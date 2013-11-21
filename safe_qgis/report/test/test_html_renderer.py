@@ -109,7 +109,7 @@ class HtmlRendererTest(unittest.TestCase):
         assert myLayer.isValid(), myMessage
         myPageDpi = 300
         myHtmlRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='impactTable',
+        myPath = unique_filename(prefix='impact_table',
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
         myKeywordIO = KeywordIO()

@@ -818,32 +818,32 @@ class ShakeEvent(QObject):
 
         return myOutputFile
 
-    def romanize(self, theMMIValue):
+    def romanize(self, the_mmi_value):
         """Return the roman numeral for an mmi value.
-        :param theMMIValue:float
+        :param the_mmi_value:float
         :return str Roman numeral equivalent of the value
         """
-        if theMMIValue is None:
+        if the_mmi_value is None:
             LOGGER.debug('Romanize passed None')
             return ''
 
-        LOGGER.debug('Romanising %f' % float(theMMIValue))
-        myRomanList = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
-                       'IX', 'X', 'XI', 'XII']
+        LOGGER.debug('Romanising %f' % float(the_mmi_value))
+        my_roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                         'IX', 'X', 'XI', 'XII']
         try:
-            myRoman = myRomanList[int(float(theMMIValue))]
+            my_roman = my_roman_list[int(float(the_mmi_value))]
         except ValueError:
             LOGGER.exception('Error converting MMI value to roman')
             return None
-        return myRoman
+        return my_roman
 
-    def mmiShaking(self, theMMIValue):
+    def mmi_shaking(self, the_mmi_value):
         """Return the perceived shaking for an mmi value as translated string.
-        :param theMMIValue: float or int required.
+        :param the_mmi_value: float or int required.
         :return str: internationalised string representing perceived shaking
              level e.g. weak, severe etc.
         """
-        myShakingDict = {
+        my_shaking_dict = {
             1: self.tr('Not felt'),
             2: self.tr('Weak'),
             3: self.tr('Weak'),
@@ -855,15 +855,15 @@ class ShakeEvent(QObject):
             9: self.tr('Violent'),
             10: self.tr('Extreme'),
         }
-        return myShakingDict[theMMIValue]
+        return my_shaking_dict[the_mmi_value]
 
-    def mmiPotentialDamage(self, theMMIValue):
+    def mmi_potential_damage(self, the_mmi_value):
         """Return the potential damage for an mmi value as translated string.
-        :param theMMIValue: float or int required.
+        :param the_mmi_value: float or int required.
         :return str: internationalised string representing potential damage
             level e.g. Light, Moderate etc.
         """
-        myDamageDict = {
+        my_damage_dict = {
             1: self.tr('None'),
             2: self.tr('None'),
             3: self.tr('None'),
@@ -875,7 +875,7 @@ class ShakeEvent(QObject):
             9: self.tr('Heavy'),
             10: self.tr('Very heavy')
         }
-        return myDamageDict[theMMIValue]
+        return my_damage_dict[the_mmi_value]
 
     def setContourProperties(self, theFile):
         """
@@ -1479,7 +1479,7 @@ class ShakeEvent(QObject):
             mySortedCities = mySortedCities[0: theCount]
         return mySortedCities
 
-    def writeHtmlTable(self, theFileName, theTable):
+    def write_html_table(self, the_file_name, the_table):
         """Write a Table object to disk with a standard header and footer.
 
         This is a helper function that allows you to easily write a table
@@ -1490,38 +1490,38 @@ class ShakeEvent(QObject):
         The bootstrap.css file will also be written to the same directory
         where the table is written.
 
-        :param theFileName: file name (without full path) .e.g foo.html
-        :param theTable: A Table instance.
+        :param the_file_name: file name (without full path) .e.g foo.html
+        :param the_table: A Table instance.
         :return str: full path to file that was created on disk.
         """
-        myPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              theFileName)
-        myHtmlFile = file(myPath, 'wt')
-        myHeaderFile = os.path.join(dataDir(), 'header.html')
-        myFooterFile = os.path.join(dataDir(), 'footer.html')
-        myHeaderFile = file(myHeaderFile, 'rt')
-        myHeader = myHeaderFile.read()
-        myHeaderFile.close()
-        myFooterFile = file(myFooterFile, 'rt')
-        myFooter = myFooterFile.read()
-        myFooterFile.close()
-        myHtmlFile.write(myHeader)
-        myHtmlFile.write(theTable.toNewlineFreeString())
-        myHtmlFile.write(myFooter)
-        myHtmlFile.close()
+        my_path = os.path.join(shakemapExtractDir(),
+                               self.eventId,
+                               the_file_name)
+        my_html_file = file(my_path, 'wt')
+        my_header_file = os.path.join(dataDir(), 'header.html')
+        my_footer_file = os.path.join(dataDir(), 'footer.html')
+        my_header_file = file(my_header_file, 'rt')
+        my_header = my_header_file.read()
+        my_header_file.close()
+        my_footer_file = file(my_footer_file, 'rt')
+        my_footer = my_footer_file.read()
+        my_footer_file.close()
+        my_html_file.write(my_header)
+        my_html_file.write(the_table.toNewlineFreeString())
+        my_html_file.write(my_footer)
+        my_html_file.close()
         # Also bootstrap gets copied to extract dir
-        myDestination = os.path.join(shakemapExtractDir(),
-                                     self.eventId,
-                                     'bootstrap.css')
-        mySource = os.path.join(dataDir(), 'bootstrap.css')
-        shutil.copyfile(mySource, myDestination)
+        my_destination = os.path.join(shakemapExtractDir(),
+                                      self.eventId,
+                                      'bootstrap.css')
+        my_source = os.path.join(dataDir(), 'bootstrap.css')
+        shutil.copyfile(my_source, my_destination)
 
-        return myPath
+        return my_path
 
-    def impactedCitiesTable(self, theCount=5):
+    def impacted_cities_table(self, the_count=5):
         """Return a table object of sorted impacted cities.
-        :param theCount:optional maximum number of cities to show.
+        :param the_count:optional maximum number of cities to show.
                 Default is 5.
 
         The cities will be listed in the order computed by sortedImpactedCities
@@ -1545,32 +1545,35 @@ class ShakeEvent(QObject):
         :raise
             Propagates any exceptions.
         """
-        myTableData = self.sortedImpactedCities(theCount)
-        myTableBody = []
-        myHeader = TableRow(['',
-                             self.tr('Name'),
-                             self.tr('Affected (x 1000)'),
-                             self.tr('Intensity')],
-                            header=True)
-        for myRowData in myTableData:
-            myIntensity = myRowData['roman']
-            myName = myRowData['name']
-            myPopulation = int(round(myRowData['population'] / 1000))
-            myColour = mmi_colour(myRowData['mmi'])
-            myColourBox = ('<div style="width: 16px; height: 16px;'
-                           'background-color: %s"></div>' % myColour)
-            myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])
-            myTableBody.append(myRow)
+        my_table_data = self.sortedImpactedCities(the_count)
+        my_table_body = []
+        my_header = TableRow(['',
+                              self.tr('Name'),
+                              self.tr('Affected (x 1000)'),
+                              self.tr('Intensity')],
+                             header=True)
+        for my_row_data in my_table_data:
+            my_intensity = my_row_data['roman']
+            my_name = my_row_data['name']
+            my_population = int(round(my_row_data['population'] / 1000))
+            my_colour = mmi_colour(my_row_data['mmi'])
+            my_colour_box = ('<div style="width: 16px; height: 16px;'
+                             'background-color: %s"></div>' % my_colour)
+            my_row = TableRow([my_colour_box,
+                               my_name,
+                               my_population,
+                               my_intensity])
+            my_table_body.append(my_row)
 
-        myTable = Table(myTableBody, header_row=myHeader,
-                        table_class='table table-striped table-condensed')
+        my_table = Table(my_table_body, header_row=my_header,
+                         table_class='table table-striped table-condensed')
         # Also make an html file on disk
-        myPath = self.writeHtmlTable(theFileName='affected-cities.html',
-                                     theTable=myTable)
+        my_path = self.write_html_table(the_file_name='affected-cities.html',
+                                        the_table=my_table)
 
-        return myTable, myPath
+        return my_table, my_path
 
-    def impactTable(self):
+    def impact_table(self):
         """Create the html listing affected people per mmi interval.
 
         Expects that calculate impacts has run and set pop affected etc.
@@ -1597,35 +1600,35 @@ class ShakeEvent(QObject):
                 8: 0.0,
                 9: 0.0}
         """
-        myHeader = [
+        my_header = [
             TableCell(self.tr('Intensity'), header=True)]
-        myAffectedRow = [
+        my_affected_row = [
             TableCell(self.tr('People Affected (x 1000)'), header=True)]
-        myImpactRow = [
+        my_impact_row = [
             TableCell(self.tr('Perceived Shaking'), header=True)]
-        for myMmi in range(2, 10):
-            myHeader.append(
-                TableCell(self.romanize(myMmi),
-                          cell_class='mmi-%s' % myMmi,
+        for my_mmi in range(2, 10):
+            my_header.append(
+                TableCell(self.romanize(my_mmi),
+                          cell_class='mmi-%s' % my_mmi,
                           header=True))
-            if myMmi in self.affectedCounts:
+            if my_mmi in self.affectedCounts:
                 # noinspection PyTypeChecker
-                myAffectedRow.append(
-                    '%i' % round(self.affectedCounts[myMmi] / 1000))
+                my_affected_row.append(
+                    '%i' % round(self.affectedCounts[my_mmi] / 1000))
             else:
                 # noinspection PyTypeChecker
-                myAffectedRow.append(0.00)
+                my_affected_row.append(0.00)
 
-            myImpactRow.append(TableCell(self.mmiShaking(myMmi)))
+            my_impact_row.append(TableCell(self.mmi_shaking(my_mmi)))
 
-        myTableBody = list()
-        myTableBody.append(myAffectedRow)
-        myTableBody.append(myImpactRow)
-        myTable = Table(myTableBody, header_row=myHeader,
-                        table_class='table table-striped table-condensed')
-        myPath = self.writeHtmlTable(theFileName='impacts.html',
-                                     theTable=myTable)
-        return myPath
+        my_table_body = list()
+        my_table_body.append(my_affected_row)
+        my_table_body.append(my_impact_row)
+        my_table = Table(my_table_body, header_row=my_header,
+                         table_class='table table-striped table-condensed')
+        my_path = self.write_html_table(the_file_name='impacts.html',
+                                        the_table=my_table)
+        return my_path
 
     def calculateImpacts(self,
                          thePopulationRasterPath=None,
@@ -1716,7 +1719,7 @@ class ShakeEvent(QObject):
         LOGGER.info('***** Displaced: %s ********' % self.displacedCounts)
         LOGGER.info('***** Affected: %s ********' % self.affectedCounts)
 
-        myImpactTablePath = self.impactTable()
+        myImpactTablePath = self.impact_table()
         return self.impactFile, myImpactTablePath
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
@@ -1901,7 +1904,7 @@ class ShakeEvent(QObject):
             mySearchBoxFile = self.citySearchBoxesToShapefile(
                 theForceFlag=theForceFlag)
             logging.info('Created: %s', mySearchBoxFile)
-            _, myCitiesHtmlPath = self.impactedCitiesTable()
+            _, myCitiesHtmlPath = self.impacted_cities_table()
             logging.info('Created: %s', myCitiesHtmlPath)
         except:  # pylint: disable=W0702
             logging.exception('No nearby cities found!')

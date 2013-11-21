@@ -2,7 +2,6 @@
 """The implementation of pickle reader."""
 
 import os
-import shutil
 import sys
 from glob import glob
 #noinspection PyPep8Naming
@@ -13,7 +12,9 @@ import logging
 def create_index(shakemap_dir, locale):
     """Pass dictionary from pickle to index.html.
 
-    :param shakemap_dir: Directory containing pickle shakemap metadata.
+    :param shakemap_dir: Directory containing pickle shakemap metadata. For
+    real use based on current environment, this would be a published directory
+    either public/en or public/id.
     :type shakemap_dir: str
 
     :returns: Path to index file.
@@ -22,30 +23,36 @@ def create_index(shakemap_dir, locale):
     :param locale: Language of output index.html. id = Bahasa, en = English
     :type locale: str
     """
-    if locale == 'en':
-        index_path = os.path.join(shakemap_dir, 'index-en.html')
-        path_list = glob(os.path.join(shakemap_dir, '*en.pickle'))
-        header_html_file_path = os.path.join(os.path.dirname(__file__),
-                                             'fixtures',
-                                             'web',
-                                             'resource',
-                                             'header.html')
-
-    elif locale == 'id':
-        index_path = os.path.join(shakemap_dir, 'index-id.html')
-        path_list = glob(os.path.join(shakemap_dir, '*id.pickle'))
-        header_html_file_path = os.path.join(os.path.dirname(__file__),
-                                             'fixtures',
-                                             'web',
-                                             'resource',
-                                             'header-id.html')
-    else:
-        raise logging.exception(
+    registered_locales = ['en', 'id']
+    clean_locale = locale.lower()
+    if clean_locale not in registered_locales:
+        raise Exception(
             'Locale ID other than id and en is not supported!')
+
+    localed_pickle_path = '*%s.pickle' % clean_locale
+    localed_header_path = 'header-%s.html' % clean_locale
+    localed_footer_path = 'footer-%s.html' % clean_locale
+    path_list = glob(os.path.join(shakemap_dir, localed_pickle_path))
+
+    header_html_file_path = os.path.join(os.path.dirname(__file__),
+                                         'fixtures',
+                                         'web',
+                                         'resource',
+                                         localed_header_path)
+    footer_html_file_path = os.path.join(os.path.dirname(__file__),
+                                         'fixtures',
+                                         'web',
+                                         'resource',
+                                         localed_footer_path)
+
     # Check if index_path is exist. Remove if it's exist
+    index_path = os.path.join(shakemap_dir, 'index.html')
     if os.path.exists(index_path):
         os.remove(index_path)
-    path_list.reverse()
+
+    # Sort based on name, which based on the date descending and keep 10 latest
+    path_list.sort()
+    path_list = path_list[:10]
 
     # Prepare header of the html file
     header_html_file = open(header_html_file_path)
@@ -53,45 +60,52 @@ def create_index(shakemap_dir, locale):
     header_html_file.close()
 
     # Prepare footer of the html file
-    footer_html_file = open(os.path.join(os.path.dirname(__file__),
-                                         'fixtures',
-                                         'web',
-                                         'resource',
-                                         'footer.html'), 'r')
+    footer_html_file = open(footer_html_file_path)
     footer_html = footer_html_file.read()
     footer_html_file.close()
 
     # Generate Table HTML for all of the pickle_path
-    table_html = ('\t'
-                  '<table class="table table-bordered table-hover>\n'
+    table_html = ('\t<table class="table">\n'
                   '\t\t<thead>'
                   '\n\t\t\t<tr>'
                   '\n\t\t\t\t<th>Max MMI</th>'
                   '\n\t\t\t\t<th>Time</th>'
                   '\n\t\t\t\t<th>Location</th>'
                   '\n\t\t\t\t<th>Magnitude</th>'
-                  '\n\t\t\t\t<th>Report</th>'
+                  '\n\t\t\t\t<th>Report Detail</th>'
                   '\n\t\t\t</tr>'
-                  '\n\t</thead>'
-                  '\n\t<tbody>\n')
+                  '\n\t\t</thead>'
+                  '\n\t\t<tbody>\n')
 
     for pickle_path in path_list:
         pickle_file = file(pickle_path, 'rb')
         metadata = pickle.load(pickle_file)
-        mmi_class = 'mmi-2'  # TODO
-        table_html += ('\t\t<tr>'
-                       '\n\t\t\t<td class="%s">%s</td>'
-                       '\n\t\t\t<td>%s</td>'
-                       '\n\t\t\t<td>%s</td>'
-                       '\n\t\t\t<td>%s</td>'
-                       '\n\t\t\t<td>%s</td>'
-                       '\n\t\t</tr>\n' % (mmi_class,
-                                          metadata['mmi'],
-                                          metadata['formatted-date-time'],
-                                          metadata['place-name'],
-                                          metadata['mmi'],
-                                          metadata['place-name']))
-    table_html += ('\t</tbody> \n</table>')
+        pickle_filename = os.path.basename(pickle_path)
+        report_path = pickle_filename.split('-')[0] + '-' + locale
+        report_path_pdf_link = '<a href="%s">%s</a>' % (report_path + '.pdf',
+                                                        'PDF')
+        report_path_png_link = '<a href="%s">%s</a>' % (report_path + '.png',
+                                                        'PNG')
+        mmi_class = '7'  # TODO: MMI Classification
+        table_html += (
+            '\t\t\t<tr>'
+            '\n\t\t\t\t<td><div class="mmi-%s">%s</div></td>'
+            '\n\t\t\t\t<td>%s</td>'
+            '\n\t\t\t\t<td><p class="location-info"><em>%s</em></p>%s</td>'
+            '\n\t\t\t\t<td><div class="center">%s</div></td>'
+            '\n\t\t\t\t<td>%s | %s</td>'
+            '\n\t\t\t</tr>\n' % (
+                mmi_class,
+                mmi_class,
+                metadata['formatted-date-time'],
+                format(metadata['location-info']).encode('utf-8'),
+                metadata['place-name'].upper(),
+                metadata['mmi'],
+                report_path_pdf_link,
+                report_path_png_link))
+
+    table_html += ('\t\t</tbody>'
+                   '\n\t</table>')
 
     index_file = file(index_path, 'wt')
     index_file.write(header_html + table_html + footer_html)
@@ -99,37 +113,27 @@ def create_index(shakemap_dir, locale):
     return index_path
 
 
-def generate_pages(shakemap_dir):
-    """Generate index.html for en and id and return the path to them.
+def generate_pages(shakemap_dir_en, shakemap_dir_id):
+    """Generate index.html, currently for both en and id and return the path to
+    them.
 
-    :param shakemap_dir: Shakemap directory where pickles are located.
-    :type shakemap_dir: str
+    :param shakemap_dir_en: Shakemap directory for en locale where pickles are
+    located. For real use based on current environment, this would be a
+    published directory public/en
+    :type shakemap_dir_en: str
+
+    :param shakemap_dir_id: Shakemap directory for id locale where pickles are
+    located. For real use based on current environment, this would be a
+    published directory public/id
+    :type shakemap_dir_id: str
 
     :returns: en_index_path, id_index_path
     :rtype: str, str
     """
-    en_index_path = create_index(shakemap_dir, 'en')
-    id_index_path = create_index(shakemap_dir, 'id')
+    en_index_path = create_index(shakemap_dir_en, 'en')
+    id_index_path = create_index(shakemap_dir_id, 'id')
 
     return en_index_path, id_index_path
-
-
-def publish_pages(shakemap_dir):
-    """Publish index.html to both en/index.html and id/index.html.
-
-    :param shakemap_dir:Shakemap directory where pickles are located
-    """
-    en_index_path, id_index_path = generate_pages(shakemap_dir)
-
-    # Move to /home/web/quake/public/
-    # public_dir = '/home/web/quake/public/'
-    testdir = os.path.join(os.path.dirname(__file__),
-                           os.pardir,
-                           'realtime',
-                           'fixtures',
-                           'tests')
-    shutil.move(en_index_path, os.path.join(testdir, 'index-en.html'))
-    shutil.move(id_index_path, os.path.join(testdir, 'index-id.html'))
 
 
 if __name__ == '__main__':
@@ -138,5 +142,7 @@ if __name__ == '__main__':
         print 'To use: python pickle_reader.py <shakemap_directory>'
         print 'The shakemap directory should contain one or more pickle files.'
     elif len(sys.argv) == 2:
-        publish_pages(sys.argv[1])
+        en_path, id_path = generate_pages(sys.argv[1], sys.argv[2])
+        print 'en_index is generated and saved in: %s' % en_path
+        print 'id_index is generated and saved in: %s' % id_path
         exit()

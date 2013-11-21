@@ -70,79 +70,105 @@ def set_vector_graduated_style(vector_layer, style):
 
     .. note:: The transparency and size keys are optional. Size applies
        to points only.
-    """
-    myTargetField = style['target_field']
-    myClasses = style['style_classes']
-    myGeometryType = vector_layer.geometryType()
 
-    myRangeList = []
-    for myClass in myClasses:
+    .. note:: you can optionally pass border_color also, if not color will be
+        used
+
+    .. note:: you can optionally pass data_defined also, this has to be a
+        dictionary of property: expressions like
+        {'color': 'color_hsv(%s, "pop"/%s*100, %s)' % (hue, max, val)}
+    """
+    target_field = style['target_field']
+    style_classes = style['style_classes']
+    geometry_type = vector_layer.geometryType()
+
+    range_list = []
+    for style_class in style_classes:
         # Transparency 100: transparent
         # Transparency 0: opaque
-        mySize = 2  # mm
-        if 'size' in myClass:
-            mySize = myClass['size']
-        myTransparencyPercent = 0
-        if 'transparency' in myClass:
-            myTransparencyPercent = myClass['transparency']
+        size = 2  # mm
+        if 'size' in style_class:
+            size = style_class['size']
+        transparency_percent = 0
+        if 'transparency' in style_class:
+            transparency_percent = style_class['transparency']
 
-        if 'min' not in myClass:
+        if 'min' not in style_class:
             raise StyleError('Style info should provide a "min" entry')
-        if 'max' not in myClass:
+        if 'max' not in style_class:
             raise StyleError('Style info should provide a "max" entry')
 
         try:
-            myMin = float(myClass['min'])
+            min_val = float(style_class['min'])
         except TypeError:
             raise StyleError(
                 'Class break lower bound should be a number.'
-                'I got %s' % myClass['min'])
+                'I got %s' % style_class['min'])
 
         try:
-            myMax = float(myClass['max'])
+            max_val = float(style_class['max'])
         except TypeError:
             raise StyleError('Class break upper bound should be a number.'
-                             'I got %s' % myClass['max'])
+                             'I got %s' % style_class['max'])
 
-        myColour = myClass['colour']
-        myLabel = myClass['label']
-        myColour = QtGui.QColor(myColour)
+        color = style_class['colour']
+        label = style_class['label']
+        color = QtGui.QColor(color)
         # noinspection PyArgumentList
-        mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
+        symbol = QgsSymbolV2.defaultSymbol(geometry_type)
         # We need to create a custom symbol layer as
         # the border colour of a symbol can not be set otherwise
         # noinspection PyArgumentList
-        if myGeometryType == QGis.Point:
-            mySymbolLayer = QgsSimpleMarkerSymbolLayerV2()
-            mySymbolLayer.setBorderColor(myColour)
-            mySymbolLayer.setSize(mySize)
-            mySymbol.changeSymbolLayer(0, mySymbolLayer)
-        elif myGeometryType == QGis.Polygon:
-            mySymbolLayer = QgsSimpleFillSymbolLayerV2()
-            mySymbolLayer.setBorderColor(myColour)
-            mySymbol.changeSymbolLayer(0, mySymbolLayer)
+        try:
+            border_color = QtGui.QColor(style_class['border_color'])
+        except KeyError:
+            border_color = color
+
+        if geometry_type == QGis.Point:
+            symbol_layer = QgsSimpleMarkerSymbolLayerV2()
+            symbol_layer.setBorderColor(border_color)
+            symbol_layer.setSize(size)
+            symbol.changeSymbolLayer(0, symbol_layer)
+        elif geometry_type == QGis.Polygon:
+            symbol_layer = QgsSimpleFillSymbolLayerV2()
+            symbol_layer.setBorderColor(border_color)
+            symbol.changeSymbolLayer(0, symbol_layer)
         else:
             # for lines we do nothing special as the property setting
             # below should give us what we require.
             pass
 
-        mySymbol.setColor(myColour)
+        try:
+            symbol_layer.setBorderWidth(style_class['border_width'])
+        except (NameError, KeyError):
+            # use QGIS default border size
+            # NameError is when symbol_layer is not defined (lines for example)
+            # KeyError is when border_width is not defined
+            pass
+
+        # set data defined properties
+        try:
+            for prop, expr in style_class['data_defined'].iteritems():
+                symbol_layer.setDataDefinedProperty(prop, expr)
+        except (NameError, KeyError):
+            # NameError is when symbol_layer is not defined (lines for example)
+            # KeyError is when data_defined is not defined
+            pass
+
+        symbol.setColor(color)
         # .. todo:: Check that vectors use alpha as % otherwise scale TS
         # Convert transparency % to opacity
         # alpha = 0: transparent
         # alpha = 1: opaque
-        alpha = 1 - myTransparencyPercent / 100.0
-        mySymbol.setAlpha(alpha)
-        myRange = QgsRendererRangeV2(myMin,
-                                     myMax,
-                                     mySymbol,
-                                     myLabel)
-        myRangeList.append(myRange)
+        alpha = 1 - transparency_percent / 100.0
+        symbol.setAlpha(alpha)
+        range_renderer = QgsRendererRangeV2(min_val, max_val, symbol, label)
+        range_list.append(range_renderer)
 
-    myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
-    myRenderer.setMode(QgsGraduatedSymbolRendererV2.EqualInterval)
-    myRenderer.setClassAttribute(myTargetField)
-    vector_layer.setRendererV2(myRenderer)
+    renderer = QgsGraduatedSymbolRendererV2('', range_list)
+    renderer.setMode(QgsGraduatedSymbolRendererV2.EqualInterval)
+    renderer.setClassAttribute(target_field)
+    vector_layer.setRendererV2(renderer)
     vector_layer.saveDefaultStyle()
 
 
@@ -177,34 +203,44 @@ def set_vector_categorized_style(vector_layer, style):
 
     .. note:: We should change 'value' in style classes to something more
         meaningful e.g. discriminant value
+
+    .. note:: you can optionally pass border_color also, if not color will be
+        used
+
+    .. note:: you can optionally pass border_width also, if not QGIS defaults
+        will be used
+
+    .. note:: you can optionally pass data_defined also, this has to be a
+        dictionary of property: expressions like
+        {'color': 'color_hsv(%s, "pop"/%s*100, %s)' % (hue, max, val)}
     """
-    myTargetField = style['target_field']
-    myClasses = style['style_classes']
+    target_field = style['target_field']
+    style_classes = style['style_classes']
     geometry_type = vector_layer.geometryType()
 
     category_list = []
-    for myClass in myClasses:
+    for style_class in style_classes:
         # Transparency 100: transparent
         # Transparency 0: opaque
-        mySize = 2  # mm
-        if 'size' in myClass:
-            mySize = myClass['size']
-        myTransparencyPercent = 0
-        if 'transparency' in myClass:
-            myTransparencyPercent = myClass['transparency']
+        size = 2  # mm
+        if 'size' in style_class:
+            size = style_class['size']
+        transparency_percent = 0
+        if 'transparency' in style_class:
+            transparency_percent = style_class['transparency']
 
-        if 'value' not in myClass:
+        if 'value' not in style_class:
             raise StyleError('Style info should provide a "value" entry')
 
-        try:
-            myValue = float(myClass['value'])
-        except TypeError:
-            raise StyleError(
-                'Value should be a number. I got %s' % myClass['value'])
-
-        colour = myClass['colour']
-        label = myClass['label']
+        value = style_class['value']
+        colour = style_class['colour']
+        label = style_class['label']
         colour = QtGui.QColor(colour)
+        try:
+            border_color = QtGui.QColor(style_class['border_color'])
+        except KeyError:
+            border_color = colour
+
         # noinspection PyArgumentList
         symbol = QgsSymbolV2.defaultSymbol(geometry_type)
         # We need to create a custom symbol layer as
@@ -212,16 +248,34 @@ def set_vector_categorized_style(vector_layer, style):
         # noinspection PyArgumentList
         if geometry_type == QGis.Point:
             symbol_layer = QgsSimpleMarkerSymbolLayerV2()
-            symbol_layer.setBorderColor(colour)
-            symbol_layer.setSize(mySize)
+            symbol_layer.setBorderColor(border_color)
+            symbol_layer.setSize(size)
             symbol.changeSymbolLayer(0, symbol_layer)
         elif geometry_type == QGis.Polygon:
             symbol_layer = QgsSimpleFillSymbolLayerV2()
-            symbol_layer.setBorderColor(colour)
+            symbol_layer.setBorderColor(border_color)
             symbol.changeSymbolLayer(0, symbol_layer)
         else:
             # for lines we do nothing special as the property setting
             # below should give us what we require.
+            pass
+
+        try:
+            symbol_layer.setBorderWidth(style_class['border_width'])
+        except (NameError, KeyError):
+            # use QGIS default border size
+            # NameError is when symbol_layer is not defined (lines for example)
+            # KeyError is when border_width is not defined
+            pass
+
+        # set data defined properties
+        print style_class['data_defined']
+        try:
+            for prop, expr in style_class['data_defined'].iteritems():
+                symbol_layer.setDataDefinedProperty(prop, expr)
+        except (NameError, KeyError):
+            # NameError is when symbol_layer is not defined (lines for example)
+            # KeyError is when data_defined is not defined
             pass
 
         symbol.setColor(colour)
@@ -229,13 +283,13 @@ def set_vector_categorized_style(vector_layer, style):
         # Convert transparency % to opacity
         # alpha = 0: transparent
         # alpha = 1: opaque
-        alpha = 1 - myTransparencyPercent / 100.0
+        alpha = 1 - transparency_percent / 100.0
         symbol.setAlpha(alpha)
-        category = QgsRendererCategoryV2(myValue, symbol, label)
+        category = QgsRendererCategoryV2(value, symbol, label)
         category_list.append(category)
 
     renderer = QgsCategorizedSymbolRendererV2('', category_list)
-    renderer.setClassAttribute(myTargetField)
+    renderer.setClassAttribute(target_field)
     vector_layer.setRendererV2(renderer)
     vector_layer.saveDefaultStyle()
 

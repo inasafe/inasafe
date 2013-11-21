@@ -18,6 +18,7 @@ E.g.::
 
 """
 
+import colorsys
 from safe.common.utilities import ugettext as tr
 
 # Flood population impact raster style
@@ -80,3 +81,28 @@ style_classes = [dict(colour='#EEFFEE', quantity=0.01, transparency=100,
                       label=tr('High'))]
 earthquake_fatality_style = dict(target_field=None,
                                  style_classes=style_classes)
+
+
+def generate_categorical_color_ramp(class_count, saturation=0.5, value=0.7):
+    colors = []
+    hue_step = 1 / float(class_count)
+
+    for c in range(class_count):
+        hue = 1 - c * hue_step
+        r, g, b = colorsys.hsv_to_rgb(hue, saturation, value)
+        rgb = (r * 255, g * 255, b * 255)
+        hex_color = rgb_to_hex(rgb)
+        colors.append(hex_color)
+    return colors
+
+
+def rgb_to_hex(rgb):
+    """Convert an rgb tuple in an hex sting.
+    :param rgb: a (r, g, b) tuple where r, g, b are 0-255
+    :type: rgb, tuple
+
+    :returns: the hexadecimal color string.
+    :rtype: str
+    :see: http://stackoverflow.com/q/214359/#answer-214657"""
+
+    return '#%02x%02x%02x' % rgb
