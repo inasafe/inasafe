@@ -153,6 +153,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.state = None
         self.last_used_function = ''
 
+        self.composer = None
+        self.composition = None
+
         # Flag used to prevent recursion and allow bulk loads of layers to
         # trigger a single event only
         self.get_layers_lock = False
@@ -1867,7 +1870,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             QtCore.QUrl.TolerantMode))
             self.show_dynamic_message(status)
         else:
-            print_map.show_composer()
+            self.composer = self.iface.createNewComposer()
+            self.composition = print_map.get_composition()
+            self.composer.setComposition(self.composition)
 
         self.hide_busy()
 

@@ -312,10 +312,8 @@ class Map():
         legend.setTitle(legend_title)
         legend.updateLegend()
 
-    def show_composer(self):
-        """Prepare report and show it in a composer view so the
-        user can tweak it.
+    def prepare_composition(self):
+        """ Initialize composition and make it available for further usage.
         """
         self.load_template()
-        composer = self.iface.createNewComposer()
-        composer.setComposition(self.composition)
+        return self.composition
