@@ -73,6 +73,10 @@ def set_vector_graduated_style(vector_layer, style):
 
     .. note:: you can optionally pass border_color also, if not color will be
         used
+
+    .. note:: you can optionally pass data_defined also, this has to be a
+        dictionary of property: expressions like
+        {'color': 'color_hsv(%s, "pop"/%s*100, %s)' % (hue, max, val)}
     """
     target_field = style['target_field']
     style_classes = style['style_classes']
@@ -141,6 +145,16 @@ def set_vector_graduated_style(vector_layer, style):
             # NameError is when symbol_layer is not defined (lines for example)
             # KeyError is when border_width is not defined
             pass
+
+        # set data defined properties
+        try:
+            for prop, expr in style_class['data_defined'].iteritems():
+                symbol_layer.setDataDefinedProperty(prop, expr)
+        except (NameError, KeyError):
+            # NameError is when symbol_layer is not defined (lines for example)
+            # KeyError is when data_defined is not defined
+            pass
+
         symbol.setColor(color)
         # .. todo:: Check that vectors use alpha as % otherwise scale TS
         # Convert transparency % to opacity
@@ -192,8 +206,13 @@ def set_vector_categorized_style(vector_layer, style):
 
     .. note:: you can optionally pass border_color also, if not color will be
         used
+
     .. note:: you can optionally pass border_width also, if not QGIS defaults
         will be used
+
+    .. note:: you can optionally pass data_defined also, this has to be a
+        dictionary of property: expressions like
+        {'color': 'color_hsv(%s, "pop"/%s*100, %s)' % (hue, max, val)}
     """
     target_field = style['target_field']
     style_classes = style['style_classes']
@@ -247,6 +266,16 @@ def set_vector_categorized_style(vector_layer, style):
             # use QGIS default border size
             # NameError is when symbol_layer is not defined (lines for example)
             # KeyError is when border_width is not defined
+            pass
+
+        # set data defined properties
+        print style_class['data_defined']
+        try:
+            for prop, expr in style_class['data_defined'].iteritems():
+                symbol_layer.setDataDefinedProperty(prop, expr)
+        except (NameError, KeyError):
+            # NameError is when symbol_layer is not defined (lines for example)
+            # KeyError is when data_defined is not defined
             pass
 
         symbol.setColor(colour)
