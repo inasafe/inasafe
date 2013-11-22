@@ -1871,7 +1871,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_dynamic_message(status)
         else:
             self.composer = self.iface.createNewComposer()
-            self.composition = print_map.get_composition()
+            print_map.load_template()
+            self.composition = print_map.composition
             self.composer.setComposition(self.composition)
 
         self.hide_busy()

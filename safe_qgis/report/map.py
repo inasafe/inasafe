@@ -311,9 +311,3 @@ class Map():
             legend_title = ""
         legend.setTitle(legend_title)
         legend.updateLegend()
-
-    def prepare_composition(self):
-        """ Initialize composition and make it available for further usage.
-        """
-        self.load_template()
-        return self.composition
