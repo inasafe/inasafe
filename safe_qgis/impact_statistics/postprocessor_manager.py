@@ -20,8 +20,7 @@ import logging
 
 from PyQt4 import QtCore
 
-from qgis.core import (
-    QgsFeatureRequest)
+from qgis.core import QgsFeatureRequest
 
 from third_party.odict import OrderedDict
 
@@ -84,7 +83,8 @@ class PostprocessorManager(QtCore.QObject):
         #get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
-        if data[1][key]['value'] == self.aggregator.get_default_keyword('NO_DATA'):
+        if data[1][key]['value'] == \
+                self.aggregator.get_default_keyword('NO_DATA'):
             position = -1
         else:
             position = data[1][key]['value']
@@ -177,7 +177,8 @@ class PostprocessorManager(QtCore.QObject):
                 message.add(m.EmphasizedText(self.tr(
                     '* "%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
-                    'values.') % (self.aggregator.get_default_keyword('NO_DATA'))))
+                    'values.') % (
+                        self.aggregator.get_default_keyword('NO_DATA'))))
 
         return message
 
@@ -211,7 +212,8 @@ class PostprocessorManager(QtCore.QObject):
                         # see http://irclogs.geoapt.com/inasafe/
                         # %23inasafe.2013-08-09.log (at 22.29)
 
-                        no_data = self.aggregator.get_default_keyword('NO_DATA')
+                        no_data = \
+                            self.aggregator.get_default_keyword('NO_DATA')
                         # both are No data
                         value = first_part_result['value']
                         result_value = result['value']
@@ -280,7 +282,7 @@ class PostprocessorManager(QtCore.QObject):
                     self.aggregator.get_default_keyword('FEM_RATIO_ATTR_KEY')]
                 female_ratio_field_index = \
                     self.aggregator.layer.fieldNameIndex(female_ration_field)
-                    
+
                 # something went wrong finding the female ratio field,
                 # use defaults from below except block
                 if female_ratio_field_index == -1:
@@ -294,7 +296,8 @@ class PostprocessorManager(QtCore.QObject):
                         self.aggregator.layer,
                         self.aggregator.get_default_keyword('FEM_RATIO_KEY'))
                 except KeywordNotFoundError:
-                    female_ratio = self.aggregator.get_default_keyword('FEM_RATIO')
+                    female_ratio = \
+                        self.aggregator.get_default_keyword('FEM_RATIO')
 
         # iterate zone features
         request = QgsFeatureRequest()

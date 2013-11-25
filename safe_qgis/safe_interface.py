@@ -494,7 +494,8 @@ def getSafeImpactFunctions(theFunction=None):
 def getSafeImpactFunctionType(function_id):
     """
     Args:
-        function_id - str giving a specific plugins name that should be fetched.
+        function_id - str giving a specific plugins name that should be
+        fetched.
     Returns:
         A str type of safe impact function is returned:
             'old-style' is "classic" safe impact function

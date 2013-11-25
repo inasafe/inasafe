@@ -36,12 +36,12 @@ class ImpactCalculator(QObject):
     """A class to compute an impact scenario. We inherit from QObject
     so that we can use Qt translation self.tr calls."""
 
-    # DK: I think it should be only one module that uses information about function style:
+    # DK: I think it should be only one module that uses information about
+    # function style:
     #  ImpactCalculator
     #     gets layers
     #     checks style of the impact function
     #     clips layers if the function is old-style
-
 
     def __init__(self):
         """Constructor for the impact calculator."""

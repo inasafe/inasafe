@@ -181,7 +181,7 @@ class Aggregator(QtCore.QObject):
         :raises:  All exceptions are propagated.
         """
         try:
-           self._keyword_io.copy_keywords(layer, out_filename)
+            self._keyword_io.copy_keywords(layer, out_filename)
         except:
             raise
 
@@ -191,7 +191,7 @@ class Aggregator(QtCore.QObject):
         :raises:  All exceptions are propagated.
         """
         try:
-           self._keyword_io.write_keywords(layer, keywords)
+            self._keyword_io.write_keywords(layer, keywords)
         except:
             raise
 
@@ -278,9 +278,10 @@ class Aggregator(QtCore.QObject):
                     keywords[self.get_default_keyword('AGGR_ATTR_KEY')] = \
                         my_attributes[0]
 
-                if self.get_default_keyword('FEM_RATIO_ATTR_KEY') not in keywords:
-                    keywords[self.get_default_keyword('FEM_RATIO_ATTR_KEY')] = self.tr(
-                        'Use default')
+                if self.get_default_keyword('FEM_RATIO_ATTR_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword(
+                        'FEM_RATIO_ATTR_KEY')] = self.tr('Use default')
 
                 if self.get_default_keyword('FEM_RATIO_KEY') not in keywords:
                     keywords[self.get_default_keyword('FEM_RATIO_KEY')] = \
@@ -323,8 +324,8 @@ class Aggregator(QtCore.QObject):
         :param exposure_layer: An exposure layer.
         :type exposure_layer: QgsMapLayer
 
-        :raises: InsufficientParametersError if hazard_layer or exposure_layer  is not set.
-
+        :raises: InsufficientParametersError if hazard_layer or exposure_layer
+                 is not set.
         """
 
         if not self.is_valid:
