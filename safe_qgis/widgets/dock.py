@@ -1818,7 +1818,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
-            default_file_name = print_map.map_title() + '.pdf'
+            if print_map.map_title() is not None:
+                default_file_name = print_map.map_title() + '.pdf'
+            else:
+                self.show_error_message(self.tr('Keyword "map_title" not '
+                                                'found.'))
+                return
+
             default_file_name = default_file_name.replace(' ', '_')
             # noinspection PyCallByClass,PyTypeChecker
             map_pdf_path = QtGui.QFileDialog.getSaveFileName(
