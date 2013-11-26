@@ -93,18 +93,18 @@ class KeywordIO(QObject):
             UnsupportedProviderError
 
         """
-        mySource = str(layer.source())
+        source = str(layer.source())
         try:
-            myFlag = self.are_keywords_file_based(layer)
+            flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
             raise
 
         try:
-            if myFlag:
-                myKeywords = read_file_keywords(mySource, keyword)
+            if flag:
+                keywords = read_file_keywords(source, keyword)
             else:
-                myKeywords = self.read_keyword_from_uri(mySource, keyword)
-            return myKeywords
+                keywords = self.read_keyword_from_uri(source, keyword)
+            return keywords
         except (HashNotFoundError,
                 Exception,
                 OperationalError,
