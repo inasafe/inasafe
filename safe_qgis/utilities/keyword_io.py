@@ -2,7 +2,7 @@
 """**Keyword IO implementation.**
 
 .. tip:: Provides functionality for reading and writing keywords from within
-   QGIS. It is an abstration for the keywords system used by the underlying
+   QGIS. It is an abstraction for the keywords system used by the underlying
    library.
 
 """
@@ -50,7 +50,7 @@ class KeywordIO(QObject):
         """Constructor for the KeywordIO object."""
         QObject.__init__(self)
         # path to sqlite db path
-        self.keywordDbPath = None
+        self.keyword_db_path = None
         self.setup_keyword_db_path()
         self.connection = None
 
@@ -64,7 +64,7 @@ class KeywordIO(QObject):
             to the path provided.
         :type path: str
         """
-        self.keywordDbPath = str(path)
+        self.keyword_db_path = str(path)
 
     def read_keywords(self, layer, keyword=None):
         """Read keywords for a datasource and return them as a dictionary.
@@ -132,16 +132,16 @@ class KeywordIO(QObject):
         :raises: UnsupportedProviderError
         """
         try:
-            myFlag = self.are_keywords_file_based(layer)
+            flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
             raise
 
-        mySource = str(layer.source())
+        source = str(layer.source())
         try:
-            if myFlag:
-                writeKeywordsToFile(mySource, keywords)
+            if flag:
+                writeKeywordsToFile(source, keywords)
             else:
-                self.write_keywords_for_uri(mySource, keywords)
+                self.write_keywords_for_uri(source, keywords)
             return
         except:
             raise
@@ -157,16 +157,17 @@ class KeywordIO(QObject):
         :type keywords: dict
         """
         try:
-            myKeywords = self.read_keywords(layer)
+            existing_keywords = self.read_keywords(layer)
         except (HashNotFoundError, OperationalError, InvalidParameterError):
-            myKeywords = {}
-        myKeywords.update(keywords)
+            existing_keywords = {}
+        existing_keywords.update(keywords)
         try:
-            self.write_keywords(layer, myKeywords)
+            self.write_keywords(layer, existing_keywords)
         except OperationalError, e:
-            myMessage = self.tr('Keyword database path: ') + self\
-                .keywordDbPath
-            raise KeywordDbError(str(e) + '\n' + myMessage)
+            message = (
+                self.tr('Keyword database path: %s') %
+                self.keyword_db_path)
+            raise KeywordDbError(str(e) + '\n' + message)
 
     def copy_keywords(
             self,
@@ -202,25 +203,26 @@ class KeywordIO(QObject):
         :type extra_keywords: dict
 
         """
-        myKeywords = self.read_keywords(source_layer)
+        keywords = self.read_keywords(source_layer)
         if extra_keywords is None:
             extra_keywords = {}
-        myMessage = self.tr('Expected extraKeywords to be a dictionary. Got '
-                            '%s' % str(type(extra_keywords))[1:-1])
-        verify(isinstance(extra_keywords, dict), myMessage)
+        message = self.tr(
+            'Expected extraKeywords to be a dictionary. Got '
+            '%s' % str(type(extra_keywords))[1:-1])
+        verify(isinstance(extra_keywords, dict), message)
         # compute the output keywords file name
-        myDestinationBase = os.path.splitext(destination_file)[0]
-        myNewDestination = myDestinationBase + '.keywords'
+        destination_base = os.path.splitext(destination_file)[0]
+        new_destination = destination_base + '.keywords'
         # write the extra keywords into the source dict
         try:
             for key in extra_keywords:
-                myKeywords[key] = extra_keywords[key]
-            writeKeywordsToFile(myNewDestination, myKeywords)
+                keywords[key] = extra_keywords[key]
+            writeKeywordsToFile(new_destination, keywords)
         except Exception, e:
-            myMessage = self.tr(
+            message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
-                source_layer.source(), myNewDestination, str(e)))
-            raise Exception(myMessage)
+                source_layer.source(), new_destination, str(e)))
+            raise Exception(message)
         return
 
     def clear_keywords(self, layer):
@@ -252,9 +254,9 @@ class KeywordIO(QObject):
         """
 
         try:
-            myKeywords = self.read_keywords(layer)
-            myKeywords.pop(keyword)
-            self.write_keywords(layer, myKeywords)
+            keywords = self.read_keywords(layer)
+            keywords.pop(keyword)
+            self.write_keywords(layer, keywords)
             return True
         except (HashNotFoundError, KeyError):
             return False
@@ -285,11 +287,11 @@ class KeywordIO(QObject):
             returned.
         :rtype: str
         """
-        mySettings = QSettings()
-        myPath = mySettings.value(
+        settings = QSettings()
+        path = settings.value(
             'inasafe/keywordCachePath',
             self.default_keyword_db_path())
-        self.keywordDbPath = str(myPath)
+        self.keyword_db_path = str(path)
 
     def open_connection(self):
         """Open an sqlite connection to the keywords database.
@@ -302,7 +304,7 @@ class KeywordIO(QObject):
         :raises: An sqlite.Error is raised if anything goes wrong
         """
         self.connection = None
-        base_directory = os.path.basename(self.keywordDbPath)
+        base_directory = os.path.basename(self.keyword_db_path)
         if not os.path.exists(base_directory):
             try:
                 os.mkdir(base_directory)
@@ -312,7 +314,7 @@ class KeywordIO(QObject):
                 raise
 
         try:
-            self.connection = sqlite.connect(self.keywordDbPath)
+            self.connection = sqlite.connect(self.keyword_db_path)
         except (OperationalError, sqlite.Error):
             LOGGER.exception('Failed to open keywords cache database.')
             raise
@@ -341,27 +343,28 @@ class KeywordIO(QObject):
             except OperationalError:
                 raise
         try:
-            myCursor = self.connection.cursor()
-            myCursor.execute('SELECT SQLITE_VERSION()')
-            myData = myCursor.fetchone()
-            LOGGER.debug("SQLite version: %s" % myData)
+            cursor = self.connection.cursor()
+            cursor.execute('SELECT SQLITE_VERSION()')
+            data = cursor.fetchone()
+            LOGGER.debug("SQLite version: %s" % data)
             # Check if we have some tables, if not create them
-            mySQL = 'select sql from sqlite_master where type = \'table\';'
-            myCursor.execute(mySQL)
-            myData = myCursor.fetchone()
-            LOGGER.debug("Tables: %s" % myData)
-            if myData is None:
+            sql = 'select sql from sqlite_master where type = \'table\';'
+            cursor.execute(sql)
+            data = cursor.fetchone()
+            LOGGER.debug("Tables: %s" % data)
+            if data is None:
                 LOGGER.debug('No tables found')
-                mySQL = ('create table keyword (hash varchar(32) primary key,'
-                         'dict text);')
-                LOGGER.debug(mySQL)
-                myCursor.execute(mySQL)
-                #myData = myCursor.fetchone()
-                myCursor.fetchone()
+                sql = (
+                    'create table keyword (hash varchar(32) primary key,'
+                    'dict text);')
+                LOGGER.debug(sql)
+                cursor.execute(sql)
+                #data = cursor.fetchone()
+                cursor.fetchone()
             else:
                 LOGGER.debug('Keywords table already exists')
 
-            return myCursor
+            return cursor
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])
             raise
@@ -385,13 +388,13 @@ class KeywordIO(QObject):
         """
 
         try:
-            myProviderType = str(layer.providerType())
+            provider_type = str(layer.providerType())
         except AttributeError:
             raise UnsupportedProviderError(
                 'Could not determine type for provider: %s' %
                 layer.__class__.__name__)
 
-        myProviderDict = {
+        provider_dict = {
             'ogr': True,
             'gdal': True,
             'gpx': False,
@@ -399,10 +402,10 @@ class KeywordIO(QObject):
             'spatialite': False,
             'delimitedtext': True,
             'postgres': False}
-        myFileBasedKeywords = False
-        if myProviderType in myProviderDict:
-            myFileBasedKeywords = myProviderDict[myProviderType]
-        return myFileBasedKeywords
+        file_based_keywords = False
+        if provider_type in provider_dict:
+            file_based_keywords = provider_dict[provider_type]
+        return file_based_keywords
 
     def hash_for_datasource(self, data_source):
         """Given a data_source, return its hash.
@@ -414,10 +417,10 @@ class KeywordIO(QObject):
         :rtype: str
         """
         import hashlib
-        myHash = hashlib.md5()
-        myHash.update(data_source)
-        myHash = myHash.hexdigest()
-        return myHash
+        hash_value = hashlib.md5()
+        hash_value.update(data_source)
+        hash_value = hash_value.hexdigest()
+        return hash_value
 
     def delete_keywords_for_uri(self, uri):
         """Delete keywords for a URI in the keywords database.
@@ -434,12 +437,12 @@ class KeywordIO(QObject):
 
         :type uri: str
         """
-        myHash = self.hash_for_datasource(uri)
+        hash_value = self.hash_for_datasource(uri)
         try:
-            myCursor = self.get_cursor()
+            cursor = self.get_cursor()
             # now see if we have any data for our hash
-            mySQL = 'delete from keyword where hash = \'' + myHash + '\';'
-            myCursor.execute(mySQL)
+            sql = 'delete from keyword where hash = \'' + hash_value + '\';'
+            cursor.execute(sql)
             self.connection.commit()
         except sqlite.Error, e:
             LOGGER.debug("SQLITE Error %s:" % e.args[0])
@@ -475,31 +478,32 @@ class KeywordIO(QObject):
 
         :raises: KeywordNotFoundError if the keyword is not recognised.
         """
-        myHash = self.hash_for_datasource(uri)
+        hash_value = self.hash_for_datasource(uri)
         try:
-            myCursor = self.get_cursor()
+            cursor = self.get_cursor()
             # now see if we have any data for our hash
-            mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
-            myCursor.execute(mySQL)
-            myData = myCursor.fetchone()
-            myPickle = pickle.dumps(keywords, pickle.HIGHEST_PROTOCOL)
-            if myData is None:
+            sql = (
+                'select dict from keyword where hash = \'%s\';' % hash_value)
+            cursor.execute(sql)
+            data = cursor.fetchone()
+            pickle_dump = pickle.dumps(keywords, pickle.HIGHEST_PROTOCOL)
+            if data is None:
                 # insert a new rec
-                #myCursor.execute('insert into keyword(hash) values(:hash);',
-                #             {'hash': myHash})
-                myCursor.execute(
+                #cursor.execute('insert into keyword(hash) values(:hash);',
+                #             {'hash': hash_value})
+                cursor.execute(
                     'insert into keyword(hash, dict) values(:hash, :dict);',
-                    {'hash': myHash, 'dict': sqlite.Binary(myPickle)})
+                    {'hash': hash_value, 'dict': sqlite.Binary(pickle_dump)})
                 self.connection.commit()
             else:
                 # update existing rec
-                myCursor.execute(
+                cursor.execute(
                     'update keyword set dict=? where hash = ?;',
-                    (sqlite.Binary(myPickle), myHash))
+                    (sqlite.Binary(pickle_dump), hash_value))
                 self.connection.commit()
         except sqlite.Error:
             LOGGER.exception('Error writing keywords to SQLite db %s' %
-                             self.keywordDbPath)
+                             self.keyword_db_path)
             # See if we can roll back.
             if self.connection is not None:
                 self.connection.rollback()
@@ -535,29 +539,30 @@ class KeywordIO(QObject):
 
         :raises: KeywordNotFoundError if the keyword is not found.
         """
-        myHash = self.hash_for_datasource(uri)
+        hash_value = self.hash_for_datasource(uri)
         try:
             self.open_connection()
         except OperationalError:
             raise
         try:
-            myCursor = self.get_cursor()
+            cursor = self.get_cursor()
             # now see if we have any data for our hash
-            mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
-            myCursor.execute(mySQL)
-            myData = myCursor.fetchone()
+            sql = (
+                'select dict from keyword where hash = \'%s\';' % hash_value)
+            cursor.execute(sql)
+            data = cursor.fetchone()
             # unpickle it to get our dict back
-            if myData is None:
-                raise HashNotFoundError('No hash found for %s' % myHash)
-            myData = myData[0]  # first field
-            myDict = pickle.loads(str(myData))
+            if data is None:
+                raise HashNotFoundError('No hash found for %s' % hash_value)
+            data = data[0]  # first field
+            picked_dict = pickle.loads(str(data))
             if keyword is None:
-                return myDict
-            if keyword in myDict:
-                return myDict[keyword]
+                return picked_dict
+            if keyword in picked_dict:
+                return picked_dict[keyword]
             else:
                 raise KeywordNotFoundError('Keyword "%s" not found in %s' % (
-                    keyword, myDict))
+                    keyword, picked_dict))
 
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])
@@ -580,14 +585,14 @@ class KeywordIO(QObject):
         """
         # find needed statistics type
         try:
-            myStatisticsType = self.read_keywords(
+            statistics_type = self.read_keywords(
                 layer, 'statistics_type')
-            myStatisticsClasses = self.read_keywords(
+            statistics_classes = self.read_keywords(
                 layer, 'statistics_classes')
 
         except KeywordNotFoundError:
             # default to summing
-            myStatisticsType = 'sum'
-            myStatisticsClasses = {}
+            statistics_type = 'sum'
+            statistics_classes = {}
 
-        return myStatisticsType, myStatisticsClasses
+        return statistics_type, statistics_classes

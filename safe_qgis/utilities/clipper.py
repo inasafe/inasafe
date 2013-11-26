@@ -128,6 +128,7 @@ def clip_layer(
             raise e
 
 
+#noinspection PyArgumentList
 def _clip_vector_layer(
         layer,
         extent,
@@ -180,120 +181,124 @@ def _clip_vector_layer(
 
     """
     if not layer or not extent:
-        myMessage = tr('Layer or Extent passed to clip is None.')
-        raise InvalidParameterError(myMessage)
+        message = tr('Layer or Extent passed to clip is None.')
+        raise InvalidParameterError(message)
 
     if layer.type() != QgsMapLayer.VectorLayer:
-        myMessage = tr('Expected a vector layer but received a %s.' %
-                       str(layer.type()))
-        raise InvalidParameterError(myMessage)
+        message = tr(
+            'Expected a vector layer but received a %s.' %
+            str(layer.type()))
+        raise InvalidParameterError(message)
 
-    #myHandle, myFilename = tempfile.mkstemp('.sqlite', 'clip_',
+    #handle, file_name = tempfile.mkstemp('.sqlite', 'clip_',
     #    temp_dir())
-    myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                            temp_dir())
+    handle, file_name = tempfile.mkstemp(
+        '.shp', 'clip_', temp_dir())
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
     # ERROR 1: c:\temp\inasafe\clip_jpxjnt.shp is not a directory.
     # This is because mkstemp creates the file handle and leaves
     # the file open.
-    os.close(myHandle)
-    os.remove(myFilename)
+    os.close(handle)
+    os.remove(file_name)
 
     # Get the clip extents in the layer's native CRS
-    myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromSrid(4326)
-    myXForm = QgsCoordinateTransform(myGeoCrs, layer.crs())
-    myAllowedClipTypes = [QGis.WKBPolygon, QGis.WKBPolygon25D]
+    geo_crs = QgsCoordinateReferenceSystem()
+    geo_crs.createFromSrid(4326)
+    transform = QgsCoordinateTransform(geo_crs, layer.crs())
+    allowed_clip_values = [QGis.WKBPolygon, QGis.WKBPolygon25D]
     if type(extent) is list:
-        myRect = QgsRectangle(
+        rectangle = QgsRectangle(
             extent[0], extent[1],
             extent[2], extent[3])
         # noinspection PyCallByClass
-        myClipPolygon = QgsGeometry.fromRect(myRect)
+        #noinspection PyTypeChecker
+        polygon = QgsGeometry.fromRect(rectangle)
     elif (type(extent) is QgsGeometry and
-          extent.wkbType in myAllowedClipTypes):
-        myRect = extent.boundingBox().toRectF()
-        myClipPolygon = extent
+          extent.wkbType in allowed_clip_values):
+        rectangle = extent.boundingBox().toRectF()
+        polygon = extent
     else:
         raise InvalidClipGeometryError(
             tr(
                 'Clip geometry must be an extent or a single part'
                 'polygon based geometry.'))
 
-    myProjectedExtent = myXForm.transformBoundingBox(myRect)
+    projected_extent = transform.transformBoundingBox(rectangle)
 
     # Get vector layer
-    myProvider = layer.dataProvider()
-    if myProvider is None:
-        myMessage = tr('Could not obtain data provider from '
-                       'layer "%s"' % layer.source())
-        raise Exception(myMessage)
+    provider = layer.dataProvider()
+    if provider is None:
+        message = tr(
+            'Could not obtain data provider from '
+            'layer "%s"' % layer.source())
+        raise Exception(message)
 
     # Get the layer field list, select by our extent then write to disk
     # .. todo:: FIXME - for different geometry types we should implement
     #    different clipping behaviour e.g. reject polygons that
     #    intersect the edge of the bbox. Tim
-    myRequest = QgsFeatureRequest()
-    if not myProjectedExtent.isEmpty():
-        myRequest.setFilterRect(myProjectedExtent)
-        myRequest.setFlags(QgsFeatureRequest.ExactIntersect)
+    request = QgsFeatureRequest()
+    if not projected_extent.isEmpty():
+        request.setFilterRect(projected_extent)
+        request.setFlags(QgsFeatureRequest.ExactIntersect)
 
-    myFieldList = myProvider.fields()
+    field_list = provider.fields()
 
-    myWriter = QgsVectorFileWriter(
-        myFilename,
+    writer = QgsVectorFileWriter(
+        file_name,
         'UTF-8',
-        myFieldList,
+        field_list,
         layer.wkbType(),
-        myGeoCrs,
+        geo_crs,
         #'SQLite')  # FIXME (Ole): This works but is far too slow
         'ESRI Shapefile')
-    if myWriter.hasError() != QgsVectorFileWriter.NoError:
-        myMessage = tr('Error when creating shapefile: <br>Filename:'
-                       '%s<br>Error: %s' %
-                       (myFilename, myWriter.hasError()))
-        raise Exception(myMessage)
+    if writer.hasError() != QgsVectorFileWriter.NoError:
+        message = tr(
+            'Error when creating shapefile: <br>Filename:'
+            '%s<br>Error: %s' %
+            (file_name, writer.hasError()))
+        raise Exception(message)
 
     # Reverse the coordinate xform now so that we can convert
     # geometries from layer crs to geocrs.
-    myXForm = QgsCoordinateTransform(layer.crs(), myGeoCrs)
+    transform = QgsCoordinateTransform(layer.crs(), geo_crs)
     # Retrieve every feature with its geometry and attributes
-    myCount = 0
-    myHasMultipart = False
+    count = 0
+    has_multipart = False
 
-    for myFeature in myProvider.getFeatures(myRequest):
-        myGeometry = myFeature.geometry()
+    for feature in provider.getFeatures(request):
+        geometry = feature.geometry()
 
         # Loop through the parts adding them to the output file
         # we write out single part features unless explode_flag is False
         if explode_flag:
-            myGeometryList = explode_multipart_geometry(myGeometry)
+            geometry_list = explode_multipart_geometry(geometry)
         else:
-            myGeometryList = [myGeometry]
+            geometry_list = [geometry]
 
-        for myPartIndex, myPart in enumerate(myGeometryList):
-            myPart.transform(myXForm)
+        for part_index, part in enumerate(geometry_list):
+            part.transform(transform)
             if hard_clip_flag:
                 # Remove any dangling bits so only intersecting area is
                 # kept.
-                myPart = clip_geometry(myClipPolygon, myPart)
-            if myPart is None:
+                part = clip_geometry(polygon, part)
+            if part is None:
                 continue
 
-            myFeature.setGeometry(myPart)
+            feature.setGeometry(part)
             # There are multiple parts and we want to show it in the
             # explode_attribute
-            if myPartIndex > 0 and explode_attribute is not None:
-                myHasMultipart = True
+            if part_index > 0 and explode_attribute is not None:
+                has_multipart = True
 
-            myWriter.addFeature(myFeature)
-        myCount += 1
-    del myWriter  # Flush to disk
+            writer.addFeature(feature)
+        count += 1
+    del writer  # Flush to disk
 
-    if myCount < 1:
-        myMessage = tr(
+    if count < 1:
+        message = tr(
             'No features fall within the clip extents. Try panning / zooming '
             'to an area containing data and then try to run your analysis '
             'again. If hazard and exposure data doesn\'t overlap at all, it '
@@ -301,18 +306,18 @@ def _clip_vector_layer(
             'the layers do overlap but because they may have different '
             'spatial references, they appear to be disjointed. If this is the '
             'case, try to turn on reproject on-the-fly in QGIS.')
-        raise NoFeaturesInExtentError(myMessage)
+        raise NoFeaturesInExtentError(message)
 
-    myKeywordIO = KeywordIO()
+    keyword_io = KeywordIO()
     if extra_keywords is None:
         extra_keywords = {}
-    extra_keywords['had multipart polygon'] = myHasMultipart
-    myKeywordIO.copy_keywords(
-        layer, myFilename, extra_keywords=extra_keywords)
-    myBaseName = '%s clipped' % layer.name()
-    myLayer = QgsVectorLayer(myFilename, myBaseName, 'ogr')
+    extra_keywords['had multipart polygon'] = has_multipart
+    keyword_io.copy_keywords(
+        layer, file_name, extra_keywords=extra_keywords)
+    base_name = '%s clipped' % layer.name()
+    layer = QgsVectorLayer(file_name, base_name, 'ogr')
 
-    return myLayer
+    return layer
 
 
 def clip_geometry(clip_polygon, geometry):
@@ -335,19 +340,19 @@ def clip_geometry(clip_polygon, geometry):
     :rtype: QgsGeometry
     """
     # Add nodes to input geometry where it intersects with clip
-    myLineTypes = [QGis.WKBLineString, QGis.WKBLineString25D]
-    myPointTypes = [QGis.WKBPoint, QGis.WKBPoint25D]
-    myPolygonTypes = [QGis.WKBPolygon, QGis.WKBPolygon25D]
-    myType = geometry.wkbType()
-    if myType in myLineTypes:
-        myCombinedGeometry = geometry.combine(clip_polygon)
+    line_types = [QGis.WKBLineString, QGis.WKBLineString25D]
+    point_types = [QGis.WKBPoint, QGis.WKBPoint25D]
+    polygons_types = [QGis.WKBPolygon, QGis.WKBPolygon25D]
+    geometry_type = geometry.wkbType()
+    if geometry_type in line_types:
+        combined_geometry = geometry.combine(clip_polygon)
         # Gives you the lines inside the clip
-        mySymmetricalGeometry = geometry.symDifference(myCombinedGeometry)
-        return mySymmetricalGeometry
-    elif myType in myPolygonTypes:
-        myIntersectionGeometry = geometry.intersection(clip_polygon)
-        return myIntersectionGeometry
-    elif myType in myPointTypes:
+        symmetrical_geometry = geometry.symDifference(combined_geometry)
+        return symmetrical_geometry
+    elif geometry_type in polygons_types:
+        intersection_geometry = geometry.intersection(clip_polygon)
+        return intersection_geometry
+    elif geometry_type in point_types:
         if clip_polygon.contains(geometry):
             return geometry
         else:
@@ -356,42 +361,42 @@ def clip_geometry(clip_polygon, geometry):
         return None
 
 
-def explode_multipart_geometry(theGeom):
+def explode_multipart_geometry(geometry):
     """Convert a multipart geometry to a list of single parts.
 
     This method was adapted from Carson Farmer's fTools doGeometry
     implementation in QGIS.
 
-    :param theGeom: A geometry to be exploded it it is multipart.
-    :type theGeom: QgsGeometry
+    :param geometry: A geometry to be exploded it it is multipart.
+    :type geometry: QgsGeometry
 
     :returns: A list of single part geometries.
     :rtype: list
 
     """
-    myParts = []
-    if theGeom.type() == QGis.Point:
-        if theGeom.isMultipart():
-            myMultiGeometry = theGeom.asMultiPoint()
-            for i in myMultiGeometry:
-                myParts.append(QgsGeometry().fromPoint(i))
+    parts = []
+    if geometry.type() == QGis.Point:
+        if geometry.isMultipart():
+            multi_geometry = geometry.asMultiPoint()
+            for i in multi_geometry:
+                parts.append(QgsGeometry().fromPoint(i))
         else:
-            myParts.append(theGeom)
-    elif theGeom.type() == QGis.Line:
-        if theGeom.isMultipart():
-            myMultiGeometry = theGeom.asMultiPolyline()
-            for i in myMultiGeometry:
-                myParts.append(QgsGeometry().fromPolyline(i))
+            parts.append(geometry)
+    elif geometry.type() == QGis.Line:
+        if geometry.isMultipart():
+            multi_geometry = geometry.asMultiPolyline()
+            for i in multi_geometry:
+                parts.append(QgsGeometry().fromPolyline(i))
         else:
-            myParts.append(theGeom)
-    elif theGeom.type() == QGis.Polygon:
-        if theGeom.isMultipart():
-            myMultiGeometry = theGeom.asMultiPolygon()
-            for i in myMultiGeometry:
-                myParts.append(QgsGeometry().fromPolygon(i))
+            parts.append(geometry)
+    elif geometry.type() == QGis.Polygon:
+        if geometry.isMultipart():
+            multi_geometry = geometry.asMultiPolygon()
+            for i in multi_geometry:
+                parts.append(QgsGeometry().fromPolygon(i))
         else:
-            myParts.append(theGeom)
-    return myParts
+            parts.append(geometry)
+    return parts
 
 
 def _clip_raster_layer(
@@ -546,11 +551,11 @@ def extent_to_kml(extent):
     :type extent: list(float)
     """
 
-    myBottomLeftCorner = '%f,%f' % (extent[0], extent[1])
-    myTopLeftCorner = '%f,%f' % (extent[0], extent[3])
-    myTopRightCorner = '%f,%f' % (extent[2], extent[3])
-    myBottomRightCorner = '%f,%f' % (extent[2], extent[1])
-    myKml = ("""<?xml version="1.0" encoding="utf-8" ?>
+    bottom_left_corner = '%f,%f' % (extent[0], extent[1])
+    top_left_corner = '%f,%f' % (extent[0], extent[3])
+    top_right_corner = '%f,%f' % (extent[2], extent[3])
+    bottom_right_corner = '%f,%f' % (extent[2], extent[1])
+    kml = ("""<?xml version="1.0" encoding="utf-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
     <Folder>
@@ -568,17 +573,17 @@ def extent_to_kml(extent):
     </Folder>
   </Document>
 </kml>""" % (
-        myBottomLeftCorner,
-        myTopLeftCorner,
-        myTopRightCorner,
-        myBottomRightCorner,
-        myBottomLeftCorner))
+        bottom_left_corner,
+        top_left_corner,
+        top_right_corner,
+        bottom_right_corner,
+        bottom_left_corner))
 
-    myFilename = tempfile.mkstemp('.kml', 'extent_', temp_dir())[1]
-    myFile = file(myFilename, 'wt')
-    myFile.write(myKml)
-    myFile.close()
-    return myFilename
+    file_name = tempfile.mkstemp('.kml', 'extent_', temp_dir())[1]
+    file_handle = file(file_name, 'wt')
+    file_handle.write(kml)
+    file_handle.close()
+    return file_name
 
 
 def extent_to_geoarray(extent, source_crs):
@@ -595,17 +600,18 @@ def extent_to_geoarray(extent, source_crs):
         [xmin, ymin, xmax, ymax]
     """
 
-    myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-    myXForm = QgsCoordinateTransform(
+    geo_crs = QgsCoordinateReferenceSystem()
+    geo_crs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+    transform = QgsCoordinateTransform(
         source_crs,
-        myGeoCrs)
+        geo_crs)
 
     # Get the clip area in the layer's crs
-    myTransformedExtent = myXForm.transformBoundingBox(extent)
+    transformed_extent = transform.transformBoundingBox(extent)
 
-    myGeoExtent = [myTransformedExtent.xMinimum(),
-                   myTransformedExtent.yMinimum(),
-                   myTransformedExtent.xMaximum(),
-                   myTransformedExtent.yMaximum()]
-    return myGeoExtent
+    geo_extent = [
+        transformed_extent.xMinimum(),
+        transformed_extent.yMinimum(),
+        transformed_extent.xMaximum(),
+        transformed_extent.yMaximum()]
+    return geo_extent
