@@ -1825,7 +1825,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                 'found.'))
                 return
 
-
             default_file_name = default_file_name.replace(' ', '_')
             # noinspection PyCallByClass,PyTypeChecker
             map_pdf_path = QtGui.QFileDialog.getSaveFileName(
