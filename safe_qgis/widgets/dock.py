@@ -1793,7 +1793,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_template(report_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
-        default_file_name = print_map.map_title() + '.pdf'
+        if print_map.map_title() is not None:
+            default_file_name = print_map.map_title() + '.pdf'
+        else:
+            QtGui.QMessageBox.warning(
+                self,
+                self.tr('InaSAFE'),
+                self.tr('Please specify "map_title" keyword before '
+                        'trying to print.'))
+            return
+
         default_file_name = default_file_name.replace(' ', '_')
         # noinspection PyCallByClass,PyTypeChecker
         map_pdf_path = QtGui.QFileDialog.getSaveFileName(

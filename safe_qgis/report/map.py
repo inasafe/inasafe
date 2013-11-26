@@ -237,9 +237,13 @@ class Map():
         # get information for substitutions
         # date, time and plugin version
         date_time = self.keyword_io.read_keywords(self.layer, 'time_stamp')
-        tokens = date_time.split('_')
-        date = tokens[0]
-        time = tokens[1]
+        if date_time is None:
+            date = ''
+            time = ''
+        else:
+            tokens = date_time.split('_')
+            date = tokens[0]
+            time = tokens[1]
         long_version = get_version()
         tokens = long_version.split('.')
         version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
