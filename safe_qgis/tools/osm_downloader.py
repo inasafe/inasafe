@@ -203,7 +203,6 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         :raises: CanceledImportDialogError - when user choose 'No' in
             the question dialog for creating directory.
         """
-
         path = str(self.output_directory.text())
 
         if os.path.exists(path):
@@ -219,7 +218,15 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             question, QMessageBox.Yes | QMessageBox.No)
 
         if answer == QMessageBox.Yes:
-            os.makedirs(path)
+            if len(path) != 0:
+                os.makedirs(path)
+            else:
+            # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
+                QMessageBox.warning(
+                    self,
+                    self.tr('InaSAFE error'),
+                    self.tr('Output directory can not be empty.'))
+                raise CanceledImportDialogError()
         else:
             raise CanceledImportDialogError()
 

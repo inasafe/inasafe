@@ -82,7 +82,7 @@ from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
-from safe_qgis.utilities.utilities import getWGS84resolution
+from safe_qgis.utilities.utilities import get_wgs84_resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
 from utils import shakemapExtractDir, dataDir
@@ -1766,10 +1766,10 @@ class ShakeEvent(QObject):
         extraExposureKeywords = {}
 
         # Hazard layer is raster
-        myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
+        myHazardGeoCellSize = get_wgs84_resolution(myHazardLayer)
 
         # In case of two raster layers establish common resolution
-        myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
+        myExposureGeoCellSize = get_wgs84_resolution(myExposureLayer)
 
         if myHazardGeoCellSize < myExposureGeoCellSize:
             myCellSize = myHazardGeoCellSize

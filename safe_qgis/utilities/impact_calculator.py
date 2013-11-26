@@ -33,8 +33,9 @@ from safe_qgis.safe_interface import (
 
 
 class ImpactCalculator(QObject):
-    """A class to compute an impact scenario. We inherit from QObject
-    so that we can use Qt translation self.tr calls."""
+    """A class to compute an impact scenario.
+
+    We inherit from QObject so that we can use Qt translation self.tr calls."""
 
     # DK: I think it should be only one module that uses information about
     # function style:
@@ -74,8 +75,8 @@ class ImpactCalculator(QObject):
         #   modules: I prefer keep only one place of function style analysis
 
         if self._function is None or self._function == '':
-            myMessage = self.tr('Error: Function not set.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: Function not set.')
+            raise InsufficientParametersError(message)
 
         # Get type of the impact function (old-style or new-style)
         try:
@@ -86,8 +87,8 @@ class ImpactCalculator(QObject):
                 # TODO (DK): convert for new style impact function
                 return convertToSafeLayer(layer)
             else:
-                myMessage = self.tr('Error: Function has unknown style.')
-                raise InvalidParameterError(myMessage)
+                message = self.tr('Error: Function has unknown style.')
+                raise InvalidParameterError(message)
         except:
             raise
 
@@ -127,7 +128,7 @@ class ImpactCalculator(QObject):
         e.g. buildings or features that will be affected.
 
         :param layer: A hazard layer.
-        :type layer_path: QgsMapLayer or SAFE layer.
+        :type layer: QgsMapLayer or SAFE layer.
         """
         if layer is None:
             self._hazardLayer = None
@@ -172,33 +173,33 @@ class ImpactCalculator(QObject):
         self._filename = None
         self._result = None
         if self._hazardLayer is None:
-            myMessage = self.tr('Error: Hazard layer not set.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: Hazard layer not set.')
+            raise InsufficientParametersError(message)
 
         if self._exposureLayer is None:
-            myMessage = self.tr('Error: Exposure layer not set.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: Exposure layer not set.')
+            raise InsufficientParametersError(message)
 
         if self._function is None or self._function == '':
-            myMessage = self.tr('Error: Function not set.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: Function not set.')
+            raise InsufficientParametersError(message)
 
         # Call impact calculation engine
-        myHazardLayer = self.hazard_layer()
-        myExposureLayer = self.exposure_layer()
+        hazard_layer = self.hazard_layer()
+        exposure_layer = self.exposure_layer()
 
-        myFunctions = getSafeImpactFunctions(self._function)
-        myFunction = myFunctions[0][self._function]
+        functions = getSafeImpactFunctions(self._function)
+        function = functions[0][self._function]
         return ImpactCalculatorThread(
-            myHazardLayer,
-            myExposureLayer,
-            myFunction)
+            hazard_layer,
+            exposure_layer,
+            function)
 
-    def need_clip(self):
+    def requires_clipping(self):
         """Check to clip or not to clip layers.
 
         If self._function is a 'new-style' impact function, then
-            return False -- clipping is unnecessary, else return True
+        return False -- clipping is unnecessary, else return True
 
         :returns:   To clip or not to clip.
         :rtype:     bool
@@ -208,8 +209,8 @@ class ImpactCalculator(QObject):
         """
         f = self.function()
         if f is None:
-            myMessage = self.tr('Error: Function is not provided.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: Function is not provided.')
+            raise InsufficientParametersError(message)
 
         style = getSafeImpactFunctionType(f)
         if style == 'old-style':
@@ -217,5 +218,5 @@ class ImpactCalculator(QObject):
         elif style == 'qgis2.0':
             return False
         else:
-            myMessage = self.tr('Error: Function has unknown style.')
-            raise InvalidParameterError(myMessage)
+            message = self.tr('Error: Function has unknown style.')
+            raise InvalidParameterError(message)
