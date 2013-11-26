@@ -45,7 +45,7 @@ INFO_STYLE = styles.INFO_STYLE
 
 
 class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
-    """Downloader for OSM data."""
+    """Tools for merging 2 impact layer based on different exposure."""
 
     def __init__(self, parent=None, iface=None):
         """Constructor for dialog.
@@ -191,33 +191,36 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         want to create it or not.
 
         :raises: CanceledImportDialogError - when user choose 'No' in
-            the question dialog for creating directory.
+            the question dialog for creating directory, or 'Yes' but the output
+            directory path is empty
         """
         path = str(self.output_directory.text())
 
-        if len(path) == 0:
-            # noinspection PyCallByClass,PyTypeChecker
-            QMessageBox.warning(
-                self,
-                self.tr('InaSAFE error'),
-                self.tr('You have not specified the output directory.'))
-        else:
-            if os.path.exists(path):
-                return
+        if os.path.exists(path):
+            return
 
-            title = self.tr("Directory %s not exist") % path
-            question = self.tr(
-                "Directory %s not exist. Do you want to create it?"
-            ) % path
-            # noinspection PyCallByClass,PyTypeChecker
-            answer = QMessageBox.question(
-                self, title,
-                question, QMessageBox.Yes | QMessageBox.No)
+        title = self.tr("Directory %s not exist") % path
+        question = self.tr(
+            "Directory %s not exist. Do you want to create it?"
+        ) % path
+        # noinspection PyCallByClass,PyTypeChecker
+        answer = QMessageBox.question(
+            self, title,
+            question, QMessageBox.Yes | QMessageBox.No)
 
-            if answer == QMessageBox.Yes:
+        if answer == QMessageBox.Yes:
+            if len(path) != 0:
                 os.makedirs(path)
             else:
+            # noinspection PyCallByClass,PyTypeChecker
+                QMessageBox.warning(
+                    self,
+                    self.tr('InaSAFE error'),
+                    self.tr('Output directory can not be empty.'))
                 raise CanceledImportDialogError()
+
+        else:
+            raise CanceledImportDialogError()
 
     def merge(self):
         """Merge the postprocessing_report from each impact."""
