@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+from collections import OrderedDict
 from xml.dom import minidom
 
 #noinspection PyPackageRequirements
@@ -212,7 +213,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             if len(path) != 0:
                 os.makedirs(path)
             else:
-            # noinspection PyCallByClass,PyTypeChecker
+            # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
                 QMessageBox.warning(
                     self,
                     self.tr('InaSAFE error'),
@@ -271,7 +272,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         QtGui.qApp.restoreOverrideCursor()
 
         # Give user success information
-        # noinspection PyCallByClass,PyTypeChecker
+        # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
         QMessageBox.information(
             self,
             self.tr('InaSAFE Information'),
@@ -302,20 +303,22 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                }
            }
         """
-        merged_report_dict = {}
+        merged_report_dict = OrderedDict()
         for table in html_dom:
+            #noinspection PyUnresolvedReferences
             caption = table.getElementsByTagName('caption')[0].firstChild.data
+            #noinspection PyUnresolvedReferences
             rows = table.getElementsByTagName('tr')
             header = rows[0]
             contains = rows[1:]
             for contain in contains:
                 data = contain.getElementsByTagName('td')
                 aggregation_area = data[0].firstChild.nodeValue
-                exposure_dict = {}
+                exposure_dict = OrderedDict()
                 if aggregation_area in merged_report_dict:
                     exposure_dict = merged_report_dict[aggregation_area]
                 data_contain = data[1:]
-                exposure_detail_dict = {}
+                exposure_detail_dict = OrderedDict()
                 for datum in data_contain:
                     index_datum = data.index(datum)
                     datum_header = \
@@ -341,27 +344,18 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         html_reports = []
         for aggregation_area in merged_report_dict:
             html = ''
-            html += '<table class="table table-condensed table-striped">'
-            html += '<caption>%s</caption>' % aggregation_area
+            html += ('<table style="margin:50px;"'
+                     'class="table table-condensed table-striped">')
+            html += '<caption><h4>%s</h4></caption>' % aggregation_area.upper()
             exposure_report_dict = merged_report_dict[aggregation_area]
             for exposure in exposure_report_dict:
                 exposure_detail_dict = exposure_report_dict[exposure]
-                html += '<tr><th>%s</th></tr>' % exposure
-                # Print rows containing 'total'
+                html += '<tr><th>%s</th></tr>' % exposure.upper()
                 for datum in exposure_detail_dict:
-                    if 'total' in str(datum).lower():
-                        html += ('<tr>'
-                                 '<td>%s</td>'
-                                 '<td>%s</td>'
-                                 '</tr>') % (datum, exposure_detail_dict[datum])
-                # Print rows other than above
-                for datum in exposure_detail_dict:
-                    if 'total' not in str(datum).lower():
-                        html += ('<tr>'
-                                 '<td>%s</td>'
-                                 '<td>%s</td>'
-                                 '</tr>') % (datum, exposure_detail_dict[datum])
-
+                    html += ('<tr>'
+                             '<td>%s</td>'
+                             '<td>%s</td>'
+                             '</tr>') % (datum, exposure_detail_dict[datum])
             html += '</table>'
             html_report = (aggregation_area, html)
             html_reports.append(html_report)
@@ -371,6 +365,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def get_layers(self):
         """Obtain a list of impact layers currently loaded in QGIS.
         """
+        #noinspection PyArgumentList
         registry = QgsMapLayerRegistry.instance()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = registry.mapLayers().values()

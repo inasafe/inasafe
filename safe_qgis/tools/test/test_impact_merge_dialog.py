@@ -28,9 +28,8 @@ import qgis  # pylint: disable=W0611
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 #noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app, load_layer
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import UNITDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
