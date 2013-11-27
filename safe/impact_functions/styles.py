@@ -138,7 +138,7 @@ def categorical_style(target_field,
                 hsv[0] * 360,
                 data_defined_saturation_field,
                 max_impact_value,
-                hsv[2]*100)
+                hsv[2] * 100)
             style_class.update({'data_defined': {'color': expr}})
         classes.append(style_class)
 
