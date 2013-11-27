@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -20,13 +19,16 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import re
 import sys
 import traceback
 import logging
 import uuid
+import webbrowser
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
+from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from qgis.core import (
     QGis,
@@ -42,6 +44,7 @@ from safe_qgis.safe_interface import (
     ErrorMessage,
     safeTr,
     get_version,
+    unique_filename,
     messaging as m,
     styles)
 
@@ -830,3 +833,82 @@ def read_impact_layer(impact_layer):
         message = tr(
             'Loaded impact layer "%s" is not valid') % file_name
         raise Exception(message)
+
+
+def map_qrc_to_file(match, res_copy_dir):
+        """map a qrc:/ path to its correspondent file:/// and creates it
+
+        for example qrc:/plugins/inasafe/ajax-loader.gif
+        is converted to file:////home/marco/.qgis2/python/plugins/
+        inasafe-master/safe_qgis/resources/img/ajax-loader.gif
+
+        if the qrc asset is non file based (i.e. is compiled in resources_rc
+        .pc) then a copy of is extracted to res_copy_dir
+
+        :param match: the qrc path to be mapped matched from a regular
+        expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
+        :type match: re.match object
+
+        :param res_copy_dir: the path to copy non file based qrc assets.
+        :type res_copy_dir: str
+
+        :returns: a file path to the resource or None if the resource could
+        not be created
+        :rtype: None, str
+        """
+
+        resources_path = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'resources'))
+        res_alias = match.group(1)
+        res_path = '%s/%s' % (resources_path, res_alias)
+        if not os.path.isfile(res_path):
+            res_path = os.path.join(res_copy_dir, res_alias)
+            # file might be here due to a previous copy
+            if not os.path.isfile(res_path):
+                if not os.path.exists(res_copy_dir):
+                    os.makedirs(res_copy_dir)
+                # copy from qrc to filesystem
+                copy_successful = QFile.copy(':/plugins/inasafe/%s' %
+                                             res_alias, res_path)
+                if not copy_successful:
+                    #copy somehow failed
+                    res_path = None
+
+        return res_path
+
+
+def open_in_browser(file_path):
+    webbrowser.open('file://%s' % file_path)
+
+
+def html_to_file(html, file_path=None, open_browser=False):
+    """Save the html to an html file adapting the paths to the filesystem
+
+    if a file_path is passed, it is used, if not a unique_filename is
+    generated.
+
+    qrc:/..../ paths gets converted to file:///..../
+
+    :param html: the html for the output file.
+    :type html: str
+
+    :param file_path: the path for the html output file.
+    :type file_path: str
+
+    :param open_browser: if true open the generated html in an external
+    browser
+    :type open_browser: bool
+    """
+    if file_path is None:
+        file_path = unique_filename(suffix='.html')
+
+    file_dir = os.path.dirname(file_path)
+    reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
+    html = reg_exp.sub(lambda match: map_qrc_to_file(match, file_dir),
+                       html)
+
+    with open(file_path, 'w') as f:
+        f.write(html)
+
+    if open_browser:
+        open_in_browser(file_path)

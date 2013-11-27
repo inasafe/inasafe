@@ -1,7 +1,7 @@
 #!/bin/bash
-export PYTHONPATH=/usr/local/qgis-master/share/qgis/python/:`pwd`
-export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
-export QGIS_PREFIX_PATH=/usr/local/qgis-master/
+export QGIS_PREFIX_PATH=/usr/local/qgis-2.0/
+export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:`pwd`
+export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 export INASAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-QGIS2/exposure/population.tif
 
 # Make sure data dir is current and synced it its git clone
