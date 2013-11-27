@@ -263,7 +263,7 @@ pylint:
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime || true
+	@pylint --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime || true
 
 profile:
 	@echo

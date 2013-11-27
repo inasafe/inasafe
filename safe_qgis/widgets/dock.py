@@ -39,7 +39,7 @@ from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
     get_error_message,
-    getWGS84resolution,
+    get_wgs84_resolution,
     impact_attribution,
     add_ordered_combo_item,
     extent_to_geo_array,
@@ -849,20 +849,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
 
-        hazard_layer, exposure_layer = self.optimal_clip()
-        # See if the inputs need further refinement for aggregations
-        try:
-            self.aggregator.deintersect(hazard_layer, exposure_layer)
-        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
-            raise
-        # Identify input layers
-        self.calculator.set_hazard_layer(self.aggregator.hazard_layer.source())
-        self.calculator.set_exposure_layer(
-            self.aggregator.exposure_layer.source())
-
         # Use canonical function name to identify selected function
         function_id = self.get_function_id()
         self.calculator.set_function(function_id)
+
+        hazard_layer, exposure_layer = self.optimal_clip()
+        # See if the inputs need further refinement for aggregations
+        try:
+            self.aggregator.set_layers(hazard_layer, exposure_layer)
+            self.aggregator.deintersect()
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
+        # Identify input layers
+        self.calculator.set_hazard_layer(self.aggregator.hazard_layer)
+        self.calculator.set_exposure_layer(self.aggregator.exposure_layer)
 
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
@@ -1289,7 +1289,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             message = str(self.tr(
                 'No impact layer was calculated. Error message: %s\n'
             ) % (str(result)))
-            exception = self.runner.lastException()
+            exception = self.runner.last_exception()
             if isinstance(exception, ZeroImpactException):
                 report = m.Message()
                 report.add(LOGO_ELEMENT)
@@ -1477,11 +1477,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extra_exposure_keywords = {}
         if hazard_layer.type() == QgsMapLayer.RasterLayer:
             # Hazard layer is raster
-            hazard_geo_cell_size = getWGS84resolution(hazard_layer)
+            hazard_geo_cell_size = get_wgs84_resolution(hazard_layer)
 
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
-                exposure_geo_cell_size = getWGS84resolution(exposure_layer)
+                exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
 
                 if hazard_geo_cell_size < exposure_geo_cell_size:
                     cell_size = hazard_geo_cell_size
@@ -1793,7 +1793,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_template(report_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
-        default_file_name = print_map.map_title() + '.pdf'
+        if print_map.map_title() is not None:
+            default_file_name = print_map.map_title() + '.pdf'
+        else:
+            QtGui.QMessageBox.warning(
+                self,
+                self.tr('InaSAFE'),
+                self.tr('Please specify "map_title" keyword before '
+                        'trying to print.'))
+            return
+
         default_file_name = default_file_name.replace(' ', '_')
         # noinspection PyCallByClass,PyTypeChecker
         map_pdf_path = QtGui.QFileDialog.getSaveFileName(

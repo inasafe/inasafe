@@ -417,13 +417,13 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
         QtGui.QImage.Format_ARGB32_Premultiplied)
     difference_image.fill(152 + 219 * 256 + 249 * 256 * 256)
 
-    for myY in range(image_height):
-        for myX in range(image_width):
-            control_pixel = control_image.pixel(myX, myY)
-            test_pixel = test_image.pixel(myX, myY)
+    for y in range(image_height):
+        for y in range(image_width):
+            control_pixel = control_image.pixel(y, y)
+            test_pixel = test_image.pixel(y, y)
             if control_pixel != test_pixel:
                 mismatch_count += 1
-                difference_image.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
+                difference_image.setPixel(y, y, QtGui.qRgb(255, 0, 0))
     difference_path = unique_filename(
         prefix='difference-%s' % os.path.basename(control_image_path),
         suffix='.png',
@@ -510,15 +510,15 @@ def get_platform_name():
         Windows7-SP1-AMD64
         LinuxMint-14-x86_64
     """
-    my_platform_system = platform.system()
-    if my_platform_system == 'Darwin':
+    platform_name = platform.system()
+    if platform_name == 'Darwin':
         name = 'OSX'
         name += '.'.join(platform.mac_ver()[0].split('.')[0:2])
         return name
-    elif my_platform_system == 'Linux':
+    elif platform_name == 'Linux':
         name = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
         return name
-    elif my_platform_system == 'Windows':
+    elif platform_name == 'Windows':
         name = 'Windows'
         win32_version = platform.win32_ver()
         platform_machine = platform.machine()
