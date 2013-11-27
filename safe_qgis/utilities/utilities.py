@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -93,34 +94,34 @@ def get_error_message(exception, context=None, suggestion=None):
     :rtype: ErrorMessage
     """
 
-    myTraceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
+    traceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
 
-    myProblem = m.Message(m.Text(exception.__class__.__name__))
+    problem = m.Message(m.Text(exception.__class__.__name__))
 
     if str(exception) is None or str(exception) == '':
-        myProblem.append = m.Text(tr('No details provided'))
+        problem.append = m.Text(tr('No details provided'))
     else:
-        myProblem.append = m.Text(str(exception))
+        problem.append = m.Text(str(exception))
 
-    mySuggestion = suggestion
-    if mySuggestion is None and hasattr(exception, 'suggestion'):
-        mySuggestion = exception.message
+    suggestion = suggestion
+    if suggestion is None and hasattr(exception, 'suggestion'):
+        suggestion = exception.message
 
-    myErrorMessage = ErrorMessage(
-        myProblem,
+    error_message = ErrorMessage(
+        problem,
         detail=context,
-        suggestion=mySuggestion,
-        traceback=myTraceback
+        suggestion=suggestion,
+        traceback=traceback
     )
 
-    myArgs = exception.args
-    for myArg in myArgs:
-        myErrorMessage.details.append(myArg)
+    args = exception.args
+    for arg in args:
+        error_message.details.append(arg)
 
-    return myErrorMessage
+    return error_message
 
 
-def getWGS84resolution(layer):
+def get_wgs84_resolution(layer):
     """Return resolution of raster layer in EPSG:4326.
 
     If input layer is already in EPSG:4326, simply return the resolution
@@ -141,26 +142,27 @@ def getWGS84resolution(layer):
         raise RuntimeError(msg)
 
     if layer.crs().authid() == 'EPSG:4326':
-        myCellSize = layer.rasterUnitsPerPixelX()
+        cell_size = layer.rasterUnitsPerPixelX()
 
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
 
         # Reproject extent to EPSG:4326
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromSrid(4326)
-        myXForm = QgsCoordinateTransform(layer.crs(), myGeoCrs)
-        myExtent = layer.extent()
-        myProjectedExtent = myXForm.transformBoundingBox(myExtent)
+        geo_crs = QgsCoordinateReferenceSystem()
+        geo_crs.createFromSrid(4326)
+        transform = QgsCoordinateTransform(layer.crs(), geo_crs)
+        extent = layer.extent()
+        projected_extent = transform.transformBoundingBox(extent)
 
         # Estimate cell size
-        myColumns = layer.width()
-        myGeoWidth = abs(myProjectedExtent.xMaximum() -
-                         myProjectedExtent.xMinimum())
-        myCellSize = myGeoWidth / myColumns
+        columns = layer.width()
+        geo_width = abs(
+            projected_extent.xMaximum() -
+            projected_extent.xMinimum())
+        cell_size = geo_width / columns
 
-    return myCellSize
+    return cell_size
 
 
 def html_header():
@@ -170,13 +172,13 @@ def html_header():
         including the body open tag.
     :rtype: str
     """
-    myFile = QtCore.QFile(':/plugins/inasafe/header.html')
-    if not myFile.open(QtCore.QIODevice.ReadOnly):
+    file_path = QtCore.QFile(':/plugins/inasafe/header.html')
+    if not file_path.open(QtCore.QIODevice.ReadOnly):
         return '----'
-    myStream = QtCore.QTextStream(myFile)
-    myHeader = myStream.readAll()
-    myFile.close()
-    return myHeader
+    stream = QtCore.QTextStream(file_path)
+    header = stream.readAll()
+    file_path.close()
+    return header
 
 
 def html_footer():
@@ -186,13 +188,13 @@ def html_footer():
         and including the body close tag.
     :rtype: str
     """
-    myFile = QtCore.QFile(':/plugins/inasafe/footer.html')
-    if not myFile.open(QtCore.QIODevice.ReadOnly):
+    file_path = QtCore.QFile(':/plugins/inasafe/footer.html')
+    if not file_path.open(QtCore.QIODevice.ReadOnly):
         return '----'
-    myStream = QtCore.QTextStream(myFile)
-    myFooter = myStream.readAll()
-    myFile.close()
-    return myFooter
+    stream = QtCore.QTextStream(file_path)
+    footer = stream.readAll()
+    file_path.close()
+    return footer
 
 
 def qgis_version():
@@ -201,9 +203,9 @@ def qgis_version():
     :returns: QGIS Version where 10700 represents QGIS 1.7 etc.
     :rtype: int
     """
-    myVersion = unicode(QGis.QGIS_VERSION_INT)
-    myVersion = int(myVersion)
-    return myVersion
+    version = unicode(QGis.QGIS_VERSION_INT)
+    version = int(version)
+    return version
 
 
 def layer_attribute_names(layer, allowed_types, current_keyword=None):
@@ -227,21 +229,21 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
     """
 
     if layer.type() == QgsMapLayer.VectorLayer:
-        myProvider = layer.dataProvider()
-        myProvider = myProvider.fields()
-        myFields = []
-        mySelectedIndex = None
+        provider = layer.dataProvider()
+        provider = provider.fields()
+        fields = []
+        selected_index = None
         i = 0
-        for f in myProvider:
-            # show only int or string myFields to be chosen as aggregation
+        for f in provider:
+            # show only int or string fields to be chosen as aggregation
             # attribute other possible would be float
             if f.type() in allowed_types:
-                myCurrentFieldName = f.name()
-                myFields.append(myCurrentFieldName)
-                if current_keyword == myCurrentFieldName:
-                    mySelectedIndex = i
+                current_field_name = f.name()
+                fields.append(current_field_name)
+                if current_keyword == current_field_name:
+                    selected_index = i
                 i += 1
-        return myFields, mySelectedIndex
+        return fields, selected_index
     else:
         return None, None
 
@@ -263,13 +265,13 @@ def create_memory_layer(layer, new_name=''):
         new_name = layer.name() + ' TMP'
 
     if layer.type() == QgsMapLayer.VectorLayer:
-        vType = layer.geometryType()
-        if vType == QGis.Point:
-            typeStr = 'Point'
-        elif vType == QGis.Line:
-            typeStr = 'Line'
-        elif vType == QGis.Polygon:
-            typeStr = 'Polygon'
+        vector_type = layer.geometryType()
+        if vector_type == QGis.Point:
+            type_string = 'Point'
+        elif vector_type == QGis.Line:
+            type_string = 'Line'
+        elif vector_type == QGis.Polygon:
+            type_string = 'Polygon'
         else:
             raise MemoryLayerCreationError('Layer is whether Point nor '
                                            'Line nor Polygon')
@@ -277,24 +279,24 @@ def create_memory_layer(layer, new_name=''):
         raise MemoryLayerCreationError('Layer is not a VectorLayer')
 
     crs = layer.crs().authid().lower()
-    myUUID = str(uuid.uuid4())
-    uri = '%s?crs=%s&index=yes&uuid=%s' % (typeStr, crs, myUUID)
-    memLayer = QgsVectorLayer(uri, new_name, 'memory')
-    memProvider = memLayer.dataProvider()
+    uuid_string = str(uuid.uuid4())
+    uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, uuid_string)
+    memory_layer = QgsVectorLayer(uri, new_name, 'memory')
+    memory_provider = memory_layer.dataProvider()
 
     provider = layer.dataProvider()
-    vFields = provider.fields()
+    vector_fields = provider.fields()
 
     fields = []
-    for i in vFields:
+    for i in vector_fields:
         fields.append(i)
 
-    memProvider.addAttributes(fields)
+    memory_provider.addAttributes(fields)
 
     for ft in provider.getFeatures():
-        memProvider.addFeatures([ft])
+        memory_provider.addFeatures([ft])
 
-    return memLayer
+    return memory_layer
 
 
 def mm_to_points(mm, dpi):
@@ -310,9 +312,9 @@ def mm_to_points(mm, dpi):
     :returns: mm converted value as points.
     :rtype: int
     """
-    myInchAsMM = 25.4
-    myPoints = (mm * dpi) / myInchAsMM
-    return myPoints
+    inch_as_mm = 25.4
+    points = (mm * dpi) / inch_as_mm
+    return points
 
 
 def points_to_mm(points, dpi):
@@ -328,9 +330,9 @@ def points_to_mm(points, dpi):
     :returns: points converted value as mm.
     :rtype: int
     """
-    myInchAsMM = 25.4
-    myMM = (float(points) / dpi) * myInchAsMM
-    return myMM
+    inch_as_mm = 25.4
+    mm = (float(points) / dpi) * inch_as_mm
+    return mm
 
 
 def dpi_to_meters(dpi):
@@ -342,10 +344,10 @@ def dpi_to_meters(dpi):
     :returns: dpi converted value.
     :rtype: int
     """
-    myInchAsMM = 25.4
-    myInchesPerM = 1000.0 / myInchAsMM
-    myDotsPerM = myInchesPerM * dpi
-    return myDotsPerM
+    inch_as_mm = 25.4
+    inches_per_m = 1000.0 / inch_as_mm
+    dots_per_m = inches_per_m * dpi
+    return dots_per_m
 
 
 def setup_printer(filename, resolution=300, page_height=297, page_width=210):
@@ -367,16 +369,16 @@ def setup_printer(filename, resolution=300, page_height=297, page_width=210):
     # Create a printer device (we are 'printing' to a pdf
     #
     LOGGER.debug('InaSAFE Map setupPrinter called')
-    myPrinter = QtGui.QPrinter()
-    myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
-    myPrinter.setOutputFileName(filename)
-    myPrinter.setPaperSize(
+    printer = QtGui.QPrinter()
+    printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
+    printer.setOutputFileName(filename)
+    printer.setPaperSize(
         QtCore.QSizeF(page_width, page_height),
         QtGui.QPrinter.Millimeter)
-    myPrinter.setFullPage(True)
-    myPrinter.setColorMode(QtGui.QPrinter.Color)
-    myPrinter.setResolution(resolution)
-    return myPrinter
+    printer.setFullPage(True)
+    printer.setColorMode(QtGui.QPrinter.Color)
+    printer.setResolution(resolution)
+    return printer
 
 
 def humanise_seconds(seconds):
@@ -393,26 +395,26 @@ def humanise_seconds(seconds):
     :returns: A humanised version of the seconds count.
     :rtype: str
     """
-    myDays = seconds / (3600 * 24)
-    myDayModulus = seconds % (3600 * 24)
-    myHours = myDayModulus / 3600
-    myHourModulus = myDayModulus % 3600
-    myMinutes = myHourModulus / 60
+    days = seconds / (3600 * 24)
+    day_modulus = seconds % (3600 * 24)
+    hours = day_modulus / 3600
+    hour_modulus = day_modulus % 3600
+    minutes = hour_modulus / 60
 
     if seconds < 60:
         return tr('%i seconds' % seconds)
     if seconds < 120:
         return tr('a minute')
     if seconds < 3600:
-        return tr('%s minutes' % myMinutes)
+        return tr('%s minutes' % minutes)
     if seconds < 7200:
         return tr('over an hour')
     if seconds < 86400:
-        return tr('%i hours and %i minutes' % (myHours, myMinutes))
+        return tr('%i hours and %i minutes' % (hours, minutes))
     else:
         # If all else fails...
         return tr('%i days, %i hours and %i minutes' % (
-            myDays, myHours, myMinutes))
+            days, hours, minutes))
 
 
 def impact_attribution(keywords, inasafe_flag=False):
@@ -432,60 +434,60 @@ def impact_attribution(keywords, inasafe_flag=False):
     if keywords is None:
         return None
 
-    myJoinWords = ' - %s ' % tr('sourced from')
-    myHazardDetails = tr('Hazard details')
-    myHazardTitleKeyword = 'hazard_title'
-    myHazardSourceKeyword = 'hazard_source'
-    myExposureDetails = tr('Exposure details')
-    myExposureTitleKeyword = 'exposure_title'
-    myExposureSourceKeyword = 'exposure_source'
+    join_words = ' - %s ' % tr('sourced from')
+    hazard_details = tr('Hazard details')
+    hazard_title_keywords = 'hazard_title'
+    hazard_source_keywords = 'hazard_source'
+    exposure_details = tr('Exposure details')
+    exposure_title_keywords = 'exposure_title'
+    exposure_source_keyword = 'exposure_source'
 
-    if myHazardTitleKeyword in keywords:
+    if hazard_title_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        myHazardTitle = safeTr(keywords[myHazardTitleKeyword])
+        hazard_title = safeTr(keywords[hazard_title_keywords])
     else:
-        myHazardTitle = tr('Hazard layer')
+        hazard_title = tr('Hazard layer')
 
-    if myHazardSourceKeyword in keywords:
+    if hazard_source_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        myHazardSource = safeTr(keywords[myHazardSourceKeyword])
+        hazard_source = safeTr(keywords[hazard_source_keywords])
     else:
-        myHazardSource = tr('an unknown source')
+        hazard_source = tr('an unknown source')
 
-    if myExposureTitleKeyword in keywords:
-        myExposureTitle = keywords[myExposureTitleKeyword]
+    if exposure_title_keywords in keywords:
+        exposure_title = keywords[exposure_title_keywords]
     else:
-        myExposureTitle = tr('Exposure layer')
+        exposure_title = tr('Exposure layer')
 
-    if myExposureSourceKeyword in keywords:
-        myExposureSource = keywords[myExposureSourceKeyword]
+    if exposure_source_keyword in keywords:
+        exposure_source = keywords[exposure_source_keyword]
     else:
-        myExposureSource = tr('an unknown source')
+        exposure_source = tr('an unknown source')
 
-    myReport = m.Message()
-    myReport.add(m.Heading(myHazardDetails, **INFO_STYLE))
-    myReport.add(m.Paragraph(
-        myHazardTitle,
-        myJoinWords,
-        myHazardSource))
+    report = m.Message()
+    report.add(m.Heading(hazard_details, **INFO_STYLE))
+    report.add(m.Paragraph(
+        hazard_title,
+        join_words,
+        hazard_source))
 
-    myReport.add(m.Heading(myExposureDetails, **INFO_STYLE))
-    myReport.add(m.Paragraph(
-        myExposureTitle,
-        myJoinWords,
-        myExposureSource))
+    report.add(m.Heading(exposure_details, **INFO_STYLE))
+    report.add(m.Paragraph(
+        exposure_title,
+        join_words,
+        exposure_source))
 
     if inasafe_flag:
-        myReport.add(m.Heading(tr('Software notes'), **INFO_STYLE))
+        report.add(m.Heading(tr('Software notes'), **INFO_STYLE))
         # noinspection PyUnresolvedReferences
-        myInaSAFEPhrase = tr(
+        inasafe_phrase = tr(
             'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org to get your free copy of this software!'
             'InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR & the '
             'World Bank') % (get_version())
 
-        myReport.add(m.Paragraph(m.Text(myInaSAFEPhrase)))
-    return myReport
+        report.add(m.Paragraph(m.Text(inasafe_phrase)))
+    return report
 
 
 def add_ordered_combo_item(combo, text, data=None):
@@ -505,15 +507,15 @@ def add_ordered_combo_item(combo, text, data=None):
     :param data: Optional UserRole data to be associated with the item.
     :type data: QVariant, str
     """
-    mySize = combo.count()
-    for myCount in range(0, mySize):
-        myItemText = str(combo.itemText(myCount))
+    size = combo.count()
+    for myCount in range(0, size):
+        item_text = str(combo.itemText(myCount))
         # see if text alphabetically precedes myItemText
-        if cmp(str(text).lower(), myItemText.lower()) < 0:
+        if cmp(str(text).lower(), item_text.lower()) < 0:
             combo.insertItem(myCount, text, data)
             return
         # otherwise just add it to the end
-    combo.insertItem(mySize, text, data)
+    combo.insertItem(size, text, data)
 
 
 def is_polygon_layer(layer):
@@ -599,9 +601,10 @@ def which(name, flags=os.X_OK):
     # adding it back here in case the user's path does not include the
     # gdal binary dir on OSX but it is actually there. (TS)
     if sys.platform == 'darwin':  # Mac OS X
-        myGdalPrefix = ('/Library/Frameworks/GDAL.framework/'
-                        'Versions/1.9/Programs/')
-        path = '%s:%s' % (path, myGdalPrefix)
+        gdal_prefix = (
+            '/Library/Frameworks/GDAL.framework/'
+            'Versions/1.10/Programs/')
+        path = '%s:%s' % (path, gdal_prefix)
 
     LOGGER.debug('Search path: %s' % path)
 
@@ -635,18 +638,19 @@ def extent_to_geo_array(extent, source_crs):
 
     """
 
-    myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromSrid(4326)
-    myXForm = QgsCoordinateTransform(source_crs, myGeoCrs)
+    geo_crs = QgsCoordinateReferenceSystem()
+    geo_crs.createFromSrid(4326)
+    transform = QgsCoordinateTransform(source_crs, geo_crs)
 
     # Get the clip area in the layer's crs
-    myTransformedExtent = myXForm.transformBoundingBox(extent)
+    transformed_extent = transform.transformBoundingBox(extent)
 
-    myGeoExtent = [myTransformedExtent.xMinimum(),
-                   myTransformedExtent.yMinimum(),
-                   myTransformedExtent.xMaximum(),
-                   myTransformedExtent.yMaximum()]
-    return myGeoExtent
+    geo_extent = [
+        transformed_extent.xMinimum(),
+        transformed_extent.yMinimum(),
+        transformed_extent.xMaximum(),
+        transformed_extent.yMaximum()]
+    return geo_extent
 
 
 def safe_to_qgis_layer(layer):
@@ -662,32 +666,32 @@ def safe_to_qgis_layer(layer):
     """
 
     # noinspection PyUnresolvedReferences
-    myMessage = tr(
+    message = tr(
         'Input layer must be a InaSAFE spatial object. I got %s'
     ) % (str(type(layer)))
     if not hasattr(layer, 'is_inasafe_spatial_object'):
-        raise Exception(myMessage)
+        raise Exception(message)
     if not layer.is_inasafe_spatial_object:
-        raise Exception(myMessage)
+        raise Exception(message)
 
     # Get associated filename and symbolic name
-    myFilename = layer.get_filename()
-    myName = layer.get_name()
+    filename = layer.get_filename()
+    name = layer.get_name()
 
-    myQGISLayer = None
+    qgis_layer = None
     # Read layer
     if layer.is_vector:
-        myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+        qgis_layer = QgsVectorLayer(filename, name, 'ogr')
     elif layer.is_raster:
-        myQGISLayer = QgsRasterLayer(myFilename, myName)
+        qgis_layer = QgsRasterLayer(filename, name)
 
     # Verify that new qgis layer is valid
-    if myQGISLayer.isValid():
-        return myQGISLayer
+    if qgis_layer.isValid():
+        return qgis_layer
     else:
         # noinspection PyUnresolvedReferences
-        myMessage = tr('Loaded impact layer "%s" is not valid') % myFilename
-        raise Exception(myMessage)
+        message = tr('Loaded impact layer "%s" is not valid') % filename
+        raise Exception(message)
 
 
 def download_url(manager, url, output_path, progress_dialog=None):
@@ -710,18 +714,18 @@ def download_url(manager, url, output_path, progress_dialog=None):
     """
 
     # prepare output path
-    myFile = QFile(output_path)
-    if not myFile.open(QFile.WriteOnly):
-        raise IOError(myFile.errorString())
+    file = QFile(output_path)
+    if not file.open(QFile.WriteOnly):
+        raise IOError(file.errorString())
 
     # slot to write data to file
     def write_data():
         """Write data to a file."""
-        myFile.write(myReply.readAll())
+        file.write(reply.readAll())
 
-    myRequest = QNetworkRequest(QUrl(url))
-    myReply = manager.get(myRequest)
-    myReply.readyRead.connect(write_data)
+    request = QNetworkRequest(QUrl(url))
+    reply = manager.get(request)
+    reply.readyRead.connect(write_data)
 
     if progress_dialog:
         # progress bar
@@ -745,23 +749,23 @@ def download_url(manager, url, output_path, progress_dialog=None):
         # cancel
         def cancel_action():
             """Cancel download."""
-            myReply.abort()
+            reply.abort()
 
-        myReply.downloadProgress.connect(progress_event)
+        reply.downloadProgress.connect(progress_event)
         progress_dialog.canceled.connect(cancel_action)
 
     # wait until finished
-    while not myReply.isFinished():
+    while not reply.isFinished():
         # noinspection PyArgumentList
         QCoreApplication.processEvents()
 
-    myFile.close()
+    file.close()
 
-    myResult = myReply.error()
-    if myResult == QNetworkReply.NoError:
+    result = reply.error()
+    if result == QNetworkReply.NoError:
         return True
     else:
-        return myResult, str(myReply.errorString())
+        return result, str(reply.errorString())
 
 
 def viewport_geo_array(map_canvas):
@@ -778,17 +782,17 @@ def viewport_geo_array(map_canvas):
     """
 
     # get the current viewport extent
-    myRect = map_canvas.extent()
+    rectangle = map_canvas.extent()
 
     if map_canvas.hasCrsTransformEnabled():
-        myCrs = map_canvas.mapRenderer().destinationCrs()
+        crs = map_canvas.mapRenderer().destinationCrs()
     else:
         # some code duplication from extentToGeoArray here
         # in favour of clarity of logic...
-        myCrs = QgsCoordinateReferenceSystem()
-        myCrs.createFromSrid(4326)
+        crs = QgsCoordinateReferenceSystem()
+        crs.createFromSrid(4326)
 
-    return extent_to_geo_array(myRect, myCrs)
+    return extent_to_geo_array(rectangle, crs)
 
 
 def read_impact_layer(impact_layer):
@@ -802,32 +806,33 @@ def read_impact_layer(impact_layer):
     """
 
     # noinspection PyUnresolvedReferences
-    myMessage = tr('Input layer must be a InaSAFE spatial object. '
-                   'I got %s') % (str(type(impact_layer)))
+    message = tr(
+        'Input layer must be a InaSAFE spatial object. '
+        'I got %s') % (str(type(impact_layer)))
     if not hasattr(impact_layer, 'is_inasafe_spatial_object'):
-        raise Exception(myMessage)
+        raise Exception(message)
     if not impact_layer.is_inasafe_spatial_object:
-        raise Exception(myMessage)
+        raise Exception(message)
 
     # Get associated filename and symbolic name
-    myFilename = impact_layer.get_filename()
-    myName = impact_layer.get_name()
+    file_name = impact_layer.get_filename()
+    name = impact_layer.get_name()
 
-    myQGISLayer = None
+    qgis_layer = None
     # Read layer
     if impact_layer.is_vector:
-        myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+        qgis_layer = QgsVectorLayer(file_name, name, 'ogr')
     elif impact_layer.is_raster:
-        myQGISLayer = QgsRasterLayer(myFilename, myName)
+        qgis_layer = QgsRasterLayer(file_name, name)
 
     # Verify that new qgis layer is valid
-    if myQGISLayer.isValid():
-        return myQGISLayer
+    if qgis_layer.isValid():
+        return qgis_layer
     else:
         # noinspection PyUnresolvedReferences
-        myMessage = tr(
-            'Loaded impact layer "%s" is not valid') % myFilename
-        raise Exception(myMessage)
+        message = tr(
+            'Loaded impact layer "%s" is not valid') % file_name
+        raise Exception(message)
 
 
 def map_qrc_to_file(match, res_copy_dir):

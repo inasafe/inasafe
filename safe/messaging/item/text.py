@@ -142,7 +142,7 @@ class PlainText(Text):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(PlainText, self).__init__(**kwargs)
-        if self._is_qstring(text):
+        if self._is_stringable(text) or self._is_qstring(text):
             self.text = str(text)
         else:
             self.text = text
