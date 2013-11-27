@@ -6,7 +6,7 @@ from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 
 import numpy
 
