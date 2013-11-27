@@ -902,6 +902,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        self.wvResults.clear_dynamic_messages_log()
         title = self.tr('Processing started')
         details = self.tr(
             'Please wait - processing may take a while depending on your '
@@ -1165,7 +1166,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysis_error(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
-            self.show_static_message(m.Message(report))
+            impact_path = qgis_impact_layer.source()
+            message = m.Message(report)
+            #message.add(m.Heading(self.tr('View processing log as HTML'),
+            #                      **INFO_STYLE))
+            #message.add(m.Link('file://%s' % self.wvResults.log_path))
+            self.show_static_message(message)
+            self.wvResults.impact_path = impact_path
+
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
