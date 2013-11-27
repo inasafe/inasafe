@@ -143,8 +143,8 @@ def setup_logger(log_file=None, sentry_url=None):
     #               /var/log/syslog
     # (Tim) Ole and I discussed this - we prefer to log into the
     # user's temporary working directory.
-    temp_dir = temp_dir('logs')
-    path = os.path.join(temp_dir, 'inasafe.log')
+    log_temp_dir = temp_dir('logs')
+    path = os.path.join(log_temp_dir, 'inasafe.log')
     if log_file is None:
         file_handler = logging.FileHandler(path)
     else:
