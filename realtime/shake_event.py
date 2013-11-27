@@ -143,7 +143,7 @@ class ShakeEvent(QObject):
         # We inherit from QObject for translation support
         QObject.__init__(self)
 
-        self.checkEnvironment()
+        self.check_environment()
 
         if theDataIsLocalFlag:
             self.eventId = theEventId
@@ -166,14 +166,17 @@ class ShakeEvent(QObject):
         self.month = None
         self.year = None
         self.time = None
-        self.timeZone = None
-        self.xMinimum = None
-        self.xMaximum = None
-        self.yMinimum = None
-        self.yMaximum = None
+        self.hour = None
+        self.minute = None
+        self.second = None
+        self.timezone = None
+        self.x_minimum = None
+        self.x_maximum = None
+        self.y_minimum = None
+        self.y_maximum = None
         self.rows = None
         self.columns = None
-        self.mmiData = None
+        self.mmi_data = None
         self.populationRasterPath = thePopulationRasterPath
         # Path to tif of impact result - probably we wont even use it
         self.impactFile = None
@@ -209,47 +212,40 @@ class ShakeEvent(QObject):
         self.translator = None
         self.locale = theLocale
         self.setupI18n()
-        self.parseGridXml()
+        self.parse_grid_xml()
 
-    def checkEnvironment(self):
+    def check_environment(self):
         """A helper class to check that QGIS is correctly initialised.
 
-        Args: None
-
-        Returns: None
-
-        Raises: EnvironmentError if the environment is not correct.
+        :raises: EnvironmentError if the environment is not correct.
         """
         # noinspection PyArgumentList
-        myRegistry = QgsProviderRegistry.instance()
-        myList = myRegistry.pluginList()
-        if len(myList) < 1:
+        registry = QgsProviderRegistry.instance()
+        registry_list = registry.pluginList()
+        if len(registry_list) < 1:
             raise EnvironmentError('QGIS data provider list is empty!')
 
-    def gridFilePath(self):
+    def grid_file_path(self):
         """A helper to retrieve the path to the grid.xml file
 
-        Args: None
-
-        Returns: An absolute filesystem path to the grid.xml file.
-
-        Raises: GridXmlFileNotFoundError
+        :return: An absolute filesystem path to the grid.xml file.
+        :raise: GridXmlFileNotFoundError
         """
         LOGGER.debug('Event path requested.')
-        myGridXmlPath = os.path.join(shakemapExtractDir(),
+        grid_xml_path = os.path.join(shakemapExtractDir(),
                                      self.eventId,
                                      'grid.xml')
         #short circuit if the tif is already created.
-        if os.path.exists(myGridXmlPath):
-            return myGridXmlPath
+        if os.path.exists(grid_xml_path):
+            return grid_xml_path
         else:
-            LOGGER.error('Event file not found. %s' % myGridXmlPath)
-            raise GridXmlFileNotFoundError('%s not found' % myGridXmlPath)
+            LOGGER.error('Event file not found. %s' % grid_xml_path)
+            raise GridXmlFileNotFoundError('%s not found' % grid_xml_path)
 
-    def extractDateTime(self, theTimeStamp):
+    def extract_datetime(self, timestamp):
         """Extract the parts of a date given a timestamp as per below example.
 
-        :param theTimeStamp: (str) as provided by the 'event_timestamp'
+        :param timestamp: (str) as provided by the 'event_timestamp'
                 attribute in the grid.xml.
 
         # now separate out its parts
@@ -261,17 +257,19 @@ class ShakeEvent(QObject):
         #>>> e[-3:]
         #'WIB'   (WIB = Western Indonesian Time)
         """
-        myDateTokens = theTimeStamp[0:10].split('-')
-        self.year = int(myDateTokens[0])
-        self.month = int(myDateTokens[1])
-        self.day = int(myDateTokens[2])
-        myTimeTokens = theTimeStamp[11:-3].split(':')
-        self.hour = int(myTimeTokens[0])
-        self.minute = int(myTimeTokens[1])
-        self.second = int(myTimeTokens[2])
+        date_tokens = timestamp[0:10].split('-')
+        self.year = int(date_tokens[0])
+        self.month = int(date_tokens[1])
+        self.day = int(date_tokens[2])
+        time_tokens = timestamp[11:-3].split(':')
+        self.hour = int(time_tokens[0])
+        self.minute = int(time_tokens[1])
+        self.second = int(time_tokens[2])
 
-    def parseGridXml(self):
+    def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
+
+        :raise GridXmlParseError
 
         The grid xyz dataset looks like this::
 
@@ -315,72 +313,63 @@ class ShakeEvent(QObject):
            contains clear and unequivical metadata describing the various
            fields and attributes. Also it provides all the data we need in a
            single file.
-
-
-        Args: None
-
-        Returns: None
-
-        Raises: GridXmlParseError
         """
         LOGGER.debug('ParseGridXml requested.')
-        myPath = self.gridFilePath()
+        path = self.grid_file_path()
         try:
-            myDocument = minidom.parse(myPath)
-            myEventElement = myDocument.getElementsByTagName('event')
-            myEventElement = myEventElement[0]
-            self.magnitude = float(myEventElement.attributes[
-                                   'magnitude'].nodeValue)
-            self.longitude = float(myEventElement.attributes[
-                                   'lon'].nodeValue)
-            self.latitude = float(myEventElement.attributes[
-                                  'lat'].nodeValue)
-            self.location = myEventElement.attributes[
+            document = minidom.parse(path)
+            event_element = document.getElementsByTagName('event')
+            event_element = event_element[0]
+            self.magnitude = float(
+                event_element.attributes['magnitude'].nodeValue)
+            self.longitude = float(
+                event_element.attributes['lon'].nodeValue)
+            self.latitude = float(
+                event_element.attributes['lat'].nodeValue)
+            self.location = event_element.attributes[
                 'event_description'].nodeValue.strip()
-            self.depth = float(myEventElement.attributes['depth'].nodeValue)
+            self.depth = float(event_element.attributes['depth'].nodeValue)
             # Get the date - its going to look something like this:
             # 2012-08-07T01:55:12WIB
-            myTimeStamp = myEventElement.attributes[
-                'event_timestamp'].nodeValue
-            self.extractDateTime(myTimeStamp)
+            timestamp = event_element.attributes['event_timestamp'].nodeValue
+            self.extract_datetime(timestamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
-            self.timeZone = myTimeStamp[-3:]
+            self.timezone = timestamp[-3:]
 
-            mySpecificationElement = myDocument.getElementsByTagName(
+            specification_element = document.getElementsByTagName(
                 'grid_specification')
-            mySpecificationElement = mySpecificationElement[0]
-            self.xMinimum = float(mySpecificationElement.attributes[
-                                  'lon_min'].nodeValue)
-            self.xMaximum = float(mySpecificationElement.attributes[
-                                  'lon_max'].nodeValue)
-            self.yMinimum = float(mySpecificationElement.attributes[
-                                  'lat_min'].nodeValue)
-            self.yMaximum = float(mySpecificationElement.attributes[
-                                  'lat_max'].nodeValue)
-            self.rows = float(mySpecificationElement.attributes[
-                              'nlat'].nodeValue)
-            self.columns = float(mySpecificationElement.attributes[
-                                 'nlon'].nodeValue)
-            myDataElement = myDocument.getElementsByTagName(
-                'grid_data')
-            myDataElement = myDataElement[0]
-            myData = myDataElement.firstChild.nodeValue
+            specification_element = specification_element[0]
+            self.x_minimum = float(
+                specification_element.attributes['lon_min'].nodeValue)
+            self.x_maximum = float(
+                specification_element.attributes['lon_max'].nodeValue)
+            self.y_minimum = float(
+                specification_element.attributes['lat_min'].nodeValue)
+            self.y_maximum = float(
+                specification_element.attributes['lat_max'].nodeValue)
+            self.rows = float(
+                specification_element.attributes['nlat'].nodeValue)
+            self.columns = float(
+                specification_element.attributes['nlon'].nodeValue)
+            data_element = document.getElementsByTagName('grid_data')
+            data_element = data_element[0]
+            data = data_element.firstChild.nodeValue
 
             # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
-            myLonColumn = 0
-            myLatColumn = 1
-            myMMIColumn = 4
-            self.mmiData = []
-            for myLine in myData.split('\n'):
-                if not myLine:
+            lon_column = 0
+            lat_column = 1
+            mmi_column = 4
+            self.mmi_data = []
+            for line in data.split('\n'):
+                if not line:
                     continue
-                myTokens = myLine.split(' ')
-                myLon = myTokens[myLonColumn]
-                myLat = myTokens[myLatColumn]
-                myMMI = myTokens[myMMIColumn]
-                myTuple = (myLon, myLat, myMMI)
-                self.mmiData.append(myTuple)
+                tokens = line.split(' ')
+                lon = tokens[lon_column]
+                lat = tokens[lat_column]
+                mmi = tokens[mmi_column]
+                datum_tuple = (lon, lat, mmi)
+                self.mmi_data.append(datum_tuple)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
@@ -388,8 +377,12 @@ class ShakeEvent(QObject):
                 'Failed to parse grid file.\n%s\n%s'
                 % (e.__class__, str(e)))
 
-    def mmiDataToDelimitedText(self):
+    def mmi_data_to_delimited_text(self):
         """Return the mmi data as a delimited test string.
+
+        :return: a delimited text string that can easily be written to
+            disk for e.g. use by gdal_grid.
+        :rtype:  str
 
         The returned string will look like this::
 
@@ -398,23 +391,21 @@ class ShakeEvent(QObject):
            123.1250,01.7900,1.15
            123.1500,01.7900,1.16
            etc...
-
-        Args: None
-
-        Returns: str - a delimited text string that can easily be written to
-            disk for e.g. use by gdal_grid.
-
-        Raises: None
-
         """
-        myString = 'lon,lat,mmi\n'
-        for myRow in self.mmiData:
-            myString += '%s,%s,%s\n' % (myRow[0], myRow[1], myRow[2])
-        return myString
+        string = 'lon,lat,mmi\n'
+        for row in self.mmi_data:
+            string += '%s,%s,%s\n' % (row[0], row[1], row[2])
+        return string
 
-    def mmiDataToDelimitedFile(self, theForceFlag=True):
+    def mmi_data_to_delimited_file(self, force_flag=True):
         """Save the mmi_data to a delimited text file suitable for processing
         with gdal_grid.
+
+        :param force_flag: Optional. Whether to force the regeneration of the
+        output file. Defaults to False.
+        :type force_flag: bool
+        :return: The absolute file system path to the delimited text file.
+        :rtype: str
 
         The output file will be of the same format as strings returned from
         :func:`mmi_to_delimited_text`.
@@ -425,92 +416,84 @@ class ShakeEvent(QObject):
            operations. For example to convert the csv to a shp you would do::
 
               ogr2ogr -select mmi -a_srs EPSG:4326 mmi.shp mmi.vrt mmi
-
-        Args: theForceFlag bool (Optional). Whether to force the regeneration
-            of the output file. Defaults to False.
-
-        Returns: str The absolute file system path to the delimited text
-            file.
-
-        Raises: None
         """
         LOGGER.debug('mmi_to_delimited_text requested.')
 
-        myPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi.csv')
+        path = os.path.join(shakemapExtractDir(),
+                            self.eventId,
+                            'mmi.csv')
         #short circuit if the csv is already created.
-        if os.path.exists(myPath) and theForceFlag is not True:
-            return myPath
-        myFile = file(myPath, 'wt')
-        myFile.write(self.mmiDataToDelimitedText())
-        myFile.close()
+        if os.path.exists(path) and force_flag is not True:
+            return path
+        result_file = file(path, 'wt')
+        result_file.write(self.mmi_data_to_delimited_text())
+        result_file.close()
 
         # Also write the .csv which contains metadata about field types
-        myCsvPath = os.path.join(
+        csv_path = os.path.join(
             shakemapExtractDir(), self.eventId, 'mmi.csvt')
-        myFile = file(myCsvPath, 'wt')
-        myFile.write('"Real","Real","Real"')
-        myFile.close()
-        return myPath
+        result_file = file(csv_path, 'wt')
+        result_file.write('"Real","Real","Real"')
+        result_file.close()
+        return path
 
-    def mmiDataToVrt(self, theForceFlag=True):
+    def mmi_data_to_vrt(self, force_flag=True):
         """Save the mmi_data to an ogr vrt text file.
 
-        Args: theForceFlag bool (Optional). Whether to force the regeneration
+        :param force_flag: Optional. Whether to force the regeneration
             of the output file. Defaults to False.
+        :type force_flag: bool
+        :return: The absolute file system path to the .vrt text file.
+        :rtype: str
+        :raises: None
 
-        Returns: str The absolute file system path to the .vrt text file.
-
-        Raises: None
         """
         # Ensure the delimited mmi file exists
         LOGGER.debug('mmi_to_vrt requested.')
 
-        myVrtPath = os.path.join(shakemapExtractDir(),
-                                 self.eventId,
-                                 'mmi.vrt')
+        vrt_path = os.path.join(shakemapExtractDir(),
+                                self.eventId,
+                                'mmi.vrt')
 
         #short circuit if the vrt is already created.
-        if os.path.exists(myVrtPath) and theForceFlag is not True:
-            return myVrtPath
+        if os.path.exists(vrt_path) and force_flag is not True:
+            return vrt_path
 
-        myCsvPath = self.mmiDataToDelimitedFile(theForceFlag)
+        csv_path = self.mmi_data_to_delimited_file(force_flag)
 
-        myVrtString = ('<OGRVRTDataSource>'
-                       '  <OGRVRTLayer name="mmi">'
-                       '    <SrcDataSource>%s</SrcDataSource>'
-                       '    <GeometryType>wkbPoint</GeometryType>'
-                       '    <GeometryField encoding="PointFromColumns"'
-                       '                      x="lon" y="lat" z="mmi"/>'
-                       '  </OGRVRTLayer>'
-                       '</OGRVRTDataSource>' % myCsvPath)
-        myFile = file(myVrtPath, 'wt')
-        myFile.write(myVrtString)
-        myFile.close()
-        return myVrtPath
+        vrt_string = ('<OGRVRTDataSource>'
+                      '  <OGRVRTLayer name="mmi">'
+                      '    <SrcDataSource>%s</SrcDataSource>'
+                      '    <GeometryType>wkbPoint</GeometryType>'
+                      '    <GeometryField encoding="PointFromColumns"'
+                      '                      x="lon" y="lat" z="mmi"/>'
+                      '  </OGRVRTLayer>'
+                      '</OGRVRTDataSource>' % csv_path)
+        result_file = file(vrt_path, 'wt')
+        result_file.write(vrt_string)
+        result_file.close()
+        return vrt_path
 
-    def _addExecutablePrefix(self, theCommand):
+    def _add_executable_prefix(self, command):
         """Add the executable prefix for gdal binaries.
 
         This is primarily needed for OSX where gdal tools are tucked away in
         the Library path.
-
-        Args: theCommand str - Required. A string containing the command to
-            which the prefix will be prepended.
-
-        Returns: str - A copy of the command with the prefix added.
-
-        Raises: None
+        :param command: A string containing the command to
+        which the prefix will be prepended
+        :type command: str
+        :return: A copy of the command with the prefix added.
+        :rtype: str
+        :raises: None
         """
 
-        myExecutablePrefix = ''
+        executable_prefix = ''
         if sys.platform == 'darwin':  # Mac OS X
             # .. todo:: FIXME - softcode gdal version in this path
-            myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
-                                  'Versions/1.9/Programs/')
-        theCommand = myExecutablePrefix + theCommand
-        return theCommand
+            executable_prefix = ('/Library/Frameworks/GDAL.framework/'
+                                 'Versions/1.9/Programs/')
+        command = executable_prefix + command
+        return command
 
     def _runCommand(self, theCommand):
         """Run a command and raise any error as needed.
@@ -524,7 +507,7 @@ class ShakeEvent(QObject):
         Raises: Any exceptions will be propagated.
         """
 
-        myCommand = self._addExecutablePrefix(theCommand)
+        myCommand = self._add_executable_prefix(theCommand)
 
         try:
             myResult = call(myCommand, shell=True)
@@ -570,7 +553,7 @@ class ShakeEvent(QObject):
             return myShpPath
 
         # Ensure the vrt mmi file exists (it will generate csv too if needed)
-        myVrtPath = self.mmiDataToVrt(theForceFlag)
+        myVrtPath = self.mmi_data_to_vrt(theForceFlag)
 
         #now generate the tif using default interpolation options
 
@@ -641,7 +624,7 @@ class ShakeEvent(QObject):
             return myTifPath
 
         # Ensure the vrt mmi file exists (it will generate csv too if needed)
-        myVrtPath = self.mmiDataToVrt(theForceFlag)
+        myVrtPath = self.mmi_data_to_vrt(theForceFlag)
 
         # now generate the tif using default nearest neighbour interpolation
         # options. This gives us the same output as the mi.grd generated by
@@ -654,10 +637,10 @@ class ShakeEvent(QObject):
 
         myOptions = {
             'alg': myAlgorithm,
-            'xMin': self.xMinimum,
-            'xMax': self.xMaximum,
-            'yMin': self.yMinimum,
-            'yMax': self.yMaximum,
+            'xMin': self.x_minimum,
+            'xMax': self.x_maximum,
+            'yMin': self.y_minimum,
+            'yMax': self.y_maximum,
             'dimX': self.columns,
             'dimY': self.rows,
             'vrt': myVrtPath,
@@ -962,10 +945,10 @@ class ShakeEvent(QObject):
         Raises: None
         """
         LOGGER.debug('bounds to rectangle called.')
-        myRectangle = QgsRectangle(self.xMinimum,
-                                   self.yMaximum,
-                                   self.xMaximum,
-                                   self.yMinimum)
+        myRectangle = QgsRectangle(self.x_minimum,
+                                   self.y_maximum,
+                                   self.x_maximum,
+                                   self.y_minimum)
         return myRectangle
 
     def citiesToShapefile(self, theForceFlag=False):
@@ -2342,7 +2325,7 @@ class ShakeEvent(QObject):
         else:
             myExtentWithCities = 'Not set'
 
-        if self.mmiData:
+        if self.mmi_data:
             mmiData = 'Populated'
         else:
             mmiData = 'Not populated'
@@ -2358,11 +2341,11 @@ class ShakeEvent(QObject):
                   'month': self.month,
                   'year': self.year,
                   'time': self.time,
-                  'time_zone': self.timeZone,
-                  'x_minimum': self.xMinimum,
-                  'x_maximum': self.xMaximum,
-                  'y_minimum': self.yMinimum,
-                  'y_maximum': self.yMaximum,
+                  'time_zone': self.timezone,
+                  'x_minimum': self.x_minimum,
+                  'x_maximum': self.x_maximum,
+                  'y_minimum': self.y_minimum,
+                  'y_maximum': self.y_maximum,
                   'rows': self.rows,
                   'columns': self.columns,
                   'mmi_data': mmiData,

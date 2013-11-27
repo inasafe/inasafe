@@ -65,7 +65,7 @@ class TestShakeEvent(unittest.TestCase):
                                       myShakeId,
                                       'grid.xml')
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.gridFilePath()
+        myPath = myShakeEvent.grid_file_path()
         self.assertEquals(myExpectedPath, myPath)
 
     def test_eventParser(self):
@@ -78,27 +78,27 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(2, myShakeEvent.hour)
         self.assertEquals(15, myShakeEvent.minute)
         self.assertEquals(35, myShakeEvent.second)
-        self.assertEquals('WIB', myShakeEvent.timeZone)
+        self.assertEquals('WIB', myShakeEvent.timezone)
         self.assertEquals(124.45, myShakeEvent.longitude)
         self.assertEquals(-0.21, myShakeEvent.latitude)
         self.assertEquals(11.0, myShakeEvent.depth)
         self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
-        self.assertEquals(122.45, myShakeEvent.xMinimum)
-        self.assertEquals(126.45, myShakeEvent.xMaximum)
-        self.assertEquals(-2.21, myShakeEvent.yMinimum)
-        self.assertEquals(1.79, myShakeEvent.yMaximum)
+        self.assertEquals(122.45, myShakeEvent.x_minimum)
+        self.assertEquals(126.45, myShakeEvent.x_maximum)
+        self.assertEquals(-2.21, myShakeEvent.y_minimum)
+        self.assertEquals(1.79, myShakeEvent.y_maximum)
 
-        myGridXmlData = myShakeEvent.mmiData
+        myGridXmlData = myShakeEvent.mmi_data
         self.assertEquals(25921, len(myGridXmlData))
 
-        myDelimitedString = myShakeEvent.mmiDataToDelimitedText()
+        myDelimitedString = myShakeEvent.mmi_data_to_delimited_text()
         self.assertEqual(578234, len(myDelimitedString))
 
     def test_eventGridToCsv(self):
         """Test grid data can be written to csv"""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.mmiDataToDelimitedFile(theForceFlag=True)
+        myPath = myShakeEvent.mmi_data_to_delimited_file(force_flag=True)
         myFile = file(myPath, 'rt')
         myString = myFile.readlines()
         myFile.close()
@@ -497,11 +497,11 @@ search_boxes: None
         """Check that we extract date and time correctly."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId, theLocale='en')
-        myShakeEvent.extractDateTime('2012-08-07T01:55:12WIB')
+        myShakeEvent.extract_datetime('2012-08-07T01:55:12WIB')
         self.assertEqual(1, myShakeEvent.hour)
         self.assertEqual(55, myShakeEvent.minute)
         self.assertEqual(12, myShakeEvent.second)
-        myShakeEvent.extractDateTime('2013-02-07T22:22:37WIB')
+        myShakeEvent.extract_datetime('2013-02-07T22:22:37WIB')
         self.assertEqual(22, myShakeEvent.hour)
         self.assertEqual(22, myShakeEvent.minute)
         self.assertEqual(37, myShakeEvent.second)
