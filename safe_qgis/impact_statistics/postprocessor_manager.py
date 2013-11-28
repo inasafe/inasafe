@@ -60,6 +60,7 @@ class PostprocessorManager(QtCore.QObject):
         self.aggregator = aggregator
         self.current_output_postprocessor = None
         self.attribute_title = None
+        self.function_parameters = None
 
     def _sum_field_name(self):
         return self.aggregator.prefix + 'sum'
@@ -251,7 +252,8 @@ class PostprocessorManager(QtCore.QObject):
         """Run any post processors requested by the impact function.
         """
         try:
-            requested_postprocessors = self.functionParams['postprocessors']
+            requested_postprocessors = self.function_parameters[
+                'postprocessors']
             postprocessors = get_postprocessors(requested_postprocessors)
         except (TypeError, KeyError):
             # TypeError is for when function_parameters is none
@@ -316,7 +318,7 @@ class PostprocessorManager(QtCore.QObject):
             # create dictionary of attributes to pass to postprocessor
             general_params = {
                 'target_field': self.aggregator.target_field,
-                'function_params': self.functionParams}
+                'function_params': self.function_parameters}
 
             if self.aggregator.statistics_type == 'class_count':
                 general_params['impact_classes'] = (
@@ -337,7 +339,8 @@ class PostprocessorManager(QtCore.QObject):
                 try:
                     # look if params are available for this postprocessor
                     parameters.update(
-                        self.functionParams['postprocessors'][key]['params'])
+                        self.function_parameters[
+                            'postprocessors'][key]['params'])
                 except KeyError:
                     pass
 

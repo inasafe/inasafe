@@ -94,7 +94,7 @@ def get_error_message(exception, context=None, suggestion=None):
     :rtype: ErrorMessage
     """
 
-    traceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
+    trace = ''.join(traceback.format_tb(sys.exc_info()[2]))
 
     problem = m.Message(m.Text(exception.__class__.__name__))
 
@@ -111,7 +111,7 @@ def get_error_message(exception, context=None, suggestion=None):
         problem,
         detail=context,
         suggestion=suggestion,
-        traceback=traceback
+        traceback=trace
     )
 
     args = exception.args
