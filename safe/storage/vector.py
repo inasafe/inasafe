@@ -26,14 +26,12 @@ import logging
 qgis_imported = True
 try:
     from qgis.core import QgsVectorLayer, QgsVectorFileWriter
-    import safe_qgis
 except ImportError:
     qgis_imported = False
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.utilities import (verify,
-                                   ugettext as safe_tr)
+from safe.common.utilities import verify, ugettext as safe_tr
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -51,6 +49,7 @@ from utilities import points_along_line
 from utilities import geometry_type_to_string
 from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
+from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -598,7 +597,7 @@ class Vector(Layer):
         # FIXME (DK): ? move code from safe_to_qgis_layer to this method
         #           and call layer.as_qgis_native from safe_to_qgis_layer ?
 
-        qgis_layer = safe_qgis.utilities.utilities.safe_to_qgis_layer(self)
+        qgis_layer = safe_to_qgis_layer(self)
         return qgis_layer
 
     def write_to_file(self, filename, sublayer=None):

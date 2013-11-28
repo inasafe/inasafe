@@ -59,20 +59,20 @@ from safe_qgis.ui import resources_rc  # pylint: disable=W0611
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def tr(theText):
+def tr(text):
     """We define a tr() alias here since the utilities implementation below
     is not a class and does not inherit from QObject.
     .. note:: see http://tinyurl.com/pyqt-differences
 
-    :param theText: String to be translated
-    :type theText: str
+    :param text: String to be translated
+    :type text: str
 
     :returns: Translated version of the given string if available, otherwise
         the original string.
     :rtype: str
     """
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    return QCoreApplication.translate('@default', theText)
+    return QCoreApplication.translate('@default', text)
 
 
 def get_error_message(exception, context=None, suggestion=None):
@@ -594,7 +594,7 @@ def which(name, flags=os.X_OK):
     """
     result = []
     #pylint: disable=W0141
-    exts = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
+    extensions = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
     #pylint: enable=W0141
     path = os.environ.get('PATH', None)
     # In c6c9b26 we removed this hard coding for issue #529 but I am
@@ -615,10 +615,10 @@ def which(name, flags=os.X_OK):
         p = os.path.join(p, name)
         if os.access(p, flags):
             result.append(p)
-        for e in exts:
-            pext = p + e
-            if os.access(pext, flags):
-                result.append(pext)
+        for e in extensions:
+            path_extensions = p + e
+            if os.access(path_extensions, flags):
+                result.append(path_extensions)
 
     return result
 
@@ -653,47 +653,6 @@ def extent_to_geo_array(extent, source_crs):
     return geo_extent
 
 
-def safe_to_qgis_layer(layer):
-    """Helper function to make a QgsMapLayer from a safe read_layer layer.
-
-    :param layer: Layer object as provided by InaSAFE engine.
-    :type layer: read_layer
-
-    :returns: A validated QGIS layer or None.
-    :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer, None
-
-    :raises: Exception if layer is not valid.
-    """
-
-    # noinspection PyUnresolvedReferences
-    message = tr(
-        'Input layer must be a InaSAFE spatial object. I got %s'
-    ) % (str(type(layer)))
-    if not hasattr(layer, 'is_inasafe_spatial_object'):
-        raise Exception(message)
-    if not layer.is_inasafe_spatial_object:
-        raise Exception(message)
-
-    # Get associated filename and symbolic name
-    filename = layer.get_filename()
-    name = layer.get_name()
-
-    qgis_layer = None
-    # Read layer
-    if layer.is_vector:
-        qgis_layer = QgsVectorLayer(filename, name, 'ogr')
-    elif layer.is_raster:
-        qgis_layer = QgsRasterLayer(filename, name)
-
-    # Verify that new qgis layer is valid
-    if qgis_layer.isValid():
-        return qgis_layer
-    else:
-        # noinspection PyUnresolvedReferences
-        message = tr('Loaded impact layer "%s" is not valid') % filename
-        raise Exception(message)
-
-
 def download_url(manager, url, output_path, progress_dialog=None):
     """Download file from url.
 
@@ -714,14 +673,14 @@ def download_url(manager, url, output_path, progress_dialog=None):
     """
 
     # prepare output path
-    file = QFile(output_path)
-    if not file.open(QFile.WriteOnly):
-        raise IOError(file.errorString())
+    out_file = QFile(output_path)
+    if not out_file.open(QFile.WriteOnly):
+        raise IOError(out_file.errorString())
 
     # slot to write data to file
     def write_data():
         """Write data to a file."""
-        file.write(reply.readAll())
+        out_file.write(reply.readAll())
 
     request = QNetworkRequest(QUrl(url))
     reply = manager.get(request)
@@ -759,7 +718,7 @@ def download_url(manager, url, output_path, progress_dialog=None):
         # noinspection PyArgumentList
         QCoreApplication.processEvents()
 
-    file.close()
+    out_file.close()
 
     result = reply.error()
     if result == QNetworkReply.NoError:
@@ -868,8 +827,9 @@ def map_qrc_to_file(match, res_copy_dir):
                 if not os.path.exists(res_copy_dir):
                     os.makedirs(res_copy_dir)
                 # copy from qrc to filesystem
-                copy_successful = QFile.copy(':/plugins/inasafe/%s' %
-                                             res_alias, res_path)
+                #noinspection PyTypeChecker
+                copy_successful = QFile.copy(
+                    ':/plugins/inasafe/%s' % res_alias, res_path)
                 if not copy_successful:
                     #copy somehow failed
                     res_path = None
@@ -878,6 +838,11 @@ def map_qrc_to_file(match, res_copy_dir):
 
 
 def open_in_browser(file_path):
+    """Open a file in the default web browser.
+
+    :param file_path: Path to the file that should be opened.
+    :type file_path: str
+    """
     webbrowser.open('file://%s' % file_path)
 
 

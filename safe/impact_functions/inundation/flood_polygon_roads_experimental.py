@@ -14,7 +14,6 @@ from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
-from safe_qgis.safe_interface import temp_dir
 
 
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
