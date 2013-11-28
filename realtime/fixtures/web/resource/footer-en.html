@@ -41,5 +41,21 @@
       </li>
     </ul>
   </div>
+  <script type="text/javascript">
+  $(document).ready(function()
+    {
+        $("#earthquake_table").tablesorter({
+            headers: {
+              2: {
+                  sorter: false
+              },
+              5: {
+                  sorter: false
+              }
+            }
+          });
+    }
+  );
+  </script>
  </body>
 </html>

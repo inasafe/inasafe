@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="resource/bootstrap-responsive.css"
           type="text/css"/>
     <link rel="shortcut icon" href="resource/favicon.ico">
+    <script language="javascript" type="text/javascript"
+            src="resource/jquery.js"></script>
+    <script language="javascript" type="text/javascript"
+            src="resource/jquery.tablesorter.js"></script>
   </head>
 
   <body>
@@ -15,6 +19,12 @@
     {
       padding-top    : 60px;
       padding-bottom : 40px;
+    }
+    table#earthquake_table thead tr .header {
+      background-image: url(resource/sort_bg.gif);
+      background-repeat: no-repeat;
+      background-position: center right;
+      cursor: pointer;
     }
     .mmi-2 {padding: 4px; text-align: center; background-color: #209fff;}
     .mmi-3 {padding: 4px; text-align: center; background-color: #00cfff;}
@@ -39,15 +49,15 @@
         following shake events in the Indonesia region.</p>
     </div>
     <br>
-	<table class="table">
+	<table class="table" id="earthquake_table">
 		<thead>
 			<tr>
-				<th class="center">Max MMI</th>
-				<th class="center">Date and Time</th>
-				<th class="center">Location</th>
-				<th class="center">Magnitude</th>
-				<th class="center">Depth</th>
-				<th class="center">Report Detail</th>
+				<th>Max MMI</th>
+				<th>Date and Time</th>
+				<th>Location</th>
+				<th>Magnitude</th>
+				<th>Depth</th>
+				<th>Report Detail</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -111,5 +121,21 @@
       </li>
     </ul>
   </div>
+  <script type="text/javascript">
+  $(document).ready(function()
+    {
+        $("#earthquake_table").tablesorter({
+            headers: {
+              2: {
+                  sorter: false
+              },
+              5: {
+                  sorter: false
+              }
+            }
+          });
+    }
+  );
+  </script>
  </body>
 </html>

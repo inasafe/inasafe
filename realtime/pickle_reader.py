@@ -64,15 +64,15 @@ def create_index(shakemap_dir, locale):
     footer_html_file.close()
 
     # Generate Table HTML for all of the pickle_path
-    table_html = ('\t<table class="table">\n'
+    table_html = ('\t<table class="table" id="earthquake_table">\n'
                   '\t\t<thead>'
                   '\n\t\t\t<tr>'
-                  '\n\t\t\t\t<th class="center">Max MMI</th>'
-                  '\n\t\t\t\t<th class="center">Date and Time</th>'
-                  '\n\t\t\t\t<th class="center">Location</th>'
-                  '\n\t\t\t\t<th class="center">Magnitude</th>'
-                  '\n\t\t\t\t<th class="center">Depth</th>'
-                  '\n\t\t\t\t<th class="center">Report Detail</th>'
+                  '\n\t\t\t\t<th>Max MMI</th>'
+                  '\n\t\t\t\t<th>Date and Time</th>'
+                  '\n\t\t\t\t<th>Location</th>'
+                  '\n\t\t\t\t<th>Magnitude</th>'
+                  '\n\t\t\t\t<th>Depth</th>'
+                  '\n\t\t\t\t<th>Report Detail</th>'
                   '\n\t\t\t</tr>'
                   '\n\t\t</thead>'
                   '\n\t\t<tbody>\n')
