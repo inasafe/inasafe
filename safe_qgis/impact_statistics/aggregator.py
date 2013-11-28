@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.storage.utilities import safe_to_qgis_layer
 from safe_qgis import breakdown_defaults
 
 __author__ = 'marco@opengis.ch'
@@ -51,8 +52,7 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
     create_memory_layer,
-    extent_to_geo_array,
-    safe_to_qgis_layer)
+    extent_to_geo_array )
 from safe_qgis.utilities.styling import set_vector_graduated_style
 from safe_qgis.safe_interface import (
     temp_dir,
@@ -181,7 +181,7 @@ class Aggregator(QtCore.QObject):
         :raises:  All exceptions are propagated.
         """
         try:
-           self._keyword_io.copy_keywords(layer, out_filename)
+            self._keyword_io.copy_keywords(layer, out_filename)
         except:
             raise
 
@@ -191,7 +191,7 @@ class Aggregator(QtCore.QObject):
         :raises:  All exceptions are propagated.
         """
         try:
-           self._keyword_io.write_keywords(layer, keywords)
+            self._keyword_io.write_keywords(layer, keywords)
         except:
             raise
 
@@ -278,9 +278,10 @@ class Aggregator(QtCore.QObject):
                     keywords[self.get_default_keyword('AGGR_ATTR_KEY')] = \
                         my_attributes[0]
 
-                if self.get_default_keyword('FEM_RATIO_ATTR_KEY') not in keywords:
-                    keywords[self.get_default_keyword('FEM_RATIO_ATTR_KEY')] = self.tr(
-                        'Use default')
+                if self.get_default_keyword('FEM_RATIO_ATTR_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword(
+                        'FEM_RATIO_ATTR_KEY')] = self.tr('Use default')
 
                 if self.get_default_keyword('FEM_RATIO_KEY') not in keywords:
                     keywords[self.get_default_keyword('FEM_RATIO_KEY')] = \
@@ -323,8 +324,8 @@ class Aggregator(QtCore.QObject):
         :param exposure_layer: An exposure layer.
         :type exposure_layer: QgsMapLayer
 
-        :raises: InsufficientParametersError if hazard_layer or exposure_layer  is not set.
-
+        :raises: InsufficientParametersError if hazard_layer or exposure_layer
+                 is not set.
         """
 
         if not self.is_valid:
@@ -641,11 +642,10 @@ class Aggregator(QtCore.QObject):
                                 error = (
                                     'StatisticsClasses %s does not include '
                                     'the %s class which was found in the '
-                                    'data. This is a problem in the %s '
-                                    'statistics_classes definition' %
+                                    'data. This is a problem in the impact '
+                                    'function statistics_classes definition' %
                                     (self.statistics_classes,
-                                    key,
-                                    self.getFunctionID()))
+                                    key))
                                 raise KeyError(error)
 
                             self.impact_layer_attributes[polygon_index].append(
@@ -727,10 +727,10 @@ class Aggregator(QtCore.QObject):
                         error = (
                             'StatisticsClasses %s does not include the %s '
                             'class which was found in the data. This is a '
-                            'problem in the %s statistics_classes definition' %
+                            'problem in the impact function '
+                            'statistics_classes definition' %
                             (self.statistics_classes,
-                             key,
-                             self.getFunctionID()))
+                             key))
                         raise KeyError(error)
 
                     self.impact_layer_attributes[0].append(myImpactValueList)

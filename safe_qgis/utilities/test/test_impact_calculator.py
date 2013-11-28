@@ -212,11 +212,12 @@ class ImpactCalculatorTest(unittest.TestCase):
         # 'Old-style' impact function
 
         myMessage = 'True expected, but False returned'
-        assert self.calculator.need_clip(), myMessage
+        assert self.calculator.requires_clipping(), myMessage
 
-        self.calculator.set_function('Flood Vector Roads Experimental Function')
+        self.calculator.set_function(
+            'Flood Vector Roads Experimental Function')
         myMessage = 'False expected, but True returned'
-        assert not self.calculator.need_clip(), myMessage
+        assert not self.calculator.requires_clipping(), myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')

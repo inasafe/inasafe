@@ -65,7 +65,7 @@ class TestShakeEvent(unittest.TestCase):
                                       myShakeId,
                                       'grid.xml')
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.gridFilePath()
+        myPath = myShakeEvent.grid_file_path()
         self.assertEquals(myExpectedPath, myPath)
 
     def test_eventParser(self):
@@ -78,27 +78,27 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(2, myShakeEvent.hour)
         self.assertEquals(15, myShakeEvent.minute)
         self.assertEquals(35, myShakeEvent.second)
-        self.assertEquals('WIB', myShakeEvent.timeZone)
+        self.assertEquals('WIB', myShakeEvent.timezone)
         self.assertEquals(124.45, myShakeEvent.longitude)
         self.assertEquals(-0.21, myShakeEvent.latitude)
         self.assertEquals(11.0, myShakeEvent.depth)
         self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
-        self.assertEquals(122.45, myShakeEvent.xMinimum)
-        self.assertEquals(126.45, myShakeEvent.xMaximum)
-        self.assertEquals(-2.21, myShakeEvent.yMinimum)
-        self.assertEquals(1.79, myShakeEvent.yMaximum)
+        self.assertEquals(122.45, myShakeEvent.x_minimum)
+        self.assertEquals(126.45, myShakeEvent.x_maximum)
+        self.assertEquals(-2.21, myShakeEvent.y_minimum)
+        self.assertEquals(1.79, myShakeEvent.y_maximum)
 
-        myGridXmlData = myShakeEvent.mmiData
+        myGridXmlData = myShakeEvent.mmi_data
         self.assertEquals(25921, len(myGridXmlData))
 
-        myDelimitedString = myShakeEvent.mmiDataToDelimitedText()
+        myDelimitedString = myShakeEvent.mmi_data_to_delimited_text()
         self.assertEqual(578234, len(myDelimitedString))
 
     def test_eventGridToCsv(self):
         """Test grid data can be written to csv"""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.mmiDataToDelimitedFile(theForceFlag=True)
+        myPath = myShakeEvent.mmi_data_to_delimited_file(force_flag=True)
         myFile = file(myPath, 'rt')
         myString = myFile.readlines()
         myFile.close()
@@ -110,7 +110,7 @@ class TestShakeEvent(unittest.TestCase):
         myShakeEvent = ShakeEvent(myShakeId)
         myExpectedState = """latitude: -0.21
 longitude: 124.45
-eventId: 20120726022003
+event_id: 20120726022003
 magnitude: 5.0
 depth: 11.0
 description: None
@@ -127,7 +127,7 @@ y_maximum: 1.79
 rows: 161.0
 columns: 161.0
 mmi_data: Populated
-populationRasterPath: None
+population_raster_path: None
 impact_file: None
 impact_keywords_file: None
 fatality_counts: None
@@ -142,7 +142,7 @@ search_boxes: None
                      '\n\nGot\n------------------\n%s\n') %
                      (myExpectedState, myState))
         assert myState == myExpectedState, myMessage
-        myPath = myShakeEvent.mmiDataToRaster(theForceFlag=True)
+        myPath = myShakeEvent.mmi_data_to_raster(force_flag=True)
         assert os.path.exists(myPath)
         myExpectedQml = myPath.replace('tif', 'qml')
         assert os.path.exists(myExpectedQml)
@@ -153,7 +153,7 @@ search_boxes: None
         """Check we can convert the shake event to a raster"""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.mmiDataToShapefile(theForceFlag=True)
+        myPath = myShakeEvent.mmi_data_to_shapefile(force_flag=True)
         assert os.path.exists(myPath)
         myExpectedQml = myPath.replace('shp', 'qml')
         myMessage = '%s not found' % myExpectedQml
@@ -179,19 +179,19 @@ search_boxes: None
         """Check we can extract contours from the event"""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True,
-                                                theAlgorithm='invdist')
+        myPath = myShakeEvent.mmi_data_to_contours(force_flag=True,
+                                                algorithm='invdist')
         assert self.checkFeatureCount(myPath, 16)
         assert os.path.exists(myPath)
         myExpectedQml = myPath.replace('shp', 'qml')
         myMessage = '%s not found' % myExpectedQml
         assert os.path.exists(myExpectedQml), myMessage
 
-        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True,
-                                                theAlgorithm='nearest')
+        myPath = myShakeEvent.mmi_data_to_contours(force_flag=True,
+                                                algorithm='nearest')
         assert self.checkFeatureCount(myPath, 132)
-        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True,
-                                                theAlgorithm='average')
+        myPath = myShakeEvent.mmi_data_to_contours(force_flag=True,
+                                                algorithm='average')
         assert self.checkFeatureCount(myPath, 132)
 
     def testLocalCities(self):
@@ -199,7 +199,7 @@ search_boxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         # Get teh mem layer
-        myCitiesLayer = myShakeEvent.localCitiesMemoryLayer()
+        myCitiesLayer = myShakeEvent.local_cities_memory_layer()
         myProvider = myCitiesLayer.dataProvider()
 
         myExpectedFeatureCount = 6
@@ -245,14 +245,14 @@ search_boxes: None
         """Test that we can retrieve the cities local to the event"""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.citiesToShapefile()
+        myPath = myShakeEvent.cities_to_shapefile()
         assert os.path.exists(myPath)
 
     def testCitiesSearchBoxesToShape(self):
         """Test that we can retrieve the search boxes used to find cities."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.citySearchBoxesToShapefile()
+        myPath = myShakeEvent.city_search_boxes_to_shapefile()
         assert os.path.exists(myPath)
 
     def testCalculateFatalities(self):
@@ -260,7 +260,7 @@ search_boxes: None
         LOGGER.debug(QGIS_APP.showSettings())
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myResult, myFatalitiesHtml = myShakeEvent.calculateImpacts()
+        myResult, myFatalitiesHtml = myShakeEvent.calculate_impacts()
 
         myExpectedResult = (
             '/tmp/inasafe/realtime/shakemaps-extracted'
@@ -287,14 +287,14 @@ search_boxes: None
                                 9: 0.0}
 
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
-            myShakeEvent.fatalityCounts, myExpectedFatalities)
-        assert myShakeEvent.fatalityCounts == myExpectedFatalities, myMessage
+            myShakeEvent.fatality_counts, myExpectedFatalities)
+        assert myShakeEvent.fatality_counts == myExpectedFatalities, myMessage
 
     def testBoundsToRect(self):
         """Test that we can calculate the event bounds properly"""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myBounds = myShakeEvent.boundsToRectangle().toString()
+        myBounds = myShakeEvent.bounds_to_rectangle().toString()
         myExpectedResult = (
             '122.4500000000000028,-2.2100000000000000 : '
             '126.4500000000000028,1.7900000000000000')
@@ -318,7 +318,7 @@ search_boxes: None
         """Test getting impacted cities sorted by mmi then population."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myTable = myShakeEvent.sortedImpactedCities()
+        myTable = myShakeEvent.sorted_impacted_cities()
 
         myFilePath = unique_filename(
             prefix='testSortedImpactedCities',
@@ -366,7 +366,7 @@ search_boxes: None
         """Test rendering a fatalities table."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myShakeEvent.calculateImpacts()
+        myShakeEvent.calculate_impacts()
         myResult = myShakeEvent.impact_table()
         # TODO compare actual content of impact table...
         myExpectedResult = (
@@ -380,7 +380,7 @@ search_boxes: None
         """Test we can get a dictionary of location info nicely."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myResult = myShakeEvent.eventDict()
+        myResult = myShakeEvent.event_dict()
         myExpectedDict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
                           'fatalities-name': PyQt4.QtCore.QString(
@@ -454,7 +454,7 @@ search_boxes: None
             'M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S Longitude: '
             '124%s27\'0.00"E Depth: 11.0km Located 0.00km n/a of n/a'
             % (myDegreeSymbol, myDegreeSymbol))
-        myResult = myShakeEvent.eventInfo()
+        myResult = myShakeEvent.event_info()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
@@ -466,21 +466,21 @@ search_boxes: None
 
         # Ints should work
         myExpectedResult = 'SSE'
-        myResult = myShakeEvent.bearingToCardinal(160)
+        myResult = myShakeEvent.bearing_to_cardinal(160)
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
 
         # Floats should work
         myExpectedResult = 'SW'
-        myResult = myShakeEvent.bearingToCardinal(225.4)
+        myResult = myShakeEvent.bearing_to_cardinal(225.4)
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
 
         # non numeric data as input should return None
         myExpectedResult = None
-        myResult = myShakeEvent.bearingToCardinal('foo')
+        myResult = myShakeEvent.bearing_to_cardinal('foo')
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
@@ -488,7 +488,7 @@ search_boxes: None
     def testI18n(self):
         """See if internationalisation is working."""
         myShakeId = '20120726022003'
-        myShakeEvent = ShakeEvent(myShakeId, theLocale='id')
+        myShakeEvent = ShakeEvent(myShakeId, locale='id')
         myShaking = myShakeEvent.mmi_shaking(5)
         myExpectedShaking = 'Sedang'
         self.assertEqual(myExpectedShaking, myShaking)
@@ -496,12 +496,12 @@ search_boxes: None
     def test_extractDateTime(self):
         """Check that we extract date and time correctly."""
         myShakeId = '20120726022003'
-        myShakeEvent = ShakeEvent(myShakeId, theLocale='en')
-        myShakeEvent.extractDateTime('2012-08-07T01:55:12WIB')
+        myShakeEvent = ShakeEvent(myShakeId, locale='en')
+        myShakeEvent.extract_datetime('2012-08-07T01:55:12WIB')
         self.assertEqual(1, myShakeEvent.hour)
         self.assertEqual(55, myShakeEvent.minute)
         self.assertEqual(12, myShakeEvent.second)
-        myShakeEvent.extractDateTime('2013-02-07T22:22:37WIB')
+        myShakeEvent.extract_datetime('2013-02-07T22:22:37WIB')
         self.assertEqual(22, myShakeEvent.hour)
         self.assertEqual(22, myShakeEvent.minute)
         self.assertEqual(37, myShakeEvent.second)
