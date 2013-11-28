@@ -37,7 +37,7 @@ from gdalconst import GA_ReadOnly
 from sftp_shake_data import SftpShakeData
 
 
-# TODO I think QCoreApplication is needed for tr() check hefore removing
+# TODO: I think QCoreApplication is needed for tr() check hefore removing
 from PyQt4.QtCore import (
     QCoreApplication,
     QObject,
@@ -108,53 +108,58 @@ class ShakeEvent(QObject):
     earthquake, including epicenter, magnitude etc."""
 
     def __init__(self,
-                 theEventId=None,
-                 theLocale='en',
-                 thePopulationRasterPath=None,
-                 theForceFlag=False,
-                 theDataIsLocalFlag=False):
+                 event_id=None,
+                 locale='en',
+                 population_raster_path=None,
+                 force_flag=False,
+                 data_is_local_flag=False):
         """Constructor for the shake event class.
 
-        Args:
-            * theEventId - (Optional) Id of the event. Will be used to
+        :param event_id: (Optional) Id of the event. Will be used to
                 fetch the ShakeData for this event (either from cache or from
                 ftp server as required). The grid.xml file in the unpacked
                 event will be used to intialise the state of the ShakeEvent
                 instance.
                 If no event id is supplied, the most recent event recorded
                 on the server will be used.
-            * theLocale - (Optional) string for iso locale to use for outputs.
+
+        :param locale:(Optional) string for iso locale to use for outputs.
                 Defaults to en. Can also use 'id' or possibly more as
                 translations are added.
-            * thePopulationRasterPath - (Optional)path to the population raster
+
+        :param population_raster_path: (Optional)path to the population raster
                 that will be used if you want to calculate the impact. This
                 is optional because there are various ways this can be
                 specified before calling :func:`calculate_impacts`.
-            * theForceFlag: bool Whether to force retrieval of the dataset from
+
+        :param force_flag: Whether to force retrieval of the dataset from
                 the ftp server.
-            * theDataIsLocalFlag: bool Whether the data is already extracted
+        :type force_flag: bool
+
+        :param data_is_local_flag: Whether the data is already extracted
                 and exists locally. Use this in cases where you manually want
                 to run a grid.xml without first doing a download.
+        :type data_is_local_flag: bool
 
-        Returns: Instance
+        :return: Instance
 
-        Raises: EventXmlParseError
+        :raises: EventXmlParseError
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
 
         self.check_environment()
 
-        if theDataIsLocalFlag:
-            self.eventId = theEventId
+        if data_is_local_flag:
+            self.event_id = event_id
         else:
             # fetch the data from (s)ftp
-            #self.data = ShakeData(theEventId, theForceFlag)
+            #self.data = ShakeData(event_id, force_flag)
             self.data = SftpShakeData(
-                theEvent=theEventId,
-                theForceFlag=theForceFlag)
+                theEvent=event_id,
+                theForceFlag=force_flag)
             self.data.extract()
-            self.eventId = self.data.eventId
+            self.event_id = self.data.eventId
 
         self.latitude = None
         self.longitude = None
@@ -177,7 +182,7 @@ class ShakeEvent(QObject):
         self.rows = None
         self.columns = None
         self.mmi_data = None
-        self.populationRasterPath = thePopulationRasterPath
+        self.population_raster_path = population_raster_path
         # Path to tif of impact result - probably we wont even use it
         self.impact_file = None
         # Path to impact keywords file - this is GOLD here!
@@ -194,7 +199,7 @@ class ShakeEvent(QObject):
         # shake map + cities
         self.extent_with_cities = None
         # How much to iteratively zoom out by when searching for cities
-        self.zoomFactor = 1.25
+        self.zoom_factor = 1.25
         # The search boxes used to find extent_with_cities
         # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
         self.search_boxes = None
@@ -210,8 +215,8 @@ class ShakeEvent(QObject):
         self.most_affected_city = None
         # for localization
         self.translator = None
-        self.locale = theLocale
-        self.setupI18n()
+        self.locale = locale
+        self.setup_i18n()
         self.parse_grid_xml()
 
     def check_environment(self):
@@ -233,7 +238,7 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('Event path requested.')
         grid_xml_path = os.path.join(shakemapExtractDir(),
-                                     self.eventId,
+                                     self.event_id,
                                      'grid.xml')
         #short circuit if the tif is already created.
         if os.path.exists(grid_xml_path):
@@ -420,7 +425,7 @@ class ShakeEvent(QObject):
         LOGGER.debug('mmi_to_delimited_text requested.')
 
         path = os.path.join(shakemapExtractDir(),
-                            self.eventId,
+                            self.event_id,
                             'mmi.csv')
         #short circuit if the csv is already created.
         if os.path.exists(path) and force_flag is not True:
@@ -431,7 +436,7 @@ class ShakeEvent(QObject):
 
         # Also write the .csv which contains metadata about field types
         csv_path = os.path.join(
-            shakemapExtractDir(), self.eventId, 'mmi.csvt')
+            shakemapExtractDir(), self.event_id, 'mmi.csvt')
         result_file = file(csv_path, 'wt')
         result_file.write('"Real","Real","Real"')
         result_file.close()
@@ -452,7 +457,7 @@ class ShakeEvent(QObject):
         LOGGER.debug('mmi_to_vrt requested.')
 
         vrt_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'mmi.vrt')
 
         #short circuit if the vrt is already created.
@@ -545,7 +550,7 @@ class ShakeEvent(QObject):
         LOGGER.debug('mmi_data_to_shapefile requested.')
 
         shp_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'mmi-points.shp')
         # Short circuit if the tif is already created.
         if os.path.exists(shp_path) and force_flag is not True:
@@ -566,7 +571,7 @@ class ShakeEvent(QObject):
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         qml_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'mmi-points.qml')
         source_qml = os.path.join(dataDir(), 'mmi-shape.qml')
         shutil.copyfile(source_qml, qml_path)
@@ -619,7 +624,7 @@ class ShakeEvent(QObject):
             algorithm = 'nearest'
 
         tif_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'mmi-%s.tif' % algorithm)
         #short circuit if the tif is already created.
         if os.path.exists(tif_path) and force_flag is not True:
@@ -660,13 +665,13 @@ class ShakeEvent(QObject):
         # copy the keywords file from fixtures for this layer
         keyword_path = os.path.join(
             shakemapExtractDir(),
-            self.eventId,
+            self.event_id,
             'mmi-%s.keywords' % algorithm)
         source_keywords = os.path.join(dataDir(), 'mmi.keywords')
         shutil.copyfile(source_keywords, keyword_path)
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         qml_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'mmi-%s.qml' % algorithm)
         source_qml = os.path.join(dataDir(), 'mmi.qml')
         shutil.copyfile(source_qml, qml_path)
@@ -701,7 +706,7 @@ class ShakeEvent(QObject):
         LOGGER.debug('mmi_data_to_contours requested.')
         # TODO: Use sqlite rather?
         output_file_base = os.path.join(shakemapExtractDir(),
-                                        self.eventId,
+                                        self.event_id,
                                         'mmi-contours-%s.' % algorithm)
         output_file = output_file_base + 'shp'
         if os.path.exists(output_file) and force_flag is not True:
@@ -788,14 +793,14 @@ class ShakeEvent(QObject):
         # Copy over the standard .prj file since ContourGenerate does not
         # create a projection definition
         qml_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'mmi-contours-%s.prj' % algorithm)
         source_qml = os.path.join(dataDir(), 'mmi-contours.prj')
         shutil.copyfile(source_qml, qml_path)
 
         # Lastly copy over the standard qml (QGIS Style file)
         qml_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'mmi-contours-%s.qml' % algorithm)
         source_qml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(source_qml, qml_path)
@@ -1036,7 +1041,7 @@ class ShakeEvent(QObject):
         geo_crs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
         output_file_base = os.path.join(shakemapExtractDir(),
-                                        self.eventId,
+                                        self.event_id,
                                         '%s.' % file_name)
         output_file = output_file_base + 'shp'
         if os.path.exists(output_file) and force_flag is not True:
@@ -1087,7 +1092,7 @@ class ShakeEvent(QObject):
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         qml_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 '%s.qml' % file_name)
         source_qml = os.path.join(dataDir(), '%s.qml' % file_name)
         shutil.copyfile(source_qml, qml_path)
@@ -1189,7 +1194,7 @@ class ShakeEvent(QObject):
             LOGGER.debug('Found cities in search box: %s' % record)
             search_boxes.append(record)
             if count < minimum_city_count:
-                rectangle.scale(self.zoomFactor)
+                rectangle.scale(self.zoom_factor)
             else:
                 found_flag = True
                 break
@@ -1500,7 +1505,7 @@ class ShakeEvent(QObject):
         :rtype: str
         """
         path = os.path.join(shakemapExtractDir(),
-                            self.eventId,
+                            self.event_id,
                             file_name)
         html_file = file(path, 'wt')
         header_file = os.path.join(dataDir(), 'header.html')
@@ -1517,7 +1522,7 @@ class ShakeEvent(QObject):
         html_file.close()
         # Also bootstrap gets copied to extract dir
         my_destination = os.path.join(shakemapExtractDir(),
-                                      self.eventId,
+                                      self.event_id,
                                       'bootstrap.css')
         my_source = os.path.join(dataDir(), 'bootstrap.css')
         shutil.copyfile(my_source, my_destination)
@@ -1637,7 +1642,7 @@ class ShakeEvent(QObject):
         """Use the SAFE ITB earthquake function to calculate impacts.
 
         :param population_raster_path: optional. see
-                :func:`_getPopulationPath` for more details on how the path
+                :func:`_get_population_path` for more details on how the path
                 will be resolved if not explicitly given.
         :type population_raster_path: str
 
@@ -1667,7 +1672,7 @@ class ShakeEvent(QObject):
                 not os.path.isfile(population_raster_path) and not
                 os.path.islink(population_raster_path))):
 
-            exposure_path = self._getPopulationPath()
+            exposure_path = self._get_population_path()
         else:
             exposure_path = population_raster_path
 
@@ -1701,14 +1706,14 @@ class ShakeEvent(QObject):
             raise
         # Copy the impact layer into our extract dir.
         tif_path = os.path.join(shakemapExtractDir(),
-                                self.eventId,
+                                self.event_id,
                                 'impact-%s.tif' % algorithm)
         shutil.copyfile(result.filename, tif_path)
         LOGGER.debug('Copied impact result to:\n%s\n' % tif_path)
         # Copy the impact keywords layer into our extract dir.
         keywords_path = os.path.join(
             shakemapExtractDir(),
-            self.eventId,
+            self.event_id,
             'impact-%s.keywords' % algorithm)
         keywords_source = os.path.splitext(result.filename)[0]
         keywords_source = '%s.keywords' % keywords_source
@@ -1803,11 +1808,11 @@ class ShakeEvent(QObject):
 
         return clipped_hazard, clipped_exposure
 
-    def _getPopulationPath(self):
+    def _get_population_path(self):
         """Helper to determine population raster spath.
 
         The following priority will be used to determine the path:
-            1) the class attribute self.populationRasterPath
+            1) the class attribute self.population_raster_path
                 will be checked and if not None it will be used.
             2) the environment variable 'INASAFE_POPULATION_PATH' will be
                checked if set it will be used.
@@ -1818,12 +1823,10 @@ class ShakeEvent(QObject):
                :file:`/usr/local/share/inasafe/exposure/population.tif`
                will be used.
 
-        Args:
-            None
-        Returns:
-            str - path to a population raster file.
-        Raises:
-            FileNotFoundError
+        :return: path to a population raster file.
+        :rtype: str
+
+        :raises: FileNotFoundError
 
         TODO: Consider automatically fetching from
         http://web.clas.ufl.edu/users/atatem/pub/IDN.7z
@@ -1832,188 +1835,190 @@ class ShakeEvent(QObject):
         https://github.com/AIFDR/inasafe/issues/381
         """
         # When used via the scripts make_shakemap.sh
-        myFixturePath = os.path.join(
+        fixture_path = os.path.join(
             dataDir(), 'exposure', 'population.tif')
 
-        myLocalPath = '/usr/local/share/inasafe/exposure/population.tif'
-        if self.populationRasterPath is not None:
-            return self.populationRasterPath
+        local_path = '/usr/local/share/inasafe/exposure/population.tif'
+        if self.population_raster_path is not None:
+            return self.population_raster_path
         elif 'INASAFE_POPULATION_PATH' in os.environ:
             return os.environ['INASAFE_POPULATION_PATH']
-        elif os.path.exists(myFixturePath):
-            return myFixturePath
-        elif os.path.exists(myLocalPath):
-            return myLocalPath
+        elif os.path.exists(fixture_path):
+            return fixture_path
+        elif os.path.exists(local_path):
+            return local_path
         else:
             raise FileNotFoundError('Population file could not be found')
 
-    def renderMap(self, theForceFlag=False):
+    def render_map(self, force_flag=False):
         """This is the 'do it all' method to render a pdf.
 
-        :param theForceFlag: bool - (Optional). Whether to force the
+        :param force_flag: (Optional). Whether to force the
                 regeneration of map product. Defaults to False.
-        :return str - path to rendered pdf.
+        :type force_flag: bool
+
+        :return Path to rendered pdf.
+        :rtype: str
         :raise Propagates any exceptions.
         """
-        myPdfPath = os.path.join(shakemapExtractDir(),
-                                 self.eventId,
-                                 '%s-%s.pdf' % (self.eventId, self.locale))
-        myImagePath = os.path.join(shakemapExtractDir(),
-                                   self.eventId,
-                                   '%s-%s.png' % (self.eventId, self.locale))
-        myThumbnailImagePath = os.path.join(shakemapExtractDir(),
-                                            self.eventId,
+        pdf_path = os.path.join(shakemapExtractDir(),
+                                self.event_id,
+                                '%s-%s.pdf' % (self.event_id, self.locale))
+        image_path = os.path.join(shakemapExtractDir(),
+                                  self.event_id,
+                                  '%s-%s.png' % (self.event_id, self.locale))
+        thumbnail_image_path = os.path.join(shakemapExtractDir(),
+                                            self.event_id,
                                             '%s-thumb-%s.png' % (
-                                            self.eventId, self.locale))
+                                            self.event_id, self.locale))
         pickle_path = os.path.join(
             shakemapExtractDir(),
-            self.eventId,
-            '%s-metadata-%s.pickle' % (self.eventId, self.locale))
+            self.event_id,
+            '%s-metadata-%s.pickle' % (self.event_id, self.locale))
 
-        if not theForceFlag:
+        if not force_flag:
             # Check if the images already exist and if so
             # short circuit.
-            myShortCircuitFlag = True
-            if not os.path.exists(myPdfPath):
-                myShortCircuitFlag = False
-            if not os.path.exists(myImagePath):
-                myShortCircuitFlag = False
-            if not os.path.exists(myThumbnailImagePath):
-                myShortCircuitFlag = False
-            if myShortCircuitFlag:
-                LOGGER.info('%s (already exists)' % myPdfPath)
-                LOGGER.info('%s (already exists)' % myImagePath)
-                LOGGER.info('%s (already exists)' % myThumbnailImagePath)
-                return myPdfPath
+            short_circuit_flag = True
+            if not os.path.exists(pdf_path):
+                short_circuit_flag = False
+            if not os.path.exists(image_path):
+                short_circuit_flag = False
+            if not os.path.exists(thumbnail_image_path):
+                short_circuit_flag = False
+            if short_circuit_flag:
+                LOGGER.info('%s (already exists)' % pdf_path)
+                LOGGER.info('%s (already exists)' % image_path)
+                LOGGER.info('%s (already exists)' % thumbnail_image_path)
+                return pdf_path
 
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
-        myMmiShapeFile = self.mmi_data_to_shapefile(force_flag=theForceFlag)
-        logging.info('Created: %s', myMmiShapeFile)
-        myCitiesHtmlPath = None
-        myCitiesShapeFile = None
+        mmi_shape_file = self.mmi_data_to_shapefile(force_flag=force_flag)
+        logging.info('Created: %s', mmi_shape_file)
+        cities_html_path = None
+        cities_shape_file = None
 
         # 'average', 'invdist', 'nearest' - currently only nearest works
-        myAlgorithm = 'nearest'
+        algorithm = 'nearest'
         try:
-            myContoursShapeFile = self.mmi_data_to_contours(
-                force_flag=theForceFlag,
-                algorithm=myAlgorithm)
+            contours_shapefile = self.mmi_data_to_contours(
+                force_flag=force_flag,
+                algorithm=algorithm)
         except:
             raise
-        logging.info('Created: %s', myContoursShapeFile)
+        logging.info('Created: %s', contours_shapefile)
         try:
-            myCitiesShapeFile = self.cities_to_shapefile(
-                force_flag=theForceFlag)
-            logging.info('Created: %s', myCitiesShapeFile)
-            mySearchBoxFile = self.city_search_boxes_to_shapefile(
-                force_flag=theForceFlag)
-            logging.info('Created: %s', mySearchBoxFile)
-            _, myCitiesHtmlPath = self.impacted_cities_table()
-            logging.info('Created: %s', myCitiesHtmlPath)
+            cities_shape_file = self.cities_to_shapefile(
+                force_flag=force_flag)
+            logging.info('Created: %s', cities_shape_file)
+            search_box_file = self.city_search_boxes_to_shapefile(
+                force_flag=force_flag)
+            logging.info('Created: %s', search_box_file)
+            _, cities_html_path = self.impacted_cities_table()
+            logging.info('Created: %s', cities_html_path)
         except:  # pylint: disable=W0702
             logging.exception('No nearby cities found!')
 
-        _, myImpactsHtmlPath = self.calculate_impacts()
-        logging.info('Created: %s', myImpactsHtmlPath)
+        _, impacts_html_path = self.calculate_impacts()
+        logging.info('Created: %s', impacts_html_path)
 
         # Load our project
         if 'INSAFE_REALTIME_PROJECT' in os.environ:
-            myProjectPath = os.environ['INSAFE_REALTIME_PROJECT']
+            project_path = os.environ['INSAFE_REALTIME_PROJECT']
         else:
-            myProjectPath = os.path.join(dataDir(), 'realtime.qgs')
+            project_path = os.path.join(dataDir(), 'realtime.qgs')
         # noinspection PyArgumentList
-        QgsProject.instance().setFileName(myProjectPath)
+        QgsProject.instance().setFileName(project_path)
         # noinspection PyArgumentList
         QgsProject.instance().read()
 
         if 'INSAFE_REALTIME_TEMPLATE' in os.environ:
-            myTemplatePath = os.environ['INSAFE_REALTIME_TEMPLATE']
+            template_path = os.environ['INSAFE_REALTIME_TEMPLATE']
         else:
-            myTemplatePath = os.path.join(dataDir(), 'realtime-template.qpt')
+            template_path = os.path.join(dataDir(), 'realtime-template.qpt')
 
-        myTemplateFile = file(myTemplatePath, 'rt')
-        myTemplateContent = myTemplateFile.read()
-        myTemplateFile.close()
+        template_file = file(template_path, 'rt')
+        template_content = template_file.read()
+        template_file.close()
 
-        myDocument = QDomDocument()
-        myDocument.setContent(myTemplateContent)
+        document = QDomDocument()
+        document.setContent(template_content)
 
         # Set up the map renderer that will be assigned to the composition
-        myMapRenderer = QgsMapRenderer()
+        map_renderer = QgsMapRenderer()
         # Set the labelling engine for the canvas
-        myLabellingEngine = QgsPalLabeling()
-        myMapRenderer.setLabelingEngine(myLabellingEngine)
+        labelling_engine = QgsPalLabeling()
+        map_renderer.setLabelingEngine(labelling_engine)
 
         # Enable on the fly CRS transformations
-        myMapRenderer.setProjectionsEnabled(False)
+        map_renderer.setProjectionsEnabled(False)
         # Now set up the composition
-        myComposition = QgsComposition(myMapRenderer)
+        composition = QgsComposition(map_renderer)
 
         # You can use this to replace any string like this [key]
         # in the template with a new value. e.g. to replace
         # [date] pass a map like this {'date': '1 Jan 2012'}
-        myLocationInfo = self.eventInfo()
-        LOGGER.debug(myLocationInfo)
-        mySubstitutionMap = {'location-info': myLocationInfo,
-                             'version': self.version()}
-        mySubstitutionMap.update(self.eventDict())
-        LOGGER.debug(mySubstitutionMap)
+        location_info = self.event_info()
+        LOGGER.debug(location_info)
+        substitution_map = {'location-info': location_info,
+                            'version': self.version()}
+        substitution_map.update(self.event_dict())
+        LOGGER.debug(substitution_map)
 
         pickle_file = file(pickle_path, 'w')
-        pickle.dump(mySubstitutionMap, pickle_file)
+        pickle.dump(substitution_map, pickle_file)
         pickle_file.close()
 
-        myResult = myComposition.loadFromTemplate(myDocument,
-                                                  mySubstitutionMap)
-        if not myResult:
+        result = composition.loadFromTemplate(document, substitution_map)
+        if not result:
             LOGGER.exception('Error loading template %s with keywords\n %s',
-                             myTemplatePath, mySubstitutionMap)
+                             template_path, substitution_map)
             raise MapComposerError
 
         # Get the main map canvas on the composition and set
         # its extents to the event.
-        myMap = myComposition.getComposerMapById(0)
-        if myMap is not None:
-            myMap.setNewExtent(self.extent_with_cities)
-            myMap.renderModeUpdateCachedImage()
+        map_canvas = composition.getComposerMapById(0)
+        if map_canvas is not None:
+            map_canvas.setNewExtent(self.extent_with_cities)
+            map_canvas.renderModeUpdateCachedImage()
         else:
             LOGGER.exception('Map 0 could not be found in template %s',
-                             myTemplatePath)
+                             template_path)
             raise MapComposerError
 
         # Set the impacts report up
-        myImpactsItem = myComposition.getComposerItemById(
+        impacts_item = composition.getComposerItemById(
             'impacts-table')
-        if myImpactsItem is None:
-            myMessage = 'impacts-table composer item could not be found'
-            LOGGER.exception(myMessage)
-            raise MapComposerError(myMessage)
-        myImpactsHtml = myComposition.getComposerHtmlByItem(
-            myImpactsItem)
-        if myImpactsHtml is None:
-            myMessage = 'Impacts QgsComposerHtml could not be found'
-            LOGGER.exception(myMessage)
-            raise MapComposerError(myMessage)
-        myImpactsHtml.setUrl(QUrl(myImpactsHtmlPath))
+        if impacts_item is None:
+            message = 'impacts-table composer item could not be found'
+            LOGGER.exception(message)
+            raise MapComposerError(message)
+        impacts_html = composition.getComposerHtmlByItem(
+            impacts_item)
+        if impacts_html is None:
+            message = 'Impacts QgsComposerHtml could not be found'
+            LOGGER.exception(message)
+            raise MapComposerError(message)
+        impacts_html.setUrl(QUrl(impacts_html_path))
 
         # Set the affected cities report up
-        myCitiesItem = myComposition.getComposerItemById('affected-cities')
-        if myCitiesItem is None:
-            myMessage = 'affected-cities composer item could not be found'
-            LOGGER.exception(myMessage)
-            raise MapComposerError(myMessage)
-        myCitiesHtml = myComposition.getComposerHtmlByItem(myCitiesItem)
-        if myCitiesHtml is None:
-            myMessage = 'Cities QgsComposerHtml could not be found'
-            LOGGER.exception(myMessage)
-            raise MapComposerError(myMessage)
+        cities_item = composition.getComposerItemById('affected-cities')
+        if cities_item is None:
+            message = 'affected-cities composer item could not be found'
+            LOGGER.exception(message)
+            raise MapComposerError(message)
+        cities_html = composition.getComposerHtmlByItem(cities_item)
+        if cities_html is None:
+            message = 'Cities QgsComposerHtml could not be found'
+            LOGGER.exception(message)
+            raise MapComposerError(message)
 
-        if myCitiesHtmlPath is not None:
-            myCitiesHtml.setUrl(QUrl(myCitiesHtmlPath))
+        if cities_html_path is not None:
+            cities_html.setUrl(QUrl(cities_html_path))
         else:
             # We used to raise an error here but it is actually feasible that
             # no nearby cities with a valid mmi value are found - e.g.
@@ -2021,150 +2026,144 @@ class ShakeEvent(QObject):
             LOGGER.info('No nearby cities found.')
 
         # Load the contours and cities shapefile into the map
-        myContoursLayer = QgsVectorLayer(
-            myContoursShapeFile,
+        contours_layer = QgsVectorLayer(
+            contours_shapefile,
             'mmi-contours', "ogr")
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([myContoursLayer])
+        QgsMapLayerRegistry.instance().addMapLayers([contours_layer])
 
-        myCitiesLayer = None
-        if myCitiesShapeFile is not None:
-            myCitiesLayer = QgsVectorLayer(
-                myCitiesShapeFile,
+        cities_layer = None
+        if cities_shape_file is not None:
+            cities_layer = QgsVectorLayer(
+                cities_shape_file,
                 'mmi-cities', "ogr")
-            if myCitiesLayer.isValid():
+            if cities_layer.isValid():
                 # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayers([myCitiesLayer])
+                QgsMapLayerRegistry.instance().addMapLayers([cities_layer])
 
         # Now add our layers to the renderer so they appear in the print out
-        myLayers = reversed(CANVAS.layers())
-        myLayerList = []
-        for myLayer in myLayers:
-            myLayerList.append(myLayer.id())
+        layers = reversed(CANVAS.layers())
+        layer_list = []
+        for myLayer in layers:
+            layer_list.append(myLayer.id())
 
-        myLayerList.append(myContoursLayer.id())
-        if myCitiesLayer is not None and myCitiesLayer.isValid():
-            myLayerList.append(myCitiesLayer.id())
+        layer_list.append(contours_layer.id())
+        if cities_layer is not None and cities_layer.isValid():
+            layer_list.append(cities_layer.id())
 
-        myMapRenderer.setLayerSet(myLayerList)
-        LOGGER.info(str(myLayerList))
+        map_renderer.setLayerSet(layer_list)
+        LOGGER.info(str(layer_list))
 
         # Save a pdf.
-        myComposition.exportAsPDF(myPdfPath)
-        LOGGER.info('Generated PDF: %s' % myPdfPath)
+        composition.exportAsPDF(pdf_path)
+        LOGGER.info('Generated PDF: %s' % pdf_path)
         # Save a png
-        myPageNumber = 0
-        myImage = myComposition.printPageAsRaster(myPageNumber)
-        myImage.save(myImagePath)
-        LOGGER.info('Generated Image: %s' % myImagePath)
+        page_number = 0
+        image = composition.printPageAsRaster(page_number)
+        image.save(image_path)
+        LOGGER.info('Generated Image: %s' % image_path)
         # Save a thumbnail
-        mySize = QSize(200, 200)
-        myThumbnailImage = myImage.scaled(
-            mySize, Qt.KeepAspectRatioByExpanding)
-        myThumbnailImage.save(myThumbnailImagePath)
-        LOGGER.info('Generated Thumbnail: %s' % myThumbnailImagePath)
+        size = QSize(200, 200)
+        thumbnail_image = image.scaled(
+            size, Qt.KeepAspectRatioByExpanding)
+        thumbnail_image.save(thumbnail_image_path)
+        LOGGER.info('Generated Thumbnail: %s' % thumbnail_image_path)
 
         # Save a QGIS Composer template that you can open in QGIS
-        myTemplateDocument = QDomDocument()
-        myElement = myTemplateDocument.createElement('Composer')
-        myComposition.writeXML(
-            myElement, myTemplateDocument)
-        myTemplateDocument.appendChild(myElement)
-        myTemplatePath = os.path.join(
+        template_document = QDomDocument()
+        element = template_document.createElement('Composer')
+        composition.writeXML(
+            element, template_document)
+        template_document.appendChild(element)
+        template_path = os.path.join(
             shakemapExtractDir(),
-            self.eventId,
+            self.event_id,
             'composer-template.qpt')
-        myFile = file(myTemplatePath, 'wt')
-        myFile.write(myTemplateDocument.toByteArray())
-        myFile.close()
+        template_file = file(template_path, 'wt')
+        template_file.write(template_document.toByteArray())
+        template_file.close()
 
         # Save a QGIS project that you can open in QGIS
         # noinspection PyArgumentList
-        myProject = QgsProject.instance()
-        myProjectPath = os.path.join(
+        project = QgsProject.instance()
+        project_path = os.path.join(
             shakemapExtractDir(),
-            self.eventId,
+            self.event_id,
             'project.qgs')
-        myProject.write(QFileInfo(myProjectPath))
+        project.write(QFileInfo(project_path))
 
-    def bearingToCardinal(self, theBearing):
+    def bearing_to_cardinal(self, bearing):
         """Given a bearing in degrees return it as compass units e.g. SSE.
 
-        :param theBearing: theBearing float (required)
-        :return str Compass bearing derived from theBearing or None if
+        :param bearing: theBearing float (required)
+
+        :return: Compass bearing derived from theBearing or None if
             theBearing is None or can not be resolved to a float.
+        :rtype: str
 
         .. note:: This method is heavily based on http://hoegners.de/Maxi/geo/
            which is licensed under the GPL V3.
         """
-        myDirectionList = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
-                           'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
-                           'NW', 'NNW']
+        direction_list = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
+                          'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
+                          'NW', 'NNW']
         try:
-            myBearing = float(theBearing)
+            bearing = float(bearing)
         except ValueError:
             LOGGER.exception('Error casting bearing to a float')
             return None
 
-        myDirectionsCount = len(myDirectionList)
-        myDirectionsInterval = 360. / myDirectionsCount
-        myIndex = int(round(myBearing / myDirectionsInterval))
-        myIndex %= myDirectionsCount
-        return myDirectionList[myIndex]
+        directions_count = len(direction_list)
+        directions_interval = 360. / directions_count
+        index = int(round(bearing / directions_interval))
+        index %= directions_count
+        return direction_list[index]
 
-    def eventInfo(self):
+    def event_info(self):
         """Get a short paragraph describing the event.
 
-        Args:
-            None
-
-        Returns:
-            str: A string describing the event e.g.
+        :return: A string describing the event e.g.
                 'M 5.0 26-7-2012 2:15:35 Latitude: 0°12'36.00"S
                  Longitude: 124°27'0.00"E Depth: 11.0km
                  Located 2.50km SSW of Tondano'
-        Raises:
-            None
+        :rtype: str
         """
-        myDict = self.eventDict()
-        myString = ('M %(mmi)s %(date)s %(time)s '
-                    '%(latitude-name)s: %(latitude-value)s '
-                    '%(longitude-name)s: %(longitude-value)s '
-                    '%(depth-name)s: %(depth-value)s%(depth-unit)s '
-                    '%(located-label)s %(distance)s%(distance-unit)s '
-                    '%(bearing-compass)s '
-                    '%(direction-relation)s %(place-name)s') % myDict
-        return myString
+        event_dict = self.event_dict()
+        event_string = ('M %(mmi)s %(date)s %(time)s '
+                        '%(latitude-name)s: %(latitude-value)s '
+                        '%(longitude-name)s: %(longitude-value)s '
+                        '%(depth-name)s: %(depth-value)s%(depth-unit)s '
+                        '%(located-label)s %(distance)s%(distance-unit)s '
+                        '%(bearing-compass)s '
+                        '%(direction-relation)s %(place-name)s') % event_dict
+        return event_string
 
-    def eventDict(self):
+    def event_dict(self):
         """Get a dict of key value pairs that describe the event.
 
-        Args:
+        :return: key-value pairs describing the event.
+        :rtype: dict:
 
-        Returns:
-            dict: key-value pairs describing the event.
-
-        Raises:
-            propagates any exceptions
+        :raises: Propagates any exceptions
 
         """
-        myMapName = self.tr('Estimated Earthquake Impact')
-        myExposureTableName = self.tr(
+        map_name = self.tr('Estimated Earthquake Impact')
+        exposure_table_name = self.tr(
             'Estimated number of people affected by each MMI level')
-        myFatalitiesName = self.tr('Estimated fatalities')
-        myFatalitiesCount = self.fatality_total
+        fatalities_name = self.tr('Estimated fatalities')
+        fatalities_count = self.fatality_total
 
         # put the estimate into neat ranges 0-100, 100-1000, 1000-10000. etc
-        myLowerLimit = 0
-        myUpperLimit = 100
-        while myFatalitiesCount > myUpperLimit:
-            myLowerLimit = myUpperLimit
-            myUpperLimit = math.pow(myUpperLimit, 2)
-        myFatalitiesRange = '%i - %i' % (myLowerLimit, myUpperLimit)
+        lower_limit = 0
+        upper_limit = 100
+        while fatalities_count > upper_limit:
+            lower_limit = upper_limit
+            upper_limit = math.pow(upper_limit, 2)
+        fatalities_range = '%i - %i' % (lower_limit, upper_limit)
 
-        myCityTableName = self.tr('Places Affected')
-        myLegendName = self.tr('Population density')
-        myLimitations = self.tr(
+        city_table_name = self.tr('Places Affected')
+        legend_name = self.tr('Population density')
+        limitations = self.tr(
             'This impact estimation is automatically generated and only takes'
             ' into account the population and cities affected by different '
             'levels of ground shaking. The estimate is based on ground '
@@ -2179,83 +2178,79 @@ class ShakeEvent(QObject):
             'sources. The fatality calculation assumes that '
             'no fatalities occur for shake levels below MMI 4. Fatality '
             'counts of less than 50 are disregarded.')
-        myCredits = self.tr(
+        credits_text = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
         #Format the lat lon from decimal degrees to dms
-        myPoint = QgsPoint(self.longitude, self.latitude)
-        myCoordinates = myPoint.toDegreesMinutesSeconds(2)
-        myTokens = myCoordinates.split(',')
-        myLongitude = myTokens[0]
-        myLatitude = myTokens[1]
-        myKmText = self.tr('km')
-        myDirectionalityText = self.tr('of')
-        myBearingText = self.tr('bearing')
-        LOGGER.debug(myLongitude)
-        LOGGER.debug(myLatitude)
+        point = QgsPoint(self.longitude, self.latitude)
+        coordinates = point.toDegreesMinutesSeconds(2)
+        tokens = coordinates.split(',')
+        longitude = tokens[0]
+        latitude = tokens[1]
+        km_text = self.tr('km')
+        directionality_text = self.tr('of')
+        bearing_text = self.tr('bearing')
+        LOGGER.debug(longitude)
+        LOGGER.debug(latitude)
         if self.most_affected_city is None:
             # Check why we have this line - perhaps setting class state?
             self.sorted_impacted_cities()
-            myDirection = 0
-            myDistance = 0
-            myKeyCityName = self.tr('n/a')
-            myBearing = self.tr('n/a')
+            direction = 0
+            distance = 0
+            key_city_name = self.tr('n/a')
+            bearing = self.tr('n/a')
         else:
-            myDirection = self.most_affected_city['dir_to']
-            myDistance = self.most_affected_city['dist_to']
-            myKeyCityName = self.most_affected_city['name']
-            myBearing = self.bearingToCardinal(myDirection)
+            direction = self.most_affected_city['dir_to']
+            distance = self.most_affected_city['dist_to']
+            key_city_name = self.most_affected_city['name']
+            bearing = self.bearing_to_cardinal(direction)
 
-        myElapsedTimeText = self.tr('Elapsed time since event')
-        myElapsedTime = self.elapsedTime()[1]
-        myDegreeSymbol = '\xb0'
-        myDict = {
-            'map-name': myMapName,
-            'exposure-table-name': myExposureTableName,
-            'city-table-name': myCityTableName,
-            'legend-name': myLegendName,
-            'limitations': myLimitations,
-            'credits': myCredits,
-            'fatalities-name': myFatalitiesName,
-            'fatalities-range': myFatalitiesRange,
-            'fatalities-count': '%s' % myFatalitiesCount,
+        elapsed_time_text = self.tr('Elapsed time since event')
+        elapsed_time = self.elapsed_time()[1]
+        degree_symbol = '\xb0'
+        event_dict = {
+            'map-name': map_name,
+            'exposure-table-name': exposure_table_name,
+            'city-table-name': city_table_name,
+            'legend-name': legend_name,
+            'limitations': limitations,
+            'credits': credits_text,
+            'fatalities-name': fatalities_name,
+            'fatalities-range': fatalities_range,
+            'fatalities-count': '%s' % fatalities_count,
             'mmi': '%s' % self.magnitude,
             'date': '%s-%s-%s' % (
                 self.day, self.month, self.year),
             'time': '%s:%s:%s' % (
                 self.hour, self.minute, self.second),
-            'formatted-date-time': self.elapsedTime()[0],
+            'formatted-date-time': self.elapsed_time()[0],
             'latitude-name': self.tr('Latitude'),
-            'latitude-value': '%s' % myLatitude,
+            'latitude-value': '%s' % latitude,
             'longitude-name': self.tr('Longitude'),
-            'longitude-value': '%s' % myLongitude,
+            'longitude-value': '%s' % longitude,
             'depth-name': self.tr('Depth'),
             'depth-value': '%s' % self.depth,
-            'depth-unit': myKmText,
+            'depth-unit': km_text,
             'located-label': self.tr('Located'),
-            'distance': '%.2f' % myDistance,
-            'distance-unit': myKmText,
-            'direction-relation': myDirectionalityText,
-            'bearing-degrees': '%.2f%s' % (myDirection, myDegreeSymbol),
-            'bearing-compass': '%s' % myBearing,
-            'bearing-text': myBearingText,
-            'place-name': myKeyCityName,
-            'elapsed-time-name': myElapsedTimeText,
-            'elapsed-time': myElapsedTime
+            'distance': '%.2f' % distance,
+            'distance-unit': km_text,
+            'direction-relation': directionality_text,
+            'bearing-degrees': '%.2f%s' % (direction, degree_symbol),
+            'bearing-compass': '%s' % bearing,
+            'bearing-text': bearing_text,
+            'place-name': key_city_name,
+            'elapsed-time-name': elapsed_time_text,
+            'elapsed-time': elapsed_time
         }
-        return myDict
+        return event_dict
 
-    def elapsedTime(self):
+    def elapsed_time(self):
         """Calculate how much time has elapsed since the event.
 
-        Args:
-            None
+        :return: local formatted date
+        :rtype: str
 
-        Returns:
-            str - local formatted date
-
-        Raises:
-            None
+        :raises: None
 
         .. note:: Code based on Ole's original impact_map work.
         """
@@ -2327,10 +2322,10 @@ class ShakeEvent(QObject):
         """
         return self.tr('Version: %s' % get_version())
 
-    def getCityById(self, theId):
+    def get_city_by_id(self, city_id):
         """A helper to get the info of an affected city given it's id.
 
-        :param theId: int mandatory, the id number of the city to retrieve.
+        :param city_id: int mandatory, the id number of the city to retrieve.
         :return dict: various properties for the given city including distance
                 from the epicenter and direction to and from the epicenter.
         """
@@ -2338,56 +2333,55 @@ class ShakeEvent(QObject):
     def __str__(self):
         """The unicode representation for an event object's state.
 
-        Args: None
+        :return: A string describing the ShakeEvent instance
+        :rtype: str
 
-        Returns: str A string describing the ShakeEvent instance
-
-        Raises: None
+        :raises: None
         """
         if self.extent_with_cities is not None:
             # noinspection PyUnresolvedReferences
-            myExtentWithCities = self.extent_with_cities.asWktPolygon()
+            extent_with_cities = self.extent_with_cities.asWktPolygon()
         else:
-            myExtentWithCities = 'Not set'
+            extent_with_cities = 'Not set'
 
         if self.mmi_data:
-            mmiData = 'Populated'
+            mmi_data = 'Populated'
         else:
-            mmiData = 'Not populated'
+            mmi_data = 'Not populated'
 
-        myDict = {'latitude': self.latitude,
-                  'longitude': self.longitude,
-                  'eventId': self.eventId,
-                  'magnitude': self.magnitude,
-                  'depth': self.depth,
-                  'description': self.description,
-                  'location': self.location,
-                  'day': self.day,
-                  'month': self.month,
-                  'year': self.year,
-                  'time': self.time,
-                  'time_zone': self.timezone,
-                  'x_minimum': self.x_minimum,
-                  'x_maximum': self.x_maximum,
-                  'y_minimum': self.y_minimum,
-                  'y_maximum': self.y_maximum,
-                  'rows': self.rows,
-                  'columns': self.columns,
-                  'mmi_data': mmiData,
-                  'populationRasterPath': self.populationRasterPath,
-                  'impact_file': self.impact_file,
-                  'impact_keywords_file': self.impact_keywords_file,
-                  'fatality_counts': self.fatality_counts,
-                  'displaced_counts': self.displaced_counts,
-                  'affected_counts': self.affected_counts,
-                  'extent_with_cities': myExtentWithCities,
-                  'zoom_factor': self.zoomFactor,
-                  'search_boxes': self.search_boxes}
+        event_dict = {'latitude': self.latitude,
+                      'longitude': self.longitude,
+                      'event_id': self.event_id,
+                      'magnitude': self.magnitude,
+                      'depth': self.depth,
+                      'description': self.description,
+                      'location': self.location,
+                      'day': self.day,
+                      'month': self.month,
+                      'year': self.year,
+                      'time': self.time,
+                      'time_zone': self.timezone,
+                      'x_minimum': self.x_minimum,
+                      'x_maximum': self.x_maximum,
+                      'y_minimum': self.y_minimum,
+                      'y_maximum': self.y_maximum,
+                      'rows': self.rows,
+                      'columns': self.columns,
+                      'mmi_data': mmi_data,
+                      'population_raster_path': self.population_raster_path,
+                      'impact_file': self.impact_file,
+                      'impact_keywords_file': self.impact_keywords_file,
+                      'fatality_counts': self.fatality_counts,
+                      'displaced_counts': self.displaced_counts,
+                      'affected_counts': self.affected_counts,
+                      'extent_with_cities': extent_with_cities,
+                      'zoom_factor': self.zoom_factor,
+                      'search_boxes': self.search_boxes}
 
-        myString = (
+        event_string = (
             'latitude: %(latitude)s\n'
             'longitude: %(longitude)s\n'
-            'eventId: %(eventId)s\n'
+            'event_id: %(event_id)s\n'
             'magnitude: %(magnitude)s\n'
             'depth: %(depth)s\n'
             'description: %(description)s\n'
@@ -2404,7 +2398,7 @@ class ShakeEvent(QObject):
             'rows: %(rows)s\n'
             'columns: %(columns)s\n'
             'mmi_data: %(mmi_data)s\n'
-            'populationRasterPath: %(populationRasterPath)s\n'
+            'population_raster_path: %(population_raster_path)s\n'
             'impact_file: %(impact_file)s\n'
             'impact_keywords_file: %(impact_keywords_file)s\n'
             'fatality_counts: %(fatality_counts)s\n'
@@ -2413,10 +2407,10 @@ class ShakeEvent(QObject):
             'extent_with_cities: %(extent_with_cities)s\n'
             'zoom_factor: %(zoom_factor)s\n'
             'search_boxes: %(search_boxes)s\n'
-            % myDict)
-        return myString
+            % event_dict)
+        return event_string
 
-    def setupI18n(self):
+    def setup_i18n(self):
         """Setup internationalisation for the reports.
 
         Args:
@@ -2426,27 +2420,27 @@ class ShakeEvent(QObject):
         Raises:
            TranslationLoadException
         """
-        myLocaleName = self.locale
+        locale_name = self.locale
         # Also set the system locale to the user overridden local
         # so that the inasafe library functions gettext will work
         # .. see:: :py:func:`common.utilities`
-        os.environ['LANG'] = str(myLocaleName)
+        os.environ['LANG'] = str(locale_name)
 
-        myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        myTranslationPath = os.path.join(
-            myRoot, 'safe_qgis', 'i18n',
-            'inasafe_' + str(myLocaleName) + '.qm')
-        if os.path.exists(myTranslationPath):
+        root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        translation_path = os.path.join(
+            root, 'safe_qgis', 'i18n',
+            'inasafe_' + str(locale_name) + '.qm')
+        if os.path.exists(translation_path):
             self.translator = QTranslator()
-            myResult = self.translator.load(myTranslationPath)
-            LOGGER.debug('Switched locale to %s' % myTranslationPath)
-            if not myResult:
-                myMessage = 'Failed to load translation for %s' % myLocaleName
-                LOGGER.exception(myMessage)
-                raise TranslationLoadError(myMessage)
+            result = self.translator.load(translation_path)
+            LOGGER.debug('Switched locale to %s' % translation_path)
+            if not result:
+                message = 'Failed to load translation for %s' % locale_name
+                LOGGER.exception(message)
+                raise TranslationLoadError(message)
             # noinspection PyTypeChecker
             QCoreApplication.installTranslator(self.translator)
         else:
-            if myLocaleName != 'en':
-                myMessage = 'No translation exists for %s' % myLocaleName
-                LOGGER.exception(myMessage)
+            if locale_name != 'en':
+                message = 'No translation exists for %s' % locale_name
+                LOGGER.exception(message)

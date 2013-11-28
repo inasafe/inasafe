@@ -100,13 +100,13 @@ class SftpShakeData:
             except NetworkError:
                 raise
         else:
-            # If we fetched it above using getLatestEventId we assume it is
+            # If we fetched it above using get_latest_event_id we assume it is
             # already validated.
             try:
                 self.validateEvent()
             except EventValidationError:
                 raise
-            # If eventId is still None after all the above, moan....
+            # If event_id is still None after all the above, moan....
         if self.eventId is None:
             myMessage = ('No id was passed to the constructor and the '
                          'latest id could not be retrieved from the'

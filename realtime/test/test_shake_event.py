@@ -110,7 +110,7 @@ class TestShakeEvent(unittest.TestCase):
         myShakeEvent = ShakeEvent(myShakeId)
         myExpectedState = """latitude: -0.21
 longitude: 124.45
-eventId: 20120726022003
+event_id: 20120726022003
 magnitude: 5.0
 depth: 11.0
 description: None
@@ -127,7 +127,7 @@ y_maximum: 1.79
 rows: 161.0
 columns: 161.0
 mmi_data: Populated
-populationRasterPath: None
+population_raster_path: None
 impact_file: None
 impact_keywords_file: None
 fatality_counts: None
@@ -380,7 +380,7 @@ search_boxes: None
         """Test we can get a dictionary of location info nicely."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myResult = myShakeEvent.eventDict()
+        myResult = myShakeEvent.event_dict()
         myExpectedDict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
                           'fatalities-name': PyQt4.QtCore.QString(
@@ -454,7 +454,7 @@ search_boxes: None
             'M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S Longitude: '
             '124%s27\'0.00"E Depth: 11.0km Located 0.00km n/a of n/a'
             % (myDegreeSymbol, myDegreeSymbol))
-        myResult = myShakeEvent.eventInfo()
+        myResult = myShakeEvent.event_info()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
@@ -466,21 +466,21 @@ search_boxes: None
 
         # Ints should work
         myExpectedResult = 'SSE'
-        myResult = myShakeEvent.bearingToCardinal(160)
+        myResult = myShakeEvent.bearing_to_cardinal(160)
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
 
         # Floats should work
         myExpectedResult = 'SW'
-        myResult = myShakeEvent.bearingToCardinal(225.4)
+        myResult = myShakeEvent.bearing_to_cardinal(225.4)
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
 
         # non numeric data as input should return None
         myExpectedResult = None
-        myResult = myShakeEvent.bearingToCardinal('foo')
+        myResult = myShakeEvent.bearing_to_cardinal('foo')
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
@@ -488,7 +488,7 @@ search_boxes: None
     def testI18n(self):
         """See if internationalisation is working."""
         myShakeId = '20120726022003'
-        myShakeEvent = ShakeEvent(myShakeId, theLocale='id')
+        myShakeEvent = ShakeEvent(myShakeId, locale='id')
         myShaking = myShakeEvent.mmi_shaking(5)
         myExpectedShaking = 'Sedang'
         self.assertEqual(myExpectedShaking, myShaking)
@@ -496,7 +496,7 @@ search_boxes: None
     def test_extractDateTime(self):
         """Check that we extract date and time correctly."""
         myShakeId = '20120726022003'
-        myShakeEvent = ShakeEvent(myShakeId, theLocale='en')
+        myShakeEvent = ShakeEvent(myShakeId, locale='en')
         myShakeEvent.extract_datetime('2012-08-07T01:55:12WIB')
         self.assertEqual(1, myShakeEvent.hour)
         self.assertEqual(55, myShakeEvent.minute)
