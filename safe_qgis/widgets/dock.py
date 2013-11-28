@@ -1365,7 +1365,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         LOGGER.debug('Do postprocessing')
         self.postprocessor_manager = PostprocessorManager(self.aggregator)
-        self.postprocessor_manager.functionParams = self.function_parameters
+        self.postprocessor_manager.function_parameters = self.function_parameters
         self.postprocessor_manager.run()
         self.completed()
         self.analysisDone.emit(True)
