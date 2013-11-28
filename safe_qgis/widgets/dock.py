@@ -1789,7 +1789,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         use_full_extent = dlg.analysis_extent_radio.isChecked()
-        create_pdf = dlg.create_pdf_radio.isChecked()
+        create_pdf = dlg.create_pdf
         if dlg.default_template_radio.isChecked():
             template_path = dlg.template_combo.itemData(
                 dlg.template_combo.currentIndex())

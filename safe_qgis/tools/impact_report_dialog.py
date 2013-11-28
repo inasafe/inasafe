@@ -42,10 +42,32 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
 
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
+
+        # additional buttons
+        self.button_save_pdf = QtGui.QPushButton(self.tr('Open PDF'))
+        self.button_save_pdf.setObjectName('button_save_pdf')
+        self.button_save_pdf.setToolTip(self.tr('Write report to PDF and '
+                                                'open it in default viewer'))
+        self.buttonBox.addButton(self.button_save_pdf,
+                                 QtGui.QDialogButtonBox.ActionRole)
+
+        self.button_open_composer = QtGui.QPushButton(self.tr('Open composer'))
+        self.button_open_composer.setObjectName('button_open_composer')
+        self.button_open_composer.setToolTip(self.tr('Prepare report and '
+                                                     'open it in QGIS '
+                                                     'composer'))
+        self.buttonBox.addButton(self.button_open_composer,
+                                 QtGui.QDialogButtonBox.ActionRole)
+
+        self.button_save_pdf.clicked.connect(self.accept)
+        self.button_open_composer.clicked.connect(self.accept)
+
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
         self.dock = dock
+
+        self.create_pdf = False
 
         self.default_template_radio.toggled.connect(
             self.toggle_template_selectors)
@@ -89,11 +111,6 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
         self.current_extent_radio.setChecked(not flag)
 
         flag = bool(settings.value(
-            'inasafe/showComposerFlag', True, type=bool))
-        self.show_composer_radio.setChecked(flag)
-        self.create_pdf_radio.setChecked(not flag)
-
-        flag = bool(settings.value(
             'inasafe/useDefaultTemplates', True, type=bool))
         self.default_template_radio.setChecked(flag)
         self.custom_template_radio.setChecked(not flag)
@@ -112,9 +129,6 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
             'inasafe/analysisExtentFlag',
             self.analysis_extent_radio.isChecked())
         settings.setValue(
-            'inasafe/showComposerFlag',
-            self.show_composer_radio.isChecked())
-        settings.setValue(
             'inasafe/useDefaultTemplates',
             self.default_template_radio.isChecked())
         settings.setValue(
@@ -130,6 +144,11 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
+        sender_name = self.sender().objectName()
+        if sender_name == 'button_save_pdf':
+            self.create_pdf = True
+        else:
+            self.create_pdf = False
         QtGui.QDialog.accept(self)
 
     @pyqtSignature('')  # prevents actions being handled twice

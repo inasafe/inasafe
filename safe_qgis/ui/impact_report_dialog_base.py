@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'safe_qgis/ui/impact_report_dialog_base.ui'
 #
-# Created: Wed Oct 30 10:54:59 2013
+# Created: Thu Nov 28 10:51:35 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_ImpactReportDialogBase(object):
     def setupUi(self, ImpactReportDialogBase):
         ImpactReportDialogBase.setObjectName(_fromUtf8("ImpactReportDialogBase"))
-        ImpactReportDialogBase.resize(400, 300)
+        ImpactReportDialogBase.resize(400, 213)
         self.verticalLayout = QtGui.QVBoxLayout(ImpactReportDialogBase)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.groupBox = QtGui.QGroupBox(ImpactReportDialogBase)
@@ -57,20 +57,9 @@ class Ui_ImpactReportDialogBase(object):
         self.custom_template_radio.setObjectName(_fromUtf8("custom_template_radio"))
         self.gridLayout.addWidget(self.custom_template_radio, 1, 0, 1, 1)
         self.verticalLayout.addWidget(self.groupBox_2)
-        self.groupBox_3 = QtGui.QGroupBox(ImpactReportDialogBase)
-        self.groupBox_3.setObjectName(_fromUtf8("groupBox_3"))
-        self.horizontalLayout_2 = QtGui.QHBoxLayout(self.groupBox_3)
-        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        self.show_composer_radio = QtGui.QRadioButton(self.groupBox_3)
-        self.show_composer_radio.setObjectName(_fromUtf8("show_composer_radio"))
-        self.horizontalLayout_2.addWidget(self.show_composer_radio)
-        self.create_pdf_radio = QtGui.QRadioButton(self.groupBox_3)
-        self.create_pdf_radio.setObjectName(_fromUtf8("create_pdf_radio"))
-        self.horizontalLayout_2.addWidget(self.create_pdf_radio)
-        self.verticalLayout.addWidget(self.groupBox_3)
         self.buttonBox = QtGui.QDialogButtonBox(ImpactReportDialogBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.verticalLayout.addWidget(self.buttonBox)
 
@@ -86,7 +75,4 @@ class Ui_ImpactReportDialogBase(object):
         self.current_extent_radio.setText(QtGui.QApplication.translate("ImpactReportDialogBase", "Current extent", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("ImpactReportDialogBase", "Template to use", None, QtGui.QApplication.UnicodeUTF8))
         self.template_chooser.setText(QtGui.QApplication.translate("ImpactReportDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_3.setTitle(QtGui.QApplication.translate("ImpactReportDialogBase", "What to do when OK is pressed", None, QtGui.QApplication.UnicodeUTF8))
-        self.show_composer_radio.setText(QtGui.QApplication.translate("ImpactReportDialogBase", "Show in composer", None, QtGui.QApplication.UnicodeUTF8))
-        self.create_pdf_radio.setText(QtGui.QApplication.translate("ImpactReportDialogBase", "Generate PDF", None, QtGui.QApplication.UnicodeUTF8))
 
