@@ -68,7 +68,7 @@ def create_index(shakemap_dir, locale):
                   '\t\t<thead>'
                   '\n\t\t\t<tr>'
                   '\n\t\t\t\t<th class="center">Max MMI</th>'
-                  '\n\t\t\t\t<th class="center">Time</th>'
+                  '\n\t\t\t\t<th class="center">Date and Time</th>'
                   '\n\t\t\t\t<th class="center">Location</th>'
                   '\n\t\t\t\t<th class="center">Magnitude</th>'
                   '\n\t\t\t\t<th class="center">Depth</th>'
