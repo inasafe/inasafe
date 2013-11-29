@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Realtime Exception Classes.**

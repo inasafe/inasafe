@@ -33,7 +33,7 @@ from rt_exceptions import (EventUndefinedError,
                            InvalidInputZipError,
                            ExtractionError)
 from ftp_client import FtpClient
-from utils import shakemapZipDir, shakemapExtractDir
+from utils import shakemap_zip_dir, shakemap_extract_dir
 
 
 class ShakeData:
@@ -109,7 +109,7 @@ class ShakeData:
         """
         ftp_client = FtpClient()
         try:
-            ftp_client_list = ftp_client.getListing()
+            ftp_client_list = ftp_client.get_listing()
             ftp_client_list.sort(key=lambda x: x.lower())
         except NetworkError:
             raise
@@ -138,7 +138,7 @@ class ShakeData:
         input_file_name, output_file_name = self.file_names()
         file_list = [input_file_name, output_file_name]
         ftp_client = FtpClient()
-        return ftp_client.hasFiles(file_list)
+        return ftp_client.has_files(file_list)
 
     def file_names(self):
         """Return file names for the inp and out files based on the event id.
@@ -151,8 +151,8 @@ class ShakeData:
 
         :raises: None
         """
-        input_file_name = self.event_id + '.inp.zip'
-        output_file_name = self.event_id + '.out.zip'
+        input_file_name = '%s.inp.zip' % self.event_id
+        output_file_name = '%s.out.zip' % self.event_id
         return input_file_name, output_file_name
 
     def cache_paths(self):
@@ -164,8 +164,8 @@ class ShakeData:
         :raises: None
         """
         input_file_name, output_file_name = self.file_names()
-        input_file_path = os.path.join(shakemapZipDir(), input_file_name)
-        output_file_path = os.path.join(shakemapZipDir(), output_file_name)
+        input_file_path = os.path.join(shakemap_zip_dir(), input_file_name)
+        output_file_path = os.path.join(shakemap_zip_dir(), output_file_name)
         return input_file_path, output_file_path
 
     def is_cached(self):
@@ -198,6 +198,7 @@ class ShakeData:
         else:
             return self.is_on_server()
 
+    #noinspection PyMethodMayBeStatic
     def _fetch_file(self, event_file, retries=3):
         """Private helper to fetch a file from the ftp site.
 
@@ -225,7 +226,7 @@ class ShakeData:
         :raises: EventUndefinedError, NetworkError
         """
         # Return the cache copy if it exists
-        local_path = os.path.join(shakemapZipDir(), event_file)
+        local_path = os.path.join(shakemap_zip_dir(), event_file)
         if os.path.exists(local_path):
             return local_path
 
@@ -234,7 +235,7 @@ class ShakeData:
             last_error = None
             try:
                 client = FtpClient()
-                client.getFile(event_file, local_path)
+                client.get_file(event_file, local_path)
             except NetworkError, e:
                 last_error = e
             except:
@@ -272,7 +273,7 @@ class ShakeData:
         if self.event_id is None:
             raise EventUndefinedError('Event is none')
 
-        event_file = self.event_id + '.inp.zip'
+        event_file = '%s.inp.zip' % self.event_id
         try:
             return self._fetch_file(event_file)
         except (EventUndefinedError, NetworkError):
@@ -296,7 +297,7 @@ class ShakeData:
         if self.event_id is None:
             raise EventUndefinedError('Event is none')
 
-        event_file = self.event_id + '.out.zip'
+        event_file = '%s.out.zip' % self.event_id
         try:
             return self._fetch_file(event_file)
         except (EventUndefinedError, NetworkError):
@@ -321,7 +322,7 @@ class ShakeData:
             raise
         return input_file, output_file
 
-    def extract(self, theForceFlag=False):
+    def extract(self, force_flag=False):
         """Extract the zipped resources. The two zips associated with this
         shakemap will be extracted to e.g.
 
@@ -355,7 +356,7 @@ class ShakeData:
            we care about and will extract as a matrix (MMI in the 5th column).
 
 
-        :param theForceFlag: (Optional) Whether to force re-extraction. If the
+        :param force_flag: (Optional) Whether to force re-extraction. If the
                 files were previously extracted, you can force them to be
                 extracted again. If False, grid.xml local file is used if
                 it is cached. Default False.
@@ -371,7 +372,7 @@ class ShakeData:
 
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')
 
-        if theForceFlag:
+        if force_flag:
             self.remove_extracted_files()
         elif os.path.exists(final_grid_xml_file):
             return final_grid_xml_file
@@ -416,7 +417,7 @@ class ShakeData:
 
         :raises: Any exceptions will be propogated
         """
-        return os.path.join(shakemapExtractDir(), self.event_id)
+        return os.path.join(shakemap_extract_dir(), self.event_id)
 
     def remove_extracted_files(self):
         """Tidy up the filesystem by removing all extracted files

@@ -23,7 +23,7 @@ from stat import S_ISDIR
 from errno import ENOENT
 import os
 import logging
-from utils import mkDir
+from utils import mk_dir
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
@@ -77,7 +77,7 @@ class SFtpClient:
             dir_name = get_path_tail(remote_path)
             # create directory in local machine
             local_dir_path = os.path.join(local_path, dir_name)
-            mkDir(local_dir_path)
+            mk_dir(local_dir_path)
             # list all directory in remote path
             list_dir = self.sftp.listdir(remote_path)
             # iterate recursive

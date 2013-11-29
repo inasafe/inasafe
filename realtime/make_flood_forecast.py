@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Functionality related to shake data files.**
@@ -35,11 +36,12 @@ polygons_path = '../inasafe_data/boundaries/rw_jakarta.shp'
 
 
 def check_environment():
+    """Check all the needed environment is correct."""
     if not os.path.isfile(polygons_path):
         return False, 'Polygon file %s is not valid.' % polygons_path
     if not os.path.isdir(flood_forecast_directory):
         return False, ('flood_forecast_directory %s is not valid.' %
-                      flood_forecast_directory)
+                       flood_forecast_directory)
     if not os.path.isdir(flood_directory):
         return False, 'flood_directory %s is not valid.' % flood_directory
     if not os.path.isdir(forecast_directory):
@@ -48,8 +50,11 @@ def check_environment():
     return True, 'Environment is ready....'
 
 
-def processFloodEvent(netcdf_file=None, hours=24):
+def process_flood_event(netcdf_file=None, hours=24):
     """A function to process netcdf_file to a forecast file.
+
+    :param netcdf_file: The netcdf file. If it's none the download it.
+    :param hours: Positive integer determining how many bands to use
     """
     print 'Start flood forecasting'
 
@@ -57,7 +62,9 @@ def processFloodEvent(netcdf_file=None, hours=24):
         # retrieve data from the web
         netcdf_file = download_file_url(netcdf_url, forecast_directory)
     else:
-        netcdf_file = download_file_url(netcdf_url, name=netcdf_file,
+        netcdf_file = download_file_url(
+            netcdf_url,
+            name=netcdf_file,
             download_directory=forecast_directory)
     print 'Do flood forecasting for %s ...' % netcdf_file
 
@@ -70,9 +77,11 @@ def processFloodEvent(netcdf_file=None, hours=24):
 #        return
 
     # convert to tif
-#    tif_file = polyforecast_filepath.replace('_regions.shp', '.tif')
-    tif_filename = convert_netcdf2tif(netcdf_file, hours,
-            verbose=False, output_dir=flood_directory)
+    # tif_file = polyforecast_filepath.replace('_regions.shp', '.tif')
+    tif_filename = convert_netcdf2tif(netcdf_file,
+                                      hours,
+                                      verbose=False,
+                                      output_dir=flood_directory)
     print 'tif_file', tif_filename
     tif_file = read_layer(tif_filename)
 
@@ -85,21 +94,24 @@ def processFloodEvent(netcdf_file=None, hours=24):
                % zip_filename)
     else:
         my_polygons = read_layer(polygons_path)
-        my_result = tag_polygons_by_grid(my_polygons, tif_file, threshold=0.3,
-            tag='affected')
+        my_result = tag_polygons_by_grid(my_polygons,
+                                         tif_file,
+                                         threshold=0.3,
+                                         tag='affected')
 
         new_geom = my_result.get_geometry()
         new_data = my_result.get_data()
 
         date = os.path.split(netcdf_file)[-1].split('_')[0]
 
-        v = Vector(geometry=new_geom, data=new_data,
-            projection=my_result.projection,
-            keywords={'category': 'hazard',
-                      'subcategory': 'flood',
-                      'title': ('%d hour flood forecast regions '
-                                'in Jakarta at %s' % (hours,
-                                                      date))})
+        v = Vector(geometry=new_geom,
+                   data=new_data,
+                   projection=my_result.projection,
+                   keywords={
+                       'category': 'hazard',
+                       'subcategory': 'flood',
+                       'title': ('%d hour flood forecast regions '
+                                 'in Jakarta at %s' % (hours, date))})
 
         print 'polyforecast_filepath', polyforecast_filepath
         v.write_to_file(polyforecast_filepath)
@@ -109,31 +121,36 @@ def processFloodEvent(netcdf_file=None, hours=24):
     if os.path.isfile(zip_filename):
         print 'Has been zipped to %s' % zip_filename
     else:
-        zip_shp(polyforecast_filepath, extra_ext=['.keywords'],
-            remove_file=True)
+        zip_shp(polyforecast_filepath,
+                extra_ext=['.keywords'],
+                remove_file=True)
         print 'Zipped to %s' % zip_filename
 
 
 def usage():
-    """Print how to use the main function.
-    """
+    """Print how to use the main function."""
     sys.exit('Usage:\n%s [optional forecast file name]\nor\n%s --list'
-             '\nor\n%s --run-all' % (
-        sys.argv[0], sys.argv[0], sys.argv[0]))
+             '\nor\n%s --run-all' % (sys.argv[0],
+                                     sys.argv[0],
+                                     sys.argv[0]))
 
 
 def get_result_file_name(netcdf_file, hours):
     """Function to get result file name from a netcdf_file.
     It will return a boolean value and the result file path.
     If the file path is exist, it will return true, otherwise false
+
+    :param netcdf_file: The netcdf file. If it's none the download it.
+    :param hours: Positive integer determining how many bands to use
     """
-    polyforecast_filename = os.path.split(netcdf_file)[1].replace('.nc',
-        '_%d_hours_regions.shp' % hours)
+    polyforecast_filename = os.path.split(
+        netcdf_file)[1].replace('.nc', '_%d_hours_regions.shp' % hours)
     date_file = polyforecast_filename.split('_')[0]
     if not os.path.isdir(os.path.join(flood_directory, date_file)):
         os.mkdir(os.path.join(flood_directory, date_file))
-    polyforecast_filepath = os.path.join(flood_directory, date_file,
-        polyforecast_filename)
+    polyforecast_filepath = os.path.join(flood_directory,
+                                         date_file,
+                                         polyforecast_filename)
 
     return os.path.isfile(polyforecast_filepath), polyforecast_filepath
 
@@ -148,7 +165,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 2:
         usage()
     elif len(sys.argv) == 1:
-        processFloodEvent()
+        process_flood_event()
         exit()
 
     argv_1 = sys.argv[1]
@@ -165,8 +182,8 @@ if __name__ == '__main__':
         list_files = list_all_netcdf_files()
         print len(list_files)
         for my_netcdf_file in list_files:
-            processFloodEvent(netcdf_file=my_netcdf_file)
+            process_flood_event(netcdf_file=my_netcdf_file)
     else:
         # run specific file
-        processFloodEvent(argv_1)
+        process_flood_event(argv_1)
     exit()

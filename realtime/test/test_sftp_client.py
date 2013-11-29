@@ -24,14 +24,12 @@ import os
 
 class SFtpClientTest(unittest.TestCase):
     def test_get_list_events(self):
-        """Test to get all event ids
-        """
+        """Test to get all event ids."""
         my_ssh_client = SFtpClient()
         assert(my_ssh_client is not None)
 
     def test_download_path(self):
-        """Test to download all directories and files under a path
-        """
+        """Test to download all directories and files under a path."""
         my_ssh_client = SFtpClient(the_working_dir='shakemaps')
         assert(my_ssh_client is not None)
 

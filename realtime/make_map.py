@@ -26,10 +26,10 @@ from zipfile import BadZipfile
 
 from ftp_client import FtpClient
 from sftp_client import SFtpClient
-from utils import setupLogger, dataDir, is_event_id
+from utils import setup_logger, data_dir, is_event_id
 from shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
-setupLogger()
+setup_logger()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -40,7 +40,7 @@ def processEvent(theEventId=None, theLocale='en'):
     :param theLocale:
     """
     myPopulationPath = os.path.join(
-        dataDir(),
+        data_dir(),
         'exposure',
         'IDN_mosaic',
         'popmap10_all.tif')
@@ -114,7 +114,7 @@ elif len(sys.argv) == 2:
     if myEventId in '--list':
 #        myFtpClient = FtpClient()
         mySftpClient = SFtpClient()
-#        myListing = myFtpClient.getListing()
+#        myListing = myFtpClient.get_listing()
         myListing = mySftpClient.getListing(my_func=is_event_id)
         for myEvent in myListing:
             print myEvent
@@ -125,7 +125,7 @@ elif len(sys.argv) == 2:
         # batch file approach rather!
         #
         myFtpClient = FtpClient()
-        myListing = myFtpClient.getListing()
+        myListing = myFtpClient.get_listing()
         for myEvent in myListing:
             if 'out' not in myEvent:
                 continue
