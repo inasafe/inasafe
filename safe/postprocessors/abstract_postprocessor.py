@@ -12,7 +12,7 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 
 from safe.defaults import get_defaults
 from safe.common.exceptions import PostProcessorError

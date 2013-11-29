@@ -20,9 +20,9 @@ import unittest
 import os
 import re
 
-from PyQt4.QtCore import QCoreApplication, QTranslator
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import safeTr, get_function_title, get_plugins
+from PyQt4.QtCore import QCoreApplication, QTranslator
 
 QGIS_APP = get_qgis_app()
 
@@ -133,6 +133,11 @@ class SafeTranslationsTest(unittest.TestCase):
                     'e. "hotel", you can add it in exception_words in '
                     'safe_qgis/test_safe_translations.py')
         assert len(failure_list) == 0, message
+
+    def testAllDynamicTranslatons(self):
+        """Test all the phrases defined in dynamic_translations translate."""
+        parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)
+        dir_path = os.path.abspath(parent_path)
 
     def test_qgis_translations(self):
         parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)

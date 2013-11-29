@@ -80,7 +80,7 @@
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assesment for Emergencies" htmlState="0" halign="4" margin="1">
+  <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="4" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
    <ComposerItem width="170" x="30" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.07047" uuid="{1ee806c0-5e8d-4daa-8671-6c09c083b384}" id="" background="true" blendMode="0" positionLock="false">

@@ -83,9 +83,9 @@ def add_logging_handler_once(logger, handler):
     :returns: True if the logging handler was added, otherwise False.
     :rtype: bool
     """
-    myClassName = handler.__class__.__name__
-    for myHandler in logger.handlers:
-        if myHandler.__class__.__name__ == myClassName:
+    class_name = handler.__class__.__name__
+    for handler in logger.handlers:
+        if handler.__class__.__name__ == class_name:
             return False
 
     logger.addHandler(handler)
@@ -132,29 +132,29 @@ def setup_logger(log_file=None, sentry_url=None):
        /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
 
     """
-    myLogger = logging.getLogger('InaSAFE')
-    myLogger.setLevel(logging.DEBUG)
-    myDefaultHanderLevel = logging.DEBUG
+    logger = logging.getLogger('InaSAFE')
+    logger.setLevel(logging.DEBUG)
+    default_handler_level = logging.DEBUG
     # create formatter that will be added to the handlers
-    myFormatter = logging.Formatter(
+    formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     # create syslog handler which logs even debug messages
     # (ariel): Make this log to /var/log/safe.log instead of
     #               /var/log/syslog
     # (Tim) Ole and I discussed this - we prefer to log into the
     # user's temporary working directory.
-    myTempDir = temp_dir('logs')
-    myFilename = os.path.join(myTempDir, 'inasafe.log')
+    log_temp_dir = temp_dir('logs')
+    path = os.path.join(log_temp_dir, 'inasafe.log')
     if log_file is None:
-        myFileHandler = logging.FileHandler(myFilename)
+        file_handler = logging.FileHandler(path)
     else:
-        myFileHandler = logging.FileHandler(log_file)
-    myFileHandler.setLevel(myDefaultHanderLevel)
+        file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(default_handler_level)
     # create console handler with a higher log level
-    myConsoleHandler = logging.StreamHandler()
-    myConsoleHandler.setLevel(logging.INFO)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
 
-    myQGISHandler = QgsLogHandler()
+    qgis_handler = QgsLogHandler()
 
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
@@ -164,31 +164,31 @@ def setup_logger(log_file=None, sentry_url=None):
     #  * Enable the 'help improve InaSAFE by submitting errors to a remove
     #    server' option in InaSAFE options dialog
     # before this will be enabled.
-    mySettings = QtCore.QSettings()
-    myFlag = mySettings.value('inasafe/useSentry', False)
-    if 'INASAFE_SENTRY' in os.environ or myFlag:
+    settings = QtCore.QSettings()
+    flag = settings.value('inasafe/useSentry', False)
+    if 'INASAFE_SENTRY' in os.environ or flag:
         if sentry_url is None:
             myClient = Client(
                 'http://c64a83978732474ea751d432ab943a6b'
                 ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
         else:
             myClient = Client(sentry_url)
-        mySentryHandler = SentryHandler(myClient)
-        mySentryHandler.setFormatter(myFormatter)
-        mySentryHandler.setLevel(logging.ERROR)
-        if add_logging_handler_once(myLogger, mySentryHandler):
-            myLogger.debug('Sentry logging enabled')
+        sentry_handler = SentryHandler(myClient)
+        sentry_handler.setFormatter(formatter)
+        sentry_handler.setLevel(logging.ERROR)
+        if add_logging_handler_once(logger, sentry_handler):
+            logger.debug('Sentry logging enabled')
     else:
-        myLogger.debug('Sentry logging disabled')
+        logger.debug('Sentry logging disabled')
     # Set formatters
-    myFileHandler.setFormatter(myFormatter)
-    myConsoleHandler.setFormatter(myFormatter)
-    myQGISHandler.setFormatter(myFormatter)
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+    qgis_handler.setFormatter(formatter)
 
     # add the handlers to the logger
-    add_logging_handler_once(myLogger, myFileHandler)
-    add_logging_handler_once(myLogger, myConsoleHandler)
-    add_logging_handler_once(myLogger, myQGISHandler)
+    add_logging_handler_once(logger, file_handler)
+    add_logging_handler_once(logger, console_handler)
+    add_logging_handler_once(logger, qgis_handler)
 
 
 def temp_dir(sub_dir='work'):

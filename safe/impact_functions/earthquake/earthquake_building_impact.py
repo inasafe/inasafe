@@ -1,7 +1,7 @@
 # coding=utf-8
 """Earthquake Impact Function on Building."""
 
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector

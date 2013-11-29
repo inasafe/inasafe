@@ -231,6 +231,7 @@ dependency_test:
 	@grep -R "geonode" $(NONGUI) || true
 	@grep -R "geoserver" $(NONGUI) || true
 	@grep -R "owslib" $(NONGUI) || true
+	@grep -R "third_party" $(NONGUI) || true
 
 list_gpackages:
 	@echo
@@ -263,7 +264,7 @@ pylint:
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime || true
+	@pylint --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime || true
 
 profile:
 	@echo
