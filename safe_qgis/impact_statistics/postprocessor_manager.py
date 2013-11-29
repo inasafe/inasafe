@@ -80,12 +80,12 @@ class PostprocessorManager(QtCore.QObject):
 
         post_processor = self.output[self.current_output_postprocessor]
         #get the key position of the value field
-        key = post_processor[0][1].keyAt(0)
+        key = post_processor[0][1].keys()[0]
         #get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
-        if data[1][key]['value'] == \
-                self.aggregator.get_default_keyword('NO_DATA'):
+        if (data[1][key]['value'] == self.aggregator.get_default_keyword(
+                'NO_DATA')):
             position = -1
         else:
             position = data[1][key]['value']
