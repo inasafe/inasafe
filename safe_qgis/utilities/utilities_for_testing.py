@@ -101,16 +101,12 @@ def hash_for_file(filename):
 
 
 def get_qgis_app():
-    """ Start one QGis application to test against
+    """ Start one QGIS application to test against.
 
-    Input
-        NIL
+    :returns: Handle to QGIS app
+    :rtype: QGIS application instance
 
-    Output
-        handle to qgis app
-
-
-    If QGis is already running the handle to that app will be returned
+    If QGIS is already running the handle to that app will be returned
     """
 
     global QGIS_APP  # pylint: disable=W0603

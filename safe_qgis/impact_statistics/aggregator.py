@@ -52,7 +52,7 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
     create_memory_layer,
-    extent_to_geo_array )
+    extent_to_geo_array)
 from safe_qgis.utilities.styling import set_vector_graduated_style
 from safe_qgis.safe_interface import (
     temp_dir,
