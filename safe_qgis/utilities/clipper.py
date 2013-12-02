@@ -498,7 +498,7 @@ def _clip_raster_layer(
     if cell_size is None:
         command = (
             '"%s" -q -t_srs EPSG:4326 -r near -cutline %s -crop_to_cutline '
-            '-of GTiff "%s" "%s"' % (
+            '-ot Float64 -of GTiff "%s" "%s"' % (
                 binary,
                 clip_kml,
                 working_layer,
@@ -506,7 +506,7 @@ def _clip_raster_layer(
     else:
         command = (
             '"%s" -q -t_srs EPSG:4326 -r near -tr %f %f -cutline %s '
-            '-crop_to_cutline -of GTiff "%s" "%s"' % (
+            '-crop_to_cutline -ot Float64 -of GTiff "%s" "%s"' % (
                 binary,
                 cell_size,
                 cell_size,
