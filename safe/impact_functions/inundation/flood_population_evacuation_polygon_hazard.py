@@ -19,7 +19,7 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import numpy
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
     FunctionProvider,

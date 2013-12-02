@@ -49,7 +49,7 @@ class Map():
         self.keyword_io = KeywordIO()
         self.printer = None
         self.composition = None
-        self.legend = None
+        self.extent = iface.mapCanvas().extent()
         self.logo = ':/plugins/inasafe/bnpb_logo.png'
         self.template = ':/plugins/inasafe/inasafe.qpt'
         self.page_width = 0  # width in mm
@@ -93,6 +93,15 @@ class Map():
         :type template: str
         """
         self.template = template
+
+    def set_extent(self, extent):
+        """Set extent or the report map
+
+        :param extent: Extent of the report map
+        :type extent: QgsRectangle
+
+        """
+        self.extent = extent
 
     def setup_composition(self):
         """Set up the composition ready for drawing elements onto it."""
@@ -213,19 +222,6 @@ class Map():
         """
         self.setup_composition()
 
-        file_info = QtCore.QFileInfo(self.template)
-        template_path = file_info.absoluteDir().absolutePath()
-        template_basename = file_info.baseName()
-        system_locale = QtCore.QLocale.system().name()[:2]
-        # if template name doesn't contains locale name, try to find
-        # localized version of this template in same directory and use
-        # it for report generation
-        if system_locale.lower() not in template_basename.lower():
-            localized_template = '%s/%s-%s.qpt' % (
-                template_path, template_basename, system_locale)
-            if QtCore.QFileInfo(localized_template).exists():
-                self.template = localized_template
-
         template_file = QtCore.QFile(self.template)
         template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
         template_content = template_file.readAll()
@@ -237,9 +233,13 @@ class Map():
         # get information for substitutions
         # date, time and plugin version
         date_time = self.keyword_io.read_keywords(self.layer, 'time_stamp')
-        tokens = date_time.split('_')
-        date = tokens[0]
-        time = tokens[1]
+        if date_time is None:
+            date = ''
+            time = ''
+        else:
+            tokens = date_time.split('_')
+            date = tokens[0]
+            time = tokens[1]
         long_version = get_version()
         tokens = long_version.split('.')
         version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
@@ -277,10 +277,10 @@ class Map():
         # its extents to the event.
         composer_map = self.composition.getComposerItemById('impact-map')
         if composer_map is not None:
-            # Recenter the composer map on the center of the canvas
+            # Recenter the composer map on the center of the extent
             # Note that since the composer map is square and the canvas may be
             # arbitrarily shaped, we center based on the longest edge
-            canvas_extent = self.iface.mapCanvas().extent()
+            canvas_extent = self.extent
             width = canvas_extent.width()
             height = canvas_extent.height()
             longest_width = width

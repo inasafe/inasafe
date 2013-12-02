@@ -2,7 +2,7 @@
 """
 import numpy
 import logging
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
     FunctionProvider,

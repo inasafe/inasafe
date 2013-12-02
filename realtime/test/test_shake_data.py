@@ -52,7 +52,7 @@ class TestShakeMap(unittest.TestCase):
         """Check that we can retrieve a shakemap 'inp' input file"""
         myShakeEvent = '20110413170148'
         myShakeData = ShakeData(myShakeEvent)
-        myShakemapFile = myShakeData.fetchInput()
+        myShakemapFile = myShakeData.fetch_input()
         myExpectedFile = os.path.join(shakemapZipDir(),
                                       myShakeEvent + '.inp.zip')
         myMessage = 'Expected path for downloaded shakemap INP not received'
@@ -62,7 +62,7 @@ class TestShakeMap(unittest.TestCase):
         """Check that we can retrieve a shakemap 'out' input file"""
         myEventId = '20110413170148'
         myShakeData = ShakeData(myEventId)
-        myShakemapFile = myShakeData.fetchOutput()
+        myShakemapFile = myShakeData.fetch_output()
         myExpectedFile = os.path.join(shakemapZipDir(),
                                       myEventId + '.out.zip')
         myMessage = 'Expected path for downloaded shakemap OUT not received'
@@ -83,7 +83,7 @@ class TestShakeMap(unittest.TestCase):
         if os.path.exists(myExpectedOutFile):
             os.remove(myExpectedOutFile)
 
-        myInpFile, myOutFile = myShakeData.fetchEvent()
+        myInpFile, myOutFile = myShakeData.fetch_event()
         myMessage = ('Expected path for downloaded shakemap INP not received'
              '\nExpected: %s\nGot: %s' %
              (myExpectedOutFile, myOutFile))
@@ -105,7 +105,7 @@ class TestShakeMap(unittest.TestCase):
         myExpectedOutFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.out.zip')
         myShakeData = ShakeData(myShakeEvent)
-        myInpFile, myOutFile = myShakeData.fetchEvent()
+        myInpFile, myOutFile = myShakeData.fetch_event()
         myMessage = ('Expected path for downloaded shakemap INP not received'
              '\nExpected: %s\nGot: %s' %
              (myExpectedOutFile, myOutFile))
@@ -119,8 +119,8 @@ class TestShakeMap(unittest.TestCase):
         """Check that we can retrieve the latest shake event"""
         # Simply dont set the event id in the ctor to get the latest
         myShakeData = ShakeData()
-        myInpFile, myOutFile = myShakeData.fetchEvent()
-        myEventId = myShakeData.eventId
+        myInpFile, myOutFile = myShakeData.fetch_event()
+        myEventId = myShakeData.event_id
         myExpectedInpFile = os.path.join(shakemapZipDir(),
                                          myEventId + '.inp.zip')
         myExpectedOutFile = os.path.join(shakemapZipDir(),
@@ -152,7 +152,7 @@ class TestShakeMap(unittest.TestCase):
         """Test that we can check if an event is on the server."""
         myShakeEvent = '20120726022003'
         myShakeData = ShakeData(myShakeEvent)
-        self.assertTrue(myShakeData.isOnServer(),
+        self.assertTrue(myShakeData.is_on_server(),
                         ('Data for %s is on server' % myShakeEvent))
 
     def testCachePaths(self):
@@ -163,7 +163,7 @@ class TestShakeMap(unittest.TestCase):
                              '20120726022003.inp.zip')
         myExpectedOutPath = ('/tmp/inasafe/realtime/shakemaps-zipped/'
                              '20120726022003.out.zip')
-        myInpPath, myOutPath = myShakeData.cachePaths()
+        myInpPath, myOutPath = myShakeData.cache_paths()
         myMessage = 'Expected: %s\nGot: %s' % (myExpectedInpPath, myInpPath)
         assert myInpPath == myExpectedInpPath, myMessage
         myMessage = 'Expected: %s\nGot: %s' % (myExpectedOutPath, myOutPath)
@@ -175,7 +175,7 @@ class TestShakeMap(unittest.TestCase):
         myShakeData = ShakeData(myShakeEvent)
         myExpectedInpFileName = '20120726022003.inp.zip'
         myExpectedOutFileName = '20120726022003.out.zip'
-        myInpFileName, myOutFileName = myShakeData.fileNames()
+        myInpFileName, myOutFileName = myShakeData.file_names()
         myMessage = 'Expected: %s\nGot: %s' % (
             myExpectedInpFileName, myInpFileName)
         assert myInpFileName == myExpectedInpFileName, myMessage

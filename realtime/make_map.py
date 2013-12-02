@@ -66,28 +66,28 @@ def processEvent(theEventId=None, theLocale='en'):
         try:
             if os.path.exists(myPopulationPath):
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=myForceFlag,
-                    thePopulationRasterPath=myPopulationPath)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=myForceFlag,
+                    population_raster_path=myPopulationPath)
             else:
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=myForceFlag)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=myForceFlag)
         except (BadZipfile, URLError):
             # retry with force flag true
             if os.path.exists(myPopulationPath):
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=True,
-                    thePopulationRasterPath=myPopulationPath)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=True,
+                    population_raster_path=myPopulationPath)
             else:
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=True)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=True)
         except:
             LOGGER.exception('An error occurred setting up the shake event.')
             return
@@ -95,7 +95,7 @@ def processEvent(theEventId=None, theLocale='en'):
         LOGGER.info('Event Id: %s', myShakeEvent)
         LOGGER.info('-------------------------------------------')
 
-        myShakeEvent.renderMap(myForceFlag)
+        myShakeEvent.render_map(myForceFlag)
 
 LOGGER.info('-------------------------------------------')
 

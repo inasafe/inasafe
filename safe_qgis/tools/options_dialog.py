@@ -232,9 +232,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """Auto-connect slot activated when report file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QtGui.QFileDialog.getOpenFileName(
+        dir_name = QtGui.QFileDialog.getExistingDirectory(
             self,
-            self.tr('Set report template'),
+            self.tr('Templates directory'),
             '',
-            self.tr('QGIS Composer templates (*.qpt *.QPT)'))
-        self.leReportTemplatePath.setText(file_name)
+            QtGui.QFileDialog.ShowDirsOnly)
+        self.leReportTemplatePath.setText(dir_name)

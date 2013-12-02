@@ -9,6 +9,7 @@ import numpy
 import math
 from ast import literal_eval
 from osgeo import ogr
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 from geometry import Polygon
 
@@ -18,6 +19,8 @@ from safe.common.exceptions import BoundingBoxError, InaSAFEError
 
 
 # Default attribute to assign to vector layers
+from safe.common.utilities import ugettext as tr
+
 DEFAULT_ATTRIBUTE = 'inapolygon'
 
 # Spatial layer file extensions that are recognised in Risiko
@@ -1147,3 +1150,44 @@ def get_polygon_data(G):
     # Return Polygon instance
     return Polygon(outer_ring=outer_ring,
                    inner_rings=inner_rings)
+
+
+def safe_to_qgis_layer(layer):
+    """Helper function to make a QgsMapLayer from a safe read_layer layer.
+
+    :param layer: Layer object as provided by InaSAFE engine.
+    :type layer: read_layer
+
+    :returns: A validated QGIS layer or None.
+    :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer, None
+
+    :raises: Exception if layer is not valid.
+    """
+
+    # noinspection PyUnresolvedReferences
+    message = tr(
+        'Input layer must be a InaSAFE spatial object. I got %s'
+    ) % (str(type(layer)))
+    if not hasattr(layer, 'is_inasafe_spatial_object'):
+        raise Exception(message)
+    if not layer.is_inasafe_spatial_object:
+        raise Exception(message)
+
+    # Get associated filename and symbolic name
+    filename = layer.get_filename()
+    name = layer.get_name()
+
+    qgis_layer = None
+    # Read layer
+    if layer.is_vector:
+        qgis_layer = QgsVectorLayer(filename, name, 'ogr')
+    elif layer.is_raster:
+        qgis_layer = QgsRasterLayer(filename, name)
+
+    # Verify that new qgis layer is valid
+    if qgis_layer.isValid():
+        return qgis_layer
+    else:
+        # noinspection PyUnresolvedReferences
+        message = tr('Loaded impact layer "%s" is not valid') % filename
+        raise Exception(message)
