@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import shutil
+#noinspection PyPep8Naming
 import cPickle as pickle
 from xml.dom import minidom
 import math
@@ -85,7 +86,7 @@ from safe.api import Table, TableCell, TableRow
 from safe_qgis.utilities.utilities import get_wgs84_resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
-from utils import shakemapExtractDir, dataDir
+from utils import shakemap_extract_dir, data_dir
 from rt_exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
@@ -95,10 +96,10 @@ from rt_exceptions import (
     CityMemoryLayerCreationError,
     FileNotFoundError,
     MapComposerError)
-from realtime.utils import setupLogger
+from realtime.utils import setup_logger
 # from shake_data import ShakeData
 
-setupLogger()
+setup_logger()
 LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -156,10 +157,10 @@ class ShakeEvent(QObject):
             # fetch the data from (s)ftp
             #self.data = ShakeData(event_id, force_flag)
             self.data = SftpShakeData(
-                theEvent=event_id,
-                theForceFlag=force_flag)
+                event=event_id,
+                force_flag=force_flag)
             self.data.extract()
-            self.event_id = self.data.eventId
+            self.event_id = self.data.event_id
 
         self.latitude = None
         self.longitude = None
@@ -219,6 +220,7 @@ class ShakeEvent(QObject):
         self.setup_i18n()
         self.parse_grid_xml()
 
+    #noinspection PyMethodMayBeStatic
     def check_environment(self):
         """A helper class to check that QGIS is correctly initialised.
 
@@ -237,7 +239,7 @@ class ShakeEvent(QObject):
         :raise: GridXmlFileNotFoundError
         """
         LOGGER.debug('Event path requested.')
-        grid_xml_path = os.path.join(shakemapExtractDir(),
+        grid_xml_path = os.path.join(shakemap_extract_dir(),
                                      self.event_id,
                                      'grid.xml')
         #short circuit if the tif is already created.
@@ -424,7 +426,7 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('mmi_to_delimited_text requested.')
 
-        path = os.path.join(shakemapExtractDir(),
+        path = os.path.join(shakemap_extract_dir(),
                             self.event_id,
                             'mmi.csv')
         #short circuit if the csv is already created.
@@ -436,7 +438,7 @@ class ShakeEvent(QObject):
 
         # Also write the .csv which contains metadata about field types
         csv_path = os.path.join(
-            shakemapExtractDir(), self.event_id, 'mmi.csvt')
+            shakemap_extract_dir(), self.event_id, 'mmi.csvt')
         result_file = file(csv_path, 'wt')
         result_file.write('"Real","Real","Real"')
         result_file.close()
@@ -456,7 +458,7 @@ class ShakeEvent(QObject):
         # Ensure the delimited mmi file exists
         LOGGER.debug('mmi_to_vrt requested.')
 
-        vrt_path = os.path.join(shakemapExtractDir(),
+        vrt_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'mmi.vrt')
 
@@ -479,6 +481,7 @@ class ShakeEvent(QObject):
         result_file.close()
         return vrt_path
 
+    #noinspection PyMethodMayBeStatic
     def _add_executable_prefix(self, command):
         """Add the executable prefix for gdal binaries.
 
@@ -549,7 +552,7 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('mmi_data_to_shapefile requested.')
 
-        shp_path = os.path.join(shakemapExtractDir(),
+        shp_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'mmi-points.shp')
         # Short circuit if the tif is already created.
@@ -570,10 +573,10 @@ class ShakeEvent(QObject):
         self._run_command(the_command)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        qml_path = os.path.join(shakemapExtractDir(),
+        qml_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'mmi-points.qml')
-        source_qml = os.path.join(dataDir(), 'mmi-shape.qml')
+        source_qml = os.path.join(data_dir(), 'mmi-shape.qml')
         shutil.copyfile(source_qml, qml_path)
         return shp_path
 
@@ -623,7 +626,7 @@ class ShakeEvent(QObject):
         if algorithm is None:
             algorithm = 'nearest'
 
-        tif_path = os.path.join(shakemapExtractDir(),
+        tif_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'mmi-%s.tif' % algorithm)
         #short circuit if the tif is already created.
@@ -664,16 +667,16 @@ class ShakeEvent(QObject):
 
         # copy the keywords file from fixtures for this layer
         keyword_path = os.path.join(
-            shakemapExtractDir(),
+            shakemap_extract_dir(),
             self.event_id,
             'mmi-%s.keywords' % algorithm)
-        source_keywords = os.path.join(dataDir(), 'mmi.keywords')
+        source_keywords = os.path.join(data_dir(), 'mmi.keywords')
         shutil.copyfile(source_keywords, keyword_path)
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        qml_path = os.path.join(shakemapExtractDir(),
+        qml_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'mmi-%s.qml' % algorithm)
-        source_qml = os.path.join(dataDir(), 'mmi.qml')
+        source_qml = os.path.join(data_dir(), 'mmi.qml')
         shutil.copyfile(source_qml, qml_path)
         return tif_path
 
@@ -705,7 +708,7 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('mmi_data_to_contours requested.')
         # TODO: Use sqlite rather?
-        output_file_base = os.path.join(shakemapExtractDir(),
+        output_file_base = os.path.join(shakemap_extract_dir(),
                                         self.event_id,
                                         'mmi-contours-%s.' % algorithm)
         output_file = output_file_base + 'shp'
@@ -792,17 +795,17 @@ class ShakeEvent(QObject):
 
         # Copy over the standard .prj file since ContourGenerate does not
         # create a projection definition
-        qml_path = os.path.join(shakemapExtractDir(),
+        qml_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'mmi-contours-%s.prj' % algorithm)
-        source_qml = os.path.join(dataDir(), 'mmi-contours.prj')
+        source_qml = os.path.join(data_dir(), 'mmi-contours.prj')
         shutil.copyfile(source_qml, qml_path)
 
         # Lastly copy over the standard qml (QGIS Style file)
-        qml_path = os.path.join(shakemapExtractDir(),
+        qml_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'mmi-contours-%s.qml' % algorithm)
-        source_qml = os.path.join(dataDir(), 'mmi-contours.qml')
+        source_qml = os.path.join(data_dir(), 'mmi-contours.qml')
         shutil.copyfile(source_qml, qml_path)
 
         # Now update the additional columns - X,Y, ROMAN and RGB
@@ -813,6 +816,7 @@ class ShakeEvent(QObject):
 
         return output_file
 
+    #noinspection PyMethodMayBeStatic
     def romanize(self, mmi_value):
         """Return the roman numeral for an mmi value.
 
@@ -1040,7 +1044,7 @@ class ShakeEvent(QObject):
         geo_crs = QgsCoordinateReferenceSystem()
         geo_crs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
-        output_file_base = os.path.join(shakemapExtractDir(),
+        output_file_base = os.path.join(shakemap_extract_dir(),
                                         self.event_id,
                                         '%s.' % file_name)
         output_file = output_file_base + 'shp'
@@ -1091,10 +1095,10 @@ class ShakeEvent(QObject):
                 'Failed with error: %s' % result)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        qml_path = os.path.join(shakemapExtractDir(),
+        qml_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 '%s.qml' % file_name)
-        source_qml = os.path.join(dataDir(), '%s.qml' % file_name)
+        source_qml = os.path.join(data_dir(), '%s.qml' % file_name)
         shutil.copyfile(source_qml, qml_path)
 
         return output_file
@@ -1157,7 +1161,7 @@ class ShakeEvent(QObject):
 
         # Setup the cities table, querying on event bbox
         # Path to sqlitedb containing geonames table
-        db_path = os.path.join(dataDir(), 'indonesia.sqlite')
+        db_path = os.path.join(data_dir(), 'indonesia.sqlite')
         uri = QgsDataSourceURI()
         uri.setDatabase(db_path)
         table = 'geonames'
@@ -1504,12 +1508,12 @@ class ShakeEvent(QObject):
         :return: Full path to file that was created on disk.
         :rtype: str
         """
-        path = os.path.join(shakemapExtractDir(),
+        path = os.path.join(shakemap_extract_dir(),
                             self.event_id,
                             file_name)
         html_file = file(path, 'wt')
-        header_file = os.path.join(dataDir(), 'header.html')
-        footer_file = os.path.join(dataDir(), 'footer.html')
+        header_file = os.path.join(data_dir(), 'header.html')
+        footer_file = os.path.join(data_dir(), 'footer.html')
         header_file = file(header_file, 'rt')
         header = header_file.read()
         header_file.close()
@@ -1521,10 +1525,10 @@ class ShakeEvent(QObject):
         html_file.write(footer)
         html_file.close()
         # Also bootstrap gets copied to extract dir
-        my_destination = os.path.join(shakemapExtractDir(),
+        my_destination = os.path.join(shakemap_extract_dir(),
                                       self.event_id,
                                       'bootstrap.css')
-        my_source = os.path.join(dataDir(), 'bootstrap.css')
+        my_source = os.path.join(data_dir(), 'bootstrap.css')
         shutil.copyfile(my_source, my_destination)
 
         return path
@@ -1705,14 +1709,14 @@ class ShakeEvent(QObject):
                 result.keywords)
             raise
         # Copy the impact layer into our extract dir.
-        tif_path = os.path.join(shakemapExtractDir(),
+        tif_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 'impact-%s.tif' % algorithm)
         shutil.copyfile(result.filename, tif_path)
         LOGGER.debug('Copied impact result to:\n%s\n' % tif_path)
         # Copy the impact keywords layer into our extract dir.
         keywords_path = os.path.join(
-            shakemapExtractDir(),
+            shakemap_extract_dir(),
             self.event_id,
             'impact-%s.keywords' % algorithm)
         keywords_source = os.path.splitext(result.filename)[0]
@@ -1733,6 +1737,7 @@ class ShakeEvent(QObject):
         impact_table_path = self.impact_table()
         return self.impact_file, impact_table_path
 
+    #noinspection PyMethodMayBeStatic
     def clip_layers(self, shake_raster_path, population_raster_path):
         """Clip population (exposure) layer to dimensions of shake data.
 
@@ -1836,7 +1841,7 @@ class ShakeEvent(QObject):
         """
         # When used via the scripts make_shakemap.sh
         fixture_path = os.path.join(
-            dataDir(), 'exposure', 'population.tif')
+            data_dir(), 'exposure', 'population.tif')
 
         local_path = '/usr/local/share/inasafe/exposure/population.tif'
         if self.population_raster_path is not None:
@@ -1861,18 +1866,18 @@ class ShakeEvent(QObject):
         :rtype: str
         :raise Propagates any exceptions.
         """
-        pdf_path = os.path.join(shakemapExtractDir(),
+        pdf_path = os.path.join(shakemap_extract_dir(),
                                 self.event_id,
                                 '%s-%s.pdf' % (self.event_id, self.locale))
-        image_path = os.path.join(shakemapExtractDir(),
+        image_path = os.path.join(shakemap_extract_dir(),
                                   self.event_id,
                                   '%s-%s.png' % (self.event_id, self.locale))
-        thumbnail_image_path = os.path.join(shakemapExtractDir(),
+        thumbnail_image_path = os.path.join(shakemap_extract_dir(),
                                             self.event_id,
                                             '%s-thumb-%s.png' % (
                                             self.event_id, self.locale))
         pickle_path = os.path.join(
-            shakemapExtractDir(),
+            shakemap_extract_dir(),
             self.event_id,
             '%s-metadata-%s.pickle' % (self.event_id, self.locale))
 
@@ -1930,7 +1935,7 @@ class ShakeEvent(QObject):
         if 'INSAFE_REALTIME_PROJECT' in os.environ:
             project_path = os.environ['INSAFE_REALTIME_PROJECT']
         else:
-            project_path = os.path.join(dataDir(), 'realtime.qgs')
+            project_path = os.path.join(data_dir(), 'realtime.qgs')
         # noinspection PyArgumentList
         QgsProject.instance().setFileName(project_path)
         # noinspection PyArgumentList
@@ -1939,7 +1944,7 @@ class ShakeEvent(QObject):
         if 'INSAFE_REALTIME_TEMPLATE' in os.environ:
             template_path = os.environ['INSAFE_REALTIME_TEMPLATE']
         else:
-            template_path = os.path.join(dataDir(), 'realtime-template.qpt')
+            template_path = os.path.join(data_dir(), 'realtime-template.qpt')
 
         template_file = file(template_path, 'rt')
         template_content = template_file.read()
@@ -2076,7 +2081,7 @@ class ShakeEvent(QObject):
             element, template_document)
         template_document.appendChild(element)
         template_path = os.path.join(
-            shakemapExtractDir(),
+            shakemap_extract_dir(),
             self.event_id,
             'composer-template.qpt')
         template_file = file(template_path, 'wt')
@@ -2087,11 +2092,12 @@ class ShakeEvent(QObject):
         # noinspection PyArgumentList
         project = QgsProject.instance()
         project_path = os.path.join(
-            shakemapExtractDir(),
+            shakemap_extract_dir(),
             self.event_id,
             'project.qgs')
         project.write(QFileInfo(project_path))
 
+    #noinspection PyMethodMayBeStatic
     def bearing_to_cardinal(self, bearing):
         """Given a bearing in degrees return it as compass units e.g. SSE.
 
@@ -2322,6 +2328,7 @@ class ShakeEvent(QObject):
         """
         return self.tr('Version: %s' % get_version())
 
+    #noinspection PyMethodMayBeStatic
     def get_city_by_id(self, city_id):
         """A helper to get the info of an affected city given it's id.
 
