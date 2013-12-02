@@ -85,6 +85,8 @@ clean:
 	@-find . -name '*~' -exec rm {} \;
 	@-find . -name '*.pyc' -exec rm {} \;
 	@-find . -name '*.pyo' -exec rm {} \;
+	@# Clean stray merge working files from git
+	@-find . -name '*.orig' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 
@@ -223,15 +225,18 @@ dependency_test:
 	@# 1
 	@# See http://stackoverflow.com/questions/4761728/gives-an-error-in-makefile-not-in-bash-when-grep-output-is-empty why we need "|| true"
 
-	@grep -R PyQt4 $(NONGUI) | grep -v gui_example.py | grep -v message_element|| true
-	@grep -R qgis.core $(NONGUI) || true
+	@# Since InaSAFE 2.0 we now can use PyQt4 libs in safe lib
+	@#grep -R PyQt4 $(NONGUI) | grep -v gui_example.py | grep -v message_element|| true
+	@# Since InaSAFE 2.0 we now can use qgis libs in safe lib
+	@#grep -R qgis.core $(NONGUI) || true
 	@grep -R "import scipy" $(NONGUI) || true
 	@grep -R "from scipy import" $(NONGUI) || true
 	@grep -R "django" $(NONGUI) || true
 	@grep -R "geonode" $(NONGUI) || true
 	@grep -R "geoserver" $(NONGUI) || true
 	@grep -R "owslib" $(NONGUI) || true
-	@grep -R "third_party" $(NONGUI) || true
+	@# Allowed since 2.0
+	@#grep -R "third_party" $(NONGUI) || true
 
 list_gpackages:
 	@echo
