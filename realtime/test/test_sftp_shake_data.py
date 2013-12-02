@@ -31,9 +31,10 @@ class SFtpShakeDataTest(unittest.TestCase):
         """
         try:
             event_one = SftpShakeData()
-            event_two = SftpShakeData(theEvent='20130110041009')
-            event_three = SftpShakeData(theEvent='20130110041009',
-                theForceFlag=True)
+            event_two = SftpShakeData(event='20130110041009')
+            event_three = SftpShakeData(
+                event='20130110041009',
+                force_flag=True)
             assert event_one is not None
             assert event_two is not None
             assert event_three is not None
@@ -43,12 +44,12 @@ class SFtpShakeDataTest(unittest.TestCase):
     def test_download_data(self):
         """Test downloading data from server.
         """
-        print sftp_data.fetchFile()
+        print sftp_data.fetch_file()
 
     def test_get_latest_event_id(self):
         """Test get latest event id
         """
-        latest_id = sftp_data.getLatestEventId()
+        latest_id = sftp_data.get_latest_event_id()
         print latest_id
         assert latest_id is not None, 'There is not latest event, please check'
 
@@ -63,7 +64,7 @@ class SFtpShakeDataTest(unittest.TestCase):
         """Test to reconnect SFTP
         """
         sftp_client = sftp_data.sftpclient
-        sftp_data.reconnectSFTP()
+        sftp_data.reconnect_sftp()
         new_sftp_client = sftp_data.sftpclient
         assert sftp_client != new_sftp_client, 'message'
         assert new_sftp_client is not None, 'new sftp is none'
@@ -71,20 +72,20 @@ class SFtpShakeDataTest(unittest.TestCase):
     def test_filename(self):
         """Test filename
         """
-        filename = sftp_data.fileName()
+        filename = sftp_data.file_name()
         assert filename == 'grid.xml', 'File name is not same'
 
     def test_onServer(self):
         """Test to check if a event is in server
         """
-        assert sftp_data.isOnServer(), 'Event is not in server'
+        assert sftp_data.is_on_server(), 'Event is not in server'
 
     def test_extract(self):
         """Test extracting data to be used in earth quake realtime
         """
         sftp_data.extract()
-        myFinalGridXmlFile = os.path.join(sftp_data.extractDir(), 'grid.xml')
-        assert os.path.exists(myFinalGridXmlFile), 'grid.xml not found'
+        final_grid_xml_file = os.path.join(sftp_data.extract_dir(), 'grid.xml')
+        assert os.path.exists(final_grid_xml_file), 'grid.xml not found'
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(SFtpShakeDataTest, 'test')

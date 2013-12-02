@@ -8,7 +8,7 @@ import sys
 
 # We can't install scipy on OSX easily so disable import check
 #pylint: disable=F0401
-from netcdf_utilities import convert_netcdf2tif
+from realtime.netcdf_utilities import convert_netcdf2tif
 from safe.storage.core import read_layer
 from safe.storage.vector import Vector
 from safe.engine.interpolation import tag_polygons_by_grid

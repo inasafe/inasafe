@@ -256,9 +256,11 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             )
 
         if feature_type == 'buildings':
-            url = "{url}?bbox={box}".format(url=self.buildings_url, box=box)
+            url = "{url}?bbox={box}&qgis_version=2".format(
+                url=self.buildings_url, box=box)
         else:
-            url = "{url}?bbox={box}".format(url=self.roads_url, box=box)
+            url = "{url}?bbox={box}&qgis_version=2".format(
+                url=self.roads_url, box=box)
 
         path = tempfile.mktemp('.shp.zip')
 
