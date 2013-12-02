@@ -132,14 +132,22 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                         l_feat.setAttribute(target_field_index, 1)
                         (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
 
-            # TODO: check intersection E & H
-            v_feat = QgsFeature()
-            v_feat.setGeometry(geom)
-            v_feat.setAttributes(attrs)
-            v_feat.setAttribute(target_field_index, 1)
-            (res, out_feat) = V.dataProvider().addFeatures([v_feat])
-            fid = out_feat[0].id()
-            v_provider.changeAttributeValues({fid: {target_field_index: 1}})
+                # Check difference
+                diff_geom = QgsGeometry(line_geom.symDifference(hazard_poly)).asGeometryCollection()
+                for g in diff_geom:
+                    if g.type() == 1:   # Linestring
+                        l_feat = QgsFeature()
+                        l_feat.setGeometry(g)
+                        l_feat.setAttributes(attrs)
+                        l_feat.setAttribute(target_field_index, 0)
+                        (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
+            else:
+                l_feat = QgsFeature()
+                l_feat.setGeometry(line_geom)
+                l_feat.setAttributes(attrs)
+                l_feat.setAttribute(target_field_index, 0)
+                (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
+        line_layer.updateExtents()
 
         # Generate simple impact report
         epsg = self.get_epsg(self.extent[0], self.extent[1])
