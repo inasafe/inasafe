@@ -564,4 +564,3 @@ def create_label(my_tuple, extra_label=None):
         return '[' + ' - '.join(my_tuple) + '] ' + str(extra_label)
     else:
         return '[' + ' - '.join(my_tuple) + ']'
-
