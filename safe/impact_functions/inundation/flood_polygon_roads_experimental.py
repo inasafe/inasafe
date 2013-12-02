@@ -34,7 +34,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                     layertype=='vector'
     """
 
-    target_field = 'flooded'
+    target_field = 'flooded'    # This field marks inundated roads by '1' value
+    road_type_field = 'TYPE'    # This field contains information about road types
     title = tr('Be flooded')
 
     def get_function_type(self):
@@ -152,22 +153,37 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         epsg = self.get_epsg(self.extent[0], self.extent[1])
         crs_dest = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(E.crs(), crs_dest)
-        road_len = flooded_len = 0
+        road_len = flooded_len = 0  # Length of roads
+        roads_by_type = dict()      # Length of flooded roads by types
+
         roads_data = line_layer.getFeatures()
+        road_type_field_index = line_layer.fieldNameIndex(self.road_type_field)
         for road in roads_data:
             attrs = road.attributes()
+            road_type = attrs[road_type_field_index]
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
             road_len += length
+
+            if not roads_by_type.has_key(road_type):
+                roads_by_type[road_type] = {'flooded': 0, 'total': 0}  # (flooded, total)
+            roads_by_type[road_type]['total'] += length
+
             if attrs[target_field_index] == 1:
                 flooded_len += length
+                roads_by_type[road_type]['flooded'] += length
         table_body = [question,
                       TableRow([tr('Road Type'),
                                 tr('Temporarily closed (m)'),
                                 tr('Total (m)')],
                                header=True),
                       TableRow([tr('All'), int(flooded_len), int(road_len)])]
+        for t, v in roads_by_type.iteritems():
+            table_body.append(
+                TableRow([t, int(v['flooded']), int(v['total'])])
+            )
+
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Roads inundated')
 
