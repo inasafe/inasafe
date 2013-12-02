@@ -179,6 +179,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                                 tr('Total (m)')],
                                header=True),
                       TableRow([tr('All'), int(flooded_len), int(road_len)])]
+        table_body.append(TableRow(tr('Breakdown by road type'),
+                                       header=True))
         for t, v in roads_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
