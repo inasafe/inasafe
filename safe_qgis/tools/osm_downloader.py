@@ -26,7 +26,9 @@ from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 #noinspection PyUnresolvedReferences
+#pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
+#pylint: enable=W0611
 from safe_qgis.ui.osm_downloader_base import Ui_OsmDownloaderBase
 
 from safe_qgis.exceptions import CanceledImportDialogError, ImportDialogError
