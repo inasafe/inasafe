@@ -9,6 +9,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import sys
 import logging
 import unittest
 
@@ -17,8 +18,9 @@ from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
 from safe.storage.vector import Vector, qgis_imported
 
-if qgis_imported:   # Import QgsVectorLayer if qgis is avialable
-    from qgis.core import QgsVectorLayer
+if qgis_imported:   # Import QgsVectorLayer if qgis is available
+    QGIS_APP = None  # Static variable used to hold hand to running QGis
+    from qgis.core import QgsVectorLayer, QgsApplication
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -77,6 +79,11 @@ class VectorTest(unittest.TestCase):
         """Test that reading from QgsVectorLayer works."""
         keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
         if qgis_imported:
+            # Ensure QGIS_PREFIX_PATH env var is set when running this test
+            global QGIS_APP
+            gui_flag = True
+            QGIS_APP = QgsApplication(sys.argv, gui_flag)
+            QGIS_APP.initQgis()
             qgis_layer = QgsVectorLayer(SHP_BASE + '.shp', 'test', 'ogr')
 
             layer = Vector(data=qgis_layer, keywords=keywords)
@@ -89,12 +96,19 @@ class VectorTest(unittest.TestCase):
 
     def test_convert_to_qgis_vector_layer(self):
         """Test that converting to QgsVectorLayer works."""
-        # Create vector layer
-        keywords = read_keywords(SHP_BASE + '.keywords')
-        layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
+        if qgis_imported:
+            # Ensure QGIS_PREFIX_PATH env var is set when running this test
+            global QGIS_APP
+            gui_flag = True
+            QGIS_APP = QgsApplication(sys.argv, gui_flag)
+            QGIS_APP.initQgis()
+            # Create vector layer
+            keywords = read_keywords(SHP_BASE + '.keywords')
+            layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
 
-        # Convert to QgsVectorLayer
-        qgis_layer = layer.as_qgis_native()
-        provider = qgis_layer.dataProvider()
-        count = provider.featureCount()
-        self.assertEqual(count, 250, 'Expected 250 features, got %s' % count)
+            # Convert to QgsVectorLayer
+            qgis_layer = layer.as_qgis_native()
+            provider = qgis_layer.dataProvider()
+            count = provider.featureCount()
+            self.assertEqual(
+                count, 250, 'Expected 250 features, got %s' % count)

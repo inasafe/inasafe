@@ -112,7 +112,7 @@ def get_qgis_app():
     global QGIS_APP  # pylint: disable=W0603
 
     if QGIS_APP is None:
-        gui_flag = True  # All test will run qgis in safe_qgis mode
+        gui_flag = True  # All test will run qgis in gui mode
         #noinspection PyPep8Naming
         QGIS_APP = QgsApplication(sys.argv, gui_flag)
 
