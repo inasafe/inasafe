@@ -871,6 +871,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 exposure_layer, geo_extent, hazard_layer)
 
             self.aggregator.set_layers(hazard_layer, exposure_layer)
+            self.calculator.set_extent(None)        # Extent is calculated in the aggregator
 
             # See if the inputs need further refinement for aggregations
             try:
