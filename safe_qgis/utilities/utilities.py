@@ -836,46 +836,46 @@ def read_impact_layer(impact_layer):
 
 
 def map_qrc_to_file(match, res_copy_dir):
-        """map a qrc:/ path to its correspondent file:/// and creates it
+    """map a qrc:/ path to its correspondent file:/// and creates it
 
-        for example qrc:/plugins/inasafe/ajax-loader.gif
-        is converted to file:////home/marco/.qgis2/python/plugins/
-        inasafe-master/safe_qgis/resources/img/ajax-loader.gif
+    for example qrc:/plugins/inasafe/ajax-loader.gif
+    is converted to file:////home/marco/.qgis2/python/plugins/
+    inasafe-master/safe_qgis/resources/img/ajax-loader.gif
 
-        if the qrc asset is non file based (i.e. is compiled in resources_rc
-        .pc) then a copy of is extracted to res_copy_dir
+    if the qrc asset is non file based (i.e. is compiled in resources_rc
+    .pc) then a copy of is extracted to res_copy_dir
 
-        :param match: the qrc path to be mapped matched from a regular
-        expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
-        :type match: re.match object
+    :param match: the qrc path to be mapped matched from a regular
+    expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
+    :type match: re.match object
 
-        :param res_copy_dir: the path to copy non file based qrc assets.
-        :type res_copy_dir: str
+    :param res_copy_dir: the path to copy non file based qrc assets.
+    :type res_copy_dir: str
 
-        :returns: a file path to the resource or None if the resource could
-        not be created
-        :rtype: None, str
-        """
+    :returns: a file path to the resource or None if the resource could
+    not be created
+    :rtype: None, str
+    """
 
-        resources_path = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', 'resources'))
-        res_alias = match.group(1)
-        res_path = '%s/%s' % (resources_path, res_alias)
+    resources_path = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), '..', 'resources'))
+    res_alias = match.group(1)
+    res_path = '%s/%s' % (resources_path, res_alias)
+    if not os.path.isfile(res_path):
+        res_path = os.path.join(res_copy_dir, res_alias)
+        # file might be here due to a previous copy
         if not os.path.isfile(res_path):
-            res_path = os.path.join(res_copy_dir, res_alias)
-            # file might be here due to a previous copy
-            if not os.path.isfile(res_path):
-                if not os.path.exists(res_copy_dir):
-                    os.makedirs(res_copy_dir)
-                # copy from qrc to filesystem
-                #noinspection PyTypeChecker
-                copy_successful = QFile.copy(
-                    ':/plugins/inasafe/%s' % res_alias, res_path)
-                if not copy_successful:
-                    #copy somehow failed
-                    res_path = None
+            if not os.path.exists(res_copy_dir):
+                os.makedirs(res_copy_dir)
+            # copy from qrc to filesystem
+            #noinspection PyTypeChecker
+            copy_successful = QFile.copy(
+                ':/plugins/inasafe/%s' % res_alias, res_path)
+            if not copy_successful:
+                #copy somehow failed
+                res_path = None
 
-        return res_path
+    return res_path
 
 
 def open_in_browser(file_path):

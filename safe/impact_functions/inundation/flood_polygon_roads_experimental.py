@@ -1,11 +1,9 @@
-import os.path
 
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
-    QgsFeature,
-    QgsVectorFileWriter
+    QgsFeature
 )
 
 from safe.impact_functions.core import FunctionProvider
@@ -40,7 +38,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         """
         return 'qgis2.0'
 
-    def run(self, layers, extent=None):
+    def run(self, layers):
         """
         Experimental impact function
 
@@ -96,7 +94,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             v_feat.setGeometry(geom)
             v_feat.setAttributes(attrs)
             v_feat.setAttribute(target_field_index, 1)
-            (res, out_feat) = V.dataProvider().addFeatures([v_feat])
+            (out_feat) = V.dataProvider().addFeatures([v_feat])
             fid = out_feat[0].id()
             v_provider.changeAttributeValues({fid: {target_field_index: 1}})
 

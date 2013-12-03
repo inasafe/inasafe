@@ -393,6 +393,7 @@ class Aggregator(QtCore.QObject):
             myMessage = self.tr('Error: exposure layer is not provided.')
             raise InsufficientParametersError(myMessage)
 
+        if not self.aoi_mode:
             if is_polygon_layer(self.hazard_layer):
                 self.hazard_layer = self._prepare_polygon_layer(
                     self.hazard_layer)
@@ -1031,7 +1032,6 @@ class Aggregator(QtCore.QObject):
                 (elderly_ratio_attribute != self.tr('Use default'))):
             self.attributes[elderly_ratio_key] = \
                 elderly_ratio_attribute
-
 
     def _prepare_polygon_layer(self, layer):
         """Create a new layer with no intersecting features to self.layer.

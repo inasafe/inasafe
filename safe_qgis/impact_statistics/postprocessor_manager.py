@@ -288,7 +288,8 @@ class PostprocessorManager(QtCore.QObject):
             # look if we need to look for a variable female ratio in a layer
             try:
                 female_ratio_field = self.aggregator.attributes[
-                    self.aggregator.get_default_keyword('FEMALE_RATIO_ATTR_KEY')]
+                    self.aggregator.get_default_keyword(
+                        'FEMALE_RATIO_ATTR_KEY')]
                 female_ratio_field_index = \
                     self.aggregator.layer.fieldNameIndex(female_ratio_field)
 
@@ -358,7 +359,6 @@ class PostprocessorManager(QtCore.QObject):
                         self.aggregator.get_default_keyword('ADULT_RATIO')
                     elderly_ratio = \
                         self.aggregator.get_default_keyword('ELDERLY_RATIO')
-
 
         # iterate zone features
         request = QgsFeatureRequest()
