@@ -15,6 +15,18 @@ from numbers import Integral
 
 from safe.common.exceptions import VerificationError
 
+# Prefer python's own OrderedDict if it exists
+try:
+    #pylint: disable=W0611
+    from collections import OrderedDict
+    #pylint: enable=W0611
+except ImportError:
+    try:
+        from third_party.odict import OrderedDict
+    except ImportError:
+        raise RuntimeError(("Could not find an"
+                            "available OrderedDict implementation"))
+
 
 class MEMORYSTATUSEX(ctypes.Structure):
     """
@@ -552,14 +564,3 @@ def create_label(my_tuple, extra_label=None):
         return '[' + ' - '.join(my_tuple) + '] ' + str(extra_label)
     else:
         return '[' + ' - '.join(my_tuple) + ']'
-
-
-# Prefer python's own OrderedDict if it exists
-try:
-    from collections import OrderedDict
-except ImportError:
-    try:
-        from third_party.odict import OrderedDict
-    except ImportError:
-        raise RuntimeError(("Could not find an"
-                            "available OrderedDict implementation"))

@@ -26,12 +26,13 @@ from zipfile import ZipFile
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 
-from rt_exceptions import (EventUndefinedError,
-                           EventIdError,
-                           NetworkError,
-                           EventValidationError,
-                           InvalidInputZipError,
-                           ExtractionError)
+from rt_exceptions import (
+    EventUndefinedError,
+    EventIdError,
+    NetworkError,
+    EventValidationError,
+    InvalidInputZipError,
+    ExtractionError)
 from ftp_client import FtpClient
 from utils import shakemap_zip_dir, shakemap_extract_dir
 
@@ -176,7 +177,8 @@ class ShakeData:
         :raises: None
         """
         input_file_path, output_file_path = self.cache_paths()
-        if os.path.exists(input_file_path) and os.path.exists(output_file_path):
+        if os.path.exists(input_file_path) and \
+                os.path.exists(output_file_path):
             # TODO: we should actually try to unpack them for deeper validation
             return True
         else:
