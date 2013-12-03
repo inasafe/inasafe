@@ -1,6 +1,6 @@
 import math
 
-from PyQt4.QtCore import QVariant, QSettings
+from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
@@ -12,6 +12,7 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
+from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
@@ -34,9 +35,18 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                     layertype=='vector'
     """
 
-    target_field = 'flooded'    # This field marks inundated roads by '1' value
-    road_type_field = 'TYPE'    # This field contains information about road types
     title = tr('Be flooded')
+
+    parameters = OrderedDict([
+        # This field of impact layer marks inundated roads by '1' value
+        ('target_field', 'flooded'),
+        # This field of the exposure layer contains information about road types
+        ('road_type_field', 'TYPE'),
+        # This field of the  hazard layer contains information about inundated areas
+        ('affected_field', 'affected'),
+        # This value in 'affected_field' of the hazard layer marks the areas as inundated
+        ('affected_value', '1'),
+    ])
 
     def get_function_type(self):
         """Get type of the impact function.
@@ -72,9 +82,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
               H: Polygon layer of inundation areas
               E: Vector layer of roads
         """
+        target_field = self.parameters['target_field']
+        road_type_field = self.parameters['road_type_field']
+        affected_field = self.parameters['affected_field']
+        affected_value = self.parameters['affected_value']
+
 
         # Extract data
-
         H = get_hazard_layer(layers)    # Flood
         E = get_exposure_layer(layers)  # Roads
 
@@ -82,20 +96,23 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                                 E.get_name(),
                                 self)
 
-        E = E.as_qgis_native()
         H = H.as_qgis_native()
+        h_provider = H.dataProvider()
+        affected_field_index = h_provider.fieldNameIndex(affected_field)
+        E = E.as_qgis_native()
         srs = E.crs().toWkt()
         e_provider = E.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
-        if fields.indexFromName(self.target_field) == -1:
-            e_provider.addAttributes([QgsField(self.target_field,
+        if fields.indexFromName(target_field) == -1:
+            e_provider.addAttributes([QgsField(target_field,
                                                QVariant.Int)])
-        target_field_index = e_provider.fieldNameIndex(self.target_field)
+        target_field_index = e_provider.fieldNameIndex(target_field)
         fields = e_provider.fields()
 
         # Create layer for store the lines from E and extent
-        line_layer = QgsVectorLayer('LineString?crs=' + srs, 'impact_lines', 'memory')
+        line_layer = QgsVectorLayer(
+            'LineString?crs=' + srs, 'impact_lines', 'memory')
         line_provider = line_layer.dataProvider()
 
         # Set attributes
@@ -108,10 +125,20 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         request=QgsFeatureRequest()
         request.setFilterRect(extent)
 
-        # Split line_layer by H and save as result
+        # Split line_layer by H and save as result:
+        #   1) Filter from H inundated features
+        #   2) Mark roads as inundated (1) or not inundated (0)
+
+        affected_field_type = h_provider.fields()[affected_field_index].typeName()
+        if affected_field_type in ['Real', 'Integer']:
+            affected_value = float(affected_value)
+
         h_data = H.getFeatures(request)
         hazard_poly = None
         for mpolygon in h_data:
+            attrs = mpolygon.attributes()
+            if attrs[affected_field_index] != affected_value:
+                continue
             if hazard_poly is None:
                 hazard_poly = QgsGeometry(mpolygon.geometry())
             else:
@@ -157,7 +184,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         roads_by_type = dict()      # Length of flooded roads by types
 
         roads_data = line_layer.getFeatures()
-        road_type_field_index = line_layer.fieldNameIndex(self.road_type_field)
+        road_type_field_index = line_layer.fieldNameIndex(road_type_field)
         for road in roads_data:
             attrs = road.attributes()
             road_type = attrs[road_type_field_index]
@@ -193,7 +220,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                               colour='#1EFC7C', transparency=0, size=1),
                          dict(label=tr('Inundated'), value=1,
                               colour='#F31A1C', transparency=0, size=1)]
-        style_info = dict(target_field=self.target_field,
+        style_info = dict(target_field=target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
@@ -202,6 +229,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                    name=tr('Flooded roads'),
                    keywords={'impact_summary': impact_summary,
                              'map_title': map_title,
-                             'target_field': self.target_field},
+                             'target_field': target_field},
                    style_info=style_info)
         return line_layer
