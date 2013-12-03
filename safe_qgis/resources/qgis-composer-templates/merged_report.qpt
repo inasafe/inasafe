@@ -1,0 +1,72 @@
+<Composer title="merged_report" visible="1">
+ <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="210" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="0" generateWorldFile="0">
+  <ComposerPicture pictureWidth="190.033" file="." pictureHeight="123.392" mapId="-1">
+   <ComposerItem width="190.033" x="9.6215" transparency="0" y="158.534" rotation="0" height="123.392" positionMode="0" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.0604" uuid="{882435b9-9a4c-4a1b-a83b-5d8295bfbb40}" id="merged-report-image" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerPicture>
+
+  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank" htmlState="0" halign="1" margin="1">
+   <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="200" x="10" transparency="0" y="287" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="2.60738" uuid="{aac8c586-a982-4b37-a776-9e496f1bd1da}" id="" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+
+  <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Cache" drawCanvasItems="true">
+   <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
+    <symbol alpha="0.3" type="fill" name="">
+     <layer pass="0" class="SimpleFill" locked="0">
+      <prop k="border_width_unit" v="MM"/>
+      <prop k="color" v="255,0,0,255"/>
+      <prop k="color_border" v="0,0,0,255"/>
+      <prop k="offset" v="0,0"/>
+      <prop k="offset_unit" v="MM"/>
+      <prop k="style" v="solid"/>
+      <prop k="style_border" v="no"/>
+      <prop k="width_border" v="0.26"/>
+     </layer>
+    </symbol>
+   </overviewFrame>
+   <Extent ymin="-1" xmin="-1.04247000000000001" ymax="0.31204331864495316" xmax="1.04247000000000001"/>
+   <LayerSet/>
+   <Grid gridStyle="1" crossLength="3" intervalX="0" offsetX="0" intervalY="0" offsetY="0" gridFrameStyle="0" gridFrameWidth="2" gridBlendMode="0" show="1">
+    <symbol alpha="1" type="line" name="">
+     <layer pass="0" class="SimpleLine" locked="0">
+      <prop k="capstyle" v="flat"/>
+      <prop k="color" v="0,0,0,255"/>
+      <prop k="customdash" v="5;2"/>
+      <prop k="customdash_unit" v="MM"/>
+      <prop k="joinstyle" v="bevel"/>
+      <prop k="offset" v="0"/>
+      <prop k="offset_unit" v="MM"/>
+      <prop k="penstyle" v="solid"/>
+      <prop k="use_custom_dash" v="0"/>
+      <prop k="width" v="0.3"/>
+      <prop k="width_unit" v="MM"/>
+     </layer>
+    </symbol>
+    <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="1" precision="2" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Droid Sans,6,-1,5,50,0,0,0,0,0" leftPosition="1" topDirection="0">
+     <fontColor red="0" blue="0" green="0"/>
+    </Annotation>
+   </Grid>
+   <ComposerItem width="187.02" x="12" transparency="0" y="25" rotation="0" height="117.691" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.0604" uuid="{23c7ddd4-938f-47b8-b414-2981146e0491}" id="impact-map" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerMap>
+
+  <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="4" margin="1">
+   <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="170" x="21" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.0604" uuid="{e4344a51-114e-4bad-8f3e-e8176e3ca111}" id="" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+
+ </Composition>
+</Composer>

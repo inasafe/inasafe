@@ -34,5 +34,6 @@
 	<!-- composer templates -->
         <file alias="basic.qpt">qgis-composer-templates/basic.qpt</file>
         <file alias="inasafe.qpt">qgis-composer-templates/inasafe.qpt</file>
+        <file alias="merged_report.qpt">qgis-composer-templates/merged_report.qpt</file>
     </qresource>
 </RCC>

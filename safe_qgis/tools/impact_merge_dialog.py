@@ -21,7 +21,7 @@ from collections import OrderedDict
 from xml.dom import minidom
 
 #noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, QtXml
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature
 #noinspection PyPackageRequirements
@@ -82,6 +82,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         #pydevd.settrace(
         #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         self.image_reports = []
+        self.template_path = ':/plugins/inasafe/merged_report.qpt'
+        self.composition = None
         self.get_layers()
 
     def show_info(self):
@@ -434,17 +436,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         renderer.setLayerSet(layer_set)
 
         # Set Composition
-        composition = QgsComposition(renderer)
-        composition.setPaperSize(297, 210)
+        self.composition = QgsComposition(renderer)
+        self.composition.setPaperSize(297, 210)
 
-        # Prepare the atlas map and add it to composition:
-        atlas_map = QgsComposerMap(composition, 10, 10, 200, 200)
-        composition.addComposerMap(atlas_map)
-
-        # Add image to composition
-        table_image_report = QgsComposerPicture(composition)
-        table_image_report.setItemPosition(0, 0, 100, 100)
-        composition.addComposerPicture(table_image_report)
+        ## Prepare the atlas map and add it to composition:
+        #atlas_map = QgsComposerMap(composition, 10, 10, 200, 200)
+        #composition.addComposerMap(atlas_map)
+        #
+        ## Add image to composition
+        #table_image_report = QgsComposerPicture(composition)
+        #table_image_report.setItemPosition(0, 0, 100, 100)
+        #composition.addComposerPicture(table_image_report)
 
         # Create atlas composition:
         atlas = QgsAtlasComposition(composition)
@@ -472,3 +474,27 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # End of rendering
         atlas.endRender()
+
+    def load_template(self):
+        """Load composer template for merged report."""
+        # Read template content
+        template_file = QtCore.QFile(self.template_path)
+        template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
+        template_content = template_file.readAll()
+        template_file.close()
+
+        # Create a dom document containing template content
+        document = QtXml.QDomDocument()
+        document.setContent(template_content)
+
+        # Load template
+        self.composition.loadFromTemplate(document)
+
+        # Set Map
+        atlas_map = self.composition.getComposerItemById('impact-map')
+
+        # Set Image Report
+
+
+
+
