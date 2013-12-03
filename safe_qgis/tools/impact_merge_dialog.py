@@ -26,7 +26,12 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QSettings, pyqtSignature
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import (QgsMapLayerRegistry,
+                       QgsMapRenderer,
+                       QgsComposition,
+                       QgsComposerMap,
+                       QgsComposerPicture,
+                       QgsAtlasComposition)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
@@ -40,7 +45,7 @@ from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.report.html_renderer import HtmlRenderer
 
-#from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -76,6 +81,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Enable remote debugging - should normally be commented out.
         #pydevd.settrace(
         #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        self.image_reports = []
         self.get_layers()
 
     def show_info(self):
@@ -268,6 +274,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 str(self.output_directory.text()),
                 aggregation_area)
             image_report.save(path)
+            self.image_reports.append((aggregation_area, path))
+        self.generate_atlas_reports(self.image_reports)
 
         QtGui.qApp.restoreOverrideCursor()
 
@@ -363,8 +371,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         return html_reports
 
     def get_layers(self):
-        """Obtain a list of impact layers currently loaded in QGIS.
-        """
+        """Obtain a list of impact layers and aggregation layer currently
+        loaded in QGIS."""
         #noinspection PyArgumentList
         registry = QgsMapLayerRegistry.instance()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
@@ -376,14 +384,91 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         self.first_layer.clear()
         self.second_layer.clear()
+        self.aggregation_layer.clear()
 
         for layer in layers:
             try:
                 self.keyword_io.read_keywords(layer, 'impact_summary')
             except (NoKeywordsFoundError, KeywordNotFoundError):
-                # Skip if there are no keywords at all
-                # Skip if the impact_summary keyword is missing
+                # Check if it has aggregation keyword
+                try:
+                    self.keyword_io.read_keywords(layer,
+                                                  'aggregation attribute')
+                except (NoKeywordsFoundError, KeywordNotFoundError):
+                    # Skip if there are no keywords at all
+                    continue
+                add_ordered_combo_item(
+                    self.aggregation_layer,
+                    layer.name(),
+                    layer)
                 continue
 
             add_ordered_combo_item(self.first_layer, layer.name(), layer)
             add_ordered_combo_item(self.second_layer, layer.name(), layer)
+
+    def generate_atlas_reports(self, image_reports):
+        """Generate atlas reports for each aggregation unit.
+
+        :param image_reports: List of tuples containing each aggregation area
+                and its path to the image report
+                E.g [('Jakarta Barat', 'C:/temp/jakbar.png'), ('Jakarta
+                Timur, 'C:/temp/jaktim.png')]
+        """
+        # Prepare the aggregation layer
+        aggregation_layer = self.aggregation_layer.itemData(
+            self.aggregation_layer.currentIndex(), QtCore.Qt.UserRole)
+
+        # First impact layer
+        first_impact_layer = self.first_layer.itemData(
+            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
+
+        # Second impact layer
+        second_impact_layer = self.second_layer.itemData(
+            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
+
+        # Setup Map Renderer and set all the layer
+        renderer = QgsMapRenderer()
+        layer_set = [first_impact_layer.id(),
+                     second_impact_layer.id(),
+                     aggregation_layer.id()]
+        renderer.setLayerSet(layer_set)
+
+        # Set Composition
+        composition = QgsComposition(renderer)
+        composition.setPaperSize(297, 210)
+
+        # Prepare the atlas map and add it to composition:
+        atlas_map = QgsComposerMap(composition, 10, 10, 200, 200)
+        composition.addComposerMap(atlas_map)
+
+        # Add image to composition
+        table_image_report = QgsComposerPicture(composition)
+        table_image_report.setItemPosition(0, 0, 100, 100)
+        composition.addComposerPicture(table_image_report)
+
+        # Create atlas composition:
+        atlas = QgsAtlasComposition(composition)
+
+        # Set coverage layer: map will be clipped by features from this layer:
+        atlas.setCoverageLayer(aggregation_layer)
+
+        # set which composer map will be used for printing atlas
+        atlas.setComposerMap(atlas_map)
+
+        # set output filename pattern
+        atlas.setFilenamePattern("'output_' || $feature")
+
+        # Start rendering
+        atlas.beginRender()
+
+        # Iterate all aggregation unit in aggregation layer
+        for i in range(0, atlas.numFeatures()):
+            atlas.prepareForFeature(i)
+            path = '%s/%s.pdf' % (
+                str(self.output_directory.text()),
+                atlas.currentFilename())
+            table_image_report.setPictureFile(image_reports[i][1])
+            composition.exportAsPDF(path)
+
+        # End of rendering
+        atlas.endRender()

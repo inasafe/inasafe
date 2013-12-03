@@ -7,36 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>542</width>
-    <height>508</height>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QWebView" name="web_view">
-     <property name="url">
-      <url>
-       <string>about:blank</string>
-      </url>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="first_layer_label">
-     <property name="text">
-      <string>&amp;First impact layer</string>
-     </property>
-     <property name="buddy">
-      <cstring>first_layer</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QComboBox" name="first_layer"/>
-   </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="second_layer_label">
      <property name="text">
       <string>&amp;Second impact layer</string>
@@ -46,20 +24,43 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QComboBox" name="second_layer"/>
+   <item row="6" column="0">
+    <widget class="QLabel" name="aggregation_layer_label">
+     <property name="text">
+      <string>&amp;Aggregation Layer</string>
+     </property>
+     <property name="buddy">
+      <cstring>aggregation_layer</cstring>
+     </property>
+    </widget>
    </item>
    <item row="5" column="0">
+    <widget class="QComboBox" name="second_layer"/>
+   </item>
+   <item row="7" column="0">
+    <widget class="QComboBox" name="aggregation_layer"/>
+   </item>
+   <item row="8" column="0">
     <widget class="QLabel" name="output_directory_label">
      <property name="text">
-      <string>Output directory</string>
+      <string>&amp;Output directory</string>
      </property>
      <property name="buddy">
       <cstring>output_directory</cstring>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="10" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLineEdit" name="output_directory">
@@ -77,13 +78,25 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="3" column="0">
+    <widget class="QComboBox" name="first_layer"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QWebView" name="web_view">
+     <property name="url">
+      <url>
+       <string>about:blank</string>
+      </url>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="first_layer_label">
+     <property name="text">
+      <string>&amp;First impact layer</string>
+     </property>
+     <property name="buddy">
+      <cstring>first_layer</cstring>
      </property>
     </widget>
    </item>
@@ -97,12 +110,13 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>web_view</tabstop>
   <tabstop>first_layer</tabstop>
   <tabstop>second_layer</tabstop>
-  <tabstop>directory_chooser</tabstop>
+  <tabstop>aggregation_layer</tabstop>
   <tabstop>output_directory</tabstop>
+  <tabstop>directory_chooser</tabstop>
   <tabstop>button_box</tabstop>
-  <tabstop>web_view</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -113,8 +127,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>392</x>
-     <y>484</y>
+     <x>285</x>
+     <y>577</y>
     </hint>
     <hint type="destinationlabel">
      <x>363</x>
@@ -129,8 +143,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>432</x>
-     <y>485</y>
+     <x>285</x>
+     <y>577</y>
     </hint>
     <hint type="destinationlabel">
      <x>432</x>
