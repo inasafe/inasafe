@@ -28,15 +28,15 @@ from PyQt4 import QtCore
 from safe.defaults import DEFAULTS
 
 
-def breakdown_defaults(theDefault=None):
+def breakdown_defaults(default=None):
     """Get a dictionary of default values to be used for post processing.
 
     .. note: This method takes the DEFAULTS from safe and modifies them
         according to user preferences defined in QSettings.
 
-    :param theDefault: A key of the defaults dictionary. Use this to
+    :param default: A key of the defaults dictionary. Use this to
         optionally retrieve only a specific default.
-    :type theDefault: str
+    :type default: str
 
     :returns: A dictionary of defaults values to be used or the default
         value if a key is passed. None if the requested default value is not
@@ -44,26 +44,32 @@ def breakdown_defaults(theDefault=None):
     :rtype: dict, str, None
     """
     print "QGIS defaults CALL"
-    mySettings = QtCore.QSettings()
-    myDefaults = DEFAULTS
+    settings = QtCore.QSettings()
+    defaults = DEFAULTS
 
-    settings_value = mySettings.value('inasafe/defaultFemaleRatio',
-                                      DEFAULTS['FEMALE_RATIO'], type=float)
-    myDefaults['FEMALE_RATIO'] = float(settings_value)
+    value = settings.value(
+        'inasafe/defaultFemaleRatio',
+        DEFAULTS['FEMALE_RATIO'], type=float)
+    defaults['FEMALE_RATIO'] = float(value)
 
-    settings_value = mySettings.value('inasafe/defaultYouthRatio',
-                                      DEFAULTS['YOUTH_RATIO'], type=float)
-    myDefaults['YOUTH_RATIO'] = float(settings_value)
-    settings_value = mySettings.value('inasafe/defaultAdultRatio',
-                                      DEFAULTS['ADULT_RATIO'], type=float)
-    myDefaults['ADULT_RATIO'] = float(settings_value)
-    settings_value = mySettings.value('inasafe/defaultElderlyRatio',
-                                      DEFAULTS['ELDERLY_RATIO'], type=float)
-    myDefaults['ELDERLY_RATIO'] = float(settings_value)
+    value = settings.value(
+        'inasafe/defaultYouthRatio',
+        DEFAULTS['YOUTH_RATIO'], type=float)
+    defaults['YOUTH_RATIO'] = float(value)
 
-    if theDefault is None:
-        return myDefaults
-    elif theDefault in myDefaults:
-        return myDefaults[theDefault]
+    value = settings.value(
+        'inasafe/defaultAdultRatio',
+        DEFAULTS['ADULT_RATIO'], type=float)
+    defaults['ADULT_RATIO'] = float(value)
+
+    value = settings.value(
+        'inasafe/defaultElderlyRatio',
+        DEFAULTS['ELDERLY_RATIO'], type=float)
+    defaults['ELDERLY_RATIO'] = float(value)
+
+    if default is None:
+        return defaults
+    elif default in defaults:
+        return defaults[default]
     else:
         return None

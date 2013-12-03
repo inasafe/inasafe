@@ -94,7 +94,7 @@ class SafeTranslationsTest(unittest.TestCase):
                 message += 'PASS: %s' % myPhrase
         self.assertNotIn('FAIL', message, message)
 
-    def testAllDynamicTranslatons(self):
+    def test_all_dynamic_translations(self):
         """Test all the phrases defined in dynamic_translations translate."""
         parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)
         dir_path = os.path.abspath(parent_path)

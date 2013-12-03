@@ -1177,6 +1177,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #message.add(m.Link('file://%s' % self.wvResults.log_path))
             self.show_static_message(message)
             #self.wvResults.impact_path = impact_path
+            self.wvResults.impact_path = impact_path
+
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
@@ -1366,6 +1368,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocessor_manager = PostprocessorManager(self.aggregator)
         self.postprocessor_manager.function_parameters = (
             self.function_parameters)
+        self.postprocessor_manager.function_parameters = \
+            self.function_parameters
         self.postprocessor_manager.run()
         self.completed()
         self.analysisDone.emit(True)

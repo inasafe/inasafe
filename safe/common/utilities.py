@@ -15,6 +15,18 @@ from numbers import Integral
 
 from safe.common.exceptions import VerificationError
 
+# Prefer python's own OrderedDict if it exists
+try:
+    #pylint: disable=W0611
+    from collections import OrderedDict
+    #pylint: enable=W0611
+except ImportError:
+    try:
+        from third_party.odict import OrderedDict
+    except ImportError:
+        raise RuntimeError(("Could not find an"
+                            "available OrderedDict implementation"))
+
 
 class MEMORYSTATUSEX(ctypes.Structure):
     """
