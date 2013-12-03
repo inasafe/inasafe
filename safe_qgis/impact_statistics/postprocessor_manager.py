@@ -20,8 +20,7 @@ import logging
 
 from PyQt4 import QtCore
 
-from qgis.core import (
-    QgsFeatureRequest)
+from qgis.core import QgsFeatureRequest
 
 from third_party.odict import OrderedDict
 
@@ -61,6 +60,7 @@ class PostprocessorManager(QtCore.QObject):
         self.aggregator = aggregator
         self.current_output_postprocessor = None
         self.attribute_title = None
+        self.function_parameters = None
 
     def _sum_field_name(self):
         return self.aggregator.prefix + 'sum'
@@ -80,11 +80,12 @@ class PostprocessorManager(QtCore.QObject):
 
         post_processor = self.output[self.current_output_postprocessor]
         #get the key position of the value field
-        key = post_processor[0][1].keyAt(0)
+        key = post_processor[0][1].keys()[0]
         #get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
-        if data[1][key]['value'] == self.aggregator.defaults['NO_DATA']:
+        if (data[1][key]['value'] == self.aggregator.get_default_keyword(
+                'NO_DATA')):
             position = -1
         else:
             position = data[1][key]['value']
@@ -148,7 +149,7 @@ class PostprocessorManager(QtCore.QObject):
                 for indicator, calculation_data in calc.iteritems():
                     value = calculation_data['value']
                     value = str(unhumanize_number(value))
-                    if value == self.aggregator.defaults['NO_DATA']:
+                    if value == self.aggregator.get_default_keyword('NO_DATA'):
                         has_no_data = True
                         value += ' *'
                         try:
@@ -177,7 +178,8 @@ class PostprocessorManager(QtCore.QObject):
                 message.add(m.EmphasizedText(self.tr(
                     '* "%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
-                    'values.') % (self.aggregator.defaults['NO_DATA'])))
+                    'values.') % (
+                        self.aggregator.get_default_keyword('NO_DATA'))))
 
         return message
 
@@ -211,7 +213,8 @@ class PostprocessorManager(QtCore.QObject):
                         # see http://irclogs.geoapt.com/inasafe/
                         # %23inasafe.2013-08-09.log (at 22.29)
 
-                        no_data = self.aggregator.defaults['NO_DATA']
+                        no_data = \
+                            self.aggregator.get_default_keyword('NO_DATA')
                         # both are No data
                         value = first_part_result['value']
                         result_value = result['value']
@@ -249,7 +252,8 @@ class PostprocessorManager(QtCore.QObject):
         """Run any post processors requested by the impact function.
         """
         try:
-            requested_postprocessors = self.functionParams['postprocessors']
+            requested_postprocessors = self.function_parameters[
+                'postprocessors']
             postprocessors = get_postprocessors(requested_postprocessors)
         except (TypeError, KeyError):
             # TypeError is for when function_parameters is none
@@ -258,7 +262,7 @@ class PostprocessorManager(QtCore.QObject):
         LOGGER.debug('Running this postprocessors: ' + str(postprocessors))
 
         feature_names_attribute = self.aggregator.attributes[
-            self.aggregator.defaults['AGGR_ATTR_KEY']]
+            self.aggregator.get_default_keyword('AGGR_ATTR_KEY')]
         if feature_names_attribute is None:
             self.attribute_title = self.tr('Aggregation unit')
         else:
@@ -277,7 +281,7 @@ class PostprocessorManager(QtCore.QObject):
             # look if we need to look for a variable female ratio in a layer
             try:
                 female_ration_field = self.aggregator.attributes[
-                    self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
+                    self.aggregator.get_default_keyword('FEM_RATIO_ATTR_KEY')]
                 female_ratio_field_index = \
                     self.aggregator.layer.fieldNameIndex(female_ration_field)
 
@@ -292,9 +296,10 @@ class PostprocessorManager(QtCore.QObject):
                 try:
                     female_ratio = self.keyword_io.read_keywords(
                         self.aggregator.layer,
-                        self.aggregator.defaults['FEM_RATIO_KEY'])
+                        self.aggregator.get_default_keyword('FEM_RATIO_KEY'))
                 except KeywordNotFoundError:
-                    female_ratio = self.aggregator.defaults['FEM_RATIO']
+                    female_ratio = \
+                        self.aggregator.get_default_keyword('FEM_RATIO')
 
         # iterate zone features
         request = QgsFeatureRequest()
@@ -313,7 +318,7 @@ class PostprocessorManager(QtCore.QObject):
             # create dictionary of attributes to pass to postprocessor
             general_params = {
                 'target_field': self.aggregator.target_field,
-                'function_params': self.functionParams}
+                'function_params': self.function_parameters}
 
             if self.aggregator.statistics_type == 'class_count':
                 general_params['impact_classes'] = (
@@ -334,7 +339,8 @@ class PostprocessorManager(QtCore.QObject):
                 try:
                     # look if params are available for this postprocessor
                     parameters.update(
-                        self.functionParams['postprocessors'][key]['params'])
+                        self.function_parameters[
+                            'postprocessors'][key]['params'])
                 except KeyError:
                     pass
 

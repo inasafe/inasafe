@@ -16,8 +16,17 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
+import time
+
+from PyQt4.QtCore import QUrl
+
 from safe import messaging as m
-from safe_qgis.utilities.utilities import html_header, html_footer
+from safe_qgis.safe_interface import InvalidParameterError
+from safe_qgis.utilities.utilities import (
+    html_header,
+    html_footer,
+    html_to_file,
+    open_in_browser)
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -27,12 +36,12 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MessageViewer(QtWebKit.QWebView):
-    """A simple message queue mockup."""
+    """A simple message queue"""
     static_message_count = 0
 
     # noinspection PyOldStyleClasses
-    def __init__(self, theParent):
-        _ = theParent  # needed for promoted Qt widget in designer
+    def __init__(self, the_parent):
+        _ = the_parent  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
         # We use this var to keep track of the last allocated div id
@@ -40,10 +49,10 @@ class MessageViewer(QtWebKit.QWebView):
         self.last_id = 0
 
         # whether to show or not dev only options
-        self.devMode = QtCore.QSettings().value(
+        self.dev_mode = QtCore.QSettings().value(
             'inasafe/developer_mode', False)
 
-        if self.devMode:
+        if self.dev_mode:
             self.settings().globalSettings().setAttribute(
                 QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
 
@@ -52,10 +61,47 @@ class MessageViewer(QtWebKit.QWebView):
         # Always get appended until the next static message is called,
         # then cleared
         self.dynamic_messages = []
+        self.dynamic_messages_log = []
         #self.show()
+
+        self.action_show_log = QtGui.QAction(self.tr('Show log'), None)
+        self.action_show_log.setEnabled(False)
+        self.action_show_log.triggered.connect(self.show_log)
+
+        self.action_show_report = QtGui.QAction(self.tr('Show report'), None)
+        self.action_show_report.setEnabled(False)
+        self.action_show_report.triggered.connect(self.show_report)
+
+        self.log_path = None
+        self.report_path = None
+        self._impact_path = None
+
+        self._html_loaded_flag = False
 
         #base_dir = os.path.dirname(__file__)
         #self.header = header.replace('PATH', base_dir)
+
+    @property
+    def impact_path(self):
+        return self._impact_path
+
+    @impact_path.setter
+    def impact_path(self, value):
+        self._impact_path = value
+        if value is None:
+            self.action_show_report.setEnabled(False)
+            self.action_show_log.setEnabled(False)
+            self.report_path = None
+            self.log_path = None
+        else:
+            self.action_show_report.setEnabled(True)
+            self.action_show_log.setEnabled(True)
+            self.log_path = '%s.log.html' % self.impact_path
+            self.report_path = '%s.report.html' % self.impact_path
+
+        self.save_report_to_html()
+        self.save_log_to_html()
+        self.show_report()
 
     def contextMenuEvent(self, event):
         """Slot automatically called by Qt on right click on the WebView.
@@ -66,26 +112,39 @@ class MessageViewer(QtWebKit.QWebView):
         context_menu = QtGui.QMenu(self)
 
         # add select all
-        action = self.page().action(QtWebKit.QWebPage.SelectAll)
-        action.setEnabled(not self.page_to_text() == '')
-        context_menu.addAction(action)
+        action_select_all = self.page().action(QtWebKit.QWebPage.SelectAll)
+        action_select_all.setEnabled(not self.page_to_text() == '')
+        context_menu.addAction(action_select_all)
 
         # add copy
-        action = self.page().action(QtWebKit.QWebPage.Copy)
-        action.setEnabled(not self.selectedHtml() == '')
-        context_menu.addAction(action)
+        action_copy = self.page().action(QtWebKit.QWebPage.Copy)
+        action_copy.setEnabled(not self.selectedHtml() == '')
+        context_menu.addAction(action_copy)
+
+        # add show in browser
+        action_page_to_html_file = QtGui.QAction(
+            self.tr('Open in web browser'), None)
+        action_page_to_html_file.triggered.connect(
+            self.open_current_in_browser)
+        context_menu.addAction(action_page_to_html_file)
+
+        # add load report
+        context_menu.addAction(self.action_show_report)
+
+        # add load log
+        context_menu.addAction(self.action_show_log)
 
         # add view source if in dev mode
-        if self.devMode:
-            action = self.page().action(QtWebKit.QWebPage.InspectElement)
-            action.setEnabled(True)
-            context_menu.addAction(action)
+        if self.dev_mode:
+            action_copy = self.page().action(QtWebKit.QWebPage.InspectElement)
+            action_copy.setEnabled(True)
+            context_menu.addAction(action_copy)
 
             # add view to_text if in dev mode
-            context_menu.addAction(
-                self.tr('log pageToText'),
-                self,
-                QtCore.SLOT(self.page_to_stdout()))
+            action_page_to_stdout = QtGui.QAction(self.tr('log pageToText'),
+                                                  None)
+            action_page_to_stdout.triggered.connect(self.page_to_stdout)
+            context_menu.addAction(action_page_to_stdout)
 
         # show the menu
         context_menu.setVisible(True)
@@ -143,6 +202,7 @@ class MessageViewer(QtWebKit.QWebView):
         LOGGER.debug('Dynamic message event')
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
+        self.dynamic_messages_log.append(message)
         # Old way (works but causes full page refresh)
         self.show_messages()
         return
@@ -160,6 +220,9 @@ class MessageViewer(QtWebKit.QWebView):
         # LOGGER.debug('JAVASCRIPT: %s' % js)
         # self.page().mainFrame().evaluateJavaScript(js)
         # self.scrollToDiv()
+
+    def clear_dynamic_messages_log(self):
+        self.dynamic_messages_log = []
 
     def scroll_to_div(self):
         """Scroll to the last added div.
@@ -190,28 +253,110 @@ class MessageViewer(QtWebKit.QWebView):
                 string += html
 
         string += html_footer()
-        self.setHtml(string)
+        self.load_and_wait_html(html=string)
         #self.scroll_to_div()
 
     def to_message(self):
         """Collate all message elements to a single message."""
-        myMessage = m.Message()
+        my_message = m.Message()
         if self.static_message is not None:
-            myMessage.add(self.static_message)
+            my_message.add(self.static_message)
         for myDynamic in self.dynamic_messages:
-            myMessage.add(myDynamic)
-        return myMessage
+            my_message.add(myDynamic)
+        return my_message
 
     def page_to_text(self):
         """Return the current page contents as plain text."""
-        myMessage = self.to_message()
-        return myMessage.to_text()
+        my_message = self.to_message()
+        return my_message.to_text()
 
     def page_to_html(self):
         """Return the current page contents as html."""
-        myMessage = self.to_message()
-        return myMessage.to_html()
+        my_message = self.to_message()
+        return my_message.to_html()
 
     def page_to_stdout(self):
         """Print to console the current page contents as plain text."""
         print self.page_to_text()
+
+    def save_report_to_html(self):
+        html = self.page().mainFrame().toHtml()
+        if self.report_path is not None:
+            html_to_file(html, self.report_path)
+        else:
+            msg = self.tr('report_path is not set')
+            raise InvalidParameterError(msg)
+
+    def save_log_to_html(self):
+        html = html_header()
+        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo.svg" '
+                 'title="InaSAFE Logo" alt="InaSAFE Logo" />')
+        html += ('<h5 class="info"><i class="icon-info-sign icon-white"></i> '
+                 '%s</h5>' % self.tr('Analysis log'))
+        for item in self.dynamic_messages_log:
+            html += "%s\n" % item.to_html()
+        html += html_footer()
+        if self.log_path is not None:
+            html_to_file(html, self.log_path)
+        else:
+            msg = self.tr('log_path is not set')
+            raise InvalidParameterError(msg)
+
+    def show_report(self):
+        self.action_show_report.setEnabled(False)
+        self.action_show_log.setEnabled(True)
+        self.load_and_wait_html(file_path=self.report_path)
+
+    def show_log(self):
+        self.action_show_report.setEnabled(True)
+        self.action_show_log.setEnabled(False)
+        self.load_and_wait_html(file_path=self.log_path)
+
+    def open_current_in_browser(self):
+        if self.impact_path is None:
+            html = self.page().mainFrame().toHtml()
+            html_to_file(html, open_browser=True)
+        else:
+            if self.action_show_report.isEnabled():
+                # if show report is enable, we are looking at a log
+                open_in_browser(self.log_path)
+            else:
+                open_in_browser(self.report_path)
+
+    # TODO (MB) this and the similar method in html_renderer could be
+    # refactored out to the utilities
+    def load_and_wait_html(self, file_path=None, html=None):
+        # noinspection PyUnresolvedReferences
+        if file_path is None and html is None:
+            raise RuntimeError(self.tr('file_path or html need to be set'))
+
+        self._html_loaded_flag = False
+        self.loadFinished.connect(self.html_loaded_slot)
+
+        if file_path is not None:
+            self.setUrl(QUrl.fromLocalFile(file_path))
+        elif html is not None:
+            self.setHtml(html)
+
+        my_counter = 0
+        my_sleep_period = 0.1  # sec
+        my_timeout = 10  # sec
+        while not self._html_loaded_flag and my_counter < my_timeout:
+            # Block until the event loop is done printing the page
+            my_counter += my_sleep_period
+            time.sleep(my_sleep_period)
+            # noinspection PyArgumentList
+            QtCore.QCoreApplication.processEvents()
+
+        if not self._html_loaded_flag:
+            LOGGER.error('Failed to load html')
+
+        # noinspection PyUnresolvedReferences
+        self.loadFinished.disconnect(self.html_loaded_slot)
+
+    def html_loaded_slot(self, ok):
+        """Slot called when the page is loaded.
+        """
+        print "html_loaded_slot set to %s" % ok
+        self._html_loaded_flag = ok
+        LOGGER.debug('html_loaded_slot slot called')

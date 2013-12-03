@@ -1,4 +1,18 @@
-__author__ = 'nielso'
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**Realtime netcdf utilities.**
+
+Custom exception classes for the IS application.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 import os
 import numpy
@@ -19,20 +33,20 @@ from safe.storage.utilities import raster_geometry_to_geotransform
 # FIXME (Ole): Write test using
 # inasafe_data/test/201211120500_Jakarta_200m_Sobek_Forecast_CCAM.nc
 def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
+    """Convert netcdf to tif aggregating first n bands.
 
-    """Convert netcdf to tif aggregating first n bands
+    :param filename: NetCDF multiband raster with extension .nc
 
-    Args
-        * filename: NetCDF multiband raster with extension .nc
-        * n: Positive integer determining how many bands to use
-        * verbose: Boolean flag controlling whether diagnostics
+    :param n: Positive integer determining how many bands to use
+
+    :param verbose: Boolean flag controlling whether diagnostics
           will be printed to screen. This is useful when run from
           a command line script.
 
-    Returns
-        * Raster file in tif format. Each pixel will be the maximum
-          of that pixel in the first n bands in the input file.
+    :param output_dir: The output dir for the converted tif.
 
+    :return: Raster file in tif format. Each pixel will be the maximum
+          of that pixel in the first n bands in the input file.
     """
 
     if not isinstance(filename, basestring):

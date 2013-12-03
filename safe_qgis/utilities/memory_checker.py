@@ -82,36 +82,38 @@ def check_memory_usage(buffered_geo_extent, cell_size):
         False if it is supposed that too little memory exists.
     :rtype: bool
     """
-    myMessage = m.Message()
-    myCheckHeading = m.Heading(
+    message = m.Message()
+    check_heading = m.Heading(
         tr('Checking available memory'), **PROGRESS_UPDATE_STYLE)
-    myMessage.add(myCheckHeading)
+    message.add(check_heading)
 
-    myWidth = buffered_geo_extent[2] - buffered_geo_extent[0]
-    myHeight = buffered_geo_extent[3] - buffered_geo_extent[1]
+    width = buffered_geo_extent[2] - buffered_geo_extent[0]
+    height = buffered_geo_extent[3] - buffered_geo_extent[1]
     try:
-        myWidth = myWidth / cell_size
-        myHeight = myHeight / cell_size
+        #noinspection PyAugmentAssignment
+        width = width / cell_size
+        #noinspection PyAugmentAssignment
+        height = height / cell_size
     except TypeError:
         # Could have been a vector layer for example
-        myReason = tr(
+        reason = tr(
             'Computed cellsize was None. Memory check currently only works '
             'for raster input layers.')
-        myMessage.add(myReason)
-        send_message(myMessage)
+        message.add(reason)
+        send_message(message)
         return True  # assume enough mem since we have no vector check logic
 
-    myList = m.BulletedList()
-    myBullet = m.Paragraph(
-        m.ImportantText(tr('Width: ')), str(myWidth))
-    myList.add(myBullet)
-    myBullet = m.Paragraph(
-        m.ImportantText(tr('Height: ')), str(myHeight))
-    myList.add(myBullet)
-    myBullet = m.Paragraph(
+    bullet_list = m.BulletedList()
+    bullet = m.Paragraph(
+        m.ImportantText(tr('Width: ')), str(width))
+    bullet_list.add(bullet)
+    bullet = m.Paragraph(
+        m.ImportantText(tr('Height: ')), str(height))
+    bullet_list.add(bullet)
+    bullet = m.Paragraph(
         m.ImportantText(tr('Cell Size: ')), str(cell_size))
-    myList.add(myBullet)
-    myMessage.add(myList)
+    bullet_list.add(bullet)
+    message.add(bullet_list)
 
     # Compute mem requirement in MB (assuming numpy uses 8 bytes by per
     # cell) see this link:
@@ -120,55 +122,56 @@ def check_memory_usage(buffered_geo_extent, cell_size):
     # Also note that the on-disk requirement of the clipped tifs is about
     # half this since the tifs as in single precision,
     # whereas numpy arrays are in double precision.
-    myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
+    requirement = ((width * height * 8) / 1024 / 1024)
     try:
-        myFreeMemory = get_free_memory()
+        free_memory = get_free_memory()
     except ValueError:
-        myErrorHeading = m.Heading(tr('Memory check error'), **WARNING_STYLE)
-        myErrorMessage = tr('Could not determine free memory')
-        myMessage.add(myErrorHeading)
-        myMessage.add(myErrorMessage)
-        send_message(myMessage)
-        LOGGER.exception(myMessage)
+        error_heading = m.Heading(tr('Memory check error'), **WARNING_STYLE)
+        error_message = tr('Could not determine free memory')
+        message.add(error_heading)
+        message.add(error_message)
+        send_message(message)
+        LOGGER.exception(message)
         return True  # still let the user try to run their analysis
 
     # We work on the assumption that if more than 10% of the available
     # memory is occupied by a single layer we could run out of memory
     # (depending on the impact function). This is because multiple
     # in memory copies of the layer are often made during processing.
-    myWarningLimit = 10
-    myUsageIndicator = (float(myRequirement) / float(myFreeMemory)) * 100
-    myCountsMessage = tr('Memory requirement: about %d mb per raster layer ('
-                         '%d mb available)') % (myRequirement, myFreeMemory)
-    myUsageMessage = tr('Memory used / available: %d/%d') % (
-        myUsageIndicator, myWarningLimit)
-    myMessage.add(myCountsMessage)
-    myMessage.add(myUsageMessage)
+    warning_limit = 10
+    usage_indicator = (float(requirement) / float(free_memory)) * 100
+    counts_message = tr(
+        'Memory requirement: about %d mb per raster layer ('
+        '%d mb available)') % (requirement, free_memory)
+    usage_message = tr('Memory used / available: %d/%d') % (
+        usage_indicator, warning_limit)
+    message.add(counts_message)
+    message.add(usage_message)
 
-    if myWarningLimit <= myUsageIndicator:
-        myWarningHeading = m.Heading(
+    if warning_limit <= usage_indicator:
+        warning_heading = m.Heading(
             tr('Potential memory issue'), **WARNING_STYLE)
-        myWarningMessage = tr(
+        warning_message = tr(
             'There may not be enough free memory to run this analysis. You can'
             ' attempt to run the analysis anyway, but note that your computer '
             'may become unresponsive during execution, and / or the analysis '
             'may fail due to insufficient memory. Proceed at your own risk.')
-        mySuggestionHeading = m.Heading(
+        suggestion_heading = m.Heading(
             tr('Suggestion'), **INFO_STYLE)
-        mySuggestion = tr(
+        suggestion = tr(
             'Try zooming in to a smaller area or using a raster layer with a '
             'coarser resolution to speed up execution and reduce memory '
             'requirements. You could also try adding more RAM to your '
             'computer.')
 
-        myMessage.add(myWarningHeading)
-        myMessage.add(myWarningMessage)
-        myMessage.add(mySuggestionHeading)
-        myMessage.add(mySuggestion)
-        send_message(myMessage)
-        LOGGER.info(myMessage.to_text())
+        message.add(warning_heading)
+        message.add(warning_message)
+        message.add(suggestion_heading)
+        message.add(suggestion)
+        send_message(message)
+        LOGGER.info(message.to_text())
         return False
 
-    send_message(myMessage)
-    LOGGER.info(myMessage.to_text())
+    send_message(message)
+    LOGGER.info(message.to_text())
     return True

@@ -22,18 +22,18 @@ import unittest
 from datetime import date
 
 from realtime.utils import (
-    baseDataDir,
-    shakemapZipDir,
-    shakemapExtractDir,
-    shakemapDataDir,
-    reportDataDir,
-    logDir,
+    base_data_dir,
+    shakemap_zip_dir,
+    shakemap_extract_dir,
+    shakemap_data_dir,
+    report_data_dir,
+    log_dir,
     is_event_id,
-    purgeWorkingData)
+    purge_working_data)
 
 # Clear away working dirs so we can be sure they
 # are actually created
-purgeWorkingData()
+purge_working_data()
 # The logger is intiailsed in utils.py by init
 import logging
 LOGGER = logging.getLogger('InaSAFE')
@@ -41,52 +41,52 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class Test(unittest.TestCase):
 
-    def test_baseDataDir(self):
+    def test_base_data_dir(self):
         """Test we can get the realtime data dir"""
-        myDir = baseDataDir()
-        myExpectedDir = '/tmp/inasafe/realtime'
-        assert os.path.exists(myExpectedDir)
-        self.assertEqual(myDir, myExpectedDir)
+        data_dir = base_data_dir()
+        expected_dir = '/tmp/inasafe/realtime'
+        assert os.path.exists(expected_dir)
+        self.assertEqual(data_dir, expected_dir)
 
-    def test_shakemapZipDir(self):
+    def test_shakemap_zip_dir(self):
         """Test we can get the shakemap zip dir"""
-        myDir = shakemapZipDir()
-        myExpectedDir = '/tmp/inasafe/realtime/shakemaps-zipped'
-        assert os.path.exists(myExpectedDir)
-        self.assertEqual(myDir, myExpectedDir)
+        data_dir = shakemap_zip_dir()
+        expected_dir = '/tmp/inasafe/realtime/shakemaps-zipped'
+        assert os.path.exists(expected_dir)
+        self.assertEqual(data_dir, expected_dir)
 
-    def test_shakemapExtractDir(self):
+    def test_shakemap_extract_dir(self):
         """Test we can get the shakemap extracted data dir"""
-        myDir = shakemapExtractDir()
-        myExpectedDir = '/tmp/inasafe/realtime/shakemaps-extracted'
-        assert os.path.exists(myExpectedDir)
-        self.assertEqual(myDir, myExpectedDir)
+        data_dir = shakemap_extract_dir()
+        expected_dir = '/tmp/inasafe/realtime/shakemaps-extracted'
+        assert os.path.exists(expected_dir)
+        self.assertEqual(data_dir, expected_dir)
 
-    def test_shakemapDataDir(self):
+    def test_shakemap_data_dir(self):
         """Test we can get the shakemap post processed data dir"""
-        myDir = shakemapDataDir()
-        myExpectedDir = '/tmp/inasafe/realtime/shakemaps-processed'
-        assert os.path.exists(myExpectedDir)
-        self.assertEqual(myDir, myExpectedDir)
+        data_dir = shakemap_data_dir()
+        expected_dir = '/tmp/inasafe/realtime/shakemaps-processed'
+        assert os.path.exists(expected_dir)
+        self.assertEqual(data_dir, expected_dir)
 
-    def test_reportDataDir(self):
+    def test_report_data_dir(self):
         """Test we can get the report data dir"""
-        myDir = reportDataDir()
-        myExpectedDir = '/tmp/inasafe/realtime/reports'
-        assert os.path.exists(myExpectedDir)
-        self.assertEqual(myDir, myExpectedDir)
+        data_dir = report_data_dir()
+        expected_dir = '/tmp/inasafe/realtime/reports'
+        assert os.path.exists(expected_dir)
+        self.assertEqual(data_dir, expected_dir)
 
-    def test_Logging(self):
-        myPath = os.path.join(logDir(), 'realtime.log')
-        myCurrentDate = date.today()
-        myDateString = myCurrentDate.strftime('%d-%m-%Y-%s')
-        myMessage = 'Testing logger %s' % myDateString
-        LOGGER.info(myMessage)
-        myFile = open(myPath, 'rt')
-        myLines = myFile.readlines()
-        if myMessage not in myLines:
+    def test_logging(self):
+        path = os.path.join(log_dir(), 'realtime.log')
+        current_date = date.today()
+        date_string = current_date.strftime('%d-%m-%Y-%s')
+        message = 'Testing logger %s' % date_string
+        LOGGER.info(message)
+        log_file = open(path, 'rt')
+        log_lines = log_file.readlines()
+        if message not in log_lines:
             assert 'Error, expected log message not shown in logs'
-        myFile.close()
+        log_file.close()
 
     def test_is_event_id(self):
         """Test to check if a event is in server

@@ -26,10 +26,10 @@ from zipfile import BadZipfile
 
 from ftp_client import FtpClient
 from sftp_client import SFtpClient
-from utils import setupLogger, dataDir, is_event_id
+from utils import setup_logger, data_dir, is_event_id
 from shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
-setupLogger()
+setup_logger()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -40,7 +40,7 @@ def processEvent(theEventId=None, theLocale='en'):
     :param theLocale:
     """
     myPopulationPath = os.path.join(
-        dataDir(),
+        data_dir(),
         'exposure',
         'IDN_mosaic',
         'popmap10_all.tif')
@@ -66,28 +66,28 @@ def processEvent(theEventId=None, theLocale='en'):
         try:
             if os.path.exists(myPopulationPath):
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=myForceFlag,
-                    thePopulationRasterPath=myPopulationPath)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=myForceFlag,
+                    population_raster_path=myPopulationPath)
             else:
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=myForceFlag)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=myForceFlag)
         except (BadZipfile, URLError):
             # retry with force flag true
             if os.path.exists(myPopulationPath):
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=True,
-                    thePopulationRasterPath=myPopulationPath)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=True,
+                    population_raster_path=myPopulationPath)
             else:
                 myShakeEvent = ShakeEvent(
-                    theEventId=theEventId,
-                    theLocale=myLoc,
-                    theForceFlag=True)
+                    event_id=theEventId,
+                    locale=myLoc,
+                    force_flag=True)
         except:
             LOGGER.exception('An error occurred setting up the shake event.')
             return
@@ -95,7 +95,7 @@ def processEvent(theEventId=None, theLocale='en'):
         LOGGER.info('Event Id: %s', myShakeEvent)
         LOGGER.info('-------------------------------------------')
 
-        myShakeEvent.renderMap(myForceFlag)
+        myShakeEvent.render_map(myForceFlag)
 
 LOGGER.info('-------------------------------------------')
 
@@ -114,7 +114,7 @@ elif len(sys.argv) == 2:
     if myEventId in '--list':
 #        myFtpClient = FtpClient()
         mySftpClient = SFtpClient()
-#        myListing = myFtpClient.getListing()
+#        myListing = myFtpClient.get_listing()
         myListing = mySftpClient.getListing(my_func=is_event_id)
         for myEvent in myListing:
             print myEvent
@@ -125,7 +125,7 @@ elif len(sys.argv) == 2:
         # batch file approach rather!
         #
         myFtpClient = FtpClient()
-        myListing = myFtpClient.getListing()
+        myListing = myFtpClient.get_listing()
         for myEvent in myListing:
             if 'out' not in myEvent:
                 continue

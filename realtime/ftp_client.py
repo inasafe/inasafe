@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Ftp Client for Retrieving ftp data.**
@@ -28,57 +29,45 @@ class FtpClient:
     """A utility class that contains methods to fetch a listings and files
         from an FTP server"""
     def __init__(self,
-                 theBaseUrl='118.97.83.243',
-                 thePasvMode=True):
-        """Constructor for the FtpClient class
-
-        Args:
-            * theBaseUrl - (Optional) an ftp server to connect to. If ommitted
+                 base_url='118.97.83.243',
+                 pasv_mode=True):
+        """Constructor for the FtpClient class.
+        :param base_url: (Optional) an ftp server to connect to. If ommitted
               it will default to ftp://118.97.83.243/
-            * thePasvMode - (Optional) whether passive connections should be
+        :param pasv_mode - (Optional) whether passive connections should be
               made. Defaults to True.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
         """
-        self.baseUrl = theBaseUrl
-        self.pasv = thePasvMode
+        self.base_url = base_url
+        self.pasv = pasv_mode
 
-    def getListing(self, theExtention='zip'):
+    def get_listing(self, extension='zip'):
         """Get a listing of the available files.
 
         Adapted from Ole's original shake library.
 
-        Args:
-            theExtension - (Optional) Filename suffix to filter the listing by.
-                Defaults to zip.
+        :param extension: (Optional) Filename suffix to filter the listing
+        by. Defaults to zip.
 
-        Returns:
-            A list containing the unique filenames (if any) that match the
-                supplied extension suffix.
+        :returns: A list containing the unique filenames (if any) that match
+        the supplied extension suffix.
 
-        Raises:
-            URLError on failure
+        :raises: URLError on failure
         """
-        LOGGER.debug('Getting ftp listing for %s', self.baseUrl)
-        myUrl = 'ftp://%s' % self.baseUrl
-        myRequest = urllib2.Request(myUrl)
+        LOGGER.debug('Getting ftp listing for %s', self.base_url)
+        base_url = 'ftp://%s' % self.base_url
+        request = urllib2.Request(base_url)
         try:
-            myFileId = urllib2.urlopen(myRequest, timeout=60)
-        except urllib2.URLError, e:
+            file_id = urllib2.urlopen(request, timeout=60)
+        except urllib2.URLError:
             LOGGER.exception('Error opening url for directory listing.')
             raise
 
-        myList = []
+        file_list = []
         try:
-            for myLine in myFileId.readlines():
-                myFields = myLine.strip().split()
-                if myFields[-1].endswith('.%s' % theExtention):
-                    myList.append(myUrl + '/' + myFields[-1])
+            for line in file_id.readlines():
+                fields = line.strip().split()
+                if fields[-1].endswith('.%s' % extension):
+                    file_list.append(base_url + '/' + fields[-1])
         except urllib2.URLError, e:
             if isinstance(e.reason, socket.timeout):
                 LOGGER.exception('Timed out getting directory listing')
@@ -86,86 +75,71 @@ class FtpClient:
                 LOGGER.exception('Exception getting directory listing')
             raise
 
-        return myList
+        return file_list
 
-    def ftpUrlForFile(self, theUrlPath):
+    def ftp_url_for_file(self, url_path):
         """Get a file from the ftp server.
 
-        Args:
-            * theUrlPath - (Mandatory) The path (relative to the ftp root)
+        :param url_path: (Mandatory) The path (relative to the ftp root)
               from which the file should be retrieved.
-        Returns:
-            str - An ftp url e.g. ftp://118.97.83.243/20120726022003.inp.zip
-        Raises:
-            None
+        :return: An ftp url e.g. ftp://118.97.83.243/20120726022003.inp.zip
+        :rtype: str
+        :raises: None
         """
-        return 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
+        return 'ftp://%s/%s' % (self.base_url, url_path)
 
-    def getFile(self, theUrlPath, theFilePath):
+    def get_file(self, url_path, file_path):
         """Get a file from the ftp server.
 
-         Args:
-            * theUrlPath - (Mandatory) The path (relative to the ftp root)
+         :param url_path: (Mandatory) The path (relative to the ftp root)
               from which the file should be retrieved.
-            * theFilePath - (Mandatory). The path on the filesystem to which
+         :param file_path: (Mandatory). The path on the filesystem to which
               the file should be saved.
-         Returns:
-             The path to the downloaded file.
-
-         Raises:
-             None
+         :return: The path to the downloaded file.
         """
-        LOGGER.debug('Getting ftp file: %s', theFilePath)
-        myUrl = self.ftpUrlForFile(theUrlPath)
-        myRequest = urllib2.Request(myUrl)
+        LOGGER.debug('Getting ftp file: %s', file_path)
+        url = self.ftp_url_for_file(url_path)
+        request = urllib2.Request(url)
         try:
-            myUrlHandle = urllib2.urlopen(myRequest, timeout=60)
-            myFile = file(theFilePath, 'wb')
-            myFile.write(myUrlHandle.read())
-            myFile.close()
+            url_handle = urllib2.urlopen(request, timeout=60)
+            saved_file = file(file_path, 'wb')
+            saved_file.write(url_handle.read())
+            saved_file.close()
         except urllib2.URLError:
             LOGGER.exception('Bad Url or Timeout')
             raise
 
-    def hasFile(self, theFile):
+    def has_file(self, checked_file):
         """Check if a file is on the ftp server.
 
-         Args:
-            * theFile - (Mandatory) The paths (relative to the ftp
+         :param checked_file: (Mandatory) The paths (relative to the ftp
                 root) to be checked. e.g. '20120726022003.inp.zip',
-         Returns:
-             bool True if the file exists on the server, otherwise False.
-
-         Raises:
-             None
+         :return: True if the file exists on the server, otherwise False.
+         :rtype: bool
         """
-        LOGGER.debug('Checking for ftp file: %s', theFile)
-        myList = self.getListing()
-        myUrl = self.ftpUrlForFile(theFile)
-        return myUrl in myList
+        LOGGER.debug('Checking for ftp file: %s', checked_file)
+        file_list = self.get_listing()
+        url = self.ftp_url_for_file(checked_file)
+        return url in file_list
 
-    def hasFiles(self, theFiles):
+    def has_files(self, checked_files):
         """Check if a list files is on the ftp server.
 
-        .. seealso: func:`hasFile`
+        .. seealso: func:`has_file`
 
-        Args:
-            * theFiles: [str, ...] (Mandatory) The paths (relative to the ftp
-                root) to be checked. e.g. ['20120726022003.inp.zip',
-                '20120726022003.inp.zip']
-        Returns:
-            bool True if **all** files exists on the server, otherwise False.
-
-        Raises:
-            None
+        :param checked_files: [str, ...] (Mandatory) The paths (relative to
+        the ftp root) to be checked.
+        e.g. ['20120726022003.inp.zip', '20120726022003.inp.zip']
+        :return: True if **all** files exists on the server, otherwise False.
+        :rtype: bool
         """
-        LOGGER.debug('Checking for ftp file: %s', theFiles)
-        # Note we don't delegate to hasFile as we want to limit network IO
-        myList = self.getListing()
-        for myFile in theFiles:
-            myUrl = self.ftpUrlForFile(myFile)
-            if not myUrl in myList:
-                LOGGER.debug('** %s NOT found on server**' % myUrl)
+        LOGGER.debug('Checking for ftp file: %s', checked_files)
+        # Note we don't delegate to has_file as we want to limit network IO
+        file_list = self.get_listing()
+        for myFile in checked_files:
+            url = self.ftp_url_for_file(myFile)
+            if not url in file_list:
+                LOGGER.debug('** %s NOT found on server**' % url)
                 return False
-            LOGGER.debug('%s found on server' % myUrl)
+            LOGGER.debug('%s found on server' % url)
         return True

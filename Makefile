@@ -85,6 +85,8 @@ clean:
 	@-find . -name '*~' -exec rm {} \;
 	@-find . -name '*.pyc' -exec rm {} \;
 	@-find . -name '*.pyo' -exec rm {} \;
+	@# Clean stray merge working files from git
+	@-find . -name '*.orig' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 
@@ -109,7 +111,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py . || true
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
 test_suite: compile testdata
@@ -223,14 +225,18 @@ dependency_test:
 	@# 1
 	@# See http://stackoverflow.com/questions/4761728/gives-an-error-in-makefile-not-in-bash-when-grep-output-is-empty why we need "|| true"
 
-	@grep -R PyQt4 $(NONGUI) | grep -v gui_example.py | grep -v message_element|| true
-	@grep -R qgis.core $(NONGUI) || true
+	@# Since InaSAFE 2.0 we now can use PyQt4 libs in safe lib
+	@#grep -R PyQt4 $(NONGUI) | grep -v gui_example.py | grep -v message_element|| true
+	@# Since InaSAFE 2.0 we now can use qgis libs in safe lib
+	@#grep -R qgis.core $(NONGUI) || true
 	@grep -R "import scipy" $(NONGUI) || true
 	@grep -R "from scipy import" $(NONGUI) || true
 	@grep -R "django" $(NONGUI) || true
 	@grep -R "geonode" $(NONGUI) || true
 	@grep -R "geoserver" $(NONGUI) || true
 	@grep -R "owslib" $(NONGUI) || true
+	@# Allowed since 2.0
+	@#grep -R "third_party" $(NONGUI) || true
 
 list_gpackages:
 	@echo
@@ -263,7 +269,7 @@ pylint:
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime || true
+	@pylint --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime || true
 
 profile:
 	@echo
@@ -342,7 +348,8 @@ jenkins-pep8:
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,
+	E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py . > pep8.log || :
 
 jenkins-realtime-test:
 

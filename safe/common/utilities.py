@@ -4,6 +4,7 @@ import os
 import sys
 import numpy
 import zipfile
+import platform
 import gettext
 from datetime import date
 import getpass
@@ -13,6 +14,18 @@ import ctypes
 from numbers import Integral
 
 from safe.common.exceptions import VerificationError
+
+# Prefer python's own OrderedDict if it exists
+try:
+    #pylint: disable=W0611
+    from collections import OrderedDict
+    #pylint: enable=W0611
+except ImportError:
+    try:
+        from third_party.odict import OrderedDict
+    except ImportError:
+        raise RuntimeError(("Could not find an"
+                            "available OrderedDict implementation"))
 
 
 class MEMORYSTATUSEX(ctypes.Structure):
@@ -265,15 +278,23 @@ def get_free_memory_osx():
         p = Popen('echo -e "\n$(top -l 1 | awk \'/PhysMem/\';)\n"',
                   shell=True, stdout=PIPE)
         stdout_string = p.communicate()[0].split('\n')[1]
-        # e.g. output (its a single line)
+        # e.g. output (its a single line) OSX 10.9 Mavericks
+        # PhysMem: 6854M used (994M wired), 1332M unused.
+        # output on Mountain lion
         # PhysMem: 1491M wired, 3032M active, 1933M inactive,
         # 6456M used, 1735M free.
     except OSError:
         raise OSError
-    stdout_list = stdout_string.split(',')
-    inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
-    free = stdout_list[4].replace('M free.', '').replace(' ', '')
-    return int(inactive) + int(free)
+    if float(platform.mac_ver()[0]) > 10.8:
+        stdout_list = stdout_string.split(',')
+        unused = stdout_list[1].replace('M unused', '').replace(' ', '')
+        return int(unused)
+
+    else:
+        stdout_list = stdout_string.split(',')
+        inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
+        free = stdout_list[4].replace('M free.', '').replace(' ', '')
+        return int(inactive) + int(free)
 
 
 def format_int(x):
