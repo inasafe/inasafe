@@ -212,7 +212,7 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
     """Iterates over the layer and returns int or string fields.
 
     :param layer: A vector layer whose attributes shall be returned.
-    :type layer: QgsVectorLayer
+    :type layer: QgsVectorLayer, QgsMapLayer
 
     :param allowed_types: List of QVariant that are acceptable for the
         attribute. e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String].
