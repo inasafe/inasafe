@@ -204,8 +204,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IndexError:
             version_type = 'final'
             # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %s %s') % (
-            version, version_type))
+        self.setWindowTitle(self.tr('InaSAFE %s %s' % (version, version_type)))
 
     def enable_messaging(self):
         """Set up the dispatcher for messaging."""
