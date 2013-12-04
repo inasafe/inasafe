@@ -1,5 +1,6 @@
+# coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
+InaSAFE uDisaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -51,77 +52,77 @@ from safe_qgis.utilities.defaults import breakdown_defaults
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-def makePadangLayer():
+def make_padang_layer():
     """Helper function that returns a single predefined layer"""
-    myFile = 'Shakemap_Padang_2009.asc'
-    myPath = os.path.join(HAZDATA, myFile)
-    myTitle = read_file_keywords(myPath, 'title')
-    # myTitle = 'An earthquake in Padang like in 2009'
-    myLayer = QgsRasterLayer(myPath, myTitle)
+    path = 'Shakemap_Padang_2009.asc'
+    full_path = os.path.join(HAZDATA, path)
+    title = read_file_keywords(full_path, 'title')
+    # title = 'An earthquake in Padang like in 2009'
+    layer = QgsRasterLayer(full_path, title)
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-    return myLayer
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+    return layer
 
 
-def makePadangLayerClone():
+def clone_padang_layer():
     """Helper function that copies padang keyword for testing and return it."""
-    mySourceFileName = 'Shakemap_Padang_2009'
-    myExts = ['.asc', '.asc.aux.xml', '.keywords',
-              '.lic', '.prj', '.qml', '.sld']
-    myFileName = unique_filename()
+    path = 'Shakemap_Padang_2009'
+    extensions = [
+        '.asc', '.asc.aux.xml', '.keywords', '.lic', '.prj', '.qml', '.sld']
+    temp_path = unique_filename()
     # copy to temp file
-    for ext in myExts:
-        mySourcePath = os.path.join(HAZDATA, mySourceFileName + ext)
-        myDestPath = os.path.join(HAZDATA, myFileName + ext)
-        shutil.copy2(mySourcePath, myDestPath)
+    for ext in extensions:
+        source_path = os.path.join(HAZDATA, path + ext)
+        dest_path = os.path.join(HAZDATA, temp_path + ext)
+        shutil.copy2(source_path, dest_path)
     # return a single predefined layer
-    myFile = myFileName + '.asc'
-    myPath = os.path.join(HAZDATA, myFile)
-    myTitle = read_file_keywords(myPath, 'title')
-    myLayer = QgsRasterLayer(myPath, myTitle)
+    path = temp_path + '.asc'
+    full_path = os.path.join(HAZDATA, path)
+    title = read_file_keywords(full_path, 'title')
+    layer = QgsRasterLayer(full_path, title)
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-    return myLayer, myFileName
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+    return layer, temp_path
 
 
-def makePolygonLayer():
+def make_polygon_layer():
     """Helper function that returns a single predefined layer"""
-    myFile = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
-    myPath = os.path.join(TESTDATA, myFile)
+    path = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
+    full_path = os.path.join(TESTDATA, path)
     try:
-        myTitle = read_file_keywords(myPath, 'title')
+        title = read_file_keywords(full_path, 'title')
     except KeywordNotFoundError:
-        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
-    myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+        title = 'kabupaten_jakarta_singlepart_3_good_attr'
+    layer = QgsVectorLayer(full_path, title, 'ogr')
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-    return myLayer
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+    return layer
 
 
-def makePointLayer():
+def make_point_layer():
     """Helper function that returns a single predefined layer"""
-    myFile = 'test_buildings.shp'
-    myPath = os.path.join(TESTDATA, myFile)
+    path = 'test_buildings.shp'
+    full_path = os.path.join(TESTDATA, path)
     try:
-        myTitle = read_file_keywords(myPath, 'title')
+        title = read_file_keywords(full_path, 'title')
     except KeywordNotFoundError:
-        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
-    myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+        title = 'kabupaten_jakarta_singlepart_3_good_attr'
+    layer = QgsVectorLayer(full_path, title, 'ogr')
     # noinspection PyArgumentList
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-    return myLayer
+    QgsMapLayerRegistry.instance().addMapLayer(layer)
+    return layer
 
 
 def remove_temp_file(file_name='temp_Shakemap_Padang_2009'):
@@ -129,34 +130,34 @@ def remove_temp_file(file_name='temp_Shakemap_Padang_2009'):
     :param file_name: File to remove.
     """
     #file_name = 'temp_Shakemap_Padang_2009'
-    myExts = ['.asc', '.asc.aux.xml', '.keywords',
-              '.lic', '.prj', '.qml', '.sld']
-    for ext in myExts:
+    extensions = [
+        '.asc', '.asc.aux.xml', '.keywords', '.lic', '.prj', '.qml', '.sld']
+    for ext in extensions:
         os.remove(os.path.join(HAZDATA, file_name + ext))
 
 
 def make_keywordless_layer():
     """Helper function that returns a single predefined keywordless layer"""
-    myFile = 'keywordless_layer.tif'
-    myBasePath = test_data_path('hazard')
-    myPath = os.path.abspath(os.path.join(myBasePath, myFile))
-    myTitle = 'Keywordless Layer'
-    myLayer = QgsRasterLayer(myPath, myTitle)
+    path = 'keywordless_layer.tif'
+    base_path = test_data_path('hazard')
+    full_path = os.path.abspath(os.path.join(base_path, path))
+    title = 'Keywordless Layer'
+    layer = QgsRasterLayer(full_path, title)
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-    return myLayer
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+    return layer
 
 
-def clearLayers():
+def clear_layers():
     """Clear all the loaded layers"""
     # noinspection PyArgumentList
-    for myLayer in QgsMapLayerRegistry.instance().mapLayers():
+    for layer in QgsMapLayerRegistry.instance().mapLayers():
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+        QgsMapLayerRegistry.instance().removeMapLayer(layer)
 
 
 class KeywordsDialogTest(unittest.TestCase):
@@ -168,396 +169,391 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def tearDown(self):
         """Destroy the dialog after each test"""
-        clearLayers()
+        clear_layers()
 
     # This is how you skip a test when using unittest ...
-    @unittest.skip('Skipping as this test hangs Jenkins if docs are not '
-                   'found.')
-    def test_showHelp(self):
+    @unittest.skip(
+        'Skipping as this test hangs Jenkins if docs are not found.')
+    def test_show_help(self):
         """Test that help button works"""
         # ... and this is how you skip it using nosetests
         #prevent unreachable code errors in pylint
         #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
         # noinspection PyUnreachableCode
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        myButton.click()
-        myMessage = 'Help dialog was not created when help button pressed'
-        assert myDialog.helpDialog is not None, myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        button = dialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        button.click()
+        message = 'Help dialog was not created when help button pressed'
+        self.assertTrue(dialog.helpDialog is not None, message)
         #pylint: enable=W0101
 
-    def test_on_pbnAdvanced_toggled(self):
+    def test_on_advanced_mode_toggled(self):
         """Test advanced button toggle behaviour works"""
-        makePadangLayer()
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myButton = myDialog.pbnAdvanced
-        myButton.setChecked(False)
-        myButton.click()
-        myState = myDialog.grpAdvanced.isHidden()
-        myExpectedState = False
-        myMessage = ('Advanced options did not become visible when'
-                     ' the advanced button was clicked\nGot'
-                     '%s\nExpected\n%s\n' % (myState, myExpectedState))
+        make_padang_layer()
+        dialog = KeywordsDialog(PARENT, IFACE)
+        button = dialog.pbnAdvanced
+        button.setChecked(False)
+        button.click()
+        state = dialog.grpAdvanced.isHidden()
+        expected_state = False
+        message = (
+            'Advanced options did not become visible when'
+            ' the advanced button was clicked\nGot'
+            '%s\nExpected\n%s\n' % (state, expected_state))
 
-        assert myState == myExpectedState, myMessage
+        self.assertEqual(state, expected_state, message)
 
         # Now hide advanced again and test...
-        myButton.click()
-        myState = myDialog.grpAdvanced.isHidden()
-        myExpectedState = True
+        button.click()
+        state = dialog.grpAdvanced.isHidden()
+        expected_state = True
 
-        myMessage = ('Advanced options did not become hidden when'
-                     ' the advanced button was clicked again\nGot'
-                     '%s\nExpected\n%s\n' % (myState, myExpectedState))
-        assert not myDialog.grpAdvanced.isVisible(), myMessage
+        message = (
+            'Advanced options did not become hidden when'
+            ' the advanced button was clicked again\nGot'
+            '%s\nExpected\n%s\n' % (state, expected_state))
+        self.assertTrue(not dialog.grpAdvanced.isVisible(), message)
 
-    def test_on_radHazard_toggled(self):
+    def test_on_rad_hazard_toggled(self):
         """Test hazard radio button toggle behaviour works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myButton = myDialog.radHazard
-        myButton.setChecked(False)
-        myButton.click()
-        myMessage = ('Toggling the hazard radio did not add a category '
-                     'to the keywords list.')
-        assert myDialog.get_value_for_key('category') == 'hazard', myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        button = dialog.radHazard
+        button.setChecked(False)
+        button.click()
+        message = (
+            'Toggling the hazard radio did not add a category '
+            'to the keywords list.')
+        self.assertEqual(
+            dialog.get_value_for_key('category'), 'hazard',
+            message)
 
-    def test_on_radPostprocessing_toggled(self):
+    def test_on_rad_postprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
-        myLayer = makePolygonLayer()
-        myDefaults = breakdown_defaults()
-        myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
-        myButton = myDialog.radPostprocessing
-        myButton.setChecked(False)
-        myButton.click()
-        myMessage = ('Toggling the postprocessing radio did not add a '
-                     'category to the keywords list.')
-        assert myDialog.get_value_for_key(
-            'category') == 'postprocessing', myMessage
+        layer = make_polygon_layer()
+        defaults = breakdown_defaults()
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
+        button = dialog.radPostprocessing
+        button.setChecked(False)
+        button.click()
+        message = (
+            'Toggling the postprocessing radio did not add a '
+            'category to the keywords list.')
+        self.assertEqual(dialog.get_value_for_key(
+            'category'), 'postprocessing', message)
 
-        myMessage = ('Toggling the postprocessing radio did not add an '
-                     'aggregation attribute to the keywords list.')
-        assert myDialog.get_value_for_key(
-            myDefaults['AGGR_ATTR_KEY']) == 'KAB_NAME', myMessage
+        message = (
+            'Toggling the postprocessing radio did not add an '
+            'aggregation attribute to the keywords list.')
+        self.assertEqual(dialog.get_value_for_key(
+            defaults['AGGR_ATTR_KEY']), 'KAB_NAME', message)
 
-        myMessage = ('Toggling the postprocessing radio did not add a '
-                     'female ratio attribute to the keywords list.')
+        message = (
+            'Toggling the postprocessing radio did not add a '
+            'female ratio attribute to the keywords list.')
 
-        assert myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Use default'), \
-            myMessage
+        self.assertEqual(dialog.get_value_for_key(
+            defaults['FEM_RATIO_ATTR_KEY']), dialog.tr('Use default'),
+            message)
 
-        myMessage = ('Toggling the postprocessing radio did not add a '
-                     'female ratio default value to the keywords list.')
-        assert float(myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_KEY'])) == myDefaults['FEM_RATIO'], myMessage
+        message = (
+            'Toggling the postprocessing radio did not add a '
+            'female ratio default value to the keywords list.')
+        self.assertEqual(float(dialog.get_value_for_key(
+            defaults['FEM_RATIO_KEY'])), defaults['FEM_RATIO'], message)
 
-    def test_on_dsbFemaleRatioDefault_valueChanged(self):
+    def test_on_dsb_female_ratio_default_value_changed(self):
         """Test hazard radio button toggle behaviour works"""
-        myLayer = makePolygonLayer()
-        myDefaults = breakdown_defaults()
-        myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
-        myButton = myDialog.radPostprocessing
-        myButton.setChecked(False)
-        myButton.click()
-        myFemaleRatioAttrBox = myDialog.cboFemaleRatioAttribute
+        layer = make_polygon_layer()
+        defaults = breakdown_defaults()
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
+        button = dialog.radPostprocessing
+        button.setChecked(False)
+        button.click()
+        female_ratio_box = dialog.cboFemaleRatioAttribute
 
         #set to Don't use
-        myIndex = myFemaleRatioAttrBox.findText(
-            myDialog.tr('Don\'t use'))
-        myMessage = (myDialog.tr('Don\'t use') + ' not found')
-        assert (myIndex != -1), myMessage
-        myFemaleRatioAttrBox.setCurrentIndex(myIndex)
+        index = female_ratio_box.findText(dialog.tr('Don\'t use'))
+        message = (dialog.tr('Don\'t use') + ' not found')
+        self.assertNotEqual(index, -1, message)
+        female_ratio_box.setCurrentIndex(index)
 
-        myMessage = ('Toggling the female ratio attribute combo to'
-                     ' "Don\'t use" did not add it to the keywords list.')
-        assert myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Don\'t use'), \
-            myMessage
+        message = (
+            'Toggling the female ratio attribute combo to'
+            ' "Don\'t use" did not add it to the keywords list.')
+        self.assertEqual(dialog.get_value_for_key(
+            defaults['FEM_RATIO_ATTR_KEY']), dialog.tr('Don\'t use'),
+            message)
 
-        myMessage = ('Toggling the female ratio attribute combo to'
-                     ' "Don\'t use" did not disable dsbFemaleRatioDefault.')
-        myIsEnabled = myDialog.dsbFemaleRatioDefault.isEnabled()
-        assert not myIsEnabled, myMessage
+        message = (
+            'Toggling the female ratio attribute combo to'
+            ' "Don\'t use" did not disable dsbFemaleRatioDefault.')
+        is_enabled = dialog.dsbFemaleRatioDefault.isEnabled()
+        assert not is_enabled, message
 
-        myMessage = ('Toggling the female ratio attribute combo to'
-                     ' "Don\'t use" did not remove the keyword.')
-        assert (myDialog.get_value_for_key(myDefaults['FEM_RATIO']) is None), \
-            myMessage
+        message = (
+            'Toggling the female ratio attribute combo to'
+            ' "Don\'t use" did not remove the keyword.')
+        assert (dialog.get_value_for_key(defaults['FEM_RATIO']) is None), \
+            message
 
         #set to TEST_REAL
-        myIndex = myFemaleRatioAttrBox.findText('TEST_REAL')
-        myMessage = 'TEST_REAL not found'
-        assert (myIndex != -1), myMessage
-        myFemaleRatioAttrBox.setCurrentIndex(myIndex)
+        index = female_ratio_box.findText('TEST_REAL')
+        message = 'TEST_REAL not found'
+        assert (index != -1), message
+        female_ratio_box.setCurrentIndex(index)
 
-        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
-                     ' did not add it to the keywords list.')
-        assert myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
+        message = (
+            'Toggling the female ratio attribute combo to "TEST_REAL"'
+            ' did not add it to the keywords list.')
+        assert dialog.get_value_for_key(
+            defaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', message
 
-        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
-                     ' did not disable dsbFemaleRatioDefault.')
-        myIsEnabled = myDialog.dsbFemaleRatioDefault.isEnabled()
-        assert not myIsEnabled, myMessage
+        message = (
+            'Toggling the female ratio attribute combo to "TEST_REAL"'
+            ' did not disable dsbFemaleRatioDefault.')
+        is_enabled = dialog.dsbFemaleRatioDefault.isEnabled()
+        assert not is_enabled, message
 
-        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
-                     ' did not remove the keyword.')
-        assert (myDialog.get_value_for_key(myDefaults['FEM_RATIO']) is
-                None), myMessage
+        message = (
+            'Toggling the female ratio attribute combo to "TEST_REAL"'
+            ' did not remove the keyword.')
+        assert (dialog.get_value_for_key(defaults['FEM_RATIO']) is
+                None), message
 
     def Xtest_on_radExposure_toggled(self):
         """Test exposure radio button toggle behaviour works"""
 
         # Cannot get this test to work, but it works fine in the safe_qgis
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myButton = myDialog.radExposure
-        myButton.setChecked(False)
-        myButton.click()
-        myMessage = ('Toggling the exposure radio did not add a category '
-                     'to the keywords list.')
-        assert myDialog.get_value_for_key('category') == 'exposure', myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        button = dialog.radExposure
+        button.setChecked(False)
+        button.click()
+        message = (
+            'Toggling the exposure radio did not add a category '
+            'to the keywords list.')
+        assert dialog.get_value_for_key('category') == 'exposure', message
 
-    def test_on_cboSubcategory_currentIndexChanged(self):
+    def test_on_subcategory_currentindexchanged(self):
         """Test subcategory combo change event works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myButton = myDialog.radHazard
-        myButton.setChecked(True)
-        myButton = myDialog.radExposure
-        myButton.click()
-        myCombo = myDialog.cboSubcategory
-        myCombo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
-        myMessage = ('Changing the subcategory did not add '
-                     'to the keywords list for %s' %
-                     myCombo.currentText())
-        myKey = myDialog.get_value_for_key('subcategory')
+        dialog = KeywordsDialog(PARENT, IFACE)
+        button = dialog.radHazard
+        button.setChecked(True)
+        button = dialog.radExposure
+        button.click()
+        combo = dialog.cboSubcategory
+        combo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
+        message = (
+            'Changing the subcategory did not add '
+            'to the keywords list for %s' %
+            combo.currentText())
+        key = dialog.get_value_for_key('subcategory')
 
-        assert myKey is not None, myMessage
-        assert myKey in str(myCombo.currentText()), myMessage
+        self.assertTrue(key is not None, message)
+        assert key in str(combo.currentText()), message
 
-    def test_setSubcategoryList(self):
+    def test_set_subcategory_list(self):
         """Test set subcategory list works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myList = OrderedDict([('population [density]',
-                               'population [density]'),
-                            ('population [count]',
-                             'population [count]'),
-                            ('building',
-                             'building'),
-                            ('building [osm]',
-                             'building [osm]'),
-                            ('building [sigab]',
-                             'building [sigab]'),
-                            ('roads',
-                             'roads')])
-        mySelectedItem = 'building'
-        myDialog.set_subcategory_list(myList, mySelectedItem)
-        myResult = str(myDialog.cboSubcategory.currentText())
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, mySelectedItem))
+        dialog = KeywordsDialog(PARENT, IFACE)
+        subcategory_list = OrderedDict([
+            ('population [density]', 'population [density]'),
+            ('population [count]', 'population [count]'),
+            ('building', 'building'),
+            ('building [osm]', 'building [osm]'),
+            ('building [sigab]', 'building [sigab]'),
+            ('road', 'road')])
+        selected_item = 'building'
+        dialog.set_subcategory_list(subcategory_list, selected_item)
+        result = str(dialog.cboSubcategory.currentText())
+        message = ('\nGot: %s\nExpected: %s\n' % (result, selected_item))
 
-        assert myResult == mySelectedItem, myMessage
+        self.assertTrue(result == selected_item, message)
 
-    def test_on_pbnAddToList1_clicked(self):
+    def test_on_pbn_add_to_list1_clicked(self):
         """Test adding an item to the list using predefined form works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.reset(False)
-        myDialog.radPredefined.setChecked(True)
-        myDialog.cboKeyword.setCurrentIndex(2)
-        myExpectedResult = 'foo'
-        myDialog.lePredefinedValue.setText(myExpectedResult)
-        myDialog.on_pbnAddToList1_clicked()
-        myResult = myDialog.get_value_for_key('datatype')
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.reset(False)
+        dialog.radPredefined.setChecked(True)
+        dialog.cboKeyword.setCurrentIndex(2)
+        expected_result = 'foo'
+        dialog.lePredefinedValue.setText(expected_result)
+        dialog.on_pbnAddToList1_clicked()
+        result = dialog.get_value_for_key('datatype')
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
 
-        assert myResult == myExpectedResult, myMessage
-
-    def test_on_pbnAddToList2_clicked(self):
+    def test_on_pbn_add_to_list2_clicked(self):
         """Test adding an item to the list using user defined form works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.reset(False)
-        myDialog.radUserDefined.setChecked(True)
-        myDialog.leKey.setText('foo')
-        myDialog.leValue.setText('bar')
-        myExpectedResult = 'bar'
-        myDialog.lePredefinedValue.setText(myExpectedResult)
-        myDialog.on_pbnAddToList2_clicked()
-        myResult = myDialog.get_value_for_key('foo')
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        # print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.reset(False)
+        dialog.radUserDefined.setChecked(True)
+        dialog.leKey.setText('foo')
+        dialog.leValue.setText('bar')
+        expected_result = 'bar'
+        dialog.lePredefinedValue.setText(expected_result)
+        dialog.on_pbnAddToList2_clicked()
+        result = dialog.get_value_for_key('foo')
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        # print 'Dict', dialog.getKeywords()
+        self.assertEqual(result == expected_result, message)
 
-    def test_on_pbnRemove_clicked(self):
+    def test_on_pbn_remove_clicked(self):
         """Test pressing remove works on key list"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.reset(False)
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.reset(False)
 
-        myResult = myDialog.lstKeywords.count()
-        myExpectedResult = 0
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        result = dialog.lstKeywords.count()
+        expected_result = 0
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result, expected_result, message)
 
-        myDialog.add_list_entry('bar', 'foo')
-        myResult = myDialog.lstKeywords.count()
-        myExpectedResult = 1
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        dialog.add_list_entry('bar', 'foo')
+        result = dialog.lstKeywords.count()
+        expected_result = 1
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result, expected_result, message)
 
-    def test_addListEntry(self):
+    def test_add_list_entry(self):
         """Test add entry to list works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.reset(False)
-        myDialog.add_list_entry('bar', 'foo')
-        myResult = myDialog.get_value_for_key('bar')
-        myExpectedResult = 'foo'
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.reset(False)
+        dialog.add_list_entry('bar', 'foo')
+        result = dialog.get_value_for_key('bar')
+        expected_result = 'foo'
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result, expected_result, message)
 
-    def test_addWarningsForColons(self):
+    def test_add_warnings_for_colons(self):
         """Test add entry to list works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.reset(False)
-        myDialog.add_list_entry('bar', 'fo:o')
-        myResult = myDialog.get_value_for_key('bar')
-        myExpectedResult = 'fo.o'
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.reset(False)
+        dialog.add_list_entry('bar', 'fo:o')
+        result = dialog.get_value_for_key('bar')
+        expected_result = 'fo.o'
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result == expected_result, message)
         #
         # Check the user gets a message if they put colons in the value
         #
-        myExpectedResult = 'Colons are not allowed, replaced with "."'
-        myResult = str(myDialog.lblMessage.text())
-        myMessage = ('lblMessage error \nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        expected_result = 'Colons are not allowed, replaced with "."'
+        result = str(dialog.lblMessage.text())
+        message = (
+            'lblMessage error \nGot: %s\nExpected: %s\n' %
+            (result, expected_result))
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result, expected_result, message)
         #
         # Check the user gets a message if they put colons in the key
         #
-        myDialog.add_list_entry('ba:r', 'foo')
-        myExpectedResult = 'Colons are not allowed, replaced with "."'
-        myResult = str(myDialog.lblMessage.text())
-        myMessage = ('lblMessage error \nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        dialog.add_list_entry('ba:r', 'foo')
+        expected_result = 'Colons are not allowed, replaced with "."'
+        result = str(dialog.lblMessage.text())
+        message = (
+            'lblMessage error \nGot: %s\nExpected: %s\n' %
+            (result, expected_result))
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result, expected_result, message)
 
-    def test_setCategory(self):
+    def test_set_category(self):
         """Test set category works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.reset(False)
-        myDialog.set_category('hazard')
-        myExpectedResult = 'hazard'
-        myResult = myDialog.get_value_for_key('category')
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.reset(False)
+        dialog.set_category('hazard')
+        expected_result = 'hazard'
+        result = dialog.get_value_for_key('category')
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result, expected_result, message)
 
     def test_reset(self):
         """Test form reset works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.leTitle.setText('Foo')
-        myDialog.reset(False)
-        myExpectedResult = ''
-        myResult = myDialog.leTitle.text()
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        assert myResult == myExpectedResult, myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.leTitle.setText('Foo')
+        dialog.reset(False)
+        expected_result = ''
+        result = dialog.leTitle.text()
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
 
-    def test_removeItemByKey(self):
+    def test_remove_iItem_by_key(self):
         """Test remove item by its key works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.reset(False)
-        myDialog.add_list_entry('bar', 'foo')
-        myDialog.remove_item_by_key('bar')
-        myResult = myDialog.lstKeywords.count()
-        myExpectedResult = 0
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        #print 'Dict', myDialog.getKeywords()
-        assert myResult == myExpectedResult, myMessage
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.reset(False)
+        dialog.add_list_entry('bar', 'foo')
+        dialog.remove_item_by_key('bar')
+        result = dialog.lstKeywords.count()
+        expected_result = 0
+        message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
+        #print 'Dict', dialog.getKeywords()
+        self.assertEqual(result, expected_result, message)
 
-    def test_removeItemByValue(self):
+    def test_remove_item_by_value(self):
         """Test remove item by its value works"""
-        makePadangLayer()
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.remove_item_by_value('hazard')
+        make_padang_layer()
+        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog.remove_item_by_value('hazard')
 
-        myKeywords = myDialog.get_keywords()
-        myExpectedKeywords = {'source': 'USGS',
-                              'title': 'An earthquake in Padang like in 2009',
-                              'subcategory': 'earthquake',
-                              'unit': 'MMI'}
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myKeywords, myExpectedKeywords))
+        keywords = dialog.get_keywords()
+        expected_keywords = {
+            'source': 'USGS',
+            'title': 'An earthquake in Padang like in 2009',
+            'subcategory': 'earthquake',
+            'unit': 'MMI'}
+        self.assertEqual(keywords,  expected_keywords)
 
-        assert myKeywords == myExpectedKeywords, myMessage
-
-    def test_getValueForKey(self):
+    def test_get_value_for_key(self):
         """Test get value for key works"""
-        makePadangLayer()
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myExpectedValue = 'hazard'
-        myValue = myDialog.get_value_for_key('category')
-        myMessage = ('\nExpected key value of %s\nGot %s' %
-                     (myExpectedValue, myValue))
-        assert myValue == myExpectedValue, myMessage
+        make_padang_layer()
+        dialog = KeywordsDialog(PARENT, IFACE)
+        expected_value = 'hazard'
+        value = dialog.get_value_for_key('category')
+        self.assertEqual(value, expected_value)
 
-    def test_loadStateFromKeywords(self):
+    def test_load_state_from_keywords(self):
         """Test load state from keywords works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myLayer = makePadangLayer()
-        myDialog.layer = myLayer
-        myDialog.load_state_from_keywords()
-        myKeywords = myDialog.get_keywords()
+        dialog = KeywordsDialog(PARENT, IFACE)
+        layer = make_padang_layer()
+        dialog.layer = layer
+        dialog.load_state_from_keywords()
+        keywords = dialog.get_keywords()
 
-        myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
-                              'category': 'hazard',
-                              'source': 'USGS',
-                              'subcategory': 'earthquake',
-                              'unit': 'MMI'}
-        myMessage = ('\nGot:\n%s\nExpected:\n%s\n' %
-                     (myKeywords, myExpectedKeywords))
-        assert myKeywords == myExpectedKeywords, myMessage
+        expected_keywords = {
+            'title': 'An earthquake in Padang like in 2009',
+            'category': 'hazard',
+            'source': 'USGS',
+            'subcategory': 'earthquake',
+            'unit': 'MMI'}
+        self.assertEqual(keywords,  expected_keywords)
 
     def test_layer_without_keywords(self):
         """Test load state from keywords works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
-        myLayer = make_keywordless_layer()
-        myDialog.layer = myLayer
-        myDialog.load_state_from_keywords()
+        dialog = KeywordsDialog(PARENT, IFACE)
+        layer = make_keywordless_layer()
+        dialog.layer = layer
+        dialog.load_state_from_keywords()
 
-    def test_addKeywordWhenPressOkButton(self):
+    def test_add_keyword_when_press_ok_button(self):
         """Test add keyword when ok button is pressed."""
-        #_, myFile = makePadangLayerClone()
-        makePadangLayerClone()
-        myDialog = KeywordsDialog(PARENT, IFACE)
+        #_, path = makePadangLayerClone()
+        clone_padang_layer()
+        dialog = KeywordsDialog(PARENT, IFACE)
 
-        myDialog.radUserDefined.setChecked(True)
-        myDialog.leKey.setText('foo')
-        myDialog.leValue.setText('bar')
-        okButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
-        okButton.click()
+        dialog.radUserDefined.setChecked(True)
+        dialog.leKey.setText('foo')
+        dialog.leValue.setText('bar')
+        ok_button = dialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
+        ok_button.click()
 
         # delete temp file
-        # removeTempFile(myFile)
+        # removeTempFile(path)
 
-        myExpectedResult = 'bar'
-        myResult = myDialog.get_value_for_key('foo')
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myResult, myExpectedResult))
-        assert myExpectedResult == myResult, myMessage
+        expected_result = 'bar'
+        result = dialog.get_value_for_key('foo')
+        self.assertEqual(result, expected_result)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordsDialogTest, 'test')

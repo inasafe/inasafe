@@ -59,7 +59,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         # Set up the user interface from Designer.
         self.setupUi(self)
         self.setWindowTitle(
-            self.tr('InaSAFE %s Impact Functions Browser') % (get_version()))
+            self.tr('InaSAFE %s Impact Functions Browser' % get_version()))
         self.parent = parent
 
         self.no_filter = self.tr('No Filter')
