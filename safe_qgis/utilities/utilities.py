@@ -212,7 +212,7 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
     """Iterates over the layer and returns int or string fields.
 
     :param layer: A vector layer whose attributes shall be returned.
-    :type layer: QgsVectorLayer
+    :type layer: QgsVectorLayer, QgsMapLayer
 
     :param allowed_types: List of QVariant that are acceptable for the
         attribute. e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String].
@@ -603,7 +603,7 @@ def which(name, flags=os.X_OK):
     if sys.platform == 'darwin':  # Mac OS X
         gdal_prefix = (
             '/Library/Frameworks/GDAL.framework/'
-            'Versions/1.10/Programs/')
+            'Versions/Current/Programs/')
         path = '%s:%s' % (path, gdal_prefix)
 
     LOGGER.debug('Search path: %s' % path)
