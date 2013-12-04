@@ -70,7 +70,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """For testing only"""
         print 'hello'
 
-    def __init__(self, hazard_layer, exposure_layer, function, extent = None):
+    def __init__(self, hazard_layer, exposure_layer, function, extent=None):
         """Constructor for the impact calculator thread.
 
         :param hazard_layer: read_layer object containing the Hazard.
@@ -84,7 +84,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             will be computed.
         :type function: FunctionProvider
 
-        :param extent: Bounding box [xmin, ymin, xmax, ymax] of the working region.
+        :param extent: Bounding box [xmin, ymin, xmax, ymax]
+            of the working region.
         :type extent: list
 
         :raises: InsufficientParametersError if not all parameters are set.

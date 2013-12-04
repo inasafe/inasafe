@@ -28,7 +28,8 @@ def calculate_impact(layers, impact_fcn, extent=None):
 
         impact_fcn: Function of the form f(layers)
 
-        extent:     List of [xmin, ymin, xmax, ymax] - the coordinates of the bounding box.
+        extent:     List of [xmin, ymin, xmax, ymax]
+                    the coordinates of the bounding box.
 
     Output
         filename of resulting impact layer (GML). Comment is embedded as

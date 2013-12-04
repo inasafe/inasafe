@@ -226,9 +226,11 @@ class ImpactCalculator(QObject):
     def set_extent(self, extent):
         """Mutator for the extent property.
 
-        Set extent that can be used as bounding box of the calculator's working region.
+        Set extent that can be used as bounding box of the
+            calculator's working region.
 
-        :param extent:  Bounding box [xmin, ymin, xmax, ymax] of the working region.
+        :param extent:  Bounding box [xmin, ymin, xmax, ymax]
+            of the working region.
         :type extent: list
 
         """

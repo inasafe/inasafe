@@ -871,12 +871,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 exposure_layer, geo_extent, hazard_layer)
 
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.calculator.set_extent(None)        # Extent is calculated in the aggregator
+            # Extent is calculated in the aggregator:
+            self.calculator.set_extent(None)
 
             # See if the inputs need further refinement for aggregations
             try:
                 self.aggregator.deintersect()
-            except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
                 raise
             # Get clipped layers
             hazard_layer = self.aggregator.hazard_layer
@@ -1555,8 +1558,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             geo_extent,
             hazard_layer)
 
-    def optimal_clip(self,extra_exposure_keywords, buffered_geo_extent, cell_size,
-             exposure_layer, geo_extent, hazard_layer):
+    def optimal_clip(self, extra_exposure_keywords, buffered_geo_extent,
+                     cell_size, exposure_layer, geo_extent, hazard_layer):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
         the three inputs. The inasafe library will perform various checks

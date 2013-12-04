@@ -40,11 +40,14 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
         ('target_field', 'flooded'),
-        # This field of the exposure layer contains information about road types
+        # This field of the exposure layer contains
+        # information about road types
         ('road_type_field', 'TYPE'),
-        # This field of the  hazard layer contains information about inundated areas
+        # This field of the  hazard layer contains information
+        # about inundated areas
         ('affected_field', 'affected'),
-        # This value in 'affected_field' of the hazard layer marks the areas as inundated
+        # This value in 'affected_field' of the hazard layer
+        # marks the areas as inundated
         ('affected_value', '1'),
     ])
 
@@ -87,7 +90,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         affected_field = self.parameters['affected_field']
         affected_value = self.parameters['affected_value']
 
-
         # Extract data
         H = get_hazard_layer(layers)    # Flood
         E = get_exposure_layer(layers)  # Roads
@@ -122,14 +124,15 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
-        request=QgsFeatureRequest()
+        request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
         # Split line_layer by H and save as result:
         #   1) Filter from H inundated features
         #   2) Mark roads as inundated (1) or not inundated (0)
 
-        affected_field_type = h_provider.fields()[affected_field_index].typeName()
+        affected_field_type = \
+            h_provider.fields()[affected_field_index].typeName()
         if affected_field_type in ['Real', 'Integer']:
             affected_value = float(affected_value)
 
@@ -150,30 +153,37 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             attrs = feat.attributes()
             if hazard_poly.intersects(line_geom):
                 # Check intersection
-                int_geom = QgsGeometry(line_geom.intersection(hazard_poly)).asGeometryCollection()
+                int_geom = QgsGeometry(
+                    line_geom.intersection(hazard_poly)
+                ).asGeometryCollection()
                 for g in int_geom:
                     if g.type() == 1:   # Linestring
                         l_feat = QgsFeature()
                         l_feat.setGeometry(g)
                         l_feat.setAttributes(attrs)
                         l_feat.setAttribute(target_field_index, 1)
-                        (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
+                        (res, out_feat) = \
+                            line_layer.dataProvider().addFeatures([l_feat])
 
                 # Check difference
-                diff_geom = QgsGeometry(line_geom.symDifference(hazard_poly)).asGeometryCollection()
+                diff_geom = QgsGeometry(
+                    line_geom.symDifference(hazard_poly)
+                ).asGeometryCollection()
                 for g in diff_geom:
                     if g.type() == 1:   # Linestring
                         l_feat = QgsFeature()
                         l_feat.setGeometry(g)
                         l_feat.setAttributes(attrs)
                         l_feat.setAttribute(target_field_index, 0)
-                        (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
+                        (res, out_feat) = \
+                            line_layer.dataProvider().addFeatures([l_feat])
             else:
                 l_feat = QgsFeature()
                 l_feat.setGeometry(line_geom)
                 l_feat.setAttributes(attrs)
                 l_feat.setAttribute(target_field_index, 0)
-                (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
+                (res, out_feat) = \
+                    line_layer.dataProvider().addFeatures([l_feat])
         line_layer.updateExtents()
 
         # Generate simple impact report
@@ -193,8 +203,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             length = geom.length()
             road_len += length
 
-            if not roads_by_type.has_key(road_type):
-                roads_by_type[road_type] = {'flooded': 0, 'total': 0}  # (flooded, total)
+            if not road_type in roads_by_type:
+                roads_by_type[road_type] = {'flooded': 0, 'total': 0}
             roads_by_type[road_type]['total'] += length
 
             if attrs[target_field_index] == 1:
