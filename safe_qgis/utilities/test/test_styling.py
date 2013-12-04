@@ -157,42 +157,41 @@ class StylingTest(unittest.TestCase):
 
         self.assertEqual(len(myTransparencyList), 1)
 
-    def test_issue121(self):
+    def test_issue_121(self):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
-        myLayer, myType = load_layer('kecamatan_jakarta_osm_centroids.shp')
-        del myType
+        layer, layer_type = load_layer('kecamatan_jakarta_osm_centroids.shp')
+        del layer_type
         # Note the float quantity values below
-        myStyleInfo = {'target_field': 'KEPADATAN', 'style_classes': [
+        style_info = {'target_field': 'KEPADATAN', 'style_classes': [
             {'opacity': 1, 'max': 200, 'colour': '#fecc5c',
              'min': 45, 'label': 'Low', 'size': 1},
             {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
              'min': 201, 'label': 'Medium', 'size': 2},
             {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
              'min': 351, 'label': 'High', 'size': 3}]}
-        myMessage = 'Setting style with point sizes should work.'
-        try:
-            set_vector_graduated_style(myLayer, myStyleInfo)
-        except:
-            raise Exception(myMessage)
+
+        print 'Setting style with point sizes should work.'
+        set_vector_graduated_style(layer, style_info)
+
         # Now validate the size values were set as expected
 
         # new symbology - subclass of QgsFeatureRendererV2 class
-        myRenderer = myLayer.rendererV2()
-        myType = myRenderer.type()
-        assert myType == 'graduatedSymbol'
-        mySize = 1
-        for myRange in myRenderer.ranges():
-            mySymbol = myRange.symbol()
-            mySymbolLayer = mySymbol.symbolLayer(0)
-            myActualSize = mySymbolLayer.size()
-            myMessage = ((
+        renderer = layer.rendererV2()
+        layer_type = renderer.type()
+        assert layer_type == 'graduatedSymbol'
+        size = 1
+        for renderer_range in renderer.ranges():
+            symbol = renderer_range.symbol()
+            symbol_layer = symbol.symbolLayer(0)
+            actual_size = symbol_layer.size()
+            message = ((
                 'Expected symbol layer 0 for range %s to have'
                 ' a size of %s, got %s') %
-                (mySize, mySize, myActualSize))
-            assert mySize == myActualSize, myMessage
-            mySize += 1
+                (size, size, actual_size))
+            assert size == actual_size, message
+            size += 1
 
     def test_issue157(self):
         """Verify that we get the error class name back - issue #157
