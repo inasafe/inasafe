@@ -603,7 +603,7 @@ def which(name, flags=os.X_OK):
     if sys.platform == 'darwin':  # Mac OS X
         gdal_prefix = (
             '/Library/Frameworks/GDAL.framework/'
-            'Versions/1.10/Programs/')
+            'Versions/Current/Programs/')
         path = '%s:%s' % (path, gdal_prefix)
 
     LOGGER.debug('Search path: %s' % path)
