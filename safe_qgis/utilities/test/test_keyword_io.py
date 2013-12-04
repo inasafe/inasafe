@@ -16,7 +16,7 @@ from qgis.core import QgsDataSourceURI, QgsVectorLayer
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app, load_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
-from safe_qgis.tools.test.test_keywords_dialog import makePadangLayerClone
+from safe_qgis.tools.test.test_keywords_dialog import clone_padang_layer
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -148,7 +148,7 @@ class KeywordIOTest(unittest.TestCase):
 
     def test_appendKeywords(self):
         """Can we append file keywords with the generic readKeywords method."""
-        myLayer, _ = makePadangLayerClone()
+        myLayer, _ = clone_padang_layer()
         myNewKeywords = {'category': 'exposure', 'test': 'TEST'}
         self.keywordIO.update_keywords(myLayer, myNewKeywords)
         myKeywords = self.keywordIO.read_keywords(myLayer)

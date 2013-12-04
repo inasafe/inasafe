@@ -28,9 +28,9 @@ from safe_qgis.utilities.utilities import (
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, TEST_FILES_DIR)
 from safe_qgis.tools.test.test_keywords_dialog import (
-    makePolygonLayer,
-    makePadangLayer,
-    makePointLayer)
+    make_polygon_layer,
+    make_padang_layer,
+    make_point_layer)
 from safe_qgis.safe_interface import bbox_intersection
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -86,7 +86,7 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_getLayerAttributeNames(self):
         """Test we can get the correct attributes back"""
-        myLayer = makePolygonLayer()
+        myLayer = make_polygon_layer()
 
         #with good attribute name
         myAttrs, myPos = layer_attribute_names(myLayer, [
@@ -116,7 +116,7 @@ class UtilitiesTest(unittest.TestCase):
         assert (myPos == myExpectedPos), myMessage
 
         #with raster layer
-        myLayer = makePadangLayer()
+        myLayer = make_padang_layer()
         myAttrs, myPos = layer_attribute_names(myLayer, [], '')
         myMessage = 'Should return None, None for raster layer, got %s, %s' % (
             myAttrs, myPos)
@@ -124,15 +124,15 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_isLayerPolygonal(self):
         """Test we can get the correct attributes back"""
-        myLayer = makePolygonLayer()
+        myLayer = make_polygon_layer()
         myMessage = 'isPolygonLayer, %s layer should be polygonal' % myLayer
         assert is_polygon_layer(myLayer), myMessage
 
-        myLayer = makePointLayer()
+        myLayer = make_point_layer()
         myMessage = '%s layer should be polygonal' % myLayer
         assert not is_polygon_layer(myLayer), myMessage
 
-        myLayer = makePadangLayer()
+        myLayer = make_padang_layer()
         myMessage = ('%s raster layer should not be polygonal' % myLayer)
         assert not is_polygon_layer(myLayer), myMessage
 
