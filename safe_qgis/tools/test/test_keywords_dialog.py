@@ -344,8 +344,8 @@ class KeywordsDialogTest(unittest.TestCase):
         combo = dialog.cboSubcategory
         combo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
         message = (
-            'Changing the subcategory did not add '
-            'to the keywords list for %s' %
+            'Changing the subcategory did not add %s'
+            'to the keywords list' %
             combo.currentText())
         key = dialog.get_value_for_key('subcategory')
 
@@ -395,7 +395,7 @@ class KeywordsDialogTest(unittest.TestCase):
         result = dialog.get_value_for_key('foo')
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
         # print 'Dict', dialog.getKeywords()
-        self.assertEqual(result == expected_result, message)
+        self.assertEqual(result, expected_result, message)
 
     def test_on_pbn_remove_clicked(self):
         """Test pressing remove works on key list"""
@@ -435,7 +435,7 @@ class KeywordsDialogTest(unittest.TestCase):
         expected_result = 'fo.o'
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
         #print 'Dict', dialog.getKeywords()
-        self.assertEqual(result == expected_result, message)
+        self.assertEqual(result, expected_result, message)
         #
         # Check the user gets a message if they put colons in the value
         #

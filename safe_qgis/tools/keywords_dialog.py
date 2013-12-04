@@ -67,16 +67,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %s Keywords Editor' % get_version()))
-        self.keywordIO = KeywordIO()
+        self.keyword_io = KeywordIO()
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
         # in the combo entries.
         # .. seealso:: http://www.voidspace.org.uk/python/odict.html
-        self.standardExposureList = OrderedDict(
+        self.standard_exposure_list = OrderedDict(
             [('population', self.tr('population')),
              ('structure', self.tr('structure')),
              ('Not Set', self.tr('Not Set'))])
-        self.standardHazardList = OrderedDict(
+        self.standard_hazard_list = OrderedDict(
             [('earthquake [MMI]', self.tr('earthquake [MMI]')),
              ('tsunami [m]', self.tr('tsunami [m]')),
              ('tsunami [wet/dry]', self.tr('tsunami [wet/dry]')),
@@ -95,9 +95,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.lstKeywords.itemClicked.connect(self.edit_key_value_pair)
 
         # Set up help dialog showing logic.
-        self.helpDialog = None
-        helpButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        helpButton.clicked.connect(self.show_help)
+        help_button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        help_button.clicked.connect(self.show_help)
 
         # set some inital ui state:
         self.defaults = breakdown_defaults()
@@ -118,9 +117,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.load_state_from_keywords()
 
         # add a reload from keywords button
-        reloadButton = self.buttonBox.addButton(
+        reload_button = self.buttonBox.addButton(
             self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
-        reloadButton.clicked.connect(self.load_state_from_keywords)
+        reload_button.clicked.connect(self.load_state_from_keywords)
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.
@@ -131,20 +130,20 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.layer = layer
         self.load_state_from_keywords()
 
+    #noinspection PyMethodMayBeStatic
     def show_help(self):
         """Load the help text for the keywords dialog."""
         show_context_help(context='keywords')
 
     def toggle_postprocessing_widgets(self):
-        """Hide or show the post processing widgets depending on context.
-        """
+        """Hide or show the post processing widgets depending on context."""
         LOGGER.debug('togglePostprocessingWidgets')
-        isPostprocessingOn = self.radPostprocessing.isChecked()
-        self.cboSubcategory.setVisible(not isPostprocessingOn)
-        self.lblSubcategory.setVisible(not isPostprocessingOn)
-        self.show_aggregation_attribute(isPostprocessingOn)
-        self.show_female_ratio_attribute(isPostprocessingOn)
-        self.show_female_ratio_default(isPostprocessingOn)
+        postprocessing_flag = self.radPostprocessing.isChecked()
+        self.cboSubcategory.setVisible(not postprocessing_flag)
+        self.lblSubcategory.setVisible(not postprocessing_flag)
+        self.show_aggregation_attribute(postprocessing_flag)
+        self.show_female_ratio_attribute(postprocessing_flag)
+        self.show_female_ratio_default(postprocessing_flag)
 
     def show_aggregation_attribute(self, visible_flag):
         """Hide or show the aggregation attribute in the keyword editor dialog.
@@ -153,24 +152,24 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             should be hidden or shown.
         :type visible_flag: bool
         """
-        theBox = self.cboAggregationAttribute
-        theBox.blockSignals(True)
-        theBox.clear()
-        theBox.blockSignals(False)
+        box = self.cboAggregationAttribute
+        box.blockSignals(True)
+        box.clear()
+        box.blockSignals(False)
         if visible_flag:
-            currentKeyword = self.get_value_for_key(
+            current_keyword = self.get_value_for_key(
                 self.defaults['AGGR_ATTR_KEY'])
-            fields, attributePosition = layer_attribute_names(
+            fields, attribute_position = layer_attribute_names(
                 self.layer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String],
-                currentKeyword)
-            theBox.addItems(fields)
-            if attributePosition is None:
-                theBox.setCurrentIndex(0)
+                current_keyword)
+            box.addItems(fields)
+            if attribute_position is None:
+                box.setCurrentIndex(0)
             else:
-                theBox.setCurrentIndex(attributePosition)
+                box.setCurrentIndex(attribute_position)
 
-        theBox.setVisible(visible_flag)
+        box.setVisible(visible_flag)
         self.lblAggregationAttribute.setVisible(visible_flag)
 
     def show_female_ratio_attribute(self, visible_flag):
@@ -180,32 +179,32 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             should be hidden or shown.
         :type visible_flag: bool
         """
-        theBox = self.cboFemaleRatioAttribute
-        theBox.blockSignals(True)
-        theBox.clear()
-        theBox.blockSignals(False)
+        box = self.cboFemaleRatioAttribute
+        box.blockSignals(True)
+        box.clear()
+        box.blockSignals(False)
         if visible_flag:
-            currentKeyword = self.get_value_for_key(
+            current_keyword = self.get_value_for_key(
                 self.defaults['FEM_RATIO_ATTR_KEY'])
-            fields, attributePosition = layer_attribute_names(
+            fields, attribute_position = layer_attribute_names(
                 self.layer,
                 [QtCore.QVariant.Double],
-                currentKeyword)
+                current_keyword)
             fields.insert(0, self.tr('Use default'))
             fields.insert(1, self.tr('Don\'t use'))
-            theBox.addItems(fields)
-            if currentKeyword == self.tr('Use default'):
-                theBox.setCurrentIndex(0)
-            elif currentKeyword == self.tr('Don\'t use'):
-                theBox.setCurrentIndex(1)
-            elif attributePosition is None:
-                # currentKeyword was not found in the attribute table.
+            box.addItems(fields)
+            if current_keyword == self.tr('Use default'):
+                box.setCurrentIndex(0)
+            elif current_keyword == self.tr('Don\'t use'):
+                box.setCurrentIndex(1)
+            elif attribute_position is None:
+                # current_keyword was not found in the attribute table.
                 # Use default
-                theBox.setCurrentIndex(0)
+                box.setCurrentIndex(0)
             else:
                 # + 2 is because we add use defaults and don't use
-                theBox.setCurrentIndex(attributePosition + 2)
-        theBox.setVisible(visible_flag)
+                box.setCurrentIndex(attribute_position + 2)
+        box.setVisible(visible_flag)
         self.lblFemaleRatioAttribute.setVisible(visible_flag)
 
     def show_female_ratio_default(self, visible_flag):
@@ -215,17 +214,17 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             default attribute should be hidden or shown.
         :type visible_flag: bool
         """
-        theBox = self.dsbFemaleRatioDefault
+        box = self.dsbFemaleRatioDefault
         if visible_flag:
-            currentValue = self.get_value_for_key(
+            current_value = self.get_value_for_key(
                 self.defaults['FEM_RATIO_KEY'])
-            if currentValue is None:
+            if current_value is None:
                 val = self.defaults['FEM_RATIO']
             else:
-                val = float(currentValue)
-            theBox.setValue(val)
+                val = float(current_value)
+            box.setValue(val)
 
-        theBox.setVisible(visible_flag)
+        box.setVisible(visible_flag)
         self.lblFemaleRatioDefault.setVisible(visible_flag)
 
     # prevents actions being handled twice
@@ -251,9 +250,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         text = self.cboFemaleRatioAttribute.currentText()
         if text == self.tr('Use default'):
             self.dsbFemaleRatioDefault.setEnabled(True)
-            currentDefault = self.get_value_for_key(
+            current_default = self.get_value_for_key(
                 self.defaults['FEM_RATIO_KEY'])
-            if currentDefault is None:
+            if current_default is None:
                 self.add_list_entry(
                     self.defaults['FEM_RATIO_KEY'],
                     self.dsbFemaleRatioDefault.value())
@@ -357,32 +356,32 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for Qt slot.
         """
         del index
-        myItem = self.cboSubcategory.itemData(
+        item = self.cboSubcategory.itemData(
             self.cboSubcategory.currentIndex())
-        myText = str(myItem)
+        text = str(item)
         # I found that myText is 'Not Set' for every language
-        if myText == self.tr('Not Set') or myText == 'Not Set':
+        if text == self.tr('Not Set') or text == 'Not Set':
             self.remove_item_by_key('subcategory')
             return
-        myTokens = myText.split(' ')
-        if len(myTokens) < 1:
+        tokens = text.split(' ')
+        if len(tokens) < 1:
             self.remove_item_by_key('subcategory')
             return
-        mySubcategory = myTokens[0]
-        self.add_list_entry('subcategory', mySubcategory)
+        subcategory = tokens[0]
+        self.add_list_entry('subcategory', subcategory)
 
         # Some subcategories e.g. roads have no units or datatype
-        if len(myTokens) == 1:
+        if len(tokens) == 1:
             return
-        if myTokens[1].find('[') < 0:
+        if tokens[1].find('[') < 0:
             return
-        myCategory = self.get_value_for_key('category')
-        if 'hazard' == myCategory:
-            myUnits = myTokens[1].replace('[', '').replace(']', '')
-            self.add_list_entry('unit', myUnits)
-        if 'exposure' == myCategory:
-            myDataType = myTokens[1].replace('[', '').replace(']', '')
-            self.add_list_entry('datatype', myDataType)
+        category = self.get_value_for_key('category')
+        if 'hazard' == category:
+            units = tokens[1].replace('[', '').replace(']', '')
+            self.add_list_entry('unit', units)
+        if 'exposure' == category:
+            data_type = tokens[1].replace('[', '').replace(']', '')
+            self.add_list_entry('datatype', data_type)
             # prevents actions being handled twice
 
     def set_subcategory_list(self, entries, selected_item=None):
@@ -403,21 +402,21 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # we block signals from the combo while updating it
         self.cboSubcategory.blockSignals(True)
         self.cboSubcategory.clear()
-        theSelectedItemNone = selected_item is not None
-        theSelectedItemInValues = selected_item not in entries.values()
-        theSelectedItemInKeys = selected_item not in entries.keys()
-        if (theSelectedItemNone and theSelectedItemInValues and
-                theSelectedItemInKeys):
+        item_selected_flag = selected_item is not None
+        selected_item_values = selected_item not in entries.values()
+        selected_item_keys = selected_item not in entries.keys()
+        if (item_selected_flag and selected_item_values and
+                selected_item_keys):
             # Add it to the OrderedList
             entries[selected_item] = selected_item
-        myIndex = 0
-        mySelectedIndex = 0
+        index = 0
+        selected_index = 0
         for myKey, myValue in entries.iteritems():
             if myValue == selected_item or myKey == selected_item:
-                mySelectedIndex = myIndex
-            myIndex += 1
+                selected_index = index
+            index += 1
             self.cboSubcategory.addItem(myValue, myKey)
-        self.cboSubcategory.setCurrentIndex(mySelectedIndex)
+        self.cboSubcategory.setCurrentIndex(selected_index)
         self.cboSubcategory.blockSignals(False)
 
     # prevents actions being handled twice
@@ -427,9 +426,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         if (self.lePredefinedValue.text() != "" and
                 self.cboKeyword.currentText() != ""):
-            myCurrentKey = self.tr(self.cboKeyword.currentText())
-            myCurrentValue = self.lePredefinedValue.text()
-            self.add_list_entry(myCurrentKey, myCurrentValue)
+            current_key = self.tr(self.cboKeyword.currentText())
+            current_value = self.lePredefinedValue.text()
+            self.add_list_entry(current_key, current_value)
             self.lePredefinedValue.setText('')
             self.update_controls_from_list()
 
@@ -439,22 +438,22 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """Automatic slot executed when the pbnAddToList2 button is pressed.
         """
 
-        myCurrentKey = self.leKey.text()
-        myCurrentValue = self.leValue.text()
-        if myCurrentKey == 'category' and myCurrentValue == 'hazard':
+        current_key = self.leKey.text()
+        current_value = self.leValue.text()
+        if current_key == 'category' and current_value == 'hazard':
             self.radHazard.blockSignals(True)
             self.radHazard.setChecked(True)
-            self.set_subcategory_list(self.standardHazardList)
+            self.set_subcategory_list(self.standard_hazard_list)
             self.radHazard.blockSignals(False)
-        elif myCurrentKey == 'category' and myCurrentValue == 'exposure':
+        elif current_key == 'category' and current_value == 'exposure':
             self.radExposure.blockSignals(True)
             self.radExposure.setChecked(True)
-            self.set_subcategory_list(self.standardExposureList)
+            self.set_subcategory_list(self.standard_exposure_list)
             self.radExposure.blockSignals(False)
-        elif myCurrentKey == 'category':
+        elif current_key == 'category':
             #.. todo:: notify the user their category is invalid
             pass
-        self.add_list_entry(myCurrentKey, myCurrentValue)
+        self.add_list_entry(current_key, current_value)
         self.leKey.setText('')
         self.leValue.setText('')
         self.update_controls_from_list()
@@ -466,8 +465,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         Any selected items in the keywords list will be removed.
         """
-        for myItem in self.lstKeywords.selectedItems():
-            self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
+        for item in self.lstKeywords.selectedItems():
+            self.lstKeywords.takeItem(self.lstKeywords.row(item))
         self.leKey.setText('')
         self.leValue.setText('')
         self.update_controls_from_list()
@@ -499,25 +498,25 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # make sure that both key and value is string
         key = str(key)
         value = str(value)
-        myMessage = ''
+        message = ''
         if ':' in key:
             key = key.replace(':', '.')
-            myMessage = self.tr('Colons are not allowed, replaced with "."')
+            message = self.tr('Colons are not allowed, replaced with "."')
         if ':' in value:
             value = value.replace(':', '.')
-            myMessage = self.tr('Colons are not allowed, replaced with "."')
-        if myMessage == '':
+            message = self.tr('Colons are not allowed, replaced with "."')
+        if message == '':
             self.lblMessage.setText('')
             self.lblMessage.hide()
         else:
-            self.lblMessage.setText(myMessage)
+            self.lblMessage.setText(message)
             self.lblMessage.show()
-        myItem = QtGui.QListWidgetItem(key + ':' + value)
+        item = QtGui.QListWidgetItem(key + ':' + value)
         # We are going to replace, so remove it if it exists already
         self.remove_item_by_key(key)
-        myData = key + '|' + value
-        myItem.setData(QtCore.Qt.UserRole, myData)
-        self.lstKeywords.insertItem(0, myItem)
+        data = key + '|' + value
+        item.setData(QtCore.Qt.UserRole, data)
+        self.lstKeywords.insertItem(0, item)
 
     def set_category(self, category):
         """Set the category radio button based on category.
@@ -529,16 +528,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :rtype: bool
         """
         # convert from QString if needed
-        myCategory = str(category)
-        if self.get_value_for_key('category') == myCategory:
+        category = str(category)
+        if self.get_value_for_key('category') == category:
             #nothing to do, go home
             return True
-        if myCategory not in ['hazard', 'exposure', 'postprocessing']:
+        if category not in ['hazard', 'exposure', 'postprocessing']:
             # .. todo:: report an error to the user
             return False
             # Special case when category changes, we start on a new slate!
 
-        if myCategory == 'hazard':
+        if category == 'hazard':
             # only cause a toggle if we actually changed the category
             # This will only really be apparent if user manually enters
             # category as a keyword
@@ -549,10 +548,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.remove_item_by_key('subcategory')
             self.remove_item_by_key('datatype')
             self.add_list_entry('category', 'hazard')
-            myList = self.standardHazardList
-            self.set_subcategory_list(myList)
+            hazard_list = self.standard_hazard_list
+            self.set_subcategory_list(hazard_list)
 
-        elif myCategory == 'exposure':
+        elif category == 'exposure':
             self.reset()
             self.radExposure.blockSignals(True)
             self.radExposure.setChecked(True)
@@ -560,8 +559,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.remove_item_by_key('subcategory')
             self.remove_item_by_key('unit')
             self.add_list_entry('category', 'exposure')
-            myList = self.standardExposureList
-            self.set_subcategory_list(myList)
+            exposure_list = self.standard_exposure_list
+            self.set_subcategory_list(exposure_list)
 
         else:
             self.reset()
@@ -594,57 +593,57 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.lePredefinedValue.clear()
             self.leTitle.clear()
 
-    def remove_item_by_key(self, key):
+    def remove_item_by_key(self, removal_key):
         """Remove an item from the kvp list given its key.
 
-        :param key: Key of item to be removed.
-        :type key: str
+        :param removal_key: Key of item to be removed.
+        :type removal_key: str
         """
         for myCounter in range(self.lstKeywords.count()):
-            myExistingItem = self.lstKeywords.item(myCounter)
-            myText = myExistingItem.text()
-            myTokens = myText.split(':')
-            if len(myTokens) < 2:
+            existing_item = self.lstKeywords.item(myCounter)
+            text = existing_item.text()
+            tokens = text.split(':')
+            if len(tokens) < 2:
                 break
-            myKey = myTokens[0]
-            if myKey == key:
-                # remove it since the key is already present
+            key = tokens[0]
+            if removal_key == key:
+                # remove it since the removal_key is already present
                 self.lstKeywords.takeItem(myCounter)
                 break
 
-    def remove_item_by_value(self, value):
+    def remove_item_by_value(self, removal_value):
         """Remove an item from the kvp list given its key.
 
-        :param value: Value of item to be removed.
-        :type value: str
+        :param removal_value: Value of item to be removed.
+        :type removal_value: str
         """
-        for myCounter in range(self.lstKeywords.count()):
-            myExistingItem = self.lstKeywords.item(myCounter)
-            myText = myExistingItem.text()
-            myTokens = myText.split(':')
-            myValue = myTokens[1]
-            if myValue == value:
+        for counter in range(self.lstKeywords.count()):
+            existing_item = self.lstKeywords.item(counter)
+            text = existing_item.text()
+            tokens = text.split(':')
+            value = tokens[1]
+            if removal_value == value:
                 # remove it since the key is already present
-                self.lstKeywords.takeItem(myCounter)
+                self.lstKeywords.takeItem(counter)
                 break
 
-    def get_value_for_key(self, key):
+    def get_value_for_key(self, removal_key):
         """If key list contains a specific key, return its value.
 
-        :param key: The key to search for
-        :type key: str
+        :param removal_key: The key to search for
+        :type removal_key: str
 
         :returns: Value of key if matched otherwise none.
         :rtype: str
         """
-        for myCounter in range(self.lstKeywords.count()):
-            myExistingItem = self.lstKeywords.item(myCounter)
-            myText = myExistingItem.text()
-            myTokens = myText.split(':')
-            myKey = str(myTokens[0]).strip()
-            myValue = str(myTokens[1]).strip()
-            if myKey == key:
-                return myValue
+        for counter in range(self.lstKeywords.count()):
+            existing_item = self.lstKeywords.item(counter)
+            text = existing_item.text()
+            tokens = text.split(':')
+            key = str(tokens[0]).strip()
+            value = str(tokens[1]).strip()
+            if removal_key == key:
+                return value
         return None
 
     def load_state_from_keywords(self):
@@ -654,43 +653,43 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         start with a blank slate so that subcategory gets populated nicely &
         we will assume exposure to start with.
         """
-        myKeywords = {'category': 'exposure'}
+        keywords = {'category': 'exposure'}
 
         try:
             # Now read the layer with sub layer if needed
-            myKeywords = self.keywordIO.read_keywords(self.layer)
+            keywords = self.keyword_io.read_keywords(self.layer)
         except (InvalidParameterError,
                 HashNotFoundError,
                 NoKeywordsFoundError):
             pass
 
-        myLayerName = self.layer.name()
-        if 'title' not in myKeywords:
-            self.leTitle.setText(myLayerName)
-        self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
+        layer_name = self.layer.name()
+        if 'title' not in keywords:
+            self.leTitle.setText(layer_name)
+        self.lblLayerName.setText(self.tr('Keywords for %s' % layer_name))
         # if we have a category key, unpack it first
         # so radio button etc get set
-        if 'category' in myKeywords:
-            self.set_category(myKeywords['category'])
-            myKeywords.pop('category')
+        if 'category' in keywords:
+            self.set_category(keywords['category'])
+            keywords.pop('category')
 
-        for myKey in myKeywords.iterkeys():
-            self.add_list_entry(myKey, str(myKeywords[myKey]))
+        for myKey in keywords.iterkeys():
+            self.add_list_entry(myKey, str(keywords[myKey]))
 
         # now make the rest of the safe_qgis reflect the list entries
         self.update_controls_from_list()
 
     def update_controls_from_list(self):
         """Set the ui state to match the keywords of the active layer."""
-        mySubcategory = self.get_value_for_key('subcategory')
-        myUnits = self.get_value_for_key('unit')
-        myType = self.get_value_for_key('datatype')
-        myTitle = self.get_value_for_key('title')
-        if myTitle is not None:
-            self.leTitle.setText(myTitle)
+        subcategory = self.get_value_for_key('subcategory')
+        units = self.get_value_for_key('unit')
+        data_type = self.get_value_for_key('datatype')
+        title = self.get_value_for_key('title')
+        if title is not None:
+            self.leTitle.setText(title)
         elif self.layer is not None:
-            myLayerName = self.layer.name()
-            self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
+            layer_name = self.layer.name()
+            self.lblLayerName.setText(self.tr('Keywords for %s' % layer_name))
         else:
             self.lblLayerName.setText('')
 
@@ -701,29 +700,29 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.toggle_postprocessing_widgets()
 
         if self.radExposure.isChecked():
-            if mySubcategory is not None and myType is not None:
+            if subcategory is not None and data_type is not None:
                 self.set_subcategory_list(
-                    self.standardExposureList,
-                    mySubcategory + ' [' + myType + ']')
-            elif mySubcategory is not None:
+                    self.standard_exposure_list,
+                    subcategory + ' [' + data_type + ']')
+            elif subcategory is not None:
                 self.set_subcategory_list(
-                    self.standardExposureList, mySubcategory)
+                    self.standard_exposure_list, subcategory)
             else:
                 self.set_subcategory_list(
-                    self.standardExposureList,
+                    self.standard_exposure_list,
                     self.tr('Not Set'))
         elif self.radHazard.isChecked():
-            if mySubcategory is not None and myUnits is not None:
+            if subcategory is not None and units is not None:
                 self.set_subcategory_list(
-                    self.standardHazardList,
-                    mySubcategory + ' [' + myUnits + ']')
-            elif mySubcategory is not None:
+                    self.standard_hazard_list,
+                    subcategory + ' [' + units + ']')
+            elif subcategory is not None:
                 self.set_subcategory_list(
-                    self.standardHazardList,
-                    mySubcategory)
+                    self.standard_hazard_list,
+                    subcategory)
             else:
                 self.set_subcategory_list(
-                    self.standardHazardList,
+                    self.standard_hazard_list,
                     self.tr('Not Set'))
 
         self.resize_dialog()
@@ -757,15 +756,15 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if str(self.leTitle.text()) != '':
             self.add_list_entry('title', str(self.leTitle.text()))
 
-        myKeywords = {}
+        keywords = {}
         for myCounter in range(self.lstKeywords.count()):
-            myExistingItem = self.lstKeywords.item(myCounter)
-            myText = myExistingItem.text()
-            myTokens = myText.split(':')
-            myKey = str(myTokens[0]).strip()
-            myValue = str(myTokens[1]).strip()
-            myKeywords[myKey] = myValue
-        return myKeywords
+            existing_item = self.lstKeywords.item(myCounter)
+            text = existing_item.text()
+            tokens = text.split(':')
+            key = str(tokens[0]).strip()
+            value = str(tokens[1]).strip()
+            keywords[key] = value
+        return keywords
 
     def accept(self):
         """Automatic slot executed when the ok button is pressed.
@@ -773,18 +772,18 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         It will write out the keywords for the layer that is active.
         """
         self.apply_changes()
-        myKeywords = self.get_keywords()
+        keywords = self.get_keywords()
         try:
-            self.keywordIO.write_keywords(
-                layer=self.layer, keywords=myKeywords)
+            self.keyword_io.write_keywords(
+                layer=self.layer, keywords=keywords)
         except InaSAFEError, e:
-            myErrorMessage = get_error_message(e)
+            error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 ((self.tr(
                     'An error was encountered when saving the keywords:\n'
-                    '%s' % myErrorMessage.to_html()))))
+                    '%s' % error_message.to_html()))))
         if self.dock is not None:
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
@@ -801,25 +800,25 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.on_pbnAddToList2_clicked()
 
     def edit_key_value_pair(self, item):
-        """Set leKey and leValue to the clicked item in the lstKeywords.
+        """Slot to set leKey and leValue to clicked item in the lstKeywords.
 
         :param item: A Key Value pair expressed as a string where the first
             colon in the string delimits the key from the value.
-        :type item: str
+        :type item: QListWidgetItem
         """
-        myTempKey = item.text().split(':')[0]
-        myTempValue = item.text().split(':')[1]
-        if myTempKey == 'category':
+        temp_key = item.text().split(':')[0]
+        temp_value = item.text().split(':')[1]
+        if temp_key == 'category':
             return
         if self.radUserDefined.isChecked():
-            self.leKey.setText(myTempKey)
-            self.leValue.setText(myTempValue)
+            self.leKey.setText(temp_key)
+            self.leValue.setText(temp_value)
         elif self.radPredefined.isChecked():
-            idxKey = self.cboKeyword.findText(myTempKey)
-            if idxKey > -1:
-                self.cboKeyword.setCurrentIndex(idxKey)
-                self.lePredefinedValue.setText(myTempValue)
+            index_key = self.cboKeyword.findText(temp_key)
+            if index_key > -1:
+                self.cboKeyword.setCurrentIndex(index_key)
+                self.lePredefinedValue.setText(temp_value)
             else:
                 self.radUserDefined.setChecked(True)
-                self.leKey.setText(myTempKey)
-                self.leValue.setText(myTempValue)
+                self.leKey.setText(temp_key)
+                self.leValue.setText(temp_value)
