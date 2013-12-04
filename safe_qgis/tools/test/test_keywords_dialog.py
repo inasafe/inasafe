@@ -344,7 +344,7 @@ class KeywordsDialogTest(unittest.TestCase):
         combo = dialog.cboSubcategory
         combo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
         message = (
-            'Changing the subcategory did not add %s'
+            'Changing the subcategory did not add %s '
             'to the keywords list' %
             combo.currentText())
         key = dialog.get_value_for_key('subcategory')

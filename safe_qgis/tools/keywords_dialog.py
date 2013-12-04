@@ -358,7 +358,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del index
         item = self.cboSubcategory.itemData(
             self.cboSubcategory.currentIndex())
-        text = str(item)
+        text = str(item.toString())
         # I found that myText is 'Not Set' for every language
         if text == self.tr('Not Set') or text == 'Not Set':
             self.remove_item_by_key('subcategory')
@@ -627,11 +627,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.lstKeywords.takeItem(counter)
                 break
 
-    def get_value_for_key(self, removal_key):
+    def get_value_for_key(self, lookup_key):
         """If key list contains a specific key, return its value.
 
-        :param removal_key: The key to search for
-        :type removal_key: str
+        :param lookup_key: The key to search for
+        :type lookup_key: str
 
         :returns: Value of key if matched otherwise none.
         :rtype: str
@@ -642,7 +642,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             tokens = text.split(':')
             key = str(tokens[0]).strip()
             value = str(tokens[1]).strip()
-            if removal_key == key:
+            if lookup_key == key:
                 return value
         return None
 
