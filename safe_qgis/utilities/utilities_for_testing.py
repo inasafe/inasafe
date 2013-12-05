@@ -76,7 +76,7 @@ def assert_hashes_for_file(hashes, filename):
 
 
 def assert_hash_for_file(hash_string, filename):
-    """Assert that a files has matches its expected hash
+    """Assert that a files hash matches its expected hash.
     :param filename:
     :param hash_string:
     """
