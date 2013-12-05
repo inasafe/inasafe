@@ -503,7 +503,7 @@ class KeywordsDialogTest(unittest.TestCase):
             'title': 'An earthquake in Padang like in 2009',
             'subcategory': 'earthquake',
             'unit': 'MMI'}
-        self.assertEqual(keywords,  expected_keywords)
+        self.assertEqual(keywords, expected_keywords)
 
     def test_get_value_for_key(self):
         """Test get value for key works"""
@@ -527,7 +527,7 @@ class KeywordsDialogTest(unittest.TestCase):
             'source': 'USGS',
             'subcategory': 'earthquake',
             'unit': 'MMI'}
-        self.assertEqual(keywords,  expected_keywords)
+        self.assertEqual(keywords, expected_keywords)
 
     def test_layer_without_keywords(self):
         """Test load state from keywords works"""

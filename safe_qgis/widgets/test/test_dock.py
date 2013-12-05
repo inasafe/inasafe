@@ -23,6 +23,9 @@ import os
 import logging
 from os.path import join
 
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
+
 from unittest import TestCase, skipIf
 from PyQt4 import QtCore
 
@@ -123,6 +126,7 @@ class TestDock(TestCase):
 
     def test_defaults(self):
         """Test the GUI in its default state"""
+        print combos_to_string(DOCK)
         self.assertEqual(DOCK.cboHazard.currentIndex(), 0)
         self.assertEqual(DOCK.cboExposure.currentIndex(), 0)
         self.assertEqual(DOCK.cboFunction.currentIndex(), 0)
