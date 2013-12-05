@@ -358,12 +358,12 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
     difference_image.fill(152 + 219 * 256 + 249 * 256 * 256)
 
     for y in range(image_height):
-        for y in range(image_width):
-            control_pixel = control_image.pixel(y, y)
-            test_pixel = test_image.pixel(y, y)
+        for x in range(image_width):
+            control_pixel = control_image.pixel(x, y)
+            test_pixel = test_image.pixel(x, y)
             if control_pixel != test_pixel:
                 mismatch_count += 1
-                difference_image.setPixel(y, y, QtGui.qRgb(255, 0, 0))
+                difference_image.setPixel(x, y, QtGui.qRgb(255, 0, 0))
     difference_path = unique_filename(
         prefix='difference-%s' % os.path.basename(control_image_path),
         suffix='.png',
