@@ -42,10 +42,11 @@ class HtmlRenderer():
         """
         LOGGER.debug('InaSAFE HtmlRenderer class initialised')
 
-        self.pageDpi = float(page_dpi)
+        self.page_dpi = float(page_dpi)
         # Need to keep state here for loadCompleted signals
-        self.webView = None
-        self.htmlLoadedFlag = False
+        self.web_view = None
+        self.html_loaded_flag = False
+        self.printer = None
 
     def tr(self, string):
         """We implement this since we do not inherit QObject.
@@ -76,9 +77,9 @@ class HtmlRenderer():
         """
         LOGGER.debug('InaSAFE Map renderHtmlToImage called')
 
-        myWidthPx = mm_to_points(width_mm, self.pageDpi)
+        width_px = mm_to_points(width_mm, self.page_dpi)
         self.load_and_wait(html_snippet=html)
-        myFrame = self.webView.page().mainFrame()
+        frame = self.web_view.page().mainFrame()
 
         # Using 150dpi as the baseline, work out a standard text size
         # multiplier so that page renders equally well at different print
@@ -87,22 +88,22 @@ class HtmlRenderer():
         #myFactor = float(self.page_dpi) / myBaselineDpi
         #myFrame.setTextSizeMultiplier(myFactor)
 
-        mySize = myFrame.contentsSize()
-        mySize.setWidth(myWidthPx)
-        self.webView.page().setViewportSize(mySize)
+        size = frame.contentsSize()
+        size.setWidth(width_px)
+        self.web_view.page().setViewportSize(size)
 
-        myImage = QtGui.QImage(mySize, QtGui.QImage.Format_RGB32)
-        myImage.setDotsPerMeterX(dpi_to_meters(self.pageDpi))
-        myImage.setDotsPerMeterY(dpi_to_meters(self.pageDpi))
+        image = QtGui.QImage(size, QtGui.QImage.Format_RGB32)
+        image.setDotsPerMeterX(dpi_to_meters(self.page_dpi))
+        image.setDotsPerMeterY(dpi_to_meters(self.page_dpi))
         # Only works in Qt4.8
-        #myImage.fill(QtGui.qRgb(255, 255, 255))
+        #image.fill(QtGui.qRgb(255, 255, 255))
         # Works in older Qt4 versions
-        myImage.fill(255 + 255 * 256 + 255 * 256 * 256)
-        myPainter = QtGui.QPainter(myImage)
-        myFrame.render(myPainter)
-        myPainter.end()
-        myImage.save('/tmp/test.png')
-        return myImage
+        image.fill(255 + 255 * 256 + 255 * 256 * 256)
+        painter = QtGui.QPainter(image)
+        frame.render(painter)
+        painter.end()
+        image.save('/tmp/test.png')
+        return image
 
     def to_pdf(self, html, filename=None):
         """Render an html snippet into the printer, paginating as needed.
@@ -124,17 +125,17 @@ class HtmlRenderer():
         """
         LOGGER.info('InaSAFE Map printToPdf called')
         if filename is None:
-            myHtmlPdfPath = unique_filename(
-                prefix='table', suffix='.pdf', dir=temp_dir('work'))
+            html_pdf_path = unique_filename(
+                prefix='table', suffix='.pdf', dir=temp_dir())
         else:
             # We need to cast to python string in case we receive a QString
-            myHtmlPdfPath = str(filename)
+            html_pdf_path = str(filename)
 
-        self.printer = setup_printer(myHtmlPdfPath)
+        self.printer = setup_printer(html_pdf_path)
         self.load_and_wait(html_snippet=html)
-        self.webView.print_(self.printer)
+        self.web_view.print_(self.printer)
 
-        return myHtmlPdfPath
+        return html_pdf_path
 
     def load_and_wait(self, html_path=None, html_snippet=None):
         """Load some html to a web view and wait till it is done.
@@ -149,45 +150,48 @@ class HtmlRenderer():
         :type html_snippet: str
         """
         if html_snippet:
-            myHeader = html_header()
-            myFooter = html_footer()
-            myHtml = myHeader + html_snippet + myFooter
+            header = html_header()
+            footer = html_footer()
+            html = header + html_snippet + footer
         else:
-            myFile = file(html_path, 'rt')
-            myHtml = myFile.readlines()
-            myFile.close()
+            handle = file(html_path, 'rt')
+            html = handle.readlines()
+            handle.close()
 
-        self.webView = QtWebKit.QWebView()
-        myFrame = self.webView.page().mainFrame()
-        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
+        self.web_view = QtWebKit.QWebView()
+        frame = self.web_view.page().mainFrame()
+        frame.setScrollBarPolicy(
+            QtCore.Qt.Vertical, QtCore.Qt.ScrollBarAlwaysOff)
+        frame.setScrollBarPolicy(
+            QtCore.Qt.Horizontal, QtCore.Qt.ScrollBarAlwaysOff)
 
         # noinspection PyUnresolvedReferences
-        self.htmlLoadedFlag = False
-        self.webView.loadFinished.connect(self.html_loaded_slot)
-        self.webView.setHtml(myHtml)
+        self.html_loaded_flag = False
+        self.web_view.loadFinished.connect(self.html_loaded_slot)
+        self.web_view.setHtml(html)
         my_counter = 0
         my_sleep_period = 0.1  # sec
         my_timeout = 20  # sec
-        while not self.htmlLoadedFlag and my_counter < my_timeout:
+        while not self.html_loaded_flag and my_counter < my_timeout:
             # Block until the event loop is done printing the page
             my_counter += my_sleep_period
             time.sleep(my_sleep_period)
             # noinspection PyArgumentList
             QtCore.QCoreApplication.processEvents()
 
-        if not self.htmlLoadedFlag:
+        if not self.html_loaded_flag:
             LOGGER.error('Failed to load html')
 
         # noinspection PyUnresolvedReferences
-        self.webView.loadFinished.disconnect(self.html_loaded_slot)
+        self.web_view.loadFinished.disconnect(self.html_loaded_slot)
 
     def html_loaded_slot(self, ok):
         """Slot called when the page is loaded.
+
+        :param ok: Flag indicating if the html is loaded.
+        :type ok: bool
         """
-        self.htmlLoadedFlag = ok
+        self.html_loaded_flag = ok
         LOGGER.debug('htmlLoadedSlot slot called')
         # noinspection PyUnresolvedReferences
 
@@ -211,46 +215,46 @@ class HtmlRenderer():
             None
 
         """
-        myFilePath = filename
+        file_path = filename
 
         if filename is None:
-            myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
+            file_path = unique_filename(suffix='.pdf', dir=temp_dir())
 
         try:
-            mySummaryTable = keywords['impact_summary']
+            summary_table = keywords['impact_summary']
         except KeyError:
-            mySummaryTable = None
+            summary_table = None
 
-        myAttributionTable = impact_attribution(keywords)
+        attribution_table = impact_attribution(keywords)
 
         try:
-            myFullTable = keywords['impact_table']
+            full_table = keywords['impact_table']
         except KeyError:
-            myFullTable = None
+            full_table = None
 
         try:
-            myAggregationTable = keywords['postprocessing_report']
+            aggregation_table = keywords['postprocessing_report']
         except KeyError:
-            myAggregationTable = None
+            aggregation_table = None
 
-        myHtml = ''
-        if mySummaryTable != myFullTable and mySummaryTable is not None:
-            myHtml = '<h2>%s</h2>' % self.tr('Summary Table')
-            myHtml += mySummaryTable
-            if myAggregationTable is not None:
-                myHtml += myAggregationTable
-            if myAttributionTable is not None:
-                myHtml += myAttributionTable.to_html()
-            myHtml += '<h2>%s</h2>' % self.tr('Detailed Table')
-            myHtml += myFullTable
+        html = ''
+        if summary_table != full_table and summary_table is not None:
+            html = '<h2>%s</h2>' % self.tr('Summary Table')
+            html += summary_table
+            if aggregation_table is not None:
+                html += aggregation_table
+            if attribution_table is not None:
+                html += attribution_table.to_html()
+            html += '<h2>%s</h2>' % self.tr('Detailed Table')
+            html += full_table
         else:
-            if myAggregationTable is not None:
-                myHtml = myAggregationTable
-            if myFullTable is not None:
-                myHtml += myFullTable
-            if myAttributionTable is not None:
-                myHtml += myAttributionTable.to_html()
+            if aggregation_table is not None:
+                html = aggregation_table
+            if full_table is not None:
+                html += full_table
+            if attribution_table is not None:
+                html += attribution_table.to_html()
 
-        # myNewFilePath should be the same as myFilePath
-        myNewFilePath = self.to_pdf(myHtml, myFilePath)
-        return myNewFilePath
+        # new_file_path should be the same as file_path
+        new_file_path = self.to_pdf(html, file_path)
+        return new_file_path
