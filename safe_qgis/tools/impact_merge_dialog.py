@@ -81,15 +81,39 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         #pydevd.settrace(
         #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
+        # The image table reports
+        # Ex. {"jakarta barat": "/home/jakarta barat.png",
+        #      "jakarta timur": "/home/jakarta timur.png"}
         self.image_reports = {}
-        self.template_path = ':/plugins/inasafe/merged_report.qpt'
-        self.composition = None
-        self.get_layers()
 
-        # The chosen layers to be processed
+        # Template Path for composer
+        self.aggregated_template_path = (
+            ':/plugins/inasafe/aggregated_merged_report.qpt'
+        )
+        self.entire_area_template_path = (
+            ':/plugins/inasafe/entire_area_merged_report.qpt'
+        )
+
+        # Temporary attribute name for atlas generation
+        self.temp_attribute_name = 'IMG_PATH'
+
+        # The composition instance to be used for atlas generation
+        self.composition = None
+
+        # All the chosen layers to be processed
         self.first_impact_layer = None
         self.second_impact_layer = None
         self.chosen_aggregation_layer = None
+
+        # Get all current project layers for combo box
+        self.get_project_layers()
+
+        # Add Entire Area Option to Aggregated Layer:
+        add_ordered_combo_item(
+            self.aggregation_layer,
+            self.tr('Entire Area'),
+            None
+        )
 
     def show_info(self):
         """Show usage info to the user."""
@@ -166,7 +190,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                         'Please choose two different impact layers to continue.'
                     ))
                 return
+            # Process Merging
             self.merge()
+
+            # Process is Done
             self.done(QDialog.Accepted)
         except CanceledImportDialogError:
             # don't show anything because this exception raised
@@ -180,8 +207,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 str(myEx))
 
     def validate(self):
-        """Verify that there are two layers and they are different."""
-
+        """Verify that there are two impact layers and they are different."""
         if self.first_layer.currentIndex() < 0:
             return False
 
@@ -250,15 +276,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Validate all the layer
         # 1st and 2nd layer should have postprocessing_report keywords
-        # Aggregation layer should have aggregation attribute keywords
+        # If Aggregation layer not Entire Area, it should have aggregation
+        # attribute keywords
         try:
             first_report = self.keyword_io.read_keywords(
                 self.first_impact_layer, 'postprocessing_report')
             second_report = self.keyword_io.read_keywords(
                 self.second_impact_layer, 'postprocessing_report')
-            self.keyword_io.read_keywords(
-                self.chosen_aggregation_layer, 'aggregation attribute')
-
+            if self.chosen_aggregation_layer is not None:
+                self.keyword_io.read_keywords(
+                    self.chosen_aggregation_layer,
+                    'aggregation attribute')
         except (NoKeywordsFoundError, KeywordNotFoundError):
             # Skip if there are no keywords at all
             # Skip if the impact_summary keyword is missing
@@ -293,14 +321,18 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             image_report.save(path)
             self.image_reports[aggregation_area.lower()] = path
 
-        # Add attribute image report path to aggregation layer
-        self.add_image_path_to_aggregation_layer()
+        # If it is aggregated by aggregation layer, then generate atlas report
+        if self.chosen_aggregation_layer is not None:
+            # Add attribute image report path to aggregation layer
+            self.add_image_path_to_aggregation_layer()
 
-        # Generate Atlas Report
-        self.generate_atlas_reports()
+        # Generate Reports:
+        self.generate_reports()
 
-        # Clean our work, delete attribute image report from aggregation layer
-        self.delete_image_path_from_aggregation_layer()
+        # If it is aggregated by aggregation layer, clean some works
+        if self.chosen_aggregation_layer is not None:
+            # Delete attribute image report from aggregation layer
+            self.delete_image_path_from_aggregation_layer()
 
         # Hohoho finish doing it!
         QtGui.qApp.restoreOverrideCursor()
@@ -395,7 +427,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         return html_reports
 
-    def get_layers(self):
+    def get_project_layers(self):
         """Obtain a list of impact layers and aggregation layer currently
         loaded in QGIS."""
         #noinspection PyArgumentList
@@ -407,6 +439,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         if len(layers) == 0:
             return
 
+        # Clear the combo box first
         self.first_layer.clear()
         self.second_layer.clear()
         self.aggregation_layer.clear()
@@ -431,13 +464,20 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             add_ordered_combo_item(self.first_layer, layer.name(), layer)
             add_ordered_combo_item(self.second_layer, layer.name(), layer)
 
-    def generate_atlas_reports(self):
-        """Generate atlas reports for each aggregation unit."""
+    def generate_reports(self):
+        """Generate reports for each aggregation unit.
+
+        If it is aggregated then use atlas generation.
+        If it is not (entire area) then just use composition.
+        """
         # Setup Map Renderer and set all the layer
         renderer = QgsMapRenderer()
         layer_set = [self.first_impact_layer.id(),
-                     self.second_impact_layer.id(),
-                     self.chosen_aggregation_layer.id()]
+                     self.second_impact_layer.id()]
+
+        if self.chosen_aggregation_layer is not None:
+            layer_set.append(self.chosen_aggregation_layer.id())
+
         renderer.setLayerSet(layer_set)
 
         # Create composition
@@ -446,42 +486,64 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Get Map
         atlas_map = composition.getComposerItemById('impact-map')
 
-        # Create atlas composition:
-        atlas = QgsAtlasComposition(composition)
+        if self.chosen_aggregation_layer is None:
+            table_image_report = composition.\
+                getComposerItemById('report_image')
 
-        # Set coverage layer: map will be clipped by features from this layer:
-        atlas.setCoverageLayer(self.chosen_aggregation_layer)
-
-        # set which composer map will be used for printing atlas
-        atlas.setComposerMap(atlas_map)
-
-        # set output filename pattern
-        atlas.setFilenamePattern("KAB_NAME")
-
-        # Start rendering
-        atlas.beginRender()
-
-        # Iterate all aggregation unit in aggregation layer
-        for i in range(0, atlas.numFeatures()):
-            atlas.prepareForFeature(i)
+            # Self.image_reports must have only 1 key value pair
+            area_title = self.image_reports.keys()[0]
+            image_path = self.image_reports[area_title]
+            table_image_report.setPictureFile(image_path)
             path = '%s/%s.pdf' % (
                 str(self.output_directory.text()),
-                atlas.currentFilename())
+                area_title)
             composition.exportAsPDF(path)
+        else:
+            # Create atlas composition:
+            atlas = QgsAtlasComposition(composition)
 
-        # End of rendering
-        atlas.endRender()
+            # Set coverage layer
+            # Map will be clipped by features from this layer:
+            atlas.setCoverageLayer(self.chosen_aggregation_layer)
+
+            # set which composer map will be used for printing atlas
+            atlas.setComposerMap(atlas_map)
+
+            # set output filename pattern
+            atlas.setFilenamePattern("KAB_NAME")
+
+            # Start rendering
+            atlas.beginRender()
+
+            # Iterate all aggregation unit in aggregation layer
+            for i in range(0, atlas.numFeatures()):
+                atlas.prepareForFeature(i)
+                path = '%s/%s.pdf' % (
+                    str(self.output_directory.text()),
+                    atlas.currentFilename())
+                composition.exportAsPDF(path)
+
+            # End of rendering
+            atlas.endRender()
 
     def load_template(self, renderer):
         """Load composer template for merged report.
 
+        There are 2 templates. The template that is choosen based on
+        aggregated or not
+
         :param renderer: Map renderer
+        :type renderer: QgsMapRenderer
         """
         # Create Composition
         composition = QgsComposition(renderer)
 
         # Read template content
-        template_file = QtCore.QFile(self.template_path)
+        if self.chosen_aggregation_layer is not None:
+            template_file = QtCore.QFile(self.aggregated_template_path)
+        else:
+            template_file = QtCore.QFile(self.entire_area_template_path)
+
         template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
         template_content = template_file.readAll()
         template_file.close()
@@ -498,25 +560,24 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def add_image_path_to_aggregation_layer(self):
         """Add an attribute containing image path to aggregation layer."""
         self.chosen_aggregation_layer.startEditing()
-        attribute_name = 'IMG_PATH'
 
         provider = self.chosen_aggregation_layer.dataProvider()
         capabilities = provider.capabilities()
         # Check if the attribute is already there. Delete it first!
-        index = provider.fieldNameIndex(attribute_name)
+        index = provider.fieldNameIndex(self.temp_attribute_name)
         if index != -1:
             if capabilities & QgsVectorDataProvider.DeleteAttributes:
                 result = provider.deleteAttributes([index])
                 if not result:
                     raise Exception('Error deleting attribute: %s.'
-                                    % attribute_name)
+                                    % self.temp_attribute_name)
         # Add Attribute
         if capabilities & QgsVectorDataProvider.AddAttributes:
             result = provider.addAttributes(
-                [QgsField(attribute_name, QVariant.String)])
+                [QgsField(self.temp_attribute_name, QVariant.String)])
             if not result:
                 raise Exception('Error adding attribute:%s.'
-                                % attribute_name)
+                                % self.temp_attribute_name)
 
         aggregation_attribute = 'KAB_NAME'
         aggregation_attribute_index = \
@@ -524,7 +585,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Modify the attribute of img_path
         img_path_attribute_index = self.chosen_aggregation_layer\
-            .dataProvider().fieldNameIndex(attribute_name)
+            .dataProvider().fieldNameIndex(self.temp_attribute_name)
         if capabilities & QgsVectorDataProvider.ChangeAttributeValues:
             features = self.chosen_aggregation_layer.getFeatures()
             for feature in features:
@@ -540,22 +601,21 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         else:
             raise Exception('Attribute %s can not be modified.'
-                            % attribute_name)
+                            % self.temp_attribute_name)
 
         self.chosen_aggregation_layer.commitChanges()
 
     def delete_image_path_from_aggregation_layer(self):
         """Delete an attribute containing image path from aggregation layer."""
         self.chosen_aggregation_layer.startEditing()
-        attribute_name = 'IMG_PATH'
 
         provider = self.chosen_aggregation_layer.dataProvider()
         capabilities = provider.capabilities()
         # Check if the attribute is already there. Delete it first!
-        index = provider.fieldNameIndex(attribute_name)
+        index = provider.fieldNameIndex(self.temp_attribute_name)
         if index != -1:
             if capabilities & QgsVectorDataProvider.DeleteAttributes:
                 result = provider.deleteAttributes([index])
                 if not result:
                     raise Exception('Error deleting attribute: %s.'
-                                    % attribute_name)
+                                    % self.temp_attribute_name)

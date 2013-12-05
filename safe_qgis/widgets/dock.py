@@ -164,7 +164,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.zoom_to_impact_flag = True
         self.hide_exposure_flag = True
 
-        self.read_settings()  # get_layers called by this
+        self.read_settings()  # get_project_layers called by this
         self.aggregator = None
         self.postprocessor_manager = None
         self.function_parameters = None
