@@ -1,9 +1,9 @@
 <Composer title="2" visible="1">
  <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="210" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="0" generateWorldFile="0">
-  <ComposerLabel valign="128" labelText="&lt;img src=&quot;file:///[% &quot;image_path&quot; %]&quot; style=&quot;width: auto; height: 100%; display: block; margin: 0px 0px 0px auto;&quot; />" htmlState="2" halign="4" margin="1">
+  <ComposerLabel valign="128" labelText="&lt;img src=&quot;file://[%&quot;IMG_PATH&quot;%]&quot; style=&quot;height: 100%; display:block; margin-left:auto; margin-right:auto&quot; />" htmlState="2" halign="4" margin="1">
    <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="191.033" x="8.89799" transparency="0" y="154.541" rotation="0" height="128.281" positionMode="0" frame="true" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="3.42617" uuid="{24cb34b7-6490-4112-8618-5c89365ece9e}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="191.333" x="8.74799" transparency="0" y="149" rotation="0" height="133.972" positionMode="0" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="2.13423" uuid="{24cb34b7-6490-4112-8618-5c89365ece9e}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -61,7 +61,7 @@
      <fontColor red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <ComposerItem width="190.276" x="9.744" transparency="0" y="37.0786" rotation="0" height="106.612" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.46449" uuid="{71190f45-5208-4f99-98fd-978465aaf747}" id="impact-map" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="190.276" x="9.744" transparency="0" y="37.0786" rotation="0" height="106.612" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.13423" uuid="{71190f45-5208-4f99-98fd-978465aaf747}" id="impact-map" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -69,10 +69,19 @@
   <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="4" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="191.091" x="9.20267" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="3.69458" uuid="{bacb5ad8-2b7f-4d40-8fb7-3294d1c4f663}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="191.091" x="9.20267" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.00291" uuid="{bacb5ad8-2b7f-4d40-8fb7-3294d1c4f663}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
+  <ComposerHtml resizeMode="0" url="">
+   <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
+    <ComposerItem width="0" x="175.744" transparency="0" y="27.9593" rotation="0" height="0" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{aff0570a-1d5b-4ece-a2db-710536ab19a6}" id="" background="true" blendMode="0" positionLock="false">
+     <FrameColor alpha="255" red="0" blue="0" green="0"/>
+     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+    </ComposerItem>
+   </ComposerFrame>
+  </ComposerHtml>
  </Composition>
+ <Atlas hideCoverage="false" coverageLayer="jakarta_buildings_osm20130303154556596" fixedScale="false" composerMap="0" singleFile="false" filenamePattern="'output_'||$feature" enabled="true" filterFeatures="false" sortFeatures="false" margin="0.1"/>
 </Composer>
