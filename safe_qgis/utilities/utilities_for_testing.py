@@ -363,7 +363,7 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
             test_pixel = test_image.pixel(x, y)
             if control_pixel != test_pixel:
                 mismatch_count += 1
-                difference_image.setPixel(y, y, QtGui.qRgb(255, 0, 0))
+                difference_image.setPixel(x, y, QtGui.qRgb(255, 0, 0))
     difference_path = unique_filename(
         prefix='difference-%s' % os.path.basename(control_image_path),
         suffix='.png',
