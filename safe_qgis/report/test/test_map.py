@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Tests for map creation in QGIS plugin.**
 
 """
@@ -8,6 +9,10 @@ __date__ = '01/11/2010'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
+
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 
 import unittest
 import os
@@ -21,10 +26,10 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
+
+from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
-    load_layer)
+from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.report.map import Map
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

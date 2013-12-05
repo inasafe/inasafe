@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
@@ -10,18 +11,25 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import os
 import unittest
 import logging
 
+from safe.common.testing import get_qgis_app
+
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app, load_layer, check_images)
+    load_layer, check_images)
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.utilities.keyword_io import KeywordIO
 
@@ -35,131 +43,134 @@ class HtmlRendererTest(unittest.TestCase):
         """Runs before each test."""
         pass
 
-    def sampleHtml(self, theLineCount=100):
+    def sample_html(self, line_count=100):
         """Helper function to generate some sample html.
 
-        Args:
-            theLineCount: How many lines of fake html you want. Default is 100.
+        :param line_count: How many lines of fake html you want.
+            Default is 100.
+        :type line_count: int
 
-        Returns:
-            str: an html snippet containing a table with theLineCount rows.
-
-        Raises:
-            None
+        :returns: Html snippet containing a table with line_count rows.
+        :type: str
         """
-        myHtml = ('<table class="table table-striped condensed'
-                  ' bordered-table">'
-                  '<thead>'
-                  '<tr>'
-                  '<th>Wilayah</th>'
-                  '<th>Jumlah Penduduk</th>'
-                  '<th>Jumlah Penduduk yang Mungkin</th>'
-                  '<th>Wilayah</th>'
-                  '<th>Jumlah Penduduk</th>'
-                  '<th>Jumlah Penduduk yang Mungkin</th>'
-                  '</tr>'
-                  '</thead>')
+        html = (
+            '<table class="table table-striped condensed'
+            ' bordered-table">'
+            '<thead>'
+            '<tr>'
+            '<th>Wilayah</th>'
+            '<th>Jumlah Penduduk</th>'
+            '<th>Jumlah Penduduk yang Mungkin</th>'
+            '<th>Wilayah</th>'
+            '<th>Jumlah Penduduk</th>'
+            '<th>Jumlah Penduduk yang Mungkin</th>'
+            '</tr>'
+            '</thead>')
         i = 0
-        while i < theLineCount:
+        while i < line_count:
             i += 1
-            myHtml += ('<tr>'
-                       '<td>%(i)s</td><td>%(i)s</td><td>%(i)s</td>'
-                       '<td>%(i)s</td><td>%(i)s</td><td>%(i)s</td>'
-                       '</tr>') % {'i': i}
-        myHtml += '</table>'
-        return myHtml
+            html += (
+                '<tr>'
+                '<td>%(i)s</td><td>%(i)s</td><td>%(i)s</td>'
+                '<td>%(i)s</td><td>%(i)s</td><td>%(i)s</td>'
+                '</tr>') % {'i': i}
+        html += '</table>'
+        return html
 
     def test_printToPdf(self):
         """Test that we can render some html to a pdf (most common use case).
         """
         LOGGER.debug('InaSAFE HtmlRenderer testing printToPdf')
-        myHtml = self.sampleHtml()
-        myPageDpi = 300
-        myRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='testHtmlTable',
-                                 suffix='.pdf',
-                                 dir=temp_dir('test'))
-        LOGGER.debug(myPath)
-        # If it fails myNewPath will come back as None
-        myNewPath = myRenderer.to_pdf(myHtml, myPath)
-        myMessage = 'Rendered output does not exist: %s' % myNewPath
-        assert os.path.exists(myNewPath), myMessage
+        html = self.sample_html()
+        page_dpi = 300
+        renderer = HtmlRenderer(page_dpi)
+        path = unique_filename(
+            prefix='testHtmlTable',
+            suffix='.pdf',
+            dir=temp_dir('test'))
+        LOGGER.debug(path)
+        # If it fails new_path will come back as None
+        new_path = renderer.to_pdf(html, path)
+        message = 'Rendered output does not exist: %s' % new_path
+        assert os.path.exists(new_path), message
         # Also it should use our desired output file name
-        myMessage = 'Incorrect path - got: %s\nExpected: %s\n' % (
-            myNewPath, myPath)
-        assert myNewPath == myPath, myMessage
+        message = 'Incorrect path - got: %s\nExpected: %s\n' % (
+            new_path, path)
+        assert new_path == path, message
         # pdf rendering is non deterministic so we can't do a hash check
         # test_renderComposition renders just the image instead of pdf
         # so we hash check there and here we just do a basic minimum file
         # size check.
-        mySize = os.stat(myNewPath).st_size
-        myExpectedSize = 16600  # as rendered on linux ub 13.04-64 (MB)
-        myMessage = ('Expected rendered map pdf to be at least %s, got %s. '
-                     'Please update myExpectedSize if the rendered output '
-                     'is acceptible on your system.'
-                     % (myExpectedSize, mySize))
-        assert mySize >= myExpectedSize, myMessage
+        size = os.stat(new_path).st_size
+        expected_size = 16600  # as rendered on linux ub 13.04-64 (MB)
+        message = (
+            'Expected rendered map pdf to be at least %s, got %s. '
+            'Please update expected_size if the rendered output '
+            'is acceptible on your system.'
+            % (expected_size, size))
+        assert size >= expected_size, message
 
-    def test_printImpactTable(self):
+    def test_print_impact_table(self):
         """Test that we can render html from impact table keywords."""
         LOGGER.debug('InaSAFE HtmlRenderer testing printImpactTable')
-        myFilename = 'test_floodimpact.tif'
-        myLayer, _ = load_layer(myFilename)
-        myMessage = 'Layer is not valid: %s' % myFilename
-        assert myLayer.isValid(), myMessage
-        myPageDpi = 300
-        myHtmlRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='impact_table',
-                                 suffix='.pdf',
-                                 dir=temp_dir('test'))
-        myKeywordIO = KeywordIO()
-        myKeywords = myKeywordIO.read_keywords(myLayer)
-        myPath = myHtmlRenderer.print_impact_table(myKeywords,
-                                                 filename=myPath)
-        myMessage = 'Rendered output does not exist: %s' % myPath
-        assert os.path.exists(myPath), myMessage
+        file_name = 'test_floodimpact.tif'
+        layer, _ = load_layer(file_name)
+        message = 'Layer is not valid: %s' % file_name
+        assert layer.isValid(), message
+        page_dpi = 300
+        html_renderer = HtmlRenderer(page_dpi)
+        path = unique_filename(
+            prefix='impact_table',
+            suffix='.pdf',
+            dir=temp_dir('test'))
+        keyword_io = KeywordIO()
+        keywords = keyword_io.read_keywords(layer)
+        path = html_renderer.print_impact_table(keywords, filename=path)
+        message = 'Rendered output does not exist: %s' % path
+        assert os.path.exists(path), message
         # pdf rendering is non deterministic so we can't do a hash check
         # test_renderComposition renders just the image instead of pdf
         # so we hash check there and here we just do a basic minimum file
         # size check.
-        mySize = os.stat(myPath).st_size
-        myExpectedSizes = [20936,  # as rendered on linux ub 12.04 64
-                           21523,  # as rendered on linux ub 12.10 64
-                           20605,  # as rendered on linux ub 13.04 64
-                           14220,  # as rendered on linux ub 13.04 64 MB
-                           21527,  # as rendered on Jenkins post 22 June 2013
-                           377191,  # as rendered on OSX
-                           252699L,  # as rendered on Windows 7 64 bit
-                           251782L,  # as rendered on Windows 8 64 bit amd
-                           21491,  # as rendered on Slackware64 14.0
-                           ]
-        print 'Output pdf to %s' % myPath
-        self.assertIn(mySize, myExpectedSizes)
+        size = os.stat(path).st_size
+        expected_sizes = [
+            20936,  # as rendered on linux ub 12.04 64
+            21523,  # as rendered on linux ub 12.10 64
+            20605,  # as rendered on linux ub 13.04 64
+            14220,  # as rendered on linux ub 13.04 64 MB
+            21527,  # as rendered on Jenkins post 22 June 2013
+            377191,  # as rendered on OSX
+            252699L,  # as rendered on Windows 7 64 bit
+            251782L,  # as rendered on Windows 8 64 bit amd
+            21491,  # as rendered on Slackware64 14.0
+        ]
+        print 'Output pdf to %s' % path
+        self.assertIn(size, expected_sizes)
 
-    def test_renderHtmlToImage(self):
+    def test_render_html_toI_image(self):
         """Test that we can render html to a pixmap."""
         LOGGER.debug('InaSAFE HtmlRenderer testing renderHtmlToImage')
-        myHtml = self.sampleHtml(20)
-        LOGGER.debug(myHtml)
-        myPageDpi = 300
-        myRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(
+        html = self.sample_html(20)
+        LOGGER.debug(html)
+        page_dpu = 300
+        renderer = HtmlRenderer(page_dpu)
+        path = unique_filename(
             prefix='testHtmlToImage',
             suffix='.png',
             dir=temp_dir('test'))
-        LOGGER.debug(myPath)
-        myWidth = 250
-        myPixmap = myRenderer.html_to_image(myHtml, myWidth)
-        assert not myPixmap.isNull()
-        LOGGER.debug(myPixmap.__class__)
-        myPixmap.save(myPath)
-        myMessage = 'Rendered output does not exist: %s' % myPath
-        assert os.path.exists(myPath), myMessage
+        LOGGER.debug(path)
+        width = 250
+        pixmap = renderer.html_to_image(html, width)
+        assert not pixmap.isNull()
+        LOGGER.debug(pixmap.__class__)
+        pixmap.save(path)
+        message = 'Rendered output does not exist: %s' % path
+        assert os.path.exists(path), message
 
-        myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, myMessage = check_images(
-            'renderHtmlToImage', myPath, myTolerance)
-        assert myFlag, myMessage + '\n' + myPath
+        tolerance = 1000  # to allow for version number changes in disclaimer
+        flag, message = check_images(
+            'renderHtmlToImage', path, tolerance)
+        assert flag, message + '\n' + path
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(HtmlRendererTest, 'test')

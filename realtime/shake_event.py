@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -76,7 +77,6 @@ from qgis.core import (
     QgsFeatureRequest)
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins

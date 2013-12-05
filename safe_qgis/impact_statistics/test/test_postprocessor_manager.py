@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -34,7 +35,6 @@ sys.path.append(pardir)
 #from qgis.core import QgsMapLayerRegistry
 
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS)

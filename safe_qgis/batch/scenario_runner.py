@@ -67,11 +67,11 @@ def extractPath(theScenarioFilePath, thePath):
     :param theScenarioFilePath:
     :param thePath:
     """
-    myFilename = os.path.split(thePath)[-1]  # In case path was absolute
-    myBaseName, _ = os.path.splitext(myFilename)
+    filename = os.path.split(thePath)[-1]  # In case path was absolute
+    myBaseName, _ = os.path.splitext(filename)
     theLongPath = os.path.join(theScenarioFilePath, thePath)
-    myPath = os.path.normpath(theLongPath)
-    return myPath, myBaseName
+    path = os.path.normpath(theLongPath)
+    return path, myBaseName
 
 
 def addLayers(scenario_dir, paths):
@@ -91,33 +91,33 @@ def addLayers(scenario_dir, paths):
         * FileNotFoundError - occurs when file not found
     """
 
-    myPaths = []
+    paths = []
     if isinstance(paths, str):
-        myPaths.append(extractPath(scenario_dir, paths))
+        paths.append(extractPath(scenario_dir, paths))
     elif isinstance(paths, list):
-        myPaths = [extractPath(scenario_dir, path) for path in paths]
+        paths = [extractPath(scenario_dir, path) for path in paths]
     else:
-        myMessage = "Paths must be string or list not %s" % type(paths)
-        raise TypeError(myMessage)
+        message = "Paths must be string or list not %s" % type(paths)
+        raise TypeError(message)
 
-    for myPath, myBaseName in myPaths:
-        myExt = os.path.splitext(myPath)[-1]
+    for path, myBaseName in paths:
+        myExt = os.path.splitext(path)[-1]
 
-        if not os.path.exists(myPath):
-            raise FileNotFoundError('File not found: %s' % myPath)
+        if not os.path.exists(path):
+            raise FileNotFoundError('File not found: %s' % path)
 
         if myExt in ['.asc', '.tif']:
-            LOGGER.debug("add raster layer %s" % myPath)
-            myLayer = QgsRasterLayer(myPath, myBaseName)
+            LOGGER.debug("add raster layer %s" % path)
+            layer = QgsRasterLayer(path, myBaseName)
             # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+            QgsMapLayerRegistry.instance().addMapLayer(layer)
         elif myExt in ['.shp']:
-            LOGGER.debug("add vector layer %s" % myPath)
-            myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+            LOGGER.debug("add vector layer %s" % path)
+            layer = QgsVectorLayer(path, myBaseName, 'ogr')
             # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+            QgsMapLayerRegistry.instance().addMapLayer(layer)
         else:
-            raise Exception('File %s had illegal extension' % myPath)
+            raise Exception('File %s had illegal extension' % path)
 
 
 def setFunctionId(theFunctionId, theDock=None):
@@ -160,15 +160,15 @@ def setAggregationLayer(theAggregationLayer, theDock=None):
         return False
 
     for myCount in range(0, theDock.cboAggregation.count()):
-        myLayerId = theDock.cboAggregation.itemData(
+        layerId = theDock.cboAggregation.itemData(
             myCount, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
-        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
 
-        if myLayer is None:
+        if layer is None:
             continue
 
-        if myLayer.source() == theAggregationLayer:
+        if layer.source() == theAggregationLayer:
             theDock.cboAggregation.setCurrentIndex(myCount)
             return True
     return False

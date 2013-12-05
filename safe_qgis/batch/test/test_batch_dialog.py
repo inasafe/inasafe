@@ -17,13 +17,18 @@ __date__ = '24/06/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import unittest
 
 from safe_qgis.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app, SCENARIO_DIR)
+    SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.widgets.dock import Dock
+from safe.common.testing import get_qgis_app
 
 
 # Get QGis app handle
@@ -35,7 +40,7 @@ class BatchDialogTest(unittest.TestCase):
     """Tests for the script/batch runner dialog.
     """
 
-    def test_loadBatchDialog(self):
+    def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.
         """
         dialog = BatchDialog(PARENT, IFACE, DOCK)
@@ -44,9 +49,9 @@ class BatchDialogTest(unittest.TestCase):
         dialog.source_directory.setText(SCENARIO_DIR)
         dialog.source_directory.textChanged.emit(SCENARIO_DIR)
         print "Testing using : %s" % SCENARIO_DIR
-        numberRow = dialog.table.rowCount()
+        number_row = dialog.table.rowCount()
         self.assertTrue(
-            numberRow == 2, 'Num scenario is wrong. I got %s' % numberRow)
+            number_row == 2, 'Num scenario is wrong. I got %s' % number_row)
         out_path = dialog.output_directory.text()
         self.assertTrue(
             out_path == SCENARIO_DIR, 'Output directory is %s' % out_path)
@@ -58,7 +63,7 @@ class BatchDialogTest(unittest.TestCase):
         self.assertTrue(
             out_path != SCENARIO_DIR, 'Output directory is %s' % out_path)
 
-    def test_runSingleScenario(self):
+    def test_run_single_scenario(self):
         """Test run single scenario."""
         dialog = BatchDialog(PARENT, IFACE, DOCK)
         dialog.show_results_popup = False
@@ -73,7 +78,7 @@ class BatchDialogTest(unittest.TestCase):
         status = dialog.table.item(1, 1).text()
         self.assertTrue(status == 'Report Ok')
 
-    def test_runAllScenario(self):
+    def test_run_all_scenario(self):
         """Test run single scenario.
         """
         dialog = BatchDialog(PARENT, IFACE, DOCK)

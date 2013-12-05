@@ -34,7 +34,7 @@ from unittest import TestCase, skipIf
 from PyQt4 import QtCore
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe.common.testing import TESTDATA, BOUNDDATA
+from safe.common.testing import TESTDATA, BOUNDDATA, get_qgis_app
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -49,7 +49,6 @@ from safe_qgis.safe_interface import (
     format_int, HAZDATA, UNITDATA)
 
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
     set_canvas_crs,
     set_padang_extent,
     set_batemans_bay_extent,

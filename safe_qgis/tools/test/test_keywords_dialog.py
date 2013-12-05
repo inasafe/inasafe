@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '21/02/2011'
@@ -37,7 +38,7 @@ from qgis.core import (
 
 from third_party.odict import OrderedDict
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app, test_data_path)
+    test_data_path)
 from safe_qgis.safe_interface import (
     read_file_keywords,
     unique_filename,

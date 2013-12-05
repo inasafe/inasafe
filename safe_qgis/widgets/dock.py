@@ -1644,15 +1644,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'The following keywords are defined for the active layer:')))
         self.pbnPrint.setEnabled(False)
         keywords_list = m.BulletedList()
-        for myKeyword in keywords:
-            value = keywords[myKeyword]
+        for keyword in keywords:
+            value = keywords[keyword]
 
             # Translate titles explicitly if possible
-            if myKeyword == 'title':
+            if keyword == 'title':
                 value = safeTr(value)
                 # Add this keyword to report
             key = m.ImportantText(
-                self.tr(myKeyword.capitalize()))
+                self.tr(keyword.capitalize()))
             value = str(value)
             keywords_list.add(m.Text(key, value))
 

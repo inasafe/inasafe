@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '17/10/2013'
@@ -31,7 +32,7 @@ sys.path.append(pardir)
 from safe_qgis.impact_statistics.zonal_stats import (
     calculate_zonal_stats, intersection_box)
 from safe_qgis.utilities.utilities_for_testing import (
-    load_layer, get_qgis_app)
+    load_layer )
 from safe_qgis.safe_interface import UNITDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

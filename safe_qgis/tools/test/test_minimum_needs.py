@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'imajimatika@gmail.com'
 __date__ = '14/09/2012'
@@ -26,7 +27,6 @@ from qgis.core import QgsMapLayerRegistry
 from safe_qgis.safe_interface import safe_read_layer
 from safe_qgis.tools.minimum_needs import MinimumNeeds
 from safe_qgis.safe_interface import UNITDATA
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -72,11 +72,11 @@ class MinimumNeedsTest(unittest.TestCase):
     #     TODO: Make this test useful - Tim
     #     """
     #     #print shapefile_path
-    #     myLayer = QgsVectorLayer(
+    #     layer = QgsVectorLayer(
     #         os.path.basename(shapefile_path),
     #         os.path.dirname(shapefile_path),
     #         'ogr')
-    #     myLayer = None
+    #     layer = None
     #     dialog = MinimumNeeds(PARENT)
     #     dialog.accept()
 

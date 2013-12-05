@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
+
 __author__ = 'bungcip@gmail.com'
 __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
@@ -28,7 +30,6 @@ from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
 from safe_qgis.tools.osm_downloader import OsmDownloader
 from safe_qgis.utilities.utilities import download_url
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
     assert_hash_for_file)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

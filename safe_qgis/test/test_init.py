@@ -51,15 +51,15 @@ class TestInit(unittest.TestCase):
         parser = ConfigParser.ConfigParser()
         parser.optionxform = str
         parser.read(myFilePath)
-        myMessage = 'Cannot find a section named "general" in %s' % myFilePath
-        assert parser.has_section('general'), myMessage
+        message = 'Cannot find a section named "general" in %s' % myFilePath
+        assert parser.has_section('general'), message
         myMetadata.extend(parser.items('general'))
 
         for md in myRequiredMetadata:
-            myMessage = 'Cannot find myMetadata "%s" '\
+            message = 'Cannot find myMetadata "%s" '\
                         'in myMetadata source (%s).' % (md, myFilePath)
             assert md in dict(myMetadata) or dict(myMetadata)[md], \
-                myMessage
+                message
 
 if __name__ == '__main__':
     unittest.main()

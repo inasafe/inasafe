@@ -128,8 +128,8 @@ class Plugin:
             self.translator = QTranslator()
             myResult = self.translator.load(myTranslationPath)
             if not myResult:
-                myMessage = 'Failed to load translation for %s' % myLocaleName
-                raise TranslationLoadError(myMessage)
+                message = 'Failed to load translation for %s' % myLocaleName
+                raise TranslationLoadError(message)
             # noinspection PyTypeChecker
             QCoreApplication.installTranslator(self.translator)
 
@@ -316,9 +316,9 @@ class Plugin:
             QIcon(':/plugins/inasafe/save-as-scenario.svg'),
             self.tr('Save current scenario'), self.iface.mainWindow())
 
-        myMessage = self.tr('Save current scenario to text file')
-        self.actionSaveScenario.setStatusTip(myMessage)
-        self.actionSaveScenario.setWhatsThis(myMessage)
+        message = self.tr('Save current scenario to text file')
+        self.actionSaveScenario.setStatusTip(message)
+        self.actionSaveScenario.setWhatsThis(message)
         # noinspection PyUnresolvedReferences
         self.actionSaveScenario.triggered.connect(self.save_scenario)
         self.add_action(self.actionSaveScenario)
@@ -371,12 +371,12 @@ class Plugin:
                 # Check if it is really one of our modules i.e. exists in the
                 #  plugin directory
                 myTokens = myModule.split('.')
-                myPath = ''
+                path = ''
                 for myToken in myTokens:
-                    myPath += os.path.sep + myToken
+                    path += os.path.sep + myToken
                 myParent = os.path.abspath(os.path.join(
                     __file__, os.path.pardir, os.path.pardir))
-                myFullPath = os.path.join(myParent, myPath + '.py')
+                myFullPath = os.path.join(myParent, path + '.py')
                 if os.path.exists(os.path.abspath(myFullPath)):
                     LOGGER.debug('Removing: %s' % myModule)
                     myModules.append(myModule)

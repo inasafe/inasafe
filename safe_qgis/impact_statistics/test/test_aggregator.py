@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 from safe_qgis import breakdown_defaults
 
 __author__ = 'Marco Bernasocchi'
@@ -40,7 +41,6 @@ from safe_qgis.safe_interface import (
     safe_read_layer)
 
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS)

@@ -332,12 +332,12 @@ class Aggregator(QtCore.QObject):
             raise InvalidAggregatorError
 
         if self.hazard_layer is None:
-            myMessage = self.tr('Error: hazard layer is not provided.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: hazard layer is not provided.')
+            raise InsufficientParametersError(message)
 
         if self.exposure_layer is None:
-            myMessage = self.tr('Error: exposure layer is not provided.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: exposure layer is not provided.')
+            raise InsufficientParametersError(message)
 
         if not self.aoi_mode:
             if is_polygon_layer(self.hazard_layer):

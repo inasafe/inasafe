@@ -16,9 +16,13 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import unittest
+from safe.common.testing import get_qgis_app
 # Needed though not used below
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.utilities.help import _show_local_help
 from safe_qgis.exceptions import HelpFileMissingError
 

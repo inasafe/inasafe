@@ -411,11 +411,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             entries[selected_item] = selected_item
         index = 0
         selected_index = 0
-        for myKey, myValue in entries.iteritems():
-            if myValue == selected_item or myKey == selected_item:
+        for key, value in entries.iteritems():
+            if value == selected_item or key == selected_item:
                 selected_index = index
             index += 1
-            self.cboSubcategory.addItem(myValue, myKey)
+            self.cboSubcategory.addItem(value, key)
         self.cboSubcategory.setCurrentIndex(selected_index)
         self.cboSubcategory.blockSignals(False)
 
@@ -673,8 +673,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.set_category(keywords['category'])
             keywords.pop('category')
 
-        for myKey in keywords.iterkeys():
-            self.add_list_entry(myKey, str(keywords[myKey]))
+        for key in keywords.iterkeys():
+            self.add_list_entry(key, str(keywords[key]))
 
         # now make the rest of the safe_qgis reflect the list entries
         self.update_controls_from_list()

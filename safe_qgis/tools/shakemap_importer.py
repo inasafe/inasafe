@@ -229,17 +229,17 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         """Autoconnect slot activated when open input tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        myFilename = QFileDialog.getOpenFileName(
+        filename = QFileDialog.getOpenFileName(
             self, self.tr('Input file'), 'grid.xml',
             self.tr('Raw grid file(*.xml)'))
-        self.input_path.setText(myFilename)
+        self.input_path.setText(filename)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_open_output_tool_clicked(self):
         """Autoconnect slot activated when open output tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        myFilename = QFileDialog.getSaveFileName(
+        filename = QFileDialog.getSaveFileName(
             self, self.tr('Output file'), 'grid.tif',
             self.tr('Raster file(*.tif)'))
-        self.output_path.setText(myFilename)
+        self.output_path.setText(filename)
