@@ -34,7 +34,7 @@ from safe_qgis.utilities.styling import (
 from safe_qgis.utilities.utilities import get_error_message
 from safe_qgis.utilities.utilities_for_testing import (
     test_data_path,
-    load_layer )
+    load_layer)
 from safe_qgis.exceptions import StyleError
 from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
 
