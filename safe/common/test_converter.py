@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Converter Test Cases.**
@@ -25,28 +26,33 @@ from safe.common.testing import TESTDATA
 
 
 class ConverterTest(unittest.TestCase):
-    def test_convertGridToRaster(self):
+    def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)
         """
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
-        my_output_raster = unique_filename(prefix='result_grid',
-                                           suffix='.tif',
-                                           dir=temp_dir('test'))
+        my_output_raster = unique_filename(
+            prefix='result_grid',
+            suffix='.tif',
+            dir=temp_dir('test'))
         my_result = convert_mmi_data(my_grid_path, my_output_raster)
         my_expected_result = my_output_raster.replace('.tif', '-nearest.tif')
-        assert my_result == my_expected_result, 'Result path not as expected'
-        is_exist = os.path.exists(my_result)
-        assert is_exist, 'File result : %s is not exist' % my_result
-        is_exist = os.path.exists(my_result[:-3] + 'keywords')
-        assert is_exist, 'File result : %s is not exist' % \
-                         (my_result[:-3] + 'keywords')
-        is_exist = os.path.exists(my_result[:-3] + 'qml')
-        assert is_exist, 'File result : %s is not exist' % \
-                         (my_result[:-3] + 'qml')
-    test_convertGridToRaster.slow = True
+        self.assertEqual(
+            my_result, my_expected_result,
+            'Result path not as expected')
+        exists = os.path.exists(my_result)
+        self.assertTrue(exists, 'File result : %s is not exist' % my_result)
+        exists = os.path.exists(my_result[:-3] + 'keywords')
+        self.assertTrue(
+            exists,
+            'File result : %s does not exist' % my_result[:-3] + 'keywords')
+        exists = os.path.exists(my_result[:-3] + 'qml')
+        self.assertTrue(
+            exists,
+            'File result : %s does not exist' % my_result[:-3] + 'qml')
+    test_convert_grid_to_raster.slow = True
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ConverterTest, 'test')
+    suite = unittest.makeSuite(ConverterTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
