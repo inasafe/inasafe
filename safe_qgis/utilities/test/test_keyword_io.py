@@ -78,7 +78,7 @@ class KeywordIOTest(unittest.TestCase):
         message = "Got: %s\nExpected: %s" % (hash_value, expected_hash)
         assert hash_value == expected_hash, message
 
-    def test_writeReadKeywordFromUri(self):
+    def test_write_read_keyword_from_uri(self):
         """Test we can set and get keywords for a non local datasource"""
         handle, filename = tempfile.mkstemp(
             '.db', 'keywords_', temp_dir())
@@ -127,14 +127,14 @@ class KeywordIOTest(unittest.TestCase):
             #we expect this outcome so good!
             pass
 
-    def test_areKeywordsFileBased(self):
+    def test_are_keywords_file_based(self):
         """Can we correctly determine if keywords should be written to file or
         to database?"""
         assert not self.keyword_io.are_keywords_file_based(self.sqlite_layer)
         assert self.keyword_io.are_keywords_file_based(self.raster_layer)
         assert self.keyword_io.are_keywords_file_based(self.vector_layer)
 
-    def test_readRasterFileKeywords(self):
+    def test_read_raster_file_keywords(self):
         """Can we read raster file keywords using generic readKeywords method
         """
         keywords = self.keyword_io.read_keywords(self.raster_layer)
@@ -144,7 +144,7 @@ class KeywordIOTest(unittest.TestCase):
             keywords, expected_keywords, source)
         assert keywords == expected_keywords, message
 
-    def test_readVectorFileKeywords(self):
+    def test_read_vector_file_keywords(self):
         """Test read vector file keywords with the generic readKeywords method.
          """
         keywords = self.keyword_io.read_keywords(self.vector_layer)
@@ -154,7 +154,7 @@ class KeywordIOTest(unittest.TestCase):
             keywords, expected_keywords, source)
         assert keywords == expected_keywords, message
 
-    def test_appendKeywords(self):
+    def test_append_keywords(self):
         """Can we append file keywords with the generic readKeywords method."""
         layer, _ = clone_padang_layer()
         new_keywords = {'category': 'exposure', 'test': 'TEST'}
@@ -179,9 +179,10 @@ class KeywordIOTest(unittest.TestCase):
                 new_keywords))
             assert keywords[key] == value, message
 
-    def test_readDBKeywords(self):
+    def test_read_db_keywords(self):
         """Can we read sqlite keywords with the generic readKeywords method
         """
+        # noinspection PyUnresolvedReferences
         local_path = os.path.join(
             os.path.dirname(__file__), '../../..///', 'jk.sqlite')
         path = os.path.join(TESTDATA, 'test_keywords.db')
@@ -213,6 +214,6 @@ class KeywordIOTest(unittest.TestCase):
         assert keywords == expected_keywords, message
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(KeywordIOTest, 'test')
+    suite = unittest.makeSuite(KeywordIOTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
