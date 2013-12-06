@@ -86,6 +86,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         #      "jakarta timur": "/home/jakarta timur.png"}
         self.image_reports = {}
 
+        # Whether to merge entire area or aggregated
+        self.entire_area_mode = False
+
         # Template Path for composer
         self.aggregated_template_path = (
             ':/plugins/inasafe/aggregated_merged_report.qpt'
@@ -105,15 +108,20 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.second_impact_layer = None
         self.chosen_aggregation_layer = None
 
+        # Report from first and second impact layer keywords:
+        self.first_postprocessing_report = None
+        self.second_postprocessing_report = None
+
         # Get all current project layers for combo box
         self.get_project_layers()
 
         # Add Entire Area Option to Aggregated Layer:
-        add_ordered_combo_item(
-            self.aggregation_layer,
+        self.aggregation_layer.insertItem(
+            0,
             self.tr('Entire Area'),
             None
         )
+        self.aggregation_layer.setCurrentIndex(0)
 
     def show_info(self):
         """Show usage info to the user."""
@@ -181,17 +189,25 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         try:
             self.save_state()
             self.require_directory()
-            if not self.validate():
-                #noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-                QMessageBox.warning(
-                    self,
-                    self.tr('InaSAFE error'),
-                    self.tr(
-                        'Please choose two different impact layers to continue.'
-                    ))
-                return
+            self.get_all_chosen_layers()
+            self.validate()
+            # Flag whether to merge entire area or based on aggregation unit
+            if self.chosen_aggregation_layer is None:
+                self.entire_area_mode = True
+
             # Process Merging
+            QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.merge()
+            QtGui.qApp.restoreOverrideCursor()
+
+            # Hohoho finish doing it. Give user success information!
+            # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
+            QMessageBox.information(
+                self,
+                self.tr('InaSAFE Information'),
+                self.tr(
+                    'Reports from merging two impact layers is generated '
+                    'successfully.'))
 
             # Process is Done
             self.done(QDialog.Accepted)
@@ -200,29 +216,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # when user canceling the import process directly
             pass
         except Exception as myEx:
+            QtGui.qApp.restoreOverrideCursor()
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 self,
-                self.tr("InaSAFE Merge Impact Tools error"),
+                self.tr("InaSAFE Merge Impact Tools Error"),
                 str(myEx))
-
-    def validate(self):
-        """Verify that there are two impact layers and they are different."""
-        if self.first_layer.currentIndex() < 0:
-            return False
-
-        if self.second_layer.currentIndex() < 0:
-            return False
-
-        first_layer = self.first_layer.itemData(
-            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
-        second_layer = self.second_layer.itemData(
-            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
-
-        if first_layer.id() == second_layer.id():
-            return False
-
-        return True
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -239,9 +238,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         if os.path.exists(path):
             return
 
-        title = self.tr("Directory %s not exist") % path
+        title = self.tr("Directory %s does not exist") % path
         question = self.tr(
-            "Directory %s not exist. Do you want to create it?"
+            "Directory %s does not exist. Do you want to create it?"
         ) % path
         # noinspection PyCallByClass,PyTypeChecker
         answer = QMessageBox.question(
@@ -253,19 +252,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 os.makedirs(path)
             else:
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
-                QMessageBox.warning(
+                QMessageBox.information(
                     self,
-                    self.tr('InaSAFE error'),
-                    self.tr('Output directory can not be empty.'))
+                    self.tr('InaSAFE Merge Impact Tools Error'),
+                    self.tr('Output directory cannot be empty.'))
                 raise CanceledImportDialogError()
 
         else:
             raise CanceledImportDialogError()
 
-    def merge(self):
-        """Merge the postprocessing_report from each impact."""
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-
+    def get_all_chosen_layers(self):
+        """Get all chosen layers after user clicks merge."""
         # Get all the chosen layer
         self.first_impact_layer = self.first_layer.itemData(
             self.first_layer.currentIndex(), QtCore.Qt.UserRole)
@@ -274,14 +271,25 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.chosen_aggregation_layer = self.aggregation_layer.itemData(
             self.aggregation_layer.currentIndex(), QtCore.Qt.UserRole)
 
-        # Validate all the layer
+    def validate(self):
+        """Verify that there are two impact layers and they are different."""
+        if self.first_layer.currentIndex() < 0:
+            raise Exception(self.tr('First layer is not valid.'))
+
+        if self.second_layer.currentIndex() < 0:
+            raise Exception(self.tr('First layer is not valid.'))
+
+        if self.first_impact_layer.id() == self.second_impact_layer.id():
+            raise Exception(
+                self.tr('First layer must be different with second layer''.'))
+
         # 1st and 2nd layer should have postprocessing_report keywords
         # If Aggregation layer not Entire Area, it should have aggregation
         # attribute keywords
         try:
-            first_report = self.keyword_io.read_keywords(
+            self.first_postprocessing_report = self.keyword_io.read_keywords(
                 self.first_impact_layer, 'postprocessing_report')
-            second_report = self.keyword_io.read_keywords(
+            self.second_postprocessing_report = self.keyword_io.read_keywords(
                 self.second_impact_layer, 'postprocessing_report')
             if self.chosen_aggregation_layer is not None:
                 self.keyword_io.read_keywords(
@@ -292,9 +300,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Skip if the impact_summary keyword is missing
             raise
 
+    def merge(self):
+        """Merge the postprocessing_report from each impact."""
         # Ensure there is always only a single root element or minidom moans
-        first_report = '<body>' + first_report + '</body>'
-        second_report = '<body>' + second_report + '</body>'
+        first_report = '<body>' + self.first_postprocessing_report + '</body>'
+        second_report = '<body>' + self.second_postprocessing_report + '</body>'
 
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
@@ -322,7 +332,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.image_reports[aggregation_area.lower()] = path
 
         # If it is aggregated by aggregation layer, then generate atlas report
-        if self.chosen_aggregation_layer is not None:
+        if not self.entire_area_mode:
             # Add attribute image report path to aggregation layer
             self.add_image_path_to_aggregation_layer()
 
@@ -330,21 +340,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.generate_reports()
 
         # If it is aggregated by aggregation layer, clean some works
-        if self.chosen_aggregation_layer is not None:
+        if not self.entire_area_mode:
             # Delete attribute image report from aggregation layer
             self.delete_image_path_from_aggregation_layer()
-
-        # Hohoho finish doing it!
-        QtGui.qApp.restoreOverrideCursor()
-
-        # Give user success information
-        # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
-        QMessageBox.information(
-            self,
-            self.tr('InaSAFE Information'),
-            self.tr(
-                'Reports from merging two impact layers is generated '
-                'successfully.'))
 
     @staticmethod
     def generate_report_dictionary_from_dom(html_dom):
@@ -475,7 +473,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         layer_set = [self.first_impact_layer.id(),
                      self.second_impact_layer.id()]
 
-        if self.chosen_aggregation_layer is not None:
+        if not self.entire_area_mode:
             layer_set.append(self.chosen_aggregation_layer.id())
 
         renderer.setLayerSet(layer_set)
@@ -486,7 +484,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Get Map
         atlas_map = composition.getComposerItemById('impact-map')
 
-        if self.chosen_aggregation_layer is None:
+        if not self.entire_area_mode:
             table_image_report = composition.\
                 getComposerItemById('report_image')
 
@@ -539,7 +537,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         composition = QgsComposition(renderer)
 
         # Read template content
-        if self.chosen_aggregation_layer is not None:
+        if not self.entire_area_mode:
             template_file = QtCore.QFile(self.aggregated_template_path)
         else:
             template_file = QtCore.QFile(self.entire_area_template_path)
