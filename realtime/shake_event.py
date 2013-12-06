@@ -39,7 +39,7 @@ from gdalconst import GA_ReadOnly
 from sftp_shake_data import SftpShakeData
 
 
-# TODO: I think QCoreApplication is needed for tr() check hefore removing
+# TODO: I think QCoreApplication is needed for tr() check before removing
 from PyQt4.QtCore import (
     QCoreApplication,
     QObject,
@@ -105,8 +105,17 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakeEvent(QObject):
-    """The ShakeEvent class encapsulates behaviour and data relating to an
-    earthquake, including epicenter, magnitude etc."""
+    """Behaviour and data relating to an earthquake.
+
+    Including epicenter, magnitude etc.
+
+    .. todo:: There is a lot of duplicated code in here -  code that was
+        refactored into safe.common.shake_grid_converter and never removed
+        here. we should resolve that by removing it here and then simply
+        using an instance of ShakeGridConverter here when needed.
+
+
+    """
 
     def __init__(self,
                  event_id=None,
@@ -119,8 +128,8 @@ class ShakeEvent(QObject):
         :param event_id: (Optional) Id of the event. Will be used to
                 fetch the ShakeData for this event (either from cache or from
                 ftp server as required). The grid.xml file in the unpacked
-                event will be used to intialise the state of the ShakeEvent
-                instance.
+                event will be used to intialise the state of the
+                a ShakeGridConvert instance.
                 If no event id is supplied, the most recent event recorded
                 on the server will be used.
 
@@ -2340,7 +2349,7 @@ class ShakeEvent(QObject):
     def __str__(self):
         """The unicode representation for an event object's state.
 
-        :return: A string describing the ShakeEvent instance
+        :return: A string describing the ShakeGridConverter instance
         :rtype: str
 
         :raises: None

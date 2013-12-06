@@ -70,7 +70,7 @@ from safe.common.utilities import (
     format_int,
     get_thousand_separator,
     get_decimal_separator)
-from safe.common.converter import convert_mmi_data
+from safe.common.shake_grid_converter import convert_mmi_data
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow

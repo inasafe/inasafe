@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import unittest
-from converter import convert_mmi_data
+from shake_grid_converter import convert_mmi_data
 from safe.common.utilities import unique_filename, temp_dir
 
 from safe.common.testing import TESTDATA
