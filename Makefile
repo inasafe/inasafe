@@ -303,7 +303,7 @@ jenkins-test: testdata clean
 	@echo
 	@echo "----------------------------------"
 	@echo "Regression Test Suite for Jenkins"
-	@echo " against QGIS 1.x"
+	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis || :
 
