@@ -31,6 +31,7 @@ from qgis.core import (QgsMapLayerRegistry,
                        QgsComposition,
                        QgsVectorDataProvider,
                        QgsField,
+                    QgsComposerMap,
                        QgsAtlasComposition)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
@@ -45,6 +46,7 @@ from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.report.html_renderer import HtmlRenderer
 
+from pydev import pydevd  # pylint: disable=F0401
 INFO_STYLE = styles.INFO_STYLE
 
 
@@ -473,9 +475,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         layer_set = [self.first_impact_layer.id(),
                      self.second_impact_layer.id()]
 
+        # If aggregated, append chosen aggregation layer
         if not self.entire_area_mode:
             layer_set.append(self.chosen_aggregation_layer.id())
 
+        # Set Layer set to renderer
         renderer.setLayerSet(layer_set)
 
         # Create composition
@@ -484,7 +488,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Get Map
         atlas_map = composition.getComposerItemById('impact-map')
 
-        if not self.entire_area_mode:
+        if self.entire_area_mode:
             table_image_report = composition.\
                 getComposerItemById('report_image')
 
@@ -527,8 +531,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def load_template(self, renderer):
         """Load composer template for merged report.
 
-        There are 2 templates. The template that is choosen based on
-        aggregated or not
+        There are 2 templates. The template that is chosen based on
+        whether it is aggregated or not
 
         :param renderer: Map renderer
         :type renderer: QgsMapRenderer
