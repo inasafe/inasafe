@@ -183,7 +183,7 @@ class SftpShakeData:
     def get_list_event_ids(self):
         """Get all event id indicated by folder in remote_path
         """
-        dirs = self.sftpclient.getListing(my_func=is_event_id)
+        dirs = self.sftpclient.get_listing(my_func=is_event_id)
         if len(dirs) == 0:
             raise Exception('List event is empty')
         return dirs

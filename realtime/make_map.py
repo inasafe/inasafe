@@ -115,7 +115,7 @@ elif len(sys.argv) == 2:
 #        myFtpClient = FtpClient()
         mySftpClient = SFtpClient()
 #        myListing = myFtpClient.get_listing()
-        myListing = mySftpClient.getListing(my_func=is_event_id)
+        myListing = mySftpClient.get_listing(my_func=is_event_id)
         for myEvent in myListing:
             print myEvent
         sys.exit(0)
