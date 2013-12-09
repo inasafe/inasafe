@@ -674,25 +674,6 @@ def safe_to_qgis_layer(layer):
     if not layer.is_inasafe_spatial_object:
         raise Exception(myMessage)
 
-    # Get associated filename and symbolic name
-    myFilename = layer.get_filename()
-    myName = layer.get_name()
-
-    myQGISLayer = None
-    # Read layer
-    if layer.is_vector:
-        myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-    elif layer.is_raster:
-        myQGISLayer = QgsRasterLayer(myFilename, myName)
-
-    # Verify that new qgis layer is valid
-    if myQGISLayer.isValid():
-        return myQGISLayer
-    else:
-        # noinspection PyUnresolvedReferences
-        myMessage = tr('Loaded impact layer "%s" is not valid') % myFilename
-        raise Exception(myMessage)
-
 
 def download_url(manager, url, output_path, progress_dialog=None):
     """Download file from url.
@@ -836,7 +817,7 @@ def read_impact_layer(impact_layer):
 
 
 def map_qrc_to_file(match, res_copy_dir):
-    """map a qrc:/ path to its correspondent file:/// and creates it
+    r"""Map a qrc:/ path to its correspondent file:/// and creates it.
 
     for example qrc:/plugins/inasafe/ajax-loader.gif
     is converted to file:////home/marco/.qgis2/python/plugins/
@@ -867,7 +848,7 @@ def map_qrc_to_file(match, res_copy_dir):
         if not os.path.isfile(res_path):
             if not os.path.exists(res_copy_dir):
                 os.makedirs(res_copy_dir)
-            # copy from qrc to filesystem
+                # copy from qrc to filesystem
             #noinspection PyTypeChecker
             copy_successful = QFile.copy(
                 ':/plugins/inasafe/%s' % res_alias, res_path)
@@ -888,7 +869,7 @@ def open_in_browser(file_path):
 
 
 def html_to_file(html, file_path=None, open_browser=False):
-    """Save the html to an html file adapting the paths to the filesystem
+    """Save the html to an html file adapting the paths to the filesystem.
 
     if a file_path is passed, it is used, if not a unique_filename is
     generated.
@@ -909,7 +890,7 @@ def html_to_file(html, file_path=None, open_browser=False):
         file_path = unique_filename(suffix='.html')
 
     file_dir = os.path.dirname(file_path)
-    reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
+    reg_exp = re.compile(r'qrc:/plugins/inasafe/([-./ \w]*)')
     html = reg_exp.sub(lambda match: map_qrc_to_file(match, file_dir),
                        html)
 

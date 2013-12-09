@@ -63,6 +63,7 @@ class TestShakeMap(unittest.TestCase):
         #TODO Downloaded data should be removed before each test
 
     def test_get_shake_map_input(self):
+        """Check that we can retrieve a shakemap 'inp' input file"""
         shake_event = '20110413170148'
         shake_data = ShakeData(shake_event)
         shakemap_file = shake_data.fetch_input()

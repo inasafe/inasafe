@@ -139,7 +139,6 @@ class ShakeData:
         input_file_name, output_file_name = self.file_names()
         file_list = [input_file_name, output_file_name]
         ftp_client = FtpClient()
-        return ftp_client.hasFiles(file_list)
         return ftp_client.has_files(file_list)
 
     def file_names(self):
@@ -276,7 +275,6 @@ class ShakeData:
         if self.event_id is None:
             raise EventUndefinedError('Event is none')
 
-        event_file = self.event_id + '.inp.zip'
         event_file = '%s.inp.zip' % self.event_id
         try:
             return self._fetch_file(event_file)
