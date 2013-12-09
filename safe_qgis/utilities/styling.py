@@ -120,7 +120,8 @@ def set_vector_graduated_style(vector_layer, style):
         # the border colour of a symbol can not be set otherwise
         # noinspection PyArgumentList
         try:
-            border_color = QtGui.QColor(style_class['border_color'])
+            value = style_class['border_color']
+            border_color = QtGui.QColor(value)
         except KeyError:
             border_color = color
 
@@ -139,12 +140,14 @@ def set_vector_graduated_style(vector_layer, style):
             pass
 
         try:
-            symbol_layer.setBorderWidth(style_class['border_width'])
+            value = style_class['border_color']
+            symbol_layer.setBorderWidth(value)
         except (NameError, KeyError):
             # use QGIS default border size
             # NameError is when symbol_layer is not defined (lines for example)
-            # KeyError is when border_width is not defined
-            pass
+            # KeyError is when borderWidth is not defined
+            if hasattr(symbol_layer, 'setBorderWidth'):
+                symbol_layer.setBorderWidth(0)
 
         # set data defined properties
         try:

@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
@@ -29,8 +30,7 @@ sys.path.append(pardir)
 from PyQt4.QtGui import QWidget
 
 from qgis.gui import QgsMapCanvas
-from safe_qgis.test.qgis_interface import QgisInterface
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
+from safe.common.qgis_interface import QgisInterface
 from safe_qgis.plugin import Plugin
 from safe_qgis.safe_interface import safeTr
 
@@ -51,9 +51,9 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.setup_i18n('id')
         myTranslation = myPlugin.tr(myUntranslatedString)
-        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
+        message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     (myUntranslatedString, myTranslation, myExpectedString)
-        assert myTranslation == myExpectedString, myMessage
+        assert myTranslation == myExpectedString, message
 
     def Xtest_ImpactFunctionI18n(self):
         """Library translations are working."""
@@ -66,9 +66,9 @@ class PluginTest(unittest.TestCase):
         myPlugin.setup_i18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
         myTranslation = safeTr('A volcano eruption')
-        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
+        message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     ('A volcano eruption', myTranslation, myExpectedString)
-        assert myTranslation == myExpectedString, myMessage
+        assert myTranslation == myExpectedString, message
 
     def Xtest_Afrikaans(self):
         """Test that Afrikaans translations are working"""
@@ -90,9 +90,9 @@ class PluginTest(unittest.TestCase):
         myUntranslatedString = 'Temporarily Closed'
         myExpectedString = 'Tydelik gesluit'  # afrikaans
         myTranslation = tr(myUntranslatedString)
-        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
+        message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     (myUntranslatedString, myTranslation, myExpectedString)
-        assert myTranslation == myExpectedString, myMessage
+        assert myTranslation == myExpectedString, message
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)

@@ -17,13 +17,18 @@ __date__ = '24/06/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import unittest
 
 from safe_qgis.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app, SCENARIO_DIR)
+    SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.widgets.dock import Dock
+from safe.common.testing import get_qgis_app
 
 
 # Get QGis app handle
@@ -35,59 +40,60 @@ class BatchDialogTest(unittest.TestCase):
     """Tests for the script/batch runner dialog.
     """
 
-    def test_loadBatchDialog(self):
-        """Definitely, this is a test. Test for BatchDialog behaviour
+    def test_load_batch_dialog(self):
+        """Test for BatchDialog behaviour.
         """
-        myDialog = BatchDialog(PARENT, IFACE, DOCK)
-        myDialog.show_results_popup = False
-        myDialog.scenario_directory_radio.setChecked(True)
-        myDialog.source_directory.setText(SCENARIO_DIR)
-        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
+        dialog = BatchDialog(PARENT, IFACE, DOCK)
+        dialog.show_results_popup = False
+        dialog.scenario_directory_radio.setChecked(True)
+        dialog.source_directory.setText(SCENARIO_DIR)
+        dialog.source_directory.textChanged.emit(SCENARIO_DIR)
         print "Testing using : %s" % SCENARIO_DIR
-        numberRow = myDialog.table.rowCount()
-        assert numberRow == 2, 'Num scenario is wrong. I got %s' % numberRow
-        myOutputDir = myDialog.output_directory.text()
-        assert myOutputDir == SCENARIO_DIR, 'Output directory is ' + \
-                                            myOutputDir
-        myDialog.scenario_directory_radio.setChecked(False)
-        myDialog.output_directory.setText('not a dir')
-        myOutputDir = myDialog.output_directory.text()
-        myDialog.scenario_directory_radio.setText(SCENARIO_DIR + 'a')
-        myDialog.scenario_directory_radio.setText(SCENARIO_DIR)
-        assert myOutputDir != SCENARIO_DIR, 'Output directory is ' + \
-                                            myOutputDir
+        number_row = dialog.table.rowCount()
+        self.assertTrue(
+            number_row == 2, 'Num scenario is wrong. I got %s' % number_row)
+        out_path = dialog.output_directory.text()
+        self.assertTrue(
+            out_path == SCENARIO_DIR, 'Output directory is %s' % out_path)
+        dialog.scenario_directory_radio.setChecked(False)
+        dialog.output_directory.setText('not a dir')
+        out_path = dialog.output_directory.text()
+        dialog.scenario_directory_radio.setText(SCENARIO_DIR + 'a')
+        dialog.scenario_directory_radio.setText(SCENARIO_DIR)
+        self.assertTrue(
+            out_path != SCENARIO_DIR, 'Output directory is %s' % out_path)
 
-    def test_runSingleScenario(self):
+    def test_run_single_scenario(self):
         """Test run single scenario."""
-        myDialog = BatchDialog(PARENT, IFACE, DOCK)
-        myDialog.show_results_popup = False
-        myDialog.scenario_directory_radio.setChecked(False)
-        myDialog.source_directory.setText(SCENARIO_DIR)
-        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
-        myOutputDir = temp_dir()
-        myDialog.output_directory.setText(myOutputDir)
-        myDialog.table.selectRow(1)
-        myButton = myDialog.run_selected_button
-        myButton.click()
-        myStatus = myDialog.table.item(1, 1).text()
-        assert myStatus == 'Report Ok'
+        dialog = BatchDialog(PARENT, IFACE, DOCK)
+        dialog.show_results_popup = False
+        dialog.scenario_directory_radio.setChecked(False)
+        dialog.source_directory.setText(SCENARIO_DIR)
+        dialog.source_directory.textChanged.emit(SCENARIO_DIR)
+        out_path = temp_dir()
+        dialog.output_directory.setText(out_path)
+        dialog.table.selectRow(1)
+        button = dialog.run_selected_button
+        button.click()
+        status = dialog.table.item(1, 1).text()
+        self.assertTrue(status == 'Report Ok')
 
-    def test_runAllScenario(self):
+    def test_run_all_scenario(self):
         """Test run single scenario.
         """
-        myDialog = BatchDialog(PARENT, IFACE, DOCK)
-        myDialog.show_results_popup = False
-        myDialog.scenario_directory_radio.setChecked(False)
-        myDialog.source_directory.setText(SCENARIO_DIR)
-        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
-        myOutputDir = temp_dir()
-        myDialog.output_directory.setText(myOutputDir)
-        myButton = myDialog.run_all_button
-        myButton.click()
-        myStatus0 = myDialog.table.item(0, 1).text()
-        myStatus1 = myDialog.table.item(1, 1).text()
-        assert myStatus0 == 'Analysis Fail', myStatus0
-        assert myStatus1 == 'Report Ok', myStatus1
+        dialog = BatchDialog(PARENT, IFACE, DOCK)
+        dialog.show_results_popup = False
+        dialog.scenario_directory_radio.setChecked(False)
+        dialog.source_directory.setText(SCENARIO_DIR)
+        dialog.source_directory.textChanged.emit(SCENARIO_DIR)
+        out_path = temp_dir()
+        dialog.output_directory.setText(out_path)
+        button = dialog.run_all_button
+        button.click()
+        status0 = dialog.table.item(0, 1).text()
+        status1 = dialog.table.item(1, 1).text()
+        self.assertTrue(status0 == 'Analysis Fail', status0)
+        self.assertTrue(status1 == 'Report Ok', status1)
 
 
 if __name__ == '__main__':

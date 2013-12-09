@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '17/10/2013'
@@ -33,8 +34,7 @@ from safe_qgis.utilities.styling import (
 from safe_qgis.utilities.utilities import get_error_message
 from safe_qgis.utilities.utilities_for_testing import (
     test_data_path,
-    load_layer,
-    get_qgis_app)
+    load_layer)
 from safe_qgis.exceptions import StyleError
 from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
 
@@ -56,7 +56,7 @@ class StylingTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        myLayer, _ = load_layer('issue126.tif')
+        layer, _ = load_layer('issue126.tif')
 
         # Note the float quantity values below
         myStyleInfo = {'style_classes': [
@@ -65,41 +65,41 @@ class StylingTest(unittest.TestCase):
             dict(colour='#79C900', quantity=10.1, transparency=0)]}
 
         try:
-            setRasterStyle(myLayer, myStyleInfo)
+            setRasterStyle(layer, myStyleInfo)
         except Exception, e:
-            myMessage = (
+            message = (
                 'Setting style info with float based ranges should fail '
                 'gracefully.')
-            e.args = (e.args[0] + myMessage,)
+            e.args = (e.args[0] + message,)
             raise
         # Now validate the transparency values were set to 255 because
         # they are floats and we cant specify pixel ranges to floats
         # Note we don't test on the exact interval because 464c6171dd55
-        myValue1 = myLayer.renderer().rasterTransparency().alphaValue(1.2)
-        myValue2 = myLayer.renderer().rasterTransparency().alphaValue(1.5)
-        myMessage = ('Transparency should be ignored when style class'
+        value1 = layer.renderer().rasterTransparency().alphaValue(1.2)
+        value2 = layer.renderer().rasterTransparency().alphaValue(1.5)
+        message = ('Transparency should be ignored when style class'
                      ' quantities are floats')
-        assert myValue1 == myValue2 == 255, myMessage
+        assert value1 == value2 == 255, message
 
         # Now run the same test again for int intervals
         myStyleInfo['style_classes'] = [
             dict(colour='#38A800', quantity=2, transparency=100),
             dict(colour='#38A800', quantity=4, transparency=0),
             dict(colour='#79C900', quantity=10, transparency=0)]
-        myMessage = ('Setting style info with generate valid transparent '
+        message = ('Setting style info with generate valid transparent '
                      'pixel entries.')
         try:
-            setRasterStyle(myLayer, myStyleInfo)
+            setRasterStyle(layer, myStyleInfo)
         except:
-            raise Exception(myMessage)
+            raise Exception(message)
         # Now validate the transparency values were set to 255 because
         # they are floats and we cant specify pixel ranges to floats
-        myValue1 = myLayer.renderer().rasterTransparency().alphaValue(1)
-        myValue2 = myLayer.renderer().rasterTransparency().alphaValue(3)
-        myMessage1 = myMessage + 'Expected 0 got %i' % myValue1
-        myMessage2 = myMessage + 'Expected 255 got %i' % myValue2
-        assert myValue1 == 0, myMessage1
-        assert myValue2 == 255, myMessage2
+        value1 = layer.renderer().rasterTransparency().alphaValue(1)
+        value2 = layer.renderer().rasterTransparency().alphaValue(3)
+        message1 = message + 'Expected 0 got %i' % value1
+        message2 = message + 'Expected 255 got %i' % value2
+        assert value1 == 0, message1
+        assert value2 == 255, message2
 
         # Verify that setRasterStyle doesn't break when floats coincide with
         # integers
@@ -110,19 +110,19 @@ class StylingTest(unittest.TestCase):
             dict(colour='#79C900', quantity=10.0, transparency=0)]
 
         try:
-            setRasterStyle(myLayer, myStyleInfo)
+            setRasterStyle(layer, myStyleInfo)
         except Exception, e:
-            myMessage = (
+            message = (
                 'Broken: Setting style info with generate valid transparent '
                 'floating point pixel entries such as 2.0, 3.0')
-            e.args = (e.args[0] + myMessage,)
+            e.args = (e.args[0] + message,)
             raise
 
     def test_transparency_of_minimum_value(self):
         """Test that transparency of minimum value works when set to 100%
         """
         # This dataset has all cells with value 1.3
-        myLayer, _ = load_layer('issue126.tif')
+        layer, _ = load_layer('issue126.tif')
 
         # Note the float quantity values below
         myStyleInfo = {'style_classes': [
@@ -143,56 +143,55 @@ class StylingTest(unittest.TestCase):
              'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]}
 
         try:
-            setRasterStyle(myLayer, myStyleInfo)
+            setRasterStyle(layer, myStyleInfo)
         except Exception, e:
-            myMessage = '\nCould not create raster style'
-            e.args = (e.args[0] + myMessage,)
+            message = '\nCould not create raster style'
+            e.args = (e.args[0] + message,)
             raise
 
-        #myMessage = ('Should get a single transparency class for first style '
+        #message = ('Should get a single transparency class for first style '
         #             'class')
         myTransparencyList = (
-            myLayer.renderer().rasterTransparency().
+            layer.renderer().rasterTransparency().
             transparentSingleValuePixelList())
 
         self.assertEqual(len(myTransparencyList), 1)
 
-    def test_issue121(self):
+    def test_issue_121(self):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
-        myLayer, myType = load_layer('kecamatan_jakarta_osm_centroids.shp')
-        del myType
+        layer, layer_type = load_layer('kecamatan_jakarta_osm_centroids.shp')
+        del layer_type
         # Note the float quantity values below
-        myStyleInfo = {'target_field': 'KEPADATAN', 'style_classes': [
+        style_info = {'target_field': 'KEPADATAN', 'style_classes': [
             {'opacity': 1, 'max': 200, 'colour': '#fecc5c',
              'min': 45, 'label': 'Low', 'size': 1},
             {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
              'min': 201, 'label': 'Medium', 'size': 2},
             {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
              'min': 351, 'label': 'High', 'size': 3}]}
-        myMessage = 'Setting style with point sizes should work.'
-        try:
-            set_vector_graduated_style(myLayer, myStyleInfo)
-        except:
-            raise Exception(myMessage)
+
+        print 'Setting style with point sizes should work.'
+        set_vector_graduated_style(layer, style_info)
+
         # Now validate the size values were set as expected
 
         # new symbology - subclass of QgsFeatureRendererV2 class
-        myRenderer = myLayer.rendererV2()
-        myType = myRenderer.type()
-        assert myType == 'graduatedSymbol'
-        mySize = 1
-        for myRange in myRenderer.ranges():
-            mySymbol = myRange.symbol()
-            mySymbolLayer = mySymbol.symbolLayer(0)
-            myActualSize = mySymbolLayer.size()
-            myMessage = ((
+        renderer = layer.rendererV2()
+        layer_type = renderer.type()
+        assert layer_type == 'graduatedSymbol'
+        size = 1
+        for renderer_range in renderer.ranges():
+            symbol = renderer_range.symbol()
+            symbol_layer = symbol.symbolLayer(0)
+            actual_size = symbol_layer.size()
+            message = ((
                 'Expected symbol layer 0 for range %s to have'
                 ' a size of %s, got %s') %
-                (mySize, mySize, myActualSize))
-            assert mySize == myActualSize, myMessage
-            mySize += 1
+                (size, size, actual_size))
+            assert size == actual_size, message
+            size += 1
 
     def test_issue157(self):
         """Verify that we get the error class name back - issue #157
@@ -201,18 +200,18 @@ class StylingTest(unittest.TestCase):
         try:
             bbox_intersection('aoeu', 'oaeu', [])
         except BoundingBoxError, e:
-            myMessage = get_error_message(e)
+            message = get_error_message(e)
             myString = 'BoundingBoxError'
-            assert myString in myMessage.to_text(), myMessage
+            assert myString in message.to_text(), message
             myString = 'Western boundary'
-            assert myString in myMessage.to_text(), myMessage
+            assert myString in message.to_text(), message
 
     def test_issue230(self):
         """Verify that we give informative errors when style is not correct
            .. seealso:: https://github.com/AIFDR/inasafe/issues/230
         """
-        myPath = test_data_path('impact')
-        myVectorLayer, myType = load_layer('polygons_for_styling.shp', myPath)
+        path = test_data_path('impact')
+        myVectorLayer, myType = load_layer('polygons_for_styling.shp', path)
         del myType
         myStyle = {'legend_title': u'Population Count',
                    'target_field': 'population',
@@ -309,15 +308,15 @@ class StylingTest(unittest.TestCase):
 
     def testMmiColour(self):
         """Test that we can get a colour given an mmi number."""
-        myValues = range(0, 12)
+        values = range(0, 12)
         myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
                             '#55ffff', '#aaffff', '#fff000', '#ffa800',
                             '#ff7000', '#ff0000', '#D00', '#800']
         myResult = []
-        for myValue in myValues:
-            myResult.append(mmi_colour(myValue))
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
-        assert myResult == myExpectedResult, myMessage
+        for value in values:
+            myResult.append(mmi_colour(value))
+        message = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
+        assert myResult == myExpectedResult, message
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(StylingTest, 'test')

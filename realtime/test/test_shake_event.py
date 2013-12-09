@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
+
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '2/08/2012'
@@ -32,7 +34,6 @@ from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from realtime.utils import shakemap_extract_dir, shakemap_zip_dir, data_dir
 from realtime.shake_event import ShakeEvent
 # The logger is intialised in utils.py by init

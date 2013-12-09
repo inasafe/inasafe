@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'imajimatika@gmail.com'
 __date__ = '14/09/2012'
@@ -23,7 +24,6 @@ from PyQt4.QtGui import QDialogButtonBox
 
 from safe_qgis.tools.shakemap_importer import ShakemapImporter
 from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

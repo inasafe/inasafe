@@ -169,10 +169,10 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         :param title: title of dialog
         :type title: str, QString
         """
-        myPath = line_edit.text()
+        path = line_edit.text()
         # noinspection PyCallByClass,PyTypeChecker
         myNewPath = QFileDialog.getExistingDirectory(
-            self, title, myPath, QFileDialog.ShowDirsOnly)
+            self, title, path, QFileDialog.ShowDirsOnly)
         if myNewPath is not None and os.path.exists(myNewPath):
             line_edit.setText(myNewPath)
 
@@ -192,25 +192,25 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         # NOTE(gigih): need this line to remove existing rows
         self.table.setRowCount(0)
 
-        myPath = str(scenario_directory)
+        path = str(scenario_directory)
 
-        if not os.path.exists(myPath):
-            LOGGER.info('Scenario directory does not exist: %s' % myPath)
+        if not os.path.exists(path):
+            LOGGER.info('Scenario directory does not exist: %s' % path)
             return
 
         # only support .py and .txt files
-        for myFile in os.listdir(myPath):
+        for myFile in os.listdir(path):
             myExt = os.path.splitext(myFile)[1]
-            myAbsPath = os.path.join(myPath, myFile)
+            myAbsPath = os.path.join(path, myFile)
 
             if myExt == '.py':
                 append_row(self.table, str(myFile), myAbsPath)
             elif myExt == '.txt':
                 # insert scenarios from file into table widget
                 try:
-                    for myKey, myValue\
+                    for key, value\
                             in read_scenarios(myAbsPath).iteritems():
-                        append_row(self.table, myKey, myValue)
+                        append_row(self.table, key, value)
                     parsed_files.append(myFile)
                 except ParsingError:
                     unparsed_files.append(myFile)
@@ -258,23 +258,23 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         LOGGER.info('Run simple task' + str(theItem))
         scenarioDirectory = str(self.source_directory.text())
 
-        myPaths = []
+        paths = []
         if 'hazard' in theItem:
-            myPaths.append(theItem['hazard'])
+            paths.append(theItem['hazard'])
         if 'exposure' in theItem:
-            myPaths.append(theItem['exposure'])
+            paths.append(theItem['exposure'])
         if 'aggregation' in theItem:
-            myPaths.append(theItem['aggregation'])
+            paths.append(theItem['aggregation'])
 
         # always run in new project
         self.iface.newProject()
 
         try:
-            scenario_runner.addLayers(scenarioDirectory, myPaths)
+            scenario_runner.addLayers(scenarioDirectory, paths)
         except FileNotFoundError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
-                scenarioDirectory, myPaths))
+                scenarioDirectory, paths))
             return False
 
         # See if we have a preferred impact function
@@ -299,17 +299,17 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             myCoordinate = theItem['extent'].replace(' ', '').split(',')
             myCount = len(myCoordinate)
             if myCount != 4:
-                myMessage = 'Extent need exactly 4 value but got %s ' \
+                message = 'Extent need exactly 4 value but got %s ' \
                             'instead' % myCount
-                LOGGER.error(myMessage)
+                LOGGER.error(message)
                 return False
 
             # parse the value to float type
             try:
                 myCoordinate = [float(i) for i in myCoordinate]
             except ValueError as e:
-                myMessage = e.message
-                LOGGER.error(myMessage)
+                message = e.message
+                LOGGER.error(message)
                 return False
 
             # set the extent according the value
@@ -317,8 +317,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
             myExtent = QgsRectangle(*myCoordinate)
 
-            myMessage = 'set layer extent to %s ' % myExtent.asWktCoordinates()
-            LOGGER.info(myMessage)
+            message = 'set layer extent to %s ' % myExtent.asWktCoordinates()
+            LOGGER.info(message)
 
             self.iface.mapCanvas().setExtent(myExtent)
 
@@ -401,10 +401,10 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         currentTime = datetime.now().strftime('%Y%m%d%H%M%S')
         batchFileName = 'batch-report-' + currentTime + '.txt'
         myOutputDir = self.output_directory.text()
-        myPath = os.path.join(str(myOutputDir), batchFileName)
+        path = os.path.join(str(myOutputDir), batchFileName)
 
         try:
-            myReportFile = file(myPath, 'wt')
+            myReportFile = file(path, 'wt')
             myReportFile.write('InaSAFE Batch Report File\n')
             myReportFile.write(lineSeparator)
             for myLine in report:
@@ -416,8 +416,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             myReportFile.write(lineSeparator)
             myReportFile.close()
 
-            LOGGER.info('Log written to %s' % myPath)
-            return myPath
+            LOGGER.info('Log written to %s' % path)
+            return path
         except IOError:
             raise IOError
 
@@ -463,15 +463,15 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         # .. see also:: :func:`appendRow` to understand the next 2 lines
         myVariant = task_item.data(QtCore.Qt.UserRole)
-        myValue = myVariant[0]
+        value = myVariant[0]
 
         myResult = True
 
-        if isinstance(myValue, str):
-            myFilename = myValue
+        if isinstance(value, str):
+            filename = value
             # run script
             try:
-                self.run_script(myFilename)
+                self.run_script(filename)
                 # set status to 'OK'
                 status_item.setText(self.tr('Script OK'))
             except Exception as e:  # pylint: disable=W0703
@@ -481,12 +481,12 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 LOGGER.exception('Running macro failed. The exception: ' +
                                  str(e))
                 myResult = False
-        elif isinstance(myValue, dict):
-            myPath = str(self.output_directory.text())
+        elif isinstance(value, dict):
+            path = str(self.output_directory.text())
             myTitle = str(task_item.text())
 
             # Its a dict containing files for a scenario
-            myResult = self.run_scenario(myValue)
+            myResult = self.run_scenario(value)
             if not myResult:
                 status_item.setText(self.tr('Analysis Fail'))
             else:
@@ -501,14 +501,14 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
                     self.create_pdf(
-                        myTitle, myPath, myQGISImpactLayer, count, index)
+                        myTitle, path, myQGISImpactLayer, count, index)
                     status_item.setText(self.tr('Report Ok'))
                 except Exception:  # pylint: disable=W0703
-                    LOGGER.exception('Unable to render map: "%s"' % myValue)
+                    LOGGER.exception('Unable to render map: "%s"' % value)
                     status_item.setText(self.tr('Report Failed'))
                     myResult = False
         else:
-            LOGGER.exception('Data type not supported: "%s"' % myValue)
+            LOGGER.exception('Data type not supported: "%s"' % value)
             myResult = False
 
         self.disable_busy_cursor()
@@ -588,8 +588,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         # create table report pdf
         myHtmlRenderer = HtmlRenderer(myMap.page_dpi)
-        myKeywords = myMap.keyword_io.read_keywords(impact_layer)
-        myHtmlRenderer.print_impact_table(myKeywords, myTablePath)
+        keywords = myMap.keyword_io.read_keywords(impact_layer)
+        myHtmlRenderer.print_impact_table(keywords, myTablePath)
         LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 
     def show_parser_results(self, parsed_list, unparsed_list):
@@ -693,7 +693,7 @@ def read_scenarios(filename):
     """
 
     # Input checks
-    myFilename = os.path.abspath(filename)
+    filename = os.path.abspath(filename)
 
     myBlocks = {}
     myParser = ConfigParser()
@@ -702,20 +702,20 @@ def read_scenarios(filename):
     # if the content don't have section header
     # we use the filename.
     try:
-        myParser.read(myFilename)
+        myParser.read(filename)
     except MissingSectionHeaderError:
         myBaseName = os.path.basename(filename)
         myName = os.path.splitext(myBaseName)[0]
         mySection = '[%s]\n' % myName
-        myContent = mySection + open(myFilename).read()
+        myContent = mySection + open(filename).read()
         myParser.readfp(StringIO(myContent))
 
     # convert to dictionary
     for mySection in myParser.sections():
         myItems = myParser.items(mySection)
         myBlocks[mySection] = {}
-        for myKey, myValue in myItems:
-            myBlocks[mySection][myKey] = myValue
+        for key, value in myItems:
+            myBlocks[mySection][key] = value
 
     # Ok we have generated a structure that looks like this:
     # myBlocks = {{ 'foo' : { 'a': 'b', 'c': 'd'},
@@ -748,7 +748,7 @@ def append_row(table, label, data):
     # Make the value immutable.
     myVariant = (data,)
     # To retrieve it again you would need to do:
-    #myValue = myVariant.toPyObject()[0]
+    #value = myVariant.toPyObject()[0]
     myItem.setData(Qt.UserRole, myVariant)
 
     table.setItem(myRow, 0, myItem)

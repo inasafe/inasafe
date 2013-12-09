@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'ismailsunni@yahoo.co.id'
 __date__ = '12/10/2011'
@@ -20,7 +21,6 @@ import unittest
 import os
 import re
 
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import safeTr, get_function_title, get_plugins
 from PyQt4.QtCore import QCoreApplication, QTranslator
 
@@ -145,9 +145,9 @@ class SafeTranslationsTest(unittest.TestCase):
         QCoreApplication.installTranslator(translator)
 
         expected_msg = 'Tidak ada informasi gaya ditemukan pada lapisan ' \
-                       'myLayer'
+                       'layer'
         real_msg = QCoreApplication.translate(
-            "@default", 'No styleInfo was found for layer %s') % 'myLayer'
+            "@default", 'No styleInfo was found for layer %s') % 'layer'
         msg = 'expected %s but got %s' % (expected_msg, real_msg)
         assert expected_msg == real_msg, msg
 

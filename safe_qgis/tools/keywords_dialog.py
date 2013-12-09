@@ -358,7 +358,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del index
         item = self.cboSubcategory.itemData(
             self.cboSubcategory.currentIndex())
-        text = str(item)
+        text = str(item.toString())
         # I found that myText is 'Not Set' for every language
         if text == self.tr('Not Set') or text == 'Not Set':
             self.remove_item_by_key('subcategory')
@@ -411,11 +411,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             entries[selected_item] = selected_item
         index = 0
         selected_index = 0
-        for myKey, myValue in entries.iteritems():
-            if myValue == selected_item or myKey == selected_item:
+        for key, value in entries.iteritems():
+            if value == selected_item or key == selected_item:
                 selected_index = index
             index += 1
-            self.cboSubcategory.addItem(myValue, myKey)
+            self.cboSubcategory.addItem(value, key)
         self.cboSubcategory.setCurrentIndex(selected_index)
         self.cboSubcategory.blockSignals(False)
 
@@ -627,11 +627,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.lstKeywords.takeItem(counter)
                 break
 
-    def get_value_for_key(self, removal_key):
+    def get_value_for_key(self, lookup_key):
         """If key list contains a specific key, return its value.
 
-        :param removal_key: The key to search for
-        :type removal_key: str
+        :param lookup_key: The key to search for
+        :type lookup_key: str
 
         :returns: Value of key if matched otherwise none.
         :rtype: str
@@ -642,7 +642,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             tokens = text.split(':')
             key = str(tokens[0]).strip()
             value = str(tokens[1]).strip()
-            if removal_key == key:
+            if lookup_key == key:
                 return value
         return None
 
@@ -673,8 +673,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.set_category(keywords['category'])
             keywords.pop('category')
 
-        for myKey in keywords.iterkeys():
-            self.add_list_entry(myKey, str(keywords[myKey]))
+        for key in keywords.iterkeys():
+            self.add_list_entry(key, str(keywords[key]))
 
         # now make the rest of the safe_qgis reflect the list entries
         self.update_controls_from_list()

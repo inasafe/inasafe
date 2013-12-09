@@ -93,18 +93,18 @@ class MapLegend():
         """
         LOGGER.debug('InaSAFE Map Legend getLegend called')
         if self.layer is None:
-            myMessage = self.tr('Unable to make a legend when map generator '
+            message = self.tr('Unable to make a legend when map generator '
                                 'has no layer set.')
-            raise LegendLayerError(myMessage)
+            raise LegendLayerError(message)
         try:
             self.keywordIO.read_keywords(self.layer, 'impact_summary')
         except KeywordNotFoundError, e:
-            myMessage = self.tr('This layer does not appear to be an impact '
+            message = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
                                 'QGIS layers list or creating a new impact '
                                 'scenario before using the print tool.'
                                 '\nMessage: %s' % str(e))
-            raise Exception(myMessage)
+            raise Exception(message)
         if self.layer.type() == QgsMapLayer.VectorLayer:
             return self.vector_legend()
         else:
@@ -156,11 +156,11 @@ class MapLegend():
         else:
             LOGGER.debug('else')
             # type unknown
-            myMessage = self.tr('Unrecognised renderer type found for the '
+            message = self.tr('Unrecognised renderer type found for the '
                                 'impact layer. Please use one of these: '
                                 'single symbol, categorised symbol or '
                                 'graduated symbol and then try again.')
-            raise LegendLayerError(myMessage)
+            raise LegendLayerError(message)
         self.add_notes()
         return self.legendImage
 
@@ -180,16 +180,16 @@ class MapLegend():
         myLastValue = 0  # Making an assumption here...
         LOGGER.debug('Source: %s' % self.layer.source())
         for myItem in myRampItems:
-            myValue = myItem.value
+            value = myItem.value
             myLabel = myItem.label
             myColor = myItem.color
             self.add_class(
                 myColor,
                 minimum=myLastValue,
-                maximum=myValue,
+                maximum=value,
                 label=myLabel,
                 class_type='rasterStyle')
-            myLastValue = myValue
+            myLastValue = value
         self.add_notes()
         return self.legendImage
 

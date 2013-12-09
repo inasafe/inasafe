@@ -26,8 +26,11 @@ import logging
 import uuid
 import webbrowser
 
+#noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
+#noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
+#noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from qgis.core import (
@@ -305,12 +308,13 @@ def mm_to_points(mm, dpi):
     :param mm: A distance in millimeters.
     :type mm: int
 
+    :returns: mm converted value as points.
+    :rtype: int, float
+
     :param dpi: Dots per inch to use for the calculation (based on in the
         print / display medium).
-    :type dpi: int
+    :type dpi: int, float
 
-    :returns: mm converted value as points.
-    :rtype: int
     """
     inch_as_mm = 25.4
     points = (mm * dpi) / inch_as_mm
@@ -339,7 +343,7 @@ def dpi_to_meters(dpi):
     """Convert dots per inch (dpi) to dots per meters.
 
     :param dpi: Dots per inch in the print / display medium.
-    :type dpi: int
+    :type dpi: int, float
 
     :returns: dpi converted value.
     :rtype: int
@@ -603,7 +607,7 @@ def which(name, flags=os.X_OK):
     if sys.platform == 'darwin':  # Mac OS X
         gdal_prefix = (
             '/Library/Frameworks/GDAL.framework/'
-            'Versions/1.10/Programs/')
+            'Versions/Current/Programs/')
         path = '%s:%s' % (path, gdal_prefix)
 
     LOGGER.debug('Search path: %s' % path)

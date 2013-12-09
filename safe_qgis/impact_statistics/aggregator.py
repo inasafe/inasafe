@@ -142,6 +142,12 @@ class Aggregator(QtCore.QObject):
     def read_keywords(self, layer, keyword=None):
         """It is a wrapper around self._keyword_io.read_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param keyword: Optional specific keyword you want the value for.
+        :type keyword: str
+
         :returns:   KeywordIO.read_keywords object
         :rtype:     KeywordIO.read_keywords
 
@@ -155,6 +161,12 @@ class Aggregator(QtCore.QObject):
     def update_keywords(self, layer, keywords):
         """It is a wrapper around self._keyword_io.update_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param keywords: Dict of keywords to apply to the existing keywords.
+        :type keywords: dict
+
         :raises:  All exceptions are propagated.
         """
         try:
@@ -164,6 +176,9 @@ class Aggregator(QtCore.QObject):
 
     def get_statistics(self, layer):
         """It is a wrapper around self._keyword_io.read_keywords
+
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
 
         :returns:   KeywordIO.get_statistics object
         :rtype:     KeywordIO.get_statistics
@@ -178,6 +193,13 @@ class Aggregator(QtCore.QObject):
     def copy_keywords(self, layer, out_filename):
         """It is a wrapper around self._keyword_io.copy_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param out_filename: Output filename that the keywords should be
+            written to.
+        :type out_filename: str
+
         :raises:  All exceptions are propagated.
         """
         try:
@@ -187,6 +209,12 @@ class Aggregator(QtCore.QObject):
 
     def write_keywords(self, layer, keywords):
         """It is a wrapper around self._keyword_io.write_keywords
+
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param keywords: Dict of keywords to write.
+        :type keywords: dict
 
         :raises:  All exceptions are propagated.
         """
@@ -316,13 +344,7 @@ class Aggregator(QtCore.QObject):
 
         This should only happen after initial checks have been made.
 
-        Buildings are not split up by this method.
-
-        :param hazard_layer: A hazard layer.
-        :type hazard_layer: QgsMapLayer
-
-        :param exposure_layer: An exposure layer.
-        :type exposure_layer: QgsMapLayer
+        .. note:: Buildings are not split up by this method.
 
         :raises: InsufficientParametersError if hazard_layer or exposure_layer
                  is not set.
@@ -332,12 +354,12 @@ class Aggregator(QtCore.QObject):
             raise InvalidAggregatorError
 
         if self.hazard_layer is None:
-            myMessage = self.tr('Error: hazard layer is not provided.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: hazard layer is not provided.')
+            raise InsufficientParametersError(message)
 
         if self.exposure_layer is None:
-            myMessage = self.tr('Error: exposure layer is not provided.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: exposure layer is not provided.')
+            raise InsufficientParametersError(message)
 
         if not self.aoi_mode:
             if is_polygon_layer(self.hazard_layer):

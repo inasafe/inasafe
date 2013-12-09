@@ -129,12 +129,12 @@ class SafeInterfaceTest(unittest.TestCase):
         try:
             getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
         except InsufficientOverlapError, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'did not overlap' in str(e), myMessage
+            message = 'Did not find expected error message in %s' % str(e)
+            assert 'did not overlap' in str(e), message
         else:
-            myMessage = ('Non ovelapping bounding boxes should have raised '
+            message = ('Non ovelapping bounding boxes should have raised '
                          'an exception')
-            raise Exception(myMessage)
+            raise Exception(message)
 
         # Try with wrong input data
         try:
@@ -143,59 +143,59 @@ class SafeInterfaceTest(unittest.TestCase):
             #good this was expected
             pass
         except InsufficientOverlapError, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), myMessage
+            message = 'Did not find expected error message in %s' % str(e)
+            assert 'Invalid' in str(e), message
         else:
-            myMessage = 'Wrong input data should have raised an exception'
-            raise Exception(myMessage)
+            message = 'Wrong input data should have raised an exception'
+            raise Exception(message)
 
         try:
             getOptimalExtent(None, None, view_port)
         except BoundingBoxError, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'cannot be None' in str(e), myMessage
+            message = 'Did not find expected error message in %s' % str(e)
+            assert 'cannot be None' in str(e), message
         else:
-            myMessage = 'Wrong input data should have raised an exception'
-            raise Exception(myMessage)
+            message = 'Wrong input data should have raised an exception'
+            raise Exception(message)
 
         try:
             getOptimalExtent('aoeush', 'oeuuoe', view_port)
         except BoundingBoxError, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'Instead i got "aoeush"' in str(e), myMessage
+            message = 'Did not find expected error message in %s' % str(e)
+            assert 'Instead i got "aoeush"' in str(e), message
         else:
-            myMessage = 'Wrong input data should have raised an exception'
-            raise Exception(myMessage)
+            message = 'Wrong input data should have raised an exception'
+            raise Exception(message)
 
     def test_availableFunctions(self):
         """Check we can get the available functions from the impact calculator.
         """
         myList = availableFunctions()
-        myMessage = 'No functions available (len=%ss)' % len(myList)
-        assert len(myList) > 0, myMessage
+        message = 'No functions available (len=%ss)' % len(myList)
+        assert len(myList) > 0, message
 
         # Also test if it works when we give it two layers
         # to see if we can determine which functions will
         # work for them.
-        myKeywords1 = read_file_keywords(self.rasterShakePath)
-        myKeywords2 = read_file_keywords(self.vectorPath)
+        keywords1 = read_file_keywords(self.rasterShakePath)
+        keywords2 = read_file_keywords(self.vectorPath)
         # We need to explicitly add the layer type to each keyword list
-        myKeywords1['layertype'] = 'raster'
-        myKeywords2['layertype'] = 'vector'
+        keywords1['layertype'] = 'raster'
+        keywords2['layertype'] = 'vector'
 
-        myList = [myKeywords1, myKeywords2]
+        myList = [keywords1, keywords2]
         myList = availableFunctions(myList)
-        myMessage = 'No functions available (len=%ss)' % len(myList)
-        assert len(myList) > 0, myMessage
+        message = 'No functions available (len=%ss)' % len(myList)
+        assert len(myList) > 0, message
 
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""
 
-        myKeyword = read_file_keywords(self.rasterShakePath, 'category')
-        myExpectedKeyword = 'hazard'
-        myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-                    myKeyword, myExpectedKeyword, self.rasterShakePath)
-        assert myKeyword == 'hazard', myMessage
+        keyword = read_file_keywords(self.rasterShakePath, 'category')
+        expected_keyword = 'hazard'
+        message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
+                    keyword, expected_keyword, self.rasterShakePath)
+        assert keyword == 'hazard', message
 
         # Test we get an exception if keyword is not found
         try:
@@ -204,59 +204,59 @@ class SafeInterfaceTest(unittest.TestCase):
         except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
-            myMessage = ('Request for bogus keyword raised incorrect '
+            message = ('Request for bogus keyword raised incorrect '
                          'exception type: \n %s') % str(e)
-            assert(), myMessage
+            assert(), message
 
-        myKeywords = read_file_keywords(self.rasterShakePath)
+        keywords = read_file_keywords(self.rasterShakePath)
 
-        myExpectedKeywords = {'category': 'hazard',
+        expected_keywords = {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'source': 'USGS',
                               'unit': 'MMI',
                               'title': 'An earthquake in Padang like in 2009'}
-        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
-                                                   myKeywords)
-        assert myKeywords == myExpectedKeywords, myMessage
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
+                                                   keywords)
+        assert keywords == expected_keywords, message
 
-        myKeywords = read_file_keywords(self.rasterPopulationPath)
-        myExpectedKeywords = {'category': 'exposure',
+        keywords = read_file_keywords(self.rasterPopulationPath)
+        expected_keywords = {'category': 'exposure',
                               'source': ('Center for International Earth '
                                          'Science Information Network '
                                          '(CIESIN)'),
                               'subcategory': 'population',
                               'datatype': 'density',
                               'title': 'People'}
-        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
-                                                   myKeywords)
-        assert myKeywords == myExpectedKeywords, myMessage
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
+                                                   keywords)
+        assert keywords == expected_keywords, message
 
-        myKeywords = read_file_keywords(self.vectorPath)
-        myExpectedKeywords = {'category': 'exposure',
+        keywords = read_file_keywords(self.vectorPath)
+        expected_keywords = {'category': 'exposure',
                               'datatype': 'itb',
                               'subcategory': 'structure',
                               'title': 'Padang WGS84'}
-        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
-                                                   myKeywords)
-        assert myKeywords == myExpectedKeywords, myMessage
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
+                                                   keywords)
+        assert keywords == expected_keywords, message
 
         #  tsunami example (one layer is UTM)
-        myKeywords = read_file_keywords(self.rasterTsunamiPath)
-        myExpectedKeywords = {'title': 'Tsunami Max Inundation',
+        keywords = read_file_keywords(self.rasterTsunamiPath)
+        expected_keywords = {'title': 'Tsunami Max Inundation',
                               'category': 'hazard',
                               'subcategory': 'tsunami',
                               'unit': 'm'}
-        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
-                                                   myKeywords)
-        assert myKeywords == myExpectedKeywords, myMessage
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
+                                                   keywords)
+        assert keywords == expected_keywords, message
 
-        myKeywords = read_file_keywords(self.rasterExposurePath)
-        myExpectedKeywords = {'category': 'exposure',
+        keywords = read_file_keywords(self.rasterExposurePath)
+        expected_keywords = {'category': 'exposure',
                               'subcategory': 'structure',
                               'title': 'Tsunami Building Exposure'}
-        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
-                                                   myKeywords)
-        assert myKeywords == myExpectedKeywords, myMessage
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
+                                                   keywords)
+        assert keywords == expected_keywords, message
 
 
 if __name__ == '__main__':

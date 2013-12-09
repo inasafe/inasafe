@@ -159,13 +159,13 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
         # noinspection PyArgumentList
         myRegistry = QgsMapLayerRegistry.instance()
-        myLayers = myRegistry.mapLayers().values()
+        layers = myRegistry.mapLayers().values()
         myFoundFlag = False
-        for myLayer in myLayers:
-            myName = myLayer.name()
-            mySource = str(myLayer.id())
+        for layer in layers:
+            myName = layer.name()
+            mySource = str(layer.id())
             # check if layer is a vector polygon layer
-            if is_polygon_layer(myLayer) or is_point_layer(myLayer):
+            if is_polygon_layer(layer) or is_point_layer(layer):
                 myFoundFlag = True
                 add_ordered_combo_item(self.cboPolygonLayers, myName, mySource)
         if myFoundFlag:
@@ -178,11 +178,11 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         :param theIndex: Passed by the signal that triggers this slot.
         :type theIndex: int
         """
-        myLayerId = self.cboPolygonLayers.itemData(
+        layerId = self.cboPolygonLayers.itemData(
             theIndex, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
-        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
-        myFields = myLayer.dataProvider().fieldNameMap().keys()
+        layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
+        myFields = layer.dataProvider().fieldNameMap().keys()
         self.cboFields.clear()
         for myField in myFields:
             add_ordered_combo_item(self.cboFields, myField, myField)
@@ -198,12 +198,12 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             myIndex, QtCore.Qt.UserRole)
 
         myIndex = self.cboPolygonLayers.currentIndex()
-        myLayerId = self.cboPolygonLayers.itemData(
+        layerId = self.cboPolygonLayers.itemData(
             myIndex, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
-        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
 
-        myFileName = str(myLayer.source())
+        myFileName = str(layer.source())
 
         myInputLayer = safe_read_layer(myFileName)
 
