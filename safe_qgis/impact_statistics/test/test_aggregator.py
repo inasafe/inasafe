@@ -11,9 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-from safe_qgis import breakdown_defaults
-
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -33,6 +30,8 @@ sys.path.append(pardir)
 
 from qgis.core import QgsVectorLayer
 
+from safe.common.testing import get_qgis_app
+from safe_qgis import breakdown_defaults
 from safe_qgis.safe_interface import (
     TESTDATA,
     BOUNDDATA,
