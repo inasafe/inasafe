@@ -104,11 +104,11 @@ class SftpShakeData:
                 raise
             # If event_id is still None after all the above, moan....
         if self.event_id is None:
-            myMessage = ('No id was passed to the constructor and the '
-                         'latest id could not be retrieved from the'
-                         'server.')
+            message = ('No id was passed to the constructor and the '
+                       'latest id could not be retrieved from the'
+                       'server.')
             LOGGER.exception('ShakeData initialisation failed')
-            raise EventIdError(myMessage)
+            raise EventIdError(message)
 
     def reconnect_sftp(self):
         """Reconnect to the server."""
@@ -159,10 +159,11 @@ class SftpShakeData:
             shakemap_cache_dir(), self.event_id, xml_file_name)
         return xml_file_path
 
+    #noinspection PyMethodMayBeStatic
     def file_name(self):
         """Return file names for the inp and out files based on the event id.
 
-        for this class, only the grid.xml only
+        For this class, only the grid.xml that is used.
 
         :return: grid.xml
         :rtype: str
@@ -189,10 +190,9 @@ class SftpShakeData:
         return dirs
 
     def get_latest_event_id(self):
-        """Return latest event id
+        """Return latest event id.
         """
         event_ids = self.get_list_event_ids()
-        latest_event_id = None
 
         now = datetime.now()
         now = int(
