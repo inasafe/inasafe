@@ -799,7 +799,7 @@ def read_impact_layer(impact_layer):
 
 
 def map_qrc_to_file(match, res_copy_dir):
-    r"""Map a qrc:/ path to its correspondent file:/// and creates it.
+    """Map a qrc:/ path to its correspondent file:/// and creates it.
 
     for example qrc:/plugins/inasafe/ajax-loader.gif
     is converted to file:////home/marco/.qgis2/python/plugins/
@@ -809,14 +809,14 @@ def map_qrc_to_file(match, res_copy_dir):
     .pc) then a copy of is extracted to res_copy_dir
 
     :param match: the qrc path to be mapped matched from a regular
-    expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
+     expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
     :type match: re.match object
 
     :param res_copy_dir: the path to copy non file based qrc assets.
     :type res_copy_dir: str
 
     :returns: a file path to the resource or None if the resource could
-    not be created
+     not be created
     :rtype: None, str
     """
 
@@ -864,8 +864,7 @@ def html_to_file(html, file_path=None, open_browser=False):
     :param file_path: the path for the html output file.
     :type file_path: str
 
-    :param open_browser: if true open the generated html in an external
-    browser
+    :param open_browser: if true open the generated html in an external browser
     :type open_browser: bool
     """
     if file_path is None:
