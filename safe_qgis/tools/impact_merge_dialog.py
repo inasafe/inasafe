@@ -31,7 +31,7 @@ from qgis.core import (QgsMapLayerRegistry,
                        QgsComposition,
                        QgsVectorDataProvider,
                        QgsField,
-                    QgsComposerMap,
+                    QgsRectangle,
                        QgsAtlasComposition)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
@@ -489,6 +489,21 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         atlas_map = composition.getComposerItemById('impact-map')
 
         if self.entire_area_mode:
+            # Set the extent of the map from two impact layers
+            # Well the extent between first and second impact layer should be
+            # the same. But though we run InaSAFE on the same extent to
+            # building and people, it produces not the exact same extent.
+            min_x = min(self.first_impact_layer.extent().xMinimum(),
+                        self.first_impact_layer.extent().xMinimum())
+            max_x = max(self.first_impact_layer.extent().xMaximum(),
+                        self.first_impact_layer.extent().xMaximum())
+            min_y = max(self.first_impact_layer.extent().yMinimum(),
+                        self.first_impact_layer.extent().yMinimum())
+            max_y = max(self.first_impact_layer.extent().yMaximum(),
+                        self.first_impact_layer.extent().yMaximum())
+            map_extent = QgsRectangle(min_x, min_y, max_x, max_y)
+            atlas_map.setNewExtent(map_extent)
+
             table_image_report = composition.\
                 getComposerItemById('report_image')
 
