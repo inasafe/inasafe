@@ -486,13 +486,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         composition = self.load_template(renderer)
 
         # Get Map
-        atlas_map = composition.getComposerItemById('impact-map')
+        composer_map = composition.getComposerItemById('impact-map')
 
         if self.entire_area_mode:
-            # Set the extentfrom two impact layers to fit into composer map
+            # Set the extent from two impact layers to fit into composer map
             # Composer map size
-            composer_map_width = atlas_map.boundingRect().width()
-            composer_map_height = atlas_map.boundingRect().height()
+            composer_map_width = composer_map.boundingRect().width()
+            composer_map_height = composer_map.boundingRect().height()
             composer_size_ratio = float(
                 composer_map_height / composer_map_width)
 
@@ -533,7 +533,14 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 squared_min_y,
                 squared_max_x,
                 squared_max_y)
-            atlas_map.setNewExtent(map_extent)
+            composer_map.setNewExtent(map_extent)
+
+            # calculate intervals for grid
+            split_count = 5
+            x_interval = new_width / split_count
+            composer_map.setGridIntervalX(x_interval)
+            y_interval = new_height / split_count
+            composer_map.setGridIntervalY(y_interval)
 
             table_image_report = composition.\
                 getComposerItemById('report_image')
@@ -555,7 +562,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             atlas.setCoverageLayer(self.chosen_aggregation_layer)
 
             # set which composer map will be used for printing atlas
-            atlas.setComposerMap(atlas_map)
+            atlas.setComposerMap(composer_map)
 
             # set output filename pattern
             atlas.setFilenamePattern("KAB_NAME")
