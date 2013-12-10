@@ -489,19 +489,54 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         atlas_map = composition.getComposerItemById('impact-map')
 
         if self.entire_area_mode:
-            # Set the extent of the map from two impact layers
-            # Well the extent between first and second impact layer should be
-            # the same. But though we run InaSAFE on the same extent to
-            # building and people, it produces not the exact same extent.
+            # Set the extentfrom two impact layers to fit into composer map
+            # Composer map size
+            composer_map_width = atlas_map.boundingRect().width()
+            composer_map_height = atlas_map.boundingRect().height()
+            composer_size_ratio = composer_map_height/composer_map_width
+
+            # The extent of two impact layers
             min_x = min(self.first_impact_layer.extent().xMinimum(),
-                        self.first_impact_layer.extent().xMinimum())
+                        self.second_impact_layer.extent().xMinimum())
+            min_y = min(self.first_impact_layer.extent().yMinimum(),
+                        self.second_impact_layer.extent().yMinimum())
             max_x = max(self.first_impact_layer.extent().xMaximum(),
-                        self.first_impact_layer.extent().xMaximum())
-            min_y = max(self.first_impact_layer.extent().yMinimum(),
-                        self.first_impact_layer.extent().yMinimum())
+                        self.second_impact_layer.extent().xMaximum())
             max_y = max(self.first_impact_layer.extent().yMaximum(),
-                        self.first_impact_layer.extent().yMaximum())
-            map_extent = QgsRectangle(min_x, min_y, max_x, max_y)
+                        self.second_impact_layer.extent().yMaximum())
+            max_width = max_x - min_x
+            max_height = max_y - min_y
+            layers_size_ratio = max_height / max_width
+            center_x = min_x + float(max_width / 2.0)
+            center_y = min_y + float(max_height / 2.0)
+
+            # The extent should fit the composer map size
+            new_width = max_width
+            new_height = max_height
+            ratio_differences = abs(layers_size_ratio - composer_size_ratio)
+            # QgsComposerMap only overflows to height, so if it overflows,
+            # the extent of the width should be widened
+
+            #NOTE: The perfect formula should be:
+            # new_width = max_width * (1.0 + ratio_differences), but it still
+            # overflows height. Need deeper debug whether it is because of
+            # rounding off
+            if layers_size_ratio > composer_size_ratio:
+                new_width = max_width * (1.1 + ratio_differences)
+
+            # Set new extent
+            squared_min_x = center_x - (new_width/2.0)
+            squared_max_x = center_x + (new_width/2.0)
+            squared_min_y = center_y - (new_height/2.0)
+            squared_max_y = center_y + (new_height/2.0)
+
+            # Create the extent and set it to the map
+            #map_extent = QgsRectangle(106.622, -6.380, 107.038, -6.080)
+            map_extent = QgsRectangle(
+                squared_min_x,
+                squared_min_y,
+                squared_max_x,
+                squared_max_y)
             atlas_map.setNewExtent(map_extent)
 
             table_image_report = composition.\
