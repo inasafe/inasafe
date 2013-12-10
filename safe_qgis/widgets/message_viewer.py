@@ -83,12 +83,21 @@ class MessageViewer(QtWebKit.QWebView):
 
     @property
     def impact_path(self):
+        """Get the location of the impact file.
+
+        :returns: Path to the impact layer.
+        :rtype: str
+        """
         return self._impact_path
 
     @impact_path.setter
-    def impact_path(self, value):
-        self._impact_path = value
-        if value is None:
+    def impact_path(self, path):
+        """Set the location of the impact file.
+        :param path: Path to the impact layer.
+        :type path: str
+        """
+        self._impact_path = path
+        if path is None:
             self.action_show_report.setEnabled(False)
             self.action_show_log.setEnabled(False)
             self.report_path = None
@@ -222,6 +231,7 @@ class MessageViewer(QtWebKit.QWebView):
         # self.scrollToDiv()
 
     def clear_dynamic_messages_log(self):
+        """Clear all dynamic messages."""
         self.dynamic_messages_log = []
 
     def scroll_to_div(self):
@@ -280,6 +290,7 @@ class MessageViewer(QtWebKit.QWebView):
         print self.page_to_text()
 
     def save_report_to_html(self):
+        """Write out the current report to html."""
         html = self.page().mainFrame().toHtml()
         if self.report_path is not None:
             html_to_file(html, self.report_path)
@@ -288,6 +299,7 @@ class MessageViewer(QtWebKit.QWebView):
             raise InvalidParameterError(msg)
 
     def save_log_to_html(self):
+        """Write out the current log as an html file."""
         html = html_header()
         html += ('<img src="qrc:/plugins/inasafe/inasafe-logo.svg" '
                  'title="InaSAFE Logo" alt="InaSAFE Logo" />')
@@ -303,16 +315,22 @@ class MessageViewer(QtWebKit.QWebView):
             raise InvalidParameterError(msg)
 
     def show_report(self):
+        """Show the report for this analysis.
+        """
         self.action_show_report.setEnabled(False)
         self.action_show_log.setEnabled(True)
         self.load_and_wait_html(file_path=self.report_path)
 
     def show_log(self):
+        """Show the work log for this analysis.
+        """
         self.action_show_report.setEnabled(True)
         self.action_show_log.setEnabled(False)
         self.load_and_wait_html(file_path=self.log_path)
 
     def open_current_in_browser(self):
+        """Open the content of the message log in the browser.
+        """
         if self.impact_path is None:
             html = self.page().mainFrame().toHtml()
             html_to_file(html, open_browser=True)
@@ -327,6 +345,18 @@ class MessageViewer(QtWebKit.QWebView):
     # refactored out to the utilities
     def load_and_wait_html(self, file_path=None, html=None):
         # noinspection PyUnresolvedReferences
+        """Load a page and block till it is loaded.
+
+        To use call with either a valid file path or a valid html string.
+
+        :param file_path: Optional file URI for the page to load.
+        :type file_path: str
+
+        :param html: Optional html string to load
+        :type html: str
+
+        :raise RuntimeError:
+        """
         if file_path is None and html is None:
             raise RuntimeError(self.tr('file_path or html need to be set'))
 
@@ -334,6 +364,7 @@ class MessageViewer(QtWebKit.QWebView):
         self.loadFinished.connect(self.html_loaded_slot)
 
         if file_path is not None:
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             self.setUrl(QUrl.fromLocalFile(file_path))
         elif html is not None:
             self.setHtml(html)
@@ -356,7 +387,10 @@ class MessageViewer(QtWebKit.QWebView):
 
     def html_loaded_slot(self, ok):
         """Slot called when the page is loaded.
+
+        :param ok: Flag indicating if the page loaded ok
+        :type ok: bool
         """
-        print "html_loaded_slot set to %s" % ok
+        #print "html_loaded_slot set to %s" % ok
         self._html_loaded_flag = ok
         LOGGER.debug('html_loaded_slot slot called')
