@@ -31,7 +31,7 @@ from qgis.core import (QgsMapLayerRegistry,
                        QgsComposition,
                        QgsVectorDataProvider,
                        QgsField,
-                    QgsRectangle,
+                       QgsRectangle,
                        QgsAtlasComposition)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
@@ -493,7 +493,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Composer map size
             composer_map_width = atlas_map.boundingRect().width()
             composer_map_height = atlas_map.boundingRect().height()
-            composer_size_ratio = composer_map_height/composer_map_width
+            composer_size_ratio = float(
+                composer_map_height / composer_map_width)
 
             # The extent of two impact layers
             min_x = min(self.first_impact_layer.extent().xMinimum(),
@@ -506,23 +507,18 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                         self.second_impact_layer.extent().yMaximum())
             max_width = max_x - min_x
             max_height = max_y - min_y
-            layers_size_ratio = max_height / max_width
+            layers_size_ratio = float(max_height / max_width)
             center_x = min_x + float(max_width / 2.0)
             center_y = min_y + float(max_height / 2.0)
 
             # The extent should fit the composer map size
             new_width = max_width
             new_height = max_height
-            ratio_differences = abs(layers_size_ratio - composer_size_ratio)
+
             # QgsComposerMap only overflows to height, so if it overflows,
             # the extent of the width should be widened
-
-            #NOTE: The perfect formula should be:
-            # new_width = max_width * (1.0 + ratio_differences), but it still
-            # overflows height. Need deeper debug whether it is because of
-            # rounding off
             if layers_size_ratio > composer_size_ratio:
-                new_width = max_width * (1.1 + ratio_differences)
+                new_width = max_height / composer_size_ratio
 
             # Set new extent
             squared_min_x = center_x - (new_width/2.0)
