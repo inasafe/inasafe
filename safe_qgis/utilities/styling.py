@@ -265,10 +265,11 @@ def set_vector_categorized_style(vector_layer, style):
 
         try:
             symbol_layer.setBorderWidth(style_class['border_width'])
-        except (NameError, KeyError):
+        except (NameError, KeyError, AttributeError):
             # use QGIS default border size
             # NameError is when symbol_layer is not defined (lines for example)
             # KeyError is when border_width is not defined
+            # AttributeError is when setBorderWidth is not defined (QgsSimpleMarkerSymbolLayerV2)
             pass
 
         # set data defined properties
