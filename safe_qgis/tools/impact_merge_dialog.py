@@ -46,7 +46,7 @@ from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.report.html_renderer import HtmlRenderer
 
-from pydev import pydevd  # pylint: disable=F0401
+#from pydev import pydevd  # pylint: disable=F0401
 INFO_STYLE = styles.INFO_STYLE
 
 
@@ -489,10 +489,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         composer_map = composition.getComposerItemById('impact-map')
 
         if self.entire_area_mode:
-            # Set the extent from two impact layers to fit into composer map
-            # Composer map size
+            # Get composer map size
             composer_map_width = composer_map.boundingRect().width()
             composer_map_height = composer_map.boundingRect().height()
+
+            # Set the extent from two impact layers to fit into composer map
             composer_size_ratio = float(
                 composer_map_height / composer_map_width)
 
@@ -527,7 +528,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             squared_max_y = center_y + (new_height/2.0)
 
             # Create the extent and set it to the map
-            #map_extent = QgsRectangle(106.622, -6.380, 107.038, -6.080)
             map_extent = QgsRectangle(
                 squared_min_x,
                 squared_min_y,
@@ -535,7 +535,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 squared_max_y)
             composer_map.setNewExtent(map_extent)
 
-            # calculate intervals for grid
+            # Add grid to composer map
             split_count = 5
             x_interval = new_width / split_count
             composer_map.setGridIntervalX(x_interval)
@@ -546,7 +546,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 getComposerItemById('report_image')
 
             # Self.image_reports must have only 1 key value pair
-            area_title = self.image_reports.keys()[0]
+            area_title = list(self.image_reports.keys())[0]
             image_path = self.image_reports[area_title]
             table_image_report.setPictureFile(image_path)
             path = '%s/%s.pdf' % (
@@ -561,7 +561,18 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Map will be clipped by features from this layer:
             atlas.setCoverageLayer(self.chosen_aggregation_layer)
 
-            # set which composer map will be used for printing atlas
+            # Add grid to composer map first from coverage layer
+            split_count = 5
+            min_x = self.chosen_aggregation_layer.extent().xMinimum()
+            max_x = self.chosen_aggregation_layer.extent().xMaximum()
+            min_y = self.chosen_aggregation_layer.extent().yMinimum()
+            max_y = self.chosen_aggregation_layer.extent().yMaximum()
+            x_interval = (max_x - min_x) / split_count
+            composer_map.setGridIntervalX(x_interval)
+            y_interval = (max_y - min_y) / split_count
+            composer_map.setGridIntervalY(y_interval)
+
+            # Set  composer map that will be used for printing atlas
             atlas.setComposerMap(composer_map)
 
             # set output filename pattern
