@@ -28,7 +28,7 @@ from qgis.utils import iface
 from safe_qgis.exceptions import FileNotFoundError
 
 LOGGER = logging.getLogger('InaSAFE')
-STATUS_FLAG = False
+global_status_flag = False
 
 
 def get_map_canvas():
@@ -43,22 +43,22 @@ def run_scenario(dock=None):
     :param dock: Dock instance
     """
     # pylint: disable=W0603
-    global STATUS_FLAG
-    STATUS_FLAG = False
+    global global_status_flag
+    global_status_flag = False
 
     def completed(flag):
         """Listen for completion and set myFlag according to exit value.
         :param flag:
         """
-        global STATUS_FLAG
-        STATUS_FLAG = flag
+        global global_status_flag
+        global_status_flag = flag
         LOGGER.debug("scenario done")
         dock.analysisDone.disconnect(completed)
 
     dock.analysisDone.connect(completed)
     # Start the analysis
     dock.accept()
-    return STATUS_FLAG
+    return global_status_flag
     # pylint: enable=W0603
 
 
