@@ -3,13 +3,28 @@
 
 import numpy
 import os
+import sys
+import logging
+from PyQt4 import QtGui, QtCore
+from numpy.testing import Tester
+
+from qgis.core import QgsApplication
+from qgis.gui import QgsMapCanvas
 
 from numerics import axes_to_points
-from numpy.testing import Tester
 from safe.common.version import get_version
+from safe.common.qgis_interface import QgisInterface
+
+
+LOGGER = logging.getLogger('InaSAFE')
+QGIS_APP = None  # Static variable used to hold hand to running QGIS app
+CANVAS = None
+PARENT = None
+IFACE = None
 
 
 class SafeTester(Tester):
+    """Tester class for testing SAFE package."""
     def _show_system_info(self):
         print 'safe version %s' % get_version()
         super(SafeTester, self)._show_system_info()
@@ -655,3 +670,51 @@ test_polygon = numpy.array([[122.229086, -8.624406],
                             [122.228947, -8.624550],
                             [122.229167, -8.624583],
                             [122.229086, -8.624406]])
+
+
+def get_qgis_app():
+    """ Start one QGIS application to test against.
+
+    :returns: Handle to QGIS app
+    :rtype: QGIS application instance
+
+    If QGIS is already running the handle to that app will be returned
+    """
+
+    global QGIS_APP  # pylint: disable=W0603
+
+    if QGIS_APP is None:
+        gui_flag = True  # All test will run qgis in gui mode
+        #noinspection PyPep8Naming
+        QGIS_APP = QgsApplication(sys.argv, gui_flag)
+
+        # Note: This block is not needed for  QGIS > 1.8 which will
+        # automatically check the QGIS_PREFIX_PATH var so it is here
+        # for backwards compatibility only
+        if 'QGIS_PREFIX_PATH' in os.environ:
+            path = os.environ['QGIS_PREFIX_PATH']
+            use_default_path_flag = True
+            QGIS_APP.setPrefixPath(path, use_default_path_flag)
+
+        QGIS_APP.initQgis()
+        s = QGIS_APP.showSettings()
+        LOGGER.debug(s)
+
+    global PARENT  # pylint: disable=W0603
+    if PARENT is None:
+        #noinspection PyPep8Naming
+        PARENT = QtGui.QWidget()
+
+    global CANVAS  # pylint: disable=W0603
+    if CANVAS is None:
+        #noinspection PyPep8Naming
+        CANVAS = QgsMapCanvas(PARENT)
+        CANVAS.resize(QtCore.QSize(400, 400))
+
+    global IFACE  # pylint: disable=W0603
+    if IFACE is None:
+        # QgisInterface is a stub implementation of the QGIS plugin interface
+        #noinspection PyPep8Naming
+        IFACE = QgisInterface(CANVAS)
+
+    return QGIS_APP, CANVAS, IFACE, PARENT

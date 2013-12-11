@@ -39,7 +39,7 @@ from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
     get_error_message,
-    getWGS84resolution,
+    get_wgs84_resolution,
     impact_attribution,
     add_ordered_combo_item,
     extent_to_geo_array,
@@ -95,6 +95,7 @@ from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
+from safe_qgis.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -152,6 +153,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.state = None
         self.last_used_function = ''
 
+        self.composer = None
+        self.composition = None
+
         # Flag used to prevent recursion and allow bulk loads of layers to
         # trigger a single event only
         self.get_layers_lock = False
@@ -200,8 +204,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IndexError:
             version_type = 'final'
             # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %s %s') % (
-            version, version_type))
+        self.setWindowTitle(self.tr('InaSAFE %s %s' % (version, version_type)))
 
     def enable_messaging(self):
         """Set up the dispatcher for messaging."""
@@ -848,20 +851,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
 
-        hazard_layer, exposure_layer = self.optimal_clip()
-        # See if the inputs need further refinement for aggregations
-        try:
-            self.aggregator.deintersect(hazard_layer, exposure_layer)
-        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
-            raise
-        # Identify input layers
-        self.calculator.set_hazard_layer(self.aggregator.hazard_layer.source())
-        self.calculator.set_exposure_layer(
-            self.aggregator.exposure_layer.source())
-
         # Use canonical function name to identify selected function
         function_id = self.get_function_id()
         self.calculator.set_function(function_id)
+
+        hazard_layer, exposure_layer = self.optimal_clip()
+        # See if the inputs need further refinement for aggregations
+        try:
+            self.aggregator.set_layers(hazard_layer, exposure_layer)
+            self.aggregator.deintersect()
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
+        # Identify input layers
+        self.calculator.set_hazard_layer(self.aggregator.hazard_layer)
+        self.calculator.set_exposure_layer(self.aggregator.exposure_layer)
 
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
@@ -901,6 +904,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        self.wvResults.clear_dynamic_messages_log()
         title = self.tr('Processing started')
         details = self.tr(
             'Please wait - processing may take a while depending on your '
@@ -1164,7 +1168,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysis_error(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
-            self.show_static_message(m.Message(report))
+            impact_path = qgis_impact_layer.source()
+            message = m.Message(report)
+            #message.add(m.Heading(self.tr('View processing log as HTML'),
+            #                      **INFO_STYLE))
+            #message.add(m.Link('file://%s' % self.wvResults.log_path))
+            self.show_static_message(message)
+            self.wvResults.impact_path = impact_path
+
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
@@ -1288,7 +1299,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             message = str(self.tr(
                 'No impact layer was calculated. Error message: %s\n'
             ) % (str(result)))
-            exception = self.runner.lastException()
+            exception = self.runner.last_exception()
             if isinstance(exception, ZeroImpactException):
                 report = m.Message()
                 report.add(LOGO_ELEMENT)
@@ -1352,7 +1363,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         LOGGER.debug('Do postprocessing')
         self.postprocessor_manager = PostprocessorManager(self.aggregator)
-        self.postprocessor_manager.functionParams = self.function_parameters
+        self.postprocessor_manager.function_parameters = \
+            self.function_parameters
         self.postprocessor_manager.run()
         self.completed()
         self.analysisDone.emit(True)
@@ -1476,11 +1488,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extra_exposure_keywords = {}
         if hazard_layer.type() == QgsMapLayer.RasterLayer:
             # Hazard layer is raster
-            hazard_geo_cell_size = getWGS84resolution(hazard_layer)
+            hazard_geo_cell_size = get_wgs84_resolution(hazard_layer)
 
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
-                exposure_geo_cell_size = getWGS84resolution(exposure_layer)
+                exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
 
                 if hazard_geo_cell_size < exposure_geo_cell_size:
                     cell_size = hazard_geo_cell_size
@@ -1631,15 +1643,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'The following keywords are defined for the active layer:')))
         self.pbnPrint.setEnabled(False)
         keywords_list = m.BulletedList()
-        for myKeyword in keywords:
-            value = keywords[myKeyword]
+        for keyword in keywords:
+            value = keywords[keyword]
 
             # Translate titles explicitly if possible
-            if myKeyword == 'title':
+            if keyword == 'title':
                 value = safeTr(value)
                 # Add this keyword to report
             key = m.ImportantText(
-                self.tr(myKeyword.capitalize()))
+                self.tr(keyword.capitalize()))
             value = str(value)
             keywords_list.add(m.Text(key, value))
 
@@ -1764,7 +1776,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 break
 
     def print_map(self):
-        """Slot to print map when print map button pressed."""
+        """Slot to open impact report dialog that used to tune report
+        when print map button pressed
+        ."""
+        dlg = ImpactReportDialog(self.iface)
+        if not dlg.exec_() == QtGui.QDialog.Accepted:
+            self.show_dynamic_message(
+                m.Message(
+                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
+                    m.Text(self.tr('Report generation cancelled!'))))
+            return
+
+        use_full_extent = dlg.analysis_extent_radio.isChecked()
+        create_pdf = dlg.create_pdf
+        if dlg.default_template_radio.isChecked():
+            template_path = dlg.template_combo.itemData(
+                dlg.template_combo.currentIndex())
+        else:
+            template_path = dlg.template_path.text()
+
         print_map = Map(self.iface)
         if self.iface.activeLayer() is None:
             # noinspection PyCallByClass,PyTypeChecker
@@ -1781,68 +1811,83 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 m.Text(self.tr('Preparing map and report'))))
 
         print_map.set_impact_layer(self.iface.activeLayer())
+        if use_full_extent:
+            print_map.set_extent(self.iface.activeLayer().extent())
+        else:
+            print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
         logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
-        report_path = settings.value(
-            'inasafe/reportTemplatePath', '', type=str)
         if logo_path != '':
             print_map.set_logo(logo_path)
-        if report_path != '':
-            print_map.set_template(report_path)
+
+        print_map.set_template(template_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
-        default_file_name = print_map.map_title() + '.pdf'
-        default_file_name = default_file_name.replace(' ', '_')
-        # noinspection PyCallByClass,PyTypeChecker
-        map_pdf_path = QtGui.QFileDialog.getSaveFileName(
-            self, self.tr('Write to PDF'),
-            os.path.join(temp_dir(), default_file_name),
-            self.tr('Pdf File (*.pdf)'))
-        map_pdf_path = str(map_pdf_path)
+        if create_pdf:
+            if print_map.map_title() is not None:
+                default_file_name = print_map.map_title() + '.pdf'
+            else:
+                self.show_error_message(self.tr('Keyword "map_title" not '
+                                                'found.'))
+                return
 
-        if map_pdf_path is None or map_pdf_path == '':
-            self.show_dynamic_message(
-                m.Message(
-                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
-                    m.Text(self.tr('Printing cancelled!'))))
-            return
+            default_file_name = default_file_name.replace(' ', '_')
+            # noinspection PyCallByClass,PyTypeChecker
+            map_pdf_path = QtGui.QFileDialog.getSaveFileName(
+                self, self.tr('Write to PDF'),
+                os.path.join(temp_dir(), default_file_name),
+                self.tr('Pdf File (*.pdf)'))
+            map_pdf_path = str(map_pdf_path)
 
-        table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
-        html_renderer = HtmlRenderer(page_dpi=print_map.page_dpi)
-        keywords = self.keyword_io.read_keywords(self.iface.activeLayer())
-        html_pdf_path = html_renderer.print_impact_table(
-            keywords, filename=table_file_name)
+            if map_pdf_path is None or map_pdf_path == '':
+                self.show_dynamic_message(
+                    m.Message(
+                        m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
+                        m.Text(self.tr('Printing cancelled!'))))
+                return
 
-        try:
-            print_map.make_pdf(map_pdf_path)
-        except Exception, e:  # pylint: disable=W0703
-            # FIXME (Ole): This branch is not covered by the tests
-            report = get_error_message(e)
-            self.show_error_message(report)
+            table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
+            html_renderer = HtmlRenderer(page_dpi=print_map.page_dpi)
+            keywords = self.keyword_io.read_keywords(self.iface.activeLayer())
+            html_pdf_path = html_renderer.print_impact_table(
+                keywords, filename=table_file_name)
 
-        # Make sure the file paths can wrap nicely:
-        wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        wrapped_html_path = html_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        status = m.Message(
-            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
-            m.Paragraph(self.tr(
-                'Your PDF was created....opening using the default PDF viewer '
-                'on your system. The generated pdfs were saved as:')),
-            m.Paragraph(wrapped_map_path),
-            m.Paragraph(self.tr('and')),
-            m.Paragraph(wrapped_html_path))
+            try:
+                print_map.make_pdf(map_pdf_path)
+            except Exception, e:  # pylint: disable=W0703
+                # FIXME (Ole): This branch is not covered by the tests
+                report = get_error_message(e)
+                self.show_error_message(report)
 
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl('file:///' + html_pdf_path,
-                        QtCore.QUrl.TolerantMode))
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl('file:///' + map_pdf_path,
-                        QtCore.QUrl.TolerantMode))
+            # Make sure the file paths can wrap nicely:
+            wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+            wrapped_html_path = html_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+            status = m.Message(
+                m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+                m.Paragraph(self.tr(
+                    'Your PDF was created....opening using the default PDF '
+                    'viewer on your system. The generated pdfs were saved '
+                    'as:')),
+                m.Paragraph(wrapped_map_path),
+                m.Paragraph(self.tr('and')),
+                m.Paragraph(wrapped_html_path))
 
-        self.show_dynamic_message(status)
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl('file:///' + html_pdf_path,
+                            QtCore.QUrl.TolerantMode))
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl('file:///' + map_pdf_path,
+                            QtCore.QUrl.TolerantMode))
+            self.show_dynamic_message(status)
+        else:
+            self.composer = self.iface.createNewComposer()
+            print_map.load_template()
+            self.composition = print_map.composition
+            self.composer.setComposition(self.composition)
+
         self.hide_busy()
 
     def get_function_id(self, index=None):

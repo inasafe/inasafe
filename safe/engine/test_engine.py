@@ -646,7 +646,7 @@ class Test_Engine(unittest.TestCase):
     # This test is not finished, but must wait 'till #344 has been sorted
     @unittest.expectedFailure
     def test_polygon_hazard_raster_exposure_clipped_grids(self):
-        """Rasters clipped by polygons irrespective of pre-clipping
+        """Rasters clipped by polygons irrespective of pre-clipping.
 
         Double check that a raster clipped by the QGIS front-end
         produces the same results as when full raster is used.
@@ -656,7 +656,7 @@ class Test_Engine(unittest.TestCase):
         hazard_filename = '%s/donut.shp' % TESTDATA
         exposure_filename_clip = ('%s/pop_merapi_clip.tif' % TESTDATA)
         exposure_filename_full = ('%s/pop_merapi_prj_problem.asc'
-                                  % EXPDATA)
+                                  % TESTDATA)
 
         H = read_layer(hazard_filename)
         E_clip = read_layer(exposure_filename_clip)

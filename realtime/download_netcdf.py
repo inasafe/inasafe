@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Ftp Client for Retrieving ftp data.**
@@ -19,9 +20,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import urllib2
 import os
 from BeautifulSoup import BeautifulSoup
+
 netcdf_url = 'http://bfews.pusair-pu.go.id/Sobek-Floodmaps/'
 _download_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood' \
-                     '/forecasting_data/'
+                      '/forecasting_data/'
 
 
 def _read_contents(url):
@@ -65,6 +67,8 @@ def _read_contents(url):
 
 def list_all_netcdf_files(url=netcdf_url):
     """Public function to get list of files in the server
+
+    :param url: The netcdf file source.
     """
     print 'Listing all netcdf file from %s' % url
     list_all_files = _read_contents(url)
@@ -76,13 +80,13 @@ def list_all_netcdf_files(url=netcdf_url):
 
 
 def download_file_url(url, download_directory=_download_directory, name=None):
-    """Download file for one file
-        * Args:
-            - url : URL where the file is published
-            - name : Optional parameter to select one file.
-                    If omitted, latest file will be used.
-        *Returns:
-            - Instance of file containing name
+    """Download file for one file.
+
+    :param url: URL where the file is published
+    :param download_directory: The local directory to save the file.
+    :param name: Optional parameter to select one file. If omitted, latest
+    file will be used.
+    :return: Instance of file containing name
     """
 
     # checking file in url directory
@@ -91,8 +95,7 @@ def download_file_url(url, download_directory=_download_directory, name=None):
         name = names[-1]
         print 'Getting file for latest file, which is %s' % name
     elif name not in names:
-        print ('Can not download %s. File is not exist in %s'
-              % (name, url))
+        print ('Can not download %s. File is not exist in %s' % (name, url))
         return False
     else:
         print 'Getting file for selected file, which is %s' % name
@@ -115,8 +118,8 @@ def download_file_url(url, download_directory=_download_directory, name=None):
 
     # make sure the file has been downloaded
     if os.path.isfile(local_file_path):
-        print ('File has been downloaded to %s'
-                % os.path.join(download_directory, name))
+        print ('File has been downloaded to %s' %
+               os.path.join(download_directory, name))
         retval = local_file_path
     else:
         print 'wow, file is not downloaded'

@@ -26,8 +26,9 @@ from subprocess import call, CalledProcessError
 import logging
 
 
-from safe.common.exceptions import (GridXmlFileNotFoundError,
-                                    GridXmlParseError)
+from safe.common.exceptions import (
+    GridXmlFileNotFoundError,
+    GridXmlParseError)
 
 # The logger is initialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
@@ -44,9 +45,8 @@ def data_dir():
     return my_dir
 
 
-class ShakeEvent():
-    """The ShakeEvent class encapsulates behaviour and data relating to an
-    earthquake, including epicenter, magnitude etc."""
+class ShakeGridConverter():
+    """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
             self,
@@ -54,7 +54,7 @@ class ShakeEvent():
             output_dir=None,
             output_basename=None,
             algorithm_filename_flag=True):
-        """Constructor for the shake event class.
+        """Constructor.
 
         :param grid_xml_path: Path to grid XML file
         :type grid_xml_path:str
@@ -62,7 +62,7 @@ class ShakeEvent():
         :param output_dir: mmi output directory
         :type output_dir: str
 
-        :param output_basename: mmi file name without extention
+        :param output_basename: mmi file name without extension
         :type output_basename: str
 
         :param algorithm_filename_flag: Flag whether to use the algorithm in
@@ -70,7 +70,7 @@ class ShakeEvent():
         :type algorithm_filename_flag: bool
 
         :returns: Instance
-        :rtype: ShakeEvent
+        :rtype: ShakeGridConverter
 
         :raises: EventXmlParseError
         """
@@ -84,6 +84,9 @@ class ShakeEvent():
         self.month = None
         self.year = None
         self.time = None
+        self.hour = None
+        self.minute = None
+        self.second = None
         self.time_zone = None
         self.x_minimum = None
         self.x_maximum = None
@@ -92,36 +95,6 @@ class ShakeEvent():
         self.rows = None
         self.columns = None
         self.mmi_data = None
-        # Path to tif of impact result - probably we wont even use it
-        self.impact_file = None
-        # Path to impact keywords file - this is GOLD here!
-        self.impact_keywords_file = None
-        # number of people killed per mmi band
-        self.fatality_counts = None
-        # Total number of predicted fatalities
-        self.fatality_total = 0
-        # number of people displaced per mmi band
-        self.displaced_counts = None
-        # number of people affected per mmi band
-        self.affected_counts = None
-        # After selecting affected cities near the event, the bbox of
-        # shake map + cities
-        self.extent_with_cities = None
-        # How much to iteratively zoom out by when searching for cities
-        self.zoom_factor = 1.25
-        # The search boxes used to find extent_with_cities
-        # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
-        self.search_boxes = None
-        # Stored as a dict with dir_to, dist_to,  dist_from etc e.g.
-        #{'dir_from': 16.94407844543457,
-        #'dir_to': -163.05592346191406,
-        #'roman': 'II',
-        #'dist_to': 2.504295825958252,
-        #'mmi': 1.909999966621399,
-        #'name': 'Tondano',
-        #'id': 57,
-        #'population': 33317}
-        self.most_affected_city = None
         if output_dir is None:
             self.output_dir = os.path.dirname(grid_xml_path)
         else:
@@ -210,28 +183,28 @@ class ShakeEvent():
         LOGGER.debug('ParseGridXml requested.')
         my_path = self.grid_file_path()
         try:
-            my_document = minidom.parse(my_path)
-            my_event_element = my_document.getElementsByTagName('event')
-            my_event_element = my_event_element[0]
-            self.magnitude = float(my_event_element.attributes[
+            document = minidom.parse(my_path)
+            event_element = document.getElementsByTagName('event')
+            event_element = event_element[0]
+            self.magnitude = float(event_element.attributes[
                 'magnitude'].nodeValue)
-            self.longitude = float(my_event_element.attributes[
+            self.longitude = float(event_element.attributes[
                 'lon'].nodeValue)
-            self.latitude = float(my_event_element.attributes[
+            self.latitude = float(event_element.attributes[
                 'lat'].nodeValue)
-            self.location = my_event_element.attributes[
+            self.location = event_element.attributes[
                 'event_description'].nodeValue.strip()
-            self.depth = float(my_event_element.attributes['depth'].nodeValue)
+            self.depth = float(event_element.attributes['depth'].nodeValue)
             # Get the date - its going to look something like this:
             # 2012-08-07T01:55:12WIB
-            my_time_stamp = my_event_element.attributes[
+            my_time_stamp = event_element.attributes[
                 'event_timestamp'].nodeValue
             self.extract_date_time(my_time_stamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
             self.time_zone = my_time_stamp[-3:]
 
-            my_specification_element = my_document.getElementsByTagName(
+            my_specification_element = document.getElementsByTagName(
                 'grid_specification')
             my_specification_element = my_specification_element[0]
             self.x_minimum = float(my_specification_element.attributes[
@@ -246,10 +219,10 @@ class ShakeEvent():
                 'nlat'].nodeValue)
             self.columns = float(my_specification_element.attributes[
                 'nlon'].nodeValue)
-            my_data_element = my_document.getElementsByTagName(
+            data_element = document.getElementsByTagName(
                 'grid_data')
-            my_data_element = my_data_element[0]
-            my_data = my_data_element.firstChild.nodeValue
+            data_element = data_element[0]
+            my_data = data_element.firstChild.nodeValue
             # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
             my_lonitude_column = 0
             my_latitude_column = 1
@@ -398,9 +371,9 @@ class ShakeEvent():
 
         my_executable_prefix = ''
         if sys.platform == 'darwin':  # Mac OS X
-            # .. todo:: FIXME - softcode gdal version in this path
             my_executable_prefix = (
-                '/Library/Frameworks/GDAL.framework/Versions/1.9/Programs/')
+                '/Library/Frameworks/GDAL'
+                '.framework/Versions/Current/Programs/')
         command = my_executable_prefix + command
         return command
 
@@ -506,8 +479,10 @@ class ShakeEvent():
         else:
             myAlgorithm = algorithm
 
-        # TODO(Sunni): I'm not sure how this 'mmi' will work
-        my_command = ((
+        # (Sunni): I'm not sure how this 'mmi' will work
+        # (Tim): Its the mapping to which field in the CSV contains the data
+        #    to be gridded.
+        command = ((
             'gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
             '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
             '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
@@ -524,23 +499,23 @@ class ShakeEvent():
                 'tif': my_tif_path
             })
 
-        LOGGER.info('Created this gdal command:\n%s' % my_command)
+        LOGGER.info('Created this gdal command:\n%s' % command)
         # Now run GDAL warp scottie...
-        self._run_command(my_command)
+        self._run_command(command)
 
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         if self.algorithm_name:
-            my_qml_path = os.path.join(
+            qml_path = os.path.join(
                 self.output_dir, '%s-%s.qml' % (
                     self.output_basename, algorithm))
         else:
-            my_qml_path = os.path.join(
+            qml_path = os.path.join(
                 self.output_dir, '%s.qml' % self.output_basename)
         my_source_qml = os.path.join(data_dir(), 'mmi.qml')
-        shutil.copyfile(my_source_qml, my_qml_path)
+        shutil.copyfile(my_source_qml, qml_path)
         return my_tif_path
 
     def create_keyword_file(self, algorithm):
@@ -558,16 +533,16 @@ class ShakeEvent():
         :type algorithm: str
         """
         if self.algorithm_name:
-            myKeywordPath = os.path.join(
+            keyword_path = os.path.join(
                 self.output_dir, '%s-%s.keywords' % (
                     self.output_basename, algorithm))
         else:
-            myKeywordPath = os.path.join(
+            keyword_path = os.path.join(
                 self.output_dir, '%s.keywords' % self.output_basename)
-        mySourceKeywords = os.path.join(data_dir(), 'mmi.keywords')
-        shutil.copyfile(mySourceKeywords, myKeywordPath)
+        mmi_keywords = os.path.join(data_dir(), 'mmi.keywords')
+        shutil.copyfile(mmi_keywords, keyword_path)
         # append title to the keywords file
-        with open(myKeywordPath, 'a') as my_file:
+        with open(keyword_path, 'a') as my_file:
             my_file.write('title: ' + self.output_basename)
 
 
@@ -576,7 +551,7 @@ def convert_mmi_data(
         output_path=None,
         algorithm=None,
         algorithm_filename_flag=True):
-    """This is static interface function for converter
+    """Convenience function to convert a single file.
 
     :param grid_xml_path: Path to the xml file
     :type grid_xml_path: str
@@ -598,14 +573,14 @@ def convert_mmi_data(
     LOGGER.debug(grid_xml_path)
     LOGGER.debug(output_path)
     if output_path is not None:
-        my_output_dir, my_output_basename = os.path.split(output_path)
-        my_output_basename, _ = os.path.splitext(my_output_basename)
-        LOGGER.debug('my_output_dir : ' + my_output_dir +
-                     'my_output_basename : ' + my_output_basename)
+        output_dir, output_basename = os.path.split(output_path)
+        output_basename, _ = os.path.splitext(output_basename)
+        LOGGER.debug('output_dir : ' + output_dir +
+                     'output_basename : ' + output_basename)
     else:
-        my_output_dir = output_path
-        my_output_basename = None
-    myShakeEvent = ShakeEvent(
-        grid_xml_path, my_output_dir, my_output_basename,
+        output_dir = output_path
+        output_basename = None
+    converter = ShakeGridConverter(
+        grid_xml_path, output_dir, output_basename,
         algorithm_filename_flag)
-    return myShakeEvent.mmi_to_raster(force_flag=True, algorithm=algorithm)
+    return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)

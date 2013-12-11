@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Helpers, globals and general utilities for the realtime package**
@@ -23,111 +24,116 @@ from datetime import datetime
 from safe_qgis.utilities.custom_logging import setup_logger as setupLoggerSQ
 
 
-def baseDataDir():
+def base_data_dir():
     """Create (if needed) and return the path to the base realtime data dir"""
     if 'INASAFE_WORK_DIR' in os.environ:
-        myBaseDataDir = os.environ['INASAFE_WORK_DIR']
+        base_data_directory = os.environ['INASAFE_WORK_DIR']
     else:
         # TODO: support env var setting here too
-        myBaseDataDir = '/tmp/inasafe/realtime'
-    mkDir(myBaseDataDir)
-    return myBaseDataDir
+        base_data_directory = '/tmp/inasafe/realtime'
+    mk_dir(base_data_directory)
+    return base_data_directory
 
 
-def dataDir():
+def data_dir():
     """Return the path to the standard data dir for e.g. geonames data"""
-    myDir = os.path.abspath(
+    dir_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'fixtures'))
-    mkDir(myDir)
-    return myDir
+    mk_dir(dir_path)
+    return dir_path
 
 
-def shakemapZipDir():
+def shakemap_zip_dir():
     """Create (if needed) and return the path to the base shakemap zip dir"""
-    myDir = os.path.join(baseDataDir(), 'shakemaps-zipped')
-    mkDir(myDir)
-    return myDir
+    dir_path = os.path.join(base_data_dir(), 'shakemaps-zipped')
+    mk_dir(dir_path)
+    return dir_path
 
 
-def shakemapExtractDir():
+def shakemap_extract_dir():
     """Create (if needed) and return the path to the base shakemap extract dir
     """
-    myDir = os.path.join(baseDataDir(), 'shakemaps-extracted')
-    mkDir(myDir)
-    return myDir
+    dir_path = os.path.join(base_data_dir(), 'shakemaps-extracted')
+    mk_dir(dir_path)
+    return dir_path
 
 
-def shakemapDataDir():
+def shakemap_data_dir():
     """Create (if needed) and return the path to the base shakemap post
     procesed (tifs and pickled events) data dir.
     """
-    myDir = os.path.join(baseDataDir(), 'shakemaps-processed')
-    mkDir(myDir)
-    return myDir
+    dir_path = os.path.join(base_data_dir(), 'shakemaps-processed')
+    mk_dir(dir_path)
+    return dir_path
 
 
-def shakemapCacheDir():
+def shakemap_cache_dir():
     """Create (if needed) and return the path to the base shakemap zip dir"""
-    myDir = os.path.join(baseDataDir(), 'shakemaps-cache')
-    mkDir(myDir)
-    return myDir
+    dir_path = os.path.join(base_data_dir(), 'shakemaps-cache')
+    mk_dir(dir_path)
+    return dir_path
 
 
-def reportDataDir():
+def report_data_dir():
     """Create (if needed) and return the path to the base report data dir"""
-    myDir = os.path.join(baseDataDir(), 'reports')
-    mkDir(myDir)
-    return myDir
+    dir_path = os.path.join(base_data_dir(), 'reports')
+    mk_dir(dir_path)
+    return dir_path
 
 
-def logDir():
+def log_dir():
     """Create (if needed) and return the path to the log directory"""
-    myDir = os.path.join(baseDataDir(), 'logs')
-    mkDir(myDir)
-    return myDir
+    dir_path = os.path.join(base_data_dir(), 'logs')
+    mk_dir(dir_path)
+    return dir_path
 
 
-def mkDir(thePath):
-    """Make a directory, making sure it is world writable"""
-    if not os.path.exists(thePath):
+def mk_dir(dir_path):
+    """Make a directory, making sure it is world writable.
+    :param dir_path: The directory path.
+    """
+    if not os.path.exists(dir_path):
         # Ensure that the dir is world writable
         # Umask sets the new mask and returns the old
-        myOldMask = os.umask(0000)
-        os.makedirs(thePath, 0777)
+        old_mask = os.umask(0000)
+        os.makedirs(dir_path, 0777)
         # Resinstate the old mask for tmp
-        os.umask(myOldMask)
+        os.umask(old_mask)
 
 
-def purgeWorkingData():
+def purge_working_data():
     """Get rid of the shakemaps-* directories - mainly intended for
     invocation from unit tests to ensure there is a clean slate before
     testing."""
-    shutil.rmtree(shakemapExtractDir())
-    shutil.rmtree(shakemapDataDir())
-    shutil.rmtree(shakemapZipDir())
+    shutil.rmtree(shakemap_extract_dir())
+    shutil.rmtree(shakemap_data_dir())
+    shutil.rmtree(shakemap_zip_dir())
 
 
-def setupLogger():
+def setup_logger():
     """Run once when the module is loaded and enable logging
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
     """
-    myLogFile = os.path.join(logDir(), 'realtime.log')
-    mySentryUrl = (
+    log_file_path = os.path.join(log_dir(), 'realtime.log')
+    sentry_url = (
         'http://fda607badbe440be9a2fa6b22e759c72'
         ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
-    setupLoggerSQ(log_file=myLogFile, sentry_url=mySentryUrl)
+    setupLoggerSQ(log_file=log_file_path, sentry_url=sentry_url)
 
 
-def is_event_id(eventid):
+def is_event_id(event_id):
     """Check if an id is event id.
+
+    :param event_id: The event id.
+
     Event id is in form of yyyymmddHHMMSS or '%Y%m%d%H%M%S'
     i.e. 20130110204706
     """
-    if len(eventid) != 14:
+    if len(event_id) != 14:
         return False
     try:
-        datetime.strptime(eventid, '%Y%m%d%H%M%S')
+        datetime.strptime(event_id, '%Y%m%d%H%M%S')
     except ValueError:
         return False
     return True

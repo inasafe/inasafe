@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe_qgis import breakdown_defaults
-
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -32,6 +30,8 @@ sys.path.append(pardir)
 
 from qgis.core import QgsVectorLayer
 
+from safe.common.testing import get_qgis_app
+from safe_qgis import breakdown_defaults
 from safe_qgis.safe_interface import (
     TESTDATA,
     BOUNDDATA,
@@ -40,7 +40,6 @@ from safe_qgis.safe_interface import (
     safe_read_layer)
 
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS)
@@ -87,8 +86,8 @@ class AggregatorTest(unittest.TestCase):
         DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
-        self.keywordIO = KeywordIO()
-        self.defaults = breakdown_defaults()
+        self._keywordIO = KeywordIO()
+        self._defaults = breakdown_defaults()
 
     def test_combo_aggregation_loaded_project(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -285,8 +284,8 @@ class AggregatorTest(unittest.TestCase):
             aggregation_layer.extent(),
             aggregation_layer.crs())
 
-        aggregation_attribute = self.keywordIO.read_keywords(
-            aggregation_layer, self.defaults['AGGR_ATTR_KEY'])
+        aggregation_attribute = self._keywordIO.read_keywords(
+            aggregation_layer, self._defaults['AGGR_ATTR_KEY'])
         # noinspection PyArgumentEqualDefault
         aggregation_layer = clip_layer(
             layer=aggregation_layer,

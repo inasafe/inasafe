@@ -64,6 +64,7 @@ from safe.api import (
     get_unique_values,
     get_plugins_as_table,
     evacuated_population_weekly_needs,
+    Layer,
     Vector,
     Raster,
     nan_allclose,
@@ -177,13 +178,13 @@ def getOptimalExtent(
     """
 
     #
-    myMessage = tr('theHazardGeoExtent or theExposureGeoExtent cannot be None.'
+    message = tr('theHazardGeoExtent or theExposureGeoExtent cannot be None.'
                    'Found: /ntheHazardGeoExtent: %s '
                    '/ntheExposureGeoExtent: %s' %
                    (theHazardGeoExtent, theExposureGeoExtent))
 
     if (theHazardGeoExtent is None) or (theExposureGeoExtent is None):
-        raise BoundingBoxError(myMessage)
+        raise BoundingBoxError(message)
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
@@ -194,12 +195,12 @@ def getOptimalExtent(
 
     if myOptimalExtent is None:
         # Bounding boxes did not overlap
-        myMessage = \
+        message = \
             tr('Bounding boxes of hazard data, exposure data '
                'and viewport did not overlap, so no computation was '
                'done. Please make sure you pan to where the data is and '
                'that hazard and exposure data overlaps.')
-        raise InsufficientOverlapError(myMessage)
+        raise InsufficientOverlapError(message)
 
     return myOptimalExtent
 
@@ -241,9 +242,9 @@ def availableFunctions(theKeywordList=None):
 
            myFile1 = foo.shp
            myFile2 = bar.asc
-           myKeywords1 = readKeywordsFromFile(myFile1)
-           myKeywords2 = readKeywordsFromFile(myFile2)
-           myList = [myKeywords1, myKeywords2]
+           keywords1 = readKeywordsFromFile(myFile1)
+           keywords2 = readKeywordsFromFile(myFile2)
+           myList = [keywords1, keywords2]
            myFunctions = availableFunctions(myList)
 
     Returns:
@@ -258,8 +259,8 @@ def availableFunctions(theKeywordList=None):
     try:
         myDict = get_admissible_plugins(theKeywordList)
         #if len(myDict) < 1:
-        #    myMessage = 'No InaSAFE impact functions could be found'
-        #    raise NoFunctionsFoundError(myMessage)
+        #    message = 'No InaSAFE impact functions could be found'
+        #    raise NoFunctionsFoundError(message)
         return myDict
     except:
         raise
@@ -282,22 +283,22 @@ def readKeywordsFromLayer(theLayer, keyword):
     Raises:
        KeywordNotFoundError if the keyword is not recognised.
     """
-    myValue = None
+    value = None
     if theLayer is None:
         raise InvalidParameterError()
     try:
-        myValue = theLayer.get_keywords(keyword)
+        value = theLayer.get_keywords(keyword)
     except Exception, e:
-        myMessage = \
+        message = \
             tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 theLayer.get_filename(), keyword, str(e)))
-        raise KeywordNotFoundError(myMessage)
-    if not myValue or myValue == '':
-        myMessage = \
+        raise KeywordNotFoundError(message)
+    if not value or value == '':
+        message = \
             tr('No value was found for keyword %s in layer %s' % (
                 theLayer.get_filename(), keyword))
-        raise KeywordNotFoundError(myMessage)
-    return myValue
+        raise KeywordNotFoundError(message)
+    return value
 
 
 def read_file_keywords(theLayerPath, theKeyword=None):
@@ -328,41 +329,41 @@ def read_file_keywords(theLayerPath, theKeyword=None):
     """
     # check the source layer path is valid
     if not os.path.isfile(theLayerPath):
-        myMessage = tr('Cannot get keywords from a non-existent file.'
+        message = tr('Cannot get keywords from a non-existent file.'
                        '%s does not exist.' % theLayerPath)
-        raise InvalidParameterError(myMessage)
+        raise InvalidParameterError(message)
 
     # check there really is a keywords file for this layer
-    myKeywordFilePath = os.path.splitext(theLayerPath)[0]
-    myKeywordFilePath += '.keywords'
-    if not os.path.isfile(myKeywordFilePath):
-        myMessage = tr('No keywords file found for %s' % myKeywordFilePath)
-        raise NoKeywordsFoundError(myMessage)
+    keywordFilePath = os.path.splitext(theLayerPath)[0]
+    keywordFilePath += '.keywords'
+    if not os.path.isfile(keywordFilePath):
+        message = tr('No keywords file found for %s' % keywordFilePath)
+        raise NoKeywordsFoundError(message)
 
     # now get the requested keyword using the inasafe library
     myDictionary = None
     try:
-        myDictionary = read_keywords(myKeywordFilePath)
+        myDictionary = read_keywords(keywordFilePath)
     except Exception, e:
-        myMessage = \
+        message = \
             tr('Keyword retrieval failed for %s (%s) \n %s' % (
-                myKeywordFilePath, theKeyword, str(e)))
-        raise KeywordNotFoundError(myMessage)
+                keywordFilePath, theKeyword, str(e)))
+        raise KeywordNotFoundError(message)
 
     # if no keyword was supplied, just return the dict
     if theKeyword is None:
         return myDictionary
     if not theKeyword in myDictionary:
-        myMessage = \
+        message = \
             tr('No value was found in file %s for keyword %s' % (
-                myKeywordFilePath, theKeyword))
-        raise KeywordNotFoundError(myMessage)
+                keywordFilePath, theKeyword))
+        raise KeywordNotFoundError(message)
 
     try:
-        myValue = myDictionary[theKeyword]
+        value = myDictionary[theKeyword]
     except:
         raise
-    return myValue
+    return value
 
 
 def writeKeywordsToFile(theFilename, theKeywords):
@@ -407,25 +408,25 @@ def getStyleInfo(theLayer):
         raise InvalidParameterError()
 
     if not hasattr(theLayer, 'get_style_info'):
-        myMessage = \
+        message = \
             tr('Argument "%s" was not a valid layer instance' %
                theLayer)
-        raise StyleInfoNotFoundError(myMessage)
+        raise StyleInfoNotFoundError(message)
 
     try:
-        myValue = theLayer.get_style_info()
+        value = theLayer.get_style_info()
     except Exception, e:
-        myMessage = \
+        message = \
             tr('Styleinfo retrieval failed for %s\n %s' % (
                 theLayer.get_filename(), str(e)))
-        raise StyleInfoNotFoundError(myMessage)
+        raise StyleInfoNotFoundError(message)
 
-    if not myValue or myValue == '':
-        myMessage = \
+    if not value or value == '':
+        message = \
             tr('No styleInfo was found for layer %s' % (
                 theLayer.get_filename()))
-        raise StyleInfoNotFoundError(myMessage)
-    return myValue
+        raise StyleInfoNotFoundError(message)
+    return value
 
 
 def makeAscii(x):
@@ -451,6 +452,28 @@ def readSafeLayer(thePath):
         raise
 
 
+def convertToSafeLayer(layer):
+    """Thin wrapper around the safe read_layer function.
+
+    Args:
+        layer - QgsMapLayer or Safe layer.
+    Returns:
+        A safe readSafeLayer object is returned.
+    Raises:
+        Any exceptions are propogated
+    """
+    # FIXME (DK): it is a stub now.
+    #   Do not call readSafeLayer, but write function
+    #     safe.storage.core.convert_layer to convert QgsMapLayer to SAFE layer
+
+    if isinstance(layer, Layer):
+        return layer
+    try:
+        return readSafeLayer(layer.source())
+    except:
+        raise
+
+
 def getSafeImpactFunctions(theFunction=None):
     """Thin wrapper around the safe impact_functions function.
 
@@ -466,6 +489,33 @@ def getSafeImpactFunctions(theFunction=None):
         return safe_get_plugins(makeAscii(theFunction))
     except:
         raise
+
+
+def getSafeImpactFunctionType(function_id):
+    """
+    Args:
+        function_id - str giving a specific plugins name that should be
+        fetched.
+    Returns:
+        A str type of safe impact function is returned:
+            'old-style' is "classic" safe impact function
+            'qgis2.0'   is impact function with native qgis layers support
+    Raises:
+        Any exceptions are propogated
+    """
+    try:
+        # Get an instance of the impact function and get the type
+        my_function = getSafeImpactFunctions(function_id)[0][function_id]
+        my_function = my_function()
+
+        try:
+            fun_type = my_function.get_function_type()
+        except AttributeError:
+            fun_type = 'old-style'
+    except:
+        raise
+
+    return fun_type
 
 
 def calculateSafeImpact(theLayers, theFunction):

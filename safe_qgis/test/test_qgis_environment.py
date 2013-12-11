@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '20/01/2011'
@@ -23,7 +24,6 @@ from qgis.core import (
     QgsProviderRegistry,
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import EXPDATA
 
 QGIS_APP = get_qgis_app()
@@ -61,10 +61,10 @@ class QGISTest(unittest.TestCase):
         self.assertEqual(myAuthId, myExpectedAuthId)
 
         # now test for a loaded layer
-        myPath = os.path.join(EXPDATA, 'glp10ag.asc')
+        path = os.path.join(EXPDATA, 'glp10ag.asc')
         myTitle = 'people'
-        myLayer = QgsRasterLayer(myPath, myTitle)
-        myAuthId = myLayer.crs().authid()
+        layer = QgsRasterLayer(path, myTitle)
+        myAuthId = layer.crs().authid()
         self.assertEqual(myAuthId, myExpectedAuthId)
 
 if __name__ == '__main__':

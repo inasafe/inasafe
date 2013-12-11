@@ -23,9 +23,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # pylint: disable=W0611
 #noinspection PyUnresolvedReferences
-from safe.defaults import DEFAULTS
+from safe.storage.vector import Layer
 from safe.storage.vector import Vector
 from safe.storage.raster import Raster
+from safe.defaults import DEFAULTS
 from safe.storage.utilities import (
     bbox_intersection,
     buffered_bounding_box,
@@ -69,7 +70,7 @@ from safe.common.utilities import (
     format_int,
     get_thousand_separator,
     get_decimal_separator)
-from safe.common.converter import convert_mmi_data
+from safe.common.shake_grid_converter import convert_mmi_data
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow

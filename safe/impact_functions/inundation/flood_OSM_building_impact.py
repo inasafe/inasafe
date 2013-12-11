@@ -1,4 +1,4 @@
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -199,7 +199,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 count += 1
 
             # Add calculated impact to existing attributes
-            attributes[i][self.target_field] = x
+            attributes[i][self.target_field] = int(x)
 
         # Lump small entries and 'unknown' into 'other' category
         for usage in buildings.keys():

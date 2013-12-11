@@ -10,12 +10,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-
 __author__ = 'tim@linfiniti.com'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 
 import unittest
 import sys
@@ -36,6 +38,7 @@ from qgis.core import (
     QgsGeometry,
     QgsPoint)
 
+from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import (
     readSafeLayer,
     getOptimalExtent,
@@ -52,7 +55,6 @@ from safe_qgis.utilities.clipper import (
 from safe_qgis.utilities.utilities import qgis_version
 
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
     set_canvas_crs,
     RedirectStreams,
     DEVNULL,
@@ -92,9 +94,9 @@ class ClipperTest(unittest.TestCase):
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
 
-        myMessage = 'Did not find layer "%s" in path "%s"' % \
+        message = 'Did not find layer "%s" in path "%s"' % \
                     (myName, VECTOR_PATH)
-        assert myVectorLayer is not None, myMessage
+        assert myVectorLayer is not None, message
         assert myVectorLayer.isValid()
         # Create a bounding box
         myRect = [100.03, -1.14, 100.81, -0.73]
@@ -113,9 +115,9 @@ class ClipperTest(unittest.TestCase):
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
 
-        myMessage = 'Did not find layer "%s" in path "%s"' % \
+        message = 'Did not find layer "%s" in path "%s"' % \
                     (myName, RASTERPATH)
-        assert myRasterLayer is not None, myMessage
+        assert myRasterLayer is not None, message
 
         # Create a bounding box
         myRect = [97, -3, 104, 1]
@@ -132,10 +134,10 @@ class ClipperTest(unittest.TestCase):
         myNewRasterLayer = QgsRasterLayer(myResult.source(), myName)
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
 
-        myMessage = ('Resampled raster has incorrect pixel size.'
+        message = ('Resampled raster has incorrect pixel size.'
                      'Expected: %f, Actual: %f' %
                      (mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
-        assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, myMessage
+        assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, message
 
     def test_clip_raster_with_no_extension(self):
         """Test we can clip a raster with no extension - see #659."""
@@ -200,23 +202,23 @@ class ClipperTest(unittest.TestCase):
 
         # Try to create a vector layer from non-existing filename
         myName = 'stnhaoeu_78oeukqjkrcgA'
-        myPath = 'OEk_tnshoeu_439_kstnhoe'
+        path = 'OEk_tnshoeu_439_kstnhoe'
 
         with RedirectStreams(stdout=DEVNULL, stderr=DEVNULL):
-            myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
+            myVectorLayer = QgsVectorLayer(path, myName, 'ogr')
 
-        myMessage = ('QgsVectorLayer reported "valid" for non '
+        message = ('QgsVectorLayer reported "valid" for non '
                      'existent path "%s" and name "%s".'
-                     % (myPath, myName))
-        assert not myVectorLayer.isValid(), myMessage
+                     % (path, myName))
+        assert not myVectorLayer.isValid(), message
 
         # Create a raster layer
         with RedirectStreams(stdout=DEVNULL, stderr=DEVNULL):
-            myRasterLayer = QgsRasterLayer(myPath, myName)
-        myMessage = ('QgsRasterLayer reported "valid" for non '
+            myRasterLayer = QgsRasterLayer(path, myName)
+        message = ('QgsRasterLayer reported "valid" for non '
                      'existent path "%s" and name "%s".'
-                     % (myPath, myName))
-        assert not myRasterLayer.isValid(), myMessage
+                     % (path, myName))
+        assert not myRasterLayer.isValid(), message
 
     def test_clipBoth(self):
         """Raster and Vector layers can be clipped
@@ -225,16 +227,16 @@ class ClipperTest(unittest.TestCase):
         # Create a vector layer
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
-        myMessage = 'Did not find layer "%s" in path "%s"' % \
+        message = 'Did not find layer "%s" in path "%s"' % \
                     (myName, VECTOR_PATH)
-        assert myVectorLayer.isValid(), myMessage
+        assert myVectorLayer.isValid(), message
 
         # Create a raster layer
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
-        myMessage = 'Did not find layer "%s" in path "%s"' % \
+        message = 'Did not find layer "%s" in path "%s"' % \
                     (myName, RASTERPATH)
-        assert myRasterLayer.isValid(), myMessage
+        assert myRasterLayer.isValid(), message
 
         # Create a bounding box
         myViewportGeoExtent = [99.53, -1.22, 101.20, -0.36]
@@ -284,7 +286,7 @@ class ClipperTest(unittest.TestCase):
         assert os.path.exists(myResult.source())
         L = readSafeLayer(myResult.source())
         kwds = L.get_keywords()
-        # myMessage = 'Extra keyword wasn\'t found in %s: %s' % (myResult,
+        # message = 'Extra keyword wasn\'t found in %s: %s' % (myResult,
         # kwds)
         assert kwds['kermit'] == 'piggy'
 
@@ -297,9 +299,9 @@ class ClipperTest(unittest.TestCase):
         L = readSafeLayer(myResult.source())
         kwds = L.get_keywords()
 
-        myMessage = 'Extra keyword was not found in %s: %s' % (
+        message = 'Extra keyword was not found in %s: %s' % (
             myResult.source(), kwds)
-        assert kwds['zoot'] == 'animal', myMessage
+        assert kwds['zoot'] == 'animal', message
 
     def testRasterScaling(self):
         """Raster layers can be scaled when resampled
@@ -322,10 +324,10 @@ class ClipperTest(unittest.TestCase):
         such as population per km^2
         """
 
-        for myFilename in ['Population_Jakarta_geographic.asc',
+        for filename in ['Population_Jakarta_geographic.asc',
                            'Population_2010.asc']:
 
-            myRasterPath = ('%s/%s' % (TESTDATA, myFilename))
+            myRasterPath = ('%s/%s' % (TESTDATA, filename))
 
             # Get reference values
             mySafeLayer = readSafeLayer(myRasterPath)
@@ -348,7 +350,7 @@ class ClipperTest(unittest.TestCase):
 
                 # To save time only do two resolutions for the
                 # large population set
-                if myFilename.startswith('Population_2010'):
+                if filename.startswith('Population_2010'):
                     if myResolution > 0.01 or myResolution < 0.005:
                         break
 
@@ -369,7 +371,7 @@ class ClipperTest(unittest.TestCase):
 
                 # Compare extrema
                 myExpectedScaledMax = mySigma * numpy.nanmax(myNativeData)
-                myMessage = ('Resampled raster was not rescaled correctly: '
+                message = ('Resampled raster was not rescaled correctly: '
                              'max(myScaledData) was %f but expected %f'
                              % (numpy.nanmax(myScaledData),
                                 myExpectedScaledMax))
@@ -382,27 +384,27 @@ class ClipperTest(unittest.TestCase):
                 #              integer?
                 assert numpy.allclose(myExpectedScaledMax,
                                       numpy.nanmax(myScaledData),
-                                      rtol=1.0e-6, atol=1.0e-8), myMessage
+                                      rtol=1.0e-6, atol=1.0e-8), message
 
                 myExpectedScaledMin = mySigma * numpy.nanmin(myNativeData)
-                myMessage = ('Resampled raster was not rescaled correctly: '
+                message = ('Resampled raster was not rescaled correctly: '
                              'min(myScaledData) was %f but expected %f'
                              % (numpy.nanmin(myScaledData),
                                 myExpectedScaledMin))
                 assert numpy.allclose(myExpectedScaledMin,
                                       numpy.nanmin(myScaledData),
-                                      rtol=1.0e-8, atol=1.0e-12), myMessage
+                                      rtol=1.0e-8, atol=1.0e-12), message
 
                 # Compare elementwise
-                myMessage = 'Resampled raster was not rescaled correctly'
+                message = 'Resampled raster was not rescaled correctly'
                 assert nan_allclose(myNativeData * mySigma, myScaledData,
-                                   rtol=1.0e-8, atol=1.0e-8), myMessage
+                                   rtol=1.0e-8, atol=1.0e-8), message
 
                 # Check that it also works with manual scaling
                 myManualData = mySafeLayer.get_data(scaling=mySigma)
-                myMessage = 'Resampled raster was not rescaled correctly'
+                message = 'Resampled raster was not rescaled correctly'
                 assert nan_allclose(myManualData, myScaledData,
-                                   rtol=1.0e-8, atol=1.0e-8), myMessage
+                                   rtol=1.0e-8, atol=1.0e-8), message
 
                 # Check that an exception is raised for bad arguments
                 try:
@@ -410,36 +412,36 @@ class ClipperTest(unittest.TestCase):
                 except GetDataError:
                     pass
                 else:
-                    myMessage = 'String argument should have raised exception'
-                    raise Exception(myMessage)
+                    message = 'String argument should have raised exception'
+                    raise Exception(message)
 
                 try:
                     mySafeLayer.get_data(scaling='(1, 3)')
                 except GetDataError:
                     pass
                 else:
-                    myMessage = 'Tuple argument should have raised exception'
-                    raise Exception(myMessage)
+                    message = 'Tuple argument should have raised exception'
+                    raise Exception(message)
 
                 # Check None option without keyword datatype == 'density'
                 mySafeLayer.keywords['datatype'] = 'undefined'
                 myUnscaledData = mySafeLayer.get_data(scaling=None)
-                myMessage = 'Data should not have changed'
+                message = 'Data should not have changed'
                 assert nan_allclose(myNativeData, myUnscaledData,
-                                   rtol=1.0e-12, atol=1.0e-12), myMessage
+                                   rtol=1.0e-12, atol=1.0e-12), message
 
                 # Try with None and density keyword
                 mySafeLayer.keywords['datatype'] = 'density'
                 myUnscaledData = mySafeLayer.get_data(scaling=None)
-                myMessage = 'Resampled raster was not rescaled correctly'
+                message = 'Resampled raster was not rescaled correctly'
                 assert nan_allclose(myScaledData, myUnscaledData,
-                                   rtol=1.0e-12, atol=1.0e-12), myMessage
+                                   rtol=1.0e-12, atol=1.0e-12), message
 
                 mySafeLayer.keywords['datatype'] = 'counts'
                 myUnscaledData = mySafeLayer.get_data(scaling=None)
-                myMessage = 'Data should not have changed'
+                message = 'Data should not have changed'
                 assert nan_allclose(myNativeData, myUnscaledData,
-                                   rtol=1.0e-12, atol=1.0e-12), myMessage
+                                   rtol=1.0e-12, atol=1.0e-12), message
 
     def testRasterScaling_projected(self):
         """Attempt to scale projected density raster layers raise exception
@@ -481,8 +483,8 @@ class ClipperTest(unittest.TestCase):
             except InvalidProjectionError:
                 pass
             else:
-                myMessage = 'Should have raised InvalidProjectionError'
-                raise Exception(myMessage)
+                message = 'Should have raised InvalidProjectionError'
+                raise Exception(message)
 
     def test_extentToKml(self):
         """Test if extent to KML is working."""
@@ -493,10 +495,10 @@ class ClipperTest(unittest.TestCase):
         myKml = myFile.read()
         myFile.close()
 
-        myMessage = 'Generated KML was not as expected: %s' % myKml
-        assert '<?xml version' in myKml, myMessage
-        for myValue in myExtent:
-            assert str(myValue) in myKml, myMessage
+        message = 'Generated KML was not as expected: %s' % myKml
+        assert '<?xml version' in myKml, message
+        for value in myExtent:
+            assert str(value) in myKml, message
 
     def test_vectorProjections(self):
         """Test that vector input data is reprojected properly during clip"""
@@ -507,8 +509,8 @@ class ClipperTest(unittest.TestCase):
         myVectorLayer = QgsVectorLayer(VECTOR_PATH2,
                                        'OSM Buildings',
                                        'ogr')
-        myMessage = 'Failed to load osm buildings'
-        assert myVectorLayer is not None, myMessage
+        message = 'Failed to load osm buildings'
+        assert myVectorLayer is not None, message
         assert myVectorLayer.isValid()
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent()
@@ -525,8 +527,8 @@ class ClipperTest(unittest.TestCase):
             '-0.966314 0.445890)),((-0.906164 0.003923,-0.077148 0.197447,'
             '0.043151 -0.074533,-0.882628 -0.296824,-0.906164 0.003923)))')
         myCollection = explode_multipart_geometry(myGeometry)
-        myMessage = 'Expected 2 parts from multipart polygon geometry'
-        assert len(myCollection) == 2, myMessage
+        message = 'Expected 2 parts from multipart polygon geometry'
+        assert len(myCollection) == 2, message
 
     def test_explodeMultiLineGeometry(self):
         """Test exploding LINES multipart to single part geometries works"""
@@ -535,8 +537,8 @@ class ClipperTest(unittest.TestCase):
             ' -0.291594 0.644645), (-0.411893 0.728331,'
             ' -0.160834 0.568804))')
         myCollection = explode_multipart_geometry(myGeometry)
-        myMessage = 'Expected 2 parts from multipart line geometry'
-        assert len(myCollection) == 2, myMessage
+        message = 'Expected 2 parts from multipart line geometry'
+        assert len(myCollection) == 2, message
 
     def test_explodeMultiPointGeometry(self):
         """Test exploding POINT multipart to single part geometries works"""
@@ -544,8 +546,8 @@ class ClipperTest(unittest.TestCase):
             'MULTIPOINT((-0.966314 0.445890),'
             '(-0.281133 0.555729))')
         myCollection = explode_multipart_geometry(myGeometry)
-        myMessage = 'Expected 2 parts from multipart point geometry'
-        assert len(myCollection) == 2, myMessage
+        message = 'Expected 2 parts from multipart point geometry'
+        assert len(myCollection) == 2, message
 
     def test_clipGeometry(self):
         """Test that we can clip a geometry using another geometry."""
@@ -609,8 +611,8 @@ class ClipperTest(unittest.TestCase):
         myVectorLayer = QgsVectorLayer(VECTOR_PATH3,
                                        'OSM Buildings',
                                        'ogr')
-        myMessage = 'Failed to load osm buildings'
-        assert myVectorLayer is not None, myMessage
+        message = 'Failed to load osm buildings'
+        assert myVectorLayer is not None, message
         assert myVectorLayer.isValid()
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent()

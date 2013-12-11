@@ -31,6 +31,7 @@ from qgis.gui import QgsMapCanvasLayer
 LOGGER = logging.getLogger('InaSAFE')
 
 
+#noinspection PyMethodMayBeStatic,PyPep8Naming
 class QgisInterface(QObject):
     """Class to expose qgis objects and functionalities to plugins.
 

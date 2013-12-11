@@ -918,7 +918,7 @@ class Test_IO(unittest.TestCase):
     test_centroids_from_polygon_data.slow = True
 
     def test_rasters_and_arrays(self):
-        """Consistency of rasters and associated arrays
+        """Consistency of rasters and associated arrays.
         """
 
         # Create test data
@@ -1052,7 +1052,7 @@ class Test_IO(unittest.TestCase):
         try:
             R1.projection == 234
         except TypeError:
-            pass
+            print 'You can ignore the ERROR 1 message it is intentional - Tim'
         else:
             msg = 'Should have raised TypeError'
             raise Exception(msg)
@@ -1729,7 +1729,10 @@ class Test_IO(unittest.TestCase):
                    'get_geometry_type',
                    'get_geometry_name',
                    'to_vector_points',
-                   'to_vector_layer']
+                   'to_vector_layer',
+                   'as_qgis_native',  # added in InaSAFE 2.0
+                   'read_from_qgis_native'  # added in InaSAFE 2.0
+                   ]
 
         V = Vector()  # Empty vector instance
         R = Raster()  # Empty raster instance

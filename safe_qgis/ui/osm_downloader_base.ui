@@ -14,7 +14,26 @@
    <string>OSM Downloader</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="3" column="0">
+   <item row="2" column="0">
+    <widget class="QComboBox" name="feature_type">
+     <item>
+      <property name="text">
+       <string>All</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Buildings</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Roads</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="5" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -44,7 +63,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="minLatitude"/>
+       <widget class="QLineEdit" name="min_latitude"/>
       </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_3">
@@ -54,7 +73,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLineEdit" name="minLongitude"/>
+       <widget class="QLineEdit" name="min_longitude"/>
       </item>
       <item row="2" column="1">
        <widget class="QLabel" name="label_4">
@@ -64,32 +83,32 @@
        </widget>
       </item>
       <item row="2" column="2">
-       <widget class="QLineEdit" name="maxLongitude"/>
+       <widget class="QLineEdit" name="max_longitude"/>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="maxLatitude"/>
+       <widget class="QLineEdit" name="max_latitude"/>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="outputDirectoryLabel">
+   <item row="3" column="0">
+    <widget class="QLabel" name="output_directory_label">
      <property name="text">
       <string>Output directory</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="outDir">
+      <widget class="QLineEdit" name="output_directory">
        <property name="text">
         <string/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="pBtnDir">
+      <widget class="QToolButton" name="directory_button">
        <property name="text">
         <string>...</string>
        </property>
@@ -97,8 +116,8 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
+   <item row="6" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -108,11 +127,18 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QWebView" name="webView" native="true">
+    <widget class="QWebView" name="web_view" native="true">
      <property name="url" stdset="0">
       <url>
        <string>about:blank</string>
       </url>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="feature_type_label">
+     <property name="text">
+      <string>Feature Type</string>
      </property>
     </widget>
    </item>
@@ -128,7 +154,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>accepted()</signal>
    <receiver>OsmDownloaderBase</receiver>
    <slot>accept()</slot>
@@ -144,7 +170,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>rejected()</signal>
    <receiver>OsmDownloaderBase</receiver>
    <slot>reject()</slot>

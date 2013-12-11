@@ -59,7 +59,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         # Set up the user interface from Designer.
         self.setupUi(self)
         self.setWindowTitle(
-            self.tr('InaSAFE %s Impact Functions Browser') % (get_version()))
+            self.tr('InaSAFE %s Impact Functions Browser' % get_version()))
         self.parent = parent
 
         self.no_filter = self.tr('No Filter')
@@ -78,11 +78,11 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         self.show_table()
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
-        resetButton = self.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
-        resetButton.clicked.connect(self.reset_button_clicked)
+        reset_button = self.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
+        reset_button.clicked.connect(self.reset_button_clicked)
 
-        helpButton = self.myButtonBox.button(QtGui.QDialogButtonBox.Help)
-        helpButton.clicked.connect(self.show_help)
+        help_button = self.myButtonBox.button(QtGui.QDialogButtonBox.Help)
+        help_button.clicked.connect(self.show_help)
         # Combo box change event
         self.comboBox_id.currentIndexChanged.connect(self.update_table)
         self.comboBox_title.currentIndexChanged.connect(self.update_table)
@@ -175,5 +175,5 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
             to display.
         :type message: str or QString
         """
-        myHtml = html_header() + message + html_footer()
-        self.webView.setHtml(myHtml)
+        html = html_header() + message + html_footer()
+        self.webView.setHtml(html)

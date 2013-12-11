@@ -58,15 +58,15 @@ def _show_local_help(context=None):
         __file__, os.path.pardir, os.path.pardir, os.path.pardir, 'docs'
     ))
 
-    # set default value for myLocale
-    myLocale = 'en'
+    # set default value for locale
+    locale = 'en'
     if 'LANG' in os.environ:
-        myLocale = os.environ['LANG']
+        locale = os.environ['LANG']
 
-    if myLocale not in ['id', 'en']:
-        myLocale = 'en'
+    if locale not in ['id', 'en']:
+        locale = 'en'
 
-    base_url = os.path.join(base_url, myLocale)
+    base_url = os.path.join(base_url, locale)
 
     if context is not None:
         base_url = os.path.join(base_url, context + '.html')
@@ -86,9 +86,9 @@ def _show_local_help(context=None):
     else:
         base_url = 'file://%s' % base_url
 
-    myUrl = QtCore.QUrl(base_url)
+    url = QtCore.QUrl(base_url)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    QtGui.QDesktopServices.openUrl(myUrl)
+    QtGui.QDesktopServices.openUrl(url)
 
 
 def _show_online_help(context=None):
@@ -103,15 +103,15 @@ def _show_online_help(context=None):
 
     base_url = 'http://inasafe.linfiniti.com/'
 
-    # set default value for myLocale
-    myLocale = 'en'
+    # set default value for locale
+    locale = 'en'
     if 'LANG' in os.environ:
-        myLocale = os.environ['LANG']
+        locale = os.environ['LANG']
 
-    if myLocale not in ['id', 'en']:
-        myLocale = 'en'
+    if locale not in ['id', 'en']:
+        locale = 'en'
 
-    base_url += myLocale
+    base_url += locale
     base_url += '/user-docs/'
 
     if context is not None:
@@ -119,6 +119,6 @@ def _show_online_help(context=None):
         LOGGER.debug(os.path.isfile(base_url))
     else:
         base_url += 'index.html'
-    myUrl = QtCore.QUrl(base_url)
+    url = QtCore.QUrl(base_url)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    QtGui.QDesktopServices.openUrl(myUrl)
+    QtGui.QDesktopServices.openUrl(url)
