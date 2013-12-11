@@ -61,14 +61,15 @@ UNITDATA = os.path.abspath(
                  'data'))
 
 # Known feature counts in test data
-FEATURE_COUNTS = {'test_buildings.shp': 144,
-                  'tsunami_building_exposure.shp': 19,
-                  'kecamatan_geo.shp': 42,
-                  'Padang_WGS84.shp': 3896,
-                  'OSM_building_polygons_20110905.shp': 34960,
-                  'indonesia_highway_sample.shp': 2,
-                  'OSM_subset.shp': 79,
-                  'kecamatan_jakarta_osm.shp': 47}
+FEATURE_COUNTS = {
+    'test_buildings.shp': 144,
+    'tsunami_building_exposure.shp': 19,
+    'kecamatan_geo.shp': 42,
+    'Padang_WGS84.shp': 3896,
+    'OSM_building_polygons_20110905.shp': 34960,
+    'indonesia_highway_sample.shp': 2,
+    'OSM_subset.shp': 79,
+    'kecamatan_jakarta_osm.shp': 47}
 
 # For testing of storage modules
 GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
@@ -78,6 +79,8 @@ GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
 
 def combine_coordinates(x, y):
     """Make list of all combinations of points for x and y coordinates
+    :param x:
+    :param y:
     """
 
     return axes_to_points(x, y)
