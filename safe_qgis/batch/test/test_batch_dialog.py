@@ -37,9 +37,7 @@ DOCK = Dock(IFACE)
 
 
 class BatchDialogTest(unittest.TestCase):
-    """Tests for the script/batch runner dialog.
-    """
-
+    """Tests for the script/batch runner dialog."""
     def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.
         """
