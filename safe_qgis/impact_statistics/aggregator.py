@@ -412,7 +412,7 @@ class Aggregator(QtCore.QObject):
         aggregation_layer_name = self.layer.name()
         if self.aoi_mode:
             aggregation_layer_name = aggregation_layer_name.lower()
-        later_name = str(self.tr('%s aggregated to %s') % (
+        layer_name = str(self.tr('%s aggregated to %s') % (
             qgis_impact_layer.name(), aggregation_layer_name))
 
         #delete unwanted fields
@@ -440,7 +440,7 @@ class Aggregator(QtCore.QObject):
         self.layer.updateFields()
         del unneeded_attributes, provider, fields
         self.update_keywords(
-            self.layer, {'title': later_name})
+            self.layer, {'title': layer_name})
 
         self.statistics_type, self.statistics_classes = (
             self.get_statistics(qgis_impact_layer))
