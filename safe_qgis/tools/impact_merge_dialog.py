@@ -32,7 +32,8 @@ from qgis.core import (QgsMapLayerRegistry,
                        QgsVectorDataProvider,
                        QgsField,
                        QgsRectangle,
-                       QgsAtlasComposition)
+                       QgsAtlasComposition,
+                        QgsComposerLabel)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
@@ -43,7 +44,10 @@ from safe_qgis.exceptions import (
     ReportCreationError)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.utilities import (
-    html_footer, html_header, add_ordered_combo_item)
+    html_header,
+    html_footer,
+    html_to_file,
+    add_ordered_combo_item)
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -86,10 +90,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         #pydevd.settrace(
         #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
-        # The image table reports
-        # Ex. {"jakarta barat": "/home/jakarta barat.png",
-        #      "jakarta timur": "/home/jakarta timur.png"}
-        self.image_reports = {}
+        # The html reports and its file path
+        # Ex. {"jakarta barat": "/home/jakarta barat.html",
+        #      "jakarta timur": "/home/jakarta timur.html"}
+        self.html_reports = {}
 
         # Whether to merge entire area or aggregated
         self.entire_area_mode = False
@@ -323,18 +327,16 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Generate html reports from merged dictionary
         html_reports = self.generate_html_from_merged_report(merged_report_dict)
 
-        # Now Generate image from html reports. Each image will be generated
-        # for each html report
-        html_renderer = HtmlRenderer(300)
+        # Now Generate html file from html reports.
+        # Each file will be generated for each html report
         for html_report in html_reports:
             aggregation_area = html_report[0]
             html = html_report[1]
-            image_report = html_renderer.html_to_image(html, 40)
-            path = '%s/%s.png' % (
+            path = '%s/%s.html' % (
                 str(self.output_directory.text()),
                 aggregation_area)
-            image_report.save(path)
-            self.image_reports[aggregation_area.lower()] = path
+            html_to_file(html, path)
+            self.html_reports[aggregation_area.lower()] = path
 
         # If it is aggregated by aggregation layer, then generate atlas report
         if not self.entire_area_mode:
@@ -412,19 +414,21 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """
         html_reports = []
         for aggregation_area in merged_report_dict:
-            html = ''
-            html += '<table class="table table-condensed table-striped">'
+            html = html_header()
+            html += ('<table style="width: auto" '
+                     'class="table table-condensed table-striped">')
             html += '<caption><h4>%s</h4></caption>' % aggregation_area.upper()
             exposure_report_dict = merged_report_dict[aggregation_area]
             for exposure in exposure_report_dict:
                 exposure_detail_dict = exposure_report_dict[exposure]
-                html += '<tr><th>%s</th></tr>' % exposure.upper()
+                html += '<tr><th>%s</th><th></th></tr>' % exposure.upper()
                 for datum in exposure_detail_dict:
                     html += ('<tr>'
                              '<td>%s</td>'
                              '<td>%s</td>'
                              '</tr>') % (datum, exposure_detail_dict[datum])
             html += '</table>'
+            html += html_footer()
             html_report = (aggregation_area, html)
             html_reports.append(html_report)
 
@@ -558,12 +562,16 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             y_interval = new_height / split_count
             composer_map.setGridIntervalY(y_interval)
 
-            table_image_report = composition.\
-                getComposerItemById('report_image')
-            # Self.image_reports must have only 1 key value pair
-            area_title = list(self.image_reports.keys())[0]
-            image_path = self.image_reports[area_title]
-            table_image_report.setPictureFile(image_path)
+            html_report_frame = composition.\
+                getComposerItemById('merged-report')
+            # Self.html_reports must have only 1 key value pair
+            area_title = list(self.html_reports.keys())[0]
+            html_report_path = self.html_reports[area_title]
+            html_file = open(html_report_path, 'r')
+            html_content = html_file.read()
+            html_file.close()
+            html_report_frame.setText(html_content)
+
             path = '%s/%s.pdf' % (
                 str(self.output_directory.text()),
                 area_title)
@@ -697,7 +705,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 feature_id = feature.id()
                 aggregation_area = \
                     feature.attributes()[aggregation_attribute_index].lower()
-                image_path = str(self.image_reports[aggregation_area])
+                image_path = str(self.html_reports[aggregation_area])
                 attributes = {img_path_attribute_index: image_path}
                 self.chosen_aggregation_layer.\
                     dataProvider().\
