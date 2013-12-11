@@ -37,7 +37,10 @@ from qgis.core import (QgsMapLayerRegistry,
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
 from safe_qgis.exceptions import (
-    CanceledImportDialogError, NoKeywordsFoundError, KeywordNotFoundError)
+    CanceledImportDialogError,
+    NoKeywordsFoundError,
+    KeywordNotFoundError,
+    ReportCreationError)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.utilities import (
     html_footer, html_header, add_ordered_combo_item)
@@ -99,11 +102,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             ':/plugins/inasafe/entire_area_merged_report.qpt'
         )
 
+        # Safe Logo Path
+        self.safe_logo_path = ':/plugins/inasafe/bnpb_logo.png'
+
         # Temporary attribute name for atlas generation
         self.temp_attribute_name = 'IMG_PATH'
-
-        # The composition instance to be used for atlas generation
-        self.composition = None
 
         # All the chosen layers to be processed
         self.first_impact_layer = None
@@ -326,7 +329,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         for html_report in html_reports:
             aggregation_area = html_report[0]
             html = html_report[1]
-            image_report = html_renderer.html_to_image(html, 50)
+            image_report = html_renderer.html_to_image(html, 40)
             path = '%s/%s.png' % (
                 str(self.output_directory.text()),
                 aggregation_area)
@@ -485,8 +488,21 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Create composition
         composition = self.load_template(renderer)
 
+        # set logo
+        safe_logo = composition.getComposerItemById('safe-logo')
+        if safe_logo is not None:
+            safe_logo.setPictureFile(self.safe_logo_path)
+        else:
+            raise ReportCreationError(self.tr(
+                'Image "safe-logo" could not be found'))
+
         # Get Map
         composer_map = composition.getComposerItemById('impact-map')
+
+        # Set Map Legend
+        legend = composition.getComposerItemById('impact-legend')
+        legend.setTitle(self.tr('Legend'))
+        legend.updateLegend()
 
         if self.entire_area_mode:
             # Get composer map size
@@ -544,7 +560,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             table_image_report = composition.\
                 getComposerItemById('report_image')
-
             # Self.image_reports must have only 1 key value pair
             area_title = list(self.image_reports.keys())[0]
             image_path = self.image_reports[area_title]
@@ -618,10 +633,34 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         document = QtXml.QDomDocument()
         document.setContent(template_content)
 
+        # Map Substitution
+        substitution_map = {
+            'impact-title': self.get_impact_title()
+        }
+
         # Load template
-        composition.loadFromTemplate(document)
+        composition.loadFromTemplate(document, substitution_map)
 
         return composition
+
+    def get_impact_title(self):
+        """Get the map title from the two impact layers.
+
+        :returns: None on error, otherwise the title.
+        :rtype: None, str
+        """
+        try:
+            first_impact_title = self.keyword_io.read_keywords(
+                self.first_impact_layer,
+                'map_title')
+            second_impact_title = self.keyword_io.read_keywords(
+                self.second_impact_layer,
+                'map_title')
+            return '%s and %s' % (first_impact_title, second_impact_title)
+        except KeywordNotFoundError:
+            return None
+        except Exception:
+            return None
 
     def add_image_path_to_aggregation_layer(self):
         """Add an attribute containing image path to aggregation layer."""

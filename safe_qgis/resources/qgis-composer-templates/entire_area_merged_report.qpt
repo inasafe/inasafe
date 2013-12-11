@@ -1,20 +1,182 @@
-<Composer title="1" visible="1">
+<Composer title="en_mer" visible="1">
  <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="210" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="0" generateWorldFile="0">
-  <ComposerPicture pictureWidth="180" file="." pictureHeight="120" mapId="-1">
-   <ComposerItem width="180" x="15" transparency="0" y="164.434" rotation="0" height="120" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{16c48306-0ad4-470c-97e9-a372c3f5f60e}" id="report_image" background="true" blendMode="0" positionLock="false">
+  <ComposerLegend symbolWidth="7" title="Legend" boxSpace="2" splitLayer="0" equalColumnWidth="0" map="0" symbolHeight="4" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="2" wmsLegendWidth="50" columnCount="1">
+   <styles>
+    <style marginBottom="4" name="title" font="Droid Sans,12,-1,5,75,0,0,0,0,0"/>
+    <style marginTop="2" name="group" font="Droid Sans,11,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="4" name="subgroup" font="Droid Sans,11,-1,5,50,2,0,0,0,0"/>
+    <style marginTop="2" name="symbol" font="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="2" marginLeft="4" name="symbolLabel" font="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
+   </styles>
+   <Model autoUpdate="1">
+    <LayerItem layerId="Estimated_buildings_affected20131211095058046" userText="" style="subgroup" text="Estimated buildings KAB" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="Not Inundated">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="30,252,124,255"/>
+         <prop k="color_border" v="30,252,124,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0.26"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="Inundated">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="243,26,28,255"/>
+         <prop k="color_border" v="243,26,28,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0.26"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
+    <LayerItem layerId="Population_which_need_evacuation20131211095022073" userText="" style="subgroup" text="Population KAB" showFeatureCount="0">
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#ffffff" text="[0 - 30]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#38a800" text="[30 - 59] Low"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#79c900" text="[59 - 89]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#ceed00" text="[89 - 118]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#ffcc00" text="[118 - 148] Medium"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#ff6600" text="[148 - 177]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#ff0000" text="[177 - 207]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095022073" userText="" color="#7a0000" text="[207 - 237] High"/>
+    </LayerItem>
+    <LayerItem layerId="Population_which_need_evacuation20131211095006905" userText="" style="subgroup" text="Population which need evacuation" showFeatureCount="0">
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#ffffff" text="[0 - 30]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#38a800" text="[30 - 59] Low"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#79c900" text="[59 - 89]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#ceed00" text="[89 - 118]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#ffcc00" text="[118 - 148] Medium"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#ff6600" text="[148 - 177]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#ff0000" text="[177 - 207]"/>
+     <RasterClassificationItem layerId="Population_which_need_evacuation20131211095006905" userText="" color="#7a0000" text="[207 - 237] High"/>
+    </LayerItem>
+    <LayerItem layerId="Estimated_buildings_affected20131211094950868" userText="" style="subgroup" text="Estimated buildings affected" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="Not Inundated">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="30,252,124,255"/>
+         <prop k="color_border" v="30,252,124,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0.26"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="Inundated">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="243,26,28,255"/>
+         <prop k="color_border" v="243,26,28,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0.26"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
+    <LayerItem layerId="buildings_osm_jakarta20131210172608291" userText="" style="hidden" text="buildings" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="buildings">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="170,85,0,255"/>
+         <prop k="color_border" v="0,0,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="no"/>
+         <prop k="width_border" v="0.26"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
+    <LayerItem layerId="district_osm_jakarta20131205131949093" userText="" style="hidden" text="District's of Jakarta" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="District's of Jakarta">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="201,101,151,255"/>
+         <prop k="color_border" v="0,0,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="no"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0.7"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
+    <LayerItem layerId="flood_hkv_current_jakarta20130306172642722" userText="" style="subgroup" text="a flood similar to the 2007 Jakarta event" showFeatureCount="0">
+     <RasterClassificationItem layerId="flood_hkv_current_jakarta20130306172642722" userText="" color="#aaffff" text="0.1 - 0.5"/>
+     <RasterClassificationItem layerId="flood_hkv_current_jakarta20130306172642722" userText="" color="#00aaff" text="0.5 - 1"/>
+     <RasterClassificationItem layerId="flood_hkv_current_jakarta20130306172642722" userText="" color="#0055ff" text="1 - 5"/>
+     <RasterClassificationItem layerId="flood_hkv_current_jakarta20130306172642722" userText="" color="#00007f" text="5 - 10"/>
+     <RasterClassificationItem layerId="flood_hkv_current_jakarta20130306172642722" userText="" color="#00003c" text="10+"/>
+    </LayerItem>
+    <LayerItem layerId="popmap10_all20130303155200367" userText="" style="subgroup" text="people" showFeatureCount="0">
+     <RasterClassificationItem layerId="popmap10_all20130303155200367" userText="" color="#0000ff" text="0.000000"/>
+     <RasterClassificationItem layerId="popmap10_all20130303155200367" userText="" color="#ffff7f" text="604.986963"/>
+     <RasterClassificationItem layerId="popmap10_all20130303155200367" userText="" color="#e2e270" text="1209.973926"/>
+     <RasterClassificationItem layerId="popmap10_all20130303155200367" userText="" color="#a0a04f" text="1814.960889"/>
+     <RasterClassificationItem layerId="popmap10_all20130303155200367" userText="" color="#58582c" text="2419.947852"/>
+     <RasterClassificationItem layerId="popmap10_all20130303155200367" userText="" color="#333319" text="3024.934814"/>
+    </LayerItem>
+   </Model>
+   <ComposerItem width="73.7172" x="128" transparency="0" y="152" rotation="0" height="267.5" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{88cc3abd-2837-4192-8b9c-95dbfcd2af2b}" id="impact-legend" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLegend>
+  <ComposerPicture pictureWidth="110" file="/" pictureHeight="133" mapId="-1">
+   <ComposerItem width="110" x="15" transparency="0" y="152" rotation="0" height="133" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="1.26668" uuid="{d63096c3-9e4a-4c1b-912c-43bb854312fd}" id="report_image" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank" htmlState="0" halign="1" margin="1">
+  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="200" x="10" transparency="0" y="287" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="2.60738" uuid="{52aaac70-f10f-43b6-bd12-eb0bd27a8dcd}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="180" x="15" transparency="0" y="285" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.26668" uuid="{6aa25823-1dae-4982-a763-a4f5ce87b271}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Render" drawCanvasItems="true">
+  <ComposerLabel valign="128" labelText="[impact-title]" htmlState="0" halign="1" margin="1">
+   <LabelFont description="Droid Sans,16,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="180" x="15" transparency="0" y="140" rotation="0" height="12" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="1.26668" uuid="{b45d6c20-8883-4132-9475-ac1783970eee}" id="impact-title" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Rectangle" drawCanvasItems="false">
    <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
     <symbol alpha="0.3" type="fill" name="">
      <layer pass="0" class="SimpleFill" locked="0">
@@ -29,7 +191,7 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-6.37999999999999989" xmin="106.62199999999999989" ymax="-6.08000000000000007" xmax="107.0379999999999967"/>
+   <Extent ymin="-6.33458761266622972" xmin="106.60077412211718695" ymax="-6.04387431748503801" xmax="107.07648678695913702"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="3" intervalX="0" offsetX="0" intervalY="0" offsetY="0" gridFrameStyle="0" gridFrameWidth="2" gridBlendMode="0" show="1">
     <symbol alpha="1" type="line" name="">
@@ -51,7 +213,7 @@
      <fontColor red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <ComposerItem width="180" x="15" transparency="0" y="27.0786" rotation="0" height="129.808" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.24596" uuid="{2ff628ab-e758-4d0d-bd63-bb73db87cbc8}" id="impact-map" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="180" x="15" transparency="0" y="25" rotation="0" height="110" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.13423" uuid="{397532d8-987e-445d-834b-216462bf75cf}" id="impact-map" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -59,19 +221,25 @@
   <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="4" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="191.091" x="9.20267" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.00291" uuid="{1fabdb69-3e2f-4872-bd6a-26cd59048e05}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="165" x="30" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="1.26668" uuid="{150680f8-8a9f-40b0-b7ff-b07c1b6134fd}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
+  <ComposerPicture pictureWidth="10" file="/data/samples/inasafe/InaSAFEPackages/Jakarta" pictureHeight="10" mapId="-1">
+   <ComposerItem width="10" x="15" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="1" lastValidViewScaleFactor="1.26668" uuid="{cf5db715-1e88-4c04-8d5d-e14f5fd0c17d}" id="safe-logo" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerPicture>
   <ComposerHtml resizeMode="0" url="">
    <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="0" x="175.744" transparency="0" y="27.9593" rotation="0" height="0" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{e05b4d60-15b9-497a-ab50-bd786a88b6c0}" id="" background="true" blendMode="0" positionLock="false">
+    <ComposerItem width="0" x="175.744" transparency="0" y="27.9593" rotation="0" height="0" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{c2715af9-cfa9-4ce4-8b22-e10397779b76}" id="" background="true" blendMode="0" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
    </ComposerFrame>
   </ComposerHtml>
  </Composition>
- <Atlas hideCoverage="false" coverageLayer="jakarta_buildings_osm20130303154556596" fixedScale="false" composerMap="0" singleFile="false" filenamePattern="'output_'||$feature" enabled="true" filterFeatures="false" sortFeatures="false" margin="0.1"/>
+ <Atlas hideCoverage="false" coverageLayer="" fixedScale="false" composerMap="0" singleFile="false" filenamePattern="'output_'||$feature" enabled="true" filterFeatures="false" sortFeatures="false" margin="0.1"/>
 </Composer>
