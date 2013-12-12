@@ -147,7 +147,7 @@ class HtmlRendererTest(unittest.TestCase):
         print 'Output pdf to %s' % path
         self.assertIn(size, expected_sizes)
 
-    def test_render_html_toI_image(self):
+    def test_render_html_to_image(self):
         """Test that we can render html to a pixmap."""
         LOGGER.debug('InaSAFE HtmlRenderer testing renderHtmlToImage')
         html = self.sample_html(20)

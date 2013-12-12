@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe_qgis.batch import scenario_runner
 
 __author__ = 'bungcip@gmail.com & tim@linfiniti.com & imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -38,6 +37,7 @@ from PyQt4.QtGui import (
 
 from qgis.core import QgsRectangle
 
+from safe_qgis.batch import scenario_runner
 from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
 
 from safe_qgis.report.map import Map
@@ -128,18 +128,19 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         # restore last source path
         last_source_path = settings.value(
-            'inasafe/lastSourceDir', self.default_directory)
+            'inasafe/lastSourceDir', self.default_directory, type=str)
         self.source_directory.setText(last_source_path)
 
         # restore path pdf output
         last_output_dir = settings.value(
-            'inasafe/lastOutputDir', self.default_directory)
+            'inasafe/lastOutputDir', self.default_directory, type=str)
         self.output_directory.setText(last_output_dir)
 
         # restore default output dir combo box
         use_default_output_dir = bool(settings.value(
             'inasafe/useDefaultOutputDir', True))
-        self.scenario_directory_radio.setChecked(use_default_output_dir)
+        self.scenario_directory_radio.setChecked(
+            use_default_output_dir, type=str)
 
     def save_state(self):
         """Save current state of GUI to configuration file"""
