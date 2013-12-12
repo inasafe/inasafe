@@ -23,12 +23,12 @@ import qgis  # pylint: disable=W0611
 
 import unittest
 
+from safe.common.testing import get_qgis_app
 from safe_qgis.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
     SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.widgets.dock import Dock
-from safe.common.testing import get_qgis_app
 
 
 # Get QGis app handle
