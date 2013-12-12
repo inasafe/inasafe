@@ -23,7 +23,7 @@ from xml.dom import minidom
 #noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore, QtXml
 #noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QVariant
+from PyQt4.QtCore import QSettings, pyqtSignature, QVariant, QUrl
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog
 from qgis.core import (QgsMapLayerRegistry,
@@ -32,8 +32,7 @@ from qgis.core import (QgsMapLayerRegistry,
                        QgsVectorDataProvider,
                        QgsField,
                        QgsRectangle,
-                       QgsAtlasComposition,
-                        QgsComposerLabel)
+                       QgsAtlasComposition)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
@@ -51,9 +50,7 @@ from safe_qgis.utilities.utilities import (
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.report.html_renderer import HtmlRenderer
 
-#from pydev import pydevd  # pylint: disable=F0401
 INFO_STYLE = styles.INFO_STYLE
 
 
@@ -86,10 +83,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.show_info()
         self.restore_state()
 
-        # Enable remote debugging - should normally be commented out.
-        #pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
-
         # The html reports and its file path
         # Ex. {"jakarta barat": "/home/jakarta barat.html",
         #      "jakarta timur": "/home/jakarta timur.html"}
@@ -99,11 +92,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.entire_area_mode = False
 
         # Template Path for composer
-        self.aggregated_template_path = (
-            ':/plugins/inasafe/aggregated_merged_report.qpt'
-        )
-        self.entire_area_template_path = (
-            ':/plugins/inasafe/entire_area_merged_report.qpt'
+        self.template_path = (
+            ':/plugins/inasafe/merged_report.qpt'
         )
 
         # Safe Logo Path
@@ -506,6 +496,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Get Map
         composer_map = composition.getComposerItemById('impact-map')
 
+        # Get HTML Report Frame
+        html_report_item = composition.getComposerItemById('merged-report')
+        html_report_frame = composition.getComposerHtmlByItem(html_report_item)
+
         # Set Map Legend
         legend = composition.getComposerItemById('impact-legend')
         legend.setTitle(self.tr('Legend'))
@@ -565,15 +559,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             y_interval = new_height / split_count
             composer_map.setGridIntervalY(y_interval)
 
-            html_report_frame = composition.\
-                getComposerItemById('merged-report')
             # Self.html_reports must have only 1 key value pair
             area_title = list(self.html_reports.keys())[0]
             html_report_path = self.html_reports[area_title]
-            html_file = open(html_report_path, 'r')
-            html_content = html_file.read()
-            html_file.close()
-            html_report_frame.setText(html_content)
+            html_report_frame.setUrl(QUrl('file://%s' % html_report_path))
 
             path = '%s/%s.pdf' % (
                 str(self.output_directory.text()),
@@ -613,6 +602,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 path = '%s/%s.pdf' % (
                     str(self.output_directory.text()),
                     atlas.currentFilename())
+
+                # Self.html_reports must have only 1 key value pair
+                area_title = atlas.currentFilename().lower()
+                html_report_path = self.html_reports[area_title]
+                html_report_frame.setUrl(QUrl('file://%s' % html_report_path))
+
                 composition.exportAsPDF(path)
 
             # End of rendering
@@ -630,12 +625,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Create Composition
         composition = QgsComposition(renderer)
 
-        # Read template content
-        if not self.entire_area_mode:
-            template_file = QtCore.QFile(self.aggregated_template_path)
-        else:
-            template_file = QtCore.QFile(self.entire_area_template_path)
-
+        template_file = QtCore.QFile(self.template_path)
         template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
         template_content = template_file.readAll()
         template_file.close()
