@@ -20,6 +20,7 @@ import os
 import sys
 import unittest
 from PyQt4 import Qt
+from PyQt4.QtGui import QApplication
 from third_party.pydispatch import dispatcher
 import safe.common.utilities
 from safe_qgis.widgets.message_viewer import MessageViewer
