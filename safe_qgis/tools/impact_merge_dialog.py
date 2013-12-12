@@ -23,14 +23,12 @@ from xml.dom import minidom
 #noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore, QtXml
 #noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QVariant, QUrl
+from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog
 from qgis.core import (QgsMapLayerRegistry,
                        QgsMapRenderer,
                        QgsComposition,
-                       QgsVectorDataProvider,
-                       QgsField,
                        QgsRectangle,
                        QgsAtlasComposition)
 
@@ -98,9 +96,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Safe Logo Path
         self.safe_logo_path = ':/plugins/inasafe/bnpb_logo.png'
-
-        # Temporary attribute name for atlas generation
-        self.temp_attribute_name = 'IMG_PATH'
 
         # All the chosen layers to be processed
         self.first_impact_layer = None
@@ -331,18 +326,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html_to_file(html, path)
             self.html_reports[aggregation_area.lower()] = path
 
-        # If it is aggregated by aggregation layer, then generate atlas report
-        if not self.entire_area_mode:
-            # Add attribute image report path to aggregation layer
-            self.add_image_path_to_aggregation_layer()
-
         # Generate Reports:
         self.generate_reports()
-
-        # If it is aggregated by aggregation layer, clean some works
-        if not self.entire_area_mode:
-            # Delete attribute image report from aggregation layer
-            self.delete_image_path_from_aggregation_layer()
 
     @staticmethod
     def generate_report_dictionary_from_dom(html_dom):
@@ -485,7 +470,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Create composition
         composition = self.load_template(renderer)
 
-        # set logo
+        # Set logo
         safe_logo = composition.getComposerItemById('safe-logo')
         if safe_logo is not None:
             safe_logo.setPictureFile(self.safe_logo_path)
@@ -599,16 +584,19 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Iterate all aggregation unit in aggregation layer
             for i in range(0, atlas.numFeatures()):
                 atlas.prepareForFeature(i)
+
+                current_filename = atlas.currentFilename()
                 path = '%s/%s.pdf' % (
                     str(self.output_directory.text()),
-                    atlas.currentFilename())
+                    current_filename)
 
-                # Self.html_reports must have only 1 key value pair
-                area_title = atlas.currentFilename().lower()
-                html_report_path = self.html_reports[area_title]
-                html_report_frame.setUrl(QUrl('file://%s' % html_report_path))
-
-                composition.exportAsPDF(path)
+                # Only print the area that has the report
+                area_title = current_filename.lower()
+                if area_title in self.html_reports:
+                    html_report_path = self.html_reports[area_title]
+                    html_report_frame.setUrl(
+                        QUrl('file://%s' % html_report_path))
+                    composition.exportAsPDF(path)
 
             # End of rendering
             atlas.endRender()
@@ -662,65 +650,3 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             return None
         except Exception:
             return None
-
-    def add_image_path_to_aggregation_layer(self):
-        """Add an attribute containing image path to aggregation layer."""
-        self.chosen_aggregation_layer.startEditing()
-
-        provider = self.chosen_aggregation_layer.dataProvider()
-        capabilities = provider.capabilities()
-        # Check if the attribute is already there. Delete it first!
-        index = provider.fieldNameIndex(self.temp_attribute_name)
-        if index != -1:
-            if capabilities & QgsVectorDataProvider.DeleteAttributes:
-                result = provider.deleteAttributes([index])
-                if not result:
-                    raise Exception('Error deleting attribute: %s.'
-                                    % self.temp_attribute_name)
-        # Add Attribute
-        if capabilities & QgsVectorDataProvider.AddAttributes:
-            result = provider.addAttributes(
-                [QgsField(self.temp_attribute_name, QVariant.String)])
-            if not result:
-                raise Exception('Error adding attribute:%s.'
-                                % self.temp_attribute_name)
-
-        aggregation_attribute_index = \
-            provider.fieldNameIndex(self.aggregation_attribute)
-
-        # Modify the attribute of img_path
-        img_path_attribute_index = self.chosen_aggregation_layer\
-            .dataProvider().fieldNameIndex(self.temp_attribute_name)
-        if capabilities & QgsVectorDataProvider.ChangeAttributeValues:
-            features = self.chosen_aggregation_layer.getFeatures()
-            for feature in features:
-                feature_id = feature.id()
-                aggregation_area = \
-                    feature.attributes()[aggregation_attribute_index].lower()
-                image_path = str(self.html_reports[aggregation_area])
-                attributes = {img_path_attribute_index: image_path}
-                self.chosen_aggregation_layer.\
-                    dataProvider().\
-                    changeAttributeValues({feature_id: attributes})
-                print 'test'
-
-        else:
-            raise Exception('Attribute %s can not be modified.'
-                            % self.temp_attribute_name)
-
-        self.chosen_aggregation_layer.commitChanges()
-
-    def delete_image_path_from_aggregation_layer(self):
-        """Delete an attribute containing image path from aggregation layer."""
-        self.chosen_aggregation_layer.startEditing()
-
-        provider = self.chosen_aggregation_layer.dataProvider()
-        capabilities = provider.capabilities()
-        # Check if the attribute is already there. Delete it first!
-        index = provider.fieldNameIndex(self.temp_attribute_name)
-        if index != -1:
-            if capabilities & QgsVectorDataProvider.DeleteAttributes:
-                result = provider.deleteAttributes([index])
-                if not result:
-                    raise Exception('Error deleting attribute: %s.'
-                                    % self.temp_attribute_name)
