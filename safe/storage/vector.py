@@ -912,15 +912,13 @@ class Vector(Layer):
     def get_geometry(self, copy=False, as_geometry_objects=False):
         """Return geometry for vector layer.
 
-        Depending on the feature type, geometry is
+        Depending on the feature type, geometry is::
 
-        =============   ===========
-        geometry type   output type
-        =============   ===========
-        point           list of 2x1 array of longitudes and latitudes)
-        line            list of arrays of coordinates
-        polygon         list of arrays of coordinates
-        =============   ===========
+          geometry type   output type
+
+          point           list of 2x1 array of longitudes and latitudes)
+          line            list of arrays of coordinates
+          polygon         list of arrays of coordinates
 
         Optional boolean argument as_geometry_objects will change the return
         value to a list of geometry objects rather than a list of arrays.
