@@ -117,6 +117,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.second_impact_layer = None
         self.chosen_aggregation_layer = None
 
+        # The attribute name to aggregate in chosen aggregation layer
+        self.aggregation_attribute = None
+
         # Report from first and second impact layer keywords:
         self.first_postprocessing_report = None
         self.second_postprocessing_report = None
@@ -301,7 +304,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.second_postprocessing_report = self.keyword_io.read_keywords(
                 self.second_impact_layer, 'postprocessing_report')
             if self.chosen_aggregation_layer is not None:
-                self.keyword_io.read_keywords(
+                self.aggregation_attribute = self.keyword_io.read_keywords(
                     self.chosen_aggregation_layer,
                     'aggregation attribute')
         except (NoKeywordsFoundError, KeywordNotFoundError):
@@ -599,7 +602,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             atlas.setComposerMap(composer_map)
 
             # set output filename pattern
-            atlas.setFilenamePattern("KAB_NAME")
+            atlas.setFilenamePattern(self.aggregation_attribute)
 
             # Start rendering
             atlas.beginRender()
@@ -692,9 +695,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 raise Exception('Error adding attribute:%s.'
                                 % self.temp_attribute_name)
 
-        aggregation_attribute = 'KAB_NAME'
         aggregation_attribute_index = \
-            provider.fieldNameIndex(aggregation_attribute)
+            provider.fieldNameIndex(self.aggregation_attribute)
 
         # Modify the attribute of img_path
         img_path_attribute_index = self.chosen_aggregation_layer\
