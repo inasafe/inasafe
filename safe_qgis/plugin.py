@@ -114,7 +114,7 @@ class Plugin:
         if preferred_locale is not None:
             locale_name = preferred_locale
         elif override_flag:
-            locale_name = QSettings().value('locale/userLocale', '')
+            locale_name = QSettings().value('locale/userLocale', '', type=str)
         else:
             locale_name = QLocale.system().name()
             # NOTES: we split the locale name because we need the first two

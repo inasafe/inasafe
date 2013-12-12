@@ -138,7 +138,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         # restore default output dir combo box
         use_default_output_dir = bool(settings.value(
-            'inasafe/useDefaultOutputDir', True))
+            'inasafe/useDefaultOutputDir', True, type=bool))
         self.scenario_directory_radio.setChecked(
             use_default_output_dir, type=str)
 

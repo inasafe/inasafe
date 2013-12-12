@@ -1093,7 +1093,7 @@ class TestDock(TestCase):
 
         # use QGIS zonal stats only in the test
         qgis_zonal_flag = bool(QtCore.QSettings().value(
-            'inasafe/use_native_zonal_stats', False))
+            'inasafe/use_native_zonal_stats', False, type=bool))
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats', True)
         DOCK.accept()
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats',

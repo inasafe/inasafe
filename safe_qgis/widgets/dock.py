@@ -1996,7 +1996,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         title_dialog = self.tr('Save Scenario')
         # get last dir from setting
         settings = QSettings()
-        last_save_dir = settings.value('inasafe/lastSourceDir', '.')
+        last_save_dir = settings.value('inasafe/lastSourceDir', '.', type=str)
         default_name = title.replace(
             ' ', '_').replace('(', '').replace(')', '')
         if scenario_file_path is None:
