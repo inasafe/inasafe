@@ -355,18 +355,23 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         :param index: Not used but required for Qt slot.
         """
-        del index
-        item = self.cboSubcategory.itemData(
+        if index == -1:
+            self.remove_item_by_key('subcategory')
+            return
+
+        text = self.cboSubcategory.itemData(
             self.cboSubcategory.currentIndex())
-        text = str(item.toString())
+
         # I found that myText is 'Not Set' for every language
         if text == self.tr('Not Set') or text == 'Not Set':
             self.remove_item_by_key('subcategory')
             return
+
         tokens = text.split(' ')
         if len(tokens) < 1:
             self.remove_item_by_key('subcategory')
             return
+
         subcategory = tokens[0]
         self.add_list_entry('subcategory', subcategory)
 
