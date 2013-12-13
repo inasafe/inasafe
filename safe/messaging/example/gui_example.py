@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid - **Dispatcher gui example.**
 
@@ -58,14 +59,20 @@ class WebView(QtWebKit.QWebView):
         self.header = header.replace('PATH', base_dir)
 
     def static_message_event(self, sender, message):
-        """Static message event handler - set message state based on event."""
+        """Static message event handler - set message state based on event.
+        :param message:
+        :param sender:
+        """
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
         self.show_messages()
 
     def dynamic_message_event(self, sender, message):
-        """Dynamic event handler - set message state based on event."""
+        """Dynamic event handler - set message state based on event.
+        :param message:
+        :param sender:
+        """
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
         self.show_messages()
@@ -85,6 +92,9 @@ class WebView(QtWebKit.QWebView):
 
 
 class ImpactFunction1():
+    """Fake impact function 1
+    """
+
     def __init__(self):
         message = Message(SuccessParagraph('IF1 was initialised'))
         dispatcher.send(
@@ -94,6 +104,8 @@ class ImpactFunction1():
         self.count = 0
 
     def run(self):
+        """Run
+        """
         self.count += 1
         message = Paragraph('IF1 run %i - running' % self.count)
         dispatcher.send(
@@ -103,6 +115,9 @@ class ImpactFunction1():
 
 
 class ImpactFunction2():
+    """Fake impact function 2.
+    """
+
     def __init__(self):
         message = Message(SuccessParagraph('IF2 was initialised'))
         dispatcher.send(
@@ -112,6 +127,8 @@ class ImpactFunction2():
         self.count = 0
 
     def run(self):
+        """Run.
+        """
         self.count += 1
         message = Paragraph('IF2 run %i - running' % self.count)
         dispatcher.send(
@@ -121,6 +138,9 @@ class ImpactFunction2():
 
 
 class Dock():
+    """Dock.
+    """
+
     def __init__(self):
         self.message_queue = WebView()
         # Set up dispatcher for dynamic messages
@@ -138,6 +158,8 @@ class Dock():
             sender=dispatcher.Any)
 
     def run(self):
+        """Run.
+        """
         message = Message()
         message.add(Heading('Processing starting'))
         text = Text('This is an example application showing how the ')

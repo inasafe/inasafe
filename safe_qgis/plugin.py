@@ -10,11 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import logging
-from safe_qgis.utilities import custom_logging
-
-LOGGER = logging.getLogger('InaSAFE')
-
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
@@ -23,6 +18,11 @@ __copyright__ += 'Disaster Reduction'
 
 import sys
 import os
+import logging
+from safe_qgis.utilities import custom_logging
+
+LOGGER = logging.getLogger('InaSAFE')
+
 
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import (
@@ -74,10 +74,22 @@ class Plugin:
 
         # Save reference to the QGIS interface
         self.iface = iface
+        self.dock_widget = None
+        self.action_import_dialog = None
+        self.action_save_scenario = None
+        self.action_batch_runner = None
+        self.action_shake_converter = None
+        self.action_minimum_needs = None
+        self.key_action = None
+        self.action_function_browser = None
+        self.action_options = None
+        self.action_reset_dock = None
+        self.action_keywords_dialog = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
         self.setup_i18n()
+        self.action_dock = None
         #print self.tr('InaSAFE')
         custom_logging.setup_logger()
         # For enable/disable the keyword editor icon
@@ -96,47 +108,49 @@ class Plugin:
         :type preferred_locale: str, None
         :raises: TranslationLoadException
         """
-        myOverrideFlag = QSettings().value('locale/overrideFlag', False)
+        override_flag = QSettings().value(
+            'locale/overrideFlag', False, type=bool)
 
         if preferred_locale is not None:
-            myLocaleName = preferred_locale
-        elif myOverrideFlag:
-            myLocaleName = QSettings().value('locale/userLocale', '')
+            locale_name = preferred_locale
+        elif override_flag:
+            locale_name = QSettings().value('locale/userLocale', '', type=str)
         else:
-            myLocaleName = QLocale.system().name()
+            locale_name = QLocale.system().name()
             # NOTES: we split the locale name because we need the first two
             # character i.e. 'id', 'af, etc
-            myLocaleName = str(myLocaleName).split('_')[0]
+            locale_name = str(locale_name).split('_')[0]
 
         # Also set the system locale to the user overridden local
         # so that the inasafe library functions gettext will work
         # .. see:: :py:func:`common.utilities`
-        os.environ['LANG'] = str(myLocaleName)
+        os.environ['LANG'] = str(locale_name)
 
         LOGGER.debug('%s %s %s %s' % (
             preferred_locale,
-            myOverrideFlag,
+            override_flag,
             QLocale.system().name(),
             os.environ['LANG']))
 
-        myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        myTranslationPath = os.path.join(
-            myRoot, 'safe_qgis', 'i18n',
-            'inasafe_' + str(myLocaleName) + '.qm')
+        root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        translation_path = os.path.join(
+            root, 'safe_qgis', 'i18n',
+            'inasafe_' + str(locale_name) + '.qm')
 
-        if os.path.exists(myTranslationPath):
+        if os.path.exists(translation_path):
             self.translator = QTranslator()
-            myResult = self.translator.load(myTranslationPath)
-            if not myResult:
-                myMessage = 'Failed to load translation for %s' % myLocaleName
-                raise TranslationLoadError(myMessage)
-            # noinspection PyTypeChecker
+            result = self.translator.load(translation_path)
+            if not result:
+                message = 'Failed to load translation for %s' % locale_name
+                raise TranslationLoadError(message)
+            # noinspection PyTypeChecker,PyCallByClass
             QCoreApplication.installTranslator(self.translator)
 
         LOGGER.debug('%s %s' % (
-            myTranslationPath,
-            os.path.exists(myTranslationPath)))
+            translation_path,
+            os.path.exists(translation_path)))
 
+    # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
 
@@ -148,7 +162,7 @@ class Plugin:
         :returns: Translated version of message.
         :rtype: QString
         """
-        # noinspection PyTypeChecker,PyArgumentList
+        # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('Plugin', message)
 
     def add_action(self, action, add_to_toolbar=True):
@@ -168,7 +182,7 @@ class Plugin:
         if add_to_toolbar:
             self.toolbar.addAction(action)
 
-    #noinspection PyCallByClass
+    # noinspection PyPep8Naming
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
 
@@ -183,181 +197,183 @@ class Plugin:
         self.toolbar.setObjectName('InaSAFEToolBar')
         # Import dock here as it needs to be imported AFTER i18n is set up
         from safe_qgis.widgets.dock import Dock
-        self.dockWidget = None
+        self.dock_widget = None
         #--------------------------------------
         # Create action for plugin dockable window (show/hide)
         #--------------------------------------
         # pylint: disable=W0201
-        self.actionDock = QAction(
+        self.action_dock = QAction(
             QIcon(':/plugins/inasafe/icon.svg'),
             self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
-        self.actionDock.setObjectName('InaSAFEDockToggle')
-        self.actionDock.setStatusTip(self.tr(
+        self.action_dock.setObjectName('InaSAFEDockToggle')
+        self.action_dock.setStatusTip(self.tr(
             'Show/hide InaSAFE dock widget'))
-        self.actionDock.setWhatsThis(self.tr(
+        self.action_dock.setWhatsThis(self.tr(
             'Show/hide InaSAFE dock widget'))
-        self.actionDock.setCheckable(True)
-        self.actionDock.setChecked(True)
-        self.actionDock.triggered.connect(self.toggle_dock_visibility)
-        self.add_action(self.actionDock)
+        self.action_dock.setCheckable(True)
+        self.action_dock.setChecked(True)
+        self.action_dock.triggered.connect(self.toggle_dock_visibility)
+        self.add_action(self.action_dock)
 
         #--------------------------------------
         # Create action for keywords editor
         #--------------------------------------
-        self.actionKeywordsDialog = QAction(
+        self.action_keywords_dialog = QAction(
             QIcon(':/plugins/inasafe/show-keyword-editor.svg'),
             self.tr('InaSAFE Keyword Editor'),
             self.iface.mainWindow())
-        self.actionKeywordsDialog.setStatusTip(self.tr(
+        self.action_keywords_dialog.setStatusTip(self.tr(
             'Open InaSAFE keywords editor'))
-        self.actionKeywordsDialog.setWhatsThis(self.tr(
+        self.action_keywords_dialog.setWhatsThis(self.tr(
             'Open InaSAFE keywords editor'))
-        self.actionKeywordsDialog.setEnabled(False)
+        self.action_keywords_dialog.setEnabled(False)
 
-        self.actionKeywordsDialog.triggered.connect(self.show_keywords_editor)
+        self.action_keywords_dialog.triggered.connect(self.show_keywords_editor)
 
-        self.add_action(self.actionKeywordsDialog)
+        self.add_action(self.action_keywords_dialog)
 
         #--------------------------------------
         # Create action for reset icon
         #--------------------------------------
-        self.actionResetDock = QAction(
+        self.action_reset_dock = QAction(
             QIcon(':/plugins/inasafe/reset-dock.svg'),
             self.tr('Reset Dock'), self.iface.mainWindow())
-        self.actionResetDock.setStatusTip(self.tr(
+        self.action_reset_dock.setStatusTip(self.tr(
             'Reset the InaSAFE Dock'))
-        self.actionResetDock.setWhatsThis(self.tr(
+        self.action_reset_dock.setWhatsThis(self.tr(
             'Reset the InaSAFE Dock'))
-        self.actionResetDock.triggered.connect(self.reset_dock)
+        self.action_reset_dock.triggered.connect(self.reset_dock)
 
-        self.add_action(self.actionResetDock)
+        self.add_action(self.action_reset_dock)
 
         #--------------------------------------
         # Create action for options dialog
         #--------------------------------------
-        self.actionOptions = QAction(
+        self.action_options = QAction(
             QIcon(':/plugins/inasafe/configure-inasafe.svg'),
             self.tr('InaSAFE Options'), self.iface.mainWindow())
-        self.actionOptions.setStatusTip(self.tr(
+        self.action_options.setStatusTip(self.tr(
             'Open InaSAFE options dialog'))
-        self.actionOptions.setWhatsThis(self.tr(
+        self.action_options.setWhatsThis(self.tr(
             'Open InaSAFE options dialog'))
-        self.actionOptions.triggered.connect(self.show_options)
+        self.action_options.triggered.connect(self.show_options)
 
-        self.add_action(self.actionOptions)
+        self.add_action(self.action_options)
 
         #--------------------------------------
         # Create action for impact functions doc dialog
         #--------------------------------------
-        self.actionFunctionBrowser = QAction(
+        self.action_function_browser = QAction(
             QIcon(':/plugins/inasafe/show-impact-functions.svg'),
             self.tr('InaSAFE Impact Functions Browser'),
             self.iface.mainWindow())
-        self.actionFunctionBrowser.setStatusTip(self.tr(
+        self.action_function_browser.setStatusTip(self.tr(
             'Open InaSAFE Impact Functions Browser'))
-        self.actionFunctionBrowser.setWhatsThis(self.tr(
+        self.action_function_browser.setWhatsThis(self.tr(
             'Open InaSAFE Impact Functions Browser'))
-        self.actionFunctionBrowser.triggered.connect(
+        self.action_function_browser.triggered.connect(
             self.show_function_browser)
 
-        self.add_action(self.actionFunctionBrowser)
+        self.add_action(self.action_function_browser)
 
         # Short cut for Open Impact Functions Doc
-        self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
-        self.iface.registerMainWindowAction(self.keyAction, "F7")
-        self.keyAction.triggered.connect(self.shortcut_f7)
+        self.key_action = QAction("Test Plugin", self.iface.mainWindow())
+        self.iface.registerMainWindowAction(self.key_action, "F7")
+        self.key_action.triggered.connect(self.shortcut_f7)
 
         #---------------------------------------
         # Create action for minimum needs dialog
         #---------------------------------------
-        self.actionMinimumNeeds = QAction(
+        self.action_minimum_needs = QAction(
             QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
             self.tr('InaSAFE Minimum Needs Tool'), self.iface.mainWindow())
-        self.actionMinimumNeeds.setStatusTip(self.tr(
+        self.action_minimum_needs.setStatusTip(self.tr(
             'Open InaSAFE minimum needs tool'))
-        self.actionMinimumNeeds.setWhatsThis(self.tr(
+        self.action_minimum_needs.setWhatsThis(self.tr(
             'Open InaSAFE minimum needs tool'))
-        self.actionMinimumNeeds.triggered.connect(self.show_minimum_needs)
+        self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
 
-        self.add_action(self.actionMinimumNeeds)
+        self.add_action(self.action_minimum_needs)
 
         #---------------------------------------
         # Create action for converter dialog
         #---------------------------------------
-        self.actionConverter = QAction(
+        self.action_shake_converter = QAction(
             QIcon(':/plugins/inasafe/show-converter-tool.svg'),
             self.tr('InaSAFE Converter'), self.iface.mainWindow())
-        self.actionConverter.setStatusTip(self.tr(
+        self.action_shake_converter.setStatusTip(self.tr(
             'Open InaSAFE Converter'))
-        self.actionConverter.setWhatsThis(self.tr(
+        self.action_shake_converter.setWhatsThis(self.tr(
             'Open InaSAFE Converter'))
-        self.actionConverter.triggered.connect(self.show_shakemap_importer)
+        self.action_shake_converter.triggered.connect(
+            self.show_shakemap_importer)
 
-        self.add_action(self.actionConverter)
+        self.add_action(self.action_shake_converter)
 
         #---------------------------------------
         # Create action for batch runner dialog
         #---------------------------------------
-        self.actionBatchRunner = QAction(
+        self.action_batch_runner = QAction(
             QIcon(':/plugins/inasafe/show-batch-runner.svg'),
             self.tr('InaSAFE Batch Runner'), self.iface.mainWindow())
-        self.actionBatchRunner.setStatusTip(self.tr(
+        self.action_batch_runner.setStatusTip(self.tr(
             'Open InaSAFE Batch Runner'))
-        self.actionBatchRunner.setWhatsThis(self.tr(
+        self.action_batch_runner.setWhatsThis(self.tr(
             'Open InaSAFE Batch Runner'))
-        self.actionBatchRunner.triggered.connect(self.show_batch_runner)
+        self.action_batch_runner.triggered.connect(self.show_batch_runner)
 
-        self.add_action(self.actionBatchRunner)
+        self.add_action(self.action_batch_runner)
 
         #---------------------------------------
         # Create action for batch runner dialog
         #---------------------------------------
-        self.actionSaveScenario = QAction(
+        self.action_save_scenario = QAction(
             QIcon(':/plugins/inasafe/save-as-scenario.svg'),
             self.tr('Save current scenario'), self.iface.mainWindow())
 
-        myMessage = self.tr('Save current scenario to text file')
-        self.actionSaveScenario.setStatusTip(myMessage)
-        self.actionSaveScenario.setWhatsThis(myMessage)
+        message = self.tr('Save current scenario to text file')
+        self.action_save_scenario.setStatusTip(message)
+        self.action_save_scenario.setWhatsThis(message)
         # noinspection PyUnresolvedReferences
-        self.actionSaveScenario.triggered.connect(self.save_scenario)
-        self.add_action(self.actionSaveScenario)
+        self.action_save_scenario.triggered.connect(self.save_scenario)
+        self.add_action(self.action_save_scenario)
 
         #--------------------------------------
         # Create action for import OSM Dialog
         #--------------------------------------
-        self.actionImportDlg = QAction(
+        self.action_import_dialog = QAction(
             QIcon(':/plugins/inasafe/show-osm-download.svg'),
             self.tr('InaSAFE OpenStreetMap Downloader'),
             self.iface.mainWindow())
-        self.actionImportDlg.setStatusTip(self.tr(
+        self.action_import_dialog.setStatusTip(self.tr(
             'InaSAFE OpenStreetMap Downloader'))
-        self.actionImportDlg.setWhatsThis(self.tr(
+        self.action_import_dialog.setWhatsThis(self.tr(
             'InaSAFE OpenStreetMap Downloader'))
-        self.actionImportDlg.triggered.connect(self.show_osm_downloader)
+        self.action_import_dialog.triggered.connect(self.show_osm_downloader)
 
-        self.add_action(self.actionImportDlg)
+        self.add_action(self.action_import_dialog)
 
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
-        self.dockWidget = Dock(self.iface)
-        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockWidget)
+        self.dock_widget = Dock(self.iface)
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
 
         if myLegendTab:
             self.iface.mainWindow().tabifyDockWidget(
-                myLegendTab, self.dockWidget)
-            self.dockWidget.raise_()
+                myLegendTab, self.dock_widget)
+            self.dock_widget.raise_()
 
         #
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
         #
-        self.dockWidget.visibilityChanged.connect(self.toggle_inasafe_action)
+        self.dock_widget.visibilityChanged.connect(self.toggle_inasafe_action)
 
         # pylint: disable=W0201
 
+    # noinspection PyMethodMayBeStatic
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
         """
@@ -365,34 +381,34 @@ class Plugin:
 
         core.unload_plugins()
         # next lets force remove any inasafe related modules
-        myModules = []
+        modules = []
         for myModule in sys.modules:
             if 'inasafe' in myModule:
                 # Check if it is really one of our modules i.e. exists in the
                 #  plugin directory
-                myTokens = myModule.split('.')
-                myPath = ''
-                for myToken in myTokens:
-                    myPath += os.path.sep + myToken
-                myParent = os.path.abspath(os.path.join(
+                tokens = myModule.split('.')
+                path = ''
+                for myToken in tokens:
+                    path += os.path.sep + myToken
+                parent = os.path.abspath(os.path.join(
                     __file__, os.path.pardir, os.path.pardir))
-                myFullPath = os.path.join(myParent, myPath + '.py')
-                if os.path.exists(os.path.abspath(myFullPath)):
+                full_path = os.path.join(parent, path + '.py')
+                if os.path.exists(os.path.abspath(full_path)):
                     LOGGER.debug('Removing: %s' % myModule)
-                    myModules.append(myModule)
-        for myModule in myModules:
+                    modules.append(myModule)
+        for myModule in modules:
             del (sys.modules[myModule])
         for myModule in sys.modules:
             if 'inasafe' in myModule:
                 print myModule
 
         # Lets also clean up all the path additions that were made
-        myPackagePath = os.path.abspath(os.path.join(
+        package_path = os.path.abspath(os.path.join(
             os.path.dirname(__file__), os.path.pardir))
-        LOGGER.debug('Path to remove: %s' % myPackagePath)
+        LOGGER.debug('Path to remove: %s' % package_path)
         # We use a list comprehension to ensure duplicate entries are removed
         LOGGER.debug(sys.path)
-        sys.path = [y for y in sys.path if myPackagePath not in y]
+        sys.path = [y for y in sys.path if package_path not in y]
         LOGGER.debug(sys.path)
 
     def unload(self):
@@ -407,10 +423,10 @@ class Plugin:
         for myAction in self.actions:
             self.iface.removePluginMenu(self.tr('InaSAFE'), myAction)
             self.iface.removeToolBarIcon(myAction)
-        self.iface.mainWindow().removeDockWidget(self.dockWidget)
+        self.iface.mainWindow().removeDockWidget(self.dock_widget)
         self.iface.mainWindow().removeToolBar(self.toolbar)
-        self.dockWidget.setVisible(False)
-        self.dockWidget.destroy()
+        self.dock_widget.setVisible(False)
+        self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
         self.clear_modules()
@@ -425,16 +441,16 @@ class Plugin:
         :type checked: bool
         """
 
-        self.actionDock.setChecked(checked)
+        self.action_dock.setChecked(checked)
 
     # Run method that performs all the real work
     def toggle_dock_visibility(self):
         """Show or hide the dock widget."""
-        if self.dockWidget.isVisible():
-            self.dockWidget.setVisible(False)
+        if self.dock_widget.isVisible():
+            self.dock_widget.setVisible(False)
         else:
-            self.dockWidget.setVisible(True)
-            self.dockWidget.raise_()
+            self.dock_widget.setVisible(True)
+            self.dock_widget.raise_()
 
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
@@ -451,7 +467,7 @@ class Plugin:
 
         dialog = OptionsDialog(
             self.iface,
-            self.dockWidget,
+            self.dock_widget,
             self.iface.mainWindow())
         dialog.exec_()  # modal
 
@@ -465,7 +481,7 @@ class Plugin:
         dialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
-            self.dockWidget)
+            self.dock_widget)
         dialog.exec_()  # modal
 
     def show_function_browser(self):
@@ -498,16 +514,16 @@ class Plugin:
         dialog = BatchDialog(
             parent=self.iface.mainWindow(),
             iface=self.iface,
-            dock=self.dockWidget)
+            dock=self.dock_widget)
         dialog.exec_()  # modal
 
     def save_scenario(self):
         """Save current scenario to text file,"""
-        self.dockWidget.save_current_scenario()
+        self.dock_widget.save_current_scenario()
 
     def reset_dock(self):
         """Reset the dock to its default state."""
-        self.dockWidget.get_layers()
+        self.dock_widget.get_layers()
 
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
@@ -515,9 +531,9 @@ class Plugin:
         :type layer: QgsMapLayer
         """
         if layer is None:
-            self.actionKeywordsDialog.setEnabled(False)
+            self.action_keywords_dialog.setEnabled(False)
         else:
-            self.actionKeywordsDialog.setEnabled(True)
+            self.action_keywords_dialog.setEnabled(True)
 
     def shortcut_f7(self):
         """Executed when user press F7 - will show the shakemap importer."""

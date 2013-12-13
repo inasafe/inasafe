@@ -106,9 +106,9 @@ class FunctionOptionsDialog(QtGui.QDialog,
         widget.setLayout(layout)
 
         values = OrderedDict()
-        for myLabel, myValue in parameters.items():
+        for myLabel, value in parameters.items():
             values[myLabel] = self.build_widget(
-                layout, myLabel, myValue)
+                layout, myLabel, value)
 
         form_layout.addRow(widget, None)
         self.values['minimum needs'] = values

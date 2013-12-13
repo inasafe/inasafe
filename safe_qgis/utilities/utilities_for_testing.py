@@ -12,18 +12,16 @@ import glob
 from os.path import join
 from itertools import izip
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui
 from qgis.core import (
-    QgsApplication,
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
-from qgis.gui import QgsMapCanvas
-from safe_qgis.test.qgis_interface import QgisInterface
 
 # For testing and demoing
+from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import (
     read_file_keywords,
     unique_filename,
@@ -32,7 +30,7 @@ from safe_qgis.safe_interface import (
     UNITDATA)
 
 from safe_qgis.safe_interface import HAZDATA, EXPDATA
-
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
@@ -46,11 +44,6 @@ SCENARIO_DIR = os.path.abspath(os.path.join(
 
 LOGGER = logging.getLogger('InaSAFE')
 
-QGIS_APP = None  # Static variable used to hold hand to running QGis
-# app
-CANVAS = None
-PARENT = None
-IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
@@ -76,7 +69,7 @@ def assert_hashes_for_file(hashes, filename):
 
 
 def assert_hash_for_file(hash_string, filename):
-    """Assert that a files has matches its expected hash
+    """Assert that a files hash matches its expected hash.
     :param filename:
     :param hash_string:
     """
@@ -98,54 +91,6 @@ def hash_for_file(filename):
     data_hash.update(data)
     data_hash = data_hash.hexdigest()
     return data_hash
-
-
-def get_qgis_app():
-    """ Start one QGIS application to test against.
-
-    :returns: Handle to QGIS app
-    :rtype: QGIS application instance
-
-    If QGIS is already running the handle to that app will be returned
-    """
-
-    global QGIS_APP  # pylint: disable=W0603
-
-    if QGIS_APP is None:
-        gui_flag = True  # All test will run qgis in gui mode
-        #noinspection PyPep8Naming
-        QGIS_APP = QgsApplication(sys.argv, gui_flag)
-
-        # Note: This block is not needed for  QGIS > 1.8 which will
-        # automatically check the QGIS_PREFIX_PATH var so it is here
-        # for backwards compatibility only
-        if 'QGIS_PREFIX_PATH' in os.environ:
-            path = os.environ['QGIS_PREFIX_PATH']
-            use_default_path_flag = True
-            QGIS_APP.setPrefixPath(path, use_default_path_flag)
-
-        QGIS_APP.initQgis()
-        s = QGIS_APP.showSettings()
-        LOGGER.debug(s)
-
-    global PARENT  # pylint: disable=W0603
-    if PARENT is None:
-        #noinspection PyPep8Naming
-        PARENT = QtGui.QWidget()
-
-    global CANVAS  # pylint: disable=W0603
-    if CANVAS is None:
-        #noinspection PyPep8Naming
-        CANVAS = QgsMapCanvas(PARENT)
-        CANVAS.resize(QtCore.QSize(400, 400))
-
-    global IFACE  # pylint: disable=W0603
-    if IFACE is None:
-        # QgisInterface is a stub implementation of the QGIS plugin interface
-        #noinspection PyPep8Naming
-        IFACE = QgisInterface(CANVAS)
-
-    return QGIS_APP, CANVAS, IFACE, PARENT
 
 
 def test_data_path(subdirectory=None):
@@ -208,6 +153,7 @@ def load_layer(layer_file, directory=TESTDATA):
         raise Exception(message)
 
     message = 'Layer "%s" is not valid' % str(layer.source())
+    print message
     assert layer.isValid(), message
     return layer, category
 
@@ -223,6 +169,7 @@ def set_canvas_crs(epsg_id, enable_projection=False):
     :type enable_projection: bool
 
     """
+    global CANVAS
     # Enable on-the-fly reprojection
     CANVAS.mapRenderer().setProjectionsEnabled(enable_projection)
 
@@ -236,36 +183,42 @@ def set_canvas_crs(epsg_id, enable_projection=False):
 
 def set_padang_extent():
     """Zoom to an area occupied by both both Padang layers."""
+    global CANVAS
     rect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
     CANVAS.setExtent(rect)
 
 
 def set_jakarta_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
+    global CANVAS
     rect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
     CANVAS.setExtent(rect)
 
 
 def set_jakarta_google_extent():
     """Zoom to an area occupied by both Jakarta layers in 900913 crs."""
+    global CANVAS
     rect = QgsRectangle(11873524, -695798, 11913804, -675295)
     CANVAS.setExtent(rect)
 
 
 def set_batemans_bay_extent():
     """Zoom to an area occupied by both Batemans Bay layers in geo crs."""
+    global CANVAS
     rect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
     CANVAS.setExtent(rect)
 
 
 def set_yogya_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
+    global CANVAS
     rect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
     CANVAS.setExtent(rect)
 
 
 def set_small_jakarta_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
+    global CANVAS
     rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
     CANVAS.setExtent(rect)
 
@@ -276,6 +229,7 @@ def set_geo_extent(bounding_box):
     :param bounding_box: List containing [xmin, ymin, xmax, ymax]
     :type bounding_box: list
     """
+    global CANVAS
     rect = QgsRectangle(*bounding_box)
     CANVAS.setExtent(rect)
 
@@ -414,12 +368,12 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
     difference_image.fill(152 + 219 * 256 + 249 * 256 * 256)
 
     for y in range(image_height):
-        for y in range(image_width):
-            control_pixel = control_image.pixel(y, y)
-            test_pixel = test_image.pixel(y, y)
+        for x in range(image_width):
+            control_pixel = control_image.pixel(x, y)
+            test_pixel = test_image.pixel(x, y)
             if control_pixel != test_pixel:
                 mismatch_count += 1
-                difference_image.setPixel(y, y, QtGui.qRgb(255, 0, 0))
+                difference_image.setPixel(x, y, QtGui.qRgb(255, 0, 0))
     difference_path = unique_filename(
         prefix='difference-%s' % os.path.basename(control_image_path),
         suffix='.png',

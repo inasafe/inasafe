@@ -204,8 +204,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IndexError:
             version_type = 'final'
             # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %s %s') % (
-            version, version_type))
+        self.setWindowTitle(self.tr('InaSAFE %s %s' % (version, version_type)))
 
     def enable_messaging(self):
         """Set up the dispatcher for messaging."""
@@ -1645,15 +1644,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'The following keywords are defined for the active layer:')))
         self.pbnPrint.setEnabled(False)
         keywords_list = m.BulletedList()
-        for myKeyword in keywords:
-            value = keywords[myKeyword]
+        for keyword in keywords:
+            value = keywords[keyword]
 
             # Translate titles explicitly if possible
-            if myKeyword == 'title':
+            if keyword == 'title':
                 value = safeTr(value)
                 # Add this keyword to report
             key = m.ImportantText(
-                self.tr(myKeyword.capitalize()))
+                self.tr(keyword.capitalize()))
             value = str(value)
             keywords_list.add(m.Text(key, value))
 
@@ -1997,7 +1996,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         title_dialog = self.tr('Save Scenario')
         # get last dir from setting
         settings = QSettings()
-        last_save_dir = settings.value('inasafe/lastSourceDir', '.')
+        last_save_dir = settings.value('inasafe/lastSourceDir', '.', type=str)
         default_name = title.replace(
             ' ', '_').replace('(', '').replace(')', '')
         if scenario_file_path is None:

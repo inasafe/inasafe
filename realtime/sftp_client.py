@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Ftp Client for Retrieving ftp data.**
@@ -64,9 +65,16 @@ class SFtpClient:
 
     def download_path(self, remote_path, local_path):
         """ Download remote_dir to local_dir.
-        for example : remote_path = '20130111133900' will be download to
-        local_dir/remote_path
-        Must be in the parent directory of remote dir.
+
+        :param remote_path: The remote path that will be downloaded to local
+        :type remote_path: str
+
+        :param local_path: The target path on local
+        :type local_path: str
+
+        EXAMPLE : remote_path = '20130111133900' will be downloaded to
+        local_dir/remote_path. It must be in the parent directory of remote
+        dir.
         """
         # Check if remote_dir is exist
         if not self.is_path_exist(remote_path):
@@ -89,12 +97,16 @@ class SFtpClient:
             file_name = get_path_tail(remote_path)
             local_file_path = os.path.join(local_path, file_name)
 
-            LOGGER.info('file %s will be downloaded to %s' % (remote_path,
-                                                        local_file_path))
+            LOGGER.info('file %s will be downloaded to %s' %
+                        (remote_path, local_file_path))
             self.sftp.get(remote_path, local_file_path)
 
     def is_dir(self, path):
-        """Check if a path is a directory or not in sftp
+        """Check if a path is a directory or not in sftp.
+
+        :param path: the target path that will be tested
+        :type path: str
+
         Reference: http://stackoverflow.com/a/8307575/1198772
         """
         try:
@@ -105,6 +117,10 @@ class SFtpClient:
 
     def is_path_exist(self, path):
         """os.path.exists for paramiko's SCP object
+
+        :param path: The target path that will be tested
+        :type path: str
+
         Reference: http://stackoverflow.com/q/850749/1198772
         """
         try:
@@ -116,9 +132,16 @@ class SFtpClient:
         else:
             return True
 
-    def getListing(self, remote_dir=None, my_func=None):
+    def get_listing(self, remote_dir=None, my_func=None):
         """Return list of files and directories name under a remote_dir
-        and return true when it is input to my_func
+        and return true when it is input to my_func.
+
+        :param remote_dir: The remote directory that we want to get the list
+                    inside it
+        :type remote_dir: str
+
+        :param my_func: The function that use the directory.
+        :type my_func: object
         """
         if remote_dir is None:
             remote_dir = self.workdir_path
@@ -135,8 +158,12 @@ class SFtpClient:
 
 
 def get_path_tail(path):
-    '''Return tail of a path
+    """Return tail of a path no matter what the OS is.
+
+    :param path: The path that we want to get the tail from.
+    :type path: str
+
     Reference : http://stackoverflow.com/a/8384788/1198772
-    '''
+    """
     head, tail = ntpath.split(path)
     return tail or ntpath.basename(head)

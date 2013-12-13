@@ -69,20 +69,13 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
     Note:
             Admissible combinations of input layer types are
 
-
-
     Note:
-            Admissible combinations of input layer types are
+            Admissible combinations of input layer types are::
 
-       +----------------+----------+-----------+--------+---------+
-       | Exposure       |  Raster  |  Polygon  |  Line  |  Point  |
-       | Hazard         |          |           |        |         |
-       +================+==========+===========+========+=========+
-       | Polygon        |  Y       |   Y       |   Y    |    Y    |
-       +----------------+----------+-----------+--------+---------+
-       | Raster         |  Y       |   Y       |   Y    |    Y    |
-       +----------------+----------+-----------+--------+---------+
-
+                Exposure         Raster    Polygon    Line    Point
+                Hazard
+                Polygon          Y          Y          Y        Y
+                Raster           Y          Y          Y        Y
 
         with the following methodologies used:
 
@@ -123,7 +116,6 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
           Raster-Polygon: Polygon data
 
           Raster-Raster: Raster data
-
 
     """
 

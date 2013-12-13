@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Impact calculator test suite.**
@@ -15,6 +16,10 @@ __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 
 import sys
 import os
@@ -47,21 +52,21 @@ class ImpactCalculatorTest(unittest.TestCase):
     def setUp(self):
         """Create shared resources that all tests can use"""
         self.calculator = ImpactCalculator()
-        self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        self.vectorLayer = readSafeLayer(self.vectorPath)
-        self.rasterShakePath = os.path.join(HAZDATA,
-                                            'Shakemap_Padang_2009.asc')
-        self.rasterShake = readSafeLayer(self.rasterShakePath)
+        self.vector_path = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+        self.vector_layer = readSafeLayer(self.vector_path)
+        self.raster_shake_path = os.path.join(
+            HAZDATA, 'Shakemap_Padang_2009.asc')
+        self.raster_shake = readSafeLayer(self.raster_shake_path)
         # UTM projected layer
 
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
-        self.rasterTsunamiBBPath = os.path.join(TESTDATA, fn)
-        self.rasterExposureBBPath = os.path.join(
+        self.raster_tsunami_path = os.path.join(TESTDATA, fn)
+        self.raster_exposure_path = os.path.join(
             TESTDATA, 'tsunami_building_exposure.shp')
 
-        self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
-        self.calculator.set_hazard_layer(self.rasterShake)
-        self.calculator.set_exposure_layer(self.vectorLayer)
+        self.raster_population_path = os.path.join(EXPDATA, 'glp10ag.asc')
+        self.calculator.set_hazard_layer(self.raster_shake)
+        self.calculator.set_exposure_layer(self.vector_layer)
         self.calculator.set_function('Earthquake Building Impact Function')
 
     def tearDown(self):
@@ -71,87 +76,88 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_properties(self):
         """Test if the properties work as expected."""
 
-        myMessage = 'Vector property incorrect.'
+        message = 'Vector property incorrect.'
         assert (self.calculator.exposure_layer() ==
-                self.vectorLayer), myMessage
+                self.vector_layer), message
 
-        myMessage = 'Raster property incorrect.'
+        message = 'Raster property incorrect.'
         assert (self.calculator.hazard_layer() ==
-                self.rasterShake), myMessage
+                self.raster_shake), message
 
-        myMessage = 'Function property incorrect.'
+        message = 'Function property incorrect.'
         assert (self.calculator.function() ==
-                'Earthquake Building Impact Function'), myMessage
+                'Earthquake Building Impact Function'), message
 
     def test_run(self):
         """Test that run works as expected in non threading mode"""
         try:
-            myRunner = self.calculator.get_runner()
+            runner = self.calculator.get_runner()
             # run non threaded
-            myRunner.run()
-            myMessage = myRunner.result()
-            myImpactLayer = myRunner.impact_layer()
-            myFilename = myImpactLayer.get_filename()
-            assert(myFilename and not myFilename == '')
-            assert(myMessage and not myMessage == '')
+            runner.run()
+            message = runner.result()
+            impact_layer = runner.impact_layer()
+            file_name = impact_layer.get_filename()
+            assert(file_name and not file_name == '')
+            assert(message and not message == '')
         except Exception, e:  # pylint: disable=W0703
-            myMessage = 'Calculator run failed. %s' % str(e)
-            assert(), myMessage
+            message = 'Calculator run failed. %s' % str(e)
+            assert(), message
 
     def test_thread(self):
         """Test that starting it in a thread works as expected."""
         try:
-            myRunner = self.calculator.get_runner()
-            myRunner.start()
+            function_runner = self.calculator.get_runner()
+            function_runner.start()
             # wait until the thread is done
-            myRunner.join()
-            myMessage = myRunner.result()
-            myImpactLayer = myRunner.impact_layer()
-            myFilename = myImpactLayer.get_filename()
-            assert(myFilename and not myFilename == '')
-            assert(myMessage and not myMessage == '')
+            function_runner.join()
+            message = function_runner.result()
+            impact_layer = function_runner.impact_layer()
+            file_name = impact_layer.get_filename()
+            assert(file_name and not file_name == '')
+            assert(message and not message == '')
         except Exception, e:  # pylint: disable=W0703
-            myMessage = 'Calculator run failed:\n' + str(e)
-            assert(), myMessage
+            message = 'Calculator run failed:\n' + str(e)
+            assert(), message
 
     def test_startWithNoParameters(self):
         """Test that run raises an error properly when no parameters defined.
         """
+        #noinspection PyBroadException
         try:
             self.calculator.set_exposure_layer(None)
             self.calculator.set_hazard_layer(None)
             # Next line should raise an error
-            myRunner = self.calculator.get_runner()
-            myRunner.start()
+            function_runner = self.calculator.get_runner()
+            function_runner.start()
         except RuntimeError, e:
-            myMessage = 'Runtime error encountered: %s' % str(e)
-            assert(), myMessage
+            message = 'Runtime error encountered: %s' % str(e)
+            assert(), message
         except InsufficientParametersError:
             return  # expected outcome
         except:
-            myMessage = 'Missing parameters not raised as error.'
-            assert(), myMessage
-        myMessage = 'Expected an error, none encountered.'
-        assert(), myMessage
+            message = 'Missing parameters not raised as error.'
+            assert(), message
+        message = 'Expected an error, none encountered.'
+        assert(), message
 
     def test_getKeywordFromImpactLayer(self):
         """Check that we can get keywords from a created impact layer."""
-        myRunner = self.calculator.get_runner()
-        myRunner.run()
-        myImpactLayer = myRunner.impact_layer()
-        myKeyword = readKeywordsFromLayer(myImpactLayer,
-                                          'impact_summary')
-        myMessage = 'Keyword request returned an empty string'
-        assert(myKeyword is not ''), myMessage
+        function_runner = self.calculator.get_runner()
+        function_runner.run()
+        impact_layer = function_runner.impact_layer()
+        keyword = readKeywordsFromLayer(impact_layer, 'impact_summary')
+        message = 'Keyword request returned an empty string'
+        assert(keyword is not ''), message
         # Test we get an exception if keyword is not found
         try:
-            _ = readKeywordsFromLayer(myImpactLayer, 'boguskeyword')
+            _ = readKeywordsFromLayer(impact_layer, 'boguskeyword')
         except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
-            myMessage = ('Request for bogus keyword raised incorrect '
-                         'exception type: \n %s') % str(e)
-            assert(), myMessage
+            message = (
+                'Request for bogus keyword raised incorrect '
+                'exception type: \n %s') % str(e)
+            assert(), message
 
     def test_issue100(self):
         """Test for issue 100: unhashable type dict"""
@@ -160,64 +166,65 @@ class ImpactCalculatorTest(unittest.TestCase):
         hazard_path = os.path.join(
             HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc')
         # Verify relevant metada is ok
-        H = readSafeLayer(hazard_path)
-        E = readSafeLayer(exposure_path)
-        self.calculator.set_hazard_layer(H)
-        self.calculator.set_exposure_layer(E)
+        h = readSafeLayer(hazard_path)
+        e = readSafeLayer(exposure_path)
+        self.calculator.set_hazard_layer(h)
+        self.calculator.set_exposure_layer(e)
         self.calculator.set_function('Flood Building Impact Function')
         try:
-            myRunner = self.calculator.get_runner()
+            function_runner = self.calculator.get_runner()
             # Run non threaded
-            myRunner.run()
-            myMessage = myRunner.result()
-            myImpactLayer = myRunner.impact_layer()
-            myFilename = myImpactLayer.get_filename()
-            assert(myFilename and not myFilename == '')
-            assert(myMessage and not myMessage == '')
+            function_runner.run()
+            message = function_runner.result()
+            impact_layer = function_runner.impact_layer()
+            file_name = impact_layer.get_filename()
+            assert(file_name and not file_name == '')
+            assert(message and not message == '')
         except Exception, e:  # pylint: disable=W0703
-            myMessage = 'Calculator run failed. %s' % str(e)
-            assert(), myMessage
+            message = 'Calculator run failed. %s' % str(e)
+            assert(), message
 
     def test_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector's keyword file
         """
+        function_runner = self.calculator.get_runner()
+        function_runner.start()
+        function_runner.join()
+        impact_layer = function_runner.impact_layer()
 
-        myRunner = self.calculator.get_runner()
-        myRunner.start()
-        myRunner.join()
-        myImpactLayer = myRunner.impact_layer()
+        message = (
+            'Incorrect type returned from '
+            'function_runner.impactlayer(). Expected an impactlayer'
+            'but received a %s' % type(impact_layer))
+        assert hasattr(impact_layer, 'get_style_info'), message
 
-        myMessage = ('Incorrect type returned from '
-                     'myRunner.impactlayer(). Expected an impactlayer'
-                     'but received a %s' % type(myImpactLayer))
-        assert hasattr(myImpactLayer, 'get_style_info'), myMessage
-
-        myStyleInfo = getStyleInfo(myImpactLayer)
-        myMessage = 'Style info request returned an empty string'
-        assert myStyleInfo is not '', myMessage
-        #print myStyleInfo
+        style_info = getStyleInfo(impact_layer)
+        message = 'Style info request returned an empty string'
+        assert style_info is not '', message
+        #print style_info
 
         # Test we get an exception if style info is not found
         try:
-            myStyleInfo = getStyleInfo('boguspath')
+            getStyleInfo('boguspath')
         except StyleInfoNotFoundError:
             pass  # This is good
         except Exception, e:
-            myMessage = ('StyleInfo request for bogus file raised incorrect'
-                         ' exception type: \n %s') % str(e)
-            raise StyleInfoNotFoundError(myMessage)
+            message = (
+                'StyleInfo request for bogus file raised incorrect'
+                ' exception type: \n %s') % str(e)
+            raise StyleInfoNotFoundError(message)
 
     def test_need_clip(self):
         """Test if need_clip method work as expected."""
         # 'Old-style' impact function
 
-        myMessage = 'True expected, but False returned'
-        assert self.calculator.requires_clipping(), myMessage
+        message = 'True expected, but False returned'
+        assert self.calculator.requires_clipping(), message
 
         self.calculator.set_function(
             'Flood Vector Roads Experimental Function')
-        myMessage = 'False expected, but True returned'
-        assert not self.calculator.requires_clipping(), myMessage
+        message = 'False expected, but True returned'
+        assert not self.calculator.requires_clipping(), message
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')

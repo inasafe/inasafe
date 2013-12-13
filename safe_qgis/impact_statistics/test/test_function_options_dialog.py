@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'misugijunz@gmail.com'
 __date__ = '15/10/2012'
@@ -32,7 +33,6 @@ from third_party.odict import OrderedDict
 
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 # pylint: disable=W0611
 # pylint: enable=W0611
 
@@ -116,22 +116,22 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
     def test_buildWidget(self):
         myDialog = FunctionOptionsDialog(None)
-        myValue = myDialog.build_widget(myDialog.configLayout, 'foo', [2.3])
+        value = myDialog.build_widget(myDialog.configLayout, 'foo', [2.3])
         myWidget = myDialog.findChild(QLineEdit)
 
         # initial value must be same with default
-        assert myValue() == [2.3]
+        assert value() == [2.3]
 
         # change to 5.9
         myWidget.setText('5.9')
-        assert myValue() == [5.9]
+        assert value() == [5.9]
 
         myWidget.setText('5.9, 70')
-        assert myValue() == [5.9, 70]
+        assert value() == [5.9, 70]
 
         myWidget.setText('bar')
         try:
-            myValue()
+            value()
         except ValueError:
             ## expected to raises this exception
             pass

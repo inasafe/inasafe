@@ -15,6 +15,10 @@ __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import unittest
 import logging
 
@@ -25,10 +29,11 @@ import shutil
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
+
+from safe.common.testing import get_qgis_app
 from safe_qgis.tools.osm_downloader import OsmDownloader
 from safe_qgis.utilities.utilities import download_url
 from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
     assert_hash_for_file)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -129,7 +134,7 @@ class FakeQNetworkAccessManager:
         elif myUrl == ('http://osm.linfiniti.com/buildings-shp?'
                        'bbox=20.389938354492188,-34.10782492987083'
                        ',20.712661743164062,'
-                       '-34.008273470938335'):
+                       '-34.008273470938335&qgis_version=2'):
             myReply.content = read_all("test-importdlg-extractzip.zip")
 
         return myReply
@@ -169,7 +174,7 @@ class ImportDialogTest(unittest.TestCase):
         # this is the hash of google front page.
         # I think we can safely assume that the content
         # of google.com never changes (probably).
-        #
+        # ...or not...changed on 5 Dec 2013 by Tim to hash below...
         unique_hash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
         url = 'http://google.com'
         path = tempfile.mktemp()

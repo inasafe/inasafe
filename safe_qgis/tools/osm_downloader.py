@@ -72,8 +72,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.progress_dialog.setWindowTitle(title)
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(help_button, QtCore.SIGNAL('clicked()'),
-                               self.show_help)
+        help_button.clicked.connect(self.show_help)
 
         self.show_info()
 
