@@ -67,9 +67,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         QDialog.__init__(self, parent)
         self.parent = parent
         self.setupUi(self)
-
         self.setWindowTitle(self.tr('InaSAFE Impact Layer Merge Tool'))
-
         self.iface = iface
         self.keyword_io = KeywordIO()
 
@@ -78,16 +76,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         QtCore.QObject.connect(
             help_button, QtCore.SIGNAL('clicked()'), self.show_help)
 
+        # Show usafe info
         self.show_info()
         self.restore_state()
-
-        # The html reports and its file path
-        # Ex. {"jakarta barat": "/home/jakarta barat.html",
-        #      "jakarta timur": "/home/jakarta timur.html"}
-        self.html_reports = {}
-
-        # Whether to merge entire area or aggregated
-        self.entire_area_mode = False
 
         # Template Path for composer
         self.template_path = (
@@ -101,6 +92,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.first_impact_layer = None
         self.second_impact_layer = None
         self.chosen_aggregation_layer = None
+
+        # The output directory
+        self.out_dir = None
+
+        # The html reports and its file path
+        # Ex. {"jakarta barat": "/home/jakarta barat.html",
+        #      "jakarta timur": "/home/jakarta timur.html"}
+        self.html_reports = {}
+
+        # Whether to merge entire area or aggregated
+        self.entire_area_mode = False
 
         # The attribute name to aggregate in chosen aggregation layer
         self.aggregation_attribute = None
@@ -186,24 +188,32 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         try:
             self.save_state()
             self.require_directory()
+
+            # Get All Chosen Layer
             self.get_all_chosen_layers()
-            self.validate()
+
+            # Get output directory
+            self.out_dir = self.output_directory.text()
+
             # Flag whether to merge entire area or based on aggregation unit
             if self.chosen_aggregation_layer is None:
                 self.entire_area_mode = True
+
+            # Validate all the layers
+            self.validate()
 
             # Process Merging
             QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.merge()
             QtGui.qApp.restoreOverrideCursor()
 
-            # Hohoho finish doing it. Give user success information!
+            # Hohoho finish doing it. Give user successful information!
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
                 self,
                 self.tr('InaSAFE Information'),
                 self.tr(
-                    'Reports from merging two impact layers is generated '
+                    'Report from merging two impact layers is generated '
                     'successfully.'))
 
             # Process is Done
@@ -212,13 +222,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # don't show anything because this exception raised
             # when user canceling the import process directly
             pass
-        except Exception as myEx:
+        except Exception as ex:
             QtGui.qApp.restoreOverrideCursor()
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 self,
                 self.tr("InaSAFE Merge Impact Tools Error"),
-                str(myEx))
+                str(ex))
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -260,7 +270,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     def get_all_chosen_layers(self):
         """Get all chosen layers after user clicks merge."""
-        # Get all the chosen layer
         self.first_impact_layer = self.first_layer.itemData(
             self.first_layer.currentIndex(), QtCore.Qt.UserRole)
         self.second_impact_layer = self.second_layer.itemData(
@@ -280,18 +289,24 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             raise Exception(
                 self.tr('First layer must be different with second layer''.'))
 
-        # 1st and 2nd layer should have postprocessing_report keywords
-        # If Aggregation layer not Entire Area, it should have aggregation
-        # attribute keywords
+        # 1. 1st and 2nd impact layer should have postprocessing_report
+        #    keywords
+        # 2. If the chosen aggregation layer not Entire Area, it should have
+        #    aggregation attribute keywords
         try:
-            self.first_postprocessing_report = self.keyword_io.read_keywords(
-                self.first_impact_layer, 'postprocessing_report')
-            self.second_postprocessing_report = self.keyword_io.read_keywords(
-                self.second_impact_layer, 'postprocessing_report')
+            self.first_postprocessing_report = \
+                self.keyword_io.read_keywords(
+                    self.first_impact_layer,
+                    'postprocessing_report')
+            self.second_postprocessing_report = \
+                self.keyword_io.read_keywords(
+                    self.second_impact_layer,
+                    'postprocessing_report')
             if self.chosen_aggregation_layer is not None:
-                self.aggregation_attribute = self.keyword_io.read_keywords(
-                    self.chosen_aggregation_layer,
-                    'aggregation attribute')
+                self.aggregation_attribute = \
+                    self.keyword_io.read_keywords(
+                        self.chosen_aggregation_layer,
+                        'aggregation attribute')
         except (NoKeywordsFoundError, KeywordNotFoundError):
             # Skip if there are no keywords at all
             # Skip if the impact_summary keyword is missing
@@ -321,13 +336,19 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             aggregation_area = html_report[0]
             html = html_report[1]
             path = '%s/%s.html' % (
-                str(self.output_directory.text()),
+                str(self.out_dir),
                 aggregation_area)
             html_to_file(html, path)
             self.html_reports[aggregation_area.lower()] = path
 
         # Generate Reports:
         self.generate_reports()
+
+        # Delete report files:
+        for area in self.html_reports:
+            report_path = self.html_reports[area]
+            if os.path.exists(report_path):
+                os.remove(report_path)
 
     @staticmethod
     def generate_report_dictionary_from_dom(html_dom):
@@ -417,6 +438,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         loaded in QGIS."""
         #noinspection PyArgumentList
         registry = QgsMapLayerRegistry.instance()
+
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = registry.mapLayers().values()
 
@@ -470,25 +492,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Create composition
         composition = self.load_template(renderer)
 
-        # Set logo
-        safe_logo = composition.getComposerItemById('safe-logo')
-        if safe_logo is not None:
-            safe_logo.setPictureFile(self.safe_logo_path)
-        else:
-            raise ReportCreationError(self.tr(
-                'Image "safe-logo" could not be found'))
-
         # Get Map
         composer_map = composition.getComposerItemById('impact-map')
 
         # Get HTML Report Frame
         html_report_item = composition.getComposerItemById('merged-report')
         html_report_frame = composition.getComposerHtmlByItem(html_report_item)
-
-        # Set Map Legend
-        legend = composition.getComposerItemById('impact-legend')
-        legend.setTitle(self.tr('Legend'))
-        legend.updateLegend()
 
         if self.entire_area_mode:
             # Get composer map size
@@ -524,17 +533,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 new_width = max_height / composer_size_ratio
 
             # Set new extent
-            squared_min_x = center_x - (new_width/2.0)
-            squared_max_x = center_x + (new_width/2.0)
-            squared_min_y = center_y - (new_height/2.0)
-            squared_max_y = center_y + (new_height/2.0)
+            fit_min_x = center_x - (new_width/2.0)
+            fit_max_x = center_x + (new_width/2.0)
+            fit_min_y = center_y - (new_height/2.0)
+            fit_max_y = center_y + (new_height/2.0)
 
             # Create the extent and set it to the map
             map_extent = QgsRectangle(
-                squared_min_x,
-                squared_min_y,
-                squared_max_x,
-                squared_max_y)
+                fit_min_x,
+                fit_min_y,
+                fit_max_x,
+                fit_max_y)
             composer_map.setNewExtent(map_extent)
 
             # Add grid to composer map
@@ -550,7 +559,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html_report_frame.setUrl(QUrl('file://%s' % html_report_path))
 
             path = '%s/%s.pdf' % (
-                str(self.output_directory.text()),
+                str(self.out_dir),
                 area_title)
             composition.exportAsPDF(path)
         else:
@@ -561,15 +570,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Map will be clipped by features from this layer:
             atlas.setCoverageLayer(self.chosen_aggregation_layer)
 
-            # Add grid to composer map first from coverage layer
+            # Add grid to composer map from coverage layer
             split_count = 5
-            min_x = self.chosen_aggregation_layer.extent().xMinimum()
-            max_x = self.chosen_aggregation_layer.extent().xMaximum()
-            min_y = self.chosen_aggregation_layer.extent().yMinimum()
-            max_y = self.chosen_aggregation_layer.extent().yMaximum()
-            x_interval = (max_x - min_x) / split_count
+            map_width = self.chosen_aggregation_layer.extent().width()
+            map_height = self.chosen_aggregation_layer.extent().height()
+            x_interval = map_width / split_count
             composer_map.setGridIntervalX(x_interval)
-            y_interval = (max_y - min_y) / split_count
+            y_interval = map_height / split_count
             composer_map.setGridIntervalY(y_interval)
 
             # Set  composer map that will be used for printing atlas
@@ -587,7 +594,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
                 current_filename = atlas.currentFilename()
                 path = '%s/%s.pdf' % (
-                    str(self.output_directory.text()),
+                    str(self.out_dir),
                     current_filename)
 
                 # Only print the area that has the report
@@ -628,7 +635,24 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         }
 
         # Load template
-        composition.loadFromTemplate(document, substitution_map)
+        load_status = composition.loadFromTemplate(document, substitution_map)
+        if not load_status:
+            raise ReportCreationError(
+                self.tr('Error loading template %s') %
+                self.template_path)
+
+        # Set logo
+        safe_logo = composition.getComposerItemById('safe-logo')
+        if safe_logo is not None:
+            safe_logo.setPictureFile(self.safe_logo_path)
+        else:
+            raise ReportCreationError(
+                self.tr('Image "safe-logo" could not be found'))
+
+        # Set Map Legend
+        legend = composition.getComposerItemById('impact-legend')
+        legend.setTitle(self.tr('Legend'))
+        legend.updateLegend()
 
         return composition
 
