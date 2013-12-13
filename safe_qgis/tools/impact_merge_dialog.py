@@ -26,11 +26,12 @@ from PyQt4 import QtGui, QtCore, QtXml
 from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog
-from qgis.core import (QgsMapLayerRegistry,
-                       QgsMapRenderer,
-                       QgsComposition,
-                       QgsRectangle,
-                       QgsAtlasComposition)
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsMapRenderer,
+    QgsComposition,
+    QgsRectangle,
+    QgsAtlasComposition)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
@@ -73,8 +74,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(
-            help_button, QtCore.SIGNAL('clicked()'), self.show_help)
+        help_button.clicked.connect(self.show_help)
 
         # Show usafe info
         self.show_info()
@@ -185,7 +185,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     def accept(self):
         """Do merging two impact layers."""
-        try:
+        try:  # TODO: use smaller try blocks (Tim)
             self.save_state()
             self.require_directory()
 
@@ -234,9 +234,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """Ensure directory path entered in dialog exist.
 
         When the path does not exist, this function will ask the user if he
-        want to create it or not.
+        wants to create it or not.
 
-        :raises: CanceledImportDialogError - when user choose 'No' in
+        :raises: CanceledImportDialogError - when user chooses 'No' in
             the question dialog for creating directory, or 'Yes' but the output
             directory path is empty
         """
@@ -316,7 +316,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """Merge the postprocessing_report from each impact."""
         # Ensure there is always only a single root element or minidom moans
         first_report = '<body>' + self.first_postprocessing_report + '</body>'
-        second_report = '<body>' + self.second_postprocessing_report + '</body>'
+        second_report = (
+            '<body>' + self.second_postprocessing_report + '</body>')
 
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
@@ -328,7 +329,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         merged_report_dict = self.generate_report_dictionary_from_dom(tables)
 
         # Generate html reports from merged dictionary
-        html_reports = self.generate_html_from_merged_report(merged_report_dict)
+        html_reports = self.generate_html_from_merged_report(
+            merged_report_dict)
 
         # Now Generate html file from html reports.
         # Each file will be generated for each html report
@@ -402,13 +404,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     @staticmethod
     def generate_html_from_merged_report(merged_report_dict):
-        """Generate html format of all aggregation units from a dictionary
-        representing merged report.
+        """Generate html for aggregation units from merged report.
 
-        :param merged_report_dict: a dictionary of merged report
+        :param merged_report_dict: A dictionary of merged report.
         :type merged_report_dict: dict
 
-        :return: HTML for each aggregation unit report
+        :return: HTML for each aggregation unit report.
         :rtype: list
         """
         html_reports = []
@@ -434,8 +435,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         return html_reports
 
     def get_project_layers(self):
-        """Obtain a list of impact layers and aggregation layer currently
-        loaded in QGIS."""
+        """Get impact layers and aggregation layer currently loaded in QGIS."""
         #noinspection PyArgumentList
         registry = QgsMapLayerRegistry.instance()
 
@@ -476,6 +476,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         If it is aggregated then use atlas generation.
         If it is not (entire area) then just use composition.
+
+        .. note:: Akbar I think we should add a more verbose description of
+            how the logic works here - how the html report makes its way in
+            the composer map html and so on...
         """
         # Setup Map Renderer and set all the layer
         renderer = QgsMapRenderer()
@@ -579,7 +583,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             y_interval = map_height / split_count
             composer_map.setGridIntervalY(y_interval)
 
-            # Set  composer map that will be used for printing atlas
+            # Set composer map that will be used for printing atlas
             atlas.setComposerMap(composer_map)
 
             # set output filename pattern
