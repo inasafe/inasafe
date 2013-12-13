@@ -54,9 +54,8 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             'InaSAFE %s Minimum Needs Tool' % get_version()))
         self.polygon_layers_to_combo()
         self.show_info()
-        helpButton = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
-                               self.show_help)
+        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        help_button.clicked.connect(self.show_help)
 
     def show_info(self):
         """Show basic usage instructions."""

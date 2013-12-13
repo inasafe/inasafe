@@ -48,12 +48,11 @@ class FunctionProvider:
 
     Plugins implementing this reference should provide the following method:
 
-    run(layers)
+    run(layers)::
 
-    ===============  =========================
-    layers           A list of layers
-    result           A list of layers
-    ===============  =========================
+      layers           A list of layers
+      result           A list of layers
+
     """
     __metaclass__ = PluginMount
 

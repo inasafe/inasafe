@@ -143,7 +143,7 @@ safe_test_suite: compile testdata
 gui_test_suite: compile testdata
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regression Test Suite"
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
