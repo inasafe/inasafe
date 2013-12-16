@@ -25,7 +25,9 @@ from safe_qgis.utilities.utilities import (
     layer_attribute_names,
     impact_attribution,
     dpi_to_meters,
-    which)
+    which,
+    get_utm_zone,
+    get_utm_epsg)
 from safe_qgis.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
 from safe_qgis.tools.test.test_keywords_dialog import (
@@ -48,6 +50,17 @@ class UtilitiesTest(unittest.TestCase):
     def tearDown(self):
         """Test tear down."""
         pass
+
+    def test_get_utm_epsg(self):
+        """Test we can get correct epsg code"""
+        # North semisphere
+        self.assertEqual(get_utm_epsg(-178, 10), 32601)
+        self.assertEqual(get_utm_epsg(178, 20), 32660)
+        self.assertEqual(get_utm_epsg(-3, 30), 32630)
+        # South semisphere:
+        self.assertEqual(get_utm_epsg(-178, -10), 32701)
+        self.assertEqual(get_utm_epsg(178, -20), 32760)
+        self.assertEqual(get_utm_epsg(-3, -30), 32730)
 
     def test_stacktrace_html(self):
         """Stack traces can be caught and rendered as html
