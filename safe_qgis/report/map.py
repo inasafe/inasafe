@@ -322,3 +322,5 @@ class Map():
         impact_item = model.findItems(self.layer.name())[0]
         row = impact_item.index().row()
         model.removeRows(row + 1, model.rowCount() - row)
+        if row > 0:
+            model.removeRows(0, row)
