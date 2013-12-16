@@ -16,6 +16,10 @@ __date__ = '23/10/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import unittest
 import logging
 
@@ -34,8 +38,18 @@ from safe_qgis.safe_interface import UNITDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
-shapefile_path = os.path.join(UNITDATA, 'impact', 'impact_merge_1.shp')
-tif_path = os.path.join(UNITDATA, 'impact', 'impact_merge_2.tif')
+population_impact_path = os.path.join(
+    UNITDATA,
+    'impact',
+    'population_affected_district_jakarta.shp')
+building_impact_path = os.path.join(
+    UNITDATA,
+    'impact',
+    'buildings_inundated_district_jakarta.shp')
+aggregation_path = os.path.join(
+    UNITDATA,
+    'boundaries',
+    'district_osm_jakarta.shp')
 
 
 class ImpactMergeDialogTest(unittest.TestCase):
@@ -44,22 +58,40 @@ class ImpactMergeDialogTest(unittest.TestCase):
     #noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
-        self.impact_dialog = ImpactMergeDialog(PARENT, IFACE)
+        self.impact_merge_dialog = ImpactMergeDialog(PARENT, IFACE)
 
-    def test_download(self):
-        """Test download method."""
-        output_directory = tempfile.mkdtemp()
-        self.impact_dialog.output_directory.setText(output_directory)
+    def test_validate_all_layers(self):
+        """Test validate_all_layers function."""
+        # Test normal case
+        self.impact_merge_dialog.entire_area_mode = False
+        self.impact_merge_dialog.first_impact_layer = QgsVectorLayer(
+            population_impact_path,
+            os.path.basename(population_impact_path),
+            'ogr')
+        self.impact_merge_dialog.second_impact_layer = QgsVectorLayer(
+            building_impact_path,
+            os.path.basename(building_impact_path),
+            'ogr')
 
-        impact_layer_1 = QgsVectorLayer(
-            shapefile_path,
-            os.path.basename(shapefile_path),
+        self.impact_merge_dialog.chosen_aggregation_layer = QgsVectorLayer(
+            aggregation_path,
+            os.path.basename(aggregation_path),
             'ogr')
-        impact_layer_2 = QgsRasterLayer(
-            tif_path,
-            os.path.basename(tif_path),
-            'ogr')
-        self.assertIsNotNone(self.impact_dialog.output_directory.text())
+
+        self.impact_merge_dialog.validate_all_layers()
+
+        self.assertIn(
+            'Detailed gender report',
+            self.impact_merge_dialog.first_postprocessing_report)
+        self.assertIn(
+            'Detailed building type report',
+            self.impact_merge_dialog.second_postprocessing_report)
+        self.assertIn(
+            'Detailed gender report',
+            self.impact_merge_dialog.first_postprocessing_report)
+        self.assertEqual(
+            'KAB_NAME',
+            self.impact_merge_dialog.aggregation_attribute)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactMergeDialogTest)

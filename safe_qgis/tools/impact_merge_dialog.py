@@ -309,6 +309,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             raise InvalidLayerError(
                 self.tr('First layer must be different with second layer''.'))
 
+        # Validate all layers
+        self.validate_all_layers()
+
+    def validate_all_layers(self):
+        """Validate all layers based on the keywords."""
         # 1st impact layer should have postprocessing_report keywords
         try:
             self.first_postprocessing_report = \
