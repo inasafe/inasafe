@@ -140,7 +140,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         use_default_output_dir = bool(settings.value(
             'inasafe/useDefaultOutputDir', True, type=bool))
         self.scenario_directory_radio.setChecked(
-            use_default_output_dir, type=str)
+            use_default_output_dir)
 
     def save_state(self):
         """Save current state of GUI to configuration file"""
