@@ -313,7 +313,7 @@
      </VectorClassificationItemNg>
     </LayerItem>
    </Model>
-   <ComposerItem width="71.5766" x="120" transparency="0" y="120" rotation="0" height="341.9" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{50733782-4a26-41ca-8805-bbbab5c7c5bf}" id="impact-legend" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="71.5766" x="120" transparency="0" y="125" rotation="0" height="341.9" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{6b2b9a9b-c053-4723-a439-f1cf7e397dc9}" id="impact-legend" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -321,7 +321,7 @@
   <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="180" x="15" transparency="0" y="285" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="2.13423" uuid="{f6a97dc5-3412-4e3f-a93f-79e25e27aed6}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="180" x="15" transparency="0" y="285" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="2.13423" uuid="{cd6f68fc-ce34-4795-a844-fe7f520e517c}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -329,7 +329,7 @@
   <ComposerLabel valign="128" labelText="[impact-title]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,16,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="178" x="17" transparency="0" y="108" rotation="0" height="12" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="2.13423" uuid="{36ad9b3f-ee65-4b38-8ab7-a65cc676fc28}" id="impact-title" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="178" x="16" transparency="0" y="108" rotation="0" height="16" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="2.13423" uuid="{e0619785-838d-41bf-b7c7-3a2e2363c7f1}" id="impact-title" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -371,7 +371,7 @@
      <fontColor red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <ComposerItem width="170" x="20" transparency="0" y="25" rotation="0" height="80" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.13423" uuid="{4d07f9b3-f760-48c8-9bd6-10fdb1454636}" id="impact-map" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="170" x="20" transparency="0" y="25" rotation="0" height="80" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.13423" uuid="{8a435eaf-e48c-4d21-bb68-d05c7ce57e29}" id="impact-map" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -379,20 +379,20 @@
   <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="4" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="165" x="30" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.13423" uuid="{42023a15-b381-48d8-97cb-b0052dfd859e}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="165" x="30" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.13423" uuid="{dda08e5c-7220-4939-931d-97a2d69235f8}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerPicture pictureWidth="10" file="/data/samples/inasafe/InaSAFEPackages/Jakarta" pictureHeight="10" mapId="-1">
-   <ComposerItem width="10" x="15" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="1" lastValidViewScaleFactor="2.13423" uuid="{d592139e-f454-40d1-86bf-80d1397339d1}" id="safe-logo" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="10" x="15" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="1" lastValidViewScaleFactor="2.13423" uuid="{1847ae7c-9cc8-4bbb-962d-3fb3043ea8e0}" id="safe-logo" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
   <ComposerHtml resizeMode="0" url="">
    <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="100" x="15" transparency="0" y="120" rotation="0" height="164" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{03caad7b-28a2-49de-9181-3d88c08f912c}" id="merged-report" background="true" blendMode="0" positionLock="false">
+    <ComposerItem width="100" x="15" transparency="0" y="125" rotation="0" height="160" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.13423" uuid="{9f5a54d8-2190-4202-b5d2-28182c392d20}" id="merged-report" background="true" blendMode="0" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>

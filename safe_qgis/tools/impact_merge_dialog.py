@@ -36,6 +36,7 @@ from qgis.core import (
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
 from safe_qgis.exceptions import (
+    InvalidLayerError,
     CanceledImportDialogError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
@@ -185,50 +186,69 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     def accept(self):
         """Do merging two impact layers."""
-        try:  # TODO: use smaller try blocks (Tim)
-            self.save_state()
+        # Store the current state to configuration file
+        self.save_state()
+
+        # Validate the directory
+        try:
             self.require_directory()
+        except CanceledImportDialogError:
+            # Don't show anything because this exception raised
+            # when user canceling the import process directly
+            pass
 
-            # Get All Chosen Layer
-            self.get_all_chosen_layers()
+        # Get All Chosen Layer
+        self.get_all_chosen_layers()
 
-            # Get output directory
-            self.out_dir = self.output_directory.text()
+        # Get output directory
+        self.out_dir = self.output_directory.text()
 
-            # Flag whether to merge entire area or based on aggregation unit
-            if self.chosen_aggregation_layer is None:
-                self.entire_area_mode = True
+        # Flag whether to merge entire area or based on aggregation unit
+        if self.chosen_aggregation_layer is None:
+            self.entire_area_mode = True
 
-            # Validate all the layers
+        # Validate all the layers
+        try:
             self.validate()
-
-            # Process Merging
-            QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-            self.merge()
-            QtGui.qApp.restoreOverrideCursor()
-
-            # Hohoho finish doing it. Give user successful information!
+        except (InvalidLayerError,
+                NoKeywordsFoundError,
+                KeywordNotFoundError) as ex:
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
                 self,
-                self.tr('InaSAFE Information'),
-                self.tr(
-                    'Report from merging two impact layers is generated '
-                    'successfully.'))
+                self.tr("InaSAFE Merge Impact Tools Information"),
+                str(ex))
+            return
 
-            # Process is Done
-            self.done(QDialog.Accepted)
-        except CanceledImportDialogError:
-            # don't show anything because this exception raised
-            # when user canceling the import process directly
-            pass
+        # Merging Process
+        # Set cursor to wait cursor
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        try:
+            self.merge()
         except Exception as ex:
+            # End wait cursor
             QtGui.qApp.restoreOverrideCursor()
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 self,
                 self.tr("InaSAFE Merge Impact Tools Error"),
                 str(ex))
+            return
+
+        # Hohoho finish doing it. End wait cursor
+        QtGui.qApp.restoreOverrideCursor()
+
+        # Give user successful information!
+        # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
+        QMessageBox.information(
+            self,
+            self.tr('InaSAFE Merge Impact Tools Information'),
+            self.tr(
+                'Report from merging two impact layers is generated '
+                'successfully.'))
+
+        # Process is Done
+        self.done(QDialog.Accepted)
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -280,37 +300,57 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def validate(self):
         """Verify that there are two impact layers and they are different."""
         if self.first_layer.currentIndex() < 0:
-            raise Exception(self.tr('First layer is not valid.'))
+            raise InvalidLayerError(self.tr('First layer is not valid.'))
 
         if self.second_layer.currentIndex() < 0:
-            raise Exception(self.tr('First layer is not valid.'))
+            raise InvalidLayerError(self.tr('Second layer is not valid.'))
 
         if self.first_impact_layer.id() == self.second_impact_layer.id():
-            raise Exception(
+            raise InvalidLayerError(
                 self.tr('First layer must be different with second layer''.'))
 
-        # 1. 1st and 2nd impact layer should have postprocessing_report
-        #    keywords
-        # 2. If the chosen aggregation layer not Entire Area, it should have
-        #    aggregation attribute keywords
+        # 1st impact layer should have postprocessing_report keywords
         try:
             self.first_postprocessing_report = \
                 self.keyword_io.read_keywords(
-                    self.first_impact_layer,
-                    'postprocessing_report')
+                    self.first_impact_layer, 'postprocessing_report')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found in first impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword postprocessing_report is not found in first '
+                        'layer.'))
+
+        # 2nd impact layer should have postprocessing_report keywords
+        try:
             self.second_postprocessing_report = \
                 self.keyword_io.read_keywords(
-                    self.second_impact_layer,
-                    'postprocessing_report')
-            if self.chosen_aggregation_layer is not None:
+                    self.second_impact_layer, 'postprocessing_report')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords exist in second impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword postprocessing_report is not found in second '
+                        'layer.'))
+
+        # If the chosen aggregation layer not Entire Area, it should have
+        # aggregation attribute keywords
+        if not self.entire_area_mode:
+            try:
                 self.aggregation_attribute = \
                     self.keyword_io.read_keywords(
                         self.chosen_aggregation_layer,
                         'aggregation attribute')
-        except (NoKeywordsFoundError, KeywordNotFoundError):
-            # Skip if there are no keywords at all
-            # Skip if the impact_summary keyword is missing
-            raise
+            except NoKeywordsFoundError:
+                raise NoKeywordsFoundError(
+                    self.tr('No keywords exist in aggregation layer.'))
+            except KeywordNotFoundError:
+                raise KeywordNotFoundError(
+                    self.tr(
+                        'Keyword aggregation attribute is not found in '
+                        'aggregation layer.'))
 
     def merge(self):
         """Merge the postprocessing_report from each impact."""
@@ -457,8 +497,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             except (NoKeywordsFoundError, KeywordNotFoundError):
                 # Check if it has aggregation keyword
                 try:
-                    self.keyword_io.read_keywords(layer,
-                                                  'aggregation attribute')
+                    self.keyword_io.read_keywords(
+                        layer, 'aggregation attribute')
                 except (NoKeywordsFoundError, KeywordNotFoundError):
                     # Skip if there are no keywords at all
                     continue
