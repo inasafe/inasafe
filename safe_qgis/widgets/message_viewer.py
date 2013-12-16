@@ -121,7 +121,8 @@ class MessageViewer(QtWebKit.QWebView):
         # add show in browser
         action_page_to_html_file = QtGui.QAction(
             self.tr('Open in web browser'), None)
-        action_page_to_html_file.triggered.connect(self.open_current_in_browser)
+        action_page_to_html_file.triggered.connect(
+            self.open_current_in_browser)
         context_menu.addAction(action_page_to_html_file)
 
         # add load report
