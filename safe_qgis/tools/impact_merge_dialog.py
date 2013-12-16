@@ -329,7 +329,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     self.second_impact_layer, 'postprocessing_report')
         except NoKeywordsFoundError:
             raise NoKeywordsFoundError(
-                self.tr('No keywords exist in second impact layer.'))
+                self.tr('No keywords found in second impact layer.'))
         except KeywordNotFoundError:
             raise KeywordNotFoundError(
                 self.tr('Keyword postprocessing_report is not found in second '
