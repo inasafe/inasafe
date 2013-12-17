@@ -2,7 +2,7 @@ elapsed_time: 0
 hazard_title: A flood in Jakarta
 postprocessing_report: <table class="table table-condensed table-striped"><caption>Detailed building type report</caption><tbody><tr><td>Kab_name</td><td>Total inundated</td><td>Places of worship inundated</td><td>Schools inundated</td><td>Hospitals inundated</td></tr><tr><td>JAKARTA BARAT</td><td>2</td><td>No data *</td><td>No data *</td><td>No data *</td></tr><tr><td>JAKARTA PUSAT</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>JAKARTA UTARA</td><td>0</td><td>No data *</td><td>No data *</td><td>No data *</td></tr><tr><td>Total in aggregation areas</td><td>2</td><td>0</td><td>0</td><td>0</td></tr></tbody></table><em>* "No data" values mean that there where some problems while calculating them. This did not affect the other values.</em>
 exposure_title: buildings
-title: Estimated buildings affected
+title: Estimated buildings affected - District Jakarta
 legend_title: Structure inundated status
 user: gumbia
 exposure_source: OpenStreetMap
