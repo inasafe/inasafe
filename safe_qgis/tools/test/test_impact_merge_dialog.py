@@ -30,11 +30,13 @@ import shutil
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-from qgis.core import QgsVectorLayer
+from qgis.core import QgsMapLayerRegistry
 
 #noinspection PyPackageRequirements
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app,
+    load_layer)
 from safe_qgis.safe_interface import UNITDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -75,12 +77,14 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog = ImpactMergeDialog(PARENT, IFACE)
 
         # Create test dir
+        #noinspection PyUnresolvedReferences
         test_impact_merge_dir = os.path.join(
             TEST_DATA_DIR, 'test-impact-merge')
         if not os.path.exists(test_impact_merge_dir):
             os.makedirs(test_impact_merge_dir)
 
         # Create test dir for aggregated
+        #noinspection PyUnresolvedReferences
         test_aggregated_dir = os.path.join(
             test_impact_merge_dir, 'aggregated')
         if not os.path.exists(test_aggregated_dir):
@@ -92,6 +96,23 @@ class ImpactMergeDialogTest(unittest.TestCase):
         if not os.path.exists(test_entire_dir):
             os.makedirs(test_entire_dir)
 
+        # Register 4 impact layers and aggregation layer
+        self.population_entire_jakarta_layer, _ = load_layer(
+            population_entire_jakarta_impact_path,
+            directory=None)
+        self.building_entire_jakarta_layer, _ = load_layer(
+            building_entire_jakarta_impact_path,
+            directory=None)
+        self.population_district_jakarta_layer, _ = load_layer(
+            population_district_jakarta_impact_path,
+            directory=None)
+        self.building_district_jakarta_layer, _ = load_layer(
+            building_district_jakarta_impact_path,
+            directory=None)
+        self.district_jakarta_layer, _ = load_layer(
+            district_jakarta_boundary_path,
+            directory=None)
+
         # Prepare Input
         self.test_entire_mode = False
 
@@ -99,6 +120,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
     def tearDown(self):
         """Runs after each test."""
         # Delete test dir
+        #noinspection PyUnresolvedReferences
         test_impact_merge_dir = os.path.join(
             TEST_DATA_DIR, 'test-impact-merge')
         shutil.rmtree(test_impact_merge_dir)
@@ -106,33 +128,62 @@ class ImpactMergeDialogTest(unittest.TestCase):
     def prepare_test_input(self, test_entire_mode):
         if test_entire_mode:
             self.impact_merge_dialog.entire_area_mode = True
-            self.impact_merge_dialog.first_impact_layer = QgsVectorLayer(
-                population_entire_jakarta_impact_path,
-                os.path.basename(population_entire_jakarta_impact_path),
-                'ogr')
-            self.impact_merge_dialog.second_impact_layer = QgsVectorLayer(
-                building_entire_jakarta_impact_path,
-                os.path.basename(building_entire_jakarta_impact_path),
-                'ogr')
+            self.impact_merge_dialog.first_impact_layer = \
+                self.population_entire_jakarta_layer
+            self.impact_merge_dialog.second_impact_layer = \
+                self.building_entire_jakarta_layer
             self.impact_merge_dialog.chosen_aggregation_layer = None
+            #noinspection PyUnresolvedReferences
             self.impact_merge_dialog.out_dir = os.path.join(
                 TEST_DATA_DIR, 'test-impact-merge', 'entire')
         else:
             self.impact_merge_dialog.entire_area_mode = False
-            self.impact_merge_dialog.first_impact_layer = QgsVectorLayer(
-                population_district_jakarta_impact_path,
-                os.path.basename(population_district_jakarta_impact_path),
-                'ogr')
-            self.impact_merge_dialog.second_impact_layer = QgsVectorLayer(
-                building_district_jakarta_impact_path,
-                os.path.basename(building_district_jakarta_impact_path),
-                'ogr')
-            self.impact_merge_dialog.chosen_aggregation_layer = QgsVectorLayer(
-                district_jakarta_boundary_path,
-                os.path.basename(district_jakarta_boundary_path),
-                'ogr')
+            self.impact_merge_dialog.first_impact_layer = \
+                self.population_district_jakarta_layer
+            self.impact_merge_dialog.second_impact_layer = \
+                self.building_district_jakarta_layer
+            self.impact_merge_dialog.chosen_aggregation_layer = \
+                self.district_jakarta_layer
+            #noinspection PyUnresolvedReferences
             self.impact_merge_dialog.out_dir = os.path.join(
                 TEST_DATA_DIR, 'test-impact-merge', 'aggregated')
+
+    def test_get_project_layers(self):
+        """Test get_project_layers function."""
+        # Remove all layers on the registry
+        #noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+
+        # Add 4 impact layers and aggregation layer on it
+        layer_list = [self.population_entire_jakarta_layer,
+                      self.population_district_jakarta_layer,
+                      self.building_entire_jakarta_layer,
+                      self.building_district_jakarta_layer,
+                      self.district_jakarta_layer]
+
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers(layer_list)
+
+        # Test the get_project_layers
+        self.impact_merge_dialog.get_project_layers()
+
+        # On self.impact_merge_dialog.first_layer there must be 4 items
+        first_layer_expected_number = 4
+        self.assertEqual(
+            first_layer_expected_number,
+            self.impact_merge_dialog.first_layer.count())
+
+        # On self.impact_merge_dialog.second_layer there must be 4 items
+        second_layer_expected_number = 4
+        self.assertEqual(
+            second_layer_expected_number,
+            self.impact_merge_dialog.second_layer.count())
+
+        # On self.impact_merge_dialog.aggregation_layer there must be 1 items
+        aggregation_layer_expected_number = 1
+        self.assertEqual(
+            aggregation_layer_expected_number,
+            self.impact_merge_dialog.aggregation_layer.count())
 
     def test_validate_all_layers(self):
         """Test validate_all_layers function."""
@@ -177,12 +228,6 @@ class ImpactMergeDialogTest(unittest.TestCase):
                 '*.pdf'))
         expected_reports_number = 3
         self.assertEqual(len(report_list), expected_reports_number)
-
-    def test_load_template(self):
-        """Test load_template function."""
-        # Normal Case: It can found the template
-
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactMergeDialogTest)
