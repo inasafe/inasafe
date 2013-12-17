@@ -37,6 +37,7 @@ from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
 from safe_qgis.exceptions import (
     InvalidLayerError,
+    EmptyDirectoryError,
     CanceledImportDialogError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
@@ -73,14 +74,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.iface = iface
         self.keyword_io = KeywordIO()
 
-        # Set up context help
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
-
-        # Show usafe info
-        self.show_info()
-        self.restore_state()
-
         # Template Path for composer
         self.template_path = (
             ':/plugins/inasafe/merged_report.qpt'
@@ -98,8 +91,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.out_dir = None
 
         # The html reports and its file path
-        # Ex. {"jakarta barat": "/home/jakarta barat.html",
-        #      "jakarta timur": "/home/jakarta timur.html"}
         self.html_reports = {}
 
         # Whether to merge entire area or aggregated
@@ -122,6 +113,14 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             None
         )
         self.aggregation_layer.setCurrentIndex(0)
+
+        # Set up context help
+        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        help_button.clicked.connect(self.show_help)
+
+        # Show usafe info
+        self.show_info()
+        self.restore_state()
 
     def show_info(self):
         """Show usage info to the user."""
@@ -189,29 +188,23 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Store the current state to configuration file
         self.save_state()
 
-        # Validate the directory
+        # Prepare all the input from dialog, validate, and store it
         try:
-            self.require_directory()
+            self.prepare_input()
+        except (InvalidLayerError, EmptyDirectoryError) as ex:
+            # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
+            QMessageBox.information(
+                self,
+                self.tr("InaSAFE Merge Impact Tools Information"),
+                str(ex))
+            return
         except CanceledImportDialogError:
-            # Don't show anything because this exception raised
-            # when user canceling the import process directly
-            pass
+            return
 
-        # Get All Chosen Layer
-        self.get_all_chosen_layers()
-
-        # Get output directory
-        self.out_dir = self.output_directory.text()
-
-        # Flag whether to merge entire area or based on aggregation unit
-        if self.chosen_aggregation_layer is None:
-            self.entire_area_mode = True
-
-        # Validate all the layers
+        # Validate all the layers logically
         try:
-            self.validate()
-        except (InvalidLayerError,
-                NoKeywordsFoundError,
+            self.validate_all_layers()
+        except (NoKeywordsFoundError,
                 KeywordNotFoundError) as ex:
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
@@ -250,6 +243,80 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Process is Done
         self.done(QDialog.Accepted)
 
+    def get_project_layers(self):
+        """Get impact layers and aggregation layer currently loaded in QGIS."""
+        #noinspection PyArgumentList
+        registry = QgsMapLayerRegistry.instance()
+
+        # MapLayers returns a QMap<QString id, QgsMapLayer layer>
+        layers = registry.mapLayers().values()
+
+        # For issue #618
+        if len(layers) == 0:
+            return
+
+        # Clear the combo box first
+        self.first_layer.clear()
+        self.second_layer.clear()
+        self.aggregation_layer.clear()
+
+        for layer in layers:
+            try:
+                self.keyword_io.read_keywords(layer, 'impact_summary')
+            except (NoKeywordsFoundError, KeywordNotFoundError):
+                # Check if it has aggregation keyword
+                try:
+                    self.keyword_io.read_keywords(
+                        layer, 'aggregation attribute')
+                except (NoKeywordsFoundError, KeywordNotFoundError):
+                    # Skip if there are no keywords at all
+                    continue
+                add_ordered_combo_item(
+                    self.aggregation_layer,
+                    layer.name(),
+                    layer)
+                continue
+
+            add_ordered_combo_item(self.first_layer, layer.name(), layer)
+            add_ordered_combo_item(self.second_layer, layer.name(), layer)
+
+    def prepare_input(self):
+        """Fetch all the input from dialog, validate, and store it.
+
+        Consider this as a bridge between dialog interface and logical layer
+        after user clicks merge button.
+
+        :raises: InvalidLayerError, CanceledImportDialogError
+        """
+        # Get All Chosen Layer from combobox after user click merge
+        self.first_impact_layer = self.first_layer.itemData(
+            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
+        self.second_impact_layer = self.second_layer.itemData(
+            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
+        self.chosen_aggregation_layer = self.aggregation_layer.itemData(
+            self.aggregation_layer.currentIndex(), QtCore.Qt.UserRole)
+
+        # Validate The combobox impact layers (they should be different)
+        if self.first_layer.currentIndex() < 0:
+            raise InvalidLayerError(self.tr('First layer is not valid.'))
+
+        if self.second_layer.currentIndex() < 0:
+            raise InvalidLayerError(self.tr('Second layer is not valid.'))
+
+        if self.first_impact_layer.id() == self.second_impact_layer.id():
+            raise InvalidLayerError(
+                self.tr('First layer must be different with second layer''.'))
+
+        # Validate the output directory
+        self.require_directory()
+
+        # Get output directory
+        self.out_dir = self.output_directory.text()
+
+        # Flag whether to merge entire area or based on aggregation unit
+        if self.chosen_aggregation_layer is None:
+            self.entire_area_mode = True
+
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
 
@@ -278,39 +345,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             if len(path) != 0:
                 os.makedirs(path)
             else:
-            # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
-                QMessageBox.information(
-                    self,
-                    self.tr('InaSAFE Merge Impact Tools Error'),
+                raise EmptyDirectoryError(
                     self.tr('Output directory cannot be empty.'))
-                raise CanceledImportDialogError()
-
         else:
             raise CanceledImportDialogError()
-
-    def get_all_chosen_layers(self):
-        """Get all chosen layers after user clicks merge."""
-        self.first_impact_layer = self.first_layer.itemData(
-            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
-        self.second_impact_layer = self.second_layer.itemData(
-            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
-        self.chosen_aggregation_layer = self.aggregation_layer.itemData(
-            self.aggregation_layer.currentIndex(), QtCore.Qt.UserRole)
-
-    def validate(self):
-        """Verify that there are two impact layers and they are different."""
-        if self.first_layer.currentIndex() < 0:
-            raise InvalidLayerError(self.tr('First layer is not valid.'))
-
-        if self.second_layer.currentIndex() < 0:
-            raise InvalidLayerError(self.tr('Second layer is not valid.'))
-
-        if self.first_impact_layer.id() == self.second_impact_layer.id():
-            raise InvalidLayerError(
-                self.tr('First layer must be different with second layer''.'))
-
-        # Validate all layers
-        self.validate_all_layers()
 
     def validate_all_layers(self):
         """Validate all layers based on the keywords."""
@@ -373,25 +411,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Now create dictionary report from DOM
         merged_report_dict = self.generate_report_dictionary_from_dom(tables)
 
-        # Generate html reports from merged dictionary
-        html_reports = self.generate_html_from_merged_report(
-            merged_report_dict)
+        # Generate html reports file from merged dictionary
+        self.generate_html_reports(merged_report_dict)
 
-        # Now Generate html file from html reports.
-        # Each file will be generated for each html report
-        for html_report in html_reports:
-            aggregation_area = html_report[0]
-            html = html_report[1]
-            path = '%s/%s.html' % (
-                str(self.out_dir),
-                aggregation_area)
-            html_to_file(html, path)
-            self.html_reports[aggregation_area.lower()] = path
-
-        # Generate Reports:
+        # Generate PDF Reports using composer and/or atlas generation:
         self.generate_reports()
 
-        # Delete report files:
+        # Delete html report files:
         for area in self.html_reports:
             report_path = self.html_reports[area]
             if os.path.exists(report_path):
@@ -404,6 +430,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         :param html_dom: Input representing document dom as report from each
         impact layer report.
         :type html_dom: str
+
         :return: Dictionary representing html_dom
         :rtype: dict
 
@@ -447,17 +474,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 merged_report_dict[aggregation_area] = exposure_dict
         return merged_report_dict
 
-    @staticmethod
-    def generate_html_from_merged_report(merged_report_dict):
-        """Generate html for aggregation units from merged report.
+    def generate_html_reports(self, merged_report_dict):
+        """Generate html file for each aggregation units.
+
+        It also saves the path of the each aggregation unit in
+        self.html_reports.
+        Ex. {"jakarta barat": "/home/jakarta barat.html",
+             "jakarta timur": "/home/jakarta timur.html"}
 
         :param merged_report_dict: A dictionary of merged report.
         :type merged_report_dict: dict
-
-        :return: HTML for each aggregation unit report.
-        :rtype: list
         """
-        html_reports = []
         for aggregation_area in merged_report_dict:
             html = html_header()
             html += ('<table style="width: auto" '
@@ -474,47 +501,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                              '</tr>') % (datum, exposure_detail_dict[datum])
             html += '</table>'
             html += html_footer()
-            html_report = (aggregation_area, html)
-            html_reports.append(html_report)
-
-        return html_reports
-
-    def get_project_layers(self):
-        """Get impact layers and aggregation layer currently loaded in QGIS."""
-        #noinspection PyArgumentList
-        registry = QgsMapLayerRegistry.instance()
-
-        # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        layers = registry.mapLayers().values()
-
-        # For issue #618
-        if len(layers) == 0:
-            return
-
-        # Clear the combo box first
-        self.first_layer.clear()
-        self.second_layer.clear()
-        self.aggregation_layer.clear()
-
-        for layer in layers:
-            try:
-                self.keyword_io.read_keywords(layer, 'impact_summary')
-            except (NoKeywordsFoundError, KeywordNotFoundError):
-                # Check if it has aggregation keyword
-                try:
-                    self.keyword_io.read_keywords(
-                        layer, 'aggregation attribute')
-                except (NoKeywordsFoundError, KeywordNotFoundError):
-                    # Skip if there are no keywords at all
-                    continue
-                add_ordered_combo_item(
-                    self.aggregation_layer,
-                    layer.name(),
-                    layer)
-                continue
-
-            add_ordered_combo_item(self.first_layer, layer.name(), layer)
-            add_ordered_combo_item(self.second_layer, layer.name(), layer)
+            path = '%s/%s.html' % (
+                str(self.out_dir),
+                aggregation_area)
+            html_to_file(html, path)
+            self.html_reports[aggregation_area.lower()] = path
 
     def generate_reports(self):
         """Generate reports for each aggregation unit.
