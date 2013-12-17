@@ -398,7 +398,7 @@ class Aggregator(QtCore.QObject):
             m.Heading(self.tr('Aggregating results'), **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
-                ' by %s') % (self.layer.name())))
+                ' by %s' % self.layer.name())))
         #noinspection PyTypeChecker
         self._send_message(message)
 
