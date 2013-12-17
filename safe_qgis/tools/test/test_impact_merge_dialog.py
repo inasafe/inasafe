@@ -25,11 +25,12 @@ import logging
 
 import os
 from glob import glob
+import shutil
 
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-from qgis.core import QgsVectorLayer, QgsRasterLayer
+from qgis.core import QgsVectorLayer
 
 #noinspection PyPackageRequirements
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
@@ -42,7 +43,7 @@ LOGGER = logging.getLogger('InaSAFE')
 population_entire_jakarta_impact_path = os.path.join(
     UNITDATA,
     'impact',
-    'population_affected_entire_jakarta.shp')
+    'population_affected_entire_area.shp')
 population_district_jakarta_impact_path = os.path.join(
     UNITDATA,
     'impact',
@@ -50,7 +51,7 @@ population_district_jakarta_impact_path = os.path.join(
 building_entire_jakarta_impact_path = os.path.join(
     UNITDATA,
     'impact',
-    'buildings_inundated_entire_jakarta.shp')
+    'buildings_inundated_entire_area.shp')
 building_district_jakarta_impact_path = os.path.join(
     UNITDATA,
     'impact',
@@ -69,13 +70,38 @@ class ImpactMergeDialogTest(unittest.TestCase):
     """Test Impact Dialog widget
     """
     #noinspection PyPep8Naming
-
     def setUp(self):
         """Runs before each test."""
         self.impact_merge_dialog = ImpactMergeDialog(PARENT, IFACE)
 
+        # Create test dir
+        test_impact_merge_dir = os.path.join(
+            TEST_DATA_DIR, 'test-impact-merge')
+        if not os.path.exists(test_impact_merge_dir):
+            os.makedirs(test_impact_merge_dir)
+
+        # Create test dir for aggregated
+        test_aggregated_dir = os.path.join(
+            test_impact_merge_dir, 'aggregated')
+        if not os.path.exists(test_aggregated_dir):
+            os.makedirs(test_aggregated_dir)
+
+        # Create test dir for entire
+        test_entire_dir = os.path.join(
+            test_impact_merge_dir, 'entire')
+        if not os.path.exists(test_entire_dir):
+            os.makedirs(test_entire_dir)
+
         # Prepare Input
         self.test_entire_mode = False
+
+    #noinspection PyPep8Naming
+    def tearDown(self):
+        """Runs after each test."""
+        # Delete test dir
+        test_impact_merge_dir = os.path.join(
+            TEST_DATA_DIR, 'test-impact-merge')
+        shutil.rmtree(test_impact_merge_dir)
 
     def prepare_test_input(self, test_entire_mode):
         if test_entire_mode:
@@ -149,8 +175,13 @@ class ImpactMergeDialogTest(unittest.TestCase):
             os.path.join(
                 self.impact_merge_dialog.out_dir,
                 '*.pdf'))
-        expected_reports_number = 5
+        expected_reports_number = 3
         self.assertEqual(len(report_list), expected_reports_number)
+
+    def test_load_template(self):
+        """Test load_template function."""
+        # Normal Case: It can found the template
+
 
 
 if __name__ == '__main__':

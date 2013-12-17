@@ -2,14 +2,14 @@
 <qgis version="2.1.0-Master" minimumScale="0" maximumScale="1e+08" minLabelScale="0" maxLabelScale="1e+08" hasScaleBasedVisibilityFlag="0" scaleBasedLabelVisibilityFlag="0">
   <renderer-v2 attr="population" symbollevels="0" type="graduatedSymbol">
     <ranges>
-      <range symbol="0" lower="0.000000" upper="16378.573242" label="[0 - 16,379]"/>
-      <range symbol="1" lower="16378.573242" upper="32757.146484" label="[16,379 - 32,757]"/>
-      <range symbol="2" lower="32757.146484" upper="49135.719727" label="[32,757 - 49,136]"/>
-      <range symbol="3" lower="49135.719727" upper="65514.292969" label="[49,136 - 65,514]"/>
-      <range symbol="4" lower="65514.292969" upper="81892.866211" label="[65,514 - 81,893]"/>
-      <range symbol="5" lower="81892.866211" upper="98271.439453" label="[81,893 - 98,271]"/>
-      <range symbol="6" lower="98271.439453" upper="114650.012695" label="[98,271 - 114,650]"/>
-      <range symbol="7" lower="114650.012695" upper="131028.585938" label="[114,650 - 131,029]"/>
+      <range symbol="0" lower="0.000000" upper="8694.416016" label="[0 - 8,694]"/>
+      <range symbol="1" lower="8694.416016" upper="17388.832031" label="[8,694 - 17,389]"/>
+      <range symbol="2" lower="17388.832031" upper="26083.248047" label="[17,389 - 26,083]"/>
+      <range symbol="3" lower="26083.248047" upper="34777.664062" label="[26,083 - 34,778]"/>
+      <range symbol="4" lower="34777.664062" upper="43472.080078" label="[34,778 - 43,472]"/>
+      <range symbol="5" lower="43472.080078" upper="52166.496094" label="[43,472 - 52,166]"/>
+      <range symbol="6" lower="52166.496094" upper="60860.912109" label="[52,166 - 60,861]"/>
+      <range symbol="7" lower="60860.912109" upper="69555.328125" label="[60,861 - 69,555]"/>
     </ranges>
     <symbols>
       <symbol alpha="0" type="fill" name="0">
