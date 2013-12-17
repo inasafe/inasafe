@@ -19,7 +19,7 @@ from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
-
+from safe_qgis.utilities.utilities import get_utm_epsg
 
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     """
@@ -65,16 +65,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         Mandatory method.
         """
         self.extent = extent
-
-    def get_utm_zone(self, longitude):
-        return int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
-
-    def get_epsg(self, longitude, latitude):
-        epsg = 32600
-        if latitude < 0.0:
-            epsg += 100
-        epsg += self.get_utm_zone(longitude)
-        return epsg
 
     def run(self, layers):
         """
@@ -187,7 +177,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         line_layer.updateExtents()
 
         # Generate simple impact report
-        epsg = self.get_epsg(self.extent[0], self.extent[1])
+        epsg = get_utm_epsg(self.extent[0], self.extent[1])
         crs_dest = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(E.crs(), crs_dest)
         road_len = flooded_len = 0  # Length of roads
