@@ -10,12 +10,15 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
 
 __author__ = 'ismailsunni@yahoo.co.id'
 __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 
 import unittest
 
@@ -23,6 +26,7 @@ from nose import SkipTest
 
 from PyQt4.QtGui import QDialogButtonBox
 
+from safe.common.testing import get_qgis_app
 from safe_qgis.tools.function_browser import FunctionBrowser
 
 

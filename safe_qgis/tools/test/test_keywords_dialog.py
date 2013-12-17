@@ -11,12 +11,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 
 import unittest
 import sys
@@ -37,6 +39,7 @@ from qgis.core import (
     QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
+from safe.common.testing import get_qgis_app
 from safe_qgis.utilities.utilities_for_testing import (
     test_data_path)
 from safe_qgis.safe_interface import (

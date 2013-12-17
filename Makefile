@@ -143,7 +143,7 @@ safe_test_suite: compile testdata
 gui_test_suite: compile testdata
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regression Test Suite"
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
@@ -183,7 +183,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh b4db5177d1454ceeeac1b86fbc404d671d8305e5 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 6c69c0dd8f803cfc579020b20849da9adfc703a2 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -303,7 +303,7 @@ jenkins-test: testdata clean
 	@echo
 	@echo "----------------------------------"
 	@echo "Regression Test Suite for Jenkins"
-	@echo " against QGIS 1.x"
+	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis || :
 

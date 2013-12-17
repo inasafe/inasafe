@@ -199,7 +199,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 count += 1
 
             # Add calculated impact to existing attributes
-            attributes[i][self.target_field] = x
+            attributes[i][self.target_field] = int(x)
 
         # Lump small entries and 'unknown' into 'other' category
         for usage in buildings.keys():
