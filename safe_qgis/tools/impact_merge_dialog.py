@@ -106,14 +106,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Get all current project layers for combo box
         self.get_project_layers()
 
-        # Add Entire Area Option to Aggregated Layer:
-        self.aggregation_layer.insertItem(
-            0,
-            self.tr('Entire Area'),
-            None
-        )
-        self.aggregation_layer.setCurrentIndex(0)
-
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
@@ -279,6 +271,14 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             add_ordered_combo_item(self.first_layer, layer.name(), layer)
             add_ordered_combo_item(self.second_layer, layer.name(), layer)
+
+        # Add Entire Area Option to Aggregated Layer:
+        self.aggregation_layer.insertItem(
+            0,
+            self.tr('Entire Area'),
+            None
+        )
+        self.aggregation_layer.setCurrentIndex(0)
 
     def prepare_input(self):
         """Fetch all the input from dialog, validate, and store it.

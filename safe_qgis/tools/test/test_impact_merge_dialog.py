@@ -116,10 +116,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
             district_jakarta_boundary_path,
             directory=None)
 
-        # Get project layers and register them to combobox first_layer,
-        # second_layer, and aggregation_layer
+        # Add layers to registry
         self.register_layers()
-        self.impact_merge_dialog.get_project_layers()
 
     #noinspection PyPep8Naming
     def tearDown(self):
@@ -129,7 +127,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         test_impact_merge_dir = os.path.join(
             TEST_DATA_DIR, 'test-impact-merge')
         shutil.rmtree(test_impact_merge_dir)
-
+        # Remove Layers from registry
         QgsMapLayerRegistry().instance().removeAllMapLayers()
 
     def register_layers(self):
@@ -143,6 +141,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
         QgsMapLayerRegistry().instance().addMapLayers(layer_list)
 
     def mock_the_dialog(self, test_entire_mode):
+        # Populate layers on registry to dialog
+        self.impact_merge_dialog.get_project_layers()
         if test_entire_mode:
             self.impact_merge_dialog.entire_area_mode = True
             # Set the current Index of the combobox
@@ -164,8 +164,17 @@ class ImpactMergeDialogTest(unittest.TestCase):
                         index)
 
             # Aggregation Layer = Entire Area
-            self.impact_merge_dialog.aggregation_layer.setCurrentIndex(0)
+            aggregation_layer_count = \
+                self.impact_merge_dialog.aggregation_layer.count()
+            for index in range(0, aggregation_layer_count):
+                layer = \
+                    self.impact_merge_dialog.aggregation_layer.itemData(
+                        index, QtCore.Qt.UserRole)
+                if layer is None:
+                    self.impact_merge_dialog.aggregation_layer.\
+                        setCurrentIndex(index)
 
+            #noinspection PyUnresolvedReferences
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
                     TEST_DATA_DIR, 'test-impact-merge', 'entire'))
@@ -192,10 +201,10 @@ class ImpactMergeDialogTest(unittest.TestCase):
             aggregation_layer_count = \
                 self.impact_merge_dialog.aggregation_layer.count()
             for index in range(0, aggregation_layer_count):
-                layer_name = \
+                layer = \
                     self.impact_merge_dialog.aggregation_layer.itemData(
-                        index, QtCore.Qt.UserRole).name().lower()
-                if 'district' in layer_name:
+                        index, QtCore.Qt.UserRole)
+                if layer is not None:
                     self. \
                         impact_merge_dialog.aggregation_layer. \
                         setCurrentIndex(index)
@@ -204,6 +213,19 @@ class ImpactMergeDialogTest(unittest.TestCase):
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
                     TEST_DATA_DIR, 'test-impact-merge', 'aggregated'))
+
+    def test_accept(self):
+        """Test accept function."""
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.accept()
+
+        # There should be 1 pdf files in self.impact_merge_dialog.out_dir
+        report_list = glob(
+            os.path.join(
+                self.impact_merge_dialog.out_dir,
+                '*.pdf'))
+        expected_reports_number = 1
+        self.assertEqual(len(report_list), expected_reports_number)
 
     def test_get_project_layers(self):
         """Test get_project_layers function."""
@@ -223,17 +245,74 @@ class ImpactMergeDialogTest(unittest.TestCase):
             second_layer_expected_number,
             self.impact_merge_dialog.second_layer.count())
 
-        # On self.impact_merge_dialog.aggregation_layer there must be 1 items
-        aggregation_layer_expected_number = 1
+        # On self.impact_merge_dialog.aggregation_layer there must be 2 items
+        aggregation_layer_expected_number = 2
         self.assertEqual(
             aggregation_layer_expected_number,
             self.impact_merge_dialog.aggregation_layer.count())
 
     def test_prepare_input(self):
         """Test prepare_input function."""
+        # Test Entire Area
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.prepare_input()
+
+        # First impact layer should be the population entire
+        first_layer_name = self.impact_merge_dialog.first_impact_layer.name()
+        self.assertIn('population', first_layer_name)
+        self.assertIn('entire', first_layer_name)
+
+        # Second impact layer should be the population entire
+        second_layer_name = self.impact_merge_dialog.second_impact_layer.name()
+        self.assertIn('buildings', second_layer_name)
+        self.assertIn('entire', second_layer_name)
+
+        # Chosen aggregaton layer must be none
+        aggregation_layer = self.impact_merge_dialog.chosen_aggregation_layer
+        self.assertIsNone(aggregation_layer)
+
+        # Test Aggregated
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+
+        # First impact layer should be the population entire
+        first_layer_name = self.impact_merge_dialog.first_impact_layer.name()
+        self.assertIn('population', first_layer_name)
+        self.assertIn('district', first_layer_name)
+
+        # Second impact layer should be the population entire
+        second_layer_name = self.impact_merge_dialog.second_impact_layer.name()
+        self.assertIn('buildings', second_layer_name)
+        self.assertIn('district', second_layer_name)
+
+        # Chosen aggregaton layer must be not none
+        aggregation_layer_name = \
+            self.impact_merge_dialog.chosen_aggregation_layer.name()
+        self.assertEqual(self.district_jakarta_layer.name(),
+                         aggregation_layer_name)
+
+    def test_require_directory(self):
+        """Test require_directory function."""
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.require_directory()
 
     def test_validate_all_layers(self):
         """Test validate_all_layers function."""
+        # Test Entire Area mode
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.validate_all_layers()
+        self.assertIn(
+            'Detailed gender report',
+            self.impact_merge_dialog.first_postprocessing_report)
+        self.assertIn(
+            'Detailed building type report',
+            self.impact_merge_dialog.second_postprocessing_report)
+        self.assertEqual(
+            None,
+            self.impact_merge_dialog.aggregation_attribute)
+
         # Test Aggregated Area mode
         self.mock_the_dialog(test_entire_mode=False)
         self.impact_merge_dialog.prepare_input()
@@ -265,9 +344,10 @@ class ImpactMergeDialogTest(unittest.TestCase):
 
         # Test Aggregated Area merged
         self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
         self.impact_merge_dialog.validate_all_layers()
         self.impact_merge_dialog.merge()
-        # There should be 5 pdf files in self.impact_merge_dialog.out_dir
+        # There should be 3 pdf files in self.impact_merge_dialog.out_dir
         report_list = glob(
             os.path.join(
                 self.impact_merge_dialog.out_dir,
