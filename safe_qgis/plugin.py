@@ -228,7 +228,8 @@ class Plugin:
             'Open InaSAFE keywords editor'))
         self.action_keywords_dialog.setEnabled(False)
 
-        self.action_keywords_dialog.triggered.connect(self.show_keywords_editor)
+        self.action_keywords_dialog.triggered.connect(
+            self.show_keywords_editor)
 
         self.add_action(self.action_keywords_dialog)
 

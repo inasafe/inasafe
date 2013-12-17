@@ -1,43 +1,11 @@
 <Composer title="Composer 1" visible="1">
  <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="210" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="0" generateWorldFile="0">
-  <ComposerLegend symbolWidth="5" title="" boxSpace="2" splitLayer="1" equalColumnWidth="0" map="0" symbolHeight="3" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="4">
-   <styles>
-    <style marginBottom="2" name="title" font="Droid Sans,9,-1,5,50,0,0,0,0,0"/>
-    <style marginTop="2" name="group" font="Droid Sans,8,-1,5,50,0,0,0,0,0"/>
-    <style marginTop="2" name="subgroup" font="Droid Sans,8,-1,5,50,0,0,0,0,0"/>
-    <style marginTop="2" name="symbol" font="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
-    <style marginTop="2" marginLeft="2" name="symbolLabel" font="Droid Sans,7,-1,5,50,0,0,0,0,0"/>
-   </styles>
-   <Model autoUpdate="1"/>
-   <ComposerItem width="4" x="5.1082" transparency="0" y="235.054" rotation="0" height="6" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="2.33026" uuid="{0b9cf2d8-2218-42ad-bf1a-c19c231f3bc1}" id="impact-legend" background="true" blendMode="0" positionLock="false">
+  <ComposerPicture pictureWidth="10" file="/data/samples/inasafe/InaSAFEPackages/Jakarta" pictureHeight="10" mapId="-1">
+   <ComposerItem width="10" x="10" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="7" lastValidViewScaleFactor="2.07047" uuid="{bde9f251-c3ac-40b5-9891-f2d451540020}" id="safe-logo" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
-  </ComposerLegend>
-  <ComposerLabel valign="32" labelText="Date and time of assessment: [date] [time]&#xa;Special note: This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.&#xa;Assessment carried out using InaSAFE release [safe-version] (QGIS plugin version)." htmlState="0" halign="1" margin="1">
-   <LabelFont description="Droid Sans,6,-1,5,50,2,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="51.5718" x="149.899" transparency="0" y="234.605" rotation="0" height="50" positionMode="0" frame="false" outlineWidth="0" zValue="7" lastValidViewScaleFactor="2.33026" uuid="{3c42a144-a6f1-4ba2-97f4-e4660b700908}" id="" background="true" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
-  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
-   <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="200" x="10" transparency="0" y="287" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="2.08725" uuid="{bad24554-ecf7-401d-a229-9c1d308d471b}" id="" background="true" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
-  <ComposerLabel valign="128" labelText="[impact-title]" htmlState="0" halign="1" margin="1">
-   <LabelFont description="Droid Sans,20,-1,5,75,0,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="194.809" x="5.14964" transparency="0" y="223.035" rotation="0" height="12" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="2.33026" uuid="{dace6c6e-db7f-4575-9844-ee8976212da9}" id="impact-title" background="true" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
+  </ComposerPicture>
   <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Cache" drawCanvasItems="true">
    <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
     <symbol alpha="0.3" type="fill" name="">
@@ -75,7 +43,7 @@
      <fontColor red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <ComposerItem width="195.709" x="4.29137" transparency="0" y="25" rotation="0" height="190" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.33026" uuid="{cda899ff-b6c2-475a-ba3e-09751d22aca4}" id="impact-map" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="195.709" x="4.29137" transparency="0" y="25" rotation="0" height="190" positionMode="0" frame="true" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.66779" uuid="{fd44ac26-d6c3-4117-9840-be25b57272fb}" id="impact-map" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -83,16 +51,48 @@
   <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="4" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="170" x="30" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.07047" uuid="{308cae46-b01a-4b60-8c4f-00e981af9e94}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="170" x="30" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="5" lastValidViewScaleFactor="2.07047" uuid="{4dd44c64-9fc5-42f1-a8f1-94dea27fdb70}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerPicture pictureWidth="10" file="/data/samples/inasafe/InaSAFEPackages/Jakarta" pictureHeight="10" mapId="-1">
-   <ComposerItem width="10" x="10" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="1" lastValidViewScaleFactor="2.07047" uuid="{befc702a-30e9-43a9-9f31-2ebd296e018f}" id="safe-logo" background="true" blendMode="0" positionLock="false">
+  <ComposerLabel valign="128" labelText="[impact-title]" htmlState="0" halign="1" margin="1">
+   <LabelFont description="Droid Sans,20,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="194.809" x="5.14964" transparency="0" y="223.035" rotation="0" height="12" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="2.33026" uuid="{60199d88-1d8f-4205-9b2f-8539b196d891}" id="impact-title" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
-  </ComposerPicture>
+  </ComposerLabel>
+  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
+   <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="200" x="10" transparency="0" y="287" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.08725" uuid="{f4a40286-c5f7-4d02-aba1-a300aaf7aaa2}" id="" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="32" labelText="Date and time of assessment: [date] [time]&#xa;Special note: This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.&#xa;Assessment carried out using InaSAFE release [safe-version] (QGIS plugin version)." htmlState="0" halign="1" margin="1">
+   <LabelFont description="Droid Sans,6,-1,5,50,2,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="51.5718" x="149.899" transparency="0" y="234.605" rotation="0" height="50" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.33026" uuid="{7270ee87-3352-4555-aeea-4bc8799a4d88}" id="" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLegend symbolWidth="5" title="" boxSpace="2" splitLayer="1" equalColumnWidth="0" map="0" symbolHeight="3" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
+   <styles>
+    <style marginBottom="1" name="title" font="Droid Sans,9,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="1" name="group" font="Droid Sans,8,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="2" name="subgroup" font="Droid Sans,8,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="2" name="symbol" font="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="2" marginLeft="2" name="symbolLabel" font="Droid Sans,7,-1,5,50,0,0,0,0,0"/>
+   </styles>
+   <Model autoUpdate="1"/>
+   <ComposerItem width="4" x="5.1082" transparency="0" y="235.054" rotation="0" height="5" positionMode="0" frame="false" outlineWidth="0" zValue="1" lastValidViewScaleFactor="1.66779" uuid="{6b930dc6-7466-4ac5-bc4a-44213823b844}" id="impact-legend" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLegend>
  </Composition>
 </Composer>
