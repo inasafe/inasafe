@@ -20,6 +20,7 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe_qgis.utilities.utilities import get_utm_epsg
+from safe_qgis.exceptions import InvalidParameterError
 
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     """
@@ -91,6 +92,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         H = H.as_qgis_native()
         h_provider = H.dataProvider()
         affected_field_index = h_provider.fieldNameIndex(affected_field)
+        if affected_field_index == -1:
+            message = tr('''Parameter "Affected Field"(='%s')
+                doesn't presented in the
+                attribute table of the hazard layer.''' % (affected_field, ))
+            raise InvalidParameterError, message
+
+
         E = E.as_qgis_native()
         srs = E.crs().toWkt()
         e_provider = E.dataProvider()
@@ -136,6 +144,14 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 hazard_poly = QgsGeometry(mpolygon.geometry())
             else:
                 hazard_poly = hazard_poly.combine(mpolygon.geometry())
+
+        if hazard_poly is None:
+            message = tr('''There are no objects
+                in the hazard layer with
+                "Affected value"='%s'.
+                Please check the value or use other
+                extent.''' % (affected_value, ))
+            raise InvalidParameterError, message
 
         e_data = E.getFeatures(request)
         for feat in e_data:
@@ -217,9 +233,9 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         map_title = tr('Roads inundated')
 
         style_classes = [dict(label=tr('Not Inundated'), value=0,
-                              colour='#1EFC7C', transparency=0, size=1),
+                              colour='#1EFC7C', transparency=0, size=0.5),
                          dict(label=tr('Inundated'), value=1,
-                              colour='#F31A1C', transparency=0, size=1)]
+                              colour='#F31A1C', transparency=0, size=0.5)]
         style_info = dict(target_field=target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
