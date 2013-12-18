@@ -45,8 +45,6 @@ from PyQt4.QtCore import (
     QObject,
     QVariant,
     QFileInfo,
-    QString,
-    QStringList,
     QUrl,
     QSize,
     Qt,
@@ -1077,13 +1075,13 @@ class ShakeEvent(QObject):
 
         LOGGER.debug('Writing mem layer to shp: %s' % output_file)
         # Explicitly giving all options, not really needed but nice for clarity
-        error_message = QString()
-        options = QStringList()
-        layer_options = QStringList()
+        error_message = ''
+        options = []
+        layer_options = []
         selected_only_flag = False
         skip_attributes_flag = False
         # May differ from output_file
-        actual_new_file_name = QString()
+        actual_new_file_name = ''
         result = QgsVectorFileWriter.writeAsVectorFormat(
             memory_layer,
             output_file,
