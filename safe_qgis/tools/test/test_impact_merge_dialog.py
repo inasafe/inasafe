@@ -24,6 +24,7 @@ import unittest
 import logging
 
 import os
+from xml.dom import minidom
 from glob import glob
 import shutil
 
@@ -33,13 +34,20 @@ from PyQt4 import QtCore
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsMapRenderer,
+    QgsComposition)
 
 #noinspection PyPackageRequirements
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
     load_layer)
+from safe_qgis.exceptions import (
+    ReportCreationError,
+    KeywordNotFoundError,
+    InvalidLayerError)
 from safe_qgis.safe_interface import UNITDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -72,11 +80,16 @@ TEST_DATA_DIR = os.path.abspath(
 
 
 class ImpactMergeDialogTest(unittest.TestCase):
-    """Test Impact Dialog widget
+    """Test Impact Merge Dialog widget
     """
+
     #noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
+        self.map_layer_registry = QgsMapLayerRegistry.instance()
+        self.register_layers()
+
+        # Create Impact Merge Dialog
         self.impact_merge_dialog = ImpactMergeDialog(PARENT, IFACE)
 
         # Create test dir
@@ -99,6 +112,21 @@ class ImpactMergeDialogTest(unittest.TestCase):
         if not os.path.exists(test_entire_dir):
             os.makedirs(test_entire_dir)
 
+    #noinspection PyPep8Naming
+    def tearDown(self):
+        """Runs after each test."""
+        # Remove Map Layers
+        if len(self.map_layer_registry.mapLayers().values()) > 0:
+            self.map_layer_registry.removeAllMapLayers()
+
+        # Delete test dir
+        #noinspection PyUnresolvedReferences
+        test_impact_merge_dir = os.path.join(
+            TEST_DATA_DIR, 'test-impact-merge')
+        shutil.rmtree(test_impact_merge_dir)
+
+    def register_layers(self):
+        """Register needed layers to QgsMapLayerRegistry."""
         # Register 4 impact layers and aggregation layer
         self.population_entire_jakarta_layer, _ = load_layer(
             population_entire_jakarta_impact_path,
@@ -116,33 +144,16 @@ class ImpactMergeDialogTest(unittest.TestCase):
             district_jakarta_boundary_path,
             directory=None)
 
-        # Add layers to registry
-        self.register_layers()
-
-    #noinspection PyPep8Naming
-    def tearDown(self):
-        """Runs after each test."""
-        # Delete test dir
-        #noinspection PyUnresolvedReferences
-        test_impact_merge_dir = os.path.join(
-            TEST_DATA_DIR, 'test-impact-merge')
-        shutil.rmtree(test_impact_merge_dir)
-        # Remove Layers from registry
-        QgsMapLayerRegistry().instance().removeAllMapLayers()
-
-    def register_layers(self):
-        """Register needed layers to QgsMapLayerRegistry."""
         layer_list = [self.population_entire_jakarta_layer,
                       self.population_district_jakarta_layer,
                       self.building_entire_jakarta_layer,
                       self.building_district_jakarta_layer,
                       self.district_jakarta_layer]
+
         # noinspection PyArgumentList
-        QgsMapLayerRegistry().instance().addMapLayers(layer_list)
+        self.map_layer_registry.addMapLayers(layer_list)
 
     def mock_the_dialog(self, test_entire_mode):
-        # Populate layers on registry to dialog
-        self.impact_merge_dialog.get_project_layers()
         if test_entire_mode:
             self.impact_merge_dialog.entire_area_mode = True
             # Set the current Index of the combobox
@@ -174,6 +185,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
                     self.impact_merge_dialog.aggregation_layer.\
                         setCurrentIndex(index)
 
+            # Set Output Directory
             #noinspection PyUnresolvedReferences
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
@@ -209,6 +221,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
                         impact_merge_dialog.aggregation_layer. \
                         setCurrentIndex(index)
 
+            # Set output directory
             #noinspection PyUnresolvedReferences
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
@@ -229,7 +242,6 @@ class ImpactMergeDialogTest(unittest.TestCase):
 
     def test_get_project_layers(self):
         """Test get_project_layers function."""
-        self.register_layers()
         # Test the get_project_layers
         self.impact_merge_dialog.get_project_layers()
 
@@ -253,6 +265,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
 
     def test_prepare_input(self):
         """Test prepare_input function."""
+        # NORMAL CASE
         # Test Entire Area
         self.mock_the_dialog(test_entire_mode=True)
         self.impact_merge_dialog.prepare_input()
@@ -271,6 +284,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         aggregation_layer = self.impact_merge_dialog.chosen_aggregation_layer
         self.assertIsNone(aggregation_layer)
 
+        # NORMAL CASE
         # Test Aggregated
         self.mock_the_dialog(test_entire_mode=False)
         self.impact_merge_dialog.prepare_input()
@@ -288,8 +302,33 @@ class ImpactMergeDialogTest(unittest.TestCase):
         # Chosen aggregaton layer must be not none
         aggregation_layer_name = \
             self.impact_merge_dialog.chosen_aggregation_layer.name()
-        self.assertEqual(self.district_jakarta_layer.name(),
+        self.assertEqual('district_osm_jakarta',
                          aggregation_layer_name)
+
+        # FALL CASE
+        # First layer combobox index < 0
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.first_layer.setCurrentIndex(-1)
+        self.assertRaises(
+            InvalidLayerError,
+            self.impact_merge_dialog.prepare_input)
+
+        # FALL CASE
+        # Second layer combobox index < 0
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.second_layer.setCurrentIndex(-1)
+        self.assertRaises(
+            InvalidLayerError,
+            self.impact_merge_dialog.prepare_input)
+
+        # FALL CASE
+        # First impact layer = second impact layer
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.first_layer.setCurrentIndex(1)
+        self.impact_merge_dialog.second_layer.setCurrentIndex(1)
+        self.assertRaises(
+            InvalidLayerError,
+            self.impact_merge_dialog.prepare_input)
 
     def test_require_directory(self):
         """Test require_directory function."""
@@ -299,6 +338,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
 
     def test_validate_all_layers(self):
         """Test validate_all_layers function."""
+        # NORMAL CASE
         # Test Entire Area mode
         self.mock_the_dialog(test_entire_mode=True)
         self.impact_merge_dialog.prepare_input()
@@ -313,6 +353,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
             None,
             self.impact_merge_dialog.aggregation_attribute)
 
+        # NORMAL CASE
         # Test Aggregated Area mode
         self.mock_the_dialog(test_entire_mode=False)
         self.impact_merge_dialog.prepare_input()
@@ -326,6 +367,42 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.assertEqual(
             'KAB_NAME',
             self.impact_merge_dialog.aggregation_attribute)
+
+        # FALL CASE
+        # There is no keyword post_processing in first_impact_layer
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.prepare_input()
+        # Change first impact layer to aggregation layer that doesn't have the
+        # keywords
+        self.impact_merge_dialog.first_impact_layer = \
+            self.district_jakarta_layer
+        self.assertRaises(
+            KeywordNotFoundError,
+            self.impact_merge_dialog.validate_all_layers)
+
+        # FALL CASE
+        # There is no keyword post_processing in second_impact_layer
+        self.mock_the_dialog(test_entire_mode=True)
+        self.impact_merge_dialog.prepare_input()
+        # Change second impact layer to aggregation layer that doesn't have the
+        # keywords
+        self.impact_merge_dialog.second_impact_layer = \
+            self.district_jakarta_layer
+        self.assertRaises(
+            KeywordNotFoundError,
+            self.impact_merge_dialog.validate_all_layers)
+
+        # FALL CASE
+        # There is no keyword 'aggregation attribute' in aggregation layer
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+        # Change aggregation layer to impact layer that doesn't have the
+        # keywords
+        self.impact_merge_dialog.chosen_aggregation_layer = \
+            self.population_district_jakarta_layer
+        self.assertRaises(
+            KeywordNotFoundError,
+            self.impact_merge_dialog.validate_all_layers)
 
     def test_merge(self):
         """Test merge function."""
@@ -354,6 +431,156 @@ class ImpactMergeDialogTest(unittest.TestCase):
                 '*.pdf'))
         expected_reports_number = 3
         self.assertEqual(len(report_list), expected_reports_number)
+
+    def test_generate_report_dictionary_from_dom(self):
+        """Test generate_report_dictionary_from_dom function."""
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.validate_all_layers()
+
+        # Create the DOM
+        first_report = (
+            '<body>' +
+            self.impact_merge_dialog.first_postprocessing_report +
+            '</body>')
+        second_report = (
+            '<body>' +
+            self.impact_merge_dialog.second_postprocessing_report +
+            '</body>')
+
+        # Now create a dom document for each
+        first_document = minidom.parseString(first_report)
+        second_document = minidom.parseString(second_report)
+        tables = first_document.getElementsByTagName('table')
+        tables += second_document.getElementsByTagName('table')
+
+        report_dict = \
+            self.impact_merge_dialog.generate_report_dictionary_from_dom(
+                tables)
+        # There should be 4 keys in that dict
+        # (3 for each aggregation unit and 1 for total in aggregation unit)
+        expected_number_of_keys = 4
+        self.assertEqual(len(report_dict), expected_number_of_keys)
+
+    def test_generate_html_reports(self):
+        """Test generate_html_reports function."""
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.validate_all_layers()
+
+        # Create the DOM
+        first_report = (
+            '<body>' +
+            self.impact_merge_dialog.first_postprocessing_report +
+            '</body>')
+        second_report = (
+            '<body>' +
+            self.impact_merge_dialog.second_postprocessing_report +
+            '</body>')
+
+        # Now create a dom document for each
+        first_document = minidom.parseString(first_report)
+        second_document = minidom.parseString(second_report)
+        tables = first_document.getElementsByTagName('table')
+        tables += second_document.getElementsByTagName('table')
+
+        report_dict = \
+            self.impact_merge_dialog.generate_report_dictionary_from_dom(
+                tables)
+
+        self.impact_merge_dialog.generate_html_reports(report_dict)
+
+        # There should be 4 HTML files generated on output directory
+        html_list = glob(
+            os.path.join(
+                self.impact_merge_dialog.out_dir,
+                '*.html'))
+        expected_html_number = 4
+        self.assertEqual(len(html_list), expected_html_number)
+
+    def test_generate_reports(self):
+        """Test generate_reports function."""
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.validate_all_layers()
+
+        # Create the DOM
+        first_report = (
+            '<body>' +
+            self.impact_merge_dialog.first_postprocessing_report +
+            '</body>')
+        second_report = (
+            '<body>' +
+            self.impact_merge_dialog.second_postprocessing_report +
+            '</body>')
+
+        # Now create a dom document for each
+        first_document = minidom.parseString(first_report)
+        second_document = minidom.parseString(second_report)
+        tables = first_document.getElementsByTagName('table')
+        tables += second_document.getElementsByTagName('table')
+
+        report_dict = \
+            self.impact_merge_dialog.generate_report_dictionary_from_dom(
+                tables)
+
+        self.impact_merge_dialog.generate_html_reports(report_dict)
+
+        # Generate PDF Reports
+        self.impact_merge_dialog.generate_reports()
+
+        # There should be 3 pdf files in self.impact_merge_dialog.out_dir
+        report_list = glob(
+            os.path.join(
+                self.impact_merge_dialog.out_dir,
+                '*.pdf'))
+        expected_reports_number = 3
+        self.assertEqual(len(report_list), expected_reports_number)
+
+    def test_load_template(self):
+        """Test load_template function."""
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.validate_all_layers()
+
+        # Setup Map Renderer and set all the layer
+        renderer = QgsMapRenderer()
+        layer_set = [self.impact_merge_dialog.first_impact_layer.id(),
+                     self.impact_merge_dialog.second_impact_layer.id()]
+
+        # If aggregated, append chosen aggregation layer
+        if not self.impact_merge_dialog.entire_area_mode:
+            layer_set.append(
+                self.impact_merge_dialog.chosen_aggregation_layer.id())
+
+        # Set Layer set to renderer
+        renderer.setLayerSet(layer_set)
+
+        # NORMAL CASE: It can find the template
+        # Create composition
+        composition = self.impact_merge_dialog.load_template(renderer)
+        # The type of this composition must be QgsComposition
+        self.assertEqual(type(composition), QgsComposition)
+
+        #FALL CASE: It cannot find the template
+        self.impact_merge_dialog.template_path = '/it/will/fail/tmp.qpt'
+        expected_message = 'Error loading template %s' % \
+                           self.impact_merge_dialog.template_path
+        with self.assertRaises(ReportCreationError) as context:
+            self.impact_merge_dialog.load_template(renderer)
+        self.assertEqual(context.exception.message, expected_message)
+
+    def test_get_impact_title(self):
+        """Test get_impact_title function."""
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.validate_all_layers()
+
+        title = self.impact_merge_dialog.get_impact_title()
+        expected_title = ('People affected by flood prone areas and '
+                          'Buildings inundated')
+        self.assertEqual(title, expected_title)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactMergeDialogTest)

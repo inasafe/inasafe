@@ -243,7 +243,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = registry.mapLayers().values()
 
-        # For issue #618
         if len(layers) == 0:
             return
 
@@ -508,7 +507,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.html_reports[aggregation_area.lower()] = path
 
     def generate_reports(self):
-        """Generate reports for each aggregation unit.
+        """Generate PDF reports for each aggregation unit using map composer.
 
         If it is aggregated then use atlas generation.
         If it is not (entire area) then just use composition.
@@ -691,8 +690,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Set Map Legend
         legend = composition.getComposerItemById('impact-legend')
-        legend.setTitle(self.tr('Legend'))
-        legend.updateLegend()
+        if legend is not None:
+            legend.setTitle(self.tr('Legend'))
+            legend.updateLegend()
+        else:
+            raise ReportCreationError(
+                self.tr('Legend "impact-legend" could not be found'))
 
         return composition
 
