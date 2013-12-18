@@ -29,11 +29,10 @@ from glob import glob
 import shutil
 
 #noinspection PyPackageRequirements
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
+#noinspection PyPackageRequirements
+from PyQt4.QtGui import QApplication, QMessageBox
 
-# this import required to enable PyQt API v2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapRenderer,
@@ -226,19 +225,6 @@ class ImpactMergeDialogTest(unittest.TestCase):
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
                     TEST_DATA_DIR, 'test-impact-merge', 'aggregated'))
-
-    def test_accept(self):
-        """Test accept function."""
-        self.mock_the_dialog(test_entire_mode=True)
-        self.impact_merge_dialog.accept()
-
-        # There should be 1 pdf files in self.impact_merge_dialog.out_dir
-        report_list = glob(
-            os.path.join(
-                self.impact_merge_dialog.out_dir,
-                '*.pdf'))
-        expected_reports_number = 1
-        self.assertEqual(len(report_list), expected_reports_number)
 
     def test_get_project_layers(self):
         """Test get_project_layers function."""

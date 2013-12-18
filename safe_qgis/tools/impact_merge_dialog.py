@@ -225,7 +225,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Give user successful information!
         # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
-        QMessageBox.information(
+        self.success_message_box = QMessageBox.information(
             self,
             self.tr('InaSAFE Merge Impact Tools Information'),
             self.tr(
