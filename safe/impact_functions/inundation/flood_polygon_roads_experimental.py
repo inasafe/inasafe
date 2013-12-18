@@ -1,4 +1,3 @@
-import math
 
 from PyQt4.QtCore import QVariant
 from qgis.core import (
@@ -46,10 +45,10 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         ('road_type_field', 'TYPE'),
         # This field of the  hazard layer contains information
         # about inundated areas
-        ('affected_field', 'affected'),
+        ('affected_field', 'FLOODPRONE'),
         # This value in 'affected_field' of the hazard layer
         # marks the areas as inundated
-        ('affected_value', '1'),
+        ('affected_value', 'YES'),
     ])
 
     def get_function_type(self):
@@ -143,7 +142,15 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             if hazard_poly is None:
                 hazard_poly = QgsGeometry(mpolygon.geometry())
             else:
-                hazard_poly = hazard_poly.combine(mpolygon.geometry())
+                # Make geometry union of inundated polygons
+
+                # But some mpolygon.geometry() could be invalid, skip them
+                tmp_geometry = hazard_poly.combine(mpolygon.geometry())
+                try:
+                    if tmp_geometry.isGeosValid():
+                        hazard_poly = tmp_geometry
+                except AttributeError:
+                    pass
 
         if hazard_poly is None:
             message = tr('''There are no objects
@@ -158,7 +165,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             line_geom = feat.geometry()
             attrs = feat.attributes()
             if hazard_poly.intersects(line_geom):
-                # Check intersection
+                # Find parts of the line, intersecting
+                # with flooded polygons, then mark them as inundated
                 int_geom = QgsGeometry(
                     line_geom.intersection(hazard_poly)
                 ).asGeometryCollection()
@@ -168,10 +176,11 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                         l_feat.setGeometry(g)
                         l_feat.setAttributes(attrs)
                         l_feat.setAttribute(target_field_index, 1)
-                        (res, out_feat) = \
+                        (_, __) = \
                             line_layer.dataProvider().addFeatures([l_feat])
 
-                # Check difference
+                # Find parts of the line that do not lies in flooded regions,
+                # mark them as not inundated
                 diff_geom = QgsGeometry(
                     line_geom.symDifference(hazard_poly)
                 ).asGeometryCollection()
@@ -181,14 +190,14 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                         l_feat.setGeometry(g)
                         l_feat.setAttributes(attrs)
                         l_feat.setAttribute(target_field_index, 0)
-                        (res, out_feat) = \
+                        (_, __) = \
                             line_layer.dataProvider().addFeatures([l_feat])
             else:
                 l_feat = QgsFeature()
                 l_feat.setGeometry(line_geom)
                 l_feat.setAttributes(attrs)
                 l_feat.setAttribute(target_field_index, 0)
-                (res, out_feat) = \
+                (_, __) = \
                     line_layer.dataProvider().addFeatures([l_feat])
         line_layer.updateExtents()
 
