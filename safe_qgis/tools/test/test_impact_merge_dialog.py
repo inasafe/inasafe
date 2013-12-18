@@ -80,12 +80,12 @@ TEST_DATA_DIR = os.path.abspath(
 
 
 class ImpactMergeDialogTest(unittest.TestCase):
-    """Test Impact Merge Dialog widget
-    """
+    """Test Impact Merge Dialog widget."""
 
     #noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
+        #noinspection PyArgumentList
         self.map_layer_registry = QgsMapLayerRegistry.instance()
         self.register_layers()
 
