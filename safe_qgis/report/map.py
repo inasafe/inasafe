@@ -311,7 +311,16 @@ class Map():
         #legend_notes = mapLegendAttributes.get('legend_notes', None)
         #legend_units = mapLegendAttributes.get('legend_units', None)
         legend_title = legend_attributes.get('legend_title', None)
+
         if legend_title is None:
             legend_title = ""
         legend.setTitle(legend_title)
         legend.updateLegend()
+
+        # remove from legend all layers, except impact one
+        model = legend.model()
+        impact_item = model.findItems(self.layer.name())[0]
+        row = impact_item.index().row()
+        model.removeRows(row + 1, model.rowCount() - row)
+        if row > 0:
+            model.removeRows(0, row)

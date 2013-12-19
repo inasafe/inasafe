@@ -262,7 +262,7 @@ def set_vector_categorized_style(vector_layer, style):
         else:
             # for lines we do nothing special as the property setting
             # below should give us what we require.
-            pass
+            symbol_layer = None
 
         try:
             symbol_layer.setBorderWidth(style_class['border_width'])

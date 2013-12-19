@@ -153,7 +153,8 @@ def load_layer(layer_file, directory=TESTDATA):
         raise Exception(message)
 
     message = 'Layer "%s" is not valid' % str(layer.source())
-    print message
+    if not layer.isValid():
+        print message
     assert layer.isValid(), message
     return layer, category
 

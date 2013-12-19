@@ -137,6 +137,7 @@ class HtmlRendererTest(unittest.TestCase):
             20936,  # as rendered on linux ub 12.04 64
             21523,  # as rendered on linux ub 12.10 64
             20605,  # as rendered on linux ub 13.04 64
+            20601,  # as rendered on linux ub 13.10 64
             14220,  # as rendered on linux ub 13.04 64 MB
             21527,  # as rendered on Jenkins post 22 June 2013
             377191,  # as rendered on OSX
