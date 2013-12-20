@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>InaSAFE Realtime</title>
+    <link rel="stylesheet" href="resource/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="resource/bootstrap-responsive.css"
+          type="text/css"/>
+    <link rel="shortcut icon" href="resource/favicon.ico">
+    <script language="javascript" type="text/javascript"
+            src="resource/jquery.js"></script>
+    <script language="javascript" type="text/javascript"
+            src="resource/jquery.tablesorter.js"></script>
+  </head>
+
+  <body>
+  <style type="text/css">
+    body
+    {
+      padding-top    : 60px;
+      padding-bottom : 40px;
+    }
+    table#earthquake_table thead tr .header {
+      background-image: url(resource/sort_bg.gif);
+      background-repeat: no-repeat;
+      background-position: center right;
+      cursor: pointer;
+    }
+    .mmi-2 {padding: 4px; text-align: center; background-color: #209fff;}
+    .mmi-3 {padding: 4px; text-align: center; background-color: #00cfff;}
+    .mmi-4 {padding: 4px; text-align: center; background-color: #55ffff;}
+    .mmi-5 {padding: 4px; text-align: center; background-color: #aaffff;}
+    .mmi-6 {padding: 4px; text-align: center; background-color: #fff000;}
+    .mmi-7 {padding: 4px; text-align: center; background-color: #ffa800;}
+    .mmi-8 {padding: 4px; text-align: center; background-color: #ff7000;}
+    .mmi-9 {padding: 4px; text-align: center; background-color: #ff0000;}
+    .location-info {padding: 0; margin:0; font-size: x-small}
+    .center {
+      text-align: center;
+      vertical-align: middle;
+    }
+  </style>
+
+  <div class="container">
+    <div class="hero-unit">
+      <h1><img src='resource/inasafe-logo.png'/> InaSAFE Realtime</h1>
+
+      <p>This page lists realtime (actually near realtime) shakemaps produced
+        following shake events in the Indonesia region.</p>
+    </div>
+    <br>
+	<table class="table" id="earthquake_table">
+		<thead>
+			<tr>
+				<th>Max MMI</th>
+				<th>Date and Time</th>
+				<th>Location</th>
+				<th>Magnitude</th>
+				<th>Depth</th>
+				<th>Report Detail</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><div class="mmi-7">7</div></td>
+				<td>05-Nov-12 18:59:28 </td>
+				<td><p class="location-info"><em>M 4.7 5-11-2012 18:59:28 Latitude: 1°34'12.00"N Longitude: 128°15'36.00"E Depth: 69.0km Located 1.33km NE of Ternate</em></p>TERNATE</td>
+				<td><div class="center">4.7</div></td>
+				<td><div class="center">69.0 km</div></td>
+				<td><a href="20121105185928-en.pdf">PDF</a> | <a href="20121105185928-en.png">PNG</a></td>
+			</tr>
+		</tbody>
+	</table>    <br>
+    <div class="row">
+      <div class="span4">
+        <h2>Supporters</h2>
+        <p>Funded and supported by the
+          <a href='http://www.aifdr.org/'>Australia-Indonesia Facility
+            for Disaster Reduction</a>,
+          <a href='http://www.ga.gov.au/'>Geoscience Australia</a> and
+          the <a href='http://www.gfdrr.org'>World Bank-GFDRR</a>.</p>
+      </div>
+
+      <div class="span4">
+        <h2>Partners</h2>
+        <p>This software was developed with our partners in Indonesia:
+          <a href='http://bnpb.go.id'>Badan Nasional
+            Penanggulangan Bencana (BNPB)</a>. and
+          <a href='http://www.bmkg.go.id'>Badan Meteorologi, Klimatologi, dan
+            Geofisika (BMKG)</a>
+        </p>
+      </div>
+
+      <div class="span4">
+        <h2>InaSAFE</h2>
+        <p>This software is part of the <a
+            a href='http://inasafe.org'>InaSAFE</a> project.</p>
+      </div>
+    </div>
+
+    <ul class="thumbnails">
+      <li class="span4">
+        <a href="#" class="thumbnail">
+          <img src='resource/bnpb_logo.png' alt=""/>
+        </a>
+      </li>
+      <li class="span4">
+      </li>
+      <li class="span4">
+        <a href="#" class="thumbnail">
+          <img src='resource/bmkg_logo.png' alt=""/>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+  $(document).ready(function()
+    {
+        $("#earthquake_table").tablesorter({
+            headers: {
+              2: {
+                  sorter: false
+              },
+              5: {
+                  sorter: false
+              }
+            }
+          });
+    }
+  );
+  </script>
+ </body>
+</html>
