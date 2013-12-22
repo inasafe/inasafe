@@ -112,9 +112,6 @@ class ImpactMergeDialogTest(unittest.TestCase):
     #noinspection PyPep8Naming
     def tearDown(self):
         """Runs after each test."""
-        # Clear Layer Set on CANVAS
-        CANVAS.setLayerSet([])
-
         # Remove Map Layers
         if len(self.map_layer_registry.mapLayers().values()) > 0:
             self.map_layer_registry.removeAllMapLayers()
