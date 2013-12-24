@@ -60,7 +60,7 @@ class TestPickleReader(unittest.TestCase):
         index_file = file(index_path, 'r')
         result = index_file.read()
         index_file.close()
-        self.assertIn('Banda Aceh', result)
+        self.assertIn('Ternate', result)
 
         # Test if locale is other than en or id:
         with self.assertRaises(BaseException):
