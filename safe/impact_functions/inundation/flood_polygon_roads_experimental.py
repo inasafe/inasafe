@@ -21,6 +21,7 @@ from safe.storage.vector import Vector
 from safe_qgis.utilities.utilities import get_utm_epsg
 from safe_qgis.exceptions import InvalidParameterError
 
+
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     """
     Simple experimental impact function for inundation
@@ -95,8 +96,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             message = tr('''Parameter "Affected Field"(='%s')
                 doesn't presented in the
                 attribute table of the hazard layer.''' % (affected_field, ))
-            raise InvalidParameterError, message
-
+            raise InvalidParameterError(message)
 
         E = E.as_qgis_native()
         srs = E.crs().toWkt()
@@ -158,7 +158,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 "Affected value"='%s'.
                 Please check the value or use other
                 extent.''' % (affected_value, ))
-            raise InvalidParameterError, message
+            raise InvalidParameterError(message)
 
         e_data = E.getFeatures(request)
         for feat in e_data:

@@ -21,6 +21,7 @@ from safe.storage.vector import Vector
 from safe_qgis.utilities.utilities import get_utm_epsg
 from safe_qgis.exceptions import InvalidParameterError
 
+
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
     """
     Simple experimental impact function for inundation
@@ -96,8 +97,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
             message = tr('''Parameter "Affected Field"(='%s')
                 doesn't presented in the
                 attribute table of the hazard layer.''' % (affected_field, ))
-            raise InvalidParameterError, message
-
+            raise InvalidParameterError(message)
 
         E = E.as_qgis_native()
         srs = E.crs().toWkt()
@@ -159,7 +159,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 "Affected value"='%s'.
                 Please check the value or use other
                 extent.''' % (affected_value, ))
-            raise InvalidParameterError, message
+            raise InvalidParameterError(message)
 
         e_data = E.getFeatures(request)
         for feat in e_data:
@@ -183,7 +183,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         buildings_by_type = dict()      # Length of flooded roads by types
 
         buildings_data = building_layer.getFeatures()
-        building_type_field_index = building_layer.fieldNameIndex(building_type_field)
+        building_type_field_index = \
+            building_layer.fieldNameIndex(building_type_field)
         for building in buildings_data:
             building_count += 1
             attrs = building.attributes()
@@ -207,7 +208,9 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                                 tr('Flooded'),
                                 tr('Total')],
                                header=True),
-                      TableRow([tr('All'), int(flooded_count), int(building_count)])]
+                      TableRow([tr('All'),
+                                int(flooded_count),
+                                int(building_count)])]
         table_body.append(TableRow(tr('Breakdown by building type'),
                                        header=True))
         for t, v in buildings_by_type.iteritems():
