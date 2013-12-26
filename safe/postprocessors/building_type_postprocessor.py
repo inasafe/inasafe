@@ -33,11 +33,24 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_total = None
         self.impact_attrs = None
         self.target_field = None
+        self.no_features = None
+        self.fields_values = {
+            'Medical': ['Clinic/Doctor', 'Hospital'],
+            'Schools': ['School', 'University/College', ],
+            'Places of worship': ['Place of Worship - Unitarian', 'Place of Worship - Islam',
+                                  'Place of Worship - Buddhist', 'Place of Worship'],
+            'Residential': ['Residential'],
+            'Government': ['Government'],
+            'Public Building': ['Public Building'],
+            'Fire Station': ['Fire Station'],
+            'Police Station': ['Police Station'],
+            'Supermarket': ['Supermarket'],
+            'Commercial': ['Commercial'],
+            'Industrial': ['Industrial'],
+            'Utility': ['Utility'],
+            'Sports Facility': ['Sports Facility'], }
         self.type_fields = None
-        self.valid_type_fields = ['AMENITY', 'TYPE']
-        self.fields_values = {'Hospitals': ['medical', 'clinic', 'hospital'],
-                      'Places of worship': ['place_of_worship'],
-                      'Schools': ['school']}
+        self.valid_type_fields = ['type']
 
     def description(self):
         """Describe briefly what the post processor does.
@@ -66,9 +79,9 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.setup(self, None)
         if (self.impact_total is not None or
-           self.impact_attrs is not None or
-           self.target_field is not None or
-           self.type_fields is not None):
+                self.impact_attrs is not None or
+                self.target_field is not None or
+                self.type_fields is not None):
             self._raise_error('clear needs to be called before setup')
 
         self.impact_total = params['impact_total']
@@ -79,7 +92,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.type_fields = []
         try:
             for key in self.impact_attrs[0].iterkeys():
-                if key in self.valid_type_fields:
+                if key.lower() in self.valid_type_fields:
                     self.type_fields.append(key)
         except IndexError:
             pass
@@ -87,13 +100,10 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         if len(self.type_fields) == 0:
             self.type_fields = None
 
+        self.no_features = False
         #there are no features in this postprocessing polygon
         if self.impact_attrs == []:
-            self.noFeatures = True
-        else:
-            self.noFeatures = False
-#        self._log_message('BuildingType postprocessor, using field: %s' %
-#                          self.type_field)
+            self.no_features = True
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
@@ -150,16 +160,16 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             None
         """
 
-        myName = tr('Total')
+        name = tr('Total')
         if self.target_field is not None:
-            myName = '%s %s' % (myName, tr(self.target_field).lower())
+            name = '%s %s' % (name, tr(self.target_field).lower())
 
-        myResult = self.impact_total
+        result = self.impact_total
         try:
-            myResult = int(round(myResult))
+            result = int(round(result))
         except ValueError:
-            myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult)
+            result = self.NO_DATA_TEXT
+        self._append_result(name, result)
 
     def _calculate_type(self, title, fields_values):
         """Indicator that shows total population.
@@ -178,25 +188,26 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr(title)
-        if self.target_field is not None:
-            myName = '%s %s' % (myName, tr(self.target_field).lower())
 
-        myResult = 0
+        title = tr(title)
+        if self.target_field is not None:
+            title = '%s %s' % (title, tr(self.target_field).lower())
+
+        result = 0
         if self.type_fields is not None:
             try:
                 for building in self.impact_attrs:
                     for type_field in self.type_fields:
                         if building[type_field] in fields_values:
-                            myResult += building[self.target_field]
+                            result += building[self.target_field]
                             break
 
-                myResult = int(round(myResult))
+                result = int(round(result))
             except (ValueError, KeyError):
-                myResult = self.NO_DATA_TEXT
+                result = self.NO_DATA_TEXT
         else:
-            if self.noFeatures:
-                myResult = 0
+            if self.no_features:
+                result = 0
             else:
-                myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult)
+                result = self.NO_DATA_TEXT
+        self._append_result(title, result)
