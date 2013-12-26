@@ -931,7 +931,7 @@ class ShakeEvent(QObject):
             # Get length
             length = feature.geometry().length()
 
-            mmi_value = float(feature['MMI'].toString())
+            mmi_value = float(str(feature['MMI']))
 
             # We only want labels on the whole number contours
             if mmi_value != round(mmi_value):
@@ -948,19 +948,19 @@ class ShakeEvent(QObject):
             # Now update the feature
             feature_id = feature.id()
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('X'), QVariant(x))
+                feature_id, fields.indexFromName('X'), x)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('Y'), QVariant(y))
+                feature_id, fields.indexFromName('Y'), y)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('RGB'), QVariant(rgb))
+                feature_id, fields.indexFromName('RGB'), rgb)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ROMAN'), QVariant(roman))
+                feature_id, fields.indexFromName('ROMAN'), roman)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ALIGN'), QVariant('Center'))
+                feature_id, fields.indexFromName('ALIGN'), 'Center')
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('VALIGN'), QVariant('HALF'))
+                feature_id, fields.indexFromName('VALIGN'), 'HALF')
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('LEN'), QVariant(length))
+                feature_id, fields.indexFromName('LEN'), length)
 
         layer.commitChanges()
 
@@ -1246,12 +1246,12 @@ class ShakeEvent(QObject):
             feature_id = str(feature.id())
 
             # Make sure the fcode contains PPL (populated place)
-            code = str(feature['fcode'].toString())
+            code = str(feature['fcode'])
             if 'PPL' not in code:
                 continue
 
             # Make sure the place is populated
-            population = feature['population'].toInt()[0]
+            population = feature['population']
             if population < 1:
                 continue
 
@@ -1259,7 +1259,7 @@ class ShakeEvent(QObject):
             distance = point.sqrDist(epicenter)
             direction_to = point.azimuth(epicenter)
             direction_from = epicenter.azimuth(point)
-            place_name = str(feature['asciiname'].toString())
+            place_name = str(feature['asciiname'])
 
             new_feature = QgsFeature()
             new_feature.setGeometry(feature.geometry())
@@ -1274,8 +1274,8 @@ class ShakeEvent(QObject):
                 continue
             value = raster_values[0]  # Band 1
             LOGGER.debug('MyValue: %s' % value)
-            if 'no data' not in value.toString():
-                mmi = value.toFloat()[0]
+            if 'no data' not in str(value):
+                mmi = float(value)
             else:
                 mmi = 0
 
@@ -1292,12 +1292,12 @@ class ShakeEvent(QObject):
                 feature_id,
                 place_name,
                 population,
-                QVariant(mmi),
-                QVariant(distance),
-                QVariant(direction_to),
-                QVariant(direction_from),
-                QVariant(roman),
-                QVariant(mmi_colour(mmi))]
+                mmi,
+                distance,
+                direction_to,
+                direction_from,
+                roman,
+                mmi_colour(mmi)]
             new_feature.setAttributes(attributes)
             cities.append(new_feature)
         return cities
@@ -1453,18 +1453,18 @@ class ShakeEvent(QObject):
             # place_name = str(feature['name'].toString())
             # But its not working so we do this:
             place_name = str(
-                feature[fields.indexFromName('name')].toString())
-            mmi = feature[fields.indexFromName('mmi')].toFloat()[0]
-            population = (
-                feature[fields.indexFromName('population')].toInt()[0])
+                feature[fields.indexFromName('name')])
+            mmi = float(feature[fields.indexFromName('mmi')])
+            population = int(
+                feature[fields.indexFromName('population')])
             roman = str(
-                feature[fields.indexFromName('roman')].toString())
-            direction_to = (
-                feature[fields.indexFromName('dir_to')].toFloat()[0])
-            direction_from = (
-                feature[fields.indexFromName('dir_from')].toFloat()[0])
-            distance_to = (
-                feature[fields.indexFromName('dist_to')].toFloat()[0])
+                feature[fields.indexFromName('roman')])
+            direction_to = float(
+                feature[fields.indexFromName('dir_to')])
+            direction_from = float(
+                feature[fields.indexFromName('dir_from')])
+            distance_to = float(
+                feature[fields.indexFromName('dist_to')])
             city = {'id': feature_id,
                     'name': place_name,
                     'mmi-int': int(mmi),

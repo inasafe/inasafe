@@ -57,7 +57,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def make_padang_layer():
-    """Helper function that returns a single predefined layer"""
+    """Helper function that returns a single predefined layer."""
     path = 'Shakemap_Padang_2009.asc'
     full_path = os.path.join(HAZDATA, path)
     title = read_file_keywords(full_path, 'title')
@@ -98,7 +98,7 @@ def clone_padang_layer():
 
 
 def make_polygon_layer():
-    """Helper function that returns a single predefined layer"""
+    """Helper function that returns a single predefined layer."""
     path = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
     full_path = os.path.join(TESTDATA, path)
     try:
@@ -116,7 +116,7 @@ def make_polygon_layer():
 
 
 def make_point_layer():
-    """Helper function that returns a single predefined layer"""
+    """Helper function that returns a single predefined layer."""
     path = 'test_buildings.shp'
     full_path = os.path.join(TESTDATA, path)
     try:
@@ -130,7 +130,8 @@ def make_point_layer():
 
 
 def remove_temp_file(file_name='temp_Shakemap_Padang_2009'):
-    """Helper function that removes temp file that created during test
+    """Helper function that removes temp file that created during test.
+
     :param file_name: File to remove.
     """
     #file_name = 'temp_Shakemap_Padang_2009'
@@ -141,7 +142,7 @@ def remove_temp_file(file_name='temp_Shakemap_Padang_2009'):
 
 
 def make_keywordless_layer():
-    """Helper function that returns a single predefined keywordless layer"""
+    """Helper function that returns a single predefined keywordless layer."""
     path = 'keywordless_layer.tif'
     base_path = test_data_path('hazard')
     full_path = os.path.abspath(os.path.join(base_path, path))
@@ -157,7 +158,7 @@ def make_keywordless_layer():
 
 
 def clear_layers():
-    """Clear all the loaded layers"""
+    """Clear all the loaded layers."""
     # noinspection PyArgumentList
     for layer in QgsMapLayerRegistry.instance().mapLayers():
         # noinspection PyArgumentList
@@ -165,14 +166,14 @@ def clear_layers():
 
 
 class KeywordsDialogTest(unittest.TestCase):
-    """Test the InaSAFE keywords GUI"""
+    """Test the InaSAFE keywords GUI."""
 
     def setUp(self):
-        """Create fresh dialog for each test"""
+        """Create fresh dialog for each test."""
         pass
 
     def tearDown(self):
-        """Destroy the dialog after each test"""
+        """Destroy the dialog after each test."""
         clear_layers()
 
     # This is how you skip a test when using unittest ...
