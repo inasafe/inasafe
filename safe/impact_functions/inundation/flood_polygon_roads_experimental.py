@@ -55,7 +55,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     def get_function_type(self):
         """Get type of the impact function.
 
-        :returns:   'qgis2.0' or 'numpy'
+        :returns:   'qgis2.0'
         """
         return 'qgis2.0'
 
