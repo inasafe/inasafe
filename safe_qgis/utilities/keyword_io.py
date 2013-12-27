@@ -304,7 +304,7 @@ class KeywordIO(QObject):
         :raises: An sqlite.Error is raised if anything goes wrong
         """
         self.connection = None
-        base_directory = os.path.basename(self.keyword_db_path)
+        base_directory = os.path.dirname(self.keyword_db_path)
         if not os.path.exists(base_directory):
             try:
                 os.mkdir(base_directory)
