@@ -170,7 +170,6 @@ def set_canvas_crs(epsg_id, enable_projection=False):
     :type enable_projection: bool
 
     """
-    global CANVAS
     # Enable on-the-fly reprojection
     CANVAS.mapRenderer().setProjectionsEnabled(enable_projection)
 
@@ -184,42 +183,36 @@ def set_canvas_crs(epsg_id, enable_projection=False):
 
 def set_padang_extent():
     """Zoom to an area occupied by both both Padang layers."""
-    global CANVAS
     rect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
     CANVAS.setExtent(rect)
 
 
 def set_jakarta_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
-    global CANVAS
     rect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
     CANVAS.setExtent(rect)
 
 
 def set_jakarta_google_extent():
     """Zoom to an area occupied by both Jakarta layers in 900913 crs."""
-    global CANVAS
     rect = QgsRectangle(11873524, -695798, 11913804, -675295)
     CANVAS.setExtent(rect)
 
 
 def set_batemans_bay_extent():
     """Zoom to an area occupied by both Batemans Bay layers in geo crs."""
-    global CANVAS
     rect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
     CANVAS.setExtent(rect)
 
 
 def set_yogya_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
-    global CANVAS
     rect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
     CANVAS.setExtent(rect)
 
 
 def set_small_jakarta_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
-    global CANVAS
     rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
     CANVAS.setExtent(rect)
 
@@ -230,7 +223,6 @@ def set_geo_extent(bounding_box):
     :param bounding_box: List containing [xmin, ymin, xmax, ymax]
     :type bounding_box: list
     """
-    global CANVAS
     rect = QgsRectangle(*bounding_box)
     CANVAS.setExtent(rect)
 
