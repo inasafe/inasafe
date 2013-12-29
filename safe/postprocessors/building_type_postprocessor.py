@@ -37,8 +37,10 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.fields_values = {
             'Medical': ['Clinic/Doctor', 'Hospital'],
             'Schools': ['School', 'University/College', ],
-            'Places of worship': ['Place of Worship - Unitarian', 'Place of Worship - Islam',
-                                  'Place of Worship - Buddhist', 'Place of Worship'],
+            'Places of worship': ['Place of Worship - Unitarian',
+                                  'Place of Worship - Islam',
+                                  'Place of Worship - Buddhist',
+                                  'Place of Worship'],
             'Residential': ['Residential'],
             'Government': ['Government'],
             'Public Building': ['Public Building'],

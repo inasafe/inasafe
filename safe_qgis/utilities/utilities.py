@@ -178,6 +178,7 @@ def get_utm_zone(longitude):
         zone = 60
     return zone
 
+
 def get_utm_epsg(longitude, latitude):
     """
     Return epsg code of the utm zone.
@@ -189,6 +190,7 @@ def get_utm_epsg(longitude, latitude):
         epsg += 100
     epsg += get_utm_zone(longitude)
     return epsg
+
 
 def html_header():
     """Get a standard html header for wrapping content in.
