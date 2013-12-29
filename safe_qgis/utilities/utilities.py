@@ -833,7 +833,7 @@ def map_qrc_to_file(match, res_copy_dir):
     .pc) then a copy of is extracted to res_copy_dir
 
     :param match: the qrc path to be mapped matched from a regular
-     expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
+     expression such as re.compile(r'qrc:/plugins/inasafe/([-./ \w]*)').
     :type match: re.match object
 
     :param res_copy_dir: the path to copy non file based qrc assets.
