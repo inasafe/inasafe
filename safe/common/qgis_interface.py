@@ -61,7 +61,8 @@ class QgisInterface(QObject):
 
     def __getattr__(self, *args, **kwargs):
         # It's for processing module
-        def dummy(*args, **kwargs):
+        def dummy(*a, **kwa):
+            _ = a, kwa
             return QgisInterface(self.canvas)
         return dummy
 
