@@ -120,8 +120,8 @@ def separate_points_by_polygon(
             # Only one point was passed in. Convert to array of points.
             try:
                 points = numpy.reshape(points, (1, 2))
-            except ValueError, e:
-                raise PointsInputError(e.message)
+            except ValueError as e:
+                raise PointsInputError(str(e))
 
         msg = ('Point array must have two columns (x,y), '
                'I got points.shape[1]=%d' % points.shape[0])

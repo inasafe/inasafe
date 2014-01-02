@@ -26,7 +26,6 @@ from safe_qgis.utilities.utilities import (
     impact_attribution,
     dpi_to_meters,
     which,
-    get_utm_zone,
     get_utm_epsg)
 from safe_qgis.utilities.utilities_for_testing import (
     TEST_FILES_DIR)

@@ -56,6 +56,29 @@ class QgisInterface(QObject):
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAll.connect(self.removeAllLayers)
 
+        # It's for processing module
+        self.destCrs = None
+
+    def __getattr__(self, *args, **kwargs):
+        # It's for processing module
+        def dummy(*a, **kwa):
+            _ = a, kwa
+            return QgisInterface(self.canvas)
+        return dummy
+
+    def __iter__(self):
+        # It's for processing module
+        return self
+
+    def next(self):
+        # It's for processing module
+        raise StopIteration
+
+    def layers(self):
+        # It's for processing module
+        # simulate iface.legendInterface().layers()
+        return QgsMapLayerRegistry.instance().mapLayers().values()
+
     @pyqtSlot('QStringList')
     def addLayers(self, theLayers):
         """Handle layers being added to the registry so they show up in canvas.
