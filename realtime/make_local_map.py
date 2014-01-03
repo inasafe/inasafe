@@ -4,7 +4,7 @@
 
 from shake_event import ShakeEvent
 # myId = '20120118231542_se'
-# myShakeEvent = ShakeEvent(
+# myShakeEvent = ShakeGridConverter(
 #     theEventId=myId,
 #     theLocale='en',
 #     theForceFlag=False,
@@ -12,7 +12,7 @@ from shake_event import ShakeEvent
 # myShakeEvent.render_map(theForceFlag=False)
 #
 # myId = '20120118231552_se'
-# myShakeEvent = ShakeEvent(
+# myShakeEvent = ShakeGridConverter(
 #     theEventId=myId,
 #     theLocale='en',
 #     theForceFlag=False,
@@ -21,7 +21,7 @@ from shake_event import ShakeEvent
 #
 #
 # myId = '20120118231562_se'
-# myShakeEvent = ShakeEvent(
+# myShakeEvent = ShakeGridConverter(
 #     theEventId=myId,
 #     theLocale='en',
 #     theForceFlag=False,

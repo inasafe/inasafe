@@ -25,9 +25,13 @@ import traceback
 import logging
 import uuid
 import webbrowser
+import math
 
+#noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
+#noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
+#noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from qgis.core import (
@@ -165,6 +169,29 @@ def get_wgs84_resolution(layer):
     return cell_size
 
 
+def get_utm_zone(longitude):
+    """
+    Return utm zone.
+    """
+    zone = int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
+    if zone == 0:
+        zone = 60
+    return zone
+
+
+def get_utm_epsg(longitude, latitude):
+    """
+    Return epsg code of the utm zone.
+    The code is based on the code:
+    http://gis.stackexchange.com/questions/34401
+    """
+    epsg = 32600
+    if latitude < 0.0:
+        epsg += 100
+    epsg += get_utm_zone(longitude)
+    return epsg
+
+
 def html_header():
     """Get a standard html header for wrapping content in.
 
@@ -212,7 +239,7 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
     """Iterates over the layer and returns int or string fields.
 
     :param layer: A vector layer whose attributes shall be returned.
-    :type layer: QgsVectorLayer
+    :type layer: QgsVectorLayer, QgsMapLayer
 
     :param allowed_types: List of QVariant that are acceptable for the
         attribute. e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String].
@@ -305,12 +332,13 @@ def mm_to_points(mm, dpi):
     :param mm: A distance in millimeters.
     :type mm: int
 
+    :returns: mm converted value as points.
+    :rtype: int, float
+
     :param dpi: Dots per inch to use for the calculation (based on in the
         print / display medium).
-    :type dpi: int
+    :type dpi: int, float
 
-    :returns: mm converted value as points.
-    :rtype: int
     """
     inch_as_mm = 25.4
     points = (mm * dpi) / inch_as_mm
@@ -339,7 +367,7 @@ def dpi_to_meters(dpi):
     """Convert dots per inch (dpi) to dots per meters.
 
     :param dpi: Dots per inch in the print / display medium.
-    :type dpi: int
+    :type dpi: int, float
 
     :returns: dpi converted value.
     :rtype: int
@@ -603,7 +631,7 @@ def which(name, flags=os.X_OK):
     if sys.platform == 'darwin':  # Mac OS X
         gdal_prefix = (
             '/Library/Frameworks/GDAL.framework/'
-            'Versions/1.10/Programs/')
+            'Versions/Current/Programs/')
         path = '%s:%s' % (path, gdal_prefix)
 
     LOGGER.debug('Search path: %s' % path)
@@ -817,7 +845,7 @@ def read_impact_layer(impact_layer):
 
 
 def map_qrc_to_file(match, res_copy_dir):
-    r"""Map a qrc:/ path to its correspondent file:/// and creates it.
+    """Map a qrc:/ path to its correspondent file:/// and creates it.
 
     for example qrc:/plugins/inasafe/ajax-loader.gif
     is converted to file:////home/marco/.qgis2/python/plugins/

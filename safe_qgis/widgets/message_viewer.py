@@ -50,7 +50,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         # whether to show or not dev only options
         self.dev_mode = QtCore.QSettings().value(
-            'inasafe/developer_mode', False)
+            'inasafe/developer_mode', False, type=bool)
 
         if self.dev_mode:
             self.settings().globalSettings().setAttribute(
@@ -306,12 +306,12 @@ class MessageViewer(QtWebKit.QWebView):
     def show_report(self):
         self.action_show_report.setEnabled(False)
         self.action_show_log.setEnabled(True)
-        self.load_and_wait_html(file_path=self.report_path)
+        self.load_html_file(self.report_path)
 
     def show_log(self):
         self.action_show_report.setEnabled(True)
         self.action_show_log.setEnabled(False)
-        self.load_and_wait_html(file_path=self.log_path)
+        self.load_html_file(self.log_path)
 
     def open_current_in_browser(self):
         if self.impact_path is None:
@@ -361,3 +361,6 @@ class MessageViewer(QtWebKit.QWebView):
         print "html_loaded_slot set to %s" % ok
         self._html_loaded_flag = ok
         LOGGER.debug('html_loaded_slot slot called')
+
+    def load_html_file(self, file_path):
+        self.setUrl(QtCore.QUrl.fromLocalFile(file_path))

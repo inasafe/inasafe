@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -38,14 +39,12 @@ from gdalconst import GA_ReadOnly
 from sftp_shake_data import SftpShakeData
 
 
-# TODO: I think QCoreApplication is needed for tr() check hefore removing
+# TODO: I think QCoreApplication is needed for tr() check before removing
 from PyQt4.QtCore import (
     QCoreApplication,
     QObject,
     QVariant,
     QFileInfo,
-    QString,
-    QStringList,
     QUrl,
     QSize,
     Qt,
@@ -76,7 +75,6 @@ from qgis.core import (
     QgsFeatureRequest)
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins
@@ -105,8 +103,17 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakeEvent(QObject):
-    """The ShakeEvent class encapsulates behaviour and data relating to an
-    earthquake, including epicenter, magnitude etc."""
+    """Behaviour and data relating to an earthquake.
+
+    Including epicenter, magnitude etc.
+
+    .. todo:: There is a lot of duplicated code in here -  code that was
+        refactored into safe.common.shake_grid_converter and never removed
+        here. we should resolve that by removing it here and then simply
+        using an instance of ShakeGridConverter here when needed.
+
+
+    """
 
     def __init__(self,
                  event_id=None,
@@ -119,8 +126,8 @@ class ShakeEvent(QObject):
         :param event_id: (Optional) Id of the event. Will be used to
                 fetch the ShakeData for this event (either from cache or from
                 ftp server as required). The grid.xml file in the unpacked
-                event will be used to intialise the state of the ShakeEvent
-                instance.
+                event will be used to intialise the state of the
+                a ShakeGridConvert instance.
                 If no event id is supplied, the most recent event recorded
                 on the server will be used.
 
@@ -924,7 +931,7 @@ class ShakeEvent(QObject):
             # Get length
             length = feature.geometry().length()
 
-            mmi_value = float(feature['MMI'].toString())
+            mmi_value = float(str(feature['MMI']))
 
             # We only want labels on the whole number contours
             if mmi_value != round(mmi_value):
@@ -941,19 +948,19 @@ class ShakeEvent(QObject):
             # Now update the feature
             feature_id = feature.id()
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('X'), QVariant(x))
+                feature_id, fields.indexFromName('X'), x)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('Y'), QVariant(y))
+                feature_id, fields.indexFromName('Y'), y)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('RGB'), QVariant(rgb))
+                feature_id, fields.indexFromName('RGB'), rgb)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ROMAN'), QVariant(roman))
+                feature_id, fields.indexFromName('ROMAN'), roman)
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ALIGN'), QVariant('Center'))
+                feature_id, fields.indexFromName('ALIGN'), 'Center')
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('VALIGN'), QVariant('HALF'))
+                feature_id, fields.indexFromName('VALIGN'), 'HALF')
             layer.changeAttributeValue(
-                feature_id, fields.indexFromName('LEN'), QVariant(length))
+                feature_id, fields.indexFromName('LEN'), length)
 
         layer.commitChanges()
 
@@ -1068,13 +1075,13 @@ class ShakeEvent(QObject):
 
         LOGGER.debug('Writing mem layer to shp: %s' % output_file)
         # Explicitly giving all options, not really needed but nice for clarity
-        error_message = QString()
-        options = QStringList()
-        layer_options = QStringList()
+        error_message = ''
+        options = []
+        layer_options = []
         selected_only_flag = False
         skip_attributes_flag = False
         # May differ from output_file
-        actual_new_file_name = QString()
+        actual_new_file_name = ''
         result = QgsVectorFileWriter.writeAsVectorFormat(
             memory_layer,
             output_file,
@@ -1239,12 +1246,12 @@ class ShakeEvent(QObject):
             feature_id = str(feature.id())
 
             # Make sure the fcode contains PPL (populated place)
-            code = str(feature['fcode'].toString())
+            code = str(feature['fcode'])
             if 'PPL' not in code:
                 continue
 
             # Make sure the place is populated
-            population = feature['population'].toInt()[0]
+            population = feature['population']
             if population < 1:
                 continue
 
@@ -1252,7 +1259,7 @@ class ShakeEvent(QObject):
             distance = point.sqrDist(epicenter)
             direction_to = point.azimuth(epicenter)
             direction_from = epicenter.azimuth(point)
-            place_name = str(feature['asciiname'].toString())
+            place_name = str(feature['asciiname'])
 
             new_feature = QgsFeature()
             new_feature.setGeometry(feature.geometry())
@@ -1267,8 +1274,8 @@ class ShakeEvent(QObject):
                 continue
             value = raster_values[0]  # Band 1
             LOGGER.debug('MyValue: %s' % value)
-            if 'no data' not in value.toString():
-                mmi = value.toFloat()[0]
+            if 'no data' not in str(value):
+                mmi = float(value)
             else:
                 mmi = 0
 
@@ -1285,12 +1292,12 @@ class ShakeEvent(QObject):
                 feature_id,
                 place_name,
                 population,
-                QVariant(mmi),
-                QVariant(distance),
-                QVariant(direction_to),
-                QVariant(direction_from),
-                QVariant(roman),
-                QVariant(mmi_colour(mmi))]
+                mmi,
+                distance,
+                direction_to,
+                direction_from,
+                roman,
+                mmi_colour(mmi)]
             new_feature.setAttributes(attributes)
             cities.append(new_feature)
         return cities
@@ -1446,18 +1453,18 @@ class ShakeEvent(QObject):
             # place_name = str(feature['name'].toString())
             # But its not working so we do this:
             place_name = str(
-                feature[fields.indexFromName('name')].toString())
-            mmi = feature[fields.indexFromName('mmi')].toFloat()[0]
-            population = (
-                feature[fields.indexFromName('population')].toInt()[0])
+                feature[fields.indexFromName('name')])
+            mmi = float(feature[fields.indexFromName('mmi')])
+            population = int(
+                feature[fields.indexFromName('population')])
             roman = str(
-                feature[fields.indexFromName('roman')].toString())
-            direction_to = (
-                feature[fields.indexFromName('dir_to')].toFloat()[0])
-            direction_from = (
-                feature[fields.indexFromName('dir_from')].toFloat()[0])
-            distance_to = (
-                feature[fields.indexFromName('dist_to')].toFloat()[0])
+                feature[fields.indexFromName('roman')])
+            direction_to = float(
+                feature[fields.indexFromName('dir_to')])
+            direction_from = float(
+                feature[fields.indexFromName('dir_from')])
+            distance_to = float(
+                feature[fields.indexFromName('dist_to')])
             city = {'id': feature_id,
                     'name': place_name,
                     'mmi-int': int(mmi),
@@ -2340,7 +2347,7 @@ class ShakeEvent(QObject):
     def __str__(self):
         """The unicode representation for an event object's state.
 
-        :return: A string describing the ShakeEvent instance
+        :return: A string describing the ShakeGridConverter instance
         :rtype: str
 
         :raises: None

@@ -28,53 +28,60 @@ from qgis.utils import iface
 from safe_qgis.exceptions import FileNotFoundError
 
 LOGGER = logging.getLogger('InaSAFE')
-STATUS_FLAG = False
+global_status_flag = False
 
 
-def getMapCanvas():
+def get_map_canvas():
     """Return map canvas object
     """
     return iface.mapCanvas()
 
 
-def runScenario(theDock=None):
-    """Simulate pressing run button in InaSAFE dock widget.
+def run_scenario(dock=None):
+    """Run the current scenario.
 
-    :param theDock: Dock instance
+    :param dock: Dock instance
     """
     # pylint: disable=W0603
-    global STATUS_FLAG
-    STATUS_FLAG = False
+    global global_status_flag
+    global_status_flag = False
 
-    def completed(theFlag):
+    def completed(flag):
         """Listen for completion and set myFlag according to exit value.
-        :param theFlag:
+        :param flag:
         """
-        global STATUS_FLAG
-        STATUS_FLAG = theFlag
+        global global_status_flag
+        global_status_flag = flag
         LOGGER.debug("scenario done")
-        theDock.analysisDone.disconnect(completed)
+        dock.analysisDone.disconnect(completed)
 
-    theDock.analysisDone.connect(completed)
+    dock.analysisDone.connect(completed)
     # Start the analysis
-    theDock.accept()
-    return STATUS_FLAG
+    dock.accept()
+    return global_status_flag
     # pylint: enable=W0603
 
 
-def extractPath(theScenarioFilePath, thePath):
+def extract_path(scenario_file_path, path):
     """Get a path and basename given a scenarioFilePath and path.
-    :param theScenarioFilePath:
-    :param thePath:
+
+    :param scenario_file_path: Path to a scenario file.
+    :type scenario_file_path: str
+
+    :param path:
+    :type path: str
+
+    :returns: Tuple containing path and base name
+    :rtype: (str, str)
     """
-    myFilename = os.path.split(thePath)[-1]  # In case path was absolute
-    myBaseName, _ = os.path.splitext(myFilename)
-    theLongPath = os.path.join(theScenarioFilePath, thePath)
-    myPath = os.path.normpath(theLongPath)
-    return myPath, myBaseName
+    filename = os.path.split(path)[-1]  # In case path was absolute
+    base_name, _ = os.path.splitext(filename)
+    full_path = os.path.join(scenario_file_path, path)
+    path = os.path.normpath(full_path)
+    return path, base_name
 
 
-def addLayers(scenario_dir, paths):
+def add_layers(scenario_dir, paths):
     """Add the layers described in a scenario file to QGIS.
 
     :param scenario_dir: Base directory to find path.
@@ -91,63 +98,63 @@ def addLayers(scenario_dir, paths):
         * FileNotFoundError - occurs when file not found
     """
 
-    myPaths = []
+    path_list = []
     if isinstance(paths, str):
-        myPaths.append(extractPath(scenario_dir, paths))
+        path_list.append(extract_path(scenario_dir, paths))
     elif isinstance(paths, list):
-        myPaths = [extractPath(scenario_dir, path) for path in paths]
+        path_list = [extract_path(scenario_dir, path) for path in paths]
     else:
-        myMessage = "Paths must be string or list not %s" % type(paths)
-        raise TypeError(myMessage)
+        message = "Paths must be string or list not %s" % type(paths)
+        raise TypeError(message)
 
-    for myPath, myBaseName in myPaths:
-        myExt = os.path.splitext(myPath)[-1]
+    for path, base_name in path_list:
+        extension = os.path.splitext(path)[-1]
 
-        if not os.path.exists(myPath):
-            raise FileNotFoundError('File not found: %s' % myPath)
+        if not os.path.exists(path):
+            raise FileNotFoundError('File not found: %s' % path)
 
-        if myExt in ['.asc', '.tif']:
-            LOGGER.debug("add raster layer %s" % myPath)
-            myLayer = QgsRasterLayer(myPath, myBaseName)
+        if extension in ['.asc', '.tif']:
+            LOGGER.debug("add raster layer %s" % path)
+            layer = QgsRasterLayer(path, base_name)
             # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-        elif myExt in ['.shp']:
-            LOGGER.debug("add vector layer %s" % myPath)
-            myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+            QgsMapLayerRegistry.instance().addMapLayer(layer)
+        elif extension in ['.shp']:
+            LOGGER.debug("add vector layer %s" % path)
+            layer = QgsVectorLayer(path, base_name, 'ogr')
             # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+            QgsMapLayerRegistry.instance().addMapLayer(layer)
         else:
-            raise Exception('File %s had illegal extension' % myPath)
+            raise Exception('File %s had illegal extension' % path)
 
 
-def setFunctionId(theFunctionId, theDock=None):
+def set_function_id(function_id, dock=None):
     """Set the function combo to use the function with the given id.
 
-    :param theFunctionId: str - a string representing the unique identifier for
+    :param function_id: str - a string representing the unique identifier for
             the desired function.
-    :param theDock: a dock instance
+    :param dock: a dock instance
 
     :returns bool: True on success, False in the case that the function is not
             present in the function selector (based on the context of loaded
             hazard and exposure layers.
     """
-    if theFunctionId is None or theFunctionId == '':
+    if function_id is None or function_id == '':
         return False
 
-    for myCount in range(0, theDock.cboFunction.count()):
-        myFunctionId = theDock.get_function_id(myCount)
-        if myFunctionId == theFunctionId:
-            theDock.cboFunction.setCurrentIndex(myCount)
+    for count in range(0, dock.cboFunction.count()):
+        current_id = dock.get_function_id(count)
+        if current_id == function_id:
+            dock.cboFunction.setCurrentIndex(count)
             return True
     return False
 
 
-def setAggregationLayer(theAggregationLayer, theDock=None):
+def set_aggregation_layer(aggregation_layer, dock=None):
     """Set the aggregation combo to use the layer with the given name.
 
-    :param theAggregationLayer: str - a string representing the source name of
+    :param aggregation_layer: str - a string representing the source name of
         the desired aggregation layer.
-    :param theDock: a dock instance
+    :param dock: a dock instance
 
     :returns bool: True on success, False in the case that the aggregation
         layer is not in the aggregation selector.
@@ -156,19 +163,19 @@ def setAggregationLayer(theAggregationLayer, theDock=None):
         file based layers (e.g. shp).
 
     """
-    if theAggregationLayer is None or theAggregationLayer == '':
+    if aggregation_layer is None or aggregation_layer == '':
         return False
 
-    for myCount in range(0, theDock.cboAggregation.count()):
-        myLayerId = theDock.cboAggregation.itemData(
-            myCount, QtCore.Qt.UserRole)
+    for count in range(0, dock.cboAggregation.count()):
+        layer_id = dock.cboAggregation.itemData(
+            count, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
-        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
 
-        if myLayer is None:
+        if layer is None:
             continue
 
-        if myLayer.source() == theAggregationLayer:
-            theDock.cboAggregation.setCurrentIndex(myCount)
+        if layer.source() == aggregation_layer:
+            dock.cboAggregation.setCurrentIndex(count)
             return True
     return False

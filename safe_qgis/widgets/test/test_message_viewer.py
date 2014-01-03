@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'bungcip@gmail.com'
 __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -24,6 +23,7 @@ import unittest
 import qgis  # pylint: disable=W0611
 
 from PyQt4.Qt import QApplication
+from PyQt4.QtGui import QApplication
 from third_party.pydispatch import dispatcher
 from safe_qgis.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m

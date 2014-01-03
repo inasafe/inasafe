@@ -31,6 +31,7 @@ from qgis.gui import QgsMapCanvasLayer
 LOGGER = logging.getLogger('InaSAFE')
 
 
+#noinspection PyMethodMayBeStatic,PyPep8Naming
 class QgisInterface(QObject):
     """Class to expose qgis objects and functionalities to plugins.
 
@@ -52,6 +53,31 @@ class QgisInterface(QObject):
         QgsMapLayerRegistry.instance().layersAdded.connect(self.addLayers)
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().layerWasAdded.connect(self.addLayer)
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().removeAll.connect(self.removeAllLayers)
+
+        # It's for processing module
+        self.destCrs = None
+
+    def __getattr__(self, *args, **kwargs):
+        # It's for processing module
+        def dummy(*a, **kwa):
+            _ = a, kwa
+            return QgisInterface(self.canvas)
+        return dummy
+
+    def __iter__(self):
+        # It's for processing module
+        return self
+
+    def next(self):
+        # It's for processing module
+        raise StopIteration
+
+    def layers(self):
+        # It's for processing module
+        # simulate iface.legendInterface().layers()
+        return QgsMapLayerRegistry.instance().mapLayers().values()
 
     @pyqtSlot('QStringList')
     def addLayers(self, theLayers):
@@ -86,6 +112,12 @@ class QgisInterface(QObject):
                  not need this method much.
         """
         pass
+
+    @pyqtSlot()
+    def removeAllLayers(self):
+        """Remove layers from the canvas before they get deleted.
+        """
+        self.canvas.setLayerSet([])
 
     def newProject(self):
         """Create new project

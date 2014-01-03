@@ -140,15 +140,15 @@ class ImpactCalculatorThread(threading.Thread, QObject):
 
           calculator = ImpactCalculator()
           rasterPath = os.path.join(TESTDATA, 'xxx.asc')
-          vectorPath = os.path.join(TESTDATA, 'xxx.shp')
+          vector_path = os.path.join(TESTDATA, 'xxx.shp')
           calculator.setHazardLayer(self.rasterPath)
-          calculator.setExposureLayer(self.vectorPath)
+          calculator.setExposureLayer(self.vector_path)
           calculator.setFunction('Flood Building Impact Function')
           myRunner = calculator.getRunner()
           #wait till completion
           myRunner.join()
           myResult = myRunner.result()
-          myFilename = myRunner.filename()
+          filename = myRunner.filename()
 
 
         :raises: InsufficientParametersError

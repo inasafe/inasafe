@@ -16,14 +16,18 @@ __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import unittest
 
 from nose import SkipTest
 
 from PyQt4.QtGui import QDialogButtonBox
 
+from safe.common.testing import get_qgis_app
 from safe_qgis.tools.function_browser import FunctionBrowser
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -142,8 +146,8 @@ class FunctionBrowserTest(unittest.TestCase):
         myDialog = FunctionBrowser(PARENT)
         myButton = myDialog.buttonBox.button(QDialogButtonBox.Help)
         myButton.click()
-        myMessage = 'Help dialog was not created when help button pressed'
-        assert myDialog.helpDialog is not None, myMessage
+        message = 'Help dialog was not created when help button pressed'
+        assert myDialog.helpDialog is not None, message
         #pylint: enable=W0101
 
 if __name__ == "__main__":

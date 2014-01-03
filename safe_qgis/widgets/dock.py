@@ -204,8 +204,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IndexError:
             version_type = 'final'
             # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %s %s') % (
-            version, version_type))
+        self.setWindowTitle(self.tr('InaSAFE %s %s' % (version, version_type)))
 
     def enable_messaging(self):
         """Set up the dispatcher for messaging."""
@@ -868,24 +867,35 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.calculator.set_hazard_layer(self.aggregator.hazard_layer)
         self.calculator.set_exposure_layer(self.aggregator.exposure_layer)
 
+    def get_extent_as_array(self):
+        """Return current extent as array
+
+        :returns: a list in the form [xmin, ymin, xmax, ymax] where all
+                coordinates provided are in Geographic / EPSG:4326.
+        :rtype: list
+        """
+        # TODO: This function is not covered by tests
+
+        rectangle = self.iface.mapCanvas().extent()
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        else:
+            crs = QgsCoordinateReferenceSystem()
+            crs.createFromSrid(4326)
+        geo_extent = extent_to_geo_array(rectangle, crs)
+
+        return geo_extent
+
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
         self.aggregator = Aggregator(
-            self.iface,
+            self.get_extent_as_array(),
             self.get_aggregation_layer())
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
-        try:
-            original_keywords = self.keyword_io.read_keywords(
+        original_keywords = self.keyword_io.read_keywords(
                 self.aggregator.layer)
-        except AttributeError:
-            original_keywords = {}
-        except NoKeywordsFoundError:
-            # No kw file was found for layer - create an empty one.
-            original_keywords = {}
-            self.keyword_io.write_keywords(
-                self.aggregator.layer, original_keywords)
         LOGGER.debug('my pre dialog keywords' + str(original_keywords))
         LOGGER.debug(
             'AOImode: %s' % str(self.aggregator.aoi_mode))
@@ -1176,7 +1186,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #                      **INFO_STYLE))
             #message.add(m.Link('file://%s' % self.wvResults.log_path))
             self.show_static_message(message)
-            #self.wvResults.impact_path = impact_path
             self.wvResults.impact_path = impact_path
 
         self.save_state()
@@ -1648,15 +1657,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'The following keywords are defined for the active layer:')))
         self.pbnPrint.setEnabled(False)
         keywords_list = m.BulletedList()
-        for myKeyword in keywords:
-            value = keywords[myKeyword]
+        for keyword in keywords:
+            value = keywords[keyword]
 
             # Translate titles explicitly if possible
-            if myKeyword == 'title':
+            if keyword == 'title':
                 value = safeTr(value)
                 # Add this keyword to report
             key = m.ImportantText(
-                self.tr(myKeyword.capitalize()))
+                self.tr(keyword.capitalize()))
             value = str(value)
             keywords_list.add(m.Text(key, value))
 
@@ -2000,7 +2009,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         title_dialog = self.tr('Save Scenario')
         # get last dir from setting
         settings = QSettings()
-        last_save_dir = settings.value('inasafe/lastSourceDir', '.')
+        last_save_dir = settings.value('inasafe/lastSourceDir', '.', type=str)
         default_name = title.replace(
             ' ', '_').replace('(', '').replace(')', '')
         if scenario_file_path is None:

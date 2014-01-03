@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import tempfile
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui
 from PyQt4.QtCore import QSettings, pyqtSignature
 from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
 from PyQt4.QtNetwork import QNetworkAccessManager
@@ -72,8 +72,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.progress_dialog.setWindowTitle(title)
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(help_button, QtCore.SIGNAL('clicked()'),
-                               self.show_help)
+        help_button.clicked.connect(self.show_help)
 
         self.show_info()
 
@@ -304,7 +303,8 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             _, error_message = result
             raise ImportDialogError(error_message)
 
-    def extract_zip(self, path, output_dir):
+    @staticmethod
+    def extract_zip(path, output_dir):
         """Extract all content of a .zip file from path to output_dir.
 
         :param path: The path of the .zip file

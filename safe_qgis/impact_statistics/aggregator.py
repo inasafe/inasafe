@@ -68,6 +68,7 @@ from safe_qgis.safe_interface import (
     PointsInputError)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
+    NoKeywordsFoundError,
     InvalidParameterError,
     KeywordDbError,
     InvalidAggregatorError,
@@ -87,7 +88,7 @@ class Aggregator(QtCore.QObject):
     """The aggregator class facilitates aggregation of impact function results.
     """
 
-    def __init__(self, iface, aggregation_layer):
+    def __init__(self, extent, aggregation_layer):
         """Director for aggregation based operations.
 
         :param aggregation_layer: Layer representing clipped aggregation
@@ -98,9 +99,9 @@ class Aggregator(QtCore.QObject):
 
         QtCore.QObject.__init__(self)
 
-        self.hazard_layer = None
-        self.exposure_layer = None
-        self.safe_layer = None
+        self.hazard_layer = None    # Used in deintersect() method
+        self.exposure_layer = None  # Used in deintersect() method
+        self.safe_layer = None      # Aggregation layer in SAFE format
 
         self.prefix = 'aggr_'
         self.attributes = {}
@@ -108,16 +109,16 @@ class Aggregator(QtCore.QObject):
 
         #use qgis or inasafe zonal stats
         flag = bool(QtCore.QSettings().value(
-            'inasafe/use_native_zonal_stats', False))
+            'inasafe/use_native_zonal_stats', False, type=bool))
         self.use_native_zonal_stats = flag
 
-        self.iface = iface
+        self.extent = extent
         self._keyword_io = KeywordIO()
         self._defaults = breakdown_defaults()
         self.error_message = None
         self.target_field = None
         self.impact_layer_attributes = []
-        self.aoi_mode = True
+        #self.aoi_mode = True
 
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
@@ -139,9 +140,25 @@ class Aggregator(QtCore.QObject):
         self.statistics_classes = None
         self.preprocessed_feature_count = None
 
+        # If keywords don't assigned with self.layer,
+        # set up dummy keywords
+        try:
+            _ = self.read_keywords(
+                self.layer)
+        except NoKeywordsFoundError:
+            # No kw file was found for layer - create an empty one.
+            keywords = {}
+            self.write_keywords(
+                self.layer, keywords)
+
     def read_keywords(self, layer, keyword=None):
         """It is a wrapper around self._keyword_io.read_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param keyword: Optional specific keyword you want the value for.
+        :type keyword: str
         :returns:   KeywordIO.read_keywords object
         :rtype:     KeywordIO.read_keywords
 
@@ -155,6 +172,12 @@ class Aggregator(QtCore.QObject):
     def update_keywords(self, layer, keywords):
         """It is a wrapper around self._keyword_io.update_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param keywords: Dict of keywords to apply to the existing keywords.
+        :type keywords: dict
+
         :raises:  All exceptions are propagated.
         """
         try:
@@ -165,6 +188,8 @@ class Aggregator(QtCore.QObject):
     def get_statistics(self, layer):
         """It is a wrapper around self._keyword_io.read_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
         :returns:   KeywordIO.get_statistics object
         :rtype:     KeywordIO.get_statistics
 
@@ -178,6 +203,12 @@ class Aggregator(QtCore.QObject):
     def copy_keywords(self, layer, out_filename):
         """It is a wrapper around self._keyword_io.copy_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param out_filename: Output filename that the keywords should be
+            written to.
+        :type out_filename: str
         :raises:  All exceptions are propagated.
         """
         try:
@@ -188,6 +219,11 @@ class Aggregator(QtCore.QObject):
     def write_keywords(self, layer, keywords):
         """It is a wrapper around self._keyword_io.write_keywords
 
+        :param layer: Layer you want to get the keywords for.
+        :type layer: QgsMapLayer
+
+        :param keywords: Dict of keywords to write.
+        :type keywords: dict
         :raises:  All exceptions are propagated.
         """
         try:
@@ -361,22 +397,14 @@ class Aggregator(QtCore.QObject):
         except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
             raise
 
-        if not self.aoi_mode:
-            # This is a safe version of the aggregation layer
-            self.safe_layer = safe_read_layer(str(self.layer.source()))
+        self.safe_layer = safe_read_layer(str(self.layer.source()))
 
     def deintersect(self):
         """Ensure there are no intersecting features with self.layer.
 
         This should only happen after initial checks have been made.
 
-        Buildings are not split up by this method.
-
-        :param hazard_layer: A hazard layer.
-        :type hazard_layer: QgsMapLayer
-
-        :param exposure_layer: An exposure layer.
-        :type exposure_layer: QgsMapLayer
+        .. note:: Buildings are not split up by this method.
 
         :raises: InsufficientParametersError if hazard_layer or exposure_layer
                  is not set.
@@ -386,12 +414,12 @@ class Aggregator(QtCore.QObject):
             raise InvalidAggregatorError
 
         if self.hazard_layer is None:
-            myMessage = self.tr('Error: hazard layer is not provided.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: hazard layer is not provided.')
+            raise InsufficientParametersError(message)
 
         if self.exposure_layer is None:
-            myMessage = self.tr('Error: exposure layer is not provided.')
-            raise InsufficientParametersError(myMessage)
+            message = self.tr('Error: exposure layer is not provided.')
+            raise InsufficientParametersError(message)
 
         if not self.aoi_mode:
             if is_polygon_layer(self.hazard_layer):
@@ -430,7 +458,7 @@ class Aggregator(QtCore.QObject):
             m.Heading(self.tr('Aggregating results'), **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
-                ' by %s') % (self.layer.name())))
+                ' by %s' % self.layer.name())))
         #noinspection PyTypeChecker
         self._send_message(message)
 
@@ -444,7 +472,7 @@ class Aggregator(QtCore.QObject):
         aggregation_layer_name = self.layer.name()
         if self.aoi_mode:
             aggregation_layer_name = aggregation_layer_name.lower()
-        later_name = str(self.tr('%s aggregated to %s') % (
+        layer_name = str(self.tr('%s aggregated to %s') % (
             qgis_impact_layer.name(), aggregation_layer_name))
 
         #delete unwanted fields
@@ -472,7 +500,7 @@ class Aggregator(QtCore.QObject):
         self.layer.updateFields()
         del unneeded_attributes, provider, fields
         self.update_keywords(
-            self.layer, {'title': later_name})
+            self.layer, {'title': layer_name})
 
         self.statistics_type, self.statistics_classes = (
             self.get_statistics(qgis_impact_layer))
@@ -545,16 +573,11 @@ class Aggregator(QtCore.QObject):
     def _aggregrate_vector_impact(self, impact_layer, safe_impact_layer):
         """Performs Aggregation postprocessing step on vector impact layers.
 
-        :param impact_layer: A raster impact layer.
-        :type impact_layer: QgsRasterLayer
+        :param impact_layer: A vector impact layer.
+        :type impact_layer: QgsVectorLayer
 
-        TODO: Marco document this please!
-
-        :param safe_impact_layer:
+        :param safe_impact_layer: The impact layer in SAFE format
         :type safe_impact_layer: read_layer
-
-        TODO: Break this function up into smaller functions!
-
         """
         #TODO (MB) implement line aggregation
 
@@ -572,39 +595,21 @@ class Aggregator(QtCore.QObject):
                         impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
-            return
-        target_field_index = impact_layer.fieldNameIndex(
-            self.target_field)
-        #if a feature has no field called
-        if target_field_index == -1:
-            message = m.Paragraph(
-                self.tr('No attribute "%s" was found in the attribute table '
-                        'for layer "%s". The impact function must define this'
-                        ' attribute for postprocessing to work.') % (
-                            self.target_field, impact_layer.name()))
-            LOGGER.debug('Skipping postprocessing due to: %s' % message)
-            self.error_message = message
+        if not self._setup_target_field(impact_layer):
+            # An unexpected error occurs
             return
 
-        # start data retrieval
-        total = 0
-
+        # Add fields for store aggregation atributes
         aggregation_provider = self.layer.dataProvider()
-
         if self.statistics_type == 'class_count':
             #add the class count fields to the layer
             fields = []
             for statistics_class in self.statistics_classes:
-                field = QgsField(
-                    '%s_%s' % (statistics_class, self.target_field),
-                    QtCore.QVariant.String)
+                field_name = self._aggregation_field_name(statistics_class)
+                field = QgsField(field_name, QtCore.QVariant.String)
                 fields.append(field)
             aggregation_provider.addAttributes(fields)
             self.layer.updateFields()
-
-            temp_aggregation_field_map = aggregation_provider.fieldNameMap()
-            for k, v in temp_aggregation_field_map.iteritems():
-                field_map[str(k)] = v
 
         elif self.statistics_type == 'sum':
             #add the total field to the layer
@@ -613,148 +618,14 @@ class Aggregator(QtCore.QObject):
                 aggregation_field, QtCore.QVariant.Int)])
             self.layer.updateFields()
 
-            field_index = self.layer.fieldNameIndex(
-                aggregation_field)
-
-        impact_geometries = safe_impact_layer.get_geometry()
-        impact_values = safe_impact_layer.get_data()
-
-        attributes = None
-        # TODO: Woooow dude - these if blocks are too massive - refactor
-        # the code inside them into smaller testable functions!
-        if not self.aoi_mode:
-            aggregation_units = self.safe_layer.get_geometry()
-
-            if (safe_impact_layer.is_point_data or
-                    safe_impact_layer.is_polygon_data):
+            if safe_impact_layer.is_point_data:
                 LOGGER.debug('Doing point in polygon aggregation')
-
-                remaining_values = impact_values
-
-                if safe_impact_layer.is_polygon_data:
-                    # Using centroids to do polygon in polygon aggregation
-                    # this is always ok because
-                    # deintersect() took care of splitting
-                    # polygons that spawn across multiple postprocessing
-                    # polygons. After deintersect()
-                    # each impact polygon will never be contained by more than
-                    # one aggregation polygon
-
-                    # Calculate points for each polygon
-                    centroids = []
-                    for polygon in impact_geometries:
-                        if hasattr(polygon, 'outer_ring'):
-                            outer_ring = polygon.outer_ring
-                        else:
-                            # Assume it is an array
-                            outer_ring = polygon
-                        c = calculate_polygon_centroid(outer_ring)
-                        centroids.append(c)
-                    remaining_points = centroids
-
-                else:
-                    #this are already points data
-                    remaining_points = impact_geometries
-
-                #iterate over the aggregation units
-                for polygon_index, polygon in enumerate(aggregation_units):
-                    if hasattr(polygon, 'outer_ring'):
-                        outer_ring = polygon.outer_ring
-                        inner_rings = polygon.inner_rings
-                    else:
-                        # Assume it is an array
-                        outer_ring = polygon
-                        inner_rings = None
-
-                    try:
-                        # noinspection PyArgumentEqualDefault
-                        inside, outside = points_in_and_outside_polygon(
-                            remaining_points,
-                            outer_ring,
-                            holes=inner_rings,
-                            closed=True,
-                            check_input=True)
-                    except PointsInputError:  # too few points provided
-                        inside = []
-                        outside = []
-                    #self.impact_layer_attributes is a list of list of dict
-                    #[
-                    #   [{...},{...},{...}],
-                    #   [{...},{...},{...}]
-                    #]
-                    self.impact_layer_attributes.append([])
-                    if self.statistics_type == 'class_count':
-                        results = OrderedDict()
-                        for statistics_class in self.statistics_classes:
-                            results[statistics_class] = 0
-
-                        for i in inside:
-                            key = remaining_values[i][self.target_field]
-                            try:
-                                results[key] += 1
-                            except KeyError:
-                                error = (
-                                    'StatisticsClasses %s does not include '
-                                    'the %s class which was found in the '
-                                    'data. This is a problem in the impact '
-                                    'function statistics_classes definition' %
-                                    (self.statistics_classes,
-                                    key))
-                                raise KeyError(error)
-
-                            self.impact_layer_attributes[polygon_index].append(
-                                remaining_values[i])
-                        attributes = {}
-                        for k, v in results.iteritems():
-                            key = '%s_%s' % (k, self.target_field)
-                            #FIXME (MB) remove next line when we get rid of
-                            #shape files as internal format
-                            key = key[:10]
-                            field_index = field_map[key]
-                            attributes[field_index] = v
-
-                    elif self.statistics_type == 'sum':
-                        #by default sum attributes
-                        total = 0
-                        for i in inside:
-                            try:
-                                total += remaining_values[i][
-                                    self.target_field]
-                            except TypeError:
-                                pass
-
-                            #add all attributes to the impact_layer_attributes
-                            self.impact_layer_attributes[polygon_index].append(
-                                remaining_values[i])
-                        attributes = {field_index: total}
-
-                    # Add features inside this polygon
-                    feature_ide = polygon_index
-                    aggregation_provider.changeAttributeValues(
-                        {feature_ide: attributes})
-
-                    # make outside points the input to the next iteration
-                    # this could maybe be done more quickly using directly
-                    # numpy arrays like this:
-                    # remaining_points = remaining_points[outside]
-                    # remaining_values =
-                    # [remaining_values[i] for i in outside]
-                    temp_points = []
-                    temp_values = []
-                    for i in outside:
-                        temp_points.append(remaining_points[i])
-                        temp_values.append(remaining_values[i])
-                    remaining_points = temp_points
-                    remaining_values = temp_values
-
-                    # LOGGER.debug('Before: ' + str(len(remaining_values)))
-                    # LOGGER.debug('After: ' + str(len(remaining_values)))
-                    # LOGGER.debug('Inside: ' + str(len(inside)))
-                    # LOGGER.debug('Outside: ' + str(len(outside)))
-
+                self._aggregate_point_impact(safe_impact_layer)
+            elif safe_impact_layer.is_polygon_data:
+                LOGGER.debug('Doing polygon in polygon aggregation')
+                self._aggregate_polygon_impact(safe_impact_layer)
             elif safe_impact_layer.is_line_data:
                 LOGGER.debug('Doing line in polygon aggregation')
-
             else:
                 message = m.Paragraph(
                     self.tr(
@@ -764,60 +635,6 @@ class Aggregator(QtCore.QObject):
                 LOGGER.debug('Skipping postprocessing due to: %s' % message)
                 self.error_message = message
                 self.layer.commitChanges()
-                return
-        else:
-            if self.statistics_type == 'class_count':
-                #loop over all features in impact layer
-                results = OrderedDict()
-                for statistics_class in self.statistics_classes:
-                    results[statistics_class] = 0
-
-                self.impact_layer_attributes.append([])
-                for myImpactValueList in impact_values:
-                    key = myImpactValueList[self.target_field]
-                    try:
-                        results[key] += 1
-                    except KeyError:
-                        error = (
-                            'StatisticsClasses %s does not include the %s '
-                            'class which was found in the data. This is a '
-                            'problem in the impact function '
-                            'statistics_classes definition' %
-                            (self.statistics_classes,
-                             key))
-                        raise KeyError(error)
-
-                    self.impact_layer_attributes[0].append(myImpactValueList)
-
-                attributes = {}
-                for k, v in results.iteritems():
-                    key = '%s_%s' % (k, self.target_field)
-                    #FIXME (MB) remove next line when we get rid of
-                    #shape files as internal format
-                    key = key[:10]
-                    field_index = field_map[key]
-                    attributes[field_index] = v
-
-            elif self.statistics_type == 'sum':
-                #loop over all features in impact layer
-                self.impact_layer_attributes.append([])
-                for myImpactValueList in impact_values:
-                    if myImpactValueList[self.target_field] == 'None':
-                        myImpactValueList[self.target_field] = None
-                    try:
-                        total += myImpactValueList[self.target_field]
-                    except TypeError:
-                        pass
-                    self.impact_layer_attributes[0].append(myImpactValueList)
-                attributes = {field_index: total}
-
-            #apply to all area feature
-            feature_ide = 0
-            aggregation_provider.changeAttributeValues(
-                {feature_ide: attributes})
-
-        self.layer.commitChanges()
-        return
 
     def _aggregate_raster_impact(self, impact_layer):
         """Aggregate on a raster impact layer by using zonal statistics.
@@ -917,6 +734,149 @@ class Aggregator(QtCore.QObject):
                 }
                 provider.changeAttributeValues({feature_id: attributes})
 
+    def _aggregate_polygon_impact(self, safe_impact_layer):
+        """Aggregation of polygons in polygons
+
+        :param safe_impact_layer: The impact layer in SAFE format
+        :type safe_impact_layer: read_layer
+        """
+        # Using centroids to do polygon in polygon aggregation
+        # this is always ok because
+        # deintersect() took care of splitting
+        # polygons that spawn across multiple postprocessing
+        # polygons. After deintersect()
+        # each impact polygon will never be contained by more than
+        # one aggregation polygon
+
+        # Calculate points for each polygon
+        impact_geometries = safe_impact_layer.get_geometry()
+        aggregation_points = self._get_centroids(impact_geometries)
+        self._aggregate_point_impact(safe_impact_layer, aggregation_points)
+
+    def _aggregate_point_impact(self, safe_impact_layer,
+                                aggregation_points=None):
+        """Aggregation of points in polygons
+
+        :param safe_impact_layer: The impact layer in SAFE format
+        :type safe_impact_layer: read_layer
+
+        :param aggregation_points: Points that are used for aggregation
+                                   if aggregation_points==None,
+                                   all points from  safe_impact_layer are used
+        :type aggregation_points: self._get_centroids
+        """
+
+        aggreg_remaining_values = safe_impact_layer.get_data()
+        aggregation_units = self.safe_layer.get_geometry()
+        aggregation_provider = self.layer.dataProvider()
+
+        field_map = {}
+        temp_aggregation_field_map = aggregation_provider.fieldNameMap()
+        for k, v in temp_aggregation_field_map.iteritems():
+            field_map[str(k)] = v
+
+        if aggregation_points is None:
+            # Take all points
+            impact_geometries = safe_impact_layer.get_geometry()
+            aggregation_points = impact_geometries
+
+        #iterate over the aggregation units
+        attributes = None
+        for polygon_index, polygon in enumerate(aggregation_units):
+            if hasattr(polygon, 'outer_ring'):
+                outer_ring = polygon.outer_ring
+                inner_rings = polygon.inner_rings
+            else:
+                # Assume it is an array
+                outer_ring = polygon
+                inner_rings = None
+
+            try:
+                # noinspection PyArgumentEqualDefault
+                inside, outside = points_in_and_outside_polygon(
+                    aggregation_points,
+                    outer_ring,
+                    holes=inner_rings,
+                    closed=True,
+                    check_input=True)
+            except PointsInputError:  # too few points provided
+                inside = []
+                outside = []
+            #self.impact_layer_attributes is a list of list of dict
+            #[
+            #   [{...},{...},{...}],
+            #   [{...},{...},{...}]
+            #]
+            self.impact_layer_attributes.append([])
+            if self.statistics_type == 'class_count':
+                results = OrderedDict()
+                for statistics_class in self.statistics_classes:
+                    results[statistics_class] = 0
+
+                for i in inside:
+                    key = aggreg_remaining_values[i][self.target_field]
+                    try:
+                        results[key] += 1
+                    except KeyError:
+                        error = (
+                            'StatisticsClasses %s does not include '
+                            'the %s class which was found in the '
+                            'data. This is a problem in the impact '
+                            'function statistics_classes definition' %
+                            (self.statistics_classes,
+                            key))
+                        raise KeyError(error)
+
+                    self.impact_layer_attributes[polygon_index].append(
+                        aggreg_remaining_values[i])
+                attributes = {}
+                for k, v in results.iteritems():
+                    key = self._aggregation_field_name(k)
+                    field_index = field_map[key]
+                    attributes[field_index] = v
+
+            elif self.statistics_type == 'sum':
+                #by default sum attributes
+                aggregation_field = self._sum_field_name()
+                field_index = field_map[aggregation_field]
+                total = 0
+                for i in inside:
+                    try:
+                        total += aggreg_remaining_values[i][
+                            self.target_field]
+                    except TypeError:
+                        pass
+
+                    #add all attributes to the impact_layer_attributes
+                    self.impact_layer_attributes[polygon_index].append(
+                        aggreg_remaining_values[i])
+                attributes = {field_index: total}
+
+            # Add features inside this polygon
+            feature_ide = polygon_index
+            aggregation_provider.changeAttributeValues(
+                {feature_ide: attributes})
+
+            # make outside points the input to the next iteration
+            # this could maybe be done more quickly using directly
+            # numpy arrays like this:
+            # aggregation_points = aggregation_points[outside]
+            # aggreg_remaining_values =
+            # [aggreg_remaining_values[i] for i in outside]
+            temp_points = []
+            temp_values = []
+            for i in outside:
+                temp_points.append(aggregation_points[i])
+                temp_values.append(aggreg_remaining_values[i])
+            aggregation_points = temp_points
+            aggreg_remaining_values = temp_values
+            # LOGGER.debug('Before: ' + str(len(aggreg_remaining_values)))
+            # LOGGER.debug('After: ' + str(len(aggreg_remaining_values)))
+            # LOGGER.debug('Inside: ' + str(len(inside)))
+            # LOGGER.debug('Outside: ' + str(len(outside)))
+
+        self.layer.commitChanges()
+
     def _prepare_layer(self):
         """Prepare the aggregation layer to match analysis extents.
 
@@ -943,6 +903,9 @@ class Aggregator(QtCore.QObject):
                 raise
         # Area Of Interest (AOI) mode flag is False
         else:
+            # TODO: (DK) set extent in Dock, then use the self.extent
+            # remove extent calculation from here
+
             # we use only the exposure extent, because both exposure and hazard
             # have the same extent at this point.
             geo_extent = extent_to_geo_array(
@@ -986,6 +949,37 @@ class Aggregator(QtCore.QObject):
     def _sum_field_name(self):
         """Field name for the sum column."""
         return (self.prefix + 'sum')[:10]
+
+    def _aggregation_field_name(self, statistic_class):
+        """Return name of aggregation field
+
+        :param statistic_class: A class of aggregation statistic.
+        :return:        A string of field name
+        """
+
+        name = '%s_%s' % (statistic_class, self.target_field)
+        #FIXME (MB) remove next line when we get rid of
+        #shape files as internal format
+        name = name[:10]
+        return name
+
+    def _get_centroids(self, polygons):
+        """
+        Get centroids of the polygon collection
+
+        :returns: List of centroids of the polygons
+        :rtype: List
+        """
+        centroids = []
+        for polygon in polygons:
+            if hasattr(polygon, 'outer_ring'):
+                outer_ring = polygon.outer_ring
+            else:
+                # Assume it is an array
+                outer_ring = polygon
+            c = calculate_polygon_centroid(outer_ring)
+            centroids.append(c)
+        return centroids
 
     # noinspection PyDictCreation
     def _set_persistant_attributes(self):
@@ -1386,16 +1380,6 @@ class Aggregator(QtCore.QObject):
         :raises: InvalidLayerError, UnsupportedProviderError, KeywordDbError
         """
 
-        # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
-
-        rectangle = self.iface.mapCanvas().extent()
-        if self.iface.mapCanvas().hasCrsTransformEnabled():
-            crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-        else:
-            crs = QgsCoordinateReferenceSystem()
-            crs.createFromSrid(4326)
-        geo_extent = extent_to_geo_array(rectangle, crs)
-
         if not self.layer.isValid():
             message = self.tr(
                 'An exception occurred when creating the entire area layer.')
@@ -1415,8 +1399,8 @@ class Aggregator(QtCore.QObject):
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         feature.setGeometry(QgsGeometry.fromRect(
             QgsRectangle(
-                QgsPoint(geo_extent[0], geo_extent[1]),
-                QgsPoint(geo_extent[2], geo_extent[3]))))
+                QgsPoint(self.extent[0], self.extent[1]),
+                QgsPoint(self.extent[2], self.extent[3]))))
         feature[attribute_name] = self.tr('Entire area')
         provider.addFeatures([feature])
 
@@ -1455,3 +1439,40 @@ class Aggregator(QtCore.QObject):
             signal=message_type,
             sender=self,
             message=message)
+
+    def _setup_target_field(self, impact_layer):
+        """Set up self.target_field
+
+        :param impact_layer: Layer to be processed.
+        :type layer: QgsMapLayer, QgsVectorLayer
+
+        :returns: True if the layer contains the target field,
+                  False if any errors occur.
+        :rtype: bool
+
+        """
+        try:
+            self.target_field = self.read_keywords(
+                impact_layer, 'target_field')
+        except KeywordNotFoundError:
+            message = m.Paragraph(
+                self.tr(
+                    'No "target_field" keyword found in the impact layer %s '
+                    'keywords. The impact function should define this.') % (
+                        impact_layer.name()))
+            LOGGER.debug('Skipping postprocessing due to: %s' % message)
+            self.error_message = message
+            return False
+        target_field_index = impact_layer.fieldNameIndex(
+            self.target_field)
+        #if a feature has no field called
+        if target_field_index == -1:
+            message = m.Paragraph(
+                self.tr('No attribute "%s" was found in the attribute table '
+                        'for layer "%s". The impact function must define this'
+                        ' attribute for postprocessing to work.') % (
+                            self.target_field, impact_layer.name()))
+            LOGGER.debug('Skipping postprocessing due to: %s' % message)
+            self.error_message = message
+            return False
+        return True

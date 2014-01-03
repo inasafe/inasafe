@@ -119,12 +119,7 @@ test_suite: compile testdata
 	@echo "---------------------"
 	@echo "Regression Test Suite"
 	@echo "---------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
-
-	@# FIXME (Ole) - to get of the remaining junk I tried to use
-	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
-	@# This does clip the line, but does not flush and puts an extra
-	@# newline in.
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis 3>&1 1>&2 2>&3 3>&- || true
 
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
@@ -143,14 +138,14 @@ safe_test_suite: compile testdata
 gui_test_suite: compile testdata
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regression Test Suite"
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
 	#Noisy version - uncomment if you want to see all qgis stdout
-	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- || true
 	#Quiet version
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- || true
 
 # This one includes safe, safe_qgis and realtime and runs against QGIS v2
 qgis2_test_suite: compile testdata
@@ -158,7 +153,7 @@ qgis2_test_suite: compile testdata
 	@echo "---------------------"
 	@echo "Regression Test Suite"
 	@echo "---------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis 3>&1 1>&2 2>&3 3>&- | true
 
 # Run realtime test suite only
 realtime_test_suite:
@@ -170,9 +165,9 @@ realtime_test_suite:
 
 	@# Preceding dash means that make will continue in case of errors
 	#Noisy version - uncomment if you want to see all qgis stdout
-	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- || true
 	#Quiet version
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- || true
 
 # Get test data
 # FIXME (Ole): Need to attempt cloning this r/w for those with
@@ -183,7 +178,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh b4db5177d1454ceeeac1b86fbc404d671d8305e5 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 6c69c0dd8f803cfc579020b20849da9adfc703a2 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -263,14 +258,14 @@ pylint-count:
 	@echo "Number of pylint violations"
 	@echo "For details run make pylint"
 	@echo "---------------------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime | wc -l
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc safe safe_qgis realtime | wc -l
 
 pylint:
 	@echo
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime || true
+	@pylint --reports=n --rcfile=pylintrc safe safe_qgis realtime || true
 
 profile:
 	@echo
@@ -304,7 +299,7 @@ jenkins-test: testdata clean
 	@echo
 	@echo "----------------------------------"
 	@echo "Regression Test Suite for Jenkins"
-	@echo " against QGIS 1.x"
+	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis || :
 
@@ -342,15 +337,14 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/third_party; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis realtime> pylint.log || :
+	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/third_party; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins safe safe_qgis realtime> pylint.log || :
 
 jenkins-pep8:
 	@echo
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,
-	E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py . > pep8.log || :
 
 jenkins-realtime-test:
 

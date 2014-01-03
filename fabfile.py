@@ -34,7 +34,7 @@ from fabtools import require
 # noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
 from fabgis.system import harden
-
+from fabgis.qgis import install_qgis_master
 # Global options
 env.env_set = False
 

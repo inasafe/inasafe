@@ -126,11 +126,6 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         myName = tr('Total')
 
-        #FIXME (MB) Shameless hack to deal with issue #368
-        if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT)
-            return
-
         myResult = self.impact_total
         try:
             myResult = int(round(myResult))
@@ -152,12 +147,6 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Youth count (affected)')
-
-        #FIXME (MB) Shameless hack to deal with issue #368
-        if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT)
-            return
-
         myResult = self.impact_total * self.youth_ratio
         try:
             myResult = int(round(myResult))
@@ -179,12 +168,6 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Adult count (affected)')
-
-        #FIXME (MB) Shameless hack to deal with issue #368
-        if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT)
-            return
-
         myResult = self.impact_total * self.adult_ratio
         try:
             myResult = int(round(myResult))

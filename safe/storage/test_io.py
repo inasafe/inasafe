@@ -918,7 +918,7 @@ class Test_IO(unittest.TestCase):
     test_centroids_from_polygon_data.slow = True
 
     def test_rasters_and_arrays(self):
-        """Consistency of rasters and associated arrays
+        """Consistency of rasters and associated arrays.
         """
 
         # Create test data
@@ -1052,7 +1052,7 @@ class Test_IO(unittest.TestCase):
         try:
             R1.projection == 234
         except TypeError:
-            pass
+            print 'You can ignore the ERROR 1 message it is intentional - Tim'
         else:
             msg = 'Should have raised TypeError'
             raise Exception(msg)
