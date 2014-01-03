@@ -92,7 +92,6 @@ class AggregatorTest(unittest.TestCase):
         geo_crs.createFromSrid(4326)
         self.extent = extent_to_geo_array(CANVAS.extent(), geo_crs)
 
-
     def test_combo_aggregation_loaded_project(self):
         """Aggregation combo changes properly according loaded layers"""
         layer_list = [

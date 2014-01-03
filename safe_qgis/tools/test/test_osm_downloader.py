@@ -251,7 +251,6 @@ class ImportDialogTest(unittest.TestCase):
         # that variable to determine the location of shape files.
         self.dialog.output_directory.setText(output_path)
 
-
         self.dialog.load_shapefile('buildings')
 
         shutil.rmtree(output_path)
