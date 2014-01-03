@@ -1967,7 +1967,7 @@ msgid "Adult ratio"
 msgstr "Rasio orang dewasa"
 
 #: safe/common/dynamic_translations.py:160
-msgid "Elderly ratio"
+msgid "Elder ratio"
 msgstr "Rasio orang tua"
 
 msgid "R [km]"
