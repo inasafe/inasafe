@@ -6,9 +6,7 @@ from qgis.core import (
     QgsFeature,
     QgsRectangle,
     QgsFeatureRequest,
-    QgsGeometry,
-    QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform
+    QgsGeometry
 )
 
 from safe.common.utilities import OrderedDict
@@ -18,7 +16,6 @@ from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
-from safe_qgis.utilities.utilities import get_utm_epsg
 from safe_qgis.exceptions import InvalidParameterError
 
 
