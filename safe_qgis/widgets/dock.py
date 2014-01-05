@@ -893,24 +893,35 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.calculator.set_hazard_layer(hazard_layer)
         self.calculator.set_exposure_layer(exposure_layer)
 
+    def get_extent_as_array(self):
+        """Return current extent as array
+
+        :returns: a list in the form [xmin, ymin, xmax, ymax] where all
+                coordinates provided are in Geographic / EPSG:4326.
+        :rtype: list
+        """
+        # TODO: This function is not covered by tests
+
+        rectangle = self.iface.mapCanvas().extent()
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        else:
+            crs = QgsCoordinateReferenceSystem()
+            crs.createFromSrid(4326)
+        geo_extent = extent_to_geo_array(rectangle, crs)
+
+        return geo_extent
+
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
         self.aggregator = Aggregator(
-            self.iface,
+            self.get_extent_as_array(),
             self.get_aggregation_layer())
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
-        try:
-            original_keywords = self.keyword_io.read_keywords(
+        original_keywords = self.keyword_io.read_keywords(
                 self.aggregator.layer)
-        except AttributeError:
-            original_keywords = {}
-        except NoKeywordsFoundError:
-            # No kw file was found for layer - create an empty one.
-            original_keywords = {}
-            self.keyword_io.write_keywords(
-                self.aggregator.layer, original_keywords)
         LOGGER.debug('my pre dialog keywords' + str(original_keywords))
         LOGGER.debug(
             'AOImode: %s' % str(self.aggregator.aoi_mode))

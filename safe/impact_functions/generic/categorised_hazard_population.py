@@ -51,6 +51,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     # Configurable parameters
     defaults = get_defaults()
     parameters = OrderedDict([
+        ('Categorical thresholds', [0.34, 0.67, 1]),
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -76,9 +77,9 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         """
 
         # The 3 category
-        high_t = 1
-        medium_t = 0.66
-        low_t = 0.34
+        high_t = self.parameters['Categorical thresholds'][2]
+        medium_t = self.parameters['Categorical thresholds'][1]
+        low_t = self.parameters['Categorical thresholds'][0]
 
         # Identify hazard and exposure layers
         my_hazard = get_hazard_layer(layers)    # Categorised Hazard
@@ -93,15 +94,15 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
 
         # Calculate impact as population exposed to each category
         P = my_exposure.get_data(nan=0.0, scaling=True)
-        H = numpy.where(C == high_t, P, 0)
-        M = numpy.where(C > medium_t, P, 0)
+        H = numpy.where(C <= high_t, P, 0)
+        M = numpy.where(C < medium_t, P, 0)
         L = numpy.where(C < low_t, P, 0)
 
         # Count totals
         total = int(numpy.sum(P))
-        high = int(numpy.sum(H))
-        medium = int(numpy.sum(M)) - int(numpy.sum(H))
-        low = int(numpy.sum(L)) - int(numpy.sum(M))
+        high = int(numpy.sum(H)) - int(numpy.sum(M))
+        medium = int(numpy.sum(M)) - int(numpy.sum(L))
+        low = int(numpy.sum(L))
         total_impact = high + medium + low
 
         # Don't show digits less than a 1000

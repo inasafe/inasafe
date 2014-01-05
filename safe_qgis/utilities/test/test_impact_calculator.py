@@ -91,11 +91,11 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_run(self):
         """Test that run works as expected in non threading mode"""
         try:
-            runner = self.calculator.get_runner()
+            test_runner = self.calculator.get_runner()
             # run non threaded
-            runner.run()
-            message = runner.result()
-            impact_layer = runner.impact_layer()
+            test_runner.run()
+            message = test_runner.result()
+            impact_layer = test_runner.impact_layer()
             file_name = impact_layer.get_filename()
             assert(file_name and not file_name == '')
             assert(message and not message == '')
