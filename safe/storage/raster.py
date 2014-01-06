@@ -7,8 +7,19 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 
+qgis_imported = True
+try:
+    from qgis.core import (
+        QgsRasterLayer,
+        QgsRasterFileWriter,
+        QgsRasterPipe
+    )
+except ImportError:
+    qgis_imported = False
+
 from safe.common.utilities import (verify,
-                                   ugettext as safe_tr)
+                                   ugettext as safe_tr,
+                                   unique_filename)
 from safe.common.numerics import (nan_allclose,
                                   geotransform_to_axes,
                                   grid_to_points)
@@ -24,7 +35,7 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import (geotransform_to_bbox, geotransform_to_resolution,
                        check_geotransform)
-
+from utilities import safe_to_qgis_layer
 
 class Raster(Layer):
     """InaSAFE representation of raster data
@@ -90,6 +101,8 @@ class Raster(Layer):
         # Initialisation
         if isinstance(data, basestring):
             self.read_from_file(data)
+        elif isinstance(data, QgsRasterLayer):
+            self.read_from_qgis_native(data)
         else:
             # Assume that data is provided as a numpy array
             # with extra keyword arguments supplying metadata
@@ -282,6 +295,62 @@ class Raster(Layer):
 
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
+
+    def read_from_qgis_native(self, qgis_layer):
+        """Read raster data from qgis layer QgsRasterLayer.
+
+            A stub is used now:
+                save all data in a file,
+                then call safe.read_from_file
+
+            Raises:
+                * TypeError         if qgis is not avialable
+                * IOError           if can't store temporary file
+                * GetDataError      if can't create copy of qgis_layer's dataProvider
+        """
+        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
+            msg = ('Used data is QgsRasterLayer instance, '
+                   'but QGIS is not avialable.')
+            raise TypeError(msg)
+
+        base_name = unique_filename()
+        file_name = base_name + '.tif'
+
+        fileWriter = QgsRasterFileWriter (file_name)
+        pipe = QgsRasterPipe()
+        provider = qgis_layer.dataProvider()
+        if not pipe.set(provider.clone()):
+            msg = "Cannot set pipe provider"
+            raise GetDataError(msg)
+
+        fileWriter.writeRaster(
+            pipe,
+            provider.xSize(),
+            provider.ySize(),
+            provider.extent(),
+            provider.crs())
+
+        # Write keywords if any
+        write_keywords(self.keywords, base_name + '.keywords')
+        self.read_from_file(file_name)
+
+    def as_qgis_native(self):
+        """Return raster layer data as qgis QgsRasterayer.
+
+            A stub is used now:
+                save all data in a file,
+                then create QgsRaterLayer from the file.
+
+            Raises:
+                * TypeError         if qgis is not avialable
+        """
+        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
+            msg = ('Tried to convert layer to QgsRasterLayer instance, '
+                   'but QGIS is not avialable.')
+            raise TypeError(msg)
+
+        qgis_layer = safe_to_qgis_layer(self)
+        return qgis_layer
 
     def get_data(self, nan=True, scaling=None, copy=False):
         """Get raster data as numeric array
