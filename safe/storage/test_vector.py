@@ -19,7 +19,7 @@ from safe.storage.vector import Vector, qgis_imported
 
 if qgis_imported:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    from qgis.core import QgsVectorLayer, QgsApplication
+    from qgis.core import QgsVectorLayer
 
 
 LOGGER = logging.getLogger('InaSAFE')

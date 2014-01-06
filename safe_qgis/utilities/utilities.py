@@ -178,6 +178,7 @@ def get_utm_zone(longitude):
         zone = 60
     return zone
 
+
 def get_utm_epsg(longitude, latitude):
     """
     Return epsg code of the utm zone.
@@ -189,6 +190,7 @@ def get_utm_epsg(longitude, latitude):
         epsg += 100
     epsg += get_utm_zone(longitude)
     return epsg
+
 
 def html_header():
     """Get a standard html header for wrapping content in.
@@ -831,7 +833,7 @@ def map_qrc_to_file(match, res_copy_dir):
     .pc) then a copy of is extracted to res_copy_dir
 
     :param match: the qrc path to be mapped matched from a regular
-     expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
+     expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
     :type match: re.match object
 
     :param res_copy_dir: the path to copy non file based qrc assets.

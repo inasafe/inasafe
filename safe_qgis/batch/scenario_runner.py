@@ -38,7 +38,7 @@ def get_map_canvas():
 
 
 def run_scenario(dock=None):
-    """Simulate pressing run button in InaSAFE dock widget.
+    """Run the current scenario.
 
     :param dock: Dock instance
     """
