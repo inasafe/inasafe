@@ -80,7 +80,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         )
 
         # Safe Logo Path
-        self.safe_logo_path = ':/plugins/inasafe/bnpb_logo.png'
+        self.safe_logo_path = ':/plugins/inasafe/logo-flower.png'
 
         # All the chosen layers to be processed
         self.first_impact_layer = None
