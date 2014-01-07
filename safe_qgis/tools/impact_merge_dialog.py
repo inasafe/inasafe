@@ -149,9 +149,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'Open this tool and select each impact layer from the pick lists '
             'provided below.'))
         tips.add(self.tr(
+            'Select the aggregation layer that was used to generate the '
+            'first and second impact layer.'))
+        tips.add(self.tr(
             'Select an output directory.'))
         tips.add(self.tr(
-            'Click Run to generate the per aggregation area combined '
+            'Click OK to generate the per aggregation area combined '
             'summaries.'))
         message = m.Message()
         message.add(heading)
