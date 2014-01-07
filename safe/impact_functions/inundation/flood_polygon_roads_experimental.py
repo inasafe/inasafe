@@ -18,7 +18,7 @@ from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
-from safe_qgis.utilities.utilities import get_utm_epsg
+from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 
 
