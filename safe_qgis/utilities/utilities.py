@@ -25,7 +25,6 @@ import traceback
 import logging
 import uuid
 import webbrowser
-import math
 
 #noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
@@ -167,30 +166,6 @@ def get_wgs84_resolution(layer):
         cell_size = geo_width / columns
 
     return cell_size
-
-
-def get_utm_zone(longitude):
-    """
-    Return utm zone.
-    """
-    zone = int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
-    if zone == 0:
-        zone = 60
-    return zone
-
-
-def get_utm_epsg(longitude, latitude):
-    """
-    Return epsg code of the utm zone.
-    The code is based on the code:
-    http://gis.stackexchange.com/questions/34401
-    """
-    epsg = 32600
-    if latitude < 0.0:
-        epsg += 100
-    epsg += get_utm_zone(longitude)
-    return epsg
-
 
 def html_header():
     """Get a standard html header for wrapping content in.
