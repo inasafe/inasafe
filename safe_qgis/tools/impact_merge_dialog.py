@@ -75,12 +75,21 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.keyword_io = KeywordIO()
 
         # Template Path for composer
-        self.template_path = (
-            ':/plugins/inasafe/merged_report.qpt'
-        )
+        self.template_path = os.path.join(
+            os.path.dirname(__file__),
+            os.path.pardir,
+            'resources',
+            'qgis-composer-templates',
+            'merged_report.qpt')
 
         # Safe Logo Path
-        self.safe_logo_path = ':/plugins/inasafe/icon.svg'
+        self.safe_logo_path = os.path.join(
+            os.path.dirname(__file__),
+            os.path.pardir,
+            'resources',
+            'img',
+            'icons',
+            'icon.svg')
 
         # All the chosen layers to be processed
         self.first_impact_layer = None
@@ -483,7 +492,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """
         for aggregation_area in merged_report_dict:
             html = html_header()
-            html += ('<table style="width: auto" '
+            html += ('<table style="margin:0px auto;" '
                      'class="table table-condensed table-striped">')
             html += '<caption><h4>%s</h4></caption>' % aggregation_area.upper()
             exposure_report_dict = merged_report_dict[aggregation_area]
@@ -603,7 +612,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Self.html_reports must have only 1 key value pair
             area_title = list(self.html_reports.keys())[0]
             html_report_path = self.html_reports[area_title]
-            html_report_frame.setUrl(QUrl.fromLocalFile(html_report_path))
+            html_frame_url = QUrl.fromLocalFile(html_report_path)
+            html_report_frame.setUrl(html_frame_url)
 
             file_path = '%s.pdf' % area_title
             path = os.path.join(self.out_dir, file_path)
@@ -646,8 +656,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 area_title = current_filename.lower()
                 if area_title in self.html_reports:
                     html_report_path = self.html_reports[area_title]
-                    html_report_frame.setUrl(
-                        QUrl.fromLocalFile(html_report_path))
+                    html_frame_url = QUrl.fromLocalFile(html_report_path)
+                    html_report_frame.setUrl(html_frame_url)
                     composition.exportAsPDF(path)
 
             # End of rendering
@@ -676,7 +686,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Map Substitution
         substitution_map = {
-            'impact-title': self.get_impact_title()
+            'impact-title': self.get_impact_title(),
+            'safe-logo': self.safe_logo_path
         }
 
         # Load template
@@ -685,14 +696,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             raise ReportCreationError(
                 self.tr('Error loading template %s') %
                 self.template_path)
-
-        # Set logo
-        safe_logo = composition.getComposerItemById('safe-logo')
-        if safe_logo is not None:
-            safe_logo.setPictureFile(self.safe_logo_path)
-        else:
-            raise ReportCreationError(
-                self.tr('Image "safe-logo" could not be found'))
 
         # Set Map Legend
         legend = composition.getComposerItemById('impact-legend')
