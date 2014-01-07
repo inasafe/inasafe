@@ -168,7 +168,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.zoom_to_impact_flag = True
         self.hide_exposure_flag = True
 
-        self.read_settings()  # get_layers called by this
+        self.read_settings()  # get_project_layers called by this
         self.aggregator = None
         self.postprocessor_manager = None
         self.function_parameters = None
@@ -611,7 +611,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboExposure.blockSignals(True)
         self.cboHazard.blockSignals(True)
 
-    @pyqtSlot('QgsMapLayer')
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
         r"""Obtain a list of layers currently loaded in QGIS.

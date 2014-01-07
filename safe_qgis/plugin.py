@@ -355,6 +355,21 @@ class Plugin:
         self.add_action(self.action_import_dialog)
 
         #--------------------------------------
+        # Create action for impact layer merge Dialog
+        #--------------------------------------
+        self.action_impact_merge_dlg = QAction(
+            QIcon(':/plugins/inasafe/show-impact-merge.svg'),
+            self.tr('InaSAFE Impact Layer Merge'),
+            self.iface.mainWindow())
+        self.action_impact_merge_dlg.setStatusTip(self.tr(
+            'InaSAFE Impact Layer Merge'))
+        self.action_impact_merge_dlg.setWhatsThis(self.tr(
+            'InaSAFE Impact Layer Merge'))
+        self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
+
+        self.add_action(self.action_impact_merge_dlg)
+
+        #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dock_widget = Dock(self.iface)
@@ -459,6 +474,14 @@ class Plugin:
         from safe_qgis.tools.minimum_needs import MinimumNeeds
 
         dialog = MinimumNeeds(self.iface.mainWindow())
+        dialog.exec_()  # modal
+
+    def show_impact_merge(self):
+        """Show the impact layer merge dialog."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
+
+        dialog = ImpactMergeDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_options(self):
