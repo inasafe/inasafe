@@ -615,6 +615,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Self.html_reports must have only 1 key value pair
             area_title = list(self.html_reports.keys())[0]
             html_report_path = self.html_reports[area_title]
+            #noinspection PyArgumentList
             html_frame_url = QUrl.fromLocalFile(html_report_path)
             html_report_frame.setUrl(html_frame_url)
 
@@ -659,6 +660,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 area_title = current_filename.lower()
                 if area_title in self.html_reports:
                     html_report_path = self.html_reports[area_title]
+                    #noinspection PyArgumentList
                     html_frame_url = QUrl.fromLocalFile(html_report_path)
                     html_report_frame.setUrl(html_frame_url)
                     composition.exportAsPDF(path)
@@ -668,9 +670,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     def load_template(self, renderer):
         """Load composer template for merged report.
-
-        There are 2 templates. The template that is chosen based on
-        whether it is aggregated or not
 
         :param renderer: Map renderer
         :type renderer: QgsMapRenderer
