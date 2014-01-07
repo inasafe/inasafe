@@ -80,7 +80,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         )
 
         # Safe Logo Path
-        self.safe_logo_path = ':/plugins/inasafe/logo-flower.png'
+        self.safe_logo_path = ':/plugins/inasafe/icon.svg'
 
         # All the chosen layers to be processed
         self.first_impact_layer = None
@@ -93,10 +93,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # The html reports and its file path
         self.html_reports = {}
 
-        # Whether to merge entire area or aggregated
+        # A boolean flag whether to merge entire area or aggregated
         self.entire_area_mode = False
 
-        # The attribute name to aggregate in chosen aggregation layer
+        # The attribute name to be aggregated in chosen aggregation layer
         self.aggregation_attribute = None
 
         # Report from first and second impact layer keywords:
@@ -205,7 +205,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 str(ex))
             return
 
-        # Merging Process
+        # The input is valid, do the merging
         # Set cursor to wait cursor
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
         try:
@@ -225,7 +225,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Give user successful information!
         # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
-        self.success_message_box = QMessageBox.information(
+        QMessageBox.information(
             self,
             self.tr('InaSAFE Merge Impact Tools Information'),
             self.tr(
@@ -282,8 +282,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def prepare_input(self):
         """Fetch all the input from dialog, validate, and store it.
 
-        Consider this as a bridge between dialog interface and logical layer
-        after user clicks merge button.
+        Consider this as a bridge between dialog interface and our logical
+        stored data in this class
 
         :raises: InvalidLayerError, CanceledImportDialogError
         """
@@ -509,12 +509,23 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def generate_reports(self):
         """Generate PDF reports for each aggregation unit using map composer.
 
-        If it is aggregated then use atlas generation.
-        If it is not (entire area) then just use composition.
+        .. First the report template is loaded with the renderer from two
+        impact layers. After it's loaded, if it is not aggregated then
+        we just use composition to produce report. Since there are two
+        impact maps here, we need to set a new extent for these impact maps
+        by a simple calculation.
 
-        .. note:: Akbar I think we should add a more verbose description of
-            how the logic works here - how the html report makes its way in
-            the composer map html and so on...
+        If it is not aggregated then we use a powerful QGIS atlas generation
+        on composition. Since we save each report table representing each
+        aggregated area on self.html_report (which is a dictionary with the
+        aggregation area name as a key and its path as a value), and we set
+        the aggregation area name as current filename on atlas generation,
+        we can match these two so that we have the right report table for
+        each report.
+
+        For those two cases, we use the same template. The report table is
+        basically an HTML frame. Of course after the merging process is done,
+        we delete each report table on self.html_reports physically on disk.
         """
         # Setup Map Renderer and set all the layer
         renderer = QgsMapRenderer()
@@ -714,6 +725,4 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 'map_title')
             return '%s and %s' % (first_impact_title, second_impact_title)
         except KeywordNotFoundError:
-            return None
-        except Exception:
             return None
