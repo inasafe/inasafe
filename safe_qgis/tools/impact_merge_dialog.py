@@ -603,7 +603,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # Self.html_reports must have only 1 key value pair
             area_title = list(self.html_reports.keys())[0]
             html_report_path = self.html_reports[area_title]
-            html_report_frame.setUrl(QUrl('file://%s' % html_report_path))
+            html_report_frame.setUrl(QUrl.fromLocalFile(html_report_path))
 
             file_path = '%s.pdf' % area_title
             path = os.path.join(self.out_dir, file_path)
@@ -647,7 +647,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 if area_title in self.html_reports:
                     html_report_path = self.html_reports[area_title]
                     html_report_frame.setUrl(
-                        QUrl('file://%s' % html_report_path))
+                        QUrl.fromLocalFile(html_report_path))
                     composition.exportAsPDF(path)
 
             # End of rendering
