@@ -232,9 +232,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 'Report from merging two impact layers is generated '
                 'successfully.'))
 
-        # Process is Done
-        self.done(QDialog.Accepted)
-
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
         #noinspection PyArgumentList
@@ -500,9 +497,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                              '</tr>') % (datum, exposure_detail_dict[datum])
             html += '</table>'
             html += html_footer()
-            path = '%s/%s.html' % (
-                str(self.out_dir),
-                aggregation_area)
+
+            file_path = '%s.html' % aggregation_area
+            path = os.path.join(self.out_dir, file_path)
             html_to_file(html, path)
             self.html_reports[aggregation_area.lower()] = path
 
@@ -608,9 +605,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html_report_path = self.html_reports[area_title]
             html_report_frame.setUrl(QUrl('file://%s' % html_report_path))
 
-            path = '%s/%s.pdf' % (
-                str(self.out_dir),
-                area_title)
+            file_path = '%s.pdf' % area_title
+            path = os.path.join(self.out_dir, file_path)
             composition.exportAsPDF(path)
         else:
             # Create atlas composition:
@@ -643,9 +639,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 atlas.prepareForFeature(i)
 
                 current_filename = atlas.currentFilename()
-                path = '%s/%s.pdf' % (
-                    str(self.out_dir),
-                    current_filename)
+                file_path = '%s.pdf' % current_filename
+                path = os.path.join(self.out_dir, file_path)
 
                 # Only print the area that has the report
                 area_title = current_filename.lower()
