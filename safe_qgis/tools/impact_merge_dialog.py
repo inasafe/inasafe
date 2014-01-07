@@ -668,6 +668,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # End of rendering
             atlas.endRender()
 
+    #noinspection PyArgumentList
     def load_template(self, renderer):
         """Load composer template for merged report.
 
@@ -687,9 +688,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         document.setContent(template_content)
 
         # Map Substitution
+        #noinspection PyTypeChecker,PyCallByClass
+        safe_logo_path = QUrl.fromLocalFile(str(self.safe_logo_path))
         substitution_map = {
             'impact-title': self.get_impact_title(),
-            'safe-logo': self.safe_logo_path
+            'safe-logo': safe_logo_path.toString()
         }
 
         # Load template
@@ -702,7 +705,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Set Map Legend
         legend = composition.getComposerItemById('impact-legend')
         if legend is not None:
-            legend.setTitle(self.tr('Legend'))
             legend.updateLegend()
         else:
             raise ReportCreationError(
