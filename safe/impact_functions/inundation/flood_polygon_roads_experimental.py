@@ -50,6 +50,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         # This value in 'affected_field' of the hazard layer
         # marks the areas as inundated
         ('affected_value', 'YES'),
+
+         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
 
     def get_function_type(self):

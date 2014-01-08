@@ -22,6 +22,7 @@ from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
 from aggregation_postprocessor import AggregationPostprocessor
 from building_type_postprocessor import BuildingTypePostprocessor
+from road_type_postprocessor import RoadTypePostprocessor
 from aggregation_categorical_postprocessor import \
     AggregationCategoricalPostprocessor
 from minimum_needs_postprocessor import MinimumNeedsPostprocessor
@@ -35,6 +36,7 @@ AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
                             'Age': 'Age',
                             'Aggregation': 'Aggregation',
                             'BuildingType': 'Building type',
+                            'RoadType': 'Road type',
                             'AggregationCategorical':
                             'Aggregation categorical',
                             'MinimumNeeds': 'Minimum needs'
