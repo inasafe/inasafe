@@ -25,7 +25,7 @@ from PyQt4 import QtGui, QtCore, QtXml
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
 #noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog
+from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog, QDesktopServices
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapRenderer,
@@ -55,6 +55,7 @@ from safe_qgis.utilities.keyword_io import KeywordIO
 INFO_STYLE = styles.INFO_STYLE
 
 
+#noinspection PyArgumentList
 class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     """Tools for merging 2 impact layer based on different exposure."""
 
@@ -243,6 +244,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.tr(
                 'Report from merging two impact layers is generated '
                 'successfully.'))
+
+        # Open output directory on file explorer
+        output_directory_url = QUrl(self.out_dir)
+        #noinspection PyTypeChecker,PyCallByClass
+        QDesktopServices.openUrl(output_directory_url)
 
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
@@ -619,7 +625,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html_frame_url = QUrl.fromLocalFile(html_report_path)
             html_report_frame.setUrl(html_frame_url)
 
-            file_path = '%s.pdf' % area_title
+            file_name = '_'.join(area_title.split())
+            file_path = '%s.pdf' % file_name
             path = os.path.join(self.out_dir, file_path)
             composition.exportAsPDF(path)
         else:
@@ -653,7 +660,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 atlas.prepareForFeature(i)
 
                 current_filename = atlas.currentFilename()
-                file_path = '%s.pdf' % current_filename
+                file_name = '_'.join(current_filename.split())
+                file_path = '%s.pdf' % file_name
                 path = os.path.join(self.out_dir, file_path)
 
                 # Only print the area that has the report
