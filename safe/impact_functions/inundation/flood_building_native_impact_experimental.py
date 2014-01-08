@@ -48,6 +48,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         # This value in 'affected_field' of the hazard layer
         # marks the areas as inundated
         ('affected_value', 'YES'),
+
+        ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
 
     def get_function_type(self):
