@@ -246,7 +246,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 'successfully.'))
 
         # Open output directory on file explorer
-        output_directory_url = QUrl(self.out_dir)
+        output_directory_url = QUrl.fromLocalFile(self.out_dir)
         #noinspection PyTypeChecker,PyCallByClass
         QDesktopServices.openUrl(output_directory_url)
 
