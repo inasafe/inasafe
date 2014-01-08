@@ -63,7 +63,7 @@ class PostprocessorManager(QtCore.QObject):
         self.function_parameters = None
 
     def _sum_field_name(self):
-        return self.aggregator.prefix + 'sum'
+        return self.aggregator.sum_field_name()
 
     def _sort_no_data(self, data):
         """Check if the value field of the postprocessor is NO_DATA.

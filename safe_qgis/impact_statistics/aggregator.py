@@ -118,7 +118,6 @@ class Aggregator(QtCore.QObject):
         self.error_message = None
         self.target_field = None
         self.impact_layer_attributes = []
-        #self.aoi_mode = True
 
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
@@ -473,7 +472,7 @@ class Aggregator(QtCore.QObject):
             if self.statistics_type == 'sum':
                 #style layer if we are summing
                 provider = self.layer.dataProvider()
-                attribute = self._sum_field_name()
+                attribute = self.sum_field_name()
                 attribute_index = provider.fieldNameIndex(attribute)
                 request = QgsFeatureRequest()
                 request.setFlags(QgsFeatureRequest.NoGeometry)
@@ -548,7 +547,7 @@ class Aggregator(QtCore.QObject):
             self.layer.updateFields()
         elif self.statistics_type == 'sum':
             #add the total field to the layer
-            aggregation_field = self._sum_field_name()
+            aggregation_field = self.sum_field_name()
             aggregation_provider.addAttributes([QgsField(
                 aggregation_field, QtCore.QVariant.Int)])
             self.layer.updateFields()
@@ -640,7 +639,7 @@ class Aggregator(QtCore.QObject):
             #                      QtCore.QVariant.Double)]
             fields = [QgsField(self._count_field_name(),
                                QtCore.QVariant.Double),
-                      QgsField(self._sum_field_name(),
+                      QgsField(self.sum_field_name(),
                                QtCore.QVariant.Double),
                       QgsField(self._mean_field_name(),
                                QtCore.QVariant.Double)
@@ -648,7 +647,7 @@ class Aggregator(QtCore.QObject):
             provider.addAttributes(fields)
             self.layer.updateFields()
 
-            sum_index = provider.fieldNameIndex(self._sum_field_name())
+            sum_index = provider.fieldNameIndex(self.sum_field_name())
             count_index = provider.fieldNameIndex(self._count_field_name())
             mean_index = provider.fieldNameIndex(self._mean_field_name())
             # minIndex = provider.fieldNameIndex(self._minFieldName())
@@ -772,7 +771,7 @@ class Aggregator(QtCore.QObject):
 
             elif self.statistics_type == 'sum':
                 #by default sum attributes
-                aggregation_field = self._sum_field_name()
+                aggregation_field = self.sum_field_name()
                 field_index = field_map[aggregation_field]
                 total = 0
                 for i in inside:
@@ -881,7 +880,7 @@ class Aggregator(QtCore.QObject):
         """Field name for the max column."""
         return (self.prefix + 'max')[:10]
 
-    def _sum_field_name(self):
+    def sum_field_name(self):
         """Field name for the sum column."""
         return (self.prefix + 'sum')[:10]
 
