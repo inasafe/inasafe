@@ -30,7 +30,7 @@
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
-    <link rel="next" title="Options" href="options.html" />
+    <link rel="next" title="Reports" href="reports.html" />
     <link rel="prev" title="Using InaSAFE" href="dock.html" />
 
 <style>
@@ -130,8 +130,8 @@
                 
                 <li class="right"
                  >
-                <a href="options.html"
-                   title="Options"
+                <a href="reports.html"
+                   title="Reports"
                    style="z-index:;"
                 accesskey="N">next</a>
                 </li>
@@ -164,7 +164,7 @@
         <div class="span12">
                 
   <div class="section" id="keywords-system">
-<span id="toolbar-keywords"></span><h1>Keywords System<a class="headerlink" href="#keywords-system" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Keywords System<a class="headerlink" href="#keywords-system" title="Permalink to this headline">¶</a></h1>
 <p>This document describes the purpose and usage of the InaSAFE <em>keywords</em>
 system.</p>
 <div class="section" id="purpose">
@@ -229,7 +229,7 @@ Category should be written in lower case.</p>
 </tr>
 </tbody>
 </table>
-<p>Example keywords file entry:</p>
+<p>Example keywords file entry</p>
 <div class="highlight-python"><pre>category: hazard</pre>
 </div>
 </div>
@@ -280,7 +280,7 @@ Category should be written in lower case.</p>
 </tr>
 </tbody>
 </table>
-<p>Example keywords file entry:</p>
+<p>Example keywords file entry</p>
 <div class="highlight-python"><pre>category: hazard
 subcategory: flood</pre>
 </div>
@@ -290,7 +290,7 @@ subcategory: flood</pre>
 <p>The units keyword is only valid in the context of &#8216;hazard&#8217; layers, and is
 used to indicate the metric or imperial units represented by each data entity
 (a grid cell or a vector feature) in the hazard layer. Example keywords file
-entry:</p>
+entry</p>
 <div class="highlight-python"><pre>category: hazard
 subcategory: flood
 units: m</pre>
@@ -545,17 +545,17 @@ options dialog.</p>
 <p>In theory you can place the keywords file on a network share and create
 a shared keyword repository in a multi-user environment, but you should note
 that the layer URI hashes need to be identical in order for a layer&#8217;s keyword
-to be found. This means that, for (contrived), example:</p>
+to be found. This means that, for (contrived), example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span><span class="o">=</span><span class="n">postgresql</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">joe</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span><span class="n">resource</span><span class="o">=</span><span class="n">osm_buildings</span>
 </pre></div>
 </div>
-<p>would not be considered the same as:</p>
+<p>would not be considered the same as</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span><span class="o">=</span><span class="n">postgresql</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">anne</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span><span class="n">resource</span><span class="o">=</span><span class="n">osm_buildings</span>
 </pre></div>
 </div>
 <p>since the user credentials differ, resulting in a different URI. To work
 around this you could create a common account so that every user will
-effectively use the same URI to load that layer e.g.:</p>
+effectively use the same URI to load that layer e.g.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span><span class="o">=</span><span class="n">postgresql</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">public</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span><span class="n">resource</span><span class="o">=</span><span class="n">osm_buildings</span>
 </pre></div>
 </div>
@@ -597,7 +597,7 @@ displayed.</p>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/AusAID/World Bank.
+            Copyright 2013, BNPB/Australian Government/World Bank.
         </div>
     </div>
 
