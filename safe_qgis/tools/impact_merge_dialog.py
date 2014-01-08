@@ -200,7 +200,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
                 self,
-                self.tr("InaSAFE Merge Impact Tools Information"),
+                self.tr("InaSAFE Merge Impact Tool Information"),
                 str(ex))
             return
         except CanceledImportDialogError:
@@ -240,9 +240,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
         QMessageBox.information(
             self,
-            self.tr('InaSAFE Merge Impact Tools Information'),
+            self.tr('InaSAFE Merge Impact Tool Information'),
             self.tr(
-                'Report from merging two impact layers is generated '
+                'Report from merging two impact layers was generated '
                 'successfully.'))
 
         # Open output directory on file explorer
@@ -319,7 +319,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         if self.first_impact_layer.id() == self.second_impact_layer.id():
             raise InvalidLayerError(
-                self.tr('First layer must be different with second layer''.'))
+                self.tr('First layer must be different to second layer''.'))
 
         # Validate the output directory
         self.require_directory()
@@ -373,10 +373,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     self.first_impact_layer, 'postprocessing_report')
         except NoKeywordsFoundError:
             raise NoKeywordsFoundError(
-                self.tr('No keywords found in first impact layer.'))
+                self.tr('No keywords found for first impact layer.'))
         except KeywordNotFoundError:
             raise KeywordNotFoundError(
-                self.tr('Keyword postprocessing_report is not found in first '
+                self.tr('Keyword postprocessing_report not found for first '
                         'layer.'))
 
         # 2nd impact layer should have postprocessing_report keywords
@@ -389,7 +389,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr('No keywords found in second impact layer.'))
         except KeywordNotFoundError:
             raise KeywordNotFoundError(
-                self.tr('Keyword postprocessing_report is not found in second '
+                self.tr('Keyword postprocessing_report not found for second '
                         'layer.'))
 
         # If the chosen aggregation layer not Entire Area, it should have
@@ -406,7 +406,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             except KeywordNotFoundError:
                 raise KeywordNotFoundError(
                     self.tr(
-                        'Keyword aggregation attribute is not found in '
+                        'Keyword aggregation attribute not found for '
                         'aggregation layer.'))
 
     def merge(self):
