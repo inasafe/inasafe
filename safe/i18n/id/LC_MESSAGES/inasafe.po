@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-28 21:54+0200\n"
+"POT-Creation-Date: 2014-01-08 17:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,13 +34,12 @@ msgstr "Gedung-gedung/bangunan"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:258
 #: safe/impact_functions/inundation/flood_population_evacuation.py:178
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:209
 #: safe/impact_functions/volcanic/volcano_building_impact.py:173
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:244
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:254
 #: safe/postprocessors/age_postprocessor.py:127
 #: safe/postprocessors/aggregation_postprocessor.py:113
-#: safe/postprocessors/building_type_postprocessor.py:163
+#: safe/postprocessors/building_type_postprocessor.py:165
 #: safe/postprocessors/gender_postprocessor.py:112
 msgid "Total"
 msgstr "Jumlah"
@@ -52,7 +51,6 @@ msgstr "Jumlah"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:222
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:111
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:86
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:210
 msgid "All"
 msgstr "Semua"
 
@@ -260,7 +258,6 @@ msgstr "Terkena banjir"
 #: safe/common/dynamic_translations.py:175
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:220
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:82
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:208
 msgid "Building type"
 msgstr "Jenis bangunan"
 
@@ -343,7 +340,6 @@ msgid "Assumptions"
 msgstr "Anggapan"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:281
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:250
 msgid "Buildings are said to be flooded when "
 msgstr "Bangunan dikatakan terkena banjir ketika "
 
@@ -790,7 +786,6 @@ msgstr "Jumlah pengungsi"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:256
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:269
 #: safe/impact_functions/inundation/flood_population_evacuation.py:186
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:238
 msgid "Action Checklist:"
 msgstr "Daftar aksi:"
 
@@ -829,7 +824,6 @@ msgid "Temporarily closed"
 msgstr "Ditutup sementara"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:258
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:239
 msgid "Are the critical facilities still open?"
 msgstr "Apakah fasilitas publik penting masih terbuka?"
 
@@ -1104,7 +1098,6 @@ msgstr "Fungsi Dampak yang Tersedia"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:280
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:280
 #: safe/impact_functions/inundation/flood_population_evacuation.py:198
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:249
 #: safe/impact_functions/volcanic/volcano_building_impact.py:192
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:273
 msgid "Notes"
@@ -1524,11 +1517,11 @@ msgstr "Tidak ada data"
 msgid "Female population"
 msgstr "Penduduk wanita"
 
-#: safe/postprocessors/gender_postprocessor.py:167
+#: safe/postprocessors/gender_postprocessor.py:156
 msgid "Weekly hygiene packs"
 msgstr "Paket kebersihan mingguan"
 
-#: safe/postprocessors/gender_postprocessor.py:200
+#: safe/postprocessors/gender_postprocessor.py:184
 msgid "Additional weekly rice kg for pregnant and lactating women"
 msgstr "Tambahan kilogram beras mingguan untuk ibu hamil dan menyusui"
 
@@ -1733,14 +1726,12 @@ msgid "Lorem ipsum limitation"
 msgstr "Batasan lorem ipsum"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:156
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:146
 #, python-format
 msgid "Unknown hazard type %s. Must be either \"depth\" or \"grid\""
 msgstr ""
 "Jenis ancaman %s tidak diketahui. Harus berupa \"kedalamanr\" atau \"grid\""
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:285
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:254
 msgid "in regions marked as affected"
 msgstr "di wilayah yang ditandai sebagai area yang terkena dampak"
 
@@ -1767,7 +1758,6 @@ msgid "Total number of buildings %s in the viewable area"
 msgstr "Total bangunan %s di area yang terlihat"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:271
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:244
 #, python-format
 msgid "Where will the students from the %s closed schools go to study?"
 msgstr "Dimanakah siswa dari %s sekolah yang ditutup akan belajar?"
@@ -2567,7 +2557,7 @@ msgstr "Perhitungan statistik berdasarkan kategori umum."
 msgid "Calculates generic aggregation statistics"
 msgstr "Perhitungan statistik berdasarkan agregasi umum"
 
-#: safe/postprocessors/building_type_postprocessor.py:67
+#: safe/postprocessors/building_type_postprocessor.py:69
 msgid "Calculates building types related statistics."
 msgstr "Perhitungan statistik berdasarkan jenis bangunan."
 
@@ -2601,19 +2591,19 @@ msgstr ""
 "Tabel di bawah ini menunjukkan kebutuhan minimum mingguan bagi semua orang "
 "yang dievakuasi"
 
-#: safe/postprocessors/age_postprocessor.py:154
+#: safe/postprocessors/age_postprocessor.py:149
 msgid "Youth count (affected)"
 msgstr "Jumlah usia muda (yang terdampak)"
 
-#: safe/postprocessors/age_postprocessor.py:181
+#: safe/postprocessors/age_postprocessor.py:170
 msgid "Adult count (affected)"
 msgstr "Jumlah usia dewasa (yang terdampak)"
 
-#: safe/postprocessors/age_postprocessor.py:208
+#: safe/postprocessors/age_postprocessor.py:191
 msgid "Elderly count (affected)"
 msgstr "Jumlah usia lanjut (yang terdampak)"
 
-#: safe/postprocessors/gender_postprocessor.py:139
+#: safe/postprocessors/gender_postprocessor.py:134
 msgid "Female population (affected)"
 msgstr "Penduduk wanita (yang terdampak)"
 
@@ -2629,21 +2619,17 @@ msgstr ""
 msgid "Flooded roads"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:25
 msgid "Be Liquefied"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:27
 msgid ""
 "To assess the impacts of (liquefaction) on buildingfootprints originating "
 "from OpenStreetMap (OSM)."
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:30
 msgid "Provide details about where critical infrastructure might be liquefied"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:32
 msgid ""
 "The liquefaction status is calculated for each building (using thecentroid "
 "if it is a polygon) based on the hazard levels provided. ifthe hazard is "
@@ -2660,7 +2646,6 @@ msgid ""
 "assigned."
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:46
 msgid ""
 "A hazard raster layer where each cell represents flood depth (inmeters), or "
 "a vector polygon layer where each polygon represents anliquefied area. In "
@@ -2669,62 +2654,50 @@ msgid ""
 "be represented as 1, False as 0)"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:52
 msgid ""
 "Vector polygon layer extracted from OSM where each polygonrepresents the "
 "footprint of the building."
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:55
 msgid ""
 "Vector layer contains building is estimated to be flooded and thebreakdown "
 "of the building by type"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:58
 msgid ""
 "This function only flags buildings as impacted or not either basedon a fixed "
 "threshold in case of raster hazard or the attributesmentioned under input in "
 "case of vector hazard."
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:208
 msgid "Number liquefied"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:240
 msgid "Which structures have warning capacity(e.g. sirens, speakers, etc.)?"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:247
 #, python-format
 msgid ""
 "Where will the patients from the %s closed hospitals go and how will we "
 "transfer them?"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:252
 #, python-format
 msgid "flood levels exceed %.1fm"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:262
 msgid "Not Liquefied"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:264
 msgid "Liquefied"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:272
 msgid "Buildings Liquefied"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:273
 msgid "(liquefied or not liquefied)"
 msgstr ""
 
-#: safe/impact_functions/inundation/lique_OSM_building_impact.py:274
 msgid "Stucture liquefied status"
 msgstr ""
 
