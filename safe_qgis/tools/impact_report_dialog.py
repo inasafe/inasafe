@@ -139,7 +139,7 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
 
     def show_help(self):
         """Show context help for the impact report dialog."""
-        show_context_help('impact_report')
+        show_context_help('reports')
 
     def accept(self):
         """Method invoked when OK button is clicked."""

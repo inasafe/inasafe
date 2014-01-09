@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Pilihan &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Pilihan &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,12 +26,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
     <link rel="next" title="Memahami Fungsi Dampak" href="impact_functions.html" />
-    <link rel="prev" title="Sistem Kata kunci" href="keywords.html" />
+    <link rel="prev" title="Reports" href="reports.html" />
 
 <style>
     .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
@@ -123,7 +124,7 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="General Index"
+                   title="Indeks Umum"
                    style="z-index:;"
                 accesskey="I">index</a>
                 </li>
@@ -133,15 +134,15 @@
                 <a href="impact_functions.html"
                    title="Memahami Fungsi Dampak"
                    style="z-index:;"
-                accesskey="N">next</a>
+                accesskey="N">berikut</a>
                 </li>
                 
                 <li class="right"
                  >
-                <a href="keywords.html"
-                   title="Sistem Kata kunci"
+                <a href="reports.html"
+                   title="Reports"
                    style="z-index:;"
-                accesskey="P">previous</a>
+                accesskey="P">sebelum</a>
                 </li>
                 
 
@@ -164,7 +165,7 @@
         <div class="span12">
                 
   <div class="section" id="options">
-<span id="toolbar-options"></span><h1>Pilihan<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h1>
+<span id="toolbar-options"></span><h1>Pilihan<a class="headerlink" href="#options" title="Link permanent untuk headline ini">¶</a></h1>
 <p>InaSAFE plugin menyediakan dialog pilihan yang memungkinkan Anda untuk menentukan berbagai pilihan yang berhubungan untuk bagaimana InaSAFE akan berperilaku. Dialog pilihan dapat ditampilkan dengan mengklik pada InaSAFE simbol plugin toolbar pilihan (seperti yang terlihat di bawah) atau dengan melakukan <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/toolbar_options.png"><img alt="Options icon" src="_images/toolbar_options.png" style="width: 373.0px; height: 40.0px;" /></a>
@@ -176,37 +177,60 @@
 <p class="caption">Dialog Pilihan</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Anda dapat klik tombol <em class="guilabel">Help</em> beberapa waktu dan ini akan membuka bantuan pencarian dokumentasi untuk halaman ini</p>
 </div>
 <p>Berikut ini pilihan yang tersedia di dalam <em class="guilabel">Options Dialog</em>:</p>
 <ul class="simple">
-<li><em class="guilabel">Only show visible layers in the InaSAFE dock</em> : Pilihan ini akan menentukan apakah <strong>semua</strong> (ketika tidak dicentang) layer ancaman dan dampak harus terdaftar dalam kotak kombo dock. atau (ketika dicentang) hanya layer yang terlihat.</li>
-<li><em class="guilabel">Set QGIS layer name from &#8216;title&#8217; in keywords</em> : Pilihan ini akan (ketika diaktifkan) mengakibatkan untuk layer nama pada <em class="guilabel">Layers tree</em> menggunakan kata kunci <cite>title</cite> di file kata kunci layer. Jika layer tidak memiliki &#8216;title&#8217; pada kata kunci, atau tidak memiliki kata kunci sama sekali, perilaku QGIS normal untuk penamaan layer yang akan diterapkan.</li>
-<li><em class="guilabel">Zoom to impact layer on scenario estimate completion</em> : Pilihan ini akan menyebabkan tampilan peta untuk diperbesar/diperkecil sehingga benar-benar berisi InaSAFE hasil skenario peta dampak ketika analisis selesai.</li>
-<li><em class="guilabel">Hide exposure layer on scenario estimate completion</em> : Pilihan ini akan menyebabkan QGIS untuk mematikan layer keterpaparan yang sedang digunakan ketika InaSAFE melengkapi analisis ini. Anda dapat mengaktifkan kembali visibilitas layer lagi dengan mencentang kotak centang di legenda.</li>
-<li><em class="guilabel">Clip datasets to visible extent before analysis</em> : Pilihan ini akan menyebabkan QGIS memotong layer ancaman dan keterpaparan yang terlihat pada peta kanvas.</li>
-<li><em class="guilabel">When clipping, also clip features (e.g. will clip polygon smaller)</em>: Pilihan ini, setiap poligon yang melampaui luasan analisis akan dipotong sehingga mereka berisi oleh luasan analisis. contohnya jika Anda memiliki layer poligon ancaman banjir yang meluas jauh melampaui area yang Anda minati, poligon banjir akan berkurang sehingga hanya bagian di dalam area yang Anda minati dipertahankan. Ini dapat mempercepat waktu pemrosesan.</li>
-<li><em class="guilabel">Help to improve InaSAFE by submitting errors to a remote server</em> : Pilihan ini, ketika diaktifkan, akan mengirimkan informasi diagnosis kembali ke server proyek InaSAFE di setiap kesalahan kita mampu menjebaknya. Informasi yang diberikan berguna bagi tim InaSAFE untuk meningkatkan ketahanan perangkat lunak yang kami produksi dan untuk melihat tren pada isu-isu yang dihadapi orang. Silakan catat teks peringatan dibawah pilihan ini yang disertakan disini secara penuh:</li>
+<li><p class="first"><em class="guilabel">Only show visible layers in the InaSAFE dock</em> : Pilihan ini akan menentukan apakah <strong>semua</strong> (ketika tidak dicentang) layer ancaman dan dampak harus terdaftar dalam kotak kombo dock. atau (ketika dicentang) hanya layer yang terlihat.</p>
+</li>
+<li><p class="first"><em class="guilabel">Set QGIS layer name from &#8216;title&#8217; in keywords</em> : Pilihan ini akan (ketika diaktifkan) mengakibatkan untuk layer nama pada <em class="guilabel">Layers tree</em> menggunakan kata kunci <cite>title</cite> di file kata kunci layer. Jika layer tidak memiliki &#8216;title&#8217; pada kata kunci, atau tidak memiliki kata kunci sama sekali, perilaku QGIS normal untuk penamaan layer yang akan diterapkan.</p>
+</li>
+<li><p class="first"><em class="guilabel">Zoom to impact layer on scenario estimate completion</em> : Pilihan ini akan menyebabkan tampilan peta untuk diperbesar/diperkecil sehingga benar-benar berisi InaSAFE hasil skenario peta dampak ketika analisis selesai.</p>
+</li>
+<li><p class="first"><em class="guilabel">Hide exposure layer on scenario estimate completion</em> : Pilihan ini akan menyebabkan QGIS untuk mematikan layer keterpaparan yang sedang digunakan ketika InaSAFE melengkapi analisis ini. Anda dapat mengaktifkan kembali visibilitas layer lagi dengan mencentang kotak centang di legenda.</p>
+</li>
+<li><p class="first"><em class="guilabel">Clip datasets to visible extent before analysis</em> : Pilihan ini akan menyebabkan QGIS memotong layer ancaman dan keterpaparan yang terlihat pada peta kanvas.</p>
+</li>
+<li><p class="first"><em class="guilabel">When clipping, also clip features (e.g. will clip polygon smaller)</em>: Pilihan ini, setiap poligon yang melampaui luasan analisis akan dipotong sehingga mereka berisi oleh luasan analisis. contohnya jika Anda memiliki layer poligon ancaman banjir yang meluas jauh melampaui area yang Anda minati, poligon banjir akan berkurang sehingga hanya bagian di dalam area yang Anda minati dipertahankan. Ini dapat mempercepat waktu pemrosesan.</p>
+</li>
+<li><p class="first"><em class="guilabel">Help to improve InaSAFE by submitting errors to a remote server</em> : Pilihan ini, ketika diaktifkan, akan mengirimkan informasi diagnosis kembali ke server proyek InaSAFE di setiap kesalahan kita mampu menjebaknya. Informasi yang diberikan berguna bagi tim InaSAFE untuk meningkatkan ketahanan perangkat lunak yang kami produksi dan untuk melihat tren pada isu-isu yang dihadapi orang. Silakan catat teks peringatan dibawah pilihan ini yang disertakan disini secara penuh:</p>
+</li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Pengaturan di atas memerlukan Anda untuk me-restart QGIS setelah menonaktifkan/mengaktifkan perintah tersebut. Pesan kesalahan dan informasi diagnosis akan dipublikasi ke <a class="reference external" href="http://sentry.linfiniti.com/inasafe-desktop/">http://sentry.linfiniti.com/inasafe-desktop/</a>. Beberapa institusi tidak memungkinkan Anda untuk mengaktifkan fitur ini - periksa dengan jaringan administrator jika tidak yakin. Walaupun data dikirim secara anonim, informasi yang terisi di traceback mungkin berisi path sistem file yang mengungkapkan identitas Anda atau informasi lain dari sistem Anda.</p>
 </div>
 <ul class="simple">
-<li><em class="guilabel">Show intermediate layers generated by postprocessing</em> : Pilihan ini akan mnyebabkan QGIS menampilkan file menengah yang dihasilkan oleh langkah-langkah postprocessing pada peta kanvas.</li>
-<li><em class="guilabel">Default female ratio</em> : Ini adalah standar wantia untuk jumlah populasi rasio yang menghancurkan digunakan por menghasilkan jenis kelamin</li>
-<li><em class="guilabel">Keyword cache for remote datasources</em> : Pilihan ini digunakan untuk menentukan dimana kata kunci disimpan untuk dataset yang tidak mungkin ditulis mereka ke dalam file kata kunci (keyword). Lihat <a class="reference internal" href="keywords.html#toolbar-keywords"><em>Sistem Kata kunci</em></a> di InaSAFE User-Manual untuk informasi lebih lengkap dalam sistem kata kunci (keyword).</li>
-<li><em class="guilabel">Enable developer mode</em>. With this option enabled,
-you can right click on the report area and use the webkit debug tools to
-debug the output. <strong>This option is intended for advanced users only.</strong></li>
+<li><p class="first"><em class="guilabel">Show intermediate layers generated by postprocessing</em> : Pilihan ini akan mnyebabkan QGIS menampilkan file menengah yang dihasilkan oleh langkah-langkah postprocessing pada peta kanvas.</p>
+</li>
+<li><p class="first"><em class="guilabel">Default female ratio</em> : Ini adalah standar wantia untuk jumlah populasi rasio yang menghancurkan digunakan por menghasilkan jenis kelamin</p>
+</li>
+<li><em class="guilabel">Keyword cache for remote datasources</em> : This option is used to
+determine where keywords are stored for datasets where it is not possible
+to write them into a .keywords file. See <a class="reference internal" href="keywords.html#keywords-system"><em>Sistem Kata kunci</em></a> in the
+InaSAFE User-Manual for more information on the keywords system.</li>
+<li><em class="guilabel">Logo for maps (must be x x y)</em>: This option is used to determine
+a custom logo that will be used in the pdf of your impact scenario project.
+See <a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE User-Manual for more
+information on the reports. <strong>NOTE</strong>: image should have size X x Y.</li>
+<li><em class="guilabel">Report template</em>: This option is used to determine a directory
+with custom templates. Templates from this directory will be available for
+usage when generating report on your impact scenario project. See
+<a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE User-Manual for more information
+on the reports.</li>
+<li><p class="first"><em class="guilabel">Enable developer mode</em>. Dengan diaktifkannya pilihan ini, Anda dapat meng-klik kanan pada laporan dan menggunakan alat debug webkit untuk melakukan debug pada hasil. <strong>Opsi ini sebaiknya digunakan untuk pengguna tingkat lanjut saja.</strong></p>
+</li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Tekan <em class="guilabel">Cancel</em> di setiap waktu akan menutup dialog pilihan dan setiap perubahan yang dibuat <strong>tidak</strong> akan diterapkan. Tekan <em class="guilabel">Ok</em> setiap saat akan menutup dialog pilihan dan setiap perubahan yang dibuat <strong>akan</strong> segera diterapkan.</p>
+<p class="first admonition-title">Catatan</p>
+<p class="last">Pressing <em class="guilabel">Cancel</em> at any time will close the options
+dialog and any changes made will <strong>not</strong> be applied.
+Pressing <em class="guilabel">OK</em> at any time will close the options dialog and any
+changes made <strong>will</strong> be applied immediately.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Urutan tombol yang tepat yang ditampilkan pada kotak dialog ini mungkin berbeda tergantung pada sistem operasi atau lingkungan desktop Anda.</p>
 </div>
 </div>
@@ -230,7 +254,7 @@ debug the output. <strong>This option is intended for advanced users only.</stro
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/AusAID/World Bank.
+            Copyright 2013, BNPB/Australian Government/World Bank.
         </div>
     </div>
 

@@ -1,0 +1,16 @@
+elapsed_time: 0
+hazard_title: A flood in Jakarta
+postprocessing_report: <table class="table table-condensed table-striped"><caption>Detailed building type report</caption><tbody><tr><td>Area</td><td>Total inundated</td><td>Places of worship inundated</td><td>Schools inundated</td><td>Hospitals inundated</td></tr><tr><td>Entire area</td><td>0</td><td>No data *</td><td>No data *</td><td>No data *</td></tr></tbody></table><em>* "No data" values mean that there where some problems while calculating them. This did not affect the other values.</em>
+exposure_title: buildings
+title: Estimated buildings affected - Entire Area
+legend_title: Structure inundated status
+user: gumbia
+exposure_source: OpenStreetMap
+map_title: Buildings inundated
+legend_units: (inundated or not inundated)
+impact_summary: <table class="table table-striped condensed"> <tbody>  <tr>   <td colspan="100%">In the event of <i>a flood in jakarta</i> how many <i>buildings</i> might <i>be flooded</i></td>  </tr>  <tr>   <th>Building type</th>   <th>Number flooded</th>   <th>Total</th>  </tr>  <tr>   <td>All</td>   <td>0</td>   <td>5</td>  </tr>  <tr>   <th colspan="100%">Breakdown by building type</th>  </tr>  <tr>   <td>Other</td>   <td>0</td>   <td>5</td>  </tr>  <tr>   <th colspan="100%">Action Checklist:</th>  </tr>  <tr>   <td colspan="100%">Are the critical facilities still open?</td>  </tr>  <tr>   <td colspan="100%">Which structures have warning capacity (eg. sirens, speakers, etc.)?</td>  </tr>  <tr>   <td colspan="100%">Which buildings will be evacuation centres?</td>  </tr>  <tr>   <td colspan="100%">Where will we locate the operations centre?</td>  </tr>  <tr>   <td colspan="100%">Where will we locate warehouse and/or distribution centres?</td>  </tr>  <tr>   <th colspan="100%">Notes</th>  </tr>  <tr>   <td colspan="100%">Buildings are said to be flooded when in regions marked as affected</td>  </tr> </tbody></table>
+host_name: shiva
+time_stamp: 2013-12-17_15:07:26
+hazard_source: OpenStreetMap
+target_field: INUNDATED
+impact_table: <table class="table table-striped condensed"> <tbody>  <tr>   <td colspan="100%">In the event of <i>a flood in jakarta</i> how many <i>buildings</i> might <i>be flooded</i></td>  </tr>  <tr>   <th>Building type</th>   <th>Number flooded</th>   <th>Total</th>  </tr>  <tr>   <td>All</td>   <td>0</td>   <td>5</td>  </tr>  <tr>   <th colspan="100%">Breakdown by building type</th>  </tr>  <tr>   <td>Other</td>   <td>0</td>   <td>5</td>  </tr>  <tr>   <th colspan="100%">Action Checklist:</th>  </tr>  <tr>   <td colspan="100%">Are the critical facilities still open?</td>  </tr>  <tr>   <td colspan="100%">Which structures have warning capacity (eg. sirens, speakers, etc.)?</td>  </tr>  <tr>   <td colspan="100%">Which buildings will be evacuation centres?</td>  </tr>  <tr>   <td colspan="100%">Where will we locate the operations centre?</td>  </tr>  <tr>   <td colspan="100%">Where will we locate warehouse and/or distribution centres?</td>  </tr>  <tr>   <th colspan="100%">Notes</th>  </tr>  <tr>   <td colspan="100%">Buildings are said to be flooded when in regions marked as affected</td>  </tr> </tbody></table>

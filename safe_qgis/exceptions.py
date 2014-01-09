@@ -195,3 +195,8 @@ class InvalidLayerError(Exception):
 class ReportCreationError(Exception):
     """Raised when error occurs during report generation."""
     pass
+
+
+class EmptyDirectoryError(Exception):
+    """Raised when output directory is empty string path."""
+    pass
