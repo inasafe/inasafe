@@ -29,6 +29,7 @@ from utilities import (
     get_decimal_separator,
     get_utm_epsg)
 
+
 def print_class(my_array, my_result_class, my_expected):
     """Print my_array, my_result, my_expected in nice format
     """
@@ -230,7 +231,6 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(get_utm_epsg(-178, -10), 32701)
         self.assertEqual(get_utm_epsg(178, -20), 32760)
         self.assertEqual(get_utm_epsg(-3, -30), 32730)
-
 
 
 if __name__ == '__main__':
