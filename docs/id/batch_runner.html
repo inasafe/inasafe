@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Batch Runner &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Batch Runner &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,10 +26,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
     <link rel="next" title="Simpan Skenario" href="save_scenario.html" />
     <link rel="prev" title="Konverter" href="converter.html" />
 
@@ -123,7 +124,7 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="General Index"
+                   title="Indeks Umum"
                    style="z-index:;"
                 accesskey="I">index</a>
                 </li>
@@ -133,7 +134,7 @@
                 <a href="save_scenario.html"
                    title="Simpan Skenario"
                    style="z-index:;"
-                accesskey="N">next</a>
+                accesskey="N">berikut</a>
                 </li>
                 
                 <li class="right"
@@ -141,7 +142,7 @@
                 <a href="converter.html"
                    title="Konverter"
                    style="z-index:;"
-                accesskey="P">previous</a>
+                accesskey="P">sebelum</a>
                 </li>
                 
 
@@ -164,22 +165,13 @@
         <div class="span12">
                 
   <div class="section" id="batch-runner">
-<span id="id1"></span><h1>Batch Runner<a class="headerlink" href="#batch-runner" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Batch Runner<a class="headerlink" href="#batch-runner" title="Link permanent untuk headline ini">¶</a></h1>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/batch_runner.png"><img alt="Batch Runner" src="_images/batch_runner.png" style="width: 325.5px; height: 453.75px;" /></a>
 <p class="caption">Batch Runner</p>
 </div>
-<p>With this tool you can setup numerous scenarios and run them all in one go.
-A typical use case may be where you define a number of e.g. flood impact
-scenarios all using a standard dataset e.g. <tt class="docutils literal"><span class="pre">flood.shp</span></tt>. As new flood data
-becomes available you replace <tt class="docutils literal"><span class="pre">flood.shp</span></tt> and rerun the scenarios using the
-batch runner. Using this approach you can quickly produce regional contingency
-plans as your understanding of hazards changes. When you run the batch of
-scenarios, pdf reports are generated automatically and all placed in a single
-common directory making it easy for you to browse and disseminate the reports
-produced.</p>
-<p>When the batch process completes, it will also produce a summary report like
-this:</p>
+<p>Dengan alat ini Anda dapat mengatur berbagai skenario dan menjalankan mereka semua dalam satu kesempatan. Sebuah kasus penggunaan yang khas mungkin ketika Anda menetapkan sejumlah skenario misalnya skenario dampak banjir semua skenario menggunakan dataset standar misalnya <tt class="docutils literal"><span class="pre">flood.shp</span></tt>. Sebagai data banjir baru telah tersedia Anda mengganti <tt class="docutils literal"><span class="pre">flood.shp</span></tt> dan kembali menjalankan skenario menggunakan batch runner. Menggunakan pendekatan ini Anda dapat dengan cepat menghasilkan rencana kontingensi daerah dengan pemahaman Anda akan perubahan-perubahan bencana. Ketika Anda menjalankan skenario batch, laporan pdf akan dihasilkan otomatis dan semua ditempatkan dalam sebuah direktori umum sehingga memudahkan Anda untuk mencari dan menyebarkan laporan tersebut.</p>
+<p>Ketika proses batch telah selesai, proses tersebut juga akan menghasilkan ringkasan laporan seperti ini:</p>
 <div class="highlight-python"><pre>InaSAFE Batch Report File
 -----------------------------
 P: gempa bumi Sumatran fault (Mw7.8)
@@ -194,10 +186,11 @@ Total failed: 0
 Total tasks: 6
 -----------------------------</pre>
 </div>
-<p>For advanced users there is also the ability to batch run python scripts using
-this tool, but this should be considered an <strong>experimental</strong> feature still at
-this stage.</p>
-<p>Sebelum menjalankan Batch Runner anda mungkin ini menggunakan alat <em class="xref std std-ref">toolbar_save_scenario</em> untuk menyimpan beberapa skenario yang ingin anda jalankan di batch runner. Alat ini memungkinkan anda untuk menjalankan skenario yang telah disimpan dalam satu kali jalan.</p>
+<p>Untuk pengguna tingkat lanjut, tersedia juga pilihan untuk menjalankan script python menggunakan alat ini, tapi ini masih dianggap sebagai fitur ** eksperimental ** pada tahap ini.</p>
+<p>Before running the Batch Runner you might want to use the
+<em class="xref std std-ref">tb_save_scenario</em> tool to first save some scenarios on which you
+can let the batch runner do its work. This tool lets you run saved scenarios
+in one go. It lets you select scenarios or let run all scenarios in one go.</p>
 </div>
 
 
@@ -219,7 +212,7 @@ this stage.</p>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/AusAID/World Bank.
+            Copyright 2013, BNPB/Australian Government/World Bank.
         </div>
     </div>
 

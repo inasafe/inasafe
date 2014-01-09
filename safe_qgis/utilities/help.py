@@ -101,7 +101,7 @@ def _show_online_help(context=None):
 
     # First we try using local filesystem
 
-    base_url = 'http://inasafe.linfiniti.com/'
+    base_url = 'http://inasafe.org/'
 
     # set default value for locale
     locale = 'en'

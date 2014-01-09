@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Menggunakan InaSAFE &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Menggunakan InaSAFE &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,12 +26,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
     <link rel="next" title="Sistem Kata kunci" href="keywords.html" />
-    <link rel="prev" title="Bantuan Aplikasi" href="index.html" />
+    <link rel="prev" title="Application Help" href="index.html" />
 
 <style>
     .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
@@ -123,7 +124,7 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="General Index"
+                   title="Indeks Umum"
                    style="z-index:;"
                 accesskey="I">index</a>
                 </li>
@@ -133,15 +134,15 @@
                 <a href="keywords.html"
                    title="Sistem Kata kunci"
                    style="z-index:;"
-                accesskey="N">next</a>
+                accesskey="N">berikut</a>
                 </li>
                 
                 <li class="right"
                  >
                 <a href="index.html"
-                   title="Bantuan Aplikasi"
+                   title="Application Help"
                    style="z-index:;"
-                accesskey="P">previous</a>
+                accesskey="P">sebelum</a>
                 </li>
                 
 
@@ -164,11 +165,12 @@
         <div class="span12">
                 
   <div class="section" id="using-project-name">
-<span id="toolbar-dock"></span><h1>Menggunakan InaSAFE<a class="headerlink" href="#using-project-name" title="Permalink to this headline">¶</a></h1>
-<p>Dokumen ini menjelaskan penggunaan InaSAFE &#8216;dock panel&#8217; - yang merupakan tampilan utama untuk menjalankan skenario resiko di dalam lingkungan Quantum GIS.</p>
+<span id="toolbar-dock"></span><h1>Menggunakan InaSAFE<a class="headerlink" href="#using-project-name" title="Link permanent untuk headline ini">¶</a></h1>
+<p>This document describes the usage of the InaSAFE &#8216;dock panel&#8217; - which
+is the main interface for running risk scenarios within the QGIS environment.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Dalam penggunaan alat InaSAFE secara efektif, Anda seharusnya juga membaca dokumentasi <a class="reference internal" href="impact_functions.html"><em>Memahami Fungsi Dampak</em></a> dan <a class="reference internal" href="impact_functions.html"><em>Memahami Fungsi Dampak</em></a> sebelum Anda memulai.</p>
+<p class="first admonition-title">Catatan</p>
+<p class="last">Dalam penggunaan alat InaSAFE secara efektif, Anda seharusnya juga membaca dokumentasi <a class="reference internal" href="keywords.html"><em>Sistem Kata kunci</em></a> dan <a class="reference internal" href="impact_functions.html"><em>Memahami Fungsi Dampak</em></a> sebelum Anda memulai.</p>
 </div>
 <p>Panel dek InaSAFE merupakan cara utama untuk berinteraksi dengan alat-alat yang telah disediakan dalam InaSAFE. Setelah anda menginstal plugin InaSAFE, panel dek akan termuat secara otomatis di QGIS dan muncul di suatu tempat di layar anda. Itu akan terlihat seperti ini:</p>
 <div class="figure align-center">
@@ -182,24 +184,31 @@
 </div>
 <p>Terdapat 3 area utama pada panel:</p>
 <ul class="simple">
-<li>Area <em class="guilabel">Pertanyaan</em></li>
-<li>Area <em class="guilabel">Hasil</em></li>
-<li>Area the <em class="guilabel">Tombol</em></li>
+<li><p class="first">Area <em class="guilabel">Pertanyaan</em></p>
+</li>
+<li><p class="first">Area <em class="guilabel">Hasil</em></p>
+</li>
+<li><p class="first">Area the <em class="guilabel">Tombol</em></p>
+</li>
 </ul>
 <p>Pada saat apa pun Anda dapat memperoleh bantuan di InaSAFE dengan mengklik pada tombol <em class="guilabel">bantuan</em> yang telah disediakan pada setiap dek dan dialog.</p>
 <div class="section" id="the-questions-area">
-<h2>Area Pertanyaan<a class="headerlink" href="#the-questions-area" title="Permalink to this headline">¶</a></h2>
+<h2>Area Pertanyaan<a class="headerlink" href="#the-questions-area" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Tujuan dari InaSAFE adalah untuk membuat analisis dampak Anda sangat sederhana dan mudah untuk dilakukan. Bagian Pertanyaan menyediakan cara yang mudah bagi Anda untuk merumuskan, apa itu yang Anda ingin cari? Semua pertanyaan yang ada dirumuskan dalam bentuk sebagai berikut:</p>
 <blockquote>
-<div>Apabila terjadi [<strong>hazard</strong>] berapa banyak [<strong>exposure</strong>] yang mungkin [<strong>impact</strong>].</div></blockquote>
+<div><p>Apabila terjadi [<strong>hazard</strong>] berapa banyak [<strong>exposure</strong>] yang mungkin [<strong>impact</strong>].</p>
+</div></blockquote>
 <p>Sebagai contoh:</p>
 <blockquote>
-<div>Jika <strong>terjadi banjir</strong> berapa banyak <strong>sekolah</strong> yang mungkin <strong>ditutup</strong>.</div></blockquote>
+<div><p>Jika <strong>terjadi banjir</strong> berapa banyak <strong>sekolah</strong> yang mungkin <strong>ditutup</strong>.</p>
+</div></blockquote>
 <p>Untuk menjawab pertanyaan semacam itu, Pengembang InaSAFE telah membangun sejumlah <strong>fungsi dampak</strong> yang mencakup skenario risiko seperti banjir, tsunami, abu vulkanik, gempa dan sebagainya. Anda dapat membaca dokumentasi fungsi dampak untuk mengetahui lebih lanjut tentang <a class="reference internal" href="impact_functions.html"><em>Memahami Fungsi Dampak</em></a> yang telah diimplementasikan.</p>
 <p>Formulasi dari pertanyaan-pertanyaan ini akan diproses dengan memuat layer-layer yang merepresentasikan skenario baik <strong>ancaman</strong> maupun <strong>paparan</strong> di dalam QGIS.</p>
 <ul class="simple">
-<li><strong>Ancaman</strong> (<em class="guilabel">Pada kejadian</em>) dapat dipresentasikan sebagai, contoh, sebuah layer data jenis raster pada QGIS dimana setiap pixel pada data ini mempresentasikan kedalaman banjir saat ini mengikuti genangannya.</li>
-<li><strong>keterpaparan</strong> (<em class="guilabel">berapa banyak</em>) dapat direpresentasikan, contohnya, sebagai data vektor poligon yang mempresentasikan garis luar sebuah bangunan, atau garis luar dari data jenis raster dimana setiap pixel merepresentasikan jumlah permukiman penduduk pada sel itu.</li>
+<li><p class="first"><strong>Ancaman</strong> (<em class="guilabel">Pada kejadian</em>) dapat dipresentasikan sebagai, contoh, sebuah layer data jenis raster pada QGIS dimana setiap pixel pada data ini mempresentasikan kedalaman banjir saat ini mengikuti genangannya.</p>
+</li>
+<li><p class="first"><strong>keterpaparan</strong> (<em class="guilabel">berapa banyak</em>) dapat direpresentasikan, contohnya, sebagai data vektor poligon yang mempresentasikan garis luar sebuah bangunan, atau garis luar dari data jenis raster dimana setiap pixel merepresentasikan jumlah permukiman penduduk pada sel itu.</p>
+</li>
 </ul>
 <p><strong>fungsi dampak</strong> (<em class="guilabel">Mungkin</em>) akan menggabungkan dua input layer pada model matematika dalam rangka untuk mengartikan dampak bahaya seperti apa yang mengancam sesuai data keterpaparan infrastruktur atau jumlah penduduk.</p>
 <p>Dengan memilih kombinasi dari kotak combo <em class="guilabel">In the event of</em> dan <em class="guilabel">How many</em>, aturan sesuai dengan fungsi dampak yang akan dicantumkan di kotak combo <em class="guilabel">Might</em>.</p>
@@ -208,22 +217,15 @@
 <p>InaSAFE menggunakan kombinasi kata kunci <strong>kategori</strong>, <strong>subkategori</strong>, <strong>unit</strong>, dan <strong>jenis data</strong> untuk menentukan <strong>fungsi dampak</strong> yang akan dicantumkan pada combo <em class="guilabel">Might</em>.</p>
 <p>Fungsi dampak terpilih dapat diketahui (jika dapat diterapkan) dengan menekan tombol elips kecil (...) disebelah fungsi dampak yang dipilih.</p>
 <p>Ini menjelaskan detail yang lebih lanjut dibawah <a class="reference internal" href="#analysis-parameters"><em>Pengaturan Parameter Analisis</em></a></p>
-<p>As of InaSAFE 1.2, you can now also choose an aggregation layer for both
-raster and vector layers.</p>
-<p>Aggregation allows you to specify an additional layer when defining the
-analysis criteria. This layer will be used to provide a by-area breakdown of
-the results of the analysis. For example if you are carrying out an analysis
-for a city, you can use district areas within the city to provide per-area
-results. In the absence of an aggregation layer, the analysis extent is used
-as the aggregation unit. To use this option you need to load a polygon based
-layer into QGIS that represents the areas you wish to summarise by.</p>
+<p>Di InaSAFE 1.2, Anda juga dapat memilih layer agregasi dari layer raster dan layer vector.</p>
+<p>Agregasi memungkinkan Anda untuk menentukan layer tambahan ketika mendefinisikan kriteria analisis. Layer ini akan digunakan untuk memberikan rincian hasil analisis tiap daerah. Sebagai contoh jika Anda sedang melakukan analisis untuk sebuah kota, Anda dapat menggunakan wilayah kecamatan dalam kota untuk memberikan hasil per-daerah. Dengan tidak adanya layer agregasi, sejauh analisis digunakan sebagai unit agregasi. Untuk menggunakan pilihan ini Anda perlu memuat layer data poligon sabagai dasar ke dalam QGIS yang mewakili area yang ingin Anda ringkas.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Setelah menjalankan analisis, area pertanyaan disembunyikan untuk memaksimalkan jumlah ruang alokasi untuk area hasil (lihat di bawah). Anda dapat membukan kembali area pertanyaan kapan saja dengan menekan tombol <em class="guilabel">Show question form</em></p>
 </div>
 </div>
 <div class="section" id="the-results-area">
-<h2>Area Hasil<a class="headerlink" href="#the-results-area" title="Permalink to this headline">¶</a></h2>
+<h2>Area Hasil<a class="headerlink" href="#the-results-area" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Area <em class="guilabel">hasil</em> digunakan untuk menampilkan berbagai item umpan balik yang berguna bagi pengguna. Karena skenario dampak telah dijalankan (lihat bagian selanjutnya di bawah), tabel ringkasan akan ditampilkan.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/scenario-results.png"><img alt="Scenario results" src="_images/scenario-results.png" style="width: 702.5px; height: 389.0px;" /></a>
@@ -252,35 +254,43 @@ layer into QGIS that represents the areas you wish to summarise by.</p>
 </div>
 <p>Jika anda ingin menyembunyikan pertanyaan kembali untuk mendapatkan ruang yang lebih untuk menampilkan hasilnya lagi. Pastikan layer yang anda baru hitung dengan InaSAFE kembali aktif di daftar QGIS <em class="guilabel">Layers</em></p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p>Pada bagian bawah tampilan kesalahan Anda mungkin melihat tombol seperti berikut ini. Jika Anda mengklik pada tombol ini, maka akan muncul kotak yang berisi informasi diagnosis yang berguna yang dapat disampaikan sebagai bagian dari laporan bug jika Anda berpikir kesalahan tersebut adalah salah.</p>
 <a class="last reference internal image-reference" href="_images/toggle-traceback.png"><img alt="_images/toggle-traceback.png" src="_images/toggle-traceback.png" style="width: 211.5px; height: 56.25px;" /></a>
 </div>
 </div>
 <div class="section" id="the-buttons-area">
-<h2>Area Tombol<a class="headerlink" href="#the-buttons-area" title="Permalink to this headline">¶</a></h2>
+<h2>Area Tombol<a class="headerlink" href="#the-buttons-area" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Tombol area berisi tiga tombol:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/buttons.png"><img alt="Buttons area" src="_images/buttons.png" style="width: 218.25px; height: 39.75px;" /></a>
 <p class="caption">Area Tombol</p>
 </div>
 <ul class="simple">
-<li><em class="guilabel">Help</em> - klik pada ini jika Anda membutuhkan bantuan konteks, seperti dokumen yang Anda baca sekarang!</li>
-<li><em class="guilabel">Print...</em> - klik ini jika Anda ingin membuat sebuah pdf proyek skenario dampak Anda. Sebuah <strong>layer dampak</strong> harus aktif sebelum tombol <em class="guilabel">Print...</em> akan diaktifkan.</li>
-<li><em class="guilabel">Run - jika kombinasi pilihan pada kotak combo area :guilabel:`Questions</em> akan memungkinkan Anda untuk menjalankan skenario, tombol ini diaktifkan.</li>
+<li><p class="first"><em class="guilabel">Help</em> - klik pada ini jika Anda membutuhkan bantuan konteks, seperti dokumen yang Anda baca sekarang!</p>
+</li>
+<li><em class="guilabel">Print...</em> - click on this if you wish to create a pdf of your
+impact scenarion project or just generate report and open it in composer for
+further tuning. An <strong>impact layer</strong> must be active before the
+<em class="guilabel">Print...</em> button will be enabled.</li>
+<li><p class="first"><em class="guilabel">Run - jika kombinasi pilihan pada kotak combo area :guilabel:`Questions</em> akan memungkinkan Anda untuk menjalankan skenario, tombol ini diaktifkan.</p>
+</li>
 </ul>
 </div>
 <div class="section" id="data-conversions-when-running-a-scenario">
-<h2>Konversi data ketika menjalankan sebuah skenario<a class="headerlink" href="#data-conversions-when-running-a-scenario" title="Permalink to this headline">¶</a></h2>
+<h2>Konversi data ketika menjalankan sebuah skenario<a class="headerlink" href="#data-conversions-when-running-a-scenario" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Ketika menjalankan sebuah skenario, data yang digunakan harus diproses ke dalam bentuk dimana dapat digunakan oleh fungsi dampak. Secara khusus perlu dicatat bahwa:</p>
 <ul class="simple">
-<li>Remote dataset akan disalin secara lokal sebelum pengolahan.</li>
-<li>Semua dataset akan terpotong ke perpotongan layer <strong>ancaman</strong>, layer <strong>keterpaparan</strong> dan tampilan luasan saat ini.</li>
-<li>Semua dataset yang terpotong akan dikonversi (diproyeksi kembali) ke sistem referensi koordinat Geografi (EPSG:4326) sebelum analisis.</li>
+<li><p class="first">Remote dataset akan disalin secara lokal sebelum pengolahan.</p>
+</li>
+<li><p class="first">Semua dataset akan terpotong ke perpotongan layer <strong>ancaman</strong>, layer <strong>keterpaparan</strong> dan tampilan luasan saat ini.</p>
+</li>
+<li><p class="first">Semua dataset yang terpotong akan dikonversi (diproyeksi kembali) ke sistem referensi koordinat Geografi (EPSG:4326) sebelum analisis.</p>
+</li>
 </ul>
 </div>
 <div class="section" id="setting-analysis-parameters">
-<span id="analysis-parameters"></span><h2>Pengaturan Parameter Analisis<a class="headerlink" href="#setting-analysis-parameters" title="Permalink to this headline">¶</a></h2>
+<span id="analysis-parameters"></span><h2>Pengaturan Parameter Analisis<a class="headerlink" href="#setting-analysis-parameters" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Tergantung dari fungsi dampak apa yang anda pilih anda memiliki pilihan berbeda untuk menyesuaikan parameter dari pertanyaan yang anda tanyakan. Beberapa fungsi dampak memiliki beberapa pilihan konfigurasi lebih dan beberapa yang lain kurang. Selalu tergantung pada fungsi dampak itu sendiri dan pertanyaan yang ingin anda tanyakan.</p>
 <p>Untuk membuka dialog konfigurasi fungsi dampak, anda butuh untuk klik pada tombol <em class="guilabel">...</em> di sebelah paragraf <em class="guilabel">Might</em> di dok InaSAFE.</p>
 <div class="figure align-center">
@@ -290,24 +300,49 @@ layer into QGIS that represents the areas you wish to summarise by.</p>
 <p>Anda mungkin harus membuka 3 tab yang terlihat</p>
 <blockquote>
 <div><ul class="simple">
-<li><em class="guilabel">Options</em>: Depending in the Impact function you selected,
-you can influence the result of your question here (the Impact Function)
-by setting different initial values which are presented depending on the
-function you choose (Some Impact functions might now be able to be
-influenced).</li>
-<li><em class="guilabel">Postprocessors</em>: Takes the results from the impact function and
-calculates derivative indicators, for example if you have an affected
-population total, the Gender postprocessor will calculate gender specific
-indicators such as additional nutritional requirements for pregnant women</li>
-<li><em class="guilabel">Minimum Needs</em>: If it is something that effects for eg people it
-works out the minimum needs of the people affected by the impact scenario.
-To use that function you should have the necessary data available and
-calculate this by using the <a class="reference internal" href="minimum_needs.html#minimum-needs"><em>Alat kebutuhan minimum</em></a>.</li>
+<li><p class="first"><em class="guilabel">Pilihan</em>: Tergantung dari fungsi dampak yang Anda pilih, Anda dapat mempengaruhi hasil dari pertanyaan Anda disini (Fungsi Dampak) dengan mengatur nilai awal yang berbeda yang dibawakan tergantung dari fungsi yang Anda pilih (Beberapa fungsi dampak sekarang mungkin sudah dapat dipengaruhi).</p>
+</li>
+<li><p class="first"><em class="guilabel">Postprocessors</em>: Mengambil hasil dari fungsi dampak dan mengkalkulasikan indikator turunan, sebagai contoh jika Anda mempunyai jumlah populasi terdampak, post-processor Gender akan memperhitungkan sesuai spesifikasi dari indikator gender seperti informasi nutrisi tambahan yang dibutuhkan untuk ibu hamil.</p>
+</li>
+<li><p class="first"><em class="guilabel">Kebutuhan Minimum</em>: Jika ada sesuatu yang terjadi pada (misalnya) beberapa orang yang terkena dampak dapat diperoleh analisis kebutuhan minimumnya berdasarkan perhitungan skenario dampak. Untuk menggunakan fungsi ini Anda harus memiliki data yang diperlukan dan menghitungnya dengan menggunakan <a class="reference internal" href="minimum_needs.html#minimum-needs"><em>Alat kebutuhan minimum</em></a>.</p>
+</li>
 </ul>
 </div></blockquote>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/imp_func_conf2.png"><img alt="Impact Function Configurator" src="_images/imp_func_conf2.png" style="width: 744.75px; height: 320.25px;" /></a>
 </div>
+</div>
+<div class="section" id="generating-impact-report">
+<span id="impact-report"></span><h2>Generating impact report<a class="headerlink" href="#generating-impact-report" title="Link permanent untuk headline ini">¶</a></h2>
+<p>When scenario analysis completed you may want to generate a report. Usually
+<em class="guilabel">Print...</em>  button will be enabled immediatelly after analysis. If it
+still inactive, select impact layer in QGIS ToC.</p>
+<p>To start report generation you need to click on the <em class="guilabel">Print...</em> button
+in the buttons area. This will open an <em class="guilabel">Impact report</em> dialog.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/impact_report_dlg.png"><img alt="Impact Report configuration" src="_images/impact_report_dlg.png" style="width: 315.75px; height: 180.0px;" /></a>
+<p class="caption">Impact report configuration</p>
+</div>
+<p>Dialog has three major areas:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em class="guilabel">Area to print</em> group: allows to customize extent of the report
+map. There are two options available. Choose <em class="guilabel">Current extent</em> if
+current canvas extent represents necessary area. <em class="guilabel">Analysis extent</em>
+will set extent of the report map to impact layer extent.</li>
+<li><em class="guilabel">Template to use</em> group: here you can select desired template for
+your report. In combobox listed all templates bundled with plugin plus
+templates from user-defined template directory (see <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a>)
+for information how to set templates directory. It is also possible to
+select custom template from any location: just activate radiobutton under
+combobox and provide path to template using <em class="guilabel">...</em> button.</li>
+<li>buttons area: contains four buttons. <em class="guilabel">Open PDF</em> button used to
+generate report and export it in PDF format. Resulting file(s) will be
+opened in your default PDF viewer. <em class="guilabel">Open composer</em> used when you
+need to adjust generated report before printing. In this case report will be
+opened in QGIS composer and you can edit it as needed.</li>
+</ul>
+</div></blockquote>
 </div>
 </div>
 
@@ -330,7 +365,7 @@ calculate this by using the <a class="reference internal" href="minimum_needs.ht
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/AusAID/World Bank.
+            Copyright 2013, BNPB/Australian Government/World Bank.
         </div>
     </div>
 
