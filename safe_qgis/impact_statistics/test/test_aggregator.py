@@ -33,6 +33,7 @@ from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem
 from safe.common.testing import get_qgis_app
 from safe_qgis import breakdown_defaults
 from safe_qgis.safe_interface import (
+    UNITDATA,
     TESTDATA,
     BOUNDDATA,
     Raster,
@@ -45,6 +46,7 @@ from safe_qgis.utilities.utilities_for_testing import (
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
+from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     extent_to_geo_array)
@@ -431,8 +433,12 @@ class AggregatorTest(unittest.TestCase):
         self._aggregate(impact_layer, expected_results, use_aoi_mode=True)
 
         # Aggregation in class_count mode
+        data_path = os.path.join(
+            UNITDATA,
+            'impact',
+            'aggregation_test_impact_vector_class_count.shp')
         impact_layer = Vector(
-            data=TESTDATA + '/aggregation_test_impact_vector_class_count.shp',
+            data=data_path,
             name='test vector impact')
         expected_results = [
             ['Entire area', '2', '3', '0']

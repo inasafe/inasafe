@@ -1,0 +1,5 @@
+statistics_classes: [0, 1, 2]
+statistics_type: class_count
+title: aggregation_test_impact_vector_small
+legend_units: (inundated or not inundated)
+target_field: INUNDATED
