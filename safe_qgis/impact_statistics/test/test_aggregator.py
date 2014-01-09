@@ -273,12 +273,16 @@ class AggregatorTest(unittest.TestCase):
             impact_layer,
             expected_results,
             use_native_zonal_stats=False,
-            use_aoi_mode=False):
+            use_aoi_mode=False,
+            impact_layer_attributes=None):
         """Helper to calculate aggregation.
 
         Expected results is split into two lists - one list contains numeric
         attributes, the other strings. This is done so that we can use numpy
         .testing.assert_allclose which doesn't work on strings
+
+        impact_layer_attributes is a list of expected attributes
+        for aggregator.impact_layer_attributes (used for vector aggregation)
         """
 
         expected_string_results = []
@@ -342,6 +346,12 @@ class AggregatorTest(unittest.TestCase):
         numpy.testing.assert_allclose(expected_numeric_results,
                                       numeric_results,
                                       rtol=0.01)
+
+        if impact_layer_attributes is not None:
+            self.assertListEqual(
+                aggregator.impact_layer_attributes,
+                impact_layer_attributes
+            )
 
     def test_aggregate_raster_impact_python(self):
         """Check aggregation on raster impact using python zonal stats"""
@@ -451,7 +461,48 @@ class AggregatorTest(unittest.TestCase):
             ['JAKARTA UTARA', '0', '1', '0'],
             ['JAKARTA TIMUR', '0', '0', '0']
         ]
-        self._aggregate(impact_layer, expected_results)
+        impact_layer_attributes = [
+            [   # JAKARTA BARAT
+                {'INUNDATED': 1,
+                 'depth': 2.0,
+                 'type': None,
+                 'name': None,
+                 'osm_id': None},
+                {'INUNDATED': 1,
+                 'depth': 2.0,
+                 'type': None,
+                 'name': None,
+                 'osm_id': None},
+                {'INUNDATED': 0,
+                 'depth': None,
+                 'type': None,
+                 'name': None,
+                 'osm_id': None}
+            ],
+            [   # JAKARTA PUSAT
+                {'INUNDATED': 0,
+                 'depth': None,
+                 'type': None,
+                 'name': None,
+                 'osm_id': None}
+            ],
+            [
+                # JAKARTA SELATAN
+            ],
+            [   # JAKARTA UTARA
+                {'INUNDATED': 1,
+                 'depth': None,
+                 'type': None,
+                 'name': None,
+                 'osm_id': None}
+            ],
+            [
+                # JAKARTA TIMUR
+            ]
+        ]
+        self._aggregate(impact_layer,
+                        expected_results,
+                        impact_layer_attributes=impact_layer_attributes)
 
 
 if __name__ == '__main__':

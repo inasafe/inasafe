@@ -877,7 +877,6 @@ class Aggregator(QtCore.QObject):
 
         self.layer.commitChanges()
 
-
     def _prepare_layer(self):
         """Prepare the aggregation layer to match analysis extents.
 
