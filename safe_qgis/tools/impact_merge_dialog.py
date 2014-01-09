@@ -221,6 +221,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # The input is valid, do the merging
         # Set cursor to wait cursor
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        #pylint: disable=W0703
         try:
             self.merge()
         except Exception as ex:
@@ -232,6 +233,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr("InaSAFE Merge Impact Tools Error"),
                 str(ex))
             return
+        #pylint: enable=W0703
 
         # Hohoho finish doing it. End wait cursor
         QtGui.qApp.restoreOverrideCursor()

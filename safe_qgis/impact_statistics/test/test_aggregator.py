@@ -46,7 +46,7 @@ from safe_qgis.utilities.utilities_for_testing import (
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
-from safe_qgis.utilities.clipper import clip_layer
+#from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     extent_to_geo_array)
