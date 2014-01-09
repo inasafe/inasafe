@@ -598,10 +598,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 new_width = max_height / composer_size_ratio
 
             # Set new extent
-            fit_min_x = center_x - (new_width/2.0)
-            fit_max_x = center_x + (new_width/2.0)
-            fit_min_y = center_y - (new_height/2.0)
-            fit_max_y = center_y + (new_height/2.0)
+            fit_min_x = center_x - (new_width / 2.0)
+            fit_max_x = center_x + (new_width / 2.0)
+            fit_min_y = center_y - (new_height / 2.0)
+            fit_max_y = center_y + (new_height / 2.0)
 
             # Create the extent and set it to the map
             map_extent = QgsRectangle(

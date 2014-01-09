@@ -167,6 +167,7 @@ def get_wgs84_resolution(layer):
 
     return cell_size
 
+
 def html_header():
     """Get a standard html header for wrapping content in.
 

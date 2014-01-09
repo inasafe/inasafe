@@ -204,7 +204,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
                     self.impact_merge_dialog.second_layer.itemData(
                         index, QtCore.Qt.UserRole).name()
                 if ('building' in layer_name) and ('district' in layer_name):
-                    self.impact_merge_dialog.second_layer.setCurrentIndex(index)
+                    self.impact_merge_dialog.second_layer.setCurrentIndex(
+                        index)
 
             # Aggregation Layer = District Jakarta
             aggregation_layer_count = \

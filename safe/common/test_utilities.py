@@ -29,7 +29,6 @@ from utilities import (
     get_decimal_separator,
     get_utm_epsg)
 
-
 def print_class(my_array, my_result_class, my_expected):
     """Print my_array, my_result, my_expected in nice format
     """
