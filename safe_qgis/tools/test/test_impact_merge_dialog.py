@@ -193,16 +193,14 @@ class ImpactMergeDialogTest(unittest.TestCase):
             first_layer_count = self.impact_merge_dialog.first_layer.count()
             for index in range(0, first_layer_count):
                 layer_name = \
-                    self.impact_merge_dialog.first_layer.itemData(
-                        index, QtCore.Qt.UserRole).name()
+                    self.impact_merge_dialog.first_layer.itemText(index)
                 if ('population' in layer_name) and ('district' in layer_name):
                     self.impact_merge_dialog.first_layer.setCurrentIndex(index)
 
             second_layer_count = self.impact_merge_dialog.second_layer.count()
             for index in range(0, second_layer_count):
                 layer_name = \
-                    self.impact_merge_dialog.second_layer.itemData(
-                        index, QtCore.Qt.UserRole).name()
+                    self.impact_merge_dialog.second_layer.itemText(index)
                 if ('building' in layer_name) and ('district' in layer_name):
                     self.impact_merge_dialog.second_layer.setCurrentIndex(
                         index)
