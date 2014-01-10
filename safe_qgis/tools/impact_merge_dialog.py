@@ -169,7 +169,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def restore_state(self):
         """ Read last state of GUI from configuration file."""
         settings = QSettings()
-        self.output_directory.setText(settings.value('directory'))
+        try:
+            last_path = settings.value('directory', type=str)
+        except TypeError:
+            last_path = ''
+        self.output_directory.setText(last_path)
 
     def save_state(self):
         """ Store current state of GUI to configuration file """
