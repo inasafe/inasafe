@@ -151,29 +151,30 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.map_layer_registry.addMapLayers(layer_list)
 
     def mock_the_dialog(self, test_entire_mode):
+        impact_layer_count = self.impact_merge_dialog.first_layer.count()
+        aggregation_layer_count = \
+            self.impact_merge_dialog.aggregation_layer.count()
+
         if test_entire_mode:
+            # First impact layer = population entire
+            # Second impact layer = buildings entire
             self.impact_merge_dialog.entire_area_mode = True
             # Set the current Index of the combobox
-            first_layer_count = self.impact_merge_dialog.first_layer.count()
-            for index in range(0, first_layer_count):
-                layer_name = \
-                    self.impact_merge_dialog.first_layer.itemData(
-                        index, QtCore.Qt.UserRole).name().lower()
+            for index in range(0, impact_layer_count):
+                first_combobox = self.impact_merge_dialog.first_layer
+                layer_name = first_combobox.itemText(index).lower()
                 if ('population' in layer_name) and ('entire' in layer_name):
-                    self.impact_merge_dialog.first_layer.setCurrentIndex(index)
+                    self.impact_merge_dialog.first_layer.setCurrentIndex(
+                        index)
 
-            second_layer_count = self.impact_merge_dialog.second_layer.count()
-            for index in range(0, second_layer_count):
-                layer_name = \
-                    self.impact_merge_dialog.second_layer.itemData(
-                        index, QtCore.Qt.UserRole).name().lower()
+            for index in range(0, impact_layer_count):
+                second_combobox = self.impact_merge_dialog.second_layer
+                layer_name = second_combobox.itemText(index).lower()
                 if ('buildings' in layer_name) and ('entire' in layer_name):
                     self.impact_merge_dialog.second_layer.setCurrentIndex(
                         index)
 
             # Aggregation Layer = Entire Area
-            aggregation_layer_count = \
-                self.impact_merge_dialog.aggregation_layer.count()
             for index in range(0, aggregation_layer_count):
                 layer = \
                     self.impact_merge_dialog.aggregation_layer.itemData(
@@ -190,24 +191,20 @@ class ImpactMergeDialogTest(unittest.TestCase):
         else:
             self.impact_merge_dialog.entire_area_mode = False
             # Set the current Index of the combobox
-            first_layer_count = self.impact_merge_dialog.first_layer.count()
-            for index in range(0, first_layer_count):
-                layer_name = \
-                    self.impact_merge_dialog.first_layer.itemText(index)
+            for index in range(0, impact_layer_count):
+                first_combobox = self.impact_merge_dialog.first_layer
+                layer_name = first_combobox.itemText(index).lower()
                 if ('population' in layer_name) and ('district' in layer_name):
                     self.impact_merge_dialog.first_layer.setCurrentIndex(index)
 
-            second_layer_count = self.impact_merge_dialog.second_layer.count()
-            for index in range(0, second_layer_count):
-                layer_name = \
-                    self.impact_merge_dialog.second_layer.itemText(index)
+            for index in range(0, impact_layer_count):
+                second_combobox = self.impact_merge_dialog.second_layer
+                layer_name = second_combobox.itemText(index).lower()
                 if ('building' in layer_name) and ('district' in layer_name):
                     self.impact_merge_dialog.second_layer.setCurrentIndex(
                         index)
 
             # Aggregation Layer = District Jakarta
-            aggregation_layer_count = \
-                self.impact_merge_dialog.aggregation_layer.count()
             for index in range(0, aggregation_layer_count):
                 layer = \
                     self.impact_merge_dialog.aggregation_layer.itemData(
