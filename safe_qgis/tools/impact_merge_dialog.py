@@ -308,24 +308,27 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         :raises: InvalidLayerError, CanceledImportDialogError
         """
-        # Get All Chosen Layer from combobox after user click merge
+        # Validate The combobox impact layers (they should be different)
+        first_layer_index = self.first_layer.currentIndex()
+        second_layer_index = self.second_layer.currentIndex()
+
+        if first_layer_index < 0:
+            raise InvalidLayerError(self.tr('First layer is not valid.'))
+
+        if second_layer_index < 0:
+            raise InvalidLayerError(self.tr('Second layer is not valid.'))
+
+        if first_layer_index == second_layer_index:
+            raise InvalidLayerError(
+                self.tr('First layer must be different to second layer''.'))
+
+        # Get All Chosen Layer
         self.first_impact_layer = self.first_layer.itemData(
             self.first_layer.currentIndex(), QtCore.Qt.UserRole)
         self.second_impact_layer = self.second_layer.itemData(
             self.second_layer.currentIndex(), QtCore.Qt.UserRole)
         self.chosen_aggregation_layer = self.aggregation_layer.itemData(
             self.aggregation_layer.currentIndex(), QtCore.Qt.UserRole)
-
-        # Validate The combobox impact layers (they should be different)
-        if self.first_layer.currentIndex() < 0:
-            raise InvalidLayerError(self.tr('First layer is not valid.'))
-
-        if self.second_layer.currentIndex() < 0:
-            raise InvalidLayerError(self.tr('Second layer is not valid.'))
-
-        if self.first_impact_layer.id() == self.second_impact_layer.id():
-            raise InvalidLayerError(
-                self.tr('First layer must be different to second layer''.'))
 
         # Validate the output directory
         self.require_directory()
