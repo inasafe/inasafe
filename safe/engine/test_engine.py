@@ -2910,6 +2910,54 @@ class Test_Engine(unittest.TestCase):
 
     test_flood_on_roads.slow = True
 
+    def test_flood_population_evacuation(self):
+        """Flood population evacuation
+        """
+
+
+        population = 'people_jakarta_clip.tif'
+        flood_data = 'flood_jakarta_clip.tif'
+        plugin_name = 'FloodEvacuationFunction'
+
+
+        hazard_filename = join(TESTDATA, flood_data)
+        exposure_filename = join(TESTDATA, population)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)
+
+        keywords = I.get_keywords()
+        # print "keywords", keywords
+        evacuated = float(keywords['evacuated'])
+        total_needs = keywords['total_needs']
+
+        expected_evacuated = 63000
+        assert evacuated == expected_evacuated
+        assert total_needs['rice'] == 176400
+        assert total_needs['family_kits'] == 12600
+        assert total_needs['drinking_water'] == 1102500
+        assert total_needs['toilets'] == 3150
+        assert total_needs['water'] == 6615000
+
+
+
+    test_flood_population_evacuation.slow = True
+
     def test_erf(self):
         """Test ERF approximation
 
