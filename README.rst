@@ -13,6 +13,13 @@ The latest source code is available at
 which contains modules for risk calculations, gis functionality and functions
 for impact modelling.
 
+[![Downloads](https://pypip.in/d/python-safe/badge.png)](https://crate.io/packages/python-safe)
+[![Downloads](https://pypip.in/v/python-safe/badge.png)](https://crate.io/packages/python-safe)
+
+[![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
+[![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
+[![Stories in Done](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
+
 ========================
 Quick Installation Guide
 ========================
