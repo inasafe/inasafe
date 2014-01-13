@@ -255,10 +255,19 @@ class ImpactMergeDialogTest(unittest.TestCase):
             self.impact_merge_dialog.first_layer.count())
         print 'First Layer Current Index %s' % (
             self.impact_merge_dialog.first_layer.currentIndex())
-        print 'First Layer Item %s' % (
-            self.impact_merge_dialog.first_layer.itemData(self
-            .impact_merge_dialog.first_layer.currentIndex()))
-        print 'First Layer %s' % self.impact_merge_dialog.first_impact_layer
+        print 'First Layer Current Text %s' % (
+            self.impact_merge_dialog.first_layer.currentText())
+        print 'First Layer Current Item Text %s' % (
+            self.impact_merge_dialog.first_layer.itemText(
+                self.impact_merge_dialog.first_layer.currentIndex()))
+        print 'First Layer Current Item Data %s' % (
+            self.impact_merge_dialog.first_layer.itemData(
+                self.impact_merge_dialog.first_layer.currentIndex()))
+        try:
+            print self.impact_merge_dialog.first_impact_layer.value()
+        except AttributeError:
+            print 'First Layer %s' % (
+                  self.impact_merge_dialog.first_impact_layer)
 
         # First impact layer should be the population entire
         first_layer_name = self.impact_merge_dialog.first_impact_layer.name()
