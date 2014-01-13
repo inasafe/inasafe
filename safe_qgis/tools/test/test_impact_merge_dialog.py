@@ -162,14 +162,14 @@ class ImpactMergeDialogTest(unittest.TestCase):
             # Set the current Index of the combobox
             for index in range(0, impact_layer_count):
                 first_combobox = self.impact_merge_dialog.first_layer
-                layer_name = first_combobox.itemText(index).lower()
+                layer_name = first_combobox.itemText(index)
                 if ('population' in layer_name) and ('entire' in layer_name):
                     self.impact_merge_dialog.first_layer.setCurrentIndex(
                         index)
 
             for index in range(0, impact_layer_count):
                 second_combobox = self.impact_merge_dialog.second_layer
-                layer_name = second_combobox.itemText(index).lower()
+                layer_name = second_combobox.itemText(index)
                 if ('buildings' in layer_name) and ('entire' in layer_name):
                     self.impact_merge_dialog.second_layer.setCurrentIndex(
                         index)
@@ -193,13 +193,13 @@ class ImpactMergeDialogTest(unittest.TestCase):
             # Set the current Index of the combobox
             for index in range(0, impact_layer_count):
                 first_combobox = self.impact_merge_dialog.first_layer
-                layer_name = first_combobox.itemText(index).lower()
+                layer_name = first_combobox.itemText(index)
                 if ('population' in layer_name) and ('district' in layer_name):
                     self.impact_merge_dialog.first_layer.setCurrentIndex(index)
 
             for index in range(0, impact_layer_count):
                 second_combobox = self.impact_merge_dialog.second_layer
-                layer_name = second_combobox.itemText(index).lower()
+                layer_name = second_combobox.itemText(index)
                 if ('building' in layer_name) and ('district' in layer_name):
                     self.impact_merge_dialog.second_layer.setCurrentIndex(
                         index)
@@ -250,8 +250,12 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.mock_the_dialog(test_entire_mode=True)
         self.impact_merge_dialog.prepare_input()
 
+        print 'First Layer Combobox %s' % self.impact_merge_dialog.first_layer
+        print 'First Layer %s' % self.impact_merge_dialog.first_impact_layer
+
         # First impact layer should be the population entire
         first_layer_name = self.impact_merge_dialog.first_impact_layer.name()
+        print 'First Layer Name %s' % first_layer_name
         self.assertIn('population', first_layer_name)
         self.assertIn('entire', first_layer_name)
 
