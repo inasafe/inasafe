@@ -2858,8 +2858,7 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
 
         # Call impact calculation engine
-        impact_vector = calculate_impact(layers=[H, E],
-                                             impact_fcn=IF)
+        impact_vector = calculate_impact(layers=[H, E], impact_fcn=IF)
         attributes = impact_vector.get_data()
 
 #        calculated_damage = []
@@ -2867,9 +2866,11 @@ class Test_Engine(unittest.TestCase):
             calculated_damage = attributes[i]['DAMAGE']
             bldg_class = attributes[i]['ITB_Class']
             msg = ('Calculated damage did not match expected result: \n'
-               'I got %s\n'
-               'Expected %s for bldg type: %s' % (calculated_damage,
-                                                  ref_damage[i], bldg_class))
+                   'I got %s\n'
+                   'Expected %s for bldg type: %s' %
+                   (calculated_damage,
+                    ref_damage[i],
+                    bldg_class))
             assert nan_allclose(calculated_damage, ref_damage[i],
                                # Reference data is single precision
                                atol=1.0e-6), msg
@@ -2913,12 +2914,9 @@ class Test_Engine(unittest.TestCase):
     def test_flood_population_evacuation(self):
         """Flood population evacuation
         """
-
-
         population = 'people_jakarta_clip.tif'
         flood_data = 'flood_jakarta_clip.tif'
         plugin_name = 'FloodEvacuationFunction'
-
 
         hazard_filename = join(TESTDATA, flood_data)
         exposure_filename = join(TESTDATA, population)
@@ -2926,7 +2924,6 @@ class Test_Engine(unittest.TestCase):
         # Calculate impact using API
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
-
 
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
@@ -2938,7 +2935,6 @@ class Test_Engine(unittest.TestCase):
         impact_layer = calculate_impact(layers=[H, E],
                                         impact_fcn=IF)
         impact_filename = impact_layer.get_filename()
-
         I = read_layer(impact_filename)
 
         keywords = I.get_keywords()
@@ -2953,8 +2949,6 @@ class Test_Engine(unittest.TestCase):
         assert total_needs['drinking_water'] == 1102500
         assert total_needs['toilets'] == 3150
         assert total_needs['water'] == 6615000
-
-
 
     test_flood_population_evacuation.slow = True
 

@@ -251,6 +251,13 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog.prepare_input()
 
         print 'First Layer Combobox %s' % self.impact_merge_dialog.first_layer
+        print 'First Layer Count %s' % (
+            self.impact_merge_dialog.first_layer.count())
+        print 'First Layer Current Index %s' % (
+            self.impact_merge_dialog.first_layer.currentIndex())
+        print 'First Layer Item %s' % (
+            self.impact_merge_dialog.first_layer.itemData(self
+            .impact_merge_dialog.first_layer.currentIndex()))
         print 'First Layer %s' % self.impact_merge_dialog.first_impact_layer
 
         # First impact layer should be the population entire
