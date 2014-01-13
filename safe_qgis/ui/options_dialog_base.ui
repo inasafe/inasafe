@@ -37,7 +37,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-264</y>
+        <y>-234</y>
         <width>558</width>
         <height>763</height>
        </rect>
@@ -205,14 +205,14 @@ p, li { white-space: pre-wrap; }
        <item row="16" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLineEdit" name="leMapsLogoPath">
+          <widget class="QLineEdit" name="leOrgLogoPath">
            <property name="enabled">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolMapsLogoPath">
+          <widget class="QToolButton" name="toolOrgLogoPath">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -347,12 +347,12 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="15" column="0">
-        <widget class="QLabel" name="lblMapLogo">
+        <widget class="QLabel" name="lblOrganisationLogo">
          <property name="enabled">
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Logo for maps (must be x x y) </string>
+          <string>Organisation logo</string>
          </property>
         </widget>
        </item>
@@ -400,8 +400,8 @@ p, li { white-space: pre-wrap; }
   <tabstop>toolButton</tabstop>
   <tabstop>leReportTemplatePath</tabstop>
   <tabstop>toolReportTemplatePath</tabstop>
-  <tabstop>leMapsLogoPath</tabstop>
-  <tabstop>toolMapsLogoPath</tabstop>
+  <tabstop>leOrgLogoPath</tabstop>
+  <tabstop>toolOrgLogoPath</tabstop>
   <tabstop>lineEdit_4</tabstop>
   <tabstop>toolButton_4</tabstop>
   <tabstop>spinBox</tabstop>

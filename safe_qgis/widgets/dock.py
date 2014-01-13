@@ -1828,9 +1828,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
+        logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
         if logo_path != '':
-            print_map.set_logo(logo_path)
+            print_map.set_organisation_logo(logo_path)
 
         print_map.set_template(template_path)
 

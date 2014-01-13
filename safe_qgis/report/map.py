@@ -50,7 +50,8 @@ class Map():
         self.printer = None
         self.composition = None
         self.extent = iface.mapCanvas().extent()
-        self.logo = ':/plugins/inasafe/bnpb_logo.png'
+        self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
+        self.org_logo = ':/plugins/inasafe/supporters.png'
         self.template = ':/plugins/inasafe/inasafe.qpt'
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm
@@ -78,13 +79,13 @@ class Map():
         """
         self.layer = layer
 
-    def set_logo(self, logo):
-        """Set image that will be used as logo in reports.
+    def set_organisation_logo(self, logo):
+        """Set image that will be used as organisation logo in reports.
 
         :param logo: Path to image file
         :type logo: str
         """
-        self.logo = logo
+        self.org_logo = logo
 
     def set_template(self, template):
         """Set template that will be used for report generation.
@@ -265,13 +266,21 @@ class Map():
         self.page_width = self.composition.paperWidth()
         self.page_height = self.composition.paperHeight()
 
-        # set logo
+        # set InaSAFE logo
         image = self.composition.getComposerItemById('safe-logo')
         if image is not None:
-            image.setPictureFile(self.logo)
+            image.setPictureFile(self.safe_logo)
         else:
             raise ReportCreationError(self.tr(
                 'Image "safe-logo" could not be found'))
+
+        # set organisation logo
+        image = self.composition.getComposerItemById('organisation-logo')
+        if image is not None:
+            image.setPictureFile(self.org_logo)
+        else:
+            raise ReportCreationError(self.tr(
+                'Image "organisation-logo" could not be found'))
 
         # Get the main map canvas on the composition and set
         # its extents to the event.
