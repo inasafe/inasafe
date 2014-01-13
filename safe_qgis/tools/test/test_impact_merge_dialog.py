@@ -250,28 +250,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.mock_the_dialog(test_entire_mode=True)
         self.impact_merge_dialog.prepare_input()
 
-        print 'First Layer Combobox %s' % self.impact_merge_dialog.first_layer
-        print 'First Layer Count %s' % (
-            self.impact_merge_dialog.first_layer.count())
-        print 'First Layer Current Index %s' % (
-            self.impact_merge_dialog.first_layer.currentIndex())
-        print 'First Layer Current Text %s' % (
-            self.impact_merge_dialog.first_layer.currentText())
-        print 'First Layer Current Item Text %s' % (
-            self.impact_merge_dialog.first_layer.itemText(
-                self.impact_merge_dialog.first_layer.currentIndex()))
-        print 'First Layer Current Item Data %s' % (
-            self.impact_merge_dialog.first_layer.itemData(
-                self.impact_merge_dialog.first_layer.currentIndex()))
-        try:
-            print self.impact_merge_dialog.first_impact_layer.toPyObject()
-        except AttributeError:
-            print 'First Layer %s' % (
-                  self.impact_merge_dialog.first_impact_layer)
-
         # First impact layer should be the population entire
         first_layer_name = self.impact_merge_dialog.first_impact_layer.name()
-        print 'First Layer Name %s' % first_layer_name
         self.assertIn('population', first_layer_name)
         self.assertIn('entire', first_layer_name)
 
