@@ -98,7 +98,7 @@ class MapTest(unittest.TestCase):
         # with a lower maintenance test strategy.
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
-            391235,  # Slackware64 14.0
+            414589,  # Slackware64 14.0
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -115,7 +115,7 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
-        report.set_logo(":/plugins/inasafe/logo-flower.png")
+        report.set_organisation_logo(":/plugins/inasafe/logo-flower.png")
         out_path = unique_filename(prefix='mapCustomLogoTest',
                                    suffix='.pdf',
                                    dir=temp_dir('test'))
@@ -136,7 +136,7 @@ class MapTest(unittest.TestCase):
 
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
-            388095,  # Slackware64 14.0
+            367934,  # Slackware64 14.0
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)

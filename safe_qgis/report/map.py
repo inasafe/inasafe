@@ -328,8 +328,9 @@ class Map():
 
         # remove from legend all layers, except impact one
         model = legend.model()
-        impact_item = model.findItems(self.layer.name())[0]
-        row = impact_item.index().row()
-        model.removeRows(row + 1, model.rowCount() - row)
-        if row > 0:
-            model.removeRows(0, row)
+        if model.rowCount() > 0 and model.columnCount() > 0:
+            impact_item = model.findItems(self.layer.name())[0]
+            row = impact_item.index().row()
+            model.removeRows(row + 1, model.rowCount() - row)
+            if row > 0:
+                model.removeRows(0, row)
