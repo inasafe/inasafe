@@ -78,7 +78,8 @@ from safe.api import (
     PointsInputError,
     get_decimal_separator,
     get_thousand_separator,
-    styles)
+    styles,
+    feature_attributes_as_dict)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 

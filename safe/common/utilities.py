@@ -587,3 +587,20 @@ def get_utm_epsg(longitude, latitude):
         epsg += 100
     epsg += get_utm_zone(longitude)
     return epsg
+
+def feature_attributes_as_dict(field_map, attributes):
+    """Converts list of attributes to dict of attributes.
+
+    :param field_map: Dictionary {'FieldName': FieldIndex}.
+    :type field_map: dict
+
+    :param attributes: list of field's values
+    :type attributes: list
+
+    :returns: Dictionary {'FieldName': FieldValue}
+    :rtype: dict
+    """
+    res = {}
+    for name in field_map:
+        res[name] = attributes[field_map[name]]
+    return res

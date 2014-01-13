@@ -27,7 +27,8 @@ from utilities import (
     create_label,
     get_thousand_separator,
     get_decimal_separator,
-    get_utm_epsg)
+    get_utm_epsg,
+    feature_attributes_as_dict)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -232,6 +233,16 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(get_utm_epsg(178, -20), 32760)
         self.assertEqual(get_utm_epsg(-3, -30), 32730)
 
+
+    def test_feature_attributes_as_dict(self):
+        """
+        Test if converting list of attributes to dict of attributes works
+        """
+        field_map = {'Field1': 1, 'Field2': 2, 'Field0': 0}
+        attributes = ['A', 'B', 'C']
+        expected_result = {'Field1': 'B', 'Field2': 'C', 'Field0': 'A'}
+        result = feature_attributes_as_dict(field_map, attributes)
+        self.assertEqual(expected_result, result)
 
 
 if __name__ == '__main__':
