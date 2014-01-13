@@ -28,7 +28,7 @@ from os.path import join
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem
+from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem, QgsProject
 
 from safe.common.testing import get_qgis_app
 from safe_qgis import breakdown_defaults
@@ -268,6 +268,31 @@ class AggregatorTest(unittest.TestCase):
             DOCK.aggregator.preprocessed_feature_count,
             message)
 
+    def _create_aggregator(self,
+                           use_aoi_mode,
+                           use_native_zonal_stats):
+        """Helper to create aggregator"""
+
+        aggregation_layer = QgsVectorLayer(
+            os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
+            'test aggregation',
+            'ogr')
+        # Dummy layers. Them are used in aggregator._prepare_layer
+        # The extent of the layers must be equal to aggregator.extent
+        hazard_layer = exposure_layer = aggregation_layer
+        # setting up
+        if not use_aoi_mode:
+
+            aggregator = Aggregator(self.extent, aggregation_layer)
+        else:
+            aggregator = Aggregator(self.extent, None)
+        aggregator.set_layers(hazard_layer, exposure_layer)
+        aggregator.validate_keywords()
+        aggregator.use_native_zonal_stats = use_native_zonal_stats
+
+        return aggregator
+
+
     def _aggregate(
             self,
             impact_layer,
@@ -301,24 +326,9 @@ class AggregatorTest(unittest.TestCase):
             expected_numeric_results.append(numeric_results)
             expected_string_results.append(string_results)
 
-        aggregation_layer = QgsVectorLayer(
-            os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
-            'test aggregation',
-            'ogr')
-
-        # Dummy layers. Them are used in aggregator._prepare_layer
-        # The extent of the layers must be equal to aggregator.extent
-        hazard_layer = exposure_layer = aggregation_layer
-
-        # setting up
-        if not use_aoi_mode:
-            aggregator = Aggregator(self.extent, aggregation_layer)
-        else:
-            aggregator = Aggregator(self.extent, None)
-        aggregator.set_layers(hazard_layer, exposure_layer)
-        aggregator.validate_keywords()
-        aggregator.use_native_zonal_stats = use_native_zonal_stats
-
+        aggregator = self._create_aggregator(
+            use_aoi_mode, use_native_zonal_stats
+        )
         aggregator.aggregate(impact_layer)
 
         provider = aggregator.layer.dataProvider()
@@ -429,7 +439,7 @@ class AggregatorTest(unittest.TestCase):
         impact_layer = Vector(
             data=TESTDATA + '/aggregation_test_impact_vector_small.shp',
             name='test vector impact')
-        expected_results = [
+        expected_results = [ # Count of inundated polygons
             ['JAKARTA BARAT', '2'],
             ['JAKARTA PUSAT', '0'],
             ['JAKARTA SELATAN', '0'],
@@ -504,6 +514,82 @@ class AggregatorTest(unittest.TestCase):
                         expected_results,
                         impact_layer_attributes=impact_layer_attributes)
 
+    def test_line_aggregation(self):
+        """Test if line aggregation works
+        """
+
+        data_path = os.path.join(
+            UNITDATA,
+            'impact',
+            'aggregation_test_roads.shp')
+        impact_layer = Vector(
+            data=data_path,
+            name='test vector impact')
+
+        expected_results = [
+            [u'JAKARTA BARAT', 0],
+            [u'JAKARTA PUSAT', 4356],
+            [u'JAKARTA SELATAN', 0],
+            [u'JAKARTA UTARA', 4986],
+            [u'JAKARTA TIMUR', 5809]
+        ]
+        impact_layer_attributes = [
+            [
+                {
+                    'KAB_NAME': u'JAKARTA BARAT',
+                    'flooded': 0.0,
+                    'length': 7230.864654,
+                    'id': 2,
+                    'aggr_sum': 7230.864654
+                }
+            ],
+            [
+                {
+                    'KAB_NAME': u'JAKARTA PUSAT',
+                    'flooded': 4356.161093,
+                    'length': 4356.161093,
+                    'id': 3,
+                    'aggr_sum': 4356.161093
+                }
+            ],
+            [
+                {
+                    'KAB_NAME': u'JAKARTA SELATAN',
+                    'flooded': 0.0,
+                    'length': 3633.317287,
+                    'id': 4,
+                    'aggr_sum': 3633.317287
+                }
+            ],
+            [
+                {
+                    'KAB_NAME': u'JAKARTA UTARA',
+                    'flooded': 4985.831677,
+                    'length': 4985.831677,
+                    'id': 1,
+                    'aggr_sum': 4985.831677
+                }
+            ],
+            [
+                {
+                    'KAB_NAME': u'JAKARTA TIMUR',
+                    'flooded': 0.0,
+                    'length': 4503.033629,
+                    'id': 4,
+                    'aggr_sum': 4503.033629
+                },
+                {
+                    'KAB_NAME': u'JAKARTA TIMUR',
+                    'flooded': 5809.142247,
+                    'length': 5809.142247,
+                    'id': 1,
+                    'aggr_sum': 5809.142247
+                }
+            ]
+        ]
+        self._aggregate(impact_layer,
+                        expected_results,
+                        impact_layer_attributes=impact_layer_attributes)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest)

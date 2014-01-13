@@ -62,7 +62,8 @@ from safe_qgis.safe_interface import (
     calculate_polygon_centroid,
     unique_filename,
     messaging as m,
-    feature_attributes_as_dict)
+    feature_attributes_as_dict,
+    get_utm_epsg)
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -554,8 +555,13 @@ class Aggregator(QtCore.QObject):
         :type safe_impact_layer: read_layer
         """
 
+        # Reset impact_layer_attributes
+        # (if aggregation is running twice, we need empty list
+        #   for store the data)
+        self.impact_layer_attributes = []
+
         if not self._setup_target_field(impact_layer):
-            # An unexpected error occurs
+            # An unexpected error occurs, skip postprocessing
             return
 
         # Add fields for store aggregation atributes
@@ -842,35 +848,54 @@ class Aggregator(QtCore.QObject):
         :param safe_impact_layer: The impact layer in SAFE format
         :type safe_impact_layer: read_layer
         """
-
         if self.statistics_type == 'class_count':
             msg = "Summary length calculation is only one " \
                   "implemented method for line aggregation."
             raise NotImplementedError(msg)
         elif self.statistics_type == 'sum':
+
             output_directory = temp_dir(sub_dir='pre-process')
             agg_provider = self.layer.dataProvider()
 
             # Split lines from impact layer by aggregation polygons,
             # Add column with polygon names to the line attributes
             impact_layer = safe_to_qgis_layer(safe_impact_layer)
+
             splits_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
             res = self.processing.runalg('qgis:intersection',
                 impact_layer, self.layer, splits_filename)
             impact_layer_splits = QgsVectorLayer(
-                res['OUTPUT'], 'test aggregation', 'ogr')
+                res['OUTPUT'], 'split aggregation', 'ogr')
 
             # Add length column to impact layer
+
+            # We need calculate length in meters, not degrees:
+            # We can use 'qgis:reprojectlayer' with CALC_METHODS=2 (Ellipsoidal)
+            # directly, but that requires  QgsProject instance (see
+            # ftools source). To simplify test writiting, ust reprojetion.
+
+            tmp_filename = unique_filename(
+                suffix='.shp', dir=output_directory)
+            epsg = "EPSG:" + str(get_utm_epsg(self.extent[0], self.extent[1]))
+            res = processing.runalg('qgis:reprojectlayer',
+                              impact_layer_splits,
+                              epsg,
+                              tmp_filename)
+            projected_layer = QgsVectorLayer(
+                res['OUTPUT'],
+                'projected aggregation',
+                'ogr')
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
             res = self.processing.runalg('qgis:exportaddgeometrycolumns',
-                impact_layer_splits,
-                2, # Project CRS
+                projected_layer,
+                # 2, # Ellipsoidal
+                0,  # Layer CRS
                 tmp_filename)
             impact_layer_splits = QgsVectorLayer(
                 res['OUTPUT'],
-                'test aggregation',
+                'length aggregation',
                 'ogr'
             )
             # This column name is used by the processing algorithm:

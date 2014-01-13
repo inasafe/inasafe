@@ -79,7 +79,8 @@ from safe.api import (
     get_decimal_separator,
     get_thousand_separator,
     styles,
-    feature_attributes_as_dict)
+    feature_attributes_as_dict,
+    get_utm_epsg)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 
