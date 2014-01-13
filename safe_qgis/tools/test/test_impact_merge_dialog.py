@@ -264,7 +264,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
             self.impact_merge_dialog.first_layer.itemData(
                 self.impact_merge_dialog.first_layer.currentIndex()))
         try:
-            print self.impact_merge_dialog.first_impact_layer.value()
+            print self.impact_merge_dialog.first_impact_layer.toPyObject()
         except AttributeError:
             print 'First Layer %s' % (
                   self.impact_merge_dialog.first_impact_layer)
