@@ -101,7 +101,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             raise GetDataError(message)
 
         E = E.as_qgis_native()
-        srs = E.crs().toWkt()
+        crs = E.crs().toWkt()
         e_provider = E.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
@@ -113,7 +113,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
 
         # Create layer for store the lines from E and extent
         line_layer = QgsVectorLayer(
-            'LineString?crs=' + srs, 'impact_lines', 'memory')
+            'LineString?crs=' + crs, 'impact_lines', 'memory')
         line_provider = line_layer.dataProvider()
 
         # Set attributes
