@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Mon Jan 13 15:54:14 2014
+# Created: Tue Jan 14 11:23:19 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -32,24 +32,10 @@ class Ui_OptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, -234, 558, 763))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 558, 883))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.cbxUseSentry = QtGui.QCheckBox(self.scrollAreaWidgetContents)
-        self.cbxUseSentry.setObjectName(_fromUtf8("cbxUseSentry"))
-        self.gridLayout_2.addWidget(self.cbxUseSentry, 7, 0, 1, 1)
-        self.textBrowser = QtGui.QTextBrowser(self.scrollAreaWidgetContents)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
-        self.textBrowser.setSizePolicy(sizePolicy)
-        self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
-        self.gridLayout_2.addWidget(self.textBrowser, 8, 0, 1, 1)
-        self.cbxNativeZonalStats = QtGui.QCheckBox(self.scrollAreaWidgetContents)
-        self.cbxNativeZonalStats.setObjectName(_fromUtf8("cbxNativeZonalStats"))
-        self.gridLayout_2.addWidget(self.cbxNativeZonalStats, 6, 0, 1, 1)
         self.grpNotImplemented = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         self.grpNotImplemented.setObjectName(_fromUtf8("grpNotImplemented"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpNotImplemented)
@@ -99,9 +85,23 @@ class Ui_OptionsDialogBase(object):
         self.spinBox.setObjectName(_fromUtf8("spinBox"))
         self.horizontalLayout_5.addWidget(self.spinBox)
         self.gridLayout_3.addLayout(self.horizontalLayout_5, 9, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.grpNotImplemented, 19, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.grpNotImplemented, 21, 0, 1, 1)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem, 22, 0, 1, 1)
+        self.gridLayout_2.addItem(spacerItem, 24, 0, 1, 1)
+        self.cbxUseSentry = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxUseSentry.setObjectName(_fromUtf8("cbxUseSentry"))
+        self.gridLayout_2.addWidget(self.cbxUseSentry, 7, 0, 1, 1)
+        self.textBrowser = QtGui.QTextBrowser(self.scrollAreaWidgetContents)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
+        self.textBrowser.setSizePolicy(sizePolicy)
+        self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
+        self.gridLayout_2.addWidget(self.textBrowser, 8, 0, 1, 1)
+        self.cbxNativeZonalStats = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxNativeZonalStats.setObjectName(_fromUtf8("cbxNativeZonalStats"))
+        self.gridLayout_2.addWidget(self.cbxNativeZonalStats, 6, 0, 1, 1)
         self.cbxClipToViewport = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxClipToViewport.setChecked(False)
         self.cbxClipToViewport.setObjectName(_fromUtf8("cbxClipToViewport"))
@@ -131,7 +131,7 @@ class Ui_OptionsDialogBase(object):
         self.gridLayout_2.addWidget(self.cbxHideExposure, 3, 0, 1, 1)
         self.cbxUseThread = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxUseThread.setObjectName(_fromUtf8("cbxUseThread"))
-        self.gridLayout_2.addWidget(self.cbxUseThread, 21, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbxUseThread, 23, 0, 1, 1)
         self.cbxSetLayerNameFromTitle = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxSetLayerNameFromTitle.setEnabled(True)
         self.cbxSetLayerNameFromTitle.setObjectName(_fromUtf8("cbxSetLayerNameFromTitle"))
@@ -161,7 +161,7 @@ class Ui_OptionsDialogBase(object):
         self.gridLayout_2.addLayout(self.horizontalLayout_6, 14, 0, 1, 1)
         self.cbxDevMode = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxDevMode.setObjectName(_fromUtf8("cbxDevMode"))
-        self.gridLayout_2.addWidget(self.cbxDevMode, 20, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbxDevMode, 22, 0, 1, 1)
         self.cbxVisibleLayersOnly = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxVisibleLayersOnly.setObjectName(_fromUtf8("cbxVisibleLayersOnly"))
         self.gridLayout_2.addWidget(self.cbxVisibleLayersOnly, 0, 0, 1, 1)
@@ -190,6 +190,12 @@ class Ui_OptionsDialogBase(object):
         self.lblReportTemplate.setEnabled(True)
         self.lblReportTemplate.setObjectName(_fromUtf8("lblReportTemplate"))
         self.gridLayout_2.addWidget(self.lblReportTemplate, 17, 0, 1, 1)
+        self.label_2 = QtGui.QLabel(self.scrollAreaWidgetContents)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout_2.addWidget(self.label_2, 19, 0, 1, 1)
+        self.txtDisclaimer = QtGui.QPlainTextEdit(self.scrollAreaWidgetContents)
+        self.txtDisclaimer.setObjectName(_fromUtf8("txtDisclaimer"))
+        self.gridLayout_2.addWidget(self.txtDisclaimer, 20, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
 
@@ -213,13 +219,6 @@ class Ui_OptionsDialogBase(object):
 
     def retranslateUi(self, OptionsDialogBase):
         OptionsDialogBase.setWindowTitle(QtGui.QApplication.translate("OptionsDialogBase", "InaSAFE - Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxUseSentry.setText(QtGui.QApplication.translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None, QtGui.QApplication.UnicodeUTF8))
-        self.textBrowser.setHtml(QtGui.QApplication.translate("OptionsDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Droid Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt; font-weight:600; color:#f50000;\">Note:</span><span style=\" font-family:\'Cantarell\'; font-size:11pt;\"> The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxNativeZonalStats.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use QGIS zonal statistics (not recommended for QGIS 1.8)", None, QtGui.QApplication.UnicodeUTF8))
         self.grpNotImplemented.setTitle(QtGui.QApplication.translate("OptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxBubbleLayersUp.setText(QtGui.QApplication.translate("OptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("OptionsDialogBase", "Location for results", None, QtGui.QApplication.UnicodeUTF8))
@@ -227,6 +226,13 @@ class Ui_OptionsDialogBase(object):
         self.label_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "Organisation name (for maps, reports etc.)", None, QtGui.QApplication.UnicodeUTF8))
         self.toolButton_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("OptionsDialogBase", "DPI (Maps and reports)", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxUseSentry.setText(QtGui.QApplication.translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None, QtGui.QApplication.UnicodeUTF8))
+        self.textBrowser.setHtml(QtGui.QApplication.translate("OptionsDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Droid Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt; font-weight:600; color:#f50000;\">Note:</span><span style=\" font-family:\'Cantarell\'; font-size:11pt;\"> The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxNativeZonalStats.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use QGIS zonal statistics (not recommended for QGIS 1.8)", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxClipToViewport.setToolTip(QtGui.QApplication.translate("OptionsDialogBase", "Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxClipToViewport.setText(QtGui.QApplication.translate("OptionsDialogBase", "Clip datasets to visible extent before analysis", None, QtGui.QApplication.UnicodeUTF8))
         self.toolOrgLogoPath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
@@ -245,5 +251,6 @@ class Ui_OptionsDialogBase(object):
         self.lblOrganisationLogo.setText(QtGui.QApplication.translate("OptionsDialogBase", "Organisation logo", None, QtGui.QApplication.UnicodeUTF8))
         self.toolReportTemplatePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.lblReportTemplate.setText(QtGui.QApplication.translate("OptionsDialogBase", "Report template", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("OptionsDialogBase", "Disclaimer text", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc

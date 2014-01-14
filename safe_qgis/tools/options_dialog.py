@@ -121,6 +121,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         path = settings.value('inasafe/reportTemplatePath', '', type=str)
         self.leReportTemplatePath.setText(path)
 
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        self.txtDisclaimer.setPlainText(disclaimer)
+
         flag = bool(
             settings.value('inasafe/developer_mode', False, type=bool))
         self.cbxDevMode.setChecked(flag)
@@ -171,6 +174,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         settings.setValue(
             'inasafe/reportTemplatePath',
             self.leReportTemplatePath.text())
+        settings.setValue(
+            'inasafe/reportDisclaimer',
+            self.txtDisclaimer.toPlainText())
         settings.setValue(
             'inasafe/developer_mode',
             self.cbxDevMode.isChecked())

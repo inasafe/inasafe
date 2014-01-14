@@ -53,6 +53,9 @@ class Map():
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
         self.org_logo = ':/plugins/inasafe/supporters.png'
         self.template = ':/plugins/inasafe/inasafe.qpt'
+        self.disclaimer = self.tr(
+            'InaSAFE has been jointly developed by BNPB, Australian '
+            'Government and the World Bank — GFDRR')
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0
@@ -86,6 +89,14 @@ class Map():
         :type logo: str
         """
         self.org_logo = logo
+
+    def set_disclaimer(self, text):
+        """Set text that will be used as disclaimer in reports.
+
+        :param text: Disclaimer text
+        :type text: str
+        """
+        self.disclaimer = text
 
     def set_template(self, template):
         """Set template that will be used for report generation.
@@ -253,7 +264,8 @@ class Map():
             'impact-title': title,
             'date': date,
             'time': time,
-            'safe-version': version
+            'safe-version': version,
+            'disclaimer': self.disclaimer
         }
         LOGGER.debug(substitution_map)
         load_ok = self.composition.loadFromTemplate(document,
