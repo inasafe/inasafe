@@ -282,6 +282,17 @@ class Map():
             raise ReportCreationError(self.tr(
                 'Image "organisation-logo" could not be found'))
 
+        # set impact report table
+        table = self.composition.getComposerItemById('impact-report')
+        if table is not None:
+            text = self.keyword_io.read_keywords(self.layer, 'impact-summary')
+            if text is None:
+                text = ''
+            table.setText(text)
+            table.setHtmlState(1)
+        else:
+            LOGGER.debug('"impact-report" element not found.')
+
         # Get the main map canvas on the composition and set
         # its extents to the event.
         composer_map = self.composition.getComposerItemById('impact-map')
