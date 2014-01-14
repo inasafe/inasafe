@@ -6,7 +6,7 @@
 
   <datafile>
     <filename>aggregation_test_roads.shp</filename>
-    <checksum></checksum>
+    <checksum>788327514</checksum>
     <publishable>Yes</publishable>
     <accountable>Dmitry Kolesov</accountable>
     <source>Dmitry Kolesov</source>
@@ -16,7 +16,7 @@
 
   <datafile>
     <filename>aggregation_test_roads.shx</filename>
-    <checksum></checksum>
+    <checksum>1436021631</checksum>
     <publishable>Yes</publishable>
     <accountable>Dmitry Kolesov</accountable>
     <source>Dmitry Kolesov</source>
@@ -26,7 +26,7 @@
 
   <datafile>
     <filename>aggregation_test_roads.dbf</filename>
-    <checksum></checksum>
+    <checksum>2424356326</checksum>
     <publishable>Yes</publishable>
     <accountable>Dmitry Kolesov</accountable>
     <source>Dmitry Kolesov</source>
