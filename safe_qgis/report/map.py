@@ -55,7 +55,7 @@ class Map():
         self.template = ':/plugins/inasafe/inasafe.qpt'
         self.disclaimer = self.tr(
             'InaSAFE has been jointly developed by BNPB, Australian '
-            'Government and the World Bank — GFDRR')
+            'Government and the World Bank - GFDRR')
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0
@@ -297,7 +297,7 @@ class Map():
         # set impact report table
         table = self.composition.getComposerItemById('impact-report')
         if table is not None:
-            text = self.keyword_io.read_keywords(self.layer, 'impact-summary')
+            text = self.keyword_io.read_keywords(self.layer, 'impact_summary')
             if text is None:
                 text = ''
             table.setText(text)
