@@ -89,13 +89,25 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             os.path.pardir,
             'resources',
             'img',
-            'icons',
-            'icon.svg')
+            'logos',
+            'inasafe-logo-url.png')
+
+        # Organisation Logo Path
+        self.oganisation_logo_path = os.path.join(
+            os.path.dirname(__file__),
+            os.path.pardir,
+            'resources',
+            'img',
+            'logos',
+            'supporters.png')
 
         # All the chosen layers to be processed
         self.first_impact_layer = None
         self.second_impact_layer = None
         self.chosen_aggregation_layer = None
+
+        # Title of used hazard
+        self.hazard_title = ''
 
         # The output directory
         self.out_dir = None
@@ -214,7 +226,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         try:
             self.validate_all_layers()
         except (NoKeywordsFoundError,
-                KeywordNotFoundError) as ex:
+                KeywordNotFoundError,
+                InvalidLayerError) as ex:
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
                 self,
@@ -239,7 +252,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             return
         #pylint: enable=W0703
 
-        # Hohoho finish doing it. End wait cursor
+        # Finish doing it. End wait cursor
         QtGui.qApp.restoreOverrideCursor()
 
         # Give user successful information!
@@ -400,6 +413,39 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             raise KeywordNotFoundError(
                 self.tr('Keyword postprocessing_report not found for second '
                         'layer.'))
+
+        # 1st and 2nd layer should be generated from the same hazard
+        # layer. It is indicated from 'hazard_title' keywords
+        try:
+            first_hazard_title = \
+                self.keyword_io.read_keywords(
+                    self.first_impact_layer, 'hazard_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for first impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword hazard_title not found for first '
+                        'layer.'))
+
+        try:
+            second_hazard_title = \
+                self.keyword_io.read_keywords(
+                    self.second_impact_layer, 'hazard_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for second impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword hazard_title not found for second '
+                        'layer.'))
+
+        if first_hazard_title == second_hazard_title:
+            self.hazard_title = first_hazard_title
+        else:
+            raise InvalidLayerError(
+                self.tr('First impact layer and second impact layer do not '
+                        'use the same hazard layer.'))
 
         # If the chosen aggregation layer not Entire Area, it should have
         # aggregation attribute keywords
@@ -707,9 +753,14 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Map Substitution
         #noinspection PyTypeChecker,PyCallByClass
         safe_logo_path = QUrl.fromLocalFile(str(self.safe_logo_path))
+        #noinspection PyTypeChecker,PyCallByClass
+        organisation_logo_path = QUrl.fromLocalFile(
+            str(self.oganisation_logo_path))
         substitution_map = {
             'impact-title': self.get_impact_title(),
-            'safe-logo': safe_logo_path.toString()
+            'hazard-title': self.hazard_title,
+            'safe-logo': safe_logo_path.toString(),
+            'organisation-logo': organisation_logo_path.toString()
         }
 
         # Load template
