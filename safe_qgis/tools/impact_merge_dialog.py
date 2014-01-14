@@ -148,7 +148,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         body = self.tr(
             'This tool will merge the outputs from two impact maps for the '
             'same area. The maps must be created using the same aggregation '
-            'areas. To use:'
+            'areas and same hazard. To use:'
         )
         tips = m.BulletedList()
         tips.add(self.tr(
