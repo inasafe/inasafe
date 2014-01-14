@@ -675,6 +675,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             # Self.html_reports must have only 1 key value pair
             area_title = list(self.html_reports.keys())[0]
+
+            # Set Aggregation Area Label
+            area_label = composition.getComposerItemById('aggregation-area')
+            area_label.setText(area_title.upper())
+
             html_report_path = self.html_reports[area_title]
             #noinspection PyArgumentList
             html_frame_url = QUrl.fromLocalFile(html_report_path)
@@ -722,6 +727,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 # Only print the area that has the report
                 area_title = current_filename.lower()
                 if area_title in self.html_reports:
+                    # Set Aggregation Area Label
+                    area_label = composition.getComposerItemById(
+                        'aggregation-area')
+                    area_label.setText(area_title.upper())
+
                     html_report_path = self.html_reports[area_title]
                     #noinspection PyArgumentList
                     html_frame_url = QUrl.fromLocalFile(html_report_path)
@@ -759,7 +769,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         substitution_map = {
             'impact-title': self.get_impact_title(),
             'hazard-title': self.hazard_title,
-            'safe-logo': safe_logo_path.toString(),
+            'inasafe-logo': safe_logo_path.toString(),
             'organisation-logo': organisation_logo_path.toString()
         }
 
