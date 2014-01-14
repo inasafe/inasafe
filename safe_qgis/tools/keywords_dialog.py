@@ -75,6 +75,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.standard_exposure_list = OrderedDict(
             [('population', self.tr('population')),
              ('structure', self.tr('structure')),
+             ('road', self.tr('road')),
              ('Not Set', self.tr('Not Set'))])
         self.standard_hazard_list = OrderedDict(
             [('earthquake [MMI]', self.tr('earthquake [MMI]')),
@@ -118,6 +119,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         reload_button = self.buttonBox.addButton(
             self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
         reload_button.clicked.connect(self.load_state_from_keywords)
+        self.grpAdvanced.setVisible(False)
+        self.resize_dialog()
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.

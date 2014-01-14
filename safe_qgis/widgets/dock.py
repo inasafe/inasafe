@@ -729,6 +729,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
         self.get_layers_lock = False
+        #ensure the dock keywords info panel is updated
+        #make sure to do this after the lock is released!
+        self.layer_changed(self.iface.activeLayer())
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
