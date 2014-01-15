@@ -69,6 +69,12 @@ class Test_qgis_raster_tools(unittest.TestCase):
         self.assertFalse(geom.isMultipart())
         self.assertAlmostEquals(geom.area(), 3*dx * 3*dy)
         self.assertTrue((geom.isGeosEqual(expected_area)))
+
+        polygons = points_to_rectangles(points, 0.5*dx, 0.5*dy)
+        geom = union_geometry(polygons)
+        # The union is 9 squares
+        self.assertAlmostEquals(geom.area(), 1.5*dx * 1.5*dy)
+        self.assertTrue(geom.isMultipart())
     test_union_geometry.slow = False
 
     def _create_points(self):
