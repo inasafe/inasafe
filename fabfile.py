@@ -33,8 +33,8 @@ from fabtools import require
 # Don't remove even though its unused
 # noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
-from fabgis.system import harden
-from fabgis.qgis import install_qgis_master
+from fabgis.inasafe import setup_inasafe
+from fabgis.git import update_git_checkout
 # Global options
 env.env_set = False
 
@@ -82,9 +82,8 @@ def _all():
             env.plugin_repo_path = '/home/web/inasafe-test'
             env.inasafe_docs_path = '/home/web/inasafe-docs'
             env.home = os.path.join('/home/', env.user)
-            env.repo_path = os.path.join(env.home,
-                                         'dev',
-                                         'python')
+            env.repo_path = os.path.join(
+                env.home, 'dev', 'python')
             env.git_url = 'git://github.com/AIFDR/inasafe.git'
             env.repo_alias = 'inasafe-test'
             env.code_path = os.path.join(env.repo_path, env.repo_alias)
@@ -92,10 +91,10 @@ def _all():
     env.env_set = True
     fastprint(blue('env.env_set = %s\n' % env.env_set))
 
+
 ###############################################################################
 # Next section contains helper methods tasks
 ###############################################################################
-
 
 def initialise_qgis_plugin_repo():
     """Initialise a QGIS plugin repo where we host test builds."""
@@ -134,51 +133,6 @@ def initialise_qgis_plugin_repo():
     sudo('a2ensite inasafe-test.conf')
     sudo('service apache2 reload')
 
-
-def update_git_checkout(branch='master'):
-    """Make sure there is a read only git checkout.
-
-    :param branch: The name of the branch to build from. Defaults to 'master'.
-    :type branch: str
-
-    To run e.g.::
-
-        fab -H 188.40.123.80:8697 remote update_git_checkout
-
-    """
-    _all()
-    fabtools.require.deb.package('git')
-    fastprint(green('Updating git checkout in %s\n' % env.repo_path))
-    fastprint(green('Using branch: %s\n' % branch))
-    if not exists(env.code_path):
-        fastprint('Repo checkout does not exist, creating.')
-        run('mkdir -p %s' % env.repo_path)
-        with cd(env.repo_path):
-            run('git clone %s %s' % (env.git_url, env.repo_alias))
-    else:
-        fastprint('Repo checkout does exist, updating.')
-        with cd(env.code_path):
-            # Get any updates first
-            run('git fetch')
-            # Get rid of any local changes
-            run('git reset --hard')
-            # Get back onto master branch
-            run('git checkout master')
-            # Remove any local changes in master
-            run('git reset --hard')
-            # Delete all local branches
-            #run('git branch | grep -v \* | xargs git branch -D')
-
-    with cd(env.code_path):
-        if branch != 'master':
-            run('git branch --track %s origin/%s' %
-                (branch, branch))
-            run('git checkout %s' % branch)
-        else:
-            run('git checkout master')
-        run('git pull')
-
-
 ###############################################################################
 # Next section contains actual tasks
 ###############################################################################
@@ -194,17 +148,17 @@ def build_test_package(branch='master'):
 
     To run e.g.::
 
-        fab -H 176.9.37.173:8697 build_test_package
+        fab -H <host:port> build_test_package
 
         or to package up a specific branch (in this case minimum_needs)
 
-        fab -H 176.9.37.173:8697 build_test_package:minimum_needs
+        fab -H <host:port> build_test_package:minimum_needs
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """
     _all()
     show_environment()
-    update_git_checkout(branch)
+    update_git_checkout(env.repo_path, env.git_url, env.repo_alias, branch)
     initialise_qgis_plugin_repo()
 
     fabtools.require.deb.packages(['zip', 'make', 'gettext'])
