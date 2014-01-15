@@ -10,7 +10,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
-
 from safe.storage.raster import qgis_imported
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
     from PyQt4.QtCore import QVariant
@@ -48,12 +47,13 @@ def _get_pixel_coords(extent, width, height, row, col):
     """
     xmin = extent.xMinimum()
     ymax = extent.yMaximum()
-    x_res = (extent.xMaximum() - extent.xMinimum())/width
-    y_res = (extent.yMaximum() - extent.yMinimum())/height
+    x_res = (extent.xMaximum() - extent.xMinimum()) / width
+    y_res = (extent.yMaximum() - extent.yMinimum()) / height
 
     outx = xmin + col*x_res
     outy = ymax - row*y_res
     return (outx, outy)
+
 
 def pixes_to_points(raster,
                threshold_min=0.0,
@@ -119,13 +119,11 @@ def pixes_to_points(raster,
     return point_layer
 
 
-
-
 def polygonize(raster,
                threshold_min=0.0,
                threshold_max=float('inf')):
     """
-    Helper to polygonize raster. Areas (pixels) with
+    Function to polygonize raster. Areas (pixels) with
         threshold_min < pixel_values < threshold_max
     will be converted to polygons.
 
@@ -144,4 +142,5 @@ def polygonize(raster,
     :rtype:     QgsVectorLayer
 
     """
-    pass
+    points = pixes_to_points(raster, threshold_min, threshold_max)
+    print points
