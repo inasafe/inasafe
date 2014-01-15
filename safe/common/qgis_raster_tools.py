@@ -22,6 +22,10 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsGeometry
     )
 
+from qgis_vector_tools import (
+    union_geometry,
+    points_to_rectangles
+)
 
 def _get_pixel_coords(extent, width, height, row, col):
     """Pixel to coordinates transformation
@@ -138,9 +142,13 @@ def polygonize(raster,
                     flooded or not flooded.
     :type threshold_max: float
 
-    :returns:   Polygon layer of pixels
-    :rtype:     QgsVectorLayer
+    :returns:   Polygonal geometry
+    :rtype:     QgsGeometry
 
     """
     points = pixes_to_points(raster, threshold_min, threshold_max)
-    print points
+    polygons = points_to_rectangles(points,
+                                    raster.rasterUnitsPerPixelX(),
+                                    raster.rasterUnitsPerPixelY())
+    polygons = union_geometry(polygons)
+    return polygons

@@ -7,16 +7,20 @@ from safe.storage.raster import qgis_imported
 
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+    from PyQt4.QtCore import QVariant
     from qgis.core import (
         QgsRasterLayer,
         QgsRaster,
         QgsPoint,
-        QgsApplication
+        QgsApplication,
+        QgsVectorLayer
         )
 
 
 RASTER_BASE = os.path.abspath(
     os.path.join(UNITDATA, 'hazard', 'jakarta_flood_design'))
+VECTOR_BASE = os.path.abspath(
+    os.path.join(UNITDATA, 'other', 'polygonization_result'))
 
 from qgis_raster_tools import (
     pixes_to_points,
@@ -70,6 +74,25 @@ class Test_qgis_raster_tools(unittest.TestCase):
             self.assertGreater(value, 1.1)
     test_pixes_to_points.slow = True
 
+    def test_polygonize(self):
+        """Test if polygonize works"""
+        geometry = polygonize(self.raster,
+                              threshold_min=1.0,
+                              threshold_max=1.5)
+        # Result is one square
+        self.assertTrue(geometry.isGeosValid())
+        self.assertFalse(geometry.isMultipart())
+
+        geometry = polygonize(self.raster, threshold_min=0.0)
+        # Result is several polygons
+        self.assertTrue(geometry.isGeosValid())
+        self.assertTrue(geometry.isMultipart())
+
+        expected = QgsVectorLayer(VECTOR_BASE + '.shp', 'test')
+        for feature in expected.getFeatures():
+            # the layer has one feature only
+            expected_geom = feature.geometry()
+            self.assertTrue((geom.isGeosEqual(expected_geom)))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_qgis_raster_tools, 'test')
