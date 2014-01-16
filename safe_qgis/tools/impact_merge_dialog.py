@@ -112,6 +112,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # The output directory
         self.out_dir = None
 
+        # The summary report, contain report for each aggregation area
+        self.summary_report = {}
+
         # The html reports and its file path
         self.html_reports = {}
 
@@ -480,6 +483,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Now create dictionary report from DOM
         merged_report_dict = self.generate_report_dictionary_from_dom(tables)
 
+        # Generate report summary for all aggregation unit
+        self.generate_report_summary(merged_report_dict)
+
         # Generate html reports file from merged dictionary
         self.generate_html_reports(merged_report_dict)
 
@@ -511,7 +517,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
            {"Jakarta Barat":
                {"Buildings":
                    {"Total":150,
-                    "Places of Worship: No data
+                    "Places of Worship": "No data"
                    }
                }
            }
@@ -542,6 +548,29 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 exposure_dict[caption] = exposure_detail_dict
                 merged_report_dict[aggregation_area] = exposure_dict
         return merged_report_dict
+
+    def generate_report_summary(self, merged_report_dict):
+        """Generate report summary for each aggregation area from
+        merged report dictionary.
+
+        :param merged_report_dict: A dictionary of merged report.
+        :type merged_report_dict: dict
+        """
+        for aggregation_area in merged_report_dict:
+            html = ''
+            html += '<table style="margin:0px auto">'
+            exposure_report_dict = merged_report_dict[aggregation_area]
+            for exposure in exposure_report_dict:
+                exposure_detail_dict = exposure_report_dict[exposure]
+                html += '<tr><th>%s</th><th></th></tr>' % exposure.upper()
+                for datum in exposure_detail_dict:
+                    if 'total' in datum.lower():
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % (datum, exposure_detail_dict[datum])
+            html += '</table>'
+            self.summary_report[aggregation_area.lower()] = html
 
     def generate_html_reports(self, merged_report_dict):
         """Generate html file for each aggregation units.
@@ -675,6 +704,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             # Self.html_reports must have only 1 key value pair
             area_title = list(self.html_reports.keys())[0]
+
+            # Set Report Summary
+            summary_report = composition.getComposerItemById('summary-report')
+            summary_report.setText(self.summary_report[area_title])
 
             # Set Aggregation Area Label
             area_label = composition.getComposerItemById('aggregation-area')
