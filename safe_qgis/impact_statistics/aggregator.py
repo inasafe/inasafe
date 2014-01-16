@@ -921,10 +921,12 @@ class Aggregator(QtCore.QObject):
 
             request = QgsFeatureRequest().\
                 setSubsetOfAttributes([agg_attribute_index])
-            agg_attribute_dict = {
-                feat.attributes()[0]: id\
-                    for id, feat in enumerate(self.layer.getFeatures(request))
-            }
+            agg_attribute_dict = {}
+            for id, feat in enumerate(self.layer.getFeatures(request)):
+                name = feat.attributes()[0]
+                if name in agg_attribute_dict: # The name isn't unique
+                    name += str(id)     # Add a number to make unique key
+                agg_attribute_dict[name] = id
             # Total impacted length in the aggregation polygons:
             total = {id: 0 for id, __ in enumerate(self.layer.getFeatures(request))}
 
