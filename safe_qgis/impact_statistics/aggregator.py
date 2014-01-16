@@ -941,6 +941,18 @@ class Aggregator(QtCore.QObject):
                 line_attribute_dict[self.sum_field_name()] = \
                     line_attribute_dict[LENGTH_COLUMN]
 
+                if isinstance(
+                        line_attribute_dict[self.target_field],
+                        QtCore.QPyNullVariant):
+                    message = m.Paragraph(
+                        self.tr(
+                            'The target_field contains Null values.'
+                            ' The impact function should define this.')
+                    )
+                    LOGGER.debug('Skipping postprocessing due to: %s' % message)
+                    self.error_message = message
+                    return
+
                 # Postprocessor will sum all impacted length,
                 # (remember, if line_attribute_dict[self.target_field]==0,
                 # then the line is not impacted), so to keep the impacted
