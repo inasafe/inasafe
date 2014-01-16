@@ -88,11 +88,11 @@ class Test_qgis_raster_tools(unittest.TestCase):
         self.assertTrue(geometry.isGeosValid())
         self.assertTrue(geometry.isMultipart())
 
-        expected = QgsVectorLayer(VECTOR_BASE + '.shp', 'test')
+        expected = QgsVectorLayer(VECTOR_BASE + '.shp', 'test', 'ogr')
         for feature in expected.getFeatures():
             # the layer has one feature only
             expected_geom = feature.geometry()
-            self.assertTrue((geom.isGeosEqual(expected_geom)))
+            self.assertTrue((geometry.isGeosEqual(expected_geom)))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_qgis_raster_tools, 'test')
