@@ -760,6 +760,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 # Only print the area that has the report
                 area_title = current_filename.lower()
                 if area_title in self.html_reports:
+                    # Set Report Summary
+                    summary_report = composition.getComposerItemById(
+                        'summary-report')
+                    summary_report.setText(self.summary_report[area_title])
+
                     # Set Aggregation Area Label
                     area_label = composition.getComposerItemById(
                         'aggregation-area')
