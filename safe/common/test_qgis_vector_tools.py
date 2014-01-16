@@ -14,20 +14,30 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsField,
         QgsFeature,
         QgsGeometry,
+        QgsFeatureRequest,
         QgsApplication
         )
 
 
 from qgis_vector_tools import (
     points_to_rectangles,
-    union_geometry
+    union_geometry,
+    split_by_polygon
     )
 
 
 class Test_qgis_raster_tools(unittest.TestCase):
 
+    def setUp(self):
+        self.POLYGON_BASE = os.path.abspath(
+            os.path.join(UNITDATA, 'other', 'polygonization_result'))
+        self.LINE_BEFORE = os.path.abspath(
+            os.path.join(UNITDATA, 'other', 'line_before_splitting'))
+        self.LINE_AFTER = os.path.abspath(
+            os.path.join(UNITDATA, 'other', 'line_after_splitting1'))
+
     def test_points_to_rectangles(self):
-        """Test points_to_rectangles works
+        """Test points_to_rectangles work
         """
         points = self._create_points()
         x_index = points.dataProvider().fieldNameIndex('X')
@@ -48,7 +58,7 @@ class Test_qgis_raster_tools(unittest.TestCase):
     test_points_to_rectangles.slow = False
 
     def test_union_geometry(self):
-        """Test union_geometry works"""
+        """Test union_geometry work"""
 
         # Create big polygons from the point layer,
         # then the union is one BIG polygon
@@ -76,6 +86,37 @@ class Test_qgis_raster_tools(unittest.TestCase):
         self.assertAlmostEquals(geom.area(), 1.5*dx * 1.5*dy)
         self.assertTrue(geom.isMultipart())
     test_union_geometry.slow = False
+
+    def test_split_by_polygon(self):
+        """Test split_by_polygon work"""
+        line_before = QgsVectorLayer(
+            self.LINE_BEFORE +'.shp', 'test', 'ogr')
+        expected_lines = QgsVectorLayer(
+            self.LINE_AFTER +'.shp', 'test', 'ogr')
+        polygon_layer = QgsVectorLayer(
+            self.POLYGON_BASE + '.shp', 'test', 'ogr')
+
+        # Only one polygon is stored in the layer
+        for feature in polygon_layer.getFeatures():
+            polygon = feature.geometry()
+
+        splitted_lines = split_by_polygon(line_before,
+                                          polygon,
+                                          mark_value=(1,'INSIDE'))
+
+        self.assertEqual(expected_lines.featureCount(),
+                         splitted_lines.featureCount())
+        # Assert fo every line from splitted_lines
+        # we can find the same line
+        for feature in splitted_lines.getFeatures():
+            found = False
+            for expected in expected_lines.getFeatures():
+                if (feature.attributes()==expected.attributes()) and \
+                    (feature.geometry().isGeosEqual(expected.geometry())):
+                    found = True
+                    break
+            self.assertTrue(found)
+    test_split_by_polygon.slow = True
 
     def _create_points(self):
         """Create points for testing"""
