@@ -20,6 +20,7 @@ from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
+from safe.common.qgis_vector_tools import union_geometry, split_by_polygon
 
 
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
@@ -111,16 +112,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         target_field_index = e_provider.fieldNameIndex(target_field)
         fields = e_provider.fields()
 
-        # Create layer for store the lines from E and extent
-        line_layer = QgsVectorLayer(
-            'LineString?crs=' + crs, 'impact_lines', 'memory')
-        line_provider = line_layer.dataProvider()
-
-        # Set attributes
-        line_provider.addAttributes(fields.toList())
-        line_layer.startEditing()
-        line_layer.commitChanges()
-
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
         request = QgsFeatureRequest()
@@ -134,6 +125,17 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             h_provider.fields()[affected_field_index].typeName()
         if affected_field_type in ['Real', 'Integer']:
             affected_value = float(affected_value)
+
+        #################################
+        #           REMARK 1
+        #  In qgis 2.2 we can use request to filter inundated
+        #  polygons directly (it allows QgsExpression). Then
+        #  we can delete the lines and call
+        #
+        #  request = ....
+        #  hazard_poly = union_geometry(H, request)
+        #
+        ################################
 
         h_data = H.getFeatures(request)
         hazard_poly = None
@@ -154,6 +156,10 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 except AttributeError:
                     pass
 
+        ###############################################
+        # END REMARK 1
+        ###############################################
+
         if hazard_poly is None:
             message = tr('''There are no objects
                 in the hazard layer with
@@ -162,46 +168,15 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 extent.''' % (affected_value, ))
             raise GetDataError(message)
 
+        # Set roads as not inundated by default
         e_data = E.getFeatures(request)
         for feat in e_data:
-            line_geom = feat.geometry()
-            attrs = feat.attributes()
-            if hazard_poly.intersects(line_geom):
-                # Find parts of the line, intersecting
-                # with flooded polygons, then mark them as inundated
-                int_geom = QgsGeometry(
-                    line_geom.intersection(hazard_poly)
-                ).asGeometryCollection()
-                for g in int_geom:
-                    if g.type() == 1:   # Linestring
-                        l_feat = QgsFeature()
-                        l_feat.setGeometry(g)
-                        l_feat.setAttributes(attrs)
-                        l_feat.setAttribute(target_field_index, 1)
-                        (_, __) = \
-                            line_layer.dataProvider().addFeatures([l_feat])
-
-                # Find parts of the line that do not lies in flooded regions,
-                # mark them as not inundated
-                diff_geom = QgsGeometry(
-                    line_geom.symDifference(hazard_poly)
-                ).asGeometryCollection()
-                for g in diff_geom:
-                    if g.type() == 1:   # Linestring
-                        l_feat = QgsFeature()
-                        l_feat.setGeometry(g)
-                        l_feat.setAttributes(attrs)
-                        l_feat.setAttribute(target_field_index, 0)
-                        (_, __) = \
-                            line_layer.dataProvider().addFeatures([l_feat])
-            else:
-                l_feat = QgsFeature()
-                l_feat.setGeometry(line_geom)
-                l_feat.setAttributes(attrs)
-                l_feat.setAttribute(target_field_index, 0)
-                (_, __) = \
-                    line_layer.dataProvider().addFeatures([l_feat])
-        line_layer.updateExtents()
+            feat.setAttribute(target_field_index, 0)
+        # Find inundated roads, mark them
+        line_layer = split_by_polygon(E,
+                                      hazard_poly,
+                                      request,
+                                      mark_value=(target_field_index, 1))
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.extent[0], self.extent[1])
