@@ -190,7 +190,7 @@ def split_by_polygon(vector,
                     feature = _set_feature(g, attrs)
                     _ = result_layer.dataProvider().addFeatures([feature])
         else:
-            feature = _set_feature(g, attrs)
+            feature = _set_feature(initial_geom, attrs)
             _ = result_layer.dataProvider().addFeatures([feature])
     result_layer.updateExtents()
     return result_layer

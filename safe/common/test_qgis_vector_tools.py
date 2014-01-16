@@ -104,6 +104,10 @@ class Test_qgis_raster_tools(unittest.TestCase):
                                           polygon,
                                           mark_value=(1,'INSIDE'))
 
+        # Test the lines is not multipart
+        for feature in splitted_lines.getFeatures():
+            self.assertFalse(feature.geometry().isMultipart())
+
         self.assertEqual(expected_lines.featureCount(),
                          splitted_lines.featureCount())
         # Assert fo every line from splitted_lines
