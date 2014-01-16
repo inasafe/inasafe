@@ -780,6 +780,16 @@ class Aggregator(QtCore.QObject):
 
                 for i in inside:
                     key = aggreg_remaining_values[i][self.target_field]
+                    if isinstance(key, QtCore.QPyNullVariant):
+                        message = m.Paragraph(
+                            self.tr(
+                                'The target_field contains Null values.'
+                                ' The impact function should define this.')
+                        )
+                        LOGGER.debug('Skipping postprocessing due to: %s' % message)
+                        self.error_message = message
+                        return
+
                     try:
                         results[key] += 1
                     except KeyError:
