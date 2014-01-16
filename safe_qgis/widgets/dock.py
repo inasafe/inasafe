@@ -1835,6 +1835,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        if disclaimer != '':
+            print_map.set_disclaimer(disclaimer)
+
         print_map.set_template(template_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
