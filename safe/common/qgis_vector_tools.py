@@ -72,8 +72,9 @@ def points_to_rectangles(points, dx, dy):
 
     return polygons
 
-def union_geometry(vector):
+def union_geometry(vector, request=QgsFeatureRequest()):
     """Return union of the vector geometries regardless of the attributes.
+    (If request is specified, filter the objects before union).
     If all geometries in the vector are invalid, return None.
 
     The boundaries will be dissolved during the operation.
@@ -81,12 +82,15 @@ def union_geometry(vector):
     :param vector:  Vector layer
     :type vector:   QgsVectorLayer
 
+    :param request: Filter for vector objects
+    :type request:  QgsFeatureRequest
+
     :return:        Union of the geometry
     :rtype:         QgsGeometry or None
     """
 
     result_geometry = None
-    for feature in vector.getFeatures():
+    for feature in vector.getFeatures(request):
         if result_geometry is None:
             result_geometry = QgsGeometry(feature.geometry())
         else:
