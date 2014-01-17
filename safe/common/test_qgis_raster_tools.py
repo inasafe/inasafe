@@ -13,7 +13,8 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsRaster,
         QgsPoint,
         QgsApplication,
-        QgsVectorLayer
+        QgsVectorLayer,
+        QgsRectangle,
         )
 
 
@@ -24,7 +25,8 @@ VECTOR_BASE = os.path.abspath(
 
 from qgis_raster_tools import (
     pixes_to_points,
-    polygonize
+    polygonize,
+    clip_raster
     )
 
 
@@ -93,6 +95,54 @@ class Test_qgis_raster_tools(unittest.TestCase):
             # the layer has one feature only
             expected_geom = feature.geometry()
             self.assertTrue((geometry.isGeosEqual(expected_geom)))
+    test_polygonize.slow = True
+
+    def test_clip_raster(self):
+        """Test clip_raster work"""
+        new_raster = clip_raster(
+            self.raster,
+            self.raster.width(),
+            self.raster.height(),
+            self.extent
+        )
+
+        self.assertEqual(self.raster.rasterUnitsPerPixelY(),
+                         new_raster.rasterUnitsPerPixelY())
+        self.assertEqual(self.raster.rasterUnitsPerPixelX(),
+                         new_raster.rasterUnitsPerPixelX())
+        self.assertEqual(self.raster.extent(),
+                         new_raster.extent())
+        self.assertEqual(self.raster.width(),
+                         new_raster.width())
+        self.assertEqual(self.raster.height(),
+                         new_raster.height())
+
+        # Set extent as 1/2 of self.extent
+        center = self.extent.center()
+        x_max, y_max = center.x(), center.y()
+        new_extent = QgsRectangle(
+            self.extent.xMinimum(),
+            self.extent.yMinimum(),
+            x_max,
+            y_max
+        )
+        new_raster = clip_raster(
+            self.raster,
+            self.raster.width(),
+            self.raster.height(),
+            new_extent
+        )
+        self.assertAlmostEquals(self.raster.rasterUnitsPerPixelY(),
+                         2 * new_raster.rasterUnitsPerPixelY())
+        self.assertAlmostEquals(self.raster.rasterUnitsPerPixelX(),
+                         2 * new_raster.rasterUnitsPerPixelX())
+        self.assertEqual(new_extent,
+                         new_raster.extent())
+        self.assertEqual(self.raster.width(),
+                         new_raster.width())
+        self.assertEqual(self.raster.height(),
+                         new_raster.height())
+    test_clip_raster.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_qgis_raster_tools, 'test')

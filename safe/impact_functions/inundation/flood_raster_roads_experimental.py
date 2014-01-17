@@ -20,7 +20,7 @@ from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe_qgis.exceptions import InvalidParameterError
-from safe.common.qgis_raster_tools import polygonize
+from safe.common.qgis_raster_tools import polygonize, clip_raster
 from safe.common.qgis_vector_tools import split_by_polygon
 
 
@@ -108,7 +108,15 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                                                QVariant.Int)])
         target_field_index = e_provider.fieldNameIndex(target_field)
 
-        flooded_polygon = polygonize(H, threshold_min, threshold_max)
+
+        # Get necessary width and height of raster
+        height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
+        height = int(height)
+        width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
+        width = int(width)
+
+        small_raster = clip_raster(H, width, height, QgsRectangle(*self.extent))
+        flooded_polygon = polygonize(small_raster, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)

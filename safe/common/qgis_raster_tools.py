@@ -10,6 +10,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
+from safe.common.utilities import unique_filename
 from safe.storage.raster import qgis_imported
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
     from PyQt4.QtCore import QVariant
@@ -19,7 +20,9 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsVectorLayer,
         QgsFeature,
         QgsPoint,
-        QgsGeometry
+        QgsGeometry,
+        QgsRasterFileWriter,
+        QgsRasterPipe
     )
 
 from qgis_vector_tools import (
@@ -152,3 +155,39 @@ def polygonize(raster,
                                     raster.rasterUnitsPerPixelY())
     polygons = union_geometry(polygons)
     return polygons
+
+def clip_raster(raster, n_cols, n_rows, output_extent):
+    """Clip raster to specified extent, width and heigth.
+    Note there is similar utility in
+    safe_qgis.utilities.clipper, but it uses gdal.
+
+    :param raster:      Raster
+    :type raster:       QgsRasterLayer
+
+    :param n_cols:      Desired width in pixels of new raster
+    :type n_cols:       Int
+
+    :param n_rows:      Desired height in pixels of new raster
+    :type n_rows:       Int
+
+    :param output_extent:   Extent of the clipped region
+    :type output_extent:    QgsRectangle
+
+    :returns:           Clipped region of the raster
+    "rtype:             QgsRasterLayer
+    """
+
+    provider = raster.dataProvider()
+    pipe = QgsRasterPipe()
+    pipe.set(provider.clone())
+
+    base_name = unique_filename()
+    file_name = base_name + '.tif'
+    file_writer = QgsRasterFileWriter (file_name)
+    file_writer.writeRaster(pipe,
+                            n_cols,
+                            n_rows,
+                            output_extent,
+                            raster.crs())
+
+    return QgsRasterLayer(file_name, 'clipped_raster')
