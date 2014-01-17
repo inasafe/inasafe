@@ -48,7 +48,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         # information about road types
         ('road_type_field', 'TYPE'),
         ('min threshold [m]', 3.5),
-        #('max threshold [m]', float('inf')),
+        ('max threshold [m]', float('inf')),
 
          ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
@@ -80,7 +80,14 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         target_field = self.parameters['target_field']
         road_type_field = self.parameters['road_type_field']
         threshold_min = self.parameters['min threshold [m]']
-        #threshold_max = self.parameters['max threshold [m]']
+        threshold_max = self.parameters['max threshold [m]']
+
+        if threshold_min > threshold_max:
+            message = tr('''The minimal threshold is
+                greater then the maximal specified threshold.
+                Please check the values.''')
+            raise InvalidParameterError(message)
+
 
         # Extract data
         H = get_hazard_layer(layers)    # Flood
@@ -101,7 +108,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                                                QVariant.Int)])
         target_field_index = e_provider.fieldNameIndex(target_field)
 
-        flooded_polygon = polygonize(H, threshold_min)
+        flooded_polygon = polygonize(H, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
