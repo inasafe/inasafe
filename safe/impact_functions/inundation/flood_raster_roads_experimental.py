@@ -39,7 +39,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                     layertype=='vector'
     """
 
-    title = tr('Be flooded')
+    title = tr('Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
@@ -48,7 +48,9 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         # information about road types
         ('road_type_field', 'TYPE'),
         ('min threshold [m]', 3.5),
-        #('max threshold [m]', float('inf'))
+        #('max threshold [m]', float('inf')),
+
+         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
 
     def get_function_type(self):
@@ -153,7 +155,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 roads_by_type[road_type]['flooded'] += length
         table_body = [question,
                       TableRow([tr('Road Type'),
-                                tr('Temporarily closed (m)'),
+                                tr('Flooded in the threshold (m)'),
                                 tr('Total (m)')],
                                header=True),
                       TableRow([tr('All'), int(flooded_len), int(road_len)])]
