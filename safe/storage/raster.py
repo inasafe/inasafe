@@ -316,14 +316,14 @@ class Raster(Layer):
         base_name = unique_filename()
         file_name = base_name + '.tif'
 
-        fileWriter = QgsRasterFileWriter (file_name)
+        file_writer = QgsRasterFileWriter (file_name)
         pipe = QgsRasterPipe()
         provider = qgis_layer.dataProvider()
         if not pipe.set(provider.clone()):
             msg = "Cannot set pipe provider"
             raise GetDataError(msg)
 
-        fileWriter.writeRaster(
+        file_writer.writeRaster(
             pipe,
             provider.xSize(),
             provider.ySize(),
