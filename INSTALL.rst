@@ -1,1 +1,1 @@
-See README.rst for installation instructions.
+See README.md for installation instructions.

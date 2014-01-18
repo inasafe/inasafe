@@ -33,63 +33,32 @@ from fabtools import require
 # Don't remove even though its unused
 # noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
+# noinspection PyUnresolvedReferences
 from fabgis.inasafe import setup_inasafe
 from fabgis.git import update_git_checkout
-# Global options
-env.env_set = False
+from fabgis.common import show_environment, setup_env
 
 
-def _all():
-    """Things to do regardless of whether command is local or remote."""
-    if env.env_set:
-        fastprint(green('Environment already set!\n'))
-        return
+def get_vars():
+    """Helper method to get standard deployment vars.
 
-    fastprint('Setting environment!\n')
-    # Key is hostname as it resolves by running hostname directly on the server
-    # value is desired web site url to publish the repo as.
-    doc_site_names = {
-        'waterfall': 'inasafe-docs.localhost',
-        'spur': 'inasafe-docs.localhost',
-        'maps.linfiniti.com': 'inasafe-docs.linfiniti.com',
-        'linfiniti3': 'inasafe-docs.linfiniti.com',
-        'linfiniti': 'inasafe-docs.linfiniti.com',
-        #vagrant instance
-        'inasafe': 'inasafe-docs.vagrant.localhost',
-        'shiva': 'docs.inasafe.org'}
-    repo_site_names = {
-        'waterfall': 'inasafe-test.localhost',
-        'spur': 'inasafe-test.localhost',
-        'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
-        'linfiniti': 'inasafe-crisis.linfiniti.com',
-        'linfiniti3': 'experimental.inasafe.org',
-        #vagrant instance
-        'inasafe': 'experimental.vagrant.localhost',
-        'shiva': 'experimental.inasafe.org'}
+    :returns: A tuple containing the following:
+        * base_path: Workspace dir e.g. ``/home/foo/python``
+        * code_path: Project dir e.g. ``/home/foo/python/inasafe``
+        * git_url: Url for git checkout - use http for read only checkout
+        * repo_alias: Name of checkout folder e.g. ``inasafe-dev``
+        * site_name: Name for the web site e.g. ``experimental.inasafe.org``
 
-    with hide('output'):
-        env.user = run('whoami')
-        env.hostname = run('hostname')
-        if env.hostname not in repo_site_names:
-            print 'Error: %s not in: \n%s' % (env.hostname, repo_site_names)
-            exit()
-        elif env.hostname not in doc_site_names:
-            print 'Error: %s not in: \n%s' % (env.hostname, repo_site_names)
-            exit()
-        else:
-            env.repo_site_name = repo_site_names[env.hostname]
-            env.doc_site_name = doc_site_names[env.hostname]
-            env.plugin_repo_path = '/home/web/inasafe-test'
-            env.inasafe_docs_path = '/home/web/inasafe-docs'
-            env.home = os.path.join('/home/', env.user)
-            env.repo_path = os.path.join(
-                env.home, 'dev', 'python')
-            env.git_url = 'git://github.com/AIFDR/inasafe.git'
-            env.repo_alias = 'inasafe-test'
-            env.code_path = os.path.join(env.repo_path, env.repo_alias)
-
-    env.env_set = True
-    fastprint(blue('env.env_set = %s\n' % env.env_set))
+    :rtype: tuple
+    """
+    setup_env()
+    fastprint(green('Getting project variables\n'))
+    site_name = 'experimental.inasafe.org'
+    base_path = '/home/dev/python'
+    git_url = 'git://github.com/AIFDR/inasafe.git'
+    repo_alias = 'inasafe-test'
+    code_path = os.path.abspath(os.path.join(base_path, repo_alias))
+    return base_path, code_path, git_url, repo_alias, site_name
 
 
 ###############################################################################
@@ -98,15 +67,14 @@ def _all():
 
 def initialise_qgis_plugin_repo():
     """Initialise a QGIS plugin repo where we host test builds."""
-    _all()
+    base_path, code_path, git_url, repo_alias, site_name = get_vars()
     sudo('apt-get update')
     fabtools.require.deb.package('libapache2-mod-wsgi')
-    code_path = os.path.join(env.repo_path, env.repo_alias)
     local_path = '%s/scripts/test-build-repo' % code_path
 
-    if not exists(env.plugin_repo_path):
-        sudo('mkdir -p %s' % env.plugin_repo_path)
-        sudo('chown %s.%s %s' % (env.user, env.user, env.plugin_repo_path))
+    if not exists(base_path):
+        sudo('mkdir -p %s' % base_path)
+        sudo('chown %s.%s %s' % (env.user, env.user, base_path))
 
     run('cp %s/plugin* %s' % (local_path, env.plugin_repo_path))
     run('cp %s/icon* %s' % (code_path, env.plugin_repo_path))
@@ -156,7 +124,7 @@ def build_test_package(branch='master'):
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """
-    _all()
+    base_path, code_path, git_url, repo_alias, site_name = get_vars()
     show_environment()
     update_git_checkout(env.repo_path, env.git_url, env.repo_alias, branch)
     initialise_qgis_plugin_repo()
@@ -200,57 +168,3 @@ def build_test_package(branch='master'):
 
         fastprint('Add http://%s/plugins.xml to QGIS plugin manager to use.'
                   % env.repo_site_name)
-
-
-@task
-def show_environment():
-    """For diagnostics - show any pertinent info about server."""
-    _all()
-    fastprint('\n-------------------------------------------------\n')
-    fastprint('User: %s\n' % env.user)
-    fastprint('Host: %s\n' % env.hostname)
-    fastprint('Site Name: %s\n' % env.repo_site_name)
-    fastprint('Destination Path: %s\n' % env.plugin_repo_path)
-    fastprint('Home Path: %s\n' % env.home)
-    fastprint('Repo Path: %s\n' % env.repo_path)
-    fastprint('Git Url: %s\n' % env.git_url)
-    fastprint('Repo Alias: %s\n' % env.repo_alias)
-    fastprint('-------------------------------------------------\n')
-
-
-@task
-def setup_jenkins_jobs():
-    """Setup jenkins to run Continuous Integration Tests."""
-    #fabgis.fabgis.initialise_jenkins_site()
-    xvfb_config = "org.jenkinsci.plugins.xvfb.XvfbBuildWrapper.xml"
-    job_dir = ['InaSAFE-master-QGIS1',
-               'InaSAFE-master-QGIS2',
-               'InaSAFE-release-QGIS1',
-               'InaSAFE-release-QGIS2']
-
-    with cd('/var/lib/jenkins/'):
-        if not exists(xvfb_config):
-            local_dir = os.path.dirname(__file__)
-            local_file = os.path.abspath(os.path.join(
-                local_dir,
-                'scripts',
-                'jenkins_jobs',
-                xvfb_config))
-            put(local_file,
-                "/var/lib/jenkins/", use_sudo=True)
-
-    with cd('/var/lib/jenkins/jobs/'):
-        for job in job_dir:
-            if not exists(job):
-                local_dir = os.path.dirname(__file__)
-                local_job_file = os.path.abspath(os.path.join(
-                    local_dir,
-                    'scripts',
-                    'jenkins_jobs',
-                    '%s.xml' % job))
-                sudo('mkdir /var/lib/jenkins/jobs/%s' % job)
-                put(local_job_file,
-                    "/var/lib/jenkins/jobs/%s/config.xml" % job,
-                    use_sudo=True)
-        sudo('chown -R jenkins:nogroup InaSAFE*')
-    sudo('service jenkins restart')

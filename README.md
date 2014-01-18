@@ -1,4 +1,5 @@
-========================================================
+
+
 InaSAFE - Indonesian Scenario Assessment for Emergencies
 ========================================================
 
@@ -20,16 +21,21 @@ for impact modelling.
 [![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
 [![Stories in Done](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
 
-========================
+Current test status for master branch: [![Build Status](http://jenkins.inasafe.org/job/inasafe-qgis2/badge/icon)](http://jenkins.inasafe.org/job/inasafe-qgis2/)
+Current test status for release branch: [![Build Status](http://jenkins.inasafe.org/buildStatus/icon?job=inasafe-release-qgis1)](http://jenkins.inasafe.org/job/inasafe-release-qgis1/)
+
+
 Quick Installation Guide
 ========================
 
-To install the InaSAFE plugin, use the plugin manager in `QGIS <http://qgis.org>`_::
+To install the InaSAFE plugin, use the plugin manager in (QGIS)[http://qgis.org]
 
-  Plugins -> Fetch Python Plugins
+  Plugins -> Manage and Install Plugins -> Get more tab
 
 Then search for 'InaSAFE', select it and click the install button.
 The plugin will now be added to your plugins menu.
+
+**Note:** You may need to restart QGIS if upgrading from a prior version.
 
 
 System Requirements
