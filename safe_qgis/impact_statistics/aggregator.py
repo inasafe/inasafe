@@ -1494,7 +1494,7 @@ class Aggregator(QtCore.QObject):
                 QgsPoint(self.extent[2], self.extent[3]))))
         feature[attribute_name] = self.tr('Entire area')
         provider.addFeatures([feature])
-
+        self.layer.updateExtents()
         try:
             self.update_keywords(
                 self.layer,

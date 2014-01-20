@@ -22,6 +22,7 @@ import os
 import logging
 
 import numpy.testing
+import numpy
 
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
@@ -282,7 +283,6 @@ class AggregatorTest(unittest.TestCase):
         hazard_layer = exposure_layer = aggregation_layer
         # setting up
         if not use_aoi_mode:
-
             aggregator = Aggregator(self.extent, aggregation_layer)
         else:
             aggregator = Aggregator(self.extent, None)
@@ -590,6 +590,76 @@ class AggregatorTest(unittest.TestCase):
         self._aggregate(impact_layer,
                         expected_results,
                         impact_layer_attributes=impact_layer_attributes)
+
+    def test_set_layers(self):
+        """
+        Test set up aggregator's layers work
+        """
+
+        hazard = QgsVectorLayer(
+            os.path.join(UNITDATA,
+            'hazard',
+            'multipart_polygons_osm_4326.shp'),
+            'hazard',
+            'ogr'
+        )
+        exposure = QgsVectorLayer(
+            os.path.join(UNITDATA,
+            'exposure',
+            'buildings_osm_4326.shp'),
+            'impact',
+            'ogr'
+        )
+
+        aggregation_layer = QgsVectorLayer(
+            os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
+            'test aggregation',
+            'ogr')
+
+        # Test in
+        #   aoi mode (use None)
+        #   not aoi mode (use aggregation_layer)
+        for agg_layer in [None, aggregation_layer]:
+            aggregator = Aggregator(self.extent, None)
+            aggregator.set_layers(hazard, exposure)
+            self.assertEquals(aggregator.exposure_layer, exposure)
+            self.assertEquals(aggregator.hazard_layer, hazard)
+            layer = aggregator.layer
+            extent = layer.extent()
+            x_min, y_min, x_max, y_max = \
+                extent.xMinimum(), extent.yMinimum(), \
+                extent.xMaximum(), extent.yMaximum()
+            self.assertAlmostEquals(self.extent[0], x_min)
+            self.assertAlmostEquals(self.extent[1], y_min)
+            self.assertAlmostEquals(self.extent[2], x_max)
+            self.assertAlmostEquals(self.extent[3], y_max)
+            self.assertTrue(aggregator.safe_layer.is_vector)
+
+    def test_set_sum_field_name(self):
+        """Test sum_field_name work
+        """
+        aggregator = self._create_aggregator(False, False)
+        self.assertEquals(aggregator.sum_field_name(), 'aggr_sum')
+
+        aggregator.set_sum_field_name('SUMM_AGGR')
+        self.assertEquals(aggregator.sum_field_name(), 'SUMM_AGGR')
+    test_set_sum_field_name.slow = False
+
+    def test_get_centroids(self):
+        """Test get_centroids work"""
+        aggregator = self._create_aggregator(False, False)
+
+        polygon1 = numpy.array([[0,0], [0,1],[1,0], [0,0]])
+        polygon2 = numpy.array([[0,0], [1,1],[1,0], [0,0]])
+        polygons = [polygon1, polygon2]
+
+        centroids = aggregator._get_centroids(polygons)
+        self.assertEquals(len(centroids), 2)
+
+        centroids = aggregator._get_centroids([polygon1])
+        self.assertEquals(len(centroids), 1)
+    test_get_centroids.slow = False
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest)
