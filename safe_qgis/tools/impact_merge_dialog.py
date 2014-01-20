@@ -110,7 +110,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'map_title': None,
             'hazard_title': None,
             'exposure_title': None,
-            'postprocessing_report': None
+            'postprocessing_report': None,
+            'summary_report': None,
+            'breakdown_report': None
         }
 
         # Stored information from second impact layer
@@ -119,7 +121,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'map_title': None,
             'hazard_title': None,
             'exposure_title': None,
-            'postprocessing_report': None
+            'postprocessing_report': None,
+            'summary_report': None,
+            'breakdown_report': None
         }
 
         # Stored information from aggregation layer
@@ -144,7 +148,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
-        # Show usafe info
+        # Show usage info
         self.show_info()
         self.restore_state()
 
@@ -420,8 +424,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """
         # FETCH 'map_title' from each impact layer
         try:
-            self.first_impact['map_title'] = self.keyword_io.read_keywords(
-                self.first_impact['layer'], 'map_title')
+            #noinspection PyTypeChecker
+            self.first_impact['map_title'] = \
+                self.keyword_io.read_keywords(
+                    self.first_impact['layer'], 'map_title')
         except NoKeywordsFoundError:
             raise NoKeywordsFoundError(
                 self.tr('No keywords found for first impact layer.'))
@@ -430,8 +436,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             pass
 
         try:
-            self.second_impact['map_title'] = self.keyword_io.read_keywords(
-                self.second_impact['layer'], 'map_title')
+            #noinspection PyTypeChecker
+            self.second_impact['map_title'] = \
+                self.keyword_io.read_keywords(
+                    self.second_impact['layer'], 'map_title')
         except NoKeywordsFoundError:
             raise NoKeywordsFoundError(
                 self.tr('No keywords found for first impact layer.'))
@@ -442,6 +450,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # VALIDATE AND FETCH 'exposure_title'
         # From first impact layer
         try:
+            #noinspection PyTypeChecker
             self.first_impact['exposure_title'] = \
                 self.keyword_io.read_keywords(
                     self.first_impact['layer'], 'exposure_title')
@@ -455,6 +464,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Then from second impact layer
         try:
+            #noinspection PyTypeChecker
             self.second_impact['exposure_title'] = \
                 self.keyword_io.read_keywords(
                     self.second_impact['layer'], 'exposure_title')
@@ -469,6 +479,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # VALIDATE AND FETCH 'postprocessing_report'
         # 1st impact layer should have postprocessing_report keywords
         try:
+            #noinspection PyTypeChecker
             self.first_impact['postprocessing_report'] = \
                 self.keyword_io.read_keywords(
                     self.first_impact['layer'], 'postprocessing_report')
@@ -482,6 +493,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # 2nd impact layer should have postprocessing_report keywords
         try:
+            #noinspection PyTypeChecker
             self.second_impact['postprocessing_report'] = \
                 self.keyword_io.read_keywords(
                     self.second_impact['layer'], 'postprocessing_report')
@@ -497,6 +509,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # 1st and 2nd layer should be generated from the same hazard layer.
         # It is indicated from 'hazard_title' keywords
         try:
+            #noinspection PyTypeChecker
             self.first_impact['hazard_title'] = \
                 self.keyword_io.read_keywords(
                     self.first_impact['layer'], 'hazard_title')
@@ -509,6 +522,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                         'layer.'))
 
         try:
+            #noinspection PyTypeChecker
             self.second_impact['hazard_title'] = \
                 self.keyword_io.read_keywords(
                     self.second_impact['layer'], 'hazard_title')
@@ -531,6 +545,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # aggregation attribute keywords
         if not self.entire_area_mode:
             try:
+                #noinspection PyTypeChecker
                 self.aggregation['aggregation_attribute'] = \
                     self.keyword_io.read_keywords(
                         self.aggregation['layer'],
@@ -551,32 +566,37 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.first_impact['postprocessing_report']
         second_postprocessing_report = \
             self.second_impact['postprocessing_report']
+        #noinspection PyTypeChecker
         first_report = '<body>' + first_postprocessing_report + '</body>'
+        #noinspection PyTypeChecker
         second_report = '<body>' + second_postprocessing_report + '</body>'
 
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
         second_document = minidom.parseString(second_report)
-        tables = first_document.getElementsByTagName('table')
-        tables += second_document.getElementsByTagName('table')
+        first_impact_tables = first_document.getElementsByTagName('table')
+        second_impact_tables = second_document.getElementsByTagName('table')
 
         # Now create dictionary report from DOM
-        merged_report_dict = self.generate_report_dictionary_from_dom(tables)
+        first_report_dict = self.generate_report_dictionary_from_dom(
+            first_impact_tables)
+        second_report_dict = self.generate_report_dictionary_from_dom(
+            second_impact_tables)
 
         # Generate report summary for all aggregation unit
-        self.generate_report_summary(merged_report_dict)
+        self.generate_report_summary(first_report_dict, second_report_dict)
 
         # Generate html reports file from merged dictionary
-        self.generate_html_reports(merged_report_dict)
+        self.generate_html_reports(first_report_dict, second_report_dict)
 
         # Generate PDF Reports using composer and/or atlas generation:
         self.generate_reports()
 
         # Delete html report files:
-        for area in self.html_reports:
-            report_path = self.html_reports[area]
-            if os.path.exists(report_path):
-                os.remove(report_path)
+        #for area in self.html_reports:
+        #    report_path = self.html_reports[area]
+        #    if os.path.exists(report_path):
+        #        os.remove(report_path)
 
     @staticmethod
     def generate_report_dictionary_from_dom(html_dom):
@@ -629,17 +649,22 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 merged_report_dict[aggregation_area] = exposure_dict
         return merged_report_dict
 
-    def generate_report_summary(self, merged_report_dict):
+    def generate_report_summary(self,
+                                first_report_dict,
+                                second_report_dict):
         """Generate report summary for each aggregation area from
         merged report dictionary.
 
-        :param merged_report_dict: A dictionary of merged report.
-        :type merged_report_dict: dict
+        :param first_report_dict: Dictionary report from first impact
+        :type first_report_dict: dict
+
+        :param second_report_dict: Dictionary report from second impact
+        :type second_report_dict: dict
         """
-        for aggregation_area in merged_report_dict:
+        for aggregation_area in first_report_dict:
             html = ''
             html += '<table style="margin:0px auto">'
-            exposure_report_dict = merged_report_dict[aggregation_area]
+            exposure_report_dict = first_report_dict[aggregation_area]
             for exposure in exposure_report_dict:
                 exposure_detail_dict = exposure_report_dict[exposure]
                 html += '<tr><th>%s</th><th></th></tr>' % exposure.upper()
@@ -652,7 +677,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html += '</table>'
             self.summary_report[aggregation_area.lower()] = html
 
-    def generate_html_reports(self, merged_report_dict):
+    def generate_html_reports(self, first_report_dict, second_report_dict):
         """Generate html file for each aggregation units.
 
         It also saves the path of the each aggregation unit in
@@ -660,23 +685,63 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         Ex. {"jakarta barat": "/home/jakarta barat.html",
              "jakarta timur": "/home/jakarta timur.html"}
 
-        :param merged_report_dict: A dictionary of merged report.
-        :type merged_report_dict: dict
+        :param first_report_dict: Dictionary report from first impact.
+        :type first_report_dict: dict
+
+        :param second_report_dict: Dictionary report from second impact.
+        :type second_report_dict: dict
         """
-        for aggregation_area in merged_report_dict:
+        for aggregation_area in first_report_dict:
             html = html_header()
-            html += ('<table style="margin:0px auto;" '
+            html += ('<table width="100%" style="position:absolute;left:0px;"'
                      'class="table table-condensed table-striped">')
-            html += '<caption><h4>%s</h4></caption>' % aggregation_area.upper()
-            exposure_report_dict = merged_report_dict[aggregation_area]
-            for exposure in exposure_report_dict:
-                exposure_detail_dict = exposure_report_dict[exposure]
-                html += '<tr><th>%s</th><th></th></tr>' % exposure.upper()
-                for datum in exposure_detail_dict:
+            html += '<tr>'
+
+            # First impact on the left side
+            html += '<td width="48%">'
+            html += '<table width="100%">'
+            html += '<caption>%s</caption>' % \
+                    self.first_impact['exposure_title'].upper()
+            first_exposure_report_dict = first_report_dict[aggregation_area]
+            for first_exposure in first_exposure_report_dict:
+                first_exposure_detail_dict = \
+                    first_exposure_report_dict[first_exposure]
+                html += '<tr><th><i>%s</i></th><th></th></tr>' % \
+                        first_exposure.title()
+                for datum in first_exposure_detail_dict:
                     html += ('<tr>'
                              '<td>%s</td>'
                              '<td>%s</td>'
-                             '</tr>') % (datum, exposure_detail_dict[datum])
+                             '</tr>') % (datum,
+                                         first_exposure_detail_dict[datum])
+            html += '</table>'
+            html += '</td>'
+
+            # Add spaces between
+            html += '<td width="4%">'
+            html += '</td>'
+
+            # Second impact on the right side
+            html += '<td width="48%">'
+            html += '<table width="100%">'
+            html += '<caption>%s</caption>' % \
+                    self.second_impact['exposure_title'].upper()
+            second_exposure_report_dict = second_report_dict[aggregation_area]
+            for second_exposure in second_exposure_report_dict:
+                second_exposure_detail_dict = \
+                    second_exposure_report_dict[second_exposure]
+                html += '<tr><th><i>%s</i></th><th></th></tr>' % \
+                        second_exposure.title()
+                for datum in second_exposure_detail_dict:
+                    html += ('<tr>'
+                             '<td>%s</td>'
+                             '<td>%s</td>'
+                             '</tr>') % (datum,
+                                         second_exposure_detail_dict[datum])
+            html += '</table>'
+            html += '</td>'
+
+            html += '</tr>'
             html += '</table>'
             html += html_footer()
 
