@@ -233,7 +233,6 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(get_utm_epsg(178, -20), 32760)
         self.assertEqual(get_utm_epsg(-3, -30), 32730)
 
-
     def test_feature_attributes_as_dict(self):
         """
         Test if converting list of attributes to dict of attributes works
@@ -243,7 +242,6 @@ class UtilitiesTest(unittest.TestCase):
         expected_result = {'Field1': 'B', 'Field2': 'C', 'Field0': 'A'}
         result = feature_attributes_as_dict(field_map, attributes)
         self.assertEqual(expected_result, result)
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

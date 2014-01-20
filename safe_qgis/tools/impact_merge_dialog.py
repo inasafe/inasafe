@@ -89,29 +89,57 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             os.path.pardir,
             'resources',
             'img',
-            'icons',
-            'icon.svg')
+            'logos',
+            'inasafe-logo-url.png')
 
-        # All the chosen layers to be processed
-        self.first_impact_layer = None
-        self.second_impact_layer = None
-        self.chosen_aggregation_layer = None
+        # Organisation Logo Path
+        self.oganisation_logo_path = os.path.join(
+            os.path.dirname(__file__),
+            os.path.pardir,
+            'resources',
+            'img',
+            'logos',
+            'supporters.png')
 
         # The output directory
         self.out_dir = None
+
+        # Stored information from first impact layer
+        self.first_impact = {
+            'layer': None,
+            'map_title': None,
+            'hazard_title': None,
+            'exposure_title': None,
+            'postprocessing_report': None,
+            'summary_report': None,
+            'breakdown_report': None
+        }
+
+        # Stored information from second impact layer
+        self.second_impact = {
+            'layer': None,
+            'map_title': None,
+            'hazard_title': None,
+            'exposure_title': None,
+            'postprocessing_report': None,
+            'summary_report': None,
+            'breakdown_report': None
+        }
+
+        # Stored information from aggregation layer
+        self.aggregation = {
+            'layer': None,
+            'aggregation_attribute': None
+        }
+
+        # The summary report, contains report for each aggregation area
+        self.summary_report = {}
 
         # The html reports and its file path
         self.html_reports = {}
 
         # A boolean flag whether to merge entire area or aggregated
         self.entire_area_mode = False
-
-        # The attribute name to be aggregated in chosen aggregation layer
-        self.aggregation_attribute = None
-
-        # Report from first and second impact layer keywords:
-        self.first_postprocessing_report = None
-        self.second_postprocessing_report = None
 
         # Get all current project layers for combo box
         self.get_project_layers()
@@ -120,7 +148,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
-        # Show usafe info
+        # Show usage info
         self.show_info()
         self.restore_state()
 
@@ -136,7 +164,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         body = self.tr(
             'This tool will merge the outputs from two impact maps for the '
             'same area. The maps must be created using the same aggregation '
-            'areas. To use:'
+            'areas and same hazard. To use:'
         )
         tips = m.BulletedList()
         tips.add(self.tr(
@@ -169,7 +197,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def restore_state(self):
         """ Read last state of GUI from configuration file."""
         settings = QSettings()
-        self.output_directory.setText(settings.value('directory'))
+        try:
+            last_path = settings.value('directory', type=str)
+        except TypeError:
+            last_path = ''
+        self.output_directory.setText(last_path)
 
     def save_state(self):
         """ Store current state of GUI to configuration file """
@@ -210,7 +242,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         try:
             self.validate_all_layers()
         except (NoKeywordsFoundError,
-                KeywordNotFoundError) as ex:
+                KeywordNotFoundError,
+                InvalidLayerError) as ex:
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
                 self,
@@ -221,6 +254,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # The input is valid, do the merging
         # Set cursor to wait cursor
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        #pylint: disable=W0703
         try:
             self.merge()
         except Exception as ex:
@@ -232,8 +266,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr("InaSAFE Merge Impact Tools Error"),
                 str(ex))
             return
+        #pylint: enable=W0703
 
-        # Hohoho finish doing it. End wait cursor
+        # Finish doing it. End wait cursor
         QtGui.qApp.restoreOverrideCursor()
 
         # Give user successful information!
@@ -302,24 +337,27 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         :raises: InvalidLayerError, CanceledImportDialogError
         """
-        # Get All Chosen Layer from combobox after user click merge
-        self.first_impact_layer = self.first_layer.itemData(
-            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
-        self.second_impact_layer = self.second_layer.itemData(
-            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
-        self.chosen_aggregation_layer = self.aggregation_layer.itemData(
-            self.aggregation_layer.currentIndex(), QtCore.Qt.UserRole)
-
         # Validate The combobox impact layers (they should be different)
-        if self.first_layer.currentIndex() < 0:
+        first_layer_index = self.first_layer.currentIndex()
+        second_layer_index = self.second_layer.currentIndex()
+
+        if first_layer_index < 0:
             raise InvalidLayerError(self.tr('First layer is not valid.'))
 
-        if self.second_layer.currentIndex() < 0:
+        if second_layer_index < 0:
             raise InvalidLayerError(self.tr('Second layer is not valid.'))
 
-        if self.first_impact_layer.id() == self.second_impact_layer.id():
+        if first_layer_index == second_layer_index:
             raise InvalidLayerError(
                 self.tr('First layer must be different to second layer''.'))
+
+        # Get All Chosen Layer
+        self.first_impact['layer'] = self.first_layer.itemData(
+            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
+        self.second_impact['layer'] = self.second_layer.itemData(
+            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
+        self.aggregation['layer'] = self.aggregation_layer.itemData(
+            self.aggregation_layer.currentIndex(), QtCore.Qt.UserRole)
 
         # Validate the output directory
         self.require_directory()
@@ -328,7 +366,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.out_dir = self.output_directory.text()
 
         # Flag whether to merge entire area or based on aggregation unit
-        if self.chosen_aggregation_layer is None:
+        if self.aggregation['layer'] is None:
             self.entire_area_mode = True
 
     def require_directory(self):
@@ -365,12 +403,86 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             raise CanceledImportDialogError()
 
     def validate_all_layers(self):
-        """Validate all layers based on the keywords."""
+        """Validate all layers based on the keywords.
+
+        ... When we do the validation, we also fetch the information we need:
+        1. 'map_title'' from each impact layer
+        2.  'exposure_title' from each impact layer
+        3.  'postprocessing_report' from each impact layer
+        4.  'aggregation_attribute' on aggregation layer, if user runs
+            merging tools with aggregation layer chosen
+
+        ... The things that we validate are:
+        1. 'exposure_title' keyword must exist on each impact layer
+        2. 'postprocessing_report' keyword must exist on each impact layer
+        3. 'hazard_title' keyword must exist on each impact layer.
+            Hazard title from first impact layer must be the same with
+            second impact layer to indicate that both are generated from the
+            same hazard layer.
+        4. 'aggregation attribute' must exist when user wants to run merging
+            tools with aggregation layer chosen.
+        """
+        # FETCH 'map_title' from each impact layer
+        try:
+            #noinspection PyTypeChecker
+            self.first_impact['map_title'] = \
+                self.keyword_io.read_keywords(
+                    self.first_impact['layer'], 'map_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for first impact layer.'))
+        except KeywordNotFoundError:
+            # Do Nothing. It's okay not having map_title
+            pass
+
+        try:
+            #noinspection PyTypeChecker
+            self.second_impact['map_title'] = \
+                self.keyword_io.read_keywords(
+                    self.second_impact['layer'], 'map_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for first impact layer.'))
+        except KeywordNotFoundError:
+            # Do Nothing. It's okay not having map_title
+            pass
+
+        # VALIDATE AND FETCH 'exposure_title'
+        # From first impact layer
+        try:
+            #noinspection PyTypeChecker
+            self.first_impact['exposure_title'] = \
+                self.keyword_io.read_keywords(
+                    self.first_impact['layer'], 'exposure_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for first impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword exposure_title not found for first '
+                        'layer.'))
+
+        # Then from second impact layer
+        try:
+            #noinspection PyTypeChecker
+            self.second_impact['exposure_title'] = \
+                self.keyword_io.read_keywords(
+                    self.second_impact['layer'], 'exposure_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for first impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword exposure_title not found for second '
+                        'layer.'))
+
+        # VALIDATE AND FETCH 'postprocessing_report'
         # 1st impact layer should have postprocessing_report keywords
         try:
-            self.first_postprocessing_report = \
+            #noinspection PyTypeChecker
+            self.first_impact['postprocessing_report'] = \
                 self.keyword_io.read_keywords(
-                    self.first_impact_layer, 'postprocessing_report')
+                    self.first_impact['layer'], 'postprocessing_report')
         except NoKeywordsFoundError:
             raise NoKeywordsFoundError(
                 self.tr('No keywords found for first impact layer.'))
@@ -381,9 +493,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # 2nd impact layer should have postprocessing_report keywords
         try:
-            self.second_postprocessing_report = \
+            #noinspection PyTypeChecker
+            self.second_impact['postprocessing_report'] = \
                 self.keyword_io.read_keywords(
-                    self.second_impact_layer, 'postprocessing_report')
+                    self.second_impact['layer'], 'postprocessing_report')
         except NoKeywordsFoundError:
             raise NoKeywordsFoundError(
                 self.tr('No keywords found in second impact layer.'))
@@ -392,13 +505,50 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr('Keyword postprocessing_report not found for second '
                         'layer.'))
 
+        # VALIDATE AND FETCH 'hazard_title'
+        # 1st and 2nd layer should be generated from the same hazard layer.
+        # It is indicated from 'hazard_title' keywords
+        try:
+            #noinspection PyTypeChecker
+            self.first_impact['hazard_title'] = \
+                self.keyword_io.read_keywords(
+                    self.first_impact['layer'], 'hazard_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for first impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword hazard_title not found for first '
+                        'layer.'))
+
+        try:
+            #noinspection PyTypeChecker
+            self.second_impact['hazard_title'] = \
+                self.keyword_io.read_keywords(
+                    self.second_impact['layer'], 'hazard_title')
+        except NoKeywordsFoundError:
+            raise NoKeywordsFoundError(
+                self.tr('No keywords found for second impact layer.'))
+        except KeywordNotFoundError:
+            raise KeywordNotFoundError(
+                self.tr('Keyword hazard_title not found for second '
+                        'layer.'))
+
+        if (self.first_impact['hazard_title'] !=
+                self.second_impact['hazard_title']):
+            raise InvalidLayerError(
+                self.tr('First impact layer and second impact layer do not '
+                        'use the same hazard layer.'))
+
+        # VALIDATE AND FETCH 'aggregation_attribute'
         # If the chosen aggregation layer not Entire Area, it should have
         # aggregation attribute keywords
         if not self.entire_area_mode:
             try:
-                self.aggregation_attribute = \
+                #noinspection PyTypeChecker
+                self.aggregation['aggregation_attribute'] = \
                     self.keyword_io.read_keywords(
-                        self.chosen_aggregation_layer,
+                        self.aggregation['layer'],
                         'aggregation attribute')
             except NoKeywordsFoundError:
                 raise NoKeywordsFoundError(
@@ -412,30 +562,41 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def merge(self):
         """Merge the postprocessing_report from each impact."""
         # Ensure there is always only a single root element or minidom moans
-        first_report = '<body>' + self.first_postprocessing_report + '</body>'
-        second_report = (
-            '<body>' + self.second_postprocessing_report + '</body>')
+        first_postprocessing_report = \
+            self.first_impact['postprocessing_report']
+        second_postprocessing_report = \
+            self.second_impact['postprocessing_report']
+        #noinspection PyTypeChecker
+        first_report = '<body>' + first_postprocessing_report + '</body>'
+        #noinspection PyTypeChecker
+        second_report = '<body>' + second_postprocessing_report + '</body>'
 
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
         second_document = minidom.parseString(second_report)
-        tables = first_document.getElementsByTagName('table')
-        tables += second_document.getElementsByTagName('table')
+        first_impact_tables = first_document.getElementsByTagName('table')
+        second_impact_tables = second_document.getElementsByTagName('table')
 
         # Now create dictionary report from DOM
-        merged_report_dict = self.generate_report_dictionary_from_dom(tables)
+        first_report_dict = self.generate_report_dictionary_from_dom(
+            first_impact_tables)
+        second_report_dict = self.generate_report_dictionary_from_dom(
+            second_impact_tables)
+
+        # Generate report summary for all aggregation unit
+        self.generate_report_summary(first_report_dict, second_report_dict)
 
         # Generate html reports file from merged dictionary
-        self.generate_html_reports(merged_report_dict)
+        self.generate_html_reports(first_report_dict, second_report_dict)
 
         # Generate PDF Reports using composer and/or atlas generation:
         self.generate_reports()
 
         # Delete html report files:
-        for area in self.html_reports:
-            report_path = self.html_reports[area]
-            if os.path.exists(report_path):
-                os.remove(report_path)
+        #for area in self.html_reports:
+        #    report_path = self.html_reports[area]
+        #    if os.path.exists(report_path):
+        #        os.remove(report_path)
 
     @staticmethod
     def generate_report_dictionary_from_dom(html_dom):
@@ -456,7 +617,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
            {"Jakarta Barat":
                {"Buildings":
                    {"Total":150,
-                    "Places of Worship: No data
+                    "Places of Worship": "No data"
                    }
                }
            }
@@ -488,7 +649,35 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 merged_report_dict[aggregation_area] = exposure_dict
         return merged_report_dict
 
-    def generate_html_reports(self, merged_report_dict):
+    def generate_report_summary(self,
+                                first_report_dict,
+                                second_report_dict):
+        """Generate report summary for each aggregation area from
+        merged report dictionary.
+
+        :param first_report_dict: Dictionary report from first impact
+        :type first_report_dict: dict
+
+        :param second_report_dict: Dictionary report from second impact
+        :type second_report_dict: dict
+        """
+        for aggregation_area in first_report_dict:
+            html = ''
+            html += '<table style="margin:0px auto">'
+            exposure_report_dict = first_report_dict[aggregation_area]
+            for exposure in exposure_report_dict:
+                exposure_detail_dict = exposure_report_dict[exposure]
+                html += '<tr><th>%s</th><th></th></tr>' % exposure.upper()
+                for datum in exposure_detail_dict:
+                    if 'total' in datum.lower():
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % (datum, exposure_detail_dict[datum])
+            html += '</table>'
+            self.summary_report[aggregation_area.lower()] = html
+
+    def generate_html_reports(self, first_report_dict, second_report_dict):
         """Generate html file for each aggregation units.
 
         It also saves the path of the each aggregation unit in
@@ -496,23 +685,63 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         Ex. {"jakarta barat": "/home/jakarta barat.html",
              "jakarta timur": "/home/jakarta timur.html"}
 
-        :param merged_report_dict: A dictionary of merged report.
-        :type merged_report_dict: dict
+        :param first_report_dict: Dictionary report from first impact.
+        :type first_report_dict: dict
+
+        :param second_report_dict: Dictionary report from second impact.
+        :type second_report_dict: dict
         """
-        for aggregation_area in merged_report_dict:
+        for aggregation_area in first_report_dict:
             html = html_header()
-            html += ('<table style="margin:0px auto;" '
+            html += ('<table width="100%" style="position:absolute;left:0px;"'
                      'class="table table-condensed table-striped">')
-            html += '<caption><h4>%s</h4></caption>' % aggregation_area.upper()
-            exposure_report_dict = merged_report_dict[aggregation_area]
-            for exposure in exposure_report_dict:
-                exposure_detail_dict = exposure_report_dict[exposure]
-                html += '<tr><th>%s</th><th></th></tr>' % exposure.upper()
-                for datum in exposure_detail_dict:
+            html += '<tr>'
+
+            # First impact on the left side
+            html += '<td width="48%">'
+            html += '<table width="100%">'
+            html += '<caption>%s</caption>' % \
+                    self.first_impact['exposure_title'].upper()
+            first_exposure_report_dict = first_report_dict[aggregation_area]
+            for first_exposure in first_exposure_report_dict:
+                first_exposure_detail_dict = \
+                    first_exposure_report_dict[first_exposure]
+                html += '<tr><th><i>%s</i></th><th></th></tr>' % \
+                        first_exposure.title()
+                for datum in first_exposure_detail_dict:
                     html += ('<tr>'
                              '<td>%s</td>'
                              '<td>%s</td>'
-                             '</tr>') % (datum, exposure_detail_dict[datum])
+                             '</tr>') % (datum,
+                                         first_exposure_detail_dict[datum])
+            html += '</table>'
+            html += '</td>'
+
+            # Add spaces between
+            html += '<td width="4%">'
+            html += '</td>'
+
+            # Second impact on the right side
+            html += '<td width="48%">'
+            html += '<table width="100%">'
+            html += '<caption>%s</caption>' % \
+                    self.second_impact['exposure_title'].upper()
+            second_exposure_report_dict = second_report_dict[aggregation_area]
+            for second_exposure in second_exposure_report_dict:
+                second_exposure_detail_dict = \
+                    second_exposure_report_dict[second_exposure]
+                html += '<tr><th><i>%s</i></th><th></th></tr>' % \
+                        second_exposure.title()
+                for datum in second_exposure_detail_dict:
+                    html += ('<tr>'
+                             '<td>%s</td>'
+                             '<td>%s</td>'
+                             '</tr>') % (datum,
+                                         second_exposure_detail_dict[datum])
+            html += '</table>'
+            html += '</td>'
+
+            html += '</tr>'
             html += '</table>'
             html += html_footer()
 
@@ -544,12 +773,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """
         # Setup Map Renderer and set all the layer
         renderer = QgsMapRenderer()
-        layer_set = [self.first_impact_layer.id(),
-                     self.second_impact_layer.id()]
+        layer_set = [self.first_impact['layer'].id(),
+                     self.second_impact['layer'].id()]
 
         # If aggregated, append chosen aggregation layer
         if not self.entire_area_mode:
-            layer_set.append(self.chosen_aggregation_layer.id())
+            layer_set.append(self.aggregation['layer'].id())
 
         # Set Layer set to renderer
         renderer.setLayerSet(layer_set)
@@ -574,14 +803,14 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 composer_map_height / composer_map_width)
 
             # The extent of two impact layers
-            min_x = min(self.first_impact_layer.extent().xMinimum(),
-                        self.second_impact_layer.extent().xMinimum())
-            min_y = min(self.first_impact_layer.extent().yMinimum(),
-                        self.second_impact_layer.extent().yMinimum())
-            max_x = max(self.first_impact_layer.extent().xMaximum(),
-                        self.second_impact_layer.extent().xMaximum())
-            max_y = max(self.first_impact_layer.extent().yMaximum(),
-                        self.second_impact_layer.extent().yMaximum())
+            min_x = min(self.first_impact['layer'].extent().xMinimum(),
+                        self.second_impact['layer'].extent().xMinimum())
+            min_y = min(self.first_impact['layer'].extent().yMinimum(),
+                        self.second_impact['layer'].extent().yMinimum())
+            max_x = max(self.first_impact['layer'].extent().xMaximum(),
+                        self.second_impact['layer'].extent().xMaximum())
+            max_y = max(self.first_impact['layer'].extent().yMaximum(),
+                        self.second_impact['layer'].extent().yMaximum())
             max_width = max_x - min_x
             max_height = max_y - min_y
             layers_size_ratio = float(max_height / max_width)
@@ -598,10 +827,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 new_width = max_height / composer_size_ratio
 
             # Set new extent
-            fit_min_x = center_x - (new_width/2.0)
-            fit_max_x = center_x + (new_width/2.0)
-            fit_min_y = center_y - (new_height/2.0)
-            fit_max_y = center_y + (new_height/2.0)
+            fit_min_x = center_x - (new_width / 2.0)
+            fit_max_x = center_x + (new_width / 2.0)
+            fit_min_y = center_y - (new_height / 2.0)
+            fit_max_y = center_y + (new_height / 2.0)
 
             # Create the extent and set it to the map
             map_extent = QgsRectangle(
@@ -620,6 +849,15 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             # Self.html_reports must have only 1 key value pair
             area_title = list(self.html_reports.keys())[0]
+
+            # Set Report Summary
+            summary_report = composition.getComposerItemById('summary-report')
+            summary_report.setText(self.summary_report[area_title])
+
+            # Set Aggregation Area Label
+            area_label = composition.getComposerItemById('aggregation-area')
+            area_label.setText(area_title.upper())
+
             html_report_path = self.html_reports[area_title]
             #noinspection PyArgumentList
             html_frame_url = QUrl.fromLocalFile(html_report_path)
@@ -635,12 +873,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             # Set coverage layer
             # Map will be clipped by features from this layer:
-            atlas.setCoverageLayer(self.chosen_aggregation_layer)
+            atlas.setCoverageLayer(self.aggregation['layer'])
 
             # Add grid to composer map from coverage layer
             split_count = 5
-            map_width = self.chosen_aggregation_layer.extent().width()
-            map_height = self.chosen_aggregation_layer.extent().height()
+            map_width = self.aggregation['layer'].extent().width()
+            map_height = self.aggregation['layer'].extent().height()
             x_interval = map_width / split_count
             composer_map.setGridIntervalX(x_interval)
             y_interval = map_height / split_count
@@ -650,7 +888,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             atlas.setComposerMap(composer_map)
 
             # set output filename pattern
-            atlas.setFilenamePattern(self.aggregation_attribute)
+            atlas.setFilenamePattern(
+                self.aggregation['aggregation_attribute'])
 
             # Start rendering
             atlas.beginRender()
@@ -666,7 +905,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
                 # Only print the area that has the report
                 area_title = current_filename.lower()
-                if area_title in self.html_reports:
+                if area_title in self.summary_report:
+                    # Set Report Summary
+                    summary_report = composition.getComposerItemById(
+                        'summary-report')
+                    summary_report.setText(self.summary_report[area_title])
+
+                    # Set Aggregation Area Label
+                    area_label = composition.getComposerItemById(
+                        'aggregation-area')
+                    area_label.setText(area_title.upper())
+
                     html_report_path = self.html_reports[area_title]
                     #noinspection PyArgumentList
                     html_frame_url = QUrl.fromLocalFile(html_report_path)
@@ -698,9 +947,18 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Map Substitution
         #noinspection PyTypeChecker,PyCallByClass
         safe_logo_path = QUrl.fromLocalFile(str(self.safe_logo_path))
+        #noinspection PyTypeChecker,PyCallByClass
+        organisation_logo_path = QUrl.fromLocalFile(
+            str(self.oganisation_logo_path))
+        impact_title = '%s and %s' % (
+            self.first_impact['map_title'],
+            self.second_impact['map_title']
+        )
         substitution_map = {
-            'impact-title': self.get_impact_title(),
-            'safe-logo': safe_logo_path.toString()
+            'impact-title': impact_title,
+            'hazard-title': self.first_impact['hazard_title'],
+            'inasafe-logo': safe_logo_path.toString(),
+            'organisation-logo': organisation_logo_path.toString()
         }
 
         # Load template
@@ -719,20 +977,3 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr('Legend "impact-legend" could not be found'))
 
         return composition
-
-    def get_impact_title(self):
-        """Get the map title from the two impact layers.
-
-        :returns: None on error, otherwise the title.
-        :rtype: None, str
-        """
-        try:
-            first_impact_title = self.keyword_io.read_keywords(
-                self.first_impact_layer,
-                'map_title')
-            second_impact_title = self.keyword_io.read_keywords(
-                self.second_impact_layer,
-                'map_title')
-            return '%s and %s' % (first_impact_title, second_impact_title)
-        except KeywordNotFoundError:
-            return None

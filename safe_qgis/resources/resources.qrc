@@ -14,6 +14,8 @@
         <file alias="show-impact-merge.svg">img/icons/show-impact-merge.svg</file>
         <!-- logos -->
         <file alias="inasafe-logo.svg">img/logos/inasafe-logo.svg</file>
+        <file alias="inasafe-logo-url.svg">img/logos/inasafe-logo-url.svg</file>
+        <file alias="supporters.png">img/logos/supporters.png</file>
         <file alias="bnpb_logo.png">img/logos/bnpb_logo.png</file>
         <file alias="bnpb_logo_64.png">img/logos/bnpb_logo_64.png</file>
         <file alias="bnpb_logo_32.png">img/logos/bnpb_logo_32.png</file>

@@ -115,10 +115,16 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
         self.default_template_radio.setChecked(flag)
         self.custom_template_radio.setChecked(not flag)
 
-        path = settings.value('inasafe/lastTemplate', '', type=str)
+        try:
+            path = settings.value('inasafe/lastTemplate', '', type=str)
+        except TypeError:
+            path = ''
         self.template_combo.setCurrentIndex(
             self.template_combo.findData(path))
-        path = settings.value('inasafe/lastCustomTemplate', '', type=str)
+        try:
+            path = settings.value('inasafe/lastCustomTemplate', '', type=str)
+        except TypeError:
+            path = ''
         self.template_path.setText(path)
 
     def save_state(self):

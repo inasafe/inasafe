@@ -50,8 +50,12 @@ class Map():
         self.printer = None
         self.composition = None
         self.extent = iface.mapCanvas().extent()
-        self.logo = ':/plugins/inasafe/bnpb_logo.png'
+        self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
+        self.org_logo = ':/plugins/inasafe/supporters.png'
         self.template = ':/plugins/inasafe/inasafe.qpt'
+        self.disclaimer = self.tr(
+            'InaSAFE has been jointly developed by BNPB, Australian '
+            'Government and the World Bank - GFDRR')
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0
@@ -78,13 +82,21 @@ class Map():
         """
         self.layer = layer
 
-    def set_logo(self, logo):
-        """Set image that will be used as logo in reports.
+    def set_organisation_logo(self, logo):
+        """Set image that will be used as organisation logo in reports.
 
         :param logo: Path to image file
         :type logo: str
         """
-        self.logo = logo
+        self.org_logo = logo
+
+    def set_disclaimer(self, text):
+        """Set text that will be used as disclaimer in reports.
+
+        :param text: Disclaimer text
+        :type text: str
+        """
+        self.disclaimer = text
 
     def set_template(self, template):
         """Set template that will be used for report generation.
@@ -252,7 +264,8 @@ class Map():
             'impact-title': title,
             'date': date,
             'time': time,
-            'safe-version': version
+            'safe-version': version,
+            'disclaimer': self.disclaimer
         }
         LOGGER.debug(substitution_map)
         load_ok = self.composition.loadFromTemplate(document,
@@ -265,13 +278,32 @@ class Map():
         self.page_width = self.composition.paperWidth()
         self.page_height = self.composition.paperHeight()
 
-        # set logo
+        # set InaSAFE logo
         image = self.composition.getComposerItemById('safe-logo')
         if image is not None:
-            image.setPictureFile(self.logo)
+            image.setPictureFile(self.safe_logo)
         else:
             raise ReportCreationError(self.tr(
                 'Image "safe-logo" could not be found'))
+
+        # set organisation logo
+        image = self.composition.getComposerItemById('organisation-logo')
+        if image is not None:
+            image.setPictureFile(self.org_logo)
+        else:
+            raise ReportCreationError(self.tr(
+                'Image "organisation-logo" could not be found'))
+
+        # set impact report table
+        table = self.composition.getComposerItemById('impact-report')
+        if table is not None:
+            text = self.keyword_io.read_keywords(self.layer, 'impact_summary')
+            if text is None:
+                text = ''
+            table.setText(text)
+            table.setHtmlState(1)
+        else:
+            LOGGER.debug('"impact-report" element not found.')
 
         # Get the main map canvas on the composition and set
         # its extents to the event.
@@ -319,8 +351,9 @@ class Map():
 
         # remove from legend all layers, except impact one
         model = legend.model()
-        impact_item = model.findItems(self.layer.name())[0]
-        row = impact_item.index().row()
-        model.removeRows(row + 1, model.rowCount() - row)
-        if row > 0:
-            model.removeRows(0, row)
+        if model.rowCount() > 0 and model.columnCount() > 0:
+            impact_item = model.findItems(self.layer.name())[0]
+            row = impact_item.index().row()
+            model.removeRows(row + 1, model.rowCount() - row)
+            if row > 0:
+                model.removeRows(0, row)

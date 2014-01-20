@@ -75,6 +75,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.standard_exposure_list = OrderedDict(
             [('population', self.tr('population')),
              ('structure', self.tr('structure')),
+             ('road', self.tr('road')),
              ('Not Set', self.tr('Not Set'))])
         self.standard_hazard_list = OrderedDict(
             [('earthquake [MMI]', self.tr('earthquake [MMI]')),
@@ -118,6 +119,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         reload_button = self.buttonBox.addButton(
             self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
         reload_button.clicked.connect(self.load_state_from_keywords)
+        self.grpAdvanced.setVisible(False)
+        self.resize_dialog()
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.
@@ -655,6 +658,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         In case the layer has no keywords or any problem occurs reading them,
         start with a blank slate so that subcategory gets populated nicely &
         we will assume exposure to start with.
+
+        Also if only title is set we use similar logic (title is added by
+        default in dock and other defaults need to be explicitly added
+        when opening this dialog). See #751
+
         """
         keywords = {'category': 'exposure'}
 
@@ -675,12 +683,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'category' in keywords:
             self.set_category(keywords['category'])
             keywords.pop('category')
+        else:
+            # assume exposure to match ui. See issue #751
+            self.add_list_entry('category', 'exposure')
 
         for key in keywords.iterkeys():
             self.add_list_entry(key, str(keywords[key]))
 
         # now make the rest of the safe_qgis reflect the list entries
         self.update_controls_from_list()
+
 
     def update_controls_from_list(self):
         """Set the ui state to match the keywords of the active layer."""

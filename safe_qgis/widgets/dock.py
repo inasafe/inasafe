@@ -729,6 +729,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
         self.get_layers_lock = False
+        #ensure the dock keywords info panel is updated
+        #make sure to do this after the lock is released!
+        self.layer_changed(self.iface.activeLayer())
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
@@ -1860,9 +1863,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
+        logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
         if logo_path != '':
-            print_map.set_logo(logo_path)
+            print_map.set_organisation_logo(logo_path)
+
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        if disclaimer != '':
+            print_map.set_disclaimer(disclaimer)
 
         print_map.set_template(template_path)
 

@@ -1,28 +1,50 @@
 <Composer title="merged_report" visible="1">
- <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="2" paperHeight="297" alignmentSnapTolerance="0" printAsRaster="0">
-  <ComposerLabel valign="128" labelText="&lt;img src=&quot;[safe-logo]&quot; style=&quot;max-width:100%; max-height:100%;&quot;/>" htmlState="2" halign="4" margin="1">
+ <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="297" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="2" paperHeight="210" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="0" generateWorldFile="0">
+  <ComposerScaleBar penColor="#000000" style="Numeric" numMapUnitsPerScaleBarUnit="1000" alignment="1" brushColor="#000000" numSegments="4" segmentMillimeters="449.71" fontColor="#000000" font="Sans,12,-1,5,50,0,0,0,0,0" numUnitsPerSegment="1" units="2" labelBarSpace="3" outlineWidth="1" numSegmentsLeft="2" height="3" mapId="0" boxContentSpace="1" unitLabel="m">
+   <ComposerItem width="30" x="115" transparency="0" y="180" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="1.47564" uuid="{f1b226eb-9870-48ac-81b7-3066f8e0a9d9}" id="" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerScaleBar>
+  <ComposerLabel valign="32" labelText="" htmlState="0" halign="4" margin="1">
    <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="15" x="15" transparency="0" y="8" rotation="0" height="15" positionMode="0" frame="false" outlineWidth="0" zValue="11" lastValidViewScaleFactor="1.08099" uuid="{6e6c68fd-08a0-40a8-85f0-dce2d9247b8e}" id="safe-logo" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="30" x="115" transparency="0" y="150" rotation="0" height="25" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{582f84d4-4e40-4866-bc14-7ffa68e367e9}" id="aggregation-area" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" labelText="&lt;img src=&quot;[safe-logo]&quot; style=&quot;max-width:100%; max-height:100%;&quot;/>" htmlState="2" halign="4" margin="1">
+  <ComposerLabel valign="32" labelText="" htmlState="2" halign="1" margin="1">
    <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="15" x="15" transparency="0" y="318" rotation="0" height="15" positionMode="0" frame="false" outlineWidth="0" zValue="11" lastValidViewScaleFactor="1.08099" uuid="{b3f89a19-3024-4f49-82e5-f92bd45268be}" id="safe-logo" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="40" x="69.55" transparency="0" y="150" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{37d9a49c-5f4a-4015-a403-71e1cf58c2a3}" id="summary-report" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLegend symbolWidth="7" title="" boxSpace="0" splitLayer="0" equalColumnWidth="1" map="0" symbolHeight="4" wrapChar="" fontColor="#000000" columnSpace="3" columnCount="2">
+  <ComposerLabel valign="128" labelText="&lt;img src=&quot;[organisation-logo]&quot; style=&quot;max-width:100%;&quot;/>" htmlState="2" halign="4" margin="1">
+   <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="50" x="235" transparency="0" y="150" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{89f76be0-04fc-4b22-a0d9-c8a9b4354b22}" id="organisation-logo" background="false" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="128" labelText="&lt;img src=&quot;[inasafe-logo]&quot; style=&quot;max-width:100%%;&quot;/>" htmlState="2" halign="4" margin="1">
+   <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="50" x="15" transparency="0" y="150" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{09507ba2-cdaf-46ff-bcc7-6b3133c551ee}" id="safe-logo" background="false" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLegend symbolWidth="7" title="" boxSpace="0" splitLayer="0" equalColumnWidth="1" map="0" symbolHeight="4" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
    <styles>
-    <style name="title" font="Droid Sans,12,-1,5,75,0,0,0,0,0"/>
-    <style marginTop="2" name="group" font="Droid Sans,11,-1,5,50,0,0,0,0,0"/>
-    <style marginTop="2" name="subgroup" font="Ubuntu,11,-1,5,75,0,0,0,0,0"/>
-    <style marginTop="2" name="symbol" font="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
-    <style marginTop="2" marginLeft="2" name="symbolLabel" font="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
+    <style marginBottom="1" name="title" font="Droid Sans,7,-1,5,75,0,0,0,0,0"/>
+    <style marginTop="1" name="group" font="Droid Sans,6,-1,5,75,0,0,0,0,0"/>
+    <style marginTop="1" name="subgroup" font="Ubuntu,6,-1,5,75,0,0,0,0,0"/>
+    <style marginTop="1" name="symbol" font="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="1" marginLeft="1" name="symbolLabel" font="Droid Sans,6,-1,5,75,0,0,0,0,0"/>
    </styles>
    <Model autoUpdate="1">
     <LayerItem layerId="Estimated_buildings_affected20140107224803280" userText="" style="subgroup" text="Estimated buildings affected" showFeatureCount="0">
@@ -225,38 +247,202 @@
       </symbols>
      </VectorClassificationItemNg>
     </LayerItem>
+    <LayerItem layerId="Estimated_buildings_affected20140114143736731" userText="" style="subgroup" text="Estimated buildings affected" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="Not Inundated">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="30,252,124,255"/>
+         <prop k="color_border" v="30,252,124,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="Inundated">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="243,26,28,255"/>
+         <prop k="color_border" v="243,26,28,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
+    <LayerItem layerId="Population_affected_by_flood_prone_areas20140114143747175" userText="" style="subgroup" text="Population affected by flood prone areas" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="[0 - 10,070]">
+      <symbols>
+       <symbol alpha="0" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="255,255,255,255"/>
+         <prop k="color_border" v="255,255,255,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="[10,070 - 20,141]">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="56,168,0,255"/>
+         <prop k="color_border" v="56,168,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="[20,141 - 30,211]">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="121,201,0,255"/>
+         <prop k="color_border" v="121,201,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="[30,211 - 40,281]">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="206,237,0,255"/>
+         <prop k="color_border" v="206,237,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="[40,281 - 50,351]">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="255,204,0,255"/>
+         <prop k="color_border" v="255,204,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="[50,351 - 60,422]">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="255,102,0,255"/>
+         <prop k="color_border" v="255,102,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="[60,422 - 70,492]">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="255,0,0,255"/>
+         <prop k="color_border" v="255,0,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="[70,492 - 80,562]">
+      <symbols>
+       <symbol alpha="1" type="fill" name="classificationSymbol">
+        <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_unit" v="MM"/>
+         <prop k="color" v="122,0,0,255"/>
+         <prop k="color_border" v="122,0,0,255"/>
+         <prop k="offset" v="0,0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="style" v="solid"/>
+         <prop k="style_border" v="solid"/>
+         <prop k="width_border" v="0"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
    </Model>
-   <ComposerItem width="155.912" x="15" transparency="0" y="200" rotation="0" height="69.2" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="2.16198" uuid="{8bd51c33-3d69-4966-8c09-2f655f05046e}" id="impact-legend" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="83.5" x="150" transparency="0" y="150" rotation="0" height="65" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="1.47564" uuid="{b5988e26-184c-4a22-8d71-78b8f2ddbfe0}" id="impact-legend" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLegend>
-  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
+  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, Australian Government and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="180" x="15" transparency="0" y="592" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.08099" uuid="{dc3c323b-c6c1-4b11-941c-335f82c77dd1}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="180" x="15" transparency="0" y="415" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.47564" uuid="{91b0266c-9c6d-4096-9102-e463e838ab4f}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, AusAid and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
+  <ComposerLabel valign="128" labelText="InaSAFE has been jointly developed by BNPB, Australian Government and the World Bank - GFDRR" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="180" x="15" transparency="0" y="285" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.08099" uuid="{3a55fed4-76a1-4c65-abb7-728e21248cf9}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="180" x="15" transparency="0" y="195" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.47564" uuid="{2a7f7366-e225-4be7-8d1a-f849f434b419}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" labelText="[impact-title]" htmlState="0" halign="1" margin="1">
+  <ComposerLabel valign="128" labelText="[impact-title] in the Event of [hazard-title]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="180" x="15" transparency="0" y="185" rotation="0" height="15" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="2.16198" uuid="{a0a05a55-91d6-4ecc-838d-ec490a302dbd}" id="impact-title" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="270" x="15" transparency="0" y="230" rotation="0" height="20" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="1.47564" uuid="{cc1681d5-0c62-45d2-8dae-38aac4a42ea8}" id="impact-title" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Render" drawCanvasItems="true">
-   <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewInverted="false">
+   <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
     <symbol alpha="0.3" type="fill" name="">
      <layer pass="0" class="SimpleFill" locked="0">
       <prop k="border_width_unit" v="MM"/>
@@ -270,7 +456,7 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-6.2445" xmin="106.744" ymax="-6.08183" xmax="106.927"/>
+   <Extent ymin="-6.24450000000000038" xmin="106.74399999999999977" ymax="-6.1563888888888858" xmax="106.92700000000000671"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="3" intervalX="0" offsetX="0" intervalY="0" offsetY="0" gridFrameStyle="0" gridFrameWidth="2" gridBlendMode="0" show="1">
     <symbol alpha="1" type="line" name="">
@@ -292,30 +478,14 @@
      <fontColor red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <ComposerItem width="180" x="15" transparency="0" y="25" rotation="0" height="160" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.16198" uuid="{25ebd596-0d53-4521-b03e-4f636eca77e2}" id="impact-map" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="270" x="15" transparency="0" y="10" rotation="0" height="130" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="1.47564" uuid="{027f5001-6440-4c80-89e5-3f1c08255ccd}" id="impact-map" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="1" margin="1">
-   <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="170" x="30" transparency="0" y="320" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.16198" uuid="{d0dcd12d-901b-4840-a131-24a5547561b3}" id="" background="true" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
-  <ComposerLabel valign="128" labelText="InaSAFE ­­- Indonesia Scenario Assessment for Emergencies" htmlState="0" halign="1" margin="1">
-   <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="170" x="30" transparency="0" y="10" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="2.16198" uuid="{5a76ba42-7cf3-4942-8e00-0f0626a3b52a}" id="" background="true" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
   <ComposerHtml resizeMode="0" url="">
    <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="180" x="15" transparency="0" y="335" rotation="0" height="240" positionMode="0" frame="false" outlineWidth="0" zValue="9" lastValidViewScaleFactor="1.08099" uuid="{a2075f90-29ee-44d9-9b47-9d894d7bed85}" id="merged-report" background="true" blendMode="0" positionLock="false">
+    <ComposerItem width="240" x="15" transparency="0" y="250" rotation="0" height="160" positionMode="0" frame="false" outlineWidth="0" zValue="9" lastValidViewScaleFactor="1.47564" uuid="{d1508303-1fac-4473-8c9c-93c5a1422c8e}" id="merged-report" background="true" blendMode="0" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>

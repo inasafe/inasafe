@@ -20,7 +20,10 @@
    enable-background="new 0 0 567 567"
    xml:space="preserve"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="inasafe-logo.svg"><metadata
+   sodipodi:docname="inasafe-logo-url.svg"
+   inkscape:export-filename="/home/timlinux/dev/python/inasafe-dev/safe_qgis/resources/img/logos/inasafe-logo-url.png"
+   inkscape:export-xdpi="150"
+   inkscape:export-ydpi="150"><metadata
      id="metadata16"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
@@ -244,7 +247,9 @@
          sodipodi:role="line"
          id="tspan3131"
          x="46.617451"
-         y="559.61053">http://<tspan
+         y="559.61053"><tspan
    style="font-weight:bold"
-   id="tspan3133">inasafe</tspan>.org</tspan></text>
+   id="tspan3133"><tspan
+   style="font-weight:normal"
+   id="tspan3116">www.</tspan>inasafe</tspan>.org</tspan></text>
 </g></svg>

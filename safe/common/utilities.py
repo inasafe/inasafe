@@ -566,6 +566,7 @@ def create_label(my_tuple, extra_label=None):
     else:
         return '[' + ' - '.join(my_tuple) + ']'
 
+
 def get_utm_zone(longitude):
     """
     Return utm zone.
