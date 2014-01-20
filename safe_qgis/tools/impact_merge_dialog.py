@@ -111,8 +111,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'hazard_title': None,
             'exposure_title': None,
             'postprocessing_report': None,
-            'summary_report': None,
-            'breakdown_report': None
         }
 
         # Stored information from second impact layer
@@ -122,8 +120,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'hazard_title': None,
             'exposure_title': None,
             'postprocessing_report': None,
-            'summary_report': None,
-            'breakdown_report': None
         }
 
         # Stored information from aggregation layer
@@ -266,7 +262,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr("InaSAFE Merge Impact Tools Error"),
                 str(ex))
             return
-        #pylint: enable=W0703
+            #pylint: enable=W0703
 
         # Finish doing it. End wait cursor
         QtGui.qApp.restoreOverrideCursor()
@@ -593,10 +589,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.generate_reports()
 
         # Delete html report files:
-        #for area in self.html_reports:
-        #    report_path = self.html_reports[area]
-        #    if os.path.exists(report_path):
-        #        os.remove(report_path)
+        for area in self.html_reports:
+            report_path = self.html_reports[area]
+            if os.path.exists(report_path):
+                os.remove(report_path)
 
     @staticmethod
     def generate_report_dictionary_from_dom(html_dom):
@@ -664,16 +660,39 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         for aggregation_area in first_report_dict:
             html = ''
             html += '<table style="margin:0px auto">'
-            exposure_report_dict = first_report_dict[aggregation_area]
-            for exposure in exposure_report_dict:
-                exposure_detail_dict = exposure_report_dict[exposure]
-                html += '<tr><th>%s</th><th></th></tr>' % exposure.upper()
-                for datum in exposure_detail_dict:
-                    if 'total' in datum.lower():
-                        html += ('<tr>'
-                                 '<td>%s</td>'
-                                 '<td>%s</td>'
-                                 '</tr>') % (datum, exposure_detail_dict[datum])
+
+            # Summary total From first report
+            html += '<tr><td><b>%s</b></td><td></td></tr>' % \
+                    self.first_impact['exposure_title'].title()
+            first_exposure_report_dict = first_report_dict[aggregation_area]
+            first_exposure = first_exposure_report_dict.keys()[0]
+            first_exposure_detail_dict = \
+                first_exposure_report_dict[first_exposure]
+            for datum in first_exposure_detail_dict:
+                if 'total' in datum.lower():
+                    html += ('<tr>'
+                             '<td>%s</td>'
+                             '<td>%s</td>'
+                             '</tr>') % \
+                            (datum, first_exposure_detail_dict[datum])
+                    break
+
+            # Summary total from second report
+            html += '<tr><td><b>%s</b></td><td></td></tr>' % \
+                    self.second_impact['exposure_title'].title()
+            second_exposure_report_dict = second_report_dict[aggregation_area]
+            second_exposure = second_exposure_report_dict.keys()[0]
+            second_exposure_detail_dict = \
+                second_exposure_report_dict[second_exposure]
+            for datum in second_exposure_detail_dict:
+                if 'total' in datum.lower():
+                    html += ('<tr>'
+                             '<td>%s</td>'
+                             '<td>%s</td>'
+                             '</tr>') % \
+                            (datum, second_exposure_detail_dict[datum])
+                    break
+
             html += '</table>'
             self.summary_report[aggregation_area.lower()] = html
 
