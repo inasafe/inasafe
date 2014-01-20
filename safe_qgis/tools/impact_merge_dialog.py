@@ -605,14 +605,16 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         :return: Dictionary representing html_dom
         :rtype: dict
 
-        # DICT STRUCTURE:
-         { Aggregation_Area:
+        ... Dict Structure:
+        { Aggregation_Area:
             {Exposure Type:{
-                Exposure Detail}}}
-        # EXAMPLE
+                Exposure Detail}
+            }
+        }
+        ... Example
            {"Jakarta Barat":
-               {"Buildings":
-                   {"Total":150,
+               {"Detailed Building Type Report":
+                   {"Total inundated":150,
                     "Places of Worship": "No data"
                    }
                }
@@ -645,11 +647,28 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 merged_report_dict[aggregation_area] = exposure_dict
         return merged_report_dict
 
-    def generate_report_summary(self,
-                                first_report_dict,
-                                second_report_dict):
+    def generate_report_summary(self, first_report_dict, second_report_dict):
         """Generate report summary for each aggregation area from
         merged report dictionary.
+
+        ... For each exposure, search for the total only
+
+        ... Report dictionary looks like this:
+        ... Dict structure:
+        { aggregation_area:
+            {exposure_type:{
+                exposure_detail}
+            }
+        }
+
+        .. Example:
+        {"Jakarta Barat":
+               {"Detailed Building Type Report":
+                   {"Total inundated":150,
+                    "Places of Worship": "No data"
+                   }
+               }
+       }
 
         :param first_report_dict: Dictionary report from first impact
         :type first_report_dict: dict
@@ -661,13 +680,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html = ''
             html += '<table style="margin:0px auto">'
 
-            # Summary total From first report
+            # Summary total from first report
             html += '<tr><td><b>%s</b></td><td></td></tr>' % \
                     self.first_impact['exposure_title'].title()
-            first_exposure_report_dict = first_report_dict[aggregation_area]
-            first_exposure = first_exposure_report_dict.keys()[0]
+            first_exposure_type_dict = first_report_dict[aggregation_area]
+            first_exposure_type = first_exposure_type_dict.keys()[0]
             first_exposure_detail_dict = \
-                first_exposure_report_dict[first_exposure]
+                first_exposure_type_dict[first_exposure_type]
             for datum in first_exposure_detail_dict:
                 if 'total' in datum.lower():
                     html += ('<tr>'
@@ -677,21 +696,24 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                             (datum, first_exposure_detail_dict[datum])
                     break
 
-            # Summary total from second report
-            html += '<tr><td><b>%s</b></td><td></td></tr>' % \
-                    self.second_impact['exposure_title'].title()
-            second_exposure_report_dict = second_report_dict[aggregation_area]
-            second_exposure = second_exposure_report_dict.keys()[0]
-            second_exposure_detail_dict = \
-                second_exposure_report_dict[second_exposure]
-            for datum in second_exposure_detail_dict:
-                if 'total' in datum.lower():
-                    html += ('<tr>'
-                             '<td>%s</td>'
-                             '<td>%s</td>'
-                             '</tr>') % \
-                            (datum, second_exposure_detail_dict[datum])
-                    break
+            # Catch fallback for aggregation_area not exist in second_report
+            if aggregation_area in second_report_dict:
+                second_exposure_report_dict = second_report_dict[
+                    aggregation_area]
+                # Summary total from second report
+                html += '<tr><td><b>%s</b></td><td></td></tr>' % \
+                        self.second_impact['exposure_title'].title()
+                second_exposure = second_exposure_report_dict.keys()[0]
+                second_exposure_detail_dict = \
+                    second_exposure_report_dict[second_exposure]
+                for datum in second_exposure_detail_dict:
+                    if 'total' in datum.lower():
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % \
+                                (datum, second_exposure_detail_dict[datum])
+                        break
 
             html += '</table>'
             self.summary_report[aggregation_area.lower()] = html
@@ -736,29 +758,33 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html += '</table>'
             html += '</td>'
 
-            # Add spaces between
-            html += '<td width="4%">'
-            html += '</td>'
-
             # Second impact on the right side
-            html += '<td width="48%">'
-            html += '<table width="100%">'
-            html += '<caption>%s</caption>' % \
-                    self.second_impact['exposure_title'].upper()
-            second_exposure_report_dict = second_report_dict[aggregation_area]
-            for second_exposure in second_exposure_report_dict:
-                second_exposure_detail_dict = \
-                    second_exposure_report_dict[second_exposure]
-                html += '<tr><th><i>%s</i></th><th></th></tr>' % \
-                        second_exposure.title()
-                for datum in second_exposure_detail_dict:
-                    html += ('<tr>'
-                             '<td>%s</td>'
-                             '<td>%s</td>'
-                             '</tr>') % (datum,
-                                         second_exposure_detail_dict[datum])
-            html += '</table>'
-            html += '</td>'
+            if aggregation_area in second_report_dict:
+                # Add spaces between
+                html += '<td width="4%">'
+                html += '</td>'
+
+                # Second impact report
+                html += '<td width="48%">'
+                html += '<table width="100%">'
+                html += '<caption>%s</caption>' % \
+                        self.second_impact['exposure_title'].upper()
+                second_exposure_report_dict = \
+                    second_report_dict[aggregation_area]
+                for second_exposure in second_exposure_report_dict:
+                    second_exposure_detail_dict = \
+                        second_exposure_report_dict[second_exposure]
+                    html += '<tr><th><i>%s</i></th><th></th></tr>' % \
+                            second_exposure.title()
+                    for datum in second_exposure_detail_dict:
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % \
+                                (datum,
+                                 second_exposure_detail_dict[datum])
+                html += '</table>'
+                html += '</td>'
 
             html += '</tr>'
             html += '</table>'
@@ -875,7 +901,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             # Set Aggregation Area Label
             area_label = composition.getComposerItemById('aggregation-area')
-            area_label.setText(area_title.upper())
+            area_label.setText(area_title.title())
+
+            # Set Aggregation Area Breakdown Label
+            area_breakdown_label = composition.getComposerItemById(
+                'aggregation-area-breakdown')
+            area_breakdown_text = 'Area: %s' % area_title.title()
+            area_breakdown_label.setText(area_breakdown_text)
 
             html_report_path = self.html_reports[area_title]
             #noinspection PyArgumentList
@@ -933,7 +965,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     # Set Aggregation Area Label
                     area_label = composition.getComposerItemById(
                         'aggregation-area')
-                    area_label.setText(area_title.upper())
+                    area_label.setText(area_title.title())
+
+                    # Set Aggregation Area Breakdown Label
+                    area_breakdown_label = composition.getComposerItemById(
+                        'aggregation-area-breakdown')
+                    area_breakdown_text = 'Area: %s' % area_title.title()
+                    area_breakdown_label.setText(area_breakdown_text)
 
                     html_report_path = self.html_reports[area_title]
                     #noinspection PyArgumentList
