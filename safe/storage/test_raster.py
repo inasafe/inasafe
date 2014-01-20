@@ -26,9 +26,9 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
 
 LOGGER = logging.getLogger('InaSAFE')
 KEYWORD_PATH = os.path.abspath(
-    os.path.join(UNITDATA, 'hazard', 'padang_tsunami_mw8.keywords'))
+    os.path.join(UNITDATA, 'hazard', 'jakarta_flood_design.keywords'))
 RASTER_BASE = os.path.abspath(
-    os.path.join(UNITDATA, 'hazard', 'padang_tsunami_mw8'))
+    os.path.join(UNITDATA, 'hazard', 'jakarta_flood_design'))
 
 
 class RasterTest(unittest.TestCase):
@@ -37,21 +37,12 @@ class RasterTest(unittest.TestCase):
         msg = 'Keyword file does not exist at %s' % KEYWORD_PATH
         assert os.path.exists(KEYWORD_PATH), msg
 
-    # This test is disabled for now because it can hangs.
-    # (it occurs approx. 10% of runs)
-    # TODO: find the cause, fix it
-    def Xtest_qgis_raster_layer_loading(self):
+    def test_qgis_raster_layer_loading(self):
         """Test that reading from QgsRasterLayer works."""
-        keywords = read_keywords(KEYWORD_PATH)
         if qgis_imported:
-            print 'import...'
             # This line is the cause of the problem:
             qgis_layer = QgsRasterLayer(RASTER_BASE + '.tif', 'test')
-            print 'import done'
-
-            print 'raster creation...'
             layer = Raster(data=qgis_layer)
-            print 'raster creation done'
             qgis_extent = qgis_layer.dataProvider().extent()
             qgis_extent = [qgis_extent.xMinimum(), qgis_extent.yMinimum(),
                            qgis_extent.xMaximum(), qgis_extent.yMaximum()]
