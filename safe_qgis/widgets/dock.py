@@ -106,7 +106,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -131,8 +131,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        #pydevd.settrace('localhost', port=5678, stdoutToServer=True,
-        #               stderrToServer=True)
+        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
+                       stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -632,8 +632,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.get_layers_lock:
             return
 
-        for arg in args:
-            LOGGER.debug('get_layer argument: %s' % arg)
+        #for arg in args:
+        #    LOGGER.debug('get_layer argument: %s' % arg)
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
         canvas_layers = self.iface.mapCanvas().layers()
@@ -897,7 +897,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_intermediate_layers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
         original_keywords = self.keyword_io.read_keywords(
-                self.aggregator.layer)
+            self.aggregator.layer)
         LOGGER.debug('my pre dialog keywords' + str(original_keywords))
         LOGGER.debug(
             'AOImode: %s' % str(self.aggregator.aoi_mode))
