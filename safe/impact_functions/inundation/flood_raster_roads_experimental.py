@@ -19,7 +19,7 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
-from safe_qgis.exceptions import InvalidParameterError
+from safe.common.exceptions import GetDataError
 from safe.common.qgis_raster_tools import polygonize, clip_raster
 from safe.common.qgis_vector_tools import split_by_polygon
 
@@ -86,7 +86,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
             message = tr('''The minimal threshold is
                 greater then the maximal specified threshold.
                 Please check the values.''')
-            raise InvalidParameterError(message)
+            raise GetDataError(message)
 
 
         # Extract data
@@ -129,7 +129,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 "value">'%s'.
                 Please check the value or use other
                 extent.''' % (threshold_min, ))
-            raise InvalidParameterError(message)
+            raise GetDataError(message)
 
         # Set roads as not inundated by default
         E.startEditing()
