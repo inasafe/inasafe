@@ -239,7 +239,7 @@ class SftpShakeData:
         trials = [i + 1 for i in xrange(retries)]
         remote_path = os.path.join(self.sftpclient.workdir_path, self.event_id)
         xml_remote_path = os.path.join(remote_path, 'output', self.file_name())
-        for my_counter in trials:
+        for counter in trials:
             last_error = None
             try:
                 mk_dir(local_path)
@@ -257,7 +257,7 @@ class SftpShakeData:
             else:
                 self.reconnect_sftp()
 
-            LOGGER.info('Fetching failed, attempt %s' % my_counter)
+            LOGGER.info('Fetching failed, attempt %s' % counter)
         LOGGER.exception('Could not fetch shake event from server %s'
                          % remote_path)
         raise Exception('Could not fetch shake event from server %s'
@@ -276,7 +276,8 @@ class SftpShakeData:
 
     def extract(self, force_flag=False):
         """Checking the grid.xml file in the machine, if found use it.
-        Else, download from the server
+        Else, download from the server.
+
         :param force_flag: force flag to extract.
         """
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')
