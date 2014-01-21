@@ -32,8 +32,10 @@ class FtpClient:
                  base_url='118.97.83.243',
                  pasv_mode=True):
         """Constructor for the FtpClient class.
+
         :param base_url: (Optional) an ftp server to connect to. If ommitted
               it will default to ftp://118.97.83.243/
+
         :param pasv_mode - (Optional) whether passive connections should be
               made. Defaults to True.
         """
@@ -82,8 +84,10 @@ class FtpClient:
 
         :param url_path: (Mandatory) The path (relative to the ftp root)
               from which the file should be retrieved.
+
         :return: An ftp url e.g. ftp://118.97.83.243/20120726022003.inp.zip
         :rtype: str
+
         :raises: None
         """
         return 'ftp://%s/%s' % (self.base_url, url_path)
@@ -93,8 +97,10 @@ class FtpClient:
 
          :param url_path: (Mandatory) The path (relative to the ftp root)
               from which the file should be retrieved.
+
          :param file_path: (Mandatory). The path on the filesystem to which
               the file should be saved.
+
          :return: The path to the downloaded file.
         """
         LOGGER.debug('Getting ftp file: %s', file_path)
@@ -114,6 +120,7 @@ class FtpClient:
 
          :param checked_file: (Mandatory) The paths (relative to the ftp
                 root) to be checked. e.g. '20120726022003.inp.zip',
+
          :return: True if the file exists on the server, otherwise False.
          :rtype: bool
         """
@@ -130,6 +137,7 @@ class FtpClient:
         :param checked_files: [str, ...] (Mandatory) The paths (relative to
         the ftp root) to be checked.
         e.g. ['20120726022003.inp.zip', '20120726022003.inp.zip']
+
         :return: True if **all** files exists on the server, otherwise False.
         :rtype: bool
         """

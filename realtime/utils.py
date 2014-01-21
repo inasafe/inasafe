@@ -25,7 +25,7 @@ from safe_qgis.utilities.custom_logging import setup_logger as setupLoggerSQ
 
 
 def base_data_dir():
-    """Create (if needed) and return the path to the base realtime data dir"""
+    """Create (if needed) and return the path to the base realtime data dir."""
     if 'INASAFE_WORK_DIR' in os.environ:
         base_data_directory = os.environ['INASAFE_WORK_DIR']
     else:
@@ -36,7 +36,7 @@ def base_data_dir():
 
 
 def data_dir():
-    """Return the path to the standard data dir for e.g. geonames data"""
+    """Return the path to the standard data dir for e.g. geonames data."""
     dir_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'fixtures'))
     mk_dir(dir_path)
@@ -44,14 +44,14 @@ def data_dir():
 
 
 def shakemap_zip_dir():
-    """Create (if needed) and return the path to the base shakemap zip dir"""
+    """Create (if needed) and return the path to the base shakemap zip dir."""
     dir_path = os.path.join(base_data_dir(), 'shakemaps-zipped')
     mk_dir(dir_path)
     return dir_path
 
 
 def shakemap_extract_dir():
-    """Create (if needed) and return the path to the base shakemap extract dir
+    """Create (if needed) and return the path to the base shakemap extract dir.
     """
     dir_path = os.path.join(base_data_dir(), 'shakemaps-extracted')
     mk_dir(dir_path)
@@ -68,21 +68,21 @@ def shakemap_data_dir():
 
 
 def shakemap_cache_dir():
-    """Create (if needed) and return the path to the base shakemap zip dir"""
+    """Create (if needed) and return the path to the base shakemap zip dir."""
     dir_path = os.path.join(base_data_dir(), 'shakemaps-cache')
     mk_dir(dir_path)
     return dir_path
 
 
 def report_data_dir():
-    """Create (if needed) and return the path to the base report data dir"""
+    """Create (if needed) and return the path to the base report data dir."""
     dir_path = os.path.join(base_data_dir(), 'reports')
     mk_dir(dir_path)
     return dir_path
 
 
 def log_dir():
-    """Create (if needed) and return the path to the log directory"""
+    """Create (if needed) and return the path to the log directory."""
     dir_path = os.path.join(base_data_dir(), 'logs')
     mk_dir(dir_path)
     return dir_path
@@ -90,6 +90,7 @@ def log_dir():
 
 def mk_dir(dir_path):
     """Make a directory, making sure it is world writable.
+
     :param dir_path: The directory path.
     """
     if not os.path.exists(dir_path):

@@ -43,13 +43,13 @@ my_remote_path = 'shakemaps'
 class SFtpClient:
     """A utility class that contains methods to fetch a listings and files
     from an SSH protocol"""
-    def __init__(self, the_host=my_host, the_username=my_username,
-                 the_password=my_password, the_working_dir=my_remote_path):
+    def __init__(self, host=my_host, username=my_username,
+                 password=my_password, working_dir=my_remote_path):
 
-        self.host = the_host
-        self.username = the_username
-        self.password = the_password
-        self.working_dir = the_working_dir
+        self.host = host
+        self.username = username
+        self.password = password
+        self.working_dir = working_dir
 
         # create transport object
         self.transport = paramiko.Transport(self.host)
@@ -66,10 +66,10 @@ class SFtpClient:
     def download_path(self, remote_path, local_path):
         """ Download remote_dir to local_dir.
 
-        :param remote_path: The remote path that will be downloaded to local
+        :param remote_path: The remote path that will be downloaded to local,
         :type remote_path: str
 
-        :param local_path: The target path on local
+        :param local_path: The target path on local,
         :type local_path: str
 
         EXAMPLE : remote_path = '20130111133900' will be downloaded to
