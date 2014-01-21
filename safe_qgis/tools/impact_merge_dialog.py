@@ -94,13 +94,18 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'inasafe-logo-url.png')
 
         # Organisation Logo Path
-        self.oganisation_logo_path = os.path.join(
+        self.organisation_logo_path = os.path.join(
             os.path.dirname(__file__),
             os.path.pardir,
             'resources',
             'img',
             'logos',
             'supporters.png')
+
+        # Disclaimer text
+        self.disclaimer = ('InaSAFE has been jointly developed by BPNB, '
+                           'Australian Govenment and the World Bank - '
+                           'GFDRR')
 
         # The output directory
         self.out_dir = None
@@ -137,6 +142,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # A boolean flag whether to merge entire area or aggregated
         self.entire_area_mode = False
+
+        # Get the global settings and override some variable if exist
+        self.read_settings()
 
         # Get all current project layers for combo box
         self.get_project_layers()
@@ -281,6 +289,22 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         output_directory_url = QUrl.fromLocalFile(self.out_dir)
         #noinspection PyTypeChecker,PyCallByClass
         QDesktopServices.openUrl(output_directory_url)
+
+    def read_settings(self):
+        """Set some variables from global settings on inasafe options dialog.
+        """
+        settings = QtCore.QSettings()
+
+        # Organisation logo
+        organisation_logo_path = \
+            settings.value('inasafe/orgLogoPath', '', type=str)
+        if organisation_logo_path != '':
+            self.organisation_logo_path = organisation_logo_path
+
+        # Disclaimer text
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        if disclaimer != '':
+            self.disclaimer = disclaimer
 
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
@@ -934,7 +958,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         safe_logo_path = QUrl.fromLocalFile(str(self.safe_logo_path))
         #noinspection PyTypeChecker,PyCallByClass
         organisation_logo_path = QUrl.fromLocalFile(
-            str(self.oganisation_logo_path))
+            str(self.organisation_logo_path))
         impact_title = '%s and %s' % (
             self.first_impact['map_title'],
             self.second_impact['map_title']
@@ -943,6 +967,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'impact-title': impact_title,
             'hazard-title': self.first_impact['hazard_title'],
             'inasafe-logo': safe_logo_path.toString(),
+            'disclaimer': self.disclaimer,
             'organisation-logo': organisation_logo_path.toString()
         }
 
