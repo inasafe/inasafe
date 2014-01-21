@@ -409,6 +409,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             merging tools with aggregation layer chosen
 
         ... The things that we validate are:
+        1. 'map_title' keyword must exist on each impact layer
         1. 'exposure_title' keyword must exist on each impact layer
         2. 'postprocessing_report' keyword must exist on each impact layer
         3. 'hazard_title' keyword must exist on each impact layer.
@@ -418,125 +419,48 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         4. 'aggregation attribute' must exist when user wants to run merging
             tools with aggregation layer chosen.
         """
-        # FETCH 'map_title' from each impact layer
-        try:
-            #noinspection PyTypeChecker
-            self.first_impact['map_title'] = \
-                self.keyword_io.read_keywords(
-                    self.first_impact['layer'], 'map_title')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found for first impact layer.'))
-        except KeywordNotFoundError:
-            # Do Nothing. It's okay not having map_title
-            pass
+        required_attribute = ['map_title', 'exposure_title', 'hazard_title',
+                              'postprocessing_report']
+        # Fetch for first impact layer
+        for attribute in required_attribute:
+            try:
+                #noinspection PyTypeChecker
+                self.first_impact[attribute] = \
+                    self.keyword_io.read_keywords(
+                        self.first_impact['layer'], attribute)
+            except NoKeywordsFoundError:
+                raise NoKeywordsFoundError(
+                    self.tr('No keywords found for first impact layer.'))
+            except KeywordNotFoundError:
+                raise KeywordNotFoundError(
+                    self.tr(
+                        'Keyword %s not found for first layer.' % attribute))
 
-        try:
-            #noinspection PyTypeChecker
-            self.second_impact['map_title'] = \
-                self.keyword_io.read_keywords(
-                    self.second_impact['layer'], 'map_title')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found for first impact layer.'))
-        except KeywordNotFoundError:
-            # Do Nothing. It's okay not having map_title
-            pass
+        # Fetch for second impact layer
+        for attribute in required_attribute:
+            try:
+                #noinspection PyTypeChecker
+                self.second_impact[attribute] = \
+                    self.keyword_io.read_keywords(
+                        self.second_impact['layer'], attribute)
+            except NoKeywordsFoundError:
+                raise NoKeywordsFoundError(
+                    self.tr('No keywords found for second impact layer.'))
+            except KeywordNotFoundError:
+                raise KeywordNotFoundError(
+                    self.tr(
+                        'Keyword %s not found for second layer.' % attribute))
 
-        # VALIDATE AND FETCH 'exposure_title'
-        # From first impact layer
-        try:
-            #noinspection PyTypeChecker
-            self.first_impact['exposure_title'] = \
-                self.keyword_io.read_keywords(
-                    self.first_impact['layer'], 'exposure_title')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found for first impact layer.'))
-        except KeywordNotFoundError:
-            raise KeywordNotFoundError(
-                self.tr('Keyword exposure_title not found for first '
-                        'layer.'))
-
-        # Then from second impact layer
-        try:
-            #noinspection PyTypeChecker
-            self.second_impact['exposure_title'] = \
-                self.keyword_io.read_keywords(
-                    self.second_impact['layer'], 'exposure_title')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found for first impact layer.'))
-        except KeywordNotFoundError:
-            raise KeywordNotFoundError(
-                self.tr('Keyword exposure_title not found for second '
-                        'layer.'))
-
-        # VALIDATE AND FETCH 'postprocessing_report'
-        # 1st impact layer should have postprocessing_report keywords
-        try:
-            #noinspection PyTypeChecker
-            self.first_impact['postprocessing_report'] = \
-                self.keyword_io.read_keywords(
-                    self.first_impact['layer'], 'postprocessing_report')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found for first impact layer.'))
-        except KeywordNotFoundError:
-            raise KeywordNotFoundError(
-                self.tr('Keyword postprocessing_report not found for first '
-                        'layer.'))
-
-        # 2nd impact layer should have postprocessing_report keywords
-        try:
-            #noinspection PyTypeChecker
-            self.second_impact['postprocessing_report'] = \
-                self.keyword_io.read_keywords(
-                    self.second_impact['layer'], 'postprocessing_report')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found in second impact layer.'))
-        except KeywordNotFoundError:
-            raise KeywordNotFoundError(
-                self.tr('Keyword postprocessing_report not found for second '
-                        'layer.'))
-
-        # VALIDATE AND FETCH 'hazard_title'
-        # 1st and 2nd layer should be generated from the same hazard layer.
-        # It is indicated from 'hazard_title' keywords
-        try:
-            #noinspection PyTypeChecker
-            self.first_impact['hazard_title'] = \
-                self.keyword_io.read_keywords(
-                    self.first_impact['layer'], 'hazard_title')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found for first impact layer.'))
-        except KeywordNotFoundError:
-            raise KeywordNotFoundError(
-                self.tr('Keyword hazard_title not found for first '
-                        'layer.'))
-
-        try:
-            #noinspection PyTypeChecker
-            self.second_impact['hazard_title'] = \
-                self.keyword_io.read_keywords(
-                    self.second_impact['layer'], 'hazard_title')
-        except NoKeywordsFoundError:
-            raise NoKeywordsFoundError(
-                self.tr('No keywords found for second impact layer.'))
-        except KeywordNotFoundError:
-            raise KeywordNotFoundError(
-                self.tr('Keyword hazard_title not found for second '
-                        'layer.'))
-
+        # Validate that two impact layers are obtained from the same hazard.
+        # Indicated by the same 'hazard_title' (to be fixed later by using
+        # more reliable method)
         if (self.first_impact['hazard_title'] !=
                 self.second_impact['hazard_title']):
             raise InvalidLayerError(
                 self.tr('First impact layer and second impact layer do not '
                         'use the same hazard layer.'))
 
-        # VALIDATE AND FETCH 'aggregation_attribute'
+        # Fetch 'aggregation_attribute'
         # If the chosen aggregation layer not Entire Area, it should have
         # aggregation attribute keywords
         if not self.entire_area_mode:
