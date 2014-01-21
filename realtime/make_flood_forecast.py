@@ -51,10 +51,12 @@ def check_environment():
 
 
 def process_flood_event(netcdf_file=None, hours=24):
-    """A function to process netcdf_file to a forecast file.
+    """A function to process this_netcdf_file to a forecast file.
 
-    :param netcdf_file: The netcdf file. If it's none the download it.
-    :param hours: Positive integer determining how many bands to use
+    :param netcdf_file: The netcdf file. If it's None the download it.
+
+    :param hours: Positive integer determining how many bands to use.
+    :type hours: int
     """
     print 'Start flood forecasting'
 
@@ -68,13 +70,14 @@ def process_flood_event(netcdf_file=None, hours=24):
             download_directory=forecast_directory)
     print 'Do flood forecasting for %s ...' % netcdf_file
 
-#    # check if a forecasting file has been created or not
-#    is_exist, polyforecast_filepath = get_result_file_name(netcdf_file, hours)
-#
-#    if is_exist:
-#        print 'Current flood forecasting has been already created.'
-#        print 'You can look it at %s' % polyforecast_filepath
-#        return
+    ## check if a forecasting file has been created or not
+    # is_exist, polyforecast_filepath = get_result_file_name(this_netcdf_file,
+    # hours)
+    #
+    #if is_exist:
+    #    print 'Current flood forecasting has been already created.'
+    #    print 'You can look it at %s' % polyforecast_filepath
+    #    return
 
     # convert to tif
     # tif_file = polyforecast_filepath.replace('_regions.shp', '.tif')
@@ -93,20 +96,20 @@ def process_flood_event(netcdf_file=None, hours=24):
         print ('File %s is exist, so we do not do the forecasting'
                % zip_filename)
     else:
-        my_polygons = read_layer(polygons_path)
-        my_result = tag_polygons_by_grid(my_polygons,
-                                         tif_file,
-                                         threshold=0.3,
-                                         tag='affected')
+        polygons = read_layer(polygons_path)
+        result = tag_polygons_by_grid(polygons,
+                                      tif_file,
+                                      threshold=0.3,
+                                      tag='affected')
 
-        new_geom = my_result.get_geometry()
-        new_data = my_result.get_data()
+        new_geom = result.get_geometry()
+        new_data = result.get_data()
 
         date = os.path.split(netcdf_file)[-1].split('_')[0]
 
         v = Vector(geometry=new_geom,
                    data=new_data,
-                   projection=my_result.projection,
+                   projection=result.projection,
                    keywords={
                        'category': 'hazard',
                        'subcategory': 'flood',
@@ -137,28 +140,30 @@ def usage():
 
 def get_result_file_name(netcdf_file, hours):
     """Function to get result file name from a netcdf_file.
+
     It will return a boolean value and the result file path.
     If the file path is exist, it will return true, otherwise false
 
     :param netcdf_file: The netcdf file. If it's none the download it.
+
     :param hours: Positive integer determining how many bands to use
+    :type hours: int
     """
     polyforecast_filename = os.path.split(
         netcdf_file)[1].replace('.nc', '_%d_hours_regions.shp' % hours)
     date_file = polyforecast_filename.split('_')[0]
     if not os.path.isdir(os.path.join(flood_directory, date_file)):
         os.mkdir(os.path.join(flood_directory, date_file))
-    polyforecast_filepath = os.path.join(flood_directory,
-                                         date_file,
-                                         polyforecast_filename)
+    polyforecast_filepath = os.path.join(
+        flood_directory, date_file, polyforecast_filename)
 
     return os.path.isfile(polyforecast_filepath), polyforecast_filepath
 
 if __name__ == '__main__':
     # Checking all environment is valid
-    my_check, msg = check_environment()
+    check, msg = check_environment()
     print msg
-    if not my_check:
+    if not check:
         exit()
 
     # Checking argument which has been given is valid
@@ -181,8 +186,8 @@ if __name__ == '__main__':
               'This may take a little while.'
         list_files = list_all_netcdf_files()
         print len(list_files)
-        for my_netcdf_file in list_files:
-            process_flood_event(netcdf_file=my_netcdf_file)
+        for this_netcdf_file in list_files:
+            process_flood_event(netcdf_file=this_netcdf_file)
     else:
         # run specific file
         process_flood_event(argv_1)

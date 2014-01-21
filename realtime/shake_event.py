@@ -31,8 +31,10 @@ import logging
 from datetime import datetime
 
 import numpy
+#noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
 import ogr
+#noinspection PyPackageRequirements
 import gdal
 from gdalconst import GA_ReadOnly
 
@@ -40,6 +42,7 @@ from sftp_shake_data import SftpShakeData
 
 
 # TODO: I think QCoreApplication is needed for tr() check before removing
+#noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QCoreApplication,
     QObject,
@@ -49,6 +52,7 @@ from PyQt4.QtCore import (
     QSize,
     Qt,
     QTranslator)
+#noinspection PyPackageRequirements
 from PyQt4.QtXml import QDomDocument
 # We should remove the following pylint suppressions when we support only QGIS2
 # pylint: disable=E0611
@@ -418,6 +422,7 @@ class ShakeEvent(QObject):
         :param force_flag: Optional. Whether to force the regeneration of the
         output file. Defaults to False.
         :type force_flag: bool
+
         :return: The absolute file system path to the delimited text file.
         :rtype: str
 
@@ -457,10 +462,11 @@ class ShakeEvent(QObject):
         :param force_flag: Optional. Whether to force the regeneration
             of the output file. Defaults to False.
         :type force_flag: bool
+
         :return: The absolute file system path to the .vrt text file.
         :rtype: str
-        :raises: None
 
+        :raises: None
         """
         # Ensure the delimited mmi file exists
         LOGGER.debug('mmi_to_vrt requested.')
@@ -494,11 +500,14 @@ class ShakeEvent(QObject):
 
         This is primarily needed for OSX where gdal tools are tucked away in
         the Library path.
+
         :param command: A string containing the command to
         which the prefix will be prepended
         :type command: str
+
         :return: A copy of the command with the prefix added.
         :rtype: str
+
         :raises: None
         """
 
@@ -517,7 +526,9 @@ class ShakeEvent(QObject):
 
         :param command: Required. A command string to be run.
         :type command: str
-        :returns: None
+
+        :return: None
+
         :raises: Any exceptions will be propagated.
         """
 
@@ -548,6 +559,7 @@ class ShakeEvent(QObject):
 
         :param force_flag: bool (Optional). Whether to force the regeneration
             of the output file. Defaults to False.
+
         :return: Path to the resulting tif file.
         :rtype: str
 
@@ -1923,6 +1935,7 @@ class ShakeEvent(QObject):
         except:
             raise
         logging.info('Created: %s', contours_shapefile)
+        #noinspection PyBroadException
         try:
             cities_shape_file = self.cities_to_shapefile(
                 force_flag=force_flag)
@@ -2452,7 +2465,7 @@ class ShakeEvent(QObject):
                 message = 'Failed to load translation for %s' % locale_name
                 LOGGER.exception(message)
                 raise TranslationLoadError(message)
-            # noinspection PyTypeChecker
+            # noinspection PyTypeChecker, PyCallByClass, PyArgumentList
             QCoreApplication.installTranslator(self.translator)
         else:
             if locale_name != 'en':

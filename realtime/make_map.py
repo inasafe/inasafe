@@ -116,9 +116,9 @@ elif len(sys.argv) == 2:
 
     my_event_id = sys.argv[1]
     if my_event_id in '--list':
-#        myFtpClient = FtpClient()
+#        ftp_client = FtpClient()
         sftp_client = SFtpClient()
-#        myListing = myFtpClient.get_listing()
+#        myListing = ftp_client.get_listing()
         dir_listing = sftp_client.get_listing(my_func=is_event_id)
         for event in dir_listing:
             print event
@@ -128,8 +128,8 @@ elif len(sys.argv) == 2:
         # Caution, this code path gets memory leaks, use the
         # batch file approach rather!
         #
-        myFtpClient = FtpClient()
-        dir_listing = myFtpClient.get_listing()
+        ftp_client = FtpClient()
+        dir_listing = ftp_client.get_listing()
         for event in dir_listing:
             if 'out' not in event:
                 continue

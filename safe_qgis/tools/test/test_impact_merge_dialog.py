@@ -461,6 +461,47 @@ class ImpactMergeDialogTest(unittest.TestCase):
         expected_number_of_keys = 4
         self.assertEqual(len(report_dict), expected_number_of_keys)
 
+    def test_generate_report_summary(self):
+        """Test generate_report_summary function."""
+        self.mock_the_dialog(test_entire_mode=False)
+        self.impact_merge_dialog.prepare_input()
+        self.impact_merge_dialog.validate_all_layers()
+
+        first_postprocessing_report = \
+            self.impact_merge_dialog.first_impact['postprocessing_report']
+        second_postprocessing_report = \
+            self.impact_merge_dialog.second_impact['postprocessing_report']
+        first_report = (
+            '<body>' +
+            first_postprocessing_report +
+            '</body>')
+        second_report = (
+            '<body>' +
+            second_postprocessing_report +
+            '</body>')
+
+        # Now create a dom document for each
+        first_document = minidom.parseString(first_report)
+        second_document = minidom.parseString(second_report)
+        first_impact_tables = first_document.getElementsByTagName('table')
+        second_impact_tables = second_document.getElementsByTagName('table')
+
+        first_report_dict = \
+            self.impact_merge_dialog.generate_report_dictionary_from_dom(
+                first_impact_tables)
+        second_report_dict = \
+            self.impact_merge_dialog.generate_report_dictionary_from_dom(
+                second_impact_tables)
+
+        self.impact_merge_dialog.generate_report_summary(
+            first_report_dict, second_report_dict)
+
+        # There should be 4 keys in that dict
+        # (3 for each aggregation unit and 1 for total in aggregation unit)
+        expected_number_of_keys = 4
+        self.assertEqual(len(self.impact_merge_dialog.summary_report),
+                         expected_number_of_keys)
+
     def test_generate_html_reports(self):
         """Test generate_html_reports function."""
         self.mock_the_dialog(test_entire_mode=False)
@@ -483,14 +524,18 @@ class ImpactMergeDialogTest(unittest.TestCase):
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
         second_document = minidom.parseString(second_report)
-        tables = first_document.getElementsByTagName('table')
-        tables += second_document.getElementsByTagName('table')
+        first_impact_tables = first_document.getElementsByTagName('table')
+        second_impact_tables = second_document.getElementsByTagName('table')
 
-        report_dict = \
+        first_report_dict = \
             self.impact_merge_dialog.generate_report_dictionary_from_dom(
-                tables)
+                first_impact_tables)
+        second_report_dict = \
+            self.impact_merge_dialog.generate_report_dictionary_from_dom(
+                second_impact_tables)
 
-        self.impact_merge_dialog.generate_html_reports(report_dict)
+        self.impact_merge_dialog.generate_html_reports(
+            first_report_dict, second_report_dict)
 
         # There should be 4 HTML files generated on output directory
         html_list = glob(
@@ -523,14 +568,20 @@ class ImpactMergeDialogTest(unittest.TestCase):
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
         second_document = minidom.parseString(second_report)
-        tables = first_document.getElementsByTagName('table')
-        tables += second_document.getElementsByTagName('table')
+        first_impact_tables = first_document.getElementsByTagName('table')
+        second_impact_tables = second_document.getElementsByTagName('table')
 
-        report_dict = \
+        first_report_dict = \
             self.impact_merge_dialog.generate_report_dictionary_from_dom(
-                tables)
-        self.impact_merge_dialog.generate_report_summary(report_dict)
-        self.impact_merge_dialog.generate_html_reports(report_dict)
+                first_impact_tables)
+        second_report_dict = \
+            self.impact_merge_dialog.generate_report_dictionary_from_dom(
+                second_impact_tables)
+
+        self.impact_merge_dialog.generate_report_summary(
+            first_report_dict, second_report_dict)
+        self.impact_merge_dialog.generate_html_reports(
+            first_report_dict, second_report_dict)
 
         # Generate PDF Reports
         self.impact_merge_dialog.generate_reports()

@@ -693,7 +693,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # now make the rest of the safe_qgis reflect the list entries
         self.update_controls_from_list()
 
-
     def update_controls_from_list(self):
         """Set the ui state to match the keywords of the active layer."""
         subcategory = self.get_value_for_key('subcategory')
