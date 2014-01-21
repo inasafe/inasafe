@@ -41,7 +41,8 @@ from safe_qgis.exceptions import (
     CanceledImportDialogError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
-    ReportCreationError)
+    ReportCreationError,
+    UnsupportedProviderError)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.utilities import (
     html_header,
@@ -313,6 +314,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     layer.name(),
                     layer)
                 continue
+            except UnsupportedProviderError:
+                # Encounter unsupported provider layer, e.g Open Layer
+                continue
 
             add_ordered_combo_item(self.first_layer, layer.name(), layer)
             add_ordered_combo_item(self.second_layer, layer.name(), layer)
@@ -410,13 +414,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         ... The things that we validate are:
         1. 'map_title' keyword must exist on each impact layer
-        1. 'exposure_title' keyword must exist on each impact layer
-        2. 'postprocessing_report' keyword must exist on each impact layer
-        3. 'hazard_title' keyword must exist on each impact layer.
+        2. 'exposure_title' keyword must exist on each impact layer
+        3. 'postprocessing_report' keyword must exist on each impact layer
+        4. 'hazard_title' keyword must exist on each impact layer.
             Hazard title from first impact layer must be the same with
             second impact layer to indicate that both are generated from the
             same hazard layer.
-        4. 'aggregation attribute' must exist when user wants to run merging
+        5. 'aggregation attribute' must exist when user wants to run merging
             tools with aggregation layer chosen.
         """
         required_attribute = ['map_title', 'exposure_title', 'hazard_title',
