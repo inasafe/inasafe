@@ -47,11 +47,11 @@ class FtpClient:
 
         Adapted from Ole's original shake library.
 
-        :param extension: (Optional) Filename suffix to filter the listing
-        by. Defaults to zip.
+        :param extension: (Optional) Filename suffix to filter the listing by.
+            Defaults to zip.
 
         :returns: A list containing the unique filenames (if any) that match
-        the supplied extension suffix.
+            the supplied extension suffix.
 
         :raises: URLError on failure
         """
@@ -134,9 +134,10 @@ class FtpClient:
 
         .. seealso: func:`has_file`
 
-        :param checked_files: [str, ...] (Mandatory) The paths (relative to
-        the ftp root) to be checked.
-        e.g. ['20120726022003.inp.zip', '20120726022003.inp.zip']
+        :param checked_files: The paths (relative to the ftp root) to be
+            checked. e.g.
+            ['20120726022003.inp.zip', '20120726022003.inp.zip']
+         :type checked_files: list
 
         :return: True if **all** files exists on the server, otherwise False.
         :rtype: bool

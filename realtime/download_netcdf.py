@@ -131,5 +131,5 @@ def download_file_url(url, download_directory=_download_directory, name=None):
     return str(retval)
 
 if __name__ == '__main__':
-    download_file_url(netcdf_url, download_directory=_download_directory)
+    download_file_url(netcdf_url)
     print 'fin'

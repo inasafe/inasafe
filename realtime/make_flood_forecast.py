@@ -53,9 +53,10 @@ def check_environment():
 def process_flood_event(netcdf_file=None, hours=24):
     """A function to process this_netcdf_file to a forecast file.
 
-    :param netcdf_file: The netcdf file. If it's none the download it.
+    :param netcdf_file: The netcdf file. If it's None the download it.
 
-    :param hours: Positive integer determining how many bands to use
+    :param hours: Positive integer determining how many bands to use.
+    :type hours: int
     """
     print 'Start flood forecasting'
 
@@ -138,7 +139,7 @@ def usage():
 
 
 def get_result_file_name(netcdf_file, hours):
-    """Function to get result file name from a this_netcdf_file.
+    """Function to get result file name from a netcdf_file.
 
     It will return a boolean value and the result file path.
     If the file path is exist, it will return true, otherwise false
@@ -146,15 +147,15 @@ def get_result_file_name(netcdf_file, hours):
     :param netcdf_file: The netcdf file. If it's none the download it.
 
     :param hours: Positive integer determining how many bands to use
+    :type hours: int
     """
     polyforecast_filename = os.path.split(
         netcdf_file)[1].replace('.nc', '_%d_hours_regions.shp' % hours)
     date_file = polyforecast_filename.split('_')[0]
     if not os.path.isdir(os.path.join(flood_directory, date_file)):
         os.mkdir(os.path.join(flood_directory, date_file))
-    polyforecast_filepath = os.path.join(flood_directory,
-                                         date_file,
-                                         polyforecast_filename)
+    polyforecast_filepath = os.path.join(
+        flood_directory, date_file, polyforecast_filename)
 
     return os.path.isfile(polyforecast_filepath), polyforecast_filepath
 
