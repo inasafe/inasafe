@@ -25,7 +25,8 @@ from safe_qgis.utilities.utilities import (
     layer_attribute_names,
     impact_attribution,
     dpi_to_meters,
-    which)
+    which,
+    qt_at_least)
 from safe_qgis.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
 from safe_qgis.tools.test.test_keywords_dialog import (
@@ -213,6 +214,15 @@ class UtilitiesTest(unittest.TestCase):
         path = which(myBinary)
         # Check we found at least one match
         assert len(path) > 0
+
+    def test_qt_at_least(self):
+        """Test that we can compare the installed qt version"""
+        # simulate 4.7.2 installed
+        test_version = 0x040702
+
+        assert qt_at_least('4.6.4', test_version)
+        assert qt_at_least('4.7.2', test_version)
+        assert not qt_at_least('4.8.4', test_version)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
