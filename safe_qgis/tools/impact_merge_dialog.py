@@ -38,6 +38,7 @@ from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 from safe_qgis.exceptions import (
     InvalidLayerError,
     EmptyDirectoryError,
+    FileNotFoundError,
     CanceledImportDialogError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
@@ -223,7 +224,20 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """ Show a dialog to choose directory """
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
-            self, self.tr("Select output directory")))
+            self, self.tr("Select Output Directory")))
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_report_template_chooser_clicked(self):
+        """ Show a dialog to choose directory """
+        # noinspection PyCallByClass,PyTypeChecker
+        report_template_path = QtGui.QFileDialog.getOpenFileName(
+            self,
+            self.tr('Select Report Template'),
+            self.template_path,
+            self.tr('QPT File (*.qpt)'))
+
+        # noinspection PyCallByClass,PyTypeChecker
+        self.report_template_le.setText(report_template_path)
 
     def accept(self):
         """Do merging two impact layers."""
@@ -233,7 +247,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Prepare all the input from dialog, validate, and store it
         try:
             self.prepare_input()
-        except (InvalidLayerError, EmptyDirectoryError) as ex:
+        except (InvalidLayerError,
+                EmptyDirectoryError,
+                FileNotFoundError) as ex:
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
                 self,
@@ -388,6 +404,15 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Get output directory
         self.out_dir = self.output_directory.text()
+
+        # Whether to use own report template:
+        if self.report_template_checkbox.isChecked():
+            own_template_path = self.report_template_le.text()
+            if os.path.isfile(own_template_path):
+                self.template_path = own_template_path
+            else:
+                raise FileNotFoundError(
+                    self.tr('Template file does not exist.'))
 
         # Flag whether to merge entire area or based on aggregation unit
         if self.aggregation['layer'] is None:
