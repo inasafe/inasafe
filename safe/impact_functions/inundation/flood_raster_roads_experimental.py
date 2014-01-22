@@ -97,8 +97,8 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                                 E.get_name(),
                                 self)
 
-        H = H.as_qgis_native()
-        E = E.as_qgis_native()
+        H = H.get_layer()
+        E = E.get_layer()
 
         e_provider = E.dataProvider()
         fields = e_provider.fields()

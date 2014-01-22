@@ -23,6 +23,7 @@ from PyQt4.QtCore import QObject
 
 #Do not import any QGIS or SAFE modules in this module!
 from safe_qgis.utilities.impact_calculator_thread import ImpactCalculatorThread
+from safe_qgis.utilities.qgis_layer_wrapper import QgisWrapper
 from safe_qgis.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
@@ -42,7 +43,7 @@ class ImpactCalculator(QObject):
     #  ImpactCalculator
     #     gets layers
     #     checks style of the impact function
-    #     clips layers if the function is old-style
+    #     informs about layer clipping (is the clipping requires?)
 
     def __init__(self):
         """Constructor for the impact calculator."""
@@ -54,7 +55,7 @@ class ImpactCalculator(QObject):
         self._result = None
         self._extent = None
 
-    def _convert_layer(self, layer):
+    def _get_layer(self, layer):
         """Analyze style of self._function and return appropriate
             class of the layer.
 
@@ -62,18 +63,13 @@ class ImpactCalculator(QObject):
         :type layer:  QgsMapLayer or SAFE layer.
 
         :returns:   The layer of appropriate type
-        :rtype:     convertToSafeLayer
+        :rtype:     SAFE or QgisWrapper
 
         :raises: InsufficientParametersError if self._function is not set,
                  InvalidParameterError if style of self._function is not
                      in ('old-style', 'qgis2.0')
                  Any exceptions raised by other libraries will be propogated.
         """
-
-        # FIXME (DK): I'm not sure that it is good place for the
-        #   converting function. May be safe_qgis.safe_interface is better.
-        #   But I don't like pass information about function style to other
-        #   modules: I prefer keep only one place of function style analysis
 
         if self._function is None or self._function == '':
             message = self.tr('Error: Function not set.')
@@ -85,8 +81,8 @@ class ImpactCalculator(QObject):
             if func_type == 'old-style':
                 return convertToSafeLayer(layer)
             elif func_type == 'qgis2.0':
-                # TODO (DK): convert for new style impact function
-                return convertToSafeLayer(layer)
+                # convert for new style impact function
+                return QgisWrapper(layer)
             else:
                 message = self.tr('Error: Function has unknown style.')
                 raise InvalidParameterError(message)
@@ -99,7 +95,7 @@ class ImpactCalculator(QObject):
         :returns: The exposure layer.
         :rtype: read_layer
         """
-        return self._convert_layer(self._exposureLayer)
+        return self._get_layer(self._exposureLayer)
 
     def set_exposure_layer(self, layer):
         """Mutator for Exposure layer property.
@@ -121,7 +117,7 @@ class ImpactCalculator(QObject):
         :rtype:   QgsMapLayer or SAFE layer.
 
         """
-        return self._convert_layer(self._hazardLayer)
+        return self._get_layer(self._hazardLayer)
 
     def set_hazard_layer(self, layer):
         """Mutator for hazard layer property.
@@ -195,7 +191,8 @@ class ImpactCalculator(QObject):
             hazard_layer,
             exposure_layer,
             function,
-            extent=self.extent())
+            extent=self.extent(),
+            check_integrity=self.requires_clipping())
 
     def requires_clipping(self):
         """Check to clip or not to clip layers.

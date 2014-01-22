@@ -70,7 +70,12 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """For testing only"""
         print 'hello'
 
-    def __init__(self, hazard_layer, exposure_layer, function, extent=None):
+    def __init__(self,
+                 hazard_layer,
+                 exposure_layer,
+                 function,
+                 extent=None,
+                 check_integrity=True):
         """Constructor for the impact calculator thread.
 
         :param hazard_layer: read_layer object containing the Hazard.
@@ -88,6 +93,11 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             of the working region.
         :type extent: list
 
+        :param check_integrity:     If true, perform checking of
+                                    input data integrity before running
+                                    impact calculation
+        :type check_integrity:      Bool
+
         :raises: InsufficientParametersError if not all parameters are set.
         """
         threading.Thread.__init__(self)
@@ -100,6 +110,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         self._result = None
         self._exception = None
         self._traceback = None
+        self._check_integrity = check_integrity
 
     def impact_layer(self):
         """Get the impact output from the last run.
@@ -171,7 +182,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             layers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculateSafeImpact(
                 theLayers=layers, theFunction=self._function,
-                theExtent=self._extent)
+                theExtent=self._extent,
+                check_integrity=self._check_integrity)
         except MemoryError, e:
             message = self.tr(
                 'An error occurred because it appears that your system does '

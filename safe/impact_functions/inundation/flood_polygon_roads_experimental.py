@@ -92,7 +92,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                                 E.get_name(),
                                 self)
 
-        H = H.as_qgis_native()
+        H = H.get_layer()
         h_provider = H.dataProvider()
         affected_field_index = h_provider.fieldNameIndex(affected_field)
         if affected_field_index == -1:
@@ -101,7 +101,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 attribute table of the hazard layer.''' % (affected_field, ))
             raise GetDataError(message)
 
-        E = E.as_qgis_native()
+        E = E.get_layer()
         crs = E.crs().toWkt()
         e_provider = E.dataProvider()
         fields = e_provider.fields()
