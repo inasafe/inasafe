@@ -287,8 +287,9 @@ class MessageViewer(QtWebKit.QWebView):
             raise InvalidParameterError(msg)
 
     def save_log_to_html(self):
+        """Helper to write the log out as an html file."""
         html = html_header()
-        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo.svg" '
+        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo-url.png" '
                  'title="InaSAFE Logo" alt="InaSAFE Logo" />')
         html += ('<h5 class="info"><i class="icon-info-sign icon-white"></i> '
                  '%s</h5>' % self.tr('Analysis log'))
