@@ -33,15 +33,53 @@ from safe.impact_functions import get_plugins
 # We need QGIS_APP started during the tests
 # to convert SAFE layers to QGIS layers
 from safe.storage.raster import qgis_imported
-if qgis_imported:   # Import QgsRasterLayer if qgis is available
+if qgis_imported:
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+    from qgis.core import QgsVectorLayer, QgsRasterLayer
 
+
+class Wrapper():
+    """
+    A wrapper around qgis layers. It implements get_layer method of
+    safe_qgis.utilities.qgis_layer_wrapper.QgisWrapper
+
+    Also it provides a stub for get_keyword
+    """
+
+    def __init__(self, layer, keyword='hazard', name="Test"):
+        """Create the wrapper
+
+        :param layer:       Qgis layer
+        :type layer:        QgsMapLayer
+
+        :param keyword:     A layer's category keyword
+        :type keyword:      Basestring or None
+        """
+
+        self.data = layer
+
+        self.keywords = {'category': keyword}
+        self.name = name
+
+    def get_name(self):
+        return self.name
+
+    def set_name(self, name):
+        self.name = name
+
+    def get_keywords(self, key=None):
+        if key is None:
+            return self.keywords
+        return self.keywords[key]
+
+    def get_layer(self):
+        return self.data
 
 class Test_gis_native_impact_functions(unittest.TestCase):
 
     def _get_impact_function(self,
-                             hazard_filename,
-                             exposure_filename,
+                             qgis_hazard,
+                             qgis_exposure,
                              plugin_name,
                              impact_parameters):
         """Helper to run impact function
@@ -51,8 +89,11 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         """
 
         # Calculate impact using API
-        hazard = read_layer(hazard_filename)
-        exposure = read_layer(exposure_filename)
+        # hazard = read_layer(hazard_filename)
+        # exposure = read_layer(exposure_filename)
+
+        hazard = Wrapper(qgis_hazard, 'hazard', 'Hazard')
+        exposure = Wrapper(qgis_exposure, 'exposure', 'Exposure')
 
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
@@ -60,12 +101,24 @@ class Test_gis_native_impact_functions(unittest.TestCase):
 
         IF = plugin_list[0][plugin_name]
         # Set up IF extent
-        hazard_extent = hazard.extent
-        exposure_extent = exposure.extent
+        hazard_extent = hazard.get_layer().extent()
+        hazard_extent = [
+            hazard_extent.xMinimum(),
+            hazard_extent.yMinimum(),
+            hazard_extent.xMaximum(),
+            hazard_extent.yMaximum()
+        ]
+        exposure_extent = exposure.get_layer().extent()
+        exposure_extent = [
+            exposure_extent.xMinimum(),
+            exposure_extent.yMinimum(),
+            exposure_extent.xMaximum(),
+            exposure_extent.yMaximum()
+        ]
         extent = [
             max(hazard_extent[0], exposure_extent[0]),
-            max(hazard_extent[2], exposure_extent[2]),
-            min(hazard_extent[1], exposure_extent[1]),
+            max(hazard_extent[1], exposure_extent[1]),
+            min(hazard_extent[2], exposure_extent[2]),
             min(hazard_extent[3], exposure_extent[3])
         ]
 
@@ -74,7 +127,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         # Call calculation engine
         impact_layer = calculate_impact(layers=[hazard, exposure],
                                         impact_fcn=IF,
-                                        extent=extent)
+                                        extent=extent,
+                                        check_integrity=False)
 
         impact_filename = impact_layer.get_filename()
         I = read_layer(impact_filename)
@@ -82,15 +136,27 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         return I
 
 
-    def test_building_native_impact_experrimental(self):
+    def test_building_native_impact_experimental(self):
         """Test flood_building_native_impact_experimental
         """
         hazard_name = os.path.join(UNITDATA,
             'hazard',
             'multipart_polygons_osm_4326.shp')
+        qgis_hazard = QgsVectorLayer(
+            hazard_name,
+            'HAZARD',
+            'ogr'
+        )
+
         exposure_name = os.path.join(UNITDATA,
             'exposure',
             'buildings_osm_4326.shp')
+        qgis_exposure = QgsVectorLayer(
+            exposure_name,
+            'EXPOSURE',
+            'ogr'
+        )
+
         plugin_name = "FloodNativePolygonExperimentalFunction"
 
         params = OrderedDict(
@@ -106,8 +172,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         self.assertRaises(
             GetDataError,
             self._get_impact_function,
-            hazard_name,
-            exposure_name,
+            qgis_hazard,
+            qgis_exposure,
             plugin_name,
             params
         )
@@ -122,8 +188,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
             ]
         )
         impact = self._get_impact_function(
-            hazard_name,
-            exposure_name,
+            qgis_hazard,
+            qgis_exposure,
             plugin_name,
             params
         )
