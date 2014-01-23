@@ -1,23 +1,27 @@
 <Composer title="merged_report" visible="1">
- <Composition printResolution="300" paperWidth="297" snapGridOffsetX="0" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="2" paperHeight="210" alignmentSnapTolerance="0" printAsRaster="0">
-  <ComposerScaleBar penColor="#000000" style="Numeric" numMapUnitsPerScaleBarUnit="1000" alignment="1" brushColor="#000000" numSegments="4" segmentMillimeters="449.71" fontColor="#000000" font="Droid Sans,12,-1,5,50,0,0,0,0,0" numUnitsPerSegment="1" units="2" labelBarSpace="3" outlineWidth="1" numSegmentsLeft="2" height="3" mapId="0" boxContentSpace="1" unitLabel="m">
-   <ComposerItem width="30" x="115" transparency="0" y="170" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="1.47564" uuid="{2d194d72-6c19-47f5-965d-f7ddd8422702}" id="" background="true" blendMode="0" positionLock="false">
+ <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="297" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="2" paperHeight="210" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="0" generateWorldFile="0">
+  <ComposerPicture pictureWidth="50" file="." pictureHeight="40" mapId="-1">
+   <ComposerItem width="50" x="235" transparency="0" y="145" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="1.42459" uuid="{26abd5ba-bc04-4b34-8c47-4669a02ae51d}" id="organisation-logo" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerPicture>
+  <ComposerPicture pictureWidth="30" file="." pictureHeight="30" mapId="-1">
+   <ComposerItem width="30" x="15" transparency="0" y="145" rotation="0" height="30" positionMode="0" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="1.42459" uuid="{e484eeac-c78c-4ce9-82e8-728551962bfe}" id="safe-logo" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerPicture>
+  <ComposerScaleBar penColor="#000000" style="Numeric" numMapUnitsPerScaleBarUnit="1000" alignment="1" brushColor="#000000" numSegments="4" segmentMillimeters="449.71" fontColor="#000000" font="Droid Sans,11,-1,5,75,0,0,0,0,0" numUnitsPerSegment="1" units="2" labelBarSpace="3" outlineWidth="1" numSegmentsLeft="2" height="3" mapId="0" boxContentSpace="1" unitLabel="m">
+   <ComposerItem width="30" x="111" transparency="0" y="160" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="1.42459" uuid="{c5f8ebc8-0ffb-428e-9a6b-2e2dc59a825a}" id="map-scale" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerScaleBar>
-  <ComposerLabel valign="32" labelText="Area" htmlState="0" halign="1" margin="1">
-   <LabelFont description="Droid Sans,12,-1,5,75,0,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="270" x="15" transparency="0" y="250" rotation="0" height="6.9" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="1.47564" uuid="{5ded70af-7ab5-4619-a0ff-1e11600824c2}" id="aggregation-area-breakdown" background="true" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
   <ComposerLabel valign="32" labelText="" htmlState="0" halign="4" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="30" x="115" transparency="0" y="150" rotation="0" height="20" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{5aa85061-617d-4ca9-8e1c-a941ca2458aa}" id="aggregation-area" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="30" x="111" transparency="0" y="145" rotation="0" height="15" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="1.42459" uuid="{31247e34-81c2-4262-8422-ed93d5edeee4}" id="aggregation-area" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -25,28 +29,12 @@
   <ComposerLabel valign="32" labelText="" htmlState="2" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="50" x="60" transparency="0" y="150" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{e56002cb-48b4-4864-88a9-55cbd5246bd6}" id="summary-report" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="60" x="48" transparency="0" y="145" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="1.42459" uuid="{4a3e8d3e-de82-41cb-bece-3b92ea0b94a8}" id="summary-report" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" labelText="&lt;img src=&quot;[organisation-logo]&quot; style=&quot;max-width:100%;&quot;/>" htmlState="2" halign="4" margin="1">
-   <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="50" x="235" transparency="0" y="150" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{a9bc8d6e-f2fa-421b-8ee6-68b5c2b40a7f}" id="organisation-logo" background="false" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
-  <ComposerLabel valign="128" labelText="&lt;img src=&quot;[inasafe-logo]&quot; style=&quot;max-width:100%%;&quot;/>" htmlState="2" halign="4" margin="1">
-   <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="40" x="15" transparency="0" y="150" rotation="0" height="40" positionMode="0" frame="false" outlineWidth="0" zValue="11" lastValidViewScaleFactor="1.47564" uuid="{cac971cb-ae70-48ab-8f79-be6dc0a3bd4a}" id="safe-logo" background="false" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
-  <ComposerLegend symbolWidth="7" title="" boxSpace="0" splitLayer="0" equalColumnWidth="1" map="0" symbolHeight="4" wrapChar="" fontColor="#000000" columnSpace="1" columnCount="2">
+  <ComposerLegend symbolWidth="7" title="" boxSpace="0" splitLayer="0" equalColumnWidth="1" map="0" symbolHeight="4" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
    <styles>
     <style marginBottom="1" name="title" font="Droid Sans,7,-1,5,75,0,0,0,0,0"/>
     <style marginTop="1" name="group" font="Droid Sans,6,-1,5,75,0,0,0,0,0"/>
@@ -420,7 +408,7 @@
      </VectorClassificationItemNg>
     </LayerItem>
    </Model>
-   <ComposerItem width="83.5" x="150" transparency="0" y="150" rotation="0" height="65" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="1.47564" uuid="{a0f66802-f916-48b3-83c9-cdbd117b0c1d}" id="impact-legend" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="83.5" x="144" transparency="0" y="145" rotation="0" height="65" positionMode="0" frame="false" outlineWidth="0" zValue="8" lastValidViewScaleFactor="1.42459" uuid="{7813df28-54ce-4887-9946-7a4f5541be8f}" id="map-legend" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -428,7 +416,7 @@
   <ComposerLabel valign="128" labelText="[disclaimer]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="180" x="15" transparency="0" y="415" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="2.37587" uuid="{e201dc29-523b-43cc-bddd-80a303eda7a2}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="180" x="15" transparency="0" y="415" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.42459" uuid="{a90a8b8b-b001-4512-a057-9ba28d1362e4}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -436,7 +424,7 @@
   <ComposerLabel valign="128" labelText="[disclaimer]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="180" x="15" transparency="0" y="195" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="2.37587" uuid="{8c24d728-19eb-4376-97a1-1fa8ffa2b99d}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="180" x="15" transparency="0" y="195" rotation="0" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="6" lastValidViewScaleFactor="1.42459" uuid="{afbb4d69-f31e-4c90-b1b9-093dacd935ba}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -444,13 +432,13 @@
   <ComposerLabel valign="128" labelText="[impact-title] in the Event of [hazard-title]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="270" x="15" transparency="0" y="230" rotation="0" height="20" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="2.37587" uuid="{b9c5324a-c02c-4cbf-ad36-ebe9022bbe9d}" id="impact-title" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="270" x="15" transparency="0" y="230" rotation="0" height="20" positionMode="0" frame="false" outlineWidth="0" zValue="4" lastValidViewScaleFactor="1.42459" uuid="{02aa250d-90b4-418d-beac-7a403011ac17}" id="impact-title" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Render" drawCanvasItems="true">
-   <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewInverted="false">
+   <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
     <symbol alpha="0.3" type="fill" name="">
      <layer pass="0" class="SimpleFill" locked="0">
       <prop k="border_width_unit" v="MM"/>
@@ -464,7 +452,7 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-6.2445" xmin="106.744" ymax="-6.15639" xmax="106.927"/>
+   <Extent ymin="-6.24450000000000038" xmin="106.74399999999999977" ymax="-6.1563888888888858" xmax="106.92700000000000671"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="3" intervalX="0" offsetX="0" intervalY="0" offsetY="0" gridFrameStyle="0" gridFrameWidth="2" gridBlendMode="0" show="1">
     <symbol alpha="1" type="line" name="">
@@ -486,14 +474,14 @@
      <fontColor red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <ComposerItem width="270" x="15" transparency="0" y="10" rotation="0" height="130" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="2.37587" uuid="{2a7da592-e0e6-4aff-9ee0-6c9d7f176758}" id="impact-map" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="270" x="15" transparency="0" y="10" rotation="0" height="130" positionMode="0" frame="true" outlineWidth="0" zValue="3" lastValidViewScaleFactor="1.42459" uuid="{8241f267-eda6-44a1-91ef-1a69e363bbd1}" id="impact-map" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerMap>
   <ComposerHtml resizeMode="0" url="">
    <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="240" x="15" transparency="0" y="260" rotation="0" height="155" positionMode="0" frame="false" outlineWidth="0" zValue="9" lastValidViewScaleFactor="2.37587" uuid="{4584fb67-eb1d-4da5-90fc-95b2e0592ded}" id="merged-report" background="true" blendMode="0" positionLock="false">
+    <ComposerItem width="240" x="15" transparency="0" y="250" rotation="0" height="165" positionMode="0" frame="false" outlineWidth="0" zValue="9" lastValidViewScaleFactor="1.42459" uuid="{3bf748cd-12b1-4c4b-9f11-49246a6dfd98}" id="merged-report-table" background="true" blendMode="0" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
