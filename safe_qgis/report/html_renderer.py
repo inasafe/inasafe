@@ -245,8 +245,9 @@ class HtmlRenderer():
                 html += aggregation_table
             if attribution_table is not None:
                 html += attribution_table.to_html()
-            html += '<h2>%s</h2>' % self.tr('Detailed Table')
-            html += full_table
+            if full_table is not None:
+                html += '<h2>%s</h2>' % self.tr('Detailed Table')
+                html += full_table
         else:
             if aggregation_table is not None:
                 html = aggregation_table
