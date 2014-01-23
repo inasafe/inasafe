@@ -838,7 +838,8 @@ def map_qrc_to_file(match, res_copy_dir):
                 #copy somehow failed
                 res_path = None
 
-    return res_path
+    #noinspection PyArgumentList
+    return QUrl.fromLocalFile(res_path).toString()
 
 
 def open_in_browser(file_path):
