@@ -103,7 +103,7 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
-LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
+LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 #from pydev import pydevd  # pylint: disable=F0401

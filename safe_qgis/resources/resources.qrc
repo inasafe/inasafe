@@ -15,6 +15,8 @@
         <!-- logos -->
         <file alias="inasafe-logo.svg">img/logos/inasafe-logo.svg</file>
         <file alias="inasafe-logo-url.svg">img/logos/inasafe-logo-url.svg</file>
+        <file alias="inasafe-logo.png">img/logos/inasafe-logo.png</file>
+        <file alias="inasafe-logo-url.png">img/logos/inasafe-logo-url.png</file>
         <file alias="supporters.png">img/logos/supporters.png</file>
         <file alias="bnpb_logo.png">img/logos/bnpb_logo.png</file>
         <file alias="bnpb_logo_64.png">img/logos/bnpb_logo_64.png</file>
@@ -35,7 +37,8 @@
         <file alias="footer.html">footer.html</file>
 	<!-- composer templates -->
         <file alias="basic.qpt">qgis-composer-templates/basic.qpt</file>
-        <file alias="inasafe.qpt">qgis-composer-templates/inasafe.qpt</file>
+        <file alias="inasafe-portrait-a4.qpt">qgis-composer-templates/inasafe-portrait-a4.qpt</file>
+        <file alias="inasafe-landscape-a3.qpt">qgis-composer-templates/inasafe-landscape-a3.qpt</file>
         <file alias="merged_report.qpt">qgis-composer-templates/merged_report.qpt</file>
     </qresource>
 </RCC>

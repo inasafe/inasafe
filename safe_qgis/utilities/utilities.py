@@ -799,24 +799,24 @@ def read_impact_layer(impact_layer):
 
 
 def map_qrc_to_file(match, res_copy_dir):
-    """Map a qrc:/ path to its correspondent file:/// and creates it.
+    """Map a qrc:/ path to its correspondent file:/// and create it.
 
-    for example qrc:/plugins/inasafe/ajax-loader.gif
+    For example qrc:/plugins/inasafe/ajax-loader.gif
     is converted to file:////home/marco/.qgis2/python/plugins/
     inasafe-master/safe_qgis/resources/img/ajax-loader.gif
 
-    if the qrc asset is non file based (i.e. is compiled in resources_rc
-    .pc) then a copy of is extracted to res_copy_dir
+    If the qrc asset is non file based (i.e. is compiled in resources_rc
+    .pc) then a copy of is extracted to res_copy_dir.
 
-    :param match: the qrc path to be mapped matched from a regular
-     expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
+    :param match: The qrc path to be mapped matched from a regular
+        expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
     :type match: re.match object
 
-    :param res_copy_dir: the path to copy non file based qrc assets.
+    :param res_copy_dir: The path to copy non file based qrc assets.
     :type res_copy_dir: str
 
-    :returns: a file path to the resource or None if the resource could
-     not be created
+    :returns: File path to the resource or None if the resource could
+        not be created.
     :rtype: None, str
     """
 
@@ -838,7 +838,8 @@ def map_qrc_to_file(match, res_copy_dir):
                 #copy somehow failed
                 res_path = None
 
-    return res_path
+    #noinspection PyArgumentList
+    return QUrl.fromLocalFile(res_path).toString()
 
 
 def open_in_browser(file_path):
