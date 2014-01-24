@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Wed Jun 26 13:57:36 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Fri Jan 24 19:33:53 2014
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_KeywordsDialogBase(object):
     def setupUi(self, KeywordsDialogBase):
@@ -143,6 +152,8 @@ class Ui_KeywordsDialogBase(object):
         self.cboKeyword.addItem(_fromUtf8(""))
         self.cboKeyword.setItemText(2, _fromUtf8("datatype"))
         self.cboKeyword.addItem(_fromUtf8(""))
+        self.cboKeyword.addItem(_fromUtf8(""))
+        self.cboKeyword.setItemText(4, _fromUtf8("key_attribute"))
         self.horizontalLayout.addWidget(self.cboKeyword)
         self.label_5 = QtGui.QLabel(self.framePredefined)
         self.label_5.setObjectName(_fromUtf8("label_5"))
@@ -232,32 +243,32 @@ class Ui_KeywordsDialogBase(object):
         KeywordsDialogBase.setTabOrder(self.pbnRemove, self.buttonBox)
 
     def retranslateUi(self, KeywordsDialogBase):
-        KeywordsDialogBase.setWindowTitle(QtGui.QApplication.translate("KeywordsDialogBase", "InaSAFE - Keyword Editor", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpSimple.setTitle(QtGui.QApplication.translate("KeywordsDialogBase", "Quick edit", None, QtGui.QApplication.UnicodeUTF8))
-        self.cboSubcategory.setToolTip(QtGui.QApplication.translate("KeywordsDialogBase", "A subcategory represents the type of hazard.", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSubcategory.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAggregationAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Aggregation attribute", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblCategory.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
-        self.radHazard.setToolTip(QtGui.QApplication.translate("KeywordsDialogBase", "A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)", None, QtGui.QApplication.UnicodeUTF8))
-        self.radHazard.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Hazard", None, QtGui.QApplication.UnicodeUTF8))
-        self.radExposure.setToolTip(QtGui.QApplication.translate("KeywordsDialogBase", "Where people and property are situated.", None, QtGui.QApplication.UnicodeUTF8))
-        self.radExposure.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Exposure", None, QtGui.QApplication.UnicodeUTF8))
-        self.radPostprocessing.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Postprocessing", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblTitle.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblFemaleRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Female ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblFemaleRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Female ratio default", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnAdvanced.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Show advanced editor", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpAdvanced.setTitle(QtGui.QApplication.translate("KeywordsDialogBase", "Advanced editor", None, QtGui.QApplication.UnicodeUTF8))
-        self.radPredefined.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Predefined", None, QtGui.QApplication.UnicodeUTF8))
-        self.radUserDefined.setText(QtGui.QApplication.translate("KeywordsDialogBase", "User defined", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Keyword", None, QtGui.QApplication.UnicodeUTF8))
-        self.cboKeyword.setItemText(3, QtGui.QApplication.translate("KeywordsDialogBase", "source", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Value", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnAddToList1.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Add to list", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Key", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Value", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnAddToList2.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Add to list", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Current keywords", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnRemove.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Remove selected", None, QtGui.QApplication.UnicodeUTF8))
+        KeywordsDialogBase.setWindowTitle(_translate("KeywordsDialogBase", "InaSAFE - Keyword Editor", None))
+        self.grpSimple.setTitle(_translate("KeywordsDialogBase", "Quick edit", None))
+        self.cboSubcategory.setToolTip(_translate("KeywordsDialogBase", "A subcategory represents the type of hazard.", None))
+        self.lblSubcategory.setText(_translate("KeywordsDialogBase", "Subcategory", None))
+        self.lblAggregationAttribute.setText(_translate("KeywordsDialogBase", "Aggregation attribute", None))
+        self.lblCategory.setText(_translate("KeywordsDialogBase", "Category", None))
+        self.radHazard.setToolTip(_translate("KeywordsDialogBase", "A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)", None))
+        self.radHazard.setText(_translate("KeywordsDialogBase", "Hazard", None))
+        self.radExposure.setToolTip(_translate("KeywordsDialogBase", "Where people and property are situated.", None))
+        self.radExposure.setText(_translate("KeywordsDialogBase", "Exposure", None))
+        self.radPostprocessing.setText(_translate("KeywordsDialogBase", "Postprocessing", None))
+        self.lblTitle.setText(_translate("KeywordsDialogBase", "Title", None))
+        self.lblFemaleRatioAttribute.setText(_translate("KeywordsDialogBase", "Female ratio attribute", None))
+        self.lblFemaleRatioDefault.setText(_translate("KeywordsDialogBase", "Female ratio default", None))
+        self.pbnAdvanced.setText(_translate("KeywordsDialogBase", "Show advanced editor", None))
+        self.grpAdvanced.setTitle(_translate("KeywordsDialogBase", "Advanced editor", None))
+        self.radPredefined.setText(_translate("KeywordsDialogBase", "Predefined", None))
+        self.radUserDefined.setText(_translate("KeywordsDialogBase", "User defined", None))
+        self.label_4.setText(_translate("KeywordsDialogBase", "Keyword", None))
+        self.cboKeyword.setItemText(3, _translate("KeywordsDialogBase", "source", None))
+        self.label_5.setText(_translate("KeywordsDialogBase", "Value", None))
+        self.pbnAddToList1.setText(_translate("KeywordsDialogBase", "Add to list", None))
+        self.label_6.setText(_translate("KeywordsDialogBase", "Key", None))
+        self.label_7.setText(_translate("KeywordsDialogBase", "Value", None))
+        self.pbnAddToList2.setText(_translate("KeywordsDialogBase", "Add to list", None))
+        self.label_8.setText(_translate("KeywordsDialogBase", "Current keywords", None))
+        self.pbnRemove.setText(_translate("KeywordsDialogBase", "Remove selected", None))
 
 import resources_rc
