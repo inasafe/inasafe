@@ -589,6 +589,7 @@ def get_utm_epsg(longitude, latitude):
     epsg += get_utm_zone(longitude)
     return epsg
 
+
 def feature_attributes_as_dict(field_map, attributes):
     """Converts list of attributes to dict of attributes.
 

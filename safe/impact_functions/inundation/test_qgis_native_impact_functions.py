@@ -75,6 +75,7 @@ class Wrapper():
     def get_layer(self):
         return self.data
 
+
 class Test_gis_native_impact_functions(unittest.TestCase):
 
     def _get_impact_function(self,
@@ -134,7 +135,6 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         I = read_layer(impact_filename)
 
         return I
-
 
     def test_building_native_impact_experimental(self):
         """Test flood_building_native_impact_experimental

@@ -30,6 +30,7 @@ from qgis_vector_tools import (
     points_to_rectangles
 )
 
+
 def _get_pixel_coords(extent, width, height, row, col):
     """Pixel to coordinates transformation
 
@@ -156,6 +157,7 @@ def polygonize(raster,
     polygons = union_geometry(polygons)
     return polygons
 
+
 def clip_raster(raster, n_cols, n_rows, output_extent):
     """Clip raster to specified extent, width and heigth.
     Note there is similar utility in
@@ -183,7 +185,7 @@ def clip_raster(raster, n_cols, n_rows, output_extent):
 
     base_name = unique_filename()
     file_name = base_name + '.tif'
-    file_writer = QgsRasterFileWriter (file_name)
+    file_writer = QgsRasterFileWriter(file_name)
     file_writer.writeRaster(pipe,
                             n_cols,
                             n_rows,

@@ -11,11 +11,16 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
-from safe.postprocessors.building_type_postprocessor import BuildingTypePostprocessor
+from safe.postprocessors.building_type_postprocessor import \
+    BuildingTypePostprocessor
 
 from safe.common.utilities import ugettext as tr
 
 
+# The road postprocessing is the same workflow as Building postprocessing
+# So we can redefine field values and call BuildingTypePostprocessor
+# That is why I define RoadTypePostprocessor
+# as descendant of BuildingTypePostprocessor
 class RoadTypePostprocessor(BuildingTypePostprocessor):
     """
     Postprocessor that calculates road types related statistics.

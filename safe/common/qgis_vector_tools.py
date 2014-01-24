@@ -72,6 +72,7 @@ def points_to_rectangles(points, dx, dy):
 
     return polygons
 
+
 def union_geometry(vector, request=QgsFeatureRequest()):
     """Return union of the vector geometries regardless of the attributes.
     (If request is specified, filter the objects before union).
@@ -102,6 +103,7 @@ def union_geometry(vector, request=QgsFeatureRequest()):
             except AttributeError:
                 pass
     return result_geometry
+
 
 def split_by_polygon(vector,
                      polygon,
@@ -194,4 +196,3 @@ def split_by_polygon(vector,
             _ = result_layer.dataProvider().addFeatures([feature])
     result_layer.updateExtents()
     return result_layer
-

@@ -14,6 +14,7 @@ __copyright__ += 'Disaster Reduction'
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import KeywordNotFoundError
 
+
 class QgisWrapper():
     """Wrapper class to add keywords functionality to Qgis layers
     """
@@ -30,7 +31,7 @@ class QgisWrapper():
         self.data = layer
         self.keyword_io = KeywordIO()
         self.keywords = self.keyword_io.read_keywords(layer)
-        if name == None:
+        if name is None:
             try:
                 self.name = self.get_keywords(key='title')
             except KeywordNotFoundError:

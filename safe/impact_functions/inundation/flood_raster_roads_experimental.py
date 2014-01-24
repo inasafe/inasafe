@@ -24,7 +24,6 @@ from safe.common.qgis_raster_tools import polygonize, clip_raster
 from safe.common.qgis_vector_tools import split_by_polygon
 
 
-
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
     """
     Simple experimental impact function for inundation
@@ -88,7 +87,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 Please check the values.''')
             raise GetDataError(message)
 
-
         # Extract data
         H = get_hazard_layer(layers)    # Flood
         E = get_exposure_layer(layers)  # Roads
@@ -108,15 +106,16 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                                                QVariant.Int)])
         target_field_index = e_provider.fieldNameIndex(target_field)
 
-
         # Get necessary width and height of raster
         height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
         height = int(height)
         width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
         width = int(width)
 
-        small_raster = clip_raster(H, width, height, QgsRectangle(*self.extent))
-        flooded_polygon = polygonize(small_raster, threshold_min, threshold_max)
+        small_raster = clip_raster(
+            H, width, height, QgsRectangle(*self.extent))
+        flooded_polygon = polygonize(
+            small_raster, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)

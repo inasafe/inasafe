@@ -25,6 +25,7 @@ from safe_qgis.safe_interface import UNITDATA
 from safe_qgis.utilities.qgis_layer_wrapper import QgisWrapper
 from safe_qgis.exceptions import KeywordNotFoundError
 
+
 class QgisLayerWrapperTest(unittest.TestCase):
     """Test that context help works."""
 
@@ -38,7 +39,6 @@ class QgisLayerWrapperTest(unittest.TestCase):
             'test vector',
             'ogr')
         self.wrapper = QgisWrapper(self.layer)
-
 
     def test_get_keywords(self):
         """Test get_keywords work

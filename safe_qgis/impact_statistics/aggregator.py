@@ -786,7 +786,8 @@ class Aggregator(QtCore.QObject):
                                 'The target_field contains Null values.'
                                 ' The impact function should define this.')
                         )
-                        LOGGER.debug('Skipping postprocessing due to: %s' % message)
+                        LOGGER.debug(
+                            'Skipping postprocessing due to: %s' % message)
                         self.error_message = message
                         return
 
@@ -881,9 +882,10 @@ class Aggregator(QtCore.QObject):
             # Add length column to impact layer
 
             # We need calculate length in meters, not degrees:
-            # We can use 'qgis:reprojectlayer' with CALC_METHODS=2 (Ellipsoidal)
-            # directly, but that requires  QgsProject instance (see
-            # ftools source). To simplify test writiting, ust reprojetion.
+            # We can use processing 'qgis:exportaddgeometrycolumns' with
+            # CALC_METHODS=2 (Ellipsoidal) directly, but that
+            # requires  QgsProject instance (see ftools source).
+            # To simplify test writing, use reprojection before.
 
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
@@ -924,32 +926,37 @@ class Aggregator(QtCore.QObject):
             agg_attribute_dict = {}
             for id, feat in enumerate(self.layer.getFeatures(request)):
                 name = feat.attributes()[0]
-                if name in agg_attribute_dict: # The name isn't unique
+                if name in agg_attribute_dict:  # The name isn't unique
                     name += str(id)     # Add a number to make unique key
                 agg_attribute_dict[name] = id
             # Total impacted length in the aggregation polygons:
-            total = {id: 0 for id, __ in enumerate(self.layer.getFeatures(request))}
+            total = {
+                id: 0 for id, __ in enumerate(self.layer.getFeatures(request))
+            }
 
             # Create slots for dicts
             self.impact_layer_attributes = []
             for i in range(len(agg_attribute_dict)):
                 self.impact_layer_attributes.append([])
 
-            # Create list of line objects that are covered by aggregation polygons
-            # (a list of dicts for a polygon)
+            # Create list of line objects that are covered by
+            # aggregation polygons (a list of dicts for a polygon)
             impact_field_map = {}   # {'FieldName': FieldIndex}
-            temp_aggr_field_map = impact_layer_splits.dataProvider().fieldNameMap()
+            temp_aggr_field_map = \
+                impact_layer_splits.dataProvider().fieldNameMap()
             for k, v in temp_aggr_field_map.iteritems():
                 impact_field_map[str(k)] = v
 
-            request = QgsFeatureRequest().setFlags(QgsFeatureRequest.NoGeometry)
+            request = QgsFeatureRequest().\
+                setFlags(QgsFeatureRequest.NoGeometry)
             agg_attribute_index = impact_layer_splits.dataProvider().\
                 fieldNameIndex(agg_attribute)
             for feat in impact_layer_splits.getFeatures(request):
                 line_attributes = feat.attributes()
                 polygon_name = line_attributes[agg_attribute_index]
                 line_attribute_dict = \
-                    feature_attributes_as_dict(impact_field_map, line_attributes)
+                    feature_attributes_as_dict(
+                        impact_field_map, line_attributes)
                 line_attribute_dict[self.sum_field_name()] = \
                     line_attribute_dict[LENGTH_COLUMN]
 
@@ -961,7 +968,8 @@ class Aggregator(QtCore.QObject):
                             'The target_field contains Null values.'
                             ' The impact function should define this.')
                     )
-                    LOGGER.debug('Skipping postprocessing due to: %s' % message)
+                    LOGGER.debug(
+                        'Skipping postprocessing due to: %s' % message)
                     self.error_message = message
                     return
 

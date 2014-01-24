@@ -67,12 +67,12 @@ class Test_qgis_raster_tools(unittest.TestCase):
             attr = feature.attributes()
 
             self.assertTrue(geom.isGeosValid())
-            self.assertAlmostEquals(geom.area(), dx*dy)
+            self.assertAlmostEquals(geom.area(), dx * dy)
 
             p = geom.centroid().asPoint()
             x, y = [attr[index].toDouble()[0] for index in [x_index, y_index]]
-            self.assertLess(abs(p.x()-x), dx)
-            self.assertLess(abs(p.y()-y), dy)
+            self.assertLess(abs(p.x() - x), dx)
+            self.assertLess(abs(p.y() - y), dy)
     test_points_to_rectangles.slow = False
 
     def test_union_geometry(self):
@@ -98,7 +98,7 @@ class Test_qgis_raster_tools(unittest.TestCase):
         self.assertAlmostEquals(geom.area(), 3*dx * 3*dy)
         self.assertTrue((geom.isGeosEqual(expected_area)))
 
-        polygons = points_to_rectangles(points, 0.5*dx, 0.5*dy)
+        polygons = points_to_rectangles(points, 0.5 * dx, 0.5 * dy)
         geom = union_geometry(polygons)
         # The union is 9 squares
         self.assertAlmostEquals(geom.area(), 1.5*dx * 1.5*dy)
@@ -108,9 +108,9 @@ class Test_qgis_raster_tools(unittest.TestCase):
     def test_split_by_polygon(self):
         """Test split_by_polygon work"""
         line_before = QgsVectorLayer(
-            self.LINE_BEFORE +'.shp', 'test', 'ogr')
+            self.LINE_BEFORE + '.shp', 'test', 'ogr')
         expected_lines = QgsVectorLayer(
-            self.LINE_AFTER +'.shp', 'test', 'ogr')
+            self.LINE_AFTER + '.shp', 'test', 'ogr')
         polygon_layer = QgsVectorLayer(
             self.POLYGON_BASE + '.shp', 'test', 'ogr')
 
@@ -120,7 +120,7 @@ class Test_qgis_raster_tools(unittest.TestCase):
 
         splitted_lines = split_by_polygon(line_before,
                                           polygon,
-                                          mark_value=(1,'INSIDE'))
+                                          mark_value=(1, 'INSIDE'))
 
         # Test the lines is not multipart
         for feature in splitted_lines.getFeatures():
@@ -133,7 +133,7 @@ class Test_qgis_raster_tools(unittest.TestCase):
         for feature in splitted_lines.getFeatures():
             found = False
             for expected in expected_lines.getFeatures():
-                if (feature.attributes()==expected.attributes()) and \
+                if (feature.attributes() == expected.attributes()) and \
                     (feature.geometry().isGeosEqual(expected.geometry())):
                     found = True
                     break

@@ -292,7 +292,6 @@ class AggregatorTest(unittest.TestCase):
 
         return aggregator
 
-
     def _aggregate(
             self,
             impact_layer,
@@ -439,7 +438,7 @@ class AggregatorTest(unittest.TestCase):
         impact_layer = Vector(
             data=TESTDATA + '/aggregation_test_impact_vector_small.shp',
             name='test vector impact')
-        expected_results = [ # Count of inundated polygons
+        expected_results = [  # Count of inundated polygons:
             ['JAKARTA BARAT', '2'],
             ['JAKARTA PUSAT', '0'],
             ['JAKARTA SELATAN', '0'],
@@ -649,8 +648,8 @@ class AggregatorTest(unittest.TestCase):
         """Test get_centroids work"""
         aggregator = self._create_aggregator(False, False)
 
-        polygon1 = numpy.array([[0,0], [0,1],[1,0], [0,0]])
-        polygon2 = numpy.array([[0,0], [1,1],[1,0], [0,0]])
+        polygon1 = numpy.array([[0, 0], [0, 1], [1, 0], [0, 0]])
+        polygon2 = numpy.array([[0, 0], [1, 1], [1, 0], [0, 0]])
         polygons = [polygon1, polygon2]
 
         centroids = aggregator._get_centroids(polygons)

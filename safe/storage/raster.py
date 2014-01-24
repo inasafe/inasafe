@@ -37,6 +37,7 @@ from utilities import (geotransform_to_bbox, geotransform_to_resolution,
                        check_geotransform)
 from utilities import safe_to_qgis_layer
 
+
 class Raster(Layer):
     """InaSAFE representation of raster data
 
@@ -306,7 +307,8 @@ class Raster(Layer):
             Raises:
                 * TypeError         if qgis is not avialable
                 * IOError           if can't store temporary file
-                * GetDataError      if can't create copy of qgis_layer's dataProvider
+                * GetDataError      if can't create copy of qgis_layer's
+                                        dataProvider
         """
         if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
             msg = ('Used data is QgsRasterLayer instance, '
@@ -316,7 +318,7 @@ class Raster(Layer):
         base_name = unique_filename()
         file_name = base_name + '.tif'
 
-        file_writer = QgsRasterFileWriter (file_name)
+        file_writer = QgsRasterFileWriter(file_name)
         pipe = QgsRasterPipe()
         provider = qgis_layer.dataProvider()
         if not pipe.set(provider.clone()):
