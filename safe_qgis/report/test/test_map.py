@@ -98,7 +98,7 @@ class MapTest(unittest.TestCase):
         # with a lower maintenance test strategy.
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
-            431470,  # Ubuntu 13.10_64
+            427172,  # Ubuntu 13.10_64
             414589,  # Slackware64 14.0
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
@@ -136,7 +136,7 @@ class MapTest(unittest.TestCase):
 
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
-            385308,  # Ubuntu 13.10_64
+            400563,  # Ubuntu 13.10_64
             367934,  # Slackware64 14.0
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (

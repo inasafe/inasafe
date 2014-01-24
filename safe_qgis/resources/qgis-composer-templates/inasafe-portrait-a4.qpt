@@ -1,5 +1,17 @@
 <Composer title="Composer 1" visible="1">
  <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="0" printAsRaster="0">
+  <ComposerPicture pictureWidth="11.5387" file="/usr/local/qgis-2.0/share/qgis/svg/arrows/Arrow_05.svg" pictureHeight="11.8732" mapId="-1">
+   <ComposerItem width="11.5387" x="187.797" transparency="40" y="26.9237" rotation="0" height="11.8732" positionMode="0" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="5.97987" uuid="{2c35d3f6-2709-4b47-94a9-ec183f96dfc3}" id="" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="170" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerPicture>
+  <ComposerScaleBar penColor="#000000" style="Line Ticks Up" numMapUnitsPerScaleBarUnit="1000" alignment="2" brushColor="#000000" numSegments="3" segmentMillimeters="50.3168" fontColor="#000000" font="Cantarell,8,-1,5,50,0,0,0,0,0" numUnitsPerSegment="1000" units="1" labelBarSpace="1" outlineWidth="0.26" numSegmentsLeft="0" height="1" mapId="0" boxContentSpace="1" unitLabel="km">
+   <ComposerItem width="159.652" x="40.9742" transparency="0" y="206.908" rotation="0" height="7" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="5.97987" uuid="{dd3b4156-1745-4219-a682-b51df1cad1f0}" id="" background="true" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="170" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerScaleBar>
   <ComposerPicture pictureWidth="74.8288" file="." pictureHeight="9.31066" mapId="-1">
    <ComposerItem width="74.8288" x="128.639" transparency="0" y="283.918" rotation="0" height="9.31066" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="5.25503" uuid="{90f4a132-322f-44c1-8004-d0bb966ce930}" id="organisation-logo" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
@@ -27,7 +39,7 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-1" xmin="-1.04247" ymax="1.02412" xmax="1.04247"/>
+   <Extent ymin="-6.19298" xmin="106.796" ymax="-6.15886" xmax="106.831"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="3" intervalX="0" offsetX="0" intervalY="0" offsetY="0" gridFrameStyle="0" gridFrameWidth="2" gridBlendMode="0" show="1">
     <symbol alpha="1" type="line" name="">
@@ -49,7 +61,7 @@
      <fontColor red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <ComposerItem width="195.709" x="4.29137" transparency="0" y="25" rotation="0" height="190" positionMode="0" frame="true" outlineWidth="0" zValue="6" lastValidViewScaleFactor="3.56376" uuid="{da7e0988-2ed9-48a7-b287-059375ae3fd7}" id="impact-map" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="195.709" x="6.29137" transparency="0" y="25" rotation="0" height="190" positionMode="0" frame="true" outlineWidth="0" zValue="6" lastValidViewScaleFactor="5.97987" uuid="{da7e0988-2ed9-48a7-b287-059375ae3fd7}" id="impact-map" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -65,7 +77,7 @@
   <ComposerLabel valign="128" labelText="[disclaimer]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="124.642" x="3.61558" transparency="0" y="282.777" rotation="0" height="11.2235" positionMode="0" frame="false" outlineWidth="0" zValue="3" lastValidViewScaleFactor="5.25503" uuid="{77e1bc8a-6287-4f20-924a-8408b0f1d0c4}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="124.642" x="3.61558" transparency="0" y="282.777" rotation="0" height="11.2235" positionMode="0" frame="false" outlineWidth="0" zValue="3" lastValidViewScaleFactor="5.97987" uuid="{77e1bc8a-6287-4f20-924a-8408b0f1d0c4}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -73,7 +85,7 @@
   <ComposerLabel valign="32" labelText="&lt;div style=&quot;font-size: 8pt;&quot;>&#xa;&lt;strong>Time stamp:&lt;/strong> &lt;br/>[date] [time]&lt;br/>&lt;/br/>&#xa;&lt;strong>Note:&lt;/strong> This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.&lt;br/>&lt;br/>&#xa;&lt;i>Assessment carried out using InaSAFE release [safe-version] (QGIS plugin version).&lt;/i>&#xa;&lt;/div>" htmlState="2" halign="1" margin="1">
    <LabelFont description="Droid Sans,6,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="38.4393" x="161.369" transparency="0" y="224.125" rotation="0" height="60.7037" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="3.56376" uuid="{7ebc5339-c596-4fb3-98d1-9c2bdf5f07c7}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="38.4393" x="161.369" transparency="0" y="224.125" rotation="0" height="60.7037" positionMode="0" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="5.97987" uuid="{7ebc5339-c596-4fb3-98d1-9c2bdf5f07c7}" id="" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -121,8 +133,92 @@
       </symbols>
      </VectorClassificationItemNg>
     </LayerItem>
+    <LayerItem layerId="light_shade_relief20140124094017131" userText="" style="subgroup" text="light-shade-relief" showFeatureCount="0">
+     <RasterClassificationItem layerId="light_shade_relief20140124094017131" userText="" color="#000000" text="0"/>
+     <RasterClassificationItem layerId="light_shade_relief20140124094017131" userText="" color="#ffffff" text="174.316"/>
+    </LayerItem>
+    <LayerItem layerId="Flooded_roads20140124095619198" userText="" style="subgroup" text="Flooded roads" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="Not Inundated">
+      <symbols>
+       <symbol alpha="1" type="line" name="classificationSymbol">
+        <layer pass="0" class="SimpleLine" locked="0">
+         <prop k="capstyle" v="square"/>
+         <prop k="color" v="30,252,124,255"/>
+         <prop k="customdash" v="5;2"/>
+         <prop k="customdash_unit" v="MM"/>
+         <prop k="joinstyle" v="bevel"/>
+         <prop k="offset" v="0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="penstyle" v="solid"/>
+         <prop k="use_custom_dash" v="0"/>
+         <prop k="width" v="0.26"/>
+         <prop k="width_unit" v="MM"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="Inundated">
+      <symbols>
+       <symbol alpha="1" type="line" name="classificationSymbol">
+        <layer pass="0" class="SimpleLine" locked="0">
+         <prop k="capstyle" v="square"/>
+         <prop k="color" v="243,26,28,255"/>
+         <prop k="customdash" v="5;2"/>
+         <prop k="customdash_unit" v="MM"/>
+         <prop k="joinstyle" v="bevel"/>
+         <prop k="offset" v="0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="penstyle" v="solid"/>
+         <prop k="use_custom_dash" v="0"/>
+         <prop k="width" v="0.26"/>
+         <prop k="width_unit" v="MM"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
+    <LayerItem layerId="Flooded_roads20140124100628112" userText="" style="subgroup" text="Flooded roads" showFeatureCount="0">
+     <VectorClassificationItemNg userText="" text="Not Inundated">
+      <symbols>
+       <symbol alpha="1" type="line" name="classificationSymbol">
+        <layer pass="0" class="SimpleLine" locked="0">
+         <prop k="capstyle" v="square"/>
+         <prop k="color" v="30,252,124,255"/>
+         <prop k="customdash" v="5;2"/>
+         <prop k="customdash_unit" v="MM"/>
+         <prop k="joinstyle" v="bevel"/>
+         <prop k="offset" v="0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="penstyle" v="solid"/>
+         <prop k="use_custom_dash" v="0"/>
+         <prop k="width" v="0.26"/>
+         <prop k="width_unit" v="MM"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+     <VectorClassificationItemNg userText="" text="Inundated">
+      <symbols>
+       <symbol alpha="1" type="line" name="classificationSymbol">
+        <layer pass="0" class="SimpleLine" locked="0">
+         <prop k="capstyle" v="square"/>
+         <prop k="color" v="243,26,28,255"/>
+         <prop k="customdash" v="5;2"/>
+         <prop k="customdash_unit" v="MM"/>
+         <prop k="joinstyle" v="bevel"/>
+         <prop k="offset" v="0"/>
+         <prop k="offset_unit" v="MM"/>
+         <prop k="penstyle" v="solid"/>
+         <prop k="use_custom_dash" v="0"/>
+         <prop k="width" v="0.26"/>
+         <prop k="width_unit" v="MM"/>
+        </layer>
+       </symbol>
+      </symbols>
+     </VectorClassificationItemNg>
+    </LayerItem>
    </Model>
-   <ComposerItem width="154.331" x="4.20904" transparency="0" y="224.166" rotation="0" height="56.7175" positionMode="0" frame="false" outlineWidth="0" zValue="1" lastValidViewScaleFactor="3.56376" uuid="{6059b7b8-9686-4d05-b5b4-c117ddff12c8}" id="impact-legend" background="true" blendMode="0" positionLock="false">
+   <ComposerItem width="151.313" x="4.20904" transparency="0" y="223.166" rotation="0" height="50.0876" positionMode="0" frame="false" outlineWidth="0" zValue="1" lastValidViewScaleFactor="5.97987" uuid="{6059b7b8-9686-4d05-b5b4-c117ddff12c8}" id="impact-legend" background="true" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
