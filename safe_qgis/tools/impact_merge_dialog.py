@@ -38,6 +38,7 @@ from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 from safe_qgis.exceptions import (
     InvalidLayerError,
     EmptyDirectoryError,
+    FileNotFoundError,
     CanceledImportDialogError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
@@ -94,13 +95,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'inasafe-logo-url.png')
 
         # Organisation Logo Path
-        self.oganisation_logo_path = os.path.join(
+        self.organisation_logo_path = os.path.join(
             os.path.dirname(__file__),
             os.path.pardir,
             'resources',
             'img',
             'logos',
             'supporters.png')
+
+        # Disclaimer text
+        self.disclaimer = ('InaSAFE has been jointly developed by BPNB, '
+                           'Australian Govenment and the World Bank - GFDRR')
 
         # The output directory
         self.out_dir = None
@@ -137,6 +142,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # A boolean flag whether to merge entire area or aggregated
         self.entire_area_mode = False
+
+        # Get the global settings and override some variable if exist
+        self.read_settings()
 
         # Get all current project layers for combo box
         self.get_project_layers()
@@ -180,6 +188,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         tips.add(self.tr(
             'Select an output directory.'))
         tips.add(self.tr(
+            'Check the checkbox and select the report template if you want to '
+            'use your own template. Note that all the map composer components '
+            'needed must be fulfiled.'))
+        tips.add(self.tr(
             'Click OK to generate the per aggregation area combined '
             'summaries.'))
         message = m.Message()
@@ -215,7 +227,20 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """ Show a dialog to choose directory """
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
-            self, self.tr("Select output directory")))
+            self, self.tr("Select Output Directory")))
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_report_template_chooser_clicked(self):
+        """ Show a dialog to choose directory """
+        # noinspection PyCallByClass,PyTypeChecker
+        report_template_path = QtGui.QFileDialog.getOpenFileName(
+            self,
+            self.tr('Select Report Template'),
+            self.template_path,
+            self.tr('QPT File (*.qpt)'))
+
+        # noinspection PyCallByClass,PyTypeChecker
+        self.report_template_le.setText(report_template_path)
 
     def accept(self):
         """Do merging two impact layers."""
@@ -225,7 +250,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Prepare all the input from dialog, validate, and store it
         try:
             self.prepare_input()
-        except (InvalidLayerError, EmptyDirectoryError) as ex:
+        except (InvalidLayerError,
+                EmptyDirectoryError,
+                FileNotFoundError) as ex:
             # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
             QMessageBox.information(
                 self,
@@ -281,6 +308,22 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         output_directory_url = QUrl.fromLocalFile(self.out_dir)
         #noinspection PyTypeChecker,PyCallByClass
         QDesktopServices.openUrl(output_directory_url)
+
+    def read_settings(self):
+        """Set some variables from global settings on inasafe options dialog.
+        """
+        settings = QtCore.QSettings()
+
+        # Organisation logo
+        organisation_logo_path = \
+            settings.value('inasafe/orgLogoPath', '', type=str)
+        if organisation_logo_path != '':
+            self.organisation_logo_path = organisation_logo_path
+
+        # Disclaimer text
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        if disclaimer != '':
+            self.disclaimer = disclaimer
 
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
@@ -364,6 +407,15 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Get output directory
         self.out_dir = self.output_directory.text()
+
+        # Whether to use own report template:
+        if self.report_template_checkbox.isChecked():
+            own_template_path = self.report_template_le.text()
+            if os.path.isfile(own_template_path):
+                self.template_path = own_template_path
+            else:
+                raise FileNotFoundError(
+                    self.tr('Template file does not exist.'))
 
         # Flag whether to merge entire area or based on aggregation unit
         if self.aggregation['layer'] is None:
@@ -664,12 +716,15 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html = html_header()
             html += ('<table width="100%" style="position:absolute;left:0px;"'
                      'class="table table-condensed table-striped">')
+            html += '<caption><h4>%s</h4></caption>' % \
+                    aggregation_area.title()
+
             html += '<tr>'
 
             # First impact on the left side
             html += '<td width="48%">'
             html += '<table width="100%">'
-            html += '<caption>%s</caption>' % \
+            html += '<thead><th>%s</th></thead>' % \
                     self.first_impact['exposure_title'].upper()
             first_exposure_report_dict = first_report_dict[aggregation_area]
             for first_exposure in first_exposure_report_dict:
@@ -695,7 +750,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 # Second impact report
                 html += '<td width="48%">'
                 html += '<table width="100%">'
-                html += '<caption>%s</caption>' % \
+                html += '<thead><th>%s</th></thead>' % \
                         self.second_impact['exposure_title'].upper()
                 second_exposure_report_dict = \
                     second_report_dict[aggregation_area]
@@ -763,7 +818,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         composer_map = composition.getComposerItemById('impact-map')
 
         # Get HTML Report Frame
-        html_report_item = composition.getComposerItemById('merged-report')
+        html_report_item = \
+            composition.getComposerItemById('merged-report-table')
         html_report_frame = composition.getComposerHtmlByItem(html_report_item)
 
         if self.entire_area_mode:
@@ -807,10 +863,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             # Create the extent and set it to the map
             map_extent = QgsRectangle(
-                fit_min_x,
-                fit_min_y,
-                fit_max_x,
-                fit_max_y)
+                fit_min_x, fit_min_y, fit_max_x, fit_max_y)
             composer_map.setNewExtent(map_extent)
 
             # Add grid to composer map
@@ -831,17 +884,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             area_label = composition.getComposerItemById('aggregation-area')
             area_label.setText(area_title.title())
 
-            # Set Aggregation Area Breakdown Label
-            area_breakdown_label = composition.getComposerItemById(
-                'aggregation-area-breakdown')
-            area_breakdown_text = 'Area: %s' % area_title.title()
-            area_breakdown_label.setText(area_breakdown_text)
-
+            # Set merged-report-table
             html_report_path = self.html_reports[area_title]
             #noinspection PyArgumentList
             html_frame_url = QUrl.fromLocalFile(html_report_path)
             html_report_frame.setUrl(html_frame_url)
 
+            # Export composition to PDF file
             file_name = '_'.join(area_title.split())
             file_path = '%s.pdf' % file_name
             path = os.path.join(self.out_dir, file_path)
@@ -895,16 +944,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                         'aggregation-area')
                     area_label.setText(area_title.title())
 
-                    # Set Aggregation Area Breakdown Label
-                    area_breakdown_label = composition.getComposerItemById(
-                        'aggregation-area-breakdown')
-                    area_breakdown_text = 'Area: %s' % area_title.title()
-                    area_breakdown_label.setText(area_breakdown_text)
-
+                    # Set merged-report-table
                     html_report_path = self.html_reports[area_title]
                     #noinspection PyArgumentList
                     html_frame_url = QUrl.fromLocalFile(html_report_path)
                     html_report_frame.setUrl(html_frame_url)
+
+                    # Export composition to PDF file
                     composition.exportAsPDF(path)
 
             # End of rendering
@@ -913,6 +959,19 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     #noinspection PyArgumentList
     def load_template(self, renderer):
         """Load composer template for merged report.
+
+        Validate it as well. The template needs to have:
+        1. QgsComposerMap with id 'impact-map' for merged impact map.
+        2. QgsComposerPicture with id 'safe-logo' for InaSAFE logo.
+        3. QgsComposerLabel with id 'summary-report' for a summary of two
+           impacts.
+        4. QgsComposerLabel with id 'aggregation-area' to indicate the area
+           of aggregation.
+        5. QgsComposerScaleBar with id 'map-scale' for impact map scale.
+        6. QgsComposerLegend with id 'map-legend' for impact map legend.
+        7. QgsComposerPicture with id 'organisation-logo' for organisation
+           logo.
+        8. QgsComposerLegend with id 'impact-legend' for map legend.
 
         :param renderer: Map renderer
         :type renderer: QgsMapRenderer
@@ -929,21 +988,14 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         document = QtXml.QDomDocument()
         document.setContent(template_content)
 
-        # Map Substitution
-        #noinspection PyTypeChecker,PyCallByClass
-        safe_logo_path = QUrl.fromLocalFile(str(self.safe_logo_path))
-        #noinspection PyTypeChecker,PyCallByClass
-        organisation_logo_path = QUrl.fromLocalFile(
-            str(self.oganisation_logo_path))
+        # Prepare Map Substitution
         impact_title = '%s and %s' % (
             self.first_impact['map_title'],
-            self.second_impact['map_title']
-        )
+            self.second_impact['map_title'])
         substitution_map = {
             'impact-title': impact_title,
             'hazard-title': self.first_impact['hazard_title'],
-            'inasafe-logo': safe_logo_path.toString(),
-            'organisation-logo': organisation_logo_path.toString()
+            'disclaimer': self.disclaimer
         }
 
         # Load template
@@ -953,12 +1005,26 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr('Error loading template %s') %
                 self.template_path)
 
+        # Validate all needed composer components
+        component_ids = ['impact-map', 'safe-logo', 'summary-report',
+                         'aggregation-area', 'map-scale', 'map-legend',
+                         'organisation-logo', 'merged-report-table']
+        for component_id in component_ids:
+            component = composition.getComposerItemById(component_id)
+            if component is None:
+                raise ReportCreationError(self.tr(
+                    'Component %s could not be found' % component_id))
+
+        # Set InaSAFE logo
+        safe_logo = composition.getComposerItemById('safe-logo')
+        safe_logo.setPictureFile(self.safe_logo_path)
+
+        # set organisation logo
+        org_logo = composition.getComposerItemById('organisation-logo')
+        org_logo.setPictureFile(self.organisation_logo_path)
+
         # Set Map Legend
-        legend = composition.getComposerItemById('impact-legend')
-        if legend is not None:
-            legend.updateLegend()
-        else:
-            raise ReportCreationError(
-                self.tr('Legend "impact-legend" could not be found'))
+        legend = composition.getComposerItemById('map-legend')
+        legend.updateLegend()
 
         return composition

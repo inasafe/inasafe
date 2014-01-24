@@ -22,7 +22,8 @@ import logging
 from PyQt4 import QtCore, QtGui, QtXml
 from qgis.core import (
     QgsComposition,
-    QgsRectangle)
+    QgsRectangle,
+    QgsMapLayer)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -343,6 +344,21 @@ class Map():
         #legend_notes = mapLegendAttributes.get('legend_notes', None)
         #legend_units = mapLegendAttributes.get('legend_units', None)
         legend_title = legend_attributes.get('legend_title', None)
+
+        symbol_count = 1
+        if self.layer.type() == QgsMapLayer.VectorLayer:
+            renderer = self.layer.rendererV2()
+            if renderer.type() in ['', '']:
+                symbol_count = len(self.layer.legendSymbologyItems())
+        else:
+            renderer = self.layer.renderer()
+            if renderer.type() in ['']:
+                symbol_count = len(self.layer.legendSymbologyItems())
+
+        if symbol_count <= 5:
+            legend.setColumnCount(1)
+        else:
+            legend.setColumnCount(symbol_count / 5 + 1)
 
         if legend_title is None:
             legend_title = ""

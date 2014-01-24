@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-08 17:09+0200\n"
+"POT-Creation-Date: 2014-01-21 15:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2609,7 +2609,7 @@ msgstr "Penduduk wanita (yang terdampak)"
 
 #: safe/common/dynamic_translations.py:184
 msgid "Area"
-msgstr "Daerah"
+msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:107
 msgid "Road Type"
@@ -2617,88 +2617,6 @@ msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:125
 msgid "Flooded roads"
-msgstr ""
-
-msgid "Be Liquefied"
-msgstr ""
-
-msgid ""
-"To assess the impacts of (liquefaction) on buildingfootprints originating "
-"from OpenStreetMap (OSM)."
-msgstr ""
-
-msgid "Provide details about where critical infrastructure might be liquefied"
-msgstr ""
-
-msgid ""
-"The liquefaction status is calculated for each building (using thecentroid "
-"if it is a polygon) based on the hazard levels provided. ifthe hazard is "
-"given as a rester threshold of 1 meter is used. Thisis configurable though "
-"the InaSAFE interface. If the hazard isgiven as a vector polygon layer "
-"buildings are considered to beimpacted depending on the value of hazard "
-"attributes (in order)\"affected\" or \"LIQUEFACTIONPRONE\": If a building is "
-"in a region that hasattribute \"affected\" set to True(or 1) it is impacted. "
-"If attribute\"affected\" does not exist but \"LIQUEFACTIONPRONE\" does, then "
-"the buildingis considered impacted if \"LIQUEFACTIONPRONE\" is \"yes\". If "
-"neither\"affected\" nor \"LIQUEFACTIONPRONE\" is available, a building will "
-"beimpacted if it is belongs to any polygon. The latter behaviour "
-"isimplemented through the attribute \"inapolygon\" which is automatically "
-"assigned."
-msgstr ""
-
-msgid ""
-"A hazard raster layer where each cell represents flood depth (inmeters), or "
-"a vector polygon layer where each polygon represents anliquefied area. In "
-"the latter case, the following attributes arerecognized (in order): "
-"\"affected\" (True or False) or \"LIQUEFACTIONPRONE\"(Yes or No). (True may "
-"be represented as 1, False as 0)"
-msgstr ""
-
-msgid ""
-"Vector polygon layer extracted from OSM where each polygonrepresents the "
-"footprint of the building."
-msgstr ""
-
-msgid ""
-"Vector layer contains building is estimated to be flooded and thebreakdown "
-"of the building by type"
-msgstr ""
-
-msgid ""
-"This function only flags buildings as impacted or not either basedon a fixed "
-"threshold in case of raster hazard or the attributesmentioned under input in "
-"case of vector hazard."
-msgstr ""
-
-msgid "Number liquefied"
-msgstr ""
-
-msgid "Which structures have warning capacity(e.g. sirens, speakers, etc.)?"
-msgstr ""
-
-#, python-format
-msgid ""
-"Where will the patients from the %s closed hospitals go and how will we "
-"transfer them?"
-msgstr ""
-
-#, python-format
-msgid "flood levels exceed %.1fm"
-msgstr ""
-
-msgid "Not Liquefied"
-msgstr ""
-
-msgid "Liquefied"
-msgstr ""
-
-msgid "Buildings Liquefied"
-msgstr ""
-
-msgid "(liquefied or not liquefied)"
-msgstr ""
-
-msgid "Stucture liquefied status"
 msgstr ""
 
 #: safe/postprocessors/minimum_needs_postprocessor.py:48
