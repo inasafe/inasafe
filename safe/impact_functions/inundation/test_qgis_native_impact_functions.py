@@ -205,7 +205,7 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         count = sum(impact.get_data(attribute=keywords['target_field']))
         self.assertEquals(count, 68)
 
-    test_building_native_impact_experrimental.slow = True
+    test_building_native_impact_experimental.slow = True
 
 
 if __name__ == '__main__':
