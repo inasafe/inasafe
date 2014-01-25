@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Converter Test Cases.**
+- **Impact function Test Cases.**
 
 Contact : kolesov.dm@gmail.com
 
@@ -204,6 +204,99 @@ class Test_gis_native_impact_functions(unittest.TestCase):
 
     test_building_native_impact_experimental.slow = True
 
+    def test_polygon_roads_impact(self):
+        """Test FloodVectorRoadsExperimentalFunction work
+        """
+        hazard_name = os.path.join(UNITDATA,
+            'hazard',
+            'multipart_polygons_osm_4326.shp')
+        qgis_hazard = QgsVectorLayer(
+            hazard_name,
+            'HAZARD',
+            'ogr'
+        )
+
+        exposure_name = os.path.join(UNITDATA,
+            'exposure',
+            'roads_osm_4326.shp')
+        qgis_exposure = QgsVectorLayer(
+            exposure_name,
+            'EXPOSURE',
+            'ogr'
+        )
+
+        plugin_name = "FloodVectorRoadsExperimentalFunction"
+
+        params = OrderedDict([
+            ('target_field', 'flooded'),
+            ('road_type_field', 'TYPE'),
+            ('affected_field', 'FLOODPRONE'),
+            ('affected_value', 'YES')
+        ])
+
+        impact = self._get_impact_function(
+            qgis_hazard,
+            qgis_exposure,
+            plugin_name,
+            params
+        )
+
+        keywords = impact.get_keywords()
+        self.assertEquals(
+            params['target_field'],
+            keywords['target_field']
+        )
+
+        # Count of flooded objects is calculated "by the hands"
+        # the count = 63
+        count = sum(impact.get_data(attribute=keywords['target_field']))
+        self.assertEquals(count, 63)
+    test_polygon_roads_impact.slow = True
+
+    def test_raster_roads_impact(self):
+        """Test FloodVectorRoadsExperimentalFunction work
+        """
+        hazard_name = os.path.join(UNITDATA,
+            'hazard',
+            'jakarta_flood_design.tif')
+        qgis_hazard = QgsRasterLayer(
+            hazard_name,
+            'HAZARD'
+        )
+
+        exposure_name = os.path.join(UNITDATA,
+            'exposure',
+            'roads_osm_4326.shp')
+        qgis_exposure = QgsVectorLayer(
+            exposure_name,
+            'EXPOSURE',
+            'ogr'
+        )
+
+        plugin_name = "FloodRasterRoadsExperimentalFunction"
+
+        params = OrderedDict([
+            ('target_field', 'flooded'),
+            ('road_type_field', 'TYPE'),
+            ('min threshold [m]', 0.005),
+            ('max threshold [m]', float('inf'))
+        ])
+
+        impact = self._get_impact_function(
+            qgis_hazard,
+            qgis_exposure,
+            plugin_name,
+            params
+        )
+
+        keywords = impact.get_keywords()
+        self.assertEquals(
+            params['target_field'],
+            keywords['target_field']
+        )
+        count = sum(impact.get_data(attribute=keywords['target_field']))
+        self.assertEquals(count, 25)
+    test_raster_roads_impact.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_gis_native_impact_functions, 'test')
