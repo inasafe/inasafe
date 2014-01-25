@@ -110,8 +110,6 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
     def _calculate_categories(self):
         """Indicator that shows total population.
 
-        this indicator reports the total population
-
         Args:
             None
         Returns:

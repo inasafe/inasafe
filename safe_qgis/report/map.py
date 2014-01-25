@@ -53,7 +53,7 @@ class Map():
         self.extent = iface.mapCanvas().extent()
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
         self.org_logo = ':/plugins/inasafe/supporters.png'
-        self.template = ':/plugins/inasafe/inasafe.qpt'
+        self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
         self.disclaimer = self.tr(
             'InaSAFE has been jointly developed by BNPB, Australian '
             'Government and the World Bank - GFDRR')
