@@ -112,8 +112,33 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
         width = int(width)
 
+        # Align raster extent and self.extent
+        raster_extent = H.dataProvider().extent()
+        xmin = raster_extent.xMinimum()
+        xmax = raster_extent.xMaximum()
+        ymin = raster_extent.yMinimum()
+        ymax = raster_extent.yMaximum()
+
+        x_delta = (xmax - xmin)/H.width()
+        x = xmin
+        for i in range(H.width()):
+            if abs(x - self.extent[0]) < x_delta:
+                # We have found the aligned raster boundary
+                break
+            x += x_delta
+
+        y_delta = (ymax - ymin)/H.height()
+        y = ymin
+        for i in range(H.width()):
+            if abs(y - self.extent[1]) < y_delta:
+                # We have found the aligned raster boundary
+                break
+            y += y_delta
+        clip_extent = [x, y, x + width*x_delta, y + height*y_delta]
+
+        # Clip and polygonize
         small_raster = clip_raster(
-            H, width, height, QgsRectangle(*self.extent))
+            H, width, height, QgsRectangle(*clip_extent))
         flooded_polygon = polygonize(
             small_raster, threshold_min, threshold_max)
 
