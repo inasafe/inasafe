@@ -188,9 +188,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         tips.add(self.tr(
             'Select an output directory.'))
         tips.add(self.tr(
-            'Check the checkbox and select the report template if you want to '
-            'use your own template. Note that all the map composer components '
-            'needed must be fulfiled.'))
+            'Check "Use own report template" checkbox and select the report '
+            'template file if you want to use your own template. Note that '
+            'all the map composer components that are needed must be '
+            'fulfilled.'))
         tips.add(self.tr(
             'Click OK to generate the per aggregation area combined '
             'summaries.'))
