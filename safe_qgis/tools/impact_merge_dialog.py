@@ -42,6 +42,7 @@ from safe_qgis.exceptions import (
     CanceledImportDialogError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
+    InvalidParameterError,
     ReportCreationError,
     UnsupportedProviderError)
 from safe_qgis.safe_interface import messaging as m
@@ -358,8 +359,12 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     layer.name(),
                     layer)
                 continue
-            except UnsupportedProviderError:
-                # Encounter unsupported provider layer, e.g Open Layer
+            except (UnsupportedProviderError, InvalidParameterError):
+                # UnsupportedProviderError:
+                #   Encounter unsupported provider layer, e.g Open Layer
+                # InvalidParameterError:
+                #   Encounter invalid layer source,
+                #   see https://github.com/AIFDR/inasafe/issues/754
                 continue
 
             add_ordered_combo_item(self.first_layer, layer.name(), layer)
