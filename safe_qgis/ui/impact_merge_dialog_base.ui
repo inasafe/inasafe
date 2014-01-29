@@ -93,7 +93,7 @@
    <item>
     <widget class="QCheckBox" name="report_template_checkbox">
      <property name="text">
-      <string>&amp;Use own report template</string>
+      <string>&amp;Use customized report template</string>
      </property>
     </widget>
    </item>

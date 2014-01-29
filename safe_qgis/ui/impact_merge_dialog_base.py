@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'impact_merge_dialog_base.ui'
 #
-# Created: Wed Jan 22 16:17:31 2014
+# Created: Wed Jan 29 12:19:05 2014
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -107,7 +107,7 @@ class Ui_ImpactMergeDialogBase(object):
         self.aggregation_layer_label.setText(QtGui.QApplication.translate("ImpactMergeDialogBase", "&Aggregation Layer", None, QtGui.QApplication.UnicodeUTF8))
         self.output_directory_label.setText(QtGui.QApplication.translate("ImpactMergeDialogBase", "&Output directory", None, QtGui.QApplication.UnicodeUTF8))
         self.directory_chooser.setText(QtGui.QApplication.translate("ImpactMergeDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.report_template_checkbox.setText(QtGui.QApplication.translate("ImpactMergeDialogBase", "&Use own report template", None, QtGui.QApplication.UnicodeUTF8))
+        self.report_template_checkbox.setText(QtGui.QApplication.translate("ImpactMergeDialogBase", "&Use customized report template", None, QtGui.QApplication.UnicodeUTF8))
         self.report_template_chooser.setText(QtGui.QApplication.translate("ImpactMergeDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
