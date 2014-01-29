@@ -189,9 +189,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         tips.add(self.tr(
             'Select an output directory.'))
         tips.add(self.tr(
-            'Check "Use own report template" checkbox and select the report '
-            'template file if you want to use your own template. Note that '
-            'all the map composer components that are needed must be '
+            'Check "Use customized report template" checkbox and select the '
+            'report template file if you want to use your own template. Note '
+            'that all the map composer components that are needed must be '
             'fulfilled.'))
         tips.add(self.tr(
             'Click OK to generate the per aggregation area combined '
@@ -464,7 +464,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """Validate all layers based on the keywords.
 
         ... When we do the validation, we also fetch the information we need:
-        1. 'map_title'' from each impact layer
+        1. 'map_title' from each impact layer
         2.  'exposure_title' from each impact layer
         3.  'postprocessing_report' from each impact layer
         4.  'aggregation_attribute' on aggregation layer, if user runs
@@ -978,9 +978,11 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         7. QgsComposerPicture with id 'organisation-logo' for organisation
            logo.
         8. QgsComposerLegend with id 'impact-legend' for map legend.
+        9. QgsComposerHTML with id 'merged-report-table' for the merged report.
 
         :param renderer: Map renderer
         :type renderer: QgsMapRenderer
+
         """
         # Create Composition
         composition = QgsComposition(renderer)
