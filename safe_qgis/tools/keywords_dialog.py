@@ -598,6 +598,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.leValue.clear()
             self.lePredefinedValue.clear()
             self.leTitle.clear()
+            self.leSource.clear()
 
     def remove_item_by_key(self, removal_key):
         """Remove an item from the kvp list given its key.
@@ -678,8 +679,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'title' not in keywords:
             self.leTitle.setText(layer_name)
         self.lblLayerName.setText(self.tr('Keywords for %s' % layer_name))
+
         # if we have a category key, unpack it first
-        # so radio button etc get set
+            # so radio button etc get set
         if 'category' in keywords:
             self.set_category(keywords['category'])
             keywords.pop('category')
@@ -699,6 +701,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         units = self.get_value_for_key('unit')
         data_type = self.get_value_for_key('datatype')
         title = self.get_value_for_key('title')
+        source = self.get_value_for_key('source')
+
         if title is not None:
             self.leTitle.setText(title)
         elif self.layer is not None:
@@ -706,6 +710,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.lblLayerName.setText(self.tr('Keywords for %s' % layer_name))
         else:
             self.lblLayerName.setText('')
+
+        if source is not None:
+            self.leSource.setText(source)
 
         if not is_polygon_layer(self.layer):
             self.radPostprocessing.setEnabled(False)
@@ -760,6 +767,19 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.add_list_entry('title', str(title))
 
+        # prevents actions being handled twice
+
+    @pyqtSignature('QString')
+    def on_leSource_textEdited(self, source):
+        """Update the keywords list whenever the user changes the source.
+
+        This slot is not called if the source is changed programmatically.
+
+        :param source: New source keyword for the layer.
+        :type source: str
+        """
+        self.add_list_entry('source', str(source))
+
     def get_keywords(self):
         """Obtain the state of the dialog as a keywords dict.
 
@@ -769,6 +789,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         #make sure title is listed
         if str(self.leTitle.text()) != '':
             self.add_list_entry('title', str(self.leTitle.text()))
+
+        # make sure the source is listed too
+        if str(self.leSource.text()) != '':
+            self.add_list_entry('source', str(self.leSource.text()))
 
         keywords = {}
         for myCounter in range(self.lstKeywords.count()):
