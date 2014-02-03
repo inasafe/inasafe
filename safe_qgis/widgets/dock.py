@@ -860,16 +860,42 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         function_id = self.get_function_id()
         self.calculator.set_function(function_id)
 
-        hazard_layer, exposure_layer = self.optimal_clip()
-        # See if the inputs need further refinement for aggregations
-        try:
+        # Get the hazard and exposure layers selected in the combos
+        # and other related parameters needed for clipping.
+        (extra_exposure_keywords, buffered_geo_extent, cell_size,
+             exposure_layer, geo_extent, hazard_layer) = \
+                self.get_clip_parameters()
+
+        if self.calculator.requires_clipping():
+            # The impact function uses SAFE layers,
+            # clip them
+            hazard_layer, exposure_layer = self.optimal_clip(
+                extra_exposure_keywords, buffered_geo_extent, cell_size,
+                exposure_layer, geo_extent, hazard_layer)
+
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.aggregator.deintersect()
-        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
-            raise
+            # Extent is calculated in the aggregator:
+            self.calculator.set_extent(None)
+
+            # See if the inputs need further refinement for aggregations
+            try:
+                self.aggregator.deintersect()
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
+            # Get clipped layers
+            hazard_layer = self.aggregator.hazard_layer
+            exposure_layer = self.aggregator.exposure_layer
+        else:
+            # It is a 'new-style' impact function,
+            # clipping doesn't needed, but we need to set up extent
+            self.aggregator.set_layers(hazard_layer, exposure_layer)
+            self.calculator.set_extent(buffered_geo_extent)
+
         # Identify input layers
-        self.calculator.set_hazard_layer(self.aggregator.hazard_layer)
-        self.calculator.set_exposure_layer(self.aggregator.exposure_layer)
+        self.calculator.set_hazard_layer(hazard_layer)
+        self.calculator.set_exposure_layer(exposure_layer)
 
     def get_extent_as_array(self):
         """Return current extent as array
@@ -1546,7 +1572,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             geo_extent,
             hazard_layer)
 
-    def optimal_clip(self):
+    def optimal_clip(self, extra_exposure_keywords, buffered_geo_extent,
+                     cell_size, exposure_layer, geo_extent, hazard_layer):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
         the three inputs. The inasafe library will perform various checks
@@ -1558,7 +1585,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         coordinate reference system.
 
         Args:
-            None
+            * extra_exposure_keywords: dict - any additional keywords that
+                should be written to the exposure layer. For example if
+                rescaling is required for a raster, the original resolution
+                can be added to the keywords file.
+            * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
+                extent that can be used given the input datasets and the
+                current viewport extents.
+            * cell_size: float - the cell size that is the best of the
+                hazard and exposure rasters.
+            * exposure_layer: QgsMapLayer - layer representing exposure.
+            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
+                intersection of the two input layers extents and the viewport.
+            * hazard_layer: QgsMapLayer - layer representing hazard.
+
         Returns:
             A two-tuple containing the clipped hazard and exposure layers.
 
@@ -1566,14 +1606,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Any exceptions raised by the InaSAFE library will be propagated.
         """
 
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-        try:
-            (extra_exposure_keywords, buffered_geo_extent, cell_size,
-             exposure_layer, geo_extent, hazard_layer) = \
-                self.get_clip_parameters()
-        except:
-            raise
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.

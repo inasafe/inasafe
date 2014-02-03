@@ -78,7 +78,9 @@ from safe.api import (
     PointsInputError,
     get_decimal_separator,
     get_thousand_separator,
-    styles)
+    styles,
+    feature_attributes_as_dict,
+    get_utm_epsg)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 
@@ -464,10 +466,6 @@ def convertToSafeLayer(layer):
     Raises:
         Any exceptions are propogated
     """
-    # FIXME (DK): it is a stub now.
-    #   Do not call readSafeLayer, but write function
-    #     safe.storage.core.convert_layer to convert QgsMapLayer to SAFE layer
-
     if isinstance(layer, Layer):
         return layer
     try:
@@ -520,19 +518,31 @@ def getSafeImpactFunctionType(function_id):
     return fun_type
 
 
-def calculateSafeImpact(theLayers, theFunction):
+def calculateSafeImpact(theLayers,
+                        theFunction,
+                        theExtent=None,
+                        check_integrity=True):
     """Thin wrapper around the safe calculate_impact function.
 
     Args:
         * theLayers - a list of layers to be used. They should be ordered
           with hazard layer first and exposure layer second.
         * theFunction - SAFE impact function instance to be used
+        * theExtent - List of [xmin, ymin, xmax, ymax]
+                the coordinates of the bounding box.
+        * check_integrity - If true, perform checking of
+                input data integrity before running
+                impact calculation
     Returns:
         A safe impact function is returned
     Raises:
         Any exceptions are propogated
     """
     try:
-        return safe_calculate_impact(theLayers, theFunction)
+        return safe_calculate_impact(
+            theLayers,
+            theFunction,
+            extent=theExtent,
+            check_integrity=check_integrity)
     except:
         raise

@@ -26,7 +26,7 @@
 
   <datafile>
     <filename>buildings_osm_4326.dbf</filename>
-    <checksum>4182211596</checksum>
+    <checksum>19121294</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
     <source>Open Street Map (OSM)</source>

@@ -6,9 +6,7 @@ from qgis.core import (
     QgsFeature,
     QgsRectangle,
     QgsFeatureRequest,
-    QgsGeometry,
-    QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform
+    QgsGeometry
 )
 
 from safe.common.utilities import OrderedDict
@@ -18,14 +16,13 @@ from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
-from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_vector_tools import union_geometry, split_by_polygon
 
 
-class FloodVectorRoadsExperimentalFunction(FunctionProvider):
+class FloodNativePolygonExperimentalFunction(FunctionProvider):
     """
     Simple experimental impact function for inundation
+    (polygon-polygon)
 
     :author Dmitry Kolesov
     :rating 1
@@ -33,18 +30,18 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                     subcategory in ['flood', 'tsunami'] and \
                     layertype=='vector'
     :param requires category=='exposure' and \
-                    subcategory in ['road'] and \
+                    subcategory in ['structure'] and \
                     layertype=='vector'
     """
 
-    title = tr('Be flooded')
+    title = tr('Be-flooded')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
         ('target_field', 'flooded'),
         # This field of the exposure layer contains
-        # information about road types
-        ('road_type_field', 'TYPE'),
+        # information about building types
+        ('building_type_field', 'TYPE'),
         # This field of the  hazard layer contains information
         # about inundated areas
         ('affected_field', 'FLOODPRONE'),
@@ -52,7 +49,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         # marks the areas as inundated
         ('affected_value', 'YES'),
 
-         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
+        ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
 
     def get_function_type(self):
@@ -80,7 +77,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
               E: Vector layer of roads
         """
         target_field = self.parameters['target_field']
-        road_type_field = self.parameters['road_type_field']
+        building_type_field = self.parameters['building_type_field']
         affected_field = self.parameters['affected_field']
         affected_value = self.parameters['affected_value']
 
@@ -102,7 +99,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             raise GetDataError(message)
 
         E = E.get_layer()
-        crs = E.crs().toWkt()
+        srs = E.crs().toWkt()
         e_provider = E.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
@@ -112,30 +109,29 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         target_field_index = e_provider.fieldNameIndex(target_field)
         fields = e_provider.fields()
 
+        # Create layer for store the lines from E and extent
+        building_layer = QgsVectorLayer(
+            'Polygon?crs=' + srs, 'impact_buildings', 'memory')
+        building_provider = building_layer.dataProvider()
+
+        # Set attributes
+        building_provider.addAttributes(fields.toList())
+        building_layer.startEditing()
+        building_layer.commitChanges()
+
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
-        # Split line_layer by H and save as result:
+        # Split building_layer by H and save as result:
         #   1) Filter from H inundated features
-        #   2) Mark roads as inundated (1) or not inundated (0)
+        #   2) Mark buildings as inundated (1) or not inundated (0)
 
         affected_field_type = \
             h_provider.fields()[affected_field_index].typeName()
         if affected_field_type in ['Real', 'Integer']:
             affected_value = float(affected_value)
-
-        #################################
-        #           REMARK 1
-        #  In qgis 2.2 we can use request to filter inundated
-        #  polygons directly (it allows QgsExpression). Then
-        #  we can delete the lines and call
-        #
-        #  request = ....
-        #  hazard_poly = union_geometry(H, request)
-        #
-        ################################
 
         h_data = H.getFeatures(request)
         hazard_poly = None
@@ -156,10 +152,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 except AttributeError:
                     pass
 
-        ###############################################
-        # END REMARK 1
-        ###############################################
-
         if hazard_poly is None:
             message = tr('''There are no objects
                 in the hazard layer with
@@ -168,58 +160,65 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 extent.''' % (affected_value, ))
             raise GetDataError(message)
 
-        # Set roads as not inundated by default
-        E.startEditing()
         e_data = E.getFeatures(request)
         for feat in e_data:
-            feat.setAttribute(target_field_index, 0)
-            E.updateFeature(feat)
-        E.commitChanges()
-        # Find inundated roads, mark them
-        line_layer = split_by_polygon(E,
-                                      hazard_poly,
-                                      request,
-                                      mark_value=(target_field_index, 1))
+            building_geom = feat.geometry()
+            attrs = feat.attributes()
+            l_feat = QgsFeature()
+            l_feat.setGeometry(building_geom)
+            l_feat.setAttributes(attrs)
+            if hazard_poly.intersects(building_geom):
+                l_feat.setAttribute(target_field_index, 1)
+            else:
+
+                l_feat.setAttribute(target_field_index, 0)
+            (_, __) = \
+                    building_layer.dataProvider().addFeatures([l_feat])
+        building_layer.updateExtents()
 
         # Generate simple impact report
-        epsg = get_utm_epsg(self.extent[0], self.extent[1])
-        crs_dest = QgsCoordinateReferenceSystem(epsg)
-        transform = QgsCoordinateTransform(E.crs(), crs_dest)
-        road_len = flooded_len = 0  # Length of roads
-        roads_by_type = dict()      # Length of flooded roads by types
 
-        roads_data = line_layer.getFeatures()
-        road_type_field_index = line_layer.fieldNameIndex(road_type_field)
-        for road in roads_data:
-            attrs = road.attributes()
-            road_type = attrs[road_type_field_index]
-            geom = road.geometry()
-            geom.transform(transform)
-            length = geom.length()
-            road_len += length
+        building_count = flooded_count = 0  # Count of buildings
+        buildings_by_type = dict()      # Length of flooded roads by types
 
-            if not road_type in roads_by_type:
-                roads_by_type[road_type] = {'flooded': 0, 'total': 0}
-            roads_by_type[road_type]['total'] += length
+        buildings_data = building_layer.getFeatures()
+        building_type_field_index = \
+            building_layer.fieldNameIndex(building_type_field)
+        for building in buildings_data:
+            building_count += 1
+            attrs = building.attributes()
+            building_type = attrs[building_type_field_index]
+            if building_type in [None,
+                                 'NULL', 'null',
+                                 'Null'
+            ]:
+                building_type = 'Unknown type'
+
+            if not building_type in buildings_by_type:
+                buildings_by_type[building_type] = {'flooded': 0, 'total': 0}
+            buildings_by_type[building_type]['total'] += 1
 
             if attrs[target_field_index] == 1:
-                flooded_len += length
-                roads_by_type[road_type]['flooded'] += length
+                flooded_count += 1
+                buildings_by_type[building_type]['flooded'] += 1
+
         table_body = [question,
-                      TableRow([tr('Road Type'),
-                                tr('Temporarily closed (m)'),
-                                tr('Total (m)')],
+                      TableRow([tr('Building Type'),
+                                tr('Flooded'),
+                                tr('Total')],
                                header=True),
-                      TableRow([tr('All'), int(flooded_len), int(road_len)])]
-        table_body.append(TableRow(tr('Breakdown by road type'),
+                      TableRow([tr('All'),
+                                int(flooded_count),
+                                int(building_count)])]
+        table_body.append(TableRow(tr('Breakdown by building type'),
                                        header=True))
-        for t, v in roads_by_type.iteritems():
+        for t, v in buildings_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
             )
 
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('Roads inundated')
+        map_title = tr('Buildings inundated')
 
         style_classes = [dict(label=tr('Not Inundated'), value=0,
                               colour='#1EFC7C', transparency=0, size=0.5),
@@ -230,10 +229,10 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(data=line_layer,
-                   name=tr('Flooded roads'),
+        building_layer = Vector(data=building_layer,
+                   name=tr('Flooded buildings'),
                    keywords={'impact_summary': impact_summary,
                              'map_title': map_title,
                              'target_field': target_field},
                    style_info=style_info)
-        return line_layer
+        return building_layer

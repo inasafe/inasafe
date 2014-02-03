@@ -20,10 +20,11 @@ from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_vector_tools import union_geometry, split_by_polygon
+from safe.common.qgis_raster_tools import polygonize, clip_raster
+from safe.common.qgis_vector_tools import split_by_polygon
 
 
-class FloodVectorRoadsExperimentalFunction(FunctionProvider):
+class FloodRasterRoadsExperimentalFunction(FunctionProvider):
     """
     Simple experimental impact function for inundation
 
@@ -31,13 +32,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     :rating 1
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami'] and \
-                    layertype=='vector'
+                    layertype=='raster'
     :param requires category=='exposure' and \
                     subcategory in ['road'] and \
                     layertype=='vector'
     """
 
-    title = tr('Be flooded')
+    title = tr('Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
@@ -45,12 +46,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         # This field of the exposure layer contains
         # information about road types
         ('road_type_field', 'TYPE'),
-        # This field of the  hazard layer contains information
-        # about inundated areas
-        ('affected_field', 'FLOODPRONE'),
-        # This value in 'affected_field' of the hazard layer
-        # marks the areas as inundated
-        ('affected_value', 'YES'),
+        ('min threshold [m]', 3.5),
+        ('max threshold [m]', float('inf')),
 
          ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
@@ -81,8 +78,14 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         """
         target_field = self.parameters['target_field']
         road_type_field = self.parameters['road_type_field']
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        threshold_min = self.parameters['min threshold [m]']
+        threshold_max = self.parameters['max threshold [m]']
+
+        if threshold_min > threshold_max:
+            message = tr('''The minimal threshold is
+                greater then the maximal specified threshold.
+                Please check the values.''')
+            raise GetDataError(message)
 
         # Extract data
         H = get_hazard_layer(layers)    # Flood
@@ -93,16 +96,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                                 self)
 
         H = H.get_layer()
-        h_provider = H.dataProvider()
-        affected_field_index = h_provider.fieldNameIndex(affected_field)
-        if affected_field_index == -1:
-            message = tr('''Parameter "Affected Field"(='%s')
-                doesn't presented in the
-                attribute table of the hazard layer.''' % (affected_field, ))
-            raise GetDataError(message)
-
         E = E.get_layer()
-        crs = E.crs().toWkt()
+
         e_provider = E.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
@@ -110,62 +105,54 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             e_provider.addAttributes([QgsField(target_field,
                                                QVariant.Int)])
         target_field_index = e_provider.fieldNameIndex(target_field)
-        fields = e_provider.fields()
+
+        # Get necessary width and height of raster
+        height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
+        height = int(height)
+        width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
+        width = int(width)
+
+        # Align raster extent and self.extent
+        raster_extent = H.dataProvider().extent()
+        xmin = raster_extent.xMinimum()
+        xmax = raster_extent.xMaximum()
+        ymin = raster_extent.yMinimum()
+        ymax = raster_extent.yMaximum()
+
+        x_delta = (xmax - xmin)/H.width()
+        x = xmin
+        for i in range(H.width()):
+            if abs(x - self.extent[0]) < x_delta:
+                # We have found the aligned raster boundary
+                break
+            x += x_delta
+
+        y_delta = (ymax - ymin)/H.height()
+        y = ymin
+        for i in range(H.width()):
+            if abs(y - self.extent[1]) < y_delta:
+                # We have found the aligned raster boundary
+                break
+            y += y_delta
+        clip_extent = [x, y, x + width*x_delta, y + height*y_delta]
+
+        # Clip and polygonize
+        small_raster = clip_raster(
+            H, width, height, QgsRectangle(*clip_extent))
+        flooded_polygon = polygonize(
+            small_raster, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
-        # Split line_layer by H and save as result:
-        #   1) Filter from H inundated features
-        #   2) Mark roads as inundated (1) or not inundated (0)
-
-        affected_field_type = \
-            h_provider.fields()[affected_field_index].typeName()
-        if affected_field_type in ['Real', 'Integer']:
-            affected_value = float(affected_value)
-
-        #################################
-        #           REMARK 1
-        #  In qgis 2.2 we can use request to filter inundated
-        #  polygons directly (it allows QgsExpression). Then
-        #  we can delete the lines and call
-        #
-        #  request = ....
-        #  hazard_poly = union_geometry(H, request)
-        #
-        ################################
-
-        h_data = H.getFeatures(request)
-        hazard_poly = None
-        for mpolygon in h_data:
-            attrs = mpolygon.attributes()
-            if attrs[affected_field_index] != affected_value:
-                continue
-            if hazard_poly is None:
-                hazard_poly = QgsGeometry(mpolygon.geometry())
-            else:
-                # Make geometry union of inundated polygons
-
-                # But some mpolygon.geometry() could be invalid, skip them
-                tmp_geometry = hazard_poly.combine(mpolygon.geometry())
-                try:
-                    if tmp_geometry.isGeosValid():
-                        hazard_poly = tmp_geometry
-                except AttributeError:
-                    pass
-
-        ###############################################
-        # END REMARK 1
-        ###############################################
-
-        if hazard_poly is None:
+        if flooded_polygon is None:
             message = tr('''There are no objects
                 in the hazard layer with
-                "Affected value"='%s'.
+                "value">'%s'.
                 Please check the value or use other
-                extent.''' % (affected_value, ))
+                extent.''' % (threshold_min, ))
             raise GetDataError(message)
 
         # Set roads as not inundated by default
@@ -177,7 +164,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         E.commitChanges()
         # Find inundated roads, mark them
         line_layer = split_by_polygon(E,
-                                      hazard_poly,
+                                      flooded_polygon,
                                       request,
                                       mark_value=(target_field_index, 1))
 
@@ -207,7 +194,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 roads_by_type[road_type]['flooded'] += length
         table_body = [question,
                       TableRow([tr('Road Type'),
-                                tr('Temporarily closed (m)'),
+                                tr('Flooded in the threshold (m)'),
                                 tr('Total (m)')],
                                header=True),
                       TableRow([tr('All'), int(flooded_len), int(road_len)])]
