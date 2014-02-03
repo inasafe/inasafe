@@ -163,11 +163,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Flag so we can see if the dock is busy processing
         self.busy = False
 
-        self.run_in_thread_flag = False
-        self.show_only_visible_layers_flag = True
-        self.set_layer_from_title_flag = True
-        self.zoom_to_impact_flag = True
-        self.hide_exposure_flag = True
+        # Values for settings these gets set in read_settings.
+        self.run_in_thread_flag = None
+        self.show_only_visible_layers_flag = None
+        self.set_layer_from_title_flag = None
+        self.zoom_to_impact_flag = None
+        self.hide_exposure_flag = None
+        self.clip_to_viewport = None
+        self.clip_hard = None
+        self.show_intermediate_layers = None
+        self.developer_mode = None
 
         self.read_settings()  # get_project_layers called by this
         self.aggregator = None
@@ -189,10 +194,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
-        self.clip_to_viewport = True
-        self.clip_hard = False
-        self.show_intermediate_layers = False
-        self.developer_mode = False
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
