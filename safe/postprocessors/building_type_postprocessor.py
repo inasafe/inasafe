@@ -130,15 +130,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                 self._calculate_type(title, field_values)
 
     def clear(self):
-        """concrete implementation it takes care of the needed parameters being
-         properly cleared
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        """concrete implementation that ensures needed parameters are cleared.
         """
         AbstractPostprocessor.clear(self)
         self.impact_total = None

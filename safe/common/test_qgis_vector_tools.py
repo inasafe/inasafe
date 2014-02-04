@@ -31,27 +31,23 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsPoint,
         QgsField,
         QgsFeature,
-        QgsGeometry,
-        QgsFeatureRequest,
-        QgsApplication
-        )
+        QgsGeometry)
 
 
 from qgis_vector_tools import (
     points_to_rectangles,
     union_geometry,
-    split_by_polygon
-    )
+    split_by_polygon)
 
 
-class Test_qgis_raster_tools(unittest.TestCase):
+class TestQGISRasterTools(unittest.TestCase):
 
     def setUp(self):
-        self.POLYGON_BASE = os.path.abspath(
+        self.polygon_base = os.path.abspath(
             os.path.join(UNITDATA, 'other', 'polygonization_result'))
-        self.LINE_BEFORE = os.path.abspath(
+        self.line_before = os.path.abspath(
             os.path.join(UNITDATA, 'other', 'line_before_splitting'))
-        self.LINE_AFTER = os.path.abspath(
+        self.line_after = os.path.abspath(
             os.path.join(UNITDATA, 'other', 'line_after_splitting1'))
 
     def test_points_to_rectangles(self):
@@ -86,12 +82,12 @@ class Test_qgis_raster_tools(unittest.TestCase):
         geom = union_geometry(polygons)
 
         # The union is the rectangle
-        expected_area = QgsGeometry.fromPolygon([
-            [QgsPoint(10, 30),
-             QgsPoint(40, 30),
-             QgsPoint(40, 0),
-             QgsPoint(10, 0)]
-        ])
+        # noinspection PyCallByClass,PyTypeChecker
+        expected_area = QgsGeometry.fromPolygon([[
+            QgsPoint(10, 30),
+            QgsPoint(40, 30),
+            QgsPoint(40, 0),
+            QgsPoint(10, 0)]])
 
         self.assertTrue(geom.isGeosValid())
         self.assertFalse(geom.isMultipart())
@@ -108,33 +104,34 @@ class Test_qgis_raster_tools(unittest.TestCase):
     def test_split_by_polygon(self):
         """Test split_by_polygon work"""
         line_before = QgsVectorLayer(
-            self.LINE_BEFORE + '.shp', 'test', 'ogr')
+            self.line_before + '.shp', 'test', 'ogr')
         expected_lines = QgsVectorLayer(
-            self.LINE_AFTER + '.shp', 'test', 'ogr')
+            self.line_after + '.shp', 'test', 'ogr')
         polygon_layer = QgsVectorLayer(
-            self.POLYGON_BASE + '.shp', 'test', 'ogr')
+            self.polygon_base + '.shp', 'test', 'ogr')
 
         # Only one polygon is stored in the layer
         for feature in polygon_layer.getFeatures():
             polygon = feature.geometry()
 
-        splitted_lines = split_by_polygon(line_before,
-                                          polygon,
-                                          mark_value=(1, 'INSIDE'))
+        split_lines = split_by_polygon(
+            line_before,
+            polygon,
+            mark_value=('flooded', 1))
 
         # Test the lines is not multipart
-        for feature in splitted_lines.getFeatures():
+        for feature in split_lines.getFeatures():
             self.assertFalse(feature.geometry().isMultipart())
 
         self.assertEqual(expected_lines.featureCount(),
-                         splitted_lines.featureCount())
-        # Assert fo every line from splitted_lines
+                         split_lines.featureCount())
+        # Assert for every line from split_lines
         # we can find the same line
-        for feature in splitted_lines.getFeatures():
+        for feature in split_lines.getFeatures():
             found = False
             for expected in expected_lines.getFeatures():
                 if (feature.attributes() == expected.attributes()) and \
-                    (feature.geometry().isGeosEqual(expected.geometry())):
+                   (feature.geometry().isGeosEqual(expected.geometry())):
                     found = True
                     break
             self.assertTrue(found)
@@ -143,8 +140,7 @@ class Test_qgis_raster_tools(unittest.TestCase):
     def _create_points(self):
         """Create points for testing"""
 
-        point_layer = QgsVectorLayer(
-        'Point?crs=EPSG:4326', 'points', 'memory')
+        point_layer = QgsVectorLayer('Point?crs=EPSG:4326', 'points', 'memory')
 
         point_provider = point_layer.dataProvider()
         point_provider.addAttributes([QgsField('X', QVariant.Double)])
@@ -159,6 +155,7 @@ class Test_qgis_raster_tools(unittest.TestCase):
                 feature.initAttributes(2)
                 feature.setAttribute(x_index, x)
                 feature.setAttribute(y_index, y)
+                # noinspection PyCallByClass
                 geom = QgsGeometry.fromPoint(QgsPoint(x, y))
                 feature.setGeometry(geom)
                 _ = point_layer.dataProvider().addFeatures([feature])
@@ -168,6 +165,6 @@ class Test_qgis_raster_tools(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_qgis_raster_tools, 'test')
+    suite = unittest.makeSuite(TestQGISRasterTools, 'test')
     runner = unittest.TextTestRunner()
     runner.run(suite)

@@ -62,14 +62,19 @@ class Wrapper():
         self.name = name
 
     def get_name(self):
+        """Get name"""
         return self.name
 
     def get_keywords(self, key=None):
+        """Get keywords.
+        :param key:
+        """
         if key is None:
             return self.keywords
         return self.keywords[key]
 
     def get_layer(self):
+        """Get layer."""
         return self.data
 
 
@@ -97,8 +102,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
 
-        IF = plugin_list[0][plugin_name]
-        # Set up IF extent
+        impact_function = plugin_list[0][plugin_name]
+        # Set up impact_function extent
         hazard_extent = hazard.get_layer().extent()
         hazard_extent = [
             hazard_extent.xMinimum(),
@@ -120,13 +125,14 @@ class Test_gis_native_impact_functions(unittest.TestCase):
             min(hazard_extent[3], exposure_extent[3])
         ]
 
-        IF.parameters = impact_parameters
+        impact_function.parameters = impact_parameters
 
         # Call calculation engine
-        impact_layer = calculate_impact(layers=[hazard, exposure],
-                                        impact_fcn=IF,
-                                        extent=extent,
-                                        check_integrity=False)
+        impact_layer = calculate_impact(
+            layers=[hazard, exposure],
+            impact_fcn=impact_function,
+            extent=extent,
+            check_integrity=False)
 
         impact_filename = impact_layer.get_filename()
         I = read_layer(impact_filename)
@@ -136,7 +142,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
     def test_building_native_impact_experimental(self):
         """Test flood_building_native_impact_experimental
         """
-        hazard_name = os.path.join(UNITDATA,
+        hazard_name = os.path.join(
+            UNITDATA,
             'hazard',
             'multipart_polygons_osm_4326.shp')
         qgis_hazard = QgsVectorLayer(
@@ -145,7 +152,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
             'ogr'
         )
 
-        exposure_name = os.path.join(UNITDATA,
+        exposure_name = os.path.join(
+            UNITDATA,
             'exposure',
             'buildings_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(
@@ -207,7 +215,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
     def test_polygon_roads_impact(self):
         """Test FloodVectorRoadsExperimentalFunction work
         """
-        hazard_name = os.path.join(UNITDATA,
+        hazard_name = os.path.join(
+            UNITDATA,
             'hazard',
             'multipart_polygons_osm_4326.shp')
         qgis_hazard = QgsVectorLayer(
@@ -216,7 +225,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
             'ogr'
         )
 
-        exposure_name = os.path.join(UNITDATA,
+        exposure_name = os.path.join(
+            UNITDATA,
             'exposure',
             'roads_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(
@@ -247,7 +257,7 @@ class Test_gis_native_impact_functions(unittest.TestCase):
             keywords['target_field']
         )
 
-        # Count of flooded objects is calculated "by the hands"
+        # Count of flooded objects is calculated "by hand"
         # the count = 63
         count = sum(impact.get_data(attribute=keywords['target_field']))
         self.assertEquals(count, 63)
@@ -256,7 +266,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
     def test_raster_roads_impact(self):
         """Test FloodVectorRoadsExperimentalFunction work
         """
-        hazard_name = os.path.join(UNITDATA,
+        hazard_name = os.path.join(
+            UNITDATA,
             'hazard',
             'jakarta_flood_design.tif')
         qgis_hazard = QgsRasterLayer(
@@ -264,7 +275,8 @@ class Test_gis_native_impact_functions(unittest.TestCase):
             'HAZARD'
         )
 
-        exposure_name = os.path.join(UNITDATA,
+        exposure_name = os.path.join(
+            UNITDATA,
             'exposure',
             'roads_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(

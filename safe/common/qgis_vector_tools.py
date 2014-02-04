@@ -171,7 +171,6 @@ def split_by_polygon(
                 [QgsField(target_field, QVariant.Int)])
 
     result_layer.commitChanges()
-    target_field_index = None
     target_value = None
 
     if mark_value is not None:
