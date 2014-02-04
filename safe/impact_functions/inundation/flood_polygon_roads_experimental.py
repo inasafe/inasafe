@@ -1,9 +1,8 @@
-
+# coding=utf-8
+"""Polygon flood on roads."""
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
-    QgsVectorLayer,
-    QgsFeature,
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry,
@@ -20,22 +19,23 @@ from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_vector_tools import union_geometry, split_by_polygon
+from safe.common.qgis_vector_tools import split_by_polygon
 
 
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """
-    Simple experimental impact function for inundation
+        Simple experimental impact function for inundation
 
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
-                    layertype=='vector'
-    :param requires category=='exposure' and \
-                    subcategory in ['road'] and \
-                    layertype=='vector'
-    """
+        :author Dmitry Kolesov
+        :rating 1
+        :param requires category=='hazard' and \
+                        subcategory in ['flood', 'tsunami'] and \
+                        layertype=='vector'
+        :param requires category=='exposure' and \
+                        subcategory in ['road'] and \
+                        layertype=='vector'
+        """
 
     title = tr('Be flooded')
 
@@ -51,10 +51,14 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         # This value in 'affected_field' of the hazard layer
         # marks the areas as inundated
         ('affected_value', 'YES'),
-
-         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
+        ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
 
+    def __init__(self):
+        """Constructor."""
+        self.extent = None
+
+    # noinspection PyMethodMayBeStatic
     def get_function_type(self):
         """Get type of the impact function.
 
@@ -67,17 +71,17 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
         Mandatory method.
+
+        :param extent: Extent for the analysis.
         """
         self.extent = extent
 
     def run(self, layers):
         """
-        Experimental impact function
+        Experimental impact function for flood polygons on roads.
 
-        Input
-          layers: List of layers expected to contain
-              H: Polygon layer of inundation areas
-              E: Vector layer of roads
+        :param layers: List of layers expected to contain H: Polygon layer of
+            inundation areas E: Vector layer of roads
         """
         target_field = self.parameters['target_field']
         road_type_field = self.parameters['road_type_field']
@@ -85,15 +89,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         affected_value = self.parameters['affected_value']
 
         # Extract data
-        H = get_hazard_layer(layers)    # Flood
-        E = get_exposure_layer(layers)  # Roads
+        hazard = get_hazard_layer(layers)    # Flood
+        exposure = get_exposure_layer(layers)  # Roads
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
-                                self)
+        question = get_question(hazard.get_name(), exposure.get_name(), self)
 
-        H = H.get_layer()
-        h_provider = H.dataProvider()
+        hazard = hazard.get_layer()
+        h_provider = hazard.dataProvider()
         affected_field_index = h_provider.fieldNameIndex(affected_field)
         if affected_field_index == -1:
             message = tr('''Parameter "Affected Field"(='%s')
@@ -101,16 +103,15 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 attribute table of the hazard layer.''' % (affected_field, ))
             raise GetDataError(message)
 
-        E = E.get_layer()
-        crs = E.crs().toWkt()
-        e_provider = E.dataProvider()
+        exposure = exposure.get_layer()
+        # crs = exposure.crs().toWkt()
+        e_provider = exposure.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
         if fields.indexFromName(target_field) == -1:
-            e_provider.addAttributes([QgsField(target_field,
-                                               QVariant.Int)])
+            e_provider.addAttributes([QgsField(target_field, QVariant.Int)])
         target_field_index = e_provider.fieldNameIndex(target_field)
-        fields = e_provider.fields()
+        # fields = e_provider.fields()
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
@@ -137,7 +138,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         #
         ################################
 
-        h_data = H.getFeatures(request)
+        h_data = hazard.getFeatures(request)
         hazard_poly = None
         for mpolygon in h_data:
             attrs = mpolygon.attributes()
@@ -161,30 +162,29 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         ###############################################
 
         if hazard_poly is None:
-            message = tr('''There are no objects
-                in the hazard layer with
-                "Affected value"='%s'.
-                Please check the value or use other
-                extent.''' % (affected_value, ))
+            message = tr('''There are no objects in the hazard layer with
+                "Affected value"='%s'. Please check the value or use a
+                different extent.''' % (affected_value, ))
             raise GetDataError(message)
 
         # Set roads as not inundated by default
-        E.startEditing()
-        e_data = E.getFeatures(request)
+        exposure.startEditing()
+        e_data = exposure.getFeatures(request)
         for feat in e_data:
             feat.setAttribute(target_field_index, 0)
-            E.updateFeature(feat)
-        E.commitChanges()
+            exposure.updateFeature(feat)
+        exposure.commitChanges()
         # Find inundated roads, mark them
-        line_layer = split_by_polygon(E,
-                                      hazard_poly,
-                                      request,
-                                      mark_value=(target_field_index, 1))
+        line_layer = split_by_polygon(
+            exposure,
+            hazard_poly,
+            request,
+            mark_value=(target_field_index, 1))
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.extent[0], self.extent[1])
         crs_dest = QgsCoordinateReferenceSystem(epsg)
-        transform = QgsCoordinateTransform(E.crs(), crs_dest)
+        transform = QgsCoordinateTransform(exposure.crs(), crs_dest)
         road_len = flooded_len = 0  # Length of roads
         roads_by_type = dict()      # Length of flooded roads by types
 
@@ -205,14 +205,15 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             if attrs[target_field_index] == 1:
                 flooded_len += length
                 roads_by_type[road_type]['flooded'] += length
-        table_body = [question,
-                      TableRow([tr('Road Type'),
-                                tr('Temporarily closed (m)'),
-                                tr('Total (m)')],
-                               header=True),
-                      TableRow([tr('All'), int(flooded_len), int(road_len)])]
-        table_body.append(TableRow(tr('Breakdown by road type'),
-                                       header=True))
+        table_body = [
+            question,
+            TableRow(
+                [tr('Road Type'),
+                 tr('Temporarily closed (m)'),
+                 tr('Total (m)')],
+                header=True),
+            TableRow([tr('All'), int(flooded_len), int(road_len)]),
+            TableRow(tr('Breakdown by road type'), header=True)]
         for t, v in roads_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
@@ -230,10 +231,12 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(data=line_layer,
-                   name=tr('Flooded roads'),
-                   keywords={'impact_summary': impact_summary,
-                             'map_title': map_title,
-                             'target_field': target_field},
-                   style_info=style_info)
+        line_layer = Vector(
+            data=line_layer,
+            name=tr('Flooded roads'),
+            keywords={
+                'impact_summary': impact_summary,
+                'map_title': map_title,
+                'target_field': target_field},
+            style_info=style_info)
         return line_layer

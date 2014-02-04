@@ -1,7 +1,6 @@
-
+# coding=utf-8
 """**Convert QgsRasterLayer to QgsVectorLayer**
 """
-
 __author__ = 'Dmitry Kolesov <kolesov.dm@gmail.com>'
 __revision__ = '$Format:%H$'
 __date__ = '14/01/2014'
@@ -13,6 +12,7 @@ __copyright__ += 'Disaster Reduction'
 from safe.common.utilities import unique_filename
 from safe.storage.raster import qgis_imported
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
+    # noinspection PyPackageRequirements
     from PyQt4.QtCore import QVariant
     from qgis.core import (
         QgsRasterLayer,
@@ -31,7 +31,7 @@ from qgis_vector_tools import (
 )
 
 
-def _get_pixel_coords(extent, width, height, row, col):
+def _get_pixel_coordinates(extent, width, height, row, col):
     """Pixel to coordinates transformation
 
     :param extent: Geotransformation parameter: extent
@@ -60,30 +60,30 @@ def _get_pixel_coords(extent, width, height, row, col):
 
     outx = xmin + col*x_res
     outy = ymax - row*y_res
-    return (outx, outy)
+    return outx, outy
 
 
-def pixes_to_points(raster,
-               threshold_min=0.0,
-               threshold_max=float('inf'),
-               field_name='value'):
+def pixels_to_points(
+        raster,
+        threshold_min=0.0,
+        threshold_max=float('inf'),
+        field_name='value'):
     """
-    Convert raster to points. Areas (pixels) with
-        threshold_min < pixel_values < threshold_max
-    will be converted to point layer.
+    Convert raster to points.
+
+    Areas (pixels) with threshold_min < pixel_values < threshold_max will be
+    converted to point layer.
 
     :param raster:  Raster layer
     :type raster: QgsRasterLayer
 
-    :param threshold_min: Value that splits raster to
-                    flooded or not flooded.
+    :param threshold_min: Value that splits raster to flooded or not flooded.
     :type threshold_min: float
 
-    :param threshold_max: Value that splits raster to
-                    flooded or not flooded.
+    :param threshold_max: Value that splits raster to flooded or not flooded.
     :type threshold_max: float
 
-    :param field_name: Field name to store pixel valued
+    :param field_name: Field name to store pixel value.
     :type field_name:  string
 
     :returns:   Point layer of pixels
@@ -114,7 +114,8 @@ def pixes_to_points(raster,
     for row in range(height):
         for col in range(width):
             value = block.value(row, col)
-            x, y = _get_pixel_coords(extent, width, height, row, col)
+            x, y = _get_pixel_coordinates(extent, width, height, row, col)
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             geom = QgsGeometry.fromPoint(QgsPoint(x, y))
             if threshold_min < value < threshold_max:
                 feature = QgsFeature()
@@ -150,33 +151,35 @@ def polygonize(raster,
     :rtype:     QgsGeometry
 
     """
-    points = pixes_to_points(raster, threshold_min, threshold_max)
-    polygons = points_to_rectangles(points,
-                                    raster.rasterUnitsPerPixelX(),
-                                    raster.rasterUnitsPerPixelY())
+    points = pixels_to_points(raster, threshold_min, threshold_max)
+    polygons = points_to_rectangles(
+        points,
+        raster.rasterUnitsPerPixelX(),
+        raster.rasterUnitsPerPixelY())
     polygons = union_geometry(polygons)
     return polygons
 
 
 def clip_raster(raster, n_cols, n_rows, output_extent):
-    """Clip raster to specified extent, width and heigth.
-    Note there is similar utility in
-    safe_qgis.utilities.clipper, but it uses gdal.
+    """Clip raster to specified extent, width and height.
 
-    :param raster:      Raster
-    :type raster:       QgsRasterLayer
+    Note there is similar utility in safe_qgis.utilities.clipper, but it uses
+    gdal whereas this one uses native QGIS.
 
-    :param n_cols:      Desired width in pixels of new raster
-    :type n_cols:       Int
+    :param raster: Raster
+    :type raster: QgsRasterLayer
 
-    :param n_rows:      Desired height in pixels of new raster
-    :type n_rows:       Int
+    :param n_cols: Desired width in pixels of new raster
+    :type n_cols: Int
 
-    :param output_extent:   Extent of the clipped region
-    :type output_extent:    QgsRectangle
+    :param n_rows: Desired height in pixels of new raster
+    :type n_rows: Int
 
-    :returns:           Clipped region of the raster
-    "rtype:             QgsRasterLayer
+    :param output_extent: Extent of the clipped region
+    :type output_extent: QgsRectangle
+
+    :returns: Clipped region of the raster
+    :rtype: QgsRasterLayer
     """
 
     provider = raster.dataProvider()
@@ -186,10 +189,11 @@ def clip_raster(raster, n_cols, n_rows, output_extent):
     base_name = unique_filename()
     file_name = base_name + '.tif'
     file_writer = QgsRasterFileWriter(file_name)
-    file_writer.writeRaster(pipe,
-                            n_cols,
-                            n_rows,
-                            output_extent,
-                            raster.crs())
+    file_writer.writeRaster(
+        pipe,
+        n_cols,
+        n_rows,
+        output_extent,
+        raster.crs())
 
     return QgsRasterLayer(file_name, 'clipped_raster')
