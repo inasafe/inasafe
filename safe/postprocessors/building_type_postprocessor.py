@@ -72,12 +72,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         """concrete implementation it takes care of the needed parameters being
          initialized
 
-        Args:
-            params: dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
+        :param params: dict of parameters to pass to the post processor
         """
         AbstractPostprocessor.setup(self, None)
         if (self.impact_total is not None or

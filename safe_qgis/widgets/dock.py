@@ -106,7 +106,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -131,9 +131,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        #pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True,
-        #    stderrToServer=True)
+        pydevd.settrace(
+           'localhost', port=5678, stdoutToServer=True,
+           stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -613,6 +613,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboExposure.blockSignals(True)
         self.cboHazard.blockSignals(True)
 
+    # noinspection PyUnusedLocal
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
         r"""Obtain a list of layers currently loaded in QGIS.
@@ -862,9 +863,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        (extra_exposure_keywords, buffered_geo_extent, cell_size,
-             exposure_layer, geo_extent, hazard_layer) = \
-                self.get_clip_parameters()
+        (extra_exposure_keywords,
+         buffered_geo_extent,
+         cell_size,
+         exposure_layer,
+         geo_extent,
+         hazard_layer) = self.get_clip_parameters()
 
         if self.calculator.requires_clipping():
             # The impact function uses SAFE layers,
@@ -1572,8 +1576,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             geo_extent,
             hazard_layer)
 
-    def optimal_clip(self, extra_exposure_keywords, buffered_geo_extent,
-                     cell_size, exposure_layer, geo_extent, hazard_layer):
+    def optimal_clip(
+            self,
+            extra_exposure_keywords,
+            buffered_geo_extent,
+            cell_size,
+            exposure_layer,
+            geo_extent,
+            hazard_layer):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
         the three inputs. The inasafe library will perform various checks
@@ -1584,26 +1594,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         clipped and resampled if needed, and in the EPSG:4326 geographic
         coordinate reference system.
 
-        Args:
-            * extra_exposure_keywords: dict - any additional keywords that
-                should be written to the exposure layer. For example if
-                rescaling is required for a raster, the original resolution
-                can be added to the keywords file.
-            * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
-                extent that can be used given the input datasets and the
-                current viewport extents.
-            * cell_size: float - the cell size that is the best of the
-                hazard and exposure rasters.
-            * exposure_layer: QgsMapLayer - layer representing exposure.
-            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
-                intersection of the two input layers extents and the viewport.
-            * hazard_layer: QgsMapLayer - layer representing hazard.
+        :param extra_exposure_keywords: Any additional keywords that
+            should be written to the exposure layer. For example if
+            rescaling is required for a raster, the original resolution
+            can be added to the keywords file.
 
-        Returns:
-            A two-tuple containing the clipped hazard and exposure layers.
+        :param buffered_geo_extent: [xmin, ymin, xmax, ymax] - the best
+            extent that can be used given the input datasets and the
+            current viewport extents.
 
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :param cell_size: The cell size that is the best of the
+            hazard and exposure rasters.
+
+        :param exposure_layer: QgsMapLayer - layer representing exposure.
+
+        :param geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
+            intersection of the two input layers extents and the viewport.
+
+        :param hazard_layer: QgsMapLayer - layer representing hazard.
+
+        :returns: Two-tuple containing the clipped hazard and exposure layers.
+
         """
 
         # Make sure that we have EPSG:4326 versions of the input layers

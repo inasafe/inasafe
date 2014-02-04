@@ -52,7 +52,7 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
             'Tertiary': ['tertiary', 'tertiary_link'],
             'Track': ['track'],
             'unclassified': ['unclassified', 'yes', 'road'],
-         }
+        }
 
     def description(self):
         """Describe briefly what the post processor does.

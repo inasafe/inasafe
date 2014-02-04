@@ -301,7 +301,7 @@ class PostprocessorManager(QtCore.QObject):
                     female_ratio = \
                         self.aggregator.get_default_keyword('FEM_RATIO')
 
-        if 'BuildingType' in postprocessors:
+        if 'BuildingType' or 'RoadType' in postprocessors:
             try:
                 key_attribute = self.keyword_io.read_keywords(
                     self.aggregator.exposure_layer, 'key_attribute')
@@ -361,7 +361,7 @@ class PostprocessorManager(QtCore.QObject):
                         LOGGER.debug(female_ratio)
                     parameters['female_ratio'] = female_ratio
 
-                if key == 'BuildingType':
+                if key == 'BuildingType' or key == 'RoadType':
                     parameters['key_attribute'] = key_attribute
 
                 value.setup(parameters)

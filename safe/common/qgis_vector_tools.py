@@ -105,14 +105,17 @@ def union_geometry(vector, request=QgsFeatureRequest()):
     return result_geometry
 
 
-def split_by_polygon(vector,
-                     polygon,
-                     request=QgsFeatureRequest(),
-                     mark_value=None):
-    """Split objects from vector layer by polygon (If request is specified,
-        filter the objects before splitting).
-    If part of vector object lies in the polygon,
-        mark it by mark_value (optional).
+def split_by_polygon(
+        vector,
+        polygon,
+        request=QgsFeatureRequest(),
+        mark_value=None):
+    """Split objects from vector layer by polygon.
+
+    If request is specified, filter the objects before splitting.
+
+    If part of vector object lies in the polygon, mark it by mark_value (
+    optional).
 
     :param vector:  Vector layer
     :type vector:   QgsVectorLayer
@@ -124,7 +127,7 @@ def split_by_polygon(vector,
     :type request:  QgsFeatureRequest
 
     :param mark_value:  Field value to mark the objects.
-    :type mark_value:   (field_index, field_value).or None
+    :type mark_value:   (field_name, field_value).or None
 
     :returns:       Vector layer with splitted geometry
     :rtype:         QgsVectorLayer
@@ -142,7 +145,7 @@ def split_by_polygon(vector,
     # Create layer to store the splitted objects
     crs = vector.crs().toWkt()
     if vector.geometryType() == 0:
-        msg = "Points cant' be splitted"
+        msg = "Points cant' be split"
         raise WrongDataTypeException(msg)
     elif vector.geometryType() == 1:
         uri = 'LineString?crs=' + crs
@@ -153,21 +156,36 @@ def split_by_polygon(vector,
               % (vector.geometryType(),)
         raise WrongDataTypeException(msg)
 
-    result_layer = QgsVectorLayer(
-        uri, 'splitted', 'memory')
+    result_layer = QgsVectorLayer(uri, 'intersected', 'memory')
     result_provider = result_layer.dataProvider()
-
+    result_layer.startEditing()
     # Copy fields from vector
     vector_provider = vector.dataProvider()
     fields = vector_provider.fields()
     result_provider.addAttributes(fields.toList())
-    result_layer.startEditing()
+    # If target_field does not exist, add it:
+    if mark_value is not None:
+        target_field = mark_value[0]
+        if fields.indexFromName(target_field) == -1:
+            result_provider.addAttributes(
+                [QgsField(target_field, QVariant.Int)])
+
     result_layer.commitChanges()
+    target_field_index = None
+    target_value = None
+
+    if mark_value is not None:
+        target_field = mark_value[0]
+        target_value = mark_value[1]
+        target_field_index = result_provider.fieldNameIndex(target_field)
+        if target_field_index == -1:
+            raise WrongDataTypeException(
+                'Field not found for %s' % target_field)
 
     # Start split procedure
     for initial_feature in vector.getFeatures(request):
         initial_geom = initial_feature.geometry()
-        attrs = initial_feature.attributes()
+        attributes = initial_feature.attributes()
         geometry_type = initial_geom.type()
         if polygon.intersects(initial_geom):
             # Find parts of initial_geom, intersecting
@@ -178,9 +196,9 @@ def split_by_polygon(vector,
 
             for g in intersection:
                 if g.type() == geometry_type:
-                    feature = _set_feature(g, attrs)
                     if mark_value is not None:
-                        feature.setAttribute(*mark_value)
+                        attributes.append(target_value)
+                    feature = _set_feature(g, attributes)
                     _ = result_layer.dataProvider().addFeatures([feature])
 
             # Find parts of the initial_geom that do not lies in the polygon
@@ -189,10 +207,15 @@ def split_by_polygon(vector,
             ).asGeometryCollection()
             for g in diff_geom:
                 if g.type() == geometry_type:
-                    feature = _set_feature(g, attrs)
+                    feature = _set_feature(g, attributes)
                     _ = result_layer.dataProvider().addFeatures([feature])
         else:
-            feature = _set_feature(initial_geom, attrs)
+            if mark_value is not None:
+                attributes.append(0)
+            feature = _set_feature(initial_geom, attributes)
             _ = result_layer.dataProvider().addFeatures([feature])
+    result_layer.commitChanges()
     result_layer.updateExtents()
+
+
     return result_layer

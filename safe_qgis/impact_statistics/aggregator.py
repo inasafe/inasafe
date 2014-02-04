@@ -890,10 +890,11 @@ class Aggregator(QtCore.QObject):
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
             epsg = "EPSG:" + str(get_utm_epsg(self.extent[0], self.extent[1]))
-            res = processing.runalg('qgis:reprojectlayer',
-                              impact_layer_splits,
-                              epsg,
-                              tmp_filename)
+            res = processing.runalg(
+                'qgis:reprojectlayer',
+                impact_layer_splits,
+                epsg,
+                tmp_filename)
             projected_layer = QgsVectorLayer(
                 res['OUTPUT'],
                 'projected aggregation',
