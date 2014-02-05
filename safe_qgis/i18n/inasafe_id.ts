@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -1378,32 +1377,32 @@
     <message>
         <location filename="impact_merge_dialog.py" line="191"/>
         <source>Check &quot;Use customized report template&quot; checkbox and select the report template file if you want to use your own template. Note that all the map composer components that are needed must be fulfilled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Centang pilihan &quot;Gunakan template laporan terkostumisasi&quot; dan pilih file template laporan jika Anda ingin menggunakan template sendiri. Sebagai catatan, seluruh komponen komposer map yang dibutuhkan harus dipenuhi.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="231"/>
         <source>Select Output Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih direktori output.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="238"/>
         <source>Select Report Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih template laporan</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="238"/>
         <source>QPT File (*.qpt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen QPT (*.qpt)</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="423"/>
         <source>Template file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>File template tidak ada</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="1023"/>
         <source>Component %s could not be found</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponen %s tidak dapat ditemukan</translation>
     </message>
 </context>
 <context>
@@ -1446,7 +1445,7 @@
     <message>
         <location filename="impact_merge_dialog_base.ui" line="96"/>
         <source>&amp;Use customized report template</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gunakan template laporan terkostumisasi</translation>
     </message>
 </context>
 <context>
@@ -2109,14 +2108,18 @@ Pesan: %s</translation>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#f50000;&quot;&gt;Catatan:&lt;/span&gt; Untuk mengaktifkan atau menon-aktifkan  pengaturan di atas, QGIS harus di-restart. Pesan kesalahan dan informasi diagnosa akan dikirimkan ke http://sentry.linfiniti.com/inasafe-desktop/. Beberapa institusi mungkin tidak memperbolehkan Anda untuk mengaktifkan fitur ini - Tanyakan pada admin jaringan Anda jika tidak yakin. Walaupun data dikirimkan secara anonim, pada informasi yang dikirimkan tersebut mungkin terdapat path berkas yang akan membuka identitas Anda atau informasi lain dari sistem Anda.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="386"/>
         <source>Report templates directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Direktori template laporan</translation>
     </message>
 </context>
 <context>
