@@ -667,7 +667,7 @@
     <message>
         <location filename="dock.py" line="366"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one</source>
-        <translation>Untuk menggunakan tool ini Anda perlu menambahkan beberapa layer ke proyek QGIS Anda. Pastikan bahwa setidaknya terdapat satu</translation>
+        <translation>Untuk menggunakan tool ini, Anda perlu menambahkan beberapa layer ke proyek QGIS Anda. Pastikan bahwa setidaknya terdapat satu</translation>
     </message>
     <message>
         <location filename="dock.py" line="366"/>
@@ -702,7 +702,7 @@
     <message>
         <location filename="dock.py" line="381"/>
         <source>InaSAFE is not a hazard modelling tool.</source>
-        <translation>InaSAFE bukanlah alat untuk permodelan ancaman.</translation>
+        <translation>InaSAFE bukanlah tool untuk membuat pemodelan ancaman.</translation>
     </message>
     <message>
         <location filename="dock.py" line="383"/>
@@ -872,7 +872,7 @@
     <message>
         <location filename="dock.py" line="1688"/>
         <source> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</source>
-        <translation>ikon di toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Keyword Editor dari menu bar.</translation>
+        <translation>ikon pada toolbar, atau dengan memilih Plugins -&gt; InaSAFE -&gt; Keyword Editor pada menu bar.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1886"/>
@@ -1237,12 +1237,12 @@
     <message>
         <location filename="impact_merge_dialog.py" line="77"/>
         <source>InaSAFE Impact Layer Merge Tool</source>
-        <translation>Alat Penggabungan Layer Dampak InaSAFE</translation>
+        <translation>Tool Penggabungan Layer Dampak InaSAFE</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="169"/>
         <source>Impact Layer Merge Tool</source>
-        <translation>Alat Penggabungan Layer Dampak</translation>
+        <translation>Tool Penggabungan Layer Dampak</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="176"/>
@@ -1252,17 +1252,17 @@
     <message>
         <location filename="impact_merge_dialog.py" line="179"/>
         <source>Run a second impact assessment for the same area using the same aggregation. e.g. Flood Impact on People aggregated by municipal boundaries.</source>
-        <translation>Jalankan penilaian dampak ke-dua untuk daerah yang sama menggunakan agregasi yang sama, misalnya  jumlah penduduk terdampak banjir diagregasi berdasarkan batas kabupaten/kota.</translation>
+        <translation>Jalankan penilaian dampak kedua untuk daerah yang sama menggunakan agregasi yang sama, misalnya jumlah penduduk terdampak banjir diagregasi berdasarkan batas kabupaten/kota.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="183"/>
         <source>Open this tool and select each impact layer from the pick lists provided below.</source>
-        <translation>Buka alat ini dan pilih layer dampak dari daftar pilihan yang tersedia berikut.</translation>
+        <translation>Jalankan tool ini dan pilih layer terdampak dari daftar pilihan yang tersedia.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="186"/>
         <source>Select the aggregation layer that was used to generate the first and second impact layer.</source>
-        <translation>Pilih layer agregasi yang digunakan untuk menghasilkan layer terdampak pertama dan ke-dua.</translation>
+        <translation>Pilih layer agregasi yang digunakan untuk menghasilkan layer terdampak pertama dan kedua.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="189"/>
@@ -1272,22 +1272,22 @@
     <message>
         <location filename="impact_merge_dialog.py" line="196"/>
         <source>Click OK to generate the per aggregation area combined summaries.</source>
-        <translation>Klik OK untuk menghasilkan agregasi per area yang digabung dengan ringkasan.</translation>
+        <translation>Klik OK untuk menghasilkan ringkasan kedua layer terdampak per area agregasi.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="302"/>
         <source>InaSAFE Merge Impact Tool Information</source>
-        <translation>Informasi Alat Penggabungan Dampak InaSAFE</translation>
+        <translation>Informasi Tool Penggabungan Dampak InaSAFE</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="274"/>
         <source>InaSAFE Merge Impact Tools Information</source>
-        <translation>Informasi Alat Penggabungan Dampak InaSAFE</translation>
+        <translation>Informasi Tool Penggabungan Dampak InaSAFE</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="290"/>
         <source>InaSAFE Merge Impact Tools Error</source>
-        <translation>Kesalahan Alat Penggabungan Dampak InaSAFE</translation>
+        <translation>Kesalahan Tool Penggabungan Dampak InaSAFE</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="302"/>
@@ -1352,7 +1352,7 @@
     <message>
         <location filename="impact_merge_dialog.py" line="170"/>
         <source>This tool will merge the outputs from two impact maps for the same area. The maps must be created using the same aggregation areas and same hazard. To use:</source>
-        <translation>Alat ini akan menggabungkan *output* dari dua peta dampak untuk area yang sama. Peta-peta tersebut harus dibuat menggunakan area agregasi yang sama dan ancaman yang sama. Untuk menggunakan:</translation>
+        <translation>Tool ini akan menggabungkan output dari dua peta terdampak untuk area yang sama. Kedua peta tersebut harus dibuat menggunakan area agregasi yang sama dan layer ancaman yang sama. Untuk menggunakan:</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="497"/>
@@ -1362,7 +1362,7 @@
     <message>
         <location filename="impact_merge_dialog.py" line="509"/>
         <source>No keywords found for second impact layer.</source>
-        <translation>Tidak ada kata kunci yang ditemukan untuk layer dampak ke-dua.</translation>
+        <translation>Tidak ada kata kunci yang ditemukan pada layer dampak kedua.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="512"/>
@@ -1372,7 +1372,7 @@
     <message>
         <location filename="impact_merge_dialog.py" line="521"/>
         <source>First impact layer and second impact layer do not use the same hazard layer.</source>
-        <translation>Layer dampak pertama dan ke-dua tidak menggunakan layer ancaman yang sama.</translation>
+        <translation>Layer dampak pertama dan kedua tidak menggunakan layer ancaman yang sama.</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="191"/>
@@ -1415,7 +1415,7 @@
     <message>
         <location filename="impact_merge_dialog_base.ui" line="42"/>
         <source>&amp;Second impact layer</source>
-        <translation>&amp;Layer dampak ke-dua</translation>
+        <translation>&amp;Layer dampak kedua</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog_base.ui" line="55"/>
@@ -1825,7 +1825,7 @@ ke
         <location filename="map_legend.py" line="102"/>
         <source>This layer does not appear to be an impact layer. Try selecting an impact layer in the QGIS layers list or creating a new impact scenario before using the print tool.
 Message: %s</source>
-        <translation>Layer ini nampaknya bukan layer dampak. Cobalah untuk memilih layer dampak dari daftar layer di QGIS atau buatlah skenario dampak sebelum menggunakan alat pencetak.
+        <translation>Layer ini nampaknya bukan layer terdampak. Cobalah untuk memilih layer terdampak dari daftar layer di QGIS atau buatlah skenario dampak sebelum menggunakan tool pencetak.
 Pesan: %s</translation>
     </message>
     <message>
@@ -1892,7 +1892,7 @@ Pesan: %s</translation>
     <message>
         <location filename="minimum_needs.py" line="67"/>
         <source>This tool will calculated minimum needs for evacuated people. To use this tool effectively:</source>
-        <translation>Alat ini akan menghitung kebutuhan minimum untuk penduduk yang dievakuasi. untuk menggunakan alat ini secara efektif:</translation>
+        <translation>Tool ini akan menghitung kebutuhan minimum untuk penduduk yang dievakuasi. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
         <location filename="minimum_needs.py" line="72"/>
@@ -1922,7 +1922,7 @@ Pesan: %s</translation>
     <message>
         <location filename="minimum_needs.py" line="53"/>
         <source>InaSAFE %s Minimum Needs Tool</source>
-        <translation>Alat Kebutuhan Minimal InaSAFE %s</translation>
+        <translation>Tool Kebutuhan Minimum InaSAFE %s</translation>
     </message>
 </context>
 <context>
@@ -2162,7 +2162,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader.py" line="96"/>
         <source>This tool will fetch building (&apos;structure&apos;) or road (&apos;highway&apos;) data from the OpenStreetMap project for you. The downloaded data will have InaSAFE keywords defined and a default QGIS style applied. To use this tool effectively:</source>
-        <translation>Alat ini akan mengambil data bangunan *(&apos;structure&apos;)* atau jalan *(&apos;highway&apos;)* dari proyek OpenStreetMap untuk Anda. Data yang didownload akan memiliki kata kunci InaSAFE yang telah didefinisikan dan style QGIS standar yang telah diterapkan. Untuk menggunakan alat ini secara efektif:</translation>
+        <translation>Tool ini akan mengambil data bangunan *(&apos;structure&apos;)* atau jalan *(&apos;highway&apos;)* dari proyek OpenStreetMap untuk Anda. Data yang didownload akan memiliki kata kunci InaSAFE yang telah didefinisikan dan style QGIS standar yang telah diterapkan. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
         <location filename="osm_downloader.py" line="103"/>
@@ -2177,7 +2177,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader.py" line="115"/>
         <source>This tool requires a working internet connection and fetching buildings or roads will consume your bandwidth.</source>
-        <translation>Alat ini memerlukan koneksi internet dan untuk dapat memanggil data bangunan atau jalan akan mengkonsumsi bandwidth Anda.</translation>
+        <translation>Tool ini memerlukan koneksi internet dan men-download data bangunan atau jalan yang akan mengkonsumsi bandwidth Anda.</translation>
     </message>
     <message>
         <location filename="osm_downloader.py" line="212"/>
@@ -2333,12 +2333,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="288"/>
         <source>InaSAFE Minimum Needs Tool</source>
-        <translation>InaSAFE Alat Kebutuhan Minimal</translation>
+        <translation>Tool Kebutuhan Minimum InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="293"/>
         <source>Open InaSAFE minimum needs tool</source>
-        <translation>Buka InaSAFE Alat Kebutuhan Minimal</translation>
+        <translation>Jalankan tool kebutuhan minimum InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="46"/>
@@ -2637,7 +2637,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_importer.py" line="89"/>
         <source>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format to a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require and earthquake layer.  To use this tool effectively:</source>
-        <translation>Alat ini akan mengkonversi  &apos;shakemap&apos; gempa bumi yang ada di kotak Format xml ke file GeoTIFF. File yang diimpor dapat digunakan dalam InaSAFE sebagai input untuk fungsi dampak yang dibutuhkan dan lapisan gempa. Untuk menggunakan alat ini secara efektif:</translation>
+        <translation>Tool ini akan melakukan konversi &apos;shakemap&apos; gempa bumi dari format grid xml menjadi file GeoTIFF. File yang diimpor dapat digunakan dalam InaSAFE sebagai input untuk fungsi dampak yang dibutuhkan dan lapisan gempa. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
         <location filename="shakemap_importer.py" line="96"/>
