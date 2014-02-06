@@ -233,7 +233,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Generate impact report for the pdf map
         blank_cell = ''
         table_body = [question,
-                      TableRow([tr('Volcanos considered'),
+                      TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
                                header=True),
                       TableRow([tr('People needing evacuation'),

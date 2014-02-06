@@ -167,7 +167,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Generate simple impact report
         blank_cell = ''
         table_body = [question,
-                      TableRow([tr('Volcanos considered'),
+                      TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
                                header=True),
                       TableRow([tr('Distance [km]'), tr('Total'),
