@@ -57,14 +57,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
     def description(self):
         """Describe briefly what the post processor does.
 
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
+        :returns: The translated description.
+        :rtype: str
         """
         return tr('Calculates building types related statistics.')
 
@@ -105,15 +99,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             self.no_features = True
 
     def process(self):
-        """concrete implementation it takes care of the needed parameters being
-         available and performs all the indicators calculations
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        """Concrete implementation that performs all indicators calculations.
         """
         AbstractPostprocessor.process(self)
 
@@ -141,14 +127,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
     def _calculate_total(self):
         """Indicator that shows total population.
 
-        this indicator reports the total population
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        This indicator reports the total population.
         """
 
         name = tr('Total')
@@ -171,13 +150,6 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         - look in those fields for any of the values of self.fields_values
         - if a record has one of the valid fields with one of the valid
         fields_values then it is considered affected
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
 
         title = tr(title)

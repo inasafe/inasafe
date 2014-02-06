@@ -31,10 +31,14 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
 
     def __init__(self):
         """
-        Constructor for postprocessor class,
+        Constructor for postprocessor class.
+
         It takes care of defining self.impact_total
         """
+
         BuildingTypePostprocessor.__init__(self)
+        # Note: Do we need these explicityl defined? With new osm-reporter
+        # changes you already get a nicely named list in the 'type' field
         self.fields_values = {
             'Construction': ['construction'],
             'Crossing': ['crossing'],
@@ -43,7 +47,7 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
             'Highway': ['highway'],
             'Industri': ['industri'],
             'Living street': ['living_street'],
-            'Motorway': ['motorway', 'motorway_link'],
+            'Motorway': ['motorway', 'motorway_link', 'Motorway link'],
             'Primary': ['primary', 'primary_link'],
             'Raceway': ['raceway'],
             'Residential': ['residential'],
@@ -56,14 +60,5 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
 
     def description(self):
         """Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         return tr('Calculates road types related statistics.')
