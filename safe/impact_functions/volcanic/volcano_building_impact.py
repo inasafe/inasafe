@@ -55,19 +55,18 @@ class VolcanoBuildingImpact(FunctionProvider):
         ('distances [km]', [3, 5, 10])])
 
     def run(self, layers):
-        """Risk plugin for volcano hazard on building/structure
-
-        Input
-          layers: List of layers expected to contain
-              my_hazard: Hazard layer of volcano
-              my_exposure: Vector layer of structure data on
-              the same grid as my_hazard
+        """Risk plugin for volcano hazard on building/structure.
 
         Counts number of building exposed to each volcano hazard zones.
 
-        Return
-          Map of building exposed to volcanic hazard zones
-          Table with number of buildings affected
+        :param layers: List of layers expected to contain.
+
+                * my_hazard: Hazard layer of volcano
+                * my_exposure: Vector layer of structure data on
+                  the same grid as my_hazard
+        :returns: Map of building exposed to volcanic hazard zones.
+            Table with number of buildings affected
+        :rtype: dict
         """
 
         # Identify hazard and exposure layers
