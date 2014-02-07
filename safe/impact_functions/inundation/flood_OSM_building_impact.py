@@ -1,3 +1,15 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk tool by Australian Aid - Flood Impact on OSM Buildings
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 from safe.common.utilities import OrderedDict
 
 from safe.impact_functions.core import (
@@ -73,6 +85,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map).
+
+         :param layers: List of layers expected to contain.
+                * my_hazard: Hazard layer of flood
+                * my_exposure: Vector layer of structure data on
+                  the same grid as my_hazard
         """
 
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]
@@ -81,13 +98,16 @@ class FloodBuildingImpactFunction(FunctionProvider):
                'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
-        H = get_hazard_layer(layers)    # Depth
-        E = get_exposure_layer(layers)  # Building locations
+        my_hazard = get_hazard_layer(layers)    # Depth
+        my_exposure = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(H.get_name(), E.get_name(), self)
+        question = get_question(
+            my_hazard.get_name(),
+            my_exposure.get_name(),
+            self)
 
         # Determine attribute name for hazard levels
-        if H.is_raster:
+        if my_hazard.is_raster:
             mode = 'grid'
             hazard_attribute = 'depth'
         else:
@@ -96,7 +116,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Interpolate hazard level to building locations
         I = assign_hazard_values_to_exposure_data(
-            H, E, attribute_name=hazard_attribute)
+            my_hazard, my_exposure, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
         attribute_names = I.get_attribute_names()
