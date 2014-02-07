@@ -38,7 +38,7 @@ class TestShakeMap(unittest.TestCase):
 
     #noinspection PyPep8Naming
     def setUp(self):
-        """Copy our cached dataset from the fixture dir to the cache dir"""
+        """Copy our cached dataset from the fixture dir to the cache dir."""
         output_file = '20120726022003.out.zip'
         input_file = '20120726022003.inp.zip'
         output_path = os.path.abspath(
@@ -63,7 +63,7 @@ class TestShakeMap(unittest.TestCase):
         #TODO Downloaded data should be removed before each test
 
     def test_get_shake_map_input(self):
-        """Check that we can retrieve a shakemap 'inp' input file"""
+        """Check that we can retrieve a shakemap 'inp' input file."""
         shake_event = '20110413170148'
         shake_data = ShakeData(shake_event)
         shakemap_file = shake_data.fetch_input()
@@ -73,7 +73,7 @@ class TestShakeMap(unittest.TestCase):
         self.assertEqual(shakemap_file, expected_file, message)
 
     def test_get_shake_map_output(self):
-        """Check that we can retrieve a shakemap 'out' input file"""
+        """Check that we can retrieve a shakemap 'out' input file."""
         event_id = '20110413170148'
         shake_data = ShakeData(event_id)
         shakemap_file = shake_data.fetch_output()
@@ -83,7 +83,8 @@ class TestShakeMap(unittest.TestCase):
         self.assertEqual(shakemap_file, expected_file, message)
 
     def test_get_remote_shake_map(self):
-        """Check that we can retrieve both input and output from ftp at once"""
+        """Check that we can retrieve both input and output from ftp at once.
+        """
         shake_event = '20110413170148'
         shake_data = ShakeData(shake_event)
 
@@ -113,7 +114,8 @@ class TestShakeMap(unittest.TestCase):
         assert os.path.exists(expected_output_file)
 
     def test_get_cached_shake_map(self):
-        """Check that we can retrieve both input and output from ftp at once"""
+        """Check that we can retrieve both input and output from ftp at once.
+        """
         shake_event = '20120726022003'
 
         expected_input_file = os.path.join(shakemap_zip_dir(),
@@ -132,7 +134,7 @@ class TestShakeMap(unittest.TestCase):
         self.assertEqual(output_file, expected_output_file, message)
 
     def test_get_latest_shake_map(self):
-        """Check that we can retrieve the latest shake event"""
+        """Check that we can retrieve the latest shake event."""
         # Simply dont set the event id in the ctor to get the latest
         shake_data = ShakeData()
         input_file, output_file = shake_data.fetch_event()
@@ -151,7 +153,7 @@ class TestShakeMap(unittest.TestCase):
         self.assertEqual(output_file, expected_output_file, message)
 
     def test_extract_shake_map(self):
-        """Test that we can extract the shakemap inp and out files"""
+        """Test that we can extract the shakemap inp and out files."""
         shake_event = '20120726022003'
         shake_data = ShakeData(shake_event)
         grid_xml = shake_data.extract(force_flag=True)
@@ -171,6 +173,7 @@ class TestShakeMap(unittest.TestCase):
         self.assertTrue(shake_data.is_on_server(),
                         ('Data for %s is on server' % shake_event))
 
+    #noinspection PyMethodMayBeStatic
     def test_cache_paths(self):
         """Check we compute local cache paths properly."""
         shake_event = '20120726022003'
@@ -185,6 +188,7 @@ class TestShakeMap(unittest.TestCase):
         message = 'Expected: %s\nGot: %s' % (expected_output_path, output_path)
         assert output_path == expected_output_path, message
 
+    #noinspection PyMethodMayBeStatic
     def test_file_names(self):
         """Check we compute file names properly."""
         shake_event = '20120726022003'
