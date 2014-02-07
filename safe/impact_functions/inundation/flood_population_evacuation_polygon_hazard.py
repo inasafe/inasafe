@@ -190,7 +190,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             else:
                 # there is no flood related attribute
                 msg = ('No flood related attribute found in %s. '
-                       'I was looking fore either "Flooded", "FLOODPRONE" '
+                       'I was looking for either "Flooded", "FLOODPRONE" '
                        'or "Affected". The latter should have been '
                        'automatically set by call to '
                        'assign_hazard_values_to_exposure_data(). '
@@ -253,7 +253,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                                header=True),
                       TableRow(tr('Map shows population affected in each flood'
                                   ' prone area')),
-                      TableRow(tr('Table below shows the weekly minium needs '
+                      TableRow(tr('Table below shows the weekly minimum needs '
                                   'for all evacuated people')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),

@@ -1245,10 +1245,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         elif engine_impact_layer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not style:
-                qgis_impact_layer.setDrawingStyle(
-                    QgsRasterLayer.SingleBandPseudoColor)
-                qgis_impact_layer.setColorShadingAlgorithm(
-                    QgsRasterLayer.PseudoColorShader)
+                qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
+                #qgis_impact_layer.setColorShadingAlgorithm(
+                #    QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
 
