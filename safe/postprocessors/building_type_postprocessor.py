@@ -150,6 +150,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_attrs = None
         self.target_field = None
         self.type_fields = None
+        self.valid_type_fields = None
 
     def _calculate_total(self):
         """Indicator that shows total population.
