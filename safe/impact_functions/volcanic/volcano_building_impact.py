@@ -74,10 +74,10 @@ class VolcanoBuildingImpact(FunctionProvider):
         :param layers: List of layers expected to contain.
                 * my_hazard: Hazard layer of volcano
                 * my_exposure: Vector layer of structure data on
-                  the same grid as my_hazard
+                the same grid as my_hazard
 
         :returns: Map of building exposed to volcanic hazard zones.
-            Table with number of buildings affected
+                  Table with number of buildings affected
         :rtype: dict
         """
 

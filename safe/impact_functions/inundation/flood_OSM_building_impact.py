@@ -89,7 +89,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
          :param layers: List of layers expected to contain.
                 * my_hazard: Hazard layer of flood
                 * my_exposure: Vector layer of structure data on
-                  the same grid as my_hazard
+                the same grid as my_hazard
         """
 
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]
