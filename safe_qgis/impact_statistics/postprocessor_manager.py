@@ -131,8 +131,10 @@ class PostprocessorManager(QtCore.QObject):
             has_no_data = False
             table = m.Table(
                 style_class='table table-condensed table-striped')
-            table.caption = self.tr('Detailed %s report') % (safeTr(
-                get_postprocessor_human_name(processor)).lower())
+            postprocessor_translated = str(
+                safeTr(get_postprocessor_human_name(processor)).lower())
+            table.caption = self.tr(
+                'Detailed %s report' % postprocessor_translated)
 
             header = m.Row()
             header.add(str(self.attribute_title).capitalize())
