@@ -504,8 +504,8 @@ class TestDock(TestCase):
         message = ('Result not as expected: %s' % result)
         # This is the expected number of population might be affected
         self.assertTrue(format_int(30938000) in result, message)
-        self.assertTrue(format_int(287707000) in result, message)
-        self.assertTrue(format_int(256769000) in result, message)
+        self.assertTrue(format_int(68280000) in result, message)
+        self.assertTrue(format_int(157551000) in result, message)
 
     #noinspection PyArgumentList
     def test_runEarthquakeBuildingImpactFunction(self):
