@@ -32,7 +32,7 @@ QGIS_APP = get_qgis_app()
 class QGISTest(unittest.TestCase):
     """Test the QGIS Environment"""
 
-    def test_QGISEnvironment(self):
+    def test_qgis_environment(self):
         """QGIS environment has the expected providers"""
 
         r = QgsProviderRegistry.instance()
