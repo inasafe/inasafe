@@ -585,7 +585,7 @@
         <translation>Area keseluruhan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2057"/>
+        <location filename="dock.py" line="2056"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -635,32 +635,32 @@
         <translation>Terjadi pengecualian ketika memulai model.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1817"/>
+        <location filename="dock.py" line="1816"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Silakan pilih layer dampak yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1886"/>
+        <location filename="dock.py" line="1885"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1824"/>
+        <location filename="dock.py" line="1823"/>
         <source>Preparing map and report</source>
         <translation>Mempersiapkan peta dan laporan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1857"/>
+        <location filename="dock.py" line="1856"/>
         <source>Write to PDF</source>
         <translation>Membuat dalam format PDF</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1857"/>
+        <location filename="dock.py" line="1856"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1864"/>
+        <location filename="dock.py" line="1863"/>
         <source>Printing cancelled!</source>
         <translation>Pencetakan dibatalkan!</translation>
     </message>
@@ -795,122 +795,122 @@
         <translation>Kesalahan memuat layer dampak.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1632"/>
+        <location filename="dock.py" line="1631"/>
         <source>Analysis Results</source>
         <translation>Hasil Analisis</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1325"/>
+        <location filename="dock.py" line="1324"/>
         <source>Notes</source>
         <translation>Catatan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1336"/>
+        <location filename="dock.py" line="1335"/>
         <source>Check that the exposure is not no-data or zero for the entire area of your analysis.</source>
         <translation>Pastikan bahwa keterpaparan bukan merupakan data kosong atau bernilai nol untuk seluruh area yang ingin Anda analisis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1339"/>
+        <location filename="dock.py" line="1338"/>
         <source>Check that your impact function thresholds do not exclude all features unintentionally.</source>
         <translation>Pastikan bahwa fungsi dampak Anda tidak menghilangkan semua fitur yang ada secara tidak sengaja.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1373"/>
+        <location filename="dock.py" line="1372"/>
         <source>Aggregation error occurred.</source>
         <translation>Terjadi kesalahan (error) pada aggregasi.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1454"/>
+        <location filename="dock.py" line="1453"/>
         <source>There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:</source>
         <translation>Tidak cukup tumpang tindih (overlap) antara layer masukan dan/atau layer dengan area yang dilihat. Silakan memilih 2 layer yang saling tumpang tindih (overlap) dan perbesar atau geser lapisan tersebut atau non-aktifkan pemotongan area yang terlihat di kotak pilihan. Untuk keterangan lebih lengkap sebagai berikut:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1461"/>
+        <location filename="dock.py" line="1460"/>
         <source>Failed to obtain the optimal extent given:</source>
         <translation>Gagal dalam memproleh luasan optimal dari:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1580"/>
+        <location filename="dock.py" line="1579"/>
         <source>Preparing hazard data</source>
         <translation>Menyiapkan data ancaman bencana</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1581"/>
+        <location filename="dock.py" line="1580"/>
         <source>We are resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</source>
         <translation>Kita mengambil contoh ulang dan memotong layer ancaman bencana untuk menyesuaikan perpotongan dari layer keterpaparan dan luasan tampilannya saat ini.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1599"/>
+        <location filename="dock.py" line="1598"/>
         <source>Preparing exposure data</source>
         <translation>Menyiapkan data keterpaparan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1600"/>
+        <location filename="dock.py" line="1599"/>
         <source>We are resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</source>
         <translation>Kita mengambil contoh ulang dan memotong layer keterpaparan untuk menyesuaikan perpotongan layer ancaman bencana dan luasan tampilan saat ini.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1656"/>
+        <location filename="dock.py" line="1655"/>
         <source>Layer keywords:</source>
         <translation>Kata kunci layer:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1658"/>
+        <location filename="dock.py" line="1657"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation>Kata kunci berikut ini ditentukan oleh layer yang aktif:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1686"/>
+        <location filename="dock.py" line="1685"/>
         <source>Layer keywords missing:</source>
         <translation>Kata kunci layer hilang:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1688"/>
+        <location filename="dock.py" line="1687"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the </source>
         <translation>Belum ada kata kunci yang telah ditentukan untuk layer ini. Jika Anda ingin menggunakannya sebagai dampak atau layer ancaman bencana dalam skenario Anda, silakan gunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan klik pada</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1688"/>
+        <location filename="dock.py" line="1687"/>
         <source> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</source>
         <translation>ikon pada toolbar, atau dengan memilih Plugins -&gt; InaSAFE -&gt; Keyword Editor pada menu bar.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1886"/>
+        <location filename="dock.py" line="1885"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>PDF Anda telah selesai dibuat....buka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda. Berkas PDF Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1886"/>
+        <location filename="dock.py" line="1885"/>
         <source>and</source>
         <translation>dan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1973"/>
+        <location filename="dock.py" line="1972"/>
         <source>InaSAFE Save Scenario Warning</source>
         <translation>InaSAFE Peringatan Skenario Penyelamatan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1987"/>
+        <location filename="dock.py" line="1986"/>
         <source>Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</source>
         <translation>Layer keterpaparan tidak ditemukan, tidak dapat menyimpan skenario. Silakan tambahkan layer keterpaparan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1994"/>
+        <location filename="dock.py" line="1993"/>
         <source>Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</source>
         <translation>Layer ancaman bencana tidak ditemukan, tidak dapat menyimpan skenario. Silakan tambahkan layer ancaman bencana.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2003"/>
+        <location filename="dock.py" line="2002"/>
         <source>The impact function is empty, can not save scenario</source>
         <translation>Fungsi dampak kosong, tidak dapat menyimpan skenario</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2015"/>
+        <location filename="dock.py" line="2014"/>
         <source>Save Scenario</source>
         <translation>Simpan Skenario</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2057"/>
+        <location filename="dock.py" line="2056"/>
         <source>Failed to save scenario to </source>
         <translation>Gagal untuk menyimpan skenario ke</translation>
     </message>
@@ -925,74 +925,74 @@
         <translation>dan bullet_list hasil</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1257"/>
+        <location filename="dock.py" line="1256"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Layer dampak %1 bukan berupa layer raster ataupun vektor</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1315"/>
+        <location filename="dock.py" line="1314"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>Tidak ada layer dampak yang dihitung. Pesan kesalahan: %s
 </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1326"/>
+        <location filename="dock.py" line="1325"/>
         <source>It appears that no %s are affected by %s. You may want to consider:</source>
         <translation>Ini menunjukkan bahwa tidak ada %s terdampak oleh %s. Anda mungkin ingin mempertimbangkan:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1332"/>
+        <location filename="dock.py" line="1331"/>
         <source>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</source>
         <translation>Periksa bahwa Anda tidak terlalu memperbesar peta dan sehingga %s tidak termasuk dari daerah analisis Anda.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1349"/>
+        <location filename="dock.py" line="1348"/>
         <source>An exception occurred when calculating the results. %s</source>
         <translation>Kesalahan terjadi ketika menghitung hasil. %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1466"/>
+        <location filename="dock.py" line="1465"/>
         <source>Hazard: %s</source>
         <translation>Ancaman: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1470"/>
+        <location filename="dock.py" line="1469"/>
         <source>Exposure: %s</source>
         <translation>Keterpaparan: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1474"/>
+        <location filename="dock.py" line="1473"/>
         <source>Viewable area Geo Extent: %s</source>
         <translation>Geo Extent daerah yang terlihat: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1478"/>
+        <location filename="dock.py" line="1477"/>
         <source>Hazard Geo Extent: %s</source>
         <translation>Geo Extent Ancaman: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1482"/>
+        <location filename="dock.py" line="1481"/>
         <source>Exposure Geo Extent: %s</source>
         <translation>Geo Extent Keterpaparan: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1486"/>
+        <location filename="dock.py" line="1485"/>
         <source>Viewable area clipping enabled: %s</source>
         <translation>Area terlihat yang dapat dipotong: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1489"/>
+        <location filename="dock.py" line="1488"/>
         <source>Details: %s</source>
         <translation>Rincian: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1800"/>
+        <location filename="dock.py" line="1799"/>
         <source>Report generation cancelled!</source>
         <translation>Pembuatan laporan dibatalkan!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1851"/>
+        <location filename="dock.py" line="1850"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation>Kata kunci &quot;map_title&quot; tidak ditemukan.</translation>
     </message>
@@ -1551,7 +1551,7 @@ ke
         <translation>bangunan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="738"/>
+        <location filename="keywords_dialog.py" line="746"/>
         <source>Not Set</source>
         <translation>Tidak ditentukan</translation>
     </message>
@@ -1631,17 +1631,17 @@ ke
         <translation>Tanda titik dua (:) tidak diijinkan, diganti dengan &quot;.&quot;</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="706"/>
+        <location filename="keywords_dialog.py" line="714"/>
         <source>Keywords for %s</source>
         <translation>Kata kunci (keyword) untuk %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="796"/>
+        <location filename="keywords_dialog.py" line="823"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="796"/>
+        <location filename="keywords_dialog.py" line="823"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>Terjadi kesalahan saat penyimpanan kata kunci (keyword):
@@ -1661,129 +1661,129 @@ ke
 <context>
     <name>KeywordsDialogBase</name>
     <message>
-        <location filename="keywords_dialog_base.ui" line="20"/>
+        <location filename="keywords_dialog_base.py" line="253"/>
         <source>InaSAFE - Keyword Editor</source>
         <translation>InaSAFE - Editor kata kunci (keyword)</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="58"/>
+        <location filename="keywords_dialog_base.py" line="254"/>
         <source>Quick edit</source>
         <translation>Edit cepat</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="67"/>
+        <location filename="keywords_dialog_base.py" line="256"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation>Subkategori menunjukan jenis ancaman.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="74"/>
+        <location filename="keywords_dialog_base.py" line="258"/>
         <source>Subcategory</source>
         <translation>Subkategori</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="90"/>
+        <location filename="keywords_dialog_base.py" line="255"/>
         <source>Aggregation attribute</source>
         <translation>Atribut agregasi</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="97"/>
+        <location filename="keywords_dialog_base.py" line="267"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="106"/>
+        <location filename="keywords_dialog_base.py" line="261"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation>Ancaman bencana merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="109"/>
+        <location filename="keywords_dialog_base.py" line="262"/>
         <source>Hazard</source>
         <translation>Ancaman</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="116"/>
+        <location filename="keywords_dialog_base.py" line="263"/>
         <source>Where people and property are situated.</source>
         <translation>Dimana lokasi manusia dan harta benda.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="119"/>
+        <location filename="keywords_dialog_base.py" line="264"/>
         <source>Exposure</source>
         <translation>Keterpaparan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="129"/>
+        <location filename="keywords_dialog_base.py" line="265"/>
         <source>Postprocessing</source>
         <translation>Pascapemrosesan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="141"/>
+        <location filename="keywords_dialog_base.py" line="266"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="148"/>
+        <location filename="keywords_dialog_base.py" line="257"/>
         <source>Female ratio attribute</source>
         <translation>Atribut perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="155"/>
+        <location filename="keywords_dialog_base.py" line="259"/>
         <source>Female ratio default</source>
         <translation>Nilai default perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="181"/>
+        <location filename="keywords_dialog_base.py" line="268"/>
         <source>Show advanced editor</source>
         <translation>Tampilkan editor lanjutan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="197"/>
+        <location filename="keywords_dialog_base.py" line="269"/>
         <source>Advanced editor</source>
         <translation>Editor lanjutan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="205"/>
+        <location filename="keywords_dialog_base.py" line="270"/>
         <source>Predefined</source>
         <translation>Yang telah ditentukan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="212"/>
+        <location filename="keywords_dialog_base.py" line="271"/>
         <source>User defined</source>
         <translation>Yang ditentukan oleh pengguna</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="230"/>
+        <location filename="keywords_dialog_base.py" line="272"/>
         <source>Keyword</source>
         <translation>Kata kunci (keyword)</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="311"/>
+        <location filename="keywords_dialog_base.py" line="276"/>
         <source>Value</source>
         <translation>Nilai</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="324"/>
+        <location filename="keywords_dialog_base.py" line="277"/>
         <source>Add to list</source>
         <translation>Tambahkan ke dalam daftar</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="298"/>
+        <location filename="keywords_dialog_base.py" line="275"/>
         <source>Key</source>
         <translation>Kunci</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="334"/>
+        <location filename="keywords_dialog_base.py" line="278"/>
         <source>Current keywords</source>
         <translation>Kata kunci (keyword) saat ini</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="370"/>
+        <location filename="keywords_dialog_base.py" line="279"/>
         <source>Remove selected</source>
         <translation>Hilangkan yang dipilih</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="256"/>
-        <source>source</source>
-        <translation>sumber</translation>
+        <location filename="keywords_dialog_base.py" line="260"/>
+        <source>Source</source>
+        <translation>Sumber</translation>
     </message>
 </context>
 <context>
