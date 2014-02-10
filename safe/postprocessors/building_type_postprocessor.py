@@ -56,28 +56,11 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
 
     def description(self):
         """Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         return tr('Calculates building types related statistics.')
 
     def setup(self, params):
-        """concrete implementation it takes care of the needed parameters being
-         initialized
-
-        Args:
-            params: dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
+        """Intialises parameters.
         """
         AbstractPostprocessor.setup(self, None)
         if (self.impact_total is not None or

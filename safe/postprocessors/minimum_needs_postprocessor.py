@@ -35,15 +35,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
 
     def description(self):
         """Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         return tr('Aggregates minimum needs.')
 
