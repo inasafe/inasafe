@@ -155,8 +155,8 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
 
         # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
+        impact_layer = calculate_impact(
+            layers=[H, E], impact_fcn=IF)
 
         # Do calculation manually and check result
         hazard_raster = read_layer(hazard_filename)

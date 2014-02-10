@@ -45,7 +45,7 @@ def data_dir():
     return my_dir
 
 
-class ShakeGridConverter():
+class ShakeGridConverter(object):
     """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
@@ -304,14 +304,14 @@ class ShakeGridConverter():
         #short circuit if the csv is already created.
         if os.path.exists(my_path) and force_flag is not True:
             return my_path
-        my_file = file(my_path, 'wt')
+        my_file = file(my_path, 'w')
         my_file.write(self.mmi_to_delimited_text())
         my_file.close()
 
         # Also write the .csv which contains metadata about field types
         my_csv_path = os.path.join(
             self.output_dir, self.output_basename + '.csvt')
-        my_file = file(my_csv_path, 'wt')
+        my_file = file(my_csv_path, 'w')
         my_file.write('"Real","Real","Real"')
         my_file.close()
         return my_path
@@ -351,7 +351,7 @@ class ShakeGridConverter():
             '                      x="lon" y="lat" z="mmi"/>'
             '  </OGRVRTLayer>'
             '</OGRVRTDataSource>' % my_csv_path)
-        my_file = file(my_vrt_path, 'wt')
+        my_file = file(my_vrt_path, 'w')
         my_file.write(my_vrt_string)
         my_file.close()
         return my_vrt_path
