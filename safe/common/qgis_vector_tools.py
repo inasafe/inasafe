@@ -129,18 +129,18 @@ def split_by_polygon(
     :param mark_value:  Field value to mark the objects.
     :type mark_value:   (field_name, field_value).or None
 
-    :returns:       Vector layer with splitted geometry
-    :rtype:         QgsVectorLayer
+    :returns: Vector layer with split geometry
+    :rtype: QgsVectorLayer
     """
 
     def _set_feature(geometry, attributes):
         """
         Helper to create and set up feature
         """
-        feature = QgsFeature()
-        feature.setGeometry(geometry)
-        feature.setAttributes(attributes)
-        return feature
+        included_feature = QgsFeature()
+        included_feature.setGeometry(geometry)
+        included_feature.setAttributes(attributes)
+        return included_feature
 
     # Create layer to store the splitted objects
     crs = vector.crs().toWkt()
@@ -215,6 +215,5 @@ def split_by_polygon(
             _ = result_layer.dataProvider().addFeatures([feature])
     result_layer.commitChanges()
     result_layer.updateExtents()
-
 
     return result_layer
