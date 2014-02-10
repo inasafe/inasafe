@@ -40,7 +40,7 @@ from qgis_vector_tools import (
     split_by_polygon)
 
 
-class TestQGISRasterTools(unittest.TestCase):
+class TestQGISVectorTools(unittest.TestCase):
 
     def setUp(self):
         self.polygon_base = os.path.abspath(
