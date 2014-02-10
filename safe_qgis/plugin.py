@@ -83,7 +83,6 @@ class Plugin:
         self.key_action = None
         self.action_function_browser = None
         self.action_options = None
-        self.action_reset_dock = None
         self.action_keywords_dialog = None
         self.translator = None
         self.toolbar = None
@@ -232,20 +231,6 @@ class Plugin:
             self.show_keywords_editor)
 
         self.add_action(self.action_keywords_dialog)
-
-        #--------------------------------------
-        # Create action for reset icon
-        #--------------------------------------
-        self.action_reset_dock = QAction(
-            QIcon(':/plugins/inasafe/reset-dock.svg'),
-            self.tr('Reset Dock'), self.iface.mainWindow())
-        self.action_reset_dock.setStatusTip(self.tr(
-            'Reset the InaSAFE Dock'))
-        self.action_reset_dock.setWhatsThis(self.tr(
-            'Reset the InaSAFE Dock'))
-        self.action_reset_dock.triggered.connect(self.reset_dock)
-
-        self.add_action(self.action_reset_dock)
 
         #--------------------------------------
         # Create action for options dialog
@@ -544,10 +529,6 @@ class Plugin:
     def save_scenario(self):
         """Save current scenario to text file,"""
         self.dock_widget.save_current_scenario()
-
-    def reset_dock(self):
-        """Reset the dock to its default state."""
-        self.dock_widget.get_layers()
 
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
