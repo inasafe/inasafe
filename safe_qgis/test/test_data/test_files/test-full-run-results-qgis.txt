@@ -7,7 +7,7 @@ Toilets 48,850
 Total population: 10,484,000
 People need evacuation if flood levels exceed 1.0 m
 Minimum needs are defined in BNPB regulation 7/2008
-All values are rounded up to the nearest integer in order to avoid representing human lives as fractionals.
+All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.
 Hazard details
 A flood in Jakarta like in 2007 - sourced from HKV
 Exposure details
