@@ -1,3 +1,4 @@
+# coding=utf-8
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
@@ -32,9 +33,8 @@ class FloodRoadImpactFunctionExperimental(FunctionProvider):
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
-                                self)
+        question = get_question(
+            H.get_name(), E.get_name(), self)
 
         # Interpolate hazard level to building locations
         I = assign_hazard_values_to_exposure_data(H, E)
