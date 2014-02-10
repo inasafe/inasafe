@@ -35,14 +35,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
 
     def description(self):
         """Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
             Errors are propagated
         """
         return tr('Aggregates minimum needs.')
@@ -67,13 +59,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
     def process(self):
         """concrete implementation it takes care of the needed parameters being
          available and performs all the indicators calculations
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         AbstractPostprocessor.process(self)
         if self.impact_total is None or self.minimum_needs is None:
@@ -87,13 +72,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
          properly cleared
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         AbstractPostprocessor.clear(self)
         self.impact_total = None
@@ -103,13 +81,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         """Indicator that shows aggregated minimum needs.
 
         this indicator reports the aggregated minimum needs
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
 
         for need, value in self.minimum_needs.iteritems():
