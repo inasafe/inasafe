@@ -101,8 +101,9 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         )
         tips = m.BulletedList()
         tips.add(self.tr(
-            'Use QGIS to zoom in to the area for which you want data to be '
-            'retrieved.'))
+            'Your current extent will be used to determine the area for which '
+            'you want data to be retrieved. You can adjust it manually using '
+            'the bounding box options below.'))
         tips.add(self.tr(
             'Check the output directory is correct. Note that the saved '
             'dataset will be called either roads.shp or buildings.shp (and '
