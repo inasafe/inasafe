@@ -10,10 +10,13 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import itertools
 
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (
+    ugettext as tr,
+    OrderedDict)
 
 
 class BuildingTypePostprocessor(AbstractPostprocessor):
@@ -36,23 +39,27 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.no_features = None
         self.type_fields = None
         self.valid_type_fields = None
-        self.fields_values = {
-            'Medical': ['Clinic/Doctor', 'Hospital'],
-            'Schools': ['School', 'University/College', ],
-            'Places of worship': ['Place of Worship - Unitarian',
-                                  'Place of Worship - Islam',
-                                  'Place of Worship - Buddhist',
-                                  'Place of Worship'],
-            'Residential': ['Residential'],
-            'Government': ['Government'],
-            'Public Building': ['Public Building'],
-            'Fire Station': ['Fire Station'],
-            'Police Station': ['Police Station'],
-            'Supermarket': ['Supermarket'],
-            'Commercial': ['Commercial'],
-            'Industrial': ['Industrial'],
-            'Utility': ['Utility'],
-            'Sports Facility': ['Sports Facility'], }
+        self.fields_values = OrderedDict([
+            ('Medical', ['Clinic/Doctor', 'Hospital']),
+            ('Schools', ['School', 'University/College', ]),
+            ('Places of worship', ['Place of Worship - Unitarian',
+                                   'Place of Worship - Islam',
+                                   'Place of Worship - Buddhist',
+                                   'Place of Worship']),
+            ('Residential', ['Residential']),
+            ('Government', ['Government']),
+            ('Public Building', ['Public Building']),
+            ('Fire Station', ['Fire Station']),
+            ('Police Station', ['Police Station']),
+            ('Supermarket', ['Supermarket']),
+            ('Commercial', ['Commercial']),
+            ('Industrial', ['Industrial']),
+            ('Utility', ['Utility']),
+            ('Sports Facility', ['Sports Facility']),
+            ('Other', [])])
+
+        self.known_types = []
+        self._update_known_types()
 
     def description(self):
         """Describe briefly what the post processor does.
@@ -186,9 +193,12 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             try:
                 for building in self.impact_attrs:
                     for type_field in self.type_fields:
-                        if building[type_field] in fields_values:
+                        building_type = building[type_field]
+                        if building_type in fields_values:
                             result += building[self.target_field]
                             break
+                        elif self._is_unknown_type(building_type):
+                            self._update_known_types(building_type)
 
                 result = int(round(result))
             except (ValueError, KeyError):
@@ -199,3 +209,20 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             else:
                 result = self.NO_DATA_TEXT
         self._append_result(title, result)
+
+    def _is_unknown_type(self, building_type):
+        print 'checking %s not in ' % building_type
+        print self.known_types
+        is_unknown = building_type not in self.known_types
+        print is_unknown
+        return is_unknown
+
+    def _update_known_types(self, building_type=None):
+        if type is not None:
+            self.fields_values['Other'].append(building_type)
+
+        # flatten self.fields_values.values()
+        # using http://stackoverflow.com/questions/5286541/#5286614
+        self.known_types = list(itertools.chain.from_iterable(
+            itertools.repeat(x, 1) if isinstance(x, str) else x for x in
+            self.fields_values.values()))
