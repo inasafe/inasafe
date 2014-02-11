@@ -101,6 +101,7 @@ class MapTest(unittest.TestCase):
             427172,  # Ubuntu 13.10_64
             414589,  # Slackware64 14.0
             416796,  # Linux Mint 14_64
+            412911,  # Windows 7 64
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -140,6 +141,7 @@ class MapTest(unittest.TestCase):
             400563,  # Ubuntu 13.10_64
             367934,  # Slackware64 14.0
             390100,  # Linux Mint 14_64
+            386188,  # Windows 7 64bit
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
