@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 13:55+0700\n"
+"POT-Creation-Date: 2014-02-11 11:04+0700\n"
 "PO-Revision-Date: 2014-02-10 06:57+0000\n"
 "Last-Translator: akbargumbira <akbargumbira@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/inasafe/language/tr_TR/)\n"
@@ -39,7 +39,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:254
 #: safe/postprocessors/age_postprocessor.py:127
 #: safe/postprocessors/aggregation_postprocessor.py:113
-#: safe/postprocessors/building_type_postprocessor.py:168
+#: safe/postprocessors/building_type_postprocessor.py:151
 #: safe/postprocessors/gender_postprocessor.py:112
 msgid "Total"
 msgstr ""
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Flooded"
 msgstr ""
 
-#: safe/storage/test_io.py:2463 safe/storage/test_io.py:2473
+#: safe/storage/test_io.py:2465 safe/storage/test_io.py:2475
 msgid "Hello!"
 msgstr ""
 
@@ -2209,7 +2209,7 @@ msgstr ""
 msgid "Calculates age related statistics."
 msgstr ""
 
-#: safe/postprocessors/aggregation_categorical_postprocessor.py:48
+#: safe/postprocessors/aggregation_categorical_postprocessor.py:39
 msgid "Calculates generic categorical statistics."
 msgstr ""
 
@@ -2217,7 +2217,7 @@ msgstr ""
 msgid "Calculates generic aggregation statistics"
 msgstr ""
 
-#: safe/postprocessors/building_type_postprocessor.py:69
+#: safe/postprocessors/building_type_postprocessor.py:60
 msgid "Calculates building types related statistics."
 msgstr ""
 
@@ -2355,7 +2355,7 @@ msgstr ""
 msgid "Stucture liquefied status"
 msgstr ""
 
-#: safe/postprocessors/minimum_needs_postprocessor.py:48
+#: safe/postprocessors/minimum_needs_postprocessor.py:39
 msgid "Aggregates minimum needs."
 msgstr ""
 
