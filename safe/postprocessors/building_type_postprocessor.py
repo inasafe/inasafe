@@ -211,13 +211,29 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self._append_result(title, result)
 
     def _is_unknown_type(self, building_type):
-        print 'checking %s not in ' % building_type
-        print self.known_types
+        """check if the given type is in any of the known_types dictionary
+
+        :param building_type: the name of the type
+        :type building_type: str
+
+        :returns: Flag indicating if the building_type is unknown
+        :rtype: boolean
+        """
+
         is_unknown = building_type not in self.known_types
-        print is_unknown
         return is_unknown
 
     def _update_known_types(self, building_type=None):
+        """
+        Adds a building_type (if passed) and updates the known_types list
+
+        this is called each time a new unknown type is found and is needed so
+        that self._is_unknown_type (which is called many times) to perform
+        only a simple 'in' check
+
+        :param building_type: the name of the type to add to the known types
+        :type building_type: str
+        """
         if type is not None:
             self.fields_values['Other'].append(building_type)
 
