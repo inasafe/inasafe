@@ -19,10 +19,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import tempfile
+import logging
 
 from PyQt4 import QtGui
-from PyQt4.QtCore import QSettings, pyqtSignature
-from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
+from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
+from PyQt4.QtGui import (
+    QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 #noinspection PyUnresolvedReferences
@@ -40,6 +42,7 @@ from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.proxy import get_proxy
 
 INFO_STYLE = styles.INFO_STYLE
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
@@ -76,6 +79,11 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         self.show_info()
 
+        # set up the validator for the file name prefix
+        expression = QRegExp('^[A-Za-z0-9-_]*$')
+        validator = QRegExpValidator(expression)
+        self.filename_prefix.setValidator(validator)
+
         # Set Proxy in webpage
         proxy = get_proxy()
         self.network_manager = QNetworkAccessManager(self)
@@ -108,6 +116,16 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             'Check the output directory is correct. Note that the saved '
             'dataset will be called either roads.shp or buildings.shp (and '
             'associated files).'
+        ))
+        tips.add(self.tr(
+            'By default simple file names will be used (e.g. roads.shp, '
+            'buildings.shp). If you wish you can specify a prefix to '
+            'add in front of this default name. For example using a prefix '
+            'of \'padang-\' will cause the downloaded files to be saved as '
+            '\'padang-roads.shp\' and \'padang-buildings.shp\'. Note that '
+            'the only allowed prefix characters are A-Z, a-z, 0-9 and the '
+            'characters \'-\' and \'_\'. You can leave this blank if you '
+            'prefer.'
         ))
         tips.add(self.tr(
             'If a dataset already exists in the output directory it will be '
@@ -256,7 +274,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
                 max_longitude=max_longitude,
                 max_latitude=max_latitude
             )
-
+        output_prefix = self.filename_prefix.text()
         if feature_type == 'buildings':
             url = "{url}?bbox={box}&qgis_version=2".format(
                 url=self.buildings_url, box=box)
@@ -264,12 +282,16 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             url = "{url}?bbox={box}&qgis_version=2".format(
                 url=self.roads_url, box=box)
 
+        if output_prefix is not None:
+            url += '&output_prefix=%s' % output_prefix
+
         path = tempfile.mktemp('.shp.zip')
 
         # download and extract it
         self.fetch_zip(url, path)
         #print path
         #print str(self.output_directory.text())
+
         self.extract_zip(path, str(self.output_directory.text()))
 
         self.progress_dialog.done(QDialog.Accepted)
@@ -285,6 +307,8 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         :raises: ImportDialogError - when network error occurred
         """
+        LOGGER.debug('Downloading file from URL: %s' % url)
+        LOGGER.debug('Downloading to: %s' % output_path)
 
         self.progress_dialog.show()
         self.progress_dialog.setMaximum(100)
@@ -300,7 +324,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             self.network_manager, url, output_path,
             self.progress_dialog)
 
-        if result is not True:
+        if result[0] is not True:
             _, error_message = result
             raise ImportDialogError(error_message)
 
@@ -341,9 +365,9 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         :raises: ImportDialogError - when buildings.shp not exist
         """
-
+        output_prefix = self.filename_prefix.text()
         path = str(self.output_directory.text())
-        path = os.path.join(path, '%s.shp' % feature_type)
+        path = os.path.join(path, '%s%s.shp' % (output_prefix, feature_type))
 
         if not os.path.exists(path):
             message = self.tr(
