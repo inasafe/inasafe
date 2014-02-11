@@ -102,13 +102,13 @@ class SafeTranslationsTest(unittest.TestCase):
                                  '../safe',
                                  'common',
                                  'dynamic_translations.py')
-        translations_file = file(file_path, 'rt')
+        translations_file = file(file_path)
         failure_list = []
         os.environ['LANG'] = 'id'
         line_count = 0
         # exception_words is a list of words that has the same form in both
         # English and Indonesian. For example hotel, bank
-        exception_words = ['hotel', 'bank']
+        exception_words = ['hotel', 'bank', 'Area']
         for line in translations_file.readlines():
             line_count += 1
             if 'tr(' in line:
@@ -144,10 +144,9 @@ class SafeTranslationsTest(unittest.TestCase):
         translator.load(file_path)
         QCoreApplication.installTranslator(translator)
 
-        expected_msg = 'Tidak ada informasi gaya ditemukan pada lapisan ' \
-                       'layer'
+        expected_msg = 'Tidak ada informasi gaya ditemukan pada lapisan %s'
         real_msg = QCoreApplication.translate(
-            "@default", 'No styleInfo was found for layer %s') % 'layer'
+            "@default", 'No styleInfo was found for layer %s')
         msg = 'expected %s but got %s' % (expected_msg, real_msg)
         assert expected_msg == real_msg, msg
 

@@ -30,6 +30,7 @@ import logging
 import difflib
 
 import ogr
+#noinspection PyPackageRequirements
 import PyQt4
 
 # pylint: disable=E0611
@@ -48,8 +49,9 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
 
+    #noinspection PyPep8Naming
     def setUp(self):
-        """Copy our cached dataset from the fixture dir to the cache dir"""
+        """Copy our cached dataset from the fixture dir to the cache dir."""
         output_file = '20120726022003.out.zip'
         input_file = '20120726022003.inp.zip'
         output_path = os.path.abspath(os.path.join(
@@ -68,7 +70,7 @@ class TestShakeEvent(unittest.TestCase):
         #TODO Downloaded data should be removed before each test
 
     def test_grid_xml_file_path(self):
-        """Test eventFilePath works(using cached data)"""
+        """Test eventFilePath works(using cached data)."""
         shake_id = '20120726022003'
         expected_path = os.path.join(shakemap_extract_dir(),
                                      shake_id,
@@ -108,11 +110,12 @@ class TestShakeEvent(unittest.TestCase):
         shake_id = '20120726022003'
         shake_event = ShakeEvent(shake_id)
         file_path = shake_event.mmi_data_to_delimited_file(force_flag=True)
-        delimited_file = file(file_path, 'rt')
+        delimited_file = file(file_path)
         delimited_string = delimited_file.readlines()
         delimited_file.close()
         self.assertEqual(25922, len(delimited_string))
 
+    #noinspection PyMethodMayBeStatic
     def test_event_to_raster(self):
         """Check we can convert the shake event to a raster"""
         shake_id = '20120726022003'
@@ -158,6 +161,7 @@ search_boxes: None
         expected_keywords = raster_path.replace('tif', 'keywords')
         assert os.path.exists(expected_keywords)
 
+    #noinspection PyMethodMayBeStatic
     def test_event_to_shapefile(self):
         """Check we can convert the shake event to a raster"""
         shake_id = '20120726022003'
@@ -168,18 +172,19 @@ search_boxes: None
         message = '%s not found' % expected_qml
         assert os.path.exists(expected_qml), message
 
-    def check_feature_count(self, thePath, theCount):
-        data_source = ogr.Open(thePath)
-        base_name = os.path.splitext(os.path.basename(thePath))[0]
+    #noinspection PyMethodMayBeStatic
+    def check_feature_count(self, path, count):
+        data_source = ogr.Open(path)
+        base_name = os.path.splitext(os.path.basename(path))[0]
         # do a little query to make sure we got some results...
         sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
         #print sql_statement
         layer = data_source.ExecuteSQL(sql_statement)
-        count = layer.GetFeatureCount()
-        flag = count == theCount
+        feature_count = layer.GetFeatureCount()
+        flag = feature_count == count
         message = ''
         if not flag:
-            message = 'Expected %s features, got %s' % (theCount, count)
+            message = 'Expected %s features, got %s' % (count, feature_count)
         data_source.ReleaseResultSet(layer)
         data_source.Destroy()
         return flag, message
@@ -226,14 +231,14 @@ search_boxes: None
         file_path = unique_filename(prefix='test_local_cities',
                                     suffix='.txt',
                                     dir=temp_dir('test'))
-        cities_file = file(file_path, 'wt')
+        cities_file = file(file_path, 'w')
         cities_file.writelines(strings)
         cities_file.close()
 
         fixture_path = os.path.join(data_dir(),
                                     'tests',
                                     'test_local_cities.txt')
-        cities_file = file(fixture_path, 'rt')
+        cities_file = file(fixture_path)
         expected_string = cities_file.readlines()
         cities_file.close()
 
@@ -252,13 +257,15 @@ search_boxes: None
                     diff_string))
         self.assertEqual(diff_string, '', message)
 
+    #noinspection PyMethodMayBeStatic
     def test_cities_to_shape(self):
-        """Test that we can retrieve the cities local to the event"""
+        """Test that we can retrieve the cities local to the event."""
         shake_id = '20120726022003'
         shake_event = ShakeEvent(shake_id)
         file_path = shake_event.cities_to_shapefile()
         assert os.path.exists(file_path)
 
+    #noinspection PyMethodMayBeStatic
     def test_cities_search_boxes_to_shape(self):
         """Test that we can retrieve the search boxes used to find cities."""
         shake_id = '20120726022003'
@@ -266,6 +273,7 @@ search_boxes: None
         file_path = shake_event.city_search_boxes_to_shapefile()
         assert os.path.exists(file_path)
 
+    #noinspection PyMethodMayBeStatic
     def test_calculate_fatalities(self):
         """Test that we can calculate fatalities."""
         LOGGER.debug(QGIS_APP.showSettings())
@@ -301,6 +309,7 @@ search_boxes: None
             shake_event.fatality_counts, expected_fatalities)
         assert shake_event.fatality_counts == expected_fatalities, message
 
+    #noinspection PyMethodMayBeStatic
     def test_bounds_to_rect(self):
         """Test that we can calculate the event bounds properly"""
         shake_id = '20120726022003'
@@ -312,6 +321,7 @@ search_boxes: None
         message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
         assert bounds == expected_result, message
 
+    #noinspection PyMethodMayBeStatic
     def test_romanize(self):
         """Test we can convert MMI values to float."""
         shake_id = '20120726022003'
@@ -335,7 +345,7 @@ search_boxes: None
             prefix='test_sorted_impacted_cities',
             suffix='.txt',
             dir=temp_dir('test'))
-        cities_file = file(file_path, 'wt')
+        cities_file = file(file_path, 'w')
         cities_file.writelines(str(table))
         cities_file.close()
         table = str(table).replace(', \'', ',\n\'')
@@ -343,7 +353,7 @@ search_boxes: None
 
         fixture_path = os.path.join(
             data_dir(), 'tests', 'test_sorted_impacted_cities.txt')
-        cities_file = file(fixture_path, 'rt')
+        cities_file = file(fixture_path)
         expected_string = cities_file.read()
         cities_file.close()
         expected_string = expected_string.replace(', \'', ',\n\'')
@@ -373,6 +383,7 @@ search_boxes: None
         message = 'Got:\n%s\nExpected:\n%s\n' % (path, expected_path)
         assert path == expected_path, message
 
+    #noinspection PyMethodMayBeStatic
     def test_fatalities_table(self):
         """Test rendering a fatalities table."""
         shake_id = '20120726022003'
@@ -392,6 +403,7 @@ search_boxes: None
         shake_id = '20120726022003'
         shake_event = ShakeEvent(shake_id)
         result = shake_event.event_dict()
+        #noinspection PyUnresolvedReferences
         expected_dict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
                          'depth-name': PyQt4.QtCore.QString(u'Depth'),
                          'fatalities-name': PyQt4.QtCore.QString(
@@ -458,6 +470,7 @@ search_boxes: None
         print difference.all()
         self.assertDictEqual(expected_dict, result, message)
 
+    #noinspection PyMethodMayBeStatic
     def test_event_info_string(self):
         """Test we can get a location info string nicely."""
         shake_id = '20120726022003'
@@ -472,6 +485,7 @@ search_boxes: None
                    (result, expected_result))
         assert result == expected_result, message
 
+    #noinspection PyMethodMayBeStatic
     def test_bearing_to_cardinal(self):
         """Test we can convert a bearing to a cardinal direction."""
         shake_id = '20120726022003'

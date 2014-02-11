@@ -30,7 +30,6 @@ from PyQt4.QtGui import QFileDialog
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 from qgis.core import (
     QgsMapLayer,
-    QgsRasterLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis)
@@ -630,7 +629,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         ..note:: \*args is only used for debugging purposes.
         """
-
+        _ = args
         # Prevent recursion
         if self.get_layers_lock:
             return
@@ -1275,10 +1274,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         elif engine_impact_layer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not style:
-                qgis_impact_layer.setDrawingStyle(
-                    QgsRasterLayer.SingleBandPseudoColor)
-                qgis_impact_layer.setColorShadingAlgorithm(
-                    QgsRasterLayer.PseudoColorShader)
+                qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
+                #qgis_impact_layer.setColorShadingAlgorithm(
+                #    QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
 
@@ -2091,7 +2089,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         try:
-            parser.write(open(file_name, 'at'))
+            parser.write(open(file_name, 'a'))
             # Save directory settings
             last_save_dir = os.path.dirname(file_name)
             settings.setValue('inasafe/lastSourceDir', last_save_dir)

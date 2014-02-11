@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@linfiniti.c/om'
 __revision__ = '$Format:%H$'
 __date__ = '23/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -463,23 +463,21 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def validate_all_layers(self):
         """Validate all layers based on the keywords.
 
-        ... When we do the validation, we also fetch the information we need:
-        1. 'map_title' from each impact layer
-        2.  'exposure_title' from each impact layer
-        3.  'postprocessing_report' from each impact layer
-        4.  'aggregation_attribute' on aggregation layer, if user runs
-            merging tools with aggregation layer chosen
+        When we do the validation, we also fetch the information we need:
 
-        ... The things that we validate are:
+        1. 'map_title' from each impact layer
+        2. 'exposure_title' from each impact layer
+        3. 'postprocessing_report' from each impact layer
+        4. 'aggregation_attribute' on aggregation layer, if user runs merging tools with aggregation layer chosen
+
+        The things that we validate are:
+
         1. 'map_title' keyword must exist on each impact layer
         2. 'exposure_title' keyword must exist on each impact layer
         3. 'postprocessing_report' keyword must exist on each impact layer
-        4. 'hazard_title' keyword must exist on each impact layer.
-            Hazard title from first impact layer must be the same with
-            second impact layer to indicate that both are generated from the
-            same hazard layer.
-        5. 'aggregation attribute' must exist when user wants to run merging
-            tools with aggregation layer chosen.
+        4. 'hazard_title' keyword must exist on each impact layer. Hazard title from first impact layer must be the same with second impact layer to indicate that both are generated from the same hazard layer.
+        5. 'aggregation attribute' must exist when user wants to run merging tools with aggregation layer chosen.
+
         """
         required_attribute = ['map_title', 'exposure_title', 'hazard_title',
                               'postprocessing_report']
@@ -585,19 +583,22 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """Generate dictionary representing report from html dom.
 
         :param html_dom: Input representing document dom as report from each
-        impact layer report.
+                         impact layer report.
         :type html_dom: str
 
         :return: Dictionary representing html_dom
         :rtype: dict
 
-        ... Dict Structure:
-        { Aggregation_Area:
-            {Exposure Type:{
-                Exposure Detail}
+        Dict Structure::
+
+            { Aggregation_Area:
+                {Exposure Type:{
+                    Exposure Detail}
+                }
             }
-        }
-        ... Example
+
+        Example::
+
            {"Jakarta Barat":
                {"Detailed Building Type Report":
                    {"Total inundated":150,
@@ -605,6 +606,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                    }
                }
            }
+
         """
         merged_report_dict = OrderedDict()
         for table in html_dom:
@@ -634,33 +636,36 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         return merged_report_dict
 
     def generate_report_summary(self, first_report_dict, second_report_dict):
-        """Generate report summary for each aggregation area from
-        merged report dictionary.
+        """Generate report summary for each aggregation area from merged report dictionary.
+        For each exposure, search for the total only.
 
-        ... For each exposure, search for the total only
+        Report dictionary looks like this:
 
-        ... Report dictionary looks like this:
-        ... Dict structure:
-        { aggregation_area:
-            {exposure_type:{
-                exposure_detail}
+        Dict structure:
+        ::
+
+            { aggregation_area:
+                {exposure_type:{
+                   exposure_detail}
+                }
             }
-        }
 
-        .. Example:
-        {"Jakarta Barat":
-               {"Detailed Building Type Report":
-                   {"Total inundated":150,
-                    "Places of Worship": "No data"
-                   }
-               }
-       }
+        Example::
+
+            {"Jakarta Barat":
+                {"Detailed Building Type Report":
+                    {"Total inundated":150,
+                     "Places of Worship": "No data"
+                    }
+                }
+            }
 
         :param first_report_dict: Dictionary report from first impact
         :type first_report_dict: dict
 
         :param second_report_dict: Dictionary report from second impact
         :type second_report_dict: dict
+
         """
         for aggregation_area in first_report_dict:
             html = ''
@@ -709,8 +714,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         It also saves the path of the each aggregation unit in
         self.html_reports.
-        Ex. {"jakarta barat": "/home/jakarta barat.html",
-             "jakarta timur": "/home/jakarta timur.html"}
+        ::
+
+            Ex. {"jakarta barat": "/home/jakarta barat.html",
+                 "jakarta timur": "/home/jakarta timur.html"}
 
         :param first_report_dict: Dictionary report from first impact.
         :type first_report_dict: dict
@@ -787,7 +794,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def generate_reports(self):
         """Generate PDF reports for each aggregation unit using map composer.
 
-        .. First the report template is loaded with the renderer from two
+        First the report template is loaded with the renderer from two
         impact layers. After it's loaded, if it is not aggregated then
         we just use composition to produce report. Since there are two
         impact maps here, we need to set a new extent for these impact maps
@@ -970,13 +977,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         1. QgsComposerMap with id 'impact-map' for merged impact map.
         2. QgsComposerPicture with id 'safe-logo' for InaSAFE logo.
         3. QgsComposerLabel with id 'summary-report' for a summary of two
-           impacts.
+        impacts.
         4. QgsComposerLabel with id 'aggregation-area' to indicate the area
-           of aggregation.
+        of aggregation.
         5. QgsComposerScaleBar with id 'map-scale' for impact map scale.
         6. QgsComposerLegend with id 'map-legend' for impact map legend.
         7. QgsComposerPicture with id 'organisation-logo' for organisation
-           logo.
+        logo.
         8. QgsComposerLegend with id 'impact-legend' for map legend.
         9. QgsComposerHTML with id 'merged-report-table' for the merged report.
 

@@ -444,14 +444,14 @@ class ShakeEvent(QObject):
         #short circuit if the csv is already created.
         if os.path.exists(path) and force_flag is not True:
             return path
-        result_file = file(path, 'wt')
+        result_file = file(path, 'w')
         result_file.write(self.mmi_data_to_delimited_text())
         result_file.close()
 
         # Also write the .csv which contains metadata about field types
         csv_path = os.path.join(
             shakemap_extract_dir(), self.event_id, 'mmi.csvt')
-        result_file = file(csv_path, 'wt')
+        result_file = file(csv_path, 'w')
         result_file.write('"Real","Real","Real"')
         result_file.close()
         return path
@@ -489,7 +489,7 @@ class ShakeEvent(QObject):
                       '                      x="lon" y="lat" z="mmi"/>'
                       '  </OGRVRTLayer>'
                       '</OGRVRTDataSource>' % csv_path)
-        result_file = file(vrt_path, 'wt')
+        result_file = file(vrt_path, 'w')
         result_file.write(vrt_string)
         result_file.close()
         return vrt_path
@@ -1530,13 +1530,13 @@ class ShakeEvent(QObject):
         path = os.path.join(shakemap_extract_dir(),
                             self.event_id,
                             file_name)
-        html_file = file(path, 'wt')
+        html_file = file(path, 'w')
         header_file = os.path.join(data_dir(), 'header.html')
         footer_file = os.path.join(data_dir(), 'footer.html')
-        header_file = file(header_file, 'rt')
+        header_file = file(header_file)
         header = header_file.read()
         header_file.close()
-        footer_file = file(footer_file, 'rt')
+        footer_file = file(footer_file)
         footer = footer_file.read()
         footer_file.close()
         html_file.write(header)
@@ -1966,7 +1966,7 @@ class ShakeEvent(QObject):
         else:
             template_path = os.path.join(data_dir(), 'realtime-template.qpt')
 
-        template_file = file(template_path, 'rt')
+        template_file = file(template_path)
         template_content = template_file.read()
         template_file.close()
 
@@ -2104,7 +2104,7 @@ class ShakeEvent(QObject):
             shakemap_extract_dir(),
             self.event_id,
             'composer-template.qpt')
-        template_file = file(template_path, 'wt')
+        template_file = file(template_path, 'w')
         template_file.write(template_document.toByteArray())
         template_file.close()
 

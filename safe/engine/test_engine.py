@@ -155,8 +155,8 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
 
         # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
+        impact_layer = calculate_impact(
+            layers=[H, E], impact_fcn=IF)
 
         # Do calculation manually and check result
         hazard_raster = read_layer(hazard_filename)
@@ -1616,7 +1616,7 @@ class Test_Engine(unittest.TestCase):
         V = read_layer(vector_filename)
 
         # Then test that axes and data returned by R are correct
-        x, y = R.get_geometry()
+        x, y = R.get_geometry()  # pylint: disable=W0633,W0632
         msg = 'X axes was %s, should have been %s' % (longitudes, x)
         assert numpy.allclose(longitudes, x), msg
         msg = 'Y axes was %s, should have been %s' % (latitudes, y)
