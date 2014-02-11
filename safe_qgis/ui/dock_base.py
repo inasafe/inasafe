@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Tue Feb 11 11:00:28 2014
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Tue Feb 11 16:33:23 2014
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_DockBase(object):
     def setupUi(self, DockBase):
@@ -41,21 +50,6 @@ class Ui_DockBase(object):
         self.cboHazard.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboHazard.setObjectName(_fromUtf8("cboHazard"))
         self.gridLayout_3.addWidget(self.cboHazard, 0, 0, 1, 2)
-        self.toolFunctionOptions = QtGui.QToolButton(self.grpQuestion)
-        self.toolFunctionOptions.setEnabled(False)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.toolFunctionOptions.sizePolicy().hasHeightForWidth())
-        self.toolFunctionOptions.setSizePolicy(sizePolicy)
-        self.toolFunctionOptions.setMinimumSize(QtCore.QSize(90, 27))
-        self.toolFunctionOptions.setMaximumSize(QtCore.QSize(16777215, 27))
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/edit.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.toolFunctionOptions.setIcon(icon1)
-        self.toolFunctionOptions.setIconSize(QtCore.QSize(27, 27))
-        self.toolFunctionOptions.setObjectName(_fromUtf8("toolFunctionOptions"))
-        self.gridLayout_3.addWidget(self.toolFunctionOptions, 5, 1, 1, 1)
         self.label_2 = QtGui.QLabel(self.grpQuestion)
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.gridLayout_3.addWidget(self.label_2, 6, 0, 1, 1)
@@ -70,7 +64,7 @@ class Ui_DockBase(object):
         self.cboExposure.setObjectName(_fromUtf8("cboExposure"))
         self.gridLayout_3.addWidget(self.cboExposure, 3, 0, 1, 2)
         self.cboFunction = QtGui.QComboBox(self.grpQuestion)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cboFunction.sizePolicy().hasHeightForWidth())
@@ -78,6 +72,9 @@ class Ui_DockBase(object):
         self.cboFunction.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
         self.gridLayout_3.addWidget(self.cboFunction, 5, 0, 1, 1)
+        self.toolFunctionOptions = QtGui.QPushButton(self.grpQuestion)
+        self.toolFunctionOptions.setObjectName(_fromUtf8("toolFunctionOptions"))
+        self.gridLayout_3.addWidget(self.toolFunctionOptions, 5, 1, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 1, 0, 1, 1)
         self.verticalLayout_4 = QtGui.QVBoxLayout()
         self.verticalLayout_4.setContentsMargins(3, -1, -1, -1)
@@ -165,18 +162,17 @@ class Ui_DockBase(object):
         DockBase.setTabOrder(self.pbnRunStop, self.pbnHelp)
 
     def retranslateUi(self, DockBase):
-        DockBase.setWindowTitle(QtGui.QApplication.translate("DockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnShowQuestion.setText(QtGui.QApplication.translate("DockBase", "Show question form", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpQuestion.setTitle(QtGui.QApplication.translate("DockBase", "Question: In the event of", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolFunctionOptions.setToolTip(QtGui.QApplication.translate("DockBase", "Configure Impact Function Parameter", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolFunctionOptions.setText(QtGui.QApplication.translate("DockBase", "Options ...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate results by", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnPrint.setText(QtGui.QApplication.translate("DockBase", "Print ...", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnRunStop.setText(QtGui.QApplication.translate("DockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
+        DockBase.setWindowTitle(_translate("DockBase", "InaSAFE", None))
+        self.pbnShowQuestion.setText(_translate("DockBase", "Show question form", None))
+        self.grpQuestion.setTitle(_translate("DockBase", "Question: In the event of", None))
+        self.label_8.setText(_translate("DockBase", "&Might", None))
+        self.label_2.setText(_translate("DockBase", "Aggregate results by", None))
+        self.label_7.setText(_translate("DockBase", "How many", None))
+        self.toolFunctionOptions.setText(_translate("DockBase", "Options ...", None))
+        self.label_3.setText(_translate("DockBase", "Supported by:", None))
+        self.pbnHelp.setText(_translate("DockBase", "Help", None))
+        self.pbnPrint.setText(_translate("DockBase", "Print ...", None))
+        self.pbnRunStop.setText(_translate("DockBase", "Run", None))
 
 from ..widgets.message_viewer import MessageViewer
 import resources_rc
