@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Tue Feb 11 18:19:45 2014
+# Created: Tue Feb 11 18:57:32 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -289,7 +289,7 @@ class Ui_OptionsDialogBase(object):
         self.toolOrgLogoPath.setText(_translate("OptionsDialogBase", "...", None))
         self.lblReportTemplate.setText(_translate("OptionsDialogBase", "Report templates directory", None))
         self.toolReportTemplatePath.setText(_translate("OptionsDialogBase", "...", None))
-        self.label_2.setText(_translate("OptionsDialogBase", "Disclaimer text", None))
+        self.label_2.setText(_translate("OptionsDialogBase", "Organisation disclaimer text", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_templates), _translate("OptionsDialogBase", "Template Options", None))
         self.lblKeywordCache.setText(_translate("OptionsDialogBase", "Keyword cache for remote datasources", None))
         self.toolKeywordCachePath.setText(_translate("OptionsDialogBase", "...", None))
