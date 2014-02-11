@@ -726,7 +726,7 @@ def download_url(manager, url, output_path, progress_dialog=None):
 
     result = reply.error()
     if result == QNetworkReply.NoError:
-        return True
+        return True, None
     else:
         return result, str(reply.errorString())
 

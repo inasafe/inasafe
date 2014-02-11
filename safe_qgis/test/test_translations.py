@@ -102,7 +102,7 @@ class SafeTranslationsTest(unittest.TestCase):
                                  '../safe',
                                  'common',
                                  'dynamic_translations.py')
-        translations_file = file(file_path, 'rt')
+        translations_file = file(file_path)
         failure_list = []
         os.environ['LANG'] = 'id'
         line_count = 0

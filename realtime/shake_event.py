@@ -1533,10 +1533,10 @@ class ShakeEvent(QObject):
         html_file = file(path, 'w')
         header_file = os.path.join(data_dir(), 'header.html')
         footer_file = os.path.join(data_dir(), 'footer.html')
-        header_file = file(header_file, 'rt')
+        header_file = file(header_file)
         header = header_file.read()
         header_file.close()
-        footer_file = file(footer_file, 'rt')
+        footer_file = file(footer_file)
         footer = footer_file.read()
         footer_file.close()
         html_file.write(header)
@@ -1966,7 +1966,7 @@ class ShakeEvent(QObject):
         else:
             template_path = os.path.join(data_dir(), 'realtime-template.qpt')
 
-        template_file = file(template_path, 'rt')
+        template_file = file(template_path)
         template_content = template_file.read()
         template_file.close()
 

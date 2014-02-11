@@ -111,7 +111,7 @@ def create_index(shakemap_dir, locale):
     table_html += ('\t\t</tbody>'
                    '\n\t</table>')
 
-    index_file = file(index_path, 'wt')
+    index_file = file(index_path, 'w')
     index_file.write(header_html + table_html + footer_html)
     index_file.close()
     return index_path

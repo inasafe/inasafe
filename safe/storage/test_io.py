@@ -1171,7 +1171,9 @@ class Test_IO(unittest.TestCase):
 
             # Test conversion between geotransform and
             # geometry (longitudes and latitudes)
+            # pylint: disable=W0633,W0632
             longitudes, latitudes = R1.get_geometry()
+            # pylint: enable=W0633,W0632
             gt = raster_geometry_to_geotransform(longitudes, latitudes)
             msg = ('Conversion from coordinates to geotransform failed: %s'
                    % str(gt))
@@ -1506,7 +1508,7 @@ class Test_IO(unittest.TestCase):
 
         # Check data directly
         coordinates, values = R.to_vector_points()
-        longitudes, latitudes = R.get_geometry()
+        longitudes, latitudes = R.get_geometry()  # pylint: disable=W0633,W0632
         A = R.get_data()
         M, N = A.shape
         L = M * N
@@ -1556,7 +1558,7 @@ class Test_IO(unittest.TestCase):
 
         # Check data directly
         coordinates, values = R.to_vector_points()
-        longitudes, latitudes = R.get_geometry()
+        longitudes, latitudes = R.get_geometry()  # pylint: disable=W0633,W0632
         A = R.get_data()
         M, N = A.shape
         L = M * N
