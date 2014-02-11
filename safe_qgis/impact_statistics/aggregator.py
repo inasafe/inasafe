@@ -618,23 +618,23 @@ class Aggregator(QtCore.QObject):
                 aggregation_field, QtCore.QVariant.Int)])
             self.layer.updateFields()
 
-            if safe_impact_layer.is_point_data:
-                LOGGER.debug('Doing point in polygon aggregation')
-                self._aggregate_point_impact(safe_impact_layer)
-            elif safe_impact_layer.is_polygon_data:
-                LOGGER.debug('Doing polygon in polygon aggregation')
-                self._aggregate_polygon_impact(safe_impact_layer)
-            elif safe_impact_layer.is_line_data:
-                LOGGER.debug('Doing line in polygon aggregation')
-            else:
-                message = m.Paragraph(
-                    self.tr(
-                        'Aggregation on vector impact layers other than points'
-                        ' or polygons not implemented yet not implemented yet.'
-                        ' Called on %s') % (impact_layer.name()))
-                LOGGER.debug('Skipping postprocessing due to: %s' % message)
-                self.error_message = message
-                self.layer.commitChanges()
+        if safe_impact_layer.is_point_data:
+            LOGGER.debug('Doing point in polygon aggregation')
+            self._aggregate_point_impact(safe_impact_layer)
+        elif safe_impact_layer.is_polygon_data:
+            LOGGER.debug('Doing polygon in polygon aggregation')
+            self._aggregate_polygon_impact(safe_impact_layer)
+        elif safe_impact_layer.is_line_data:
+            LOGGER.debug('Doing line in polygon aggregation')
+        else:
+            message = m.Paragraph(
+                self.tr(
+                    'Aggregation on vector impact layers other than points'
+                    ' or polygons not implemented yet not implemented yet.'
+                    ' Called on %s') % (impact_layer.name()))
+            LOGGER.debug('Skipping postprocessing due to: %s' % message)
+            self.error_message = message
+            self.layer.commitChanges()
 
     def _aggregate_raster_impact(self, impact_layer):
         """Aggregate on a raster impact layer by using zonal statistics.

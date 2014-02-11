@@ -103,7 +103,7 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
-LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
+LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 #from pydev import pydevd  # pylint: disable=F0401
@@ -131,8 +131,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        #pydevd.settrace('localhost', port=5678, stdoutToServer=True,
-        #               stderrToServer=True)
+        #pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True,
+        #    stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -162,13 +163,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Flag so we can see if the dock is busy processing
         self.busy = False
 
-        self.run_in_thread_flag = False
-        self.show_only_visible_layers_flag = True
-        self.set_layer_from_title_flag = True
-        self.zoom_to_impact_flag = True
-        self.hide_exposure_flag = True
+        # Values for settings these gets set in read_settings.
+        self.run_in_thread_flag = None
+        self.show_only_visible_layers_flag = None
+        self.set_layer_from_title_flag = None
+        self.zoom_to_impact_flag = None
+        self.hide_exposure_flag = None
+        self.clip_to_viewport = None
+        self.clip_hard = None
+        self.show_intermediate_layers = None
+        self.developer_mode = None
 
-        self.read_settings()  # get_layers called by this
+        self.read_settings()  # get_project_layers called by this
         self.aggregator = None
         self.postprocessor_manager = None
         self.function_parameters = None
@@ -188,10 +194,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
-        self.clip_to_viewport = True
-        self.clip_hard = False
-        self.show_intermediate_layers = False
-        self.developer_mode = False
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -612,7 +614,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboHazard.blockSignals(True)
 
     @pyqtSlot('QgsMapLayer')
-    @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
         r"""Obtain a list of layers currently loaded in QGIS.
 
@@ -633,8 +634,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.get_layers_lock:
             return
 
-        for arg in args:
-            LOGGER.debug('get_layer argument: %s' % arg)
+        #for arg in args:
+        #    LOGGER.debug('get_layer argument: %s' % arg)
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
         canvas_layers = self.iface.mapCanvas().layers()
@@ -730,6 +731,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
         self.get_layers_lock = False
+        #ensure the dock keywords info panel is updated
+        #make sure to do this after the lock is released!
+        self.layer_changed(self.iface.activeLayer())
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
@@ -895,7 +899,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_intermediate_layers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
         original_keywords = self.keyword_io.read_keywords(
-                self.aggregator.layer)
+            self.aggregator.layer)
         LOGGER.debug('my pre dialog keywords' + str(original_keywords))
         LOGGER.debug(
             'AOImode: %s' % str(self.aggregator.aoi_mode))
@@ -1241,10 +1245,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         elif engine_impact_layer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not style:
-                qgis_impact_layer.setDrawingStyle(
-                    QgsRasterLayer.SingleBandPseudoColor)
-                qgis_impact_layer.setColorShadingAlgorithm(
-                    QgsRasterLayer.PseudoColorShader)
+                qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
+                #qgis_impact_layer.setColorShadingAlgorithm(
+                #    QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
 
@@ -1375,8 +1378,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         LOGGER.debug('Do postprocessing')
         self.postprocessor_manager = PostprocessorManager(self.aggregator)
-        self.postprocessor_manager.function_parameters = (
-            self.function_parameters)
         self.postprocessor_manager.function_parameters = \
             self.function_parameters
         self.postprocessor_manager.run()
@@ -1831,9 +1832,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
+        logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
         if logo_path != '':
-            print_map.set_logo(logo_path)
+            print_map.set_organisation_logo(logo_path)
+
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        if disclaimer != '':
+            print_map.set_disclaimer(disclaimer)
 
         print_map.set_template(template_path)
 

@@ -26,7 +26,8 @@ from safe_qgis.utilities.utilities import (
     html_header,
     html_footer,
     html_to_file,
-    open_in_browser)
+    open_in_browser,
+    qt_at_least)
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -118,7 +119,10 @@ class MessageViewer(QtWebKit.QWebView):
 
         # add copy
         action_copy = self.page().action(QtWebKit.QWebPage.Copy)
-        action_copy.setEnabled(not self.selectedHtml() == '')
+        if qt_at_least('4.8.0'):
+            action_copy.setEnabled(not self.selectedHtml() == '')
+        else:
+            action_copy.setEnabled(not self.selectedText() == '')
         context_menu.addAction(action_copy)
 
         # add show in browser
@@ -281,7 +285,6 @@ class MessageViewer(QtWebKit.QWebView):
 
     def save_report_to_html(self):
         html = self.page().mainFrame().toHtml()
-        print html
         if self.report_path is not None:
             html_to_file(html, self.report_path)
         else:
@@ -289,8 +292,9 @@ class MessageViewer(QtWebKit.QWebView):
             raise InvalidParameterError(msg)
 
     def save_log_to_html(self):
+        """Helper to write the log out as an html file."""
         html = html_header()
-        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo.svg" '
+        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo-url.png" '
                  'title="InaSAFE Logo" alt="InaSAFE Logo" />')
         html += ('<h5 class="info"><i class="icon-info-sign icon-white"></i> '
                  '%s</h5>' % self.tr('Analysis log'))

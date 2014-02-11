@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Impact Layer Merge Tool &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap-responsive.min.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="prev" title="OpenStreetMap Downloader" href="openstreetmap_downloader.html" />
+
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("_static/img/logo.png");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 30px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = 'impact_layer_merge_tool.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+        // Make the search button pretty - issue 36
+        $(':submit').addClass('btn btn-warning btn-small');
+    })
+
+    
+    function gotoLang(lang) {
+        var currentPage = 'impact_layer_merge_tool.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+
+<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+
+  </head>
+  <body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <font color="#333">
+                        <li><h1>Ina<b>SAFE</b></h1></li>
+                        </font>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                
+                
+                <li class="right"
+                style="margin-right: 10px" >
+                <a href="genindex.html"
+                   title="General Index"
+                   style="z-index:;"
+                accesskey="I">index</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="openstreetmap_downloader.html"
+                   title="OpenStreetMap Downloader"
+                   style="z-index:;"
+                accesskey="P">previous</a>
+                </li>
+                
+
+                
+                <li class="first">
+                    <a style="z-index:100;" href="index.html"> InaSAFE Docs </a>
+                </li>
+                
+                
+                <li><a href="#">The Impact Layer Merge Tool</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="span12">
+                
+  <div class="section" id="the-impact-layer-merge-tool">
+<span id="toolbar-impact-layer-merge-tool"></span><h1>The Impact Layer Merge Tool<a class="headerlink" href="#the-impact-layer-merge-tool" title="Permalink to this headline">¶</a></h1>
+<p>In some cases you may wish to create a report containing the combined output of
+two impact functions for the same area. For example You may carry out an
+assessment of the impact of a flood on population and on buildings and combine
+the results into a single report. The impact layer merge tool allows you to do
+this.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/impact_merge_dialog.png"><img alt="Opened impact merge dialog" src="_images/impact_merge_dialog.png" style="width: 412.5px; height: 483.0px;" /></a>
+<p class="caption">Opened impact merge dialog</p>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>In order to use this tool, please bear in mind the following requirements:</p>
+<ul class="simple">
+<li>Both impact layers should be loaded in your current project.</li>
+<li>Both impact layers should have been created for the same geographic region.</li>
+<li>The same aggregation area should be used for both assessments.</li>
+</ul>
+</div>
+<div class="section" id="procedure">
+<h2>Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">¶</a></h2>
+<p>To use this tool, follow this procedure:</p>
+<ul class="simple">
+<li>Run an impact assessment for an area using aggregation. e.g.Flood Impact on
+Buildings aggregated by municipal boundaries.</li>
+<li>Run a second impact assessment for the same area using the same aggregation.
+e.g. Flood Impact on People aggregated by municipal boundaries.</li>
+<li>Open impact merge tool and select each impact layer from the pick lists
+provided.</li>
+<li>Select the aggregation layer that was used to generate the first and second
+impact layer.</li>
+<li>Select an output directory.</li>
+<li>Click OK to generate the per aggregation area combined summaries.</li>
+</ul>
+</div>
+<div class="section" id="generated-outputs">
+<h2>Generated outputs<a class="headerlink" href="#generated-outputs" title="Permalink to this headline">¶</a></h2>
+<p>The tool will generate a PDF per aggregation area. The PDFs will be placed in
+the designated output directory after completion of the merge process. The
+output will consist of a map page and a table page. These are illustrated
+below:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/impact_merge_map.png"><img alt="Impact merge report - map page" src="_images/impact_merge_map.png" style="width: 424.5px; height: 596.25px;" /></a>
+<p class="caption">Map page generated by the impact merge tool.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/impact_merge_table.png"><img alt="Impact merge report - table page" src="_images/impact_merge_table.png" style="width: 520.5px; height: 739.5px;" /></a>
+<p class="caption">Table page generated by the impact merge tool.</p>
+</div>
+<p>In the case of impact assessments where <strong>no</strong> aggregation has been used, only
+a single pdf report is generated. In the case of impact assessments where
+aggregation <strong>has</strong> been used, one pdf is generated per aggregation area.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">After report generation completes, you need to manually open the
+output directly with your file manager in order to view the resulting PDFs.</p>
+</div>
+</div>
+</div>
+
+
+        </div> 
+        <hr>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact
+            <a href="mailto:info@inasafe.org?subject=[inasafe-info]">
+            <b>info@inasafe.org</b></a> for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.<br>
+            This document is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
+            <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
+            Copyright 2013, BNPB/Australian Government/World Bank.
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>

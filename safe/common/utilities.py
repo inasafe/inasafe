@@ -12,6 +12,7 @@ from tempfile import mkstemp
 from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
+import math
 
 from safe.common.exceptions import VerificationError
 
@@ -575,3 +576,26 @@ except ImportError:
     except ImportError:
         raise RuntimeError(("Could not find an"
                             "available OrderedDict implementation"))
+
+
+def get_utm_zone(longitude):
+    """
+    Return utm zone.
+    """
+    zone = int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
+    if zone == 0:
+        zone = 60
+    return zone
+
+
+def get_utm_epsg(longitude, latitude):
+    """
+    Return epsg code of the utm zone.
+    The code is based on the code:
+    http://gis.stackexchange.com/questions/34401
+    """
+    epsg = 32600
+    if latitude < 0.0:
+        epsg += 100
+    epsg += get_utm_zone(longitude)
+    return epsg

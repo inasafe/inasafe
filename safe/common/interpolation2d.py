@@ -84,8 +84,10 @@ def interpolate2d(x, y, z, points, mode='linear', bounds_error=False):
 
     # Input checks
     validate_mode(mode)
+    #pylint: disable=W0632
     x, y, z, xi, eta = validate_inputs(
         x=x, y=y, z=z, points=points, bounds_error=bounds_error)
+    #pylint: enable=W0632
 
     # Identify elements that are outside interpolation domain or NaN
     outside = (xi < x[0]) + (eta < y[0]) + (xi > x[-1]) + (eta > y[-1])

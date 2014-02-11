@@ -13,7 +13,7 @@ def load_plugins():
         if os.path.isdir(os.path.join(dirname, f)):
             try:
                 __import__('safe.impact_functions.%s' % f)
-            except ImportError:
+            except (ImportError, ValueError):
                 # Ignore e.g. directories that are not Python modules
                 # FIXME (Ole): Should we emit a warning to the log file?
                 pass

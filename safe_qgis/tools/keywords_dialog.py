@@ -75,6 +75,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.standard_exposure_list = OrderedDict(
             [('population', self.tr('population')),
              ('structure', self.tr('structure')),
+             ('road', self.tr('road')),
              ('Not Set', self.tr('Not Set'))])
         self.standard_hazard_list = OrderedDict(
             [('earthquake [MMI]', self.tr('earthquake [MMI]')),
@@ -111,9 +112,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.dsbAdultRatioDefault.blockSignals(True)
         self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
         self.dsbAdultRatioDefault.blockSignals(False)
-        self.dsbElderlyRatioDefault.blockSignals(True)
-        self.dsbElderlyRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
-        self.dsbElderlyRatioDefault.blockSignals(False)
+        self.dsbElderRatioDefault.blockSignals(True)
+        self.dsbElderRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
+        self.dsbElderRatioDefault.blockSignals(False)
 
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
@@ -128,6 +129,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         reload_button = self.buttonBox.addButton(
             self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
         reload_button.clicked.connect(self.load_state_from_keywords)
+        self.grpAdvanced.setVisible(False)
+        self.resize_dialog()
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.
@@ -352,13 +355,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.lblAdultRatioDefault.setVisible(visible_flag)
 
     def show_elderly_ratio_attribute(self, visible_flag):
-        """Hide or show the elderly ratio attribute in the dialog.
+        """Hide or show the elder ratio attribute in the dialog.
 
-        :param visible_flag: Flag indicating if the elderly ratio attribute
+        :param visible_flag: Flag indicating if the elder ratio attribute
             should be hidden or shown.
         :type visible_flag: bool
         """
-        box = self.cboElderlyRatioAttribute
+        box = self.cboElderRatioAttribute
         box.blockSignals(True)
         box.clear()
         box.blockSignals(False)
@@ -384,16 +387,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 # + 2 is because we add use defaults and don't use
                 box.setCurrentIndex(attribute_position + 2)
         box.setVisible(visible_flag)
-        self.lblElderlyRatioAttribute.setVisible(visible_flag)
+        self.lblElderRatioAttribute.setVisible(visible_flag)
 
     def show_elderly_ratio_default(self, visible_flag):
-        """Hide or show the elderly ratio default attribute in the dialog.
+        """Hide or show the elder ratio default attribute in the dialog.
 
-        :param visible_flag: Flag indicating if the elderly ratio
+        :param visible_flag: Flag indicating if the elder ratio
             default attribute should be hidden or shown.
         :type visible_flag: bool
         """
-        box = self.dsbElderlyRatioDefault
+        box = self.dsbElderRatioDefault
         if visible_flag:
             current_value = self.get_value_for_key(
                 self.defaults['ELDERLY_RATIO_KEY'])
@@ -404,7 +407,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             box.setValue(val)
 
         box.setVisible(visible_flag)
-        self.lblElderlyRatioDefault.setVisible(visible_flag)
+        self.lblElderRatioDefault.setVisible(visible_flag)
 
     # prevents actions being handled twice
     @pyqtSignature('int')
@@ -480,23 +483,23 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.remove_item_by_key(self.defaults['ADULT_RATIO_KEY'])
         self.add_list_entry(self.defaults['ADULT_RATIO_ATTR_KEY'], text)
 
-    def on_cboElderlyRatioAttribute_currentIndexChanged(self, index=None):
-        """Handler for elderly ratio attribute change.
+    def on_cboElderRatioAttribute_currentIndexChanged(self, index=None):
+        """Handler for elder ratio attribute change.
 
         :param index: Not used but required for slot.
         """
         del index
-        text = self.cboElderlyRatioAttribute.currentText()
+        text = self.cboElderRatioAttribute.currentText()
         if text == self.tr('Use default'):
-            self.dsbElderlyRatioDefault.setEnabled(True)
+            self.dsbElderRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ELDERLY_RATIO_KEY'])
             if current_default is None:
                 self.add_list_entry(
                     self.defaults['ELDERLY_RATIO_KEY'],
-                    self.dsbElderlyRatioDefault.value())
+                    self.dsbElderRatioDefault.value())
         else:
-            self.dsbElderlyRatioDefault.setEnabled(False)
+            self.dsbElderRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['ELDERLY_RATIO_KEY'])
         self.add_list_entry(self.defaults['ELDERLY_RATIO_ATTR_KEY'], text)
 
@@ -538,13 +541,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.defaults['ADULT_RATIO_KEY'],
                 box.value())
 
-    def on_dsbElderlyRatioDefault_valueChanged(self, value):
-        """Handler for elderly ration default value changing.
+    def on_dsbElderRatioDefault_valueChanged(self, value):
+        """Handler for elder ration default value changing.
 
         :param value: Not used but required for slot.
         """
         del value
-        box = self.dsbElderlyRatioDefault
+        box = self.dsbElderRatioDefault
         if box.isEnabled():
             self.add_list_entry(
                 self.defaults['ELDERLY_RATIO_KEY'],
@@ -878,6 +881,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.leValue.clear()
             self.lePredefinedValue.clear()
             self.leTitle.clear()
+            self.leSource.clear()
 
     def remove_item_by_key(self, removal_key):
         """Remove an item from the kvp list given its key.
@@ -938,6 +942,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         In case the layer has no keywords or any problem occurs reading them,
         start with a blank slate so that subcategory gets populated nicely &
         we will assume exposure to start with.
+
+        Also if only title is set we use similar logic (title is added by
+        default in dock and other defaults need to be explicitly added
+        when opening this dialog). See #751
+
         """
         keywords = {'category': 'exposure'}
 
@@ -953,11 +962,20 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'title' not in keywords:
             self.leTitle.setText(layer_name)
         self.lblLayerName.setText(self.tr('Keywords for %s' % layer_name))
+
+        if 'source' in keywords:
+            self.leSource.setText(keywords['source'])
+        else:
+            self.leSource.setText('')
+
         # if we have a category key, unpack it first
         # so radio button etc get set
         if 'category' in keywords:
             self.set_category(keywords['category'])
             keywords.pop('category')
+        else:
+            # assume exposure to match ui. See issue #751
+            self.add_list_entry('category', 'exposure')
 
         for key in keywords.iterkeys():
             self.add_list_entry(key, str(keywords[key]))
@@ -1032,6 +1050,21 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.add_list_entry('title', str(title))
 
+    # prevents actions being handled twice
+    @pyqtSignature('QString')
+    def on_leSource_textEdited(self, source):
+        """Update the keywords list whenever the user changes the source.
+
+        This slot is not called if the source is changed programmatically.
+
+        :param source: New source keyword for the layer.
+        :type source: str
+        """
+        if source is None or source == '':
+            self.remove_item_by_key('source')
+        else:
+            self.add_list_entry('source', str(source))
+
     def get_keywords(self):
         """Obtain the state of the dialog as a keywords dict.
 
@@ -1041,6 +1074,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         #make sure title is listed
         if str(self.leTitle.text()) != '':
             self.add_list_entry('title', str(self.leTitle.text()))
+
+        # make sure the source is listed too
+        if str(self.leSource.text()) != '':
+            self.add_list_entry('source', str(self.leSource.text()))
 
         keywords = {}
         for myCounter in range(self.lstKeywords.count()):

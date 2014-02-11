@@ -9,6 +9,7 @@ export INASAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-QGIS2/exposure/popu
 source /var/lib/jenkins/jobs/InaSAFE-QGIS2/env.sh
 
 #Go on with metrics and tests
+make clean
 nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis,realtime safe safe_qgis realtime
 make jenkins-pyflakes
 make jenkins-pep8

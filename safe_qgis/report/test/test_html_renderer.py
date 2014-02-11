@@ -113,21 +113,6 @@ class HtmlRendererTest(unittest.TestCase):
     def test_print_impact_table(self):
         """Test that we can render html from impact table keywords."""
         LOGGER.debug('InaSAFE HtmlRenderer testing printImpactTable')
-        myFilename = 'test_floodimpact.tif'
-        myLayer, _ = load_layer(myFilename)
-        myMessage = 'Layer is not valid: %s' % myFilename
-        assert myLayer.isValid(), myMessage
-        myPageDpi = 300
-        myHtmlRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='impact_table',
-                                 suffix='.pdf',
-                                 dir=temp_dir('test'))
-        myKeywordIO = KeywordIO()
-        myKeywords = myKeywordIO.read_keywords(myLayer)
-        myPath = myHtmlRenderer.print_impact_table(myKeywords,
-                                                 filename=myPath)
-        myMessage = 'Rendered output does not exist: %s' % myPath
-        assert os.path.exists(myPath), myMessage
         file_name = 'test_floodimpact.tif'
         layer, _ = load_layer(file_name)
         message = 'Layer is not valid: %s' % file_name

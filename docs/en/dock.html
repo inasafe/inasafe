@@ -166,8 +166,7 @@
   <div class="section" id="using-project-name">
 <span id="toolbar-dock"></span><h1>Using InaSAFE<a class="headerlink" href="#using-project-name" title="Permalink to this headline">¶</a></h1>
 <p>This document describes the usage of the InaSAFE &#8216;dock panel&#8217; - which
-is the main interface for running risk scenarios within the Quantum GIS
-environment.</p>
+is the main interface for running risk scenarios within the QGIS environment.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">In order to use the InaSAFE tool effectively,
@@ -329,7 +328,8 @@ report if you think the error was incorrect.</p>
 <li><em class="guilabel">Help</em> - click on this if you need context help, such as the
 document you are reading right now!</li>
 <li><em class="guilabel">Print...</em> - click on this if you wish to create a pdf of your
-impact scenarion project. An <strong>impact layer</strong> must be active before the
+impact scenarion project or just generate report and open it in composer for
+further tuning. An <strong>impact layer</strong> must be active before the
 <em class="guilabel">Print...</em> button will be enabled.</li>
 <li><em class="guilabel">Run</em> - if the combination of options in the <em class="guilabel">Questions</em>
 area&#8217;s combo boxes will allow you to run a scenario, this button is enabled.</li>
@@ -383,6 +383,38 @@ calculate this by using the <a class="reference internal" href="minimum_needs.ht
 <a class="reference internal image-reference" href="_images/imp_func_conf2.png"><img alt="Impact Function Configurator" src="_images/imp_func_conf2.png" style="width: 744.75px; height: 320.25px;" /></a>
 </div>
 </div>
+<div class="section" id="generating-impact-report">
+<span id="impact-report"></span><h2>Generating impact report<a class="headerlink" href="#generating-impact-report" title="Permalink to this headline">¶</a></h2>
+<p>When scenario analysis completed you may want to generate a report. Usually
+<em class="guilabel">Print...</em>  button will be enabled immediatelly after analysis. If it
+still inactive, select impact layer in QGIS ToC.</p>
+<p>To start report generation you need to click on the <em class="guilabel">Print...</em> button
+in the buttons area. This will open an <em class="guilabel">Impact report</em> dialog.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/impact_report_dlg.png"><img alt="Impact Report configuration" src="_images/impact_report_dlg.png" style="width: 315.75px; height: 180.0px;" /></a>
+<p class="caption">Impact report configuration</p>
+</div>
+<p>Dialog has three major areas:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em class="guilabel">Area to print</em> group: allows to customize extent of the report
+map. There are two options available. Choose <em class="guilabel">Current extent</em> if
+current canvas extent represents necessary area. <em class="guilabel">Analysis extent</em>
+will set extent of the report map to impact layer extent.</li>
+<li><em class="guilabel">Template to use</em> group: here you can select desired template for
+your report. In combobox listed all templates bundled with plugin plus
+templates from user-defined template directory (see <a class="reference internal" href="options.html#toolbar-options"><em>Options</em></a>)
+for information how to set templates directory. It is also possible to
+select custom template from any location: just activate radiobutton under
+combobox and provide path to template using <em class="guilabel">...</em> button.</li>
+<li>buttons area: contains four buttons. <em class="guilabel">Open PDF</em> button used to
+generate report and export it in PDF format. Resulting file(s) will be
+opened in your default PDF viewer. <em class="guilabel">Open composer</em> used when you
+need to adjust generated report before printing. In this case report will be
+opened in QGIS composer and you can edit it as needed.</li>
+</ul>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -404,7 +436,7 @@ calculate this by using the <a class="reference internal" href="minimum_needs.ht
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/AusAID/World Bank.
+            Copyright 2013, BNPB/Australian Government/World Bank.
         </div>
     </div>
 

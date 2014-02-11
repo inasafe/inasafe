@@ -131,8 +131,10 @@ class PostprocessorManager(QtCore.QObject):
             has_no_data = False
             table = m.Table(
                 style_class='table table-condensed table-striped')
-            table.caption = self.tr('Detailed %s report') % (safeTr(
-                get_postprocessor_human_name(processor)).lower())
+            postprocessor_translated = str(
+                safeTr(get_postprocessor_human_name(processor)).lower())
+            table.caption = self.tr(
+                'Detailed %s report' % postprocessor_translated)
 
             header = m.Row()
             header.add(str(self.attribute_title).capitalize())
@@ -360,6 +362,14 @@ class PostprocessorManager(QtCore.QObject):
                     elderly_ratio = \
                         self.aggregator.get_default_keyword('ELDERLY_RATIO')
 
+        if 'BuildingType' in postprocessors:
+            try:
+                key_attribute = self.keyword_io.read_keywords(
+                    self.aggregator.exposure_layer, 'key_attribute')
+            except KeywordNotFoundError:
+                #use 'type' as default
+                key_attribute = 'type'
+
         # iterate zone features
         request = QgsFeatureRequest()
         request.setFlags(QgsFeatureRequest.NoGeometry)
@@ -438,6 +448,9 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['youth_ratio'] = youth_ratio
                     parameters['adult_ratio'] = adult_ratio
                     parameters['elderly_ratio'] = elderly_ratio
+
+                if key == 'BuildingType':
+                    parameters['key_attribute'] = key_attribute
 
                 value.setup(parameters)
                 value.process()

@@ -188,7 +188,7 @@ class AgePostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Elderly count (affected)')
+        myName = tr('Elder count (affected)')
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:

@@ -4,7 +4,7 @@ dd_test2 19,881 0 0 0
 dd_test1 1,426 998 792 93
 Total in aggregation areas 21,307 998 792 93
 Detailed age report
-Name Total Youth count (affected) Adult count (affected) Elderly count (affected)
+Name Total Youth count (affected) Adult count (affected) Elder count (affected)
 dd_test2 19,881 9,941 0 19,881
 dd_test1 1,426 713 0 1,426
 Total in aggregation areas 21,307 10,654 0 21,307

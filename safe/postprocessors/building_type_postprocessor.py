@@ -34,6 +34,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_attrs = None
         self.target_field = None
         self.no_features = None
+        self.type_fields = None
+        self.valid_type_fields = None
         self.fields_values = {
             'Medical': ['Clinic/Doctor', 'Hospital'],
             'Schools': ['School', 'University/College', ],
@@ -51,44 +53,27 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             'Industrial': ['Industrial'],
             'Utility': ['Utility'],
             'Sports Facility': ['Sports Facility'], }
-        self.type_fields = None
-        self.valid_type_fields = ['type']
 
     def description(self):
         """Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         return tr('Calculates building types related statistics.')
 
     def setup(self, params):
-        """concrete implementation it takes care of the needed parameters being
-         initialized
-
-        Args:
-            params: dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
+        """Intialises parameters.
         """
         AbstractPostprocessor.setup(self, None)
         if (self.impact_total is not None or
                 self.impact_attrs is not None or
                 self.target_field is not None or
+                self.valid_type_fields is not None or
                 self.type_fields is not None):
             self._raise_error('clear needs to be called before setup')
 
         self.impact_total = params['impact_total']
         self.impact_attrs = params['impact_attrs']
         self.target_field = params['target_field']
+        self.valid_type_fields = params['key_attribute']
 
         #find which attribute field has to be used
         self.type_fields = []
@@ -148,6 +133,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_attrs = None
         self.target_field = None
         self.type_fields = None
+        self.valid_type_fields = None
 
     def _calculate_total(self):
         """Indicator that shows total population.

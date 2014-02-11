@@ -65,6 +65,7 @@ def filter_zip_eq_event(zip_eq_event):
     """Return true if zip_eq_event in the following format:
         YYYYBBDDhhmmss.out.zip
         for example : 20130226211002.out.zip
+
     :param zip_eq_event
     """
     expected_len = len('20130226211002.out.zip')
@@ -81,6 +82,7 @@ def filter_eq_map(eq_map_path):
     """Return true if eq_map_path in the following format:
         earthquake_impact_map_YYYYBBDDhhmmss.pdf
         for example : earthquake_impact_map_20120216181705.pdf
+
     :param eq_map_path
     """
     expected_len = len('earthquake_impact_map_20120216181705.pdf')
@@ -99,45 +101,46 @@ def filter_eq_map(eq_map_path):
         return False
 
 
-def sort_event(my_events):
-    """Sort list of event id my_event as list ascending
-    :param my_events:
+def sort_event(events):
+    """Sort list of event id my_event as list ascending.
+
+    :param events:
     """
     try:
-        sorted_events = sorted([int(x) for x in my_events])
+        sorted_events = sorted([int(x) for x in events])
         return sorted_events
     except ValueError as e:
         raise e
 
 
-def get_last_event_id(my_events):
+def get_last_event_id(events):
     """Return last event id of my_events.
-    :param my_events:
+    :param events:
     """
-    sorted_events = sort_event(my_events)[-1]
+    sorted_events = sort_event(events)[-1]
     return sorted_events
 
 
-def update_report(my_source_path, my_public_path, last_event_id):
+def update_report(source_path, public_path, last_event_id):
     """Copy latest report to my_public_path and make a copy with
     a latest_earthquake_impact_map.pdf and latest_earthquake_impact_map.png
-    :param my_source_path:
-    :param my_public_path:
+    :param source_path:
+    :param public_path:
     :param last_event_id:
     """
     last_event_id = str(last_event_id)
 
-    source_dir = os.path.join(my_source_path, last_event_id)
+    source_dir = os.path.join(source_path, last_event_id)
     report_filename = last_event_id + '-id'
     pdf_file = report_filename + '.pdf'
     pdf_path = os.path.join(source_dir, pdf_file)
     png_path = pdf_path.replace('.pdf', '.png')
 
     public_pdf_file = 'earthquake_impact_map_' + last_event_id + '.pdf'
-    public_pdf_path = os.path.join(my_public_path, public_pdf_file)
-    latest_pdf_path = os.path.join(my_public_path,
+    public_pdf_path = os.path.join(public_path, public_pdf_file)
+    latest_pdf_path = os.path.join(public_path,
                                    'latest_earthquake_impact_map.pdf')
-    latest_png_path = os.path.join(my_public_path,
+    latest_png_path = os.path.join(public_path,
                                    'latest_earthquake_impact_map.png')
 
     # copy file

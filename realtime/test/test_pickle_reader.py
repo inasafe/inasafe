@@ -27,6 +27,7 @@ from realtime.pickle_reader import create_index, generate_pages
 class TestPickleReader(unittest.TestCase):
     """Tests relating to pickle reader"""
 
+    #noinspection PyPep8Naming
     def setUp(self):
         """Set public test dir for en and id"""
         self.shakemap_dir_en = os.path.join(
@@ -60,6 +61,12 @@ class TestPickleReader(unittest.TestCase):
         index_file = file(index_path, 'r')
         result = index_file.read()
         index_file.close()
+        self.assertIn('Ternate', result)
+
+        # Test if locale is other than en or id:
+        with self.assertRaises(BaseException):
+            create_index(shakemap_dir=self.shakemap_dir_en,
+                         locale='ens')
 
         self.assertIn('Banda Aceh', result)
 

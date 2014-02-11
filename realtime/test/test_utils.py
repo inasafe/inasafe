@@ -39,43 +39,44 @@ import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class Test(unittest.TestCase):
+class UtilsTest(unittest.TestCase):
 
     def test_base_data_dir(self):
-        """Test we can get the realtime data dir"""
+        """Test we can get the realtime data dir."""
         data_dir = base_data_dir()
         expected_dir = '/tmp/inasafe/realtime'
         assert os.path.exists(expected_dir)
         self.assertEqual(data_dir, expected_dir)
 
     def test_shakemap_zip_dir(self):
-        """Test we can get the shakemap zip dir"""
+        """Test we can get the shakemap zip dir."""
         data_dir = shakemap_zip_dir()
         expected_dir = '/tmp/inasafe/realtime/shakemaps-zipped'
         assert os.path.exists(expected_dir)
         self.assertEqual(data_dir, expected_dir)
 
     def test_shakemap_extract_dir(self):
-        """Test we can get the shakemap extracted data dir"""
+        """Test we can get the shakemap extracted data dir."""
         data_dir = shakemap_extract_dir()
         expected_dir = '/tmp/inasafe/realtime/shakemaps-extracted'
         assert os.path.exists(expected_dir)
         self.assertEqual(data_dir, expected_dir)
 
     def test_shakemap_data_dir(self):
-        """Test we can get the shakemap post processed data dir"""
+        """Test we can get the shakemap post processed data dir."""
         data_dir = shakemap_data_dir()
         expected_dir = '/tmp/inasafe/realtime/shakemaps-processed'
         assert os.path.exists(expected_dir)
         self.assertEqual(data_dir, expected_dir)
 
     def test_report_data_dir(self):
-        """Test we can get the report data dir"""
+        """Test we can get the report data dir."""
         data_dir = report_data_dir()
         expected_dir = '/tmp/inasafe/realtime/reports'
         assert os.path.exists(expected_dir)
         self.assertEqual(data_dir, expected_dir)
 
+    #noinspection PyMethodMayBeStatic
     def test_logging(self):
         path = os.path.join(log_dir(), 'realtime.log')
         current_date = date.today()
@@ -88,9 +89,9 @@ class Test(unittest.TestCase):
             assert 'Error, expected log message not shown in logs'
         log_file.close()
 
+    #noinspection PyMethodMayBeStatic
     def test_is_event_id(self):
-        """Test to check if a event is in server
-        """
+        """Test to check if a event is in server."""
         assert is_event_id('20130110041009'), 'should be event id'
         assert not is_event_id('20130110041090'), 'should not be event id'
         assert not is_event_id('2013'), 'should not be event id'

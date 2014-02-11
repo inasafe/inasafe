@@ -30,7 +30,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     subcategory=='population' and \
                     layertype=='raster'
     """
-    synopsis = tr('To asses the impact of earthquake on population based on '
+    synopsis = tr('To assess the impact of earthquake on population based on '
                   'Population Vulnerability Model Pager')
     citations = \
         tr(' * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '

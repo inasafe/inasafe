@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Mendownload OpenStreetMap &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Mendownload OpenStreetMap &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,10 +26,12 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
+    <link rel="next" title="The Impact Layer Merge Tool" href="impact_layer_merge_tool.html" />
     <link rel="prev" title="Simpan Skenario" href="save_scenario.html" />
 
 <style>
@@ -122,9 +124,17 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="General Index"
+                   title="Indeks Umum"
                    style="z-index:;"
                 accesskey="I">index</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="impact_layer_merge_tool.html"
+                   title="The Impact Layer Merge Tool"
+                   style="z-index:;"
+                accesskey="N">berikut</a>
                 </li>
                 
                 <li class="right"
@@ -132,7 +142,7 @@
                 <a href="save_scenario.html"
                    title="Simpan Skenario"
                    style="z-index:;"
-                accesskey="P">previous</a>
+                accesskey="P">sebelum</a>
                 </li>
                 
 
@@ -155,39 +165,30 @@
         <div class="span12">
                 
   <div class="section" id="openstreetmap-downloader">
-<span id="id1"></span><h1>Mendownload OpenStreetMap<a class="headerlink" href="#openstreetmap-downloader" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Mendownload OpenStreetMap<a class="headerlink" href="#openstreetmap-downloader" title="Link permanent untuk headline ini">¶</a></h1>
 <p>Alat ini akan memperoleh data (&#8216;struktur&#8217;) bangunan dari projek OpenStreetMap untuk Anda.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/openstreetmap_downloader.png"><img alt="OpenStreetMap Downloader" src="_images/openstreetmap_downloader.png" style="width: 338.25px; height: 476.25px;" /></a>
 <p class="caption">Mendownload OpenStreetMap</p>
 </div>
-<p>InaSAFE supports the use of building data in various impact functions. In
-particular we support building footprints sourced from the
-<a class="reference external" href="https://openstreetmap.org">OpenStreetMap</a> project (OSM). The tool
-requires internet connection as it fetches the data via a web service running
-on <a class="reference external" href="http://osm.linfiniti.com">Linfiniti&#8217;s OSM Reporter</a> web site.</p>
-<p>The data, once downloaded will be available to you as a shapefile. A style
-file is automatically created so that it symbolises nicely in QGIS. In
-addition, the correct keyword metadata is created for the downloaded dataset
-so that it can be used directly in InaSAFE impact scenario analyses.</p>
-<p><strong>Note:</strong> The building downloader service has limitations as to the size of
-datasets that can be retrieved. As such you may experience issues trying to
-fetch e.g. country wide building footprint data. Generally datasets at a
-city level and below should work well.</p>
+<p>InaSAFE mendukung penggunaan data bangunan dalam berbagai analisis fungsi dampak, khususnya data bangunan yang bersumber dari <cite>OpenStreetMap &lt;https://openstreetmap.org&gt;</cite> _ proyek (OSM). Alat ini membutuhkan koneksi internet untuk mengambil data melalui layanan berbasis web yang berjalan pada <a class="reference external" href="http://osm.linfiniti.com">Linfiniti&#8217;s OSM Reporter</a> situs web.</p>
+<p>Data, setelah didownload akan tersedia untuk Anda sebagai sebuah shapefile. Sebuah gaya file secara otomatis dibuat sehingga dilambangkan dengan baik dalam QGIS. Selain itu, metadata kata kunci yang benar dibuat untuk dataset didownload sehingga dapat digunakan secara langsung dalam skenario analisis dampak menggunakan InaSAFE.</p>
+<p><strong>Catatan:</strong> Alat mendownload data bangunan memiliki batas untuk ukuran dataset yang akan diambil. Mungkin Anda memiliki masalah ketika ingin mengambil wilayah sebuah negara.  Umumnya dataset untuk tingkat kota dan dibawahnya akan berjalan dengan baik.</p>
 <p>Untuk menggunakan alat ini secara efektif:</p>
 <ul class="simple">
-<li>Use QGIS to zoom in to the area for which you want building data to be
-retrieved.</li>
-<li>Check the output directory is correct. Note that the saved dataset
-will be called buildings.shp (and its associated files).</li>
-<li>Press the <em class="guilabel">OK Button</em> and wait for the data to be retrieved.</li>
+<li><p class="first">Gunakan QGIS untuk memperbesar ke daerah yang data bangunannya akan diambil.</p>
+</li>
+<li><p class="first">Periksa direktori output yang benar. Perhatikan bahwa dataset tersimpan akan bernama buildings.shp (begitu pun file terkait lainnya).</p>
+</li>
+<li><p class="first">Tekan <em class="guilabel">OK Button</em> dan tunggu data untuk diambil.</p>
+</li>
 </ul>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<p class="first admonition-title">Peringatan</p>
 <p class="last">Jika dataset sudah ada di direktori output, dataset tersebut akan ditimpa. Alat ini memerlukan koneksi internet untuk bekerja dan mengambil bangunan akan menggunakan bandwidth Anda.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Data yang didownload adalah hak cipta kontributor OpenStreetMap (klik untuk info lebih lanjut).</p>
 </div>
 </div>
@@ -211,7 +212,7 @@ will be called buildings.shp (and its associated files).</li>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/AusAID/World Bank.
+            Copyright 2013, BNPB/Australian Government/World Bank.
         </div>
     </div>
 

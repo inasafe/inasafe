@@ -173,7 +173,7 @@ class FloodEvacuationFunction(FunctionProvider):
             TableRow(tr('* Number is rounded to the nearest 1000'),
                      header=False),
             TableRow(tr('Map shows population density needing evacuation')),
-            TableRow(tr('Table below shows the weekly minium needs for all '
+            TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
             [tr('Rice [kg]'), format_int(tot_needs['rice'])],
@@ -201,7 +201,7 @@ class FloodEvacuationFunction(FunctionProvider):
             {'eps': thresholds[-1]},
             tr('Minimum needs are defined in BNPB regulation 7/2008'),
             tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractionals.')])
+               'avoid representing human lives as fractions.')])
 
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
@@ -276,6 +276,8 @@ class FloodEvacuationFunction(FunctionProvider):
                              'map_title': map_title,
                              'legend_notes': legend_notes,
                              'legend_units': legend_units,
-                             'legend_title': legend_title},
+                             'legend_title': legend_title,
+                             'evacuated': evacuated,
+                             'total_needs' : tot_needs},
                    style_info=style_info)
         return R

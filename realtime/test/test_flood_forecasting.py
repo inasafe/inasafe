@@ -19,18 +19,19 @@ from safe.common.utilities import verify
 
 
 @unittest.skipIf(sys.platform in ('win32', 'darwin'), 'OSX, Win not supported')
-class Test_flood_forecasting_functionality(unittest.TestCase):
+class FloodForecastingTest(unittest.TestCase):
     """Specific tests of flood forecasting functionality
     """
+    #noinspection PyPep8Naming
     def setUp(self):
+        """Runs before each test."""
         self.nc_filename = os.path.join(
             TESTDATA,
             '201211120500_Jakarta_200m_Sobek_Forecast_CCAM.nc')
 
     def test_convert_netcdf2tif(self):
-        """NetCDF flood forecasts can be converted to tif
+        """NetCDF flood forecasts can be converted to tif.
         """
-
         # First check that input file is as expected
         from Scientific.IO.NetCDF import NetCDFFile
         fid = NetCDFFile(self.nc_filename)
@@ -91,9 +92,8 @@ class Test_flood_forecasting_functionality(unittest.TestCase):
         return
 
     def test_tag_regions_by_flood(self):
-        """Regions can be tagged correctly with data from flood forecasts
+        """Regions can be tagged correctly with data from flood forecasts.
         """
-
         threshold = 0.3
         label = 'affected'
 
@@ -165,6 +165,6 @@ class Test_flood_forecasting_functionality(unittest.TestCase):
     test_tag_regions_by_flood.slow = True
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_flood_forecasting_functionality, 'test')
+    suite = unittest.makeSuite(FloodForecastingTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

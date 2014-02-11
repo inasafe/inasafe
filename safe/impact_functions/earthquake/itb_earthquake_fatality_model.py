@@ -100,7 +100,7 @@ class ITBFatalityFunction(FunctionProvider):
 
     title = tr('Die or be displaced')
     synopsis = tr(
-        'To asses the impact of earthquake on population based on earthquake '
+        'To assess the impact of earthquake on population based on earthquake '
         'model developed by ITB')
     citations = tr(
         ' * Indonesian Earthquake Building-Damage and Fatality Models and '
@@ -346,7 +346,7 @@ class ITBFatalityFunction(FunctionProvider):
                               'disregarded.'),
                            tr('All values are rounded up to the nearest '
                               'integer in order to avoid representing human '
-                              'lives as fractionals.')])
+                              'lives as fractions.')])
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '
@@ -401,7 +401,7 @@ class ITBFatalityFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'total_population': total,
                              'total_fatalities': fatalities,
-                             'fatalites_per_mmi': number_of_fatalities,
+                             'fatalities_per_mmi': number_of_fatalities,
                              'exposed_per_mmi': number_of_exposed,
                              'displaced_per_mmi': number_of_displaced,
                              'impact_table': impact_table,

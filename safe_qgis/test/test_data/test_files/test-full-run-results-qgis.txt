@@ -7,7 +7,7 @@ Toilets 48,850
 Total population: 10,484,000
 People need evacuation if flood levels exceed 1.0 m
 Minimum needs are defined in BNPB regulation 7/2008
-All values are rounded up to the nearest integer in order to avoid representing human lives as fractionals.
+All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.
 Hazard details
 A flood in Jakarta like in 2007 - sourced from HKV
 Exposure details
@@ -20,7 +20,7 @@ JAKARTA TIMUR 251,506 125,753 99,810 11,718
 JAKARTA PUSAT 66,870 33,435 26,537 3,116
 JAKARTA SELATAN 33,203 16,601 13,176 1,547
 Detailed age report
-Kab_name Total Youth count (affected) Adult count (affected) Elderly count (affected)
+Kab_name Total Youth count (affected) Adult count (affected) Elder count (affected)
 JAKARTA UTARA 344,641 90,641 227,118 26,882
 JAKARTA BARAT 278,349 73,206 183,432 21,711
 JAKARTA TIMUR 251,506 66,146 165,743 19,617

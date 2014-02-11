@@ -18,11 +18,6 @@ __author__ = 'timlinux'
 import os
 import sys
 import unittest
-
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
-from PyQt4.Qt import QApplication
 from PyQt4.QtGui import QApplication
 from third_party.pydispatch import dispatcher
 from safe_qgis.widgets.message_viewer import MessageViewer

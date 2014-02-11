@@ -28,7 +28,7 @@ import webbrowser
 import math
 
 #noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, Qt
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
 #noinspection PyPackageRequirements
@@ -190,6 +190,7 @@ def get_utm_epsg(longitude, latitude):
         epsg += 100
     epsg += get_utm_zone(longitude)
     return epsg
+    return cell_size
 
 
 def html_header():
@@ -702,6 +703,13 @@ def safe_to_qgis_layer(layer):
     if not layer.is_inasafe_spatial_object:
         raise Exception(myMessage)
 
+    geo_extent = [
+        transformed_extent.xMinimum(),
+        transformed_extent.yMinimum(),
+        transformed_extent.xMaximum(),
+        transformed_extent.yMaximum()]
+    return geo_extent
+
 
 def download_url(manager, url, output_path, progress_dialog=None):
     """Download file from url.
@@ -845,24 +853,24 @@ def read_impact_layer(impact_layer):
 
 
 def map_qrc_to_file(match, res_copy_dir):
-    """Map a qrc:/ path to its correspondent file:/// and creates it.
+    """Map a qrc:/ path to its correspondent file:/// and create it.
 
-    for example qrc:/plugins/inasafe/ajax-loader.gif
+    For example qrc:/plugins/inasafe/ajax-loader.gif
     is converted to file:////home/marco/.qgis2/python/plugins/
     inasafe-master/safe_qgis/resources/img/ajax-loader.gif
 
-    if the qrc asset is non file based (i.e. is compiled in resources_rc
-    .pc) then a copy of is extracted to res_copy_dir
+    If the qrc asset is non file based (i.e. is compiled in resources_rc
+    .pc) then a copy of is extracted to res_copy_dir.
 
-    :param match: the qrc path to be mapped matched from a regular
-    expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
+    :param match: The qrc path to be mapped matched from a regular
+        expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
     :type match: re.match object
 
-    :param res_copy_dir: the path to copy non file based qrc assets.
+    :param res_copy_dir: The path to copy non file based qrc assets.
     :type res_copy_dir: str
 
-    :returns: a file path to the resource or None if the resource could
-    not be created
+    :returns: File path to the resource or None if the resource could
+    not be created.
     :rtype: None, str
     """
 
@@ -885,6 +893,8 @@ def map_qrc_to_file(match, res_copy_dir):
                 res_path = None
 
     return res_path
+    #noinspection PyArgumentList
+    return QUrl.fromLocalFile(res_path).toString()
 
 
 def open_in_browser(file_path):
@@ -927,3 +937,30 @@ def html_to_file(html, file_path=None, open_browser=False):
 
     if open_browser:
         open_in_browser(file_path)
+
+
+def qt_at_least(needed_version, test_version=None):
+    """Check if the installed Qt version is greater than the requested
+
+    :param needed_version: minimally needed Qt version in format like 4.8.4
+    :type needed_version: str
+
+    :param test_version: Qt version as returned from Qt.QT_VERSION. As in
+     0x040100 This is used only for tests
+    :type test_version: int
+
+    :returns: True if the installed Qt version is greater than the requested
+    :rtype: bool
+    """
+    major, minor, patch = needed_version.split('.')
+    needed_version = '0x0%s0%s0%s' % (major, minor, patch)
+    needed_version = int(needed_version, 0)
+
+    installed_version = Qt.QT_VERSION
+    if test_version is not None:
+        installed_version = test_version
+
+    if needed_version <= installed_version:
+        return True
+    else:
+        return False
