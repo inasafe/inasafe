@@ -2406,7 +2406,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="postprocessor_manager.py" line="134"/>
         <source>Detailed %s report</source>
-        <translation>Laporan %1 lebih rinci</translation>
+        <translation>Laporan %s lebih rinci</translation>
     </message>
     <message>
         <location filename="postprocessor_manager.py" line="170"/>
