@@ -125,7 +125,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             '\'padang-roads.shp\' and \'padang-buildings.shp\'. Note that '
             'the only allowed prefix characters are A-Z, a-z, 0-9 and the '
             'characters \'-\' and \'_\'. You can leave this blank if you '
-            'prefer'
+            'prefer.'
         ))
         tips.add(self.tr(
             'If a dataset already exists in the output directory it will be '
