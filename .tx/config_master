@@ -1,0 +1,17 @@
+[main]
+host = https://www.transifex.com
+
+[inasafe.safe_qgis]
+file_filter = safe_qgis/i18n/inasafe_<lang>.ts
+source_file = safe_qgis/i18n/inasafe_en.ts
+source_lang = en
+trans.id = safe_qgis/i18n/inasafe_id.ts
+type = QT
+
+[inasafe.safe]
+file_filter = safe/i18n/<lang>/LC_MESSAGES/inasafe.po
+source_file = safe/i18n/en/LC_MESSAGES/inasafe.po
+source_lang = en
+trans.id = safe/i18n/id/LC_MESSAGES/inasafe.po
+type = PO
+
