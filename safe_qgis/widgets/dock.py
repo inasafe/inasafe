@@ -102,6 +102,7 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
+SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -364,17 +365,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         message.add(m.Heading('Getting started', **INFO_STYLE))
         notes = m.Paragraph(
             self.tr(
-                'To use this tool you need to add some layers to your '
-                'QGIS project. Ensure that at least one'),
-            m.EmphasizedText(self.tr('hazard'), **KEYWORD_STYLE),
-            self.tr('layer (e.g. earthquake MMI) and one '),
-            m.EmphasizedText(self.tr('exposure'), **KEYWORD_STYLE),
-            self.tr(
-                'layer (e.g. structures) are available. When you are '
-                'ready, click the '),
-            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
-            self.tr('button below.'))
+                'These are the minimum steps you need to follow in order '
+                'to use InaSAFE:'))
         message.add(notes)
+        basics_list = m.NumberedList()
+        basics_list.add(m.Paragraph(
+            self.tr('Add at least one '),
+            m.EmphasizedText(self.tr('hazard'), **KEYWORD_STYLE),
+            self.tr(' layer (e.g. earthquake MMI) to QGIS.')))
+        basics_list.add(m.Paragraph(
+            self.tr('Add at least one '),
+            m.EmphasizedText(self.tr('exposure'), **KEYWORD_STYLE),
+            self.tr(' layer (e.g. structures) to QGIS.')))
+        basics_list.add(m.Paragraph(
+            self.tr(
+                'Make sure you have defined keywords for your hazard and '
+                'exposure layers. You can do this using the keywords icon '),
+            m.Image(
+                'qrc:/plugins/inasafe/show-keyword-editor.svg',
+                **SMALL_ICON_STYLE),
+            self.tr(' in the InaSAFE toolbar.'))),
+        basics_list.add(m.Paragraph(
+            self.tr('Click on the '),
+            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
+            self.tr(' button below.')))
+        message.add(basics_list)
+
         message.add(m.Heading('Limitations', **WARNING_STYLE))
         caveat_list = m.NumberedList()
         caveat_list.add(

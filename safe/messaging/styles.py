@@ -56,6 +56,9 @@ DETAILS_STYLE = {
     'icon': 'icon-list icon-white',
     'style_class': 'problem'}
 
+SMALL_ICON_STYLE = {
+    'attributes': 'style="width: 24px; height: 24px;"',
+}
 
 TRACEBACK_STYLE = {
     'level': 5,
