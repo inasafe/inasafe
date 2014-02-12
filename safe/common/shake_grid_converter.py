@@ -56,17 +56,17 @@ class ShakeGridConverter(object):
             algorithm_filename_flag=True):
         """Constructor.
 
-        :param grid_xml_path: Path to grid XML file
+        :param grid_xml_path: Path to grid XML file.
         :type grid_xml_path:str
 
         :param output_dir: mmi output directory
         :type output_dir: str
 
-        :param output_basename: mmi file name without extension
+        :param output_basename: mmi file name without extension.
         :type output_basename: str
 
         :param algorithm_filename_flag: Flag whether to use the algorithm in
-            the output file's name
+            the output file's name.
         :type algorithm_filename_flag: bool
 
         :returns: Instance
@@ -410,7 +410,7 @@ class ShakeGridConverter(object):
 
     def mmi_to_raster(
             self, force_flag=False, algorithm='nearest'):
-        """Convert the grid.xml' s mmi column to a raster using gdal_grid.
+        """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
 
@@ -475,9 +475,7 @@ class ShakeGridConverter(object):
         # the earthquake server.
 
         if 'invdist' in algorithm:
-            myAlgorithm = 'invdist:power=2.0:smoothing=1.0'
-        else:
-            myAlgorithm = algorithm
+            algorithm = 'invdist:power=2.0:smoothing=1.0'
 
         # (Sunni): I'm not sure how this 'mmi' will work
         # (Tim): Its the mapping to which field in the CSV contains the data
@@ -488,7 +486,7 @@ class ShakeGridConverter(object):
             '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
             '%(vrt)s %(tif)s') %
             {
-                'alg': myAlgorithm,
+                'alg': algorithm,
                 'xMin': self.x_minimum,
                 'xMax': self.x_maximum,
                 'yMin': self.y_minimum,
@@ -553,7 +551,7 @@ def convert_mmi_data(
         algorithm_filename_flag=True):
     """Convenience function to convert a single file.
 
-    :param grid_xml_path: Path to the xml file
+    :param grid_xml_path: Path to the xml shake grid file.
     :type grid_xml_path: str
 
     :param output_path: Specify which path to use as an alternative to the
@@ -564,10 +562,10 @@ def convert_mmi_data(
     :type algorithm: str
 
     :param algorithm_filename_flag: Flag whether to use the algorithm in the
-        output file's name
+        output file's name.
     :type algorithm_filename_flag: bool
 
-    :returns: A path to the resulting raster file
+    :returns: A path to the resulting raster file.
     :rtype: str
     """
     LOGGER.debug(grid_xml_path)
@@ -581,6 +579,5 @@ def convert_mmi_data(
         output_dir = output_path
         output_basename = None
     converter = ShakeGridConverter(
-        grid_xml_path, output_dir, output_basename,
-        algorithm_filename_flag)
+        grid_xml_path, output_dir, output_basename, algorithm_filename_flag)
     return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)

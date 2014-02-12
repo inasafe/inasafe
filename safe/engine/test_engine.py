@@ -1,3 +1,5 @@
+# coding=utf-8
+"""Tests for engine."""
 import unittest
 import cPickle
 import numpy
@@ -24,14 +26,16 @@ from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from safe.common.polygon import line_dictionary_to_geometry
 from safe.common.interpolation2d import interpolate_raster
-from safe.common.numerics import (normal_cdf,
-                                  log_normal_cdf,
-                                  erf,
-                                  ensure_numeric)
+from safe.common.numerics import (
+    normal_cdf,
+    log_normal_cdf,
+    erf,
+    ensure_numeric)
 from safe.common.numerics import nan_allclose
-from safe.common.utilities import (VerificationError,
-                                   unique_filename,
-                                   format_int)
+from safe.common.utilities import (
+    VerificationError,
+    unique_filename,
+    format_int)
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
@@ -40,19 +44,31 @@ from safe.impact_functions import get_plugins, get_plugin
 # If any of these get reinstated as "official" public impact functions,
 # remove from here and update test to use the real one.
 # pylint: disable=W0611
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import empirical_fatality_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import allen_fatality_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import unspecific_building_impact_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import earthquake_impact_on_women
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import NEXIS_building_impact_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import HKV_flood_study
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import BNPB_earthquake_guidelines
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import general_ashload_impact
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import flood_road_impact
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import itb_fatality_model_org
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import padang_building_impact_model
+# noinspection PyUnresolvedReferences
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
-PAGFatalityFunction)
+    PAGFatalityFunction)
 # pylint: enable=W0611
 
 

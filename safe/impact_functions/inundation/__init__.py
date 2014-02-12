@@ -7,4 +7,8 @@ for module in os.listdir(dirname):
     if (module == '__init__.py' or module[-3:] != '.py' or
         module.startswith('.#')):
         continue
-    __import__(module[:-3], locals(), globals())
+    try:
+        __import__(module[:-3], locals(), globals())
+    except ImportError:
+        # Most likely not Qt4 / QGIS present
+        continue
