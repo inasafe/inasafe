@@ -5,7 +5,6 @@ import numpy
 import os
 import sys
 import logging
-from PyQt4 import QtGui, QtCore
 from numpy.testing import Tester
 
 from numerics import axes_to_points
@@ -682,6 +681,7 @@ def get_qgis_app():
     """
 
     try:
+        from PyQt4 import QtGui, QtCore
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
         from safe.common.qgis_interface import QgisInterface

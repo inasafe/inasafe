@@ -27,14 +27,8 @@ class Image(Text):
     def __init__(self, uri, text=None, **kwargs):
         """Creates a Emphasized Text Text object
 
-        Args:
-            String message, a string to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        :param uri: A string to add to the message
+        :type uri: str
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -50,16 +44,7 @@ class Image(Text):
             self.text = text
 
     def to_html(self):
-        """Render as html
-
-        Args:
-            None
-
-        Returns:
-            Str the html representation
-
-        Raises:
-            Errors are propagated
+        """Render as html.
         """
         return '<img src="%s" title="%s" alt="%s" %s/>' % (
             self.uri,
@@ -68,16 +53,7 @@ class Image(Text):
             self.html_attributes())
 
     def to_text(self):
-        """Render as plain text
-
-        Args:
-            None
-
-        Returns:
-            Str the plain text representation
-
-        Raises:
-            Errors are propagated
+        """Render as plain text.
         """
         if self.text == '':
             return '::%s' % self.uri
