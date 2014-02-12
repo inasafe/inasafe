@@ -372,11 +372,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         basics_list = m.NumberedList()
         basics_list.add(m.Paragraph(
             self.tr('Add at least one '),
-            m.EmphasizedText(self.tr('hazard'), **KEYWORD_STYLE),
+            m.ImportantText(self.tr('hazard'), **KEYWORD_STYLE),
             self.tr(' layer (e.g. earthquake MMI) to QGIS.')))
         basics_list.add(m.Paragraph(
             self.tr('Add at least one '),
-            m.EmphasizedText(self.tr('exposure'), **KEYWORD_STYLE),
+            m.ImportantText(self.tr('exposure'), **KEYWORD_STYLE),
             self.tr(' layer (e.g. structures) to QGIS.')))
         basics_list.add(m.Paragraph(
             self.tr(
@@ -388,7 +388,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr(' in the InaSAFE toolbar.'))),
         basics_list.add(m.Paragraph(
             self.tr('Click on the '),
-            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
+            m.ImportantText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr(' button below.')))
         message.add(basics_list)
 
