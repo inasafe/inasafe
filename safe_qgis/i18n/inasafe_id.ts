@@ -1005,12 +1005,12 @@
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="173"/>
+        <location filename="dock_base.ui" line="138"/>
         <source>about:blank</source>
         <translation>Perihal:kosong</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="219"/>
+        <location filename="dock_base.ui" line="184"/>
         <source>Supported by:</source>
         <translation>Didukung oleh:</translation>
     </message>
@@ -1020,7 +1020,7 @@
         <translation>Pertanyaan: Apabila terjadi</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="122"/>
+        <location filename="dock_base.ui" line="80"/>
         <source>How many</source>
         <translation>Berapa banyak</translation>
     </message>
@@ -1030,22 +1030,17 @@
         <translation>Yang mungkin</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="91"/>
-        <source>Configure Impact Function Parameter</source>
-        <translation>Pengaturan parameter fungsi dampak</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="112"/>
+        <location filename="dock_base.ui" line="70"/>
         <source>Aggregate results by</source>
         <translation>Hasil agregrasi berdasarkan</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="293"/>
+        <location filename="dock_base.ui" line="258"/>
         <source>Help</source>
         <translation>Bantuan</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="333"/>
+        <location filename="dock_base.ui" line="298"/>
         <source>Run</source>
         <translation>Hitung</translation>
     </message>
@@ -1055,12 +1050,12 @@
         <translation>Tampilkan form pertanyaan</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="94"/>
+        <location filename="dock_base.ui" line="110"/>
         <source>Options ...</source>
         <translation>Pilihan ...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="313"/>
+        <location filename="dock_base.ui" line="278"/>
         <source>Print ...</source>
         <translation>Cetak ...</translation>
     </message>
@@ -1989,220 +1984,240 @@ Pesan: %s</translation>
         <translation>InaSAFE - Option (pilihan)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="49"/>
+        <location filename="options_dialog_base.ui" line="162"/>
         <source>Not yet implemented</source>
         <translation>Belum diiplementasikan</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="58"/>
+        <location filename="options_dialog_base.ui" line="202"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
         <translation>Gelembung keterpaparan dan layer ancaman ke atas saat dipilih</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="68"/>
+        <location filename="options_dialog_base.ui" line="254"/>
         <source>Location for results</source>
         <translation>Lokasi untuk hasil analisis</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="374"/>
+        <location filename="options_dialog_base.ui" line="400"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="99"/>
+        <location filename="options_dialog_base.ui" line="192"/>
         <source>Organisation name (for maps, reports etc.)</source>
         <translation>Nama organisasi (untuk peta, laporan, dll.)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="132"/>
+        <location filename="options_dialog_base.ui" line="214"/>
         <source>DPI (Maps and reports)</source>
         <translation>DPI (Peta-peta dan laporan-laporan)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="328"/>
+        <location filename="options_dialog_base.ui" line="58"/>
         <source>Only show visible layers in InaSAFE dock</source>
         <translation>Hanya tampilkan layer yang terlihat di InaSAFE</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="269"/>
+        <location filename="options_dialog_base.ui" line="68"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
         <translation>Gunakan &apos;judul&apos; pada Editor Kata Kunci sebagai nama layer QGIS</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="242"/>
+        <location filename="options_dialog_base.ui" line="78"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
         <translation>Zoom ke lapisan dampak saat perhitungan dampak selesai</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="232"/>
+        <location filename="options_dialog_base.ui" line="381"/>
         <source>Keyword cache for remote datasources</source>
         <translation>Cache Kata Kunci (keyword) untuk sumber data jarak jauh</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="259"/>
+        <location filename="options_dialog_base.ui" line="261"/>
         <source>Run analysis in a separate thread (experimental)</source>
         <translation>Jalankan analisis dalam thread terpisah (percobaan)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="252"/>
+        <location filename="options_dialog_base.ui" line="88"/>
         <source>Hide exposure layer on scenario estimate completion</source>
         <translation>Sembunyikan layer keterpaparan saat perhitungan dampak selesai</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="195"/>
+        <location filename="options_dialog_base.ui" line="95"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
         <translation>Nyalakan untuk memotong layer ancaman dan keterpaparan ke tampilan yang terlihat pada kanvas peta</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="198"/>
+        <location filename="options_dialog_base.ui" line="98"/>
         <source>Clip datasets to visible extent before analysis</source>
         <translation>Saat melakukan analisis, dataset yang digunakan hanya sebatas yang tertampil di layar</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="342"/>
+        <location filename="options_dialog_base.ui" line="115"/>
         <source>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</source>
         <translation>Hidupkan untuk melihat berkas intermediate yang dibuat oleh tahapan pascapemrosesan pada kanvas peta</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="345"/>
+        <location filename="options_dialog_base.ui" line="118"/>
         <source>Show intermediate layers generated by postprocessing</source>
         <translation>Tampilkan layer intermediate yang dibuat pascapemrosesan</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="278"/>
+        <location filename="options_dialog_base.ui" line="127"/>
         <source>Female ratio default value</source>
         <translation>Nilai default perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="164"/>
+        <location filename="options_dialog_base.ui" line="409"/>
         <source>Help to improve InaSAFE by submitting errors to a remote server</source>
         <translation>Bantu untuk pengembangan InaSAFE dengan mengirimkan kesalahan kepada remote server</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="321"/>
-        <source>Enable developer mode (needs restart)</source>
-        <translation>Aktifkan mode pengembang (butuh direstart)</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="335"/>
+        <location filename="options_dialog_base.ui" line="108"/>
         <source>When clipping, also clip features (i.e. will clip polygon smaller)</source>
         <translation>Potong fitur saat melakukan clipping (akan memotong poligon menjadi lebih kecil)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="188"/>
+        <location filename="options_dialog_base.ui" line="440"/>
         <source>Use QGIS zonal statistics (not recommended for QGIS 1.8)</source>
         <translation>Gunakan statistik QGIS zonal (tidak dianjurkan untuk QGIS 1.8)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="355"/>
+        <location filename="options_dialog_base.ui" line="298"/>
         <source>Organisation logo</source>
         <translation>Logo organisasi</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="393"/>
-        <source>Disclaimer text</source>
-        <translation>Teks ketentuan</translation>
+        <location filename="options_dialog_base.ui" line="329"/>
+        <source>Report templates directory</source>
+        <translation>Direktori template laporan</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="177"/>
+        <location filename="options_dialog_base.ui" line="28"/>
+        <source>Basic Options</source>
+        <translation>Pilihan Dasar</translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="357"/>
+        <source>Organisation disclaimer text</source>
+        <translation>Teks disclaimer organisasi</translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="289"/>
+        <source>Template Options</source>
+        <translation>Pilihan Template</translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="422"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#f50000;&quot;&gt;Catatan:&lt;/span&gt; Untuk mengaktifkan atau menon-aktifkan  pengaturan di atas, QGIS harus di-restart. Pesan kesalahan dan informasi diagnosa akan dikirimkan ke http://sentry.linfiniti.com/inasafe-desktop/. Beberapa institusi mungkin tidak memperbolehkan Anda untuk mengaktifkan fitur ini - Tanyakan pada admin jaringan Anda jika tidak yakin. Walaupun data dikirimkan secara anonim, pada informasi yang dikirimkan tersebut mungkin terdapat path berkas yang akan membuka identitas Anda atau informasi lain dari sistem Anda.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Catatan:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; Pengaturan di atas memerlukan restart QGIS untuk proses menon-aktifkan/mengaktifkan. Pesan kesalahan dan informasi diagnosa akan dikirimkan ke http://sentry.linfiniti.com/inasafe-desktop/. Beberapa institusi mungkin tidak memperbolehkan Anda untuk mengaktifkan fitur ini.- Periksa dengan admin jaringan Anda jika tidak yakin. Walaupun data dikirimkan secara anonim, informasi yang berada di jejak mungkin berisi path berkas yang akan membuka identitas Anda atau informasi lain dari sistem Anda.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="386"/>
-        <source>Report templates directory</source>
-        <translation>Direktori template laporan</translation>
+        <location filename="options_dialog_base.ui" line="433"/>
+        <source>Enable developer mode for dock webkit (needs restart)</source>
+        <translation>Aktifkan mode pengembang untuk webkit dock (butuh direstart)</translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="372"/>
+        <source>Advanced</source>
+        <translation>Pilihan Lanjutan</translation>
     </message>
 </context>
 <context>
     <name>OsmDownloader</name>
     <message>
-        <location filename="osm_downloader.py" line="71"/>
+        <location filename="osm_downloader.py" line="74"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
         <translation>Alat download InaSAFE OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="95"/>
+        <location filename="osm_downloader.py" line="103"/>
         <source>OSM Downloader</source>
         <translation>Alat download OSM</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="111"/>
+        <location filename="osm_downloader.py" line="130"/>
         <source>If a dataset already exists in the output directory it will be overwritten.</source>
         <translation>Jika dataset sudah ada di direktori output maka dataset tersebut akan ditimpa.</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="118"/>
+        <location filename="osm_downloader.py" line="137"/>
         <source>Downloaded data is copyright OpenStreetMap contributors (click for more info).</source>
         <translation>Data yang didownload adalah hak cipta kontributor OpenStreetMap  (klik untuk info lebih lanjut).</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="164"/>
+        <location filename="osm_downloader.py" line="183"/>
         <source>Select download directory</source>
         <translation>Pilih direktori download</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="191"/>
+        <location filename="osm_downloader.py" line="210"/>
         <source>InaSAFE OpenStreetMap downloader error</source>
         <translation>Kesalahan pada alat download InaSAFE OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="295"/>
+        <location filename="osm_downloader.py" line="320"/>
         <source>Downloading shapefile</source>
         <translation>Mendownload shapefile</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="96"/>
+        <location filename="osm_downloader.py" line="104"/>
         <source>This tool will fetch building (&apos;structure&apos;) or road (&apos;highway&apos;) data from the OpenStreetMap project for you. The downloaded data will have InaSAFE keywords defined and a default QGIS style applied. To use this tool effectively:</source>
         <translation>Tool ini akan mengambil data bangunan *(&apos;structure&apos;)* atau jalan *(&apos;highway&apos;)* dari proyek OpenStreetMap untuk Anda. Data yang didownload akan memiliki kata kunci InaSAFE yang telah didefinisikan dan style QGIS standar yang telah diterapkan. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="103"/>
-        <source>Use QGIS to zoom in to the area for which you want data to be retrieved.</source>
-        <translation>Gunakan QGIS untuk memperbesar ke daerah yang datanya akan diambil.</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader.py" line="106"/>
+        <location filename="osm_downloader.py" line="115"/>
         <source>Check the output directory is correct. Note that the saved dataset will be called either roads.shp or buildings.shp (and associated files).</source>
         <translation>Periksa direktori output yang benar. Perhatikan bahwa dataset yang tersimpan akan dinamai roads.shp atau buildings.shp (dan file terkaitnya).</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="115"/>
+        <location filename="osm_downloader.py" line="134"/>
         <source>This tool requires a working internet connection and fetching buildings or roads will consume your bandwidth.</source>
         <translation>Tool ini memerlukan koneksi internet dan men-download data bangunan atau jalan yang akan mengkonsumsi bandwidth Anda.</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="212"/>
+        <location filename="osm_downloader.py" line="231"/>
         <source>Directory %s not exist</source>
         <translation>Direktori %s tidak ada</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="213"/>
+        <location filename="osm_downloader.py" line="232"/>
         <source>Directory %s not exist. Do you want to create it?</source>
         <translation>Directory %s tidak ada. Apakah Anda ingin membuatnya?</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="226"/>
+        <location filename="osm_downloader.py" line="245"/>
         <source>InaSAFE error</source>
         <translation>Kesalahan InaSAFE</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="226"/>
+        <location filename="osm_downloader.py" line="245"/>
         <source>Output directory can not be empty.</source>
         <translation>Direktori output tidak boleh kosong.</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="348"/>
+        <location filename="osm_downloader.py" line="373"/>
         <source>%s don&apos;t exist. The server doesn&apos;t have any data.</source>
         <translation>%s tidak ada. Server tidak memiliki data.</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader.py" line="111"/>
+        <source>Your current extent will be used to determine the area for which you want data to be retrieved. You can adjust it manually using the bounding box options below.</source>
+        <translation>Extent Anda saat ini akan digunakan untuk mendapatkan area yang ingin Anda ambil. Anda dapat mengubahnya secara manual dengan menggunakan pilihan kotak pembatas di bawah ini.</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader.py" line="120"/>
+        <source>By default simple file names will be used (e.g. roads.shp, buildings.shp). If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;padang-&apos; will cause the downloaded files to be saved as &apos;padang-roads.shp&apos; and &apos;padang-buildings.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
+        <translation>Secara default, nama file yang sederhana akan digunakan (misalnya roads.shp, buildings.shp). Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &apos;padang-&apos; akan mengubah file yang di-download menjadi &apos;padang-roads.shp&apos; dan &apos;padang-buildings.shp&apos;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &apos;-&apos;, dan &apos;_&apos;. Anda dapat mengosongkan pilihan ini.</translation>
     </message>
 </context>
 <context>
@@ -2213,64 +2228,69 @@ p, li { white-space: pre-wrap; }
         <translation>Alat download OSM</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="48"/>
+        <location filename="osm_downloader_base.ui" line="106"/>
         <source>Bounding box</source>
         <translation>Kotak batas</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="54"/>
+        <location filename="osm_downloader_base.ui" line="112"/>
         <source>Minimum latitude</source>
         <translation>Garis lintang minimum</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="61"/>
+        <location filename="osm_downloader_base.ui" line="119"/>
         <source>Minimum longitude</source>
         <translation>Garis bujur minimum</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="71"/>
+        <location filename="osm_downloader_base.ui" line="129"/>
         <source>Maximum longitude</source>
         <translation>Garis bujur maksimum</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="81"/>
+        <location filename="osm_downloader_base.ui" line="139"/>
         <source>Maximum latitude</source>
         <translation>Garis lintang maksimum</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="97"/>
+        <location filename="osm_downloader_base.ui" line="55"/>
         <source>Output directory</source>
         <translation>Hasil direktori</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="113"/>
+        <location filename="osm_downloader_base.ui" line="71"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="133"/>
+        <location filename="osm_downloader_base.ui" line="21"/>
         <source>about:blank</source>
         <translation>Perihal:kosong</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="21"/>
+        <location filename="osm_downloader_base.ui" line="37"/>
         <source>All</source>
         <translation>Semua</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="26"/>
+        <location filename="osm_downloader_base.ui" line="42"/>
         <source>Buildings</source>
         <translation>Bangunan</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="31"/>
+        <location filename="osm_downloader_base.ui" line="47"/>
         <source>Roads</source>
         <translation>Jalan</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="141"/>
+        <location filename="osm_downloader_base.ui" line="29"/>
         <source>Feature Type</source>
         <translation>Jenis feature</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_base.ui" line="80"/>
+        <source>File name prefix</source>
+        <translation>Prefix dari nama file</translation>
     </message>
 </context>
 <context>

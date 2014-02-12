@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" sourcelanguage="" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="en" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -1005,12 +1006,12 @@
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="173"/>
+        <location filename="dock_base.ui" line="138"/>
         <source>about:blank</source>
         <translation>about:blank</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="219"/>
+        <location filename="dock_base.ui" line="184"/>
         <source>Supported by:</source>
         <translation>Supported by:</translation>
     </message>
@@ -1020,7 +1021,7 @@
         <translation>Question: In the event of</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="122"/>
+        <location filename="dock_base.ui" line="80"/>
         <source>How many</source>
         <translation>How many</translation>
     </message>
@@ -1030,22 +1031,17 @@
         <translation>&amp;Might</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="91"/>
-        <source>Configure Impact Function Parameter</source>
-        <translation>Configure Impact Function Parameter</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="112"/>
+        <location filename="dock_base.ui" line="70"/>
         <source>Aggregate results by</source>
         <translation>Aggregate results by</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="293"/>
+        <location filename="dock_base.ui" line="258"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="333"/>
+        <location filename="dock_base.ui" line="298"/>
         <source>Run</source>
         <translation>Run</translation>
     </message>
@@ -1055,12 +1051,12 @@
         <translation>Show question form</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="94"/>
+        <location filename="dock_base.ui" line="110"/>
         <source>Options ...</source>
         <translation>Options ...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="313"/>
+        <location filename="dock_base.ui" line="278"/>
         <source>Print ...</source>
         <translation>Print ...</translation>
     </message>
@@ -1990,220 +1986,236 @@ Message: %s</translation>
         <translation>InaSAFE - Options</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="49"/>
+        <location filename="options_dialog_base.ui" line="162"/>
         <source>Not yet implemented</source>
         <translation>Not yet implemented</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="58"/>
+        <location filename="options_dialog_base.ui" line="202"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
         <translation>Bubble exposure and hazard layers to top when selected</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="68"/>
+        <location filename="options_dialog_base.ui" line="254"/>
         <source>Location for results</source>
         <translation>Location for results</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="374"/>
+        <location filename="options_dialog_base.ui" line="400"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="99"/>
+        <location filename="options_dialog_base.ui" line="192"/>
         <source>Organisation name (for maps, reports etc.)</source>
         <translation>Organisation name (for maps, reports etc.)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="132"/>
+        <location filename="options_dialog_base.ui" line="214"/>
         <source>DPI (Maps and reports)</source>
         <translation>DPI (Maps and reports)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="328"/>
+        <location filename="options_dialog_base.ui" line="58"/>
         <source>Only show visible layers in InaSAFE dock</source>
         <translation>Only show visible layers in InaSAFE dock</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="269"/>
+        <location filename="options_dialog_base.ui" line="68"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
         <translation>Set QGIS layer name from &apos;title&apos; in keywords</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="242"/>
+        <location filename="options_dialog_base.ui" line="78"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
         <translation>Zoom to impact layer on scenario estimate completion</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="232"/>
+        <location filename="options_dialog_base.ui" line="381"/>
         <source>Keyword cache for remote datasources</source>
         <translation>Keyword cache for remote datasources</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="259"/>
+        <location filename="options_dialog_base.ui" line="261"/>
         <source>Run analysis in a separate thread (experimental)</source>
         <translation>Run analysis in a separate thread (experimental)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="252"/>
+        <location filename="options_dialog_base.ui" line="88"/>
         <source>Hide exposure layer on scenario estimate completion</source>
         <translation>Hide exposure layer on scenario estimate completion</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="195"/>
+        <location filename="options_dialog_base.ui" line="95"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
         <translation>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="198"/>
+        <location filename="options_dialog_base.ui" line="98"/>
         <source>Clip datasets to visible extent before analysis</source>
         <translation>Clip datasets to visible extent before analysis</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="342"/>
+        <location filename="options_dialog_base.ui" line="115"/>
         <source>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</source>
         <translation>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="345"/>
+        <location filename="options_dialog_base.ui" line="118"/>
         <source>Show intermediate layers generated by postprocessing</source>
         <translation>Show intermediate layers generated by postprocessing</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="278"/>
+        <location filename="options_dialog_base.ui" line="127"/>
         <source>Female ratio default value</source>
         <translation>Female ratio default value</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="164"/>
+        <location filename="options_dialog_base.ui" line="409"/>
         <source>Help to improve InaSAFE by submitting errors to a remote server</source>
         <translation>Help to improve InaSAFE by submitting errors to a remote server</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="321"/>
-        <source>Enable developer mode (needs restart)</source>
-        <translation>Enable developer mode (needs restart)</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="335"/>
+        <location filename="options_dialog_base.ui" line="108"/>
         <source>When clipping, also clip features (i.e. will clip polygon smaller)</source>
         <translation>When clipping, also clip features (i.e. will clip polygon smaller)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="188"/>
+        <location filename="options_dialog_base.ui" line="440"/>
         <source>Use QGIS zonal statistics (not recommended for QGIS 1.8)</source>
         <translation>Use QGIS zonal statistics (not recommended for QGIS 1.8)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="355"/>
+        <location filename="options_dialog_base.ui" line="298"/>
         <source>Organisation logo</source>
         <translation>Organisation logo</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="393"/>
-        <source>Disclaimer text</source>
-        <translation>Disclaimer text</translation>
+        <location filename="options_dialog_base.ui" line="329"/>
+        <source>Report templates directory</source>
+        <translation>Report templates directory</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="177"/>
+        <location filename="options_dialog_base.ui" line="28"/>
+        <source>Basic Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="357"/>
+        <source>Organisation disclaimer text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="289"/>
+        <source>Template Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="422"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="386"/>
-        <source>Report templates directory</source>
-        <translation>Report templates directory</translation>
+        <location filename="options_dialog_base.ui" line="433"/>
+        <source>Enable developer mode for dock webkit (needs restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="372"/>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>OsmDownloader</name>
     <message>
-        <location filename="osm_downloader.py" line="71"/>
+        <location filename="osm_downloader.py" line="74"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
         <translation>InaSAFE OpenStreetMap Downloader</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="95"/>
+        <location filename="osm_downloader.py" line="103"/>
         <source>OSM Downloader</source>
         <translation>OSM Downloader</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="111"/>
+        <location filename="osm_downloader.py" line="130"/>
         <source>If a dataset already exists in the output directory it will be overwritten.</source>
         <translation>If a dataset already exists in the output directory it will be overwritten.</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="118"/>
+        <location filename="osm_downloader.py" line="137"/>
         <source>Downloaded data is copyright OpenStreetMap contributors (click for more info).</source>
         <translation>Downloaded data is copyright OpenStreetMap contributors (click for more info).</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="164"/>
+        <location filename="osm_downloader.py" line="183"/>
         <source>Select download directory</source>
         <translation>Select download directory</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="191"/>
+        <location filename="osm_downloader.py" line="210"/>
         <source>InaSAFE OpenStreetMap downloader error</source>
         <translation>InaSAFE OpenStreetMap downloader error</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="295"/>
+        <location filename="osm_downloader.py" line="320"/>
         <source>Downloading shapefile</source>
         <translation>Downloading shapefile</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="96"/>
+        <location filename="osm_downloader.py" line="104"/>
         <source>This tool will fetch building (&apos;structure&apos;) or road (&apos;highway&apos;) data from the OpenStreetMap project for you. The downloaded data will have InaSAFE keywords defined and a default QGIS style applied. To use this tool effectively:</source>
         <translation>This tool will fetch building (&apos;structure&apos;) or road (&apos;highway&apos;) data from the OpenStreetMap project for you. The downloaded data will have InaSAFE keywords defined and a default QGIS style applied. To use this tool effectively:</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="103"/>
-        <source>Use QGIS to zoom in to the area for which you want data to be retrieved.</source>
-        <translation>Use QGIS to zoom in to the area for which you want data to be retrieved.</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader.py" line="106"/>
+        <location filename="osm_downloader.py" line="115"/>
         <source>Check the output directory is correct. Note that the saved dataset will be called either roads.shp or buildings.shp (and associated files).</source>
         <translation>Check the output directory is correct. Note that the saved dataset will be called either roads.shp or buildings.shp (and associated files).</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="115"/>
+        <location filename="osm_downloader.py" line="134"/>
         <source>This tool requires a working internet connection and fetching buildings or roads will consume your bandwidth.</source>
         <translation>This tool requires a working internet connection and fetching buildings or roads will consume your bandwidth.</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="212"/>
+        <location filename="osm_downloader.py" line="231"/>
         <source>Directory %s not exist</source>
         <translation>Directory %s not exist</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="213"/>
+        <location filename="osm_downloader.py" line="232"/>
         <source>Directory %s not exist. Do you want to create it?</source>
         <translation>Directory %s not exist. Do you want to create it?</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="226"/>
+        <location filename="osm_downloader.py" line="245"/>
         <source>InaSAFE error</source>
         <translation>InaSAFE error</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="226"/>
+        <location filename="osm_downloader.py" line="245"/>
         <source>Output directory can not be empty.</source>
         <translation>Output directory can not be empty.</translation>
     </message>
     <message>
-        <location filename="osm_downloader.py" line="348"/>
+        <location filename="osm_downloader.py" line="373"/>
         <source>%s don&apos;t exist. The server doesn&apos;t have any data.</source>
         <translation>%s don&apos;t exist. The server doesn&apos;t have any data.</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader.py" line="111"/>
+        <source>Your current extent will be used to determine the area for which you want data to be retrieved. You can adjust it manually using the bounding box options below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader.py" line="120"/>
+        <source>By default simple file names will be used (e.g. roads.shp, buildings.shp). If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;padang-&apos; will cause the downloaded files to be saved as &apos;padang-roads.shp&apos; and &apos;padang-buildings.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2214,64 +2226,69 @@ p, li { white-space: pre-wrap; }
         <translation>OSM Downloader</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="48"/>
+        <location filename="osm_downloader_base.ui" line="106"/>
         <source>Bounding box</source>
         <translation>Bounding box</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="54"/>
+        <location filename="osm_downloader_base.ui" line="112"/>
         <source>Minimum latitude</source>
         <translation>Minimum latitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="61"/>
+        <location filename="osm_downloader_base.ui" line="119"/>
         <source>Minimum longitude</source>
         <translation>Minimum longitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="71"/>
+        <location filename="osm_downloader_base.ui" line="129"/>
         <source>Maximum longitude</source>
         <translation>Maximum longitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="81"/>
+        <location filename="osm_downloader_base.ui" line="139"/>
         <source>Maximum latitude</source>
         <translation>Maximum latitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="97"/>
+        <location filename="osm_downloader_base.ui" line="55"/>
         <source>Output directory</source>
         <translation>Output directory</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="113"/>
+        <location filename="osm_downloader_base.ui" line="71"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="133"/>
+        <location filename="osm_downloader_base.ui" line="21"/>
         <source>about:blank</source>
         <translation>about:blank</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="21"/>
+        <location filename="osm_downloader_base.ui" line="37"/>
         <source>All</source>
         <translation>All</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="26"/>
+        <location filename="osm_downloader_base.ui" line="42"/>
         <source>Buildings</source>
         <translation>Buildings</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="31"/>
+        <location filename="osm_downloader_base.ui" line="47"/>
         <source>Roads</source>
         <translation>Roads</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="141"/>
+        <location filename="osm_downloader_base.ui" line="29"/>
         <source>Feature Type</source>
         <translation>Feature Type</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_base.ui" line="80"/>
+        <source>File name prefix</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
