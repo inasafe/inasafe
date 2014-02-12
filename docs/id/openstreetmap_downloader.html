@@ -166,20 +166,32 @@
                 
   <div class="section" id="openstreetmap-downloader">
 <span id="id1"></span><h1>Mendownload OpenStreetMap<a class="headerlink" href="#openstreetmap-downloader" title="Link permanent untuk headline ini">¶</a></h1>
-<p>Alat ini akan memperoleh data (&#8216;struktur&#8217;) bangunan dari projek OpenStreetMap untuk Anda.</p>
+<p>This tool will fetch building (&#8216;structure&#8217;) and highway (&#8216;road&#8217;) data from the
+OpenStreetMap project for you.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/openstreetmap_downloader.png"><img alt="OpenStreetMap Downloader" src="_images/openstreetmap_downloader.png" style="width: 338.25px; height: 476.25px;" /></a>
+<a class="reference internal image-reference" href="_images/openstreetmap_downloader.png"><img alt="OpenStreetMap Downloader" src="_images/openstreetmap_downloader.png" style="width: 391.5px; height: 403.5px;" /></a>
 <p class="caption">Mendownload OpenStreetMap</p>
 </div>
-<p>InaSAFE mendukung penggunaan data bangunan dalam berbagai analisis fungsi dampak, khususnya data bangunan yang bersumber dari <cite>OpenStreetMap &lt;https://openstreetmap.org&gt;</cite> _ proyek (OSM). Alat ini membutuhkan koneksi internet untuk mengambil data melalui layanan berbasis web yang berjalan pada <a class="reference external" href="http://osm.linfiniti.com">Linfiniti&#8217;s OSM Reporter</a> situs web.</p>
+<p>The tool requires internet connection as it fetches the data via a web service
+running on <a class="reference external" href="http://osm.linfiniti.com">Linfiniti&#8217;s OSM Reporter</a> web site.</p>
 <p>Data, setelah didownload akan tersedia untuk Anda sebagai sebuah shapefile. Sebuah gaya file secara otomatis dibuat sehingga dilambangkan dengan baik dalam QGIS. Selain itu, metadata kata kunci yang benar dibuat untuk dataset didownload sehingga dapat digunakan secara langsung dalam skenario analisis dampak menggunakan InaSAFE.</p>
-<p><strong>Catatan:</strong> Alat mendownload data bangunan memiliki batas untuk ukuran dataset yang akan diambil. Mungkin Anda memiliki masalah ketika ingin mengambil wilayah sebuah negara.  Umumnya dataset untuk tingkat kota dan dibawahnya akan berjalan dengan baik.</p>
+<p><strong>Note:</strong> The downloader service has limitations as to the size of
+datasets that can be retrieved. As such you may experience issues trying to
+fetch e.g. country wide building footprint data. Generally datasets at a
+city level and below should work well.</p>
 <p>Untuk menggunakan alat ini secara efektif:</p>
 <ul class="simple">
-<li><p class="first">Gunakan QGIS untuk memperbesar ke daerah yang data bangunannya akan diambil.</p>
-</li>
-<li><p class="first">Periksa direktori output yang benar. Perhatikan bahwa dataset tersimpan akan bernama buildings.shp (begitu pun file terkait lainnya).</p>
-</li>
+<li>Use QGIS to zoom in to the area for which you want building data to be
+retrieved. For fine-grained control, you can set the bounding box manually
+in the area provided at the bottom of the dialog.</li>
+<li>Check the output directory is correct. Note that the saved datasets
+will be called buildings.shp and roads.shp (and their associated files).</li>
+<li>By default simple file names will be used (e.g. roads.shp, buildings.shp).
+If you wish you can specify a prefix to add in front of this default name.
+For example using a prefix of &#8216;padang-&#8216; will cause the downloaded files to be
+saved as &#8216;padang-roads.shp&#8217; and &#8216;padang-buildings.shp&#8217;. Note that the only
+allowed prefix characters are A-Z, a-z, 0-9 and the characters &#8216;-&#8216; and &#8216;_&#8217;.
+You can leave this blank if you prefer.</li>
 <li><p class="first">Tekan <em class="guilabel">OK Button</em> dan tunggu data untuk diambil.</p>
 </li>
 </ul>
@@ -190,6 +202,62 @@
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
 <p class="last">Data yang didownload adalah hak cipta kontributor OpenStreetMap (klik untuk info lebih lanjut).</p>
+</div>
+<div class="section" id="building-data">
+<h2>Building data<a class="headerlink" href="#building-data" title="Link permanent untuk headline ini">¶</a></h2>
+<p>InaSAFE supports the use of building data in various impact functions. In
+particular we support building footprints sourced from the
+<a class="reference external" href="https://openstreetmap.org">OpenStreetMap</a> project (OSM).</p>
+<p>The following building types are derived (depending on the various tags assigned
+to them in OSM):</p>
+<ul class="simple">
+<li>School</li>
+<li>University/College</li>
+<li>Government</li>
+<li>Clinic/Doctor</li>
+<li>Hospital</li>
+<li>Fire Station</li>
+<li>Police Station</li>
+<li>Public Building</li>
+<li>Place of Worship - Islam</li>
+<li>Place of Worship - Unitarian</li>
+<li>Place of Worship - Buddhist</li>
+<li>Place of Worship - Unitarian</li>
+<li>Supermarket</li>
+<li>Residential</li>
+<li>Sports Facility</li>
+<li>Place of Worship</li>
+<li>Commercial</li>
+<li>Industrial</li>
+</ul>
+<p>These derived types will be present in a field called &#8216;type&#8217; when downloading
+the building data.Note that depending on the area for which you have downloaded,
+only some of these categories may be present in your buildings dataset.</p>
+</div>
+<div class="section" id="roads-data">
+<h2>Roads data<a class="headerlink" href="#roads-data" title="Link permanent untuk headline ini">¶</a></h2>
+<p>InaSAFE supports the use of road data in various impact functions. In
+particular we support roads sourced from the
+<a class="reference external" href="https://openstreetmap.org">OpenStreetMap</a> project (OSM).</p>
+<p>The following road types are derived (depending on the various tags assigned
+to them in OSM):</p>
+<p>ALTER TABLE planet_osm_line ADD COLUMN &#8220;type&#8221; VARCHAR(255) NULL;</p>
+<ul class="simple">
+<li>Motorway or highway (includes &#8216;trunk&#8217; from OSM)</li>
+<li>Motorway link</li>
+<li>Primary road</li>
+<li>Primary link</li>
+<li>Tertiary</li>
+<li>Tertiary link</li>
+<li>Secondary</li>
+<li>Secondary link</li>
+<li>Road, residential, living street, etc. (includes all highways tagged with
+&#8216;living_street&#8217;, &#8216;residential&#8217;, &#8216;yes&#8217;, &#8216;road&#8217;, &#8216;unclassified&#8217;, &#8216;service&#8217;, &#8216;&#8217;
+and NULL highways)</li>
+<li>Track&#8217;</li>
+<li>Cycleway, footpath, etc. (includes &#8216;cycleway&#8217;, &#8216;footpath&#8217;, &#8216;pedestrian&#8217;,
+&#8216;footway&#8217; and &#8216;path&#8217; highway tags).</li>
+</ul>
 </div>
 </div>
 

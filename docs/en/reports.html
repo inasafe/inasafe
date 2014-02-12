@@ -208,13 +208,19 @@ replaced by the realtime map renderer, although certain styling options
 the following elements:</p>
 <ul class="simple">
 <li><strong>safe-logo</strong> &#8212; QGIS composer image, which will be used for displaying
-organization logo. By default BNPB logo is used. To use custom logo image,
-set the path to your PNG file in the plugin Options dialog (see
-<a class="reference internal" href="options.html#toolbar-options"><em>Options</em></a> for details).</li>
+InaSAFE logo with web-site url.</li>
+<li><strong>organisation-logo</strong> &#8212; QGIS composer image, which will be used for
+displaying organisation logo. By default a combined supporters logo is used.
+To use custom logo image, set the path to your PNG file in the plugin Options
+dialog (see <a class="reference internal" href="options.html#toolbar-options"><em>Options</em></a> for details).</li>
 <li><strong>impact-map</strong> &#8212; QGIS composer map, which will be used for displaying the
 impact scenario.</li>
 <li><strong>impact-legend</strong> &#8212; QGIS composer legend, which will be used for displaying
 the legend of the impact scenario.</li>
+<li><strong>impact-report</strong> &#8212; QGIS composer label, which will be used for displaying
+the impact report table. <strong>NOTE</strong>: as QGIS composer doesn&#8217;t support
+automatic resizing elementse, based on their contents, make sure that label
+have dimensions large enough to show full table.</li>
 </ul>
 </div>
 </div>
@@ -232,6 +238,10 @@ defaulting to English where no translation if available).</p>
 <li><strong>date</strong> &#8212; date of the assessment.</li>
 <li><strong>time</strong> &#8212; time of the assessment.</li>
 <li><strong>safe-version</strong> &#8212; version of the plugin used.</li>
+<li><strong>disclaimer</strong> &#8212; disclaimer text. By default used next text: &#8220;InaSAFE has
+been jointly developed by BNPB, Australian Government and the World Bank -
+GFDRR&#8221;. To use custom disclaimer text, enter desired text the plugin Options
+dialog (see <a class="reference internal" href="options.html#toolbar-options"><em>Options</em></a> for details).</li>
 </ul>
 </div>
 <div class="section" id="custom-templates">
@@ -246,18 +256,19 @@ borders, etc), moving the template elements themselves around or
 adding / removing them completely.</li>
 <li>Creating your own template from scratch and using it instead of default one.</li>
 </ul>
-<p>The template is provided as
+<p>The default template is provided as
 <tt class="file docutils literal"><span class="pre">inasafe/safe_qgis/resources/qgis-composer-templates/inasafe.qpt</span></tt>
 and can be modified by opening the template using the QGIS map composer,
 making your changes and then overwriting the template or saving it in any
-directory.
-You should take care to test your template changes before using it in
+directory.</p>
+<p>You should take care to test your template changes before using it in
 a production environment.</p>
-<p>To use a custom template instead of the default one,
-go to <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em> or click on
-the InaSAFE plugin toolbar&#8217;s options icon.
-In Options dialog specify <em class="guilabel">Report template</em> setting.
-It should contain full path to your custom template.</p>
+<p>Also in addition to default template you can have as many custom templates as
+you want. Just create templates, put them in some folder somewhere in
+filesystem and go to <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em>
+or click on the InaSAFE plugin toolbar&#8217;s options icon. In Options dialog
+specify <em class="guilabel">Report template</em> setting. It should contain full path to the
+folder with your custom templates.</p>
 </div>
 </div>
 
