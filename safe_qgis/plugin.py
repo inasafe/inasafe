@@ -506,7 +506,6 @@ class Plugin:
             return
         # End of fix for #776
 
-
         dialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
