@@ -31,7 +31,7 @@
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
-    <link rel="next" title="Reports" href="reports.html" />
+    <link rel="next" title="Laporan" href="reports.html" />
     <link rel="prev" title="Menggunakan InaSAFE" href="dock.html" />
 
 <style>
@@ -132,7 +132,7 @@
                 <li class="right"
                  >
                 <a href="reports.html"
-                   title="Reports"
+                   title="Laporan"
                    style="z-index:;"
                 accesskey="N">berikut</a>
                 </li>
@@ -216,8 +216,9 @@
 </tr>
 </tbody>
 </table>
-<p>Example keywords file entry</p>
-<div class="highlight-python"><pre>category: hazard</pre>
+<p>Contoh pemasukan file kata kunci</p>
+<div class="highlight-python"><div class="highlight"><pre>category: hazard
+</pre></div>
 </div>
 </div>
 <div class="section" id="subcategory">
@@ -280,20 +281,19 @@
 </tr>
 </tbody>
 </table>
-<p>Example keywords file entry</p>
-<div class="highlight-python"><pre>category: hazard
-subcategory: flood</pre>
+<p>Contoh pemasukan file kata kunci</p>
+<div class="highlight-python"><div class="highlight"><pre>category: hazard
+subcategory: flood
+</pre></div>
 </div>
 </div>
 <div class="section" id="units">
 <h3>unit/ satuan<a class="headerlink" href="#units" title="Link permanent untuk headline ini">¶</a></h3>
-<p>The units keyword is only valid in the context of &#8216;hazard&#8217; layers, and is
-used to indicate the metric or imperial units represented by each data entity
-(a grid cell or a vector feature) in the hazard layer. Example keywords file
-entry</p>
-<div class="highlight-python"><pre>category: hazard
+<p>Kata kunci unit hanya berlaku pada konteks layer &#8216;ancaman&#8217;, dan digunakan untuk mengindikasikan satuan metrik atau imperial yang digambarkan oleh setiap entitas data (satu sel kotak atau satu fitur vektor) pada layer ancaman. Contoh pemasukan file kata kunci</p>
+<div class="highlight-python"><div class="highlight"><pre>category: hazard
 subcategory: flood
-units: m</pre>
+units: m
+</pre></div>
 </div>
 <p>Pada kasus di atas terdapat kendala halus untuk menggunakan nilai satuan m, kaki atau basah/kering sebagaimana yang didefinisikan oleh tabel di bawah ini karena subkategori &#8216;banjir&#8217;. Berikut ini adalah satuan yang diperbolehkan tergantung pada subkategori yang telah ditetapkan.</p>
 <p>Subkategori yang berlaku untuk subkategori &#8216;tsunami&#8217; atau subkategori &#8216;banjir&#8217;:</p>
@@ -452,7 +452,7 @@ units: m</pre>
 </ol>
 <p>Contoh mengedit kata kunci dalam mode minimal ditunjukkan di bawah ini.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-simple.png"><img alt="Opened keyword editor window" src="_images/keyword-editor-simple.png" style="width: 501.0px; height: 355.5px;" /></a>
+<a class="reference internal image-reference" href="_images/keyword-editor-simple.png"><img alt="Opened keyword editor window" src="_images/keyword-editor-simple.png" style="width: 311.25px; height: 218.25px;" /></a>
 <p class="caption">Jendela editor kata kunci yang dibuka</p>
 </div>
 <ol class="arabic simple" start="2">
@@ -470,7 +470,7 @@ units: m</pre>
 </ul>
 </div></blockquote>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-advanced.png"><img alt="Advanced mode of keyword editor" src="_images/keyword-editor-advanced.png" style="width: 390.0px; height: 487.5px;" /></a>
+<a class="reference internal image-reference" href="_images/keyword-editor-advanced.png"><img alt="Advanced mode of keyword editor" src="_images/keyword-editor-advanced.png" style="width: 431.25px; height: 478.5px;" /></a>
 <p class="caption">Mode Editor kata kunci tingkat lanjut</p>
 </div>
 </div>
@@ -478,7 +478,7 @@ units: m</pre>
 <h2>Membuka editor kata kunci (keyword editor)<a class="headerlink" href="#invoking-the-keywords-editor" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Editor kata kunci (keyword) dapat dengan mudah dipanggil dengan <strong>memilih setiap layer</strong> di daftar layer QGIS, dan kemudian menggunakan menu plugin untuk memulai mengedit (<em class="menuselection">Plugins ‣ InaSAFE ‣ Keyword Editor</em>). Atau Anda mungkin menggunakan simbol editor kata kunci (keyword) di dalam toolbar plugin seperti diilustrasikan di bawah.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-icon.png"><img alt="Keyword editor icon" src="_images/keyword-editor-icon.png" style="width: 373.0px; height: 40.0px;" /></a>
+<a class="reference internal image-reference" href="_images/keyword-editor-icon.png"><img alt="Keyword editor icon" src="_images/keyword-editor-icon.png" style="width: 353.0px; height: 36.0px;" /></a>
 <p class="caption">Ikon editor kata kunci</p>
 </div>
 <div class="admonition note">
@@ -499,12 +499,12 @@ units: m</pre>
 <p>Jika Anda menggunakan PostgreSQL, WFS, Spatialite atau non-file lain berbasis sumber daya, Anda tetap dapat mengisi kotak dialog kata kunci (keyword). Dalam keadaan ini kata kunci akan ditulis ke basis data sqlite - secara standar basis data ini disimpan sebagai <tt class="file docutils literal"><span class="pre">keywords.db</span></tt> di dalam InaSAFE direktori utama pugin.</p>
 <p>Anda mungkin berharap untuk menggunakan lokasi yang berbeda untuk <tt class="file docutils literal"><span class="pre">keywords.db</span></tt> kata kunci basis data - Anda dapat mengkonfigurasi ini dengan menggunakan InaSAFE dialog pilihan. Dialog pilihan dapat dimunculkan dengan mengklik pada InaSAFE simbol plugin toolbar pilihan (seperti terlihat di bawah) atau dengan melakukan <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em>.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/toolbar_options.png"><img alt="Options Icon" src="_images/toolbar_options.png" style="width: 373.0px; height: 40.0px;" /></a>
+<a class="reference internal image-reference" href="_images/toolbar_options.png"><img alt="Options Icon" src="_images/toolbar_options.png" style="width: 348.0px; height: 37.0px;" /></a>
 <p class="caption">Memilih ikon pilihan</p>
 </div>
 <p>Ketika kotak dialog Option (Pilihan) terbuka, path basis data  kata kunci (keyword) dapat ditentukan menggunakan pilihan <em class="guilabel">keyword cache for remote datasources</em> seperti yang terlihat dibawah.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/options-keyword-db-path.png"><img alt="Path to options database" src="_images/options-keyword-db-path.png" style="width: 495.0px; height: 596.0px;" /></a>
+<a class="reference internal image-reference" href="_images/options-keyword-db-path.png"><img alt="Path to options database" src="_images/options-keyword-db-path.png" style="width: 523.0px; height: 592.0px;" /></a>
 <p class="caption">Jalur ke pilihan database</p>
 </div>
 <div class="admonition note">
@@ -520,20 +520,15 @@ units: m</pre>
 </div>
 <div class="section" id="sharing-your-keywords-cache">
 <h2>Berbagi cache kata kunci Anda<a class="headerlink" href="#sharing-your-keywords-cache" title="Link permanent untuk headline ini">¶</a></h2>
-<p>In theory you can place the keywords file on a network share and create
-a shared keyword repository in a multi-user environment, but you should note
-that the layer URI hashes need to be identical in order for a layer&#8217;s keyword
-to be found. This means that, for (contrived), example</p>
+<p>Secara teori anda dapat menempatkan file kata kunci pada sebuah jaringan berbagi dan membuat sebuah repositori kata kunci bersama dalam lingkungan banyak pengguna, tetapi anda harus perhatikan bahwa hash layer URI perlu untuk diidentifikasi supaya kata kunci layer dapat ditemukan.  Ini dimaksudkan untuk (dibuat sebagai), contoh</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span><span class="o">=</span><span class="n">postgresql</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">joe</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span><span class="n">resource</span><span class="o">=</span><span class="n">osm_buildings</span>
 </pre></div>
 </div>
-<p>would not be considered the same as</p>
+<p>Tidak akan dianggap sama seperti</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span><span class="o">=</span><span class="n">postgresql</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">anne</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span><span class="n">resource</span><span class="o">=</span><span class="n">osm_buildings</span>
 </pre></div>
 </div>
-<p>since the user credentials differ, resulting in a different URI. To work
-around this you could create a common account so that every user will
-effectively use the same URI to load that layer e.g.</p>
+<p>karena kredensial pengguna berbeda, sehingga menghasilkan URI yang berbeda. Untuk mengatasi ini, Anda bisa membuat akun umum sehingga setiap pengguna secara efektif akan menggunakan URI yang sama untuk memuat layer misalnya</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span><span class="o">=</span><span class="n">postgresql</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">public</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span><span class="n">resource</span><span class="o">=</span><span class="n">osm_buildings</span>
 </pre></div>
 </div>
