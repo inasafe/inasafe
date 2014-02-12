@@ -177,8 +177,8 @@ def get_plugins(name=None):
             dict([(p.__name__, p) for p in FunctionProvider.plugins]))
 
         msg = ('No plugin named "%s" was found. '
-               'List of available plugins is: %s'
-               % (name, ', '.join(plugins_dict.keys())))
+               'List of available plugins is: \n%s'
+               % (name, ',\n '.join(plugins_dict.keys())))
         if name not in plugins_dict:
             raise RuntimeError(msg)
 

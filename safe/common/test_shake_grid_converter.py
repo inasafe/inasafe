@@ -40,7 +40,7 @@ class ConverterTest(unittest.TestCase):
             my_result, my_expected_result,
             'Result path not as expected')
         exists = os.path.exists(my_result)
-        self.assertTrue(exists, 'File result : %s is not exist' % my_result)
+        self.assertTrue(exists, 'File result : %s does not exist' % my_result)
         exists = os.path.exists(my_result[:-3] + 'keywords')
         self.assertTrue(
             exists,
