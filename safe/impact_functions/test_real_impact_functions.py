@@ -1,3 +1,4 @@
+# coding=utf-8
 """Works with real library impact functions rather than test examples
 """
 
@@ -7,8 +8,8 @@ from safe.impact_functions.core import get_admissible_plugins
 from safe.impact_functions.core import requirements_collect
 
 
-class Test_real_plugins(unittest.TestCase):
-    """Tests of Risiko calculations
+class TestRealImpactFunctions(unittest.TestCase):
+    """Tests of SAFE calculations
     """
 
     def test_filtering_of_impact_functions(self):
@@ -16,45 +17,74 @@ class Test_real_plugins(unittest.TestCase):
         """
 
         # Check empty call returns all
-        P = get_admissible_plugins([])
+        admissible_plugins = get_admissible_plugins([])
 
         # List the known impact function names
         # based on their class names - not their titles
-        msg = 'Available impact functions are: %s' % str(P.keys())
+        msg = (
+            'Available impact functions are: %s' %
+            str(admissible_plugins.keys()))
         #print msg
-        assert 'Flood Evacuation Function Vector Hazard' in P, msg
-        assert 'I T B Earthquake Building Damage Function' in P, msg
-        assert 'Earthquake Building Impact Function' in P, msg
-        assert 'P A G Fatality Function' in P, msg
-        assert 'Flood Evacuation Function' in P, msg
-        assert 'Flood Building Impact Function' in P, msg
-        assert 'I T B Fatality Function' in P, msg
-        assert 'Volcano Building Impact' in P, msg
-        assert 'Volcano Polygon Hazard Population' in P, msg
+        assert (
+            'Flood Evacuation Function Vector Hazard'
+            in admissible_plugins, msg)
+        assert (
+            'I T B Earthquake Building Damage Function'
+            in admissible_plugins, msg)
+        assert (
+            'Earthquake Building Impact Function'
+            in admissible_plugins, msg)
+        assert (
+            'admissible_plugins A G Fatality Function'
+            in admissible_plugins, msg)
+        assert (
+            'Flood Evacuation Function'
+            in admissible_plugins, msg)
+        assert (
+            'Flood Building Impact Function'
+            in admissible_plugins, msg)
+        assert (
+            'I T B Fatality Function'
+            in admissible_plugins, msg)
+        assert (
+            'Volcano Building Impact'
+            in admissible_plugins, msg)
+        assert (
+            'Volcano Polygon Hazard Population'
+            in admissible_plugins, msg)
 
         # This one should get 2 earthquake building impact functions
-        D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
-        D2 = {'category': 'exposure', 'datatype': 'itb',
-              'subcategory': 'structure'}
+        dict1 = {
+            'category': 'hazard',
+            'subcategory': 'earthquake',
+            'unit': 'MMI'}
+        dict2 = dict(
+            category='exposure',
+            datatype='itb',
+            subcategory='structure')
 
         # Add layertype
-        D1['layertype'] = 'raster'
-        D2['layertype'] = 'vector'
-        P = get_admissible_plugins([D1, D2])
-        msg = 'Expected: len(P) >= 2, Got: len(P) is %i' % len(P)
-        assert len(P) >= 1, msg  # Depending on other tests there could be more
-        assert 'Earthquake Building Impact Function' in P
+        dict1['layertype'] = 'raster'
+        dict2['layertype'] = 'vector'
+        admissible_plugins = get_admissible_plugins([dict1, dict2])
+        msg = (
+            'Expected: len(admissible_plugins) >= 2, Got: '
+            'len(admissible_plugins) is %i' % len(admissible_plugins))
+        # Depending on other tests there could be more
+        assert len(admissible_plugins) >= 1, msg
+        assert 'Earthquake Building Impact Function' in admissible_plugins
 
         # This one should get 3 flood population impact functions
-        D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
-        D2 = {'category': 'exposure', 'subcategory': 'population'}
+        dict1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
+        dict2 = dict(category='exposure', subcategory='population')
 
         # Add layertype
-        D1['layertype'] = 'raster'
-        D2['layertype'] = 'raster'
-        P = get_admissible_plugins([D1, D2])
-        assert len(P) >= 1  # Depending on other tests there could be more
-        #assert 'W B Flood Evacuation Function' in P
+        dict1['layertype'] = 'raster'
+        dict2['layertype'] = 'raster'
+        admissible_plugins = get_admissible_plugins([dict1, dict2])
+        # Depending on other tests there could be more
+        assert len(admissible_plugins) >= 1
+        #assert 'W B Flood Evacuation Function' in admissible_plugins
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
@@ -62,29 +92,31 @@ class Test_real_plugins(unittest.TestCase):
         # Try to get general inundation building impact function
         f_name = 'Flood Building Impact Function'
 
-        P = get_admissible_plugins(D1)
-        assert len(P) >= 2
-        #assert 'W B Flood Evacuation Function' in P
-        assert f_name in P
-        #assert 'Flood Road Impact Function' in P
+        admissible_plugins = get_admissible_plugins(dict1)
+        assert len(admissible_plugins) >= 2
+        #assert 'W B Flood Evacuation Function' in admissible_plugins
+        assert f_name in admissible_plugins
+        #assert 'Flood Road Impact Function' in admissible_plugins
 
-        D1 = {'category': 'hazard', 'subcategory': 'tsunami'}
-        D2 = {'category': 'exposure', 'subcategory': 'structure'}
+        dict1 = {'category': 'hazard', 'subcategory': 'tsunami'}
+        dict2 = dict(category='exposure', subcategory='structure')
 
         # Add layertype
-        #D1['layertype'] = 'raster'  # Not required for flood building impact
-        D2['layertype'] = 'vector'
-        P = get_admissible_plugins([D1, D2])
+        # Not required for flood building impact
+        #dict1['layertype'] = 'raster'
+        dict2['layertype'] = 'vector'
+        admissible_plugins = get_admissible_plugins([dict1, dict2])
 
-        msg = 'Expected name "%s" in P: %s' % (f_name, P)
-        assert f_name in P, msg
+        msg = 'Expected name "%s" in admissible_plugins: %s' % (
+            f_name, admissible_plugins)
+        assert f_name in admissible_plugins, msg
 
         # Get requirements from expected function
-        P_all = get_admissible_plugins()
-        assert P[f_name] == P_all[f_name]
+        all_plugins = get_admissible_plugins()
+        assert admissible_plugins[f_name] == all_plugins[f_name]
 
-        requirelines = requirements_collect(P[f_name])
-        for i, D in enumerate([D1, D2]):
+        requirelines = requirements_collect(admissible_plugins[f_name])
+        for i, D in enumerate([dict1, dict2]):
             for key in D:
                 msg = 'Key %s was not found in %s' % (key, requirelines[i])
                 assert key in requirelines[i], msg
@@ -93,6 +125,6 @@ class Test_real_plugins(unittest.TestCase):
                 assert D[key] in requirelines[i], msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_real_plugins, 'test')
+    suite = unittest.makeSuite(TestRealImpactFunctions)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
