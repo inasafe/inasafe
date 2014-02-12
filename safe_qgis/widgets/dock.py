@@ -832,14 +832,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Obtain QgsMapLayer id from the userrole of the QtCombo for exposure
         and return it as a QgsMapLayer.
 
-        Args:
-            None
-
-        Returns:
-            QgsMapLayer - currently selected map layer in the exposure combo.
-
-        Raises:
-            None
+        :returns: Currently selected map layer in the exposure combo.
+        :rtype: QgsMapLayer
         """
 
         index = self.cboExposure.currentIndex()
@@ -948,11 +942,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
         #TODO style these.
+
+        hazard_layer = self.get_hazard_layer()
+        exposure_layer = self.get_exposure_layer()
+
+        if exposure_layer is None or hazard_layer is None:
+            title = self.tr('No valid layers')
+            details = self.tr(
+                'Please ensure your hazard and exposure layers are defined '
+                'and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                 m.Heading(title, **WARNING_STYLE),
+                 m.Paragraph(details))
+            self.show_static_message(message)
+            return
+
         text = m.Text(
             self.tr('This analysis will calculate the impact of'),
-            m.EmphasizedText(self.get_hazard_layer().name()),
+            m.EmphasizedText(hazard_layer.name()),
             self.tr('on'),
-            m.EmphasizedText(self.get_exposure_layer().name()),
+            m.EmphasizedText(exposure_layer.name()),
         )
 
         if self.get_aggregation_layer() is not None:
