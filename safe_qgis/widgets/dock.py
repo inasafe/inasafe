@@ -174,6 +174,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.developer_mode = None
 
         self.read_settings()  # get_project_layers called by this
+        self.clip_parameters = None
         self.aggregator = None
         self.postprocessor_manager = None
         self.function_parameters = None
@@ -891,8 +892,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
+
+        _, buffered_geo_extent, _, _, _, _ = self.clip_parameters
+
+        #setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
-            self.get_extent_as_array(),
+            buffered_geo_extent,
             self.get_aggregation_layer())
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
@@ -980,9 +985,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         # Find out what the usable extent and cellsize are
+        self.clip_parameters = self.get_clip_parameters()
         try:
-            _, buffered_geoextent, cell_size, _, _, _ = \
-                self.get_clip_parameters()
+            _, buffered_geoextent, cell_size, _, _, _ = self.clip_parameters
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
@@ -1568,8 +1573,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # and other related parameters needed for clipping.
         try:
             (extra_exposure_keywords, buffered_geo_extent, cell_size,
-             exposure_layer, geo_extent, hazard_layer) = \
-                self.get_clip_parameters()
+             exposure_layer, geo_extent, hazard_layer) = self.clip_parameters
         except:
             raise
         # Make sure that we have EPSG:4326 versions of the input layers
