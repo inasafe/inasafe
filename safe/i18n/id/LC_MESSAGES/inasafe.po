@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# akbargumbira <akbargumbira@gmail.com>, 2014
 # dewisulistio <dewi.sulistio@gmail.com>, 2013
 # uswatunkh21 <uswatunkh21@yahoo.com>, 2014
 # dika <mahardika.fadmastuti@gmail.com>, 2013
@@ -12,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 13:55+0700\n"
-"PO-Revision-Date: 2014-02-10 06:57+0000\n"
+"POT-Creation-Date: 2014-02-11 11:04+0700\n"
+"PO-Revision-Date: 2014-02-11 02:50+0000\n"
 "Last-Translator: akbargumbira <akbargumbira@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +45,7 @@ msgstr "Gedung-gedung/bangunan"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:254
 #: safe/postprocessors/age_postprocessor.py:127
 #: safe/postprocessors/aggregation_postprocessor.py:113
-#: safe/postprocessors/building_type_postprocessor.py:168
+#: safe/postprocessors/building_type_postprocessor.py:151
 #: safe/postprocessors/gender_postprocessor.py:112
 msgid "Total"
 msgstr "Jumlah"
@@ -163,7 +164,7 @@ msgstr "OK"
 msgid "Flooded"
 msgstr "Kebanjiran"
 
-#: safe/storage/test_io.py:2463 safe/storage/test_io.py:2473
+#: safe/storage/test_io.py:2465 safe/storage/test_io.py:2475
 msgid "Hello!"
 msgstr "Halo!"
 
@@ -2270,7 +2271,7 @@ msgstr "Diagnostik (klik untuk rincian)"
 msgid "Calculates age related statistics."
 msgstr "Perhitungan statistik berdasarkan kelompok usia."
 
-#: safe/postprocessors/aggregation_categorical_postprocessor.py:48
+#: safe/postprocessors/aggregation_categorical_postprocessor.py:39
 msgid "Calculates generic categorical statistics."
 msgstr "Perhitungan statistik berdasarkan kategori umum."
 
@@ -2278,7 +2279,7 @@ msgstr "Perhitungan statistik berdasarkan kategori umum."
 msgid "Calculates generic aggregation statistics"
 msgstr "Perhitungan statistik berdasarkan agregasi umum"
 
-#: safe/postprocessors/building_type_postprocessor.py:69
+#: safe/postprocessors/building_type_postprocessor.py:60
 msgid "Calculates building types related statistics."
 msgstr "Perhitungan statistik berdasarkan jenis bangunan."
 
@@ -2419,7 +2420,7 @@ msgstr "(tergenang atau tidak tergenang)"
 msgid "Stucture liquefied status"
 msgstr "Status bangunan tergenang"
 
-#: safe/postprocessors/minimum_needs_postprocessor.py:48
+#: safe/postprocessors/minimum_needs_postprocessor.py:39
 msgid "Aggregates minimum needs."
 msgstr "Mengagregasi kebutuhan minimum."
 
@@ -2437,27 +2438,27 @@ msgstr "Pemuatan layer dampak \"%s\" tidak valid"
 msgid ""
 "To assess the impact of earthquake on population based on earthquake model "
 "developed by ITB"
-msgstr ""
+msgstr "Untuk menjalankan dampak gempa bumi pada populasi berdasarkan model gempa bumi yang dikembangkan oleh ITB"
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:347
 #: safe/impact_functions/inundation/flood_population_evacuation.py:203
 msgid ""
 "All values are rounded up to the nearest integer in order to avoid "
 "representing human lives as fractions."
-msgstr ""
+msgstr "Semua nilai dibulatkan ke integer terdekat agar tidak menyatakan jumlah manusia sebagai pecahan."
 
 #: safe/impact_functions/earthquake/pager_earthquake_fatality_model.py:33
 msgid ""
 "To assess the impact of earthquake on population based on Population "
 "Vulnerability Model Pager"
-msgstr ""
+msgstr "Untuk menghitung dampak gempa bumi pada populasi berdasarkan Model Pager Kerentanan Populasi"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:256
 #: safe/impact_functions/inundation/flood_population_evacuation.py:176
 msgid "Table below shows the weekly minimum needs for all evacuated people"
-msgstr ""
+msgstr "Tabel di bawah ini menunjukkan kebutuhan minimum mingguan untuk semua orang yang dievakuasi"
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:181
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:236
 msgid "Volcanoes considered"
-msgstr ""
+msgstr "Nama gunung api yang dipilih"

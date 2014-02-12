@@ -138,7 +138,7 @@ def build_test_package(branch='master'):
         fastprint('Git revision: %s' % sha)
 
         get('metadata.txt', '/tmp/metadata.txt')
-        metadata_file = file('/tmp/metadata.txt', 'rt')
+        metadata_file = file('/tmp/metadata.txt')
         metadata_text = metadata_file.readlines()
         metadata_file.close()
         for line in metadata_text:

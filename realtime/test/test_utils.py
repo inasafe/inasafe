@@ -83,7 +83,7 @@ class UtilsTest(unittest.TestCase):
         date_string = current_date.strftime('%d-%m-%Y-%s')
         message = 'Testing logger %s' % date_string
         LOGGER.info(message)
-        log_file = open(path, 'rt')
+        log_file = open(path)
         log_lines = log_file.readlines()
         if message not in log_lines:
             assert 'Error, expected log message not shown in logs'

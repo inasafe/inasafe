@@ -184,7 +184,7 @@ def write_keywords(keywords, filename, sublayer=None):
         first_value = existing_keywords[existing_keywords.keys()[0]]
     multilayer_flag = type(first_value) == dict
 
-    handle = file(filename, 'wt')
+    handle = file(filename, 'w')
 
     if multilayer_flag:
         if sublayer is not None and sublayer != '':

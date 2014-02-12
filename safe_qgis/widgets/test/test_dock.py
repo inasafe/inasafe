@@ -1368,7 +1368,7 @@ Click for Diagnostic Information:
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=temp_dir('test'))
         DOCK.save_current_scenario(scenario_file_path=scenario_file)
-        with open(scenario_file, 'rt') as f:
+        with open(scenario_file) as f:
             data = f.readlines()
         title = data[0][:-1]
         exposure = data[1][:-1]

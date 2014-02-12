@@ -111,7 +111,7 @@ class TestShakeEvent(unittest.TestCase):
         shake_id = '20120726022003'
         shake_event = ShakeEvent(shake_id)
         file_path = shake_event.mmi_data_to_delimited_file(force_flag=True)
-        delimited_file = file(file_path, 'rt')
+        delimited_file = file(file_path)
         delimited_string = delimited_file.readlines()
         delimited_file.close()
         self.assertEqual(25922, len(delimited_string))
@@ -232,14 +232,14 @@ search_boxes: None
         file_path = unique_filename(prefix='test_local_cities',
                                     suffix='.txt',
                                     dir=temp_dir('test'))
-        cities_file = file(file_path, 'wt')
+        cities_file = file(file_path, 'w')
         cities_file.writelines(strings)
         cities_file.close()
 
         fixture_path = os.path.join(data_dir(),
                                     'tests',
                                     'test_local_cities.txt')
-        cities_file = file(fixture_path, 'rt')
+        cities_file = file(fixture_path)
         expected_string = cities_file.readlines()
         cities_file.close()
 
@@ -346,7 +346,7 @@ search_boxes: None
             prefix='test_sorted_impacted_cities',
             suffix='.txt',
             dir=temp_dir('test'))
-        cities_file = file(file_path, 'wt')
+        cities_file = file(file_path, 'w')
         cities_file.writelines(str(table))
         cities_file.close()
         table = str(table).replace(', \'', ',\n\'')
@@ -354,7 +354,7 @@ search_boxes: None
 
         fixture_path = os.path.join(
             data_dir(), 'tests', 'test_sorted_impacted_cities.txt')
-        cities_file = file(fixture_path, 'rt')
+        cities_file = file(fixture_path)
         expected_string = cities_file.read()
         cities_file.close()
         expected_string = expected_string.replace(', \'', ',\n\'')

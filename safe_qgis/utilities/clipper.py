@@ -580,7 +580,7 @@ def extent_to_kml(extent):
         bottom_left_corner))
 
     file_name = tempfile.mkstemp('.kml', 'extent_', temp_dir())[1]
-    file_handle = file(file_name, 'wt')
+    file_handle = file(file_name, 'w')
     file_handle.write(kml)
     file_handle.close()
     return file_name

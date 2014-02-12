@@ -154,7 +154,7 @@ class HtmlRenderer():
             footer = html_footer()
             html = header + html_snippet + footer
         else:
-            handle = file(html_path, 'rt')
+            handle = file(html_path)
             html = handle.readlines()
             handle.close()
 
