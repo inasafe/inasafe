@@ -15,9 +15,9 @@ import unittest
 from safe.common.testing import UNITDATA, get_qgis_app
 from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
-from safe.storage.vector import Vector, qgis_imported
+from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
 
-if qgis_imported:   # Import QgsVectorLayer if qgis is available
+if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
     from qgis.core import QgsVectorLayer
 
@@ -77,7 +77,7 @@ class VectorTest(unittest.TestCase):
     def test_qgis_vector_layer_loading(self):
         """Test that reading from QgsVectorLayer works."""
         keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
-        if qgis_imported:
+        if QGIS_IS_AVAILABLE:
             qgis_layer = QgsVectorLayer(SHP_BASE + '.shp', 'test', 'ogr')
 
             layer = Vector(data=qgis_layer, keywords=keywords)
@@ -90,7 +90,7 @@ class VectorTest(unittest.TestCase):
 
     def test_convert_to_qgis_vector_layer(self):
         """Test that converting to QgsVectorLayer works."""
-        if qgis_imported:
+        if QGIS_IS_AVAILABLE:
             # Create vector layer
             keywords = read_keywords(SHP_BASE + '.keywords')
             layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
