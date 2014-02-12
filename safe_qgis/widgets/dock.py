@@ -397,21 +397,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr('InaSAFE is not a hazard modelling tool.'))
         caveat_list.add(
             self.tr(
-                'Exposure data in the form of roads (or any other line '
-                'feature) is not yet supported.'))
-        caveat_list.add(
-            self.tr(
                 'Polygon area analysis (such as land use) is not yet '
                 'supported.'))
         caveat_list.add(
             self.tr(
-                'Population density data must be provided in WGS84 '
+                'Population density data (raster) must be provided in WGS84 '
                 'geographic coordinates.'))
         caveat_list.add(
             self.tr(
-                'Neither BNPB, AusAID, nor the World Bank-GFDRR, take any '
-                'responsibility for the correctness of outputs from InaSAFE '
-                'or decisions derived as a consequence.'))
+                'Population by administration boundary is not yet supported.'))
+        caveat_list.add(
+            self.tr(
+                'Neither Indonesian or Australian Government, the World '
+                'Bank-GFDRR, nor the individual software developers of '
+                'InaSAFE take any responsibility for the correctness of '
+                'outputs from InaSAFE or decisions derived as a consequence.'))
         message.add(caveat_list)
         return message
 
