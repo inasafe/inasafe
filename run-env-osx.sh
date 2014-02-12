@@ -6,7 +6,7 @@
 #
 # Tim Sutton, June 2013
 
-# Assume brew insstalled deps
+# Assume brew installed deps
 export PATH=$PATH:/usr/local/bin/
 
 SITES=`find /usr/local/ -name site-packages`
