@@ -71,7 +71,7 @@
         <translation>Clip geometry must be an extent or a single partpolygon based geometry.</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="233"/>
+        <location filename="zonal_stats.py" line="134"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
         <translation>Could not obtain data provider from layer &quot;%s&quot;</translation>
     </message>
@@ -499,47 +499,47 @@
 <context>
     <name>BatchDialogBase</name>
     <message>
-        <location filename="batch_dialog_base.ui" line="14"/>
+        <location filename="batch_dialog_base.py" line="90"/>
         <source>Batch Runner</source>
         <translation>Batch Runner</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="20"/>
+        <location filename="batch_dialog_base.py" line="91"/>
         <source>Scenario directory</source>
         <translation>Scenario directory</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="90"/>
+        <location filename="batch_dialog_base.py" line="101"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="39"/>
+        <location filename="batch_dialog_base.py" line="93"/>
         <source>Result table</source>
         <translation>Result table</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="46"/>
+        <location filename="batch_dialog_base.py" line="95"/>
         <source>Task</source>
         <translation>Task</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="51"/>
+        <location filename="batch_dialog_base.py" line="97"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="62"/>
+        <location filename="batch_dialog_base.py" line="98"/>
         <source>Output destination</source>
         <translation>Output destination</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="68"/>
+        <location filename="batch_dialog_base.py" line="99"/>
         <source>Use scenario directory</source>
         <translation>Use scenario directory</translation>
     </message>
     <message>
-        <location filename="batch_dialog_base.ui" line="78"/>
+        <location filename="batch_dialog_base.py" line="100"/>
         <source>Choose custom output directory</source>
         <translation>Choose custom output directory</translation>
     </message>
@@ -547,7 +547,7 @@
 <context>
     <name>DOCK</name>
     <message>
-        <location filename="test_dock.py" line="1290"/>
+        <location filename="test_aggregator.py" line="100"/>
         <source>Entire area</source>
         <translation>Entire area</translation>
     </message>
@@ -1081,42 +1081,42 @@
 <context>
     <name>FunctionBrowserBase</name>
     <message>
-        <location filename="function_browser_base.ui" line="14"/>
+        <location filename="function_browser_base.py" line="165"/>
         <source>InaSAFE Impact Functions</source>
         <translation>InaSAFE Impact Functions</translation>
     </message>
     <message>
-        <location filename="function_browser_base.ui" line="60"/>
+        <location filename="function_browser_base.py" line="166"/>
         <source>Title</source>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="function_browser_base.ui" line="79"/>
+        <location filename="function_browser_base.py" line="167"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="function_browser_base.ui" line="98"/>
+        <location filename="function_browser_base.py" line="168"/>
         <source>Subcategory</source>
         <translation>Subcategory</translation>
     </message>
     <message>
-        <location filename="function_browser_base.ui" line="117"/>
+        <location filename="function_browser_base.py" line="169"/>
         <source>Category</source>
         <translation>Category</translation>
     </message>
     <message>
-        <location filename="function_browser_base.ui" line="136"/>
+        <location filename="function_browser_base.py" line="170"/>
         <source>Layer Type</source>
         <translation>Layer Type</translation>
     </message>
     <message>
-        <location filename="function_browser_base.ui" line="175"/>
+        <location filename="function_browser_base.py" line="171"/>
         <source>Unit</source>
         <translation>Unit</translation>
     </message>
     <message>
-        <location filename="function_browser_base.ui" line="194"/>
+        <location filename="function_browser_base.py" line="172"/>
         <source>Data Type</source>
         <translation>Data Type</translation>
     </message>
@@ -1157,12 +1157,12 @@
 <context>
     <name>FunctionOptionsDialogBase</name>
     <message>
-        <location filename="function_options_dialog_base.ui" line="14"/>
+        <location filename="function_options_dialog_base.py" line="75"/>
         <source>Dialog</source>
         <translation>Dialog</translation>
     </message>
     <message>
-        <location filename="function_options_dialog_base.ui" line="104"/>
+        <location filename="function_options_dialog_base.py" line="76"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
@@ -1409,32 +1409,32 @@
 <context>
     <name>ImpactMergeDialogBase</name>
     <message>
-        <location filename="impact_merge_dialog_base.ui" line="14"/>
+        <location filename="impact_merge_dialog_base.py" line="104"/>
         <source>Dialog</source>
         <translation>Dialog</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog_base.ui" line="42"/>
+        <location filename="impact_merge_dialog_base.py" line="106"/>
         <source>&amp;Second impact layer</source>
         <translation>&amp;Second impact layer</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog_base.ui" line="55"/>
+        <location filename="impact_merge_dialog_base.py" line="107"/>
         <source>&amp;Aggregation Layer</source>
         <translation>&amp;Aggregation Layer</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog_base.ui" line="68"/>
+        <location filename="impact_merge_dialog_base.py" line="108"/>
         <source>&amp;Output directory</source>
         <translation>&amp;Output directory</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog_base.ui" line="127"/>
+        <location filename="impact_merge_dialog_base.py" line="111"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog_base.ui" line="29"/>
+        <location filename="impact_merge_dialog_base.py" line="105"/>
         <source>&amp;First impact layer</source>
         <translation>&amp;First impact layer</translation>
     </message>
@@ -1444,7 +1444,7 @@
         <translation>about:blank</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog_base.ui" line="96"/>
+        <location filename="impact_merge_dialog_base.py" line="110"/>
         <source>&amp;Use customized report template</source>
         <translation>&amp;Use customized report template</translation>
     </message>
@@ -1662,127 +1662,127 @@ to
 <context>
     <name>KeywordsDialogBase</name>
     <message>
-        <location filename="keywords_dialog_base.py" line="253"/>
+        <location filename="keywords_dialog_base.ui" line="20"/>
         <source>InaSAFE - Keyword Editor</source>
         <translation>InaSAFE - Keyword Editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="254"/>
+        <location filename="keywords_dialog_base.ui" line="58"/>
         <source>Quick edit</source>
         <translation>Quick edit</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="256"/>
+        <location filename="keywords_dialog_base.ui" line="84"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation>A subcategory represents the type of hazard.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="258"/>
+        <location filename="keywords_dialog_base.ui" line="98"/>
         <source>Subcategory</source>
         <translation>Subcategory</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="255"/>
+        <location filename="keywords_dialog_base.ui" line="74"/>
         <source>Aggregation attribute</source>
         <translation>Aggregation attribute</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="267"/>
+        <location filename="keywords_dialog_base.ui" line="182"/>
         <source>Category</source>
         <translation>Category</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="261"/>
+        <location filename="keywords_dialog_base.ui" line="143"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="262"/>
+        <location filename="keywords_dialog_base.ui" line="146"/>
         <source>Hazard</source>
         <translation>Hazard</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="263"/>
+        <location filename="keywords_dialog_base.ui" line="153"/>
         <source>Where people and property are situated.</source>
         <translation>Where people and property are situated.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="264"/>
+        <location filename="keywords_dialog_base.ui" line="156"/>
         <source>Exposure</source>
         <translation>Exposure</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="265"/>
+        <location filename="keywords_dialog_base.ui" line="166"/>
         <source>Postprocessing</source>
         <translation>Postprocessing</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="266"/>
+        <location filename="keywords_dialog_base.ui" line="175"/>
         <source>Title</source>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="257"/>
+        <location filename="keywords_dialog_base.ui" line="91"/>
         <source>Female ratio attribute</source>
         <translation>Female ratio attribute</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="259"/>
+        <location filename="keywords_dialog_base.ui" line="108"/>
         <source>Female ratio default</source>
         <translation>Female ratio default</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="268"/>
+        <location filename="keywords_dialog_base.ui" line="195"/>
         <source>Show advanced editor</source>
         <translation>Show advanced editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="269"/>
+        <location filename="keywords_dialog_base.ui" line="211"/>
         <source>Advanced editor</source>
         <translation>Advanced editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="270"/>
+        <location filename="keywords_dialog_base.ui" line="219"/>
         <source>Predefined</source>
         <translation>Predefined</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="271"/>
+        <location filename="keywords_dialog_base.ui" line="226"/>
         <source>User defined</source>
         <translation>User defined</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="272"/>
+        <location filename="keywords_dialog_base.ui" line="244"/>
         <source>Keyword</source>
         <translation>Keyword</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="276"/>
+        <location filename="keywords_dialog_base.ui" line="320"/>
         <source>Value</source>
         <translation>Value</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="277"/>
+        <location filename="keywords_dialog_base.ui" line="333"/>
         <source>Add to list</source>
         <translation>Add to list</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="275"/>
+        <location filename="keywords_dialog_base.ui" line="307"/>
         <source>Key</source>
         <translation>Key</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="278"/>
+        <location filename="keywords_dialog_base.ui" line="343"/>
         <source>Current keywords</source>
         <translation>Current keywords</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="279"/>
+        <location filename="keywords_dialog_base.ui" line="379"/>
         <source>Remove selected</source>
         <translation>Remove selected</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="260"/>
+        <location filename="keywords_dialog_base.ui" line="115"/>
         <source>Source</source>
         <translation>Source</translation>
     </message>
@@ -1985,127 +1985,127 @@ Message: %s</translation>
 <context>
     <name>OptionsDialogBase</name>
     <message>
-        <location filename="options_dialog_base.ui" line="14"/>
+        <location filename="options_dialog_base.py" line="230"/>
         <source>InaSAFE - Options</source>
         <translation>InaSAFE - Options</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="49"/>
+        <location filename="options_dialog_base.py" line="231"/>
         <source>Not yet implemented</source>
         <translation>Not yet implemented</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="58"/>
+        <location filename="options_dialog_base.py" line="232"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
         <translation>Bubble exposure and hazard layers to top when selected</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="68"/>
+        <location filename="options_dialog_base.py" line="233"/>
         <source>Location for results</source>
         <translation>Location for results</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="374"/>
+        <location filename="options_dialog_base.py" line="261"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="99"/>
+        <location filename="options_dialog_base.py" line="235"/>
         <source>Organisation name (for maps, reports etc.)</source>
         <translation>Organisation name (for maps, reports etc.)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="132"/>
+        <location filename="options_dialog_base.py" line="237"/>
         <source>DPI (Maps and reports)</source>
         <translation>DPI (Maps and reports)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="328"/>
+        <location filename="options_dialog_base.py" line="256"/>
         <source>Only show visible layers in InaSAFE dock</source>
         <translation>Only show visible layers in InaSAFE dock</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="269"/>
+        <location filename="options_dialog_base.py" line="252"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
         <translation>Set QGIS layer name from &apos;title&apos; in keywords</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="242"/>
+        <location filename="options_dialog_base.py" line="249"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
         <translation>Zoom to impact layer on scenario estimate completion</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="232"/>
+        <location filename="options_dialog_base.py" line="248"/>
         <source>Keyword cache for remote datasources</source>
         <translation>Keyword cache for remote datasources</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="259"/>
+        <location filename="options_dialog_base.py" line="251"/>
         <source>Run analysis in a separate thread (experimental)</source>
         <translation>Run analysis in a separate thread (experimental)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="252"/>
+        <location filename="options_dialog_base.py" line="250"/>
         <source>Hide exposure layer on scenario estimate completion</source>
         <translation>Hide exposure layer on scenario estimate completion</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="195"/>
+        <location filename="options_dialog_base.py" line="245"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
         <translation>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="198"/>
+        <location filename="options_dialog_base.py" line="246"/>
         <source>Clip datasets to visible extent before analysis</source>
         <translation>Clip datasets to visible extent before analysis</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="342"/>
+        <location filename="options_dialog_base.py" line="258"/>
         <source>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</source>
         <translation>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="345"/>
+        <location filename="options_dialog_base.py" line="259"/>
         <source>Show intermediate layers generated by postprocessing</source>
         <translation>Show intermediate layers generated by postprocessing</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="278"/>
+        <location filename="options_dialog_base.py" line="253"/>
         <source>Female ratio default value</source>
         <translation>Female ratio default value</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="164"/>
+        <location filename="options_dialog_base.py" line="238"/>
         <source>Help to improve InaSAFE by submitting errors to a remote server</source>
         <translation>Help to improve InaSAFE by submitting errors to a remote server</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="321"/>
+        <location filename="options_dialog_base.py" line="255"/>
         <source>Enable developer mode (needs restart)</source>
         <translation>Enable developer mode (needs restart)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="335"/>
+        <location filename="options_dialog_base.py" line="257"/>
         <source>When clipping, also clip features (i.e. will clip polygon smaller)</source>
         <translation>When clipping, also clip features (i.e. will clip polygon smaller)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="188"/>
+        <location filename="options_dialog_base.py" line="244"/>
         <source>Use QGIS zonal statistics (not recommended for QGIS 1.8)</source>
         <translation>Use QGIS zonal statistics (not recommended for QGIS 1.8)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="355"/>
+        <location filename="options_dialog_base.py" line="260"/>
         <source>Organisation logo</source>
         <translation>Organisation logo</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="393"/>
+        <location filename="options_dialog_base.py" line="263"/>
         <source>Disclaimer text</source>
         <translation>Disclaimer text</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="177"/>
+        <location filename="options_dialog_base.py" line="239"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2118,7 +2118,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="386"/>
+        <location filename="options_dialog_base.py" line="262"/>
         <source>Report templates directory</source>
         <translation>Report templates directory</translation>
     </message>
@@ -2209,42 +2209,42 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>OsmDownloaderBase</name>
     <message>
-        <location filename="osm_downloader_base.ui" line="14"/>
+        <location filename="osm_downloader_base.py" line="105"/>
         <source>OSM Downloader</source>
         <translation>OSM Downloader</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="48"/>
+        <location filename="osm_downloader_base.py" line="109"/>
         <source>Bounding box</source>
         <translation>Bounding box</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="54"/>
+        <location filename="osm_downloader_base.py" line="110"/>
         <source>Minimum latitude</source>
         <translation>Minimum latitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="61"/>
+        <location filename="osm_downloader_base.py" line="111"/>
         <source>Minimum longitude</source>
         <translation>Minimum longitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="71"/>
+        <location filename="osm_downloader_base.py" line="112"/>
         <source>Maximum longitude</source>
         <translation>Maximum longitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="81"/>
+        <location filename="osm_downloader_base.py" line="113"/>
         <source>Maximum latitude</source>
         <translation>Maximum latitude</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="97"/>
+        <location filename="osm_downloader_base.py" line="114"/>
         <source>Output directory</source>
         <translation>Output directory</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="113"/>
+        <location filename="osm_downloader_base.py" line="115"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -2254,22 +2254,22 @@ p, li { white-space: pre-wrap; }
         <translation>about:blank</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="21"/>
+        <location filename="osm_downloader_base.py" line="106"/>
         <source>All</source>
         <translation>All</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="26"/>
+        <location filename="osm_downloader_base.py" line="107"/>
         <source>Buildings</source>
         <translation>Buildings</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="31"/>
+        <location filename="osm_downloader_base.py" line="108"/>
         <source>Roads</source>
         <translation>Roads</translation>
     </message>
     <message>
-        <location filename="osm_downloader_base.ui" line="141"/>
+        <location filename="osm_downloader_base.py" line="116"/>
         <source>Feature Type</source>
         <translation>Feature Type</translation>
     </message>

@@ -2,8 +2,13 @@
 
 # Resource object code
 #
+<<<<<<< HEAD
 # Created: Wed Feb 12 10:19:58 2014
 #      by: The Resource Compiler for PyQt (Qt v4.8.2)
+=======
+# Created: Mi. Feb 12 10:26:08 2014
+#      by: The Resource Compiler for PyQt (Qt v4.8.4)
+>>>>>>> updates for french language
 #
 # WARNING! All changes made in this file will be lost!
 
