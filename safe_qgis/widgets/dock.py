@@ -409,10 +409,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'Population by administration boundary is not yet supported.'))
         caveat_list.add(
             self.tr(
-                'Neither Indonesian or Australian Government, the World '
-                'Bank-GFDRR, nor the individual software developers of '
-                'InaSAFE take any responsibility for the correctness of '
-                'outputs from InaSAFE or decisions derived as a consequence.'))
+                'InaSAFE has been jointly developed by Indonesian '
+                'Government-BNPB, Australian Government-AIFDR and the World '
+                'Bank-GFDRR. These agencies and the individual software '
+                'developers of InaSAFE take no responsibility for the '
+                'correctness of outputs from InaSAFE or decisions derived as '
+                'a consequence.'))
         message.add(caveat_list)
         return message
 
