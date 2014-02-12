@@ -6,6 +6,7 @@ import numpy
 import zipfile
 import platform
 import gettext
+import logging
 from datetime import date
 import getpass
 from tempfile import mkstemp
@@ -27,6 +28,8 @@ except ImportError:
     except ImportError:
         raise RuntimeError(("Could not find an"
                             "available OrderedDict implementation"))
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class MEMORYSTATUSEX(ctypes.Structure):
@@ -599,3 +602,60 @@ def get_utm_epsg(longitude, latitude):
         epsg += 100
     epsg += get_utm_zone(longitude)
     return epsg
+
+
+def which(name, flags=os.X_OK):
+    """Search PATH for executable files with the given name.
+
+    ..note:: This function was taken verbatim from the twisted framework,
+      licence available here:
+      http://twistedmatrix.com/trac/browser/tags/releases/twisted-8.2.0/LICENSE
+
+    On newer versions of MS-Windows, the PATHEXT environment variable will be
+    set to the list of file extensions for files considered executable. This
+    will normally include things like ".EXE". This function will also find
+    files
+    with the given name ending with any of these extensions.
+
+    On MS-Windows the only flag that has any meaning is os.F_OK. Any other
+    flags will be ignored.
+
+    :param name: The name for which to search.
+    :type name: C{str}
+
+    :param flags: Arguments to L{os.access}.
+    :type flags: C{int}
+
+    :returns: A list of the full paths to files found, in the order in which
+        they were found.
+    :rtype: C{list}
+    """
+    result = []
+    #pylint: disable=W0141
+    extensions = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
+    #pylint: enable=W0141
+    path = os.environ.get('PATH', None)
+    # In c6c9b26 we removed this hard coding for issue #529 but I am
+    # adding it back here in case the user's path does not include the
+    # gdal binary dir on OSX but it is actually there. (TS)
+    if sys.platform == 'darwin':  # Mac OS X
+        gdal_prefix = (
+            '/Library/Frameworks/GDAL.framework/'
+            'Versions/Current/Programs/')
+        path = '%s:%s' % (path, gdal_prefix)
+
+    LOGGER.debug('Search path: %s' % path)
+
+    if path is None:
+        return []
+
+    for p in path.split(os.pathsep):
+        p = os.path.join(p, name)
+        if os.access(p, flags):
+            result.append(p)
+        for e in extensions:
+            path_extensions = p + e
+            if os.access(path_extensions, flags):
+                result.append(path_extensions)
+
+    return result

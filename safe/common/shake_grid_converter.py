@@ -25,6 +25,7 @@ from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
 
+from safe.common.utilities import which
 
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
@@ -56,17 +57,17 @@ class ShakeGridConverter(object):
             algorithm_filename_flag=True):
         """Constructor.
 
-        :param grid_xml_path: Path to grid XML file
+        :param grid_xml_path: Path to grid XML file.
         :type grid_xml_path:str
 
         :param output_dir: mmi output directory
         :type output_dir: str
 
-        :param output_basename: mmi file name without extension
+        :param output_basename: mmi file name without extension.
         :type output_basename: str
 
         :param algorithm_filename_flag: Flag whether to use the algorithm in
-            the output file's name
+            the output file's name.
         :type algorithm_filename_flag: bool
 
         :returns: Instance
@@ -356,27 +357,6 @@ class ShakeGridConverter(object):
         my_file.close()
         return my_vrt_path
 
-    def _add_executable_prefix(self, command):
-        """Add the executable prefix for gdal binaries.
-
-        This is primarily needed for OSX where gdal tools are tucked away in
-        the Library path.
-
-        :param command: The command to which the prefix will be prepended.
-        :type command: str
-
-        :returns: A copy of the command with the prefix added.
-        :rtype: str
-        """
-
-        my_executable_prefix = ''
-        if sys.platform == 'darwin':  # Mac OS X
-            my_executable_prefix = (
-                '/Library/Frameworks/GDAL'
-                '.framework/Versions/Current/Programs/')
-        command = my_executable_prefix + command
-        return command
-
     def _run_command(self, command):
         """Run a command and raise any error as needed.
 
@@ -388,29 +368,27 @@ class ShakeGridConverter(object):
         :raises: Any exceptions will be propagated.
         """
 
-        my_command = self._add_executable_prefix(command)
-
         try:
-            my_result = call(my_command, shell=True)
+            my_result = call(command, shell=True)
             del my_result
         except CalledProcessError, e:
-            LOGGER.exception('Running command failed %s' % my_command)
-            my_message = (
+            LOGGER.exception('Running command failed %s' % command)
+            message = (
                 'Error while executing the following shell '
-                'command: %s\nError message: %s' % (my_command, str(e)))
+                'command: %s\nError message: %s' % (command, str(e)))
             # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
             if sys.platform == 'darwin':  # Mac OS X
                 if 'Errno 4' in str(e):
                     # continue as the error seems to be non critical
                     pass
                 else:
-                    raise Exception(my_message)
+                    raise Exception(message)
             else:
-                raise Exception(my_message)
+                raise Exception(message)
 
     def mmi_to_raster(
             self, force_flag=False, algorithm='nearest'):
-        """Convert the grid.xml' s mmi column to a raster using gdal_grid.
+        """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
 
@@ -475,20 +453,19 @@ class ShakeGridConverter(object):
         # the earthquake server.
 
         if 'invdist' in algorithm:
-            myAlgorithm = 'invdist:power=2.0:smoothing=1.0'
-        else:
-            myAlgorithm = algorithm
+            algorithm = 'invdist:power=2.0:smoothing=1.0'
 
         # (Sunni): I'm not sure how this 'mmi' will work
         # (Tim): Its the mapping to which field in the CSV contains the data
         #    to be gridded.
         command = ((
-            'gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
+            '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
             '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
             '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
             '%(vrt)s %(tif)s') %
             {
-                'alg': myAlgorithm,
+                'gdal_grid': which('gdal_grid')[0],
+                'alg': algorithm,
                 'xMin': self.x_minimum,
                 'xMax': self.x_maximum,
                 'yMin': self.y_minimum,
@@ -553,7 +530,7 @@ def convert_mmi_data(
         algorithm_filename_flag=True):
     """Convenience function to convert a single file.
 
-    :param grid_xml_path: Path to the xml file
+    :param grid_xml_path: Path to the xml shake grid file.
     :type grid_xml_path: str
 
     :param output_path: Specify which path to use as an alternative to the
@@ -564,10 +541,10 @@ def convert_mmi_data(
     :type algorithm: str
 
     :param algorithm_filename_flag: Flag whether to use the algorithm in the
-        output file's name
+        output file's name.
     :type algorithm_filename_flag: bool
 
-    :returns: A path to the resulting raster file
+    :returns: A path to the resulting raster file.
     :rtype: str
     """
     LOGGER.debug(grid_xml_path)
@@ -581,6 +558,5 @@ def convert_mmi_data(
         output_dir = output_path
         output_basename = None
     converter = ShakeGridConverter(
-        grid_xml_path, output_dir, output_basename,
-        algorithm_filename_flag)
+        grid_xml_path, output_dir, output_basename, algorithm_filename_flag)
     return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)

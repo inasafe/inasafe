@@ -23,11 +23,11 @@ import sys
 import numpy
 import logging
 
-qgis_imported = True
+QGIS_IS_AVAILABLE = True
 try:
     from qgis.core import QgsVectorLayer, QgsVectorFileWriter
 except ImportError:
-    qgis_imported = False
+    QGIS_IS_AVAILABLE = False
 
 import copy as copy_module
 from osgeo import ogr, gdal
@@ -158,7 +158,8 @@ class Vector(Layer):
 
         if isinstance(data, basestring):
             self.read_from_file(data)
-        elif isinstance(data, QgsVectorLayer):
+        # check QGIS_IS_AVAILABLE to avoid QgsVectorLayer undefined error
+        elif QGIS_IS_AVAILABLE and isinstance(data, QgsVectorLayer):
             self.read_from_qgis_native(data)
         else:
             # Assume that data is provided as sequences provided as
@@ -556,7 +557,8 @@ class Vector(Layer):
                 * TypeError         if qgis is not avialable
                 * IOError           if can't store temporary file
         """
-        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
+        # FIXME (DK): this branch isn't covered by test
+        if not QGIS_IS_AVAILABLE:
             msg = ('Used data is QgsVectorLayer instance, '
                    'but QGIS is not avialable.')
             raise TypeError(msg)
@@ -589,7 +591,8 @@ class Vector(Layer):
             Raises:
                 * TypeError         if qgis is not avialable
         """
-        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
+        # FIXME (DK): this branch isn't covered by test
+        if not QGIS_IS_AVAILABLE:
             msg = ('Tried to convert layer to QgsVectorLayer instance, '
                    'but QGIS is not avialable.')
             raise TypeError(msg)

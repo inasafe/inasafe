@@ -1057,7 +1057,7 @@
     <message>
         <location filename="dock_base.ui" line="94"/>
         <source>Options ...</source>
-        <translation>Opsi ...</translation>
+        <translation>Pilihan ...</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="313"/>
@@ -2026,7 +2026,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="269"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
-        <translation>Menggunakan &apos;judul&apos; pada Editor Kata Kunci (Keyword Editor) sebagai nama layer QGIS</translation>
+        <translation>Gunakan &apos;judul&apos; pada Editor Kata Kunci sebagai nama layer QGIS</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="242"/>
@@ -2086,7 +2086,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="335"/>
         <source>When clipping, also clip features (i.e. will clip polygon smaller)</source>
-        <translation>Ketika melakukan pemotongan, juga potong fitur (contoh ketika akan memotong poligon yang lebih kecil)</translation>
+        <translation>Potong fitur saat melakukan clipping (akan memotong poligon menjadi lebih kecil)</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="188"/>
@@ -2204,6 +2204,16 @@ p, li { white-space: pre-wrap; }
         <source>%s don&apos;t exist. The server doesn&apos;t have any data.</source>
         <translation>%s tidak ada. Server tidak memiliki data.</translation>
     </message>
+    <message>
+        <location filename="osm_downloader.py" line="111"/>
+        <source>Your current extent will be used to determine the area for which you want data to be retrieved. You can adjust it manually using the bounding box options below.</source>
+        <translation>Extent Anda saat ini akan digunakan untuk mendapatkan area yang ingin Anda ambil. Anda dapat mengubahnya secara manual dengan menggunakan pilihan kotak pembatas di bawah ini.</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader.py" line="120"/>
+        <source>By default simple file names will be used (e.g. roads.shp, buildings.shp). If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;padang-&apos; will cause the downloaded files to be saved as &apos;padang-roads.shp&apos; and &apos;padang-buildings.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
+        <translation>Secara default, nama file yang sederhana akan digunakan (misalnya roads.shp, buildings.shp). Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &apos;padang-&apos; akan mengubah file yang di-download menjadi &apos;padang-roads.shp&apos; dan &apos;padang-buildings.shp&apos;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &apos;-&apos;, dan &apos;_&apos;. Anda dapat mengosongkan pilihan ini.</translation>
+    </message>
 </context>
 <context>
     <name>OsmDownloaderBase</name>
@@ -2272,6 +2282,11 @@ p, li { white-space: pre-wrap; }
         <source>Feature Type</source>
         <translation>Jenis feature</translation>
     </message>
+    <message>
+        <location filename="osm_downloader_base.ui" line="80"/>
+        <source>File name prefix</source>
+        <translation>Prefix dari nama file</translation>
+    </message>
 </context>
 <context>
     <name>Plugin</name>
@@ -2328,7 +2343,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="278"/>
         <source>Open InaSAFE minimum needs tool</source>
-        <translation>Jalankan tool kebutuhan minimum InaSAFE</translation>
+        <translation>Buka tool kebutuhan minimum InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="46"/>

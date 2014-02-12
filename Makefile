@@ -24,7 +24,7 @@ ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list usi
 
 # LOCALES = space delimited list of iso codes to generate po files for
 # Please dont remove en here
-LOCALES = en id af
+LOCALES = en id fr
 
 default: compile
 

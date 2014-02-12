@@ -9,20 +9,15 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import sys
 import logging
 import unittest
 
 from safe.common.testing import UNITDATA, get_qgis_app
 from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
-from safe.storage.vector import Vector, qgis_imported
+from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
 
-if qgis_imported:   # Import QgsVectorLayer if qgis is available
-
-    QGIS_APP = None  # Static variable used to hold hand to running QGis
-    from qgis.core import QgsVectorLayer, QgsApplication
-
+if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
     from qgis.core import QgsVectorLayer
 
@@ -82,22 +77,12 @@ class VectorTest(unittest.TestCase):
     def test_qgis_vector_layer_loading(self):
         """Test that reading from QgsVectorLayer works."""
         keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
-        if qgis_imported:
-
-            # Ensure QGIS_PREFIX_PATH env var is set when running this test
-            global QGIS_APP
-            gui_flag = True
-            QGIS_APP = QgsApplication(sys.argv, gui_flag)
-            QGIS_APP.initQgis()
-
+        if QGIS_IS_AVAILABLE:
             qgis_layer = QgsVectorLayer(SHP_BASE + '.shp', 'test', 'ogr')
 
             layer = Vector(data=qgis_layer, keywords=keywords)
             msg = ('Expected layer to be a polygon layer, got a %s' %
                    layer.geometry_type)
-
-            assert layer.is_polygon_data, msg
-
             self.assertTrue(layer.is_polygon_data, msg)
             count = len(layer)
             self.assertEqual(
@@ -105,14 +90,7 @@ class VectorTest(unittest.TestCase):
 
     def test_convert_to_qgis_vector_layer(self):
         """Test that converting to QgsVectorLayer works."""
-        if qgis_imported:
-
-            # Ensure QGIS_PREFIX_PATH env var is set when running this test
-            global QGIS_APP
-            gui_flag = True
-            QGIS_APP = QgsApplication(sys.argv, gui_flag)
-            QGIS_APP.initQgis()
-
+        if QGIS_IS_AVAILABLE:
             # Create vector layer
             keywords = read_keywords(SHP_BASE + '.keywords')
             layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
