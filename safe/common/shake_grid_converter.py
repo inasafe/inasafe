@@ -25,6 +25,7 @@ from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
 
+from safe.common.utilities import which
 
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
@@ -356,27 +357,6 @@ class ShakeGridConverter(object):
         my_file.close()
         return my_vrt_path
 
-    def _add_executable_prefix(self, command):
-        """Add the executable prefix for gdal binaries.
-
-        This is primarily needed for OSX where gdal tools are tucked away in
-        the Library path.
-
-        :param command: The command to which the prefix will be prepended.
-        :type command: str
-
-        :returns: A copy of the command with the prefix added.
-        :rtype: str
-        """
-
-        my_executable_prefix = ''
-        if sys.platform == 'darwin':  # Mac OS X
-            my_executable_prefix = (
-                '/Library/Frameworks/GDAL'
-                '.framework/Versions/Current/Programs/')
-        command = my_executable_prefix + command
-        return command
-
     def _run_command(self, command):
         """Run a command and raise any error as needed.
 
@@ -388,25 +368,23 @@ class ShakeGridConverter(object):
         :raises: Any exceptions will be propagated.
         """
 
-        my_command = self._add_executable_prefix(command)
-
         try:
-            my_result = call(my_command, shell=True)
+            my_result = call(command, shell=True)
             del my_result
         except CalledProcessError, e:
-            LOGGER.exception('Running command failed %s' % my_command)
-            my_message = (
+            LOGGER.exception('Running command failed %s' % command)
+            message = (
                 'Error while executing the following shell '
-                'command: %s\nError message: %s' % (my_command, str(e)))
+                'command: %s\nError message: %s' % (command, str(e)))
             # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
             if sys.platform == 'darwin':  # Mac OS X
                 if 'Errno 4' in str(e):
                     # continue as the error seems to be non critical
                     pass
                 else:
-                    raise Exception(my_message)
+                    raise Exception(message)
             else:
-                raise Exception(my_message)
+                raise Exception(message)
 
     def mmi_to_raster(
             self, force_flag=False, algorithm='nearest'):
@@ -481,11 +459,12 @@ class ShakeGridConverter(object):
         # (Tim): Its the mapping to which field in the CSV contains the data
         #    to be gridded.
         command = ((
-            'gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
+            '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
             '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
             '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
             '%(vrt)s %(tif)s') %
             {
+                'gdal_grid': which('gdal_grid')[0],
                 'alg': algorithm,
                 'xMin': self.x_minimum,
                 'xMax': self.x_maximum,

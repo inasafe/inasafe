@@ -20,7 +20,7 @@ LOCALES=`ls docs/i18n`
 POFILE='safe/i18n/en/LC_MESSAGES/inasafe.po'
 RESOURCE='safe/i18n/<lang>/LC_MESSAGES/inasafe.po'
 
-tx set -t PO --auto-local -r inasafe.safe \
+tx set -t PO --auto-local -r inasafe-develop.safe \
   $RESOURCE \
   --source safe/i18n/en/LC_MESSAGES/inasafe.po \
   --source-lang en --execute
@@ -38,7 +38,7 @@ done
 TSFILE='safe_qgis/i18n/inasafe_en.ts'
 RESOURCE='safe_qgis/i18n/inasafe_<lang>.ts'
 
-tx set -t QT --auto-local -r inasafe.safe_qgis \
+tx set -t QT --auto-local -r inasafe-develop.safe_qgis \
   $RESOURCE \
   --source-lang en \
   --source $TSFILE \

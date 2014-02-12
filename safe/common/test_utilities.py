@@ -27,7 +27,8 @@ from utilities import (
     create_label,
     get_thousand_separator,
     get_decimal_separator,
-    get_utm_epsg)
+    get_utm_epsg,
+    which)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -45,6 +46,15 @@ def print_class(my_array, my_result_class, my_expected):
 
 
 class UtilitiesTest(unittest.TestCase):
+
+
+    def test_which(self):
+        """Test that the which command works as expected."""
+        binary = 'gdalwarp'
+        path = which(binary)
+        # Check we found at least one match
+        assert len(path) > 0
+
     def test_humanize_class(self):
         """Test humanize class
         First class interval < 1

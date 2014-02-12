@@ -78,7 +78,8 @@ from safe.api import (
     PointsInputError,
     get_decimal_separator,
     get_thousand_separator,
-    styles)
+    styles,
+    which)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 
