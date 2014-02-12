@@ -1057,7 +1057,7 @@
     <message>
         <location filename="dock_base.ui" line="94"/>
         <source>Options ...</source>
-        <translation>Opsi ...</translation>
+        <translation>Pilihan ...</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="313"/>
@@ -2026,7 +2026,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="269"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
-        <translation>Menggunakan &apos;judul&apos; pada Editor Kata Kunci (Keyword Editor) sebagai nama layer QGIS</translation>
+        <translation>Gunakan &apos;judul&apos; pada Editor Kata Kunci sebagai nama layer QGIS</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="242"/>
@@ -2086,7 +2086,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="335"/>
         <source>When clipping, also clip features (i.e. will clip polygon smaller)</source>
-        <translation>Ketika melakukan pemotongan, juga potong fitur (contoh ketika akan memotong poligon yang lebih kecil)</translation>
+        <translation>Potong fitur saat melakukan clipping (akan memotong poligon menjadi lebih kecil)</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="188"/>
@@ -2328,7 +2328,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="278"/>
         <source>Open InaSAFE minimum needs tool</source>
-        <translation>Jalankan tool kebutuhan minimum InaSAFE</translation>
+        <translation>Buka tool kebutuhan minimum InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="46"/>
