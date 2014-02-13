@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es_ES" sourcelanguage="" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -522,7 +522,7 @@
     <message>
         <location filename="batch_dialog_base.ui" line="51"/>
         <source>Status</source>
-        <translation>Estado</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="batch_dialog_base.ui" line="62"/>
@@ -1113,7 +1113,7 @@
     <message>
         <location filename="function_browser_base.ui" line="117"/>
         <source>Category</source>
-        <translation>Categoría</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="function_browser_base.ui" line="136"/>
@@ -1694,7 +1694,7 @@ to
     <message>
         <location filename="keywords_dialog_base.py" line="267"/>
         <source>Category</source>
-        <translation>Categoría</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="261"/>
@@ -2276,12 +2276,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_base.ui" line="37"/>
         <source>All</source>
-        <translation>Todo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="osm_downloader_base.ui" line="42"/>
         <source>Buildings</source>
-        <translation>Edificios</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="osm_downloader_base.ui" line="47"/>
