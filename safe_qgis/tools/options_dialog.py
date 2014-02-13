@@ -115,11 +115,14 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keyword_io.default_keyword_db_path(), type=str)
         self.leKeywordCachePath.setText(path)
 
-        path = settings.value('inasafe/mapsLogoPath', '', type=str)
-        self.leMapsLogoPath.setText(path)
+        path = settings.value('inasafe/orgLogoPath', '', type=str)
+        self.leOrgLogoPath.setText(path)
 
         path = settings.value('inasafe/reportTemplatePath', '', type=str)
         self.leReportTemplatePath.setText(path)
+
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        self.txtDisclaimer.setPlainText(disclaimer)
 
         flag = bool(
             settings.value('inasafe/developer_mode', False, type=bool))
@@ -166,11 +169,14 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/keywordCachePath',
             self.leKeywordCachePath.text())
         settings.setValue(
-            'inasafe/mapsLogoPath',
-            self.leMapsLogoPath.text())
+            'inasafe/orgLogoPath',
+            self.leOrgLogoPath.text())
         settings.setValue(
             'inasafe/reportTemplatePath',
             self.leReportTemplatePath.text())
+        settings.setValue(
+            'inasafe/reportDisclaimer',
+            self.txtDisclaimer.toPlainText())
         settings.setValue(
             'inasafe/developer_mode',
             self.cbxDevMode.isChecked())
@@ -201,16 +207,16 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.leKeywordCachePath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolMapsLogoPath_clicked(self):
+    def on_toolOrgLogoPath_clicked(self):
         """Auto-connect slot activated when logo file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QtGui.QFileDialog.getOpenFileName(
             self,
-            self.tr('Set map logo file'),
+            self.tr('Set organisation logo file'),
             '',
             self.tr('Portable Network Graphics files (*.png *.PNG)'))
-        self.leMapsLogoPath.setText(file_name)
+        self.leOrgLogoPath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolReportTemplatePath_clicked(self):

@@ -1,3 +1,15 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk tool by Australian Aid - Volcano Impact on buildings
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -55,19 +67,18 @@ class VolcanoBuildingImpact(FunctionProvider):
         ('distances [km]', [3, 5, 10])])
 
     def run(self, layers):
-        """Risk plugin for volcano hazard on building/structure
-
-        Input
-          layers: List of layers expected to contain
-              my_hazard: Hazard layer of volcano
-              my_exposure: Vector layer of structure data on
-              the same grid as my_hazard
+        """Risk plugin for volcano hazard on building/structure.
 
         Counts number of building exposed to each volcano hazard zones.
 
-        Return
-          Map of building exposed to volcanic hazard zones
-          Table with number of buildings affected
+        :param layers: List of layers expected to contain.
+                * my_hazard: Hazard layer of volcano
+                * my_exposure: Vector layer of structure data on
+                the same grid as my_hazard
+
+        :returns: Map of building exposed to volcanic hazard zones.
+                  Table with number of buildings affected
+        :rtype: dict
         """
 
         # Identify hazard and exposure layers
@@ -116,7 +127,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                               'Kawasan Rawan Bencana I']
             name_attribute = 'GUNUNG'  # As in e.g. BNPB hazard map
 
-        # Get names of volcanos considered
+        # Get names of volcanoes considered
         if name_attribute in my_hazard.get_attribute_names():
             D = {}
             for att in my_hazard.get_data():
@@ -167,7 +178,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Generate simple impact report
         blank_cell = ''
         table_body = [question,
-                      TableRow([tr('Volcanos considered'),
+                      TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
                                header=True),
                       TableRow([tr('Distance [km]'), tr('Total'),

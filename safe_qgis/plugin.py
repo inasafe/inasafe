@@ -20,6 +20,7 @@ import sys
 import os
 import logging
 from safe_qgis.utilities import custom_logging
+from safe_qgis.utilities.keyword_io import KeywordIO
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -37,7 +38,9 @@ try:
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
     # noinspection PyUnresolvedReferences
-    from safe_qgis.exceptions import TranslationLoadError
+    from safe_qgis.exceptions import (
+        TranslationLoadError,
+        UnsupportedProviderError)
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
@@ -83,7 +86,6 @@ class Plugin:
         self.key_action = None
         self.action_function_browser = None
         self.action_options = None
-        self.action_reset_dock = None
         self.action_keywords_dialog = None
         self.translator = None
         self.toolbar = None
@@ -234,20 +236,6 @@ class Plugin:
         self.add_action(self.action_keywords_dialog)
 
         #--------------------------------------
-        # Create action for reset icon
-        #--------------------------------------
-        self.action_reset_dock = QAction(
-            QIcon(':/plugins/inasafe/reset-dock.svg'),
-            self.tr('Reset Dock'), self.iface.mainWindow())
-        self.action_reset_dock.setStatusTip(self.tr(
-            'Reset the InaSAFE Dock'))
-        self.action_reset_dock.setWhatsThis(self.tr(
-            'Reset the InaSAFE Dock'))
-        self.action_reset_dock.triggered.connect(self.reset_dock)
-
-        self.add_action(self.action_reset_dock)
-
-        #--------------------------------------
         # Create action for options dialog
         #--------------------------------------
         self.action_options = QAction(
@@ -353,6 +341,21 @@ class Plugin:
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
 
         self.add_action(self.action_import_dialog)
+
+        #--------------------------------------
+        # Create action for impact layer merge Dialog
+        #--------------------------------------
+        self.action_impact_merge_dlg = QAction(
+            QIcon(':/plugins/inasafe/show-impact-merge.svg'),
+            self.tr('InaSAFE Impact Layer Merge'),
+            self.iface.mainWindow())
+        self.action_impact_merge_dlg.setStatusTip(self.tr(
+            'InaSAFE Impact Layer Merge'))
+        self.action_impact_merge_dlg.setWhatsThis(self.tr(
+            'InaSAFE Impact Layer Merge'))
+        self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
+
+        self.add_action(self.action_impact_merge_dlg)
 
         #--------------------------------------
         # create dockwidget and tabify it with the legend
@@ -461,6 +464,14 @@ class Plugin:
         dialog = MinimumNeeds(self.iface.mainWindow())
         dialog.exec_()  # modal
 
+    def show_impact_merge(self):
+        """Show the impact layer merge dialog."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
+
+        dialog = ImpactMergeDialog(self.iface.mainWindow())
+        dialog.exec_()  # modal
+
     def show_options(self):
         """Show the options dialog."""
         # import here only so that it is AFTER i18n set up
@@ -477,8 +488,25 @@ class Plugin:
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.keywords_dialog import KeywordsDialog
 
+        # Next block is a fix for #776
         if self.iface.activeLayer() is None:
             return
+
+        try:
+            keyword_io = KeywordIO()
+            keyword_io.read_keywords(self.iface.activeLayer())
+        except UnsupportedProviderError:
+            # noinspection PyUnresolvedReferences,PyCallByClass
+            QMessageBox.warning(
+                None,
+                self.tr('Unsupported layer type'),
+                self.tr(
+                    'The layer you have selected cannot be used for '
+                    'analysis because its data type is unsupported.'))
+            return
+        # End of fix for #776
+
+
         dialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
@@ -521,10 +549,6 @@ class Plugin:
     def save_scenario(self):
         """Save current scenario to text file,"""
         self.dock_widget.save_current_scenario()
-
-    def reset_dock(self):
-        """Reset the dock to its default state."""
-        self.dock_widget.get_layers()
 
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.

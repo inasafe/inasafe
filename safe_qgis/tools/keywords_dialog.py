@@ -20,7 +20,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 
 from third_party.odict import OrderedDict
@@ -36,7 +38,9 @@ from safe_qgis.utilities.utilities import (
     layer_attribute_names)
 
 from safe_qgis.exceptions import (
-    InvalidParameterError, HashNotFoundError, NoKeywordsFoundError)
+    InvalidParameterError,
+    HashNotFoundError,
+    NoKeywordsFoundError)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -62,12 +66,22 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             the keywords. Optional.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %s Keywords Editor' % get_version()))
+        # Save reference to the QGIS interface and parent
+        self.iface = iface
+        self.parent = parent
+        self.dock = dock
+
+        if layer is None:
+            self.layer = iface.activeLayer()
+        else:
+            self.layer = layer
+
         self.keyword_io = KeywordIO()
+
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
         # in the combo entries.
@@ -75,6 +89,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.standard_exposure_list = OrderedDict(
             [('population', self.tr('population')),
              ('structure', self.tr('structure')),
+             ('road', self.tr('road')),
              ('Not Set', self.tr('Not Set'))])
         self.standard_hazard_list = OrderedDict(
             [('earthquake [MMI]', self.tr('earthquake [MMI]')),
@@ -87,10 +102,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
              ('tephra [kg2/m2]', self.tr('tephra [kg2/m2]')),
              ('volcano', self.tr('volcano')),
              ('Not Set', self.tr('Not Set'))])
-        # Save reference to the QGIS interface and parent
-        self.iface = iface
-        self.parent = parent
-        self.dock = dock
 
         self.lstKeywords.itemClicked.connect(self.edit_key_value_pair)
 
@@ -98,19 +109,14 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         help_button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
-        # set some inital ui state:
+        # set some initial ui state:
         self.defaults = breakdown_defaults()
         self.pbnAdvanced.setChecked(False)
         self.radPredefined.setChecked(True)
         self.dsbFemaleRatioDefault.blockSignals(True)
         self.dsbFemaleRatioDefault.setValue(self.defaults['FEM_RATIO'])
         self.dsbFemaleRatioDefault.blockSignals(False)
-        #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
-        #myButton.setEnabled(False)
-        if layer is None:
-            self.layer = self.iface.activeLayer()
-        else:
-            self.layer = layer
+
         if self.layer:
             self.load_state_from_keywords()
 
@@ -118,6 +124,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         reload_button = self.buttonBox.addButton(
             self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
         reload_button.clicked.connect(self.load_state_from_keywords)
+        self.grpAdvanced.setVisible(False)
+        self.resize_dialog()
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.
@@ -226,6 +234,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.lblFemaleRatioDefault.setVisible(visible_flag)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('int')
     def on_cboAggregationAttribute_currentIndexChanged(self, index=None):
         """Handler for aggregation attribute combo change.
@@ -238,6 +247,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.cboAggregationAttribute.currentText())
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('int')
     def on_cboFemaleRatioAttribute_currentIndexChanged(self, index=None):
         """Handler for female ratio attribute change.
@@ -260,6 +270,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.add_list_entry(self.defaults['FEM_RATIO_ATTR_KEY'], text)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('double')
     def on_dsbFemaleRatioDefault_valueChanged(self, value):
         """Handler for female ration default value changing.
@@ -274,6 +285,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 box.value())
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('bool')
     def on_pbnAdvanced_toggled(self, flag):
         """Automatic slot executed when the advanced button is toggled.
@@ -301,6 +313,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.resize_dialog()
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('bool')
     def on_radHazard_toggled(self, flag):
         """Automatic slot executed when the hazard radio is toggled.
@@ -314,6 +327,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.update_controls_from_list()
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('bool')
     def on_radExposure_toggled(self, theFlag):
         """Automatic slot executed when the hazard radio is toggled on.
@@ -327,6 +341,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.update_controls_from_list()
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('bool')
     def on_radPostprocessing_toggled(self, flag):
         """Automatic slot executed when the hazard radio is toggled on.
@@ -343,6 +358,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.update_controls_from_list()
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('int')
     def on_cboSubcategory_currentIndexChanged(self, index=None):
         """Automatic slot executed when the subcategory is changed.
@@ -423,6 +439,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.cboSubcategory.blockSignals(False)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnAddToList1_clicked(self):
         """Automatic slot executed when the pbnAddToList1 button is pressed.
@@ -436,6 +453,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.update_controls_from_list()
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnAddToList2_clicked(self):
         """Automatic slot executed when the pbnAddToList2 button is pressed.
@@ -462,6 +480,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.update_controls_from_list()
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnRemove_clicked(self):
         """Automatic slot executed when the pbnRemove button is pressed.
@@ -595,6 +614,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.leValue.clear()
             self.lePredefinedValue.clear()
             self.leTitle.clear()
+            self.leSource.clear()
 
     def remove_item_by_key(self, removal_key):
         """Remove an item from the kvp list given its key.
@@ -655,6 +675,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         In case the layer has no keywords or any problem occurs reading them,
         start with a blank slate so that subcategory gets populated nicely &
         we will assume exposure to start with.
+
+        Also if only title is set we use similar logic (title is added by
+        default in dock and other defaults need to be explicitly added
+        when opening this dialog). See #751
+
         """
         keywords = {'category': 'exposure'}
 
@@ -670,11 +695,20 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'title' not in keywords:
             self.leTitle.setText(layer_name)
         self.lblLayerName.setText(self.tr('Keywords for %s' % layer_name))
+
+        if 'source' in keywords:
+            self.leSource.setText(keywords['source'])
+        else:
+            self.leSource.setText('')
+
         # if we have a category key, unpack it first
         # so radio button etc get set
         if 'category' in keywords:
             self.set_category(keywords['category'])
             keywords.pop('category')
+        else:
+            # assume exposure to match ui. See issue #751
+            self.add_list_entry('category', 'exposure')
 
         for key in keywords.iterkeys():
             self.add_list_entry(key, str(keywords[key]))
@@ -688,6 +722,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         units = self.get_value_for_key('unit')
         data_type = self.get_value_for_key('datatype')
         title = self.get_value_for_key('title')
+
         if title is not None:
             self.leTitle.setText(title)
         elif self.layer is not None:
@@ -738,6 +773,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.adjustSize()
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('QString')
     def on_leTitle_textEdited(self, title):
         """Update the keywords list whenever the user changes the title.
@@ -749,6 +785,22 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.add_list_entry('title', str(title))
 
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('QString')
+    def on_leSource_textEdited(self, source):
+        """Update the keywords list whenever the user changes the source.
+
+        This slot is not called if the source is changed programmatically.
+
+        :param source: New source keyword for the layer.
+        :type source: str
+        """
+        if source is None or source == '':
+            self.remove_item_by_key('source')
+        else:
+            self.add_list_entry('source', str(source))
+
     def get_keywords(self):
         """Obtain the state of the dialog as a keywords dict.
 
@@ -758,6 +810,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         #make sure title is listed
         if str(self.leTitle.text()) != '':
             self.add_list_entry('title', str(self.leTitle.text()))
+
+        # make sure the source is listed too
+        if str(self.leSource.text()) != '':
+            self.add_list_entry('source', str(self.leSource.text()))
 
         keywords = {}
         for myCounter in range(self.lstKeywords.count()):

@@ -60,8 +60,10 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
 
     # Input checks
     validate_mode(mode)
+    #pylint: disable=W0632
     x, z, xi = validate_inputs(
         x=x, z=z, points=points, bounds_error=bounds_error)
+    #pylint: enable=W0632
 
     # Identify elements that are outside interpolation domain or NaN
     outside = (xi < x[0]) + (xi > x[-1])

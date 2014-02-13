@@ -18,6 +18,10 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+#noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 import os
 import sys
 import logging
@@ -409,7 +413,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         path = os.path.join(str(output_path), report_path)
 
         try:
-            report_file = file(path, 'wt')
+            report_file = file(path, 'w')
             report_file.write('InaSAFE Batch Report File\n')
             report_file.write(separator)
             for myLine in report:
@@ -440,7 +444,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
             QtGui.QDesktopServices.openUrl(url)
         else:
-            report = open(report_path, 'rt').read()
+            report = open(report_path).read()
             LOGGER.info(report)
 
     def run_task(self, task_item, status_item, count=0, index=''):

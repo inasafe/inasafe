@@ -56,6 +56,9 @@ DETAILS_STYLE = {
     'icon': 'icon-list icon-white',
     'style_class': 'problem'}
 
+SMALL_ICON_STYLE = {
+    'attributes': 'style="width: 24px; height: 24px;"',
+}
 
 TRACEBACK_STYLE = {
     'level': 5,
@@ -69,4 +72,6 @@ TRACEBACK_ITEMS_STYLE = {
 
 # This is typically a text element or its derivatives
 KEYWORD_STYLE = {
-    'style_class': 'label label-info'}
+    # not working unless you turn css on and off again using inspector
+    #'style_class': 'label label-success'
+}

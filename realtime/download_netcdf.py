@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import urllib2
 import os
+#noinspection PyPackageRequirements
 from BeautifulSoup import BeautifulSoup
 
 netcdf_url = 'http://bfews.pusair-pu.go.id/Sobek-Floodmaps/'
@@ -28,18 +29,19 @@ _download_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood' \
 
 def _read_contents(url):
     """Read contents of the url.
-    Auxiliary function to read and return file urls.
-    Args:
-        * url = URL where the file is published
-    Returns:
-        * list of filename that can be used directly, e.g. with wget
-            after concat it with netcdf_url
+
+    .. Auxiliary function to read and return file urls.
+
+    :param url: URL where the file is published.
+
+    :return: list of filename that can be used directly, e.g. with wget after
+            concat it with netcdf_url.
     """
 
-#    proxy_handler = urllib2.ProxyHandler({'http': '218.54.201.168:80'})
-#    opener = urllib2.build_opener(proxy_handler)
+    #proxy_handler = urllib2.ProxyHandler({'http': '218.54.201.168:80'})
+    #opener = urllib2.build_opener(proxy_handler)
     fid = urllib2.urlopen(url)
-#    fid = opener.open(url)
+    #fid = opener.open(url)
     html = fid.read()
     soup = BeautifulSoup(html)
     soup_table = soup.findAll('table')[0]
@@ -66,16 +68,16 @@ def _read_contents(url):
 
 
 def list_all_netcdf_files(url=netcdf_url):
-    """Public function to get list of files in the server
+    """Public function to get list of files in the server.
 
     :param url: The netcdf file source.
     """
     print 'Listing all netcdf file from %s' % url
     list_all_files = _read_contents(url)
     retval = []
-    for my_file in list_all_files[200:]:
-        if my_file.endswith('.nc'):
-            retval.append(str(my_file))
+    for this_file in list_all_files[200:]:
+        if this_file.endswith('.nc'):
+            retval.append(str(this_file))
     return retval
 
 
@@ -85,7 +87,7 @@ def download_file_url(url, download_directory=_download_directory, name=None):
     :param url: URL where the file is published
     :param download_directory: The local directory to save the file.
     :param name: Optional parameter to select one file. If omitted, latest
-    file will be used.
+                file will be used.
     :return: Instance of file containing name
     """
 
@@ -129,5 +131,5 @@ def download_file_url(url, download_directory=_download_directory, name=None):
     return str(retval)
 
 if __name__ == '__main__':
-    download_file_url(netcdf_url, download_directory=_download_directory)
+    download_file_url(netcdf_url)
     print 'fin'

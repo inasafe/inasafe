@@ -3,6 +3,7 @@
 #Tim Sutton, April 2013.
 
 from shake_event import ShakeEvent
+
 # myId = '20120118231542_se'
 # myShakeEvent = ShakeGridConverter(
 #     theEventId=myId,

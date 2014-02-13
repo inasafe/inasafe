@@ -26,9 +26,9 @@ sftp_data = SftpShakeData()
 
 class SFtpShakeDataTest(unittest.TestCase):
 
+    #noinspection PyMethodMayBeStatic
     def test_create_event(self):
-        """Test create shake data
-        """
+        """Test create shake data."""
         try:
             event_one = SftpShakeData()
             event_two = SftpShakeData(event='20130110041009')
@@ -41,11 +41,12 @@ class SFtpShakeDataTest(unittest.TestCase):
         except:
             raise
 
+    #noinspection PyMethodMayBeStatic
     def test_download_data(self):
-        """Test downloading data from server.
-        """
+        """Test downloading data from server."""
         print sftp_data.fetch_file()
 
+    #noinspection PyMethodMayBeStatic
     def test_get_latest_event_id(self):
         """Test get latest event id
         """
@@ -53,36 +54,36 @@ class SFtpShakeDataTest(unittest.TestCase):
         print latest_id
         assert latest_id is not None, 'There is not latest event, please check'
 
+    #noinspection PyMethodMayBeStatic
     def test_get_list_event_ids(self):
-        """Test get list event id
-        """
+        """Test get list event id."""
         list_id = sftp_data.get_list_event_ids()
         print list_id
         assert len(list_id) > 0, 'num of list event is zero, please check'
 
-    def test_reconnectSFTP(self):
-        """Test to reconnect SFTP
-        """
+    #noinspection PyMethodMayBeStatic
+    def test_reconnect_sftp(self):
+        """Test to reconnect SFTP."""
         sftp_client = sftp_data.sftpclient
         sftp_data.reconnect_sftp()
         new_sftp_client = sftp_data.sftpclient
         assert sftp_client != new_sftp_client, 'message'
         assert new_sftp_client is not None, 'new sftp is none'
 
+    #noinspection PyMethodMayBeStatic
     def test_filename(self):
-        """Test filename
-        """
+        """Test filename."""
         filename = sftp_data.file_name()
         assert filename == 'grid.xml', 'File name is not same'
 
-    def test_onServer(self):
-        """Test to check if a event is in server
-        """
+    #noinspection PyMethodMayBeStatic
+    def test_is_on_server(self):
+        """Test to check if a event is in server."""
         assert sftp_data.is_on_server(), 'Event is not in server'
 
+    #noinspection PyMethodMayBeStatic
     def test_extract(self):
-        """Test extracting data to be used in earth quake realtime
-        """
+        """Test extracting data to be used in earth quake realtime."""
         sftp_data.extract()
         final_grid_xml_file = os.path.join(sftp_data.extract_dir(), 'grid.xml')
         assert os.path.exists(final_grid_xml_file), 'grid.xml not found'

@@ -16,11 +16,11 @@ def create_index(shakemap_dir, locale):
     either public/en or public/id.
     :type shakemap_dir: str
 
-    :returns: Path to index file.
-    :rtype: str
-
     :param locale: Language of output index.html. id = Bahasa, en = English
     :type locale: str
+
+    :return: Path to index file.
+    :rtype: str
     """
     registered_locales = ['en', 'id']
     clean_locale = locale.lower()
@@ -111,7 +111,7 @@ def create_index(shakemap_dir, locale):
     table_html += ('\t\t</tbody>'
                    '\n\t</table>')
 
-    index_file = file(index_path, 'wt')
+    index_file = file(index_path, 'w')
     index_file.write(header_html + table_html + footer_html)
     index_file.close()
     return index_path

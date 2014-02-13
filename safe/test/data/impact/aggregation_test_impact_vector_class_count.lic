@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Dmitry Kolesov</author>
+  </metadata>
+
+  <datafile>
+    <filename>aggregation_test_impact_vector_class_count.shp</filename>
+    <checksum>1703675823</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Marco Bernasocchi</accountable>
+    <source>Marco Bernasocchi</source>
+    <IP_owner>Marco Bernasocchi</IP_owner>
+    <IP_info>This data is just a copy of aggregation_test_impact_vector_small that was created by Marco for the InaSAFE project. The difference between the files is their keywords.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>aggregation_test_impact_vector_class_count.shx</filename>
+    <checksum>2442695160</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Marco Bernasocchi</accountable>
+    <source>Marco Bernasocchi</source>
+    <IP_owner>Marco Bernasocchi</IP_owner>
+    <IP_info>This data is just a copy of aggregation_test_impact_vector_small that was created by Marco for the InaSAFE project. The difference between the files is their keywords.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>aggregation_test_impact_vector_class_count.dbf</filename>
+    <checksum>1200299816</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Marco Bernasocchi</accountable>
+    <source>Marco Bernasocchi</source>
+    <IP_owner>Marco Bernasocchi</IP_owner>
+    <IP_info>This data is just a copy of aggregation_test_impact_vector_small that was created by Marco for the InaSAFE project. The difference between the files is their keywords.</IP_info>
+  </datafile>
+
+</ga_license_file>
+

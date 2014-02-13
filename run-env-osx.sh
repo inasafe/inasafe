@@ -6,12 +6,20 @@
 #
 # Tim Sutton, June 2013
 
-QGISPATH=/Applications/QGIS.app
+# Assume brew installed deps
+export PATH=$PATH:/usr/local/bin/
+
+SITES=`find /usr/local/ -name site-packages`
+for SITE in $SITES
+do
+	PYTHONPATH=$PYTHONPATH:$SITE
+done
+export PYTHONPATH
+
+
+QGISPATH=`find /usr/local/ -name QGIS.app`
 export QGIS_PREFIX_PATH=${QGISPATH}/contents/MacOS
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
-PYTHONPATH=${PYTHONPATH}:"${QGISPATH}/Contents/Resources/python"
-PYTHONPATH=${PYTHONPATH}:'/Library/Frameworks/GDAL.framework/Versions/1.10/Python/2.7/site-packages'
-export PYTHONPATH
 
 export QGIS_DEBUG=0
 export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log

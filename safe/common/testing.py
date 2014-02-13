@@ -5,15 +5,10 @@ import numpy
 import os
 import sys
 import logging
-from PyQt4 import QtGui, QtCore
 from numpy.testing import Tester
-
-from qgis.core import QgsApplication
-from qgis.gui import QgsMapCanvas
 
 from numerics import axes_to_points
 from safe.common.version import get_version
-from safe.common.qgis_interface import QgisInterface
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -675,14 +670,23 @@ test_polygon = numpy.array([[122.229086, -8.624406],
                             [122.229086, -8.624406]])
 
 
+# noinspection PyUnresolvedReferences
 def get_qgis_app():
     """ Start one QGIS application to test against.
 
-    :returns: Handle to QGIS app
-    :rtype: QGIS application instance
+    :returns: Handle to QGIS app or None.
+    :rtype: QgsApplication, None
 
-    If QGIS is already running the handle to that app will be returned
+    If QGIS is already running the handle to that app will be returned.
     """
+
+    try:
+        from PyQt4 import QtGui, QtCore
+        from qgis.core import QgsApplication
+        from qgis.gui import QgsMapCanvas
+        from safe.common.qgis_interface import QgisInterface
+    except ImportError:
+        return None
 
     global QGIS_APP  # pylint: disable=W0603
 

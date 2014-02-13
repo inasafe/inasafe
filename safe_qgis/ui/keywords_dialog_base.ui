@@ -57,31 +57,15 @@
      <property name="title">
       <string>Quick edit</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="4" column="1">
-       <widget class="QComboBox" name="cboFemaleRatioAttribute"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="cboSubcategory">
-        <property name="toolTip">
-         <string>A subcategory represents the type of hazard.</string>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="leSource">
+        <property name="dragEnabled">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lblSubcategory">
-        <property name="text">
-         <string>Subcategory</string>
-        </property>
-        <property name="buddy">
-         <cstring>cboSubcategory</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="cboAggregationAttribute"/>
-      </item>
-      <item row="3" column="0">
+      <item row="6" column="0" colspan="2">
        <widget class="QLabel" name="lblAggregationAttribute">
         <property name="enabled">
          <bool>true</bool>
@@ -91,14 +75,67 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblCategory">
-        <property name="text">
-         <string>Category</string>
+      <item row="6" column="2">
+       <widget class="QComboBox" name="cboAggregationAttribute"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="QComboBox" name="cboSubcategory">
+        <property name="toolTip">
+         <string>A subcategory represents the type of hazard.</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="7" column="0" colspan="2">
+       <widget class="QLabel" name="lblFemaleRatioAttribute">
+        <property name="text">
+         <string>Female ratio attribute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="lblSubcategory">
+        <property name="text">
+         <string>Subcategory</string>
+        </property>
+        <property name="buddy">
+         <cstring>cboSubcategory</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="lblFemaleRatioDefault">
+        <property name="text">
+         <string>Female ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblSource">
+        <property name="text">
+         <string>Source</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="QDoubleSpinBox" name="dsbFemaleRatioDefault">
+        <property name="accelerated">
+         <bool>true</bool>
+        </property>
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="QComboBox" name="cboFemaleRatioAttribute"/>
+      </item>
+      <item row="4" column="2">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QRadioButton" name="radHazard">
@@ -132,10 +169,7 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="leTitle"/>
-      </item>
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="lblTitle">
         <property name="text">
          <string>Title</string>
@@ -143,34 +177,14 @@
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="lblFemaleRatioAttribute">
+       <widget class="QLabel" name="lblCategory">
         <property name="text">
-         <string>Female ratio attribute</string>
+         <string>Category</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="lblFemaleRatioDefault">
-        <property name="text">
-         <string>Female ratio default</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QDoubleSpinBox" name="dsbFemaleRatioDefault">
-        <property name="accelerated">
-         <bool>true</bool>
-        </property>
-        <property name="maximum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.010000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.000000000000000</double>
-        </property>
-       </widget>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="leTitle"/>
       </item>
      </layout>
     </widget>
@@ -253,7 +267,7 @@
            </item>
            <item>
             <property name="text">
-             <string>source</string>
+             <string notr="true">key_attribute</string>
             </property>
            </item>
           </widget>
@@ -391,10 +405,20 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>leTitle</tabstop>
+  <tabstop>leSource</tabstop>
   <tabstop>radHazard</tabstop>
+  <tabstop>radExposure</tabstop>
+  <tabstop>radPostprocessing</tabstop>
+  <tabstop>cboSubcategory</tabstop>
+  <tabstop>cboAggregationAttribute</tabstop>
+  <tabstop>cboFemaleRatioAttribute</tabstop>
+  <tabstop>dsbFemaleRatioDefault</tabstop>
   <tabstop>pbnAdvanced</tabstop>
   <tabstop>radPredefined</tabstop>
+  <tabstop>radUserDefined</tabstop>
   <tabstop>cboKeyword</tabstop>
+  <tabstop>lePredefinedValue</tabstop>
   <tabstop>pbnAddToList1</tabstop>
   <tabstop>leKey</tabstop>
   <tabstop>leValue</tabstop>
@@ -430,8 +454,8 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>500</x>
-     <y>343</y>
+     <x>495</x>
+     <y>359</y>
     </hint>
     <hint type="destinationlabel">
      <x>82</x>
@@ -462,8 +486,8 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>500</x>
-     <y>343</y>
+     <x>495</x>
+     <y>359</y>
     </hint>
     <hint type="destinationlabel">
      <x>166</x>
@@ -478,8 +502,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>343</x>
-     <y>657</y>
+     <x>352</x>
+     <y>687</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -494,8 +518,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>275</x>
-     <y>657</y>
+     <x>284</x>
+     <y>687</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>

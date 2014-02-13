@@ -26,7 +26,9 @@ from utilities import (
     create_classes,
     create_label,
     get_thousand_separator,
-    get_decimal_separator)
+    get_decimal_separator,
+    get_utm_epsg,
+    which)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -44,6 +46,15 @@ def print_class(my_array, my_result_class, my_expected):
 
 
 class UtilitiesTest(unittest.TestCase):
+
+
+    def test_which(self):
+        """Test that the which command works as expected."""
+        binary = 'gdalwarp'
+        path = which(binary)
+        # Check we found at least one match
+        assert len(path) > 0
+
     def test_humanize_class(self):
         """Test humanize class
         First class interval < 1
@@ -219,6 +230,17 @@ class UtilitiesTest(unittest.TestCase):
         my_expected = '[1 - 2] Low damage'
         assert my_result == my_expected, ' %s is not same with %s' % (
             my_result, my_expected)
+
+    def test_get_utm_epsg(self):
+        """Test we can get correct epsg code"""
+        # North semisphere
+        self.assertEqual(get_utm_epsg(-178, 10), 32601)
+        self.assertEqual(get_utm_epsg(178, 20), 32660)
+        self.assertEqual(get_utm_epsg(-3, 30), 32630)
+        # South semisphere:
+        self.assertEqual(get_utm_epsg(-178, -10), 32701)
+        self.assertEqual(get_utm_epsg(178, -20), 32760)
+        self.assertEqual(get_utm_epsg(-3, -30), 32730)
 
 
 if __name__ == '__main__':

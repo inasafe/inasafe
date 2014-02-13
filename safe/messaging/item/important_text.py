@@ -27,14 +27,8 @@ class ImportantText(Text):
     def __init__(self, text, **kwargs):
         """Creates a Bold Text object
 
-        Args:
-            String message, a string to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        :param text: A string to add to the message.
+        :type text: str
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -46,16 +40,10 @@ class ImportantText(Text):
         self.text = text
 
     def to_html(self):
-        """Render as html
+        """Render as html.
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation.
+        :rtype: str
         """
         return '<strong%s>%s%s</strong>' % (
             self.html_attributes(), self.html_icon(), self.text)
@@ -63,13 +51,7 @@ class ImportantText(Text):
     def to_text(self):
         """Render as plain text
 
-        Args:
-            None
-
-        Returns:
-            Str the plain text representation
-
-        Raises:
-            Errors are propagated
+        :returns: The Text representation.
+        :rtype: str
         """
         return '*%s*' % self.text

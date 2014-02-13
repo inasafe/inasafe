@@ -37,7 +37,8 @@ from qgis.core import (
 from safe_qgis.safe_interface import (
     verify,
     read_file_keywords,
-    temp_dir)
+    temp_dir,
+    which)
 
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
@@ -46,7 +47,7 @@ from safe_qgis.exceptions import (
     CallGDALError,
     InvalidProjectionError,
     InvalidClipGeometryError)
-from safe_qgis.utilities.utilities import which, tr
+from safe_qgis.utilities.utilities import tr
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -580,7 +581,7 @@ def extent_to_kml(extent):
         bottom_left_corner))
 
     file_name = tempfile.mkstemp('.kml', 'extent_', temp_dir())[1]
-    file_handle = file(file_name, 'wt')
+    file_handle = file(file_name, 'w')
     file_handle.write(kml)
     file_handle.close()
     return file_name

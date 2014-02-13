@@ -17,10 +17,10 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import sys
 import os
 import logging
 
+#noinspection PyPackageRequirements
 from PyQt4 import (QtGui, QtCore)
 
 from safe_qgis.exceptions import HelpFileMissingError
@@ -77,16 +77,8 @@ def _show_local_help(context=None):
     if not os.path.exists(base_url):
         raise HelpFileMissingError('Help file not found: %s' % base_url)
 
-    # Even on windows we need to use / for urls
-    if 'win32' in sys.platform:
-        drive, path = os.path.splitdrive(base_url)
-        base_url = path.replace(os.path.sep, '/')
-        base_url = drive + base_url
-        base_url = 'file:///%s' % base_url
-    else:
-        base_url = 'file://%s' % base_url
-
-    url = QtCore.QUrl(base_url)
+    #noinspection PyTypeChecker,PyArgumentList
+    url = QtCore.QUrl.fromLocalFile(base_url)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     QtGui.QDesktopServices.openUrl(url)
 
@@ -101,7 +93,7 @@ def _show_online_help(context=None):
 
     # First we try using local filesystem
 
-    base_url = 'http://inasafe.linfiniti.com/'
+    base_url = 'http://inasafe.org/'
 
     # set default value for locale
     locale = 'en'

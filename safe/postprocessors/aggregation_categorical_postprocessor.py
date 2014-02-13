@@ -35,28 +35,11 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
 
     def description(self):
         """Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         return tr('Calculates generic categorical statistics.')
 
     def setup(self, params):
-        """concrete implementation it takes care of the needed parameters being
-         initialized
-
-        Args:
-            params: dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
+        """Initialise needed parameters.
         """
         AbstractPostprocessor.setup(self, None)
         if (self.impact_classes is not None or
@@ -70,37 +53,22 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
         self._log_message(self.impact_attrs)
 
     def process(self):
-        """concrete implementation it takes care of the needed parameters being
-         available and performs all the indicators calculations
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        """Performs all the indicators calculations.
         """
         AbstractPostprocessor.process(self)
         if (self.impact_classes is None or
             self.impact_attrs is None or
             self.target_field is None):
-            self._log_message('%s not all params have been correctly '
-                              'initialized, setup needs to be called before '
-                              'process. Skipping this postprocessor'
-                              % self.__class__.__name__)
+            self._log_message(
+                '%s not all params have been correctly '
+                'initialized, setup needs to be called before '
+                'process. Skipping this postprocessor'
+                 % self.__class__.__name__)
         else:
             self._calculate_categories()
 
     def clear(self):
-        """concrete implementation it takes care of the needed parameters being
-         properly cleared
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        """Clear properly parameters.
         """
         AbstractPostprocessor.clear(self)
         self.impact_classes = None
@@ -109,15 +77,6 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
 
     def _calculate_categories(self):
         """Indicator that shows total population.
-
-        this indicator reports the total population
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
 
         impact_name = tr(self.target_field).lower()

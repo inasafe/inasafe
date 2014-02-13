@@ -237,7 +237,7 @@ class Test_plugins(unittest.TestCase):
             pass
         else:
             msg = ('Damage_curve should have raised exception for '
-                   'more than two colums')
+                   'more than two columns')
             raise Exception(msg)
 
     def test_aggregate(self):

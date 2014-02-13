@@ -74,56 +74,32 @@ class MessageElement(object):
     def to_html(self):
         """Render a MessageElement queue as html
 
-        Args:
-            None
-
-        Returns:
-            Str message the html representation of the message queue
-
-        Raises:
-            Errors are propagated
+        :returns: Html representation of the Text MessageElement.
+        :rtype: str
         """
         raise NotImplementedError('Please Implement this method')
 
     def to_text(self):
         """Render a MessageElement queue as text
 
-        Args:
-            None
-
-        Returns:
-            Str message the text representation of the message queue
-
-        Raises:
-            Errors are propagated
+        :returns: Text representation of the Text MessageElement.
+        :rtype: str
         """
         raise NotImplementedError('Please Implement this method')
 
     def to_markdown(self):
         """Render a MessageElement queue as markdown
 
-        Args:
-            None
-
-        Returns:
-            Str message the markdown representation of the message queue
-
-        Raises:
-            Errors are propagated
+        :returns: Markdown representation of the Text MessageElement.
+        :rtype: str
         """
         raise NotImplementedError('Please Implement this method')
 
     def to_json(self):
         """Render a MessageElement queue as JSON
 
-        Args:
-            None
-
-        Returns:
-            Str message the JSON representation of the message queue
-
-        Raises:
-            Errors are propagated
+        :returns: Json representation of the Text MessageElement.
+        :rtype: str
         """
         raise NotImplementedError('Please Implement this method')
 

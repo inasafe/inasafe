@@ -98,14 +98,17 @@ class MapTest(unittest.TestCase):
         # with a lower maintenance test strategy.
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
-            391235,  # Slackware64 14.0
+            427172,  # Ubuntu 13.10_64
+            414589,  # Slackware64 14.0
+            416796,  # Linux Mint 14_64
+            412911,  # Windows 7 64
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
         self.assertIn(out_size, expected_sizes, message)
 
     def test_custom_logo(self):
-        """Test that setting user-defined logo works"""
+        """Test that setting user-defined logo works."""
         LOGGER.info('Testing custom_logo')
         layer, _ = load_layer('test_shakeimpact.shp')
         canvas_layer = QgsMapCanvasLayer(layer)
@@ -115,10 +118,9 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
-        report.set_logo(":/plugins/inasafe/logo-flower.png")
-        out_path = unique_filename(prefix='mapCustomLogoTest',
-                                   suffix='.pdf',
-                                   dir=temp_dir('test'))
+        report.set_organisation_logo(":/plugins/inasafe/logo-flower.png")
+        out_path = unique_filename(
+            prefix='mapCustomLogoTest', suffix='.pdf', dir=temp_dir('test'))
         report.make_pdf(out_path)
         LOGGER.debug(out_path)
         message = 'Rendered output does not exist: %s' % out_path
@@ -136,7 +138,10 @@ class MapTest(unittest.TestCase):
 
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
-            388095,  # Slackware64 14.0
+            400563,  # Ubuntu 13.10_64
+            367934,  # Slackware64 14.0
+            390100,  # Linux Mint 14_64
+            386188,  # Windows 7 64bit
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)

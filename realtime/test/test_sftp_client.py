@@ -23,14 +23,16 @@ import os
 
 
 class SFtpClientTest(unittest.TestCase):
+    #noinspection PyMethodMayBeStatic
     def test_get_list_events(self):
         """Test to get all event ids."""
         my_ssh_client = SFtpClient()
         assert(my_ssh_client is not None)
 
+    #noinspection PyMethodMayBeStatic
     def test_download_path(self):
         """Test to download all directories and files under a path."""
-        my_ssh_client = SFtpClient(the_working_dir='shakemaps')
+        my_ssh_client = SFtpClient(working_dir='shakemaps')
         assert(my_ssh_client is not None)
 
         remote_path = os.path.join(

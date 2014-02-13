@@ -69,7 +69,7 @@ class TablesTest(unittest.TestCase):
     def writeHtml(self, name):
         self.html += ' </body>\n</html>\n'
         file(os.path.join(self.tmpDir(), '%s.html' % name),
-             'wt').write(self.html)
+             'w').write(self.html)
 
     def setUp(self):
         """Fixture run before all tests"""
@@ -460,17 +460,17 @@ class TablesTest(unittest.TestCase):
         table_body.append(TableRow([1, 2, 3, 4]))
         table_body.append(TableRow(['a', 'b', 'c', 'd']))
         table_body.append(TableRow(['x', 'y', 'z', 't']))
-        myTable = Table(table_body)
+        html_table = Table(table_body)
         expected_result1 = ['header1', 1, 'a', 'x']
         expected_result2 = [2, 'b', 'y']
-        real_result1 = myTable.column(0, True)
-        real_result2 = myTable.column(1)
-        myMessage1 = "Expected %s but got %s" % (expected_result1,
-                                                real_result1)
-        myMessage2 = "Expected %s but got %s" % (expected_result2,
-                                                 real_result2)
-        assert expected_result1 == real_result1, myMessage1
-        assert expected_result2 == real_result2, myMessage2
+        real_result1 = html_table.column(0, True)
+        real_result2 = html_table.column(1)
+        message1 = "Expected %s but got %s" % (
+            expected_result1, real_result1)
+        message2 = "Expected %s but got %s" % (
+            expected_result2, real_result2)
+        assert expected_result1 == real_result1, message1
+        assert expected_result2 == real_result2, message2
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TablesTest, 'test')

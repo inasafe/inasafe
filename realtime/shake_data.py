@@ -63,12 +63,13 @@ class ShakeData:
     """
 
     def __init__(self, event=None, host='118.97.83.243'):
-        """Constructor for the ShakeData class
+        """Constructor for the ShakeData class.
 
         :param event: (Optional) a string representing the event id
                 that this raster is associated with. e.g. 20110413170148.
                 **If no event id is supplied, a query will be made to the
                   ftp server, and the latest event id assigned.**
+
         :param host: (Optional) a string representing the ip address
                   or host name of the server from which the data should be
                   retrieved. It assumes that the data is in the root directory.

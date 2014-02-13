@@ -1,3 +1,5 @@
+# coding=utf-8
+"""Tests for engine."""
 import unittest
 import cPickle
 import numpy
@@ -24,14 +26,16 @@ from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from safe.common.polygon import line_dictionary_to_geometry
 from safe.common.interpolation2d import interpolate_raster
-from safe.common.numerics import (normal_cdf,
-                                  log_normal_cdf,
-                                  erf,
-                                  ensure_numeric)
+from safe.common.numerics import (
+    normal_cdf,
+    log_normal_cdf,
+    erf,
+    ensure_numeric)
 from safe.common.numerics import nan_allclose
-from safe.common.utilities import (VerificationError,
-                                   unique_filename,
-                                   format_int)
+from safe.common.utilities import (
+    VerificationError,
+    unique_filename,
+    format_int)
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
@@ -40,19 +44,31 @@ from safe.impact_functions import get_plugins, get_plugin
 # If any of these get reinstated as "official" public impact functions,
 # remove from here and update test to use the real one.
 # pylint: disable=W0611
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import empirical_fatality_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import allen_fatality_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import unspecific_building_impact_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import earthquake_impact_on_women
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import NEXIS_building_impact_model
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import HKV_flood_study
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import BNPB_earthquake_guidelines
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import general_ashload_impact
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import flood_road_impact
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import itb_fatality_model_org
+# noinspection PyUnresolvedReferences
 from impact_functions_for_testing import padang_building_impact_model
+# noinspection PyUnresolvedReferences
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
-PAGFatalityFunction)
+    PAGFatalityFunction)
 # pylint: enable=W0611
 
 
@@ -155,8 +171,8 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
 
         # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
+        impact_layer = calculate_impact(
+            layers=[H, E], impact_fcn=IF)
 
         # Do calculation manually and check result
         hazard_raster = read_layer(hazard_filename)
@@ -1616,7 +1632,7 @@ class Test_Engine(unittest.TestCase):
         V = read_layer(vector_filename)
 
         # Then test that axes and data returned by R are correct
-        x, y = R.get_geometry()
+        x, y = R.get_geometry()  # pylint: disable=W0633,W0632
         msg = 'X axes was %s, should have been %s' % (longitudes, x)
         assert numpy.allclose(longitudes, x), msg
         msg = 'Y axes was %s, should have been %s' % (latitudes, y)
@@ -2858,8 +2874,7 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
 
         # Call impact calculation engine
-        impact_vector = calculate_impact(layers=[H, E],
-                                             impact_fcn=IF)
+        impact_vector = calculate_impact(layers=[H, E], impact_fcn=IF)
         attributes = impact_vector.get_data()
 
 #        calculated_damage = []
@@ -2867,9 +2882,11 @@ class Test_Engine(unittest.TestCase):
             calculated_damage = attributes[i]['DAMAGE']
             bldg_class = attributes[i]['ITB_Class']
             msg = ('Calculated damage did not match expected result: \n'
-               'I got %s\n'
-               'Expected %s for bldg type: %s' % (calculated_damage,
-                                                  ref_damage[i], bldg_class))
+                   'I got %s\n'
+                   'Expected %s for bldg type: %s' %
+                   (calculated_damage,
+                    ref_damage[i],
+                    bldg_class))
             assert nan_allclose(calculated_damage, ref_damage[i],
                                # Reference data is single precision
                                atol=1.0e-6), msg
@@ -2909,6 +2926,47 @@ class Test_Engine(unittest.TestCase):
         # FIXME (Ole): To do when road functionality is done
 
     test_flood_on_roads.slow = True
+
+    def test_flood_population_evacuation(self):
+        """Flood population evacuation
+        """
+        population = 'people_jakarta_clip.tif'
+        flood_data = 'flood_jakarta_clip.tif'
+        plugin_name = 'FloodEvacuationFunction'
+
+        hazard_filename = join(TESTDATA, flood_data)
+        exposure_filename = join(TESTDATA, population)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+        I = read_layer(impact_filename)
+
+        keywords = I.get_keywords()
+        # print "keywords", keywords
+        evacuated = float(keywords['evacuated'])
+        total_needs = keywords['total_needs']
+
+        expected_evacuated = 63000
+        assert evacuated == expected_evacuated
+        assert total_needs['rice'] == 176400
+        assert total_needs['family_kits'] == 12600
+        assert total_needs['drinking_water'] == 1102500
+        assert total_needs['toilets'] == 3150
+        assert total_needs['water'] == 6615000
+
+    test_flood_population_evacuation.slow = True
 
     def test_erf(self):
         """Test ERF approximation

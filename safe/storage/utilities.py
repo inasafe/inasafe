@@ -9,7 +9,6 @@ import numpy
 import math
 from ast import literal_eval
 from osgeo import ogr
-from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 from geometry import Polygon
 
@@ -184,7 +183,7 @@ def write_keywords(keywords, filename, sublayer=None):
         first_value = existing_keywords[existing_keywords.keys()[0]]
     multilayer_flag = type(first_value) == dict
 
-    handle = file(filename, 'wt')
+    handle = file(filename, 'w')
 
     if multilayer_flag:
         if sublayer is not None and sublayer != '':
@@ -1158,11 +1157,16 @@ def safe_to_qgis_layer(layer):
     :param layer: Layer object as provided by InaSAFE engine.
     :type layer: read_layer
 
-    :returns: A validated QGIS layer or None.
+    :returns: A validated QGIS layer or None. Returns None when QGIS is not
+        available.
     :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer, None
 
     :raises: Exception if layer is not valid.
     """
+    try:
+        from qgis.core import QgsVectorLayer, QgsRasterLayer
+    except ImportError:
+        return None
 
     # noinspection PyUnresolvedReferences
     message = tr(

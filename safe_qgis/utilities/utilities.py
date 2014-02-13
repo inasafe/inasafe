@@ -25,10 +25,9 @@ import traceback
 import logging
 import uuid
 import webbrowser
-import math
 
 #noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, Qt
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
 #noinspection PyPackageRequirements
@@ -167,29 +166,6 @@ def get_wgs84_resolution(layer):
         cell_size = geo_width / columns
 
     return cell_size
-
-
-def get_utm_zone(longitude):
-    """
-    Return utm zone.
-    """
-    zone = int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
-    if zone == 0:
-        zone = 60
-    return zone
-
-
-def get_utm_epsg(longitude, latitude):
-    """
-    Return epsg code of the utm zone.
-    The code is based on the code:
-    http://gis.stackexchange.com/questions/34401
-    """
-    epsg = 32600
-    if latitude < 0.0:
-        epsg += 100
-    epsg += get_utm_zone(longitude)
-    return epsg
 
 
 def html_header():
@@ -594,63 +570,6 @@ def is_raster_layer(layer):
         return False
 
 
-def which(name, flags=os.X_OK):
-    """Search PATH for executable files with the given name.
-
-    ..note:: This function was taken verbatim from the twisted framework,
-      licence available here:
-      http://twistedmatrix.com/trac/browser/tags/releases/twisted-8.2.0/LICENSE
-
-    On newer versions of MS-Windows, the PATHEXT environment variable will be
-    set to the list of file extensions for files considered executable. This
-    will normally include things like ".EXE". This function will also find
-    files
-    with the given name ending with any of these extensions.
-
-    On MS-Windows the only flag that has any meaning is os.F_OK. Any other
-    flags will be ignored.
-
-    :param name: The name for which to search.
-    :type name: C{str}
-
-    :param flags: Arguments to L{os.access}.
-    :type flags: C{int}
-
-    :returns: A list of the full paths to files found, in the order in which
-        they were found.
-    :rtype: C{list}
-    """
-    result = []
-    #pylint: disable=W0141
-    extensions = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
-    #pylint: enable=W0141
-    path = os.environ.get('PATH', None)
-    # In c6c9b26 we removed this hard coding for issue #529 but I am
-    # adding it back here in case the user's path does not include the
-    # gdal binary dir on OSX but it is actually there. (TS)
-    if sys.platform == 'darwin':  # Mac OS X
-        gdal_prefix = (
-            '/Library/Frameworks/GDAL.framework/'
-            'Versions/Current/Programs/')
-        path = '%s:%s' % (path, gdal_prefix)
-
-    LOGGER.debug('Search path: %s' % path)
-
-    if path is None:
-        return []
-
-    for p in path.split(os.pathsep):
-        p = os.path.join(p, name)
-        if os.access(p, flags):
-            result.append(p)
-        for e in extensions:
-            path_extensions = p + e
-            if os.access(path_extensions, flags):
-                result.append(path_extensions)
-
-    return result
-
-
 def extent_to_geo_array(extent, source_crs):
     """Convert the supplied extent to geographic and return as an array.
 
@@ -750,7 +669,7 @@ def download_url(manager, url, output_path, progress_dialog=None):
 
     result = reply.error()
     if result == QNetworkReply.NoError:
-        return True
+        return True, None
     else:
         return result, str(reply.errorString())
 
@@ -823,24 +742,24 @@ def read_impact_layer(impact_layer):
 
 
 def map_qrc_to_file(match, res_copy_dir):
-    """Map a qrc:/ path to its correspondent file:/// and creates it.
+    """Map a qrc:/ path to its correspondent file:/// and create it.
 
-    for example qrc:/plugins/inasafe/ajax-loader.gif
+    For example qrc:/plugins/inasafe/ajax-loader.gif
     is converted to file:////home/marco/.qgis2/python/plugins/
     inasafe-master/safe_qgis/resources/img/ajax-loader.gif
 
-    if the qrc asset is non file based (i.e. is compiled in resources_rc
-    .pc) then a copy of is extracted to res_copy_dir
+    If the qrc asset is non file based (i.e. is compiled in resources_rc
+    .pc) then a copy of is extracted to res_copy_dir.
 
-    :param match: the qrc path to be mapped matched from a regular
-     expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
+    :param match: The qrc path to be mapped matched from a regular
+        expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
     :type match: re.match object
 
-    :param res_copy_dir: the path to copy non file based qrc assets.
+    :param res_copy_dir: The path to copy non file based qrc assets.
     :type res_copy_dir: str
 
-    :returns: a file path to the resource or None if the resource could
-     not be created
+    :returns: File path to the resource or None if the resource could
+        not be created.
     :rtype: None, str
     """
 
@@ -862,7 +781,8 @@ def map_qrc_to_file(match, res_copy_dir):
                 #copy somehow failed
                 res_path = None
 
-    return res_path
+    #noinspection PyArgumentList
+    return QUrl.fromLocalFile(res_path).toString()
 
 
 def open_in_browser(file_path):
@@ -904,3 +824,30 @@ def html_to_file(html, file_path=None, open_browser=False):
 
     if open_browser:
         open_in_browser(file_path)
+
+
+def qt_at_least(needed_version, test_version=None):
+    """Check if the installed Qt version is greater than the requested
+
+    :param needed_version: minimally needed Qt version in format like 4.8.4
+    :type needed_version: str
+
+    :param test_version: Qt version as returned from Qt.QT_VERSION. As in
+     0x040100 This is used only for tests
+    :type test_version: int
+
+    :returns: True if the installed Qt version is greater than the requested
+    :rtype: bool
+    """
+    major, minor, patch = needed_version.split('.')
+    needed_version = '0x0%s0%s0%s' % (major, minor, patch)
+    needed_version = int(needed_version, 0)
+
+    installed_version = Qt.QT_VERSION
+    if test_version is not None:
+        installed_version = test_version
+
+    if needed_version <= installed_version:
+        return True
+    else:
+        return False
