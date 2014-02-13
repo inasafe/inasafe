@@ -468,15 +468,19 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         1. 'map_title' from each impact layer
         2. 'exposure_title' from each impact layer
         3. 'postprocessing_report' from each impact layer
-        4. 'aggregation_attribute' on aggregation layer, if user runs merging tools with aggregation layer chosen
+        4. 'aggregation_attribute' on aggregation layer, if user runs merging
+           tools with aggregation layer chosen
 
         The things that we validate are:
 
         1. 'map_title' keyword must exist on each impact layer
         2. 'exposure_title' keyword must exist on each impact layer
         3. 'postprocessing_report' keyword must exist on each impact layer
-        4. 'hazard_title' keyword must exist on each impact layer. Hazard title from first impact layer must be the same with second impact layer to indicate that both are generated from the same hazard layer.
-        5. 'aggregation attribute' must exist when user wants to run merging tools with aggregation layer chosen.
+        4. 'hazard_title' keyword must exist on each impact layer. Hazard title
+           from first impact layer must be the same with second impact layer
+           to indicate that both are generated from the same hazard layer.
+        5. 'aggregation attribute' must exist when user wants to run merging
+           tools with aggregation layer chosen.
 
         """
         required_attribute = ['map_title', 'exposure_title', 'hazard_title',
@@ -636,7 +640,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         return merged_report_dict
 
     def generate_report_summary(self, first_report_dict, second_report_dict):
-        """Generate report summary for each aggregation area from merged report dictionary.
+        """Generate report summary for each aggregation area from merged
+        report dictionary.
         For each exposure, search for the total only.
 
         Report dictionary looks like this:
