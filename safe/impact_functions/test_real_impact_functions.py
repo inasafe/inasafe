@@ -24,7 +24,7 @@ class TestRealImpactFunctions(unittest.TestCase):
         msg = (
             'Available impact functions are: %s' %
             str(admissible_plugins.keys()))
-        print msg
+
         self.assertIn(
             'Flood Evacuation Function Vector Hazard',
             admissible_plugins, msg)
