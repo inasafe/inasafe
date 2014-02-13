@@ -169,7 +169,7 @@
 <p>Peta guncangan berguna untuk melaksanakan perencanaan kontinjensi dalam kejadian gempa bumi. Biasanya hal ini didistribusikan sebagai file grid.xml yang tidak dapat digunakan dalam InaSAFE atau QGIS. Alat ini akan mengimpor file grid.xml sebagai file GEOTIFF yang nantinya dapat digunakan dalam InaSAFE.</p>
 <p>Dua algoritma interpolasi yang berbeda dapat digunakan selama proses impor - <tt class="docutils literal"><span class="pre">Nearest</span> <span class="pre">Neighboir</span></tt> dan <tt class="docutils literal"><span class="pre">Inverse</span> <span class="pre">Distance</span></tt>. Setelah konversi, alat tersebut secara otomatis membuat metadata katakunci InaSAFE untuk  layer sehingga dapat segera digunakan untuk analisis.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/converter.png"><img alt="Converter" src="_images/converter.png" style="width: 471.75px; height: 413.25px;" /></a>
+<a class="reference internal image-reference" href="_images/converter.png"><img alt="Converter" src="_images/converter.png" style="width: 480.75px; height: 437.25px;" /></a>
 <p class="caption">Konverter</p>
 </div>
 <p>Untuk menggunakan alat ini secara efektif:</p>
@@ -186,10 +186,12 @@
 <p>Anda dapat memperoleh data guncangan secara gratis dari <a class="reference external" href="http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013">situs peta guncangan USGS</a>.</p>
 <p>Jika Anda mendownload file grid. Anda harus klik-kanan di atasnya dan pilih <em class="menuselection">Simpan sebagai</em> untuk memasikan bahwa file itu disimpan dengan benar. Pengguna OSX dan Linux juga dapat mempertimbangkan untuk menggunakan perintah tool garis untuk mengambil file grid:</p>
 <p>OSX:</p>
-<div class="highlight-python"><pre>curl -O http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml</pre>
+<div class="highlight-python"><div class="highlight"><pre>curl -O http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml
+</pre></div>
 </div>
 <p>Linux:</p>
-<div class="highlight-python"><pre>wget -C http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml</pre>
+<div class="highlight-python"><div class="highlight"><pre>wget -C http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>

@@ -30,16 +30,7 @@ class Text(MessageElement):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
-        item.Text()
-
-        Args:
-            Text message, an element to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        item.Text().
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -59,14 +50,8 @@ class Text(MessageElement):
         Strings can be passed and are automatically converted in to
         item.Text()
 
-        Args:
-            Text text, an element to add to the text
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        :param text: An element to add to the text.
+        :type text: str
         """
         if self._is_stringable(text) or self._is_qstring(text):
             self.text.append(PlainText(text))
@@ -76,16 +61,11 @@ class Text(MessageElement):
             raise InvalidMessageItemError(text, text.__class__)
 
     def to_html(self):
-        """Render a Text MessageElement as html
+        """Render a Text MessageElement as html.
 
-        Args:
-            None
+        :returns: Html representation of the Text MessageElement.
+        :rtype: str
 
-        Returns:
-            Str the html representation of the Text MessageElement
-
-        Raises:
-            Errors are propagated
         """
         if self.text is None:
             return
@@ -98,14 +78,8 @@ class Text(MessageElement):
     def to_text(self):
         """Render a Text MessageElement as plain text
 
-        Args:
-            None
-
-        Returns:
-            Str the plain text representation of the Text MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: Text representation of the Text MessageElement.
+        :rtype: str
         """
         if self.text is None:
             return

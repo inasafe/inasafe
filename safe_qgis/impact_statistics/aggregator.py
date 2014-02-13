@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 from safe.storage.utilities import safe_to_qgis_layer
-from safe_qgis import breakdown_defaults
+from safe_qgis.utilities.defaults import breakdown_defaults
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
