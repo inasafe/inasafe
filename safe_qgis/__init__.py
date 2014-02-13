@@ -12,6 +12,7 @@ from PyQt4.QtCore import (
     QTranslator,
     QCoreApplication,
     QSettings)
+from PyQt4.QtGui import QMessageBox
 
 try:
     # When upgrading, using the plugin manager, you may get an error when
