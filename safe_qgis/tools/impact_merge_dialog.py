@@ -679,7 +679,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             first_exposure_detail_dict = \
                 first_exposure_type_dict[first_exposure_type]
             for datum in first_exposure_detail_dict:
-                if 'total' in datum.lower():
+                if self.tr('Total').lower() in datum.lower():
                     html += ('<tr>'
                              '<td>%s</td>'
                              '<td>%s</td>'
@@ -698,7 +698,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 second_exposure_detail_dict = \
                     second_exposure_report_dict[second_exposure]
                 for datum in second_exposure_detail_dict:
-                    if 'total' in datum.lower():
+                    if self.tr('Total').lower() in datum.lower():
                         html += ('<tr>'
                                  '<td>%s</td>'
                                  '<td>%s</td>'
