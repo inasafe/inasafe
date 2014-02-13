@@ -30,6 +30,7 @@ from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     setup_printer,
     dpi_to_meters)
+from safe_qgis.utilities.defaults import disclaimer
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -54,9 +55,7 @@ class Map():
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
         self.org_logo = ':/plugins/inasafe/supporters.png'
         self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
-        self.disclaimer = self.tr(
-            'InaSAFE has been jointly developed by BNPB, Australian '
-            'Government and the World Bank - GFDRR')
+        self.disclaimer = disclaimer()
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0

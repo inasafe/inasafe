@@ -44,6 +44,7 @@ from safe_qgis.utilities.utilities import (
     extent_to_geo_array,
     viewport_geo_array,
     read_impact_layer)
+from safe_qgis.utilities.defaults import disclaimer
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -407,14 +408,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         caveat_list.add(
             self.tr(
                 'Population by administration boundary is not yet supported.'))
-        caveat_list.add(
-            self.tr(
-                'InaSAFE has been jointly developed by Indonesian '
-                'Government-BNPB, Australian Government-AIFDR and the World '
-                'Bank-GFDRR. These agencies and the individual software '
-                'developers of InaSAFE take no responsibility for the '
-                'correctness of outputs from InaSAFE or decisions derived as '
-                'a consequence.'))
+        caveat_list.add(disclaimer())
         message.add(caveat_list)
         return message
 

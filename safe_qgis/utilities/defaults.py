@@ -27,7 +27,6 @@ from PyQt4 import QtCore
 # patched safe_qgis.defaults (see safe_qgis.__init__)
 from safe.defaults import DEFAULTS
 
-
 def breakdown_defaults(default=None):
     """Get a dictionary of default values to be used for post processing.
 
@@ -58,3 +57,22 @@ def breakdown_defaults(default=None):
         return defaults[default]
     else:
         return None
+
+
+def disclaimer():
+    """Get a standard disclaimer.
+
+    :returns: Standard disclaimer string for InaSAFE.
+    :rtype: str
+    """
+    #import tr here to avoid side effects with safe (see notes above in import
+    #section.
+    from safe_qgis.utilities.utilities import tr
+    text = tr(
+        'InaSAFE has been jointly developed by Indonesian '
+        'Government-BNPB, Australian Government-AIFDR and the World '
+        'Bank-GFDRR. These agencies and the individual software '
+        'developers of InaSAFE take no responsibility for the '
+        'correctness of outputs from InaSAFE or decisions derived as '
+        'a consequence.')
+    return text
