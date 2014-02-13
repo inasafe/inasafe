@@ -8,7 +8,7 @@ Authors ordered by date of first contribution:
 * Ted Dunstone <ted@biometix.com>
 * Ariel Nunez <ingenieroariel@gmail.com>
 * Tim Sutton <tim@linfiniti.com>
-* Ismail Sunni <ismailsunni@yahoo.co.id>
+* Ismail Sunni <imajimatika@gmail.com>
 * Kristy Van Putten <Kristy.VanPutten@dfat.gov.au>
 * Marco Bernasocchi <marco@opengis.ch>
 * Oscar Kurniawan <misugijunz@gmail.com>
