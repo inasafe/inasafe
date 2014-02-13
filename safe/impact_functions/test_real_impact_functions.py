@@ -24,34 +24,34 @@ class TestRealImpactFunctions(unittest.TestCase):
         msg = (
             'Available impact functions are: %s' %
             str(admissible_plugins.keys()))
-        #print msg
-        assert (
-            'Flood Evacuation Function Vector Hazard'
-            in admissible_plugins, msg)
-        assert (
-            'I T B Earthquake Building Damage Function'
-            in admissible_plugins, msg)
-        assert (
-            'Earthquake Building Impact Function'
-            in admissible_plugins, msg)
-        assert (
-            'admissible_plugins A G Fatality Function'
-            in admissible_plugins, msg)
-        assert (
-            'Flood Evacuation Function'
-            in admissible_plugins, msg)
-        assert (
-            'Flood Building Impact Function'
-            in admissible_plugins, msg)
-        assert (
-            'I T B Fatality Function'
-            in admissible_plugins, msg)
-        assert (
-            'Volcano Building Impact'
-            in admissible_plugins, msg)
-        assert (
-            'Volcano Polygon Hazard Population'
-            in admissible_plugins, msg)
+        print msg
+        self.assertIn(
+            'Flood Evacuation Function Vector Hazard',
+            admissible_plugins, msg)
+        self.assertIn(
+            'I T B Earthquake Building Damage Function',
+            admissible_plugins, msg)
+        self.assertIn(
+            'Earthquake Building Impact Function',
+            admissible_plugins, msg)
+        self.assertIn(
+            'P A G Fatality Function',
+            admissible_plugins, msg)
+        self.assertIn(
+            'Flood Evacuation Function',
+            admissible_plugins, msg)
+        self.assertIn(
+            'Flood Building Impact Function',
+            admissible_plugins, msg)
+        self.assertIn(
+            'I T B Fatality Function',
+            admissible_plugins, msg)
+        self.assertIn(
+            'Volcano Building Impact',
+            admissible_plugins, msg)
+        self.assertIn(
+            'Volcano Polygon Hazard Population',
+            admissible_plugins, msg)
 
         # This one should get 2 earthquake building impact functions
         dict1 = {
