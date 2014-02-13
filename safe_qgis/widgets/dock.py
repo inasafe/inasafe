@@ -106,7 +106,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+# from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -131,7 +131,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        #pydevd.settrace(
+        # pydevd.settrace(
         #    'localhost', port=5678, stdoutToServer=True,
         #    stderrToServer=True)
 
@@ -832,14 +832,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Obtain QgsMapLayer id from the userrole of the QtCombo for exposure
         and return it as a QgsMapLayer.
 
-        Args:
-            None
-
-        Returns:
-            QgsMapLayer - currently selected map layer in the exposure combo.
-
-        Raises:
-            None
+        :returns: Currently selected map layer in the exposure combo.
+        :rtype: QgsMapLayer
         """
 
         index = self.cboExposure.currentIndex()
@@ -948,19 +942,48 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
         #TODO style these.
+
+        hazard_layer = self.get_hazard_layer()
+        exposure_layer = self.get_exposure_layer()
+        aggregation_layer = self.get_aggregation_layer()
+
+        # trap for issue 706
+        try:
+            exposure_name = exposure_layer.name()
+            hazard_name = hazard_layer.name()
+            #aggregation layer could be set to AOI so no check for that
+        except AttributeError:
+            title = self.tr('No valid layers')
+            details = self.tr(
+                'Please ensure your hazard and exposure layers are set '
+                'in the question area and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                 m.Heading(title, **WARNING_STYLE),
+                 m.Paragraph(details))
+            self.show_static_message(message)
+            self.grpQuestion.show()
+            self.pbnRunStop.setDisabled(True)
+            return
+
         text = m.Text(
             self.tr('This analysis will calculate the impact of'),
-            m.EmphasizedText(self.get_hazard_layer().name()),
+            m.EmphasizedText(hazard_name),
             self.tr('on'),
-            m.EmphasizedText(self.get_exposure_layer().name()),
+            m.EmphasizedText(exposure_name),
         )
 
         if self.get_aggregation_layer() is not None:
-            text.add(m.Text(
-                self.tr('and bullet_list the results'),
-                m.ImportantText(self.tr('aggregated by')),
-                m.EmphasizedText(self.get_aggregation_layer().name()))
-            )
+            try:
+                aggregation_name = aggregation_layer.name()
+                text.add(m.Text(
+                    self.tr('and bullet_list the results'),
+                    m.ImportantText(self.tr('aggregated by')),
+                    m.EmphasizedText(aggregation_name))
+                )
+            except AttributeError:
+                pass
+
         text.add('.')
 
         message = m.Message(
@@ -1084,7 +1107,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.busy = True
 
     def run(self):
-        """Execute analysis when ok button on dock is clicked."""
+        """Execute analysis when run button on dock is clicked."""
+
+        hazard_layer = self.get_hazard_layer()
+        exposure_layer = self.get_exposure_layer()
+
+        if exposure_layer is None or hazard_layer is None:
+            title = self.tr('No valid layers')
+            details = self.tr(
+                'Please ensure your hazard and exposure layers are set '
+                'in the question area and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                 m.Heading(title, **WARNING_STYLE),
+                 m.Paragraph(details))
+            self.show_static_message(message)
+            return
 
         self.enable_busy_cursor()
 
@@ -1293,6 +1331,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             exposure_layer = self.get_exposure_layer()
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
+
         self.restore_state()
 
         # append postprocessing report
@@ -1319,7 +1358,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
-        self.pbnRunStop.setEnabled(True)
+        # for #706 - if the exposure is hidden
+        # due to self.hide_exposure_flag being enabled
+        # we may have no exposure layers left
+        # so we handle that here and disable run
+        if self.cboExposure.count() == 0:
+            self.pbnRunStop.setEnabled(False)
+        else:
+            self.pbnRunStop.setEnabled(True)
         self.repaint()
         self.disable_busy_cursor()
         self.busy = False
