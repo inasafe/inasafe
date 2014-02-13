@@ -1358,9 +1358,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
-        # for #706 - after teh exposure is hidden
-        # the cboExposure will asynchronously be clear
-        # so we anticipate that here and disable run
+        # for #706 - if the exposure is hidden
+        # due to self.hide_exposure_flag being enabled
+        # we may have no exposure layers left
+        # so we handle that here and disable run
         if self.cboExposure.count() == 0:
             self.pbnRunStop.setEnabled(False)
         else:
