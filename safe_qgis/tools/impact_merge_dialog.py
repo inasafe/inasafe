@@ -46,6 +46,7 @@ from safe_qgis.exceptions import (
     ReportCreationError,
     UnsupportedProviderError)
 from safe_qgis.safe_interface import messaging as m
+from safe_qgis.utilities.defaults import disclaimer
 from safe_qgis.utilities.utilities import (
     html_header,
     html_footer,
@@ -105,8 +106,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'supporters.png')
 
         # Disclaimer text
-        self.disclaimer = ('InaSAFE has been jointly developed by BPNB, '
-                           'Australian Govenment and the World Bank - GFDRR')
+        self.disclaimer = disclaimer()
 
         # The output directory
         self.out_dir = None

@@ -27,6 +27,7 @@ from PyQt4 import QtCore
 # patched safe_qgis.defaults (see safe_qgis.__init__)
 from safe.defaults import DEFAULTS
 
+
 def breakdown_defaults(default=None):
     """Get a dictionary of default values to be used for post processing.
 
