@@ -323,9 +323,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.organisation_logo_path = organisation_logo_path
 
         # Disclaimer text
-        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
-        if disclaimer != '':
-            self.disclaimer = disclaimer
+        customised_disclaimer = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        if customised_disclaimer != '':
+            self.disclaimer = customised_disclaimer
 
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
