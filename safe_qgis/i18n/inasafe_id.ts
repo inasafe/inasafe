@@ -2167,7 +2167,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader.py" line="74"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
-        <translation>Alat download InaSAFE OpenStreetMap</translation>
+        <translation>Alat download OpenStreetMap untuk InaSAFE</translation>
     </message>
     <message>
         <location filename="osm_downloader.py" line="103"/>
@@ -2192,7 +2192,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader.py" line="210"/>
         <source>InaSAFE OpenStreetMap downloader error</source>
-        <translation>Kesalahan pada alat download InaSAFE OpenStreetMap</translation>
+        <translation>Kesalahan pada alat download OpenStreetMap untuk InaSAFE</translation>
     </message>
     <message>
         <location filename="osm_downloader.py" line="320"/>
@@ -2418,7 +2418,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="339"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
-        <translation>Pendownload InaSAFE OpenStreetMap</translation>
+        <translation>Alat download OpenStreetMap untuk InaSAFE</translation>
     </message>
     <message>
         <location filename="__init__.py" line="39"/>

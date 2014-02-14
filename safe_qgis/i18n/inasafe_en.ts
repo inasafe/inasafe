@@ -292,7 +292,7 @@
         <translation>Feature %d has no geometry or geometry is invalid</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="72"/>
+        <location filename="defaults.py" line="71"/>
         <source>InaSAFE has been jointly developed by Indonesian Government-BNPB, Australian Government-AIFDR and the World Bank-GFDRR. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1322,57 +1322,57 @@
         <translation>Report from merging two impact layers was generated successfully.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="374"/>
+        <location filename="impact_merge_dialog.py" line="375"/>
         <source>Entire Area</source>
         <translation>Entire Area</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="394"/>
+        <location filename="impact_merge_dialog.py" line="395"/>
         <source>First layer is not valid.</source>
         <translation>First layer is not valid.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="397"/>
+        <location filename="impact_merge_dialog.py" line="398"/>
         <source>Second layer is not valid.</source>
         <translation>Second layer is not valid.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="400"/>
+        <location filename="impact_merge_dialog.py" line="401"/>
         <source>First layer must be different to second layer.</source>
         <translation>First layer must be different to second layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="445"/>
+        <location filename="impact_merge_dialog.py" line="446"/>
         <source>Directory %s does not exist</source>
         <translation>Directory %s does not exist</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="446"/>
+        <location filename="impact_merge_dialog.py" line="447"/>
         <source>Directory %s does not exist. Do you want to create it?</source>
         <translation>Directory %s does not exist. Do you want to create it?</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="458"/>
+        <location filename="impact_merge_dialog.py" line="459"/>
         <source>Output directory cannot be empty.</source>
         <translation>Output directory cannot be empty.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="492"/>
+        <location filename="impact_merge_dialog.py" line="497"/>
         <source>No keywords found for first impact layer.</source>
         <translation>No keywords found for first impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="534"/>
+        <location filename="impact_merge_dialog.py" line="539"/>
         <source>No keywords exist in aggregation layer.</source>
         <translation>No keywords exist in aggregation layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="537"/>
+        <location filename="impact_merge_dialog.py" line="542"/>
         <source>Keyword aggregation attribute not found for aggregation layer.</source>
         <translation>Keyword aggregation attribute not found for aggregation layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="1019"/>
+        <location filename="impact_merge_dialog.py" line="1025"/>
         <source>Error loading template %s</source>
         <translation>Error loading template %s</translation>
     </message>
@@ -1382,22 +1382,22 @@
         <translation>This tool will merge the outputs from two impact maps for the same area. The maps must be created using the same aggregation areas and same hazard. To use:</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="495"/>
+        <location filename="impact_merge_dialog.py" line="500"/>
         <source>Keyword %s not found for first layer.</source>
         <translation>Keyword %s not found for first layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="507"/>
+        <location filename="impact_merge_dialog.py" line="512"/>
         <source>No keywords found for second impact layer.</source>
         <translation>No keywords found for second impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="510"/>
+        <location filename="impact_merge_dialog.py" line="515"/>
         <source>Keyword %s not found for second layer.</source>
         <translation>Keyword %s not found for second layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="519"/>
+        <location filename="impact_merge_dialog.py" line="524"/>
         <source>First impact layer and second impact layer do not use the same hazard layer.</source>
         <translation>First impact layer and second impact layer do not use the same hazard layer.</translation>
     </message>
@@ -1422,17 +1422,17 @@
         <translation>QPT File (*.qpt)</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="423"/>
+        <location filename="impact_merge_dialog.py" line="424"/>
         <source>Template file does not exist.</source>
         <translation>Template file does not exist.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="1030"/>
+        <location filename="impact_merge_dialog.py" line="1036"/>
         <source>Component %s could not be found</source>
         <translation>Component %s could not be found</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="701"/>
+        <location filename="impact_merge_dialog.py" line="707"/>
         <source>Total</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2324,97 +2324,97 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="207"/>
+        <location filename="plugin.py" line="208"/>
         <source>Toggle InaSAFE Dock</source>
         <translation>Toggle InaSAFE Dock</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="213"/>
+        <location filename="plugin.py" line="214"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation>Show/hide InaSAFE dock widget</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="428"/>
+        <location filename="plugin.py" line="429"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="223"/>
+        <location filename="plugin.py" line="224"/>
         <source>InaSAFE Keyword Editor</source>
         <translation>InaSAFE Keyword Editor</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="229"/>
+        <location filename="plugin.py" line="230"/>
         <source>Open InaSAFE keywords editor</source>
         <translation>Open InaSAFE keywords editor</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="241"/>
+        <location filename="plugin.py" line="242"/>
         <source>InaSAFE Options</source>
         <translation>InaSAFE Options</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="246"/>
+        <location filename="plugin.py" line="247"/>
         <source>Open InaSAFE options dialog</source>
         <translation>Open InaSAFE options dialog</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="255"/>
+        <location filename="plugin.py" line="256"/>
         <source>InaSAFE Impact Functions Browser</source>
         <translation>InaSAFE Impact Functions Browser</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="261"/>
+        <location filename="plugin.py" line="262"/>
         <source>Open InaSAFE Impact Functions Browser</source>
         <translation>Open InaSAFE Impact Functions Browser</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="276"/>
+        <location filename="plugin.py" line="277"/>
         <source>InaSAFE Minimum Needs Tool</source>
         <translation>InaSAFE Minimum Needs Tool</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="281"/>
+        <location filename="plugin.py" line="282"/>
         <source>Open InaSAFE minimum needs tool</source>
         <translation>Open InaSAFE minimum needs tool</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="49"/>
+        <location filename="plugin.py" line="50"/>
         <source>Please restart QGIS to use this plugin.</source>
         <translation>Please restart QGIS to use this plugin.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="290"/>
+        <location filename="plugin.py" line="291"/>
         <source>InaSAFE Converter</source>
         <translation>InaSAFE Converter</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="295"/>
+        <location filename="plugin.py" line="296"/>
         <source>Open InaSAFE Converter</source>
         <translation>Open InaSAFE Converter</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="305"/>
+        <location filename="plugin.py" line="306"/>
         <source>InaSAFE Batch Runner</source>
         <translation>InaSAFE Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="310"/>
+        <location filename="plugin.py" line="311"/>
         <source>Open InaSAFE Batch Runner</source>
         <translation>Open InaSAFE Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="319"/>
+        <location filename="plugin.py" line="320"/>
         <source>Save current scenario</source>
         <translation>Save current scenario</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="323"/>
+        <location filename="plugin.py" line="324"/>
         <source>Save current scenario to text file</source>
         <translation>Save current scenario to text file</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="339"/>
+        <location filename="plugin.py" line="340"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
         <translation>InaSAFE OpenStreetMap Downloader</translation>
     </message>
@@ -2424,17 +2424,17 @@ p, li { white-space: pre-wrap; }
         <translation>Please restart QGIS to use this plugin. If you experience further problems after restarting please report the issue to the InaSAFE team.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="354"/>
+        <location filename="plugin.py" line="355"/>
         <source>InaSAFE Impact Layer Merge</source>
         <translation>InaSAFE Impact Layer Merge</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="500"/>
+        <location filename="plugin.py" line="501"/>
         <source>Unsupported layer type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="500"/>
+        <location filename="plugin.py" line="501"/>
         <source>The layer you have selected cannot be used for analysis because its data type is unsupported.</source>
         <translation type="unfinished"></translation>
     </message>

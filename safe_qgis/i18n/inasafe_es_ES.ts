@@ -1427,7 +1427,7 @@
     <message>
         <location filename="impact_merge_dialog.py" line="701"/>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Total</translation>
     </message>
 </context>
 <context>

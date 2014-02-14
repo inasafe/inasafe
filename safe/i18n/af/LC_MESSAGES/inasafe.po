@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: inasafe-develop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-12 12:31+0700\n"
+"POT-Creation-Date: 2014-02-13 16:42+0700\n"
 "PO-Revision-Date: 2014-02-13 04:01+0000\n"
 "Last-Translator: akbargumbira <akbargumbira@gmail.com>\n"
 "Language-Team: Afrikaans (http://www.transifex.com/projects/p/inasafe-develop/language/af/)\n"
