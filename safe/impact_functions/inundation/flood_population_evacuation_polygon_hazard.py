@@ -331,6 +331,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                              'map_title': map_title,
                              'legend_notes': legend_notes,
                              'legend_units': legend_units,
-                             'legend_title': legend_title},
+                             'legend_title': legend_title,
+                             'affected_population': affected_population,
+                             'total_population': total},
                    style_info=style_info)
         return V
