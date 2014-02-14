@@ -1044,6 +1044,40 @@ class Test_Engine(unittest.TestCase):
 
     test_flood_building_impact_function.slow = True
 
+    def test_flood_building_impact_function_vector(self):
+        """Flood building impact function works (flood is polygon)
+        """
+        building = 'test_flood_building_impact_exposure.shp'
+        flood_data = 'test_flood_building_impact_hazard.shp'
+        plugin_name = 'FloodBuildingImpactFunction'
+
+        hazard_filename = join(TESTDATA, flood_data)
+        exposure_filename = join(TESTDATA, building)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+        I = read_layer(impact_filename)
+
+        keywords = I.get_keywords()
+        buildings_total = keywords['buildings_total']
+        buildings_affected = keywords['buildings_affected']
+
+        assert buildings_total == 67
+        assert  buildings_affected == 41
+
+
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer
         """
