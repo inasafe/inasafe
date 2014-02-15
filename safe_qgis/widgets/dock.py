@@ -528,6 +528,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
 
+    # noinspection PyPep8Naming
     @pyqtSlot(int)
     def on_cboFunction_currentIndexChanged(self, index):
         """Automatic slot executed when the Function combo is changed.
@@ -1881,6 +1882,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         'trying to print.'))
             return
 
+        # noinspection PyTypeChecker
         self.show_dynamic_message(
             m.Message(
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),

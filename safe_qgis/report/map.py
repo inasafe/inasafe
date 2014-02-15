@@ -125,43 +125,6 @@ class Map():
         self.composition.setPrintResolution(self.page_dpi)
         self.composition.setPrintAsRaster(True)
 
-    def render(self):
-        """Render the map composition to an image and save that to disk.
-
-        :returns: A three-tuple of:
-            * str: image_path - absolute path to png of rendered map
-            * QImage: image - in memory copy of rendered map
-            * QRectF: target_area - dimensions of rendered map
-        :rtype: tuple
-        """
-        LOGGER.debug('InaSAFE Map renderComposition called')
-        # NOTE: we ignore self.composition.printAsRaster() and always rasterize
-        width = int(self.page_dpi * self.page_width / 25.4)
-        height = int(self.page_dpi * self.page_height / 25.4)
-        image = QtGui.QImage(
-            QtCore.QSize(width, height),
-            QtGui.QImage.Format_ARGB32)
-        image.setDotsPerMeterX(dpi_to_meters(self.page_dpi))
-        image.setDotsPerMeterY(dpi_to_meters(self.page_dpi))
-
-        # Only works in Qt4.8
-        #image.fill(QtGui.qRgb(255, 255, 255))
-        # Works in older Qt4 versions
-        image.fill(55 + 255 * 256 + 255 * 256 * 256)
-        image_painter = QtGui.QPainter(image)
-        source_area = QtCore.QRectF(
-            0, 0, self.page_width,
-            self.page_height)
-        target_area = QtCore.QRectF(0, 0, width, height)
-        self.composition.render(image_painter, target_area, source_area)
-        image_painter.end()
-        image_path = unique_filename(
-            prefix='mapRender_',
-            suffix='.png',
-            dir=temp_dir())
-        image.save(image_path)
-        return image_path, image, target_area
-
     def make_pdf(self, filename):
         """Generate the printout for our final map.
 
@@ -182,13 +145,7 @@ class Map():
             map_pdf_path = str(filename)
 
         self.load_template()
-
-        resolution = self.composition.printResolution()
-        self.printer = setup_printer(map_pdf_path, resolution=resolution)
-        _, image, rectangle = self.render()
-        painter = QtGui.QPainter(self.printer)
-        painter.drawImage(rectangle, image, rectangle)
-        painter.end()
+        self.composition.exportAsPDF(map_pdf_path)
         return map_pdf_path
 
     def map_title(self):
@@ -212,13 +169,14 @@ class Map():
         :returns: None on error, otherwise the attributes (notes and units).
         :rtype: None, str
         """
-        LOGGER.debug('InaSAFE Map getMapLegendAtributes called')
+        LOGGER.debug('InaSAFE Map getMapLegendAttributes called')
         legend_attribute_list = [
             'legend_notes',
             'legend_units',
             'legend_title']
         legend_attribute_dict = {}
         for myLegendAttribute in legend_attribute_list:
+            # noinspection PyBroadException
             try:
                 legend_attribute_dict[myLegendAttribute] = \
                     self.keyword_io.read_keywords(
