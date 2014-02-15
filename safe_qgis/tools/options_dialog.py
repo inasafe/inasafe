@@ -115,6 +115,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keyword_io.default_keyword_db_path(), type=str)
         self.leKeywordCachePath.setText(path)
 
+        path = settings.value('inasafe/northArrowPath', '', type=str)
+        self.leNorthArrowPath.setText(path)
+
         path = settings.value('inasafe/orgLogoPath', '', type=str)
         self.leOrgLogoPath.setText(path)
 
@@ -169,6 +172,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/keywordCachePath',
             self.leKeywordCachePath.text())
         settings.setValue(
+            'inasafe/northArrowPath',
+            self.northArrowPath.text())
+        settings.setValue(
             'inasafe/orgLogoPath',
             self.leOrgLogoPath.text())
         settings.setValue(
@@ -205,6 +211,18 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keyword_io.default_keyword_db_path(),
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_toolNorhtArrowPath_clicked(self):
+        """Auto-connect slot activated when north arrow tool button is clicked.
+        """
+        # noinspection PyCallByClass,PyTypeChecker
+        file_name = QtGui.QFileDialog.getOpenFileName(
+            self,
+            self.tr('Set north arrow image file'),
+            '',
+            self.tr('Portable Network Graphics files (*.png *.PNG)'))
+        self.leNorthArrowPath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolOrgLogoPath_clicked(self):

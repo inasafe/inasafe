@@ -53,6 +53,7 @@ class Map():
         self.composition = None
         self.extent = iface.mapCanvas().extent()
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
+        self.north_arrow = ':/plugins/inasafe/simple_north_arrow.png'
         self.org_logo = ':/plugins/inasafe/supporters.png'
         self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
         self.disclaimer = disclaimer()
@@ -81,6 +82,14 @@ class Map():
         :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
         """
         self.layer = layer
+
+    def set_north_arrow_image(self, logo_path):
+        """Set image that will be used as organisation logo in reports.
+
+        :param logo_path: Path to image file
+        :type logo_path: str
+        """
+        self.north_arrow = logo_path
 
     def set_organisation_logo(self, logo):
         """Set image that will be used as organisation logo in reports.
@@ -243,6 +252,14 @@ class Map():
         else:
             raise ReportCreationError(self.tr(
                 'Image "safe-logo" could not be found'))
+
+        # set north arrow
+        image = self.composition.getComposerItemById('north-arrow')
+        if image is not None:
+            image.setPictureFile(self.north_arrow)
+        else:
+            raise ReportCreationError(self.tr(
+                'Image "north arrow" could not be found'))
 
         # set organisation logo
         image = self.composition.getComposerItemById('organisation-logo')

@@ -1,7 +1,7 @@
 <Composer title="Composer 1" visible="1">
  <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="0" printAsRaster="0">
-  <ComposerPicture pictureWidth="11.5387" file="/usr/local/qgis-2.0/share/qgis/svg/arrows/Arrow_05.svg" pictureHeight="11.8732" mapId="-1">
-   <ComposerItem width="11.5387" x="187.797" transparency="40" y="26.9237" rotation="0" height="11.8732" positionMode="0" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="5.97987" uuid="{2c35d3f6-2709-4b47-94a9-ec183f96dfc3}" id="" background="true" blendMode="0" positionLock="false">
+  <ComposerPicture pictureWidth="11.5387" file="." pictureHeight="11.8732" mapId="-1">
+   <ComposerItem width="11.5387" x="187.797" transparency="40" y="26.9237" rotation="0" height="11.8732" positionMode="0" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="5.97987" uuid="{2c35d3f6-2709-4b47-94a9-ec183f96dfc3}" id="" background="true" blendMode="0" positionLock="false" id="north-arrow">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="170" red="255" blue="255" green="255"/>
    </ComposerItem>
