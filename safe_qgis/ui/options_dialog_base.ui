@@ -31,7 +31,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_basic">
       <attribute name="title">
@@ -381,7 +381,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolReportTemplatePath_2">
+          <widget class="QToolButton" name="toolReportTemplatePath">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -407,7 +407,6 @@
       <zorder>txtDisclaimer</zorder>
       <zorder>lblOrganisationLogo</zorder>
       <zorder>lblNorthArrowPath</zorder>
-      <zorder>layoutWidget</zorder>
       <zorder>lblReportTemplate</zorder>
      </widget>
      <widget class="QWidget" name="tab_advanced">

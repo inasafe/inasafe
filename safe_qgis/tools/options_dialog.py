@@ -173,7 +173,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.leKeywordCachePath.text())
         settings.setValue(
             'inasafe/northArrowPath',
-            self.northArrowPath.text())
+            self.leNorthArrowPath.text())
         settings.setValue(
             'inasafe/orgLogoPath',
             self.leOrgLogoPath.text())
@@ -213,7 +213,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.leKeywordCachePath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolNorhtArrowPath_clicked(self):
+    def on_toolNorthArrowPath_clicked(self):
         """Auto-connect slot activated when north arrow tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker

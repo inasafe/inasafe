@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Sat Feb 15 21:31:38 2014
+# Created: Sat Feb 15 23:04:30 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -195,10 +195,10 @@ class Ui_OptionsDialogBase(object):
         self.leReportTemplatePath.setEnabled(True)
         self.leReportTemplatePath.setObjectName(_fromUtf8("leReportTemplatePath"))
         self.horizontalLayout_10.addWidget(self.leReportTemplatePath)
-        self.toolReportTemplatePath_2 = QtGui.QToolButton(self.tab_templates)
-        self.toolReportTemplatePath_2.setEnabled(True)
-        self.toolReportTemplatePath_2.setObjectName(_fromUtf8("toolReportTemplatePath_2"))
-        self.horizontalLayout_10.addWidget(self.toolReportTemplatePath_2)
+        self.toolReportTemplatePath = QtGui.QToolButton(self.tab_templates)
+        self.toolReportTemplatePath.setEnabled(True)
+        self.toolReportTemplatePath.setObjectName(_fromUtf8("toolReportTemplatePath"))
+        self.horizontalLayout_10.addWidget(self.toolReportTemplatePath)
         self.gridLayout_5.addLayout(self.horizontalLayout_10, 5, 0, 1, 1)
         self.label_2 = QtGui.QLabel(self.tab_templates)
         self.label_2.setObjectName(_fromUtf8("label_2"))
@@ -249,7 +249,7 @@ class Ui_OptionsDialogBase(object):
         self.gridLayout_2.addWidget(self.tabWidget, 0, 0, 1, 1)
 
         self.retranslateUi(OptionsDialogBase)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), OptionsDialogBase.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), OptionsDialogBase.reject)
         QtCore.QMetaObject.connectSlotsByName(OptionsDialogBase)
@@ -307,7 +307,7 @@ class Ui_OptionsDialogBase(object):
         self.lblNorthArrowPath.setText(_translate("OptionsDialogBase", "North arrow image", None))
         self.toolNorthArrowPath.setText(_translate("OptionsDialogBase", "...", None))
         self.lblReportTemplate.setText(_translate("OptionsDialogBase", "Report templates directory", None))
-        self.toolReportTemplatePath_2.setText(_translate("OptionsDialogBase", "...", None))
+        self.toolReportTemplatePath.setText(_translate("OptionsDialogBase", "...", None))
         self.label_2.setText(_translate("OptionsDialogBase", "Organisation disclaimer text", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_templates), _translate("OptionsDialogBase", "Template Options", None))
         self.lblKeywordCache.setText(_translate("OptionsDialogBase", "Keyword cache for remote datasources", None))
