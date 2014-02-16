@@ -46,16 +46,15 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
         # additional buttons
         self.button_save_pdf = QtGui.QPushButton(self.tr('Open PDF'))
         self.button_save_pdf.setObjectName('button_save_pdf')
-        self.button_save_pdf.setToolTip(self.tr('Write report to PDF and '
-                                                'open it in default viewer'))
+        self.button_save_pdf.setToolTip(self.tr(
+            'Write report to PDF and open it in default viewer'))
         self.buttonBox.addButton(self.button_save_pdf,
                                  QtGui.QDialogButtonBox.ActionRole)
 
         self.button_open_composer = QtGui.QPushButton(self.tr('Open composer'))
         self.button_open_composer.setObjectName('button_open_composer')
-        self.button_open_composer.setToolTip(self.tr('Prepare report and '
-                                                     'open it in QGIS '
-                                                     'composer'))
+        self.button_open_composer.setToolTip(
+            self.tr('Prepare report and open it in QGIS composer'))
         self.buttonBox.addButton(self.button_open_composer,
                                  QtGui.QDialogButtonBox.ActionRole)
 
@@ -117,10 +116,11 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
 
         try:
             path = settings.value('inasafe/lastTemplate', '', type=str)
+            self.template_combo.setCurrentIndex(
+                self.template_combo.findData(path))
         except TypeError:
-            path = ''
-        self.template_combo.setCurrentIndex(
-            self.template_combo.findData(path))
+            self.template_combo.setCurrentIndex(2)
+
         try:
             path = settings.value('inasafe/lastCustomTemplate', '', type=str)
         except TypeError:

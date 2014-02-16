@@ -1856,21 +1856,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Slot to open impact report dialog that used to tune report
         when print map button pressed
         ."""
-        dlg = ImpactReportDialog(self.iface)
-        if not dlg.exec_() == QtGui.QDialog.Accepted:
+        dialog = ImpactReportDialog(self.iface)
+        if not dialog.exec_() == QtGui.QDialog.Accepted:
             self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Report generation cancelled!'))))
             return
 
-        use_full_extent = dlg.analysis_extent_radio.isChecked()
-        create_pdf = dlg.create_pdf
-        if dlg.default_template_radio.isChecked():
-            template_path = dlg.template_combo.itemData(
-                dlg.template_combo.currentIndex())
+        use_full_extent = dialog.analysis_extent_radio.isChecked()
+        create_pdf = dialog.create_pdf
+        if dialog.default_template_radio.isChecked():
+            template_path = dialog.template_combo.itemData(
+                dialog.template_combo.currentIndex())
         else:
-            template_path = dlg.template_path.text()
+            template_path = dialog.template_path.text()
 
         print_map = Map(self.iface)
         if self.iface.activeLayer() is None:
