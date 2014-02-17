@@ -81,6 +81,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -94,6 +111,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -166,101 +184,131 @@
   <div class="section" id="options">
 <span id="toolbar-options"></span><h1>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h1>
 <p>The InaSAFE plugin provides an options dialog which allows you to
-define various options relating to how InaSAFE will behave. The
-options dialog can be launched by clicking on the InaSAFE plugin
+define various options relating to how InaSAFE will behave.
+The options dialog can be launched by clicking on the InaSAFE plugin
 toolbar&#8217;s options icon (as shown below) or by doing
 <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/toolbar_options.png"><img alt="Options icon" src="_images/toolbar_options.png" style="width: 348.0px; height: 37.0px;" /></a>
 <p class="caption">Options icon</p>
 </div>
-<p>Then the dialog will appear, looking something like this:</p>
+<p>Then this dialog will appear:</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/inasafe-options-dialog.png"><img alt="Options dialog" src="_images/inasafe-options-dialog.png" style="width: 525.0px; height: 410.25px;" /></a>
+<a class="reference internal image-reference" href="_images/inasafe-options-dialog.png"><img alt="Options dialog" src="_images/inasafe-options-dialog.png" style="width: 1196.25px; height: 333.0px;" /></a>
 <p class="caption">Options dialog</p>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">You can click on the <em class="guilabel">Help</em> button at any time and it
-will open the help documentation browser to this page.</p>
-</div>
 <p>The following options are available on the <em class="guilabel">Options Dialog</em>:</p>
+<p>As you can see this dialog is divided into three tabs namely:</p>
+<ul class="simple">
+<li>Basic Options</li>
+<li>Template Options</li>
+<li>Advanced</li>
+</ul>
+<div class="section" id="basic-options">
+<span id="id1"></span><h2>Basic Options<a class="headerlink" href="#basic-options" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><em class="guilabel">Only show visible layers in the InaSAFE dock</em> : This option will
-determine whether <strong>all</strong> (when unchecked) hazard and impact layers should
-be listed in the InaSAFE dock&#8217;s combo boxes. or (when checked) only
-visible layers.</li>
+determine whether <strong>all</strong> hazard and impact layers should be listed in the
+InaSAFE dock&#8217;s combo boxes or (when checked) only visible layers.</li>
 <li><em class="guilabel">Set QGIS layer name from &#8216;title&#8217; in keywords</em> : This option will
-(when enabled) cause QGIS to name layers in the <em class="guilabel">Layers tree</em>
-using the <cite>title</cite> keyword in the layer&#8217;s keywords file. If the layer
-has no &#8216;title&#8217; in its keywords, or it has no keywords at all, the normal
-QGIS behaviour for naming layers will apply.</li>
+cause QGIS to name layers in the <em class="guilabel">Layers tree</em> using the <cite>title</cite>
+keyword in the layer&#8217;s keywords file.
+If the layer has no &#8216;title&#8217; in its keywords, or it has no keywords at all,
+the normal QGIS behaviour for naming layers will apply.</li>
 <li><em class="guilabel">Zoom to impact layer on scenario estimate completion</em> : This
 option will cause the map view to zoom in/out in order to completely contain
 the InaSAFE impact scenario map output when an analysis completes.</li>
 <li><em class="guilabel">Hide exposure layer on scenario estimate completion</em> : This
 option will cause QGIS to turn off the exposure layer used when
-InaSAFE completes the current analysis. You can re-enable the layer
-visibility again by checking its checkbox in the legend.</li>
-<li><em class="guilabel">Clip datasets to visible extent before analysis</em> : This
-option will cause QGIS to clip hazard and exposure layers to the currently
-visible extent on the map canvas.</li>
+InaSAFE completes the current analysis.
+You can re-enable the layer visibility again by checking its checkbox in
+the legend.</li>
+<li><em class="guilabel">Clip datasets to visible extent before analysis</em> : This option
+will cause QGIS to clip hazard and exposure layers to the currently visible
+extent on the map canvas.</li>
 <li><em class="guilabel">When clipping, also clip features (e.g. will clip polygon
-smaller)</em>: This option will any polygons that extend beyond the analysis
-extents to be clipped so that they are contained by the analysis extents.
+smaller)</em>:
+This option will any polygons that extend beyond the analysis extents to be
+clipped so that they are contained by the analysis extents.
 For example if you have a flood hazard polygon layer that extends far
 beyond your area of interest, the flood polygons will be reduced so that
-only the part inside of your area of interested is retained. This can
-speed up processing time somewhat.</li>
-<li><em class="guilabel">Help to improve InaSAFE by submitting errors to a remote server</em> :
-This option, when enabled, will submit diagnostic information back to an
-InaSAFE project server in the event of any error taking place that
-we are able to trap. The information provided is useful to the
-InaSAFE team to improve the robustness of the software we produce
-and to spot trends in issues people encounter. Please note the warning text
-below this option which is included here in full:</li>
-</ul>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The above setting requires a QGIS restart to disable/enable. Error
-messages and diagnostic information will be posted to
-<a class="reference external" href="http://sentry.linfiniti.com/inasafe-desktop/">http://sentry.linfiniti.com/inasafe-desktop/</a>. Some institutions may not
-allow you to enable this feature - check with your network administrator
-if unsure. Although the data is submitted anonymously,
-the information contained in tracebacks may contain file system paths
-which reveal your identity or other information from your system.</p>
-</div>
-<ul class="simple">
+only the part inside of your area of interested is retained.
+This can speed up processing time somewhat.</li>
 <li><em class="guilabel">Show intermediate layers generated by postprocessing</em> : This
 option will cause QGIS to show the intermediate files generated by the
 postprocessing steps in the map canvas.</li>
-<li><em class="guilabel">Default female ratio</em> : This is the default female to total
+<li><em class="guilabel">Female ratio default value</em> : This is the default female to total
 population ratio used por generating Gender breakdowns</li>
-<li><em class="guilabel">Keyword cache for remote datasources</em> : This option is used to
-determine where keywords are stored for datasets where it is not possible
-to write them into a .keywords file. See <a class="reference internal" href="keywords.html#keywords-system"><em>Keywords System</em></a> in the
-InaSAFE User-Manual for more information on the keywords system.</li>
+</ul>
+</div>
+<div class="section" id="template-options">
+<span id="id2"></span><h2>Template Options<a class="headerlink" href="#template-options" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
 <li><em class="guilabel">Organisation logo</em>: This option is used to determine
 a custom logo that will be used as organisation logo in the pdf of your
-impact scenario project. See <a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE
-User-Manual for more information on the reports.</li>
-<li><em class="guilabel">Report template</em>: This option is used to determine a directory
-with custom templates. Templates from this directory will be available for
-usage when generating report on your impact scenario project. See
-<a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE User-Manual for more information
-on the reports.</li>
-<li><em class="guilabel">Disclaimer text</em>: This option is used to change default disclaimer
-text, printed in reports. Just enter your own text and it will be used
-instead of the default one. See <a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE
-User-Manual for more information on the reports.</li>
-<li><em class="guilabel">Enable developer mode</em>. With this option enabled,
-you can right click on the report area and use the webkit debug tools to
-debug the output. <strong>This option is intended for advanced users only.</strong></li>
+impact scenario project.
+See <a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE User-Manual for more
+information on the reports.</li>
+<li><em class="guilabel">Report templates directory</em>: This option is used to determine a
+directory with custom templates.
+Templates from this directory will be available for usage when generating
+report on your impact scenario project.
+See <a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE User-Manual for more
+information on the reports.</li>
+<li><em class="guilabel">Organisation disclaimer text</em>: This option is used to change
+default disclaimer text, printed in reports.
+Just enter your own text and it will be used instead of the default one.
+See <a class="reference internal" href="reports.html#toolbar-reports"><em>Reports</em></a> in the InaSAFE User-Manual for more
+information on the reports.</li>
+</ul>
+</div>
+<div class="section" id="advanced">
+<span id="id3"></span><h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><em class="guilabel">Keyword cache for remote datasources</em> : This option is used to
+determine where keywords are stored for datasets where it is not possible
+to write them into a .keywords file.
+See <a class="reference internal" href="keywords.html#keywords-system"><em>Keywords System</em></a> in the InaSAFE User-Manual for more
+information on the keywords system.</li>
+<li><em class="guilabel">Help to improve InaSAFE by submitting errors to a remote server</em> :
+This option, when enabled, will submit diagnostic information back to an
+InaSAFE project server in the event of any error taking place that
+we are able to trap.
+The information provided is useful to the InaSAFE team to improve
+the robustness of the software we produce and to spot trends in issues
+people encounter.
+Please note the warning text below this option which is included here in
+full:</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Pressing <em class="guilabel">Cancel</em> at any time will close the options
-dialog and any changes made will <strong>not</strong> be applied.
+<p class="last">The above setting requires a QGIS restart to disable/enable.
+Error messages and diagnostic information will be posted to
+<a class="reference external" href="http://sentry.linfiniti.com/inasafe-desktop/">http://sentry.linfiniti.com/inasafe-desktop/</a> .
+Some institutions may not allow you to enable this feature - check with
+your network administrator if unsure.
+Although the data is submitted anonymously, the information contained in
+tracebacks may contain file system paths which reveal your identity or
+other information from your system.</p>
+</div>
+<ul class="simple">
+<li><em class="guilabel">Enable developer mode</em> :  With this option enabled,
+you can right click on the report area and use the webkit debug tools to
+debug the output.
+<strong>This option is intended for advanced users only.</strong></li>
+<li><em class="guilabel">Use QGIS zonal statistics</em> : With this button you can toggle
+between using QGIS internal zonal statistics or the one that comes with
+InaSAFE</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can click on the <em class="guilabel">Help</em> button at any time and it
+will open the help documentation browser to this page.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Pressing <em class="guilabel">Cancel</em> at any time will close the options dialog and
+any changes made will <strong>not</strong> be applied.
 Pressing <em class="guilabel">OK</em> at any time will close the options dialog and any
 changes made <strong>will</strong> be applied immediately.</p>
 </div>
@@ -268,6 +316,7 @@ changes made <strong>will</strong> be applied immediately.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">The exact button order shown on this dialog may differ depending on
 your operating system or desktop environment.</p>
+</div>
 </div>
 </div>
 
@@ -290,7 +339,8 @@ your operating system or desktop environment.</p>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 
