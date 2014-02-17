@@ -1982,6 +1982,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.load_template()
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
+            # Zoom to Full Extent
+            number_pages = self.composition.numPages()
+            if number_pages > 0:
+                height = \
+                    self.composition.paperHeight() * number_pages + \
+                    self.composition.spaceBetweenPages() * (number_pages - 1)
+                self.composer.fitInView(
+                    0, 0,
+                    self.composition.paperWidth() + 1,
+                    height + 1,
+                    QtCore.Qt.KeepAspectRatio)
 
         self.hide_busy()
 
