@@ -11,6 +11,8 @@
         <file alias="save-as-scenario.svg">img/icons/save-as-scenario.svg</file>
         <file alias="show-converter-tool.svg">img/icons/show-converter-tool.svg</file>
         <file alias="show-impact-merge.svg">img/icons/show-impact-merge.svg</file>
+        <!-- North arrows -->
+        <file alias="simple_north_arrow.png">img/logos/simple_north_arrow.png</file>
         <!-- logos -->
         <file alias="inasafe-logo.svg">img/logos/inasafe-logo.svg</file>
         <file alias="inasafe-logo-url.svg">img/logos/inasafe-logo-url.svg</file>

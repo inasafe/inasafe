@@ -4,27 +4,21 @@
 # 
 # Translators:
 # adissadis <adz.only@gmail.com>, 2014
-# adissadis <adz.only@gmail.com>, 2014
 # akbargumbira <akbargumbira@gmail.com>, 2014
-# akbargumbira <akbargumbira@gmail.com>, 2014
-# dewisulistio <dewi.sulistio@gmail.com>, 2013
-# dewisulistio <dewi.sulistio@gmail.com>, 2013
+# dewisulistio <dewi.sulistioningrum@hotosm.org>, 2013
 # dika <mahardika.fadmastuti@gmail.com>, 2013
-# uswatunkh21 <uswatunkh21@yahoo.com>, 2014
-# dika <mahardika.fadmastuti@gmail.com>, 2013
+# emirhartato <emir.hartato@gmail.com>, 2014
 # raniedwianugrah <raniedwianugrah@gmail.com>, 2013
-# raniedwianugrah <raniedwianugrah@gmail.com>, 2013
-# Riangga <riangga_miko@yahoo.com>, 2013
 # Riangga <riangga_miko@yahoo.com>, 2013
 # uswatunkh21 <uswatunkh21@yahoo.com>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: inasafe\n"
+"Project-Id-Version: inasafe-develop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-12 12:31+0700\n"
-"PO-Revision-Date: 2014-02-12 05:00+0000\n"
-"Last-Translator: adissadis <adz.only@gmail.com>\n"
-"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"POT-Creation-Date: 2014-02-13 16:42+0700\n"
+"PO-Revision-Date: 2014-02-14 04:41+0000\n"
+"Last-Translator: emirhartato <emir.hartato@gmail.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe-develop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -212,7 +206,7 @@ msgstr "- Tingkat dampak didefinisikan melalui posting survei gempa bumi Padang 
 msgid ""
 "- Unreinforced masonry is assumed where no structural information is "
 "available. <br>"
-msgstr "- Batu pondasi tanpa perkuatan diasumsikan dimana tidak ada informasi struktural tersedia. <br>"
+msgstr "- Tembok tanpa penguat beton bertulang diasumsikan dimana tidak ada informasi struktural tersedia. <br>"
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:124
 #: safe/impact_functions/core.py:699 safe/impact_functions/styles.py:125

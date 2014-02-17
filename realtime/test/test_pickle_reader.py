@@ -68,15 +68,6 @@ class TestPickleReader(unittest.TestCase):
             create_index(shakemap_dir=self.shakemap_dir_en,
                          locale='ens')
 
-        self.assertIn('Banda Aceh', result)
-
-        self.assertIn('Ternate', result)
-
-        # Test if locale is other than en or id:
-        with self.assertRaises(BaseException):
-            create_index(shakemap_dir=self.shakemap_dir_en,
-                         locale='ens')
-
     def test_generate_pages(self):
         """Test we can generate index.html for both en and id."""
         en_path, id_path = generate_pages(

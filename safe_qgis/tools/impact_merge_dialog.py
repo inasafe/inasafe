@@ -46,6 +46,7 @@ from safe_qgis.exceptions import (
     ReportCreationError,
     UnsupportedProviderError)
 from safe_qgis.safe_interface import messaging as m
+from safe_qgis.utilities.defaults import disclaimer
 from safe_qgis.utilities.utilities import (
     html_header,
     html_footer,
@@ -105,8 +106,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             'supporters.png')
 
         # Disclaimer text
-        self.disclaimer = ('InaSAFE has been jointly developed by BPNB, '
-                           'Australian Govenment and the World Bank - GFDRR')
+        self.disclaimer = disclaimer()
 
         # The output directory
         self.out_dir = None
@@ -323,9 +323,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.organisation_logo_path = organisation_logo_path
 
         # Disclaimer text
-        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
-        if disclaimer != '':
-            self.disclaimer = disclaimer
+        customised_disclaimer = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        if customised_disclaimer != '':
+            self.disclaimer = customised_disclaimer
 
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
@@ -469,7 +470,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         2. 'exposure_title' from each impact layer
         3. 'postprocessing_report' from each impact layer
         4. 'aggregation_attribute' on aggregation layer, if user runs merging
-        tools with aggregation layer chosen
+           tools with aggregation layer chosen
 
         The things that we validate are:
 
@@ -477,10 +478,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         2. 'exposure_title' keyword must exist on each impact layer
         3. 'postprocessing_report' keyword must exist on each impact layer
         4. 'hazard_title' keyword must exist on each impact layer. Hazard title
-        from first impact layer must be the same with second impact layer to
-        indicate that both are generated from the same hazard layer.
+           from first impact layer must be the same with second impact layer
+           to indicate that both are generated from the same hazard layer.
         5. 'aggregation attribute' must exist when user wants to run merging
-        tools with aggregation layer chosen.
+           tools with aggregation layer chosen.
 
         """
         required_attribute = ['map_title', 'exposure_title', 'hazard_title',
@@ -640,8 +641,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         return merged_report_dict
 
     def generate_report_summary(self, first_report_dict, second_report_dict):
-        """Generate report summary for each aggregation area from merged report
-         dictionary.
+        """Generate report summary for each aggregation area from merged
+        report dictionary.
         For each exposure, search for the total only.
 
         Report dictionary looks like this:
@@ -684,7 +685,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             first_exposure_detail_dict = \
                 first_exposure_type_dict[first_exposure_type]
             for datum in first_exposure_detail_dict:
-                if 'total' in datum.lower():
+                if self.tr('Total').lower() in datum.lower():
                     html += ('<tr>'
                              '<td>%s</td>'
                              '<td>%s</td>'
@@ -703,7 +704,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 second_exposure_detail_dict = \
                     second_exposure_report_dict[second_exposure]
                 for datum in second_exposure_detail_dict:
-                    if 'total' in datum.lower():
+                    if self.tr('Total').lower() in datum.lower():
                         html += ('<tr>'
                                  '<td>%s</td>'
                                  '<td>%s</td>'

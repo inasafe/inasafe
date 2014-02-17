@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="af" sourcelanguage="" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -678,7 +678,7 @@
     <message>
         <location filename="dock.py" line="424"/>
         <source>Run</source>
-        <translation>Begin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="dock.py" line="398"/>
@@ -1047,12 +1047,12 @@
     <message>
         <location filename="dock_base.ui" line="80"/>
         <source>How many</source>
-        <translation>Hoe veel</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="dock_base.ui" line="53"/>
         <source>&amp;Might</source>
-        <translation>&amp;Mag</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="dock_base.ui" line="70"/>
@@ -1062,12 +1062,12 @@
     <message>
         <location filename="dock_base.ui" line="258"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="dock_base.ui" line="298"/>
         <source>Run</source>
-        <translation>Begin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="dock_base.ui" line="25"/>
