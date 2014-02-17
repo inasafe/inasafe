@@ -91,9 +91,8 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         H = get_hazard_layer(layers)    # Flood
         E = get_exposure_layer(layers)  # Roads
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
-                                self)
+        question = get_question(
+            H.get_name(), E.get_name(), self)
 
         H = H.get_layer()
         E = E.get_layer()
@@ -155,6 +154,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 extent.''' % (threshold_min, ))
             raise GetDataError(message)
 
+        # Bad! See https://github.com/AIFDR/inasafe/issues/799
         # Set roads as not inundated by default
         E.startEditing()
         e_data = E.getFeatures(request)
@@ -163,10 +163,11 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
             E.updateFeature(feat)
         E.commitChanges()
         # Find inundated roads, mark them
-        line_layer = split_by_polygon(E,
-                                      flooded_polygon,
-                                      request,
-                                      mark_value=(target_field_index, 1))
+        line_layer = split_by_polygon(
+            E,
+            flooded_polygon,
+            request,
+            mark_value=(target_field_index, 1))
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.extent[0], self.extent[1])
