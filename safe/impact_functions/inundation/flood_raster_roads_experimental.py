@@ -97,14 +97,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         H = H.get_layer()
         E = E.get_layer()
 
-        e_provider = E.dataProvider()
-        fields = e_provider.fields()
-        # If target_field does not exist, add it:
-        if fields.indexFromName(target_field) == -1:
-            e_provider.addAttributes([QgsField(target_field,
-                                               QVariant.Int)])
-        target_field_index = e_provider.fieldNameIndex(target_field)
-
         # Get necessary width and height of raster
         height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
         height = int(height)
@@ -160,6 +152,8 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
             flooded_polygon,
             request,
             mark_value=(target_field, 1))
+        target_field_index = line_layer.dataProvider().\
+            fieldNameIndex(target_field)
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.extent[0], self.extent[1])

@@ -178,9 +178,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_type_field)
-
-        hazard_provider = hazard.dataProvider()
-        target_field_index = hazard_provider.fieldNameIndex(target_field)
+        target_field_index = line_layer.fieldNameIndex(target_field)
 
         for road in roads_data:
             attributes = road.attributes()
