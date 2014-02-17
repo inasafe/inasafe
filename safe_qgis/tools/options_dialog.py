@@ -110,21 +110,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             DEFAULTS['FEMALE_RATIO'], type=float))
         self.dsbFemaleRatioDefault.setValue(ratio)
 
-        ratio = float(settings.value(
-            'inasafe/defaultYouthRatio',
-            DEFAULTS['YOUTH_RATIO']), type=float)
-        self.dsbYouthRatioDefault.setValue(ratio)
-
-        ratio = float(settings.value(
-            'inasafe/defaultAdultRatio',
-            DEFAULTS['ADULT_RATIO'], type=float))
-        self.dsbYouthRatioDefault.setValue(ratio)
-
-        ratio = float(settings.value(
-            'inasafe/defaultElderRatio',
-            DEFAULTS['ELDERLY_RATIO'], type=float))
-        self.dsbYouthRatioDefault.setValue(ratio)
-
         path = settings.value(
             'inasafe/keywordCachePath',
             self.keyword_io.default_keyword_db_path(), type=str)
