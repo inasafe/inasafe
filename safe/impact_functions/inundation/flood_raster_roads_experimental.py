@@ -46,7 +46,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         # This field of the exposure layer contains
         # information about road types
         ('road_type_field', 'TYPE'),
-        ('min threshold [m]', 3.5),
+        ('min threshold [m]', 1.0),
         ('max threshold [m]', float('inf')),
 
          ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
