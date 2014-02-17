@@ -130,9 +130,6 @@ class TestQGISVectorTools(unittest.TestCase):
         for feature in split_lines.getFeatures():
             found = False
             for expected in expected_lines.getFeatures():
-                # TODO this test falls because
-                # split_by_polygon doesn't set up attributes properly.
-                # Fix it.
                 if (feature.attributes() == expected.attributes()) and \
                    (feature.geometry().isGeosEqual(expected.geometry())):
                     found = True

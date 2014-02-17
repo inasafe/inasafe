@@ -167,7 +167,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
             E,
             flooded_polygon,
             request,
-            mark_value=(target_field_index, 1))
+            mark_value=(target_field, 1))
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.extent[0], self.extent[1])

@@ -142,6 +142,17 @@ def split_by_polygon(
         included_feature.setAttributes(attributes)
         return included_feature
 
+    def _update_attr_list(attributes, index, value, add_attribute=False):
+        """
+        Helper for update list of attributes.
+        """
+        new_attributes = attributes[:]
+        if add_attribute:
+            new_attributes.append(value)
+        else:
+            new_attributes[index] = value
+        return new_attributes
+
     # Create layer to store the splitted objects
     crs = vector.crs().toWkt()
     if vector.geometryType() == 0:
@@ -164,11 +175,13 @@ def split_by_polygon(
     fields = vector_provider.fields()
     result_provider.addAttributes(fields.toList())
     # If target_field does not exist, add it:
+    new_field_added = False
     if mark_value is not None:
         target_field = mark_value[0]
         if fields.indexFromName(target_field) == -1:
             result_provider.addAttributes(
                 [QgsField(target_field, QVariant.Int)])
+            new_field_added = True
 
     result_layer.commitChanges()
     target_value = None
@@ -196,8 +209,13 @@ def split_by_polygon(
             for g in intersection:
                 if g.type() == geometry_type:
                     if mark_value is not None:
-                        attributes.append(target_value)
-                    feature = _set_feature(g, attributes)
+                        new_attributes = _update_attr_list(
+                            attributes,
+                            target_field_index,
+                            target_value,
+                            add_attribute=new_field_added
+                        )
+                    feature = _set_feature(g, new_attributes)
                     _ = result_layer.dataProvider().addFeatures([feature])
 
             # Find parts of the initial_geom that do not lies in the polygon
@@ -206,12 +224,23 @@ def split_by_polygon(
             ).asGeometryCollection()
             for g in diff_geom:
                 if g.type() == geometry_type:
-                    feature = _set_feature(g, attributes)
+                    new_attributes = _update_attr_list(
+                        attributes,
+                        target_field_index,
+                        0,
+                        add_attribute=new_field_added
+                    )
+                    feature = _set_feature(g, new_attributes)
                     _ = result_layer.dataProvider().addFeatures([feature])
         else:
             if mark_value is not None:
-                attributes.append(0)
-            feature = _set_feature(initial_geom, attributes)
+                new_attributes = _update_attr_list(
+                    attributes,
+                    target_field_index,
+                    0,
+                    add_attribute=new_field_added
+                )
+            feature = _set_feature(initial_geom, new_attributes)
             _ = result_layer.dataProvider().addFeatures([feature])
     result_layer.commitChanges()
     result_layer.updateExtents()
