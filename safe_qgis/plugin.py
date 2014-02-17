@@ -40,7 +40,8 @@ try:
     # noinspection PyUnresolvedReferences
     from safe_qgis.exceptions import (
         TranslationLoadError,
-        UnsupportedProviderError)
+        UnsupportedProviderError,
+        NoKeywordsFoundError)
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
@@ -505,7 +506,11 @@ class Plugin:
                     'analysis because its data type is unsupported.'))
             return
         # End of fix for #776
-
+        # Fix for #793
+        except NoKeywordsFoundError:
+            # we will create them from scratch in the dialog
+            pass
+        # End of fix for #793
 
         dialog = KeywordsDialog(
             self.iface.mainWindow(),

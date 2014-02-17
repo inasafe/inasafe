@@ -23,6 +23,7 @@ import sys
 
 # configure paths for QGIS plugins
 # (we need to set path for processing module)
+# TS: Hard coded paths???? Very BAD! - lets get rid of / fix this!
 qgisprefix = '/usr'
 sys.path.insert(0, qgisprefix + '/share/qgis/python')
 sys.path.insert(1, qgisprefix + '/share/qgis/python/plugins')
@@ -32,7 +33,7 @@ sys.path.insert(3, qgisprefix + '/local/share/qgis/python/plugins')
 from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-import processing
+from safe import postprocessors
 
 # initalise processing plugin with dummy iface object
-plugin = processing.classFactory(IFACE)
+plugin = postprocessors.classFactory(IFACE)
