@@ -44,6 +44,7 @@ from safe_qgis.utilities.utilities import (
     extent_to_geo_array,
     viewport_geo_array,
     read_impact_layer)
+from safe_qgis.utilities.defaults import disclaimer
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -102,6 +103,7 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
+SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -365,38 +367,48 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         message.add(m.Heading('Getting started', **INFO_STYLE))
         notes = m.Paragraph(
             self.tr(
-                'To use this tool you need to add some layers to your '
-                'QGIS project. Ensure that at least one'),
-            m.EmphasizedText(self.tr('hazard'), **KEYWORD_STYLE),
-            self.tr('layer (e.g. earthquake MMI) and one '),
-            m.EmphasizedText(self.tr('exposure'), **KEYWORD_STYLE),
-            self.tr(
-                'layer (e.g. structures) are available. When you are '
-                'ready, click the '),
-            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
-            self.tr('button below.'))
+                'These are the minimum steps you need to follow in order '
+                'to use InaSAFE:'))
         message.add(notes)
+        basics_list = m.NumberedList()
+        basics_list.add(m.Paragraph(
+            self.tr('Add at least one '),
+            m.ImportantText(self.tr('hazard'), **KEYWORD_STYLE),
+            self.tr(' layer (e.g. earthquake MMI) to QGIS.')))
+        basics_list.add(m.Paragraph(
+            self.tr('Add at least one '),
+            m.ImportantText(self.tr('exposure'), **KEYWORD_STYLE),
+            self.tr(' layer (e.g. structures) to QGIS.')))
+        basics_list.add(m.Paragraph(
+            self.tr(
+                'Make sure you have defined keywords for your hazard and '
+                'exposure layers. You can do this using the keywords icon '),
+            m.Image(
+                'qrc:/plugins/inasafe/show-keyword-editor.svg',
+                **SMALL_ICON_STYLE),
+            self.tr(' in the InaSAFE toolbar.')))
+        basics_list.add(m.Paragraph(
+            self.tr('Click on the '),
+            m.ImportantText(self.tr('Run'), **KEYWORD_STYLE),
+            self.tr(' button below.')))
+        message.add(basics_list)
+
         message.add(m.Heading('Limitations', **WARNING_STYLE))
         caveat_list = m.NumberedList()
         caveat_list.add(
             self.tr('InaSAFE is not a hazard modelling tool.'))
         caveat_list.add(
             self.tr(
-                'Exposure data in the form of roads (or any other line '
-                'feature) is not yet supported.'))
-        caveat_list.add(
-            self.tr(
                 'Polygon area analysis (such as land use) is not yet '
                 'supported.'))
         caveat_list.add(
             self.tr(
-                'Population density data must be provided in WGS84 '
+                'Population density data (raster) must be provided in WGS84 '
                 'geographic coordinates.'))
         caveat_list.add(
             self.tr(
-                'Neither BNPB, AusAID, nor the World Bank-GFDRR, take any '
-                'responsibility for the correctness of outputs from InaSAFE '
-                'or decisions derived as a consequence.'))
+                'Population by administration boundary is not yet supported.'))
+        caveat_list.add(disclaimer())
         message.add(caveat_list)
         return message
 
@@ -516,6 +528,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
 
+    # noinspection PyPep8Naming
     @pyqtSlot(int)
     def on_cboFunction_currentIndexChanged(self, index):
         """Automatic slot executed when the Function combo is changed.
@@ -578,6 +591,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             self.toolFunctionOptions.setEnabled(True)
 
+    # noinspection PyPep8Naming
     @pyqtSlot()
     def on_toolFunctionOptions_clicked(self):
         """Automatic slot executed when toolFunctionOptions is clicked."""
@@ -815,14 +829,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Obtain QgsMapLayer id from the userrole of the QtCombo for exposure
         and return it as a QgsMapLayer.
 
-        Args:
-            None
-
-        Returns:
-            QgsMapLayer - currently selected map layer in the exposure combo.
-
-        Raises:
-            None
+        :returns: Currently selected map layer in the exposure combo.
+        :rtype: QgsMapLayer
         """
 
         index = self.cboExposure.currentIndex()
@@ -873,10 +881,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.calculator.requires_clipping():
             # The impact function uses SAFE layers,
             # clip them
-            hazard_layer, exposure_layer = self.optimal_clip(
-                extra_exposure_keywords, buffered_geo_extent, cell_size,
-                exposure_layer, geo_extent, hazard_layer)
-
+            hazard_layer, exposure_layer = self.optimal_clip()
             self.aggregator.set_layers(hazard_layer, exposure_layer)
             # Extent is calculated in the aggregator:
             self.calculator.set_extent(None)
@@ -923,7 +928,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
 
-        _, buffered_geo_extent, _, _, _, _ = self.clip_parameters
+        if self.clip_parameters is None:
+            raise Exception(self.tr('Clip parameters are not set!'))
+        buffered_geo_extent = self.clip_parameters[1]
 
         #setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
@@ -960,19 +967,48 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
         #TODO style these.
+
+        hazard_layer = self.get_hazard_layer()
+        exposure_layer = self.get_exposure_layer()
+        aggregation_layer = self.get_aggregation_layer()
+
+        # trap for issue 706
+        try:
+            exposure_name = exposure_layer.name()
+            hazard_name = hazard_layer.name()
+            #aggregation layer could be set to AOI so no check for that
+        except AttributeError:
+            title = self.tr('No valid layers')
+            details = self.tr(
+                'Please ensure your hazard and exposure layers are set '
+                'in the question area and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                 m.Heading(title, **WARNING_STYLE),
+                 m.Paragraph(details))
+            self.show_static_message(message)
+            self.grpQuestion.show()
+            self.pbnRunStop.setDisabled(True)
+            return
+
         text = m.Text(
             self.tr('This analysis will calculate the impact of'),
-            m.EmphasizedText(self.get_hazard_layer().name()),
+            m.EmphasizedText(hazard_name),
             self.tr('on'),
-            m.EmphasizedText(self.get_exposure_layer().name()),
+            m.EmphasizedText(exposure_name),
         )
 
         if self.get_aggregation_layer() is not None:
-            text.add(m.Text(
-                self.tr('and bullet_list the results'),
-                m.ImportantText(self.tr('aggregated by')),
-                m.EmphasizedText(self.get_aggregation_layer().name()))
-            )
+            try:
+                aggregation_name = aggregation_layer.name()
+                text.add(m.Text(
+                    self.tr('and bullet_list the results'),
+                    m.ImportantText(self.tr('aggregated by')),
+                    m.EmphasizedText(aggregation_name))
+                )
+            except AttributeError:
+                pass
+
         text.add('.')
 
         message = m.Message(
@@ -1017,7 +1053,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Find out what the usable extent and cellsize are
         self.clip_parameters = self.get_clip_parameters()
         try:
-            _, buffered_geoextent, cell_size, _, _, _ = self.clip_parameters
+            buffered_geoextent = self.clip_parameters[1]
+            cell_size = self.clip_parameters[2]
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
@@ -1096,7 +1133,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.busy = True
 
     def run(self):
-        """Execute analysis when ok button on dock is clicked."""
+        """Execute analysis when run button on dock is clicked."""
+
+        hazard_layer = self.get_hazard_layer()
+        exposure_layer = self.get_exposure_layer()
+
+        if exposure_layer is None or hazard_layer is None:
+            title = self.tr('No valid layers')
+            details = self.tr(
+                'Please ensure your hazard and exposure layers are set '
+                'in the question area and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                 m.Heading(title, **WARNING_STYLE),
+                 m.Paragraph(details))
+            self.show_static_message(message)
+            return
 
         self.enable_busy_cursor()
 
@@ -1305,6 +1357,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             exposure_layer = self.get_exposure_layer()
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
+
         self.restore_state()
 
         # append postprocessing report
@@ -1331,7 +1384,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
-        self.pbnRunStop.setEnabled(True)
+        # for #706 - if the exposure is hidden
+        # due to self.hide_exposure_flag being enabled
+        # we may have no exposure layers left
+        # so we handle that here and disable run
+        if self.cboExposure.count() == 0:
+            self.pbnRunStop.setEnabled(False)
+        else:
+            self.pbnRunStop.setEnabled(True)
         self.repaint()
         self.disable_busy_cursor()
         self.busy = False
@@ -1579,47 +1639,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             geo_extent,
             hazard_layer)
 
-    def optimal_clip(
-            self,
-            extra_exposure_keywords,
-            buffered_geo_extent,
-            cell_size,
-            exposure_layer,
-            geo_extent,
-            hazard_layer):
+    def optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
-        the three inputs. The inasafe library will perform various checks
+        the three inputs. The InaSAFE library will perform various checks
         to ensure that the extent is tenable, includes data from both
         etc.
 
         The result of this function will be two layers which are
-        clipped and resampled if needed, and in the EPSG:4326 geographic
+        clipped and re-sampled if needed, and in the EPSG:4326 geographic
         coordinate reference system.
 
-        :param extra_exposure_keywords: Any additional keywords that
-            should be written to the exposure layer. For example if
-            rescaling is required for a raster, the original resolution
-            can be added to the keywords file.
-
-        :param buffered_geo_extent: [xmin, ymin, xmax, ymax] - the best
-            extent that can be used given the input datasets and the
-            current viewport extents.
-
-        :param cell_size: The cell size that is the best of the
-            hazard and exposure rasters.
-
-        :param exposure_layer: QgsMapLayer - layer representing exposure.
-
-        :param geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
-            intersection of the two input layers extents and the viewport.
-
-        :param hazard_layer: QgsMapLayer - layer representing hazard.
-
-        :returns: Two-tuple containing the clipped hazard and exposure layers.
-
+        :returns: The clipped hazard and exposure layers.
+        :rtype: (QgsMapLayer, QgsMapLayer)
         """
 
+        # Get the hazard and exposure layers selected in the combos
+        # and other related parameters needed for clipping.
+        try:
+            extra_exposure_keywords = self.clip_parameters[0]
+            buffered_geo_extent = self.clip_parameters[1]
+            cell_size = self.clip_parameters[2]
+            exposure_layer = self.clip_parameters[3]
+            geo_extent = self.clip_parameters[4]
+            hazard_layer = self.clip_parameters[5]
+        except:
+            raise
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.

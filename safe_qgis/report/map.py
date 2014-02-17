@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
-from PyQt4 import QtCore, QtGui, QtXml
+from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
@@ -27,9 +27,7 @@ from qgis.core import (
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities import (
-    setup_printer,
-    dpi_to_meters)
+from safe_qgis.utilities.defaults import disclaimer
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -52,11 +50,10 @@ class Map():
         self.composition = None
         self.extent = iface.mapCanvas().extent()
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
+        self.north_arrow = ':/plugins/inasafe/simple_north_arrow.png'
         self.org_logo = ':/plugins/inasafe/supporters.png'
         self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
-        self.disclaimer = self.tr(
-            'InaSAFE has been jointly developed by BNPB, Australian '
-            'Government and the World Bank - GFDRR')
+        self.disclaimer = disclaimer()
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0
@@ -82,6 +79,14 @@ class Map():
         :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
         """
         self.layer = layer
+
+    def set_north_arrow_image(self, logo_path):
+        """Set image that will be used as organisation logo in reports.
+
+        :param logo_path: Path to image file
+        :type logo_path: str
+        """
+        self.north_arrow = logo_path
 
     def set_organisation_logo(self, logo):
         """Set image that will be used as organisation logo in reports.
@@ -126,43 +131,6 @@ class Map():
         self.composition.setPrintResolution(self.page_dpi)
         self.composition.setPrintAsRaster(True)
 
-    def render(self):
-        """Render the map composition to an image and save that to disk.
-
-        :returns: A three-tuple of:
-            * str: image_path - absolute path to png of rendered map
-            * QImage: image - in memory copy of rendered map
-            * QRectF: target_area - dimensions of rendered map
-        :rtype: tuple
-        """
-        LOGGER.debug('InaSAFE Map renderComposition called')
-        # NOTE: we ignore self.composition.printAsRaster() and always rasterize
-        width = int(self.page_dpi * self.page_width / 25.4)
-        height = int(self.page_dpi * self.page_height / 25.4)
-        image = QtGui.QImage(
-            QtCore.QSize(width, height),
-            QtGui.QImage.Format_ARGB32)
-        image.setDotsPerMeterX(dpi_to_meters(self.page_dpi))
-        image.setDotsPerMeterY(dpi_to_meters(self.page_dpi))
-
-        # Only works in Qt4.8
-        #image.fill(QtGui.qRgb(255, 255, 255))
-        # Works in older Qt4 versions
-        image.fill(55 + 255 * 256 + 255 * 256 * 256)
-        image_painter = QtGui.QPainter(image)
-        source_area = QtCore.QRectF(
-            0, 0, self.page_width,
-            self.page_height)
-        target_area = QtCore.QRectF(0, 0, width, height)
-        self.composition.render(image_painter, target_area, source_area)
-        image_painter.end()
-        image_path = unique_filename(
-            prefix='mapRender_',
-            suffix='.png',
-            dir=temp_dir())
-        image.save(image_path)
-        return image_path, image, target_area
-
     def make_pdf(self, filename):
         """Generate the printout for our final map.
 
@@ -183,13 +151,7 @@ class Map():
             map_pdf_path = str(filename)
 
         self.load_template()
-
-        resolution = self.composition.printResolution()
-        self.printer = setup_printer(map_pdf_path, resolution=resolution)
-        _, image, rectangle = self.render()
-        painter = QtGui.QPainter(self.printer)
-        painter.drawImage(rectangle, image, rectangle)
-        painter.end()
+        self.composition.exportAsPDF(map_pdf_path)
         return map_pdf_path
 
     def map_title(self):
@@ -213,13 +175,14 @@ class Map():
         :returns: None on error, otherwise the attributes (notes and units).
         :rtype: None, str
         """
-        LOGGER.debug('InaSAFE Map getMapLegendAtributes called')
+        LOGGER.debug('InaSAFE Map getMapLegendAttributes called')
         legend_attribute_list = [
             'legend_notes',
             'legend_units',
             'legend_title']
         legend_attribute_dict = {}
         for myLegendAttribute in legend_attribute_list:
+            # noinspection PyBroadException
             try:
                 legend_attribute_dict[myLegendAttribute] = \
                     self.keyword_io.read_keywords(
@@ -286,6 +249,14 @@ class Map():
         else:
             raise ReportCreationError(self.tr(
                 'Image "safe-logo" could not be found'))
+
+        # set north arrow
+        image = self.composition.getComposerItemById('north-arrow')
+        if image is not None:
+            image.setPictureFile(self.north_arrow)
+        else:
+            raise ReportCreationError(self.tr(
+                'Image "north arrow" could not be found'))
 
         # set organisation logo
         image = self.composition.getComposerItemById('organisation-logo')

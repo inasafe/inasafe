@@ -503,9 +503,17 @@ class TestDock(TestCase):
 
         message = ('Result not as expected: %s' % result)
         # This is the expected number of population might be affected
-        self.assertTrue(format_int(30938000) in result, message)
-        self.assertTrue(format_int(68280000) in result, message)
-        self.assertTrue(format_int(157551000) in result, message)
+        self.assertTrue(format_int(30938000) in result, message)  # high
+        #self.assertTrue(format_int(68280000) in result, message)
+        #self.assertTrue(format_int(157551000) in result, message)
+        # The 2 asserts above are not valid anymore after the fix we made to
+        # CategorisedHazardPopulationImpactFunction
+        # Look at the fix here:
+        # (https://github.com/AIFDR/inasafe/commit/aa5b3d72145c031c91f4d101b830
+        # 8228915c248d#diff-378093670f4ebd60b4487af9b7c2e164)
+        # New Asserts
+        self.assertTrue(format_int(0) in result, message)  # medium
+        self.assertTrue(format_int(256769000) in result, message)  # low
 
     #noinspection PyArgumentList
     def test_runEarthquakeBuildingImpactFunction(self):

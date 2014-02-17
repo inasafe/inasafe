@@ -1,3 +1,4 @@
+# coding=utf-8
 """**SAFE (Scenario Assessment For Emergencies) - API**
 
 The purpose of the module is to provide a well defined public API
@@ -22,10 +23,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # pylint: disable=W0611
 #noinspection PyUnresolvedReferences
-from safe.defaults import DEFAULTS
 from safe.storage.vector import Layer
 from safe.storage.vector import Vector
 from safe.storage.raster import Raster
+from safe.defaults import DEFAULTS
 from safe.storage.utilities import (
     bbox_intersection,
     buffered_bounding_box,
@@ -70,7 +71,8 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_decimal_separator,
     get_utm_epsg,
-    feature_attributes_as_dict)
+    feature_attributes_as_dict,
+    which)
 from safe.common.shake_grid_converter import convert_mmi_data
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon

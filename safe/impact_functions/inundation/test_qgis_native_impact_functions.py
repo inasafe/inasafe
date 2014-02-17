@@ -78,6 +78,10 @@ class Wrapper():
         return self.data
 
 
+### TODO: The tests fall because split_by_polygon
+### doesn't set up attributes properly.
+### Fix it.
+
 class Test_gis_native_impact_functions(unittest.TestCase):
 
     def _get_impact_function(self,

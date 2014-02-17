@@ -20,6 +20,7 @@ import sys
 import os
 import logging
 from safe_qgis.utilities import custom_logging
+from safe_qgis.utilities.keyword_io import KeywordIO
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -37,7 +38,10 @@ try:
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
     # noinspection PyUnresolvedReferences
-    from safe_qgis.exceptions import TranslationLoadError
+    from safe_qgis.exceptions import (
+        TranslationLoadError,
+        UnsupportedProviderError,
+        NoKeywordsFoundError)
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
@@ -485,8 +489,29 @@ class Plugin:
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.keywords_dialog import KeywordsDialog
 
+        # Next block is a fix for #776
         if self.iface.activeLayer() is None:
             return
+
+        try:
+            keyword_io = KeywordIO()
+            keyword_io.read_keywords(self.iface.activeLayer())
+        except UnsupportedProviderError:
+            # noinspection PyUnresolvedReferences,PyCallByClass
+            QMessageBox.warning(
+                None,
+                self.tr('Unsupported layer type'),
+                self.tr(
+                    'The layer you have selected cannot be used for '
+                    'analysis because its data type is unsupported.'))
+            return
+        # End of fix for #776
+        # Fix for #793
+        except NoKeywordsFoundError:
+            # we will create them from scratch in the dialog
+            pass
+        # End of fix for #793
+
         dialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,

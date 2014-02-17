@@ -27,14 +27,8 @@ class PreformattedText(Text):
     def __init__(self, text, **kwargs):
         """Constructor.
 
-        Args:
-            String text, a string to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        :param text: A string to add to the message.
+        :type text: str
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -52,28 +46,17 @@ class PreformattedText(Text):
     def to_html(self):
         """Render as html <pre> element.
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation.
+        :rtype: str
         """
         mytext = '<pre%s>\n%s</pre>' % (self.html_attributes(), self.text)
         return mytext
 
     def to_text(self):
-        """Render as plain text
+        """Render as plain text.
 
-        Args:
-            None
+        :param text: A string to add to the message.
+        :type text: str
 
-        Returns:
-            Str the plain text representation
-
-        Raises:
-            Errors are propagated
         """
         return '%s' % self.text

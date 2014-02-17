@@ -66,7 +66,7 @@ class TestQGISVectorTools(unittest.TestCase):
             self.assertAlmostEquals(geom.area(), dx * dy)
 
             p = geom.centroid().asPoint()
-            x, y = [attr[index].toDouble()[0] for index in [x_index, y_index]]
+            x, y = [attr[index] for index in [x_index, y_index]]
             self.assertLess(abs(p.x() - x), dx)
             self.assertLess(abs(p.y() - y), dy)
     test_points_to_rectangles.slow = False
@@ -130,6 +130,9 @@ class TestQGISVectorTools(unittest.TestCase):
         for feature in split_lines.getFeatures():
             found = False
             for expected in expected_lines.getFeatures():
+                # TODO this test falls because
+                # split_by_polygon doesn't set up attributes properly.
+                # Fix it.
                 if (feature.attributes() == expected.attributes()) and \
                    (feature.geometry().isGeosEqual(expected.geometry())):
                     found = True
@@ -149,8 +152,8 @@ class TestQGISVectorTools(unittest.TestCase):
         y_index = point_provider.fieldNameIndex('Y')
 
         point_layer.startEditing()
-        for x in [10, 20, 30]:
-            for y in [10, 20, 30]:
+        for x in [10.0, 20.0, 30.0]:
+            for y in [10.0, 20.0, 30.0]:
                 feature = QgsFeature()
                 feature.initAttributes(2)
                 feature.setAttribute(x_index, x)
@@ -165,6 +168,6 @@ class TestQGISVectorTools(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(TestQGISRasterTools, 'test')
+    suite = unittest.makeSuite(TestQGISVectorTools, 'test')
     runner = unittest.TextTestRunner()
     runner.run(suite)

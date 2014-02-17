@@ -1,5 +1,4 @@
 # coding=utf-8
-# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **QGIS plugin implementation.**
@@ -107,7 +106,7 @@ class QgisInterface(QObject):
         """Handle a layer being added to the registry so it shows up in canvas.
 
         :param theLayer: list<QgsMapLayer> list of map layers that were added
-        
+
         .. note: The QgsInterface api does not include this method, it is added
                  here as a helper to facilitate testing.
 

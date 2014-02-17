@@ -25,7 +25,6 @@ from safe_qgis.utilities.utilities import (
     layer_attribute_names,
     impact_attribution,
     dpi_to_meters,
-    which,
     qt_at_least)
 from safe_qgis.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
@@ -154,20 +153,20 @@ class UtilitiesTest(unittest.TestCase):
             myDefaults, myExpectedDefaults)
         assert (myDefaults == myExpectedDefaults), message
 
-    def test_mmPointConversion(self):
+    def test_mm_to_points(self):
         """Test that conversions between pixel and page dimensions work."""
 
-        myDpi = 300
+        dpi = 300
         myPixels = 300
-        myMM = 25.4  # 1 inch
-        myResult = points_to_mm(myPixels, myDpi)
-        message = "Expected: %s\nGot: %s" % (myMM, myResult)
-        assert myResult == myMM, message
-        myResult = mm_to_points(myMM, myDpi)
-        message = "Expected: %s\nGot: %s" % (myPixels, myResult)
-        assert myResult == myPixels, message
+        mm = 25.4  # 1 inch
+        result = points_to_mm(myPixels, dpi)
+        message = "Expected: %s\nGot: %s" % (mm, result)
+        assert result == mm, message
+        result = mm_to_points(mm, dpi)
+        message = "Expected: %s\nGot: %s" % (myPixels, result)
+        assert result == myPixels, message
 
-    def test_humaniseSeconds(self):
+    def test_humanize_seconds(self):
         """Test that humanise seconds works."""
         self.assertEqual(humanise_seconds(5), '5 seconds')
         self.assertEqual(humanise_seconds(65), 'a minute')
@@ -176,7 +175,7 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(humanise_seconds(432232),
                          '5 days, 0 hours and 3 minutes')
 
-    def test_impactLayerAttribution(self):
+    def test_impact_layer_attribution(self):
         """Test we get an attribution html snippet nicely for impact layers."""
         keywords = {'hazard_title': 'Sample Hazard Title',
                       'hazard_source': 'Sample Hazard Source',
@@ -187,7 +186,7 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(len(myAttribution.to_text()), 170)
 
     @expectedFailure
-    def test_localisedAttribution(self):
+    def test_localised_attribution(self):
         """Test we can localise attribution."""
         os.environ['LANG'] = 'id'
         keywords = {'hazard_title': 'Jakarta 2007 flood',
@@ -198,7 +197,7 @@ class UtilitiesTest(unittest.TestCase):
         print myHtml
         assert myHtml == '11'
 
-    def testDpiToMeters(self):
+    def test_dpi_to_meters(self):
         """Test conversion from dpi to dpm."""
         myDpi = 300
         myDpm = dpi_to_meters(myDpi)
@@ -207,13 +206,6 @@ class UtilitiesTest(unittest.TestCase):
                      ' Got: %s Expected: %s\n' %
                      (myDpm, myExpectedDpm))
         self.assertAlmostEqual(myDpm, myExpectedDpm, msg=message)
-
-    def testWhich(self):
-        """Test that the which command works as expected."""
-        myBinary = 'gdalwarp'
-        path = which(myBinary)
-        # Check we found at least one match
-        assert len(path) > 0
 
     def test_qt_at_least(self):
         """Test that we can compare the installed qt version"""

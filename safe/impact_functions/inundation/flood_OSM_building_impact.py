@@ -81,7 +81,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
     # parameters
     parameters = OrderedDict([
         ('threshold [m]', 1.0),
-        ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))])
+        ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
+    ])
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map).
@@ -333,6 +334,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                              'target_field': self.target_field,
                              'map_title': map_title,
                              'legend_units': legend_units,
-                             'legend_title': legend_title},
+                             'legend_title': legend_title,
+                             'buildings_total': N,
+                             'buildings_affected': count},
                    style_info=style_info)
         return V

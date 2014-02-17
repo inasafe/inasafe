@@ -80,7 +80,8 @@ from safe.api import (
     get_thousand_separator,
     styles,
     feature_attributes_as_dict,
-    get_utm_epsg)
+    get_utm_epsg,
+    which)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 
@@ -466,6 +467,10 @@ def convertToSafeLayer(layer):
     Raises:
         Any exceptions are propogated
     """
+    # FIXME (DK): it is a stub now.
+    #   Do not call readSafeLayer, but write function
+    #     safe.storage.core.convert_layer to convert QgsMapLayer to SAFE layer
+
     if isinstance(layer, Layer):
         return layer
     try:

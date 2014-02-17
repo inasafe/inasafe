@@ -1,3 +1,4 @@
+# coding=utf-8
 """Common functionality used by regression tests
 """
 
@@ -5,7 +6,6 @@ import numpy
 import os
 import sys
 import logging
-from PyQt4 import QtGui, QtCore
 from numpy.testing import Tester
 
 from numerics import axes_to_points
@@ -675,18 +675,20 @@ test_polygon = numpy.array([[122.229086, -8.624406],
 def get_qgis_app():
     """ Start one QGIS application to test against.
 
-    :returns: Handle to QGIS app or None.
-    :rtype: QgsApplication, None
+    :returns: Handle to QGIS app, canvas, iface and parent. If there are any
+        errors the tuple members will be returned as None.
+    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
 
     If QGIS is already running the handle to that app will be returned.
     """
 
     try:
+        from PyQt4 import QtGui, QtCore
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
         from safe.common.qgis_interface import QgisInterface
     except ImportError:
-        return None
+        return None, None, None, None
 
     global QGIS_APP  # pylint: disable=W0603
 

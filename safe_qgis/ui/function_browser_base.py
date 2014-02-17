@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'function_browser_base.ui'
 #
-# Created: Tue Jul  2 08:41:17 2013
-#      by: PyQt4 UI code generator 4.10
+# Created: Fri Feb 14 13:20:38 2014
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,21 +12,12 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+    _fromUtf8 = lambda s: s
 
 class Ui_FunctionBrowserBase(object):
     def setupUi(self, FunctionBrowserBase):
         FunctionBrowserBase.setObjectName(_fromUtf8("FunctionBrowserBase"))
-        FunctionBrowserBase.resize(821, 733)
+        FunctionBrowserBase.resize(821, 600)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         FunctionBrowserBase.setWindowIcon(icon)
@@ -162,14 +153,14 @@ class Ui_FunctionBrowserBase(object):
         QtCore.QMetaObject.connectSlotsByName(FunctionBrowserBase)
 
     def retranslateUi(self, FunctionBrowserBase):
-        FunctionBrowserBase.setWindowTitle(_translate("FunctionBrowserBase", "InaSAFE Impact Functions", None))
-        self.label_title.setText(_translate("FunctionBrowserBase", "Title", None))
-        self.label_id.setText(_translate("FunctionBrowserBase", "ID", None))
-        self.label_subcategory.setText(_translate("FunctionBrowserBase", "Subcategory", None))
-        self.label_category.setText(_translate("FunctionBrowserBase", "Category", None))
-        self.label_layertype.setText(_translate("FunctionBrowserBase", "Layer Type", None))
-        self.label_unit.setText(_translate("FunctionBrowserBase", "Unit", None))
-        self.label_datatype.setText(_translate("FunctionBrowserBase", "Data Type", None))
+        FunctionBrowserBase.setWindowTitle(QtGui.QApplication.translate("FunctionBrowserBase", "InaSAFE Impact Functions", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_title.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_id.setText(QtGui.QApplication.translate("FunctionBrowserBase", "ID", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_subcategory.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_category.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_layertype.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Layer Type", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_unit.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Unit", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_datatype.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Data Type", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
 import resources_rc
