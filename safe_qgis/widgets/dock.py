@@ -386,7 +386,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             m.Image(
                 'qrc:/plugins/inasafe/show-keyword-editor.svg',
                 **SMALL_ICON_STYLE),
-            self.tr(' in the InaSAFE toolbar.'))),
+            self.tr(' in the InaSAFE toolbar.')))
         basics_list.add(m.Paragraph(
             self.tr('Click on the '),
             m.ImportantText(self.tr('Run'), **KEYWORD_STYLE),
@@ -591,6 +591,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             self.toolFunctionOptions.setEnabled(True)
 
+    # noinspection PyPep8Naming
     @pyqtSlot()
     def on_toolFunctionOptions_clicked(self):
         """Automatic slot executed when toolFunctionOptions is clicked."""
