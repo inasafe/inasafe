@@ -1895,13 +1895,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
+
+        # TODO: We could move these three mutators into map.py
+        # if not set will default to north arrow in resources file
+        north_arrow_path = settings.value(
+            'inasafe/northArrowPath', '', type=str)
+        if north_arrow_path != '':
+            print_map.set_organisation_logo(north_arrow_path)
+
         logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
-        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
-        if disclaimer != '':
-            print_map.set_disclaimer(disclaimer)
+        # map.py will default to disclaimer() function text if not set below
+        disclaimer_text = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        if disclaimer_text != '':
+            print_map.set_disclaimer(disclaimer_text)
 
         print_map.set_template(template_path)
 
