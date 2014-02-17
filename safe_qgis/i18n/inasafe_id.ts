@@ -2222,7 +2222,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader.py" line="104"/>
         <source>This tool will fetch building (&apos;structure&apos;) or road (&apos;highway&apos;) data from the OpenStreetMap project for you. The downloaded data will have InaSAFE keywords defined and a default QGIS style applied. To use this tool effectively:</source>
-        <translation>Tool ini akan mengambil data bangunan *(&apos;structure&apos;)* atau jalan *(&apos;highway&apos;)* dari proyek OpenStreetMap untuk Anda. Data yang didownload akan memiliki kata kunci InaSAFE yang telah didefinisikan dan style QGIS standar yang telah diterapkan. Untuk menggunakan tool ini secara efektif:</translation>
+        <translation>Tool ini akan mengambil data bangunan (&apos;structure&apos;) atau jalan (&apos;highway&apos;) dari proyek OpenStreetMap untuk Anda. Data yang didownload akan memiliki kata kunci InaSAFE yang telah didefinisikan dan style QGIS standar yang telah diterapkan. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
         <location filename="osm_downloader.py" line="115"/>
@@ -2835,12 +2835,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_importer_base.ui" line="148"/>
         <source>Nearest neighbour</source>
-        <translation>Tetangga terdekat</translation>
+        <translation>Nearest neighbour</translation>
     </message>
     <message>
         <location filename="shakemap_importer_base.ui" line="158"/>
         <source>Inverse Distance</source>
-        <translation>Ineverse Distance</translation>
+        <translation>Inverse Distance</translation>
     </message>
 </context>
 <context>
