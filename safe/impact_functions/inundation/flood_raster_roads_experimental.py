@@ -154,14 +154,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 extent.''' % (threshold_min, ))
             raise GetDataError(message)
 
-        # Bad! See https://github.com/AIFDR/inasafe/issues/799
-        # Set roads as not inundated by default
-        E.startEditing()
-        e_data = E.getFeatures(request)
-        for feat in e_data:
-            feat.setAttribute(target_field_index, 0)
-            E.updateFeature(feat)
-        E.commitChanges()
         # Find inundated roads, mark them
         line_layer = split_by_polygon(
             E,
