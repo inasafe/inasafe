@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
-from PyQt4 import QtCore, QtGui, QtXml
+from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
@@ -27,9 +27,6 @@ from qgis.core import (
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities import (
-    setup_printer,
-    dpi_to_meters)
 from safe_qgis.utilities.defaults import disclaimer
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -130,7 +127,7 @@ class Map():
         canvas = self.iface.mapCanvas()
         renderer = canvas.mapRenderer()
         self.composition = QgsComposition(renderer)
-        self.composition.setPlotStyle(QgsComposition.Print)  # or preview
+        self.composition.setPlotStyle(QgsComposition.Preview)  # or preview
         self.composition.setPrintResolution(self.page_dpi)
         self.composition.setPrintAsRaster(True)
 
@@ -235,8 +232,8 @@ class Map():
             'disclaimer': self.disclaimer
         }
         LOGGER.debug(substitution_map)
-        load_ok = self.composition.loadFromTemplate(document,
-                                                    substitution_map)
+        load_ok = self.composition.loadFromTemplate(
+            document, substitution_map)
         if not load_ok:
             raise ReportCreationError(
                 self.tr('Error loading template %s') %

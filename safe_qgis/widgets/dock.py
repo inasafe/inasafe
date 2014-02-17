@@ -386,7 +386,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             m.Image(
                 'qrc:/plugins/inasafe/show-keyword-editor.svg',
                 **SMALL_ICON_STYLE),
-            self.tr(' in the InaSAFE toolbar.'))),
+            self.tr(' in the InaSAFE toolbar.')))
         basics_list.add(m.Paragraph(
             self.tr('Click on the '),
             m.ImportantText(self.tr('Run'), **KEYWORD_STYLE),
@@ -591,6 +591,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             self.toolFunctionOptions.setEnabled(True)
 
+    # noinspection PyPep8Naming
     @pyqtSlot()
     def on_toolFunctionOptions_clicked(self):
         """Automatic slot executed when toolFunctionOptions is clicked."""
@@ -900,7 +901,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
 
-        _, buffered_geo_extent, _, _, _, _ = self.clip_parameters
+        if self.clip_parameters is None:
+            raise Exception(self.tr('Clip parameters are not set!'))
+        buffered_geo_extent = self.clip_parameters[1]
 
         #setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
@@ -1023,7 +1026,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Find out what the usable extent and cellsize are
         self.clip_parameters = self.get_clip_parameters()
         try:
-            _, buffered_geoextent, cell_size, _, _, _ = self.clip_parameters
+            buffered_geoextent = self.clip_parameters[1]
+            cell_size = self.clip_parameters[2]
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
@@ -1611,28 +1615,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
-        the three inputs. The inasafe library will perform various checks
+        the three inputs. The InaSAFE library will perform various checks
         to ensure that the extent is tenable, includes data from both
         etc.
 
         The result of this function will be two layers which are
-        clipped and resampled if needed, and in the EPSG:4326 geographic
+        clipped and re-sampled if needed, and in the EPSG:4326 geographic
         coordinate reference system.
 
-        Args:
-            None
-        Returns:
-            A two-tuple containing the clipped hazard and exposure layers.
-
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :returns: The clipped hazard and exposure layers.
+        :rtype: (QgsMapLayer, QgsMapLayer)
         """
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         try:
-            (extra_exposure_keywords, buffered_geo_extent, cell_size,
-             exposure_layer, geo_extent, hazard_layer) = self.clip_parameters
+            extra_exposure_keywords = self.clip_parameters[0]
+            buffered_geo_extent = self.clip_parameters[1]
+            cell_size = self.clip_parameters[2]
+            exposure_layer = self.clip_parameters[3]
+            geo_extent = self.clip_parameters[4]
+            hazard_layer = self.clip_parameters[5]
         except:
             raise
         # Make sure that we have EPSG:4326 versions of the input layers
@@ -1895,13 +1898,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
+
+        # TODO: We could move these three mutators into map.py
+        # if not set will default to north arrow in resources file
+        north_arrow_path = settings.value(
+            'inasafe/northArrowPath', '', type=str)
+        if north_arrow_path != '':
+            print_map.set_organisation_logo(north_arrow_path)
+
         logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
-        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
-        if disclaimer != '':
-            print_map.set_disclaimer(disclaimer)
+        # map.py will default to disclaimer() function text if not set below
+        disclaimer_text = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        if disclaimer_text != '':
+            print_map.set_disclaimer(disclaimer_text)
 
         print_map.set_template(template_path)
 

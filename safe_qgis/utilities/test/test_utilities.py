@@ -32,7 +32,7 @@ from safe_qgis.tools.test.test_keywords_dialog import (
     make_polygon_layer,
     make_padang_layer,
     make_point_layer)
-from safe_qgis.safe_interface import bbox_intersection, which
+from safe_qgis.safe_interface import bbox_intersection
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

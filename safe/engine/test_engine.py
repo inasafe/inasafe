@@ -1075,8 +1075,7 @@ class Test_Engine(unittest.TestCase):
         buildings_affected = keywords['buildings_affected']
 
         assert buildings_total == 67
-        assert  buildings_affected == 41
-
+        assert buildings_affected == 41
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer
@@ -3000,7 +2999,6 @@ class Test_Engine(unittest.TestCase):
         assert total_needs['toilets'] == 3150
         assert total_needs['water'] == 6615000
 
-
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)
         """
@@ -3034,7 +3032,6 @@ class Test_Engine(unittest.TestCase):
 
         assert affected_population == 133000
         assert total_population == 162000
-
 
     def test_erf(self):
         """Test ERF approximation

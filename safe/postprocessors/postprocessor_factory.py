@@ -31,14 +31,15 @@ LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
 # please put the value of this dictionary in
 # safe/common/dynamic_translations.py for the run time translation
-AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
-                            'Age': 'Age',
-                            'Aggregation': 'Aggregation',
-                            'BuildingType': 'Building type',
-                            'AggregationCategorical':
-                            'Aggregation categorical',
-                            'MinimumNeeds': 'Minimum needs'
-                            }
+AVAILABLE_POSTPTOCESSORS = {
+    'Gender': 'Gender',
+    'Age': 'Age',
+    'Aggregation': 'Aggregation',
+    'BuildingType': 'Building type',
+    'AggregationCategorical':
+    'Aggregation categorical',
+    'MinimumNeeds': 'Minimum needs'
+}
 
 
 def get_postprocessors(requested_postprocessors):
@@ -97,16 +98,15 @@ def get_postprocessors(requested_postprocessors):
     return postprocessor_instances
 
 
-def get_postprocessor_human_name(postprocesor):
+def get_postprocessor_human_name(postprocessor):
     """
     Returns the human readable name of  post processor
 
-    Args:
-        * postprocessor: Machine name of the postprocessor
+    :param postprocessor: Machine name of the postprocessor
 
-    Returns:
-        str with the human readable name
+    :returns : Human readable name for the postprocessor.
+    :rtype: str
     """
-    # Sunni : translete it first
-    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocesor])
+    # Sunni : translate it first
+    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocessor])
     return human_name_translated
