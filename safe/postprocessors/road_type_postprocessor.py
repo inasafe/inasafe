@@ -14,7 +14,9 @@ __copyright__ += 'Disaster Reduction'
 from safe.postprocessors.building_type_postprocessor import \
     BuildingTypePostprocessor
 
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (
+    ugettext as tr,
+    OrderedDict)
 
 
 # The road postprocessing is the same workflow as Building postprocessing
@@ -39,24 +41,28 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
         BuildingTypePostprocessor.__init__(self)
         # Note: Do we need these explicityl defined? With new osm-reporter
         # changes you already get a nicely named list in the 'type' field
-        self.fields_values = {
-            'Construction': ['construction'],
-            'Crossing': ['crossing'],
-            'Cycleway': ['cycleway'],
-            'Footway': ['footway', 'path', 'pedestrian'],
-            'Highway': ['highway'],
-            'Industri': ['industri'],
-            'Living street': ['living_street'],
-            'Motorway': ['motorway', 'motorway_link', 'Motorway link'],
-            'Primary': ['primary', 'primary_link'],
-            'Raceway': ['raceway'],
-            'Residential': ['residential'],
-            'Secondary': ['secondary', 'secondary_link'],
-            'Service': ['service'],
-            'Tertiary': ['tertiary', 'tertiary_link'],
-            'Track': ['track'],
-            'unclassified': ['unclassified', 'yes', 'road'],
-        }
+        self.fields_values = OrderedDict([
+            ('Motorway', ['motorway', 'highway', 'trunk']),
+            ('Motorway link', ['motorway_link', 'Motorway link']),
+            ('Primary', ['primary', 'primary_link']),
+            ('Primary link', ['primary_link']),
+            ('Tertiary', ['tertiary']),
+            ('Tertiary link', ['tertiary_link']),
+            ('Secondary', ['secondary']),
+            ('Secondary link', ['secondary_link']),
+            ('Track', ['track']),
+            ('Cycleway', ['cycleway']),
+            ('Footway', ['footway', 'path', 'pedestrian']),
+            ('Living street', ['living_street']),
+            ('Residential', ['residential']),
+            ('Service', ['service']),
+            ('Raceway', ['raceway']),
+            ('Industri', ['industri']),
+            # ('unclassified', ['unclassified', 'yes', 'road']),
+            ('Other', [])
+        ])
+        self.known_types = []
+        self._update_known_types()
 
     def description(self):
         """Describe briefly what the post processor does.
