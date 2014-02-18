@@ -2698,84 +2698,84 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ShakemapImporter</name>
     <message>
-        <location filename="shakemap_importer.py" line="155"/>
+        <location filename="shakemap_importer.py" line="160"/>
         <source>Shakemap Grid Importer</source>
         <translation>Shakemap Grid Importer</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="89"/>
+        <location filename="shakemap_importer.py" line="93"/>
         <source>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format to a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require and earthquake layer.  To use this tool effectively:</source>
         <translation>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format to a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require and earthquake layer.  To use this tool effectively:</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="96"/>
+        <location filename="shakemap_importer.py" line="100"/>
         <source>Select a grid.xml for the input layer.</source>
         <translation>Select a grid.xml for the input layer.</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="98"/>
+        <location filename="shakemap_importer.py" line="102"/>
         <source>Choose where to write the output layer to.</source>
         <translation>Choose where to write the output layer to.</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="101"/>
+        <location filename="shakemap_importer.py" line="105"/>
         <source>Choose the interpolation algorithm that should be used when converting the xml grid to a raster. If unsure keep the default.</source>
         <translation>Choose the interpolation algorithm that should be used when converting the xml grid to a raster. If unsure keep the default.</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="105"/>
+        <location filename="shakemap_importer.py" line="109"/>
         <source>If you want to obtain shake data you can get it for free from the USGS shakemap site: http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</source>
         <translation>If you want to obtain shake data you can get it for free from the USGS shakemap site: http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="122"/>
+        <location filename="shakemap_importer.py" line="127"/>
         <source>output file is not .tif</source>
         <translation>output file is not .tif</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="135"/>
+        <location filename="shakemap_importer.py" line="140"/>
         <source>input file is not .xml</source>
         <translation>input file is not .xml</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="196"/>
+        <location filename="shakemap_importer.py" line="202"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="191"/>
+        <location filename="shakemap_importer.py" line="196"/>
         <source>Output file name must be tif file</source>
         <translation>Output file name must be tif file</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="196"/>
+        <location filename="shakemap_importer.py" line="202"/>
         <source>Input file is not exist</source>
         <translation>Input file is not exist</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="232"/>
+        <location filename="shakemap_importer.py" line="240"/>
         <source>Input file</source>
         <translation>Input file</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="232"/>
+        <location filename="shakemap_importer.py" line="240"/>
         <source>Raw grid file(*.xml)</source>
         <translation>Raw grid file(*.xml)</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="242"/>
+        <location filename="shakemap_importer.py" line="250"/>
         <source>Output file</source>
         <translation>Output file</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="242"/>
+        <location filename="shakemap_importer.py" line="250"/>
         <source>Raster file(*.tif)</source>
         <translation>Raster file(*.tif)</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="57"/>
-        <source>InaSAFE %s Converter</source>
-        <translation>InaSAFE %s Converter</translation>
+        <location filename="shakemap_importer.py" line="60"/>
+        <source>InaSAFE %s Shakemap Converter</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

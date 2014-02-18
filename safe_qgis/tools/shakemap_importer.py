@@ -57,8 +57,8 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         QDialog.__init__(self, parent)
         self.parent = parent
         self.setupUi(self)
-        self.setWindowTitle(self.tr('Shakemap %s Converter' % get_version()))
-
+        self.setWindowTitle(
+            self.tr('InaSAFE %s Shakemap Converter' % get_version()))
         self.warning_text = set()
         self.on_input_path_textChanged()
         self.on_output_path_textChanged()
