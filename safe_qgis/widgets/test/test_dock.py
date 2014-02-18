@@ -699,6 +699,7 @@ class TestDock(TestCase):
         set_jakarta_extent()
 
         # Run manually so we can get the output layer
+        DOCK.clip_parameters = DOCK.get_clip_parameters()
         DOCK.prepare_aggregator()
         DOCK.aggregator.validate_keywords()
         DOCK.setup_calculator()
