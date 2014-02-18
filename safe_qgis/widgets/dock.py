@@ -1051,8 +1051,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         # Find out what the usable extent and cellsize are
-        self.clip_parameters = self.get_clip_parameters()
         try:
+            self.clip_parameters = self.get_clip_parameters()
             buffered_geoextent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
