@@ -82,6 +82,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -95,6 +112,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -194,20 +212,16 @@
 <p>Dalam kasus ini semua konten yang mungkin hadir di elemen seluruhnya telah diganti oleh peta realtime, walaupun pilihan gaya tampilan ini (contoh pengaturan graticule pada peta) akan menyisakan efek tertentu</p>
 <p>Elemen ini dikenali dengan ID-nya dan plugin saat ini mendukung elemen-elemen berikut:</p>
 <ul class="simple">
-<li><strong>safe-logo</strong> &#8212; QGIS composer image, which will be used for displaying
-InaSAFE logo with web-site url.</li>
-<li><strong>organisation-logo</strong> &#8212; QGIS composer image, which will be used for
-displaying organisation logo. By default a combined supporters logo is used.
-To use custom logo image, set the path to your PNG file in the plugin Options
-dialog (see <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> for details).</li>
+<li><p class="first"><strong>safe-logo</strong> &#8212; gambar komposer QGIS, dimana akan digunakan untuk menampilkan logo InaSAFE beserta alamat situsnya.</p>
+</li>
+<li><p class="first"><strong>organisation-logo</strong> &#8212; gambar komposer QGIS, dimana akan digunakan untuk menampilkan logo organisasi. Kombinasi logo organisasi pendukung akan digunakan menurut pengaturan bawaan. Untuk menggunakan gambar logo anda sendiri, aturlah lokasi berkas PNG anda dialog Pilihan pada menu Plugin (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk lebih jelasnya).</p>
+</li>
 <li><p class="first"><strong>peta-dampak</strong> &#8212; Komposer peta QGIS, yang akan digunakan untuk menampilkan skenario dampak.</p>
 </li>
 <li><p class="first"><strong>keterangan-dampak</strong> &#8212; Komposer Keterangan QGIS, yang akan digunakan untuk menampilkan keterangan dari skenario dampak.</p>
 </li>
-<li><strong>impact-report</strong> &#8212; QGIS composer label, which will be used for displaying
-the impact report table. <strong>NOTE</strong>: as QGIS composer doesn&#8217;t support
-automatic resizing elementse, based on their contents, make sure that label
-have dimensions large enough to show full table.</li>
+<li><p class="first"><strong>impact-report</strong> &#8212; komposer label QGIS, dimana akan digunakan untuk menampilkan tabel laporan dampak. <strong>CATATAN</strong>: dikarenakan komposer QGIS tidak mendukung pembesaran elemen secara otomatis, berdasarkan konten mereka, pastikan label telah memiliki dimensi yang cukup besar untuk menampilkan tabel secara keseluruhan.</p>
+</li>
 </ul>
 </div>
 </div>
@@ -224,10 +238,8 @@ have dimensions large enough to show full table.</li>
 </li>
 <li><p class="first"><strong>versi-safe</strong> &#8212; versi plugin yang digunakan.</p>
 </li>
-<li><strong>disclaimer</strong> &#8212; disclaimer text. By default used next text: &#8220;InaSAFE has
-been jointly developed by BNPB, Australian Government and the World Bank -
-GFDRR&#8221;. To use custom disclaimer text, enter desired text the plugin Options
-dialog (see <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> for details).</li>
+<li><p class="first"><strong>disclaimer</strong> &#8212; teks ketentuan. Pengaturan bawaan akan menggunakan teks: &#8220;InaSAFE telah dikembangkan bersama dengan BNPB, Pemerintah Australia dan Bank Dunia - GFDRR&#8221;. Untuk menggunakan teks ketentuan yang diinginkan, masukan teks di dialog Pilihan pada menu plugin (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk lebih jelasnya).</p>
+</li>
 </ul>
 </div>
 <div class="section" id="custom-templates">
@@ -241,19 +253,9 @@ dialog (see <a class="reference internal" href="options.html#toolbar-options"><e
 <li><p class="first">Buat template anda sendiri dan gunakan template itu daripada template bawaan.</p>
 </li>
 </ul>
-<p>The default template is provided as
-<tt class="file docutils literal"><span class="pre">inasafe/safe_qgis/resources/qgis-composer-templates/inasafe.qpt</span></tt>
-and can be modified by opening the template using the QGIS map composer,
-making your changes and then overwriting the template or saving it in any
-directory.</p>
-<p>You should take care to test your template changes before using it in
-a production environment.</p>
-<p>Also in addition to default template you can have as many custom templates as
-you want. Just create templates, put them in some folder somewhere in
-filesystem and go to <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em>
-or click on the InaSAFE plugin toolbar&#8217;s options icon. In Options dialog
-specify <em class="guilabel">Report template</em> setting. It should contain full path to the
-folder with your custom templates.</p>
+<p>Template pengaturan bawaan yang disediakan seperti <tt class="file docutils literal"><span class="pre">inasafe/safe_qgis/resources/qgis-composer-templates/inasafe.qpt</span></tt> dapat anda modifikasi dengan membuka template tersebut menggunakan komposer peta QGIS, membuat perubahan anda dan menimpa ulang template atau menyimpannya kembali pada direktori manapun.</p>
+<p>Anda harus mencoba melakukan tes pada perubahan template anda sebelum menggunakannya pada lingkungan produksi.</p>
+<p>Juga sebagai tambahan untuk template bawaan standar, anda dapat memiliki template anda sendiri sebanayak yang anda inginkan. Anda tinggal membuat template, letakan pada suatu folder di sistem berkas dan kemudian pergi ke <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em> atau klik pada ikon Pilihan pada toolbar plugin InaSAFE. Pada dialog pilihan, tentukan pengaturan  <em class="guilabel">Report template</em> . Seharusnya berisi letak folder dengan template anda sendiri.</p>
 </div>
 </div>
 
@@ -276,7 +278,8 @@ folder with your custom templates.</p>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 

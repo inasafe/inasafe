@@ -2,8 +2,8 @@
 
 # Resource object code
 #
-# Created: Mon Feb 17 16:28:47 2014
-#      by: The Resource Compiler for PyQt (Qt v4.8.1)
+# Created: Mon Feb 17 17:37:54 2014
+#      by: The Resource Compiler for PyQt (Qt v4.8.2)
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -29675,3 +29675,4 @@ def qCleanupResources():
     QtCore.qUnregisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
 
 qInitResources()
+
