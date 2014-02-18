@@ -19,7 +19,7 @@ try:
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
     # noinspection PyUnresolvedReferences
-    from safe_qgis.exceptions import TranslationLoadError
+    from exceptions import TranslationLoadError
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
@@ -82,13 +82,6 @@ if os.path.exists(translation_path):
 # LOGGER.debug('%s %s' % (
 #     translation_path,
 #     os.path.exists(translation_path)))
-
-
-
-
-
-
-
 
 # MONKEYPATCHING safe.defaults.get_defaults to use breakdown_defaults
 # see safe_qgis.utilities.defaults for more details
