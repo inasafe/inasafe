@@ -31,7 +31,7 @@
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
-    <link rel="next" title="The Impact Layer Merge Tool" href="impact_layer_merge_tool.html" />
+    <link rel="next" title="Tool Menggabungkan Layer Dampak" href="impact_layer_merge_tool.html" />
     <link rel="prev" title="Simpan Skenario" href="save_scenario.html" />
 
 <style>
@@ -82,6 +82,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -95,6 +112,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -132,7 +150,7 @@
                 <li class="right"
                  >
                 <a href="impact_layer_merge_tool.html"
-                   title="The Impact Layer Merge Tool"
+                   title="Tool Menggabungkan Layer Dampak"
                    style="z-index:;"
                 accesskey="N">berikut</a>
                 </li>
@@ -166,26 +184,21 @@
                 
   <div class="section" id="openstreetmap-downloader">
 <span id="id1"></span><h1>Mendownload OpenStreetMap<a class="headerlink" href="#openstreetmap-downloader" title="Link permanent untuk headline ini">¶</a></h1>
-<p>This tool will fetch building (&#8216;structure&#8217;) and highway (&#8216;road&#8217;) data from the
-OpenStreetMap project for you.</p>
+<p>Tool ini akan membantu Anda memperoleh data (&#8216;struktur&#8217;) bangunan dan jaringan jalan (&#8216;jalan&#8217;) dari projek OpenStreetMap.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/openstreetmap_downloader.png"><img alt="OpenStreetMap Downloader" src="_images/openstreetmap_downloader.png" style="width: 391.5px; height: 403.5px;" /></a>
+<a class="reference internal image-reference" href="_images/openstreetmap_downloader.png"><img alt="OpenStreetMap Downloader" src="_images/openstreetmap_downloader.png" style="width: 393.0px; height: 474.0px;" /></a>
 <p class="caption">Mendownload OpenStreetMap</p>
 </div>
-<p>The tool requires internet connection as it fetches the data via a web service
-running on <a class="reference external" href="http://osm.linfiniti.com">Linfiniti&#8217;s OSM Reporter</a> web site.</p>
+<p>Tool ini membutuhkan koneksi internet karena tool ini mengambil data dari layanan situs <a class="reference external" href="http://osm.linfiniti.com">Laporan OSM Linfiniti</a></p>
 <p>Data, setelah didownload akan tersedia untuk Anda sebagai sebuah shapefile. Sebuah gaya file secara otomatis dibuat sehingga dilambangkan dengan baik dalam QGIS. Selain itu, metadata kata kunci yang benar dibuat untuk dataset didownload sehingga dapat digunakan secara langsung dalam skenario analisis dampak menggunakan InaSAFE.</p>
-<p><strong>Note:</strong> The downloader service has limitations as to the size of
-datasets that can be retrieved. As such you may experience issues trying to
-fetch e.g. country wide building footprint data. Generally datasets at a
-city level and below should work well.</p>
+<p><strong>Catatan:</strong> Layanan alat pen-<em>download</em> yang disediakan memiliki keterbatasan untuk ukuran dataset yang dapat diambil. Dengan demikian mungkin Anda akan mengalami masalah misalnya dalam mengambil data bangunan untuk seluruh wilayah negara. Pada umumnya seharusnya proses pengambilan dataset dengan cakupan wilayah tingkat kota dan di bawahnya dapat bekerja lebih baik.</p>
 <p>Untuk menggunakan alat ini secara efektif:</p>
 <ul class="simple">
 <li>Use QGIS to zoom in to the area for which you want building data to be
 retrieved. For fine-grained control, you can set the bounding box manually
 in the area provided at the bottom of the dialog.</li>
-<li>Check the output directory is correct. Note that the saved datasets
-will be called buildings.shp and roads.shp (and their associated files).</li>
+<li><p class="first">Periksa apakah direktori output sudah benar. Catatan bahwa set data yang tersimpan akan diberi nama buildings.shp dan roads.shp (beserta berkas-berkas yang terhubung dengannya)</p>
+</li>
 <li>By default simple file names will be used (e.g. roads.shp, buildings.shp).
 If you wish you can specify a prefix to add in front of this default name.
 For example using a prefix of &#8216;padang-&#8216; will cause the downloaded files to be
@@ -204,59 +217,76 @@ You can leave this blank if you prefer.</li>
 <p class="last">Data yang didownload adalah hak cipta kontributor OpenStreetMap (klik untuk info lebih lanjut).</p>
 </div>
 <div class="section" id="building-data">
-<h2>Building data<a class="headerlink" href="#building-data" title="Link permanent untuk headline ini">¶</a></h2>
-<p>InaSAFE supports the use of building data in various impact functions. In
-particular we support building footprints sourced from the
-<a class="reference external" href="https://openstreetmap.org">OpenStreetMap</a> project (OSM).</p>
-<p>The following building types are derived (depending on the various tags assigned
-to them in OSM):</p>
+<h2>Data bangunan<a class="headerlink" href="#building-data" title="Link permanent untuk headline ini">¶</a></h2>
+<p>InaSAFE mendukung penggunaan data bangunan pada berbagai macam fungsi dampak. Pada umumnya kami mendukung batas tapak bangunan yang bersumber dari proyek <a class="reference external" href="https://openstreetmap.org">OpenStreetMap (OSM)</a></p>
+<p>Tipe bangunan berikut ini yang berasal (tergantung dari berbagai tags yang diberikan pada OSM) adalah sebagai berikut:</p>
 <ul class="simple">
-<li>School</li>
-<li>University/College</li>
-<li>Government</li>
-<li>Clinic/Doctor</li>
-<li>Hospital</li>
-<li>Fire Station</li>
-<li>Police Station</li>
-<li>Public Building</li>
-<li>Place of Worship - Islam</li>
-<li>Place of Worship - Unitarian</li>
-<li>Place of Worship - Buddhist</li>
-<li>Place of Worship - Unitarian</li>
+<li><p class="first">Sekolah</p>
+</li>
+<li><p class="first">Universitas/Kampus</p>
+</li>
+<li><p class="first">Pemerintahan</p>
+</li>
+<li><p class="first">Klinik/Dokter</p>
+</li>
+<li><p class="first">Rumah Sakit</p>
+</li>
+<li><p class="first">Stasiun Pemadam Kebakaran</p>
+</li>
+<li><p class="first">Kantor Polisi</p>
+</li>
+<li><p class="first">Bangunan Publik</p>
+</li>
+<li><p class="first">Tempat Ibadah - Islam</p>
+</li>
+<li><p class="first">Tempat Ibadah - Unitarian</p>
+</li>
+<li><p class="first">Tempat Ibadah - Buddha</p>
+</li>
+<li><p class="first">Tempat Ibadah - Unitarian</p>
+</li>
 <li>Supermarket</li>
-<li>Residential</li>
-<li>Sports Facility</li>
-<li>Place of Worship</li>
-<li>Commercial</li>
-<li>Industrial</li>
+<li><p class="first">Permukiman</p>
+</li>
+<li><p class="first">Fasilitas Olahraga</p>
+</li>
+<li><p class="first">Tempat Beribadah</p>
+</li>
+<li><p class="first">Komersil</p>
+</li>
+<li><p class="first">Industri</p>
+</li>
 </ul>
-<p>These derived types will be present in a field called &#8216;type&#8217; when downloading
-the building data.Note that depending on the area for which you have downloaded,
-only some of these categories may be present in your buildings dataset.</p>
+<p>Tipe-tipe ini akan muncul pada sebuah kolom bernama &#8216;type&#8217; ketika mendownload data bangunan. Catatan bahwa tergantung wilayah mana yang anda download, kemungkinan hanya beberapa dari kategori ini yang akan muncul pada set data bangunan anda.</p>
 </div>
 <div class="section" id="roads-data">
-<h2>Roads data<a class="headerlink" href="#roads-data" title="Link permanent untuk headline ini">¶</a></h2>
-<p>InaSAFE supports the use of road data in various impact functions. In
-particular we support roads sourced from the
-<a class="reference external" href="https://openstreetmap.org">OpenStreetMap</a> project (OSM).</p>
-<p>The following road types are derived (depending on the various tags assigned
-to them in OSM):</p>
+<h2>Data jalan<a class="headerlink" href="#roads-data" title="Link permanent untuk headline ini">¶</a></h2>
+<p>InaSAFE mendukung penggunaan data bangunan untuk berbagai fungsi dampak. Pada umumnya kami mendukung jalan yang bersumber dari proyek <a class="reference external" href="https://openstreetmap.org">OpenStreetMap (OSM)</a></p>
+<p>Tipe jalan berikut ini yang berasal (tergantung dari berbagai tags yang diberikan pada OSM) adalah sebagai berikut:</p>
 <p>ALTER TABLE planet_osm_line ADD COLUMN &#8220;type&#8221; VARCHAR(255) NULL;</p>
 <ul class="simple">
-<li>Motorway or highway (includes &#8216;trunk&#8217; from OSM)</li>
-<li>Motorway link</li>
-<li>Primary road</li>
-<li>Primary link</li>
-<li>Tertiary</li>
-<li>Tertiary link</li>
-<li>Secondary</li>
-<li>Secondary link</li>
-<li>Road, residential, living street, etc. (includes all highways tagged with
-&#8216;living_street&#8217;, &#8216;residential&#8217;, &#8216;yes&#8217;, &#8216;road&#8217;, &#8216;unclassified&#8217;, &#8216;service&#8217;, &#8216;&#8217;
-and NULL highways)</li>
-<li>Track&#8217;</li>
-<li>Cycleway, footpath, etc. (includes &#8216;cycleway&#8217;, &#8216;footpath&#8217;, &#8216;pedestrian&#8217;,
-&#8216;footway&#8217; and &#8216;path&#8217; highway tags).</li>
+<li><p class="first">Jalan besar atau jalan bebas hambatan (termasuk &#8216;trunk&#8217; / jalan penting dari OSM)</p>
+</li>
+<li><p class="first">Percabangan jalan besar</p>
+</li>
+<li><p class="first">Jalan primer</p>
+</li>
+<li><p class="first">Percabangan jalan primer</p>
+</li>
+<li><p class="first">Jalan tertier</p>
+</li>
+<li><p class="first">Percabangan jalan tertier</p>
+</li>
+<li><p class="first">Jalan Sekunder</p>
+</li>
+<li><p class="first">Percabangan jalan sekunder</p>
+</li>
+<li><p class="first">Jalan, perumahan, permukiman, etc. (termasuk semua jalan yang diberi tag &#8216;living_street&#8217;, &#8216;residential&#8217;, &#8216;yes&#8217;, &#8216;road&#8217;, &#8216;unclassified&#8217;, &#8216;service&#8217;, &#8216;&#8217; dan NULL)</p>
+</li>
+<li><p class="first">Trek</p>
+</li>
+<li><p class="first">Jalur sepeda, jalan kecil, etc. (termasuk jalan dengan tag  &#8216;cycleway&#8217;, &#8216;footpath&#8217;, &#8216;pedestrian&#8217;, &#8216;footway&#8217; dan &#8216;path&#8217; )</p>
+</li>
 </ul>
 </div>
 </div>
@@ -280,7 +310,8 @@ and NULL highways)</li>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 

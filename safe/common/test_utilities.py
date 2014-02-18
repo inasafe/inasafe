@@ -1,3 +1,4 @@
+# coding=utf-8
 """InaSAFE Disaster risk assessment tool developed by AusAid -
   **Utilities Tests implementation.**
 
@@ -46,7 +47,6 @@ def print_class(my_array, my_result_class, my_expected):
 
 
 class UtilitiesTest(unittest.TestCase):
-
 
     def test_which(self):
         """Test that the which command works as expected."""

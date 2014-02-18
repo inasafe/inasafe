@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
@@ -22,6 +23,7 @@ import qgis  # pylint: disable=W0611
 import unittest
 import os
 
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe.common.testing import get_qgis_app
@@ -34,33 +36,28 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 class ShakemapImporterTest(unittest.TestCase):
     """Test class to facilitate importing shakemaps."""
 
-    def test_initDialog(self):
+    def test_init_dialog(self):
         """Test for showing table in the first."""
-        myDialog = ShakemapImporter(PARENT)
-        assert myDialog is not None, 'Dialog is failed to created'
-        # testing populate algorithm, removed since changed to radio button
-        # expected_algorithms = ['Nearest', 'Invdist']
-        # assert myDialog.cboAlgorithm.count() == len(expected_algorithms), \
-        #     'Number of algorithm is not same'
-        # for i in list(xrange(len(expected_algorithms))):
-        #     assert expected_algorithms[i] == str(
-        #         myDialog.cboAlgorithm.itemText(i)), \
-        #         ('Algorithm is not same, expect %s got %s') % \
-        #         (expected_algorithms[i], myDialog.cboAlgorithm.itemText(i))
+        shakemap_converter_dialog = ShakemapImporter(PARENT)
+        msg = 'Dialog is failed to create'
+        self.assertIsNotNone(shakemap_converter_dialog, msg)
 
     def test_behaviour(self):
         """Test behaviour of elements in the dialog
         """
-        myDialog = ShakemapImporter(PARENT)
-        myDialog.use_output_default.setEnabled(True)
+        shakemap_importer_dialog = ShakemapImporter(PARENT)
+        shakemap_importer_dialog.use_output_default.setEnabled(True)
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
-        myDialog.input_path.setText(my_grid_path)
-        input_path = myDialog.input_path.text()
-        output_path = myDialog.output_path.text()
-        assert myDialog.isEnabled(), 'Output location should be disabled'
+        shakemap_importer_dialog.input_path.setText(my_grid_path)
+        input_path = shakemap_importer_dialog.input_path.text()
+        output_path = shakemap_importer_dialog.output_path.text()
+
+        msg = 'Output location should be disabled'
+        self.assertTrue(shakemap_importer_dialog.isEnabled(), msg)
+
         expected_output_path = input_path[:-3] + 'tif'
-        assert output_path == expected_output_path, \
-            'Expected %s got %s' % (expected_output_path, output_path)
+        msg = 'Expected %s got %s' % (expected_output_path, output_path)
+        self.assertEqual(output_path, expected_output_path, msg)
 
     def test_converting(self):
         """Test converting a file.
@@ -77,7 +74,9 @@ class ShakemapImporterTest(unittest.TestCase):
         dialog.output_path.setText(output_raster)
         button = dialog.button_box.button(QDialogButtonBox.Ok)
         button.click()
-        assert os.path.exists(output_raster), 'Raster is not created'
+
+        msg = 'Raster is not created'
+        self.assertTrue(os.path.exists(output_raster), msg)
 
 
 if __name__ == "__main__":

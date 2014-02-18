@@ -23,6 +23,7 @@ import sys
 
 # configure paths for QGIS plugins
 # (we need to set path for processing module)
+# TS: Hard coded paths???? Very BAD! - lets get rid of / fix this!
 qgisprefix = '/usr'
 sys.path.insert(0, qgisprefix + '/share/qgis/python')
 sys.path.insert(1, qgisprefix + '/share/qgis/python/plugins')

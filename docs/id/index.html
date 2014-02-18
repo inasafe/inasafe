@@ -81,6 +81,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -94,6 +111,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -167,7 +185,7 @@ InaSAFE Tool, how (and where) to find them and howto use them.</p>
 <li class="toctree-l2"><a class="reference internal" href="dock.html#the-buttons-area">Area Tombol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dock.html#data-conversions-when-running-a-scenario">Konversi data ketika menjalankan sebuah skenario</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dock.html#setting-analysis-parameters">Pengaturan Parameter Analisis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dock.html#generating-impact-report">Generating impact report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dock.html#generating-impact-report">Membuat laporan dampak</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="keywords.html">Sistem Kata kunci</a><ul>
@@ -190,7 +208,12 @@ InaSAFE Tool, how (and where) to find them and howto use them.</p>
 <li class="toctree-l2"><a class="reference internal" href="reports.html#custom-templates">Template yang lazim digunakan</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="options.html">Pilihan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Pilihan</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="options.html#basic-options">Basic Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="options.html#template-options">Template Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="options.html#advanced">Advanced</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="impact_functions.html">Memahami Fungsi Dampak</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="impact_functions.html#what-is-an-impact-function">Apa itu fungsi dampak?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="impact_functions.html#selecting-an-impact-function">Memilih fungsi dampak</a></li>
@@ -204,16 +227,16 @@ InaSAFE Tool, how (and where) to find them and howto use them.</p>
 <li class="toctree-l1"><a class="reference internal" href="batch_runner.html">Batch Runner</a></li>
 <li class="toctree-l1"><a class="reference internal" href="save_scenario.html">Simpan Skenario</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openstreetmap_downloader.html">Mendownload OpenStreetMap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="openstreetmap_downloader.html#building-data">Building data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="openstreetmap_downloader.html#roads-data">Roads data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openstreetmap_downloader.html#building-data">Data bangunan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openstreetmap_downloader.html#roads-data">Data jalan</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="impact_layer_merge_tool.html">The Impact Layer Merge Tool</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#procedure">Procedure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#generated-outputs">Generated outputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#using-customized-template">Using Customized Template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#map-template-elements">Map Template Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="impact_layer_merge_tool.html">Tool Menggabungkan Layer Dampak</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#prerequisites">Prasyarat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#procedure">Prosedur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#generated-outputs"><em>Output</em> yang dihasilkan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#using-customized-template">Menggunakan <em>Template</em> Terkostumisasi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impact_layer_merge_tool.html#map-template-elements">Peta <em>Template</em> Elemen</a></li>
 </ul>
 </li>
 </ul>
@@ -239,7 +262,8 @@ InaSAFE Tool, how (and where) to find them and howto use them.</p>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 
