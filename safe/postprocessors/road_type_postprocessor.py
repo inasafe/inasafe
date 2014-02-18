@@ -37,25 +37,21 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
         """
 
         BuildingTypePostprocessor.__init__(self)
-        # Note: Do we need these explicityl defined? With new osm-reporter
-        # changes you already get a nicely named list in the 'type' field
+        # Note: Do we need these explicitly defined? With new osm-reporter
+        # changes you already get a nicely named list in the 'type' field TS
         self.fields_values = {
-            'Construction': ['construction'],
-            'Crossing': ['crossing'],
-            'Cycleway': ['cycleway'],
-            'Footway': ['footway', 'path', 'pedestrian'],
-            'Highway': ['highway'],
-            'Industri': ['industri'],
-            'Living street': ['living_street'],
-            'Motorway': ['motorway', 'motorway_link', 'Motorway link'],
-            'Primary': ['primary', 'primary_link'],
-            'Raceway': ['raceway'],
-            'Residential': ['residential'],
-            'Secondary': ['secondary', 'secondary_link'],
-            'Service': ['service'],
-            'Tertiary': ['tertiary', 'tertiary_link'],
-            'Track': ['track'],
-            'unclassified': ['unclassified', 'yes', 'road'],
+            'Motorway / highway': ['Motorway / highway'],
+            'Motorway link': ['Motorway link'],
+            'Primary road': ['Primary road'],
+            'Primary link': ['Primary link'],
+            'Tertiary': ['Tertiary'],
+            'Tertiary link': ['Tertiary link'],
+            'Secondary': ['Secondary'],
+            'Secondary link': ['Secondary link'],
+            'Road, residential, living street, etc.':
+                ['Road, residential, living street, etc.'],
+            'Track': ['Track'],
+            'Cycleway, footpath, etc.': ['Cycleway, footpath, etc.'],
         }
 
     def description(self):
