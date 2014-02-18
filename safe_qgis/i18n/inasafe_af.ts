@@ -2392,16 +2392,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="291"/>
-        <source>InaSAFE Converter</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="plugin.py" line="296"/>
-        <source>Open InaSAFE Converter</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="plugin.py" line="306"/>
         <source>InaSAFE Batch Runner</source>
         <translation type="unfinished"/>
@@ -2444,6 +2434,16 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="501"/>
         <source>The layer you have selected cannot be used for analysis because its data type is unsupported.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="plugin.py" line="291"/>
+        <source>InaSAFE Shakemap Converter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="plugin.py" line="296"/>
+        <source>Open InaSAFE Shakemap Converter</source>
         <translation type="unfinished"/>
     </message>
 </context>
