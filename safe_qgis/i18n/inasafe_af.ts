@@ -2686,83 +2686,83 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ShakemapImporter</name>
     <message>
-        <location filename="shakemap_importer.py" line="155"/>
+        <location filename="shakemap_importer.py" line="160"/>
         <source>Shakemap Grid Importer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="89"/>
+        <location filename="shakemap_importer.py" line="93"/>
         <source>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format to a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require and earthquake layer.  To use this tool effectively:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="96"/>
+        <location filename="shakemap_importer.py" line="100"/>
         <source>Select a grid.xml for the input layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="98"/>
+        <location filename="shakemap_importer.py" line="102"/>
         <source>Choose where to write the output layer to.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="101"/>
+        <location filename="shakemap_importer.py" line="105"/>
         <source>Choose the interpolation algorithm that should be used when converting the xml grid to a raster. If unsure keep the default.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="105"/>
+        <location filename="shakemap_importer.py" line="109"/>
         <source>If you want to obtain shake data you can get it for free from the USGS shakemap site: http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="122"/>
+        <location filename="shakemap_importer.py" line="127"/>
         <source>output file is not .tif</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="135"/>
+        <location filename="shakemap_importer.py" line="140"/>
         <source>input file is not .xml</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="196"/>
+        <location filename="shakemap_importer.py" line="202"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="191"/>
+        <location filename="shakemap_importer.py" line="196"/>
         <source>Output file name must be tif file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="196"/>
+        <location filename="shakemap_importer.py" line="202"/>
         <source>Input file is not exist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="232"/>
+        <location filename="shakemap_importer.py" line="240"/>
         <source>Input file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="232"/>
+        <location filename="shakemap_importer.py" line="240"/>
         <source>Raw grid file(*.xml)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="242"/>
+        <location filename="shakemap_importer.py" line="250"/>
         <source>Output file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="242"/>
+        <location filename="shakemap_importer.py" line="250"/>
         <source>Raster file(*.tif)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="57"/>
-        <source>InaSAFE %s Converter</source>
+        <location filename="shakemap_importer.py" line="60"/>
+        <source>InaSAFE %s Shakemap Converter</source>
         <translation type="unfinished"/>
     </message>
 </context>
