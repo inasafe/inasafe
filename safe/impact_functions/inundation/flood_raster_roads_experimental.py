@@ -157,16 +157,18 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.extent[0], self.extent[1])
-        crs_dest = QgsCoordinateReferenceSystem(epsg)
-        transform = QgsCoordinateTransform(E.crs(), crs_dest)
+        output_crs = QgsCoordinateReferenceSystem(epsg)
+        transform = QgsCoordinateTransform(E.crs(), output_crs)
         road_len = flooded_len = 0  # Length of roads
         roads_by_type = dict()      # Length of flooded roads by types
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_type_field)
         for road in roads_data:
-            attrs = road.attributes()
-            road_type = attrs[road_type_field_index]
+            attributes = road.attributes()
+            road_type = attributes[road_type_field_index]
+            if road_type.__class__.__name__ == 'QPyNullVariant':
+                road_type = tr('Other')
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
@@ -176,17 +178,22 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 roads_by_type[road_type] = {'flooded': 0, 'total': 0}
             roads_by_type[road_type]['total'] += length
 
-            if attrs[target_field_index] == 1:
+            if attributes[target_field_index] == 1:
                 flooded_len += length
                 roads_by_type[road_type]['flooded'] += length
-        table_body = [question,
-                      TableRow([tr('Road Type'),
-                                tr('Flooded in the threshold (m)'),
-                                tr('Total (m)')],
-                               header=True),
-                      TableRow([tr('All'), int(flooded_len), int(road_len)])]
-        table_body.append(TableRow(tr('Breakdown by road type'),
-                                       header=True))
+        table_body = [
+            question,
+            TableRow([
+                tr('Road Type'),
+                tr('Flooded in the threshold (m)'),
+                tr('Total (m)')],
+                header=True),
+            TableRow([
+                tr('All'),
+                int(flooded_len),
+                int(road_len)])]
+        table_body.append(TableRow(
+            tr('Breakdown by road type'), header=True))
         for t, v in roads_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])

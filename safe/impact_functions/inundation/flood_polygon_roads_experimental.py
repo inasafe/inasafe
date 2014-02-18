@@ -183,6 +183,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         for road in roads_data:
             attributes = road.attributes()
             road_type = attributes[road_type_field_index]
+            if road_type.__class__.__name__ == 'QPyNullVariant':
+                road_type = tr('Other')
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
