@@ -2127,7 +2127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if aggregation_layer is not None:
             aggregation_path = str(aggregation_layer.publicSource())
             relative_aggregation_path = os.path.relpath(
-                aggregation_path, file_name)
+                aggregation_path, os.path.dirname(file_name))
             parser.set(title, 'aggregation', relative_aggregation_path)
 
         if file_name is None or file_name == '':
