@@ -1982,6 +1982,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.load_template()
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
+            # Zoom to Full Extent
+            number_pages = self.composition.numPages()
+            if number_pages > 0:
+                height = \
+                    self.composition.paperHeight() * number_pages + \
+                    self.composition.spaceBetweenPages() * (number_pages - 1)
+                self.composer.fitInView(
+                    0, 0,
+                    self.composition.paperWidth() + 1,
+                    height + 1,
+                    QtCore.Qt.KeepAspectRatio)
 
         self.hide_busy()
 
@@ -2116,7 +2127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if aggregation_layer is not None:
             aggregation_path = str(aggregation_layer.publicSource())
             relative_aggregation_path = os.path.relpath(
-                aggregation_path, file_name)
+                aggregation_path, os.path.dirname(file_name))
             parser.set(title, 'aggregation', relative_aggregation_path)
 
         if file_name is None or file_name == '':

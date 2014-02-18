@@ -33,7 +33,7 @@ sys.path.insert(3, qgisprefix + '/local/share/qgis/python/plugins')
 from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe import postprocessors
+import processing
 
 # initalise processing plugin with dummy iface object
-plugin = postprocessors.classFactory(IFACE)
+plugin = processing.classFactory(IFACE)

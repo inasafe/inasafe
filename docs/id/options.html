@@ -82,6 +82,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -95,6 +112,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -171,21 +189,29 @@
 <a class="reference internal image-reference" href="_images/toolbar_options.png"><img alt="Options icon" src="_images/toolbar_options.png" style="width: 348.0px; height: 37.0px;" /></a>
 <p class="caption">Pilihan ikon</p>
 </div>
-<p>Kemudian kotak dialog akan muncul seperti ini:</p>
+<p>Then this dialog will appear:</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/inasafe-options-dialog.png"><img alt="Options dialog" src="_images/inasafe-options-dialog.png" style="width: 633.75px; height: 543.0px;" /></a>
+<a class="reference internal image-reference" href="_images/inasafe-options-dialog.png"><img alt="Options dialog" src="_images/inasafe-options-dialog.png" style="width: 1196.25px; height: 360.0px;" /></a>
 <p class="caption">Dialog Pilihan</p>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Catatan</p>
-<p class="last">Anda dapat klik tombol <em class="guilabel">Help</em> beberapa waktu dan ini akan membuka bantuan pencarian dokumentasi untuk halaman ini</p>
-</div>
 <p>Berikut ini pilihan yang tersedia di dalam <em class="guilabel">Options Dialog</em>:</p>
+<p>As you can see this dialog is divided into three tabs namely:</p>
 <ul class="simple">
-<li><p class="first"><em class="guilabel">Only show visible layers in the InaSAFE dock</em> : Pilihan ini akan menentukan apakah <strong>semua</strong> (ketika tidak dicentang) layer ancaman dan dampak harus terdaftar dalam kotak kombo dock. atau (ketika dicentang) hanya layer yang terlihat.</p>
-</li>
-<li><p class="first"><em class="guilabel">Set QGIS layer name from &#8216;title&#8217; in keywords</em> : Pilihan ini akan (ketika diaktifkan) mengakibatkan untuk layer nama pada <em class="guilabel">Layers tree</em> menggunakan kata kunci <cite>title</cite> di file kata kunci layer. Jika layer tidak memiliki &#8216;title&#8217; pada kata kunci, atau tidak memiliki kata kunci sama sekali, perilaku QGIS normal untuk penamaan layer yang akan diterapkan.</p>
-</li>
+<li>Basic Options</li>
+<li>Template Options</li>
+<li>Advanced</li>
+</ul>
+<div class="section" id="basic-options">
+<span id="id1"></span><h2>Basic Options<a class="headerlink" href="#basic-options" title="Link permanent untuk headline ini">¶</a></h2>
+<ul class="simple">
+<li><em class="guilabel">Only show visible layers in the InaSAFE dock</em> : This option will
+determine whether <strong>all</strong> hazard and impact layers should be listed in the
+InaSAFE dock&#8217;s combo boxes or (when checked) only visible layers.</li>
+<li><em class="guilabel">Set QGIS layer name from &#8216;title&#8217; in keywords</em> : This option will
+cause QGIS to name layers in the <em class="guilabel">Layers tree</em> using the <cite>title</cite>
+keyword in the layer&#8217;s keywords file.
+If the layer has no &#8216;title&#8217; in its keywords, or it has no keywords at all,
+the normal QGIS behaviour for naming layers will apply.</li>
 <li><p class="first"><em class="guilabel">Zoom to impact layer on scenario estimate completion</em> : Pilihan ini akan menyebabkan tampilan peta untuk diperbesar/diperkecil sehingga benar-benar berisi InaSAFE hasil skenario peta dampak ketika analisis selesai.</p>
 </li>
 <li><p class="first"><em class="guilabel">Hide exposure layer on scenario estimate completion</em> : Pilihan ini akan menyebabkan QGIS untuk mematikan layer keterpaparan yang sedang digunakan ketika InaSAFE melengkapi analisis ini. Anda dapat mengaktifkan kembali visibilitas layer lagi dengan mencentang kotak centang di legenda.</p>
@@ -194,38 +220,62 @@
 </li>
 <li><p class="first"><em class="guilabel">When clipping, also clip features (e.g. will clip polygon smaller)</em>: Pilihan ini, setiap poligon yang melampaui luasan analisis akan dipotong sehingga mereka berisi oleh luasan analisis. contohnya jika Anda memiliki layer poligon ancaman banjir yang meluas jauh melampaui area yang Anda minati, poligon banjir akan berkurang sehingga hanya bagian di dalam area yang Anda minati dipertahankan. Ini dapat mempercepat waktu pemrosesan.</p>
 </li>
+<li><p class="first"><em class="guilabel">Show intermediate layers generated by postprocessing</em> : Pilihan ini akan mnyebabkan QGIS menampilkan file menengah yang dihasilkan oleh langkah-langkah postprocessing pada peta kanvas.</p>
+</li>
+<li><em class="guilabel">Female ratio default value</em> : This is the default female to total
+population ratio used por generating Gender breakdowns</li>
+</ul>
+</div>
+<div class="section" id="template-options">
+<span id="id2"></span><h2>Template Options<a class="headerlink" href="#template-options" title="Link permanent untuk headline ini">¶</a></h2>
+<ul class="simple">
+<li><p class="first"><em class="guilabel">Organisation logo</em>: Pilihan ini digunakan untuk menentukan logo yang akan digunakan sebagai logo organisasi pada berkas pdf proyek skenario dampak anda. Lihat <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> pada Panduan Pengguna InaSAFE untik informasi lebih lanjut mengenai laporan.</p>
+</li>
+<li><em class="guilabel">Report templates directory</em>: This option is used to determine a
+directory with custom templates.
+Templates from this directory will be available for usage when generating
+report on your impact scenario project.
+See <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> in the InaSAFE User-Manual for more
+information on the reports.</li>
+<li><em class="guilabel">Organisation disclaimer text</em>: This option is used to change
+default disclaimer text, printed in reports.
+Just enter your own text and it will be used instead of the default one.
+See <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> in the InaSAFE User-Manual for more
+information on the reports.</li>
+</ul>
+</div>
+<div class="section" id="advanced">
+<span id="id3"></span><h2>Advanced<a class="headerlink" href="#advanced" title="Link permanent untuk headline ini">¶</a></h2>
+<ul class="simple">
+<li><p class="first"><em class="guilabel">Keyword cache for remote datasources</em> : Opsi ini digunakan untuk menentukan di mana kata kunci akan disimpan untuk dataset apabila tidak dimungkinakn untuk ditulis ke dalam file .keywords. Lihat <a class="reference internal" href="keywords.html#keywords-system"><em>Sistem Kata kunci</em></a> pada Panduan Pengguna InaSAFE untuk informasi mengenai sistem kata kunci.</p>
+</li>
 <li><p class="first"><em class="guilabel">Help to improve InaSAFE by submitting errors to a remote server</em> : Pilihan ini, ketika diaktifkan, akan mengirimkan informasi diagnosis kembali ke server proyek InaSAFE di setiap kesalahan kita mampu menjebaknya. Informasi yang diberikan berguna bagi tim InaSAFE untuk meningkatkan ketahanan perangkat lunak yang kami produksi dan untuk melihat tren pada isu-isu yang dihadapi orang. Silakan catat teks peringatan dibawah pilihan ini yang disertakan disini secara penuh:</p>
 </li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
-<p class="last">Pengaturan di atas memerlukan Anda untuk me-restart QGIS setelah menonaktifkan/mengaktifkan perintah tersebut. Pesan kesalahan dan informasi diagnosis akan dipublikasi ke <a class="reference external" href="http://sentry.linfiniti.com/inasafe-desktop/">http://sentry.linfiniti.com/inasafe-desktop/</a>. Beberapa institusi tidak memungkinkan Anda untuk mengaktifkan fitur ini - periksa dengan jaringan administrator jika tidak yakin. Walaupun data dikirim secara anonim, informasi yang terisi di traceback mungkin berisi path sistem file yang mengungkapkan identitas Anda atau informasi lain dari sistem Anda.</p>
+<p class="last">The above setting requires a QGIS restart to disable/enable.
+Error messages and diagnostic information will be posted to
+<a class="reference external" href="http://sentry.linfiniti.com/inasafe-desktop/">http://sentry.linfiniti.com/inasafe-desktop/</a> .
+Some institutions may not allow you to enable this feature - check with
+your network administrator if unsure.
+Although the data is submitted anonymously, the information contained in
+tracebacks may contain file system paths which reveal your identity or
+other information from your system.</p>
 </div>
 <ul class="simple">
-<li><p class="first"><em class="guilabel">Show intermediate layers generated by postprocessing</em> : Pilihan ini akan mnyebabkan QGIS menampilkan file menengah yang dihasilkan oleh langkah-langkah postprocessing pada peta kanvas.</p>
-</li>
-<li><p class="first"><em class="guilabel">Default female ratio</em> : Ini adalah standar wantia untuk jumlah populasi rasio yang menghancurkan digunakan por menghasilkan jenis kelamin</p>
-</li>
-<li><em class="guilabel">Keyword cache for remote datasources</em> : This option is used to
-determine where keywords are stored for datasets where it is not possible
-to write them into a .keywords file. See <a class="reference internal" href="keywords.html#keywords-system"><em>Sistem Kata kunci</em></a> in the
-InaSAFE User-Manual for more information on the keywords system.</li>
-<li><em class="guilabel">Organisation logo</em>: This option is used to determine
-a custom logo that will be used as organisation logo in the pdf of your
-impact scenario project. See <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> in the InaSAFE
-User-Manual for more information on the reports.</li>
-<li><em class="guilabel">Report template</em>: This option is used to determine a directory
-with custom templates. Templates from this directory will be available for
-usage when generating report on your impact scenario project. See
-<a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> in the InaSAFE User-Manual for more information
-on the reports.</li>
-<li><em class="guilabel">Disclaimer text</em>: This option is used to change default disclaimer
-text, printed in reports. Just enter your own text and it will be used
-instead of the default one. See <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> in the InaSAFE
-User-Manual for more information on the reports.</li>
-<li><p class="first"><em class="guilabel">Enable developer mode</em>. Dengan diaktifkannya pilihan ini, Anda dapat meng-klik kanan pada laporan dan menggunakan alat debug webkit untuk melakukan debug pada hasil. <strong>Opsi ini sebaiknya digunakan untuk pengguna tingkat lanjut saja.</strong></p>
-</li>
+<li><em class="guilabel">Enable developer mode</em> :  With this option enabled,
+you can right click on the report area and use the webkit debug tools to
+debug the output.
+<strong>This option is intended for advanced users only.</strong></li>
+<li><em class="guilabel">Use QGIS zonal statistics</em> : With this button you can toggle
+between using QGIS internal zonal statistics or the one that comes with
+InaSAFE</li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">Anda dapat klik tombol <em class="guilabel">Help</em> beberapa waktu dan ini akan membuka bantuan pencarian dokumentasi untuk halaman ini</p>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
 <p class="last">Dengan menekan <em class="guilabel">Batal</em> maka dialog pilihan akan menutup dan perubahan apa saja <strong>tidak</strong> akan diterapkan. Tekan <em class="guilabel">OK</em> maka kotak dialog Pilihan akan menutup dan perubahan apa saja <strong>akan</strong> segera diterapkan.</p>
@@ -233,6 +283,7 @@ User-Manual for more information on the reports.</li>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
 <p class="last">Urutan tombol yang tepat yang ditampilkan pada kotak dialog ini mungkin berbeda tergantung pada sistem operasi atau lingkungan desktop Anda.</p>
+</div>
 </div>
 </div>
 
@@ -255,7 +306,8 @@ User-Manual for more information on the reports.</li>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 

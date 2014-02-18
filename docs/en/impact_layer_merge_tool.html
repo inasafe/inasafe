@@ -80,6 +80,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -93,6 +110,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -247,8 +265,15 @@ give you the information of what element is missing on the template.</p>
 please go to <strong>InaSAFE Option</strong> tools and change the value of the related field.
 Those elements are:</p>
 <ul class="simple">
-<li><strong>organisation-logo</strong>. It corresponds to <strong>Organisation logo</strong> field on InaSAFE Option tools. If you do not fill this field, then the default one, <strong>supporters.png</strong> logo, will be used.</li>
-<li><strong>disclaimer</strong>. It corresponds to <strong>Disclaimer text</strong> field on InaSAFE Option tools. If you do not fill this field, then the default one will be used: &#8220;<em>InaSAFE has been jointly developed by BPNB, Australian Govenment and the World Bank - GFDRR</em>&#8220;</li>
+<li><strong>organisation-logo</strong>. It corresponds to <strong>Organisation logo</strong> field on
+InaSAFE Option tools.
+If you do not fill this field, then the default one,
+<strong>supporters.png</strong> logo, will be used.</li>
+<li><strong>disclaimer</strong>. It corresponds to <strong>Disclaimer text</strong> field on InaSAFE
+Option tools.
+If you do not fill this field, then the default one will be used: &#8220;InaSAFE
+has been jointly developed by BPNB, Australian Govenment and the World
+Bank - GFDRR&#8221;</li>
 </ul>
 <p>2. Elements containing tokens. The id of these element is not significant, only the token
 it contains. At render time, any of these tokens will be replaced. If you want to have a
@@ -290,7 +315,8 @@ generated automatically by the tools.</p>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 

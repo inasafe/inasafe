@@ -82,6 +82,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -95,6 +112,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -268,10 +286,8 @@
 <ul class="simple">
 <li><p class="first"><em class="guilabel">Help</em> - klik pada ini jika Anda membutuhkan bantuan konteks, seperti dokumen yang Anda baca sekarang!</p>
 </li>
-<li><em class="guilabel">Print...</em> - click on this if you wish to create a pdf of your
-impact scenarion project or just generate report and open it in composer for
-further tuning. An <strong>impact layer</strong> must be active before the
-<em class="guilabel">Print...</em> button will be enabled.</li>
+<li><p class="first"><em class="guilabel">Print</em> - klik pada tombol ini jika anda ingin membuat sebuah pdf dari proyek skenario dampak anda atau hanya ingin membuat sebuah laporan dan membukanya pada komposer untuk penyesuaian lebih lanjut. Sebuah <strong>lapisan dampak</strong> harus aktif sebelum tombol <em class="guilabel">Print...</em> dapat diaktifkan.</p>
+</li>
 <li><p class="first"><em class="guilabel">Run - jika kombinasi pilihan pada kotak combo area :guilabel:`Questions</em> akan memungkinkan Anda untuk menjalankan skenario, tombol ini diaktifkan.</p>
 </li>
 </ul>
@@ -312,34 +328,22 @@ further tuning. An <strong>impact layer</strong> must be active before the
 </div>
 </div>
 <div class="section" id="generating-impact-report">
-<span id="impact-report"></span><h2>Generating impact report<a class="headerlink" href="#generating-impact-report" title="Link permanent untuk headline ini">¶</a></h2>
-<p>When scenario analysis completed you may want to generate a report. Usually
-<em class="guilabel">Print...</em>  button will be enabled immediatelly after analysis. If it
-still inactive, select impact layer in QGIS ToC.</p>
-<p>To start report generation you need to click on the <em class="guilabel">Print...</em> button
-in the buttons area. This will open an <em class="guilabel">Impact report</em> dialog.</p>
+<span id="impact-report"></span><h2>Membuat laporan dampak<a class="headerlink" href="#generating-impact-report" title="Link permanent untuk headline ini">¶</a></h2>
+<p>Ketika analisis skenario selesai anda mungkin ingin membuat sebuah laporan. Biasanya tombol <em class="guilabel">Print...</em> akan diaktifkan setelah analisis. Jika masih belum aktif, pilih lapisan dampak pada daftar lapisan QGIS.</p>
+<p>Untuk mulai membuat laporan anda perlu mengklik pada tombol <em class="guilabel">Print...</em> di area tombol. Ini akan membuka dialog <em class="guilabel">Impact report</em></p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/impact_report_dlg.png"><img alt="Impact Report configuration" src="_images/impact_report_dlg.png" style="width: 317.25px; height: 188.25px;" /></a>
-<p class="caption">Impact report configuration</p>
+<p class="caption">Pengaturan laporan dampak</p>
 </div>
-<p>Dialog has three major areas:</p>
+<p>Dialog memiliki tiga area utama:</p>
 <blockquote>
 <div><ul class="simple">
-<li><em class="guilabel">Area to print</em> group: allows to customize extent of the report
-map. There are two options available. Choose <em class="guilabel">Current extent</em> if
-current canvas extent represents necessary area. <em class="guilabel">Analysis extent</em>
-will set extent of the report map to impact layer extent.</li>
-<li><em class="guilabel">Template to use</em> group: here you can select desired template for
-your report. In combobox listed all templates bundled with plugin plus
-templates from user-defined template directory (see <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a>
-for information how to set templates directory). It is also possible to
-select custom template from any location: just activate radiobutton under
-combobox and provide path to template using <em class="guilabel">...</em> button.</li>
-<li>buttons area: contains four buttons. <em class="guilabel">Open PDF</em> button used to
-generate report and export it in PDF format. Resulting file(s) will be
-opened in your default PDF viewer. <em class="guilabel">Open composer</em> used when you
-need to adjust generated report before printing. In this case report will be
-opened in QGIS composer and you can edit it as needed.</li>
+<li><p class="first">guilabel:<cite>Area to print</cite> grup: memperbolehkan anda untuk mengatur jangkauan tampilan laporan peta. Terdapat dua pilihan yang tersedia. Pilih <em class="guilabel">Current extent</em> jika jangkauan tampilan hanya menggambarkan area tertentu.  <em class="guilabel">Analysis extent</em> akan mengatur jangkauan laporan peta pada jangkauan lapisan dampak.</p>
+</li>
+<li><p class="first"><em class="guilabel">Template to use</em> grup: di sini anda dapat memilih template yang diinginkan untuk laporan anda. Pada kotak pilihan akan terdaftar seluruh template yang termasuk dalam plugin ditambah template berdasarkan direktori yang dapat disesuakan pengguna (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk informasi bagaimana mengatur direktori template). Juga dimungkinkan untuk memilih template yang diinginkan dari lokasi manapun: cukup aktifkan tombol pilihan di bawah kotak pilihan dan arahkan jalur ke direktori dimana berkas template disimpan dengan menggunakan tombol <em class="guilabel">...</em></p>
+</li>
+<li><p class="first">area tombol: terdiri dari empat tombol.  <em class="guilabel">Open PDF`digunakan untuk menghasilkan laporan dan mengekspornya pada format PDF. Hasilnya berkas dapat dibuka oleh pembaca berkas PDF bawaan anda. :guilabel:`Open composer</em> digunakan ketika anda perlu mengatur laporan sebelum dicetak. Artinya, laporan akan dibuka dalam komposer QGIS dan anda dapat mengedit sesuai kebutuhan.</p>
+</li>
 </ul>
 </div></blockquote>
 </div>
@@ -364,7 +368,8 @@ opened in QGIS composer and you can edit it as needed.</li>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 
