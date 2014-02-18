@@ -42,23 +42,18 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
         # Note: Do we need these explicityl defined? With new osm-reporter
         # changes you already get a nicely named list in the 'type' field
         self.fields_values = OrderedDict([
-            ('Motorway', ['motorway', 'highway', 'trunk']),
-            ('Motorway link', ['motorway_link', 'Motorway link']),
-            ('Primary', ['primary', 'primary_link']),
-            ('Primary link', ['primary_link']),
-            ('Tertiary', ['tertiary']),
-            ('Tertiary link', ['tertiary_link']),
-            ('Secondary', ['secondary']),
-            ('Secondary link', ['secondary_link']),
-            ('Track', ['track']),
-            ('Cycleway', ['cycleway']),
-            ('Footway', ['footway', 'path', 'pedestrian']),
-            ('Living street', ['living_street']),
-            ('Residential', ['residential']),
-            ('Service', ['service']),
-            ('Raceway', ['raceway']),
-            ('Industri', ['industri']),
-            # ('unclassified', ['unclassified', 'yes', 'road']),
+            ('Motorway / highway', ['Motorway or highway']),
+            ('Motorway link', ['Motorway link']),
+            ('Primary road', ['Primary road']),
+            ('Primary link', ['Primary link']),
+            ('Tertiary', ['Tertiary']),
+            ('Tertiary link', ['Tertiary link']),
+            ('Secondary', ['Secondary']),
+            ('Secondary link', ['Secondary link']),
+            ('Road, residential, living street, etc.',
+                ['Road, residential, living street, etc.']),
+            ('Track', ['Track']),
+            ('Cycleway, footpath, etc.', ['Cycleway, footpath, etc.']),
             ('Other', [])
         ])
         self.known_types = []
