@@ -781,7 +781,6 @@ class TestDock(TestCase):
         #print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
 
-
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated."""
 
