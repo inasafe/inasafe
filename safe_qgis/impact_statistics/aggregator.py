@@ -87,7 +87,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 # If inasafe is running as qgis plugin,
-# it can import processing,
+# it can import processing (from QGIS / sextante),
 # if inasafe is called from tests as commandline application,
 # we need to use dummy QgsApplication and iface objects
 try:
