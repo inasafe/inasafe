@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Import Dialog Test Cases.**
@@ -10,15 +11,15 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 __author__ = 'timlinux'
 
 import os
-import sys
 import unittest
-from PyQt4.QtGui import QApplication
+
 from third_party.pydispatch import dispatcher
 from safe_qgis.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
@@ -34,8 +35,6 @@ TEST_FILES_DIR = os.path.join(
 
 class MessageViewerTest(unittest.TestCase):
     """Test cases for message viewer module."""
-
-    APPLICATION = QApplication(sys.argv)
 
     def setUp(self):
         """Fixture run before all tests"""
@@ -69,8 +68,7 @@ class MessageViewerTest(unittest.TestCase):
         text = self.message_viewer.page_to_text()
         self.assertEqual(text, 'Hi\n')
 
-    #Enabling this test causes a segfault for me TS
-    def Xtest_static_message(self):
+    def test_static_message(self):
         """Test we can send static messages to the message viewer."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.message_viewer.page_to_text()
@@ -89,8 +87,7 @@ class MessageViewerTest(unittest.TestCase):
         text = self.message_viewer.page_to_text().replace('\n', '')
         return text
 
-    #Enabling this test causes a segfault for me TS
-    def Xtest_error_message(self):
+    def test_error_message(self):
         """Test we can send error messages to the message viewer."""
         text = self.fake_error()
         my_expected_result = open(
@@ -99,8 +96,7 @@ class MessageViewerTest(unittest.TestCase):
             'r').read().replace('\n', '')
         self.assertEqual(text, my_expected_result)
 
-    #Enabling this test causes a segfault for me TS
-    def Xtest_static_and_error(self):
+    def test_static_and_error(self):
         """Test error message works when there is a static message in place."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.fake_error()

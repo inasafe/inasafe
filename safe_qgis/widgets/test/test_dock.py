@@ -31,6 +31,7 @@ from os.path import join
 import qgis  # pylint: disable=W0611
 
 from unittest import TestCase, skipIf
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
