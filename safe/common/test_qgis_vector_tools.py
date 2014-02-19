@@ -31,7 +31,8 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsPoint,
         QgsField,
         QgsFeature,
-        QgsGeometry)
+        QgsGeometry,
+        QgsRectangle)
 
 
 from qgis_vector_tools import (
@@ -130,6 +131,30 @@ class TestQGISVectorTools(unittest.TestCase):
         for feature in split_lines.getFeatures():
             found = False
             for expected in expected_lines.getFeatures():
+                if (feature.attributes() == expected.attributes()) and \
+                   (feature.geometry().isGeosEqual(expected.geometry())):
+                    found = True
+                    break
+            self.assertTrue(found)
+
+        # Split by the extent (The result is the copy of the layer)
+        line_before.updateExtents()
+        # Expand extent to cover the lines (add EPSILON to bounds)
+        EPSILON = 0.0001    # A small number
+        extent = line_before.extent()
+        new_extent = QgsRectangle(
+            extent.xMinimum() - EPSILON,
+            extent.yMinimum() - EPSILON,
+            extent.xMaximum() + EPSILON,
+            extent.yMaximum() + EPSILON
+        )
+        new_extent = QgsGeometry().fromRect(new_extent)
+        split_lines = split_by_polygon(
+            line_before,
+            new_extent)
+        for feature in split_lines.getFeatures():
+            found = False
+            for expected in line_before.getFeatures():
                 if (feature.attributes() == expected.attributes()) and \
                    (feature.geometry().isGeosEqual(expected.geometry())):
                     found = True

@@ -215,6 +215,8 @@ def split_by_polygon(
                             target_value,
                             add_attribute=new_field_added
                         )
+                    else:
+                        new_attributes = attributes
                     feature = _set_feature(g, new_attributes)
                     _ = result_layer.dataProvider().addFeatures([feature])
 
@@ -224,12 +226,15 @@ def split_by_polygon(
             ).asGeometryCollection()
             for g in diff_geom:
                 if g.type() == geometry_type:
-                    new_attributes = _update_attr_list(
-                        attributes,
-                        target_field_index,
-                        0,
-                        add_attribute=new_field_added
-                    )
+                    if mark_value is not None:
+                        new_attributes = _update_attr_list(
+                            attributes,
+                            target_field_index,
+                            0,
+                            add_attribute=new_field_added
+                        )
+                    else:
+                        new_attributes = attributes
                     feature = _set_feature(g, new_attributes)
                     _ = result_layer.dataProvider().addFeatures([feature])
         else:
@@ -240,6 +245,8 @@ def split_by_polygon(
                     0,
                     add_attribute=new_field_added
                 )
+            else:
+                new_attributes = attributes
             feature = _set_feature(initial_geom, new_attributes)
             _ = result_layer.dataProvider().addFeatures([feature])
     result_layer.commitChanges()
