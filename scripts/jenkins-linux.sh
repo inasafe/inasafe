@@ -15,6 +15,7 @@ in_array () {
 
 export QGIS_PREFIX_PATH=/usr/local/qgis-2.0/
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/plugins:`pwd`
+echo "PYTHONPATH: $PYTHONPATH"
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 export INASAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-QGIS2/exposure/population.tif
 
