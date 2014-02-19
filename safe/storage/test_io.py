@@ -5,38 +5,48 @@ import os
 
 from osgeo import gdal
 
-from raster import Raster
-from vector import Vector
-from vector import convert_polygons_to_centroids
-from projection import Projection
-from projection import DEFAULT_PROJECTION
-from core import read_layer
-from core import write_raster_data
-from utilities import write_keywords
-from utilities import read_keywords
-from utilities import bbox_intersection
-from utilities import minimal_bounding_box
-from utilities import buffered_bounding_box
-from utilities import array_to_wkt
-from utilities import calculate_polygon_area
-from utilities import calculate_polygon_centroid
-from utilities import points_along_line
-from utilities import geotransform_to_bbox
-from utilities import geotransform_to_resolution
-from utilities import raster_geometry_to_geotransform
-from core import get_bounding_box
-from core import bboxlist2string, bboxstring2list
-from core import check_bbox_string
-from utilities_test import same_API
-from geometry import Polygon
+from safe.storage.raster import Raster
+from safe.storage.vector import (
+    Vector,
+    convert_polygons_to_centroids)
+from safe.storage.projection import (
+    Projection, DEFAULT_PROJECTION)
+from safe.storage.utilities import (
+    write_keywords,
+    read_keywords,
+    bbox_intersection,
+    minimal_bounding_box,
+    buffered_bounding_box,
+    array_to_wkt,
+    calculate_polygon_area,
+    calculate_polygon_centroid,
+    points_along_line,
+    geotransform_to_bbox,
+    geotransform_to_resolution,
+    raster_geometry_to_geotransform)
+from safe.storage.core import (
+    read_layer,
+    write_raster_data,
+    get_bounding_box,
+    bboxlist2string,
+    bboxstring2list,
+    check_bbox_string)
+from safe.storage.utilities_test import same_API
+from safe.storage.geometry import Polygon
 from safe.common.numerics import nan_allclose
-from safe.common.testing import TESTDATA, HAZDATA, DATADIR
-from safe.common.testing import FEATURE_COUNTS
-from safe.common.testing import GEOTRANSFORMS
+from safe.common.testing import (
+    TESTDATA,
+    HAZDATA,
+    DATADIR,
+    FEATURE_COUNTS,
+    GEOTRANSFORMS)
 from safe.common.utilities import ugettext as tr, unique_filename
 from safe.common.polygon import is_inside_polygon
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
-from safe.common.exceptions import VerificationError, InaSAFEError
+from safe.common.exceptions import (
+    BoundingBoxError,
+    ReadLayerError,
+    VerificationError,
+    InaSAFEError)
 
 
 # Auxiliary function for raster test
