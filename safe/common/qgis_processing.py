@@ -30,7 +30,7 @@ import sys
 #   they are not used when INASAFE is running as qgis plugin). I'll fix it.
 # TS: Yes but for testing on windows / osx it will not work.
 
-qgisprefix = '/usr'
+qgisprefix = '/usr/'
 sys.path.insert(0, qgisprefix + '/share/qgis/python')
 sys.path.insert(1, qgisprefix + '/share/qgis/python/plugins')
 sys.path.insert(2, qgisprefix + '/local/share/qgis/python')
