@@ -101,7 +101,7 @@ class MapTest(unittest.TestCase):
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
             414589,  # Slackware64 14.0
-            416796,  # Linux Mint 14_64
+            143046,  # Linux Mint 14_64
             412911,  # Windows 7 64
             142355,  # UB 12.04 Jenkins
         ]
@@ -142,7 +142,7 @@ class MapTest(unittest.TestCase):
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
             367934,  # Slackware64 14.0
-            390100,  # Linux Mint 14_64
+            81415,  # Linux Mint 14_64
             386188,  # Windows 7 64bit
             80725,   # Jenkins ub 12.04
         ]
