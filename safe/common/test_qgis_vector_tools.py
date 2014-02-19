@@ -38,6 +38,7 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
 from qgis_vector_tools import (
     points_to_rectangles,
     union_geometry,
+    create_layer,
     split_by_polygon)
 
 
@@ -101,6 +102,30 @@ class TestQGISVectorTools(unittest.TestCase):
         self.assertAlmostEquals(geom.area(), 1.5*dx * 1.5*dy)
         self.assertTrue(geom.isMultipart())
     test_union_geometry.slow = False
+
+    def test_create_layer(self):
+        """Test create layer work"""
+
+        # Lines
+        line_layer = QgsVectorLayer(
+            self.line_before + '.shp', 'test', 'ogr')
+        new_layer = create_layer(line_layer)
+        self.assertEquals(new_layer.geometryType(), line_layer.geometryType())
+        self.assertEquals(new_layer.crs(), line_layer.crs())
+        fields = line_layer.dataProvider().fields()
+        new_fields = new_layer.dataProvider().fields()
+        self.assertEquals(new_fields.toList(), fields.toList())
+
+        # Polygon
+        polygon_layer = QgsVectorLayer(
+            self.polygon_base + '.shp', 'test', 'ogr')
+        new_layer = create_layer(polygon_layer)
+        self.assertEquals(new_layer.geometryType(), polygon_layer.geometryType())
+        self.assertEquals(new_layer.crs(), polygon_layer.crs())
+        fields = polygon_layer.dataProvider().fields()
+        new_fields = new_layer.dataProvider().fields()
+        self.assertEquals(new_fields.toList(), fields.toList())
+
 
     def test_split_by_polygon(self):
         """Test split_by_polygon work"""

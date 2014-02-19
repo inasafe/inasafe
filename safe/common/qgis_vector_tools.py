@@ -104,6 +104,44 @@ def union_geometry(vector, request=QgsFeatureRequest()):
                 pass
     return result_geometry
 
+def create_layer(vector):
+    """Create empty layer.
+
+    The CRS and Geometry Type of new layer are the same as of vector layer.
+    Attributes of the layer are copied from vector.
+
+    :param vector:  Vector layer
+    :type vector:   QgsVectorLayer
+
+    :returns: Emply vector layer (stored in memory)
+    :rtype: QgsVectorLayer
+    """
+    crs = vector.crs().toWkt()
+    if vector.geometryType() == 0:
+        msg = "Points cant' be split"
+        raise WrongDataTypeException(msg)
+    elif vector.geometryType() == 1:
+        uri = 'LineString?crs=' + crs
+    elif vector.geometryType() == 2:
+        uri = 'Polygon?crs=' + crs
+    else:
+        msg = "Received unexpected type of layer geometry: %s" \
+              % (vector.geometryType(),)
+        raise WrongDataTypeException(msg)
+
+    result_layer = QgsVectorLayer(uri, 'intersected', 'memory')
+    result_provider = result_layer.dataProvider()
+    result_layer.startEditing()
+
+    # Copy fields from vector
+    vector_provider = vector.dataProvider()
+    fields = vector_provider.fields()
+    result_provider.addAttributes(fields.toList())
+
+    result_layer.commitChanges()
+
+    return result_layer
+
 
 def split_by_polygon(
         vector,
@@ -154,36 +192,22 @@ def split_by_polygon(
         return new_attributes
 
     # Create layer to store the splitted objects
-    crs = vector.crs().toWkt()
-    if vector.geometryType() == 0:
-        msg = "Points cant' be split"
-        raise WrongDataTypeException(msg)
-    elif vector.geometryType() == 1:
-        uri = 'LineString?crs=' + crs
-    elif vector.geometryType() == 2:
-        uri = 'Polygon?crs=' + crs
-    else:
-        msg = "Received unexpected type of layer geometry: %s" \
-              % (vector.geometryType(),)
-        raise WrongDataTypeException(msg)
-
-    result_layer = QgsVectorLayer(uri, 'intersected', 'memory')
+    result_layer =  create_layer(vector)
     result_provider = result_layer.dataProvider()
-    result_layer.startEditing()
-    # Copy fields from vector
-    vector_provider = vector.dataProvider()
-    fields = vector_provider.fields()
-    result_provider.addAttributes(fields.toList())
+    fields = result_provider.fields()
+
     # If target_field does not exist, add it:
     new_field_added = False
     if mark_value is not None:
         target_field = mark_value[0]
         if fields.indexFromName(target_field) == -1:
+            result_layer.startEditing()
             result_provider.addAttributes(
                 [QgsField(target_field, QVariant.Int)])
             new_field_added = True
+            result_layer.commitChanges()
 
-    result_layer.commitChanges()
+
     target_value = None
 
     if mark_value is not None:
