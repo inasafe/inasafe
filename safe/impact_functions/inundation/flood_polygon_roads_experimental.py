@@ -20,7 +20,7 @@ from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_vector_tools import split_by_polygon
+from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -162,9 +162,15 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 different extent.''' % (affected_value, ))
             raise GetDataError(message)
 
+        # Clip exposure by the extent
+        extent_as_polygon = QgsGeometry().fromRect(extent)
+        line_layer = clip_by_polygon(
+            exposure,
+            extent_as_polygon
+        )
         # Find inundated roads, mark them
         line_layer = split_by_polygon(
-            exposure,
+            line_layer,
             hazard_poly,
             request,
             mark_value=(target_field, 1))

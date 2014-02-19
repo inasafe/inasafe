@@ -21,7 +21,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.common.qgis_raster_tools import polygonize, clip_raster
-from safe.common.qgis_vector_tools import split_by_polygon
+from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
@@ -146,12 +146,25 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 extent.''' % (threshold_min, ))
             raise GetDataError(message)
 
+        # Clip exposure by the extent
+        extent_as_polygon = QgsGeometry().fromRect(extent)
+        line_layer = clip_by_polygon(
+            E,
+            extent_as_polygon
+        )
         # Find inundated roads, mark them
         line_layer = split_by_polygon(
-            E,
+            line_layer,
             flooded_polygon,
             request,
             mark_value=(target_field, 1))
+
+        # Find inundated roads, mark them
+        # line_layer = split_by_polygon(
+        #     E,
+        #     flooded_polygon,
+        #     request,
+        #     mark_value=(target_field, 1))
         target_field_index = line_layer.dataProvider().\
             fieldNameIndex(target_field)
 
