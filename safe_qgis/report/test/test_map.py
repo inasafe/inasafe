@@ -102,7 +102,7 @@ class MapTest(unittest.TestCase):
             427172,  # Ubuntu 13.10_64
             414589,  # Slackware64 14.0
             143046,  # Linux Mint 14_64
-            412911,  # Windows 7 64
+            150412,  # Windows 7 64
             142355,  # UB 12.04 Jenkins
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
@@ -143,7 +143,7 @@ class MapTest(unittest.TestCase):
             400563,  # Ubuntu 13.10_64
             367934,  # Slackware64 14.0
             81415,  # Linux Mint 14_64
-            386188,  # Windows 7 64bit
+            88779,  # Windows 7 64bit
             80725,   # Jenkins ub 12.04
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
