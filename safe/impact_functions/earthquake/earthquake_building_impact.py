@@ -232,5 +232,6 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 .statistics_classes},
             style_info=style_info)
 
-        LOGGER.debug('Created vector layer  %s' % str(result_layer))
+        msg = 'Created vector layer %s' % str(result_layer)
+        LOGGER.debug(msg)
         return result_layer

@@ -43,7 +43,7 @@ class PluginMount(type):
 # pylint: enable=W0613,C0203
 
 
-class FunctionProvider:
+class FunctionProvider(object):
     """Mount point for impact_functions.
 
     Plugins implementing this reference should provide the following method:
