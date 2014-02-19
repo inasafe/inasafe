@@ -14,12 +14,15 @@ for SITE in $SITES
 do
 	PYTHONPATH=$PYTHONPATH:$SITE
 done
-export PYTHONPATH
+
 
 
 QGISPATH=`find /usr/local/ -name QGIS.app`
 export QGIS_PREFIX_PATH=${QGISPATH}/contents/MacOS
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
+# Needed for importing processing plugin
+PYTHONPATH=$PYTHONPATH:${QGIS_PREFIX_PATH}/share/qgis/python/plugins
+export PYTHONPATH
 
 export QGIS_DEBUG=0
 export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log
