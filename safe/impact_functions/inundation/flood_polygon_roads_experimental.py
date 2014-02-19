@@ -99,11 +99,12 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         hazard = hazard.get_layer()
         hazard_provider = hazard.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(affected_field)
+        #see #818: should still work if there is no valid attribute
         if affected_field_index == -1:
             message = tr('''Parameter "Affected Field"(='%s')
                 is not present in the attribute table of the hazard layer.
                 ''' % (affected_field, ))
-            raise GetDataError(message)
+            #raise GetDataError(message)
 
         LOGGER.info('Affected field: %s' % affected_field)
         LOGGER.info('Affected field index: %s' % affected_field_index)
@@ -118,10 +119,11 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         #   1) Filter from hazard inundated features
         #   2) Mark roads as inundated (1) or not inundated (0)
 
-        affected_field_type = \
-            hazard_provider.fields()[affected_field_index].typeName()
-        if affected_field_type in ['Real', 'Integer']:
-            affected_value = float(affected_value)
+        if affected_field_index != -1:
+            affected_field_type = \
+                hazard_provider.fields()[affected_field_index].typeName()
+            if affected_field_type in ['Real', 'Integer']:
+                affected_value = float(affected_value)
 
         #################################
         #           REMARK 1
@@ -138,8 +140,9 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         hazard_poly = None
         for feature in hazard_features:
             attributes = feature.attributes()
-            if attributes[affected_field_index] != affected_value:
-                continue
+            if affected_field_index != -1:
+                if attributes[affected_field_index] != affected_value:
+                    continue
             if hazard_poly is None:
                 hazard_poly = QgsGeometry(feature.geometry())
             else:
