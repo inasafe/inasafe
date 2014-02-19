@@ -137,11 +137,50 @@ def create_layer(vector):
     vector_provider = vector.dataProvider()
     fields = vector_provider.fields()
     result_provider.addAttributes(fields.toList())
-
     result_layer.commitChanges()
 
     return result_layer
 
+
+def clip_by_polygon(
+        vector,
+        polygon):
+    """Clip vector layer using polygon.
+
+    Return part of the objects that lie within the polygon.
+
+    :param vector:  Vector layer
+    :type vector:   QgsVectorLayer
+
+    :param polygon: Clipping polygon
+    :type polygon:  QgsGeometry
+
+    :returns: Vector layer with split geometry
+    :rtype: QgsVectorLayer
+    """
+    result_layer = create_layer(vector)
+    result_layer.startEditing()
+    for feature in vector.getFeatures():
+        geom = feature.geometry()
+        attributes = feature.attributes()
+        geometry_type = geom.type()
+        if polygon.intersects(geom):
+            # Find parts of initial_geom, intersecting
+            # with the polygon, then mark them if needed
+            intersection = QgsGeometry(
+                geom.intersection(polygon)
+            ).asGeometryCollection()
+
+            for g in intersection:
+                if g.type() == geometry_type:
+                    feature = QgsFeature()
+                    feature.setGeometry(g)
+                    feature.setAttributes(attributes)
+                    _ = result_layer.dataProvider().addFeatures([feature])
+
+    result_layer.commitChanges()
+    result_layer.updateExtents()
+    return result_layer
 
 def split_by_polygon(
         vector,
@@ -192,7 +231,7 @@ def split_by_polygon(
         return new_attributes
 
     # Create layer to store the splitted objects
-    result_layer =  create_layer(vector)
+    result_layer = create_layer(vector)
     result_provider = result_layer.dataProvider()
     fields = result_provider.fields()
 
@@ -206,8 +245,6 @@ def split_by_polygon(
                 [QgsField(target_field, QVariant.Int)])
             new_field_added = True
             result_layer.commitChanges()
-
-
     target_value = None
 
     if mark_value is not None:
@@ -219,6 +256,7 @@ def split_by_polygon(
                 'Field not found for %s' % target_field)
 
     # Start split procedure
+    result_layer.startEditing()
     for initial_feature in vector.getFeatures(request):
         initial_geom = initial_feature.geometry()
         attributes = initial_feature.attributes()
@@ -244,7 +282,7 @@ def split_by_polygon(
                     feature = _set_feature(g, new_attributes)
                     _ = result_layer.dataProvider().addFeatures([feature])
 
-            # Find parts of the initial_geom that do not lies in the polygon
+            # Find parts of the initial_geom that do not lie in the polygon
             diff_geom = QgsGeometry(
                 initial_geom.symDifference(polygon)
             ).asGeometryCollection()

@@ -39,6 +39,7 @@ from qgis_vector_tools import (
     points_to_rectangles,
     union_geometry,
     create_layer,
+    clip_by_polygon,
     split_by_polygon)
 
 
@@ -120,12 +121,46 @@ class TestQGISVectorTools(unittest.TestCase):
         polygon_layer = QgsVectorLayer(
             self.polygon_base + '.shp', 'test', 'ogr')
         new_layer = create_layer(polygon_layer)
-        self.assertEquals(new_layer.geometryType(), polygon_layer.geometryType())
+        self.assertEquals(
+            new_layer.geometryType(),
+            polygon_layer.geometryType()
+        )
         self.assertEquals(new_layer.crs(), polygon_layer.crs())
         fields = polygon_layer.dataProvider().fields()
         new_fields = new_layer.dataProvider().fields()
         self.assertEquals(new_fields.toList(), fields.toList())
 
+    def test_clip_by_polygon(self):
+        """Test clip_by_polygon work"""
+        line_before = QgsVectorLayer(
+            self.line_before + '.shp', 'test', 'ogr')
+        lines = QgsVectorLayer(
+            self.line_after + '.shp', 'test', 'ogr')
+        polygon_layer = QgsVectorLayer(
+            self.polygon_base + '.shp', 'test', 'ogr')
+
+        # Only one polygon is stored in the layer
+        for feature in polygon_layer.getFeatures():
+            polygon = feature.geometry()
+
+        clipped_lines = clip_by_polygon(
+            line_before,
+            polygon)
+
+        # Test the lines is not multipart
+        for feature in clipped_lines.getFeatures():
+            self.assertFalse(feature.geometry().isMultipart())
+
+        # Lines with flooded=1 lie within the polygon
+        for feature in clipped_lines.getFeatures():
+            found = False
+            for expected in lines.getFeatures():
+                if (expected.attributes()[2] == 1) and \
+                   (feature.geometry().isGeosEqual(expected.geometry())):
+                    found = True
+                    break
+            self.assertTrue(found)
+    test_clip_by_polygon.slow = True
 
     def test_split_by_polygon(self):
         """Test split_by_polygon work"""
