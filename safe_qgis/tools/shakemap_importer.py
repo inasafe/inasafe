@@ -22,8 +22,11 @@ __copyright__ += 'Disaster Reduction'
 import logging
 import os
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QFileInfo, pyqtSignature
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
@@ -54,8 +57,8 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         QDialog.__init__(self, parent)
         self.parent = parent
         self.setupUi(self)
-        self.setWindowTitle(self.tr('InaSAFE %s Converter' % get_version()))
-
+        self.setWindowTitle(
+            self.tr('InaSAFE %s Shakemap Converter' % get_version()))
         self.warning_text = set()
         self.on_input_path_textChanged()
         self.on_output_path_textChanged()
@@ -71,11 +74,12 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
         # Set up things for context help
         help_button = self.button_box.button(QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+        help_button.clicked.connect(ShakemapImporter.show_help)
 
         self.show_info()
 
-    def show_help(self):
+    @staticmethod
+    def show_help():
         """Show context help for the converter dialog."""
         show_context_help('converter')
 
@@ -115,6 +119,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
 
         self.webView.setHtml(string)
 
+    # noinspection PyPep8Naming
     def on_output_path_textChanged(self):
         """Action when output file name is changed.
         """
@@ -187,16 +192,19 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         input_path = str(self.input_path.text())
         output_path = str(self.output_path.text())
         if not output_path.endswith('.tif'):
-            # noinspection PyArgumentList
+            # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QMessageBox.warning(
-                self.parent, self.tr('InaSAFE'),
+                self,
+                self.tr('InaSAFE'),
                 (self.tr('Output file name must be tif file')))
         if not os.path.exists(input_path):
-            # noinspection PyArgumentList
+            # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QMessageBox.warning(
-                self.parent, self.tr('InaSAFE'),
+                self,
+                self.tr('InaSAFE'),
                 (self.tr('Input file is not exist')))
             return
+
         if self.nearest_mode.isChecked():
             my_algorithm = 'nearest'
         else:

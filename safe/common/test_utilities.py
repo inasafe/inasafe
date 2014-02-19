@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 import os
-from utilities import (
+from safe.common.utilities import (
     get_significant_decimal,
     humanize_class,
     format_decimal,

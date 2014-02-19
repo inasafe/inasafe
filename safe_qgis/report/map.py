@@ -127,7 +127,7 @@ class Map():
         canvas = self.iface.mapCanvas()
         renderer = canvas.mapRenderer()
         self.composition = QgsComposition(renderer)
-        self.composition.setPlotStyle(QgsComposition.Print)  # or preview
+        self.composition.setPlotStyle(QgsComposition.Preview)  # or preview
         self.composition.setPrintResolution(self.page_dpi)
         self.composition.setPrintAsRaster(True)
 
@@ -232,8 +232,8 @@ class Map():
             'disclaimer': self.disclaimer
         }
         LOGGER.debug(substitution_map)
-        load_ok = self.composition.loadFromTemplate(document,
-                                                    substitution_map)
+        load_ok = self.composition.loadFromTemplate(
+            document, substitution_map)
         if not load_ok:
             raise ReportCreationError(
                 self.tr('Error loading template %s') %
