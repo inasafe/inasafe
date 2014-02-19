@@ -27,10 +27,10 @@ import sys
 
 # DK: Yes, it is very bad, I agree.
 # (but I hope, it is not BAD: the prefixes are used in testing modules only,
-#   they are not used when INASAFE is running as qgis plugin)
-# I'll fix it.
+#   they are not used when INASAFE is running as qgis plugin). I'll fix it.
+# TS: Yes but for testing on windows / osx it will not work.
 
-qgisprefix = '/usr'
+qgisprefix = '/usr/'
 sys.path.insert(0, qgisprefix + '/share/qgis/python')
 sys.path.insert(1, qgisprefix + '/share/qgis/python/plugins')
 sys.path.insert(2, qgisprefix + '/local/share/qgis/python')
@@ -42,6 +42,7 @@ sys.path.insert(3, qgisprefix + '/local/share/qgis/python/plugins')
 from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+# Note this is the QGIS processing (aka Sextante) lib being imported.
 import processing
 #from safe import postprocessors
 

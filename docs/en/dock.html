@@ -81,6 +81,23 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
 
 <link rel="shortcut icon" href="_static/img/favicon.ico">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
@@ -94,6 +111,7 @@
 
   </head>
   <body>
+
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -267,7 +285,7 @@ question form</em> button.</p>
 to the user. Once an impact scenario has been run (see next section below),
 a summary table will be shown.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/scenario-results.png"><img alt="Scenario results" src="_images/scenario-results.png" style="width: 392.5px; height: 274.0px;" /></a>
+<a class="reference internal image-reference" href="_images/scenario-results.png"><img alt="Scenario results" src="_images/scenario-results.png" style="width: 640.0px; height: 363.0px;" /></a>
 <p class="caption">Processed scenario with loaded and shown results</p>
 </div>
 <p>If you select an <strong>impact layer</strong> (i.e. a layer that was produced using an
@@ -398,20 +416,28 @@ in the buttons area. This will open an <em class="guilabel">Impact report</em> d
 <blockquote>
 <div><ul class="simple">
 <li><em class="guilabel">Area to print</em> group: allows to customize extent of the report
-map. There are two options available. Choose <em class="guilabel">Current extent</em> if
-current canvas extent represents necessary area. <em class="guilabel">Analysis extent</em>
-will set extent of the report map to impact layer extent.</li>
+map.
+There are two options available.
+Choose <em class="guilabel">Current extent</em> if current canvas extent represents
+necessary area.
+<em class="guilabel">Analysis extent</em> will set extent of the report map to impact
+layer extent.</li>
 <li><em class="guilabel">Template to use</em> group: here you can select desired template for
-your report. In combobox listed all templates bundled with plugin plus
-templates from user-defined template directory (see <a class="reference internal" href="options.html#toolbar-options"><em>Options</em></a>
-for information how to set templates directory). It is also possible to
-select custom template from any location: just activate radiobutton under
-combobox and provide path to template using <em class="guilabel">...</em> button.</li>
-<li>buttons area: contains four buttons. <em class="guilabel">Open PDF</em> button used to
-generate report and export it in PDF format. Resulting file(s) will be
-opened in your default PDF viewer. <em class="guilabel">Open composer</em> used when you
-need to adjust generated report before printing. In this case report will be
-opened in QGIS composer and you can edit it as needed.</li>
+your report.
+In combobox listed all templates bundled with plugin plus templates from
+user-defined template directory (see <a class="reference internal" href="options.html#toolbar-options"><em>Options</em></a> for
+information how to set templates directory).
+It is also possible to select custom template from any location: just
+activate radiobutton under combobox and provide path to template using
+<em class="guilabel">...</em> button.</li>
+<li>buttons area: contains four buttons.
+<em class="guilabel">Open PDF</em> button used to generate report and export it in PDF
+format.
+Resulting file(s) will be opened in your default PDF viewer.
+<em class="guilabel">Open composer</em> used when you need to adjust generated report
+before printing.
+In this case report will be opened in QGIS composer and you can edit it as
+needed.</li>
 </ul>
 </div></blockquote>
 </div>
@@ -436,7 +462,8 @@ opened in QGIS composer and you can edit it as needed.</li>
             This document is licensed under a
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
             <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
-            Copyright 2013, BNPB/Australian Government/World Bank.
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
         </div>
     </div>
 

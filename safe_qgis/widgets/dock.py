@@ -352,6 +352,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         registry = QgsMapLayerRegistry.instance()
         registry.layersWillBeRemoved.disconnect(self.get_layers)
         registry.layersAdded.disconnect(self.get_layers)
+        registry.layersRemoved.disconnect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
@@ -1998,6 +1999,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.load_template()
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
+            # Zoom to Full Extent
+            number_pages = self.composition.numPages()
+            if number_pages > 0:
+                height = \
+                    self.composition.paperHeight() * number_pages + \
+                    self.composition.spaceBetweenPages() * (number_pages - 1)
+                self.composer.fitInView(
+                    0, 0,
+                    self.composition.paperWidth() + 1,
+                    height + 1,
+                    QtCore.Qt.KeepAspectRatio)
 
         self.hide_busy()
 
@@ -2038,18 +2050,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         start_path = os.path.dirname(scenario_path)
         try:
-            relative_expsosure_path = os.path.relpath(
+            relative_exposure_path = os.path.relpath(
                 exposure_path, start_path)
         except ValueError, e:
             LOGGER.info(e.message)
-            relative_expsosure_path = exposure_path
+            relative_exposure_path = exposure_path
         try:
             relative_hazard_path = os.path.relpath(hazard_path, start_path)
         except ValueError, e:
             LOGGER.info(e.message)
             relative_hazard_path = hazard_path
 
-        return relative_expsosure_path, relative_hazard_path
+        return relative_exposure_path, relative_hazard_path
 
     def save_current_scenario(self, scenario_file_path=None):
         """Save current scenario to a text file.
@@ -2131,8 +2143,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if aggregation_layer is not None:
             aggregation_path = str(aggregation_layer.publicSource())
-            relative_aggregation_path = os.path.relpath(
-                aggregation_path, file_name)
+            try:
+                relative_aggregation_path = os.path.relpath(
+                    aggregation_path, os.path.dirname(file_name))
+            except ValueError, e:
+                LOGGER.info(e.message)
+                relative_aggregation_path = aggregation_path
             parser.set(title, 'aggregation', relative_aggregation_path)
 
         if file_name is None or file_name == '':

@@ -751,10 +751,8 @@ class TestDock(TestCase):
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(2366) in result, message)
 
-    @unittest.expectedFailure
-    # FIXME (MB) check 306 and see what behaviour timlinux wants
     def test_issue306(self):
-        """Issue306: CANVAS doesnt add generate layers in tests
+        """Issue306: CANVAS doesnt add generated layers in tests
         See https://github.com/AIFDR/inasafe/issues/306"""
 
         result, message = setup_scenario(
@@ -764,11 +762,12 @@ class TestDock(TestCase):
             function='HKVtest',
             function_id='HKVtest')
         self.assertTrue(result, message)
-
+        LOGGER.info("Canvas list before:\n%s" % canvas_list())
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent()
         before_count = len(CANVAS.layers())
+        #print 'Before count %s' % before_count
 
         # Press RUN
         DOCK.accept()
@@ -778,7 +777,9 @@ class TestDock(TestCase):
         LOGGER.info("Canvas list after:\n%s" % canvas_list())
         message = ('Layer was not added to canvas (%s before, %s after)' % (
             before_count, after_count))
+        #print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
+
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated."""

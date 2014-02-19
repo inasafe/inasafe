@@ -43,7 +43,7 @@ class PluginMount(type):
 # pylint: enable=W0613,C0203
 
 
-class FunctionProvider:
+class FunctionProvider(object):
     """Mount point for impact_functions.
 
     Plugins implementing this reference should provide the following method:
@@ -80,14 +80,18 @@ def default_minimum_needs():
     return minimum_needs
 
 
-def evacuated_population_weekly_needs(population,
-                                      minimum_needs=False,
-                                      human_names=False):
+def evacuated_population_weekly_needs(
+        population,
+        minimum_needs=False,
+        human_names=False):
     """Calculate estimated needs using BNPB Perka 7/2008 minimum bantuan.
-
 
     :param population: The number of evacuated population.
     :type: int, float
+
+    :param human_names: A flag whether to use human names for minimum needs
+        items or not
+    :type human_names: bool
 
     :param minimum_needs: Ratios to use when calculating minimum needs.
         Defaults to perka 7 as described in assumptions below.

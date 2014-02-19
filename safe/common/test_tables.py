@@ -20,7 +20,7 @@ __copyright__ += 'Disaster Reduction'
 import os
 import tempfile
 import unittest
-from tables import Table, TableRow, TableCell, Link
+from safe.common.tables import Table, TableRow, TableCell, Link
 
 
 class TablesTest(unittest.TestCase):

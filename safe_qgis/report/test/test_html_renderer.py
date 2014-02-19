@@ -139,12 +139,12 @@ class HtmlRendererTest(unittest.TestCase):
             20605,  # as rendered on linux ub 13.04 64
             20601,  # as rendered on linux ub 13.10 64
             14220,  # as rendered on linux ub 13.04 64 MB
-            21527,  # as rendered on Jenkins post 22 June 2013
+            21287,  # as rendered on Jenkins post 19 February 2014
             377191,  # as rendered on OSX
-            252699L,  # as rendered on Windows 7 64 bit
-            16503L,  # as rendered on Windows 7 64 bit Ultimate i3
+            16163L,  # as rendered on Windows 7 64 bit Ultimate i3
             251782L,  # as rendered on Windows 8 64 bit amd
             21491,  # as rendered on Slackware64 14.0
+            21280,  # as rendered on Linux Mint 14_64
         ]
         print 'Output pdf to %s' % path
         self.assertIn(size, expected_sizes)

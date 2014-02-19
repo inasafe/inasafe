@@ -8,7 +8,7 @@ import sys
 import logging
 from numpy.testing import Tester
 
-from numerics import axes_to_points
+from safe.common.numerics import axes_to_points
 from safe.common.version import get_version
 
 
