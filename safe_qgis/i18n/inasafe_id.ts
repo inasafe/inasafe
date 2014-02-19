@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -412,7 +411,7 @@
     <message>
         <location filename="aggregator.py" line="466"/>
         <source>%s is %s but it should be either vector or raster</source>
-        <translation>%1 merupakan %2 tetapi itu seharusnya berupa layer vektor ataupun raster</translation>
+        <translation>%s merupakan %s tetapi itu seharusnya berupa layer vektor ataupun raster</translation>
     </message>
     <message>
         <location filename="aggregator.py" line="565"/>
@@ -427,7 +426,7 @@
     <message>
         <location filename="aggregator.py" line="958"/>
         <source>Modifying %s to avoid intersections with the aggregation layer</source>
-        <translation>Memodifikasi %1 untuk menghindari pertampalan dengan layer agregasinya</translation>
+        <translation>Memodifikasi %s untuk menghindari pertampalan dengan layer agregasinya</translation>
     </message>
     <message>
         <location filename="aggregator.py" line="1366"/>
@@ -898,7 +897,7 @@
     <message>
         <location filename="dock.py" line="1315"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
-        <translation>Layer dampak %1 bukan berupa layer raster ataupun vektor</translation>
+        <translation>Layer dampak %s bukan berupa layer raster ataupun vektor</translation>
     </message>
     <message>
         <location filename="dock.py" line="1381"/>
@@ -1699,7 +1698,7 @@ ke
     <message>
         <location filename="keywords_dialog_base.py" line="253"/>
         <source>InaSAFE - Keyword Editor</source>
-        <translation>InaSAFE - Editor kata kunci (keyword)</translation>
+        <translation>InaSAFE - Editor Kata Kunci</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="254"/>
@@ -2164,7 +2163,7 @@ Pesan: %s</translation>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.Lucida Grande UI&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Lucida Grande UI'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -2364,7 +2363,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="224"/>
         <source>InaSAFE Keyword Editor</source>
-        <translation>InaSAFE Editor kata kunci (Keyword Editor)</translation>
+        <translation>Editor Kata Kunci InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="230"/>
@@ -2405,16 +2404,6 @@ p, li { white-space: pre-wrap; }
         <location filename="plugin.py" line="50"/>
         <source>Please restart QGIS to use this plugin.</source>
         <translation>Silahkan restart QGIS dengan menggunakan plugin ini.</translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="291"/>
-        <source>InaSAFE Converter</source>
-        <translation>Tool Konversi InaSAFE</translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="296"/>
-        <source>Open InaSAFE Converter</source>
-        <translation>Buka InaSAFE Converter</translation>
     </message>
     <message>
         <location filename="plugin.py" line="306"/>
@@ -2460,6 +2449,16 @@ p, li { white-space: pre-wrap; }
         <location filename="plugin.py" line="501"/>
         <source>The layer you have selected cannot be used for analysis because its data type is unsupported.</source>
         <translation>Layer yang telah Anda pilih tidak dapat digunakan untuk analisis karena tipe datanya tidak didukung.</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="291"/>
+        <source>InaSAFE Shakemap Converter</source>
+        <translation>Tool Konversi Shakemap InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="296"/>
+        <source>Open InaSAFE Shakemap Converter</source>
+        <translation>Buka Tool Konversi Shakemap InaSAFE</translation>
     </message>
 </context>
 <context>
