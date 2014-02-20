@@ -51,8 +51,7 @@ from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
-    create_memory_layer,
-    extent_to_geo_array)
+    create_memory_layer)
 from safe_qgis.utilities.styling import set_vector_graduated_style
 from safe_qgis.safe_interface import (
     temp_dir,
@@ -918,20 +917,23 @@ class Aggregator(QtCore.QObject):
             request = QgsFeatureRequest().\
                 setSubsetOfAttributes([agg_attribute_index])
             agg_attribute_dict = {}
-            for id, feat in enumerate(self.layer.getFeatures(request)):
-                name = feat.attributes()[0]
+            for feature_id, feature in enumerate(
+                    self.layer.getFeatures(request)):
+                name = feature.attributes()[0]
                 if name in agg_attribute_dict:  # The name isn't unique
-                    name += str(id)     # Add a number to make unique key
-                agg_attribute_dict[name] = id
+                    name += str(feature_id)     # Add a number to make unique key
+                agg_attribute_dict[name] = feature_id
             # Total impacted length in the aggregation polygons:
             total = {
-                id: 0 for id, __ in enumerate(self.layer.getFeatures(request))
+                feature_id: 0 for feature_id, __ in enumerate(
+                self.layer.getFeatures(request))
             }
 
             # Create slots for dicts
             self.impact_layer_attributes = []
             for i in range(len(agg_attribute_dict)):
                 self.impact_layer_attributes.append([])
+                _ = i
 
             # Create list of line objects that are covered by
             # aggregation polygons (a list of dicts for a polygon)
@@ -945,8 +947,8 @@ class Aggregator(QtCore.QObject):
                 setFlags(QgsFeatureRequest.NoGeometry)
             agg_attribute_index = impact_layer_splits.dataProvider().\
                 fieldNameIndex(agg_attribute)
-            for feat in impact_layer_splits.getFeatures(request):
-                line_attributes = feat.attributes()
+            for feature in impact_layer_splits.getFeatures(request):
+                line_attributes = feature.attributes()
                 polygon_name = line_attributes[agg_attribute_index]
                 line_attribute_dict = \
                     feature_attributes_as_dict(
@@ -1067,6 +1069,7 @@ class Aggregator(QtCore.QObject):
         if self._sum_field_name is None:
             msg = "Field name for summary aggregation information" \
                   "is not set."
+            _ = msg
             raise InvalidParameterError
         return self._sum_field_name
 

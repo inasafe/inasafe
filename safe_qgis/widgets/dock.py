@@ -872,12 +872,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        (extra_exposure_keywords,
-         buffered_geo_extent,
-         cell_size,
-         exposure_layer,
-         geo_extent,
-         hazard_layer) = self.clip_parameters
+        buffered_geo_extent = self.clip_parameter[1]
+        exposure_layer = self.clip_parameter[3]
+        hazard_layer = self.clip_parameter[5]
 
         if self.calculator.requires_clipping():
             # The impact function uses SAFE layers,
@@ -1492,6 +1489,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
+        Note from Tim: We should return an dict with properties here
+        rather than a hard to interpret tuple.
+
         :returns: A tuple consisting of:
 
             * extra_exposure_keywords: dict - any additional keywords that
@@ -1929,9 +1929,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
-        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
-        if disclaimer != '':
-            print_map.set_disclaimer(disclaimer)
+        disclaimer_text = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        if disclaimer_text != '':
+            print_map.set_disclaimer(disclaimer_text)
 
         print_map.set_template(template_path)
 
