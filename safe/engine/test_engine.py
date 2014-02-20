@@ -1869,7 +1869,7 @@ class Test_Engine(unittest.TestCase):
                 assert interpolated_depth > 2.675
 
                 # This is a characterisation test for bilinear interpolation
-                assert numpy.allclose(interpolated_depth, 3.62477204455,
+                assert numpy.allclose([interpolated_depth], [3.62477204455],
                                       rtol=1.0e-12, atol=1.0e-12)
 
             # Check that interpolated points are within range
