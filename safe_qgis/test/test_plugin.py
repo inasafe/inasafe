@@ -49,7 +49,7 @@ class PluginTest(unittest.TestCase):
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         myPlugin = Plugin(myIface)
-        myPlugin.setup_i18n('id')
+        myPlugin.change_i18n('id')
         myTranslation = myPlugin.tr(myUntranslatedString)
         message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     (myUntranslatedString, myTranslation, myExpectedString)
@@ -63,7 +63,7 @@ class PluginTest(unittest.TestCase):
         myCanvas = QgsMapCanvas(PARENT)
         myIface = QgisInterface(myCanvas)
         myPlugin = Plugin(myIface)
-        myPlugin.setup_i18n('id')  # indonesian
+        myPlugin.change_i18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
         myTranslation = safeTr('A volcano eruption')
         message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
@@ -106,7 +106,7 @@ class PluginTest(unittest.TestCase):
             except NameError:
                 pass
         myPlugin = Plugin(myIface)
-        myPlugin.setup_i18n('af')  # afrikaans
+        myPlugin.change_i18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
         from safe_qgis.safe_interface import getSafeImpactFunctions
