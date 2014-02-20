@@ -289,11 +289,17 @@ def get_free_memory_osx():
         # 6456M used, 1735M free.
     except OSError:
         raise OSError
-    if float(platform.mac_ver()[0]) > 10.8:
+    platform_version = platform.mac_ver()[0]
+    # Might get '10.9.1' so strop off the last no
+    parts = platform_version.split('.')
+    platform_version = parts[0] + '.' + parts[1]
+    platform_version = float(platform_version)
+
+    if platform_version > 10.8:
         stdout_list = stdout_string.split(',')
         unused = stdout_list[1].replace('M unused', '').replace(' ', '')
+        unused = unused.replace('.', '')
         return int(unused)
-
     else:
         stdout_list = stdout_string.split(',')
         inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
