@@ -67,8 +67,8 @@ class TestQGISRasterTools(unittest.TestCase):
             # Move point in center of the pixels and get the value
             value = self.provider.identify(
                 QgsPoint(
-                    point.x() + 0.5*self.x_res,
-                    point.y() - 0.5*self.y_res),
+                    point.x() + 0.5 * self.x_res,
+                    point.y() - 0.5 * self.y_res),
                 QgsRaster.IdentifyFormatValue,
                 self.extent)
             value, _ = value.results()[1].toDouble()
@@ -84,8 +84,8 @@ class TestQGISRasterTools(unittest.TestCase):
             # Move point in center of the pixels and get the value
             value = self.provider.identify(
                 QgsPoint(
-                    point.x() + 0.5*self.x_res,
-                    point.y() - 0.5*self.y_res),
+                    point.x() + 0.5 * self.x_res,
+                    point.y() - 0.5 * self.y_res),
                 QgsRaster.IdentifyFormatValue,
                 self.extent)
             value, _ = value.results()[1].toDouble()

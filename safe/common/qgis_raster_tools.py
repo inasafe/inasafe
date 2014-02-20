@@ -58,8 +58,8 @@ def _get_pixel_coordinates(extent, width, height, row, col):
     x_res = (extent.xMaximum() - extent.xMinimum()) / width
     y_res = (extent.yMaximum() - extent.yMinimum()) / height
 
-    outx = xmin + col*x_res
-    outy = ymax - row*y_res
+    outx = xmin + col * x_res
+    outy = ymax - row * y_res
     return outx, outy
 
 

@@ -104,6 +104,7 @@ def union_geometry(vector, request=QgsFeatureRequest()):
                 pass
     return result_geometry
 
+
 def create_layer(vector):
     """Create empty layer.
 
@@ -181,6 +182,7 @@ def clip_by_polygon(
     result_layer.commitChanges()
     result_layer.updateExtents()
     return result_layer
+
 
 def split_by_polygon(
         vector,
