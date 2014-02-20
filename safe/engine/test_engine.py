@@ -1875,6 +1875,7 @@ class Test_Engine(unittest.TestCase):
                 # safe test is 3.62477202599, while it is 3.62477204455 when
                 # we do single test (computer also needs to rest?). The rtol
                 # and atol was 1.0e-12
+                print 'Interpolated depth is: %f' % interpolated_depth
                 assert numpy.allclose([interpolated_depth], [3.62477204455],
                                       rtol=1.0e-10, atol=1.0e-10)
 

@@ -225,7 +225,7 @@ class ShakeGridConverter(object):
             data_element = data_element[0]
             my_data = data_element.firstChild.nodeValue
             # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
-            my_lonitude_column = 0
+            longitude_column = 0
             my_latitude_column = 1
             my_mmi_column = 4
             self.mmi_data = []
@@ -233,7 +233,7 @@ class ShakeGridConverter(object):
                 if not my_line:
                     continue
                 my_tokens = my_line.split(' ')
-                my_longitude = my_tokens[my_lonitude_column]
+                my_longitude = my_tokens[longitude_column]
                 my_latitude = my_tokens[my_latitude_column]
                 my_mmi = my_tokens[my_mmi_column]
                 my_tuple = (my_longitude, my_latitude, my_mmi)
