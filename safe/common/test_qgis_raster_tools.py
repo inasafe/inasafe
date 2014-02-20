@@ -71,7 +71,7 @@ class TestQGISRasterTools(unittest.TestCase):
                     point.y() - 0.5 * self.y_res),
                 QgsRaster.IdentifyFormatValue,
                 self.extent)
-            value, _ = value.results()[1].toDouble()
+            value = value.results()[1]
             self.assertGreater(value, 1.0)
             self.assertLess(value, 1.5)
 
@@ -88,7 +88,7 @@ class TestQGISRasterTools(unittest.TestCase):
                     point.y() - 0.5 * self.y_res),
                 QgsRaster.IdentifyFormatValue,
                 self.extent)
-            value, _ = value.results()[1].toDouble()
+            value = value.results()[1]
             self.assertGreater(value, 1.1)
     test_pixels_to_points.slow = True
 
