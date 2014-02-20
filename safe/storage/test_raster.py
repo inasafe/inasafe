@@ -21,7 +21,7 @@ from safe.storage.raster import Raster, qgis_imported
 
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    from qgis.core import QgsRasterLayer
+    from qgis.core import QgsRasterLayer, QgsApplication
 
 
 LOGGER = logging.getLogger('InaSAFE')

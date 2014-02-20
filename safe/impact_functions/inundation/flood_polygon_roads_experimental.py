@@ -1,7 +1,9 @@
 # coding=utf-8
 """Polygon flood on roads."""
 import logging
+from PyQt4.QtCore import QVariant
 from qgis.core import (
+    QgsField,
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry,

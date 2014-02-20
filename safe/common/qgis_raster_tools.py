@@ -93,7 +93,7 @@ def pixels_to_points(
 
     if raster.bandCount() != 1:
         msg = "Current version allows using of one-band raster only"
-        raise NotImplementedError(msg)
+        raise NotImplemented(msg)
 
     extent = raster.extent()
     width, height = raster.width(), raster.height()

@@ -1,4 +1,9 @@
+
+from PyQt4.QtCore import QVariant
 from qgis.core import (
+    QgsField,
+    QgsVectorLayer,
+    QgsFeature,
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry,
@@ -112,7 +117,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 # We have found the aligned raster boundary
                 break
             x += x_delta
-            _ = i
 
         y_delta = (ymax - ymin) / H.height()
         y = ymin
