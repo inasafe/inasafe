@@ -146,7 +146,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(my_hazard, my_exposure,
                                                   attribute_name='population')
-        
+
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = my_hazard.get_data()
@@ -215,7 +215,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     try:
                         cat = new_attributes[poly_id][category_title]
                     except KeyError:
-                        cat = new_attributes[poly_id][deprecated_category_title]
+                        cat = new_attributes[poly_id][
+                            deprecated_category_title]
                     categories[cat] += pop
 
                 # Update total
@@ -295,7 +296,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Define classes for legend for flooded population counts
         colours = ['#08FFDA', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        
+
         population_counts = [x['population'] for x in new_attributes]
         classes = create_classes(population_counts, len(colours))
         interval_classes = humanize_class(classes)
