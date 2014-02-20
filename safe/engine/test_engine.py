@@ -1658,7 +1658,7 @@ class Test_Engine(unittest.TestCase):
         V = read_layer(vector_filename)
 
         # Then test that axes and data returned by R are correct
-        x, y = R.get_geometry()  # pylint: disable=W0633,W0632
+        x, y = R.get_geometry()
         msg = 'X axes was %s, should have been %s' % (longitudes, x)
         assert numpy.allclose(longitudes, x), msg
         msg = 'Y axes was %s, should have been %s' % (latitudes, y)
