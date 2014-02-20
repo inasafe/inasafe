@@ -49,10 +49,10 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         ('road_type_field', 'TYPE'),
         # This field of the  hazard layer contains information
         # about inundated areas
-        ('affected_field', 'FLOODPRONE'),
+        ('affected_field', 'affected'),
         # This value in 'affected_field' of the hazard layer
         # marks the areas as inundated
-        ('affected_value', 'YES'),
+        ('affected_value', '1'),
         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
 
