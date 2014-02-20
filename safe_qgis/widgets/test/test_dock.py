@@ -67,8 +67,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_ui_state,
     setup_scenario,
     load_layers,
-    canvas_list,
-    compare_result_to_expected_file)
+    canvas_list)
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.styling import setRasterStyle
@@ -774,28 +773,6 @@ class TestDock(TestCase):
         # Press RUN
         DOCK.accept()
 
-    @unittest.expectedFailure
-    # FIXME (MB) check 306 and see what behaviour timlinux wants
-    def test_issue306(self):
-        """Issue306: CANVAS doesnt add generate layers in tests
-        See https://github.com/AIFDR/inasafe/issues/306"""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='Penduduk Jakarta',
-            function='HKVtest',
-            function_id='HKVtest')
-        assert result, message
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
-        before_count = len(CANVAS.layers())
-
-        # Press RUN
-        DOCK.accept()
-
         # test issue #306
         after_count = len(CANVAS.layers())
         LOGGER.info("Canvas list after:\n%s" % canvas_list())
@@ -1116,7 +1093,6 @@ class TestDock(TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
-
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection

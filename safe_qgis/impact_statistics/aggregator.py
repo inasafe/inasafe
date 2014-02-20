@@ -581,20 +581,6 @@ class Aggregator(QtCore.QObject):
         """
         #TODO (MB) implement line aggregation
 
-        field_map = {}
-        field_index = None
-
-        try:
-            self.target_field = self.read_keywords(
-                impact_layer, 'target_field')
-        except KeywordNotFoundError:
-            message = m.Paragraph(
-                self.tr(
-                    'No "target_field" keyword found in the impact layer %s '
-                    'keywords. The impact function should define this.') % (
-                        impact_layer.name()))
-            LOGGER.debug('Skipping postprocessing due to: %s' % message)
-            self.error_message = message
         if not self._setup_target_field(impact_layer):
             # An unexpected error occurs
             return
@@ -610,7 +596,6 @@ class Aggregator(QtCore.QObject):
                 fields.append(field)
             aggregation_provider.addAttributes(fields)
             self.layer.updateFields()
-
         elif self.statistics_type == 'sum':
             #add the total field to the layer
             aggregation_field = self._sum_field_name()

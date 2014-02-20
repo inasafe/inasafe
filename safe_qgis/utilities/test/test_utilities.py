@@ -49,17 +49,6 @@ class UtilitiesTest(unittest.TestCase):
         """Test tear down."""
         pass
 
-    def test_get_utm_epsg(self):
-        """Test we can get correct epsg code"""
-        # North semisphere
-        self.assertEqual(get_utm_epsg(-178, 10), 32601)
-        self.assertEqual(get_utm_epsg(178, 20), 32660)
-        self.assertEqual(get_utm_epsg(-3, 30), 32630)
-        # South semisphere:
-        self.assertEqual(get_utm_epsg(-178, -10), 32701)
-        self.assertEqual(get_utm_epsg(178, -20), 32760)
-        self.assertEqual(get_utm_epsg(-3, -30), 32730)
-
     def test_stacktrace_html(self):
         """Stack traces can be caught and rendered as html
         """
@@ -151,19 +140,13 @@ class UtilitiesTest(unittest.TestCase):
     def test_getDefaults(self):
         """Test defaults for post processing can be obtained properly."""
         myExpectedDefaults = {
-            'FEMALE_RATIO_KEY': 'female ratio default',
-            'YOUTH_RATIO_KEY': 'youth ratio default',
-            'ADULT_RATIO_KEY': 'adult ratio default',
-            'ELDERLY_RATIO_KEY': 'elder ratio default',
+            'FEM_RATIO_KEY': 'female ratio default',
             'YOUTH_RATIO': 0.263,
-            'ELDERLY_RATIO': 0.078,
+            'ELDER_RATIO': 0.078,
             'NO_DATA': 'No data',
-            'FEMALE_RATIO': 0.5,
+            'FEM_RATIO': 0.5,
             'AGGR_ATTR_KEY': 'aggregation attribute',
-            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
-            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
-            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
-            'ELDERLY_RATIO_ATTR_KEY': 'elder ratio attribute',
+            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
             'ADULT_RATIO': 0.659}
         myDefaults = breakdown_defaults()
         message = 'Defaults: got %s, expected %s' % (

@@ -25,7 +25,6 @@ import traceback
 import logging
 import uuid
 import webbrowser
-import math
 
 #noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, Qt
@@ -166,30 +165,6 @@ def get_wgs84_resolution(layer):
             projected_extent.xMinimum())
         cell_size = geo_width / columns
 
-    return cell_size
-
-
-def get_utm_zone(longitude):
-    """
-    Return utm zone.
-    """
-    zone = int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
-    if zone == 0:
-        zone = 60
-    return zone
-
-
-def get_utm_epsg(longitude, latitude):
-    """
-    Return epsg code of the utm zone.
-    The code is based on the code:
-    http://gis.stackexchange.com/questions/34401
-    """
-    epsg = 32600
-    if latitude < 0.0:
-        epsg += 100
-    epsg += get_utm_zone(longitude)
-    return epsg
     return cell_size
 
 
@@ -625,35 +600,6 @@ def extent_to_geo_array(extent, source_crs):
     return geo_extent
 
 
-def safe_to_qgis_layer(layer):
-    """Helper function to make a QgsMapLayer from a safe read_layer layer.
-
-    :param layer: Layer object as provided by InaSAFE engine.
-    :type layer: read_layer
-
-    :returns: A validated QGIS layer or None.
-    :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer, None
-
-    :raises: Exception if layer is not valid.
-    """
-
-    # noinspection PyUnresolvedReferences
-    myMessage = tr(
-        'Input layer must be a InaSAFE spatial object. I got %s'
-    ) % (str(type(layer)))
-    if not hasattr(layer, 'is_inasafe_spatial_object'):
-        raise Exception(myMessage)
-    if not layer.is_inasafe_spatial_object:
-        raise Exception(myMessage)
-
-    geo_extent = [
-        transformed_extent.xMinimum(),
-        transformed_extent.yMinimum(),
-        transformed_extent.xMaximum(),
-        transformed_extent.yMaximum()]
-    return geo_extent
-
-
 def download_url(manager, url, output_path, progress_dialog=None):
     """Download file from url.
 
@@ -813,7 +759,7 @@ def map_qrc_to_file(match, res_copy_dir):
     :type res_copy_dir: str
 
     :returns: File path to the resource or None if the resource could
-    not be created.
+        not be created.
     :rtype: None, str
     """
 
@@ -835,7 +781,6 @@ def map_qrc_to_file(match, res_copy_dir):
                 #copy somehow failed
                 res_path = None
 
-    return res_path
     #noinspection PyArgumentList
     return QUrl.fromLocalFile(res_path).toString()
 
@@ -863,8 +808,7 @@ def html_to_file(html, file_path=None, open_browser=False):
     :param file_path: the path for the html output file.
     :type file_path: str
 
-    :param open_browser: if true open the generated html in an external
-    browser
+    :param open_browser: if true open the generated html in an external browser
     :type open_browser: bool
     """
     if file_path is None:
