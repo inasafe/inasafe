@@ -92,7 +92,7 @@ class Test_plugins(unittest.TestCase):
         """Plugins can be collected."""
         os.environ['LANG'] = 'en'
         plugin_list = get_plugins()
-        assert(len(plugin_list) > 0)
+        self.assertGreater(len(plugin_list), 0)
 
         # Obtain string representation
         string_rep = admissible_plugins_to_str(plugin_list)
@@ -121,7 +121,7 @@ class Test_plugins(unittest.TestCase):
         """Plugins are correctly filtered based on requirements"""
 
         plugin_list = get_plugins('BasicFunction')
-        assert(len(plugin_list) == 1)
+        self.assertEqual(len(plugin_list), 1)
 
         requirements = requirements_collect(plugin_list[0].values()[0])
         msg = 'Requirements are %s' % requirements

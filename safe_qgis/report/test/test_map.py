@@ -79,9 +79,10 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
-        out_path = unique_filename(prefix='mapDefaultTemplateTest',
-                                   suffix='.pdf',
-                                   dir=temp_dir('test'))
+        out_path = unique_filename(
+            prefix='mapDefaultTemplateTest',
+            suffix='.pdf',
+            dir=temp_dir('test'))
         report.make_pdf(out_path)
         LOGGER.debug(out_path)
         message = 'Rendered output does not exist: %s' % out_path
@@ -100,8 +101,9 @@ class MapTest(unittest.TestCase):
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
             414589,  # Slackware64 14.0
-            416796,  # Linux Mint 14_64
-            412911,  # Windows 7 64
+            143046,  # Linux Mint 14_64
+            150412,  # Windows 7 64
+            142355,  # UB 12.04 Jenkins
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -140,8 +142,9 @@ class MapTest(unittest.TestCase):
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
             367934,  # Slackware64 14.0
-            390100,  # Linux Mint 14_64
-            386188,  # Windows 7 64bit
+            81415,  # Linux Mint 14_64
+            88779,  # Windows 7 64bit
+            80725,   # Jenkins ub 12.04
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)

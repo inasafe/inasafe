@@ -1,7 +1,7 @@
 
 import unittest
 import numpy
-from geodesy import Point
+from safe.common.geodesy import Point
 
 
 class TestCase(unittest.TestCase):

@@ -9,29 +9,31 @@ from os.path import join
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
-from safe.engine.interpolation import interpolate_polygon_raster
-from safe.engine.interpolation import interpolate_raster_vector_points
-from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.engine.interpolation import tag_polygons_by_grid
-
-
-from safe.storage.core import read_layer
-from safe.storage.core import write_vector_data
-from safe.storage.core import write_raster_data
+from safe.engine.interpolation import (
+    interpolate_polygon_raster,
+    interpolate_raster_vector_points,
+    assign_hazard_values_to_exposure_data,
+    tag_polygons_by_grid)
+from safe.storage.core import (
+    read_layer,
+    write_vector_data,
+    write_raster_data)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-
-from safe.common.polygon import separate_points_by_polygon
-from safe.common.polygon import is_inside_polygon, inside_polygon
-from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
-from safe.common.polygon import line_dictionary_to_geometry
+from safe.common.polygon import (
+    separate_points_by_polygon,
+    is_inside_polygon,
+    inside_polygon,
+    clip_lines_by_polygon,
+    clip_grid_by_polygons,
+    line_dictionary_to_geometry)
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,
-    ensure_numeric)
-from safe.common.numerics import nan_allclose
+    ensure_numeric,
+    nan_allclose)
 from safe.common.utilities import (
     VerificationError,
     unique_filename,
@@ -45,27 +47,18 @@ from safe.impact_functions import get_plugins, get_plugin
 # remove from here and update test to use the real one.
 # pylint: disable=W0611
 # noinspection PyUnresolvedReferences
-from impact_functions_for_testing import empirical_fatality_model
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import allen_fatality_model
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import unspecific_building_impact_model
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import earthquake_impact_on_women
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import NEXIS_building_impact_model
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import HKV_flood_study
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import BNPB_earthquake_guidelines
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import general_ashload_impact
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import flood_road_impact
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import itb_fatality_model_org
-# noinspection PyUnresolvedReferences
-from impact_functions_for_testing import padang_building_impact_model
+from safe.engine.impact_functions_for_testing import (
+    empirical_fatality_model,
+    allen_fatality_model,
+    unspecific_building_impact_model,
+    earthquake_impact_on_women,
+    NEXIS_building_impact_model,
+    HKV_flood_study,
+    BNPB_earthquake_guidelines,
+    general_ashload_impact,
+    flood_road_impact,
+    itb_fatality_model_org,
+    padang_building_impact_model)
 # noinspection PyUnresolvedReferences
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
     PAGFatalityFunction)
