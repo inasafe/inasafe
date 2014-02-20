@@ -27,9 +27,7 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator,
     get_decimal_separator,
-    get_utm_epsg,
-    feature_attributes_as_dict,
-    which)
+    get_utm_epsg)
 
 
 def print_class(my_array, my_result_class, my_expected):
