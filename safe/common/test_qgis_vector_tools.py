@@ -35,7 +35,7 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsRectangle)
 
 
-from qgis_vector_tools import (
+from safe.common.qgis_vector_tools import (
     points_to_rectangles,
     union_geometry,
     create_layer,

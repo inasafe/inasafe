@@ -40,7 +40,7 @@ RASTER_BASE = os.path.abspath(
 VECTOR_BASE = os.path.abspath(
     os.path.join(UNITDATA, 'other', 'polygonization_result'))
 
-from qgis_raster_tools import (
+from safe.common.qgis_raster_tools import (
     pixels_to_points,
     polygonize,
     clip_raster)
