@@ -20,8 +20,8 @@ done
 QGISPATH=`find /usr/local/ -name QGIS.app`
 export QGIS_PREFIX_PATH=${QGISPATH}/contents/MacOS
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
-# Needed for importing processing plugin
-PYTHONPATH=$PYTHONPATH:${QGIS_PREFIX_PATH}/share/qgis/python/plugins
+# Needed for importing processing plugin - assumes brew install
+PYTHONPATH=$PYTHONPATH:${QGIS_PREFIX_PATH}//QGIS.app/Contents/Resources/python/plugins
 export PYTHONPATH
 
 export QGIS_DEBUG=0
