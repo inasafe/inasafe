@@ -31,6 +31,7 @@ from os.path import join
 import qgis  # pylint: disable=W0611
 
 from unittest import TestCase, skipIf
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
@@ -779,7 +780,6 @@ class TestDock(TestCase):
             before_count, after_count))
         #print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
-
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated."""
