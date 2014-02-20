@@ -88,14 +88,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 # If inasafe is running as qgis plugin,
 # it can import processing (from QGIS / sextante),
-# if inasafe is called from tests as commandline application,
-# we need to use dummy QgsApplication and iface objects
-try:
-    import processing
-except ImportError:
-    # Aggregator is running in testing mode, so
-    # import processing from stub (use dummy  iface)
-    from safe.common.qgis_processing import processing
+import processing
 
 
 class Aggregator(QtCore.QObject):

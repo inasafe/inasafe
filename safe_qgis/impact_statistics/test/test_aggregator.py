@@ -29,7 +29,7 @@ from os.path import join
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem, QgsProject
+from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem
 
 from safe.common.testing import get_qgis_app
 from safe_qgis import breakdown_defaults
@@ -47,7 +47,6 @@ from safe_qgis.utilities.utilities_for_testing import (
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
-#from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     extent_to_geo_array)
@@ -586,9 +585,10 @@ class AggregatorTest(unittest.TestCase):
                 }
             ]
         ]
-        self._aggregate(impact_layer,
-                        expected_results,
-                        impact_layer_attributes=impact_layer_attributes)
+        self._aggregate(
+            impact_layer,
+            expected_results,
+            impact_layer_attributes=impact_layer_attributes)
 
     def test_set_layers(self):
         """
@@ -596,16 +596,18 @@ class AggregatorTest(unittest.TestCase):
         """
 
         hazard = QgsVectorLayer(
-            os.path.join(UNITDATA,
-            'hazard',
-            'multipart_polygons_osm_4326.shp'),
+            os.path.join(
+                UNITDATA,
+                'hazard',
+                'multipart_polygons_osm_4326.shp'),
             'hazard',
             'ogr'
         )
         exposure = QgsVectorLayer(
-            os.path.join(UNITDATA,
-            'exposure',
-            'buildings_osm_4326.shp'),
+            os.path.join(
+                UNITDATA,
+                'exposure',
+                'buildings_osm_4326.shp'),
             'impact',
             'ogr'
         )
@@ -653,9 +655,11 @@ class AggregatorTest(unittest.TestCase):
         polygons = [polygon1, polygon2]
 
         centroids = aggregator._get_centroids(polygons)
+        # noinspection PyTypeChecker
         self.assertEquals(len(centroids), 2)
 
         centroids = aggregator._get_centroids([polygon1])
+        # noinspection PyTypeChecker
         self.assertEquals(len(centroids), 1)
     test_get_centroids.slow = False
 
