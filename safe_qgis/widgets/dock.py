@@ -2033,18 +2033,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         start_path = os.path.dirname(scenario_path)
         try:
-            relative_expsosure_path = os.path.relpath(
+            relative_exposure_path = os.path.relpath(
                 exposure_path, start_path)
         except ValueError, e:
             LOGGER.info(e.message)
-            relative_expsosure_path = exposure_path
+            relative_exposure_path = exposure_path
         try:
             relative_hazard_path = os.path.relpath(hazard_path, start_path)
         except ValueError, e:
             LOGGER.info(e.message)
             relative_hazard_path = hazard_path
 
-        return relative_expsosure_path, relative_hazard_path
+        return relative_exposure_path, relative_hazard_path
 
     def save_current_scenario(self, scenario_file_path=None):
         """Save current scenario to a text file.
@@ -2126,8 +2126,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if aggregation_layer is not None:
             aggregation_path = str(aggregation_layer.publicSource())
-            relative_aggregation_path = os.path.relpath(
-                aggregation_path, os.path.dirname(file_name))
+            try:
+                relative_aggregation_path = os.path.relpath(
+                    aggregation_path, os.path.dirname(file_name))
+            except ValueError, e:
+                LOGGER.info(e.message)
+                relative_aggregation_path = aggregation_path
             parser.set(title, 'aggregation', relative_aggregation_path)
 
         if file_name is None or file_name == '':

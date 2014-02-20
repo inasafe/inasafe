@@ -6,7 +6,7 @@ import numpy
 from safe.common.interpolation1d import interpolate1d
 
 
-class Damage_curve:
+class Damage_curve(object):
     """Class for implementation of damage curves based on point data
     """
 
