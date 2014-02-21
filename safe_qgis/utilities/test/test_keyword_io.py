@@ -224,7 +224,7 @@ class KeywordIOTest(unittest.TestCase):
 
         expected_keywords = self.expected_raster_keywords
         message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
-            keywords, expected_keywords, out_path)
+            copied_keywords, expected_keywords, out_path)
         self.assertEquals(copied_keywords, expected_keywords, message)
 
 if __name__ == '__main__':
