@@ -330,6 +330,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
 
+        # whether to show or not a custom Logo
+        self.org_logo_path = settings.value(
+            'inasafe/orgLogoPath', '', type=str)
+
+        if self.org_logo_path:
+            self.org_logo.setPixmap(QtGui.QPixmap(self.org_logo_path))
+            self.org_logo.show()
+        else:
+            self.org_logo.hide()
+
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
 
