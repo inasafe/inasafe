@@ -64,9 +64,11 @@ class QgisInterface(QObject):
         # instance is the actual one. It will also ensure that the processing
         # algorithms are nicely loaded and available for use.
 
+        # pylint: disable=F0401
         from processing.core import QGisLayers
         import processing
         from processing.core.Processing import Processing
+        # pylint: enable=F0401
         processing.classFactory(self)
 
         # We create our own getAlgorithm function below which will will monkey
