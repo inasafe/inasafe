@@ -94,7 +94,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         affected_field_index = h_provider.fieldNameIndex(affected_field)
         if affected_field_index == -1:
             message = tr('''Parameter "Affected Field"(='%s')
-                doesn't presented in the
+                is not present in the
                 attribute table of the hazard layer.''' % (affected_field, ))
             raise GetDataError(message)
 
