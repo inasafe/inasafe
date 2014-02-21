@@ -87,9 +87,9 @@ LOGGER = logging.getLogger('InaSAFE')
 
 # If inasafe is running as qgis plugin,
 # it can import processing (from QGIS / sextante),
-# pylint: disable=W0611
+# pylint: disable=F0401
 import processing
-# pylint: enable=W0611
+# pylint: enable=F0401
 
 
 class Aggregator(QtCore.QObject):
