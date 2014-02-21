@@ -6,7 +6,6 @@ import numpy
 import zipfile
 import platform
 import gettext
-import logging
 from datetime import date
 import getpass
 from tempfile import mkstemp
@@ -29,6 +28,7 @@ except ImportError:
         raise RuntimeError(("Could not find an"
                             "available OrderedDict implementation"))
 
+import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -289,11 +289,17 @@ def get_free_memory_osx():
         # 6456M used, 1735M free.
     except OSError:
         raise OSError
-    if float(platform.mac_ver()[0]) > 10.8:
+    platform_version = platform.mac_ver()[0]
+    # Might get '10.9.1' so strop off the last no
+    parts = platform_version.split('.')
+    platform_version = parts[0] + '.' + parts[1]
+    platform_version = float(platform_version)
+
+    if platform_version > 10.8:
         stdout_list = stdout_string.split(',')
         unused = stdout_list[1].replace('M unused', '').replace(' ', '')
+        unused = unused.replace('.', '')
         return int(unused)
-
     else:
         stdout_list = stdout_string.split(',')
         inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
@@ -591,6 +597,24 @@ def get_utm_epsg(longitude, latitude):
         epsg += 100
     epsg += get_utm_zone(longitude)
     return epsg
+
+
+def feature_attributes_as_dict(field_map, attributes):
+    """Converts list of attributes to dict of attributes.
+
+    :param field_map: Dictionary {'FieldName': FieldIndex}.
+    :type field_map: dict
+
+    :param attributes: list of field's values
+    :type attributes: list
+
+    :returns: Dictionary {'FieldName': FieldValue}
+    :rtype: dict
+    """
+    res = {}
+    for name in field_map:
+        res[name] = attributes[field_map[name]]
+    return res
 
 
 def which(name, flags=os.X_OK):

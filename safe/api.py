@@ -71,6 +71,7 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_decimal_separator,
     get_utm_epsg,
+    feature_attributes_as_dict,
     which)
 from safe.common.shake_grid_converter import convert_mmi_data
 from safe.common.version import get_version

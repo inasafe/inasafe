@@ -696,15 +696,7 @@ def get_qgis_app():
         gui_flag = True  # All test will run qgis in gui mode
         #noinspection PyPep8Naming
         QGIS_APP = QgsApplication(sys.argv, gui_flag)
-
-        # Note: This block is not needed for  QGIS > 1.8 which will
-        # automatically check the QGIS_PREFIX_PATH var so it is here
-        # for backwards compatibility only
-        if 'QGIS_PREFIX_PATH' in os.environ:
-            path = os.environ['QGIS_PREFIX_PATH']
-            use_default_path_flag = True
-            QGIS_APP.setPrefixPath(path, use_default_path_flag)
-
+        # Make sure QGIS_PREFIX_PATH is set in your env if needed!
         QGIS_APP.initQgis()
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)

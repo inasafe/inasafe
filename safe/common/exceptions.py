@@ -106,3 +106,8 @@ class ShapefileCreationError(Exception):
 class ZeroImpactException(Exception):
     """Raised if an impact function return zero impact"""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
+
+
+class WrongDataTypeException(Exception):
+    """Raised if expected and received data types are different"""
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
