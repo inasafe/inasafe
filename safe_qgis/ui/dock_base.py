@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Fri Feb 21 10:14:19 2014
+# Created: Fri Feb 21 11:06:14 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -94,8 +94,12 @@ class Ui_DockBase(object):
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.org_logo_placeholder.addItem(spacerItem)
         self.org_logo = QtGui.QLabel(self.dockWidgetContents)
-        self.org_logo.setMinimumSize(QtCore.QSize(64, 64))
-        self.org_logo.setMaximumSize(QtCore.QSize(64, 64))
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.org_logo.sizePolicy().hasHeightForWidth())
+        self.org_logo.setSizePolicy(sizePolicy)
+        self.org_logo.setMaximumSize(QtCore.QSize(0, 64))
         self.org_logo.setText(_fromUtf8(""))
         self.org_logo.setScaledContents(True)
         self.org_logo.setAlignment(QtCore.Qt.AlignCenter)

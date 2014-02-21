@@ -335,6 +335,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/orgLogoPath', '', type=str)
 
         if self.org_logo_path:
+            dock_width = self.width()
+            self.org_logo.setMaximumWidth(dock_width)
             self.org_logo.setPixmap(QtGui.QPixmap(self.org_logo_path))
             self.org_logo.show()
         else:
