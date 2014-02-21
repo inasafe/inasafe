@@ -11,20 +11,24 @@ import tempfile
 import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
+from safe.common.utilities import unique_filename
 
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from qgis.core import QgsDataSourceURI, QgsVectorLayer
-
 # For testing and demoing
+
 from safe.common.testing import get_qgis_app
+from safe.common.utilities import unique_filename
+from safe_qgis.safe_interface import read_file_keywords
 from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
 from safe_qgis.tools.test.test_keywords_dialog import clone_padang_layer
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
+
+from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -142,7 +146,7 @@ class KeywordIOTest(unittest.TestCase):
         source = self.raster_layer.source()
         message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
             keywords, expected_keywords, source)
-        assert keywords == expected_keywords, message
+        self.assertEquals(keywords, expected_keywords, message)
 
     def test_read_vector_file_keywords(self):
         """Test read vector file keywords with the generic readKeywords method.
@@ -212,6 +216,17 @@ class KeywordIOTest(unittest.TestCase):
         message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
             keywords, expected_keywords, source)
         assert keywords == expected_keywords, message
+
+    def test_copy_keywords(self):
+        """Test we can copy the keywords."""
+        out_path = unique_filename(
+            prefix='test_copy_keywords', suffix='.keywords')
+        self.keyword_io.copy_keywords(self.raster_layer, out_path)
+        copied_keywords = read_file_keywords(out_path)
+        expected_keywords = self.expected_raster_keywords
+        message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
+            copied_keywords, expected_keywords, out_path)
+        self.assertEquals(copied_keywords, expected_keywords, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)
