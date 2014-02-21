@@ -21,6 +21,7 @@ sys.path.append(pardir)
 
 from safe.common.testing import get_qgis_app
 from safe.common.utilities import unique_filename
+from safe_qgis.safe_interface import read_file_keywords
 from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
@@ -216,15 +217,14 @@ class KeywordIOTest(unittest.TestCase):
             keywords, expected_keywords, source)
         assert keywords == expected_keywords, message
 
-    def Xtest_copy_keywords(self):
+    def test_copy_keywords(self):
         """Test we can copy the keywords."""
         out_path = unique_filename(prefix='test_copy_keywords')
         self.keyword_io.copy_keywords(self.raster_layer, out_path)
-        copied_keywords = self.keyword_io.read_keywords(out_path)
-
+        copied_keywords = read_file_keywords(out_path)
         expected_keywords = self.expected_raster_keywords
         message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
-            keywords, expected_keywords, out_path)
+            copied_keywords, expected_keywords, out_path)
         self.assertEquals(copied_keywords, expected_keywords, message)
 
 if __name__ == '__main__':
