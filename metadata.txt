@@ -13,9 +13,9 @@ name=InaSAFE
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99.99
 description=InaSAFE Disaster Scenario Assessment for Emergencies tool developed by BNPB, AusAID, World Bank
-version=2.0.0-7
+version=2.0.0-8
 # alpha, beta, rc or final
-status=alpha
+status=final
 
 
 # end of mandatory metadata
@@ -33,11 +33,11 @@ tracker=https://github.com/AIFDR/inasafe/issues
 repository=https://github.com/AIFDR/inasafe
 icon=icon.png
 # experimental flag
-experimental=True
+experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version
 deprecated=False
 
 # Author contact information
-author=BNPB, AusAID and the World Bank
-email=ole.moller.nielsen@gmail.com
+author=BNPB, Australian AID and the World Bank
+email=tim@linfiniti.com
