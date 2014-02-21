@@ -298,13 +298,13 @@ class Test_plugin_core(unittest.TestCase):
 
     def test_aggregate(self):
         """Test aggregate function behaves as expected."""
-        class MockRasterData():
+        class MockRasterData(object):
             """Fake raster data object."""
             def __init__(self):
                 self.is_point_data = False
                 self.is_raster_data = True
 
-        class MockOtherData():
+        class MockOtherData(object):
             """Fake other data object."""
             def __init__(self):
                 self.is_point_data = False
