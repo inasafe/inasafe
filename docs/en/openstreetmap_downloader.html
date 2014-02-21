@@ -191,26 +191,33 @@ OpenStreetMap project for you.</p>
 </div>
 <p>The tool requires internet connection as it fetches the data via a web service
 running on <a class="reference external" href="http://osm.linfiniti.com">Linfiniti&#8217;s OSM Reporter</a> web site.</p>
-<p>The data, once downloaded will be available to you as a shapefile. A style
-file is automatically created so that it symbolises nicely in QGIS. In
-addition, the correct keyword metadata is created for the downloaded dataset
+<p>The data, once downloaded will be available to you as a shapefile.
+A style file is automatically created so that it symbolises nicely in QGIS.
+In addition, the correct keyword metadata is created for the downloaded dataset
 so that it can be used directly in InaSAFE impact scenario analyses.</p>
-<p><strong>Note:</strong> The downloader service has limitations as to the size of
-datasets that can be retrieved. As such you may experience issues trying to
-fetch e.g. country wide building footprint data. Generally datasets at a
-city level and below should work well.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The downloader service has limitations as to the size of
+datasets that can be retrieved.
+As such you may experience issues trying to fetch e.g. country wide
+building footprint data.
+Generally datasets at a city level and below should work well.</p>
+</div>
 <p>To use this tool effectively:</p>
 <ul class="simple">
 <li>Use QGIS to zoom in to the area for which you want building data to be
-retrieved. For fine-grained control, you can set the bounding box manually
-in the area provided at the bottom of the dialog.</li>
-<li>Check the output directory is correct. Note that the saved datasets
-will be called buildings.shp and roads.shp (and their associated files).</li>
+retrieved.
+For fine-grained control, you can set the bounding box manually in the area
+provided at the bottom of the dialog.</li>
+<li>Check the output directory is correct.
+Note that the saved datasets will be called buildings.shp and roads.shp
+(and their associated files).</li>
 <li>By default simple file names will be used (e.g. roads.shp, buildings.shp).
 If you wish you can specify a prefix to add in front of this default name.
 For example using a prefix of &#8216;padang-&#8216; will cause the downloaded files to be
-saved as &#8216;padang-roads.shp&#8217; and &#8216;padang-buildings.shp&#8217;. Note that the only
-allowed prefix characters are A-Z, a-z, 0-9 and the characters &#8216;-&#8216; and &#8216;_&#8217;.
+saved as &#8216;padang-roads.shp&#8217; and &#8216;padang-buildings.shp&#8217;.
+Note that the only allowed prefix characters are A-Z, a-z,
+0-9 and the characters &#8216;-&#8216; and &#8216;_&#8217;.
 You can leave this blank if you prefer.</li>
 <li>Press the <em class="guilabel">OK Button</em> and wait for the data to be retrieved.</li>
 </ul>
@@ -227,8 +234,8 @@ info).</p>
 </div>
 <div class="section" id="building-data">
 <h2>Building data<a class="headerlink" href="#building-data" title="Permalink to this headline">¶</a></h2>
-<p>InaSAFE supports the use of building data in various impact functions. In
-particular we support building footprints sourced from the
+<p>InaSAFE supports the use of building data in various impact functions.
+In particular we support building footprints sourced from the
 <a class="reference external" href="https://openstreetmap.org">OpenStreetMap</a> project (OSM).</p>
 <p>The following building types are derived (depending on the various tags assigned
 to them in OSM):</p>
@@ -253,19 +260,19 @@ to them in OSM):</p>
 <li>Industrial</li>
 </ul>
 <p>These derived types will be present in a field called &#8216;type&#8217; when downloading
-the building data.Note that depending on the area for which you have downloaded,
+the building data.
+Note that depending on the area for which you have downloaded,
 only some of these categories may be present in your buildings dataset.</p>
 </div>
 <div class="section" id="roads-data">
 <h2>Roads data<a class="headerlink" href="#roads-data" title="Permalink to this headline">¶</a></h2>
-<p>InaSAFE supports the use of road data in various impact functions. In
-particular we support roads sourced from the
+<p>InaSAFE supports the use of road data in various impact functions.
+In particular we support roads sourced from the
 <a class="reference external" href="https://openstreetmap.org">OpenStreetMap</a> project (OSM).</p>
 <p>The following road types are derived (depending on the various tags assigned
 to them in OSM):</p>
-<p>ALTER TABLE planet_osm_line ADD COLUMN &#8220;type&#8221; VARCHAR(255) NULL;</p>
 <ul class="simple">
-<li>Motorway or highway (includes &#8216;trunk&#8217; from OSM)</li>
+<li>Motorway / highway (includes &#8216;trunk&#8217; from OSM)</li>
 <li>Motorway link</li>
 <li>Primary road</li>
 <li>Primary link</li>
@@ -276,10 +283,16 @@ to them in OSM):</p>
 <li>Road, residential, living street, etc. (includes all highways tagged with
 &#8216;living_street&#8217;, &#8216;residential&#8217;, &#8216;yes&#8217;, &#8216;road&#8217;, &#8216;unclassified&#8217;, &#8216;service&#8217;, &#8216;&#8217;
 and NULL highways)</li>
-<li>Track&#8217;</li>
+<li>Track</li>
 <li>Cycleway, footpath, etc. (includes &#8216;cycleway&#8217;, &#8216;footpath&#8217;, &#8216;pedestrian&#8217;,
 &#8216;footway&#8217; and &#8216;path&#8217; highway tags).</li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The roads data are symbolised using a rule based renderer in QGIS.
+As you zoom out the roads will be rendered using different styles to avoid
+an overly cluttered map at small scales.</p>
+</div>
 </div>
 </div>
 
