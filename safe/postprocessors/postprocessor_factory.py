@@ -22,6 +22,7 @@ from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
 from aggregation_postprocessor import AggregationPostprocessor
 from building_type_postprocessor import BuildingTypePostprocessor
+from road_type_postprocessor import RoadTypePostprocessor
 from aggregation_categorical_postprocessor import \
     AggregationCategoricalPostprocessor
 from minimum_needs_postprocessor import MinimumNeedsPostprocessor
@@ -31,15 +32,15 @@ LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
 # please put the value of this dictionary in
 # safe/common/dynamic_translations.py for the run time translation
-AVAILABLE_POSTPTOCESSORS = {
-    'Gender': 'Gender',
-    'Age': 'Age',
-    'Aggregation': 'Aggregation',
-    'BuildingType': 'Building type',
-    'AggregationCategorical':
-    'Aggregation categorical',
-    'MinimumNeeds': 'Minimum needs'
-}
+AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
+                            'Age': 'Age',
+                            'Aggregation': 'Aggregation',
+                            'BuildingType': 'Building type',
+                            'RoadType': 'Road type',
+                            'AggregationCategorical':
+                            'Aggregation categorical',
+                            'MinimumNeeds': 'Minimum needs'
+                            }
 
 
 def get_postprocessors(requested_postprocessors):
@@ -98,15 +99,16 @@ def get_postprocessors(requested_postprocessors):
     return postprocessor_instances
 
 
-def get_postprocessor_human_name(postprocessor):
+def get_postprocessor_human_name(postprocesor):
     """
     Returns the human readable name of  post processor
 
-    :param postprocessor: Machine name of the postprocessor
+    Args:
+        * postprocessor: Machine name of the postprocessor
 
-    :returns : Human readable name for the postprocessor.
-    :rtype: str
+    Returns:
+        str with the human readable name
     """
-    # Sunni : translate it first
-    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocessor])
+    # Sunni : translete it first
+    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocesor])
     return human_name_translated

@@ -56,8 +56,46 @@ class QgisInterface(QObject):
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAll.connect(self.removeAllLayers)
 
-        # It's for processing module
+        # For processing module
         self.destCrs = None
+
+        # In the next section of code, we are going to do some monkey patching
+        # to make the QGIS processing framework think that this mock QGIS IFACE
+        # instance is the actual one. It will also ensure that the processing
+        # algorithms are nicely loaded and available for use.
+
+        from processing.core import QGisLayers
+        import processing
+        from processing.core.Processing import Processing
+        processing.classFactory(self)
+
+        # We create our own getAlgorithm function below which will will monkey
+        # patch in to the Processing class in QGIS in order to ensure that the
+        # Processing.initialize() call is made before asking for an alg.
+
+        @staticmethod
+        def mock_getAlgorithm(name):
+            """
+            Modified version of the original getAlgorithm function.
+
+            :param name: Name of the algorithm to load.
+            :type name: str
+
+            :return: An algorithm concrete class.
+            :rtype: QgsAlgorithm  ?
+            """
+            Processing.initialize()
+            for provider in Processing.algs.values():
+                if name in provider:
+                    return provider[name]
+            return None
+
+        # Now we let the monkey loose!
+        Processing.getAlgorithm = mock_getAlgorithm
+        # We also need to make QGisLayers think that this iface is 'the one'
+        # Note. the placement here (after the getAlgorithm monkey patch above)
+        # is significant, so don't move it!
+        QGisLayers.iface = self
 
     def __getattr__(self, *args, **kwargs):
         # It's for processing module
@@ -202,3 +240,6 @@ class QgisInterface(QObject):
         :param area:
         """
         pass
+
+    def legendInterface(self):
+        return self.canvas

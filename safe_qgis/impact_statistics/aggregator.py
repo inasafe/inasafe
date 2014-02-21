@@ -61,7 +61,9 @@ from safe_qgis.safe_interface import (
     points_in_and_outside_polygon,
     calculate_polygon_centroid,
     unique_filename,
-    messaging as m)
+    messaging as m,
+    feature_attributes_as_dict,
+    get_utm_epsg)
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -82,6 +84,11 @@ WARNING_STYLE = styles.WARNING_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
+
+
+# If inasafe is running as qgis plugin,
+# it can import processing (from QGIS / sextante),
+import processing
 
 
 class Aggregator(QtCore.QObject):
@@ -106,6 +113,8 @@ class Aggregator(QtCore.QObject):
         self.prefix = 'aggr_'
         self.attributes = {}
         self.attribute_title = None
+        self._sum_field_name = None
+        self.set_sum_field_name()
 
         #use qgis or inasafe zonal stats
         flag = bool(QtCore.QSettings().value(
@@ -117,8 +126,17 @@ class Aggregator(QtCore.QObject):
         self._defaults = breakdown_defaults()
         self.error_message = None
         self.target_field = None
+
+        # self.impact_layer_attributes is a list of list of dict
+        # [
+        #    [{...},{...},{...}],
+        #    [{...},{...},{...}]
+        # ]
+        # It contains lists of objects that are covered by
+        # aggregation polygons (one list for one polygon)
         self.impact_layer_attributes = []
-        #self.aoi_mode = True
+
+        self.processing = processing
 
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
@@ -523,7 +541,7 @@ class Aggregator(QtCore.QObject):
             if self.statistics_type == 'sum':
                 #style layer if we are summing
                 provider = self.layer.dataProvider()
-                attribute = self._sum_field_name()
+                attribute = self.sum_field_name()
                 attribute_index = provider.fieldNameIndex(attribute)
                 request = QgsFeatureRequest()
                 request.setFlags(QgsFeatureRequest.NoGeometry)
@@ -579,10 +597,14 @@ class Aggregator(QtCore.QObject):
         :param safe_impact_layer: The impact layer in SAFE format
         :type safe_impact_layer: read_layer
         """
-        #TODO (MB) implement line aggregation
+
+        # Reset impact_layer_attributes
+        # (if aggregation is running twice, we need empty list
+        #   for store the data)
+        self.impact_layer_attributes = []
 
         if not self._setup_target_field(impact_layer):
-            # An unexpected error occurs
+            # An unexpected error occurs, skip postprocessing
             return
 
         # Add fields for store aggregation atributes
@@ -598,7 +620,7 @@ class Aggregator(QtCore.QObject):
             self.layer.updateFields()
         elif self.statistics_type == 'sum':
             #add the total field to the layer
-            aggregation_field = self._sum_field_name()
+            aggregation_field = self.sum_field_name()
             aggregation_provider.addAttributes([QgsField(
                 aggregation_field, QtCore.QVariant.Int)])
             self.layer.updateFields()
@@ -611,11 +633,12 @@ class Aggregator(QtCore.QObject):
             self._aggregate_polygon_impact(safe_impact_layer)
         elif safe_impact_layer.is_line_data:
             LOGGER.debug('Doing line in polygon aggregation')
+            self._aggregate_line_impact(safe_impact_layer)
         else:
             message = m.Paragraph(
                 self.tr(
                     'Aggregation on vector impact layers other than points'
-                    ' or polygons not implemented yet not implemented yet.'
+                    ' or polygons or lines yet not implemented yet.'
                     ' Called on %s') % (impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
@@ -690,7 +713,7 @@ class Aggregator(QtCore.QObject):
             #                      QtCore.QVariant.Double)]
             fields = [QgsField(self._count_field_name(),
                                QtCore.QVariant.Double),
-                      QgsField(self._sum_field_name(),
+                      QgsField(self.sum_field_name(),
                                QtCore.QVariant.Double),
                       QgsField(self._mean_field_name(),
                                QtCore.QVariant.Double)
@@ -698,7 +721,7 @@ class Aggregator(QtCore.QObject):
             provider.addAttributes(fields)
             self.layer.updateFields()
 
-            sum_index = provider.fieldNameIndex(self._sum_field_name())
+            sum_index = provider.fieldNameIndex(self.sum_field_name())
             count_index = provider.fieldNameIndex(self._count_field_name())
             mean_index = provider.fieldNameIndex(self._mean_field_name())
             # minIndex = provider.fieldNameIndex(self._minFieldName())
@@ -800,6 +823,17 @@ class Aggregator(QtCore.QObject):
 
                 for i in inside:
                     key = aggreg_remaining_values[i][self.target_field]
+                    if isinstance(key, QtCore.QPyNullVariant):
+                        message = m.Paragraph(
+                            self.tr(
+                                'The target_field contains Null values.'
+                                ' The impact function should define this.')
+                        )
+                        LOGGER.debug(
+                            'Skipping postprocessing due to: %s' % message)
+                        self.error_message = message
+                        return
+
                     try:
                         results[key] += 1
                     except KeyError:
@@ -822,7 +856,7 @@ class Aggregator(QtCore.QObject):
 
             elif self.statistics_type == 'sum':
                 #by default sum attributes
-                aggregation_field = self._sum_field_name()
+                aggregation_field = self.sum_field_name()
                 field_index = field_map[aggregation_field]
                 total = 0
                 for i in inside:
@@ -862,6 +896,149 @@ class Aggregator(QtCore.QObject):
 
         self.layer.commitChanges()
 
+    def _aggregate_line_impact(self, safe_impact_layer):
+        """Aggregation of lines in polygons
+
+        :param safe_impact_layer: The impact layer in SAFE format
+        :type safe_impact_layer: read_layer
+        """
+        if self.statistics_type == 'class_count':
+            msg = "Summary length calculation is only one " \
+                  "implemented method for line aggregation."
+            raise NotImplementedError(msg)
+        elif self.statistics_type == 'sum':
+
+            output_directory = temp_dir(sub_dir='pre-process')
+            agg_provider = self.layer.dataProvider()
+
+            # Split lines from impact layer by aggregation polygons,
+            # Add column with polygon names to the line attributes
+            impact_layer = safe_to_qgis_layer(safe_impact_layer)
+
+            splits_filename = unique_filename(
+                suffix='.shp', dir=output_directory)
+            res = self.processing.runalg('qgis:intersection',
+                impact_layer, self.layer, splits_filename)
+            impact_layer_splits = QgsVectorLayer(
+                res['OUTPUT'], 'split aggregation', 'ogr')
+
+            # Add length column to impact layer
+
+            # We need calculate length in meters, not degrees:
+            # We can use processing 'qgis:exportaddgeometrycolumns' with
+            # CALC_METHODS=2 (Ellipsoidal) directly, but that
+            # requires  QgsProject instance (see ftools source).
+            # To simplify test writing, use reprojection before.
+
+            tmp_filename = unique_filename(
+                suffix='.shp', dir=output_directory)
+            epsg = "EPSG:" + str(get_utm_epsg(self.extent[0], self.extent[1]))
+            res = processing.runalg(
+                'qgis:reprojectlayer',
+                impact_layer_splits,
+                epsg,
+                tmp_filename)
+            projected_layer = QgsVectorLayer(
+                res['OUTPUT'],
+                'projected aggregation',
+                'ogr')
+            tmp_filename = unique_filename(
+                suffix='.shp', dir=output_directory)
+            res = self.processing.runalg('qgis:exportaddgeometrycolumns',
+                projected_layer,
+                # 2, # Ellipsoidal
+                0,  # Layer CRS
+                tmp_filename)
+            impact_layer_splits = QgsVectorLayer(
+                res['OUTPUT'],
+                'length aggregation',
+                'ogr'
+            )
+            # This column name is used by the processing algorithm:
+            LENGTH_COLUMN = 'length'
+
+            sum_field_index = \
+                agg_provider.fieldNameIndex(self.sum_field_name())
+
+            # agg_attribute is a field name of aggregating polygons
+            agg_attribute = self.read_keywords(
+                    self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
+            agg_attribute_index = agg_provider.fieldNameIndex(agg_attribute)
+
+            request = QgsFeatureRequest().\
+                setSubsetOfAttributes([agg_attribute_index])
+            agg_attribute_dict = {}
+            for id, feat in enumerate(self.layer.getFeatures(request)):
+                name = feat.attributes()[0]
+                if name in agg_attribute_dict:  # The name isn't unique
+                    name += str(id)     # Add a number to make unique key
+                agg_attribute_dict[name] = id
+            # Total impacted length in the aggregation polygons:
+            total = {
+                id: 0 for id, __ in enumerate(self.layer.getFeatures(request))
+            }
+
+            # Create slots for dicts
+            self.impact_layer_attributes = []
+            for i in range(len(agg_attribute_dict)):
+                self.impact_layer_attributes.append([])
+
+            # Create list of line objects that are covered by
+            # aggregation polygons (a list of dicts for a polygon)
+            impact_field_map = {}   # {'FieldName': FieldIndex}
+            temp_aggr_field_map = \
+                impact_layer_splits.dataProvider().fieldNameMap()
+            for k, v in temp_aggr_field_map.iteritems():
+                impact_field_map[str(k)] = v
+
+            request = QgsFeatureRequest().\
+                setFlags(QgsFeatureRequest.NoGeometry)
+            agg_attribute_index = impact_layer_splits.dataProvider().\
+                fieldNameIndex(agg_attribute)
+            for feat in impact_layer_splits.getFeatures(request):
+                line_attributes = feat.attributes()
+                polygon_name = line_attributes[agg_attribute_index]
+                line_attribute_dict = \
+                    feature_attributes_as_dict(
+                        impact_field_map, line_attributes)
+                line_attribute_dict[self.sum_field_name()] = \
+                    line_attribute_dict[LENGTH_COLUMN]
+
+                if isinstance(
+                        line_attribute_dict[self.target_field],
+                        QtCore.QPyNullVariant):
+                    message = m.Paragraph(
+                        self.tr(
+                            'The target_field contains Null values.'
+                            ' The impact function should define this.')
+                    )
+                    LOGGER.debug(
+                        'Skipping postprocessing due to: %s' % message)
+                    self.error_message = message
+                    return
+
+                # Postprocessor will sum all impacted length,
+                # (remember, if line_attribute_dict[self.target_field]==0,
+                # then the line is not impacted), so to keep the impacted
+                # length and non-impacted zeros, the multiplication is used
+                line_attribute_dict[self.target_field] = \
+                    line_attribute_dict[LENGTH_COLUMN] * \
+                    line_attribute_dict[self.target_field]
+                polygon_index = agg_attribute_dict[polygon_name]
+                self.impact_layer_attributes[polygon_index].\
+                    append(line_attribute_dict)
+
+                ###################################################
+                # total in aggregation polygon
+                total[polygon_index] +=  \
+                    line_attribute_dict[self.target_field]
+
+            for polygon_index in total.keys():
+                agg_provider.changeAttributeValues(
+                    {polygon_index: {sum_field_index: total[polygon_index]}})
+
+            self.layer.commitChanges()
+
     def _prepare_layer(self):
         """Prepare the aggregation layer to match analysis extents.
 
@@ -888,22 +1065,13 @@ class Aggregator(QtCore.QObject):
                 raise
         # Area Of Interest (AOI) mode flag is False
         else:
-            # TODO: (DK) set extent in Dock, then use the self.extent
-            # remove extent calculation from here
-
-            # we use only the exposure extent, because both exposure and hazard
-            # have the same extent at this point.
-            geo_extent = extent_to_geo_array(
-                self.exposure_layer.extent(),
-                self.exposure_layer.crs())
-
             aggregation_attribute = self.read_keywords(
                 self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
 
             #noinspection PyArgumentEqualDefault
             clipped_layer = clip_layer(
                 layer=self.layer,
-                extent=geo_extent,
+                extent=self.extent,
                 explode_flag=True,
                 explode_attribute=aggregation_attribute)
 
@@ -931,9 +1099,26 @@ class Aggregator(QtCore.QObject):
         """Field name for the max column."""
         return (self.prefix + 'max')[:10]
 
-    def _sum_field_name(self):
-        """Field name for the sum column."""
-        return (self.prefix + 'sum')[:10]
+    def set_sum_field_name(self, value=None):
+        """Set field name for the sum column.
+
+        :param value: A name of sum field
+        :type value: string
+
+        :returns: None
+        """
+        if value is None:
+            self._sum_field_name = (self.prefix + 'sum')[:10]
+        else:
+            self._sum_field_name = value
+
+    def sum_field_name(self):
+        """Return field name for the sum column."""
+        if self._sum_field_name is None:
+            msg = "Field name for summary aggregation information" \
+                  "is not set."
+            raise InvalidParameterError
+        return self._sum_field_name
 
     def _aggregation_field_name(self, statistic_class):
         """Return name of aggregation field
@@ -1388,7 +1573,7 @@ class Aggregator(QtCore.QObject):
                 QgsPoint(self.extent[2], self.extent[3]))))
         feature[attribute_name] = self.tr('Entire area')
         provider.addFeatures([feature])
-
+        self.layer.updateExtents()
         try:
             self.update_keywords(
                 self.layer,

@@ -352,6 +352,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         registry = QgsMapLayerRegistry.instance()
         registry.layersWillBeRemoved.disconnect(self.get_layers)
         registry.layersAdded.disconnect(self.get_layers)
+        registry.layersRemoved.disconnect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
@@ -627,6 +628,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboExposure.blockSignals(True)
         self.cboHazard.blockSignals(True)
 
+    # noinspection PyUnusedLocal
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
         r"""Obtain a list of layers currently loaded in QGIS.
@@ -868,16 +870,42 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         function_id = self.get_function_id()
         self.calculator.set_function(function_id)
 
-        hazard_layer, exposure_layer = self.optimal_clip()
-        # See if the inputs need further refinement for aggregations
-        try:
+        # Get the hazard and exposure layers selected in the combos
+        # and other related parameters needed for clipping.
+        (extra_exposure_keywords,
+         buffered_geo_extent,
+         cell_size,
+         exposure_layer,
+         geo_extent,
+         hazard_layer) = self.clip_parameters
+
+        if self.calculator.requires_clipping():
+            # The impact function uses SAFE layers,
+            # clip them
+            hazard_layer, exposure_layer = self.optimal_clip()
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.aggregator.deintersect()
-        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
-            raise
+            # Extent is calculated in the aggregator:
+            self.calculator.set_extent(None)
+
+            # See if the inputs need further refinement for aggregations
+            try:
+                self.aggregator.deintersect()
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
+            # Get clipped layers
+            hazard_layer = self.aggregator.hazard_layer
+            exposure_layer = self.aggregator.exposure_layer
+        else:
+            # It is a 'new-style' impact function,
+            # clipping doesn't needed, but we need to set up extent
+            self.aggregator.set_layers(hazard_layer, exposure_layer)
+            self.calculator.set_extent(buffered_geo_extent)
+
         # Identify input layers
-        self.calculator.set_hazard_layer(self.aggregator.hazard_layer)
-        self.calculator.set_exposure_layer(self.aggregator.exposure_layer)
+        self.calculator.set_hazard_layer(hazard_layer)
+        self.calculator.set_exposure_layer(exposure_layer)
 
     def get_extent_as_array(self):
         """Return current extent as array
@@ -1859,21 +1887,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Slot to open impact report dialog that used to tune report
         when print map button pressed
         ."""
-        dialog = ImpactReportDialog(self.iface)
-        if not dialog.exec_() == QtGui.QDialog.Accepted:
+        dlg = ImpactReportDialog(self.iface)
+        if not dlg.exec_() == QtGui.QDialog.Accepted:
             self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Report generation cancelled!'))))
             return
 
-        use_full_extent = dialog.analysis_extent_radio.isChecked()
-        create_pdf = dialog.create_pdf
-        if dialog.default_template_radio.isChecked():
-            template_path = dialog.template_combo.itemData(
-                dialog.template_combo.currentIndex())
+        use_full_extent = dlg.analysis_extent_radio.isChecked()
+        create_pdf = dlg.create_pdf
+        if dlg.default_template_radio.isChecked():
+            template_path = dlg.template_combo.itemData(
+                dlg.template_combo.currentIndex())
         else:
-            template_path = dialog.template_path.text()
+            template_path = dlg.template_path.text()
 
         print_map = Map(self.iface)
         if self.iface.activeLayer() is None:
@@ -1885,7 +1913,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         'trying to print.'))
             return
 
-        # noinspection PyTypeChecker
         self.show_dynamic_message(
             m.Message(
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
@@ -1898,23 +1925,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-
-        # TODO: We could move these three mutators into map.py
-        # if not set will default to north arrow in resources file
-        north_arrow_path = settings.value(
-            'inasafe/northArrowPath', '', type=str)
-        if north_arrow_path != '':
-            print_map.set_organisation_logo(north_arrow_path)
-
         logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
-        # map.py will default to disclaimer() function text if not set below
-        disclaimer_text = settings.value(
-            'inasafe/reportDisclaimer', '', type=str)
-        if disclaimer_text != '':
-            print_map.set_disclaimer(disclaimer_text)
+        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
+        if disclaimer != '':
+            print_map.set_disclaimer(disclaimer)
 
         print_map.set_template(template_path)
 

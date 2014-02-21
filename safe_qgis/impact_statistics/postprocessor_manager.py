@@ -63,7 +63,7 @@ class PostprocessorManager(QtCore.QObject):
         self.function_parameters = None
 
     def _sum_field_name(self):
-        return self.aggregator.prefix + 'sum'
+        return self.aggregator.sum_field_name()
 
     def _sort_no_data(self, data):
         """Check if the value field of the postprocessor is NO_DATA.
@@ -360,7 +360,7 @@ class PostprocessorManager(QtCore.QObject):
                     elderly_ratio = \
                         self.aggregator.get_default_keyword('ELDERLY_RATIO')
 
-        if 'BuildingType' in postprocessors:
+        if 'BuildingType' or 'RoadType' in postprocessors:
             try:
                 key_attribute = self.keyword_io.read_keywords(
                     self.aggregator.exposure_layer, 'key_attribute')
@@ -447,7 +447,7 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['adult_ratio'] = adult_ratio
                     parameters['elderly_ratio'] = elderly_ratio
 
-                if key == 'BuildingType':
+                if key == 'BuildingType' or key == 'RoadType':
                     parameters['key_attribute'] = key_attribute
 
                 value.setup(parameters)
