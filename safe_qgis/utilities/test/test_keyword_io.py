@@ -219,7 +219,8 @@ class KeywordIOTest(unittest.TestCase):
 
     def test_copy_keywords(self):
         """Test we can copy the keywords."""
-        out_path = unique_filename(prefix='test_copy_keywords')
+        out_path = unique_filename(
+            prefix='test_copy_keywords', suffix='.keywords')
         self.keyword_io.copy_keywords(self.raster_layer, out_path)
         copied_keywords = read_file_keywords(out_path)
         expected_keywords = self.expected_raster_keywords
