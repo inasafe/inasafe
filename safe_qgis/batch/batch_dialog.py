@@ -233,7 +233,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         activities in QGIS, for example automatically running an impact
         assessment in response to an event.
 
-        :param filename: str - the script filename.
+        :param filename: the script filename.
+        :type filename: str
         """
 
         # import script module

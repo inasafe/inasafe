@@ -330,6 +330,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
 
+        # whether to show or not a custom Logo
+        self.org_logo_path = settings.value(
+            'inasafe/orgLogoPath', '', type=str)
+
+        if self.org_logo_path:
+            dock_width = self.width()
+            self.org_logo.setMaximumWidth(dock_width)
+            self.org_logo.setPixmap(QtGui.QPixmap(self.org_logo_path))
+            self.org_logo.show()
+        else:
+            self.org_logo.hide()
+
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
 
@@ -872,12 +884,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
+        # pylint: disable=W0633,W0612
         (extra_exposure_keywords,
          buffered_geo_extent,
          cell_size,
          exposure_layer,
          geo_extent,
          hazard_layer) = self.clip_parameters
+        # pylint: enable=W0633,W0612
 
         if self.calculator.requires_clipping():
             # The impact function uses SAFE layers,
@@ -1929,9 +1943,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
-        disclaimer = settings.value('inasafe/reportDisclaimer', '', type=str)
-        if disclaimer != '':
-            print_map.set_disclaimer(disclaimer)
+        disclaimer_text = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        if disclaimer_text != '':
+            print_map.set_disclaimer(disclaimer_text)
 
         print_map.set_template(template_path)
 
@@ -1940,8 +1955,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if print_map.map_title() is not None:
                 default_file_name = print_map.map_title() + '.pdf'
             else:
-                self.show_error_message(self.tr('Keyword "map_title" not '
-                                                'found.'))
+                self.show_error_message(
+                    self.tr('Keyword "map_title" not found.'))
                 return
 
             default_file_name = default_file_name.replace(' ', '_')

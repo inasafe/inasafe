@@ -175,7 +175,11 @@
                 
   <div class="section" id="the-impact-layer-merge-tool">
 <span id="toolbar-impact-layer-merge-tool"></span><h1>Tool Menggabungkan Layer Dampak<a class="headerlink" href="#the-impact-layer-merge-tool" title="Link permanent untuk headline ini">¶</a></h1>
-<p>Dalam beberapa kasus Anda mungkin menginginkan membuat sebuah laporan yang berisi kombinasi dari dua fungsi dampak di satu area yang sama untuk <em>ancaman yang sama, keterpaparan yang berbeda*</em>. Sebagai contoh Anda mungkin ingin melihat hasil kajian dari dampak banjir terhadap populasi dan bangunan dan menggabungkan keduanya kedalam satu laporan. Tool menggabungkan layer dampak akan membantu anda untuk membuat hal tersebut.</p>
+<p>In some cases you may wish to create a report containing the combined output of
+two impact functions for the same area for the <strong>same hazard, different
+exposures</strong>. For example You may carry out an assessment of the impact of a
+flood on population and on buildings and combine the results into a single
+report. The impact layer merge tool allows you to do this.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/impact_merge_dialog.png"><img alt="Opened impact merge dialog" src="_images/impact_merge_dialog.png" style="width: 396.75px; height: 516.0px;" /></a>
 <p class="caption">Tampilan dialog Menggabungkan Layer Dampak yang telah terbuka</p>
@@ -231,24 +235,23 @@
 </div>
 <div class="section" id="using-customized-template">
 <h2>Menggunakan <em>Template</em> Terkostumisasi<a class="headerlink" href="#using-customized-template" title="Link permanent untuk headline ini">¶</a></h2>
-<p><em>Template</em> laporan bawaan berada di <tt class="file docutils literal"><span class="pre">/resources/qgis-composer-templates/merged-report.qpt</span></tt>. Jika <em>template</em> tersebut tidak dapat memenuhi kebutuhan anda, anda dapat menggunakan <em>template</em> laporan anda sendiri. Sebelum menggunakan <em>template</em> laporan anda sendiri, pastikan bahwa <em>template</em> anda terdiri dari elemen-elemen berikut:</p>
+<p><em>Template</em> laporan bawaan berada di <tt class="file docutils literal"><span class="pre">/resources/qgis-composer-templates/merged-report.qpt</span></tt>. Jika <em>template</em> tersebut tidak dapat memenuhi kebutuhan anda, anda dapat menggunakan <em>template</em> laporan anda sendiri. Sebelum menggunakan <em>template</em> laporan anda sendiri, pastikan bahwa <em>template</em> Anda terdiri dari elemen-elemen berikut dengan ID:</p>
 <ul class="simple">
-<li><p class="first"><strong>peta-dampak</strong>, berjenis QgsComposerMap</p>
+<li><p class="first"><strong>impact-map</strong>, berjenis QgsComposerMap</p>
 </li>
-<li><p class="first"><strong>logo-InaSAFE</strong>, berjenis QgsComposerPicture</p>
+<li><p class="first"><strong>safe-logo</strong>, berjenis QgsComposerPicture</p>
 </li>
-<li><p class="first"><strong>ringkasan-laporan</strong>, berjenis QgsComposerLabel</p>
+<li><p class="first"><strong>summary-report</strong>, berjenis QgsComposerLabel</p>
 </li>
-<li><p class="first"><strong>daerah-agregrasi</strong>, berjenis QgsComposerLabel</p>
+<li><p class="first"><strong>aggregation-area</strong>, berjenis QgsComposerLabel</p>
 </li>
-<li><p class="first"><strong>skala-peta</strong>, berjenis QgsComposerScaleBar</p>
+<li><p class="first"><strong>map-scale</strong>, berjenis QgsComposerScaleBar</p>
 </li>
-<li><p class="first"><strong>legenda-peta</strong>, berjenis QgsComposerLegend</p>
+<li><p class="first"><strong>map-legend</strong>, berjenis QgsComposerLegend</p>
 </li>
-<li><p class="first"><strong>logo-organisasi</strong>, berjenis QgsComposerPicture</p>
+<li><p class="first"><strong>organisation-logo</strong>, berjenis QgsComposerPicture</p>
 </li>
-<li><p class="first"><strong>table laporan-yang tergabung</strong>, berjenis QgsComposerHTML</p>
-</li>
+<li><strong>merged-report-table</strong>, a QgsComposerHTML</li>
 </ul>
 <p>Jika salah satu dari elemen tersebut tidak tersedia didalam <em>template</em> laporan, QGIS akan memberi Anda informasi mengenai elemen apa yang kurang dari <em>template</em> tersebut.</p>
 <div class="admonition note">
@@ -263,38 +266,39 @@
 please go to <strong>InaSAFE Option</strong> tools and change the value of the related field.
 Those elements are:</p>
 <ul class="simple">
-<li><p class="first"><strong>logo-organisasi</strong>. Ini sesuai dengan <em>field</em> <strong>Logo Organisasi</strong> pada <em>tool</em> pilihan InaSAFE. Jika anda tidak mengisi <em>field</em> ini, maka logo bawaan, <em>supporters.png</em>, akan digunakan.</p>
+<li><p class="first"><strong>organisation-logo</strong>. Ini sesuai dengan <em>field</em> <strong>Logo Organisasi</strong> pada <em>tool</em> pilihan InaSAFE. Jika anda tidak mengisi <em>field</em> ini, maka logo bawaan, <strong>supporters.png</strong>, akan digunakan.</p>
 </li>
 <li><strong>disclaimer</strong>. It corresponds to <strong>Disclaimer text</strong> field on InaSAFE
 Option tools.
 If you do not fill this field, then the default one will be used: &#8220;InaSAFE
-has been jointly developed by BPNB, Australian Govenment and the World
-Bank - GFDRR&#8221;</li>
+has been jointly developed by Indonesian Government-BPNB, Australian Govenment-AIFDR and the World
+Bank-GFDRR. These agencies and the individual software developers of InaSAFE take no responsibility for
+the correctness of outputs from InaSAFE or decisions derived as a consequence.&#8221;</li>
 </ul>
 <p>2. Elements containing tokens. The id of these element is not significant, only the token
 it contains. At render time, any of these tokens will be replaced. If you want to have a
 label containing value of these elements, enclose these elements with [] on a label i.e
 <strong>[impact-title]</strong> or <strong>[hazard-title]</strong>. Those elements are listed below:</p>
 <ul class="simple">
-<li><p class="first"><strong>judul-dampak</strong>. Menandakan judul dari dua dampak. Nilai akan menjadi &#8220;<em>judul_dampak_pertama</em> dan <em>judul_dampak_kedua</em>&#8220;</p>
+<li><p class="first"><strong>impact-title</strong>. Menandakan judul dari dua dampak. Nilai akan menjadi &#8220;<em>judul_dampak_pertama</em> dan <em>judul_dampak_kedua</em>&#8220;</p>
 </li>
-<li><p class="first"><strong>judul-bencana</strong>. Mengindikasikan judul bencana yang digunakan untuk membuat <em>layer</em> dampak.</p>
+<li><p class="first"><strong>hazard-title</strong>. Mengindikasikan judul bencana yang digunakan untuk membuat <em>layer</em> dampak.</p>
 </li>
 </ul>
 <p>3. Elements that are direcly updated by the renderer. All of these elements below are
 generated automatically by the tools.</p>
 <ul class="simple">
-<li><p class="first"><strong>peta-dampak</strong>. Terdiri dari peta dua <em>layer</em> dampak.</p>
+<li><p class="first"><strong>impact-map</strong>. Terdiri dari peta dua <em>layer</em> dampak.</p>
 </li>
-<li><p class="first"><strong>ringkasan-laporan</strong>. Terdiri dari ringkasan dampak dari dua <em>layer</em> dampak.</p>
+<li><p class="first"><strong>summary-report</strong>. Terdiri dari ringkasan dampak dari dua <em>layer</em> dampak.</p>
 </li>
-<li><p class="first"><strong>daerah-agregasi</strong>. Terdiri dari nama daerah agregasi.</p>
+<li><p class="first"><strong>aggregation-area</strong>. Terdiri dari nama daerah agregasi.</p>
 </li>
-<li><p class="first"><strong>skala-peta</strong>. Mengindikasikan skala dari peta. Agar dapat bekerja dengan segala jenis proyeksi, kami menyarankan agar Anda menggunakan skala bar numerik.</p>
+<li><p class="first"><strong>map-scale</strong>. Mengindikasikan skala dari peta. Agar dapat bekerja dengan segala jenis proyeksi, kami menyarankan agar Anda menggunakan skala bar numerik.</p>
 </li>
 <li><p class="first"><strong>legenda-peta</strong>. Menyajikan legenda dari penggabungan <em>layer</em> dampak. Pengaturan bawaan dari <em>template</em> legenda peta diatur kedalam 2 kolom yang menggambarkan masing-masing legenda <em>layer</em> dampak.</p>
 </li>
-<li><p class="first"><strong>tabel-laporan-yang tergabung</strong>. Ini terdiri dari informasi detail dari setiap dampak.</p>
+<li><p class="first"><strong>merged-report-table</strong>. Ini terdiri dari informasi detail dari setiap dampak.</p>
 </li>
 </ul>
 </div>
