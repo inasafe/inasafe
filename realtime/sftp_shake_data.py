@@ -277,6 +277,7 @@ class SftpShakeData:
     def extract(self, force_flag=False):
         """Checking the grid.xml file in the machine, if found use it.
         Else, download from the server.
+
         :param force_flag: force flag to extract.
         """
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')

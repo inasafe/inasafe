@@ -230,7 +230,6 @@ dependency_test:
 	@grep -R "geonode" $(NONGUI) || true
 	@grep -R "geoserver" $(NONGUI) || true
 	@grep -R "owslib" $(NONGUI) || true
-	@grep -R "third_party" $(NONGUI) || true
 	@# Allowed since 2.0
 	@#grep -R "third_party" $(NONGUI) || true
 

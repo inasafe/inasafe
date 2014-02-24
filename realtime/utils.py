@@ -90,6 +90,7 @@ def log_dir():
 
 def mk_dir(dir_path):
     """Make a directory, making sure it is world writable.
+
     :param dir_path: The directory path.
     """
     if not os.path.exists(dir_path):

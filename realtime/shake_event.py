@@ -422,6 +422,7 @@ class ShakeEvent(QObject):
         :param force_flag: Optional. Whether to force the regeneration of the
         output file. Defaults to False.
         :type force_flag: bool
+
         :return: The absolute file system path to the delimited text file.
         :rtype: str
 
@@ -506,6 +507,7 @@ class ShakeEvent(QObject):
 
         :return: A copy of the command with the prefix added.
         :rtype: str
+
         :raises: None
         """
 
@@ -526,6 +528,7 @@ class ShakeEvent(QObject):
         :type command: str
 
         :return: None
+
         :raises: Any exceptions will be propagated.
         """
 
@@ -556,6 +559,7 @@ class ShakeEvent(QObject):
 
         :param force_flag: bool (Optional). Whether to force the regeneration
             of the output file. Defaults to False.
+
         :return: Path to the resulting tif file.
         :rtype: str
 
@@ -1611,13 +1615,8 @@ class ShakeEvent(QObject):
         self.: A dictionary with keys mmi levels and values affected count
                 as per the example below. This is typically going to be passed
                 from the :func:`calculate_impacts` function defined below.
-<<<<<<< HEAD
 
 
-=======
-
-
->>>>>>> 65509fada1fc8e18595af09cbc92c2cd6342d445
         :return: Full absolute path to the saved html content.
         :rtype: str
 
