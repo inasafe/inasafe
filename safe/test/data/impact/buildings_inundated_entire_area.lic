@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Kristy Van Putten</author>
+  </metadata>
+
+  <datafile>
+    <filename>buildings_inundated_entire_area.shp</filename>
+    <checksum>184572097</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Yewondwossen Assefa</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was
+    derived by clipping a small area from the DKI_Buildings InaSAFE sample
+    dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>buildings_inundated_entire_area.shx</filename>
+    <checksum>3727856559</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Yewondwossen Assefa</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was
+    derived by clipping a small area from the DKI_Buildings InaSAFE sample
+    dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>buildings_inundated_entire_area.dbf</filename>
+    <checksum>3529475394</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Yewondwossen Assefa</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was
+    derived by clipping a small area from the DKI_Buildings InaSAFE sample
+    dataset.</IP_info>
+  </datafile>
+
+</ga_license_file>
+

@@ -565,7 +565,7 @@ def aggregate(data=None, boundaries=None,
     Output:
         Dictionary of {boundary_name: aggregated value}
     """
-
+    res = None
     if data.is_point_data:
         res = aggregate_point_data(data, boundaries,
                                    attribute_name, aggregation_function)
@@ -579,7 +579,6 @@ def aggregate(data=None, boundaries=None,
         msg = ('Input argument "data" must be point or raster data. '
                'I got type: %s' % data.get_geometry_type())
         raise Exception(msg)
-
     return res
 
 

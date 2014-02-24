@@ -14,4 +14,24 @@
     <IP_info>www.openstreetmap.org</IP_info>
   </datafile>
 
+  <datafile>
+    <filename>district_osm_jakarta.shx</filename>
+    <checksum>976051007</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Kristy Van Putten</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>ODbL</IP_owner>
+    <IP_info>www.openstreetmap.org</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>district_osm_jakarta.dbf</filename>
+    <checksum>1734904389</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Kristy Van Putten</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>ODbL</IP_owner>
+    <IP_info>www.openstreetmap.org</IP_info>
+  </datafile>
+
 </ga_license_file>

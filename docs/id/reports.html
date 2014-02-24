@@ -184,7 +184,7 @@
                 
   <div class="section" id="reports">
 <span id="toolbar-reports"></span><h1>Laporan<a class="headerlink" href="#reports" title="Link permanent untuk headline ini">¶</a></h1>
-<p>Laporkan tentang proyek skenario dampak yang dibuat menggunakan QGIS template komposer. Pengaturan bawaan template sudah menjadi bagian dari plugin, tapi anda dapat dengan mudah membuat template anda sendiri di QGIS dan menggunakannya sebagai dasar dalam laporan anda.</p>
+<p>Laporan tentang proyek skenario dampak dibuat menggunakan QGIS template komposer. Pengaturan bawaan template sudah menjadi bagian dari plugin, tapi anda dapat dengan mudah membuat template anda sendiri di QGIS dan menggunakannya sebagai dasar dalam laporan anda.</p>
 <p>Template lokal didukung melalui skema sederhana berikut ini:</p>
 <p>Jika ada sebuah template tertentu yang disebut <tt class="file docutils literal"><span class="pre">/path/to/template/foo.qpt</span></tt> lalu plugin terlihat di direktori template <tt class="file docutils literal"><span class="pre">/path/to/template/</span></tt> untuk sebuah file memanggil file <tt class="file docutils literal"><span class="pre">foo-LANG.qpt</span></tt>, dimana &#8220;LANG&#8221; adalah kode bahasa untuk sistem lokal.</p>
 <p>Jika sebuah file ada maka akan digunakan untuk membuat laporan sebaliknya template asli <tt class="file docutils literal"><span class="pre">/path/to/template/foo.qpt</span></tt> akan digunakan</p>
@@ -211,7 +211,7 @@
 <h3>Elemen yang mana ter-update secara langsung oleh para penyaji<a class="headerlink" href="#elements-that-are-directly-updated-by-the-renderer" title="Link permanent untuk headline ini">¶</a></h3>
 <p>Dalam kasus ini semua konten yang mungkin hadir di elemen seluruhnya telah diganti oleh peta realtime, walaupun pilihan gaya tampilan ini (contoh pengaturan graticule pada peta) akan menyisakan efek tertentu</p>
 <p>Elemen ini dikenali dengan ID-nya dan plugin saat ini mendukung elemen-elemen berikut:</p>
-<ul class="simple">
+<ul>
 <li><p class="first"><strong>safe-logo</strong> &#8212; gambar komposer QGIS, dimana akan digunakan untuk menampilkan logo InaSAFE beserta alamat situsnya.</p>
 </li>
 <li><p class="first"><strong>organisation-logo</strong> &#8212; gambar komposer QGIS, dimana akan digunakan untuk menampilkan logo organisasi. Kombinasi logo organisasi pendukung akan digunakan menurut pengaturan bawaan. Untuk menggunakan gambar logo anda sendiri, aturlah lokasi berkas PNG anda dialog Pilihan pada menu Plugin (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk lebih jelasnya).</p>
@@ -220,14 +220,18 @@
 </li>
 <li><p class="first"><strong>keterangan-dampak</strong> &#8212; Komposer Keterangan QGIS, yang akan digunakan untuk menampilkan keterangan dari skenario dampak.</p>
 </li>
-<li><p class="first"><strong>impact-report</strong> &#8212; komposer label QGIS, dimana akan digunakan untuk menampilkan tabel laporan dampak. <strong>CATATAN</strong>: dikarenakan komposer QGIS tidak mendukung pembesaran elemen secara otomatis, berdasarkan konten mereka, pastikan label telah memiliki dimensi yang cukup besar untuk menampilkan tabel secara keseluruhan.</p>
+<li><p class="first"><strong>laporan-dampak</strong> &#8212; label komposer QGIS, yang akan digunakan untuk menampilkan tabel laporan dampak.</p>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">Karena komposer QGIS tidak mendukung pembesaran elemen secara otomatis berdasarkan konten, maka pastikan label telah memiliki dimensi yang cukup besar agar tabel dapat ditampilkan secara keseluruhan.</p>
+</div>
 </li>
 </ul>
 </div>
 </div>
 <div class="section" id="replaceable-keywords">
 <h2>Kata kunci yang dapat diganti<a class="headerlink" href="#replaceable-keywords" title="Link permanent untuk headline ini">¶</a></h2>
-<p>Sesi ini menjelaskan kata kunci tokenised yang dilewatkan di template peta. Untuk menyisipkan kata kunci apapun ke dalam template peta, sertakan kunci di [] (contoh [nama-tempat]) dan dia akan terganti dengan nilai teks (contoh Tondano). Daftar tersebut termasuk frasa statis yang telah diinternasionalisasi (dan karenanya akan ditampilkan dalam bahasa lokal peta tersebut, atur ke dalam bahasa inggris jika tidak ada terjemahan yang tersedia).</p>
+<p>Bagian ini mendeskripsikan <em>tokenised keyword</em> yang akan diturunkan pada template peta. Untuk memasukan keyword apapun pada template peta, cukup lampirkan key pada [] (misal [nama-tempat]) dan key ini akan tergantikan dengan nilai teks (misal Tondano). Daftar termasuk frasa statis yang telah di-internasionalisasikan (sehingga mereka akan ditampilkan sesuai dengan bahasa yang dipilih secara lokal pada peta, jika tidak ada terjemahan yang tersedia maka akan ditampilkan ke dalam bahasa Inggris sesuai dengan pengaturan bawaan).</p>
 <p>Kata kunci tokenized berikut ini didukung:</p>
 <ul class="simple">
 <li><p class="first"><strong>judul-dampak</strong> &#8212; judul dari peta skenario dampak.</p>
@@ -238,7 +242,7 @@
 </li>
 <li><p class="first"><strong>versi-safe</strong> &#8212; versi plugin yang digunakan.</p>
 </li>
-<li><p class="first"><strong>disclaimer</strong> &#8212; teks ketentuan. Pengaturan bawaan akan menggunakan teks: &#8220;InaSAFE telah dikembangkan bersama dengan BNPB, Pemerintah Australia dan Bank Dunia - GFDRR&#8221;. Untuk menggunakan teks ketentuan yang diinginkan, masukan teks di dialog Pilihan pada menu plugin (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk lebih jelasnya).</p>
+<li><p class="first"><strong>disclaimer</strong> &#8212; disclaimer text. Pengaturan awal menggunakan teks: &#8220;InaSAFE telah dikembangkan bersama sama oleh Pemerintah Indonesia-BNPB, Pemerintah Australia-AIFDR dan Bank Dunia-GFDRR. Badan-badan tersebut dan individu pengembang perangkat lunak InaSAFE tidak bertanggung jawab atas kebenaran yang dihasilkan dari InaSAFEE atau keputusan yang mengikutinya sebagai konsekuensi.&#8221; Untuk menggunakan teks peringatan terkostumisasi, masukkan teks yang diinginkan pada dialog Pengaturan plugin (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk lebih detail).</p>
 </li>
 </ul>
 </div>
