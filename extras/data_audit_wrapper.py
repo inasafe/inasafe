@@ -27,7 +27,7 @@ extensions_to_ignore += ['.qml', '.qpj', '.qgs',
                          '.sld', '.sqlite', '.db']
 
 # Ignore pdf, doc and csv documents
-extensions_to_ignore += ['.pdf', '.doc', '.csv']
+extensions_to_ignore += ['.pdf', '.doc', '.csv', '.iml', 'DS_Store']
 
 # Ignore generated stuff
 extensions_to_ignore += ['.pyc', '.o', '.so', '~']
@@ -38,7 +38,7 @@ extensions_to_ignore += ['.aux', '.log', '.idx', 'ilg', '.ind',
 extensions_to_ignore += ['.lic', '.permission']
 
 # Ignore certain other files,
-files_to_ignore = ['README.txt', 'LICENSE.txt', 'Makefile',
+files_to_ignore = ['README.txt', 'LICENSE.txt', 'Makefile', '.name',
                    '.temp', 'SConstruct', 'SConscript', 'log.ini']
 
 # Ignore directories

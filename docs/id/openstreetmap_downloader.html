@@ -191,20 +191,24 @@
 </div>
 <p>Tool ini membutuhkan koneksi internet karena tool ini mengambil data dari layanan situs <a class="reference external" href="http://osm.linfiniti.com">Laporan OSM Linfiniti</a></p>
 <p>Data, setelah didownload akan tersedia untuk Anda sebagai sebuah shapefile. Sebuah gaya file secara otomatis dibuat sehingga dilambangkan dengan baik dalam QGIS. Selain itu, metadata kata kunci yang benar dibuat untuk dataset didownload sehingga dapat digunakan secara langsung dalam skenario analisis dampak menggunakan InaSAFE.</p>
-<p><strong>Catatan:</strong> Layanan alat pen-<em>download</em> yang disediakan memiliki keterbatasan untuk ukuran dataset yang dapat diambil. Dengan demikian mungkin Anda akan mengalami masalah misalnya dalam mengambil data bangunan untuk seluruh wilayah negara. Pada umumnya seharusnya proses pengambilan dataset dengan cakupan wilayah tingkat kota dan di bawahnya dapat bekerja lebih baik.</p>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">The downloader service has limitations as to the size of
+datasets that can be retrieved.
+As such you may experience issues trying to fetch e.g. country wide
+building footprint data.
+Generally datasets at a city level and below should work well.</p>
+</div>
 <p>Untuk menggunakan alat ini secara efektif:</p>
 <ul class="simple">
 <li>Use QGIS to zoom in to the area for which you want building data to be
-retrieved. For fine-grained control, you can set the bounding box manually
-in the area provided at the bottom of the dialog.</li>
+retrieved.
+For fine-grained control, you can set the bounding box manually in the area
+provided at the bottom of the dialog.</li>
 <li><p class="first">Periksa apakah direktori output sudah benar. Catatan bahwa set data yang tersimpan akan diberi nama buildings.shp dan roads.shp (beserta berkas-berkas yang terhubung dengannya)</p>
 </li>
-<li>By default simple file names will be used (e.g. roads.shp, buildings.shp).
-If you wish you can specify a prefix to add in front of this default name.
-For example using a prefix of &#8216;padang-&#8216; will cause the downloaded files to be
-saved as &#8216;padang-roads.shp&#8217; and &#8216;padang-buildings.shp&#8217;. Note that the only
-allowed prefix characters are A-Z, a-z, 0-9 and the characters &#8216;-&#8216; and &#8216;_&#8217;.
-You can leave this blank if you prefer.</li>
+<li><p class="first">Secara default, nama file yang sederhana akan digunakan (misalnya roads.shp, buildings.shp). Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &#8216;padang-&#8216; akan mengubah file yang di-download menjadi &#8216;padang-roads.shp&#8217; dan &#8216;padang-buildings.shp&#8217;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &#8216;-&#8216;, dan &#8216;_&#8217;. Anda dapat mengosongkan pilihan ini.</p>
+</li>
 <li><p class="first">Tekan <em class="guilabel">OK Button</em> dan tunggu data untuk diambil.</p>
 </li>
 </ul>
@@ -257,16 +261,17 @@ You can leave this blank if you prefer.</li>
 <li><p class="first">Industri</p>
 </li>
 </ul>
-<p>Tipe-tipe ini akan muncul pada sebuah kolom bernama &#8216;type&#8217; ketika mendownload data bangunan. Catatan bahwa tergantung wilayah mana yang anda download, kemungkinan hanya beberapa dari kategori ini yang akan muncul pada set data bangunan anda.</p>
+<p>These derived types will be present in a field called &#8216;type&#8217; when downloading
+the building data.
+Note that depending on the area for which you have downloaded,
+only some of these categories may be present in your buildings dataset.</p>
 </div>
 <div class="section" id="roads-data">
 <h2>Data jalan<a class="headerlink" href="#roads-data" title="Link permanent untuk headline ini">¶</a></h2>
 <p>InaSAFE mendukung penggunaan data bangunan untuk berbagai fungsi dampak. Pada umumnya kami mendukung jalan yang bersumber dari proyek <a class="reference external" href="https://openstreetmap.org">OpenStreetMap (OSM)</a></p>
 <p>Tipe jalan berikut ini yang berasal (tergantung dari berbagai tags yang diberikan pada OSM) adalah sebagai berikut:</p>
-<p>ALTER TABLE planet_osm_line ADD COLUMN &#8220;type&#8221; VARCHAR(255) NULL;</p>
 <ul class="simple">
-<li><p class="first">Jalan besar atau jalan bebas hambatan (termasuk &#8216;trunk&#8217; / jalan penting dari OSM)</p>
-</li>
+<li>Motorway / highway (includes &#8216;trunk&#8217; from OSM)</li>
 <li><p class="first">Percabangan jalan besar</p>
 </li>
 <li><p class="first">Jalan primer</p>
@@ -283,11 +288,16 @@ You can leave this blank if you prefer.</li>
 </li>
 <li><p class="first">Jalan, perumahan, permukiman, etc. (termasuk semua jalan yang diberi tag &#8216;living_street&#8217;, &#8216;residential&#8217;, &#8216;yes&#8217;, &#8216;road&#8217;, &#8216;unclassified&#8217;, &#8216;service&#8217;, &#8216;&#8217; dan NULL)</p>
 </li>
-<li><p class="first">Trek</p>
-</li>
+<li>Track</li>
 <li><p class="first">Jalur sepeda, jalan kecil, etc. (termasuk jalan dengan tag  &#8216;cycleway&#8217;, &#8216;footpath&#8217;, &#8216;pedestrian&#8217;, &#8216;footway&#8217; dan &#8216;path&#8217; )</p>
 </li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">The roads data are symbolised using a rule based renderer in QGIS.
+As you zoom out the roads will be rendered using different styles to avoid
+an overly cluttered map at small scales.</p>
+</div>
 </div>
 </div>
 

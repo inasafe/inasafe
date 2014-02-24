@@ -351,9 +351,8 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(expected_string_results, string_results)
         # check numeric attributes with a 0.01% tolerance compared to the
         # native QGIS stats
-        numpy.testing.assert_allclose(expected_numeric_results,
-                                      numeric_results,
-                                      rtol=0.01)
+        numpy.testing.assert_allclose(
+            expected_numeric_results, numeric_results, rtol=0.01)
 
         if impact_layer_attributes is not None:
             self.assertListEqual(
@@ -635,6 +634,7 @@ class AggregatorTest(unittest.TestCase):
             self.assertAlmostEquals(self.extent[2], x_max)
             self.assertAlmostEquals(self.extent[3], y_max)
             self.assertTrue(aggregator.safe_layer.is_vector)
+            _ = agg_layer
 
     def test_set_sum_field_name(self):
         """Test sum_field_name work
