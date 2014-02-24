@@ -864,14 +864,3 @@ def compare_wkt(a, b, tol=0.000001):
             return False
 
     return True
-
-
-def compare_result_to_expected_file(result, expected_result_file):
-    expected_result = open(
-        expected_result_file,
-        'r').readlines()
-    result = result.replace(
-        '</td> <td>', ' ').replace('</td><td>', ' ')
-    for line in expected_result:
-        line = line.replace('\n', '')
-        assert line in result

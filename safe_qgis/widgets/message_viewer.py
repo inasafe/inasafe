@@ -16,9 +16,6 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
-import time
-
-from PyQt4.QtCore import QUrl
 
 from safe import messaging as m
 from safe_qgis.safe_interface import InvalidParameterError
@@ -76,8 +73,6 @@ class MessageViewer(QtWebKit.QWebView):
         self.log_path = None
         self.report_path = None
         self._impact_path = None
-
-        self._html_loaded_flag = False
 
         #base_dir = os.path.dirname(__file__)
         #self.header = header.replace('PATH', base_dir)
@@ -257,7 +252,7 @@ class MessageViewer(QtWebKit.QWebView):
                 string += html
 
         string += html_footer()
-        self.load_and_wait_html(html=string)
+        self.setHtml(string)
         #self.scroll_to_div()
 
     def to_message(self):
@@ -327,44 +322,6 @@ class MessageViewer(QtWebKit.QWebView):
                 open_in_browser(self.log_path)
             else:
                 open_in_browser(self.report_path)
-
-    # TODO (MB) this and the similar method in html_renderer could be
-    # refactored out to the utilities
-    def load_and_wait_html(self, file_path=None, html=None):
-        # noinspection PyUnresolvedReferences
-        if file_path is None and html is None:
-            raise RuntimeError(self.tr('file_path or html need to be set'))
-
-        self._html_loaded_flag = False
-        self.loadFinished.connect(self.html_loaded_slot)
-
-        if file_path is not None:
-            self.setUrl(QUrl.fromLocalFile(file_path))
-        elif html is not None:
-            self.setHtml(html)
-
-        my_counter = 0
-        my_sleep_period = 0.1  # sec
-        my_timeout = 10  # sec
-        while not self._html_loaded_flag and my_counter < my_timeout:
-            # Block until the event loop is done printing the page
-            my_counter += my_sleep_period
-            time.sleep(my_sleep_period)
-            # noinspection PyArgumentList
-            QtCore.QCoreApplication.processEvents()
-
-        if not self._html_loaded_flag:
-            LOGGER.error('Failed to load html')
-
-        # noinspection PyUnresolvedReferences
-        self.loadFinished.disconnect(self.html_loaded_slot)
-
-    def html_loaded_slot(self, ok):
-        """Slot called when the page is loaded.
-        """
-        print "html_loaded_slot set to %s" % ok
-        self._html_loaded_flag = ok
-        LOGGER.debug('html_loaded_slot slot called')
 
     def load_html_file(self, file_path):
         self.setUrl(QtCore.QUrl.fromLocalFile(file_path))
