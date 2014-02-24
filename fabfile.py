@@ -23,7 +23,7 @@ Tim Sutton, Jan 2013
 import os
 from datetime import datetime
 
-from fabric.api import fastprint, env, run, hide, sudo, cd, task, get, put
+from fabric.api import fastprint, env, run, hide, sudo, cd, task, get, hosts
 from fabric.colors import blue, red, green
 from fabric.contrib.files import contains, exists, append, sed
 
@@ -106,6 +106,7 @@ def initialise_qgis_plugin_repo():
 ###############################################################################
 
 
+@hosts('linfiniti3')
 @task
 def build_test_package(branch='master'):
     """Create a test package and publish it in our repo.
