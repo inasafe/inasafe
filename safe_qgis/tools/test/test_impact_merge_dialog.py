@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'akbargumbira@gmail.com'
 __date__ = '23/10/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -162,15 +162,15 @@ class ImpactMergeDialogTest(unittest.TestCase):
             # Set the current Index of the combobox
             for index in range(0, impact_layer_count):
                 first_combobox = self.impact_merge_dialog.first_layer
-                layer_name = first_combobox.itemText(index)
-                if ('population' in layer_name) and ('entire' in layer_name):
+                layer_source = first_combobox.itemData(index).source()
+                if 'population_affected_entire_area' in layer_source:
                     self.impact_merge_dialog.first_layer.setCurrentIndex(
                         index)
 
             for index in range(0, impact_layer_count):
                 second_combobox = self.impact_merge_dialog.second_layer
-                layer_name = second_combobox.itemText(index)
-                if ('buildings' in layer_name) and ('entire' in layer_name):
+                layer_source = second_combobox.itemData(index).source()
+                if 'buildings_inundated_entire_area' in layer_source:
                     self.impact_merge_dialog.second_layer.setCurrentIndex(
                         index)
 
@@ -193,14 +193,14 @@ class ImpactMergeDialogTest(unittest.TestCase):
             # Set the current Index of the combobox
             for index in range(0, impact_layer_count):
                 first_combobox = self.impact_merge_dialog.first_layer
-                layer_name = first_combobox.itemText(index)
-                if ('population' in layer_name) and ('district' in layer_name):
+                layer_source = first_combobox.itemData(index).source()
+                if 'population_affected_district_jakarta' in layer_source:
                     self.impact_merge_dialog.first_layer.setCurrentIndex(index)
 
             for index in range(0, impact_layer_count):
                 second_combobox = self.impact_merge_dialog.second_layer
-                layer_name = second_combobox.itemText(index)
-                if ('building' in layer_name) and ('district' in layer_name):
+                layer_source = second_combobox.itemData(index).source()
+                if 'buildings_inundated_district_jakarta' in layer_source:
                     self.impact_merge_dialog.second_layer.setCurrentIndex(
                         index)
 
@@ -251,16 +251,14 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog.prepare_input()
 
         # First impact layer should be the population entire
-        first_layer_name = \
-            self.impact_merge_dialog.first_impact['layer'].name()
-        self.assertIn('population', first_layer_name)
-        self.assertIn('entire', first_layer_name)
+        first_layer_source = \
+            self.impact_merge_dialog.first_impact['layer'].source()
+        self.assertIn('population_affected_entire_area', first_layer_source)
 
-        # Second impact layer should be the population entire
-        second_layer_name = \
-            self.impact_merge_dialog.second_impact['layer'].name()
-        self.assertIn('buildings', second_layer_name)
-        self.assertIn('entire', second_layer_name)
+        # Second impact layer should be the buildings entire
+        second_layer_source = \
+            self.impact_merge_dialog.second_impact['layer'].source()
+        self.assertIn('buildings_inundated_entire_area', second_layer_source)
 
         # Chosen aggregaton layer must be none
         aggregation_layer = self.impact_merge_dialog.aggregation['layer']
@@ -272,22 +270,23 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog.prepare_input()
 
         # First impact layer should be the population entire
-        first_layer_name = \
-            self.impact_merge_dialog.first_impact['layer'].name()
-        self.assertIn('population', first_layer_name)
-        self.assertIn('district', first_layer_name)
+        first_layer_source = \
+            self.impact_merge_dialog.first_impact['layer'].source()
+        self.assertIn(
+            'population_affected_district_jakarta',
+            first_layer_source)
 
         # Second impact layer should be the population entire
-        second_layer_name = \
-            self.impact_merge_dialog.second_impact['layer'].name()
-        self.assertIn('buildings', second_layer_name)
-        self.assertIn('district', second_layer_name)
+        second_layer_source = \
+            self.impact_merge_dialog.second_impact['layer'].source()
+        self.assertIn(
+            'buildings_inundated_district_jakarta',
+            second_layer_source)
 
         # Chosen aggregaton layer must be not none
-        aggregation_layer_name = \
-            self.impact_merge_dialog.aggregation['layer'].name()
-        self.assertEqual('district_osm_jakarta',
-                         aggregation_layer_name)
+        aggregation_layer_source = \
+            self.impact_merge_dialog.aggregation['layer'].source()
+        self.assertIn('district_osm_jakarta', aggregation_layer_source)
 
         # FALL CASE
         # First layer combobox index < 0
