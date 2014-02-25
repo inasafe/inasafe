@@ -33,7 +33,8 @@ rm -rf ${WORKDIR}/${DIR}/safe/test
 rm -rf ${WORKDIR}/${DIR}/realtime
 rm -rf ${WORKDIR}/${DIR}/files
 rm -rf ${WORKDIR}/${DIR}/fabfile.py
-rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
+# Commented out next line for #832 - reinstate when that issue is resolved
+#rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
 rm -rf ${WORKDIR}/${DIR}/pylintrc_jenkins
 rm -rf ${WORKDIR}/${DIR}/.travis.yml
 rm -rf ${WORKDIR}/${DIR}/setup.py
