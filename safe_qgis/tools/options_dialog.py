@@ -118,8 +118,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         path = settings.value('inasafe/northArrowPath', '', type=str)
         self.leNorthArrowPath.setText(path)
 
-        path = settings.value('inasafe/orgLogoPath', '', type=str)
-        self.leOrgLogoPath.setText(path)
+        path = settings.value('inasafe/organisationLogoPath', '', type=str)
+        self.leorganisationLogoPath.setText(path)
 
         path = settings.value('inasafe/reportTemplatePath', '', type=str)
         self.leReportTemplatePath.setText(path)
@@ -175,8 +175,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/northArrowPath',
             self.leNorthArrowPath.text())
         settings.setValue(
-            'inasafe/orgLogoPath',
-            self.leOrgLogoPath.text())
+            'inasafe/organisationLogoPath',
+            self.leorganisationLogoPath.text())
         settings.setValue(
             'inasafe/reportTemplatePath',
             self.leReportTemplatePath.text())
@@ -225,7 +225,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.leNorthArrowPath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolOrgLogoPath_clicked(self):
+    def on_toolorganisationLogoPath_clicked(self):
         """Auto-connect slot activated when logo file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
@@ -234,7 +234,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.tr('Set organisation logo file'),
             '',
             self.tr('Portable Network Graphics files (*.png *.PNG)'))
-        self.leOrgLogoPath.setText(file_name)
+        self.leorganisationLogoPath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolReportTemplatePath_clicked(self):
