@@ -21,6 +21,7 @@ import os
 import logging
 from safe_qgis.utilities import custom_logging
 from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.utilities import is_raster_layer
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -87,6 +88,7 @@ class Plugin:
         self.action_function_browser = None
         self.action_options = None
         self.action_keywords_dialog = None
+        self.action_keywords_wizard = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
@@ -216,6 +218,24 @@ class Plugin:
             self.show_keywords_editor)
 
         self.add_action(self.action_keywords_dialog)
+
+        #--------------------------------------
+        # Create action for keywords creation wizard
+        #--------------------------------------
+        self.action_keywords_wizard = QAction(
+            QIcon(':/plugins/inasafe/show-keyword-wizard.svg'),
+            self.tr('InaSAFE Keywords Creation Wizard'),
+            self.iface.mainWindow())
+        self.action_keywords_wizard.setStatusTip(self.tr(
+            'Open InaSAFE keywords creation wizard'))
+        self.action_keywords_wizard.setWhatsThis(self.tr(
+            'Open InaSAFE keywords creation wizard'))
+        self.action_keywords_wizard.setEnabled(False)
+
+        self.action_keywords_wizard.triggered.connect(
+            self.show_keywords_wizard)
+
+        self.add_action(self.action_keywords_wizard)
 
         #--------------------------------------
         # Create action for options dialog
@@ -499,6 +519,19 @@ class Plugin:
             self.dock_widget)
         dialog.exec_()  # modal
 
+    def show_keywords_wizard(self):
+        """Show the keywords creation wizard."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.wizard_dialog import WizardDialog
+
+        if self.iface.activeLayer() is None:
+            return
+        dialog = WizardDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
+        dialog.exec_()  # modal
+
     def show_function_browser(self):
         """Show the impact function browser tool."""
         # import here only so that it is AFTER i18n set up
@@ -541,10 +574,13 @@ class Plugin:
         :param layer: The layer that is now active.
         :type layer: QgsMapLayer
         """
-        if layer is None:
+        if not layer or layer.providerType() == 'wms' \
+                or (is_raster_layer(layer) and layer.bandCount() > 1):
             self.action_keywords_dialog.setEnabled(False)
+            self.action_keywords_wizard.setEnabled(False)
         else:
             self.action_keywords_dialog.setEnabled(True)
+            self.action_keywords_wizard.setEnabled(True)
 
     def shortcut_f7(self):
         """Executed when user press F7 - will show the shakemap importer."""
