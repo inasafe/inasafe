@@ -19,6 +19,9 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="margin">
+     <number>2</number>
+    </property>
     <item row="0" column="0">
      <widget class="QPushButton" name="pbnShowQuestion">
       <property name="text">
@@ -207,13 +210,33 @@
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>17</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="about_button">
+        <property name="text">
+         <string>About</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>17</width>
           <height>20</height>
          </size>
         </property>
@@ -233,7 +256,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>17</width>
           <height>20</height>
          </size>
         </property>
@@ -260,11 +283,16 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>pbnShowQuestion</tabstop>
   <tabstop>cboHazard</tabstop>
   <tabstop>cboExposure</tabstop>
   <tabstop>cboFunction</tabstop>
-  <tabstop>pbnRunStop</tabstop>
+  <tabstop>toolFunctionOptions</tabstop>
+  <tabstop>cboAggregation</tabstop>
   <tabstop>pbnHelp</tabstop>
+  <tabstop>about_button</tabstop>
+  <tabstop>pbnPrint</tabstop>
+  <tabstop>pbnRunStop</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Fri Feb 21 11:13:27 2014
+# Created: Wed Feb 26 09:49:04 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,6 +33,7 @@ class Ui_DockBase(object):
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)
+        self.gridLayout.setMargin(2)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.pbnShowQuestion = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnShowQuestion.setObjectName(_fromUtf8("pbnShowQuestion"))
@@ -114,13 +115,18 @@ class Ui_DockBase(object):
         self.pbnHelp = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnHelp.setObjectName(_fromUtf8("pbnHelp"))
         self.horizontalLayout.addWidget(self.pbnHelp)
-        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem2 = QtGui.QSpacerItem(17, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
+        self.about_button = QtGui.QPushButton(self.dockWidgetContents)
+        self.about_button.setObjectName(_fromUtf8("about_button"))
+        self.horizontalLayout.addWidget(self.about_button)
+        spacerItem3 = QtGui.QSpacerItem(17, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem3)
         self.pbnPrint = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnPrint.setObjectName(_fromUtf8("pbnPrint"))
         self.horizontalLayout.addWidget(self.pbnPrint)
-        spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
+        spacerItem4 = QtGui.QSpacerItem(17, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem4)
         self.pbnRunStop = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnRunStop.setObjectName(_fromUtf8("pbnRunStop"))
         self.horizontalLayout.addWidget(self.pbnRunStop)
@@ -133,10 +139,15 @@ class Ui_DockBase(object):
         QtCore.QObject.connect(self.pbnShowQuestion, QtCore.SIGNAL(_fromUtf8("clicked()")), self.pbnShowQuestion.hide)
         QtCore.QObject.connect(self.pbnShowQuestion, QtCore.SIGNAL(_fromUtf8("clicked()")), self.grpQuestion.show)
         QtCore.QMetaObject.connectSlotsByName(DockBase)
+        DockBase.setTabOrder(self.pbnShowQuestion, self.cboHazard)
         DockBase.setTabOrder(self.cboHazard, self.cboExposure)
         DockBase.setTabOrder(self.cboExposure, self.cboFunction)
-        DockBase.setTabOrder(self.cboFunction, self.pbnRunStop)
-        DockBase.setTabOrder(self.pbnRunStop, self.pbnHelp)
+        DockBase.setTabOrder(self.cboFunction, self.toolFunctionOptions)
+        DockBase.setTabOrder(self.toolFunctionOptions, self.cboAggregation)
+        DockBase.setTabOrder(self.cboAggregation, self.pbnHelp)
+        DockBase.setTabOrder(self.pbnHelp, self.about_button)
+        DockBase.setTabOrder(self.about_button, self.pbnPrint)
+        DockBase.setTabOrder(self.pbnPrint, self.pbnRunStop)
 
     def retranslateUi(self, DockBase):
         DockBase.setWindowTitle(_translate("DockBase", "InaSAFE", None))
@@ -147,6 +158,7 @@ class Ui_DockBase(object):
         self.label_7.setText(_translate("DockBase", "How many", None))
         self.toolFunctionOptions.setText(_translate("DockBase", "Options ...", None))
         self.pbnHelp.setText(_translate("DockBase", "Help", None))
+        self.about_button.setText(_translate("DockBase", "About", None))
         self.pbnPrint.setText(_translate("DockBase", "Print ...", None))
         self.pbnRunStop.setText(_translate("DockBase", "Run", None))
 
