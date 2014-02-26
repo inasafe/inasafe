@@ -81,7 +81,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         # set up the validator for the file name prefix
         expression = QRegExp('^[A-Za-z0-9-_]*$')
-        validator = QRegExpValidator(expression)
+        validator = QRegExpValidator(expression, self.filename_prefix)
         self.filename_prefix.setValidator(validator)
 
         # Set Proxy in webpage
