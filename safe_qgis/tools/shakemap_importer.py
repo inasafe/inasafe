@@ -79,6 +79,12 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.show_info()
 
     @staticmethod
+    def about():
+        """Show the about dialog."""
+        dialog = AboutDialog(self)
+        dialog.show()
+
+    @staticmethod
     def show_help():
         """Show context help for the converter dialog."""
         show_context_help('converter')

@@ -94,6 +94,7 @@ from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
+from safe_qgis.tools.about_dialog import AboutDialog
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
@@ -240,6 +241,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnHelp.clicked.connect(self.show_help)
         self.pbnPrint.clicked.connect(self.print_map)
         self.pbnRunStop.clicked.connect(self.accept)
+        self.about_button.clicked.connect(self.about)
+
+    def about(self):
+        """Open the About dialog."""
+        dialog = AboutDialog(self)
+        dialog.show()
 
     def show_static_message(self, message):
         """Send a static message to the message viewer.
