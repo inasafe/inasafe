@@ -298,149 +298,250 @@
     </message>
 </context>
 <context>
+    <name>AboutDialog</name>
+    <message>
+        <location filename="about_dialog.py" line="39"/>
+        <source>About InaSAFE %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AboutDialogBase</name>
+    <message>
+        <location filename="about_dialog_base.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished">Dialog</translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="24"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="30"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;InaSAFE is free software that produces realistic natural hazard impact scenarios for better planning, preparedness and response activities. It provides a simple but rigorous way to combine data from scientists, local governments and communities to provide insights into the likely impacts of future disaster events.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;InaSAFE was conceived and initially developed by the Indonesia&apos;s National Disaster Management Agency (BNPB) and the Australian Government, through the Australia-Indonesia Facility for Disaster Reduction and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="44"/>
+        <source>Getting Started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="50"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="67"/>
+        <source>Limitations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="73"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. InaSAFE is not a hazard modelling tool.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. Polygon area analysis (such as land use) is not yet supported.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3. Population density data (raster) must be provided in WGS84 geographic coordinates.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;4. Population by administration boundary is not yet supported.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;5. InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="89"/>
+        <source>Disclaimer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="95"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;InaSAFE has been jointly developed by Indonesian Government-BNPB, Australian Government-AIFDR and the World Bank-GFDRR. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="107"/>
+        <source>Supporters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="113"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://aifdr.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australia-Indonesia Facility for Disaster Reduction&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://hot.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Humanitarian OpenStreetMap Team&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://linfiniti.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Linfiniti Consulting CC.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://essc.org.ph/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Environmental Science for Social Change (Philippines)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Aggregator</name>
     <message>
-        <location filename="aggregator.py" line="1118"/>
+        <location filename="aggregator.py" line="1121"/>
         <source>Use default</source>
         <translation>Use default</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="305"/>
+        <location filename="aggregator.py" line="306"/>
         <source>Select attribute</source>
         <translation>Select attribute</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="305"/>
+        <location filename="aggregator.py" line="306"/>
         <source>Please select which attribute you want to use as ID for the aggregated results</source>
         <translation>Please select which attribute you want to use as ID for the aggregated results</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="425"/>
+        <location filename="aggregator.py" line="426"/>
         <source>Aggregating results</source>
         <translation>Aggregating results</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="465"/>
+        <location filename="aggregator.py" line="466"/>
         <source>Could not remove the unneeded fields</source>
         <translation>Could not remove the unneeded fields</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="608"/>
+        <location filename="aggregator.py" line="609"/>
         <source>Calculating zonal statistics</source>
         <translation>Calculating zonal statistics</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="608"/>
+        <location filename="aggregator.py" line="609"/>
         <source>Abort...</source>
         <translation>Abort...</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="616"/>
+        <location filename="aggregator.py" line="617"/>
         <source>ZonalStats: Error</source>
         <translation>ZonalStats: Error</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="616"/>
+        <location filename="aggregator.py" line="617"/>
         <source>You aborted aggregation, so there are no data for analysis. Exiting...</source>
         <translation>You aborted aggregation, so there are no data for analysis. Exiting...</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="997"/>
+        <location filename="aggregator.py" line="999"/>
         <source>Preparing aggregation layer</source>
         <translation>Preparing aggregation layer</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="997"/>
+        <location filename="aggregator.py" line="999"/>
         <source>We are clipping the aggregation layer to match the intersection of the hazard and exposure layer extents.</source>
         <translation>We are clipping the aggregation layer to match the intersection of the hazard and exposure layer extents.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1028"/>
+        <location filename="aggregator.py" line="1030"/>
         <source>aggregation</source>
         <translation>aggregation</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1118"/>
+        <location filename="aggregator.py" line="1121"/>
         <source>Don&apos;t use</source>
         <translation>Don&apos;t use</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1417"/>
+        <location filename="aggregator.py" line="1420"/>
         <source>preprocessed</source>
         <translation>preprocessed</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1497"/>
+        <location filename="aggregator.py" line="1500"/>
         <source>Entire area</source>
         <translation>Entire area</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1477"/>
+        <location filename="aggregator.py" line="1480"/>
         <source>An exception occurred when creating the entire area layer.</source>
         <translation>An exception occurred when creating the entire area layer.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1483"/>
+        <location filename="aggregator.py" line="1486"/>
         <source>Area</source>
         <translation>Area</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="385"/>
+        <location filename="aggregator.py" line="386"/>
         <source>Error: hazard layer is not provided.</source>
         <translation>Error: hazard layer is not provided.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="389"/>
+        <location filename="aggregator.py" line="390"/>
         <source>Error: exposure layer is not provided.</source>
         <translation>Error: exposure layer is not provided.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="425"/>
+        <location filename="aggregator.py" line="426"/>
         <source>This may take a little while - we are aggregating the impact by %s</source>
         <translation>This may take a little while - we are aggregating the impact by %s</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="435"/>
+        <location filename="aggregator.py" line="436"/>
         <source>Error when reading %s</source>
         <translation>Error when reading %s</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="443"/>
+        <location filename="aggregator.py" line="444"/>
         <source>%s aggregated to %s</source>
         <translation>%s aggregated to %s</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="484"/>
+        <location filename="aggregator.py" line="485"/>
         <source>%s is %s but it should be either vector or raster</source>
         <translation>%s is %s but it should be either vector or raster</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1143"/>
+        <location filename="aggregator.py" line="1146"/>
         <source>Pre-clipping input data...</source>
         <translation>Pre-clipping input data...</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1143"/>
+        <location filename="aggregator.py" line="1146"/>
         <source>Modifying %s to avoid intersections with the aggregation layer</source>
         <translation>Modifying %s to avoid intersections with the aggregation layer</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1551"/>
+        <location filename="aggregator.py" line="1554"/>
         <source>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</source>
         <translation>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1563"/>
+        <location filename="aggregator.py" line="1566"/>
         <source>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</source>
         <translation>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="588"/>
+        <location filename="aggregator.py" line="589"/>
         <source>Aggregation on vector impact layers other than points or polygons or lines yet not implemented yet. Called on %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="960"/>
+        <location filename="aggregator.py" line="962"/>
         <source>The target_field contains Null values. The impact function should define this.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -448,61 +549,61 @@
 <context>
     <name>BatchDialog</name>
     <message>
-        <location filename="batch_dialog.py" line="471"/>
+        <location filename="batch_dialog.py" line="472"/>
         <source>Running</source>
         <translation>Running</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="485"/>
+        <location filename="batch_dialog.py" line="486"/>
         <source>Script OK</source>
         <translation>Script OK</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="488"/>
+        <location filename="batch_dialog.py" line="489"/>
         <source>Script Fail</source>
         <translation>Script Fail</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="500"/>
+        <location filename="batch_dialog.py" line="501"/>
         <source>Analysis Fail</source>
         <translation>Analysis Fail</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="512"/>
+        <location filename="batch_dialog.py" line="513"/>
         <source>Analysis Ok</source>
         <translation>Analysis Ok</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="515"/>
+        <location filename="batch_dialog.py" line="516"/>
         <source>Report Ok</source>
         <translation>Report Ok</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="518"/>
+        <location filename="batch_dialog.py" line="519"/>
         <source>Report Failed</source>
         <translation>Report Failed</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="619"/>
+        <location filename="batch_dialog.py" line="620"/>
         <source>The file(s) below were parsed successfully:
 </source>
         <translation>The file(s) below were parsed successfully:
 </translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="621"/>
+        <location filename="batch_dialog.py" line="622"/>
         <source>The file(s) below were not parsed successfully:
 </source>
         <translation>The file(s) below were not parsed successfully:
 </translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="676"/>
+        <location filename="batch_dialog.py" line="677"/>
         <source>Set the source directory for script and scenario</source>
         <translation>Set the source directory for script and scenario</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="683"/>
+        <location filename="batch_dialog.py" line="684"/>
         <source>Set the output directory for pdf report files</source>
         <translation>Set the output directory for pdf report files</translation>
     </message>
@@ -571,469 +672,469 @@
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="445"/>
+        <location filename="dock.py" line="464"/>
         <source>No valid functions:</source>
         <translation>No valid functions:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="452"/>
+        <location filename="dock.py" line="471"/>
         <source>Hazard keywords:</source>
         <translation>Hazard keywords:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="455"/>
+        <location filename="dock.py" line="474"/>
         <source>Exposure keywords:</source>
         <translation>Exposure keywords:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="423"/>
+        <location filename="dock.py" line="442"/>
         <source>Ready</source>
         <translation>Ready</translation>
     </message>
     <message>
-        <location filename="dock.py" line="737"/>
+        <location filename="dock.py" line="756"/>
         <source>Entire area</source>
         <translation>Entire area</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2164"/>
+        <location filename="dock.py" line="2186"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1072"/>
+        <location filename="dock.py" line="1093"/>
         <source>You may not have sufficient free system memory to carry out this analysis. See the dock panel message for more information. Would you like to continue regardless?</source>
         <translation>You may not have sufficient free system memory to carry out this analysis. See the dock panel message for more information. Would you like to continue regardless?</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1160"/>
+        <location filename="dock.py" line="1181"/>
         <source>An error occurred when calling a GDAL command</source>
         <translation>An error occurred when calling a GDAL command</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1164"/>
+        <location filename="dock.py" line="1185"/>
         <source>An error occurred when writing clip file</source>
         <translation>An error occurred when writing clip file</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1168"/>
+        <location filename="dock.py" line="1189"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation>An exception occurred when setting up the impact calculator.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1173"/>
+        <location filename="dock.py" line="1194"/>
         <source>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</source>
         <translation>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1186"/>
+        <location filename="dock.py" line="1207"/>
         <source>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</source>
         <translation>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1200"/>
+        <location filename="dock.py" line="1221"/>
         <source>An exception occurred when setting up the model runner.</source>
         <translation>An exception occurred when setting up the model runner.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1211"/>
+        <location filename="dock.py" line="1232"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1230"/>
+        <location filename="dock.py" line="1251"/>
         <source>An exception occurred when starting the model.</source>
         <translation>An exception occurred when starting the model.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1909"/>
+        <location filename="dock.py" line="1930"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Please select a valid impact layer before trying to print.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1978"/>
+        <location filename="dock.py" line="2000"/>
         <source>Map Creator</source>
         <translation>Map Creator</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1916"/>
+        <location filename="dock.py" line="1937"/>
         <source>Preparing map and report</source>
         <translation>Preparing map and report</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1949"/>
+        <location filename="dock.py" line="1971"/>
         <source>Write to PDF</source>
         <translation>Write to PDF</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1949"/>
+        <location filename="dock.py" line="1971"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Pdf File (*.pdf)</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1956"/>
+        <location filename="dock.py" line="1978"/>
         <source>Printing cancelled!</source>
         <translation>Printing cancelled!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="375"/>
+        <location filename="dock.py" line="394"/>
         <source>hazard</source>
         <translation>hazard</translation>
     </message>
     <message>
-        <location filename="dock.py" line="379"/>
+        <location filename="dock.py" line="398"/>
         <source>exposure</source>
         <translation>exposure</translation>
     </message>
     <message>
-        <location filename="dock.py" line="425"/>
+        <location filename="dock.py" line="444"/>
         <source>Run</source>
         <translation>Run</translation>
     </message>
     <message>
-        <location filename="dock.py" line="399"/>
+        <location filename="dock.py" line="418"/>
         <source>InaSAFE is not a hazard modelling tool.</source>
         <translation>InaSAFE is not a hazard modelling tool.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="401"/>
+        <location filename="dock.py" line="420"/>
         <source>Polygon area analysis (such as land use) is not yet supported.</source>
         <translation>Polygon area analysis (such as land use) is not yet supported.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="425"/>
+        <location filename="dock.py" line="444"/>
         <source>You can now proceed to run your model by clicking the</source>
         <translation>You can now proceed to run your model by clicking the</translation>
     </message>
     <message>
-        <location filename="dock.py" line="425"/>
+        <location filename="dock.py" line="444"/>
         <source>button.</source>
         <translation>button.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="447"/>
+        <location filename="dock.py" line="466"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual for details on what constitute valid inputs for a given risk function.</source>
         <translation>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual for details on what constitute valid inputs for a given risk function.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="966"/>
+        <location filename="dock.py" line="987"/>
         <source>Processing started</source>
         <translation>Processing started</translation>
     </message>
     <message>
-        <location filename="dock.py" line="967"/>
+        <location filename="dock.py" line="988"/>
         <source>Please wait - processing may take a while depending on your hardware configuration and the analysis extents and data.</source>
         <translation>Please wait - processing may take a while depending on your hardware configuration and the analysis extents and data.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="995"/>
+        <location filename="dock.py" line="1016"/>
         <source>This analysis will calculate the impact of</source>
         <translation>This analysis will calculate the impact of</translation>
     </message>
     <message>
-        <location filename="dock.py" line="995"/>
+        <location filename="dock.py" line="1016"/>
         <source>on</source>
         <translation>on</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1005"/>
+        <location filename="dock.py" line="1026"/>
         <source>aggregated by</source>
         <translation>aggregated by</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1025"/>
+        <location filename="dock.py" line="1046"/>
         <source>The following postprocessors will be used:</source>
         <translation>The following postprocessors will be used:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1048"/>
+        <location filename="dock.py" line="1069"/>
         <source>A problem was encountered when trying to read keywords.</source>
         <translation>A problem was encountered when trying to read keywords.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1061"/>
+        <location filename="dock.py" line="1082"/>
         <source>A problem was encountered when trying to determine the analysis extents.</source>
         <translation>A problem was encountered when trying to determine the analysis extents.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1179"/>
+        <location filename="dock.py" line="1200"/>
         <source>An error occurred because you are using a layer containing density data (e.g. population density) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</source>
         <translation>An error occurred because you are using a layer containing density data (e.g. population density) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1210"/>
+        <location filename="dock.py" line="1231"/>
         <source>Calculating impact</source>
         <translation>Calculating impact</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1271"/>
+        <location filename="dock.py" line="1292"/>
         <source>Error loading impact layer.</source>
         <translation>Error loading impact layer.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1724"/>
+        <location filename="dock.py" line="1745"/>
         <source>Analysis Results</source>
         <translation>Analysis Results</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1419"/>
+        <location filename="dock.py" line="1440"/>
         <source>Notes</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1430"/>
+        <location filename="dock.py" line="1451"/>
         <source>Check that the exposure is not no-data or zero for the entire area of your analysis.</source>
         <translation>Check that the exposure is not no-data or zero for the entire area of your analysis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1433"/>
+        <location filename="dock.py" line="1454"/>
         <source>Check that your impact function thresholds do not exclude all features unintentionally.</source>
         <translation>Check that your impact function thresholds do not exclude all features unintentionally.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1467"/>
+        <location filename="dock.py" line="1488"/>
         <source>Aggregation error occurred.</source>
         <translation>Aggregation error occurred.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1548"/>
+        <location filename="dock.py" line="1569"/>
         <source>There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:</source>
         <translation>There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1555"/>
+        <location filename="dock.py" line="1576"/>
         <source>Failed to obtain the optimal extent given:</source>
         <translation>Failed to obtain the optimal extent given:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1672"/>
+        <location filename="dock.py" line="1693"/>
         <source>Preparing hazard data</source>
         <translation>Preparing hazard data</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1673"/>
+        <location filename="dock.py" line="1694"/>
         <source>We are resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</source>
         <translation>We are resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1691"/>
+        <location filename="dock.py" line="1712"/>
         <source>Preparing exposure data</source>
         <translation>Preparing exposure data</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1692"/>
+        <location filename="dock.py" line="1713"/>
         <source>We are resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</source>
         <translation>We are resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1748"/>
+        <location filename="dock.py" line="1769"/>
         <source>Layer keywords:</source>
         <translation>Layer keywords:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1750"/>
+        <location filename="dock.py" line="1771"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation>The following keywords are defined for the active layer:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1778"/>
+        <location filename="dock.py" line="1799"/>
         <source>Layer keywords missing:</source>
         <translation>Layer keywords missing:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1780"/>
+        <location filename="dock.py" line="1801"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the </source>
         <translation>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1780"/>
+        <location filename="dock.py" line="1801"/>
         <source> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</source>
         <translation> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1978"/>
+        <location filename="dock.py" line="2000"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1978"/>
+        <location filename="dock.py" line="2000"/>
         <source>and</source>
         <translation>and</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2076"/>
+        <location filename="dock.py" line="2098"/>
         <source>InaSAFE Save Scenario Warning</source>
         <translation>InaSAFE Save Scenario Warning</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2090"/>
+        <location filename="dock.py" line="2112"/>
         <source>Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</source>
         <translation>Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2097"/>
+        <location filename="dock.py" line="2119"/>
         <source>Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</source>
         <translation>Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2106"/>
+        <location filename="dock.py" line="2128"/>
         <source>The impact function is empty, can not save scenario</source>
         <translation>The impact function is empty, can not save scenario</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2118"/>
+        <location filename="dock.py" line="2140"/>
         <source>Save Scenario</source>
         <translation>Save Scenario</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2164"/>
+        <location filename="dock.py" line="2186"/>
         <source>Failed to save scenario to </source>
         <translation>Failed to save scenario to </translation>
     </message>
     <message>
-        <location filename="dock.py" line="211"/>
+        <location filename="dock.py" line="212"/>
         <source>InaSAFE %s %s</source>
         <translation>InaSAFE %s %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1005"/>
+        <location filename="dock.py" line="1026"/>
         <source>and bullet_list the results</source>
         <translation>and bullet_list the results</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1343"/>
+        <location filename="dock.py" line="1364"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Impact layer %s was neither a raster or a vector layer</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1409"/>
+        <location filename="dock.py" line="1430"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>No impact layer was calculated. Error message: %s
 </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1420"/>
+        <location filename="dock.py" line="1441"/>
         <source>It appears that no %s are affected by %s. You may want to consider:</source>
         <translation>It appears that no %s are affected by %s. You may want to consider:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1426"/>
+        <location filename="dock.py" line="1447"/>
         <source>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</source>
         <translation>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1443"/>
+        <location filename="dock.py" line="1464"/>
         <source>An exception occurred when calculating the results. %s</source>
         <translation>An exception occurred when calculating the results. %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1560"/>
+        <location filename="dock.py" line="1581"/>
         <source>Hazard: %s</source>
         <translation>Hazard: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1564"/>
+        <location filename="dock.py" line="1585"/>
         <source>Exposure: %s</source>
         <translation>Exposure: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1568"/>
+        <location filename="dock.py" line="1589"/>
         <source>Viewable area Geo Extent: %s</source>
         <translation>Viewable area Geo Extent: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1572"/>
+        <location filename="dock.py" line="1593"/>
         <source>Hazard Geo Extent: %s</source>
         <translation>Hazard Geo Extent: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1576"/>
+        <location filename="dock.py" line="1597"/>
         <source>Exposure Geo Extent: %s</source>
         <translation>Exposure Geo Extent: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1580"/>
+        <location filename="dock.py" line="1601"/>
         <source>Viewable area clipping enabled: %s</source>
         <translation>Viewable area clipping enabled: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1583"/>
+        <location filename="dock.py" line="1604"/>
         <source>Details: %s</source>
         <translation>Details: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1892"/>
+        <location filename="dock.py" line="1913"/>
         <source>Report generation cancelled!</source>
         <translation>Report generation cancelled!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1943"/>
+        <location filename="dock.py" line="1965"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation>Keyword &quot;map_title&quot; not found.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="369"/>
+        <location filename="dock.py" line="388"/>
         <source>These are the minimum steps you need to follow in order to use InaSAFE:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="379"/>
+        <location filename="dock.py" line="398"/>
         <source>Add at least one </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="375"/>
+        <location filename="dock.py" line="394"/>
         <source> layer (e.g. earthquake MMI) to QGIS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="379"/>
+        <location filename="dock.py" line="398"/>
         <source> layer (e.g. structures) to QGIS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="383"/>
+        <location filename="dock.py" line="402"/>
         <source>Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="383"/>
+        <location filename="dock.py" line="402"/>
         <source> in the InaSAFE toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="391"/>
+        <location filename="dock.py" line="410"/>
         <source>Click on the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="391"/>
+        <location filename="dock.py" line="410"/>
         <source> button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="405"/>
+        <location filename="dock.py" line="424"/>
         <source>Population density data (raster) must be provided in WGS84 geographic coordinates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="409"/>
+        <location filename="dock.py" line="428"/>
         <source>Population by administration boundary is not yet supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1143"/>
+        <location filename="dock.py" line="1164"/>
         <source>No valid layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1144"/>
+        <location filename="dock.py" line="1165"/>
         <source>Please ensure your hazard and exposure layers are set in the question area and then press run again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="933"/>
+        <location filename="dock.py" line="954"/>
         <source>Clip parameters are not set!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1046,59 +1147,59 @@
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="138"/>
+        <location filename="dock_base.ui" line="141"/>
         <source>about:blank</source>
         <translation>about:blank</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="184"/>
-        <source>Supported by:</source>
-        <translation>Supported by:</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="32"/>
+        <location filename="dock_base.ui" line="35"/>
         <source>Question: In the event of</source>
         <translation>Question: In the event of</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="80"/>
+        <location filename="dock_base.ui" line="83"/>
         <source>How many</source>
         <translation>How many</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="53"/>
+        <location filename="dock_base.ui" line="56"/>
         <source>&amp;Might</source>
         <translation>&amp;Might</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="70"/>
+        <location filename="dock_base.ui" line="73"/>
         <source>Aggregate results by</source>
         <translation>Aggregate results by</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="258"/>
+        <location filename="dock_base.ui" line="208"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="298"/>
+        <location filename="dock_base.ui" line="268"/>
         <source>Run</source>
         <translation>Run</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="25"/>
+        <location filename="dock_base.ui" line="28"/>
         <source>Show question form</source>
         <translation>Show question form</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="110"/>
+        <location filename="dock_base.ui" line="113"/>
         <source>Options ...</source>
         <translation>Options ...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="278"/>
+        <location filename="dock_base.ui" line="248"/>
         <source>Print ...</source>
         <translation>Print ...</translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="228"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2495,6 +2596,44 @@ p, li { white-space: pre-wrap; }
         <location filename="postprocessor_manager.py" line="391"/>
         <source>Due to a problem while processing the results, the detailed postprocessing report is unavailable: %s</source>
         <translation>Due to a problem while processing the results, the detailed postprocessing report is unavailable: %s</translation>
+    </message>
+</context>
+<context>
+    <name>SaveScenarioDialog</name>
+    <message>
+        <location filename="save_scenario.py" line="48"/>
+        <source>InaSAFE Save Scenario Warning</source>
+        <translation type="unfinished">InaSAFE Save Scenario Warning</translation>
+    </message>
+    <message>
+        <location filename="save_scenario.py" line="62"/>
+        <source>Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</source>
+        <translation type="unfinished">Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</translation>
+    </message>
+    <message>
+        <location filename="save_scenario.py" line="69"/>
+        <source>Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</source>
+        <translation type="unfinished">Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</translation>
+    </message>
+    <message>
+        <location filename="save_scenario.py" line="78"/>
+        <source>The impact function is empty, can not save scenario</source>
+        <translation type="unfinished">The impact function is empty, can not save scenario</translation>
+    </message>
+    <message>
+        <location filename="save_scenario.py" line="90"/>
+        <source>Save Scenario</source>
+        <translation type="unfinished">Save Scenario</translation>
+    </message>
+    <message>
+        <location filename="save_scenario.py" line="136"/>
+        <source>InaSAFE</source>
+        <translation type="unfinished">InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="save_scenario.py" line="136"/>
+        <source>Failed to save scenario to </source>
+        <translation type="unfinished">Failed to save scenario to </translation>
     </message>
 </context>
 <context>

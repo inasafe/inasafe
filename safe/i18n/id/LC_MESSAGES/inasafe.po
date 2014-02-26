@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inasafe-develop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-21 10:33+0700\n"
-"PO-Revision-Date: 2014-02-21 03:35+0000\n"
+"POT-Creation-Date: 2014-02-26 17:28+0700\n"
+"PO-Revision-Date: 2014-02-21 03:40+0000\n"
 "Last-Translator: akbargumbira <akbargumbira@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe-develop/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,8 @@ msgstr "Jumlah"
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:186
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:210
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:243
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:216
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:205
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:214
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:202
 msgid "All"
 msgstr "Semua"
 
@@ -210,7 +210,7 @@ msgid ""
 msgstr "- Tembok tanpa penguat beton bertulang diasumsikan dimana tidak ada informasi struktural tersedia. <br>"
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:124
-#: safe/impact_functions/core.py:703 safe/impact_functions/styles.py:125
+#: safe/impact_functions/core.py:702 safe/impact_functions/styles.py:125
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:144
 msgid "Category"
 msgstr "Kategori"
@@ -1030,18 +1030,18 @@ msgstr "Jumlah penduduk"
 msgid "Population affected by flood prone areas"
 msgstr "Penduduk yang terkena dampak dari area rawan banjir"
 
-#: safe/impact_functions/core.py:703
+#: safe/impact_functions/core.py:702
 msgid "Title"
 msgstr "Judul"
 
-#: safe/impact_functions/core.py:703
+#: safe/impact_functions/core.py:702
 msgid "ID"
 msgstr "ID"
 
 msgid "Requirements"
 msgstr "Persyaratan"
 
-#: safe/impact_functions/core.py:776
+#: safe/impact_functions/core.py:775
 msgid "Available Impact Functions"
 msgstr "Fungsi Dampak yang Tersedia"
 
@@ -1184,19 +1184,19 @@ msgid ""
 "transport them to here?"
 msgstr "Jika tidak, dimana kita dapat mendapatkan bantuan sumber daya tambahan dan bagaimana membawanya ke sini?"
 
-#: safe/impact_functions/core.py:704
+#: safe/impact_functions/core.py:703
 msgid "Sub Category"
 msgstr "Subkategori"
 
-#: safe/impact_functions/core.py:704
+#: safe/impact_functions/core.py:703
 msgid "Layer type"
 msgstr "Jenis layer"
 
-#: safe/impact_functions/core.py:704
+#: safe/impact_functions/core.py:703
 msgid "Data type"
 msgstr "Jenis data"
 
-#: safe/impact_functions/core.py:705
+#: safe/impact_functions/core.py:704
 msgid "Unit"
 msgstr "Satuan"
 
@@ -1213,7 +1213,7 @@ msgid "Be impacted"
 msgstr "Terdampak"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:43
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:42
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:40
 msgid "Be flooded"
 msgstr "Terkena banjir"
 
@@ -1365,8 +1365,8 @@ msgstr "Harga dalam satuan 1 juta Dolar Australia"
 msgid "Buildings affected"
 msgstr "Bangunan terdampak"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:226
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:216
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:224
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:213
 msgid "Roads inundated"
 msgstr "Jalan raya yang tergenang"
 
@@ -2026,15 +2026,15 @@ msgstr "Layer data vektor berisi bangunan yang diperkirakan banjir dan kerusakan
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:223
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:314
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:228
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:218
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:226
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:215
 msgid "Not Inundated"
 msgstr "Tidak tergenang"
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:225
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:316
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:230
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:220
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:228
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:217
 msgid "Inundated"
 msgstr "Tergenang"
 
@@ -2274,13 +2274,13 @@ msgstr "Penduduk wanita (yang terdampak)"
 msgid "Area"
 msgstr "Area"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:212
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:200
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:210
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:197
 msgid "Road Type"
 msgstr "Jenis Jalan"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:239
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:228
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:237
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:225
 msgid "Flooded roads"
 msgstr "Jalan yang tergenang"
 
@@ -2438,7 +2438,7 @@ msgstr "Tipe Bangunan"
 msgid "Flooded buildings"
 msgstr "Bangunan yang mengalami banjir"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:104
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:102
 #, python-format
 msgid ""
 "Parameter \"Affected Field\"(='%s')\n"
@@ -2446,7 +2446,7 @@ msgid ""
 "                "
 msgstr "Parameter \"Affected Field\"(='%s')\ntidak ada di tabel atribut layer ancaman."
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:163
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:161
 #, python-format
 msgid ""
 "There are no objects in the hazard layer with\n"
@@ -2454,37 +2454,37 @@ msgid ""
 "                different extent."
 msgstr "Tidak ada objek di layer ancaman dengan\n\"Affected value\"='%s'. Silahkan cek nilai tersebut atau gunakan \nextent lain."
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:196
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:184
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:194
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:181
 msgid "Other"
 msgstr "Lain-lain"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:213
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:211
 msgid "Temporarily closed (m)"
 msgstr "Ditutup untuk sementara (m)"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:214
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:202
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:212
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:199
 msgid "Total (m)"
 msgstr "Total (m)"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:217
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:209
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:215
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:206
 msgid "Breakdown by road type"
 msgstr "Perincian berdasarkan tipe jalan"
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:41
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:37
 msgid "Be flooded in given thresholds"
 msgstr "Mengalami banjir dengan ambang batas yang diberikan"
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:85
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:81
 msgid ""
 "The minimal threshold is\n"
 "                greater then the maximal specified threshold.\n"
 "                Please check the values."
 msgstr "Ambang batas minimal\nlebih besar dari ambang batas maksimal yang ditentukan.\nSilahkan cek kembali nilai tersebut."
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:142
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:139
 #, python-format
 msgid ""
 "There are no objects\n"
@@ -2494,7 +2494,7 @@ msgid ""
 "                extent."
 msgstr "Tidak ada objek\npada layer ancaman dengan\n\"value\">'%s'.\nSilahkan cek kembali nilai tersebut atau gunakan\nextent lain."
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:201
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:198
 msgid "Flooded in the threshold (m)"
 msgstr "Mengalami banjir pada ambang batas (m)"
 
