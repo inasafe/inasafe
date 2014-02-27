@@ -354,7 +354,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Berikut adalah langkah-langkah minimum yang perlu dilakukan untuk menggunakan InaSAFE:&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. Tambahkan setidaknya satu layer ancaman (misalnya layer gempabumi MMI) ke QGIS.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. Tambahkan setidaknya satu layer keterpaparan (misalnya layer struktur bangunan) ke QGIS.&lt;/p&gt;
@@ -390,7 +390,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="about_dialog_base.ui" line="89"/>
         <source>Disclaimer</source>
-        <translation>Penolakan</translation>
+        <translation>Ketentuan</translation>
     </message>
     <message>
         <location filename="about_dialog_base.ui" line="95"/>
@@ -557,7 +557,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="aggregator.py" line="1146"/>
         <source>Modifying %s to avoid intersections with the aggregation layer</source>
-        <translation>Memodifikasi %s untuk menghindari pertampalan dengan layer agregasinya</translation>
+        <translation>Memodifikasi %s untuk menghindari perpotongan dengan layer agregasinya</translation>
     </message>
     <message>
         <location filename="aggregator.py" line="1554"/>
@@ -567,7 +567,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="aggregator.py" line="1566"/>
         <source>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</source>
-        <translation>Tidak ada atribut &quot;%s&quot; ditemukan pada tabel atribut untuk layer &quot;%s&quot;. Fungsi dampak harus mendefinisikan atribut ini agar analisis pasca pemrosesan dapat dilakukan.</translation>
+        <translation>Tidak ada atribut &quot;%s&quot; yang ditemukan pada tabel atribut untuk layer &quot;%s&quot;. Fungsi dampak harus mendefinisikan atribut ini agar analisis pasca pemrosesan dapat dilakukan.</translation>
     </message>
     <message>
         <location filename="aggregator.py" line="589"/>
@@ -585,7 +585,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="batch_dialog.py" line="472"/>
         <source>Running</source>
-        <translation>Hitung</translation>
+        <translation>Menghitung</translation>
     </message>
     <message>
         <location filename="batch_dialog.py" line="486"/>
