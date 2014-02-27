@@ -165,7 +165,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Flag so we can see if the dock is busy processing
         self.busy = False
 
-        # Values for settings these gets set in read_settings.
+        # Values for settings these get set in read_settings.
         self.run_in_thread_flag = None
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
@@ -339,9 +339,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to show or not a custom Logo
         self.organisation_logo_path = settings.value(
-            'inasafe/organisationLogoPath', '', type=str)
+            'inasafe/organisationLogoPath',
+            ':/plugins/inasafe/bnpb_logo_64.png',
+            type=str)
+        flag = bool(settings.value(
+            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
-        if self.organisation_logo_path:
+        if self.organisation_logo_path and flag:
             dock_width = self.width()
             self.organisation_logo.setMaximumWidth(dock_width)
             self.organisation_logo.setPixmap(

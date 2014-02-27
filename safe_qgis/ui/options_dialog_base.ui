@@ -57,8 +57,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>638</width>
-            <height>454</height>
+            <width>648</width>
+            <height>560</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -299,6 +299,9 @@
        <string>Template Options</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
+       <item row="8" column="0">
+        <widget class="QPlainTextEdit" name="txtDisclaimer"/>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lblOrganisationLogo">
          <property name="enabled">
@@ -312,14 +315,14 @@
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
-          <widget class="QLineEdit" name="leOrgLogoPath">
+          <widget class="QLineEdit" name="leOrganisationLogoPath">
            <property name="enabled">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolOrgLogoPath">
+          <widget class="QToolButton" name="toolOrganisationLogoPath">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -330,7 +333,7 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="lblNorthArrowPath">
          <property name="enabled">
           <bool>true</bool>
@@ -340,7 +343,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
           <widget class="QLineEdit" name="leNorthArrowPath">
@@ -361,7 +364,7 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="lblReportTemplate">
          <property name="enabled">
           <bool>true</bool>
@@ -371,7 +374,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
           <widget class="QLineEdit" name="leReportTemplatePath">
@@ -392,15 +395,22 @@
          </item>
         </layout>
        </item>
-       <item row="6" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Organisation disclaimer text</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QPlainTextEdit" name="txtDisclaimer"/>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="organisation_on_dock_checkbox">
+         <property name="text">
+          <string>Show organisation logo on main panel too</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
       <zorder>label_2</zorder>
@@ -408,6 +418,7 @@
       <zorder>lblOrganisationLogo</zorder>
       <zorder>lblNorthArrowPath</zorder>
       <zorder>lblReportTemplate</zorder>
+      <zorder>organisation_on_dock_checkbox</zorder>
      </widget>
      <widget class="QWidget" name="tab_advanced">
       <attribute name="title">
@@ -464,8 +475,8 @@
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Lucida Grande UI'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -503,34 +514,38 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <tabstops>
-  <tabstop>cbxVisibleLayersOnly</tabstop>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>cbxSetLayerNameFromTitle</tabstop>
-  <tabstop>lineEdit_4</tabstop>
-  <tabstop>toolButton_4</tabstop>
-  <tabstop>spinBox</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>cbxVisibleLayersOnly</tabstop>
+  <tabstop>cbxSetLayerNameFromTitle</tabstop>
   <tabstop>cbxZoomToImpact</tabstop>
   <tabstop>cbxHideExposure</tabstop>
-  <tabstop>cbxBubbleLayersUp</tabstop>
-  <tabstop>toolButton</tabstop>
-  <tabstop>cbxShowPostprocessingLayers</tabstop>
-  <tabstop>buttonBox</tabstop>
   <tabstop>cbxClipToViewport</tabstop>
-  <tabstop>cbxUseThread</tabstop>
-  <tabstop>dsbFemaleRatioDefault</tabstop>
   <tabstop>cbxClipHard</tabstop>
-  <tabstop>scrollArea</tabstop>
-  <tabstop>txtDisclaimer</tabstop>
+  <tabstop>cbxShowPostprocessingLayers</tabstop>
+  <tabstop>dsbFemaleRatioDefault</tabstop>
+  <tabstop>cbxBubbleLayersUp</tabstop>
+  <tabstop>leOrganisationLogoPath</tabstop>
+  <tabstop>toolOrganisationLogoPath</tabstop>
+  <tabstop>organisation_on_dock_checkbox</tabstop>
   <tabstop>leNorthArrowPath</tabstop>
   <tabstop>toolNorthArrowPath</tabstop>
-  <tabstop>leOrgLogoPath</tabstop>
-  <tabstop>toolOrgLogoPath</tabstop>
-  <tabstop>cbxDevMode</tabstop>
-  <tabstop>textBrowser</tabstop>
-  <tabstop>cbxUseSentry</tabstop>
+  <tabstop>leReportTemplatePath</tabstop>
+  <tabstop>toolReportTemplatePath</tabstop>
+  <tabstop>txtDisclaimer</tabstop>
   <tabstop>leKeywordCachePath</tabstop>
   <tabstop>toolKeywordCachePath</tabstop>
+  <tabstop>cbxUseSentry</tabstop>
+  <tabstop>textBrowser</tabstop>
+  <tabstop>cbxDevMode</tabstop>
+  <tabstop>cbxNativeZonalStats</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>cbxUseThread</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>toolButton_4</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>lineEdit</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>
