@@ -144,7 +144,8 @@ class SafeTranslationsTest(unittest.TestCase):
         translator.load(file_path)
         QCoreApplication.installTranslator(translator)
 
-        expected_msg = 'Tidak ada informasi gaya ditemukan pada lapisan %s'
+        expected_msg = (
+            'Tidak ada informasi gaya yang ditemukan pada lapisan %s')
         real_msg = QCoreApplication.translate(
             "@default", 'No styleInfo was found for layer %s')
         msg = 'expected %s but got %s' % (expected_msg, real_msg)
