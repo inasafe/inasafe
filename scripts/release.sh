@@ -12,20 +12,16 @@ VERSION=$1
 # TODO
 #replace _type_ = 'alpha' or 'beta' with final
 
-#regenerate docs
-rm -rf docs/build
-make docs
-
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
 DIR='inasafe'
-
 
 OUT="/tmp/${DIR}.${1}.zip"
 
 WORKDIR=/tmp/${DIR}$$
 mkdir -p ${WORKDIR}/${DIR}
 git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C ${WORKDIR}/${DIR}
-rm -rf ${WORKDIR}/${DIR}/docs/
+rm -rf ${WORKDIR}/${DIR}/docs/en/_static/user*
+rm -rf ${WORKDIR}/${DIR}/docs/id/_static/user*
 rm -rf ${WORKDIR}/${DIR}/unit_test_data
 rm -rf ${WORKDIR}/${DIR}/.idea
 rm -rf ${WORKDIR}/${DIR}/Makefile
@@ -37,7 +33,8 @@ rm -rf ${WORKDIR}/${DIR}/safe/test
 rm -rf ${WORKDIR}/${DIR}/realtime
 rm -rf ${WORKDIR}/${DIR}/files
 rm -rf ${WORKDIR}/${DIR}/fabfile.py
-rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
+# Commented out next line for #832 - reinstate when that issue is resolved
+#rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
 rm -rf ${WORKDIR}/${DIR}/pylintrc_jenkins
 rm -rf ${WORKDIR}/${DIR}/.travis.yml
 rm -rf ${WORKDIR}/${DIR}/setup.py
@@ -50,24 +47,6 @@ find ${WORKDIR}/${DIR} -name *.ts -delete
 rpl "from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA" "" ${WORKDIR}/${DIR}/safe/api.py
 
 rm -rf ${WORKDIR}/${DIR}/*.bat
-mkdir -p ${WORKDIR}/${DIR}/docs/
-
-echo "Note: We assume that you have a working build environment for the docs."
-
-if [ ! -d ../inasafe-doc ]
-then
-  # check the repo out since it does not exist
-  pushd .
-  cd ..
-  git clone --depth 1 git://github.com/AIFDR/inasafe-doc.git inasafe-doc
-  cd inasafe-doc
-  scripts/post_translate_application_docs.sh
-  popd
-fi
-
-cp -r ../inasafe-doc/docs/output-app-docs/html/* ${WORKDIR}/${DIR}/docs/
-
-
 
 
 pushd .
