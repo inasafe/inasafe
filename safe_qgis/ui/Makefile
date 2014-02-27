@@ -20,7 +20,9 @@
 # List of ui files and rc files here that should be compiled to py files.
 #############################################################################
 
-UI_FILES = batch_dialog_base.ui \
+UI_FILES = \
+	about_dialog_base.ui \
+	batch_dialog_base.ui \
 	dock_base.ui \
 	function_options_dialog_base.ui \
 	impact_merge_dialog_base.ui \
