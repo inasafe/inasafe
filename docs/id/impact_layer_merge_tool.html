@@ -31,7 +31,7 @@
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
-    <link rel="prev" title="Mendownload OpenStreetMap" href="openstreetmap_downloader.html" />
+    <link rel="prev" title="OpenStreetMap Downloader" href="openstreetmap_downloader.html" />
 
 <style>
     .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
@@ -149,7 +149,7 @@
                 <li class="right"
                  >
                 <a href="openstreetmap_downloader.html"
-                   title="Mendownload OpenStreetMap"
+                   title="OpenStreetMap Downloader"
                    style="z-index:;"
                 accesskey="P">sebelum</a>
                 </li>
@@ -175,11 +175,7 @@
                 
   <div class="section" id="the-impact-layer-merge-tool">
 <span id="toolbar-impact-layer-merge-tool"></span><h1>Tool Menggabungkan Layer Dampak<a class="headerlink" href="#the-impact-layer-merge-tool" title="Link permanent untuk headline ini">¶</a></h1>
-<p>In some cases you may wish to create a report containing the combined output of
-two impact functions for the same area for the <strong>same hazard, different
-exposures</strong>. For example You may carry out an assessment of the impact of a
-flood on population and on buildings and combine the results into a single
-report. The impact layer merge tool allows you to do this.</p>
+<p>Dalam beberapa kasus Anda mungkin ingin membuat sebuah laporan yang berisi kombinasi dari dua fungsi dampak di satu area yang sama untuk <em>ancaman yang sama, keterpaparan yang berbeda*</em>. Sebagai contoh Anda mungkin ingin melihat hasil kajian dari dampak banjir terhadap populasi dan bangunan dan menggabungkan keduanya kedalam satu laporan. Tool merger/menggabungkan layer dampak akan membantu anda untuk membuat hal tersebut.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/impact_merge_dialog.png"><img alt="Opened impact merge dialog" src="_images/impact_merge_dialog.png" style="width: 396.75px; height: 516.0px;" /></a>
 <p class="caption">Tampilan dialog Menggabungkan Layer Dampak yang telah terbuka</p>
@@ -251,7 +247,8 @@ report. The impact layer merge tool allows you to do this.</p>
 </li>
 <li><p class="first"><strong>organisation-logo</strong>, berjenis QgsComposerPicture</p>
 </li>
-<li><strong>merged-report-table</strong>, a QgsComposerHTML</li>
+<li><p class="first"><strong>merged-report-table</strong>, sebuah QgsComposerHTML</p>
+</li>
 </ul>
 <p>Jika salah satu dari elemen tersebut tidak tersedia didalam <em>template</em> laporan, QGIS akan memberi Anda informasi mengenai elemen apa yang kurang dari <em>template</em> tersebut.</p>
 <div class="admonition note">
@@ -268,12 +265,8 @@ Those elements are:</p>
 <ul class="simple">
 <li><p class="first"><strong>organisation-logo</strong>. Ini sesuai dengan <em>field</em> <strong>Logo Organisasi</strong> pada <em>tool</em> pilihan InaSAFE. Jika anda tidak mengisi <em>field</em> ini, maka logo bawaan, <strong>supporters.png</strong>, akan digunakan.</p>
 </li>
-<li><strong>disclaimer</strong>. It corresponds to <strong>Disclaimer text</strong> field on InaSAFE
-Option tools.
-If you do not fill this field, then the default one will be used: &#8220;InaSAFE
-has been jointly developed by Indonesian Government-BPNB, Australian Govenment-AIFDR and the World
-Bank-GFDRR. These agencies and the individual software developers of InaSAFE take no responsibility for
-the correctness of outputs from InaSAFE or decisions derived as a consequence.&#8221;</li>
+<li><p class="first"><strong>Penolakan</strong>. Berpengaruh pada kolom <strong>Teks Penolakan</strong> pada tool InaSAFE Options. Jika anda tdak mengisi kolom ini, maka pengaturan bawaan akan digunakan: &#8220;InaSAFE telah dikembangkan secara bersama-sama oleh Pemerintah Indonesia-BNPB, Pemerintah Australia-AIFDR, dan World Bank-GFDRR. Instansi-instansi tersebut dan pengembang perangkat lunak dari InaSAFE tidak bertanggung jawab atas kebenaran output dari InaSAFE atau keputusan yang diberikan sebagai konsekuensinya.&#8221;</p>
+</li>
 </ul>
 <p>2. Elements containing tokens. The id of these element is not significant, only the token
 it contains. At render time, any of these tokens will be replaced. If you want to have a
@@ -296,7 +289,7 @@ generated automatically by the tools.</p>
 </li>
 <li><p class="first"><strong>map-scale</strong>. Mengindikasikan skala dari peta. Agar dapat bekerja dengan segala jenis proyeksi, kami menyarankan agar Anda menggunakan skala bar numerik.</p>
 </li>
-<li><p class="first"><strong>legenda-peta</strong>. Menyajikan legenda dari penggabungan <em>layer</em> dampak. Pengaturan bawaan dari <em>template</em> legenda peta diatur kedalam 2 kolom yang menggambarkan masing-masing legenda <em>layer</em> dampak.</p>
+<li><p class="first"><strong>map-legend</strong>. Menyajikan legenda dari penggabungan <em>layer</em> dampak. Pengaturan bawaan dari <em>template</em> legenda peta diatur kedalam 2 kolom yang menggambarkan masing-masing legenda <em>layer</em> dampak.</p>
 </li>
 <li><p class="first"><strong>merged-report-table</strong>. Ini terdiri dari informasi detail dari setiap dampak.</p>
 </li>
