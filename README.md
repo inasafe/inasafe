@@ -1,7 +1,9 @@
-InaSAFE - Indonesian Scenario Assessment for Emergencies
-========================================================
+InaSAFE
+=======
 
-This is the project: InaSAFE a QGIS plugin
+InaSAFE is free software that allows disaster managers to study realistic
+natural hazard impact scenarios for better planning, preparedness and
+response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
 
 For more information about InaSAFE please visit
 `www.inasafe.org <http://www.inasafe.org>`_ and look at the documentation at
@@ -22,21 +24,21 @@ Current test status for master branch:
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-batch-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-batch-test/) - batch-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-impact-stats-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-impact-stats-test/) - impact-stats-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-report-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-report-test/) - report-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-safe-package/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-safe-package/) - safe-package 
+* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-safe-package/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-safe-package/) - safe-package
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-test/) - test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-tools-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-tools-test/) - tools-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-utilities-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-utilities-test/) - utilities-test 
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/) - widgets-test 
+* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-utilities-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-utilities-test/) - utilities-test
+* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/) - widgets-test
 
 Current test status for develop branch:
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/batch-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/batch-test/) - batch-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/impact-stats-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/impact-stats-test/) - impact-stats-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/report-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/report-test/) - report-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/safe-package/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/safe-package/) - safe-package 
+* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/safe-package/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/safe-package/) - safe-package
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/test/) - test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/tools-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/tools-test/) - tools-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/) - utilities-test 
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/) - widgets-test 
+* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/) - utilities-test
+* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/) - widgets-test
 
 PyPi Donwloads for the 'safe' library:
 [![Downloads](https://pypip.in/d/python-safe/badge.png)](https://crate.io/packages/python-safe)
@@ -47,7 +49,11 @@ PyPi Donwloads for the 'safe' library:
 Quick Installation Guide
 ========================
 
-To install the InaSAFE plugin, use the plugin manager in (QGIS)[http://qgis.org]
+You first need to have (QGIS)[http://qgis.org] installed. Grab your free
+copy from (the QGIS download page)[http://download/qgis.org].
+
+To install the InaSAFE plugin, use the plugin manager in
+(QGIS)[http://qgis.org]:
 
   Plugins -> Manage and Install Plugins -> Get more tab
 
@@ -73,7 +79,7 @@ we work on the philosophy that stakeholders should have access to the
 development and source code from the very beginning and invite
 comments, suggestions and contributions.  See
 `our milestones list <https://github.com/AIFDR/inasafe/issues/milestones>`_ and
-`our open issues list <https://github.com/AIFDR/inasafe/issues?page=1&state=open>`_ 
+`our open issues list <https://github.com/AIFDR/inasafe/issues?page=1&state=open>`_
 for known bugs and outstanding tasks.
 
 

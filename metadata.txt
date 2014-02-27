@@ -12,8 +12,8 @@
 name=InaSAFE
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99.99
-description=InaSAFE Disaster Scenario Assessment for Emergencies tool developed by BNPB, Australian AID, World Bank
-version=2.0.0
+description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
+version=2.0.2
 # alpha, beta, rc or final
 status=final
 
@@ -39,5 +39,5 @@ experimental=False
 deprecated=False
 
 # Author contact information
-author=BNPB, Australian AID and the World Bank
+author=Indonesian Government - BNPB, Australian Government - AIFDR and World Bank - GFDRR
 email=tim@linfiniti.com
