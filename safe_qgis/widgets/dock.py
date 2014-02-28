@@ -165,7 +165,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Flag so we can see if the dock is busy processing
         self.busy = False
 
-        # Values for settings these gets set in read_settings.
+        # Values for settings these get set in read_settings.
         self.run_in_thread_flag = None
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
@@ -338,16 +338,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/developer_mode', False, type=bool)
 
         # whether to show or not a custom Logo
-        self.org_logo_path = settings.value(
-            'inasafe/orgLogoPath', '', type=str)
+        self.organisation_logo_path = settings.value(
+            'inasafe/organisationLogoPath',
+            ':/plugins/inasafe/bnpb_logo_64.png',
+            type=str)
+        flag = bool(settings.value(
+            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
-        if self.org_logo_path:
+        if self.organisation_logo_path and flag:
             dock_width = self.width()
-            self.org_logo.setMaximumWidth(dock_width)
-            self.org_logo.setPixmap(QtGui.QPixmap(self.org_logo_path))
-            self.org_logo.show()
+            self.organisation_logo.setMaximumWidth(dock_width)
+            self.organisation_logo.setPixmap(
+                QtGui.QPixmap(self.organisation_logo_path))
+            self.organisation_logo.show()
         else:
-            self.org_logo.hide()
+            self.organisation_logo.hide()
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -1946,7 +1951,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
+        logo_path = settings.value('inasafe/organisationLogoPath', '', type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
