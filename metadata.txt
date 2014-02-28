@@ -39,5 +39,5 @@ experimental=False
 deprecated=False
 
 # Author contact information
-author=BNPB, Australian AID and the World Bank
+author=Indonesian Government - BNPB, Australian Government - AIFDR and World Bank - GFDRR
 email=tim@linfiniti.com

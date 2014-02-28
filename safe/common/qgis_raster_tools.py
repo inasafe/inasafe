@@ -132,9 +132,8 @@ def polygonize(raster,
                threshold_min=0.0,
                threshold_max=float('inf')):
     """
-    Function to polygonize raster. Areas (pixels) with
-        threshold_min < pixel_values < threshold_max
-    will be converted to polygons.
+    Function to polygonize raster. Areas (pixels) with threshold_min <
+    pixel_values < threshold_max will be converted to polygons.
 
     :param raster:  Raster layer
     :type raster: QgsRasterLayer
