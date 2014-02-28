@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'about_dialog_base.ui'
 #
-# Created: Fri Feb 28 10:35:24 2014
+# Created: Fri Feb 28 11:06:03 2014
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -62,10 +62,10 @@ class Ui_AboutDialogBase(object):
         self.supporters_tab.setObjectName(_fromUtf8("supporters_tab"))
         self.gridLayout_5 = QtGui.QGridLayout(self.supporters_tab)
         self.gridLayout_5.setObjectName(_fromUtf8("gridLayout_5"))
-        self.textBrowser = QtGui.QTextBrowser(self.supporters_tab)
-        self.textBrowser.setOpenExternalLinks(True)
-        self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
-        self.gridLayout_5.addWidget(self.textBrowser, 0, 0, 1, 1)
+        self.supporters_text = QtGui.QTextBrowser(self.supporters_tab)
+        self.supporters_text.setOpenExternalLinks(True)
+        self.supporters_text.setObjectName(_fromUtf8("supporters_text"))
+        self.gridLayout_5.addWidget(self.supporters_text, 0, 0, 1, 1)
         self.tab_widget.addTab(self.supporters_tab, _fromUtf8(""))
         self.gridLayout_6.addWidget(self.tab_widget, 0, 0, 1, 3)
         self.label = QtGui.QLabel(AboutDialogBase)
@@ -128,7 +128,7 @@ class Ui_AboutDialogBase(object):
 "</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt;\">InaSAFE has been jointly developed by Indonesian Government-BNPB, Australian Government-AIFDR and the World Bank-GFDRR. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.disclaimer_tab), QtGui.QApplication.translate("AboutDialogBase", "Disclaimer", None, QtGui.QApplication.UnicodeUTF8))
-        self.textBrowser.setHtml(QtGui.QApplication.translate("AboutDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.supporters_text.setHtml(QtGui.QApplication.translate("AboutDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
