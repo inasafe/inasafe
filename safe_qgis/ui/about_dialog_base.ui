@@ -120,10 +120,7 @@ p, li { white-space: pre-wrap; }
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
-        <widget class="QTextEdit" name="supporters_text">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
+        <widget class="QTextBrowser" name="supporters_text">
          <property name="html">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -134,6 +131,9 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://hot.openstreetmap.org/&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; text-decoration: underline; color:#0000ff;&quot;&gt;Humanitarian OpenStreetMap Team&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://linfiniti.com&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; text-decoration: underline; color:#0000ff;&quot;&gt;Linfiniti Consulting CC.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://essc.org.ph/&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; text-decoration: underline; color:#0000ff;&quot;&gt;Environmental Science for Social Change (Philippines)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="openExternalLinks">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
