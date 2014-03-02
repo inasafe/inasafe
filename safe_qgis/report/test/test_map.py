@@ -99,7 +99,7 @@ class MapTest(unittest.TestCase):
         # with a lower maintenance test strategy.
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
-            427172,  # Ubuntu 13.10_64
+            135312,  # Ubuntu 13.10_64
             414589,  # Slackware64 14.0
             143046,  # Linux Mint 14_64
             150412,  # Windows 7 64
@@ -140,7 +140,7 @@ class MapTest(unittest.TestCase):
 
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
-            400563,  # Ubuntu 13.10_64
+            73033,  # Ubuntu 13.10_64
             367934,  # Slackware64 14.0
             81415,  # Linux Mint 14_64
             88779,  # Windows 7 64bit
