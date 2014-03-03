@@ -40,4 +40,4 @@ deprecated=False
 
 # Author contact information
 author=Indonesian Government - BNPB, Australian Government - AIFDR and World Bank - GFDRR
-email=info@insafe.org
+email=info@inasafe.org
