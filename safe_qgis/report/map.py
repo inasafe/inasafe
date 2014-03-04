@@ -80,13 +80,13 @@ class Map():
         """
         self.layer = layer
 
-    def set_north_arrow_image(self, logo_path):
+    def set_north_arrow_image(self, north_arrow_path):
         """Set image that will be used as organisation logo in reports.
 
-        :param logo_path: Path to image file
-        :type logo_path: str
+        :param north_arrow_path: Path to image file
+        :type north_arrow_path: str
         """
-        self.north_arrow = logo_path
+        self.north_arrow = north_arrow_path
 
     def set_organisation_logo(self, logo):
         """Set image that will be used as organisation logo in reports.
