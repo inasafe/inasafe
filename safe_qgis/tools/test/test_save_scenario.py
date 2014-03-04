@@ -57,17 +57,41 @@ class SaveScenarioTest(unittest.TestCase):
         DOCK.hide_exposure_flag = False
         DOCK.show_intermediate_layers = False
 
+        # Create scenario dialog
+        self.save_scenario_dialog = SaveScenarioDialog(IFACE, DOCK)
+
     def tearDown(self):
         """Fixture run after each test"""
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         DOCK.cboHazard.clear()
         DOCK.cboExposure.clear()
         #DOCK.cboAggregation.clear() #dont do this because the cboAggregation
         # need to be able to react to the status changes of the other combos
+        self.save_scenario_dialog = None
 
-    def test_save_current_scenario(self):
-        """Test saving Current scenario
-        """
+    def test_validate_input(self):
+        """Test validate input."""
+        # Valid Case
+        result, message = setup_scenario(
+            DOCK,
+            hazard='Flood in Jakarta',
+            exposure='Penduduk Jakarta',
+            function='Be impacted',
+            function_id='Categorised Hazard Population Impact Function')
+        self.assertTrue(result, message)
+        is_valid, message = self.save_scenario_dialog.validate_input()
+        self.assertTrue(is_valid)
+        self.assertIsNone(message)
+
+        # Change the hazard layer to None
+        self.save_scenario_dialog.dock.cboHazard.setCurrentIndex(-1)
+        is_valid, message = self.save_scenario_dialog.validate_input()
+        self.assertFalse(is_valid)
+        self.assertIsNotNone(message)
+
+    def test_save_scenario(self):
+        """Test saving Current scenario."""
         result, message = setup_scenario(
             DOCK,
             hazard='Flood in Jakarta',
@@ -83,8 +107,9 @@ class SaveScenarioTest(unittest.TestCase):
         # create unique file
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=temp_dir('test'))
-        # TODO Changing the dock to the save scenario tool
-        DOCK.save_current_scenario(scenario_file_path=scenario_file)
+
+        self.save_scenario_dialog.save_scenario(
+            scenario_file_path=scenario_file)
         with open(scenario_file) as f:
             data = f.readlines()
         title = data[0][:-1]
@@ -112,7 +137,7 @@ class SaveScenarioTest(unittest.TestCase):
             'extent = 106.313333, -6.380000, 107.346667, -6.070000')
         self.assertEqual(expected_extent, extent)
 
-    def test_scenario_layer_paths(self):
+    def test_relative_path(self):
         """Test we calculate the relative paths correctly when saving scenario.
         """
         result, message = setup_scenario(
@@ -128,11 +153,10 @@ class SaveScenarioTest(unittest.TestCase):
         exposure_layer = str(DOCK.get_exposure_layer().publicSource())
         hazard_layer = str(DOCK.get_hazard_layer().publicSource())
 
-        # TODO Changing the dock to the save scenario tool
-        relative_exposure, relative_hazard = DOCK.scenario_layer_paths(
-            exposure_layer,
-            hazard_layer,
-            scenario_file)
+        relative_exposure = self.save_scenario_dialog.relative_path(
+            scenario_file, exposure_layer)
+        relative_hazard = self.save_scenario_dialog.relative_path(
+            scenario_file, hazard_layer)
 
         if 'win32' in sys.platform:
             # windows
@@ -150,4 +174,3 @@ class SaveScenarioTest(unittest.TestCase):
             self.assertEqual(
                 'hazard/jakarta_flood_category_123.asc',
                 relative_hazard)
-

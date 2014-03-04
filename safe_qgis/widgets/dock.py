@@ -20,13 +20,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import logging
-from ConfigParser import ConfigParser
 from functools import partial
 
 import numpy
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtGui import QFileDialog
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 from qgis.core import (
     QgsMapLayer,
