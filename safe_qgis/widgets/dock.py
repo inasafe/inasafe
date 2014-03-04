@@ -1960,6 +1960,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if disclaimer_text != '':
             print_map.set_disclaimer(disclaimer_text)
 
+        north_arrow_path = settings.value(
+            'inasafe/northArrowPath', '', type=str)
+        if north_arrow_path != '':
+            print_map.set_north_arrow_image(north_arrow_path)
+
         print_map.set_template(template_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
