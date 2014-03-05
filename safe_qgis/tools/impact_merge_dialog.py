@@ -80,30 +80,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.keyword_io = KeywordIO()
 
         # Template Path for composer
-        self.template_path = os.path.join(
-            os.path.dirname(__file__),
-            os.path.pardir,
-            'resources',
-            'qgis-composer-templates',
-            'merged_report.qpt')
+        self.template_path = ':/plugins/inasafe/merged_report.qpt'
 
         # Safe Logo Path
-        self.safe_logo_path = os.path.join(
-            os.path.dirname(__file__),
-            os.path.pardir,
-            'resources',
-            'img',
-            'logos',
-            'inasafe-logo-url.png')
+        self.safe_logo_path = ':/plugins/inasafe/inasafe-logo-url.png'
 
         # Organisation Logo Path
-        self.organisation_logo_path = os.path.join(
-            os.path.dirname(__file__),
-            os.path.pardir,
-            'resources',
-            'img',
-            'logos',
-            'supporters.png')
+        self.organisation_logo_path = ':/plugins/inasafe/supporters.png'
 
         # Disclaimer text
         self.disclaimer = disclaimer()
