@@ -741,7 +741,7 @@ def read_impact_layer(impact_layer):
         raise Exception(message)
 
 
-def map_qrc_to_file(match, resource_copy_directory):
+def map_qrc_to_file(match, destination_directory):
     """Map a qrc:/ path to its correspondent file:/// and create it.
 
     For example qrc:/plugins/inasafe/ajax-loader.gif
@@ -749,39 +749,42 @@ def map_qrc_to_file(match, resource_copy_directory):
     inasafe-master/safe_qgis/resources/img/ajax-loader.gif
 
     If the qrc asset is non file based (i.e. is compiled in resources_rc
-    .pc) then a copy of is extracted to resource_copy_directory.
+    .pc) then a copy of is extracted to destination_directory.
 
     :param match: The qrc path to be mapped matched from a regular
         expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
     :type match: re.match object
 
-    :param resource_copy_directory: The path to copy non file based qrc assets.
-    :type resource_copy_directory: str
+    :param destination_directory: The destination path to copy non file based
+        qrc assets.
+    :type destination_directory: str
 
     :returns: File path to the resource or None if the resource could
         not be created.
     :rtype: None, str
     """
-
-    resources_directory_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), '..', 'resources'))
+    # Resource alias on resources.qrc
     resource_alias = match.group(1)
-    resource_path = '%s/%s' % (resources_directory_path, resource_alias)
+
+    # The resource path (will be placed inside destination_directory)
+    resource_path = os.path.join(destination_directory, resource_alias)
+
+    # The file (resource) might be here due to a previous copy
     if not os.path.isfile(resource_path):
-        resource_path = os.path.join(resource_copy_directory, resource_alias)
-        # file might be here due to a previous copy
-        if not os.path.isfile(resource_path):
-            resource_path_directory = os.path.dirname(resource_path)
-            # Create dirs recursively if resource_path_directory does not exist
-            if not os.path.exists(resource_path_directory):
-                os.makedirs(resource_path_directory)
-            # copy from qrc to filesystem
-            source_file = ':/plugins/inasafe/%s' % resource_alias
-            # noinspection PyTypeChecker
-            copy_successful = QFile.copy(source_file, resource_path)
-            if not copy_successful:
-                #copy somehow failed
-                resource_path = None
+        # Get resource directory tree
+        resource_path_directory = os.path.dirname(resource_path)
+
+        # Create dirs recursively if resource_path_directory does not exist
+        if not os.path.exists(resource_path_directory):
+            os.makedirs(resource_path_directory)
+
+        # Now, copy from qrc to file system
+        source_file = ':/plugins/inasafe/%s' % resource_alias
+        # noinspection PyTypeChecker
+        copy_successful = QFile.copy(source_file, resource_path)
+        if not copy_successful:
+            #copy somehow failed
+            resource_path = None
 
     #noinspection PyArgumentList
     return QUrl.fromLocalFile(resource_path).toString()
