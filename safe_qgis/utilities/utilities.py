@@ -771,12 +771,14 @@ def map_qrc_to_file(match, res_copy_dir):
         res_path = os.path.join(res_copy_dir, res_alias)
         # file might be here due to a previous copy
         if not os.path.isfile(res_path):
-            if not os.path.exists(res_copy_dir):
-                os.makedirs(res_copy_dir)
-                # copy from qrc to filesystem
-            #noinspection PyTypeChecker
-            copy_successful = QFile.copy(
-                ':/plugins/inasafe/%s' % res_alias, res_path)
+            res_path_dir = os.path.dirname(res_path)
+            # Create dirs recursively if res_path_dir does not exist
+            if not os.path.exists(res_path_dir):
+                os.makedirs(res_path_dir)
+            # copy from qrc to filesystem
+            source = ':/plugins/inasafe/%s' % res_alias
+            # noinspection PyTypeChecker
+            copy_successful = QFile.copy(source, res_path)
             if not copy_successful:
                 #copy somehow failed
                 res_path = None
