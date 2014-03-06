@@ -1,3 +1,4 @@
+# coding=utf-8
 """Utilities for InaSAFE
 """
 import os
@@ -104,15 +105,14 @@ def temp_dir(sub_dir='work'):
     If you specify INASAFE_WORK_DIR as an environment var, it will be
     used in preference to the system temp directory.
 
-    Args:
-        sub_dir str - optional argument which will cause an additional
-                subdirectory to be created e.g. /tmp/inasafe/foo/
+    :param sub_dir: Optional argument which will cause an additional
+        subdirectory to be created e.g. /tmp/inasafe/foo/
+    :type sub_dir: str
 
-    Returns:
-        Path to the output clipped layer (placed in the system temp dir).
+    :return: Path to the output clipped layer (placed in the system temp dir).
+    :rtype: str
 
-    Raises:
-       Any errors from the underlying system calls.
+    :raises: Any errors from the underlying system calls.
     """
     user = getpass.getuser().replace(' ', '_')
     current_date = date.today()
