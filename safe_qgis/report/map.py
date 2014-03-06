@@ -246,25 +246,16 @@ class Map():
         image = self.composition.getComposerItemById('safe-logo')
         if image is not None:
             image.setPictureFile(self.safe_logo)
-        else:
-            raise ReportCreationError(self.tr(
-                'Image "safe-logo" could not be found'))
 
         # set north arrow
         image = self.composition.getComposerItemById('north-arrow')
         if image is not None:
             image.setPictureFile(self.north_arrow)
-        else:
-            raise ReportCreationError(self.tr(
-                'Image "north arrow" could not be found'))
 
         # set organisation logo
         image = self.composition.getComposerItemById('organisation-logo')
         if image is not None:
             image.setPictureFile(self.org_logo)
-        else:
-            raise ReportCreationError(self.tr(
-                'Image "organisation-logo" could not be found'))
 
         # set impact report table
         table = self.composition.getComposerItemById('impact-report')
@@ -274,8 +265,6 @@ class Map():
                 text = ''
             table.setText(text)
             table.setHtmlState(1)
-        else:
-            LOGGER.debug('"impact-report" element not found.')
 
         # Get the main map canvas on the composition and set
         # its extents to the event.
@@ -305,42 +294,40 @@ class Map():
             composer_map.setGridIntervalX(x_interval)
             y_interval = square_extent.height() / split_count
             composer_map.setGridIntervalY(y_interval)
-        else:
-            raise ReportCreationError(self.tr(
-                'Map "impact-map" could not be found'))
 
         legend = self.composition.getComposerItemById('impact-legend')
-        legend_attributes = self.map_legend_attributes()
-        LOGGER.debug(legend_attributes)
-        #legend_notes = mapLegendAttributes.get('legend_notes', None)
-        #legend_units = mapLegendAttributes.get('legend_units', None)
-        legend_title = legend_attributes.get('legend_title', None)
+        if legend is not None:
+            legend_attributes = self.map_legend_attributes()
+            LOGGER.debug(legend_attributes)
+            #legend_notes = mapLegendAttributes.get('legend_notes', None)
+            #legend_units = mapLegendAttributes.get('legend_units', None)
+            legend_title = legend_attributes.get('legend_title', None)
 
-        symbol_count = 1
-        if self.layer.type() == QgsMapLayer.VectorLayer:
-            renderer = self.layer.rendererV2()
-            if renderer.type() in ['', '']:
-                symbol_count = len(self.layer.legendSymbologyItems())
-        else:
-            renderer = self.layer.renderer()
-            if renderer.type() in ['']:
-                symbol_count = len(self.layer.legendSymbologyItems())
+            symbol_count = 1
+            if self.layer.type() == QgsMapLayer.VectorLayer:
+                renderer = self.layer.rendererV2()
+                if renderer.type() in ['', '']:
+                    symbol_count = len(self.layer.legendSymbologyItems())
+            else:
+                renderer = self.layer.renderer()
+                if renderer.type() in ['']:
+                    symbol_count = len(self.layer.legendSymbologyItems())
 
-        if symbol_count <= 5:
-            legend.setColumnCount(1)
-        else:
-            legend.setColumnCount(symbol_count / 5 + 1)
+            if symbol_count <= 5:
+                legend.setColumnCount(1)
+            else:
+                legend.setColumnCount(symbol_count / 5 + 1)
 
-        if legend_title is None:
-            legend_title = ""
-        legend.setTitle(legend_title)
-        legend.updateLegend()
+            if legend_title is None:
+                legend_title = ""
+            legend.setTitle(legend_title)
+            legend.updateLegend()
 
-        # remove from legend all layers, except impact one
-        model = legend.model()
-        if model.rowCount() > 0 and model.columnCount() > 0:
-            impact_item = model.findItems(self.layer.name())[0]
-            row = impact_item.index().row()
-            model.removeRows(row + 1, model.rowCount() - row)
-            if row > 0:
-                model.removeRows(0, row)
+            # remove from legend all layers, except impact one
+            model = legend.model()
+            if model.rowCount() > 0 and model.columnCount() > 0:
+                impact_item = model.findItems(self.layer.name())[0]
+                row = impact_item.index().row()
+                model.removeRows(row + 1, model.rowCount() - row)
+                if row > 0:
+                    model.removeRows(0, row)
