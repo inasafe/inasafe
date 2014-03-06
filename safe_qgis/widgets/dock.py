@@ -2028,7 +2028,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_dynamic_message(status)
         else:
             self.composer = self.iface.createNewComposer()
-            print_map.load_template()
+            try:
+                print_map.load_template()
+            except Exception:
+                # noinspection PyCallByClass,PyTypeChecker
+                QtGui.QMessageBox.warning(
+                    self,
+                    self.tr('InaSAFE Error'),
+                    self.tr('Error on loading template'))
+                return
+
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
             # Zoom to Full Extent
