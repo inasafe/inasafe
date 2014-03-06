@@ -33,8 +33,8 @@ from qgis.core import (
     QgsRectangle,
     QgsAtlasComposition)
 
+from safe.common.utilities import temp_dir
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
-
 from safe_qgis.exceptions import (
     InvalidLayerError,
     EmptyDirectoryError,
@@ -776,7 +776,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             html += html_footer()
 
             file_path = '%s.html' % aggregation_area
-            path = os.path.join(self.out_dir, file_path)
+            path = os.path.join(temp_dir(), file_path)
             html_to_file(html, path)
             self.html_reports[aggregation_area.lower()] = path
 
