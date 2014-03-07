@@ -533,8 +533,13 @@ class Plugin:
         dialog.exec_()  # modal
 
     def save_scenario(self):
-        """Save current scenario to text file,"""
-        self.dock_widget.save_current_scenario()
+        """Save current scenario to text file"""
+        from safe_qgis.tools.save_scenario import SaveScenarioDialog
+
+        dialog = SaveScenarioDialog(
+            iface=self.iface,
+            dock=self.dock_widget)
+        dialog.save_scenario()
 
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
