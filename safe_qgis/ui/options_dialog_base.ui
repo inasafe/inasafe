@@ -18,16 +18,6 @@
     <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -57,8 +47,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>648</width>
-            <height>560</height>
+            <width>645</width>
+            <height>471</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -298,11 +288,18 @@
       <attribute name="title">
        <string>Template Options</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_5">
-       <item row="8" column="0">
-        <widget class="QPlainTextEdit" name="txtDisclaimer"/>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="template_warning_checkbox">
+         <property name="text">
+          <string>Warn me when map templates are missing elements</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
-       <item row="0" column="0">
+       <item>
         <widget class="QLabel" name="lblOrganisationLogo">
          <property name="enabled">
           <bool>true</bool>
@@ -312,7 +309,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
           <widget class="QLineEdit" name="leOrganisationLogoPath">
@@ -333,7 +330,17 @@
          </item>
         </layout>
        </item>
-       <item row="3" column="0">
+       <item>
+        <widget class="QCheckBox" name="organisation_on_dock_checkbox">
+         <property name="text">
+          <string>Show organisation logo on main panel too</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="lblNorthArrowPath">
          <property name="enabled">
           <bool>true</bool>
@@ -343,7 +350,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
           <widget class="QLineEdit" name="leNorthArrowPath">
@@ -364,7 +371,7 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="0">
+       <item>
         <widget class="QLabel" name="lblReportTemplate">
          <property name="enabled">
           <bool>true</bool>
@@ -374,8 +381,8 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QLineEdit" name="leReportTemplatePath">
            <property name="enabled">
@@ -395,22 +402,15 @@
          </item>
         </layout>
        </item>
-       <item row="7" column="0">
+       <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Organisation disclaimer text</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="organisation_on_dock_checkbox">
-         <property name="text">
-          <string>Show organisation logo on main panel too</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
+       <item>
+        <widget class="QPlainTextEdit" name="txtDisclaimer"/>
        </item>
       </layout>
       <zorder>label_2</zorder>
@@ -419,6 +419,7 @@
       <zorder>lblNorthArrowPath</zorder>
       <zorder>lblReportTemplate</zorder>
       <zorder>organisation_on_dock_checkbox</zorder>
+      <zorder>template_warning_checkbox</zorder>
      </widget>
      <widget class="QWidget" name="tab_advanced">
       <attribute name="title">
@@ -475,8 +476,8 @@
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -509,6 +510,16 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>

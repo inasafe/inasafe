@@ -179,6 +179,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/keywordCachePath',
             self.leKeywordCachePath.text())
         settings.setValue(
+            'inasafe/templateWarningVerbose',
+            self.template_warning_checkbox.isChecked())
+        settings.setValue(
             'inasafe/northArrowPath',
             self.leNorthArrowPath.text())
         settings.setValue(

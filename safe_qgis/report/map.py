@@ -59,6 +59,12 @@ class Map():
         self.page_dpi = 300.0
         self.show_frames = False  # intended for debugging use only
 
+        # List of all component id on the template
+        self.component_ids = []
+
+        # Prompt user if template does not contain some elements
+        self.template_warning_verbose = False
+
     @staticmethod
     def tr(string):
         """We implement this since we do not inherit QObject.
@@ -111,6 +117,23 @@ class Map():
         :type template: str
         """
         self.template = template
+
+    def set_component_ids(self, component_ids):
+        """Set component_ids that should be present on the standard template.
+
+        :param component_ids: List of component id on the standard template
+        :type component_ids: list
+        """
+        self.component_ids = component_ids
+
+    def set_template_warning_verbose(self, verbose):
+        """Set the choice to prompt user the error or not if template does
+        not have some elements.
+
+        :param verbose: the choice to keep it verbose or not
+        :type verbose: bool
+        """
+        self.template_warning_verbose = verbose
 
     def set_extent(self, extent):
         """Set extent or the report map
@@ -193,6 +216,25 @@ class Map():
                 pass
         return legend_attribute_dict
 
+    def validate_template(self, component_ids):
+        """Validate the template to see what are the missing elements on the
+        self.composition.
+
+        :param component_ids: All the component_ids that need to be present
+        on self.composition
+        :type component_ids: list
+
+        :return: Sublist of component_ids
+        :rtype: list
+        """
+        missing_elements = []
+        for component_id in component_ids:
+            component = self.composition.getComposerItemById(component_id)
+            if component is None:
+                missing_elements.append(component_ids)
+
+        return missing_elements
+
     def load_template(self):
         """Load a QgsComposer map from a template.
         """
@@ -241,6 +283,9 @@ class Map():
 
         self.page_width = self.composition.paperWidth()
         self.page_height = self.composition.paperHeight()
+
+        # Validate the template components
+
 
         # set InaSAFE logo
         image = self.composition.getComposerItemById('safe-logo')

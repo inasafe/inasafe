@@ -1944,6 +1944,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
 
+        # Set all the map components
         print_map.set_impact_layer(self.iface.activeLayer())
         if use_full_extent:
             print_map.set_extent(self.iface.activeLayer().extent())
@@ -1965,7 +1966,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if north_arrow_path != '':
             print_map.set_north_arrow_image(north_arrow_path)
 
+        template_warning_verbose = settings.value(
+            'inasafe/templateWarningVerbose')
+        print_map.set_template_warning_verbose(template_warning_verbose)
+
         print_map.set_template(template_path)
+        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
+                         'impact-report', 'impact-map', 'impact-legend']
+        print_map.set_component_ids(component_ids)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
