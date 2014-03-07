@@ -132,13 +132,13 @@ class SaveScenarioDialog(QDialog):
             ' ', '_').replace('(', '').replace(')', '')
 
         # Popup a dialog to request the filename if scenario_file_path = None
-        title_dialog = self.tr('Save Scenario')
+        dialog_title = self.tr('Save Scenario')
         if scenario_file_path is None:
             # noinspection PyCallByClass,PyTypeChecker
             scenario_file_path = str(
                 QFileDialog.getSaveFileName(
                     self,
-                    title_dialog,
+                    dialog_title,
                     os.path.join(
                         self.output_directory,
                         default_filename + '.txt'),
