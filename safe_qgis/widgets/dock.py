@@ -2026,15 +2026,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_dynamic_message(status)
         else:
             self.composer = self.iface.createNewComposer()
+            # pylint: disable=W0703
+            # noinspection PyBroadException
             try:
                 print_map.load_template()
             except Exception:
                 # noinspection PyCallByClass,PyTypeChecker
+                # TODO: This is a but sucky - we should show informative msg TS
                 QtGui.QMessageBox.warning(
                     self,
                     self.tr('InaSAFE Error'),
                     self.tr('Error on loading template'))
                 return
+            # pylint: enable=W0703
 
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
