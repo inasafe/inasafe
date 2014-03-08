@@ -36,6 +36,7 @@ from qgis.core import (
     QgsMapRenderer,
     QgsComposition)
 
+from safe.common.utilities import temp_dir
 #noinspection PyPackageRequirements
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
 from safe_qgis.utilities.utilities_for_testing import (
@@ -536,11 +537,9 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog.generate_html_reports(
             first_report_dict, second_report_dict)
 
-        # There should be 4 HTML files generated on output directory
+        # There should be 4 HTML files generated on temp_dir()
         html_list = glob(
-            os.path.join(
-                self.impact_merge_dialog.out_dir,
-                '*.html'))
+            os.path.join(temp_dir(), '*.html'))
         expected_html_number = 4
         self.assertEqual(len(html_list), expected_html_number)
 
