@@ -58,6 +58,9 @@ class GenderPostprocessor(AbstractPostprocessor):
             self._raise_error('clear needs to be called before setup')
         self.impact_total = params['impact_total']
         self.female_ratio = params['female_ratio']
+        if self.female_ratio > 1:
+            self._raise_error('Female ratio should be lower max 1. Found: '
+                              '%s ' % self.female_ratio)
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
