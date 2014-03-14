@@ -257,9 +257,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             'population_density_next_question': self.tr('people density in people/km<sup>2</sup>')
         }
 
-
-
-
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -295,6 +292,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
 
+        self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
 
         self.go_to_step(1)
@@ -346,6 +344,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return item.text()
         else:
             return None
+
+    def update_dragged_item_flags(self, item, column):
+        """A slot executed when thee item change. Check if it looks like
+        an item  dragged from QListWidget to QTreeWidget and disable the
+        drop flag. For some reasons the flag is set when dragging.
+        """
+        if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
 
     # prevents actions being handled twice
     @pyqtSignature('')
@@ -534,11 +540,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         bold_font.setItalic(True)
         bold_font.setBold(True)
         bold_font.setWeight(75)
-        self.treeWidget.clear()
-        self.treeWidget.invisibleRootItem().setFlags(QtCore.Qt.ItemIsEnabled)
+        self.treeClasses.clear()
+        self.treeClasses.invisibleRootItem().setFlags(QtCore.Qt.ItemIsEnabled)
         for key in default_mapping:
             # Create branch for class
-            tree_branch = QtGui.QTreeWidgetItem(self.treeWidget)
+            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
             tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled|QtCore.Qt.ItemIsEnabled)
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
@@ -548,8 +554,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled|QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setText(0, val)
-
-
 
     def go_to_step(self, step):
         """Set the stacked widget to the given step
@@ -683,7 +687,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: dict
         """
         my_keywords = {}
-        my_keywords['category'] = self.selected_category()
+        if self.selected_category():
+            my_keywords['category'] = self.selected_category()
         if self.selected_subcategory():
             my_keywords['subcategory'] = self.selected_subcategory()
         if self.selected_unit():
@@ -700,6 +705,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             my_keywords['source_date'] = self.leSource_date.text()
         if self.leTitle.text():
             my_keywords['title'] = self.leTitle.text()
+        value_map = {}
+        for tree_branch in self.treeClasses.invisibleRootItem().takeChildren():
+            value_list = []
+            for tree_leaf in tree_branch.takeChildren():
+                value_list += [tree_leaf.text(0)]
+            if value_list:
+                value_map[tree_branch.text(0)] = value_list
+        if value_map:
+            my_keywords['value_map'] = str(value_map)
         return my_keywords
 
     def accept(self):

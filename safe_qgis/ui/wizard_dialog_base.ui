@@ -852,7 +852,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout_15">
          <item row="1" column="5">
-          <widget class="QTreeWidget" name="treeWidget">
+          <widget class="QTreeWidget" name="treeClasses">
            <property name="showDropIndicator" stdset="0">
             <bool>true</bool>
            </property>
@@ -867,6 +867,9 @@
            </property>
            <property name="defaultDropAction">
             <enum>Qt::MoveAction</enum>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
            </property>
            <property name="rootIsDecorated">
             <bool>false</bool>
@@ -925,7 +928,7 @@
             <string>Classified unique values</string>
            </property>
            <property name="buddy">
-            <cstring>treeWidget</cstring>
+            <cstring>treeClasses</cstring>
            </property>
           </widget>
          </item>
@@ -1360,7 +1363,7 @@
   <tabstop>lstUnits</tabstop>
   <tabstop>lstFields</tabstop>
   <tabstop>lstUniqueValues</tabstop>
-  <tabstop>treeWidget</tabstop>
+  <tabstop>treeClasses</tabstop>
   <tabstop>leSource</tabstop>
   <tabstop>leSource_url</tabstop>
   <tabstop>leSource_scale</tabstop>
