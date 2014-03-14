@@ -60,7 +60,8 @@ from safe.common.exceptions import (
     InaSAFEError,
     GetDataError,
     ZeroImpactException,
-    PointsInputError)
+    PointsInputError,
+    PostProcessorError)
 from safe.common.utilities import (
     VerificationError,
     temp_dir,

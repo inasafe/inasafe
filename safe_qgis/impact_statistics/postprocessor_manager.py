@@ -31,8 +31,10 @@ from safe_qgis.safe_interface import (
     safeTr,
     get_postprocessors,
     get_postprocessor_human_name,
-    messaging as m)
-from safe_qgis.exceptions import KeywordNotFoundError
+    messaging as m,
+    PostProcessorError,
+    KeywordNotFoundError,
+    styles)
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
@@ -364,14 +366,24 @@ class PostprocessorManager(QtCore.QObject):
                 if key == 'BuildingType' or key == 'RoadType':
                     parameters['key_attribute'] = key_attribute
 
-                value.setup(parameters)
-                value.process()
-                results = value.results()
-                value.clear()
-#                LOGGER.debug(results)
                 try:
+                    value.setup(parameters)
+                    value.process()
+                    results = value.results()
+                    value.clear()
+    #                LOGGER.debug(results)
+
+                    #this can raise a KeyError
                     self.output[key].append(
                         (zone_name, results))
+
+                except PostProcessorError as e:
+                    message = m.Message(
+                        m.Heading(self.tr('%s postprocessor problem' % key),
+                                  **styles.DETAILS_STYLE),
+                        m.Paragraph(self.tr(str(e))))
+                    self.error_message = message
+
                 except KeyError:
                     self.output[key] = []
                     self.output[key].append(
@@ -387,20 +399,25 @@ class PostprocessorManager(QtCore.QObject):
 
         :returns: str - a string containing the html in the requested format.
         """
-        if self.error_message is not None:
-            message = m.Message(
-                m.Heading(self.tr('Postprocessing report skipped')),
-                m.Paragraph(self.tr(
-                    'Due to a problem while processing the results,'
-                    ' the detailed postprocessing report is unavailable:'
-                    ' %s') % self.error_message))
-            return message
-        else:
-            try:
-                if (self.keyword_io.read_keywords(
-                        self.aggregator.layer, 'had multipart polygon')):
-                    self._consolidate_multipart_stats()
-            except KeywordNotFoundError:
-                pass
 
-            return self._generate_tables(aoi_mode)
+        message = m.Message()
+        if self.error_message is not None:
+            message.add(
+                m.Heading(
+                    self.tr('Postprocessing report partially skipped'),
+                    **styles.WARNING_STYLE))
+            message.add(
+                m.Paragraph(self.tr(
+                    'Due to a problem while processing the results, part of '
+                    'the detailed postprocessing report is unavailable:')))
+            message.add(self.error_message)
+
+        try:
+            if (self.keyword_io.read_keywords(
+                    self.aggregator.layer, 'had multipart polygon')):
+                self._consolidate_multipart_stats()
+        except KeywordNotFoundError:
+            pass
+
+        message.add(self._generate_tables(aoi_mode))
+        return message

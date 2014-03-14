@@ -67,6 +67,16 @@ class AgePostprocessor(AbstractPostprocessor):
             self.youth_ratio = params['youth_ratio']
             self.adult_ratio = params['adult_ratio']
             self.elder_ratio = params['elder_ratio']
+
+            ratios_total = (self.youth_ratio +
+                            self.adult_ratio +
+                            self.elder_ratio)
+            if ratios_total > 1:
+                self._raise_error('Age ratios should sum up to 1. Found: '
+                                  '%s + %s + %s = %s ' % (self.youth_ratio,
+                                                          self.adult_ratio,
+                                                          self.elder_ratio,
+                                                          ratios_total))
         except KeyError:
             self._log_message('either all 3 age ratio are custom set or we'
                               ' use defaults')
