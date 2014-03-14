@@ -51,6 +51,7 @@ class MockQNetworkReply(QObject):
     :type parent:
     """
     readyRead = pyqtSignal()
+    finished = pyqtSignal()
     downloadProgress = pyqtSignal('qint64', 'qint64')
 
     def __init__(self, parent=None):
@@ -58,6 +59,7 @@ class MockQNetworkReply(QObject):
         self.progress = 0
         self.content = ""
         self._url = ""
+        self._size = 12
 
     #noinspection PyDocstring,PyPep8Naming
     def isFinished(self):
@@ -76,12 +78,23 @@ class MockQNetworkReply(QObject):
         return myContent
 
     #noinspection PyDocstring,PyPep8Naming
+    def read(self, size):
+        myContent = self.content
+        self.content = ""
+        self._size = size
+        return myContent
+
+    #noinspection PyDocstring,PyPep8Naming
     def url(self):
         return QUrl(self._url)
 
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     def error(self):
         return QNetworkReply.NoError
+
+    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    def size(self):
+        return self._size
 
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
