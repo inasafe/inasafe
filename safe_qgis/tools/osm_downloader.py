@@ -21,10 +21,14 @@ import os
 import tempfile
 import logging
 
+#noinspection PyPackageRequirements
 from PyQt4 import QtGui
+#noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
+#noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
+#noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 #noinspection PyUnresolvedReferences
@@ -320,9 +324,11 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         label_text = self.tr("Downloading shapefile")
         self.progress_dialog.setLabelText(label_text)
 
-        result = download_url(
-            self.network_manager, url, output_path,
-            self.progress_dialog)
+        try:
+            result = download_url(
+                self.network_manager, url, output_path, self.progress_dialog)
+        except IOError as ex:
+            raise IOError(ex)
 
         if result[0] is not True:
             _, error_message = result
