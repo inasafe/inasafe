@@ -58,27 +58,28 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self._result = None
         self.values = OrderedDict()
 
-    def bind(self, theObject, theProperty, theType):
+    def bind(self, widget, property_name, function):
         """Create a function that return the QWidget property of object and
         convert the value to type.
 
-        :param theObject: QWidget instance
-        :param theProperty: The name of property inside QWidget instance
-        :param theType: A function to convert the property value
+        :param widget: QWidget instance
+        :param property_name: The name of property inside QWidget instance
+        :param function: A function to convert the property value
 
         :returns: The property value of theObject
         """
-        return lambda: theType(theObject.property(theProperty))
 
-    def build_form(self, theParams):
+        return lambda: function(widget.property(property_name))
+
+    def build_form(self, parameters):
         """we build a form from impact functions parameter
 
         .. note:: see http://tinyurl.com/pyqt-differences
 
-        :param theParams: Parameters to be edited
+        :param parameters: Parameters to be edited
         """
 
-        for key, value in theParams.items():
+        for key, value in parameters.items():
             if key == 'postprocessors':
                 self.build_post_processor_form(value)
             elif key == 'minimum needs':
@@ -138,6 +139,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 group_box.setTitle(get_postprocessor_human_name(myLabel))
 
                 # NOTE (gigih): is 'on' always exist??
+                # (MB) should always be there
                 group_box.setChecked(options.get('on'))
                 input_values['on'] = self.bind(group_box, 'checked', bool)
 
@@ -197,6 +199,14 @@ class FunctionOptionsDialog(QtGui.QDialog,
             label = theName
 
         # create widget based on the type of theValue variable
+        # if widget is a QLineEdit, value needs to be set
+        # if widget is NOT a QLineEdit, property_name needs to be set
+        value = None
+        property_name = None
+
+        # can be used for widgets that have their own text like QCheckBox
+        hide_label = False
+
         if isinstance(theValue, list):
             widget = QLineEdit()
             value = ', '.join([str(x) for x in theValue])
@@ -207,15 +217,29 @@ class FunctionOptionsDialog(QtGui.QDialog,
             widget = QLineEdit()
             value = str(theValue)
             function = lambda x: ast.literal_eval(str(x))
+        elif isinstance(theValue, bool):
+            widget = QCheckBox()
+            widget.setChecked(theValue)
+            widget.setText(label.text())
+            property_name = 'checked'
+            function = bool
+            hide_label = True
         else:
             widget = QLineEdit()
             value = str(theValue)
             function = type(theValue)
 
-        widget.setText(value)
-        theFormLayout.addRow(label, widget)
+        if hide_label:
+            theFormLayout.addRow(widget)
+        else:
+            theFormLayout.addRow(label, widget)
 
-        return self.bind(widget, 'text', function)
+        # are we dealing with a QLineEdit?
+        if value is not None:
+            widget.setText(value)
+            property_name = 'text'
+
+        return self.bind(widget, property_name, function)
 
     def set_dialog_info(self, function_id):
         """Show help text in dialog.

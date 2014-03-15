@@ -43,7 +43,7 @@ AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
                             }
 
 
-def get_postprocessors(requested_postprocessors):
+def get_postprocessors(requested_postprocessors, aoi_mode):
     """
     Creates a dictionary of applicable postprocessor instances
 
@@ -80,8 +80,19 @@ def get_postprocessors(requested_postprocessors):
 
     for name, values in requested_postprocessors.iteritems():
         constr_id = name + 'Postprocessor'
+
+        aggregation_dependent_on = True
+        # lets check if the IF has a ['params']['on_when_not_aggregating']
+        # that would turn off the current postprocessor if in aoi_mode
+        if aoi_mode:
+            try:
+                aggregation_dependent_on = (
+                    values['params']['on_when_not_aggregating'])
+            except KeyError:
+                pass
+
         try:
-            if values['on']:
+            if values['on'] and aggregation_dependent_on:
                 if name in AVAILABLE_POSTPTOCESSORS.keys():
                     #http://stackoverflow.com/a/554462
                     constr = globals()[constr_id]
