@@ -21,10 +21,14 @@ import os
 import tempfile
 import logging
 
+#noinspection PyPackageRequirements
 from PyQt4 import QtGui
+#noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
+#noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
+#noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 #noinspection PyUnresolvedReferences
