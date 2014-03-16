@@ -37,10 +37,12 @@ from qgis.core import QGis  # force sip2 api
 #pylint: enable=W0611
 from safe_qgis.ui.osm_downloader_base import Ui_OsmDownloaderBase
 
-from safe_qgis.exceptions import CanceledImportDialogError, ImportDialogError
+from safe_qgis.exceptions import (
+    CanceledImportDialogError, ImportDialogError, DownloadError)
 from safe_qgis.safe_interface import messaging as m
+from safe_qgis.utilities.file_downloader import FileDownloader
 from safe_qgis.utilities.utilities import (
-    download_url, html_footer, html_header, viewport_geo_array)
+    html_footer, html_header, viewport_geo_array)
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.proxy import get_proxy
@@ -255,7 +257,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             raise CanceledImportDialogError()
 
     def download(self, feature_type):
-        """Download shapefiles from Linfinti server.
+        """Download shapefiles from Linfiniti server.
 
         :param feature_type: What kind of features should be downloaded.
             Currently 'buildings' or 'roads' are supported.
@@ -293,9 +295,6 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         # download and extract it
         self.fetch_zip(url, path)
-        #print path
-        #print str(self.output_directory.text())
-
         self.extract_zip(path, str(self.output_directory.text()))
 
         self.progress_dialog.done(QDialog.Accepted)
@@ -318,21 +317,20 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.progress_dialog.setMaximum(100)
         self.progress_dialog.setValue(0)
 
-        # label_text = "Begin downloading shapefile from " \
-        #               + "%s ..."
-        # self.progress_dialog.setLabelText(self.tr(label_text) % (url))
         label_text = self.tr("Downloading shapefile")
         self.progress_dialog.setLabelText(label_text)
 
+        # Download Process
+        downloader = FileDownloader(
+            self.network_manager, url, output_path, self.progress_dialog)
         try:
-            result = download_url(
-                self.network_manager, url, output_path, self.progress_dialog)
+            result = downloader.download()
         except IOError as ex:
             raise IOError(ex)
 
         if result[0] is not True:
             _, error_message = result
-            raise ImportDialogError(error_message)
+            raise DownloadError(error_message)
 
     @staticmethod
     def extract_zip(path, output_dir):
@@ -362,14 +360,13 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         handle.close()
 
     def load_shapefile(self, feature_type):
-        """
-        Load downloaded shape file to QGIS Main Window.
+        """Load downloaded shape file to QGIS Main Window.
 
         :param feature_type: What kind of features should be downloaded.
             Currently 'buildings' or 'roads' are supported.
         :type feature_type: str
 
-        :raises: ImportDialogError - when buildings.shp not exist
+        :raises: OSMDownloaderError - when buildings.shp not exist
         """
         output_prefix = self.filename_prefix.text()
         path = str(self.output_directory.text())

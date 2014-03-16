@@ -28,17 +28,14 @@ import tempfile
 import shutil
 
 #noinspection PyPackageRequirements
-from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
+from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant, QByteArray
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog
 #noinspection PyPackageRequirements
-from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
+from PyQt4.QtNetwork import QNetworkReply
 
 from safe.common.testing import get_qgis_app
 from safe_qgis.tools.osm_downloader import OsmDownloader
-from safe_qgis.utilities.utilities import download_url
-from safe_qgis.utilities.utilities_for_testing import (
-    assert_hash_for_file)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
@@ -63,7 +60,7 @@ class MockQNetworkReply(QObject):
         self.progress = 0
         self.content = ""
         self._url = ""
-        self._size = 12
+        self._size = 0
 
     #noinspection PyDocstring,PyPep8Naming
     def isFinished(self):
@@ -82,16 +79,18 @@ class MockQNetworkReply(QObject):
 
     #noinspection PyDocstring,PyPep8Naming
     def readAll(self):
-        myContent = self.content
+        content = self.content
         self.content = ""
-        return myContent
+        return content
 
     #noinspection PyDocstring,PyPep8Naming
     def read(self, size):
-        myContent = self.content
+        content = self.content
         self.content = ""
-        self._size = size
-        return myContent
+        # content = string while the input parameter size in QByteArray
+        data = QByteArray(content)
+        data.chop(data.size() - size)
+        return str(data)
 
     #noinspection PyDocstring,PyPep8Naming
     def url(self):
@@ -103,7 +102,8 @@ class MockQNetworkReply(QObject):
 
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     def size(self):
-        return self._size
+        data = QByteArray(self.content)
+        return data.size()
 
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
@@ -187,24 +187,6 @@ class ImportDialogTest(unittest.TestCase):
 
         ## provide Fake QNetworkAccessManager for self.network_manager
         self.dialog.network_manager = FakeQNetworkAccessManager()
-
-    #noinspection PyMethodMayBeStatic
-    def test_download_url(self):
-        """Test we can download a zip. Uses a mock network stack."""
-        manager = QNetworkAccessManager(PARENT)
-
-        # NOTE(gigih):
-        # this is the hash of google front page.
-        # I think we can safely assume that the content
-        # of google.com never changes (probably).
-        # ...or not...changed on 5 Dec 2013 by Tim to hash below...
-        unique_hash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
-        url = 'http://google.com'
-        path = tempfile.mktemp()
-
-        download_url(manager, url, path)
-
-        assert_hash_for_file(unique_hash, path)
 
     def test_fetch_zip(self):
         """Test fetch zip method."""
