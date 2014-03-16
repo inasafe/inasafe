@@ -60,7 +60,6 @@ class MockQNetworkReply(QObject):
         self.progress = 0
         self.content = ""
         self._url = ""
-        self._size = 0
 
     #noinspection PyDocstring,PyPep8Naming
     def isFinished(self):
