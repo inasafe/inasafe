@@ -366,7 +366,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             Currently 'buildings' or 'roads' are supported.
         :type feature_type: str
 
-        :raises: OSMDownloaderError - when buildings.shp not exist
+        :raises: ImportDialogError - when buildings.shp not exist
         """
         output_prefix = self.filename_prefix.text()
         path = str(self.output_directory.text())
