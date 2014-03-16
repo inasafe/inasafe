@@ -2,8 +2,13 @@
 
 # Resource object code
 #
+<<<<<<< HEAD
 # Created: Sat Mar 8 00:40:54 2014
 #      by: The Resource Compiler for PyQt (Qt v4.8.4)
+=======
+# Created: Sun Mar 16 18:47:37 2014
+#      by: The Resource Compiler for PyQt (Qt v4.8.1)
+>>>>>>> c0042d6cfa9b1e9ee098b3519f7a2e6e800e42ec
 #
 # WARNING! All changes made in this file will be lost!
 
