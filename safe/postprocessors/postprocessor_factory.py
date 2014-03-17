@@ -80,19 +80,22 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
 
     for name, values in requested_postprocessors.iteritems():
         constr_id = name + 'Postprocessor'
-
-        aggregation_dependent_on = True
-        # lets check if the IF has a ['params']['on_when_not_aggregating']
+        
+        # Flag specifying if aggregation is required. If set, postprocessor
+        # will be disabled when AOI mode is enabled.
+        requires_aggregation = True
+        # lets check if the IF has a
+        # ['params']['disable_for_entire_area_aggregation']
         # that would turn off the current postprocessor if in aoi_mode
         if aoi_mode:
             try:
-                aggregation_dependent_on = (
-                    values['params']['on_when_not_aggregating'])
+                requires_aggregation = (
+                    values['params']['disable_for_entire_area_aggregation'])
             except KeyError:
                 pass
 
         try:
-            if values['on'] and aggregation_dependent_on:
+            if values['on'] and requires_aggregation:
                 if name in AVAILABLE_POSTPTOCESSORS.keys():
                     #http://stackoverflow.com/a/554462
                     constr = globals()[constr_id]

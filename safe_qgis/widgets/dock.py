@@ -1048,8 +1048,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # aggregator is not ready yet here so we can't use
             # self.aggregator.aoi_mode
             aoi_mode = self.get_aggregation_layer() is None
-            post_processors = get_postprocessors(post_processors_names,
-                                                 aoi_mode)
+            post_processors = get_postprocessors(
+                post_processors_names, aoi_mode)
             message.add(m.Paragraph(self.tr(
                 'The following postprocessors will be used:')))
 

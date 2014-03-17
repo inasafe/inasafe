@@ -59,14 +59,16 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.values = OrderedDict()
 
     def bind(self, widget, property_name, function):
-        """Create a function that return the QWidget property of object and
-        convert the value to type.
+        """Return the widget.property converting the value using the function.
 
         :param widget: QWidget instance
+        :type widget: QWidget
         :param property_name: The name of property inside QWidget instance
+        :type property_name: str
         :param function: A function to convert the property value
+        :type function: Callable
 
-        :returns: The property value of theObject
+        :returns: The property value of widget
         """
 
         return lambda: function(widget.property(property_name))

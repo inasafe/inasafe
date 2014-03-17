@@ -37,7 +37,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
          ('AggregationCategorical', {
              'on': True,
              'params': OrderedDict([
-                 ('on_when_not_aggregating', False)])})
+                 # Disable categorical aggregation when in AOI mode see #781
+                 ('disable_for_entire_area_aggregation', False)])})
          ]))])
 
     def run(self, layers):
