@@ -8,6 +8,8 @@ from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr, format_int)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 import logging
 
@@ -36,6 +38,69 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
          ('postprocessors', OrderedDict([
          ('AggregationCategorical', {'on': True})]))
          ])
+
+    class EarthquakeBuildingImpactFunctionMetadata(ImpactFunctionMetadata):
+        """Metadata for earthquake building impact function.
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'name': tr('Earthquake Building Impact Function'),
+                'overview': tr(
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.')
+            }
+            dict_meta = {
+                'id': 'EarthQuakeBuildingImpactFunction',
+                'name': values['name'],
+                'author': 'Ole Nielsen',
+                'date_implemented': '12 Jan 2012',
+                'overview': values['overview'],
+                'requirements': [
+                    {
+                        'category': 'hazard',
+                        'subcategory': 'earthquake',
+                        'layer_types': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            },
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            },
+                        ],
+                        'unit': 'mmi'
+                    },
+                    {
+                        'category': 'exposure',
+                        'subcategory': 'structure',
+                        'layer_types': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            }
+                        ],
+                        'units': 'type'
+                    }
+                ]
+            }
+            return dict_meta
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)

@@ -16,6 +16,7 @@ __date__ = '14/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import json
 from exceptions import NotImplementedError
 
 
@@ -45,6 +46,34 @@ class ImpactFunctionMetadata():
     pass
 
     @staticmethod
+    def add_to_list(my_list, my_element):
+        """Helper function to add new my_element to my_list based on its type
+        . Add as new element if it's not a list, otherwise extend to the list
+        if it's a list.
+        """
+        if type(my_element) is list:
+            my_list.extend(my_element)
+        else:
+            my_list.append(my_element)
+
+        return my_list
+
+    @staticmethod
+    def is_subset(my_element, my_bigger_element):
+        """Check the membership of my_element from my_bigger_element based on
+        their type.
+        Only valid for string and list
+        """
+        if type(my_element) is list:
+            if type(my_bigger_element) is list:
+                return set(my_element) <= set(my_bigger_element)
+        else:
+            if type(my_bigger_element) is list:
+                return my_element in my_bigger_element
+            else:
+                return my_element == my_bigger_element
+        return False
+    @staticmethod
     def json():
         """JSON representation of the metadata for this impact function.
 
@@ -56,13 +85,32 @@ class ImpactFunctionMetadata():
 
         :returns: A json document representing all the metadata for the
             concrete impact function.
-        :rtype: str
+        :rtype: json
         """
+
+        my_json = json.dumps(ImpactFunctionMetadata.get_metadata())
+        return my_json
+
+    @staticmethod
+    def get_metadata():
+        """Return metadata as a dictionary
+
+        This is a static method. You can use it to get the metadata
+        in dictionary format for an impact function. Each concrete
+        implementation of the metadata base class should implement this.
+        Nothing else needs to be overridden from the base class unless you
+        want to modify the default behaviour.
+
+        :returns: A dictionary representing all the metadata for the
+            concrete impact function.
+        :rtype: dict
+        """
+
         raise NotImplementedError(
             'You must implement this method in your concrete class.')
 
-    @staticmethod
-    def allowed_subcategories(category=None):
+    @classmethod
+    def allowed_subcategories(cls, category=None):
         """Get the list of allowed subcategories for a given category.
 
         :param category: Optional category which will be used to subset the
@@ -73,24 +121,19 @@ class ImpactFunctionMetadata():
         :returns: A list of strings is returned.
         :rtype: list
         """
-        pass  # implementation goes here
+        metadata_dict = cls.get_metadata()
+        requirements = metadata_dict['requirements']
+        result = []
+        for requirement in requirements:
+            if category is not None:
+                if requirement['category'] == category:
+                    result.append(requirement['subcategory'])
+            else:
+                result.append(requirement['subcategory'])
+        return result
 
-    @staticmethod
-    def allowed_subcategories(category=None):
-        """Get the list of allowed subcategories for a given category.
-
-        :param category: Optional category which will be used to subset the
-            allowed subcategories. If omitted, all supported subcategories will
-            be returned (for both hazard and exposure). Default is None.
-        :type category: str
-
-        :returns: A list of strings is returned.
-        :rtype: list
-        """
-        pass  # implementation goes here
-
-    @staticmethod
-    def allowed_data_types(subcategory):
+    @classmethod
+    def allowed_data_types(cls, subcategory):
         """Get the list of allowed data types for a subcategory.
 
         Example usage::
@@ -99,10 +142,10 @@ class ImpactFunctionMetadata():
             meta = IF.metadata
             ubar = meta.allowed_data_types('structure')
             ubar
-            >>> ['polygon']
+            > ['polygon']
 
-        In the above examplem it does not show ‘numeric’ as the request is
-        specifc to the structure subcategory for that IF (using the IF
+        In the above example it does not show ‘numeric’ as the request is
+        specific to the structure subcategory for that IF (using the IF
         declaration at the top of this file as the basis for IF())
 
         Passing a subcategory is required otherwise the context of the
@@ -116,23 +159,44 @@ class ImpactFunctionMetadata():
         :returns: A list of one or more strings is returned.
         :rtype: list
         """
-        if subcategory in ImpactFunctionMetadata.allowed_subcategories(
-                'exposure'):
-            pass
-            # implementation logic that returns the allowed data_types for
-            # exposure layer with subcategory as passed in to this method
+        result = []
+        if subcategory is None:
+            return result
+        metadata_dict = cls.get_metadata()
+        requirements = metadata_dict['requirements']
+        for requirement in requirements:
+            if requirement['subcategory'] == subcategory:
+                if 'data_type' in requirement.keys():
+                    result = cls.add_to_list(result, requirement['data_type'])
+                else:
+                    my_layer_types = requirement['layer_types']
+                    if type(my_layer_types) is list:
+                        for my_layer_type in my_layer_types:
+                            result = cls.add_to_list(result,
+                                                     my_layer_type['data_type'])
+                    else:
+                        result = cls.add_to_list(result,
+                                                 my_layer_types['data_type'])
 
-        elif subcategory in ImpactFunctionMetadata.allowed_subcategories(
-                'hazard'):
-            pass
-            # implementation logic that returns the allowed data_types for
-            # hazard layer with subcategory as passed in to this method
+        return list(set(result))
+        # if subcategory in ImpactFunctionMetadata.allowed_subcategories(
+        #         'exposure'):
+        #
+        #     pass
+        #     # implementation logic that returns the allowed data_types for
+        #     # exposure layer with subcategory as passed in to this method
+        #
+        # elif subcategory in ImpactFunctionMetadata.allowed_subcategories(
+        #         'hazard'):
+        #     pass
+        #     # implementation logic that returns the allowed data_types for
+        #     # hazard layer with subcategory as passed in to this method
+        #
+        # else:
+        #     raise Exception('Invalid subcategory.')
 
-        else:
-            raise Exception('Invalid subcategory.')
-
-    @staticmethod
-    def allowed_units(subcategory, data_type):
+    @classmethod
+    def allowed_units(cls, subcategory, data_type):
         """Get the list of allowed units for a subcategory and data_type.
 
         .. note:: One data_type could be  used by more than one subcategory,
@@ -158,4 +222,24 @@ class ImpactFunctionMetadata():
         :returns: A list of one or more strings is returned.
         :rtype: list
         """
-        pass  # must implement here
+        # pass  # must implement here
+        result = []
+        if data_type not in cls.allowed_data_types(subcategory):
+            return result
+        metadata_dict = cls.get_metadata()
+        requirements = metadata_dict['requirements']
+        for requirement in requirements:
+            if cls.is_subset(subcategory, requirement['subcategory']):
+                if 'units' in requirement.keys():
+                    result = cls.add_to_list(result, requirement['units'])
+                elif 'data_types' in requirement.keys():
+                    raise (NotImplementedError(
+                        'units not found, data_types found'))
+                elif 'layer_types' in requirements.keys():
+                    raise (NotImplementedError(
+                        'units and data_types not found, layer_types found'))
+                else:
+                    raise (NotImplementedError('Error something else...'))
+            else:
+                continue
+        return list(set(result))
