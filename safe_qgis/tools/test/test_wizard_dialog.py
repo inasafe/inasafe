@@ -76,10 +76,10 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_category_count = 3
         expected_second_category = "exposure"
-        expected_subcategory_count = 6
+        expected_subcategory_count = 5
         expected_second_subcategory = "tsunami"
-        expected_unit_count = 3
-        expected_second_unit = "feet"
+        expected_unit_count = 6
+        expected_fourth_unit = "feet"
         expected_field_count = 16
         expected_second_field = "LATITUDE"
 
@@ -96,7 +96,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
-        # step 1 of 6 - select category
+        # step 1 of 7 - select category
         count = dialog.lstCategories.count()
         self.assertTrue(
             count == expected_category_count,
@@ -118,7 +118,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()
 
-        # step 2 of 6 - select hazard
+        # step 2 of 7 - select hazard
         count = dialog.lstSubcategories.count()
         self.assertTrue(
             count == expected_subcategory_count,
@@ -140,29 +140,29 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()
 
-        # step 3 of 6 - select tsunami units
+        # step 3 of 7 - select tsunami units
         count = dialog.lstUnits.count()
         self.assertTrue(
             count == expected_unit_count,
             'Invalid unit count! There should be %d while there were: %d'
             % (expected_unit_count, count))
-        second_unit = dialog.lstUnits.item(1).data(Qt.UserRole)
+        fourth_unit = dialog.lstUnits.item(3).data(Qt.UserRole)
         self.assertTrue(
-            second_unit == expected_second_unit,
-            'Invalid second unit! It should be "%s" while it was: "%s"'
-            % (expected_second_unit, second_unit))
+            fourth_unit == expected_fourth_unit,
+            'Invalid fourth unit! It should be "%s" while it was: "%s"'
+            % (expected_fourth_unit, fourth_unit))
 
         self.assertTrue(
             not dialog.pbnNext.isEnabled(), 'Invalid Next button'
             ' state in step 3! Enabled while there\'s nothing selected yet')
-        dialog.lstUnits.setCurrentRow(1)
+        dialog.lstUnits.setCurrentRow(3)
         self.assertTrue(
             dialog.pbnNext.isEnabled(), 'Invalid Next button'
             ' state in step 3! Still disabled after an item selected')
 
         dialog.pbnNext.click()
 
-        # step 4 of 6 - select data field for tsunami feet
+        # step 4 of 7 - select data field for tsunami feet
         count = dialog.lstFields.count()
         self.assertTrue(
             count == expected_field_count,
@@ -184,21 +184,21 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()
 
-        # step 5 of 6 - enter source
+        # step 6 of 7 - enter source
         self.assertTrue(
             dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 5! Disabled while source is optional')
+            ' state in step 6! Disabled while source is optional')
         dialog.leSource.setText('some source')
         dialog.pbnNext.click()
 
-        # step 6 of 6 - enter title
+        # step 7 of 7 - enter title
         self.assertTrue(
             not dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            'state in step 5! Enabled while there\'s nothing entered yet')
+            'state in step 7! Enabled while there\'s nothing entered yet')
         dialog.leTitle.setText('some title')
         self.assertTrue(
             dialog.pbnNext.isEnabled(), 'Invalid Next button state'
-            'in step 5! Still disabled after a text entered')
+            'in step 7! Still disabled after a text entered')
         dialog.pbnNext.click()
 
         # test the resulting keywords
