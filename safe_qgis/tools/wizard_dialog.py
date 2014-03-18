@@ -40,7 +40,7 @@ from safe_qgis.utilities.utilities import (
 LOGGER = logging.getLogger('InaSAFE')
 
 
-# A TEMPORARY CLASS UNTIL THE REAL API IS NOT READY YET
+# A TEMPORARY CLASS UNTIL THE REAL API IS READY
 class FakeAPI():
     def categories_for_layer(self, layer_type, data_type):
         return ['hazard', 'exposure', 'aggregation']
@@ -59,7 +59,7 @@ class FakeAPI():
                 'MMI': None,
                 'kg/m2': None,
                 'road class': 'type',
-                'categorical hazard (low/med/high)':
+                'categorical hazard':
                 {
                     'low': ['low', 'Kawasan Rawan Bencana III'],
                     'medium': ['medium', 'Kawasan Rawan Bencana II'],
@@ -255,7 +255,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             'population_number_next_question': self.tr('the number of people'),
             'population_density_desc': density_text,
             'population_density_next_question': self.tr(
-                'people density in people/km<sup>2</sup>')
+                'people density in people/km<sup>2</sup>'),
+            'road_road class_next_question': self.tr('type for your road')
         }
 
         self.field_question_values = self.tr(
@@ -266,8 +267,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         self.field_question_no_values = self.tr(
             'You have selected a <b>%s %s</b> layer, and it is a vector '
-            'layer. Which column contains the <b>%s</b> for your '
-            '<b>%s</b>?')   # (category, subcategory, unit_type, unit)
+            'layer. Which column contains the <b>%s</b>?')
+            # (category, subcategory, unit next question)
 
         self.field_question_aggregation = self.tr(
             'You have selected an aggregation layer, and it is a vector '
@@ -451,7 +452,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if key in self.units:
             desc = self.units[key]
         else:
-            desc = self.tr('<b>Missing description for unit: %s</b>') % unit
+            desc = self.tr('<b><font color="red">missing text: '
+                           '%s</font></b>') % key
         self.lblDescribeUnit.setText(desc)
 
         # Enable the next button
@@ -532,22 +534,29 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             unit_type = u'UNDEFINED'
 
-        if category == 'aggregation':
-            question_text = self.field_question_aggregation
-        elif type(unit_type) in (unicode, str):
-            question_text = self.field_question_no_values % (
-                category, subcategory, unit_type, unit)
-        else:
+        if subcategory and unit:
             key = '%s_%s_next_question' % (subcategory, unit)
             if key in self.units:
                 next_question = self.units[key]
             else:
-                next_question = self.tr('<b>Missing next question text '
-                                        'for unit: %s</b>') % unit
-                question_text = self.field_question_values % (category,
-                                                              subcategory,
-                                                              unit,
-                                                              next_question)
+                next_question = self.tr('<b><font color="red">missing text: '
+                                        ' %s</font></b>') % key
+        else:
+            next_question = self.tr('<b><font color="red">ERROR! Missing '
+                                    'subcategory or unit!</font></b>')
+
+        if category == 'aggregation':
+            question_text = self.field_question_aggregation
+        elif type(unit_type) in (unicode, str):
+            # continuous or categorized data
+            question_text = self.field_question_no_values % (
+                category, subcategory, next_question)
+        else:
+            # continuous or categorized data
+            question_text = self.field_question_values % (category,
+                                                          subcategory,
+                                                          unit,
+                                                          next_question)
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
 
