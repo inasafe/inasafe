@@ -50,11 +50,14 @@ class ImpactFunctionMetadata():
         """Helper function to add new my_element to my_list based on its type
         . Add as new element if it's not a list, otherwise extend to the list
         if it's a list.
+        It's also guarantee that all elements are unique
         """
         if type(my_element) is list:
-            my_list.extend(my_element)
+            for element in my_element:
+                my_list = ImpactFunctionMetadata.add_to_list(my_list, element)
         else:
-            my_list.append(my_element)
+            if my_element not in my_list:
+                my_list.append(my_element)
 
         return my_list
 
@@ -73,6 +76,7 @@ class ImpactFunctionMetadata():
             else:
                 return my_element == my_bigger_element
         return False
+
     @staticmethod
     def json():
         """JSON representation of the metadata for this impact function.
@@ -127,9 +131,9 @@ class ImpactFunctionMetadata():
         for requirement in requirements:
             if category is not None:
                 if requirement['category'] == category:
-                    result.append(requirement['subcategory'])
+                    result = cls.add_to_list(result, requirement['subcategory'])
             else:
-                result.append(requirement['subcategory'])
+                result = cls.add_to_list(result, requirement['subcategory'])
         return result
 
     @classmethod
@@ -178,7 +182,7 @@ class ImpactFunctionMetadata():
                         result = cls.add_to_list(result,
                                                  my_layer_types['data_type'])
 
-        return list(set(result))
+        return result
         # if subcategory in ImpactFunctionMetadata.allowed_subcategories(
         #         'exposure'):
         #
@@ -242,4 +246,4 @@ class ImpactFunctionMetadata():
                     raise (NotImplementedError('Error something else...'))
             else:
                 continue
-        return list(set(result))
+        return result
