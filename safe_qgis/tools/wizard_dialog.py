@@ -567,7 +567,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if unit_type is None:
                 # For continuous data, gray out id, gid, fid and text fields
                 field_type = field.type()
-                if field_type < 10 or re.match('.{0,2}id$', field_name, re.I):
+                if field_type > 9 or re.match('.{0,2}id$', field_name, re.I):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
         self.lblDescribeField.clear()
 
