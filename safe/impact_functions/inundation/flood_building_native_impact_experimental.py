@@ -17,6 +17,8 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
@@ -33,6 +35,61 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                     subcategory in ['structure'] and \
                     layertype=='vector'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodNativePolygonExperimentalFunction
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'name': tr('Flood Native Polygon Experimental Function'),
+                'overview': tr('N/a')
+            }
+            dict_meta = {
+                'id': 'FloodNativePolygonExperimentalFunction',
+                'name': values['name'],
+                'author': 'Dmitry Kolesov',
+                'date_implemented': 'N/A',
+                'overview': values['overview'],
+                'requirements': [
+                    {
+                        'category': 'hazard',
+                        'subcategory': ['flood', 'tsunami'],
+                        'layer_type': 'vector',
+                        'data_type': 'polygon',
+                        'units': {
+                            'categorical hazard': [
+                                'wet',
+                                'dry'
+                            ]
+                        }
+                    },
+                    {
+                        'category': 'exposure',
+                        'subcategory': 'structure',
+                        'layer_type': 'vector',
+                        'data_type': 'polygon',
+                        'units': {
+                            'building type': 'type'
+                        }
+                    }
+                ]
+            }
+            return dict_meta
 
     title = tr('Be-flooded')
 

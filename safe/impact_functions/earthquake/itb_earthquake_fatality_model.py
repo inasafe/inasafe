@@ -21,6 +21,8 @@ from safe.common.utilities import (
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -97,6 +99,56 @@ class ITBFatalityFunction(FunctionProvider):
                     layertype=='raster'
 
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for ITB Fatality function.
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'name': tr('ITB Fatality Function'),
+                'overview': tr(
+                    'To assess the impact of earthquake on population based '
+                    'on earthquake model developed by ITB')
+            }
+            dict_meta = {
+                'id': 'ITBFatalityFunction',
+                'name': values['name'],
+                'author': 'Hadi Ghasemi',
+                'date_implemented': 'N/A',
+                'overview': values['overview'],
+                'requirements': [
+                    {
+                        'category': 'hazard',
+                        'subcategory': 'earthquake',
+                        'layer_type': 'raster',
+                        'data_type': 'numeric',
+                        'units': 'mmi'
+                    },
+                    {
+                        'category': 'exposure',
+                        'subcategory': 'population',
+                        'layer_type': 'raster',
+                        'data_type': 'numeric',
+                        'units': 'people per pixel'
+                    }
+                ]
+            }
+            return dict_meta
 
     title = tr('Die or be displaced')
     synopsis = tr(

@@ -39,7 +39,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
          ('AggregationCategorical', {'on': True})]))
          ])
 
-    class EarthquakeBuildingImpactFunctionMetadata(ImpactFunctionMetadata):
+    class Metadata(ImpactFunctionMetadata):
         """Metadata for earthquake building impact function.
 
            We only need to re-implement get_metadata(), all other behaviours

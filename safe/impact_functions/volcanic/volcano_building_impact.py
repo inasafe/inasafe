@@ -13,6 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -40,6 +42,73 @@ class VolcanoBuildingImpact(FunctionProvider):
                     subcategory=='structure' and \
                     layertype=='vector'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Volcano Building Impact
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'name': tr('Volcano Building Impact'),
+                'overview': tr(
+                    'To assess the impacts of volcano eruption on building.')
+            }
+            dict_meta = {
+                'id': 'VolcanoBuildingImpact',
+                'name': values['name'],
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': values['overview'],
+                'requirements': [
+                    {
+                        'category': 'hazard',
+                        'subcategory': 'volcano',
+                        'layer_type': 'vector',
+                        'data_types': [
+                            {
+                                'data_type': 'polygon',
+                                'unit': {
+                                    'categorical hazard': [
+                                        ['low', 'Kawasan Rawan Bencana III'],
+                                        ['medium', 'Kawasan Rawan Bencana II'],
+                                        ['high', 'Kawasan Rawan Bencana I']
+                                    ]
+                                }
+                            },
+                            {
+                                'data_type': 'point',
+                                'unit': {
+                                    'name': 'type'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        'category': 'exposure',
+                        'subcategory': 'structure',
+                        'layer_type': 'vector',
+                        'data_type': 'polygon',
+                        'units': {
+                            'building type': 'type'
+                        }
+                    }
+                ]
+            }
+            return dict_meta
 
     title = tr('Be affected')
     target_field = 'buildings'

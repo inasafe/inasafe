@@ -19,6 +19,8 @@ from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.utilities import (ugettext as tr, format_int, verify)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')
@@ -37,6 +39,75 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     subcategory=='structure' and \
                     layertype=='vector'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Flood Building Impact Function
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'name': tr('Flood Building Impact Function'),
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami) inundation on '
+                    'building footprints originating from OpenStreetMap '
+                    '(OSM).')
+            }
+            dict_meta = {
+                'id': 'FloodBuildingImpactFunction',
+                'name': values['name'],
+                'author': ['Ole Nielsen', 'Kristy van Putten'],
+                'date_implemented': 'N/A',
+                'overview': values['overview'],
+                'requirements': [
+                    {
+                        'category': 'hazard',
+                        'subcategory': ['flood', 'hazard'],
+                        'layer_types': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric',
+                                'unit': {
+                                    'metres': None
+                                }
+                            },
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon',
+                                'unit': {
+                                    'categorical hazard': [
+                                        'wet',
+                                        'dry'
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        'category': 'exposure',
+                        'subcategory': 'structure',
+                        'layer_type': 'vector',
+                        'data_type': 'polygon',
+                        'units': {
+                            'building type': 'type'
+                        }
+                    }
+                ]
+            }
+            return dict_meta
 
     # Function documentation
     target_field = 'INUNDATED'

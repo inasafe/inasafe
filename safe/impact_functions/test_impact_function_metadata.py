@@ -69,11 +69,11 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
         # call from an object
-        metadata = my_impact_function.EarthquakeBuildingImpactFunctionMetadata()
+        metadata = my_impact_function.Metadata()
         metadata_dict = metadata.get_metadata()
         assert isinstance(metadata_dict, dict), 'I did not got a dict'
         # call from the class
-        metadata = my_impact_function.EarthquakeBuildingImpactFunctionMetadata
+        metadata = my_impact_function.Metadata
         metadata_dict = metadata.get_metadata()
         assert isinstance(metadata_dict, dict), 'I did not got a dict'
 
@@ -81,14 +81,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_subcategories API
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.EarthquakeBuildingImpactFunctionMetadata.\
+        result = my_impact_function.Metadata.\
             allowed_subcategories()
         expected_result = ['earthquake', 'structure']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.EarthquakeBuildingImpactFunctionMetadata. \
+        result = my_impact_function.Metadata. \
             allowed_subcategories(category='hazard')
         expected_result = ['earthquake']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
@@ -99,14 +99,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_data_types API
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.EarthquakeBuildingImpactFunctionMetadata\
+        result = my_impact_function.Metadata\
             .allowed_data_types('structure')
         expected_result = ['polygon']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.EarthquakeBuildingImpactFunctionMetadata \
+        result = my_impact_function.Metadata \
             .allowed_data_types('earthquake')
         expected_result = ['numeric', 'polygon']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
@@ -117,14 +117,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_units API
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.EarthquakeBuildingImpactFunctionMetadata \
+        result = my_impact_function.Metadata \
             .allowed_units('structure', 'polygon')
         expected_result = ['type']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.EarthquakeBuildingImpactFunctionMetadata \
+        result = my_impact_function.Metadata \
             .allowed_units('structure', 'numeric')
         expected_result = []
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(

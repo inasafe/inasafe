@@ -12,6 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 __author__ = 'Ole Nielson'
 __revision__ = '$Format:%H$'
@@ -58,6 +60,62 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodEvacuationFunctionVectorHazard
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+    @staticmethod
+    def get_metadata():
+        """
+        Return metadata as a dictionary
+
+        This is a static method. You can use it to get the metadata in
+        dictionary format for an impact function.
+
+        :returns: A dictionary representing all the metadata for the
+            concrete impact function.
+        :rtype: dict
+        """
+        values = {
+            'name': tr('Flood Evacuation Function Vector Hazard'),
+            'overview': tr('To assess the impacts of (flood or tsunami) '
+                           'inundation in vector format on population.')
+        }
+        dict_meta = {
+            'id': 'Flood Evacuation Function Vector Hazard',
+            'name': values['name'],
+            'author': 'AIFDR',
+            'date_implemented': 'N/A',
+            'overview': values['overview'],
+            'requirements': [
+                {
+                    'category': 'hazard',
+                    'subcategory': ['flood', 'tsunami'],
+                    'layer_type': 'vector',
+                    'data_type': 'polygon',
+                    'units': {
+                        'categorical hazard': [
+                            'wet',
+                            'dry'
+                        ]
+                    }
+                },
+                {
+                    'category': 'exposure',
+                    'subcategory': 'population',
+                    'layer_type': 'raster',
+                    'data_type': 'numeric',
+                    'units': {
+                        'people per pixel': None
+                    }
+                }
+            ]
+        }
+        return dict_meta
 
     title = tr('Need evacuation')
     # Function documentation
