@@ -1,6 +1,7 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **Message Modele.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**Impact Function Metadata**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -125,15 +126,13 @@ class ImpactFunctionMetadata():
         :returns: A list of strings is returned.
         :rtype: list
         """
+        result = list()
+        if category is None:
+            return cls.allowed_subcategories('exposure') + cls\
+                .allowed_subcategories('hazard')
         metadata_dict = cls.get_metadata()
-        requirements = metadata_dict['requirements']
-        result = []
-        for requirement in requirements:
-            if category is not None:
-                if requirement['category'] == category:
-                    result = cls.add_to_list(result, requirement['subcategory'])
-            else:
-                result = cls.add_to_list(result, requirement['subcategory'])
+        categories = metadata_dict['categories']
+        result = cls.add_to_list(result, categories[category]['subcategory'])
         return result
 
     @classmethod

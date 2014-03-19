@@ -1,6 +1,8 @@
 # coding=utf-8
 """Earthquake Impact Function on Building."""
+import logging
 
+from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -10,8 +12,6 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-
-import logging
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -27,20 +27,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     layertype=='vector'
     """
 
-    target_field = 'Shake_cls'
-    statistics_type = 'class_count'
-    statistics_classes = [0, 1, 2, 3]
-    title = tr('Be affected')
-    parameters = OrderedDict(
-        [('low_threshold', 6),
-         ('medium_threshold', 7),
-         ('high_threshold', 8),
-         ('postprocessors', OrderedDict([
-         ('AggregationCategorical', {'on': True})]))
-         ])
-
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for earthquake building impact function.
+        """Metadata for Earthquake Building Impact Function.
 
            We only need to re-implement get_metadata(), all other behaviours
            are inherited from the abstract base class.
@@ -59,23 +47,35 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             :rtype: dict
             """
             values = {
+                'id': 'EarthQuakeBuildingImpactFunction',
                 'name': tr('Earthquake Building Impact Function'),
+                'impact': 'Be affected',
+                'author': 'N/A',
+                'date_implemented': 'N/A',
                 'overview': tr(
                     'This impact function will calculate the impact of an '
                     'earthquake on buildings, reporting how many are expected '
                     'to be damaged etc.')
             }
             dict_meta = {
-                'id': 'EarthQuakeBuildingImpactFunction',
+                'id': values['id'],
                 'name': values['name'],
-                'author': 'Ole Nielsen',
-                'date_implemented': '12 Jan 2012',
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'requirements': [
-                    {
-                        'category': 'hazard',
+                'categories':{
+                    'hazard': {
                         'subcategory': 'earthquake',
-                        'layer_types': [
+                        'units': [
+                            {
+                                'name': metadata.mmi_name,
+                                'description': metadata.mmi_text,
+                                'constraint': 'continuous',
+                                'default': 'depth'
+                            }
+                        ],
+                        'layer_constraints': [
                             {
                                 'layer_type': 'vector',
                                 'data_type': 'polygon'
@@ -83,24 +83,39 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                             {
                                 'layer_type': 'raster',
                                 'data_type': 'numeric'
-                            },
-                        ],
-                        'unit': 'mmi'
+                            }
+                        ]
                     },
-                    {
-                        'category': 'exposure',
+                    'exposure': {
                         'subcategory': 'structure',
+                        'unit': {
+                            'name': metadata.building_type_name,
+                            'description': metadata.building_type_text,
+                            'constraint': 'unique values',
+                            'default': 'type'
+                        },
                         'layer_types': [
                             {
                                 'layer_type': 'vector',
                                 'data_type': 'polygon'
                             }
-                        ],
-                        'units': 'type'
+                        ]
                     }
-                ]
+                }
             }
             return dict_meta
+
+    target_field = 'Shake_cls'
+    statistics_type = 'class_count'
+    statistics_classes = [0, 1, 2, 3]
+    title = tr('Be affected')
+    parameters = OrderedDict(
+        [('low_threshold', 6),
+         ('medium_threshold', 7),
+         ('high_threshold', 8),
+         ('postprocessors', OrderedDict([
+         ('AggregationCategorical', {'on': True})]))
+         ])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)

@@ -86,11 +86,18 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected_result = ['earthquake', 'structure']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
-        self.assertEqual(result, expected_result, msg)
+        self.assertEqual(set(result), set(expected_result), msg)
 
         result = my_impact_function.Metadata. \
             allowed_subcategories(category='hazard')
         expected_result = ['earthquake']
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+        result = my_impact_function.Metadata. \
+            allowed_subcategories(category='exposure')
+        expected_result = ['structure']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
