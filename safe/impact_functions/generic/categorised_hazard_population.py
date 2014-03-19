@@ -80,7 +80,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                             {
                                 'name': metadata.normalized_name,
                                 'description': metadata.normalized_text,
-                                'constraint': 'continuous',
+                                'constraint': 'continuous'
                             }
                         ],
                         'layer_constraints': [

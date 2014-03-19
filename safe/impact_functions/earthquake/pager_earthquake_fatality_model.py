@@ -75,8 +75,8 @@ class PAGFatalityFunction(ITBFatalityFunction):
                             {
                                 'name': metadata.mmi_name,
                                 'description': metadata.mmi_text,
-                                'constraint': 'continuous',
-                                }
+                                'constraint': 'continuous'
+                            }
                         ],
                         'layer_constraints': [
                             {
