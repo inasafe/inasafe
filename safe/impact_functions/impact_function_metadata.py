@@ -163,40 +163,27 @@ class ImpactFunctionMetadata():
         :rtype: list
         """
         result = []
-        if subcategory is None:
-            return result
         metadata_dict = cls.get_metadata()
-        requirements = metadata_dict['requirements']
-        for requirement in requirements:
-            if requirement['subcategory'] == subcategory:
-                if 'data_type' in requirement.keys():
-                    result = cls.add_to_list(result, requirement['data_type'])
-                else:
-                    my_layer_types = requirement['layer_types']
-                    if type(my_layer_types) is list:
-                        for my_layer_type in my_layer_types:
-                            result = cls.add_to_list(result,
-                                                     my_layer_type['data_type'])
-                    else:
-                        result = cls.add_to_list(result,
-                                                 my_layer_types['data_type'])
+        categories = metadata_dict['categories']
+        if subcategory in cls.allowed_subcategories(
+                'exposure'):
+            # implementation logic that returns the allowed data_types for
+            # exposure layer with subcategory as passed in to this method
+
+            layer_constraints = categories['exposure']['layer_constraints']
+            for layer_constraint in layer_constraints:
+                result = cls.add_to_list(result, layer_constraint['data_type'])
+        elif subcategory in cls.allowed_subcategories(
+                'hazard'):
+            # implementation logic that returns the allowed data_types for
+            # hazard layer with subcategory as passed in to this method
+            layer_constraints = categories['hazard']['layer_constraints']
+            for layer_constraint in layer_constraints:
+                result = cls.add_to_list(result, layer_constraint['data_type'])
+        else:
+            raise Exception('Invalid subcategory.')
 
         return result
-        # if subcategory in ImpactFunctionMetadata.allowed_subcategories(
-        #         'exposure'):
-        #
-        #     pass
-        #     # implementation logic that returns the allowed data_types for
-        #     # exposure layer with subcategory as passed in to this method
-        #
-        # elif subcategory in ImpactFunctionMetadata.allowed_subcategories(
-        #         'hazard'):
-        #     pass
-        #     # implementation logic that returns the allowed data_types for
-        #     # hazard layer with subcategory as passed in to this method
-        #
-        # else:
-        #     raise Exception('Invalid subcategory.')
 
     @classmethod
     def allowed_units(cls, subcategory, data_type):

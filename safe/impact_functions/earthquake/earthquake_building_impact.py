@@ -64,7 +64,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 'author': values['author'],
                 'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'categories':{
+                'categories': {
                     'hazard': {
                         'subcategory': 'earthquake',
                         'units': [
@@ -88,13 +88,15 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     },
                     'exposure': {
                         'subcategory': 'structure',
-                        'unit': {
-                            'name': metadata.building_type_name,
-                            'description': metadata.building_type_text,
-                            'constraint': 'unique values',
-                            'default': 'type'
-                        },
-                        'layer_types': [
+                        'units': [
+                            {
+                                'name': metadata.building_type_name,
+                                'description': metadata.building_type_text,
+                                'constraint': 'unique values',
+                                'default': 'type'
+                            }
+                        ],
+                        'layer_constraints': [
                             {
                                 'layer_type': 'vector',
                                 'data_type': 'polygon'
