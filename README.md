@@ -6,13 +6,13 @@ natural hazard impact scenarios for better planning, preparedness and
 response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
 
 For more information about InaSAFE please visit
-`www.inasafe.org <http://www.inasafe.org>`_ and look at the documentation at
-`inasafe.readthedocs.org <http://inasafe.readthedocs.org>`_
+[inasafe.org](http://www.inasafe.org) and look at the documentation at
+[inasafe.readthedocs.org](http://inasafe.readthedocs.org>).
 
 The latest source code is available at
-`https://github.com/AIFDR/inasafe <https://github.com/AIFDR/inasafe>`_
-which contains modules for risk calculations, gis functionality and functions
-for impact modelling.
+[https://github.com/AIFDR/inasafe](https://github.com/AIFDR/inasafe),
+which contains modules for risk calculations, GIS functionality and
+functions for impact modelling.
 
 
 Story queue on Waffle:
@@ -49,15 +49,15 @@ PyPi Donwloads for the 'safe' library:
 Quick Installation Guide
 ========================
 
-You first need to have (QGIS)[http://qgis.org] installed. Grab your free
-copy from (the QGIS download page)[http://download/qgis.org].
+You first need to have [QGIS](http://qgis.org/) installed. Grab your free
+copy from [the QGIS download page](http://download/qgis.org).
 
 To install the InaSAFE plugin, use the plugin manager in
-(QGIS)[http://qgis.org]:
+[QGIS](http://qgis.org):
 
-  Plugins -> Manage and Install Plugins -> Get more tab
+  Plugins → Manage and Install Plugins → Get more tab
 
-Then search for 'InaSAFE', select it and click the install button.
+Then search for "InaSAFE", select it and click the install button.
 The plugin will now be added to your plugins menu.
 
 **Note:** You may need to restart QGIS if upgrading from a prior version.
@@ -75,11 +75,11 @@ Limitations
 
 InaSAFE is a new project. The current code development started in
 earnest in January 2012 and there is still much to be done.  However,
-we work on the philosophy that stakeholders should have access to the
+we work under the philosophy that stakeholders should have access to the
 development and source code from the very beginning and invite
 comments, suggestions and contributions.  See
-`our milestones list <https://github.com/AIFDR/inasafe/issues/milestones>`_ and
-`our open issues list <https://github.com/AIFDR/inasafe/issues?page=1&state=open>`_
+[our milestones list](https://github.com/AIFDR/inasafe/issues/milestones) and
+[our open issues list](https://github.com/AIFDR/inasafe/issues?page=1&state=open)
 for known bugs and outstanding tasks.
 
 
