@@ -2,6 +2,7 @@
 """
 import numpy
 import logging
+from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -21,6 +22,8 @@ from safe.common.utilities import (
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -97,6 +100,79 @@ class ITBFatalityFunction(FunctionProvider):
                     layertype=='raster'
 
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for ITB Fatality function.
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'ITBFatalityFunction',
+                'name': tr('ITB Fatality Function'),
+                'impact': tr('Die or be displaced'),
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impact of earthquake on population based '
+                    'on earthquake model developed by ITB')
+            }
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': 'Hadi Ghasemi',
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': 'earthquake',
+                        'units': [
+                            {
+                                'name': metadata.mmi_name,
+                                'description': metadata.mmi_text,
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': 'population',
+                        'units': [
+                            {
+                                'name': metadata.people_per_pixel_name,
+                                'description': metadata.people_per_pixel_text,
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Die or be displaced')
     synopsis = tr(

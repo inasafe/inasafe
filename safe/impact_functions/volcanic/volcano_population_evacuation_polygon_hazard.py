@@ -13,6 +13,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+from safe import metadata
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
@@ -51,6 +54,116 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Volcano Polygon Hazard Population
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'VolcanoPolygonHazardPopulation',
+                'name': tr('Volcano Polygon Hazard Population'),
+                'impact': tr('Be affected'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr('To assess the impacts of volcano eruption '
+                               'on population.')
+            }
+
+            hazard_units = [
+                {
+                    'name': metadata.volcano_category_name,
+                    'description': metadata.volcano_category_text,
+                    'constraint': 'categorical',
+                    'default_attribute': 'affected',
+                    'default_category': 'high',
+                    'classes': [
+                        {
+                            'name': 'high',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['Kawasan Rawan Bencana I',
+                                                'high'],
+                            'numeric_default_min':  0,
+                            'numeric_default_max': 3,
+                            'optional': False
+                        },
+                        {
+                            'name': 'medium',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['Kawasan Rawan Bencana II',
+                                                'medium'],
+                            'numeric_default_min':  3,
+                            'numeric_default_max': 5,
+                            'optional': False
+                        },
+                        {
+                            'name': 'low',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['Kawasan Rawan Bencana III',
+                                                'low'],
+                            'numeric_default_min':  5,
+                            'numeric_default_max': 10,
+                            'optional': False
+                        }
+                    ]
+                }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': 'volcano',
+                        'units': hazard_units,
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            },
+                            {
+                                'layer_type': 'polygon',
+                                'data_type': 'point'
+                            }
+                        ]
+                    },
+                    },
+                'exposure': {
+                    'subcategory': 'population',
+                    'units': [
+                        {
+                            'name': metadata.people_per_pixel_name,
+                            'description': metadata.people_per_pixel_text,
+                            'constraint': 'continuous'
+                        }
+                    ],
+                    'layer_constraints': [
+                        {
+                            'layer_type': 'raster',
+                            'data_type': 'numeric'
+                        }
+                    ]
+                }
+            }
+            return dict_meta
 
     title = tr('Need evacuation')
     target_field = 'population'

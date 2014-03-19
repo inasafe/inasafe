@@ -12,6 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe import metadata
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 __author__ = 'Ole Nielson'
 __revision__ = '$Format:%H$'
@@ -58,6 +61,102 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodEvacuationFunctionVectorHazard
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+    @staticmethod
+    def get_metadata():
+        """
+        Return metadata as a dictionary
+
+        This is a static method. You can use it to get the metadata in
+        dictionary format for an impact function.
+
+        :returns: A dictionary representing all the metadata for the
+            concrete impact function.
+        :rtype: dict
+        """
+        values = {
+            'id': 'FloodEvacuationFunctionVectorHazard',
+            'name': tr('Flood Evacuation Function Vector Hazard'),
+            'impact': tr('Need evacuation'),
+            'author': 'AIFDR',
+            'date_implemented': 'N/A',
+            'overview': tr(
+                'To assess the impacts of (flood or tsunami)inundation '
+                'in vector format on population.')
+        }
+
+        hazard_units = [
+            {
+                'name': metadata.wetdry_name,
+                'description': metadata.wetdry_text,
+                'constraint': 'categorical',
+                'default_attribute': 'affected',
+                'default_category': 'wet',
+                'classes': [
+                    {
+                        'name': 'wet',
+                        'description': 'Water above ground height.',
+                        'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
+                        'numeric_default_min':  1,
+                        'numeric_default_max': 9999999999,
+                        'optional': True,
+                        },
+                    {
+                        'name': 'dry',
+                        'description': 'No water above ground height.',
+                        'string_defaults': ['dry', '0', 'No', 'n', 'no'],
+                        'numeric_default_min':  0,
+                        'numeric_default_max': 1 - metadata.small_number,
+                        'optional': True
+                    }
+                ]
+            }
+        ]
+
+        dict_meta = {
+            'id': values['id'],
+            'name': values['name'],
+            'impact': values['impact'],
+            'author': values['author'],
+            'date_implemented': values['date_implemented'],
+            'overview': values['overview'],
+            'categories': {
+                'hazard': {
+                    'subcategory': ['flood', 'tsunami'],
+                    'units': hazard_units,
+                    'layer_constraints': [
+                        {
+                            'layer_type': 'vector',
+                            'data_type': 'polygon'
+                        }
+                    ]
+                },
+                'exposure': {
+                    'subcategory': 'population',
+                    'units': [
+                        {
+                            'name': metadata.people_per_pixel_name,
+                            'description': metadata.people_per_pixel_text,
+                            'constraint': 'continuous'
+                        }
+                    ],
+                    'layer_constraints': [
+                        {
+                            'layer_type': 'raster',
+                            'data_type': 'numeric'
+                        }
+                    ]
+                }
+            }
+        }
+        return dict_meta
 
     title = tr('Need evacuation')
     # Function documentation

@@ -1,6 +1,7 @@
 # coding=utf-8
 """Flood Evacuation Impact Function."""
 import numpy
+from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -11,6 +12,8 @@ from safe.impact_functions.core import (
     get_function_title,
     default_minimum_needs,
     evacuated_population_weekly_needs)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -41,6 +44,89 @@ class FloodEvacuationFunction(FunctionProvider):
                         subcategory=='population' and \
                         layertype=='raster'
         """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodEvacuationFunction
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'FloodEvacuationFunction',
+                'name': tr('Flood Evacuation Function'),
+                'impact': tr('Need evacuation'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami)inundation '
+                    'in raster format on population.')
+            }
+
+            hazard_units = [
+                {
+                    'name': metadata.depth_metres_name,
+                    'description': metadata.depth_metres_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                },
+                {
+                    'name': metadata.depth_feet_name,
+                    'description': metadata.depth_feet_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': ['flood', 'tsunami'],
+                        'units': hazard_units,
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': 'population',
+                        'units': [
+                            {
+                                'name': metadata.people_per_pixel_name,
+                                'description': metadata.people_per_pixel_text,
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Need evacuation')
     defaults = get_defaults()

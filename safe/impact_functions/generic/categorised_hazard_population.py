@@ -1,4 +1,5 @@
 import numpy
+from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (FunctionProvider,
@@ -12,6 +13,8 @@ from safe.common.utilities import (ugettext as tr,
                                    format_int,
                                    round_thousand)
 from safe.common.tables import Table, TableRow
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
@@ -27,6 +30,86 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Categorised Hazard Population Impact Function
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'name': tr('Categorised Hazard Population Impact Function'),
+                'overview': tr(
+                    'To assess the impacts of categorized hazards in raster '
+                    'format on population raster layer.')
+            }
+            values = {
+                'id': 'CategorisedHazardPopulationImpactFunction',
+                'name': tr('Categorised Hazard Population Impact Function'),
+                'impact': tr('Be impacted'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of categorized hazards in raster '
+                    'format on population raster layer.')
+            }
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': 'all',
+                        'units': [
+                            {
+                                'name': metadata.normalized_name,
+                                'description': metadata.normalized_text,
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': 'population',
+                        'units': [
+                            {
+                                'name': metadata.people_per_pixel_name,
+                                'description': metadata.people_per_pixel_text,
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    }
+                }
+            }
+            return dict_meta
+
     # Function documentation
     title = tr('Be impacted')
     synopsis = tr('To assess the impacts of categorized hazards in raster '
