@@ -1,6 +1,7 @@
 # coding=utf-8
 """Flood Evacuation Impact Function."""
 import numpy
+from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -64,36 +65,66 @@ class FloodEvacuationFunction(FunctionProvider):
             :rtype: dict
             """
             values = {
-                'name': tr('Flood Evacuation Function'),
-                'overview': tr('To assess the impacts of (flood or tsunami) '
-                               'inundation in raster format on population.')
-            }
-            dict_meta = {
                 'id': 'FloodEvacuationFunction',
-                'name': values['name'],
+                'name': tr('Flood Evacuation Function'),
+                'impact': tr('Need evacuation'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami)inundation '
+                    'in raster format on population.')
+            }
+
+            hazard_units = [
+                {
+                    'name': metadata.depth_metres_name,
+                    'description': metadata.depth_metres_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                },
+                {
+                    'name': metadata.depth_feet_name,
+                    'description': metadata.depth_feet_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'requirements': [
-                    {
-                        'category': 'hazard',
+                'categories': {
+                    'hazard': {
                         'subcategory': ['flood', 'tsunami'],
-                        'layer_type': 'raster',
-                        'data_type': 'numeric',
-                        'units': {
-                            'metres': None
-                        }
+                        'units': hazard_units,
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
                     },
-                    {
-                        'category': 'exposure',
+                    'exposure': {
                         'subcategory': 'population',
-                        'layer_type': 'raster',
-                        'data_type': 'numeric',
-                        'units': {
-                            'people per pixel': None
-                        }
+                        'units': [
+                            {
+                                'name': metadata.people_per_pixel_name,
+                                'description': metadata.people_per_pixel_text,
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
                     }
-                ]
+                }
             }
             return dict_meta
 

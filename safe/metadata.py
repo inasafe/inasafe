@@ -26,3 +26,14 @@ people_per_pixel_name = ''
 people_per_pixel_text = ''
 normalized_name = ''
 normalized_text = ''
+wetdry_name = ''
+wetdry_text = ''
+depth_metres_name = ''
+depth_metres_text = ''
+depth_feet_name = ''
+depth_feet_text = ''
+volcano_category_name = ''
+volcano_category_text = ''
+
+
+small_number = 2 ** -143

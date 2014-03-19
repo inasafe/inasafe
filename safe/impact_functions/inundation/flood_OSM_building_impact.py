@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe import metadata
 from safe.common.utilities import OrderedDict
 
 from safe.impact_functions.core import (
@@ -23,6 +24,7 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 
 import logging
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -60,52 +62,97 @@ class FloodBuildingImpactFunction(FunctionProvider):
             :rtype: dict
             """
             values = {
-                'name': tr('Flood Building Impact Function'),
-                'overview': tr(
-                    'To assess the impacts of (flood or tsunami) inundation on '
-                    'building footprints originating from OpenStreetMap '
-                    '(OSM).')
-            }
-            dict_meta = {
                 'id': 'FloodBuildingImpactFunction',
-                'name': values['name'],
+                'name': tr('Flood Building Impact Function'),
+                'impact': tr('Be flooded'),
                 'author': ['Ole Nielsen', 'Kristy van Putten'],
                 'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami) inundation '
+                    'on building footprints originating from OpenStreetMap '
+                    '(OSM).')
+            }
+
+            hazard_units = [
+                {
+                    'name': metadata.wetdry_name,
+                    'description': metadata.wetdry_text,
+                    'constraint': 'categorical',
+                    'default_attribute': 'affected',
+                    'default_category': 'wet',
+                    'classes': [
+                        {
+                            'name': 'wet',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
+                            'numeric_default_min': 1,
+                            'numeric_default_max': 9999999999,
+                            'optional': True,
+                        },
+                        {
+                            'name': 'dry',
+                            'description': 'No water above ground height.',
+                            'string_defaults': ['dry', '0', 'No', 'n', 'no'],
+                            'numeric_default_min': 0,
+                            'numeric_default_max': 1 - metadata.small_number,
+                            'optional': True
+                        }
+                    ]
+                },
+                {
+                    'name': metadata.depth_metres_name,
+                    'description': metadata.depth_metres_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                },
+                {
+                    'name': metadata.depth_feet_name,
+                    'description': metadata.depth_feet_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'requirements': [
-                    {
-                        'category': 'hazard',
-                        'subcategory': ['flood', 'hazard'],
-                        'layer_types': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric',
-                                'unit': {
-                                    'metres': None
-                                }
-                            },
+                'categories': {
+                    'hazard': {
+                        'subcategory': ['flood', 'tsunami'],
+                        'units': hazard_units,
+                        'layer_constraints': [
                             {
                                 'layer_type': 'vector',
-                                'data_type': 'polygon',
-                                'unit': {
-                                    'categorical hazard': [
-                                        'wet',
-                                        'dry'
-                                    ]
-                                }
+                                'data_type': 'polygon'
+                            },
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
                             }
                         ]
                     },
-                    {
-                        'category': 'exposure',
+                    'exposure': {
                         'subcategory': 'structure',
-                        'layer_type': 'vector',
-                        'data_type': 'polygon',
-                        'units': {
-                            'building type': 'type'
-                        }
+                        'units': [
+                            {
+                                'name': metadata.building_type_name,
+                                'description': metadata.building_type_text,
+                                'constraint': 'unique values',
+                                'default_attribute': 'type'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            }
+                        ]
                     }
-                ]
+                }
             }
             return dict_meta
 
@@ -170,7 +217,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)    # Depth
+        my_hazard = get_hazard_layer(layers)  # Depth
         my_exposure = get_exposure_layer(layers)  # Building locations
 
         question = get_question(
@@ -246,7 +293,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             else:
                 msg = (tr(
                     'Unknown hazard type %s. Must be either "depth" or "grid"')
-                    % mode)
+                       % mode)
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available

@@ -6,6 +6,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform
 )
+from safe import metadata
 
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
@@ -55,35 +56,65 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
             :rtype: dict
             """
             values = {
-                'name': tr('Flood Raster Roads Experimental Function'),
-                'overview': tr('N/A')
-            }
-            dict_meta = {
                 'id': 'FloodRasterRoadsExperimentalFunction',
-                'name': values['name'],
+                'name': tr('Flood Raster Roads Experimental Function'),
+                'impact': tr('Be flooded in given thresholds'),
                 'author': 'Dmitry Kolesov',
                 'date_implemented': 'N/A',
+                'overview': tr('N/A')
+            }
+
+            hazard_units = [
+                {
+                    'name': metadata.depth_metres_name,
+                    'description': metadata.depth_metres_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                },
+                {
+                    'name': metadata.depth_feet_name,
+                    'description': metadata.depth_feet_text,
+                    'constraint': 'continuous',
+                    'default_attribute': 'depth'  # applies to vector only
+                }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'requirements': [
-                    {
-                        'category': 'hazard',
+                'categories': {
+                    'hazard': {
                         'subcategory': ['flood', 'tsunami'],
-                        'layer_type': 'raster',
-                        'data_type': 'numeric',
-                        'units': {
-                            'metres': None
-                        }
+                        'units': hazard_units,
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
                     },
-                    {
-                        'category': 'exposure',
+                    'exposure': {
                         'subcategory': 'road',
-                        'layer_type': 'vector',
-                        'data_type': 'line',
-                        'units': {
-                            'road type': 'type'
-                        }
+                        'units': [
+                            {
+                                'name': metadata.road_type_name,
+                                'description': metadata.road_type_text,
+                                'constraint': 'unique values',
+                                'default_attribute': 'type'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'line'
+                            }
+                        ]
                     }
-                ]
+                }
             }
             return dict_meta
 

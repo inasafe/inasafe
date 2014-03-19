@@ -72,7 +72,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                                 'name': metadata.mmi_name,
                                 'description': metadata.mmi_text,
                                 'constraint': 'continuous',
-                                'default': 'depth'
+                                'default_attribute': 'depth'
                             }
                         ],
                         'layer_constraints': [
@@ -93,7 +93,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                                 'name': metadata.building_type_name,
                                 'description': metadata.building_type_text,
                                 'constraint': 'unique values',
-                                'default': 'type'
+                                'default_attribute': 'type'
                             }
                         ],
                         'layer_constraints': [

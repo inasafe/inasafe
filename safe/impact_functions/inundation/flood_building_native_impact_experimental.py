@@ -8,6 +8,7 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsGeometry
 )
+from safe import metadata
 
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
@@ -56,38 +57,78 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
             :rtype: dict
             """
             values = {
-                'name': tr('Flood Native Polygon Experimental Function'),
-                'overview': tr('N/a')
-            }
-            dict_meta = {
                 'id': 'FloodNativePolygonExperimentalFunction',
-                'name': values['name'],
+                'name': tr('Flood Native Polygon Experimental Function'),
+                'impact': tr('Be-flooded'),
                 'author': 'Dmitry Kolesov',
                 'date_implemented': 'N/A',
+                'overview': tr('N/A')
+            }
+
+            hazard_units = [
+                {
+                    'name': metadata.wetdry_name,
+                    'description': metadata.wetdry_text,
+                    'constraint': 'categorical',
+                    'default_attribute': 'affected',
+                    'default_category': 'wet',
+                    'classes': [
+                        {
+                            'name': 'wet',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
+                            'numeric_default_min':  1,
+                            'numeric_default_max': 9999999999,
+                            'optional': True,
+                            },
+                        {
+                            'name': 'dry',
+                            'description': 'No water above ground height.',
+                            'string_defaults': ['dry', '0', 'No', 'n', 'no'],
+                            'numeric_default_min':  0,
+                            'numeric_default_max': 1 - metadata.small_number,
+                            'optional': True
+                        }
+                    ]
+                }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'requirements': [
-                    {
-                        'category': 'hazard',
+                'categories': {
+                    'hazard': {
                         'subcategory': ['flood', 'tsunami'],
-                        'layer_type': 'vector',
-                        'data_type': 'polygon',
-                        'units': {
-                            'categorical hazard': [
-                                'wet',
-                                'dry'
-                            ]
-                        }
+                        'units': hazard_units,
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            }
+                        ]
                     },
-                    {
-                        'category': 'exposure',
+                    'exposure': {
                         'subcategory': 'structure',
-                        'layer_type': 'vector',
-                        'data_type': 'polygon',
-                        'units': {
-                            'building type': 'type'
-                        }
+                        'units': [
+                            {
+                                'name': metadata.building_type_name,
+                                'description': metadata.building_type_text,
+                                'constraint': 'unique values',
+                                'default_attribute': 'type'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            }
+                        ]
                     }
-                ]
+                }
             }
             return dict_meta
 

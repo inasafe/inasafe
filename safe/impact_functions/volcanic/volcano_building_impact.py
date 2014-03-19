@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -63,50 +64,94 @@ class VolcanoBuildingImpact(FunctionProvider):
             :rtype: dict
             """
             values = {
-                'name': tr('Volcano Building Impact'),
-                'overview': tr(
-                    'To assess the impacts of volcano eruption on building.')
-            }
-            dict_meta = {
                 'id': 'VolcanoBuildingImpact',
-                'name': values['name'],
+                'name': tr('Volcano Building Impact'),
+                'impact': tr('Be affected'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
+                'overview': tr('To assess the impacts of volcano eruption '
+                               'on building.')
+            }
+
+            hazard_units = [
+                {
+                    'name': metadata.volcano_category_name,
+                    'description': metadata.volcano_category_text,
+                    'constraint': 'categorical',
+                    'default_attribute': 'affected',
+                    'default_category': 'high',
+                    'classes': [
+                        {
+                            'name': 'high',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['Kawasan Rawan Bencana I',
+                                                'high'],
+                            'numeric_default_min':  0,
+                            'numeric_default_max': 3,
+                            'optional': False
+                        },
+                        {
+                            'name': 'medium',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['Kawasan Rawan Bencana II',
+                                                'medium'],
+                            'numeric_default_min':  3,
+                            'numeric_default_max': 5,
+                            'optional': False
+                        },
+                        {
+                            'name': 'low',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['Kawasan Rawan Bencana III',
+                                                'low'],
+                            'numeric_default_min':  5,
+                            'numeric_default_max': 10,
+                            'optional': False
+                        }
+                    ]
+                }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'requirements': [
-                    {
-                        'category': 'hazard',
+                'categories': {
+                    'hazard': {
                         'subcategory': 'volcano',
-                        'layer_type': 'vector',
-                        'data_types': [
+                        'units': hazard_units,
+                        'layer_constraints': [
                             {
-                                'data_type': 'polygon',
-                                'unit': {
-                                    'categorical hazard': [
-                                        ['low', 'Kawasan Rawan Bencana III'],
-                                        ['medium', 'Kawasan Rawan Bencana II'],
-                                        ['high', 'Kawasan Rawan Bencana I']
-                                    ]
-                                }
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
                             },
                             {
-                                'data_type': 'point',
-                                'unit': {
-                                    'name': 'type'
-                                }
+                                'layer_type': 'polygon',
+                                'data_type': 'point'
                             }
                         ]
                     },
-                    {
-                        'category': 'exposure',
-                        'subcategory': 'structure',
-                        'layer_type': 'vector',
-                        'data_type': 'polygon',
-                        'units': {
-                            'building type': 'type'
+                },
+                'exposure': {
+                    'subcategory': 'structure',
+                    'units': [
+                        {
+                            'name': metadata.building_type_name,
+                            'description': metadata.building_type_text,
+                            'constraint': 'unique values',
+                            'default_attribute': 'type'
                         }
-                    }
-                ]
+                    ],
+                    'layer_constraints': [
+                        {
+                            'layer_type': 'vector',
+                            'data_type': 'polygon'
+                        }
+                    ]
+                }
             }
             return dict_meta
 
