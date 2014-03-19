@@ -313,19 +313,20 @@ class FakeAPI():
             'name': depth_metres_name,
             'description': depth_metres_text,
             'constraint': 'continuous',
+            'default_attribute': 'depth'  # applies to vector only
         },
         {
             'name': depth_feet_name,
             'description': depth_feet_text,
             'constraint': 'continuous',
-            'default': 'depth'
+            'default_attribute': 'depth'  # applies to vector only
         },
         # Third kind of unit
         {
             'name': road_type_name,
             'description': road_type_text,
             'constraint': 'unique values',
-            'default': 'type'  # only applies to vector
+            'default_attribute': 'type'  # only applies to vector
         }
         ]
 
