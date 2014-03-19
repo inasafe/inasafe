@@ -49,7 +49,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             values = {
                 'id': 'EarthQuakeBuildingImpactFunction',
                 'name': tr('Earthquake Building Impact Function'),
-                'impact': 'Be affected',
+                'impact': tr('Be affected'),
                 'author': 'N/A',
                 'date_implemented': 'N/A',
                 'overview': tr(

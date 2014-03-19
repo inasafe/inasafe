@@ -1,4 +1,5 @@
 import numpy
+from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (FunctionProvider,
@@ -55,28 +56,57 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     'To assess the impacts of categorized hazards in raster '
                     'format on population raster layer.')
             }
-            dict_meta = {
+            values = {
                 'id': 'CategorisedHazardPopulationImpactFunction',
-                'name': values['name'],
+                'name': tr('Categorised Hazard Population Impact Function'),
+                'impact': tr('Be impacted'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of categorized hazards in raster '
+                    'format on population raster layer.')
+            }
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
                 'overview': values['overview'],
-                'requirements': [
-                    {
-                        'category': 'hazard',
+                'categories': {
+                    'hazard': {
                         'subcategory': 'all',
-                        'layer_type': 'raster',
-                        'data_type': 'numeric',
-                        'units': 'normalised'
+                        'units': [
+                            {
+                                'name': metadata.normalized_name,
+                                'description': metadata.normalized_text,
+                                'constraint': 'continuous',
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
                     },
-                    {
-                        'category': 'exposure',
+                    'exposure': {
                         'subcategory': 'population',
-                        'layer_type': 'raster',
-                        'data_type': 'numeric',
-                        'units': 'people per pixel'
+                        'units': [
+                            {
+                                'name': metadata.people_per_pixel_name,
+                                'description': metadata.people_per_pixel_text,
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
                     }
-                ]
+                }
             }
             return dict_meta
 

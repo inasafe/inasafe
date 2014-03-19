@@ -1,6 +1,7 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **Message Modele.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**Test Impact Function Metadata**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -70,12 +71,12 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
         # call from an object
-        metadata = my_impact_function.Metadata()
-        metadata_dict = metadata.get_metadata()
+        my_metadata = my_impact_function.Metadata()
+        metadata_dict = my_metadata.get_metadata()
         assert isinstance(metadata_dict, dict), 'I did not got a dict'
         # call from the class
-        metadata = my_impact_function.Metadata
-        metadata_dict = metadata.get_metadata()
+        my_metadata = my_impact_function.Metadata
+        metadata_dict = my_metadata.get_metadata()
         assert isinstance(metadata_dict, dict), 'I did not got a dict'
 
     def test_allowed_subcategories(self):
