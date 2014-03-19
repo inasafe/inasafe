@@ -73,18 +73,17 @@ def text(constant):
         return eval(constant)
     except:
         # raise Exception('MISSING CONSTANT: %s' % constant)
-        return '<b><font color="red"> ERROR: \
-                MISSING CONSTANT: %s </font></b>' % constant
+        return '<b>MISSING CONSTANT: %s</b>' % constant
 
 
 # constants for categories
-
 category_question = QApplication.translate(
     'safe_metadata',
     'By following the simple steps in this wizard, you can assign '
     'keywords to your layer: <b>%s</b>. First you need to define '
     'the category of your layer.')   # (layer name)
 
+hazard_name = 'Hazard'
 hazard_text = QApplication.translate(
     'safe_metadata',
     'A <b>hazard</b> layer represents '
@@ -92,12 +91,14 @@ hazard_text = QApplication.translate(
     'in an area. For example; flood, earthquake, tsunami and  '
     'volcano are all examples of hazards.')
 
+exposure_name = 'Exposure'
 exposure_text = QApplication.translate(
     'safe_metadata',
     'An <b>exposure</b> layer represents '
     'people, property or infrastructure that may be affected '
     'in the event of a flood, earthquake, volcano etc.')
 
+aggregation_name = 'Aggregation'
 aggregation_text = QApplication.translate(
     'safe_metadata',
     'An <b>aggregation</b> layer represents '
@@ -115,6 +116,7 @@ hazard_question = QApplication.translate(
     'able to use this hazard layer with impact functions such '
     'as <b>flood impact on population</b>.')
 
+flood_name = 'Flood'
 flood_text = QApplication.translate(
     'safe_metadata',
     'A <b>flood</b> describes the inundation of land that is '
@@ -123,6 +125,7 @@ flood_text = QApplication.translate(
     'when a river overflows its banks or when a dam breaks. '
     'The effect of a <b>flood</b> is for land that is normally dry '
     'to become wet.')
+tsunami_name = 'Tsunami'
 tsunami_text = QApplication.translate(
     'safe_metadata',
     'A <b>tsunami</b> describes a large ocean wave or series or '
@@ -130,15 +133,18 @@ tsunami_text = QApplication.translate(
     'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
     'wave that strikes land may cause massive destruction and '
     'flooding.')
+earthquake_name = 'Earthquake'
 earthquake_text = QApplication.translate(
     'safe_metadata',
     'An <b>earthquake</b> describes the sudden violent shaking of the '
     'ground that occurs as a result of volcanic activity or movement '
     'in the earth\'s crust.')
+tephra_name = 'Tephra'
 tephra_text = QApplication.translate(
     'safe_metadata',
     '<b>Tephra</b> describes the material, such as rock fragments and '
     'ash particles ejected by a volcanic eruption.')
+volcano_name = 'Volcano'
 volcano_text = QApplication.translate(
     'safe_metadata',
     'A <b>volcano</b> describes a mountain which has a vent through '
@@ -156,16 +162,19 @@ exposure_question = QApplication.translate(
     'able to use this exposure layer with impact functions such '
     'as <b>flood impact on population</b>.')
 
+population_name = 'Population'
 population_text = QApplication.translate(
     'safe_metadata',
     'The <b>population</b> describes the people that might be '
     'exposed to a particular hazard.')
+structure_name = 'Structure'
 structure_text = QApplication.translate(
     'safe_metadata',
     'A <b>structure</b> can be any relatively permanent man '
     'made feature such as a building (an enclosed structure '
     'with walls and a roof) or a telecommunications facility or a '
     'bridge.')
+road_name = 'Road'
 road_text = QApplication.translate(
     'safe_metadata',
     'A <b>road</b> is a defined route used by a vehicle or people to '
@@ -188,7 +197,7 @@ depth_metres_text = QApplication.translate(
     '<b>metres</b> are a metric unit of measure. There are 100 '
     'centimetres in 1 metre. In this case <b>metres</b> are used to '
     'describe the water depth.')
-depth_feet_name = 'feet'
+depth_feet_name = 'Feet'
 depth_feet_text = QApplication.translate(
     'safe_metadata',
     '<b>Feet</b> are an imperial unit of measure. There are 12 '
@@ -222,7 +231,7 @@ density_text = QApplication.translate(
     '<b>Density</b> is the number of features within a defined '
     'area. For example <b>population density</b> might be measured '
     'as the number of people per square kilometre.')
-road_type_name = 'road type'
+road_type_name = 'Road Type'
 road_type_text = 'Road type depends on its surface, width and purpose.'
 
 
@@ -285,8 +294,7 @@ class FakeAPI():
         return[
         # First kind of unit
         {
-            'name': wetdry_name,
-            'description': wetdry_text,
+            'id': 'wetdry',
             'constraint': 'categorical',
             'default_category': 'wet',
             'classes': [
@@ -310,21 +318,18 @@ class FakeAPI():
         },
         # Second kind of unit
         {
-            'name': depth_metres_name,
-            'description': depth_metres_text,
+            'id': 'depth_metres',
             'constraint': 'continuous',
             'default_attribute': 'depth'  # applies to vector only
         },
         {
-            'name': depth_feet_name,
-            'description': depth_feet_text,
+            'id': 'depth_feet',
             'constraint': 'continuous',
             'default_attribute': 'depth'  # applies to vector only
         },
         # Third kind of unit
         {
-            'name': road_type_name,
-            'description': road_type_text,
+            'id': 'road_type',
             'constraint': 'unique values',
             'default_attribute': 'type'  # only applies to vector
         }
@@ -407,7 +412,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         for category in self.kw_api.categories_for_layer(
                 self.layer_type, self.data_type):
-            item = QListWidgetItem(category, self.lstCategories)
+            item = QListWidgetItem(text('%s_name' % category),
+                                        self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category)
             self.lstCategories.addItem(item)
         self.lblDescribeCategory.setText('')
@@ -452,9 +458,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: string or None
         """
         item = self.lstUnits.currentItem()
-        try:
-            return eval(item.data(QtCore.Qt.UserRole))['name']
-        except:
+        if item:
+            return item.data(QtCore.Qt.UserRole)
+        else:
             return None
 
     def selected_unit_details(self):
@@ -465,7 +471,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         item = self.lstUnits.currentItem()
         try:
-            return eval(item.data(QtCore.Qt.UserRole))
+            return eval(item.data(QtCore.Qt.UserRole+1))
         except:
             return None
 
@@ -540,8 +546,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return
 
         # Set description label
-        self.lblDescribeSubcategory.setText(
-            text('%s_text' % subcategory))
+        self.lblDescribeSubcategory.setText(text('%s_text' % subcategory))
         self.lblIconSubcategory.setPixmap(QPixmap(
             ':/plugins/inasafe/keyword-subcategory-%s.svg'
             % (subcategory or 'notset')))
@@ -555,12 +560,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.lstFields.clear()
 
-        unit_details = self.selected_unit_details()
+        unit = self.selected_unit()
         # Exit if no selection
-        if not unit_details:
+        if not unit:
             return
-
-        self.lblDescribeUnit.setText(unit_details['description'])
+        self.lblDescribeUnit.setText(text('%s_text' % unit))
 
         # Enable the next button
         self.pbnNext.setEnabled(True)
@@ -608,7 +612,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblSelectSubcategory.setText(text('%s_question' % category))
         for i in self.kw_api.subcategories_for_layer(
                 self.layer_type, self.data_type, category):
-            item = QListWidgetItem(i, self.lstSubcategories)
+            item = QListWidgetItem(text('%s_name' % i), self.lstSubcategories)
             item.setData(QtCore.Qt.UserRole, i)
             self.lstSubcategories.addItem(item)
 
@@ -624,8 +628,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lstFields.clear()
         for i in self.kw_api.units_for_layer(
                 self.layer_type, self.data_type, subcategory):
-            item = QListWidgetItem(i['name'], self.lstUnits)
-            item.setData(QtCore.Qt.UserRole, unicode(i))
+            item = QListWidgetItem(text('%s_name' % i['id']), self.lstUnits)
+            item.setData(QtCore.Qt.UserRole, i['id'])
+            item.setData(QtCore.Qt.UserRole+1, unicode(i))
             self.lstUnits.addItem(item)
 
     def update_field_tab(self):
@@ -633,11 +638,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         category = self.selected_category()
         subcategory = self.selected_subcategory()
+        unit = self.selected_unit()
         unit_details = self.selected_unit_details()
-        unit = None
-        if subcategory and unit_details:
+        if subcategory and unit:
             next_question = text('%s_%s_question' % (subcategory,
-                                                     unit_details['name']))
+                                                     unit))
         else:
             next_question = self.tr('<b><font color="red">ERROR! Missing '
                                     'subcategory or unit!</font></b>')
@@ -652,7 +657,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # unique values, continuous or categorical data
             question_text = field_question_values % (category,
                                                      subcategory,
-                                                     unit_details['name'],
+                                                     unit,
                                                      next_question)
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
@@ -681,7 +686,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         field_type = self.layer.dataProvider().fields()[field_idx].type()
         self.lblClassify.setText(classify_question %
                                 (subcategory, category,
-                                 unit_details['name'], field.upper()))
+                                 unit_details['id'], field.upper()))
 
         # Assign unique values to classes
         unassigned_values = list()
