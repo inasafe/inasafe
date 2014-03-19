@@ -214,22 +214,22 @@ class ImpactFunctionMetadata():
         """
         # pass  # must implement here
         result = []
-        if data_type not in cls.allowed_data_types(subcategory):
+        if not data_type in cls.allowed_data_types(subcategory):
             return result
         metadata_dict = cls.get_metadata()
-        requirements = metadata_dict['requirements']
-        for requirement in requirements:
-            if cls.is_subset(subcategory, requirement['subcategory']):
-                if 'units' in requirement.keys():
-                    result = cls.add_to_list(result, requirement['units'])
-                elif 'data_types' in requirement.keys():
-                    raise (NotImplementedError(
-                        'units not found, data_types found'))
-                elif 'layer_types' in requirements.keys():
-                    raise (NotImplementedError(
-                        'units and data_types not found, layer_types found'))
-                else:
-                    raise (NotImplementedError('Error something else...'))
-            else:
-                continue
+        categories = metadata_dict['categories']
+        if subcategory in cls.allowed_subcategories(
+                'exposure'):
+            # implementation logic that returns the allowed data_types for
+            # exposure layer with subcategory as passed in to this method
+
+            result = cls.add_to_list(result, categories['exposure']['units'])
+        elif subcategory in cls.allowed_subcategories(
+                'hazard'):
+            # implementation logic that returns the allowed data_types for
+            # hazard layer with subcategory as passed in to this method
+            result = cls.add_to_list(result, categories['hazard']['units'])
+        else:
+            raise Exception('Invalid subcategory.')
+
         return result

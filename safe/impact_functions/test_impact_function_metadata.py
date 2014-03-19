@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe import metadata
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -126,7 +127,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata \
             .allowed_units('structure', 'polygon')
-        expected_result = ['type']
+        expected_result = [
+            {
+                'name': metadata.building_type_name,
+                'description': metadata.building_type_text,
+                'constraint': 'unique values',
+                'default': 'type'
+            }
+        ]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
