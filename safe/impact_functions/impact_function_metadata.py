@@ -381,3 +381,40 @@ class ImpactFunctionMetadata():
         if layer_constraints in cls.allowed_layer_constraints('hazard'):
             result = add_to_list(result, 'hazard')
         return result
+
+    @classmethod
+    def subcategories_for_layer(cls, layer_type, data_type, category):
+        """Return a list of valid subcategories for a layer.
+
+        This method is used to determine which subcategories a given layer
+        can be for.
+
+        In the returned the values are categories (if any) applicable for that
+        layer_type and data_type.
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :param category: The category for this layer. Valid possibilities
+            would be 'hazard', 'exposure' and 'aggregation'.
+        :type category: str
+
+
+        :returns: A list as per the example above where each value represents
+            a valid subcategory.
+
+        :rtype: list
+        """
+        layer_constraints = {
+            'layer_type': layer_type,
+            'data_type': data_type
+        }
+        if not layer_constraints in cls.allowed_layer_constraints(category):
+            return []
+        else:
+            return cls.allowed_subcategories(category)

@@ -300,5 +300,26 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             result)
         self.assertEqual(set(result), set(expected_result), msg)
 
+    def test_subcategories_for_layer(self):
+        """Test for subcategories_for_layer API
+        """
+        my_impact_function = EarthquakeBuildingImpactFunction()
+        result = my_impact_function.Metadata. \
+            subcategories_for_layer(layer_type='raster', data_type='numeric',
+                                    category='hazard')
+        expected_result = ['earthquake']
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+        my_impact_function = EarthquakeBuildingImpactFunction()
+        result = my_impact_function.Metadata. \
+            subcategories_for_layer(layer_type='vector', data_type='polygon',
+                                    category='exposure')
+        expected_result = ['structure']
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
 if __name__ == '__main__':
     unittest.main()

@@ -212,3 +212,46 @@ class ImpactFunctionManager:
                 .categories_for_layer(layer_type, data_type)
             result = add_to_list(result, my_categories)
         return result
+
+    def subcategories_for_layer(self, layer_type, data_type, category):
+        """Return a list of valid subcategories for a layer.
+
+        This method is used to determine which subcategories a given layer
+        can be for.
+
+        Example usage::
+
+            foo  = subcategories_for_layer('vector', 'polygon', 'exposure')
+            print foo
+
+        Would output this::
+
+            ['flood', 'landuse']
+
+        In the returned the values are categories (if any) applicable for that
+        layer_type and data_type.
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :param category: The category for this layer. Valid possibilities
+            would be 'hazard', 'exposure' and 'aggregation'.
+        :type category: str
+
+
+        :returns: A list as per the example above where each value represents
+            a valid subcategory.
+
+        :rtype: list
+        """
+        result = []
+        for impact_function in self.impact_functions:
+            my_subcategories = impact_function.Metadata \
+                .subcategories_for_layer(layer_type, data_type, category)
+            result = add_to_list(result, my_subcategories)
+        return result
