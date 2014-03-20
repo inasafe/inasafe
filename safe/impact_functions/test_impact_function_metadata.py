@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from safe.metadata import small_number
+from safe.metadata import unit_building_type_type, unit_wetdry, \
+    unit_metres_depth, unit_feet_depth, unit_mmi_depth, layer_vector_polygon, \
+    layer_raster_numeric
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.impact_functions.earthquake.earthquake_building_impact import \
@@ -109,13 +111,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata \
             .allowed_units('structure', 'polygon')
-        expected_result = [
-            {
-                'id': 'building_type',
-                'constraint': 'unique values',
-                'default_attribute': 'type'
-            }
-        ]
+        expected_result = [unit_building_type_type]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
@@ -130,55 +126,17 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         my_impact_function = FloodBuildingImpactFunction
         result = my_impact_function.Metadata \
             .allowed_units('structure', 'polygon')
-        expected_result = [
-            {
-                'id': 'building_type',
-                'constraint': 'unique values',
-                'default_attribute': 'type'
-            }
-        ]
+        expected_result = [unit_building_type_type]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
         result = my_impact_function.Metadata \
             .allowed_units('flood', 'numeric')
-        expected_result = [
-            {
-                'id': 'wetdry',
-                'constraint': 'categorical',
-                'default_attribute': 'affected',
-                'default_category': 'wet',
-                'classes': [
-                    {
-                        'name': 'wet',
-                        'description': 'Water above ground height.',
-                        'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-                        'numeric_default_min': 1,
-                        'numeric_default_max': 9999999999,
-                        'optional': True,
-                        },
-                    {
-                        'name': 'dry',
-                        'description': 'No water above ground height.',
-                        'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-                        'numeric_default_min': 0,
-                        'numeric_default_max': 1 - small_number,
-                        'optional': True
-                    }
-                ]
-            },
-            {
-                'id': 'metres',
-                'constraint': 'continuous',
-                'default_attribute': 'depth'  # applies to vector only
-            },
-            {
-                'id': 'feet',
-                'constraint': 'continuous',
-                'default_attribute': 'depth'  # applies to vector only
-            }
-        ]
+        expected_result = [unit_wetdry, unit_metres_depth, unit_feet_depth]
+        from  pprint import pprint
+        pprint(result)
+        pprint(expected_result)
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
@@ -189,44 +147,21 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata. \
             allowed_layer_constraints()
-        expected_result = [
-            {
-                'layer_type': 'vector',
-                'data_type': 'polygon'
-            },
-            {
-                'layer_type': 'raster',
-                'data_type': 'numeric'
-            }
-        ]
+        expected_result = [layer_vector_polygon, layer_raster_numeric]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
         result = my_impact_function.Metadata. \
             allowed_layer_constraints('hazard')
-        expected_result = [
-            {
-                'layer_type': 'vector',
-                'data_type': 'polygon'
-            },
-            {
-                'layer_type': 'raster',
-                'data_type': 'numeric'
-            }
-        ]
+        expected_result = [layer_vector_polygon, layer_raster_numeric]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
         result = my_impact_function.Metadata. \
             allowed_layer_constraints('exposure')
-        expected_result = [
-            {
-                'layer_type': 'vector',
-                'data_type': 'polygon'
-            }
-        ]
+        expected_result = [layer_vector_polygon]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
@@ -238,13 +173,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         result = my_impact_function.Metadata. \
             units_for_layer(subcategory='earthquake', layer_type='raster',
                             data_type='numeric')
-        expected_result = [
-            {
-                'id': 'mmi',
-                'constraint': 'continuous',
-                'default_attribute': 'depth'
-            }
-        ]
+        expected_result = [unit_mmi_depth]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)

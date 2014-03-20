@@ -13,6 +13,9 @@ from safe.impact_functions.core import (
     evacuated_population_weekly_needs)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.metadata import hazard_flood, hazard_tsunami, unit_feet_depth, \
+    unit_metres_depth, layer_raster_numeric, exposure_population, \
+    unit_people_per_pixel
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -96,29 +99,17 @@ class FloodEvacuationFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': ['flood', 'tsunami'],
-                        'units': hazard_units,
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'units': [
+                            unit_feet_depth,
+                            unit_metres_depth
+                        ],
+                        'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'subcategory': 'population',
-                        'units': [
-                            {
-                                'id': 'people_per_pixel',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
                     }
                 }
             }

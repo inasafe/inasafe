@@ -7,7 +7,9 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.metadata import small_number
+from safe.metadata import hazard_flood, hazard_tsunami, \
+    unit_metres_depth, unit_feet_depth, layer_raster_numeric, exposure_road, \
+    unit_road_type_type, layer_vector_line
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -64,19 +66,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A')
             }
 
-            hazard_units = [
-                {
-                    'id': 'metres',
-                    'constraint': 'continuous',
-                    'default_attribute': 'depth'  # applies to vector only
-                },
-                {
-                    'id': 'feet',
-                    'constraint': 'continuous',
-                    'default_attribute': 'depth'  # applies to vector only
-                }
-            ]
-
             dict_meta = {
                 'id': values['id'],
                 'name': values['name'],
@@ -86,30 +75,17 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': ['flood', 'tsunami'],
-                        'units': hazard_units,
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'units': [
+                            unit_metres_depth,
+                            unit_feet_depth
+                        ],
+                        'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'subcategory': 'road',
-                        'units': [
-                            {
-                                'id': 'road_type',
-                                'constraint': 'unique values',
-                                'default_attribute': 'type'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'line'
-                            }
-                        ]
+                        'subcategory': exposure_road,
+                        'units': [unit_road_type_type],
+                        'layer_constraints': [layer_vector_line]
                     }
                 }
             }

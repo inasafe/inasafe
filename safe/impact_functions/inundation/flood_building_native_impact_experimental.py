@@ -9,7 +9,9 @@ from qgis.core import (
     QgsGeometry
 )
 
-from safe.metadata import small_number
+from safe.metadata import unit_wetdry, hazard_flood, \
+    hazard_tsunami, layer_vector_polygon, exposure_structure, \
+    unit_building_type_type
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -65,33 +67,6 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A')
             }
 
-            hazard_units = [
-                {
-                    'id': 'wetdry',
-                    'constraint': 'categorical',
-                    'default_attribute': 'affected',
-                    'default_category': 'wet',
-                    'classes': [
-                        {
-                            'name': 'wet',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-                            'numeric_default_min':  1,
-                            'numeric_default_max': 9999999999,
-                            'optional': True,
-                            },
-                        {
-                            'name': 'dry',
-                            'description': 'No water above ground height.',
-                            'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-                            'numeric_default_min':  0,
-                            'numeric_default_max': (1 - small_number),
-                            'optional': True
-                        }
-                    ]
-                }
-            ]
-
             dict_meta = {
                 'id': values['id'],
                 'name': values['name'],
@@ -101,30 +76,14 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': ['flood', 'tsunami'],
-                        'units': hazard_units,
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            }
-                        ]
+                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'units': unit_wetdry,
+                        'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
-                        'subcategory': 'structure',
-                        'units': [
-                            {
-                                'id': 'building_type',
-                                'constraint': 'unique values',
-                                'default_attribute': 'type'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            }
-                        ]
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
                     }
                 }
             }

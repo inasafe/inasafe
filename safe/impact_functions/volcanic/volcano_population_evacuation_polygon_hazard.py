@@ -15,6 +15,9 @@ Contact : ole.moller.nielsen@gmail.com
 import numpy
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.metadata import hazard_volcano, unit_volcano_categorical, \
+    layer_vector_polygon, layer_vector_point, layer_raster_numeric, \
+    exposure_population, unit_people_per_pixel
 from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
@@ -83,44 +86,6 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                'on population.')
             }
 
-            hazard_units = [
-                {
-                    'id': 'volcano_categorical',
-                    'constraint': 'categorical',
-                    'default_attribute': 'affected',
-                    'default_category': 'high',
-                    'classes': [
-                        {
-                            'name': 'high',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['Kawasan Rawan Bencana I',
-                                                'high'],
-                            'numeric_default_min':  0,
-                            'numeric_default_max': 3,
-                            'optional': False
-                        },
-                        {
-                            'name': 'medium',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['Kawasan Rawan Bencana II',
-                                                'medium'],
-                            'numeric_default_min':  3,
-                            'numeric_default_max': 5,
-                            'optional': False
-                        },
-                        {
-                            'name': 'low',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['Kawasan Rawan Bencana III',
-                                                'low'],
-                            'numeric_default_min':  5,
-                            'numeric_default_max': 10,
-                            'optional': False
-                        }
-                    ]
-                }
-            ]
-
             dict_meta = {
                 'id': values['id'],
                 'name': values['name'],
@@ -130,33 +95,17 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': 'volcano',
-                        'units': hazard_units,
+                        'subcategory':  hazard_volcano,
+                        'units': [unit_volcano_categorical],
                         'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            },
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'point'
-                            }
+                            layer_vector_polygon,
+                            layer_vector_point
                         ]
                     },
                     'exposure': {
-                        'subcategory': 'population',
-                        'units': [
-                            {
-                                'id': 'people_per_pixel',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
                     }
                 }
             }
