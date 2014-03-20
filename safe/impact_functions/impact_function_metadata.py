@@ -347,3 +347,37 @@ class ImpactFunctionMetadata():
             return cls.allowed_units(subcategory, data_type)
         else:
             return []
+
+    @classmethod
+    def categories_for_layer(cls, layer_type, data_type):
+        """Return a list of valid categories for a layer.
+
+        This method is used to determine if a given layer can be used as a
+        hazard, exposure or aggregation layer.
+
+        In the returned the values are categories (if any) applicable for that
+        layer_type and data_type.
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :returns: A list as per the example above where each value represents
+            a valid category.
+
+        :rtype: list
+        """
+        layer_constraints = {
+            'layer_type': layer_type,
+            'data_type': data_type
+        }
+        result = []
+        if layer_constraints in cls.allowed_layer_constraints('exposure'):
+            result = add_to_list(result, 'exposure')
+        if layer_constraints in cls.allowed_layer_constraints('hazard'):
+            result = add_to_list(result, 'hazard')
+        return result

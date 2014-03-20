@@ -165,3 +165,50 @@ class ImpactFunctionManager:
                 .units_for_layer(subcategory, layer_type, data_type)
             result = add_to_list(result, my_units)
         return result
+
+    def categories_for_layer(self, layer_type, data_type):
+        """Return a list of valid categories for a layer.
+
+        This method is used to determine if a given layer can be used as a hazard,
+        exposure or aggregation layer.
+
+        Example usage::
+
+            foo  = categories_for_layer('vector', 'polygon')
+            print foo
+
+        Would output this::
+
+            ['hazard', 'exposure', 'aggregation']
+
+        While passing a vector point layer::
+
+            foo  = units_for_layer('vector', 'point')
+            print foo
+
+        Might return this::
+
+            ['hazard', 'exposure']
+
+        In the returned the values are categories (if any) applicable for that
+        layer_type and data_type.
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :returns: A list as per the example above where each value represents
+            a valid category.
+
+        :rtype: list
+        """
+        result = []
+        for impact_function in self.impact_functions:
+            my_categories = impact_function.Metadata \
+                .categories_for_layer(layer_type, data_type)
+            result = add_to_list(result, my_categories)
+        return result

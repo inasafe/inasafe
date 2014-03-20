@@ -204,5 +204,45 @@ class TestImpactFunctionManager(unittest.TestCase):
               str(result)
         assert result == expected_result, msg
 
+    def test_categories_for_layer(self):
+        """Test categories_for_layer API
+        """
+        ifm = ImpactFunctionManager()
+
+        result = ifm.categories_for_layer(layer_type='raster',
+                                          data_type='numeric')
+        expected_result = ['hazard', 'exposure']
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert set(result) == set(expected_result), msg
+
+        result = ifm.categories_for_layer(layer_type='vector',
+                                          data_type='line')
+        expected_result = ['exposure']
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert set(result) == set(expected_result), msg
+
+        result = ifm.categories_for_layer(layer_type='vector',
+                                          data_type='polygon')
+        expected_result = ['exposure', 'hazard']
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert set(result) == set(expected_result), msg
+
+        result = ifm.categories_for_layer(layer_type='vector',
+                                          data_type='point')
+        expected_result = ['hazard']
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert set(result) == set(expected_result), msg
+
+        result = ifm.categories_for_layer(layer_type='raster',
+                                          data_type='line')
+        expected_result = []
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert set(result) == set(expected_result), msg
+
 if __name__ == '__main__':
     unittest.main()
