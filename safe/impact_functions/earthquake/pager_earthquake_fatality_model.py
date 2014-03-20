@@ -1,5 +1,7 @@
 import math
 import numpy
+from safe.metadata import hazard_earthquake, unit_mmi, layer_raster_numeric, \
+    exposure_population, unit_people_per_pixel
 from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
@@ -69,34 +71,14 @@ class PAGFatalityFunction(ITBFatalityFunction):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': 'earthquake',
-                        'units': [
-                            {
-                                'id': 'mmi',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': hazard_earthquake,
+                        'units': [unit_mmi],
+                        'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'subcategory': 'population',
-                        'units': [
-                            {
-                                'id': 'people_per_pixel',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
                     }
                 }
             }

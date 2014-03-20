@@ -7,6 +7,8 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_question,
                                         get_function_title)
 from safe.impact_functions.styles import flood_population_style as style_info
+from safe.metadata import hazard_all, unit_normalised, layer_raster_numeric, \
+    exposure_population, unit_people_per_pixel
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
                                    format_int,
@@ -74,34 +76,14 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': 'all',
-                        'units': [
-                            {
-                                'id': 'normalized',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': hazard_all,
+                        'units': [unit_normalised],
+                        'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'subcategory': 'population',
-                        'units': [
-                            {
-                                'id': 'people_per_pixel',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
                     }
                 }
             }

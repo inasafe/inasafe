@@ -5,6 +5,9 @@ import logging
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
+from safe.metadata import hazard_earthquake, layer_vector_polygon, \
+    layer_raster_numeric, unit_mmi_depth, exposure_structure, \
+    unit_building_type_type
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr, format_int)
 from safe.common.tables import Table, TableRow
@@ -65,40 +68,17 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': 'earthquake',
-                        'units': [
-                            {
-                                'id': 'mmi',
-                                'constraint': 'continuous',
-                                'default_attribute': 'depth'
-                            }
-                        ],
+                        'subcategory': hazard_earthquake,
+                        'units': [unit_mmi_depth],
                         'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            },
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
+                            layer_vector_polygon,
+                            layer_raster_numeric
                         ]
                     },
                     'exposure': {
-                        'subcategory': 'structure',
-                        'units': [
-                            {
-                                'id': 'building_type',
-                                'constraint': 'unique values',
-                                'default_attribute': 'type'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            }
-                        ]
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
                     }
                 }
             }

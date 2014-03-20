@@ -15,6 +15,9 @@ from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.metadata import hazard_volcano, unit_volcano_categorical, \
+    layer_vector_polygon, layer_vector_point, exposure_structure, \
+    unit_building_type_type
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -72,44 +75,6 @@ class VolcanoBuildingImpact(FunctionProvider):
                                'on building.')
             }
 
-            hazard_units = [
-                {
-                    'id': 'volcano_categorical',
-                    'constraint': 'categorical',
-                    'default_attribute': 'affected',
-                    'default_category': 'high',
-                    'classes': [
-                        {
-                            'name': 'high',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['Kawasan Rawan Bencana I',
-                                                'high'],
-                            'numeric_default_min':  0,
-                            'numeric_default_max': 3,
-                            'optional': False
-                        },
-                        {
-                            'name': 'medium',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['Kawasan Rawan Bencana II',
-                                                'medium'],
-                            'numeric_default_min':  3,
-                            'numeric_default_max': 5,
-                            'optional': False
-                        },
-                        {
-                            'name': 'low',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['Kawasan Rawan Bencana III',
-                                                'low'],
-                            'numeric_default_min':  5,
-                            'numeric_default_max': 10,
-                            'optional': False
-                        }
-                    ]
-                }
-            ]
-
             dict_meta = {
                 'id': values['id'],
                 'name': values['name'],
@@ -119,34 +84,17 @@ class VolcanoBuildingImpact(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': 'volcano',
-                        'units': hazard_units,
+                        'subcategory':  hazard_volcano,
+                        'units': [unit_volcano_categorical],
                         'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            },
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'point'
-                            }
+                            layer_vector_polygon,
+                            layer_vector_point
                         ]
                     },
                     'exposure': {
-                        'subcategory': 'structure',
-                        'units': [
-                            {
-                                'id': 'building_type',
-                                'constraint': 'unique values',
-                                'default_attribute': 'type'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            }
-                        ]
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
                     }
                 }
             }
