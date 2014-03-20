@@ -165,7 +165,10 @@ class ImpactFunctionMetadata():
             for layer_constraint in layer_constraints:
                 result = add_to_list(result, layer_constraint['data_type'])
         else:
-            raise Exception('Invalid subcategory.')
+            # raise Exception('Invalid subcategory.')
+            # TODO (ismailsunni): create custom exception to catch since it
+            # will called by all impact function
+            pass
 
         return result
 
@@ -214,7 +217,10 @@ class ImpactFunctionMetadata():
             # hazard layer with subcategory as passed in to this method
             result = add_to_list(result, categories['hazard']['units'])
         else:
-            raise Exception('Invalid subcategory.')
+            # raise Exception('Invalid subcategory.')
+            # TODO (ismailsunni): create custom exception to catch since it
+            # will called by all impact function
+            pass
 
         return result
 
@@ -233,5 +239,3 @@ class ImpactFunctionMetadata():
             return metadata_dict.get('disabled', False)
         except AttributeError:
             return True
-        except NotImplementedError, e:
-            print e, cls
