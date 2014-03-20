@@ -213,7 +213,7 @@ class ImpactFunctionManager:
             result = add_to_list(result, my_categories)
         return result
 
-    def subcategories_for_layer(self, layer_type, data_type, category):
+    def subcategories_for_layer(self, category, layer_type, data_type):
         """Return a list of valid subcategories for a layer.
 
         This method is used to determine which subcategories a given layer
@@ -252,6 +252,6 @@ class ImpactFunctionManager:
         result = []
         for impact_function in self.impact_functions:
             my_subcategories = impact_function.Metadata \
-                .subcategories_for_layer(layer_type, data_type, category)
+                .subcategories_for_layer(category, layer_type, data_type)
             result = add_to_list(result, my_subcategories)
         return result
