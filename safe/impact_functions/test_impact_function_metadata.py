@@ -231,5 +231,47 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             result)
         self.assertEqual(result, expected_result, msg)
 
+    def test_units_for_layer(self):
+        """Test for units_for_layer API
+        """
+        my_impact_function = EarthquakeBuildingImpactFunction()
+        result = my_impact_function.Metadata. \
+            units_for_layer(subcategory='earthquake', layer_type='raster',
+                            data_type='numeric')
+        expected_result = [
+            {
+                'id': 'mmi',
+                'constraint': 'continuous',
+                'default_attribute': 'depth'
+            }
+        ]
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+        result = my_impact_function.Metadata. \
+            units_for_layer(subcategory='flood', layer_type='raster',
+                            data_type='numeric')
+        expected_result = []
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+        result = my_impact_function.Metadata. \
+            units_for_layer(subcategory='earthquake', layer_type='vector',
+                            data_type='numeric')
+        expected_result = []
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+        result = my_impact_function.Metadata. \
+            units_for_layer(subcategory='earthquake', layer_type='raster',
+                            data_type='polygon')
+        expected_result = []
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
 if __name__ == '__main__':
     unittest.main()

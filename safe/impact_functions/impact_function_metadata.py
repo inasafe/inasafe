@@ -283,3 +283,67 @@ class ImpactFunctionMetadata():
             metadata_dict = cls.get_metadata()
             categories = metadata_dict['categories']
             return categories[category]['layer_constraints']
+
+    @classmethod
+    def units_for_layer(cls, subcategory, layer_type, data_type):
+        """Get the valid units for a layer.
+
+        Example usage::
+
+            foo  = units_for_layer('flood', 'vector', 'polygon')
+            print foo
+
+        Would output this::
+
+            {'Wet/Dry': ['wet','dry']}
+
+        While passing a raster layer::
+
+            foo  = units_for_layer('flood', 'raster', None)
+            print foo
+
+        Might return this::
+
+            {
+                'metres': None,
+                'feet': None,
+                'wet/dry': ['wet', 'dry'],
+            }
+
+        In the returned dictionary the keys are unit types and
+        the values are the categories (if any) applicable for that unit type.
+
+        :param subcategory: The subcategory for this layer.
+        :type subcategory: str
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :returns: A dictionary as per the example above where each key
+            represents a unit and each value that is not None represents a
+            list of categories.
+
+        :rtype: dict
+        """
+        layer_constraints = {
+            'layer_type': layer_type,
+            'data_type': data_type
+        }
+        category = None
+        if subcategory in cls.allowed_subcategories('hazard'):
+            category = 'hazard'
+        elif subcategory in cls.allowed_subcategories('exposure'):
+            category = 'exposure'
+        else:
+            return []
+
+        if layer_constraints in cls.allowed_layer_constraints(category):
+            # Simply, I want to use the functions :)
+            return cls.allowed_units(subcategory, data_type)
+        else:
+            return []

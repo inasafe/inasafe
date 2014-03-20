@@ -23,6 +23,44 @@ from safe.metadata import small_number
 
 
 class TestImpactFunctionManager(unittest.TestCase):
+
+    flood_OSM_building_hazard_units = [
+        {
+            'id': 'wetdry',
+            'constraint': 'categorical',
+            'default_attribute': 'affected',
+            'default_category': 'wet',
+            'classes': [
+                {
+                    'name': 'wet',
+                    'description': 'Water above ground height.',
+                    'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
+                    'numeric_default_min': 1,
+                    'numeric_default_max': 9999999999,
+                    'optional': True,
+                    },
+                {
+                    'name': 'dry',
+                    'description': 'No water above ground height.',
+                    'string_defaults': ['dry', '0', 'No', 'n', 'no'],
+                    'numeric_default_min': 0,
+                    'numeric_default_max': 1 - small_number,
+                    'optional': True
+                }
+            ]
+        },
+        {
+            'id': 'metres',
+            'constraint': 'continuous',
+            'default_attribute': 'depth'  # applies to vector only
+        },
+        {
+            'id': 'feet',
+            'constraint': 'continuous',
+            'default_attribute': 'depth'  # applies to vector only
+        }
+    ]
+
     def test_init(self):
         """Test initialize ImpactFunctionManager
         """
@@ -114,42 +152,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         assert result == expected_result, msg
 
         result = ifm.allowed_units('flood', 'numeric')
-        expected_result = [
-            {
-                'id': 'wetdry',
-                'constraint': 'categorical',
-                'default_attribute': 'affected',
-                'default_category': 'wet',
-                'classes': [
-                    {
-                        'name': 'wet',
-                        'description': 'Water above ground height.',
-                        'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-                        'numeric_default_min': 1,
-                        'numeric_default_max': 9999999999,
-                        'optional': True,
-                        },
-                    {
-                        'name': 'dry',
-                        'description': 'No water above ground height.',
-                        'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-                        'numeric_default_min': 0,
-                        'numeric_default_max': 1 - small_number,
-                        'optional': True
-                    }
-                ]
-            },
-            {
-                'id': 'metres',
-                'constraint': 'continuous',
-                'default_attribute': 'depth'  # applies to vector only
-            },
-            {
-                'id': 'feet',
-                'constraint': 'continuous',
-                'default_attribute': 'depth'  # applies to vector only
-            }
-        ]
+        expected_result = self.flood_OSM_building_hazard_units
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
         assert result == expected_result, msg
@@ -163,6 +166,37 @@ class TestImpactFunctionManager(unittest.TestCase):
             },
             {
                 'id': 'mmi',
+                'constraint': 'continuous'
+            }
+        ]
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert result == expected_result, msg
+
+    def test_units_for_layer(self):
+        """Test units_for_layer API
+        """
+        ifm = ImpactFunctionManager()
+
+        result = ifm.units_for_layer(
+            subcategory='flood', layer_type='raster', data_type='numeric')
+        expected_result = self.flood_OSM_building_hazard_units
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert result == expected_result, msg
+
+        result = ifm.units_for_layer(
+            subcategory='volcano', layer_type='raster', data_type='numeric')
+        expected_result = []
+        msg = 'I expect ' + str(expected_result) + ' but I got ' + \
+              str(result)
+        assert result == expected_result, msg
+
+        result = ifm.units_for_layer(
+            subcategory='population', layer_type='raster', data_type='numeric')
+        expected_result = [
+            {
+                'id': 'people_per_pixel',
                 'constraint': 'continuous'
             }
         ]

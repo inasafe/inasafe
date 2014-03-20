@@ -113,3 +113,55 @@ class ImpactFunctionManager:
                 .allowed_units(subcategory, data_type)
             result = add_to_list(result, my_allowed_units)
         return result
+
+    def units_for_layer(self, subcategory, layer_type, data_type):
+        """Get the valid units for a layer.
+
+        Example usage::
+
+            foo  = units_for_layer('flood', 'vector', 'polygon')
+            print foo
+
+        Would output this::
+
+            {'Wet/Dry': ['wet','dry']}
+
+        While passing a raster layer::
+
+            foo  = units_for_layer('flood', 'raster', None)
+            print foo
+
+        Might return this::
+
+            {
+                'metres': None,
+                'feet': None,
+                'wet/dry': ['wet', 'dry'],
+            }
+
+        In the returned dictionary the keys are unit types and
+        the values are the categories (if any) applicable for that unit type.
+
+        :param subcategory: The subcategory for this layer.
+        :type subcategory: str
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :returns: A dictionary as per the example above where each key
+            represents a unit and each value that is not None represents a
+            list of categories.
+
+        :rtype: dict
+        """
+        result = []
+        for impact_function in self.impact_functions:
+            my_units = impact_function.Metadata \
+                .units_for_layer(subcategory, layer_type, data_type)
+            result = add_to_list(result, my_units)
+        return result
