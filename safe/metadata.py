@@ -22,7 +22,7 @@ from PyQt4.QtGui import QApplication
 # Please group them and sort them alphabetical
 
 # constants
-small_number = 2 ** -143  # I think this is small enough
+small_number = 2 ** -53  # I think this is small enough
 
 # categories
 hazard_name = QApplication.translate(

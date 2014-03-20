@@ -26,6 +26,8 @@ from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 # from third_party.odict import OrderedDict
+from safe.api import ImpactFunctionManager as IFM
+from safe import metadata
 
 from safe_qgis.safe_interface import InaSAFEError
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
@@ -83,28 +85,28 @@ category_question = QApplication.translate(
     'keywords to your layer: <b>%s</b>. First you need to define '
     'the category of your layer.')   # (layer name)
 
-hazard_name = 'Hazard'
-hazard_text = QApplication.translate(
-    'safe_metadata',
-    'A <b>hazard</b> layer represents '
-    'something that will impact on the people or infrastructure '
-    'in an area. For example; flood, earthquake, tsunami and  '
-    'volcano are all examples of hazards.')
+#hazard_name = 'Hazard'
+#hazard_text = QApplication.translate(
+    #'safe_metadata',
+    #'A <b>hazard</b> layer represents '
+    #'something that will impact on the people or infrastructure '
+    #'in an area. For example; flood, earthquake, tsunami and  '
+    #'volcano are all examples of hazards.')
 
-exposure_name = 'Exposure'
-exposure_text = QApplication.translate(
-    'safe_metadata',
-    'An <b>exposure</b> layer represents '
-    'people, property or infrastructure that may be affected '
-    'in the event of a flood, earthquake, volcano etc.')
+#exposure_name = 'Exposure'
+#exposure_text = QApplication.translate(
+    #'safe_metadata',
+    #'An <b>exposure</b> layer represents '
+    #'people, property or infrastructure that may be affected '
+    #'in the event of a flood, earthquake, volcano etc.')
 
-aggregation_name = 'Aggregation'
-aggregation_text = QApplication.translate(
-    'safe_metadata',
-    'An <b>aggregation</b> layer represents '
-    'regions you can use to summarise the results by. For '
-    'example, we might summarise the affected people after'
-    'a flood according to city districts.')
+#aggregation_name = 'Aggregation'
+#aggregation_text = QApplication.translate(
+    #'safe_metadata',
+    #'An <b>aggregation</b> layer represents '
+    #'regions you can use to summarise the results by. For '
+    #'example, we might summarise the affected people after'
+    #'a flood according to city districts.')
 
 # constants for hazards
 hazard_question = QApplication.translate(
@@ -116,41 +118,41 @@ hazard_question = QApplication.translate(
     'able to use this hazard layer with impact functions such '
     'as <b>flood impact on population</b>.')
 
-flood_name = 'Flood'
-flood_text = QApplication.translate(
-    'safe_metadata',
-    'A <b>flood</b> describes the inundation of land that is '
-    'normally dry by a large amount of water. '
-    'For example: A <b>flood</b> can occur after heavy rainfall, '
-    'when a river overflows its banks or when a dam breaks. '
-    'The effect of a <b>flood</b> is for land that is normally dry '
-    'to become wet.')
-tsunami_name = 'Tsunami'
-tsunami_text = QApplication.translate(
-    'safe_metadata',
-    'A <b>tsunami</b> describes a large ocean wave or series or '
-    'waves usually caused by an under water earthquake or volcano.'
-    'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
-    'wave that strikes land may cause massive destruction and '
-    'flooding.')
-earthquake_name = 'Earthquake'
-earthquake_text = QApplication.translate(
-    'safe_metadata',
-    'An <b>earthquake</b> describes the sudden violent shaking of the '
-    'ground that occurs as a result of volcanic activity or movement '
-    'in the earth\'s crust.')
-tephra_name = 'Tephra'
-tephra_text = QApplication.translate(
-    'safe_metadata',
-    '<b>Tephra</b> describes the material, such as rock fragments and '
-    'ash particles ejected by a volcanic eruption.')
-volcano_name = 'Volcano'
-volcano_text = QApplication.translate(
-    'safe_metadata',
-    'A <b>volcano</b> describes a mountain which has a vent through '
-    'which rock fragments, ash, lava, steam and gases can be ejected '
-    'from below the earth\'s surface. The type of material '
-    'ejected depends on the type of <b>volcano</b>.')
+#flood_name = 'Flood'
+#flood_text = QApplication.translate(
+    #'safe_metadata',
+    #'A <b>flood</b> describes the inundation of land that is '
+    #'normally dry by a large amount of water. '
+    #'For example: A <b>flood</b> can occur after heavy rainfall, '
+    #'when a river overflows its banks or when a dam breaks. '
+    #'The effect of a <b>flood</b> is for land that is normally dry '
+    #'to become wet.')
+#tsunami_name = 'Tsunami'
+#tsunami_text = QApplication.translate(
+    #'safe_metadata',
+    #'A <b>tsunami</b> describes a large ocean wave or series or '
+    #'waves usually caused by an under water earthquake or volcano.'
+    #'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
+    #'wave that strikes land may cause massive destruction and '
+    #'flooding.')
+#earthquake_name = 'Earthquake'
+#earthquake_text = QApplication.translate(
+    #'safe_metadata',
+    #'An <b>earthquake</b> describes the sudden violent shaking of the '
+    #'ground that occurs as a result of volcanic activity or movement '
+    #'in the earth\'s crust.')
+#tephra_name = 'Tephra'
+#tephra_text = QApplication.translate(
+    #'safe_metadata',
+    #'<b>Tephra</b> describes the material, such as rock fragments and '
+    #'ash particles ejected by a volcanic eruption.')
+#volcano_name = 'Volcano'
+#volcano_text = QApplication.translate(
+    #'safe_metadata',
+    #'A <b>volcano</b> describes a mountain which has a vent through '
+    #'which rock fragments, ash, lava, steam and gases can be ejected '
+    #'from below the earth\'s surface. The type of material '
+    #'ejected depends on the type of <b>volcano</b>.')
 
 # constants for exposures
 exposure_question = QApplication.translate(
@@ -162,23 +164,23 @@ exposure_question = QApplication.translate(
     'able to use this exposure layer with impact functions such '
     'as <b>flood impact on population</b>.')
 
-population_name = 'Population'
-population_text = QApplication.translate(
-    'safe_metadata',
-    'The <b>population</b> describes the people that might be '
-    'exposed to a particular hazard.')
-structure_name = 'Structure'
-structure_text = QApplication.translate(
-    'safe_metadata',
-    'A <b>structure</b> can be any relatively permanent man '
-    'made feature such as a building (an enclosed structure '
-    'with walls and a roof) or a telecommunications facility or a '
-    'bridge.')
-road_name = 'Road'
-road_text = QApplication.translate(
-    'safe_metadata',
-    'A <b>road</b> is a defined route used by a vehicle or people to '
-    'travel between two or more points.')
+#population_name = 'Population'
+#population_text = QApplication.translate(
+    #'safe_metadata',
+    #'The <b>population</b> describes the people that might be '
+    #'exposed to a particular hazard.')
+#structure_name = 'Structure'
+#structure_text = QApplication.translate(
+    #'safe_metadata',
+    #'A <b>structure</b> can be any relatively permanent man '
+    #'made feature such as a building (an enclosed structure '
+    #'with walls and a roof) or a telecommunications facility or a '
+    #'bridge.')
+#road_name = 'Road'
+#road_text = QApplication.translate(
+    #'safe_metadata',
+    #'A <b>road</b> is a defined route used by a vehicle or people to '
+    #'travel between two or more points.')
 
 # constants for units
 unit_question = QApplication.translate(
@@ -191,48 +193,48 @@ unit_question = QApplication.translate(
     'area, while ares with no polygon coverage would be assumed '
     'to be dry.')   # (subcategory, category)
 
-depth_metres_name = 'Metres'
-depth_metres_text = QApplication.translate(
-    'safe_metadata',
-    '<b>metres</b> are a metric unit of measure. There are 100 '
-    'centimetres in 1 metre. In this case <b>metres</b> are used to '
-    'describe the water depth.')
-depth_feet_name = 'Feet'
-depth_feet_text = QApplication.translate(
-    'safe_metadata',
-    '<b>Feet</b> are an imperial unit of measure. There are 12 '
-    'inches in 1 foot and 3 feet in 1 yard. '
-    'In this case <b>feet</b> are used to describe the water depth.')
-wetdry_name = 'Wet/Dry'
-wetdry_text = QApplication.translate(
-    'safe_metadata',
-    'This is a binary description for an area. The area is either '
-    '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
-    'by flood water). This unit does not describe how <b>wet</b> or '
-    '<b>dry</b> an area is.')
-mmi_text = QApplication.translate(
-    'safe_metadata',
-    'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
-    'the intensity of ground shaking from a earthquake based on the '
-    'effects observed by people at the surface.')
-notset_text = QApplication.translate(
-    'safe_metadata',
-    '<b>Not Set</b> is the default setting for when no units are '
-    'selected.')
-kgm2_text = QApplication.translate(
-    'safe_metadata',
-    '<b>Kilograms per square metre</b> describes the weight in '
-    'kilograms by area in square metres.')
-count_text = QApplication.translate(
-    'safe_metadata',
-    '<b>Count</b> is the number of features.')
-density_text = QApplication.translate(
-    'safe_metadata',
-    '<b>Density</b> is the number of features within a defined '
-    'area. For example <b>population density</b> might be measured '
-    'as the number of people per square kilometre.')
-road_type_name = 'Road Type'
-road_type_text = 'Road type depends on its surface, width and purpose.'
+#depth_metres_name = 'Metres'
+#depth_metres_text = QApplication.translate(
+    #'safe_metadata',
+    #'<b>metres</b> are a metric unit of measure. There are 100 '
+    #'centimetres in 1 metre. In this case <b>metres</b> are used to '
+    #'describe the water depth.')
+#depth_feet_name = 'Feet'
+#depth_feet_text = QApplication.translate(
+    #'safe_metadata',
+    #'<b>Feet</b> are an imperial unit of measure. There are 12 '
+    #'inches in 1 foot and 3 feet in 1 yard. '
+    #'In this case <b>feet</b> are used to describe the water depth.')
+#wetdry_name = 'Wet/Dry'
+#wetdry_text = QApplication.translate(
+    #'safe_metadata',
+    #'This is a binary description for an area. The area is either '
+    #'<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
+    #'by flood water). This unit does not describe how <b>wet</b> or '
+    #'<b>dry</b> an area is.')
+#mmi_text = QApplication.translate(
+    #'safe_metadata',
+    #'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
+    #'the intensity of ground shaking from a earthquake based on the '
+    #'effects observed by people at the surface.')
+#notset_text = QApplication.translate(
+    #'safe_metadata',
+    #'<b>Not Set</b> is the default setting for when no units are '
+    #'selected.')
+#kgm2_text = QApplication.translate(
+    #'safe_metadata',
+    #'<b>Kilograms per square metre</b> describes the weight in '
+    #'kilograms by area in square metres.')
+#count_text = QApplication.translate(
+    #'safe_metadata',
+    #'<b>Count</b> is the number of features.')
+#density_text = QApplication.translate(
+    #'safe_metadata',
+    #'<b>Density</b> is the number of features within a defined '
+    #'area. For example <b>population density</b> might be measured '
+    #'as the number of people per square kilometre.')
+#road_type_name = 'Road Type'
+#road_type_text = 'Road type depends on its surface, width and purpose.'
 
 
 flood_metres_question = 'flood depth in meters'
@@ -275,65 +277,6 @@ classify_question = QApplication.translate(
     'can see all unique values found in that column. Please drag them '
     'to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, unit, field)
-
-
-# A TEMPORARY CLASS UNTIL THE REAL API IS READY
-class FakeAPI():
-    def categories_for_layer(self, layer_type, data_type):
-        return ['hazard', 'exposure', 'aggregation']
-
-    def subcategories_for_layer(self, layer_type, data_type, category):
-        if category == 'hazard':
-            return ['flood', 'tsunami', 'earthquake', 'tephra', 'volcano']
-        elif category == 'exposure':
-            return ['population', 'structure', 'road']
-        else:
-            return []
-
-    def units_for_layer(self, layer_type, data_type, subcategory):
-        return[
-        # First kind of unit
-        {
-            'id': 'wetdry',
-            'constraint': 'categorical',
-            'default_category': 'wet',
-            'classes': [
-                {
-                    'name': 'wet',
-                    'description': 'Water above ground height.',
-                    'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-                    'numeric_default_min': 1,
-                    'numeric_default_max': 9999999999,
-                    'optional': True
-                },
-                {
-                    'name': 'dry',
-                    'description': 'No water above ground height.',
-                    'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-                    'numeric_default_min': 0,
-                    'numeric_default_max': 0.9999999999,
-                    'optional': True
-                }
-            ]
-        },
-        # Second kind of unit
-        {
-            'id': 'depth_metres',
-            'constraint': 'continuous',
-            'default_attribute': 'depth'  # applies to vector only
-        },
-        {
-            'id': 'depth_feet',
-            'constraint': 'continuous',
-            'default_attribute': 'depth'  # applies to vector only
-        },
-        # Third kind of unit
-        {
-            'id': 'road_type',
-            'constraint': 'unique values',
-            'default_attribute': 'type'  # only applies to vector
-        }
-        ]
 
 #
 #
@@ -404,16 +347,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             self.data_type = None
 
-        self.kw_api = FakeAPI()
-
         # Set widgets on the first tab
         self.lblSelectCategory.setText(
             category_question % self.layer.name())
 
-        for category in self.kw_api.categories_for_layer(
+        for category in IFM().categories_for_layer(
                 self.layer_type, self.data_type):
-            item = QListWidgetItem(text('%s_name' % category),
-                                        self.lstCategories)
+            item = QListWidgetItem(text('metadata.%s_name' % category),
+                                   self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category)
             self.lstCategories.addItem(item)
         self.lblDescribeCategory.setText('')
@@ -526,7 +467,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return
 
         # Set description label
-        self.lblDescribeCategory.setText(text('%s_text' % category))
+        self.lblDescribeCategory.setText(text('metadata.%s_text' % category))
         self.lblIconCategory.setPixmap(
             QPixmap(':/plugins/inasafe/keyword-category-%s.svg'
                     % (category or 'notset')))
@@ -540,13 +481,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.lstUnits.clear()
 
+        category = self.selected_category()
         subcategory = self.selected_subcategory()
         # Exit if no selection
         if not subcategory:
             return
 
         # Set description label
-        self.lblDescribeSubcategory.setText(text('%s_text' % subcategory))
+        self.lblDescribeSubcategory.setText(
+            text('metadata.%s_%s_text' % (category, subcategory)))
         self.lblIconSubcategory.setPixmap(QPixmap(
             ':/plugins/inasafe/keyword-subcategory-%s.svg'
             % (subcategory or 'notset')))
@@ -560,11 +503,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.lstFields.clear()
 
-        unit = self.selected_unit()
+        unit = self.selected_unit_details()
         # Exit if no selection
         if not unit:
             return
-        self.lblDescribeUnit.setText(text('%s_text' % unit))
+        self.lblDescribeUnit.setText(unit['description'])
 
         # Enable the next button
         self.pbnNext.setEnabled(True)
@@ -610,9 +553,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeSubcategory.setText('')
         self.lblIconSubcategory.setPixmap(QPixmap())
         self.lblSelectSubcategory.setText(text('%s_question' % category))
-        for i in self.kw_api.subcategories_for_layer(
-                self.layer_type, self.data_type, category):
-            item = QListWidgetItem(text('%s_name' % i), self.lstSubcategories)
+        for i in IFM().subcategories_for_layer(
+                category, self.layer_type, self.data_type):
+            item = QListWidgetItem(text(
+                'metadata.%s_%s_name' % (category, i)), self.lstSubcategories)
             item.setData(QtCore.Qt.UserRole, i)
             self.lstSubcategories.addItem(item)
 
@@ -626,9 +570,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         self.lstFields.clear()
-        for i in self.kw_api.units_for_layer(
-                self.layer_type, self.data_type, subcategory):
-            item = QListWidgetItem(text('%s_name' % i['id']), self.lstUnits)
+        for i in IFM().units_for_layer(
+                subcategory, self.layer_type, self.data_type):
+            item = QListWidgetItem(i['name'], self.lstUnits)
             item.setData(QtCore.Qt.UserRole, i['id'])
             item.setData(QtCore.Qt.UserRole+1, unicode(i))
             self.lstUnits.addItem(item)
@@ -657,20 +601,27 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # unique values, continuous or categorical data
             question_text = field_question_values % (category,
                                                      subcategory,
-                                                     unit,
+                                                     unit_details['name'],
                                                      next_question)
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
+        default_item = None
 
         for field in self.layer.dataProvider().fields():
             field_name = field.name()
             item = QListWidgetItem(field_name, self.lstFields)
             item.setData(QtCore.Qt.UserRole, field_name)
+            # Select the item if it match the unit's default_attribute
+            if 'default_attribute' in unit_details \
+                    and field_name == unit_details['default_attribute']:
+                default_item = item
+            # For continuous data, gray out id, gid, fid and text fields
             if unit_details and unit_details['constraint'] == 'continuous':
-                # For continuous data, gray out id, gid, fid and text fields
                 field_type = field.type()
                 if field_type > 9 or re.match('.{0,2}id$', field_name, re.I):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+        if default_item:
+            self.lstFields.setCurrentItem(default_item)
         self.lblDescribeField.clear()
 
     def update_classify_tab(self):
@@ -686,7 +637,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         field_type = self.layer.dataProvider().fields()[field_idx].type()
         self.lblClassify.setText(classify_question %
                                 (subcategory, category,
-                                 unit_details['id'], field.upper()))
+                                 unit_details['name'], field.upper()))
 
         # Assign unique values to classes
         unassigned_values = list()
@@ -827,15 +778,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         if current_step == step_category:
             category = self.selected_category()
-            if self.kw_api.subcategories_for_layer(
-                    self.layer_type, self.data_type, category):
+            if IFM().subcategories_for_layer(
+                    category, self.layer_type, self.data_type):
                 new_step = step_subcategory
             else:
                 new_step = step_field
         elif current_step == step_subcategory:
             subcategory = self.selected_subcategory()
-            if self.kw_api.units_for_layer(
-                    self.layer_type, self.data_type, subcategory):
+            if IFM().units_for_layer(
+                    subcategory, self.layer_type, self.data_type):
                 new_step = step_unit
             else:
                 new_step = step_field
