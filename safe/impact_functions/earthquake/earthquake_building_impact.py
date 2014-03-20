@@ -2,7 +2,6 @@
 """Earthquake Impact Function on Building."""
 import logging
 
-from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -69,8 +68,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         'subcategory': 'earthquake',
                         'units': [
                             {
-                                'name': metadata.mmi_name,
-                                'description': metadata.mmi_text,
+                                'id': 'mmi',
                                 'constraint': 'continuous',
                                 'default_attribute': 'depth'
                             }
@@ -90,8 +88,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         'subcategory': 'structure',
                         'units': [
                             {
-                                'name': metadata.building_type_name,
-                                'description': metadata.building_type_text,
+                                'id': 'building_type',
                                 'constraint': 'unique values',
                                 'default_attribute': 'type'
                             }

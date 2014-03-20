@@ -1,7 +1,6 @@
 # coding=utf-8
 """Flood Evacuation Impact Function."""
 import numpy
-from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -77,14 +76,12 @@ class FloodEvacuationFunction(FunctionProvider):
 
             hazard_units = [
                 {
-                    'name': metadata.depth_metres_name,
-                    'description': metadata.depth_metres_text,
+                    'id': 'metres',
                     'constraint': 'continuous',
                     'default_attribute': 'depth'  # applies to vector only
                 },
                 {
-                    'name': metadata.depth_feet_name,
-                    'description': metadata.depth_feet_text,
+                    'id': 'feet',
                     'constraint': 'continuous',
                     'default_attribute': 'depth'  # applies to vector only
                 }
@@ -112,8 +109,7 @@ class FloodEvacuationFunction(FunctionProvider):
                         'subcategory': 'population',
                         'units': [
                             {
-                                'name': metadata.people_per_pixel_name,
-                                'description': metadata.people_per_pixel_text,
+                                'id': 'people_per_pixel',
                                 'constraint': 'continuous'
                             }
                         ],

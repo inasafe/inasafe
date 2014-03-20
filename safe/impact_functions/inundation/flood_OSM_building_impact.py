@@ -10,9 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe import metadata
-from safe.common.utilities import OrderedDict
 
+from safe.metadata import small_number
+from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
@@ -75,8 +75,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
             hazard_units = [
                 {
-                    'name': metadata.wetdry_name,
-                    'description': metadata.wetdry_text,
+                    'id': 'wetdry',
                     'constraint': 'categorical',
                     'default_attribute': 'affected',
                     'default_category': 'wet',
@@ -94,20 +93,18 @@ class FloodBuildingImpactFunction(FunctionProvider):
                             'description': 'No water above ground height.',
                             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
                             'numeric_default_min': 0,
-                            'numeric_default_max': 1 - metadata.small_number,
+                            'numeric_default_max': 1 - small_number,
                             'optional': True
                         }
                     ]
                 },
                 {
-                    'name': metadata.depth_metres_name,
-                    'description': metadata.depth_metres_text,
+                    'id': 'metres',
                     'constraint': 'continuous',
                     'default_attribute': 'depth'  # applies to vector only
                 },
                 {
-                    'name': metadata.depth_feet_name,
-                    'description': metadata.depth_feet_text,
+                    'id': 'feet',
                     'constraint': 'continuous',
                     'default_attribute': 'depth'  # applies to vector only
                 }
@@ -139,8 +136,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         'subcategory': 'structure',
                         'units': [
                             {
-                                'name': metadata.building_type_name,
-                                'description': metadata.building_type_text,
+                                'id': 'building_type',
                                 'constraint': 'unique values',
                                 'default_attribute': 'type'
                             }

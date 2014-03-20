@@ -1,6 +1,5 @@
 import math
 import numpy
-from safe import metadata
 from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
@@ -73,8 +72,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
                         'subcategory': 'earthquake',
                         'units': [
                             {
-                                'name': metadata.mmi_name,
-                                'description': metadata.mmi_text,
+                                'id': 'mmi',
                                 'constraint': 'continuous'
                             }
                         ],
@@ -89,8 +87,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
                         'subcategory': 'population',
                         'units': [
                             {
-                                'name': metadata.people_per_pixel_name,
-                                'description': metadata.people_per_pixel_text,
+                                'id': 'people_per_pixel',
                                 'constraint': 'continuous'
                             }
                         ],

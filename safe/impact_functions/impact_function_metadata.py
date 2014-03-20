@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import json
 from exceptions import NotImplementedError
-
+from safe.impact_functions.utilities import add_to_list
 
 class ImpactFunctionMetadata():
     """Abstract metadata class for an impact function.
@@ -44,23 +44,7 @@ class ImpactFunctionMetadata():
 
     def __init__(self):
         """Constructor"""
-    pass
-
-    @staticmethod
-    def add_to_list(my_list, my_element):
-        """Helper function to add new my_element to my_list based on its type
-        . Add as new element if it's not a list, otherwise extend to the list
-        if it's a list.
-        It's also guarantee that all elements are unique
-        """
-        if type(my_element) is list:
-            for element in my_element:
-                my_list = ImpactFunctionMetadata.add_to_list(my_list, element)
-        else:
-            if my_element not in my_list:
-                my_list.append(my_element)
-
-        return my_list
+        pass
 
     @staticmethod
     def is_subset(my_element, my_bigger_element):
@@ -126,14 +110,15 @@ class ImpactFunctionMetadata():
         :returns: A list of strings is returned.
         :rtype: list
         """
-        result = list()
+        result = []
         if category is None:
             return cls.allowed_subcategories('exposure') + cls\
                 .allowed_subcategories('hazard')
-        metadata_dict = cls.get_metadata()
-        categories = metadata_dict['categories']
-        result = cls.add_to_list(result, categories[category]['subcategory'])
-        return result
+        else:
+            metadata_dict = cls.get_metadata()
+            categories = metadata_dict['categories']
+            result = add_to_list(result, categories[category]['subcategory'])
+            return result
 
     @classmethod
     def allowed_data_types(cls, subcategory):
@@ -172,16 +157,19 @@ class ImpactFunctionMetadata():
 
             layer_constraints = categories['exposure']['layer_constraints']
             for layer_constraint in layer_constraints:
-                result = cls.add_to_list(result, layer_constraint['data_type'])
+                result = add_to_list(result, layer_constraint['data_type'])
         elif subcategory in cls.allowed_subcategories(
                 'hazard'):
             # implementation logic that returns the allowed data_types for
             # hazard layer with subcategory as passed in to this method
             layer_constraints = categories['hazard']['layer_constraints']
             for layer_constraint in layer_constraints:
-                result = cls.add_to_list(result, layer_constraint['data_type'])
+                result = add_to_list(result, layer_constraint['data_type'])
         else:
-            raise Exception('Invalid subcategory.')
+            # raise Exception('Invalid subcategory.')
+            # TODO (ismailsunni): create custom exception to catch since it
+            # will called by all impact function
+            pass
 
         return result
 
@@ -223,13 +211,210 @@ class ImpactFunctionMetadata():
             # implementation logic that returns the allowed data_types for
             # exposure layer with subcategory as passed in to this method
 
-            result = cls.add_to_list(result, categories['exposure']['units'])
+            result = add_to_list(result, categories['exposure']['units'])
         elif subcategory in cls.allowed_subcategories(
                 'hazard'):
             # implementation logic that returns the allowed data_types for
             # hazard layer with subcategory as passed in to this method
-            result = cls.add_to_list(result, categories['hazard']['units'])
+            result = add_to_list(result, categories['hazard']['units'])
         else:
-            raise Exception('Invalid subcategory.')
+            # raise Exception('Invalid subcategory.')
+            # TODO (ismailsunni): create custom exception to catch since it
+            # will called by all impact function
+            pass
 
         return result
+
+    @classmethod
+    def is_disabled(cls):
+        """Return True if the metadata disabled value is True. Usually is
+        used for checking whether a impact function is disabled or not. If
+        there is not disabled keyword in the metadata, return False. If there
+        is not Metadata inner class in the function, return True
+
+        :returns: True or False based on the metadata_dict
+        :rtype: bool
+        """
+        try:
+            metadata_dict = cls.get_metadata()
+            return metadata_dict.get('disabled', False)
+        except AttributeError:
+            return True
+
+    @classmethod
+    def allowed_layer_constraints(cls, category=None):
+        """Get the list of allowed layer_constraints for a category as a
+        dictionary
+
+        Example usage::
+
+            foo = IF()
+            meta = IF.metadata
+            ubar = meta.allowed_layer_constraints('exposure')
+            ubar
+            >  [
+                {
+                    'layer_type': 'vector',
+                    'data_type': 'polygon'
+                },
+                {
+                    'layer_type': 'raster',
+                    'data_type': 'numeric'
+                }
+            ]
+
+        :param category: Optional category which will be used to subset the
+        allowed layer_constraints. If omitted, all supported layer_constraints
+        will be returned (for both hazard and exposure). Default is None.
+        :type category: str
+
+        :returns: A list of one or more dictionary is returned.
+        :rtype: list
+        """
+        result = []
+        if category is None:
+            result = add_to_list(result,
+                                 cls.allowed_layer_constraints('hazard'))
+            result = add_to_list(
+                result, cls.allowed_layer_constraints('exposure'))
+            return result
+
+        else:
+            metadata_dict = cls.get_metadata()
+            categories = metadata_dict['categories']
+            return categories[category]['layer_constraints']
+
+    @classmethod
+    def units_for_layer(cls, subcategory, layer_type, data_type):
+        """Get the valid units for a layer.
+
+        Example usage::
+
+            foo  = units_for_layer('flood', 'vector', 'polygon')
+            print foo
+
+        Would output this::
+
+            {'Wet/Dry': ['wet','dry']}
+
+        While passing a raster layer::
+
+            foo  = units_for_layer('flood', 'raster', None)
+            print foo
+
+        Might return this::
+
+            {
+                'metres': None,
+                'feet': None,
+                'wet/dry': ['wet', 'dry'],
+            }
+
+        In the returned dictionary the keys are unit types and
+        the values are the categories (if any) applicable for that unit type.
+
+        :param subcategory: The subcategory for this layer.
+        :type subcategory: str
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :returns: A dictionary as per the example above where each key
+            represents a unit and each value that is not None represents a
+            list of categories.
+
+        :rtype: dict
+        """
+        layer_constraints = {
+            'layer_type': layer_type,
+            'data_type': data_type
+        }
+        category = None
+        if subcategory in cls.allowed_subcategories('hazard'):
+            category = 'hazard'
+        elif subcategory in cls.allowed_subcategories('exposure'):
+            category = 'exposure'
+        else:
+            return []
+
+        if layer_constraints in cls.allowed_layer_constraints(category):
+            # Simply, I want to use the functions :)
+            return cls.allowed_units(subcategory, data_type)
+        else:
+            return []
+
+    @classmethod
+    def categories_for_layer(cls, layer_type, data_type):
+        """Return a list of valid categories for a layer.
+
+        This method is used to determine if a given layer can be used as a
+        hazard, exposure or aggregation layer.
+
+        In the returned the values are categories (if any) applicable for that
+        layer_type and data_type.
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :returns: A list as per the example above where each value represents
+            a valid category.
+
+        :rtype: list
+        """
+        layer_constraints = {
+            'layer_type': layer_type,
+            'data_type': data_type
+        }
+        result = []
+        if layer_constraints in cls.allowed_layer_constraints('exposure'):
+            result = add_to_list(result, 'exposure')
+        if layer_constraints in cls.allowed_layer_constraints('hazard'):
+            result = add_to_list(result, 'hazard')
+        return result
+
+    @classmethod
+    def subcategories_for_layer(cls, layer_type, data_type, category):
+        """Return a list of valid subcategories for a layer.
+
+        This method is used to determine which subcategories a given layer
+        can be for.
+
+        In the returned the values are categories (if any) applicable for that
+        layer_type and data_type.
+
+        :param layer_type: The type for this layer. Valid values would be,
+            'raster' or 'vector'.
+        :type layer_type: str
+
+        :param data_type: The data_type for this layer. Valid possibilities
+            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+        :type data_type: str
+
+        :param category: The category for this layer. Valid possibilities
+            would be 'hazard', 'exposure' and 'aggregation'.
+        :type category: str
+
+
+        :returns: A list as per the example above where each value represents
+            a valid subcategory.
+
+        :rtype: list
+        """
+        layer_constraints = {
+            'layer_type': layer_type,
+            'data_type': data_type
+        }
+        if not layer_constraints in cls.allowed_layer_constraints(category):
+            return []
+        else:
+            return cls.allowed_subcategories(category)
