@@ -71,92 +71,92 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
            are inherited from the abstract base class.
            """
 
-    @staticmethod
-    def get_metadata():
-        """
-        Return metadata as a dictionary
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
 
-        This is a static method. You can use it to get the metadata in
-        dictionary format for an impact function.
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
 
-        :returns: A dictionary representing all the metadata for the
-            concrete impact function.
-        :rtype: dict
-        """
-        values = {
-            'id': 'FloodEvacuationFunctionVectorHazard',
-            'name': tr('Flood Evacuation Function Vector Hazard'),
-            'impact': tr('Need evacuation'),
-            'author': 'AIFDR',
-            'date_implemented': 'N/A',
-            'overview': tr(
-                'To assess the impacts of (flood or tsunami)inundation '
-                'in vector format on population.')
-        }
-
-        hazard_units = [
-            {
-                'id': 'wetdry',
-                'constraint': 'categorical',
-                'default_attribute': 'affected',
-                'default_category': 'wet',
-                'classes': [
-                    {
-                        'name': 'wet',
-                        'description': 'Water above ground height.',
-                        'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-                        'numeric_default_min':  1,
-                        'numeric_default_max': 9999999999,
-                        'optional': True,
-                        },
-                    {
-                        'name': 'dry',
-                        'description': 'No water above ground height.',
-                        'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-                        'numeric_default_min':  0,
-                        'numeric_default_max': 1 - small_number,
-                        'optional': True
-                    }
-                ]
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'FloodEvacuationFunctionVectorHazard',
+                'name': tr('Flood Evacuation Function Vector Hazard'),
+                'impact': tr('Need evacuation'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami)inundation '
+                    'in vector format on population.')
             }
-        ]
 
-        dict_meta = {
-            'id': values['id'],
-            'name': values['name'],
-            'impact': values['impact'],
-            'author': values['author'],
-            'date_implemented': values['date_implemented'],
-            'overview': values['overview'],
-            'categories': {
-                'hazard': {
-                    'subcategory': ['flood', 'tsunami'],
-                    'units': hazard_units,
-                    'layer_constraints': [
+            hazard_units = [
+                {
+                    'id': 'wetdry',
+                    'constraint': 'categorical',
+                    'default_attribute': 'affected',
+                    'default_category': 'wet',
+                    'classes': [
                         {
-                            'layer_type': 'vector',
-                            'data_type': 'polygon'
-                        }
-                    ]
-                },
-                'exposure': {
-                    'subcategory': 'population',
-                    'units': [
+                            'name': 'wet',
+                            'description': 'Water above ground height.',
+                            'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
+                            'numeric_default_min':  1,
+                            'numeric_default_max': 9999999999,
+                            'optional': True,
+                            },
                         {
-                            'id': 'people_per_pixel',
-                            'constraint': 'continuous'
-                        }
-                    ],
-                    'layer_constraints': [
-                        {
-                            'layer_type': 'raster',
-                            'data_type': 'numeric'
+                            'name': 'dry',
+                            'description': 'No water above ground height.',
+                            'string_defaults': ['dry', '0', 'No', 'n', 'no'],
+                            'numeric_default_min':  0,
+                            'numeric_default_max': 1 - small_number,
+                            'optional': True
                         }
                     ]
                 }
+            ]
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': ['flood', 'tsunami'],
+                        'units': hazard_units,
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            }
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': 'population',
+                        'units': [
+                            {
+                                'id': 'people_per_pixel',
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    }
+                }
             }
-        }
-        return dict_meta
+            return dict_meta
 
     title = tr('Need evacuation')
     # Function documentation
