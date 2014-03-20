@@ -64,13 +64,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_subcategories API
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata.\
-            allowed_subcategories()
-        expected_result = ['earthquake', 'structure']
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
-        self.assertEqual(set(result), set(expected_result), msg)
-
         result = my_impact_function.Metadata. \
             allowed_subcategories(category='hazard')
         expected_result = ['earthquake']
@@ -84,6 +77,13 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
+
+        result = my_impact_function.Metadata.\
+            allowed_subcategories()
+        expected_result = ['earthquake', 'structure']
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(set(result), set(expected_result), msg)
 
     def test_allowed_data_types(self):
         """Test for allowed_data_types API
@@ -177,6 +177,54 @@ class TestImpactFunctionMetadata(unittest.TestCase):
                 'id': 'feet',
                 'constraint': 'continuous',
                 'default_attribute': 'depth'  # applies to vector only
+            }
+        ]
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+    def test_allowed_layer_constraints(self):
+        """Test for allowed_layer_constraints API
+        """
+        my_impact_function = EarthquakeBuildingImpactFunction()
+        result = my_impact_function.Metadata. \
+            allowed_layer_constraints()
+        expected_result = [
+            {
+                'layer_type': 'vector',
+                'data_type': 'polygon'
+            },
+            {
+                'layer_type': 'raster',
+                'data_type': 'numeric'
+            }
+        ]
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+        result = my_impact_function.Metadata. \
+            allowed_layer_constraints('hazard')
+        expected_result = [
+            {
+                'layer_type': 'vector',
+                'data_type': 'polygon'
+            },
+            {
+                'layer_type': 'raster',
+                'data_type': 'numeric'
+            }
+        ]
+        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
+            result)
+        self.assertEqual(result, expected_result, msg)
+
+        result = my_impact_function.Metadata. \
+            allowed_layer_constraints('exposure')
+        expected_result = [
+            {
+                'layer_type': 'vector',
+                'data_type': 'polygon'
             }
         ]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(

@@ -110,14 +110,15 @@ class ImpactFunctionMetadata():
         :returns: A list of strings is returned.
         :rtype: list
         """
-        result = list()
+        result = []
         if category is None:
             return cls.allowed_subcategories('exposure') + cls\
                 .allowed_subcategories('hazard')
-        metadata_dict = cls.get_metadata()
-        categories = metadata_dict['categories']
-        result = add_to_list(result, categories[category]['subcategory'])
-        return result
+        else:
+            metadata_dict = cls.get_metadata()
+            categories = metadata_dict['categories']
+            result = add_to_list(result, categories[category]['subcategory'])
+            return result
 
     @classmethod
     def allowed_data_types(cls, subcategory):
@@ -239,3 +240,46 @@ class ImpactFunctionMetadata():
             return metadata_dict.get('disabled', False)
         except AttributeError:
             return True
+
+    @classmethod
+    def allowed_layer_constraints(cls, category=None):
+        """Get the list of allowed layer_constraints for a category as a
+        dictionary
+
+        Example usage::
+
+            foo = IF()
+            meta = IF.metadata
+            ubar = meta.allowed_layer_constraints('exposure')
+            ubar
+            >  [
+                {
+                    'layer_type': 'vector',
+                    'data_type': 'polygon'
+                },
+                {
+                    'layer_type': 'raster',
+                    'data_type': 'numeric'
+                }
+            ]
+
+        :param category: Optional category which will be used to subset the
+        allowed layer_constraints. If omitted, all supported layer_constraints
+        will be returned (for both hazard and exposure). Default is None.
+        :type category: str
+
+        :returns: A list of one or more dictionary is returned.
+        :rtype: list
+        """
+        result = []
+        if category is None:
+            result = add_to_list(result,
+                                 cls.allowed_layer_constraints('hazard'))
+            result = add_to_list(
+                result, cls.allowed_layer_constraints('exposure'))
+            return result
+
+        else:
+            metadata_dict = cls.get_metadata()
+            categories = metadata_dict['categories']
+            return categories[category]['layer_constraints']
