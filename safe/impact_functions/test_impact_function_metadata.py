@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe import metadata
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -61,8 +60,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         assert list_b == list_original
         # add new mutable element
         list_b = ImpactFunctionMetadata.add_to_list(list_a, 'c')
-        print list_b, 'b'
-        print list_a, 'a'
         assert len(list_b) == (len(list_original) + 1)
         assert list_b[-1] == 'c'
 
@@ -130,10 +127,9 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             .allowed_units('structure', 'polygon')
         expected_result = [
             {
-                'name': metadata.building_type_name,
-                'description': metadata.building_type_text,
+                'id': 'building_type',
                 'constraint': 'unique values',
-                'default': 'type'
+                'default_attribute': 'type'
             }
         ]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
