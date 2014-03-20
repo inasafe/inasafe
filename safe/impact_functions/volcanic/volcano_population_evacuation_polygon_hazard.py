@@ -143,21 +143,21 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                             }
                         ]
                     },
-                    },
-                'exposure': {
-                    'subcategory': 'population',
-                    'units': [
-                        {
-                            'id': 'people_per_pixel',
-                            'constraint': 'continuous'
-                        }
-                    ],
-                    'layer_constraints': [
-                        {
-                            'layer_type': 'raster',
-                            'data_type': 'numeric'
-                        }
-                    ]
+                    'exposure': {
+                        'subcategory': 'population',
+                        'units': [
+                            {
+                                'id': 'people_per_pixel',
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    }
                 }
             }
             return dict_meta

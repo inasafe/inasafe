@@ -132,22 +132,22 @@ class VolcanoBuildingImpact(FunctionProvider):
                             }
                         ]
                     },
-                },
-                'exposure': {
-                    'subcategory': 'structure',
-                    'units': [
-                        {
-                            'id': 'building_type',
-                            'constraint': 'unique values',
-                            'default_attribute': 'type'
-                        }
-                    ],
-                    'layer_constraints': [
-                        {
-                            'layer_type': 'vector',
-                            'data_type': 'polygon'
-                        }
-                    ]
+                    'exposure': {
+                        'subcategory': 'structure',
+                        'units': [
+                            {
+                                'id': 'building_type',
+                                'constraint': 'unique values',
+                                'default_attribute': 'type'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'vector',
+                                'data_type': 'polygon'
+                            }
+                        ]
+                    }
                 }
             }
             return dict_meta
