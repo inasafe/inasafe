@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Import Dialog Test Cases.**
@@ -26,15 +27,15 @@ import os
 import tempfile
 import shutil
 
-from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
-from PyQt4.QtGui import (QDialog)
-from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
+#noinspection PyPackageRequirements
+from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant, QByteArray
+#noinspection PyPackageRequirements
+from PyQt4.QtGui import QDialog
+#noinspection PyPackageRequirements
+from PyQt4.QtNetwork import QNetworkReply
 
 from safe.common.testing import get_qgis_app
 from safe_qgis.tools.osm_downloader import OsmDownloader
-from safe_qgis.utilities.utilities import download_url
-from safe_qgis.utilities.utilities_for_testing import (
-    assert_hash_for_file)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
@@ -51,6 +52,7 @@ class MockQNetworkReply(QObject):
     :type parent:
     """
     readyRead = pyqtSignal()
+    finished = pyqtSignal()
     downloadProgress = pyqtSignal('qint64', 'qint64')
 
     def __init__(self, parent=None):
@@ -67,13 +69,27 @@ class MockQNetworkReply(QObject):
         self.readyRead.emit()
         # noinspection PyUnresolvedReferences
         self.downloadProgress.emit(self.progress, 4)
-        return self.progress >= 4
+        if self.progress >= 4:
+            #noinspection PyUnresolvedReferences
+            self.finished.emit()
+            return True
+        else:
+            return False
 
     #noinspection PyDocstring,PyPep8Naming
     def readAll(self):
-        myContent = self.content
+        content = self.content
         self.content = ""
-        return myContent
+        return content
+
+    #noinspection PyDocstring,PyPep8Naming
+    def read(self, size):
+        content = self.content
+        self.content = ""
+        # content = string while the input parameter size in QByteArray
+        data = QByteArray(content)
+        data.chop(data.size() - size)
+        return str(data)
 
     #noinspection PyDocstring,PyPep8Naming
     def url(self):
@@ -84,8 +100,13 @@ class MockQNetworkReply(QObject):
         return QNetworkReply.NoError
 
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    def size(self):
+        data = QByteArray(self.content)
+        return data.size()
+
+    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
-    def attribute(self, theAttribute):
+    def attribute(self):
         return QVariant()
         # pylint: enable=W0613
 
@@ -95,49 +116,49 @@ class FakeQNetworkAccessManager:
     """Mock network manager for testing."""
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
-    def post(self, theRequest, theData=None):
+    def post(self, request_url, data=None):
         """Mock handler for post requests.
-        :param theRequest: Requested url.
-        :param theData: Payload data (ignored).
+        :param request_url: Requested url.
+        :param data: Payload data (ignored).
         """
-        _ = theData  # ignored
-        return self.request(theRequest)
+        _ = data  # ignored
+        return self.request(request_url)
 
     # pylint: enable=W0613
 
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
-    def get(self, theRequest):
+    def get(self, request_url):
         """Mock handler for a get request.
-        :param theRequest: Url being requested.
+        :param request_url: Url being requested.
         """
-        return self.request(theRequest)
+        return self.request(request_url)
 
     #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
-    def request(self, theRequest):
+    def request(self, request_url):
         """Mock handler for an http request.
-        :param theRequest: Url being requested.
+        :param request_url: Url being requested.
         """
-        myUrl = str(theRequest.url().toString())
-        myReply = MockQNetworkReply()
+        url = str(request_url.url().toString())
+        reply = MockQNetworkReply()
 
-        print myUrl
+        print url
 
-        if myUrl == 'http://hot-export.geofabrik.de/newjob':
-            myReply.content = read_all('test-importdlg-newjob.html')
-        elif myUrl == 'http://hot-export.geofabrik.de/wizard_area':
-            myReply.content = read_all('test-importdlg-wizardarea.html')
-        elif myUrl == 'http://hot-export.geofabrik.de/tagupload':
-            myReply.content = read_all('test-importdlg-job.html')
-            myReply._url = 'http://hot-export.geofabrik.de/jobs/1990'
-        elif myUrl == 'http://hot-export.geofabrik.de/jobs/1990':
-            myReply.content = read_all('test-importdlg-job.html')
-        elif myUrl == ('http://osm.linfiniti.com/buildings-shp?'
-                       'bbox=20.389938354492188,-34.10782492987083'
-                       ',20.712661743164062,'
-                       '-34.008273470938335&qgis_version=2&output_prefix='):
-            myReply.content = read_all("test-importdlg-extractzip.zip")
+        if url == 'http://hot-export.geofabrik.de/newjob':
+            reply.content = read_all('test-importdlg-newjob.html')
+        elif url == 'http://hot-export.geofabrik.de/wizard_area':
+            reply.content = read_all('test-importdlg-wizardarea.html')
+        elif url == 'http://hot-export.geofabrik.de/tagupload':
+            reply.content = read_all('test-importdlg-job.html')
+            reply._url = 'http://hot-export.geofabrik.de/jobs/1990'
+        elif url == 'http://hot-export.geofabrik.de/jobs/1990':
+            reply.content = read_all('test-importdlg-job.html')
+        elif url == ('http://osm.linfiniti.com/buildings-shp?'
+                     'bbox=20.389938354492188,-34.10782492987083'
+                     ',20.712661743164062,'
+                     '-34.008273470938335&qgis_version=2&output_prefix='):
+            reply.content = read_all("test-importdlg-extractzip.zip")
 
-        return myReply
+        return reply
 
 
 def read_all(path):
@@ -158,30 +179,13 @@ def read_all(path):
 class ImportDialogTest(unittest.TestCase):
     """Test Import Dialog widget
     """
+    #noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
         self.dialog = OsmDownloader(PARENT, IFACE)
 
         ## provide Fake QNetworkAccessManager for self.network_manager
         self.dialog.network_manager = FakeQNetworkAccessManager()
-
-    #noinspection PyMethodMayBeStatic
-    def test_download_url(self):
-        """Test we can download a zip. Uses a mock network stack."""
-        manager = QNetworkAccessManager(PARENT)
-
-        # NOTE(gigih):
-        # this is the hash of google front page.
-        # I think we can safely assume that the content
-        # of google.com never changes (probably).
-        # ...or not...changed on 5 Dec 2013 by Tim to hash below...
-        unique_hash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
-        url = 'http://google.com'
-        path = tempfile.mktemp()
-
-        download_url(manager, url, path)
-
-        assert_hash_for_file(unique_hash, path)
 
     def test_fetch_zip(self):
         """Test fetch zip method."""
