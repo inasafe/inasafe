@@ -305,8 +305,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata. \
-            subcategories_for_layer(layer_type='raster', data_type='numeric',
-                                    category='hazard')
+            subcategories_for_layer(category='hazard',
+                                    layer_type='raster', data_type='numeric')
         expected_result = ['earthquake']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
@@ -314,8 +314,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata. \
-            subcategories_for_layer(layer_type='vector', data_type='polygon',
-                                    category='exposure')
+            subcategories_for_layer(category='exposure',
+                                    layer_type='vector', data_type='polygon')
         expected_result = ['structure']
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)

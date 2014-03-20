@@ -383,7 +383,7 @@ class ImpactFunctionMetadata():
         return result
 
     @classmethod
-    def subcategories_for_layer(cls, layer_type, data_type, category):
+    def subcategories_for_layer(cls, category, layer_type, data_type):
         """Return a list of valid subcategories for a layer.
 
         This method is used to determine which subcategories a given layer
