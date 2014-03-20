@@ -44,25 +44,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         assert not ImpactFunctionMetadata.is_subset('a', 'ab')
         assert not ImpactFunctionMetadata.is_subset(['a', 'c'], ['a', 'b'])
 
-    def test_add_to_list(self):
-        """Test for add_to_list function
-        """
-        list_original = ['a', 'b', ['a'], {'a': 'b'}]
-        list_a = ['a', 'b', ['a'], {'a': 'b'}]
-        # add same immutable element
-        list_b = ImpactFunctionMetadata.add_to_list(list_a, 'b')
-        assert list_b == list_original
-        # add list
-        list_b = ImpactFunctionMetadata.add_to_list(list_a, ['a'])
-        assert list_b == list_original
-        # add same mutable element
-        list_b = ImpactFunctionMetadata.add_to_list(list_a, {'a': 'b'})
-        assert list_b == list_original
-        # add new mutable element
-        list_b = ImpactFunctionMetadata.add_to_list(list_a, 'c')
-        assert len(list_b) == (len(list_original) + 1)
-        assert list_b[-1] == 'c'
-
     def test_inner_class(self):
         """Test call inner class
         """

@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import json
 from exceptions import NotImplementedError
-
+from safe.impact_functions.utilities import add_to_list
 
 class ImpactFunctionMetadata():
     """Abstract metadata class for an impact function.
@@ -44,23 +44,7 @@ class ImpactFunctionMetadata():
 
     def __init__(self):
         """Constructor"""
-    pass
-
-    @staticmethod
-    def add_to_list(my_list, my_element):
-        """Helper function to add new my_element to my_list based on its type
-        . Add as new element if it's not a list, otherwise extend to the list
-        if it's a list.
-        It's also guarantee that all elements are unique
-        """
-        if type(my_element) is list:
-            for element in my_element:
-                my_list = ImpactFunctionMetadata.add_to_list(my_list, element)
-        else:
-            if my_element not in my_list:
-                my_list.append(my_element)
-
-        return my_list
+        pass
 
     @staticmethod
     def is_subset(my_element, my_bigger_element):
@@ -132,7 +116,7 @@ class ImpactFunctionMetadata():
                 .allowed_subcategories('hazard')
         metadata_dict = cls.get_metadata()
         categories = metadata_dict['categories']
-        result = cls.add_to_list(result, categories[category]['subcategory'])
+        result = add_to_list(result, categories[category]['subcategory'])
         return result
 
     @classmethod
@@ -172,14 +156,14 @@ class ImpactFunctionMetadata():
 
             layer_constraints = categories['exposure']['layer_constraints']
             for layer_constraint in layer_constraints:
-                result = cls.add_to_list(result, layer_constraint['data_type'])
+                result = add_to_list(result, layer_constraint['data_type'])
         elif subcategory in cls.allowed_subcategories(
                 'hazard'):
             # implementation logic that returns the allowed data_types for
             # hazard layer with subcategory as passed in to this method
             layer_constraints = categories['hazard']['layer_constraints']
             for layer_constraint in layer_constraints:
-                result = cls.add_to_list(result, layer_constraint['data_type'])
+                result = add_to_list(result, layer_constraint['data_type'])
         else:
             raise Exception('Invalid subcategory.')
 
@@ -223,13 +207,31 @@ class ImpactFunctionMetadata():
             # implementation logic that returns the allowed data_types for
             # exposure layer with subcategory as passed in to this method
 
-            result = cls.add_to_list(result, categories['exposure']['units'])
+            result = add_to_list(result, categories['exposure']['units'])
         elif subcategory in cls.allowed_subcategories(
                 'hazard'):
             # implementation logic that returns the allowed data_types for
             # hazard layer with subcategory as passed in to this method
-            result = cls.add_to_list(result, categories['hazard']['units'])
+            result = add_to_list(result, categories['hazard']['units'])
         else:
             raise Exception('Invalid subcategory.')
 
         return result
+
+    @classmethod
+    def is_disabled(cls):
+        """Return True if the metadata disabled value is True. Usually is
+        used for checking whether a impact function is disabled or not. If
+        there is not disabled keyword in the metadata, return False. If there
+        is not Metadata inner class in the function, return True
+
+        :returns: True or False based on the metadata_dict
+        :rtype: bool
+        """
+        try:
+            metadata_dict = cls.get_metadata()
+            return metadata_dict.get('disabled', False)
+        except AttributeError:
+            return True
+        except NotImplementedError, e:
+            print e, cls
