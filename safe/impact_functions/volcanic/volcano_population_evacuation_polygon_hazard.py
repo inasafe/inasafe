@@ -138,7 +138,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                 'data_type': 'polygon'
                             },
                             {
-                                'layer_type': 'polygon',
+                                'layer_type': 'vector',
                                 'data_type': 'point'
                             }
                         ]
