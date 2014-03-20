@@ -34,7 +34,6 @@ from unittest import TestCase, skipIf
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe.common.testing import TESTDATA, BOUNDDATA, get_qgis_app
 
 # Add PARENT directory to path to make test aware of other modules
@@ -1335,94 +1334,10 @@ Click for Diagnostic Information:
         message += ' when no aggregation layer is defined.'
         self.assertTrue(result, message)
 
-    def test_saveCurrentScenario(self):
-        """Test saving Current scenario
-        """
-        result, message = setup_scenario(
-            DOCK,
-            hazard='Flood in Jakarta',
-            exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
-
-        # create unique file
-        scenario_file = unique_filename(
-            prefix='scenarioTest', suffix='.txt', dir=temp_dir('test'))
-        DOCK.save_current_scenario(scenario_file_path=scenario_file)
-        with open(scenario_file) as f:
-            data = f.readlines()
-        title = data[0][:-1]
-        exposure = data[1][:-1]
-        hazard = data[2][:-1]
-        function = data[3][:-1]
-        extent = data[4][:-1]
-        self.assertTrue(
-            os.path.exists(scenario_file),
-            'File %s does not exist' % scenario_file)
-        self.assertTrue(title == '[Flood in Jakarta]', 'Title is not the same')
-        self.assertTrue(
-            exposure.startswith('exposure =') and exposure.endswith(
-                'Population_Jakarta_geographic.asc'),
-            'Exposure is not the same')
-        self.assertTrue(
-            hazard.startswith('hazard =') and hazard.endswith(
-                'jakarta_flood_category_123.asc'),
-            'Hazard is not the same')
-        self.assertTrue(
-            function == (
-                'function = Categorised Hazard Population Impact Function'),
-            'Impact function is not same')
-        expected_extent = (
-            'extent = 106.313333, -6.380000, 107.346667, -6.070000')
-        self.assertEqual(expected_extent, extent)
-
     def test_set_dock_title(self):
         """Test the dock title gets set properly."""
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
-
-    def test_scenario_layer_paths(self):
-        """Test we calculate the relative paths correctly when saving scenario.
-        """
-        result, message = setup_scenario(
-            DOCK,
-            hazard='Flood in Jakarta',
-            exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
-        self.assertTrue(result, message)
-        fake_dir = os.path.dirname(TESTDATA)
-        scenario_file = unique_filename(
-            prefix='scenarioTest', suffix='.txt', dir=fake_dir)
-        exposure_layer = str(DOCK.get_exposure_layer().publicSource())
-        hazard_layer = str(DOCK.get_hazard_layer().publicSource())
-
-        relative_exposure, relative_hazard = DOCK.scenario_layer_paths(
-            exposure_layer,
-            hazard_layer,
-            scenario_file)
-
-        if 'win32' in sys.platform:
-            # windows
-            self.assertEqual(
-                'test\\Population_Jakarta_geographic.asc',
-                relative_exposure)
-            self.assertEqual(
-                'hazard\\jakarta_flood_category_123.asc',
-                relative_hazard)
-
-        else:
-            self.assertEqual(
-                'test/Population_Jakarta_geographic.asc',
-                relative_exposure)
-            self.assertEqual(
-                'hazard/jakarta_flood_category_123.asc',
-                relative_hazard)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDock)

@@ -30,6 +30,77 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ITBFatalityFunction.Metadata):
+        """Metadata for PAG Fatality Function.
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'PAGFatalityFunction.',
+                'name': tr('PAG Fatality Function.'),
+                'impact': tr('Die or be displaced'),
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impact of earthquake on population based '
+                    'on earthquake model developed by ITB')
+            }
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': 'Helen Crowley',
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': 'earthquake',
+                        'units': [
+                            {
+                                'id': 'mmi',
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': 'population',
+                        'units': [
+                            {
+                                'id': 'people_per_pixel',
+                                'constraint': 'continuous'
+                            }
+                        ],
+                        'layer_constraints': [
+                            {
+                                'layer_type': 'raster',
+                                'data_type': 'numeric'
+                            }
+                        ]
+                    }
+                }
+            }
+            return dict_meta
     synopsis = tr('To assess the impact of earthquake on population based on '
                   'Population Vulnerability Model Pager')
     citations = \
