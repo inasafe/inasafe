@@ -11,6 +11,8 @@ from safe.impact_functions.core import (
     get_question,
     default_minimum_needs,
     evacuated_population_weekly_needs)
+from safe.metadata import hazard_earthquake, unit_mmi, layer_raster_numeric, \
+    exposure_population, unit_people_per_pixel
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -138,34 +140,14 @@ class ITBFatalityFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': 'earthquake',
-                        'units': [
-                            {
-                                'id': 'mmi',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': hazard_earthquake,
+                        'units': [unit_mmi],
+                        'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'subcategory': 'population',
-                        'units': [
-                            {
-                                'id': 'people_per_pixel',
-                                'constraint': 'continuous'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
-                        ]
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
                     }
                 }
             }

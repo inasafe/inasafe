@@ -11,7 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.metadata import small_number
+from safe.metadata import hazard_flood, hazard_tsunami, \
+    unit_wetdry, unit_feet_depth, unit_metres_depth, layer_vector_polygon, \
+    layer_raster_numeric, exposure_structure, unit_building_type_type
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -73,43 +75,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     '(OSM).')
             }
 
-            hazard_units = [
-                {
-                    'id': 'wetdry',
-                    'constraint': 'categorical',
-                    'default_attribute': 'affected',
-                    'default_category': 'wet',
-                    'classes': [
-                        {
-                            'name': 'wet',
-                            'description': 'Water above ground height.',
-                            'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-                            'numeric_default_min': 1,
-                            'numeric_default_max': 9999999999,
-                            'optional': True,
-                        },
-                        {
-                            'name': 'dry',
-                            'description': 'No water above ground height.',
-                            'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-                            'numeric_default_min': 0,
-                            'numeric_default_max': 1 - small_number,
-                            'optional': True
-                        }
-                    ]
-                },
-                {
-                    'id': 'metres',
-                    'constraint': 'continuous',
-                    'default_attribute': 'depth'  # applies to vector only
-                },
-                {
-                    'id': 'feet',
-                    'constraint': 'continuous',
-                    'default_attribute': 'depth'  # applies to vector only
-                }
-            ]
-
             dict_meta = {
                 'id': values['id'],
                 'name': values['name'],
@@ -119,34 +84,20 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'subcategory': ['flood', 'tsunami'],
-                        'units': hazard_units,
+                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'units': [
+                            unit_wetdry,
+                            unit_metres_depth,
+                            unit_feet_depth],
                         'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            },
-                            {
-                                'layer_type': 'raster',
-                                'data_type': 'numeric'
-                            }
+                            layer_vector_polygon,
+                            layer_raster_numeric,
                         ]
                     },
                     'exposure': {
-                        'subcategory': 'structure',
-                        'units': [
-                            {
-                                'id': 'building_type',
-                                'constraint': 'unique values',
-                                'default_attribute': 'type'
-                            }
-                        ],
-                        'layer_constraints': [
-                            {
-                                'layer_type': 'vector',
-                                'data_type': 'polygon'
-                            }
-                        ]
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
                     }
                 }
             }

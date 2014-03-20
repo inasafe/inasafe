@@ -19,47 +19,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.metadata import small_number
+from safe.metadata import unit_wetdry, unit_metres_depth, \
+    unit_feet_depth, unit_building_type_type, unit_mmi_depth, unit_mmi, \
+    unit_people_per_pixel
 
 
 class TestImpactFunctionManager(unittest.TestCase):
 
     flood_OSM_building_hazard_units = [
-        {
-            'id': 'wetdry',
-            'constraint': 'categorical',
-            'default_attribute': 'affected',
-            'default_category': 'wet',
-            'classes': [
-                {
-                    'name': 'wet',
-                    'description': 'Water above ground height.',
-                    'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-                    'numeric_default_min': 1,
-                    'numeric_default_max': 9999999999,
-                    'optional': True
-                },
-                {
-                    'name': 'dry',
-                    'description': 'No water above ground height.',
-                    'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-                    'numeric_default_min': 0,
-                    'numeric_default_max': 1 - small_number,
-                    'optional': True
-                }
-            ]
-        },
-        {
-            'id': 'metres',
-            'constraint': 'continuous',
-            'default_attribute': 'depth'  # applies to vector only
-        },
-        {
-            'id': 'feet',
-            'constraint': 'continuous',
-            'default_attribute': 'depth'  # applies to vector only
-        }
-    ]
+        unit_wetdry, unit_metres_depth, unit_feet_depth]
 
     def test_init(self):
         """Test initialize ImpactFunctionManager
@@ -134,13 +102,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         """
         ifm = ImpactFunctionManager()
         result = ifm.allowed_units('structure', 'polygon')
-        expected_result = [
-            {
-                'id': 'building_type',
-                'constraint': 'unique values',
-                'default_attribute': 'type'
-            }
-        ]
+        expected_result = [unit_building_type_type]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
         assert result == expected_result, msg
@@ -158,17 +120,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         assert result == expected_result, msg
 
         result = ifm.allowed_units('earthquake', 'numeric')
-        expected_result = [
-            {
-                'default_attribute': 'depth',
-                'id': 'mmi',
-                'constraint': 'continuous'
-            },
-            {
-                'id': 'mmi',
-                'constraint': 'continuous'
-            }
-        ]
+        expected_result = [unit_mmi_depth, unit_mmi]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
         assert result == expected_result, msg
@@ -194,12 +146,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.units_for_layer(
             subcategory='population', layer_type='raster', data_type='numeric')
-        expected_result = [
-            {
-                'id': 'people_per_pixel',
-                'constraint': 'continuous'
-            }
-        ]
+        expected_result = [unit_people_per_pixel]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
         assert result == expected_result, msg
