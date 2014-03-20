@@ -8,8 +8,8 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsGeometry
 )
-from safe import metadata
 
+from safe.metadata import small_number
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -67,8 +67,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
 
             hazard_units = [
                 {
-                    'name': metadata.wetdry_name,
-                    'description': metadata.wetdry_text,
+                    'id': 'wetdry',
                     'constraint': 'categorical',
                     'default_attribute': 'affected',
                     'default_category': 'wet',
@@ -86,7 +85,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                             'description': 'No water above ground height.',
                             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
                             'numeric_default_min':  0,
-                            'numeric_default_max': 1 - metadata.small_number,
+                            'numeric_default_max': (1 - small_number),
                             'optional': True
                         }
                     ]
@@ -115,8 +114,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                         'subcategory': 'structure',
                         'units': [
                             {
-                                'name': metadata.building_type_name,
-                                'description': metadata.building_type_text,
+                                'id': 'building_type',
                                 'constraint': 'unique values',
                                 'default_attribute': 'type'
                             }

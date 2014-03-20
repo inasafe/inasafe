@@ -6,8 +6,8 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform
 )
-from safe import metadata
 
+from safe.metadata import small_number
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -66,14 +66,12 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
 
             hazard_units = [
                 {
-                    'name': metadata.depth_metres_name,
-                    'description': metadata.depth_metres_text,
+                    'id': 'metres',
                     'constraint': 'continuous',
                     'default_attribute': 'depth'  # applies to vector only
                 },
                 {
-                    'name': metadata.depth_feet_name,
-                    'description': metadata.depth_feet_text,
+                    'id': 'feet',
                     'constraint': 'continuous',
                     'default_attribute': 'depth'  # applies to vector only
                 }
@@ -101,8 +99,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                         'subcategory': 'road',
                         'units': [
                             {
-                                'name': metadata.road_type_name,
-                                'description': metadata.road_type_text,
+                                'id': 'road_type',
                                 'constraint': 'unique values',
                                 'default_attribute': 'type'
                             }

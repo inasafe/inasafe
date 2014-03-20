@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -75,8 +74,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
             hazard_units = [
                 {
-                    'name': metadata.volcano_category_name,
-                    'description': metadata.volcano_category_text,
+                    'id': 'volcano_categorical',
                     'constraint': 'categorical',
                     'default_attribute': 'affected',
                     'default_category': 'high',
@@ -139,8 +137,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                     'subcategory': 'structure',
                     'units': [
                         {
-                            'name': metadata.building_type_name,
-                            'description': metadata.building_type_text,
+                            'id': 'building_type',
                             'constraint': 'unique values',
                             'default_attribute': 'type'
                         }

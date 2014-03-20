@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
-from safe import metadata
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from third_party.odict import OrderedDict
@@ -86,8 +85,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
             hazard_units = [
                 {
-                    'name': metadata.volcano_category_name,
-                    'description': metadata.volcano_category_text,
+                    'id': 'volcano_categorical',
                     'constraint': 'categorical',
                     'default_attribute': 'affected',
                     'default_category': 'high',
@@ -150,8 +148,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     'subcategory': 'population',
                     'units': [
                         {
-                            'name': metadata.people_per_pixel_name,
-                            'description': metadata.people_per_pixel_text,
+                            'id': 'people_per_pixel',
                             'constraint': 'continuous'
                         }
                     ],

@@ -12,16 +12,18 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe import metadata
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
 
 __author__ = 'Ole Nielson'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+
 import numpy
+from safe.metadata import small_number
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -94,8 +96,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         hazard_units = [
             {
-                'name': metadata.wetdry_name,
-                'description': metadata.wetdry_text,
+                'id': 'wetdry',
                 'constraint': 'categorical',
                 'default_attribute': 'affected',
                 'default_category': 'wet',
@@ -113,7 +114,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                         'description': 'No water above ground height.',
                         'string_defaults': ['dry', '0', 'No', 'n', 'no'],
                         'numeric_default_min':  0,
-                        'numeric_default_max': 1 - metadata.small_number,
+                        'numeric_default_max': 1 - small_number,
                         'optional': True
                     }
                 ]
@@ -142,8 +143,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     'subcategory': 'population',
                     'units': [
                         {
-                            'name': metadata.people_per_pixel_name,
-                            'description': metadata.people_per_pixel_text,
+                            'id': 'people_per_pixel',
                             'constraint': 'continuous'
                         }
                     ],

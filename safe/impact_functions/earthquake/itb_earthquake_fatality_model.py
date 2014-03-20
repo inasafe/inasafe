@@ -2,7 +2,6 @@
 """
 import numpy
 import logging
-from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -142,8 +141,7 @@ class ITBFatalityFunction(FunctionProvider):
                         'subcategory': 'earthquake',
                         'units': [
                             {
-                                'name': metadata.mmi_name,
-                                'description': metadata.mmi_text,
+                                'id': 'mmi',
                                 'constraint': 'continuous'
                             }
                         ],
@@ -158,8 +156,7 @@ class ITBFatalityFunction(FunctionProvider):
                         'subcategory': 'population',
                         'units': [
                             {
-                                'name': metadata.people_per_pixel_name,
-                                'description': metadata.people_per_pixel_text,
+                                'id': 'people_per_pixel',
                                 'constraint': 'continuous'
                             }
                         ],

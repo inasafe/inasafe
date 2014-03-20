@@ -1,5 +1,4 @@
 import numpy
-from safe import metadata
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (FunctionProvider,
@@ -78,8 +77,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                         'subcategory': 'all',
                         'units': [
                             {
-                                'name': metadata.normalized_name,
-                                'description': metadata.normalized_text,
+                                'id': 'normalized',
                                 'constraint': 'continuous'
                             }
                         ],
@@ -94,8 +92,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                         'subcategory': 'population',
                         'units': [
                             {
-                                'name': metadata.people_per_pixel_name,
-                                'description': metadata.people_per_pixel_text,
+                                'id': 'people_per_pixel',
                                 'constraint': 'continuous'
                             }
                         ],
