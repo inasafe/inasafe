@@ -46,26 +46,42 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def clone_csv_layer():
-    """Helper function that copies a test layer and return it."""
+    """Helper function that copies a test csv layer and returns it."""
     path = 'test_buildings.csv'
     temp_path = unique_filename()
     # copy to temp file
     source_path = os.path.join(TESTDATA, path)
-    temp_path = os.path.join(TESTDATA, temp_path)
     shutil.copy2(source_path, temp_path)
     # return a single predefined layer
     layer = QgsVectorLayer(temp_path, '', 'delimitedtext')
     return layer
 
 
-def remove_temp_file(filePath):
+def clone_shp_layer(name='tsunami_polygon'):
+    """Helper function that copies a test shplayer and returns it."""
+    extensions = ['.shp', '.shx', '.dbf', '.prj']
+    temp_path = unique_filename()
+    # copy to temp file
+    for ext in extensions:
+        src_path = os.path.join(TESTDATA, name + ext)
+        trg_path = temp_path + ext
+        shutil.copy2(src_path, trg_path)
+    # return a single predefined layer
+    layer = QgsVectorLayer(temp_path+'.shp', 'TestLayer', 'ogr')
+    return layer
+
+
+def remove_temp_file(file_path):
     """Helper function that removes temp file created during test.
        Also its keywords file will be removed
 
     :param file_name: File to remove.
     """
-    os.remove(filePath)
-    os.remove(filePath + '.keywords')
+    file_path = file_path[:-4]
+    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
+    for ext in extensions:
+        if os.path.exists(file_path + ext):
+            os.remove(file_path + ext)
 
 
 class WizardDialogTest(unittest.TestCase):
@@ -76,23 +92,23 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_category_count = 3
         expected_second_category = "exposure"
-        expected_subcategory_count = 5
+        expected_subcategory_count = 4
         expected_second_subcategory = "tsunami"
-        expected_unit_count = 6
-        expected_fourth_unit = "feet"
-        expected_field_count = 16
-        expected_second_field = "LATITUDE"
+        expected_unit_count = 3
+        expected_third_unit = "feet_depth"
+        expected_field_count = 5
+        expected_second_field = "GRIDCODE"
 
         expected_keywords = {
             'category': 'hazard',
             'subcategory': 'tsunami',
-            'unit': 'feet',
-            'field': 'LATITUDE',
+            'unit': 'feet_depth',
+            'field': 'GRIDCODE',
             'source': 'some source',
             'title': 'some title'
         }
 
-        layer = clone_csv_layer()
+        layer = clone_shp_layer()
 
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
@@ -146,16 +162,16 @@ class WizardDialogTest(unittest.TestCase):
             count == expected_unit_count,
             'Invalid unit count! There should be %d while there were: %d'
             % (expected_unit_count, count))
-        fourth_unit = dialog.lstUnits.item(3).data(Qt.UserRole)
+        third_unit = dialog.lstUnits.item(2).data(Qt.UserRole)
         self.assertTrue(
-            fourth_unit == expected_fourth_unit,
+            third_unit == expected_third_unit,
             'Invalid fourth unit! It should be "%s" while it was: "%s"'
-            % (expected_fourth_unit, fourth_unit))
+            % (expected_third_unit, third_unit))
 
         self.assertTrue(
             not dialog.pbnNext.isEnabled(), 'Invalid Next button'
             ' state in step 3! Enabled while there\'s nothing selected yet')
-        dialog.lstUnits.setCurrentRow(3)
+        dialog.lstUnits.setCurrentRow(2)
         self.assertTrue(
             dialog.pbnNext.isEnabled(), 'Invalid Next button'
             ' state in step 3! Still disabled after an item selected')
