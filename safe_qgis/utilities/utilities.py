@@ -30,8 +30,6 @@ import webbrowser
 from PyQt4 import QtCore, QtGui, Qt
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
-#noinspection PyPackageRequirements
-from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from qgis.core import (
     QGis,
@@ -598,80 +596,6 @@ def extent_to_geo_array(extent, source_crs):
         transformed_extent.xMaximum(),
         transformed_extent.yMaximum()]
     return geo_extent
-
-
-def download_url(manager, url, output_path, progress_dialog=None):
-    """Download file from url.
-
-    :param manager: A QNetworkAccessManager instance
-    :type manager: QNetworkAccessManager
-
-    :param url: URL of file
-    :type url: str
-
-    :param output_path: Output path
-    :type output_path: str
-
-    :param progress_dialog: Progress dialog widget
-
-    :returns: True if success, otherwise returns a tuple with format like this
-        (QNetworkReply.NetworkError, error_message)
-    :raises: IOError - when cannot create output_path
-    """
-
-    # prepare output path
-    out_file = QFile(output_path)
-    if not out_file.open(QFile.WriteOnly):
-        raise IOError(out_file.errorString())
-
-    # slot to write data to file
-    def write_data():
-        """Write data to a file."""
-        out_file.write(reply.readAll())
-
-    request = QNetworkRequest(QUrl(url))
-    reply = manager.get(request)
-    reply.readyRead.connect(write_data)
-
-    if progress_dialog:
-        # progress bar
-        def progress_event(received, total):
-            """Update progress.
-
-            :param received: Data received so far.
-            :type received: int
-            :param total: Total expected data.
-            :type total: int
-
-            """
-
-            # noinspection PyArgumentList
-            QCoreApplication.processEvents()
-
-            progress_dialog.setLabelText("%s / %s" % (received, total))
-            progress_dialog.setMaximum(total)
-            progress_dialog.setValue(received)
-
-        # cancel
-        def cancel_action():
-            """Cancel download."""
-            reply.abort()
-
-        reply.downloadProgress.connect(progress_event)
-        progress_dialog.canceled.connect(cancel_action)
-
-    # wait until finished
-    while not reply.isFinished():
-        # noinspection PyArgumentList
-        QCoreApplication.processEvents()
-
-    out_file.close()
-
-    result = reply.error()
-    if result == QNetworkReply.NoError:
-        return True, None
-    else:
-        return result, str(reply.errorString())
 
 
 def viewport_geo_array(map_canvas):
