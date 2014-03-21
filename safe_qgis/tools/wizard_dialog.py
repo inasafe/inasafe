@@ -683,6 +683,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             tree_branch.setText(0, cls['name'])
+            if 'description' in cls:
+                tree_branch.setToolTip(0,cls['description'])
             # Assign known values
             for val in assigned_values[cls['name']]:
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
