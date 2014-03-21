@@ -351,8 +351,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblSelectCategory.setText(
             category_question % self.layer.name())
 
-        for category in IFM().categories_for_layer(
-                self.layer_type, self.data_type):
+        categories = IFM().categories_for_layer(
+            self.layer_type, self.data_type)
+        categories += ['aggregation']
+        for category in categories:
             item = QListWidgetItem(text('metadata.%s_name' % category),
                                    self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category)
@@ -612,7 +614,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             item = QListWidgetItem(field_name, self.lstFields)
             item.setData(QtCore.Qt.UserRole, field_name)
             # Select the item if it match the unit's default_attribute
-            if 'default_attribute' in unit_details \
+            if unit_details and 'default_attribute' in unit_details \
                     and field_name == unit_details['default_attribute']:
                 default_item = item
             # For continuous data, gray out id, gid, fid and text fields
@@ -780,7 +782,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         if current_step == step_category:
             category = self.selected_category()
-            if IFM().subcategories_for_layer(
+            if category == 'aggregation':
+                new_step = step_field
+            elif IFM().subcategories_for_layer(
                     category, self.layer_type, self.data_type):
                 new_step = step_subcategory
             else:
