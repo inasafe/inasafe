@@ -87,7 +87,8 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregatioError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    TemplateElementMissingError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -1968,8 +1969,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if north_arrow_path != '':
             print_map.set_north_arrow_image(north_arrow_path)
 
-        template_warning_verbose = settings.value(
-            'inasafe/templateWarningVerbose')
+        template_warning_verbose = bool(settings.value(
+            'inasafe/templateWarningVerbose', True, type=bool))
         print_map.set_template_warning_verbose(template_warning_verbose)
 
         print_map.set_template(template_path)
@@ -1979,6 +1980,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
+            try:
+                print_map.load_template()
+            except TemplateElementMissingError, msg:
+                title = self.tr('Template is missing some elements')
+                question = self.tr('%s. Do you still want to continue?') % msg
+                # noinspection PyCallByClass,PyTypeChecker
+                answer = QtGui.QMessageBox.question(
+                    self,
+                    title,
+                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+
+                if answer == QtGui.QMessageBox.No:
+                    return
+            print_map.template_warning_verbose = False
+
             if print_map.map_title() is not None:
                 default_file_name = print_map.map_title() + '.pdf'
             else:
@@ -2037,17 +2053,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             QtCore.QUrl.TolerantMode))
             self.show_dynamic_message(status)
         else:
-            self.composer = self.iface.createNewComposer()
             try:
                 print_map.load_template()
-            except Exception:
+            except TemplateElementMissingError, msg:
+                title = self.tr('Template is missing some elements')
+                question = self.tr('%s. Do you still want to continue?') % msg
                 # noinspection PyCallByClass,PyTypeChecker
-                QtGui.QMessageBox.warning(
+                answer = QtGui.QMessageBox.question(
                     self,
-                    self.tr('InaSAFE Error'),
-                    self.tr('Error on loading template'))
-                return
+                    title,
+                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
 
+                if answer == QtGui.QMessageBox.Yes:
+                    print_map.template_warning_verbose = False
+                    print_map.load_template()
+                else:
+                    return
+            self.composer = self.iface.createNewComposer()
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
             # Zoom to Full Extent

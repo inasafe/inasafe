@@ -115,6 +115,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keyword_io.default_keyword_db_path(), type=str)
         self.leKeywordCachePath.setText(path)
 
+        flag = bool(settings.value(
+            'inasafe/templateWarningVerbose', True, type=bool))
+        self.template_warning_checkbox.setChecked(flag)
+
         path = settings.value('inasafe/northArrowPath', '', type=str)
         self.leNorthArrowPath.setText(path)
 

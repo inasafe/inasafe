@@ -21,7 +21,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_basic">
       <attribute name="title">
@@ -292,7 +292,7 @@
        <item>
         <widget class="QCheckBox" name="template_warning_checkbox">
          <property name="text">
-          <string>Warn me when map templates are missing elements</string>
+          <string>Prompt me in cases when a template has missing elements</string>
          </property>
          <property name="checked">
           <bool>true</bool>

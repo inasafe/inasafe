@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Fri Mar 21 10:04:27 2014
+# Created: Fri Mar 21 10:14:45 2014
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -248,7 +248,7 @@ class Ui_OptionsDialogBase(object):
         self.gridLayout_2.addWidget(self.buttonBox, 1, 0, 1, 1)
 
         self.retranslateUi(OptionsDialogBase)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), OptionsDialogBase.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), OptionsDialogBase.reject)
         QtCore.QMetaObject.connectSlotsByName(OptionsDialogBase)
@@ -305,7 +305,7 @@ class Ui_OptionsDialogBase(object):
         self.label.setText(QtGui.QApplication.translate("OptionsDialogBase", "Location for results", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxUseThread.setText(QtGui.QApplication.translate("OptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_basic), QtGui.QApplication.translate("OptionsDialogBase", "Basic Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.template_warning_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Warn me when map templates are missing elements", None, QtGui.QApplication.UnicodeUTF8))
+        self.template_warning_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Prompt me in cases when a template has missing elements", None, QtGui.QApplication.UnicodeUTF8))
         self.lblOrganisationLogo.setText(QtGui.QApplication.translate("OptionsDialogBase", "Organisation logo", None, QtGui.QApplication.UnicodeUTF8))
         self.toolOrganisationLogoPath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.organisation_on_dock_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Show organisation logo on main panel too", None, QtGui.QApplication.UnicodeUTF8))

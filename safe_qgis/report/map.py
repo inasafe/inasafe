@@ -25,7 +25,10 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayer)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
+from safe_qgis.exceptions import (
+    KeywordNotFoundError,
+    ReportCreationError,
+    TemplateElementMissingError)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.defaults import disclaimer
 
@@ -59,7 +62,7 @@ class Map():
         self.page_dpi = 300.0
         self.show_frames = False  # intended for debugging use only
 
-        # List of all component id on the template
+        # List of all component id that should be exist on the template
         self.component_ids = []
 
         # Prompt user if template does not contain some elements
@@ -161,11 +164,21 @@ class Map():
             saved. If None, a generated file name will be used.
         :type filename: str
 
+        :raises: TemplateElementMissingError - when template elements are
+            missing
+
         :returns: File name of the output file (equivalent to filename if
                 provided).
         :rtype: str
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
+        # if self.composition != None, the template has been loaded before
+        if self.composition is None:
+            try:
+                self.load_template()
+            except TemplateElementMissingError, msg:
+                raise TemplateElementMissingError(msg)
+
         if filename is None:
             map_pdf_path = unique_filename(
                 prefix='report', suffix='.pdf', dir=temp_dir())
@@ -173,7 +186,6 @@ class Map():
             # We need to cast to python string in case we receive a QString
             map_pdf_path = str(filename)
 
-        self.load_template()
         self.composition.exportAsPDF(map_pdf_path)
         return map_pdf_path
 
@@ -216,27 +228,25 @@ class Map():
                 pass
         return legend_attribute_dict
 
-    def validate_template(self, component_ids):
-        """Validate the template to see what are the missing elements on the
-        self.composition.
+    def validate_template(self):
+        """Validate template to check the missing elements on self.composition.
 
-        :param component_ids: All the component_ids that need to be present
-        on self.composition
-        :type component_ids: list
-
-        :return: Sublist of component_ids
+        :return: Sublist of component_ids missing from composition
         :rtype: list
         """
         missing_elements = []
-        for component_id in component_ids:
+        for component_id in self.component_ids:
             component = self.composition.getComposerItemById(component_id)
             if component is None:
-                missing_elements.append(component_ids)
+                missing_elements.append(component_id)
 
         return missing_elements
 
     def load_template(self):
         """Load a QgsComposer map from a template.
+
+        :raises: TemplateElementMissingError - when template elements are
+            missing
         """
         self.setup_composition()
 
@@ -285,7 +295,18 @@ class Map():
         self.page_height = self.composition.paperHeight()
 
         # Validate the template components
-
+        if self.template_warning_verbose:
+            missing_elements = self.validate_template()
+            if len(missing_elements) > 0:
+                missing_elements_string = ''
+                for missing_element in missing_elements:
+                    missing_elements_string += missing_element + ', '
+                missing_elements_string = missing_elements_string[:-2]
+                raise TemplateElementMissingError(
+                    self.tr(
+                        'The composer template you are printing to is missing '
+                        'these elements: %s') % missing_elements_string
+                )
 
         # set InaSAFE logo
         image = self.composition.getComposerItemById('safe-logo')
