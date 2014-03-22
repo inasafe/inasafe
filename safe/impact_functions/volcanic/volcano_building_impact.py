@@ -65,23 +65,15 @@ class VolcanoBuildingImpact(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
+
+            dict_meta = {
                 'id': 'VolcanoBuildingImpact',
                 'name': tr('Volcano Building Impact'),
                 'impact': tr('Be affected'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr('To assess the impacts of volcano eruption '
-                               'on building.')
-            }
-
-            dict_meta = {
-                'id': values['id'],
-                'name': values['name'],
-                'impact': values['impact'],
-                'author': values['author'],
-                'date_implemented': values['date_implemented'],
-                'overview': values['overview'],
+                               'on building.'),
                 'categories': {
                     'hazard': {
                         'subcategory':  hazard_volcano,

@@ -57,22 +57,14 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
+
+            dict_meta = {
                 'id': 'FloodRasterRoadsExperimentalFunction',
                 'name': tr('Flood Raster Roads Experimental Function'),
                 'impact': tr('Be flooded in given thresholds'),
                 'author': 'Dmitry Kolesov',
                 'date_implemented': 'N/A',
-                'overview': tr('N/A')
-            }
-
-            dict_meta = {
-                'id': values['id'],
-                'name': values['name'],
-                'impact': values['impact'],
-                'author': values['author'],
-                'date_implemented': values['date_implemented'],
-                'overview': values['overview'],
+                'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
                         'subcategory': [hazard_flood, hazard_tsunami],

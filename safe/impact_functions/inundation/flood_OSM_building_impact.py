@@ -63,7 +63,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
+
+            dict_meta = {
                 'id': 'FloodBuildingImpactFunction',
                 'name': tr('Flood Building Impact Function'),
                 'impact': tr('Be flooded'),
@@ -72,16 +73,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 'overview': tr(
                     'To assess the impacts of (flood or tsunami) inundation '
                     'on building footprints originating from OpenStreetMap '
-                    '(OSM).')
-            }
-
-            dict_meta = {
-                'id': values['id'],
-                'name': values['name'],
-                'impact': values['impact'],
-                'author': values['author'],
-                'date_implemented': values['date_implemented'],
-                'overview': values['overview'],
+                    '(OSM).'),
                 'categories': {
                     'hazard': {
                         'subcategory': [hazard_flood, hazard_tsunami],

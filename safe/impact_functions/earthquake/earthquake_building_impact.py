@@ -48,7 +48,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
+            dict_meta = {
                 'id': 'EarthQuakeBuildingImpactFunction',
                 'name': tr('Earthquake Building Impact Function'),
                 'impact': tr('Be affected'),
@@ -57,15 +57,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 'overview': tr(
                     'This impact function will calculate the impact of an '
                     'earthquake on buildings, reporting how many are expected '
-                    'to be damaged etc.')
-            }
-            dict_meta = {
-                'id': values['id'],
-                'name': values['name'],
-                'impact': values['impact'],
-                'author': values['author'],
-                'date_implemented': values['date_implemented'],
-                'overview': values['overview'],
+                    'to be damaged etc.'),
                 'categories': {
                     'hazard': {
                         'subcategory': hazard_earthquake,

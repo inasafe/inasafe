@@ -121,23 +121,15 @@ class ITBFatalityFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
+            dict_meta = {
                 'id': 'ITBFatalityFunction',
                 'name': tr('ITB Fatality Function'),
                 'impact': tr('Die or be displaced'),
-                'author': 'N/A',
+                'author': 'Hadi Ghasemi',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impact of earthquake on population based '
-                    'on earthquake model developed by ITB')
-            }
-            dict_meta = {
-                'id': values['id'],
-                'name': values['name'],
-                'impact': values['impact'],
-                'author': 'Hadi Ghasemi',
-                'date_implemented': values['date_implemented'],
-                'overview': values['overview'],
+                    'on earthquake model developed by ITB'),
                 'categories': {
                     'hazard': {
                         'subcategory': hazard_earthquake,

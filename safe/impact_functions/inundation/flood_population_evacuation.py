@@ -66,7 +66,8 @@ class FloodEvacuationFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
+
+            dict_meta = {
                 'id': 'FloodEvacuationFunction',
                 'name': tr('Flood Evacuation Function'),
                 'impact': tr('Need evacuation'),
@@ -74,29 +75,7 @@ class FloodEvacuationFunction(FunctionProvider):
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of (flood or tsunami)inundation '
-                    'in raster format on population.')
-            }
-
-            hazard_units = [
-                {
-                    'id': 'metres',
-                    'constraint': 'continuous',
-                    'default_attribute': 'depth'  # applies to vector only
-                },
-                {
-                    'id': 'feet',
-                    'constraint': 'continuous',
-                    'default_attribute': 'depth'  # applies to vector only
-                }
-            ]
-
-            dict_meta = {
-                'id': values['id'],
-                'name': values['name'],
-                'impact': values['impact'],
-                'author': values['author'],
-                'date_implemented': values['date_implemented'],
-                'overview': values['overview'],
+                    'in raster format on population.'),
                 'categories': {
                     'hazard': {
                         'subcategory': [hazard_flood, hazard_tsunami],
