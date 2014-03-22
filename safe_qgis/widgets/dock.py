@@ -1655,6 +1655,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # as centers for evacuation circles: See issue #285
             if hazard_layer.geometryType() == QGis.Point:
                 geo_extent = exposure_geoextent
+                buffered_geoextent = geo_extent
 
         return (
             extra_exposure_keywords,
