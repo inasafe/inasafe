@@ -119,6 +119,7 @@ class WizardDialogTest(unittest.TestCase):
             'Invalid category count! There should be %d while there were: %d'
             % (expected_category_count, count))
         second_category = dialog.lstCategories.item(1).data(Qt.UserRole)
+        second_category = eval(second_category)['id']
         self.assertTrue(
             second_category == expected_second_category,
             'Invalid second category! It should be "%s" while it was: "%s"'
@@ -141,6 +142,7 @@ class WizardDialogTest(unittest.TestCase):
             'Invalid subcategory count! There should be %d and there were: %d'
             % (expected_subcategory_count, count))
         second_subcategory = dialog.lstSubcategories.item(1).data(Qt.UserRole)
+        second_subcategory = eval(second_subcategory)['id']
         self.assertTrue(
             second_subcategory == expected_second_subcategory,
             'Invalid second subcategory! It should be "%s" while it was: "%s"'
@@ -163,6 +165,7 @@ class WizardDialogTest(unittest.TestCase):
             'Invalid unit count! There should be %d while there were: %d'
             % (expected_unit_count, count))
         third_unit = dialog.lstUnits.item(2).data(Qt.UserRole)
+        third_unit = eval(third_unit)['id']
         self.assertTrue(
             third_unit == expected_third_unit,
             'Invalid fourth unit! It should be "%s" while it was: "%s"'
