@@ -13,6 +13,11 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.metadata import hazard_volcano, unit_volcano_categorical, \
+    layer_vector_polygon, layer_vector_point, layer_raster_numeric, \
+    exposure_population, unit_people_per_pixel
 from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
@@ -51,6 +56,60 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Volcano Polygon Hazard Population
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'VolcanoPolygonHazardPopulation',
+                'name': tr('Volcano Polygon Hazard Population'),
+                'impact': tr('Be affected'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr('To assess the impacts of volcano eruption '
+                               'on population.')
+            }
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory':  hazard_volcano,
+                        'units': [unit_volcano_categorical],
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Need evacuation')
     target_field = 'population'

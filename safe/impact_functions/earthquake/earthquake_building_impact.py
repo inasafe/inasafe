@@ -1,15 +1,19 @@
 # coding=utf-8
 """Earthquake Impact Function on Building."""
+import logging
 
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
+from safe.metadata import hazard_earthquake, layer_vector_polygon, \
+    layer_raster_numeric, unit_mmi_depth, exposure_structure, \
+    unit_building_type_type
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr, format_int)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-
-import logging
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -24,6 +28,61 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     subcategory=='structure' and \
                     layertype=='vector'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Earthquake Building Impact Function.
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'EarthQuakeBuildingImpactFunction',
+                'name': tr('Earthquake Building Impact Function'),
+                'impact': tr('Be affected'),
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.')
+            }
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': hazard_earthquake,
+                        'units': [unit_mmi_depth],
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_raster_numeric
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
+                    }
+                }
+            }
+            return dict_meta
 
     target_field = 'Shake_cls'
     statistics_type = 'class_count'

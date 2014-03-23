@@ -9,6 +9,9 @@ from qgis.core import (
     QgsGeometry
 )
 
+from safe.metadata import unit_wetdry, hazard_flood, \
+    hazard_tsunami, layer_vector_polygon, exposure_structure, \
+    unit_building_type_type
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -17,6 +20,8 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
@@ -33,6 +38,56 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                     subcategory in ['structure'] and \
                     layertype=='vector'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodNativePolygonExperimentalFunction
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'FloodNativePolygonExperimentalFunction',
+                'name': tr('Flood Native Polygon Experimental Function'),
+                'impact': tr('Be-flooded'),
+                'author': 'Dmitry Kolesov',
+                'date_implemented': 'N/A',
+                'overview': tr('N/A')
+            }
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'units': unit_wetdry,
+                        'layer_constraints': [layer_vector_polygon]
+                    },
+                    'exposure': {
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Be-flooded')
 

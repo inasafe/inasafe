@@ -10,8 +10,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
 
+from safe.metadata import hazard_flood, hazard_tsunami, \
+    unit_wetdry, unit_feet_depth, unit_metres_depth, layer_vector_polygon, \
+    layer_raster_numeric, exposure_structure, unit_building_type_type
+from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
@@ -19,8 +22,11 @@ from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.utilities import (ugettext as tr, format_int, verify)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 import logging
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -37,6 +43,65 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     subcategory=='structure' and \
                     layertype=='vector'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Flood Building Impact Function
+
+           We only need to re-implement get_metadata(), all other behaviours
+           are inherited from the abstract base class.
+           """
+
+        @staticmethod
+        def get_metadata():
+            """
+            Return metadata as a dictionary
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            values = {
+                'id': 'FloodBuildingImpactFunction',
+                'name': tr('Flood Building Impact Function'),
+                'impact': tr('Be flooded'),
+                'author': ['Ole Nielsen', 'Kristy van Putten'],
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami) inundation '
+                    'on building footprints originating from OpenStreetMap '
+                    '(OSM).')
+            }
+
+            dict_meta = {
+                'id': values['id'],
+                'name': values['name'],
+                'impact': values['impact'],
+                'author': values['author'],
+                'date_implemented': values['date_implemented'],
+                'overview': values['overview'],
+                'categories': {
+                    'hazard': {
+                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'units': [
+                            unit_wetdry,
+                            unit_metres_depth,
+                            unit_feet_depth],
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_raster_numeric,
+                        ]
+                    },
+                    'exposure': {
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
+                    }
+                }
+            }
+            return dict_meta
 
     # Function documentation
     target_field = 'INUNDATED'
@@ -99,7 +164,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)    # Depth
+        my_hazard = get_hazard_layer(layers)  # Depth
         my_exposure = get_exposure_layer(layers)  # Building locations
 
         question = get_question(
@@ -175,7 +240,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             else:
                 msg = (tr(
                     'Unknown hazard type %s. Must be either "depth" or "grid"')
-                    % mode)
+                       % mode)
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
