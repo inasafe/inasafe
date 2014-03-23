@@ -212,7 +212,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 self.data_type = 'line'
         else:
-            self.data_type = None
+            self.data_type = 'numeric'
 
         # Set widgets on the first tab
         self.lblSelectCategory.setText(
@@ -220,7 +220,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         categories = IFM().categories_for_layer(
             self.layer_type, self.data_type)
-        categories += ['aggregation']
+        if self.data_type == 'polygon':
+            categories += ['aggregation']
         for category in categories:
             if type(category) != dict:
                 from safe import metadata
@@ -248,7 +249,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         item = self.lstCategories.currentItem()
         try:
             return eval(item.data(QtCore.Qt.UserRole))
-        except NameError:
+        except (AttributeError, NameError):
             return None
 
     def selected_subcategory(self):
@@ -260,7 +261,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         item = self.lstSubcategories.currentItem()
         try:
             return eval(item.data(QtCore.Qt.UserRole))
-        except NameError:
+        except (AttributeError, NameError):
             return None
 
     def selected_unit(self):
@@ -272,7 +273,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         item = self.lstUnits.currentItem()
         try:
             return eval(item.data(QtCore.Qt.UserRole))
-        except NameError:
+        except (AttributeError, NameError):
             return None
 
     def selected_field(self):
