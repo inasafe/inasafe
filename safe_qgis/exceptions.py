@@ -200,3 +200,8 @@ class ReportCreationError(Exception):
 class EmptyDirectoryError(Exception):
     """Raised when output directory is empty string path."""
     pass
+
+
+class DownloadError(Exception):
+    """Raised when downloading file is error."""
+    pass
