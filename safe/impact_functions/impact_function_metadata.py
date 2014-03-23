@@ -150,16 +150,16 @@ class ImpactFunctionMetadata():
         result = []
         metadata_dict = cls.get_metadata()
         categories = metadata_dict['categories']
-        if subcategory in cls.allowed_subcategories(
-                'exposure'):
+        if subcategory in [x['id'] for x in cls.allowed_subcategories(
+                'exposure')]:
             # implementation logic that returns the allowed data_types for
             # exposure layer with subcategory as passed in to this method
 
             layer_constraints = categories['exposure']['layer_constraints']
             for layer_constraint in layer_constraints:
                 result = add_to_list(result, layer_constraint['data_type'])
-        elif subcategory in cls.allowed_subcategories(
-                'hazard'):
+        elif subcategory in [x['id'] for x in cls.allowed_subcategories(
+                'hazard')]:
             # implementation logic that returns the allowed data_types for
             # hazard layer with subcategory as passed in to this method
             layer_constraints = categories['hazard']['layer_constraints']
@@ -206,14 +206,14 @@ class ImpactFunctionMetadata():
             return result
         metadata_dict = cls.get_metadata()
         categories = metadata_dict['categories']
-        if subcategory in cls.allowed_subcategories(
-                'exposure'):
+        if subcategory in [x['id'] for x in cls.allowed_subcategories(
+                'exposure')]:
             # implementation logic that returns the allowed data_types for
             # exposure layer with subcategory as passed in to this method
 
             result = add_to_list(result, categories['exposure']['units'])
-        elif subcategory in cls.allowed_subcategories(
-                'hazard'):
+        elif subcategory in [x['id'] for x in cls.allowed_subcategories(
+                'hazard')]:
             # implementation logic that returns the allowed data_types for
             # hazard layer with subcategory as passed in to this method
             result = add_to_list(result, categories['hazard']['units'])
@@ -334,10 +334,11 @@ class ImpactFunctionMetadata():
             'layer_type': layer_type,
             'data_type': data_type
         }
-        category = None
-        if subcategory in cls.allowed_subcategories('hazard'):
+        if subcategory in [x['id'] for x in cls.allowed_subcategories(\
+                'hazard')]:
             category = 'hazard'
-        elif subcategory in cls.allowed_subcategories('exposure'):
+        elif subcategory in [x['id'] for x in cls.allowed_subcategories( \
+                'exposure')]:
             category = 'exposure'
         else:
             return []

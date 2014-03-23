@@ -17,7 +17,7 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.metadata import hazard_volcano, unit_volcano_categorical, \
     layer_vector_polygon, layer_vector_point, exposure_structure, \
-    unit_building_type_type
+    unit_building_type_type, exposure_definitions, hazard_definitions
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -76,6 +76,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                                'on building.'),
                 'categories': {
                     'hazard': {
+                        'definitions': hazard_definitions,
                         'subcategory':  hazard_volcano,
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
@@ -84,6 +85,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                         ]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]

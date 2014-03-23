@@ -18,15 +18,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from safe.metadata import unit_building_type_type, unit_wetdry, \
-    unit_metres_depth, unit_feet_depth, unit_mmi_depth, layer_vector_polygon, \
-    layer_raster_numeric
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.impact_functions.earthquake.earthquake_building_impact import \
     EarthquakeBuildingImpactFunction
 from safe.impact_functions.inundation.flood_OSM_building_impact import \
     FloodBuildingImpactFunction
+from safe.metadata import *
 from exceptions import NotImplementedError
 
 
@@ -66,26 +64,26 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_subcategories API
         """
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
+        result = my_impact_function.Metadata.\
             allowed_subcategories(category='hazard')
-        expected_result = ['earthquake']
+        expected_result = [hazard_earthquake]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
         result = my_impact_function.Metadata. \
             allowed_subcategories(category='exposure')
-        expected_result = ['structure']
+        expected_result = [exposure_structure]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
 
         result = my_impact_function.Metadata.\
             allowed_subcategories()
-        expected_result = ['earthquake', 'structure']
+        expected_result = [exposure_structure, hazard_earthquake]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
-        self.assertEqual(set(result), set(expected_result), msg)
+        self.assertEqual(result, expected_result, msg)
 
     def test_allowed_data_types(self):
         """Test for allowed_data_types API
@@ -124,8 +122,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertEqual(result, expected_result, msg)
 
         my_impact_function = FloodBuildingImpactFunction
-        result = my_impact_function.Metadata \
-            .allowed_units('structure', 'polygon')
+        result = my_impact_function.Metadata.allowed_units('structure', 'polygon')
         expected_result = [unit_building_type_type]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
@@ -134,9 +131,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         result = my_impact_function.Metadata \
             .allowed_units('flood', 'numeric')
         expected_result = [unit_wetdry, unit_metres_depth, unit_feet_depth]
-        from  pprint import pprint
-        pprint(result)
-        pprint(expected_result)
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
@@ -236,7 +230,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         result = my_impact_function.Metadata. \
             subcategories_for_layer(category='hazard',
                                     layer_type='raster', data_type='numeric')
-        expected_result = ['earthquake']
+        expected_result = [hazard_earthquake]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)
@@ -245,7 +239,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         result = my_impact_function.Metadata. \
             subcategories_for_layer(category='exposure',
                                     layer_type='vector', data_type='polygon')
-        expected_result = ['structure']
+        expected_result = [exposure_structure]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)
         self.assertEqual(result, expected_result, msg)

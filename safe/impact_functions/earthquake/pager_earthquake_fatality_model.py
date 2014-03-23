@@ -1,7 +1,8 @@
 import math
 import numpy
 from safe.metadata import hazard_earthquake, unit_mmi, layer_raster_numeric, \
-    exposure_population, unit_people_per_pixel
+    exposure_population, unit_people_per_pixel, hazard_definitions, \
+    exposure_definitions
 from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
@@ -63,11 +64,13 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     'Population Vulnerability Model Pager'),
                 'categories': {
                     'hazard': {
+                        'definitions': hazard_definitions,
                         'subcategory': hazard_earthquake,
                         'units': [unit_mmi],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

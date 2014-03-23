@@ -12,7 +12,8 @@ from safe.impact_functions.core import (
     default_minimum_needs,
     evacuated_population_weekly_needs)
 from safe.metadata import hazard_earthquake, unit_mmi, layer_raster_numeric, \
-    exposure_population, unit_people_per_pixel
+    exposure_population, unit_people_per_pixel, exposure_definitions, \
+    hazard_definitions
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -132,11 +133,13 @@ class ITBFatalityFunction(FunctionProvider):
                     'on earthquake model developed by ITB'),
                 'categories': {
                     'hazard': {
+                        'definitions': hazard_definitions,
                         'subcategory': hazard_earthquake,
                         'units': [unit_mmi],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

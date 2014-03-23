@@ -11,7 +11,7 @@ from qgis.core import (
 
 from safe.metadata import unit_wetdry, hazard_flood, \
     hazard_tsunami, layer_vector_polygon, exposure_structure, \
-    unit_building_type_type
+    unit_building_type_type, exposure_definitions, hazard_definitions
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -68,11 +68,16 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
-                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'definitions': hazard_definitions,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]

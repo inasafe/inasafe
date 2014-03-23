@@ -19,10 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.metadata import unit_wetdry, unit_metres_depth, \
-    unit_feet_depth, unit_building_type_type, unit_mmi_depth, unit_mmi, \
-    unit_people_per_pixel
-
+from safe.metadata import *
 
 class TestImpactFunctionManager(unittest.TestCase):
 
@@ -45,17 +42,17 @@ class TestImpactFunctionManager(unittest.TestCase):
         """
         ifm = ImpactFunctionManager()
         result = ifm.allowed_subcategories()
-        expected_result = ['structure',
-                           'earthquake',
-                           'population',
-                           'all',
-                           'flood',
-                           'tsunami',
-                           'road',
-                           'volcano']
+        expected_result = [exposure_structure,
+                           hazard_earthquake,
+                           exposure_population,
+                           hazard_all,
+                           hazard_flood,
+                           hazard_tsunami,
+                           exposure_road,
+                           hazard_volcano]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
     def test_allowed_data_types(self):
         """Test allowed_data_types API
@@ -158,38 +155,38 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.categories_for_layer(layer_type='raster',
                                           data_type='numeric')
-        expected_result = ['hazard', 'exposure']
+        expected_result = [hazard_definitions, exposure_definitions]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='line')
-        expected_result = ['exposure']
+        expected_result = [exposure_definitions]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='polygon')
-        expected_result = ['exposure', 'hazard']
+        expected_result = [exposure_definitions, hazard_definitions]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='point')
-        expected_result = ['hazard']
+        expected_result = [hazard_definitions]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.categories_for_layer(layer_type='raster',
                                           data_type='line')
         expected_result = []
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
     def test_subcategories_for_layer(self):
         """Test subcategories_for_layer API
@@ -199,50 +196,60 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = ifm.subcategories_for_layer(category='hazard',
                                              layer_type='raster',
                                              data_type='numeric')
-        expected_result = ['tsunami', 'flood', 'earthquake', 'all']
+        expected_result = [
+            hazard_earthquake,
+            hazard_all,
+            hazard_flood,
+            hazard_tsunami
+        ]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.subcategories_for_layer(category='hazard',
                                              layer_type='vector',
                                              data_type='point')
-        expected_result = ['volcano']
+        expected_result = [hazard_volcano]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.subcategories_for_layer(category='hazard',
                                              layer_type='vector',
                                              data_type='polygon')
-        expected_result = ['tsunami', 'flood', 'earthquake', 'volcano']
+        expected_result = [
+            hazard_earthquake,
+            hazard_flood,
+            hazard_tsunami,
+            hazard_volcano
+        ]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.subcategories_for_layer(category='exposure',
                                              layer_type='raster',
                                              data_type='numeric')
-        expected_result = ['population']
+        expected_result = [exposure_population]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.subcategories_for_layer(category='exposure',
                                              layer_type='vector',
                                              data_type='line')
-        expected_result = ['road']
+        expected_result = [exposure_road]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
         result = ifm.subcategories_for_layer(category='exposure',
                                              layer_type='vector',
                                              data_type='polygon')
-        expected_result = ['structure']
+        expected_result = [exposure_structure]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert set(result) == set(expected_result), msg
+        assert result == expected_result, msg
 
 if __name__ == '__main__':
     unittest.main()

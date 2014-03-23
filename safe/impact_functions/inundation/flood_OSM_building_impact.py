@@ -13,7 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 from safe.metadata import hazard_flood, hazard_tsunami, \
     unit_wetdry, unit_feet_depth, unit_metres_depth, layer_vector_polygon, \
-    layer_raster_numeric, exposure_structure, unit_building_type_type
+    layer_raster_numeric, exposure_structure, unit_building_type_type, \
+    hazard_definitions, exposure_definitions
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -76,7 +77,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     '(OSM).'),
                 'categories': {
                     'hazard': {
-                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'definitions': hazard_definitions,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
                         'units': [
                             unit_wetdry,
                             unit_metres_depth,
@@ -87,6 +92,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         ]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]

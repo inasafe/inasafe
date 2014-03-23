@@ -23,7 +23,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 from safe.metadata import hazard_flood, hazard_tsunami, \
     unit_wetdry, layer_vector_polygon, exposure_population, \
-    unit_people_per_pixel, layer_raster_numeric
+    unit_people_per_pixel, layer_raster_numeric, exposure_definitions, \
+    hazard_definitions
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.utilities import OrderedDict
@@ -97,11 +98,16 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     'in vector format on population.'),
                 'categories': {
                     'hazard': {
-                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'definitions': hazard_definitions,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

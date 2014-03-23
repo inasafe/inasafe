@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.metadata import hazard_definitions, exposure_definitions
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -211,7 +212,15 @@ class ImpactFunctionManager:
             my_categories = impact_function.Metadata \
                 .categories_for_layer(layer_type, data_type)
             result = add_to_list(result, my_categories)
-        return result
+        categories_definitions = []
+        for my_category in result:
+            if my_category == 'hazard':
+                categories_definitions.append(hazard_definitions)
+            elif my_category == 'exposure':
+                categories_definitions.append(exposure_definitions)
+            else:
+                raise Exception('Unsupported categories')
+        return categories_definitions
 
     def subcategories_for_layer(self, category, layer_type, data_type):
         """Return a list of valid subcategories for a layer.

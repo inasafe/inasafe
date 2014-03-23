@@ -11,7 +11,7 @@ from qgis.core import (
 
 from safe.metadata import unit_wetdry, hazard_flood, \
     layer_vector_polygon, hazard_tsunami, exposure_road, unit_road_type_type, \
-    layer_vector_line
+    layer_vector_line, exposure_definitions, hazard_definitions
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -70,11 +70,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
+                        'definitions': hazard_definitions,
                         'subcategory': [hazard_flood, hazard_tsunami],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_road,
                         'units': [unit_road_type_type],
                         'layer_constraints': [layer_vector_line]

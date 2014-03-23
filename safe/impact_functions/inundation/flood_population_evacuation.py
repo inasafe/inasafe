@@ -15,7 +15,7 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.metadata import hazard_flood, hazard_tsunami, unit_feet_depth, \
     unit_metres_depth, layer_raster_numeric, exposure_population, \
-    unit_people_per_pixel
+    unit_people_per_pixel, hazard_definitions, exposure_definitions
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -78,7 +78,11 @@ class FloodEvacuationFunction(FunctionProvider):
                     'in raster format on population.'),
                 'categories': {
                     'hazard': {
-                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'definitions': hazard_definitions,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
                         'units': [
                             unit_feet_depth,
                             unit_metres_depth
@@ -86,6 +90,7 @@ class FloodEvacuationFunction(FunctionProvider):
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

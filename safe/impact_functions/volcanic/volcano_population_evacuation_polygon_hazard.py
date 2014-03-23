@@ -17,7 +17,8 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.metadata import hazard_volcano, unit_volcano_categorical, \
     layer_vector_polygon, layer_vector_point, layer_raster_numeric, \
-    exposure_population, unit_people_per_pixel
+    exposure_population, unit_people_per_pixel, hazard_definitions, \
+    exposure_definitions
 from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
@@ -87,6 +88,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                'on population.'),
                 'categories': {
                     'hazard': {
+                        'definitions': hazard_definitions,
                         'subcategory':  hazard_volcano,
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
@@ -95,6 +97,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                         ]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

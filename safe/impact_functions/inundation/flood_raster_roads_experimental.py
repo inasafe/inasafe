@@ -9,7 +9,8 @@ from qgis.core import (
 
 from safe.metadata import hazard_flood, hazard_tsunami, \
     unit_metres_depth, unit_feet_depth, layer_raster_numeric, exposure_road, \
-    unit_road_type_type, layer_vector_line
+    unit_road_type_type, layer_vector_line, hazard_definitions, \
+    exposure_definitions
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -67,7 +68,11 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
-                        'subcategory': [hazard_flood, hazard_tsunami],
+                        'definitions': hazard_definitions,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
                         'units': [
                             unit_metres_depth,
                             unit_feet_depth
@@ -75,6 +80,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_road,
                         'units': [unit_road_type_type],
                         'layer_constraints': [layer_vector_line]

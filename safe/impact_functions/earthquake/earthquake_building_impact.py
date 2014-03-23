@@ -7,7 +7,7 @@ from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.metadata import hazard_earthquake, layer_vector_polygon, \
     layer_raster_numeric, unit_mmi_depth, exposure_structure, \
-    unit_building_type_type
+    unit_building_type_type, hazard_definitions, exposure_definitions
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr, format_int)
 from safe.common.tables import Table, TableRow
@@ -60,6 +60,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     'to be damaged etc.'),
                 'categories': {
                     'hazard': {
+                        'definitions': hazard_definitions,
                         'subcategory': hazard_earthquake,
                         'units': [unit_mmi_depth],
                         'layer_constraints': [
@@ -68,6 +69,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         ]
                     },
                     'exposure': {
+                        'definitions': exposure_definitions,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]
