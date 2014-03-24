@@ -19,7 +19,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.metadata import *
+from safe.metadata import (
+    unit_wetdry, unit_metres_depth, unit_feet_depth, exposure_definitions,
+    exposure_population, exposure_road, exposure_structure, hazard_all,
+    hazard_definitions, hazard_earthquake, hazard_flood,
+    hazard_tsunami, hazard_volcano, unit_building_type_type,
+    unit_people_per_pixel, unit_mmi, unit_mmi_depth)
 
 
 class TestImpactFunctionManager(unittest.TestCase):

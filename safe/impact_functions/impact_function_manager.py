@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.metadata import hazard_definitions, exposure_definitions
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -18,7 +17,7 @@ __date__ = '20/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
+from safe.metadata import hazard_definitions, exposure_definitions
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.utilities import add_to_list
 
