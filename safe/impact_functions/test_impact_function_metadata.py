@@ -122,7 +122,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertEqual(result, expected_result, msg)
 
         my_impact_function = FloodBuildingImpactFunction
-        result = my_impact_function.Metadata.allowed_units('structure', 'polygon')
+        result = my_impact_function.Metadata.allowed_units(
+            'structure', 'polygon')
         expected_result = [unit_building_type_type]
         msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
             result)

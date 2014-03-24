@@ -21,6 +21,7 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.metadata import *
 
+
 class TestImpactFunctionManager(unittest.TestCase):
 
     flood_OSM_building_hazard_units = [

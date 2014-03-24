@@ -21,6 +21,7 @@ import json
 from exceptions import NotImplementedError
 from safe.impact_functions.utilities import add_to_list
 
+
 class ImpactFunctionMetadata():
     """Abstract metadata class for an impact function.
 
@@ -321,7 +322,8 @@ class ImpactFunctionMetadata():
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+            would be 'numeric' (for rasters), point, line, polygon
+            (for vectors).
         :type data_type: str
 
         :returns: A dictionary as per the example above where each key
@@ -364,7 +366,8 @@ class ImpactFunctionMetadata():
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+            would be 'numeric' (for rasters), point, line, polygon
+            (for vectors).
         :type data_type: str
 
         :returns: A list as per the example above where each value represents
@@ -398,7 +401,8 @@ class ImpactFunctionMetadata():
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+            would be 'numeric' (for rasters), point, line, polygon
+            (for vectors).
         :type data_type: str
 
         :param category: The category for this layer. Valid possibilities

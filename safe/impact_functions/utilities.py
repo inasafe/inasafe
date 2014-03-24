@@ -111,6 +111,7 @@ def remove_double_spaces(myStr):
 
     return myStr
 
+
 def add_to_list(my_list, my_element):
     """Helper function to add new my_element to my_list based on its type
     . Add as new element if it's not a list, otherwise extend to the list

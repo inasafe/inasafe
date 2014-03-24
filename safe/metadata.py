@@ -208,7 +208,7 @@ unit_volcano_categorical = {
             'description': tr('Water above ground height.'),
             'string_defaults': ['Kawasan Rawan Bencana I',
                                 'high'],
-            'numeric_default_min':  0,
+            'numeric_default_min': 0,
             'numeric_default_max': 3,
             'optional': False
         },
@@ -217,7 +217,7 @@ unit_volcano_categorical = {
             'description': tr('Water above ground height.'),
             'string_defaults': ['Kawasan Rawan Bencana II',
                                 'medium'],
-            'numeric_default_min':  3,
+            'numeric_default_min': 3,
             'numeric_default_max': 5,
             'optional': False
         },
@@ -226,7 +226,7 @@ unit_volcano_categorical = {
             'description': tr('Water above ground height.'),
             'string_defaults': ['Kawasan Rawan Bencana III',
                                 'low'],
-            'numeric_default_min':  5,
+            'numeric_default_min': 5,
             'numeric_default_max': 10,
             'optional': False
         }
@@ -244,7 +244,7 @@ unit_wetdry = {
             'name': 'wet',
             'description': tr('Water above ground height.'),
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
-            'numeric_default_min':  1,
+            'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
             'optional': True,
             },
@@ -252,7 +252,7 @@ unit_wetdry = {
             'name': 'dry',
             'description': tr('No water above ground height.'),
             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
-            'numeric_default_min':  0,
+            'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True
         }

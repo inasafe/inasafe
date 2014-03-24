@@ -151,7 +151,8 @@ class ImpactFunctionManager:
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+            would be 'numeric' (for raster), point, line, polygon
+            (for vectors).
         :type data_type: str
 
         :returns: A dictionary as per the example above where each key
@@ -170,8 +171,8 @@ class ImpactFunctionManager:
     def categories_for_layer(self, layer_type, data_type):
         """Return a list of valid categories for a layer.
 
-        This method is used to determine if a given layer can be used as a hazard,
-        exposure or aggregation layer.
+        This method is used to determine if a given layer can be used as a
+        hazard, exposure or aggregation layer.
 
         Example usage::
 
@@ -199,7 +200,8 @@ class ImpactFunctionManager:
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+            would be 'numeric' (for rasters), point, line, polygon
+            (for vectors).
         :type data_type: str
 
         :returns: A list as per the example above where each value represents
@@ -245,7 +247,8 @@ class ImpactFunctionManager:
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon (for vectors).
+            would be 'numeric' (for rasters), point, line, polygon
+            (for vectors).
         :type data_type: str
 
         :param category: The category for this layer. Valid possibilities

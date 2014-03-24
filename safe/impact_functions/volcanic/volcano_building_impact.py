@@ -77,7 +77,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definitions': hazard_definitions,
-                        'subcategory':  hazard_volcano,
+                        'subcategory': hazard_volcano,
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
                             layer_vector_polygon,

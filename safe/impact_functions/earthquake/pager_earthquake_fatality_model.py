@@ -60,8 +60,8 @@ class PAGFatalityFunction(ITBFatalityFunction):
                 'author': 'Helen Crowley',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impact of earthquake on population based on '
-                    'Population Vulnerability Model Pager'),
+                    'To assess the impact of earthquake on population based '
+                    'on Population Vulnerability Model Pager'),
                 'categories': {
                     'hazard': {
                         'definitions': hazard_definitions,
