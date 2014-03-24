@@ -42,17 +42,21 @@ class TestImpactFunctionManager(unittest.TestCase):
         """
         ifm = ImpactFunctionManager()
         result = ifm.allowed_subcategories()
-        expected_result = [exposure_structure,
-                           hazard_earthquake,
-                           exposure_population,
-                           hazard_all,
-                           hazard_flood,
-                           hazard_tsunami,
-                           exposure_road,
-                           hazard_volcano]
+        result = [x['id'] for x in result]
+        expected_result = [
+            exposure_structure,
+            hazard_earthquake,
+            exposure_population,
+            hazard_all,
+            hazard_flood,
+            hazard_tsunami,
+            exposure_road,
+            hazard_volcano
+        ]
+        expected_result = [x['id'] for x in expected_result]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
     def test_allowed_data_types(self):
         """Test allowed_data_types API
@@ -117,10 +121,12 @@ class TestImpactFunctionManager(unittest.TestCase):
         assert result == expected_result, msg
 
         result = ifm.allowed_units('earthquake', 'numeric')
+        result = [x['id'] for x in result]
         expected_result = [unit_mmi_depth, unit_mmi]
+        expected_result = [x['id'] for x in expected_result]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
     def test_units_for_layer(self):
         """Test units_for_layer API
@@ -156,9 +162,11 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = ifm.categories_for_layer(layer_type='raster',
                                           data_type='numeric')
         expected_result = [hazard_definitions, exposure_definitions]
+        result = [x['id'] for x in result]
+        expected_result = [x['id'] for x in expected_result]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='line')
@@ -170,9 +178,11 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='polygon')
         expected_result = [exposure_definitions, hazard_definitions]
+        result = [x['id'] for x in result]
+        expected_result = [x['id'] for x in expected_result]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='point')
