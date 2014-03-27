@@ -187,6 +187,57 @@ class ImportDialogTest(unittest.TestCase):
         ## provide Fake QNetworkAccessManager for self.network_manager
         self.dialog.network_manager = FakeQNetworkAccessManager()
 
+    def test_validate_extent(self):
+        """Test validate extent method."""
+        # Normal case
+        self.dialog.min_longitude.setText('20.389938354492188')
+        self.dialog.min_latitude.setText('-34.10782492987083')
+        self.dialog.max_longitude.setText('20.712661743164062')
+        self.dialog.max_latitude.setText('-34.008273470938335')
+        self.assertTrue(self.dialog.validate_extent())
+
+        # min_latitude >= max_latitude
+        self.dialog.min_latitude.setText('34.10782492987083')
+        self.dialog.max_latitude.setText('-34.008273470938335')
+        self.dialog.min_longitude.setText('20.389938354492188')
+        self.dialog.max_longitude.setText('20.712661743164062')
+        self.assertFalse(self.dialog.validate_extent())
+
+        # min_longitude >= max_longitude
+        self.dialog.min_latitude.setText('-34.10782492987083')
+        self.dialog.max_latitude.setText('-34.008273470938335')
+        self.dialog.min_longitude.setText('34.10782492987083')
+        self.dialog.max_longitude.setText('-34.008273470938335')
+        self.assertFalse(self.dialog.validate_extent())
+
+        # min_latitude < -90 or > 90
+        self.dialog.min_latitude.setText('-134.10782492987083')
+        self.dialog.max_latitude.setText('-34.008273470938335')
+        self.dialog.min_longitude.setText('20.389938354492188')
+        self.dialog.max_longitude.setText('20.712661743164062')
+        self.assertFalse(self.dialog.validate_extent())
+
+        # max_latitude < -90 or > 90
+        self.dialog.min_latitude.setText('-9.10782492987083')
+        self.dialog.max_latitude.setText('91.10782492987083')
+        self.dialog.min_longitude.setText('20.389938354492188')
+        self.dialog.max_longitude.setText('20.712661743164062')
+        self.assertFalse(self.dialog.validate_extent())
+
+        # min_longitude < -180 or > 180
+        self.dialog.min_latitude.setText('-34.10782492987083')
+        self.dialog.max_latitude.setText('-34.008273470938335')
+        self.dialog.min_longitude.setText('-184.10782492987083')
+        self.dialog.max_longitude.setText('20.712661743164062')
+        self.assertFalse(self.dialog.validate_extent())
+
+        # max_longitude < -180 or > 180
+        self.dialog.min_latitude.setText('-34.10782492987083')
+        self.dialog.max_latitude.setText('-34.008273470938335')
+        self.dialog.min_longitude.setText('20.389938354492188')
+        self.dialog.max_longitude.setText('180.712661743164062')
+        self.assertFalse(self.dialog.validate_extent())
+
     def test_fetch_zip(self):
         """Test fetch zip method."""
         url = (
