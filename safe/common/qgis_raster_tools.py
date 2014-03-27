@@ -11,6 +11,8 @@ __copyright__ += 'Disaster Reduction'
 
 from safe.common.utilities import unique_filename
 from safe.storage.raster import qgis_imported
+from safe.common.gdal_ogr_tools import polygonize_thresholds
+
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
     # noinspection PyPackageRequirements
     from PyQt4.QtCore import QVariant
@@ -196,3 +198,56 @@ def clip_raster(raster, n_cols, n_rows, output_extent):
         raster.crs())
 
     return QgsRasterLayer(file_name, 'clipped_raster')
+
+
+def polygonize_gdal(raster,
+                    threshold_min=0.0,
+                    threshold_max=float('inf')):
+
+    """
+    Function to polygonize raster. Areas (pixels) with threshold_min <
+    pixel_values < threshold_max will be converted to polygons.
+
+    :param raster:  Raster layer
+    :type raster: QgsRasterLayer
+
+    :param threshold_min: Value that splits raster to
+                    flooded or not flooded.
+    :type threshold_min: float
+
+    :param threshold_max: Value that splits raster to
+                    flooded or not flooded.
+    :type threshold_max: float
+
+    :returns:   Polygonal geometry
+    :rtype:     QgsGeometry
+
+    """
+
+    #save qgis raster to disk
+    base_name = unique_filename()
+    file_name = base_name + '.tif'
+    file_writer = QgsRasterFileWriter(file_name)
+    pipe = QgsRasterPipe()
+    provider = raster.dataProvider()
+    if not pipe.set(provider.clone()):
+        msg = "Cannot set pipe provider"
+        raise GetDataError(msg)
+    file_writer.writeRaster(
+        pipe,
+        provider.xSize(),
+        provider.ySize(),
+        provider.extent(),
+        provider.crs())
+
+    (inside_file_name, inside_layer_name, outside_file_name, \
+         outside_layer_name) = \
+         polygonize_thresholds(file_name, threshold_min, threshold_max)
+    inside_layer = \
+        QgsVectorLayer(inside_file_name, inside_layer_name, 'ogr')
+    outside_layer = \
+        QgsVectorLayer(outside_file_name, outside_layer_name, 'ogr')
+    if inside_layer.featureCount() == 0:
+        return (None, None)
+    else:
+        return (inside_layer, outside_layer)
