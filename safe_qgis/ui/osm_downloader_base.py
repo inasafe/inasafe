@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'osm_downloader_base.ui'
 #
-# Created: Tue Feb 11 14:03:24 2014
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Fri Mar 28 10:38:04 2014
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,21 +12,12 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+    _fromUtf8 = lambda s: s
 
 class Ui_OsmDownloaderBase(object):
     def setupUi(self, OsmDownloaderBase):
         OsmDownloaderBase.setObjectName(_fromUtf8("OsmDownloaderBase"))
-        OsmDownloaderBase.resize(508, 594)
+        OsmDownloaderBase.resize(480, 594)
         self.gridLayout_2 = QtGui.QGridLayout(OsmDownloaderBase)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.web_view = QtWebKit.QWebView(OsmDownloaderBase)
@@ -73,30 +64,34 @@ class Ui_OsmDownloaderBase(object):
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.gridLayout = QtGui.QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.label_2 = QtGui.QLabel(self.groupBox)
-        self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.gridLayout.addWidget(self.label_2, 0, 1, 1, 1)
         self.label = QtGui.QLabel(self.groupBox)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
         self.min_latitude = QtGui.QLineEdit(self.groupBox)
         self.min_latitude.setObjectName(_fromUtf8("min_latitude"))
-        self.gridLayout.addWidget(self.min_latitude, 1, 1, 1, 1)
-        self.label_3 = QtGui.QLabel(self.groupBox)
-        self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.gridLayout.addWidget(self.label_3, 1, 2, 1, 1)
-        self.min_longitude = QtGui.QLineEdit(self.groupBox)
-        self.min_longitude.setObjectName(_fromUtf8("min_longitude"))
-        self.gridLayout.addWidget(self.min_longitude, 2, 0, 1, 1)
-        self.label_4 = QtGui.QLabel(self.groupBox)
-        self.label_4.setObjectName(_fromUtf8("label_4"))
-        self.gridLayout.addWidget(self.label_4, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.min_latitude, 3, 1, 1, 1)
         self.max_longitude = QtGui.QLineEdit(self.groupBox)
         self.max_longitude.setObjectName(_fromUtf8("max_longitude"))
         self.gridLayout.addWidget(self.max_longitude, 2, 2, 1, 1)
         self.max_latitude = QtGui.QLineEdit(self.groupBox)
         self.max_latitude.setObjectName(_fromUtf8("max_latitude"))
-        self.gridLayout.addWidget(self.max_latitude, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.max_latitude, 1, 1, 1, 1)
+        self.min_longitude = QtGui.QLineEdit(self.groupBox)
+        self.min_longitude.setObjectName(_fromUtf8("min_longitude"))
+        self.gridLayout.addWidget(self.min_longitude, 2, 0, 1, 1)
+        self.label_2 = QtGui.QLabel(self.groupBox)
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout.addWidget(self.label_2, 0, 1, 1, 1)
+        self.label_3 = QtGui.QLabel(self.groupBox)
+        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.gridLayout.addWidget(self.label_3, 1, 2, 1, 1)
+        self.label_4 = QtGui.QLabel(self.groupBox)
+        self.label_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.gridLayout.addWidget(self.label_4, 4, 1, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox, 7, 0, 1, 1)
         self.button_box = QtGui.QDialogButtonBox(OsmDownloaderBase)
         self.button_box.setOrientation(QtCore.Qt.Horizontal)
@@ -110,18 +105,18 @@ class Ui_OsmDownloaderBase(object):
         QtCore.QMetaObject.connectSlotsByName(OsmDownloaderBase)
 
     def retranslateUi(self, OsmDownloaderBase):
-        OsmDownloaderBase.setWindowTitle(_translate("OsmDownloaderBase", "OSM Downloader", None))
-        self.feature_type_label.setText(_translate("OsmDownloaderBase", "Feature Type", None))
-        self.feature_type.setItemText(0, _translate("OsmDownloaderBase", "All", None))
-        self.feature_type.setItemText(1, _translate("OsmDownloaderBase", "Buildings", None))
-        self.feature_type.setItemText(2, _translate("OsmDownloaderBase", "Roads", None))
-        self.output_directory_label.setText(_translate("OsmDownloaderBase", "Output directory", None))
-        self.directory_button.setText(_translate("OsmDownloaderBase", "...", None))
-        self.filename_prefix_label.setText(_translate("OsmDownloaderBase", "File name prefix", None))
-        self.groupBox.setTitle(_translate("OsmDownloaderBase", "Bounding box", None))
-        self.label_2.setText(_translate("OsmDownloaderBase", "Minimum latitude", None))
-        self.label.setText(_translate("OsmDownloaderBase", "Minimum longitude", None))
-        self.label_3.setText(_translate("OsmDownloaderBase", "Maximum longitude", None))
-        self.label_4.setText(_translate("OsmDownloaderBase", "Maximum latitude", None))
+        OsmDownloaderBase.setWindowTitle(QtGui.QApplication.translate("OsmDownloaderBase", "OSM Downloader", None, QtGui.QApplication.UnicodeUTF8))
+        self.feature_type_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Feature Type", None, QtGui.QApplication.UnicodeUTF8))
+        self.feature_type.setItemText(0, QtGui.QApplication.translate("OsmDownloaderBase", "All", None, QtGui.QApplication.UnicodeUTF8))
+        self.feature_type.setItemText(1, QtGui.QApplication.translate("OsmDownloaderBase", "Buildings", None, QtGui.QApplication.UnicodeUTF8))
+        self.feature_type.setItemText(2, QtGui.QApplication.translate("OsmDownloaderBase", "Roads", None, QtGui.QApplication.UnicodeUTF8))
+        self.output_directory_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Output directory", None, QtGui.QApplication.UnicodeUTF8))
+        self.directory_button.setText(QtGui.QApplication.translate("OsmDownloaderBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.filename_prefix_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "File name prefix", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox.setTitle(QtGui.QApplication.translate("OsmDownloaderBase", "Bounding box", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "West", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("OsmDownloaderBase", "North", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("OsmDownloaderBase", "East", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_4.setText(QtGui.QApplication.translate("OsmDownloaderBase", "South", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
