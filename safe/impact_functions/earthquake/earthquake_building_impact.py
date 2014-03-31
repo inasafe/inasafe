@@ -34,8 +34,12 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
          ('medium_threshold', 7),
          ('high_threshold', 8),
          ('postprocessors', OrderedDict([
-         ('AggregationCategorical', {'on': True})]))
-         ])
+         ('AggregationCategorical', {
+             'on': True,
+             'params': OrderedDict([
+                 # Disable categorical aggregation when in AOI mode see #781
+                 ('disable_for_entire_area_aggregation', False)])})
+         ]))])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)

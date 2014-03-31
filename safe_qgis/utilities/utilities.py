@@ -30,8 +30,6 @@ import webbrowser
 from PyQt4 import QtCore, QtGui, Qt
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
-#noinspection PyPackageRequirements
-from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from qgis.core import (
     QGis,
@@ -600,80 +598,6 @@ def extent_to_geo_array(extent, source_crs):
     return geo_extent
 
 
-def download_url(manager, url, output_path, progress_dialog=None):
-    """Download file from url.
-
-    :param manager: A QNetworkAccessManager instance
-    :type manager: QNetworkAccessManager
-
-    :param url: URL of file
-    :type url: str
-
-    :param output_path: Output path
-    :type output_path: str
-
-    :param progress_dialog: Progress dialog widget
-
-    :returns: True if success, otherwise returns a tuple with format like this
-        (QNetworkReply.NetworkError, error_message)
-    :raises: IOError - when cannot create output_path
-    """
-
-    # prepare output path
-    out_file = QFile(output_path)
-    if not out_file.open(QFile.WriteOnly):
-        raise IOError(out_file.errorString())
-
-    # slot to write data to file
-    def write_data():
-        """Write data to a file."""
-        out_file.write(reply.readAll())
-
-    request = QNetworkRequest(QUrl(url))
-    reply = manager.get(request)
-    reply.readyRead.connect(write_data)
-
-    if progress_dialog:
-        # progress bar
-        def progress_event(received, total):
-            """Update progress.
-
-            :param received: Data received so far.
-            :type received: int
-            :param total: Total expected data.
-            :type total: int
-
-            """
-
-            # noinspection PyArgumentList
-            QCoreApplication.processEvents()
-
-            progress_dialog.setLabelText("%s / %s" % (received, total))
-            progress_dialog.setMaximum(total)
-            progress_dialog.setValue(received)
-
-        # cancel
-        def cancel_action():
-            """Cancel download."""
-            reply.abort()
-
-        reply.downloadProgress.connect(progress_event)
-        progress_dialog.canceled.connect(cancel_action)
-
-    # wait until finished
-    while not reply.isFinished():
-        # noinspection PyArgumentList
-        QCoreApplication.processEvents()
-
-    out_file.close()
-
-    result = reply.error()
-    if result == QNetworkReply.NoError:
-        return True, None
-    else:
-        return result, str(reply.errorString())
-
-
 def viewport_geo_array(map_canvas):
     """Obtain the map canvas current extent in EPSG:4326.
 
@@ -741,7 +665,7 @@ def read_impact_layer(impact_layer):
         raise Exception(message)
 
 
-def map_qrc_to_file(match, res_copy_dir):
+def map_qrc_to_file(match, destination_directory):
     """Map a qrc:/ path to its correspondent file:/// and create it.
 
     For example qrc:/plugins/inasafe/ajax-loader.gif
@@ -749,40 +673,45 @@ def map_qrc_to_file(match, res_copy_dir):
     inasafe-master/safe_qgis/resources/img/ajax-loader.gif
 
     If the qrc asset is non file based (i.e. is compiled in resources_rc
-    .pc) then a copy of is extracted to res_copy_dir.
+    .pc) then a copy of is extracted to destination_directory.
 
     :param match: The qrc path to be mapped matched from a regular
         expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
     :type match: re.match object
 
-    :param res_copy_dir: The path to copy non file based qrc assets.
-    :type res_copy_dir: str
+    :param destination_directory: The destination path to copy non file based
+        qrc assets.
+    :type destination_directory: str
 
     :returns: File path to the resource or None if the resource could
         not be created.
     :rtype: None, str
     """
+    # Resource alias on resources.qrc
+    resource_alias = match.group(1)
 
-    resources_path = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), '..', 'resources'))
-    res_alias = match.group(1)
-    res_path = '%s/%s' % (resources_path, res_alias)
-    if not os.path.isfile(res_path):
-        res_path = os.path.join(res_copy_dir, res_alias)
-        # file might be here due to a previous copy
-        if not os.path.isfile(res_path):
-            if not os.path.exists(res_copy_dir):
-                os.makedirs(res_copy_dir)
-                # copy from qrc to filesystem
-            #noinspection PyTypeChecker
-            copy_successful = QFile.copy(
-                ':/plugins/inasafe/%s' % res_alias, res_path)
-            if not copy_successful:
-                #copy somehow failed
-                res_path = None
+    # The resource path (will be placed inside destination_directory)
+    resource_path = os.path.join(destination_directory, resource_alias)
+
+    # The file (resource) might be here due to a previous copy
+    if not os.path.isfile(resource_path):
+        # Get resource directory tree
+        resource_path_directory = os.path.dirname(resource_path)
+
+        # Create dirs recursively if resource_path_directory does not exist
+        if not os.path.exists(resource_path_directory):
+            os.makedirs(resource_path_directory)
+
+        # Now, copy from qrc to file system
+        source_file = ':/plugins/inasafe/%s' % resource_alias
+        # noinspection PyTypeChecker
+        copy_successful = QFile.copy(source_file, resource_path)
+        if not copy_successful:
+            #copy somehow failed
+            resource_path = None
 
     #noinspection PyArgumentList
-    return QUrl.fromLocalFile(res_path).toString()
+    return QUrl.fromLocalFile(resource_path).toString()
 
 
 def open_in_browser(file_path):

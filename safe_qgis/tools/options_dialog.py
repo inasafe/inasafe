@@ -197,7 +197,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/developer_mode',
             self.cbxDevMode.isChecked())
         settings.setValue(
-            'inasafe/useNativeZonalStats',
+            'inasafe/use_native_zonal_stats',
             self.cbxNativeZonalStats.isChecked())
 
     @staticmethod
