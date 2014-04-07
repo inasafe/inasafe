@@ -1,3 +1,4 @@
+# coding=utf-8
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
@@ -41,7 +42,6 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                     subcategory in ['structure'] and \
                     layertype=='vector'
     """
-
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodNativePolygonExperimentalFunction.
 
@@ -50,7 +50,6 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         We only need to re-implement get_metadata(), all other behaviours
         are inherited from the abstract base class.
         """
-
         @staticmethod
         def get_metadata():
             """Return metadata as a dictionary.
@@ -62,7 +61,6 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'FloodNativePolygonExperimentalFunction',
                 'name': tr('Flood Native Polygon Experimental Function'),
@@ -282,7 +280,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # Convert QgsVectorLayer to inasafe layer and return it
+        # Convert QgsVectorLayer to inasafe layer and return it.
         building_layer = Vector(data=building_layer,
                    name=tr('Flooded buildings'),
                    keywords={'impact_summary': impact_summary,

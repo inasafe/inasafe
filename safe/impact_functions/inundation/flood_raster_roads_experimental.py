@@ -1,4 +1,4 @@
-
+# coding=utf-8
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -35,8 +35,7 @@ from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
-    """
-    Simple experimental impact function for inundation
+    """Simple experimental impact function for inundation.
 
     :author Dmitry Kolesov
     :rating 1
@@ -58,8 +57,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -68,7 +66,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'FloodRasterRoadsExperimentalFunction',
                 'name': tr('Flood Raster Roads Experimental Function'),
@@ -121,16 +118,14 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """
-        Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
         Mandatory method.
         """
         self.extent = extent
 
     def run(self, layers):
-        """
-        Experimental impact function
+        """Experimental impact function.
 
         Input
           layers: List of layers expected to contain

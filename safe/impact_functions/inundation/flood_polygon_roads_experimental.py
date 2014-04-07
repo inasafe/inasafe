@@ -49,7 +49,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                     layertype=='vector'
     """
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for FloodVectorRoadsExperimentalFunction
+        """Metadata for FloodVectorRoadsExperimentalFunction.
 
         .. versionadded:: 2.1
 
@@ -68,7 +68,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'FloodVectorRoadsExperimentalFunction',
                 'name': tr('Flood Vector Roads Experimental Function'),

@@ -41,7 +41,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
 class VolcanoBuildingImpact(FunctionProvider):
-    """Risk plugin for volcano building impact
+    """Risk plugin for volcano building impact.
 
     :author AIFDR
     :rating 4
@@ -55,7 +55,7 @@ class VolcanoBuildingImpact(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Volcano Building Impact
+        """Metadata for Volcano Building Impact.
 
         .. versionadded:: 2.1
 
@@ -65,8 +65,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -75,7 +74,6 @@ class VolcanoBuildingImpact(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'VolcanoBuildingImpact',
                 'name': tr('Volcano Building Impact'),
@@ -143,7 +141,6 @@ class VolcanoBuildingImpact(FunctionProvider):
                   Table with number of buildings affected
         :rtype: dict
         """
-
         # Identify hazard and exposure layers
         my_hazard = get_hazard_layer(layers)  # Volcano hazard layer
         my_exposure = get_exposure_layer(layers)

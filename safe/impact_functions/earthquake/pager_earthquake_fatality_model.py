@@ -1,3 +1,4 @@
+# coding=utf-8
 import math
 import numpy
 from safe.metadata import (
@@ -86,11 +87,11 @@ class PAGFatalityFunction(ITBFatalityFunction):
             return dict_meta
     synopsis = tr('To assess the impact of earthquake on population based on '
                   'Population Vulnerability Model Pager')
-    citations = \
-        tr(' * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
-           '   Estimating casualties for large worldwide earthquakes using '
-           '   an empirical approach. U.S. Geological Survey Open-File '
-           '   Report 2009-1136.')
+    citations = tr(
+        ' * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
+        '   Estimating casualties for large worldwide earthquakes using '
+        '   an empirical approach. U.S. Geological Survey Open-File '
+        '   Report 2009-1136.')
     limitation = ''
     detailed_description = ''
     title = tr('Die or be displaced according Pager model')

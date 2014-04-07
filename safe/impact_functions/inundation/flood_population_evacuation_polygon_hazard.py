@@ -62,7 +62,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
-    """Impact function for vector flood evacuation
+    """Impact function for vector flood evacuation.
 
     :author AIFDR
     :rating 4
@@ -77,7 +77,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for FloodEvacuationFunctionVectorHazard
+        """Metadata for FloodEvacuationFunctionVectorHazard.
 
         .. versionadded:: 2.1
 
@@ -87,8 +87,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -97,7 +96,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'FloodEvacuationFunctionVectorHazard',
                 'name': tr('Flood Evacuation Function Vector Hazard'),
@@ -174,7 +172,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     ])
 
     def run(self, layers):
-        """Risk plugin for flood population evacuation
+        """Risk plugin for flood population evacuation.
 
         Input:
           layers: List of layers expected to contain

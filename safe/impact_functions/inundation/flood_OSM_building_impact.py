@@ -73,7 +73,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'FloodBuildingImpactFunction',
                 'name': tr('Flood Building Impact Function'),
@@ -164,7 +163,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 * my_exposure: Vector layer of structure data on
                 the same grid as my_hazard
         """
-
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]
 
         verify(isinstance(threshold, float),

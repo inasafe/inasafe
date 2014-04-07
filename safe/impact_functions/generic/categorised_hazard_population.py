@@ -1,3 +1,4 @@
+# coding=utf-8
 import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
@@ -59,7 +60,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
+            dict_meta = {
                 'id': 'CategorisedHazardPopulationImpactFunction',
                 'name': tr('Categorised Hazard Population Impact Function'),
                 'impact': tr('Be impacted'),
@@ -67,15 +68,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of categorized hazards in raster '
-                    'format on population raster layer.')
-            }
-            dict_meta = {
-                'id': values['id'],
-                'name': values['name'],
-                'impact': values['impact'],
-                'author': values['author'],
-                'date_implemented': values['date_implemented'],
-                'overview': values['overview'],
+                    'format on population raster layer.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -106,12 +99,12 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                         'population count.')
     output = tr('Map of population exposed to high category and a table with '
                 'number of people in each category')
-    detailed_description = \
-        tr('This function will calculate how many people will be impacted '
-           'per each category for all categories in the hazard layer. '
-           'Currently there should be 3 categories in the hazard layer. After '
-           'that it will show the result and the total amount of people that '
-           'will be impacted for the hazard given.')
+    detailed_description = tr(
+        'This function will calculate how many people will be impacted '
+        'per each category for all categories in the hazard layer. '
+        'Currently there should be 3 categories in the hazard layer. After '
+        'that it will show the result and the total amount of people that '
+        'will be impacted for the hazard given.')
     limitation = tr('The number of categories is three.')
 
     # Configurable parameters

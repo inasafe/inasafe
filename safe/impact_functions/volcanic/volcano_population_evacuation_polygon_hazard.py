@@ -53,7 +53,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
 class VolcanoPolygonHazardPopulation(FunctionProvider):
-    """Impact function for volcano hazard zones impact on population
+    """Impact function for volcano hazard zones impact on population.
 
     :author AIFDR
     :rating 4
@@ -67,7 +67,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Volcano Polygon Hazard Population
+        """Metadata for Volcano Polygon Hazard Population.
 
         .. versionadded:: 2.1
 
@@ -77,8 +77,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -87,7 +86,6 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'VolcanoPolygonHazardPopulation',
                 'name': tr('Volcano Polygon Hazard Population'),
@@ -151,7 +149,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             ('MinimumNeeds', {'on': True})]))])
 
     def run(self, layers):
-        """Risk plugin for volcano population evacuation
+        """Risk plugin for volcano population evacuation.
 
         :param layers: List of layers expected to contain where two layers
             should be present.

@@ -42,7 +42,7 @@ from safe.common.exceptions import ZeroImpactException
 # noinspection PyClassHasNoInit
 class FloodEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
-    """Impact function for flood evacuation
+    """Impact function for flood evacuation.
 
         :author AIFDR
         :rating 4
@@ -57,7 +57,7 @@ class FloodEvacuationFunction(FunctionProvider):
         """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for FloodEvacuationFunction
+        """Metadata for FloodEvacuationFunction.
 
         .. versionadded:: 2.1
 
@@ -67,8 +67,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -77,7 +76,6 @@ class FloodEvacuationFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-
             dict_meta = {
                 'id': 'FloodEvacuationFunction',
                 'name': tr('Flood Evacuation Function'),
@@ -164,7 +162,7 @@ class FloodEvacuationFunction(FunctionProvider):
     ])
 
     def run(self, layers):
-        """Risk plugin for flood population evacuation
+        """Risk plugin for flood population evacuation.
 
         :param layers: List of layers expected to contain
               my_hazard: Raster layer of flood depth

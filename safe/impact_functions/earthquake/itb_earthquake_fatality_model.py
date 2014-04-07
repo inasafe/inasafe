@@ -1,3 +1,4 @@
+# coding=utf-8
 """Impact function for ITB earth quake fatality model
 """
 import numpy
