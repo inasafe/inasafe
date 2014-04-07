@@ -124,9 +124,11 @@ class TestImpactFunctionManager(unittest.TestCase):
         assert result == expected_result, msg
 
         result = ifm.allowed_units('flood', 'numeric')
+        result = [x['id'] for x in result]
         expected_result = self.flood_OSM_building_hazard_units
+        expected_result = [x['id'] for x in expected_result]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
         result = ifm.allowed_units('earthquake', 'numeric')
         result = [x['id'] for x in result]
@@ -201,10 +203,12 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.subcategories_for_layer(
             category='hazard', layer_type='raster', data_type='numeric')
+        result = [x['id'] for x in result]
         expected_result = [
             hazard_earthquake, hazard_all, hazard_flood, hazard_tsunami]
+        expected_result = [x['id'] for x in expected_result]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
         result = ifm.subcategories_for_layer(
             category='hazard', layer_type='vector', data_type='point')
@@ -214,10 +218,12 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.subcategories_for_layer(
             category='hazard', layer_type='vector', data_type='polygon')
+        result = [x['id'] for x in result]
         expected_result = [
             hazard_earthquake, hazard_flood, hazard_tsunami, hazard_volcano]
+        expected_result = [x['id'] for x in expected_result]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
         result = ifm.subcategories_for_layer(
             category='exposure', layer_type='raster', data_type='numeric')
