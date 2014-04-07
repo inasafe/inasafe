@@ -18,7 +18,22 @@ __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+
 import numpy
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_wetdry,
+    layer_vector_polygon,
+    exposure_population,
+    unit_people_per_pixel,
+    layer_raster_numeric,
+    exposure_definition,
+    hazard_definition
+)
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -27,7 +42,8 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -35,7 +51,8 @@ from safe.common.utilities import (
     round_thousand,
     humanize_class,
     create_classes,
-    create_label)
+    create_label
+)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -45,7 +62,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
-    """Impact function for vector flood evacuation
+    """Impact function for vector flood evacuation.
 
     :author AIFDR
     :rating 4
@@ -58,6 +75,55 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodEvacuationFunctionVectorHazard.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'FloodEvacuationFunctionVectorHazard',
+                'name': tr('Flood Evacuation Function Vector Hazard'),
+                'impact': tr('Need evacuation'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami)inundation '
+                    'in vector format on population.'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
+                        'units': unit_wetdry,
+                        'layer_constraints': [layer_vector_polygon]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Need evacuation')
     # Function documentation
@@ -106,7 +172,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     ])
 
     def run(self, layers):
-        """Risk plugin for flood population evacuation
+        """Risk plugin for flood population evacuation.
 
         Input:
           layers: List of layers expected to contain
