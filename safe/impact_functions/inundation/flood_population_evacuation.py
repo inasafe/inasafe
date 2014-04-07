@@ -10,12 +10,21 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.metadata import hazard_flood, hazard_tsunami, unit_feet_depth, \
-    unit_metres_depth, layer_raster_numeric, exposure_population, \
-    unit_people_per_pixel, hazard_definitions, exposure_definitions
+    evacuated_population_weekly_needs
+)
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_feet_depth,
+    unit_metres_depth,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -78,7 +87,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     'in raster format on population.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definitions': hazard_definition,
                         'subcategory': [
                             hazard_flood,
                             hazard_tsunami
@@ -90,7 +99,7 @@ class FloodEvacuationFunction(FunctionProvider):
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definitions': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

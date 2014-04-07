@@ -13,14 +13,20 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.metadata import hazard_volcano, unit_volcano_categorical, \
-    layer_vector_polygon, layer_vector_point, layer_raster_numeric, \
-    exposure_population, unit_people_per_pixel, hazard_definitions, \
-    exposure_definitions
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.metadata import (
+    hazard_volcano,
+    unit_volcano_categorical,
+    layer_vector_polygon,
+    layer_vector_point,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from third_party.odict import OrderedDict
-
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
     FunctionProvider,
@@ -28,7 +34,8 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -37,7 +44,8 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator)
+    get_thousand_separator
+)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -88,7 +96,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                'on population.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definitions': hazard_definition,
                         'subcategory': hazard_volcano,
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
@@ -97,7 +105,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                         ]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definitions': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

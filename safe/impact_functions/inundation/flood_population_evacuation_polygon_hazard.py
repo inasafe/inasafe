@@ -21,12 +21,19 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 import numpy
-from safe.metadata import hazard_flood, hazard_tsunami, \
-    unit_wetdry, layer_vector_polygon, exposure_population, \
-    unit_people_per_pixel, layer_raster_numeric, exposure_definitions, \
-    hazard_definitions
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_wetdry,
+    layer_vector_polygon,
+    exposure_population,
+    unit_people_per_pixel,
+    layer_raster_numeric,
+    exposure_definition,
+    hazard_definition
+)
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -35,7 +42,8 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -43,7 +51,8 @@ from safe.common.utilities import (
     round_thousand,
     humanize_class,
     create_classes,
-    create_label)
+    create_label
+)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -98,7 +107,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     'in vector format on population.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definitions': hazard_definition,
                         'subcategory': [
                             hazard_flood,
                             hazard_tsunami
@@ -107,7 +116,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definitions': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

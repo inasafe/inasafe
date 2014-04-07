@@ -10,10 +10,17 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
-from safe.metadata import hazard_earthquake, unit_mmi, layer_raster_numeric, \
-    exposure_population, unit_people_per_pixel, exposure_definitions, \
-    hazard_definitions
+    evacuated_population_weekly_needs
+)
+from safe.metadata import (
+    hazard_earthquake,
+    unit_mmi,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    exposure_definition,
+    hazard_definition
+)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -24,14 +31,14 @@ from safe.common.utilities import (
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class ITBFatalityFunction(FunctionProvider):
-    """Indonesian Earthquake Fatality Model
+    """Indonesian Earthquake Fatality Model.
 
     This model was developed by Institut Teknologi Bandung (ITB) and
     implemented by Dr. Hadi Ghasemi, Geoscience Australia.
@@ -106,14 +113,13 @@ class ITBFatalityFunction(FunctionProvider):
     class Metadata(ImpactFunctionMetadata):
         """Metadata for ITB Fatality function.
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -133,13 +139,13 @@ class ITBFatalityFunction(FunctionProvider):
                     'on earthquake model developed by ITB'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definition': hazard_definition,
                         'subcategory': hazard_earthquake,
                         'units': [unit_mmi],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definition': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]
@@ -216,8 +222,8 @@ class ITBFatalityFunction(FunctionProvider):
         ('minimum needs', default_minimum_needs())])
 
     def fatality_rate(self, mmi):
-        """
-        ITB method to compute fatality rate
+        """ITB method to compute fatality rate.
+
         :param mmi:
         """
         # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
@@ -230,7 +236,7 @@ class ITBFatalityFunction(FunctionProvider):
         return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
-        """Indonesian Earthquake Fatality Model
+        """Indonesian Earthquake Fatality Model.
 
         Input:
 

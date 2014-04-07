@@ -1,4 +1,3 @@
-
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
@@ -8,10 +7,16 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsGeometry
 )
-
-from safe.metadata import unit_wetdry, hazard_flood, \
-    hazard_tsunami, layer_vector_polygon, exposure_structure, \
-    unit_building_type_type, exposure_definitions, hazard_definitions
+from safe.metadata import (
+    unit_wetdry,
+    hazard_flood,
+    hazard_tsunami,
+    layer_vector_polygon,
+    exposure_structure,
+    unit_building_type_type,
+    exposure_definition,
+    hazard_definition
+)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -20,14 +25,12 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
-    """
-    Simple experimental impact function for inundation
-    (polygon-polygon)
+    """Simple experimental impact function for inundation (polygon-polygon).
 
     :author Dmitry Kolesov
     :rating 1
@@ -40,16 +43,15 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for FloodNativePolygonExperimentalFunction
+        """Metadata for FloodNativePolygonExperimentalFunction.
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -68,7 +70,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definition': hazard_definition,
                         'subcategory': [
                             hazard_flood,
                             hazard_tsunami
@@ -77,7 +79,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definition': exposure_definition,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]
@@ -112,16 +114,14 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """
-        Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
         Mandatory method.
         """
         self.extent = extent
 
     def run(self, layers):
-        """
-        Experimental impact function
+        """Experimental impact function.
 
         Input
           layers: List of layers expected to contain

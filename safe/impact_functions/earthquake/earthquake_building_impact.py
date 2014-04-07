@@ -1,25 +1,31 @@
 # coding=utf-8
 """Earthquake Impact Function on Building."""
 import logging
-
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
-from safe.metadata import hazard_earthquake, layer_vector_polygon, \
-    layer_raster_numeric, unit_mmi_depth, exposure_structure, \
-    unit_building_type_type, hazard_definitions, exposure_definitions
+from safe.metadata import (
+    hazard_earthquake,
+    layer_vector_polygon,
+    layer_raster_numeric,
+    unit_mmi_depth,
+    exposure_structure,
+    unit_building_type_type,
+    hazard_definition,
+    exposure_definition
+)
 from safe.storage.vector import Vector
-from safe.common.utilities import (ugettext as tr, format_int)
+from safe.common.utilities import ugettext as tr, format_int
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class EarthquakeBuildingImpactFunction(FunctionProvider):
-    """Earthquake impact on building data
+    """Earthquake impact on building data.
 
     :param requires category=='hazard' and \
                     subcategory=='earthquake'
@@ -32,14 +38,13 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     class Metadata(ImpactFunctionMetadata):
         """Metadata for Earthquake Building Impact Function.
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -60,7 +65,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     'to be damaged etc.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definition': hazard_definition,
                         'subcategory': hazard_earthquake,
                         'units': [unit_mmi_depth],
                         'layer_constraints': [
@@ -69,7 +74,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         ]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definition': exposure_definition,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]
@@ -95,7 +100,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
          ]))])
 
     def run(self, layers):
-        """Earthquake impact to buildings (e.g. from OpenStreetMap)
+        """Earthquake impact to buildings (e.g. from OpenStreetMap).
+
         :param layers: All the input layers (Hazard Layer and Exposure Layer)
         """
 
@@ -105,29 +111,29 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         building_value = 0
         contents_value = 0
 
-        # Thresholds for mmi breakdown
+        # Thresholds for mmi breakdown.
         t0 = self.parameters['low_threshold']
         t1 = self.parameters['medium_threshold']
         t2 = self.parameters['high_threshold']
 
-        # Class Attribute and Label
+        # Class Attribute and Label.
 
         class_1 = {'label': tr('Low'), 'class': 1}
         class_2 = {'label': tr('Medium'), 'class': 2}
         class_3 = {'label': tr('High'), 'class': 3}
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)    # Depth
+        my_hazard = get_hazard_layer(layers)  # Depth
         my_exposure = get_exposure_layer(layers)  # Building locations
 
         question = get_question(my_hazard.get_name(),
                                 my_exposure.get_name(),
                                 self)
 
-        # Define attribute name for hazard levels
+        # Define attribute name for hazard levels.
         hazard_attribute = 'mmi'
 
-        # Determine if exposure data have NEXIS attributes
+        # Determine if exposure data have NEXIS attributes.
         attribute_names = my_exposure.get_attribute_names()
         if ('FLOOR_AREA' in attribute_names and
             'BUILDING_C' in attribute_names and
@@ -136,7 +142,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         else:
             is_nexis = False
 
-        # Interpolate hazard level to building locations
+        # Interpolate hazard level to building locations.
         my_interpolate_result = assign_hazard_values_to_exposure_data(
             my_hazard, my_exposure, attribute_name=hazard_attribute)
 

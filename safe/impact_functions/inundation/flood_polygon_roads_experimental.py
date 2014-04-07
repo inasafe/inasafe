@@ -8,50 +8,56 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform
 )
-
-from safe.metadata import unit_wetdry, hazard_flood, \
-    layer_vector_polygon, hazard_tsunami, exposure_road, unit_road_type_type, \
-    layer_vector_line, exposure_definitions, hazard_definitions
+from safe.metadata import (
+    unit_wetdry,
+    hazard_flood,
+    layer_vector_polygon,
+    hazard_tsunami,
+    exposure_road,
+    unit_road_type_type,
+    layer_vector_line,
+    exposure_definition,
+    hazard_definition
+)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
-    """
-        Simple experimental impact function for inundation
+    """Simple experimental impact function for inundation.
 
-        :author Dmitry Kolesov
-        :rating 1
-        :param requires category=='hazard' and \
-                        subcategory in ['flood', 'tsunami'] and \
-                        layertype=='vector'
-        :param requires category=='exposure' and \
-                        subcategory in ['road'] and \
-                        layertype=='vector'
-        """
+    :author Dmitry Kolesov
+    :rating 1
+    :param requires category=='hazard' and \
+                    subcategory in ['flood', 'tsunami'] and \
+                    layertype=='vector'
+    :param requires category=='exposure' and \
+                    subcategory in ['road'] and \
+                    layertype=='vector'
+    """
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodVectorRoadsExperimentalFunction
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -70,13 +76,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definitions': hazard_definition,
                         'subcategory': [hazard_flood, hazard_tsunami],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definitions': exposure_definition,
                         'subcategory': exposure_road,
                         'units': [unit_road_type_type],
                         'layer_constraints': [layer_vector_line]
@@ -115,8 +121,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """
-        Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
         Mandatory method.
 
@@ -125,8 +130,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         self.extent = extent
 
     def run(self, layers):
-        """
-        Experimental impact function for flood polygons on roads.
+        """Experimental impact function for flood polygons on roads.
 
         :param layers: List of layers expected to contain H: Polygon layer of
             inundation areas E: Vector layer of roads

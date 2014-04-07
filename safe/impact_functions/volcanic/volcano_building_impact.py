@@ -13,11 +13,18 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.metadata import hazard_volcano, unit_volcano_categorical, \
-    layer_vector_polygon, layer_vector_point, exposure_structure, \
-    unit_building_type_type, exposure_definitions, hazard_definitions
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.metadata import (
+    hazard_volcano,
+    unit_volcano_categorical,
+    layer_vector_polygon,
+    layer_vector_point,
+    exposure_structure,
+    unit_building_type_type,
+    exposure_definition,
+    hazard_definition
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -25,7 +32,8 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator)
+    get_thousand_separator
+)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -76,7 +84,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                                'on building.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definitions': hazard_definition,
                         'subcategory': hazard_volcano,
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
@@ -85,7 +93,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                         ]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definitions': exposure_definition,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]

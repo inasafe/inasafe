@@ -17,7 +17,7 @@ __date__ = '20/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.metadata import hazard_definitions, exposure_definitions
+from safe.metadata import hazard_definition, exposure_definition
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.utilities import add_to_list
 
@@ -216,9 +216,9 @@ class ImpactFunctionManager:
         categories_definitions = []
         for my_category in result:
             if my_category == 'hazard':
-                categories_definitions.append(hazard_definitions)
+                categories_definitions.append(hazard_definition)
             elif my_category == 'exposure':
-                categories_definitions.append(exposure_definitions)
+                categories_definitions.append(exposure_definition)
             else:
                 raise Exception('Unsupported categories')
         return categories_definitions

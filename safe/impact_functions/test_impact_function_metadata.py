@@ -18,16 +18,23 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.earthquake.earthquake_building_impact import \
-    EarthquakeBuildingImpactFunction
-from safe.impact_functions.inundation.flood_OSM_building_impact import \
-    FloodBuildingImpactFunction
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.impact_functions.earthquake.earthquake_building_impact import (
+    EarthquakeBuildingImpactFunction)
+from safe.impact_functions.inundation.flood_OSM_building_impact import (
+    FloodBuildingImpactFunction)
 from safe.metadata import (
-    unit_wetdry, unit_metres_depth, unit_feet_depth, exposure_structure,
-    hazard_earthquake, unit_building_type_type, unit_mmi_depth,
-    layer_raster_numeric, layer_vector_polygon)
+    unit_wetdry,
+    unit_metres_depth,
+    unit_feet_depth,
+    exposure_structure,
+    hazard_earthquake,
+    unit_building_type_type,
+    unit_mmi_depth,
+    layer_raster_numeric,
+    layer_vector_polygon
+)
 from exceptions import NotImplementedError
 
 

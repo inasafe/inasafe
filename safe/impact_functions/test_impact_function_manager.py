@@ -20,11 +20,24 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.metadata import (
-    unit_wetdry, unit_metres_depth, unit_feet_depth, exposure_definitions,
-    exposure_population, exposure_road, exposure_structure, hazard_all,
-    hazard_definitions, hazard_earthquake, hazard_flood,
-    hazard_tsunami, hazard_volcano, unit_building_type_type,
-    unit_people_per_pixel, unit_mmi, unit_mmi_depth)
+    unit_wetdry,
+    unit_metres_depth,
+    unit_feet_depth,
+    exposure_definition,
+    exposure_population,
+    exposure_road,
+    exposure_structure,
+    hazard_all,
+    hazard_definition,
+    hazard_earthquake,
+    hazard_flood,
+    hazard_tsunami,
+    hazard_volcano,
+    unit_building_type_type,
+    unit_people_per_pixel,
+    unit_mmi,
+    unit_mmi_depth
+)
 
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -167,7 +180,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.categories_for_layer(layer_type='raster',
                                           data_type='numeric')
-        expected_result = [hazard_definitions, exposure_definitions]
+        expected_result = [hazard_definition, exposure_definition]
         result = [x['id'] for x in result]
         expected_result = [x['id'] for x in expected_result]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
@@ -176,14 +189,14 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='line')
-        expected_result = [exposure_definitions]
+        expected_result = [exposure_definition]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
         assert result == expected_result, msg
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='polygon')
-        expected_result = [exposure_definitions, hazard_definitions]
+        expected_result = [exposure_definition, hazard_definition]
         result = [x['id'] for x in result]
         expected_result = [x['id'] for x in expected_result]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
@@ -192,7 +205,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.categories_for_layer(layer_type='vector',
                                           data_type='point')
-        expected_result = [hazard_definitions]
+        expected_result = [hazard_definition]
         msg = 'I expect ' + str(expected_result) + ' but I got ' + \
               str(result)
         assert result == expected_result, msg

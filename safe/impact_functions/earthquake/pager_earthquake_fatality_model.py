@@ -1,10 +1,15 @@
 import math
 import numpy
-from safe.metadata import hazard_earthquake, unit_mmi, layer_raster_numeric, \
-    exposure_population, unit_people_per_pixel, hazard_definitions, \
-    exposure_definitions
+from safe.metadata import (
+    hazard_earthquake,
+    unit_mmi,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from third_party.odict import OrderedDict
-
 from safe.defaults import get_defaults
 from safe.impact_functions.core import default_minimum_needs
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
@@ -13,8 +18,8 @@ from safe.common.utilities import ugettext as tr
 
 
 class PAGFatalityFunction(ITBFatalityFunction):
-    """
-    Population Vulnerability Model Pager
+    """Population Vulnerability Model Pager.
+
     Loss ratio(MMI) = standard normal distrib( 1 / BETA * ln(MMI/THETA)).
     Reference:
     Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).
@@ -37,14 +42,13 @@ class PAGFatalityFunction(ITBFatalityFunction):
     class Metadata(ITBFatalityFunction.Metadata):
         """Metadata for PAG Fatality Function.
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -64,13 +68,13 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     'on Population Vulnerability Model Pager'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definition': hazard_definition,
                         'subcategory': hazard_earthquake,
                         'units': [unit_mmi],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definition': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]
@@ -121,7 +125,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
         ('minimum needs', default_needs)])
 
     def fatality_rate(self, mmi):
-        """Pager method to compute fatality rate"""
+        """Pager method to compute fatality rate."""
 
         N = math.sqrt(2 * math.pi)
         THETA = self.parameters['Theta']

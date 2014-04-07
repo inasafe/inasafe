@@ -1,26 +1,32 @@
 import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
-from safe.impact_functions.core import (FunctionProvider,
-                                        get_hazard_layer,
-                                        get_exposure_layer,
-                                        get_question,
-                                        get_function_title)
+from safe.impact_functions.core import (
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layer,
+    get_question,
+    get_function_title
+)
 from safe.impact_functions.styles import flood_population_style as style_info
-from safe.metadata import hazard_all, unit_normalised, layer_raster_numeric, \
-    exposure_population, unit_people_per_pixel, hazard_definitions, \
-    exposure_definitions
+from safe.metadata import (
+    hazard_all,
+    unit_normalised,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from safe.storage.raster import Raster
-from safe.common.utilities import (ugettext as tr,
-                                   format_int,
-                                   round_thousand)
+from safe.common.utilities import ugettext as tr, format_int, round_thousand
 from safe.common.tables import Table, TableRow
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
-    """Plugin for impact of population as derived by categorised hazard
+    """Plugin for impact of population as derived by categorised hazard.
 
     :author AIFDR
     :rating 2
@@ -34,16 +40,15 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Categorised Hazard Population Impact Function
+        """Metadata for Categorised Hazard Population Impact Function.
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -52,12 +57,6 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            values = {
-                'name': tr('Categorised Hazard Population Impact Function'),
-                'overview': tr(
-                    'To assess the impacts of categorized hazards in raster '
-                    'format on population raster layer.')
-            }
             values = {
                 'id': 'CategorisedHazardPopulationImpactFunction',
                 'name': tr('Categorised Hazard Population Impact Function'),
@@ -77,13 +76,13 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 'overview': values['overview'],
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definition': hazard_definition,
                         'subcategory': hazard_all,
                         'units': [unit_normalised],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definition': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]
@@ -127,7 +126,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
-        """Plugin for impact of population as derived by categorised hazard
+        """Plugin for impact of population as derived by categorised hazard.
 
         Input
           layers: List of layers expected to contain

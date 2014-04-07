@@ -7,18 +7,26 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.metadata import hazard_flood, hazard_tsunami, \
-    unit_metres_depth, unit_feet_depth, layer_raster_numeric, exposure_road, \
-    unit_road_type_type, layer_vector_line, hazard_definitions, \
-    exposure_definitions
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_metres_depth,
+    unit_feet_depth,
+    layer_raster_numeric,
+    exposure_road,
+    unit_road_type_type,
+    layer_vector_line,
+    hazard_definition,
+    exposure_definition
+)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
@@ -68,7 +76,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definitions': hazard_definition,
                         'subcategory': [
                             hazard_flood,
                             hazard_tsunami
@@ -80,7 +88,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definitions': exposure_definition,
                         'subcategory': exposure_road,
                         'units': [unit_road_type_type],
                         'layer_constraints': [layer_vector_line]

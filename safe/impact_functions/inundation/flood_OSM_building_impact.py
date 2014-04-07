@@ -1,6 +1,6 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk tool by Australian Aid - Flood Impact on OSM Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Impact on OSM
+Buildings
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -11,28 +11,36 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.metadata import hazard_flood, hazard_tsunami, \
-    unit_wetdry, unit_feet_depth, unit_metres_depth, layer_vector_polygon, \
-    layer_raster_numeric, exposure_structure, unit_building_type_type, \
-    hazard_definitions, exposure_definitions
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_wetdry,
+    unit_feet_depth,
+    unit_metres_depth,
+    layer_vector_polygon,
+    layer_raster_numeric,
+    exposure_structure,
+    unit_building_type_type,
+    hazard_definition,
+    exposure_definition
+)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.common.utilities import (ugettext as tr, format_int, verify)
+from safe.common.utilities import ugettext as tr, format_int, verify
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 import logging
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
-    """Inundation impact on building data
+    """Inundation impact on building data.
 
     :author Ole Nielsen, Kristy van Putten
     # this rating below is only for testing a function, not the real one
@@ -46,16 +54,15 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Flood Building Impact Function
+        """Metadata for Flood Building Impact Function.
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():
-            """
-            Return metadata as a dictionary
+            """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
             dictionary format for an impact function.
@@ -77,7 +84,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     '(OSM).'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definitions,
+                        'definition': hazard_definition,
                         'subcategory': [
                             hazard_flood,
                             hazard_tsunami
@@ -92,7 +99,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         ]
                     },
                     'exposure': {
-                        'definitions': exposure_definitions,
+                        'definition': exposure_definition,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]

@@ -25,7 +25,7 @@ from safe.common.utilities import ugettext as tr
 small_number = 2 ** -53  # I think this is small enough
 
 # categories
-hazard_definitions = {
+hazard_definition = {
     'id': 'hazard',
     'name': tr('hazard'),
     'description': tr(
@@ -34,7 +34,7 @@ hazard_definitions = {
         'in an area. For example; flood, earthquake, tsunami and  '
         'volcano are all examples of hazards.')
 }
-exposure_definitions = {
+exposure_definition = {
     'id': 'exposure',
     'name': tr('exposure'),
     'description': tr(
@@ -42,7 +42,7 @@ exposure_definitions = {
         'people, property or infrastructure that may be affected '
         'in the event of a flood, earthquake, volcano etc.')
 }
-aggregation_definitions = {
+aggregation_definition = {
     'id': 'aggregation',
     'name': tr('aggregation'),
     'description': tr(
