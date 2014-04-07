@@ -76,13 +76,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                 'overview': tr('N/A'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definition,
+                        'definition': hazard_definition,
                         'subcategory': [hazard_flood, hazard_tsunami],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
-                        'definitions': exposure_definition,
+                        'definition': exposure_definition,
                         'subcategory': exposure_road,
                         'units': [unit_road_type_type],
                         'layer_constraints': [layer_vector_line]

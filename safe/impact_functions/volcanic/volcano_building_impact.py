@@ -84,7 +84,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                                'on building.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definition,
+                        'definition': hazard_definition,
                         'subcategory': hazard_volcano,
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
@@ -93,7 +93,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                         ]
                     },
                     'exposure': {
-                        'definitions': exposure_definition,
+                        'definition': exposure_definition,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]

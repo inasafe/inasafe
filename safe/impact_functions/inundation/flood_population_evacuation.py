@@ -87,7 +87,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     'in raster format on population.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definition,
+                        'definition': hazard_definition,
                         'subcategory': [
                             hazard_flood,
                             hazard_tsunami
@@ -99,7 +99,7 @@ class FloodEvacuationFunction(FunctionProvider):
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
-                        'definitions': exposure_definition,
+                        'definition': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]

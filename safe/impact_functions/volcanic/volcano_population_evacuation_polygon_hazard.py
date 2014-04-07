@@ -96,7 +96,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                'on population.'),
                 'categories': {
                     'hazard': {
-                        'definitions': hazard_definition,
+                        'definition': hazard_definition,
                         'subcategory': hazard_volcano,
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
@@ -105,7 +105,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                         ]
                     },
                     'exposure': {
-                        'definitions': exposure_definition,
+                        'definition': exposure_definition,
                         'subcategory': exposure_population,
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]
