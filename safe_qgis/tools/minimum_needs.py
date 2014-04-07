@@ -183,8 +183,8 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         fields = layer.dataProvider().fieldNameMap().keys()
         self.cboFields.clear()
-        for myField in fields:
-            add_ordered_combo_item(self.cboFields, myField, myField)
+        for field in fields:
+            add_ordered_combo_item(self.cboFields, field, field)
 
     def accept(self):
         """Process the layer and field and generate a new layer.
