@@ -5,7 +5,7 @@ InaSAFE Disaster risk assessment tool developed by AusAid -
 
 Contact : ole.moller.nielsen@gmail.com
 
-.. note:: This sprogram is free software; you can redistribute it and/or modify
+.. note:: This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
@@ -44,16 +44,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     .. versionadded:: 2.1
     """
     def test_init(self):
-        """Test init base class
-        """
+        """Test init base class."""
         ifm = ImpactFunctionMetadata()
         with self.assertRaises(NotImplementedError):
             ifm.get_metadata()
             ifm.allowed_data_types('flood')
 
     def test_is_subset(self):
-        """Test for is_subset function
-        """
+        """Test for is_subset function."""
         assert ImpactFunctionMetadata.is_subset('a', ['a'])
         assert ImpactFunctionMetadata.is_subset('a', ['a', 'b'])
         assert ImpactFunctionMetadata.is_subset(['a'], ['a', 'b'])
@@ -62,8 +60,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         assert not ImpactFunctionMetadata.is_subset(['a', 'c'], ['a', 'b'])
 
     def test_inner_class(self):
-        """Test call inner class
-        """
+        """Test call inner class."""
         my_impact_function = EarthquakeBuildingImpactFunction()
         # call from an object
         my_metadata = my_impact_function.Metadata()
@@ -75,188 +72,149 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         assert isinstance(metadata_dict, dict), 'I did not got a dict'
 
     def test_allowed_subcategories(self):
-        """Test for allowed_subcategories API
-        """
+        """Test for allowed_subcategories API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata.\
-            allowed_subcategories(category='hazard')
+        result = my_impact_function.Metadata.allowed_subcategories(
+            category='hazard')
         expected_result = [hazard_earthquake]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata. \
-            allowed_subcategories(category='exposure')
+        result = my_impact_function.Metadata.allowed_subcategories(
+            category='exposure')
         expected_result = [exposure_structure]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata.\
-            allowed_subcategories()
+        result = my_impact_function.Metadata.allowed_subcategories()
         expected_result = [exposure_structure, hazard_earthquake]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
     def test_allowed_data_types(self):
-        """Test for allowed_data_types API
-        """
+        """Test for allowed_data_types API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata\
-            .allowed_data_types('structure')
+        result = my_impact_function.Metadata.allowed_data_types('structure')
         expected_result = ['polygon']
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata \
-            .allowed_data_types('earthquake')
+        result = my_impact_function.Metadata .allowed_data_types('earthquake')
         expected_result = ['numeric', 'polygon']
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(set(result), set(expected_result), msg)
 
     def test_allowed_units(self):
-        """Test for allowed_units API
-        """
+        """Test for allowed_units API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata \
-            .allowed_units('structure', 'polygon')
+        result = my_impact_function.Metadata .allowed_units(
+            'structure', 'polygon')
         expected_result = [unit_building_type_type]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata \
-            .allowed_units('structure', 'numeric')
+        result = my_impact_function.Metadata .allowed_units(
+            'structure', 'numeric')
         expected_result = []
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
         my_impact_function = FloodBuildingImpactFunction
         result = my_impact_function.Metadata.allowed_units(
             'structure', 'polygon')
         expected_result = [unit_building_type_type]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata \
-            .allowed_units('flood', 'numeric')
+        result = my_impact_function.Metadata .allowed_units('flood', 'numeric')
         expected_result = [unit_wetdry, unit_metres_depth, unit_feet_depth]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
     def test_allowed_layer_constraints(self):
-        """Test for allowed_layer_constraints API
-        """
+        """Test for allowed_layer_constraints API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
-            allowed_layer_constraints()
+        result = my_impact_function.Metadata.allowed_layer_constraints()
         expected_result = [layer_vector_polygon, layer_raster_numeric]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata. \
-            allowed_layer_constraints('hazard')
+        result = my_impact_function.Metadata. allowed_layer_constraints(
+            'hazard')
         expected_result = [layer_vector_polygon, layer_raster_numeric]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata. \
-            allowed_layer_constraints('exposure')
+        result = my_impact_function.Metadata.allowed_layer_constraints(
+            'exposure')
         expected_result = [layer_vector_polygon]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
     def test_units_for_layer(self):
-        """Test for units_for_layer API
-        """
+        """Test for units_for_layer API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
-            units_for_layer(subcategory='earthquake', layer_type='raster',
-                            data_type='numeric')
+        result = my_impact_function.Metadata.units_for_layer(
+            subcategory='earthquake', layer_type='raster', data_type='numeric')
         expected_result = [unit_mmi_depth]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata. \
-            units_for_layer(subcategory='flood', layer_type='raster',
-                            data_type='numeric')
+        result = my_impact_function.Metadata.units_for_layer(
+            subcategory='flood', layer_type='raster', data_type='numeric')
         expected_result = []
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata. \
-            units_for_layer(subcategory='earthquake', layer_type='vector',
-                            data_type='numeric')
+        result = my_impact_function.Metadata.units_for_layer(
+            subcategory='earthquake', layer_type='vector', data_type='numeric')
         expected_result = []
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
-        result = my_impact_function.Metadata. \
-            units_for_layer(subcategory='earthquake', layer_type='raster',
-                            data_type='polygon')
+        result = my_impact_function.Metadata.units_for_layer(
+            subcategory='earthquake', layer_type='raster', data_type='polygon')
         expected_result = []
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
     def test_categories_for_layer(self):
-        """Test for categories_for_layer API
-        """
+        """Test for categories_for_layer API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
-            categories_for_layer(layer_type='raster', data_type='numeric')
+        result = my_impact_function.Metadata.categories_for_layer(
+            layer_type='raster', data_type='numeric')
         expected_result = ['hazard']
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
-            categories_for_layer(layer_type='vector', data_type='line')
+        result = my_impact_function.Metadata.categories_for_layer(
+            layer_type='vector', data_type='line')
         expected_result = []
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
         my_impact_function = FloodBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
-            categories_for_layer(layer_type='vector', data_type='polygon')
+        result = my_impact_function.Metadata.categories_for_layer(
+            layer_type='vector', data_type='polygon')
         expected_result = ['hazard', 'exposure']
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(set(result), set(expected_result), msg)
 
     def test_subcategories_for_layer(self):
-        """Test for subcategories_for_layer API
-        """
+        """Test for subcategories_for_layer API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
-            subcategories_for_layer(category='hazard',
-                                    layer_type='raster', data_type='numeric')
+        result = my_impact_function.Metadata. subcategories_for_layer(
+            category='hazard', layer_type='raster', data_type='numeric')
         expected_result = [hazard_earthquake]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
         my_impact_function = EarthquakeBuildingImpactFunction()
-        result = my_impact_function.Metadata. \
-            subcategories_for_layer(category='exposure',
-                                    layer_type='vector', data_type='polygon')
+        result = my_impact_function.Metadata.subcategories_for_layer(
+            category='exposure', layer_type='vector', data_type='polygon')
         expected_result = [exposure_structure]
-        msg = 'I should get ' + str(expected_result) + ' but I got ' + str(
-            result)
+        msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
 if __name__ == '__main__':
