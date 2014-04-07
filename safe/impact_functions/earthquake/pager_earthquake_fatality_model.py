@@ -42,6 +42,8 @@ class PAGFatalityFunction(ITBFatalityFunction):
     class Metadata(ITBFatalityFunction.Metadata):
         """Metadata for PAG Fatality Function.
 
+        .. versionadded:: 2.1
+
         We only need to re-implement get_metadata(), all other behaviours
         are inherited from the abstract base class.
         """

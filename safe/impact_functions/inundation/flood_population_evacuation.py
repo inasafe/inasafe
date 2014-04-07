@@ -59,9 +59,11 @@ class FloodEvacuationFunction(FunctionProvider):
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodEvacuationFunction
 
-           We only need to re-implement get_metadata(), all other behaviours
-           are inherited from the abstract base class.
-           """
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
 
         @staticmethod
         def get_metadata():

@@ -42,6 +42,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     class Metadata(ImpactFunctionMetadata):
         """Metadata for Categorised Hazard Population Impact Function.
 
+        .. versionadded:: 2.1
+
         We only need to re-implement get_metadata(), all other behaviours
         are inherited from the abstract base class.
         """

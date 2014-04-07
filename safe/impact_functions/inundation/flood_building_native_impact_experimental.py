@@ -45,6 +45,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodNativePolygonExperimentalFunction.
 
+        .. versionadded:: 2.1
+
         We only need to re-implement get_metadata(), all other behaviours
         are inherited from the abstract base class.
         """

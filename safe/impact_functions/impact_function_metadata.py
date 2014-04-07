@@ -25,6 +25,8 @@ from safe.impact_functions.utilities import add_to_list
 class ImpactFunctionMetadata():
     """Abstract metadata class for an impact function.
 
+    .. versionadded:: 2.1
+
     There will be a concrete implementation of this interface which is specific
     to a single IF class. So anything returned (e.g. data_types) will only be
     relevant to the category/subcategories of the concrete implementation's IF.

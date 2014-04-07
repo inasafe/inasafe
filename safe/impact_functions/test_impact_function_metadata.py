@@ -39,6 +39,10 @@ from exceptions import NotImplementedError
 
 
 class TestImpactFunctionMetadata(unittest.TestCase):
+    """Test for ImpactFunctionMetadata.
+
+    .. versionadded:: 2.1
+    """
     def test_init(self):
         """Test init base class
         """

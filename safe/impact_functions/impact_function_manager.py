@@ -23,7 +23,9 @@ from safe.impact_functions.utilities import add_to_list
 
 
 class ImpactFunctionManager:
-    """Class for managing all impact function
+    """Class for managing all impact function.
+
+    .. versionadded:: 2.1
     """
 
     def __init__(self):

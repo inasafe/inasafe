@@ -41,6 +41,10 @@ from safe.metadata import (
 
 
 class TestImpactFunctionManager(unittest.TestCase):
+    """Test for ImpactFunctionManager.
+
+    .. versionadded:: 2.1
+    """
 
     flood_OSM_building_hazard_units = [
         unit_wetdry, unit_metres_depth, unit_feet_depth]
