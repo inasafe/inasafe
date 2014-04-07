@@ -23,21 +23,21 @@ from safe.impact_functions.utilities import add_to_list
 
 
 class ImpactFunctionManager:
-    """Class for managing all impact function.
+    """Class for managing metadata for all impact function.
 
     .. versionadded:: 2.1
     """
 
     def __init__(self):
-        """Constructor
-        """
+        """Constructor."""
         # attributes
         self.impact_functions = []
         self.load_impact_functions()
 
     def load_impact_functions(self):
-        """Method to load all impact functions. It will not load impact
-        function which disabled
+        """Load all impact functions.
+
+        Disabled impact function will not be loaded.
         """
         result = []
         impact_functions = FunctionProvider.plugins
@@ -51,12 +51,11 @@ class ImpactFunctionManager:
         self.impact_functions = result
 
     def allowed_subcategories(self, category=None):
-        """Get the list of allowed subcategories for a given category from
-        all impact functions
+        """Determine allowed subcategories, optionally filtered by category.
 
         :param category: Optional category which will be used to subset the
-        allowed subcategories. If omitted, all supported subcategories will
-        be returned (for both hazard and exposure). Default is None.
+            allowed subcategories. If omitted, all supported subcategories will
+            be returned (for both hazard and exposure). Default is None.
         :type category: str
 
         :returns: A list of strings is returned.
@@ -70,11 +69,12 @@ class ImpactFunctionManager:
         return result
 
     def allowed_data_types(self, subcategory):
-        """Get the list of allowed data types for a subcategory from all
-        impact functions
+        """Determine allowed data types for all impact functions.
+
+        It uses subcategory as a filter.
 
         Passing a subcategory is required otherwise the context of the
-        data_type (s) would be ambiguous (i.e. whether they can be used as
+        data_type(s) would be ambiguous (i.e. whether they can be used as
         exposure or hazards).
 
         :param subcategory: Required subcategory which will be used to subset
@@ -92,8 +92,10 @@ class ImpactFunctionManager:
         return result
 
     def allowed_units(self, subcategory, data_type):
-        """Get the list of allowed units for a subcategory and data_type from
-        all impact functions
+        """Determine allowed units from all impact functions.
+
+
+        It uses subcategory and data_type as a filter.
 
         .. note:: One data_type could be  used by more than one subcategory,
             so we need to explicitly pass the subcategory to this function.
@@ -159,7 +161,6 @@ class ImpactFunctionManager:
         :returns: A dictionary as per the example above where each key
             represents a unit and each value that is not None represents a
             list of categories.
-
         :rtype: dict
         """
         result = []
@@ -201,13 +202,12 @@ class ImpactFunctionManager:
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon
+            would be 'numeric' (for raster), point, line, polygon
             (for vectors).
         :type data_type: str
 
         :returns: A list as per the example above where each value represents
             a valid category.
-
         :rtype: list
         """
         result = []
@@ -248,7 +248,7 @@ class ImpactFunctionManager:
         :type layer_type: str
 
         :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for rasters), point, line, polygon
+            would be 'numeric' (for raster), point, line, polygon
             (for vectors).
         :type data_type: str
 
@@ -259,7 +259,6 @@ class ImpactFunctionManager:
 
         :returns: A list as per the example above where each value represents
             a valid subcategory.
-
         :rtype: list
         """
         result = []
