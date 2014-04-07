@@ -143,9 +143,11 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.units_for_layer(
             subcategory='flood', layer_type='raster', data_type='numeric')
+        result = [x['id'] for x in result]
         expected_result = self.flood_OSM_building_hazard_units
+        expected_result = [x['id'] for x in expected_result]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
-        assert result == expected_result, msg
+        assert set(result) == set(expected_result), msg
 
         result = ifm.units_for_layer(
             subcategory='volcano', layer_type='raster', data_type='numeric')
