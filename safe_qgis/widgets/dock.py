@@ -1009,8 +1009,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'in the question area and then press run again.')
             message = m.Message(
                 LOGO_ELEMENT,
-                 m.Heading(title, **WARNING_STYLE),
-                 m.Paragraph(details))
+                m.Heading(title, **WARNING_STYLE),
+                m.Paragraph(details))
             self.show_static_message(message)
             self.grpQuestion.show()
             self.pbnRunStop.setDisabled(True)
@@ -1170,8 +1170,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'in the question area and then press run again.')
             message = m.Message(
                 LOGO_ELEMENT,
-                 m.Heading(title, **WARNING_STYLE),
-                 m.Paragraph(details))
+                m.Heading(title, **WARNING_STYLE),
+                m.Paragraph(details))
             self.show_static_message(message)
             return
 
