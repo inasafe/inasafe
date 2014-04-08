@@ -9,7 +9,6 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import time
 import itertools
 
 from safe.common.utilities import unique_filename
@@ -346,29 +345,24 @@ def split_by_polygon_in_out(
         split_by_polygon2(vector, polygon_out, request,\
                               True, mark_value=(target_field, 0))
 
-    QgsVectorFileWriter.writeAsVectorFormat(line_layer_in, file_name_in,
-                                            "utf-8", None, "ESRI Shapefile")
-    QgsVectorFileWriter.writeAsVectorFormat(line_layer_out, file_name_out,
-                                            "utf-8", None, "ESRI Shapefile")
-
-    QgsVectorFileWriter.writeAsVectorFormat(polygon_in, file_name_poly_in,
-                                            "utf-8", None, "ESRI Shapefile")
-
-    QgsVectorFileWriter.writeAsVectorFormat(polygon_out, file_name_poly_out,
-                                            "utf-8", None, "ESRI Shapefile")
+    QgsVectorFileWriter.writeAsVectorFormat(
+        line_layer_in, file_name_in, "utf-8", None, "ESRI Shapefile")
+    QgsVectorFileWriter.writeAsVectorFormat(
+        line_layer_out, file_name_out, "utf-8", None, "ESRI Shapefile")
+    QgsVectorFileWriter.writeAsVectorFormat(
+        polygon_in, file_name_poly_in, "utf-8", None, "ESRI Shapefile")
+    QgsVectorFileWriter.writeAsVectorFormat(
+        polygon_out, file_name_poly_out, "utf-8", None, "ESRI Shapefile")
     #merge layers
-    start_time = time.clock()
     in_features = line_layer_in.featureCount()
     out_features = line_layer_out.featureCount()
     if in_features > out_features:
         for feature in line_layer_out.getFeatures():
             line_layer_in.dataProvider().addFeatures([feature])
-        end_time = time.clock()
         return line_layer_in
     else:
         for feature in line_layer_in.getFeatures():
             line_layer_out.dataProvider().addFeatures([feature])
-        end_time = time.clock()
         return line_layer_out
 
 
@@ -451,30 +445,22 @@ def split_by_polygon2(
     line_geoms = []
     line_attributes = []
 
-    num_features = 0
     for initial_feature in vector.getFeatures(request):
-        num_features = num_features + 1
         initial_geom = initial_feature.geometry()
         line_geoms.append(QgsGeometry(initial_geom))
         attributes = initial_feature.attributes()
         line_attributes.append(attributes)
         geometry_type = initial_geom.type()
 
-    print "num lines %d" % num_features
-    num_features = 0
     poly_geoms = []
     poly_bboxs = []
     for polygon_feature in polygon_layer.getFeatures(request):
-        num_features = num_features + 1
         polygon = polygon_feature.geometry()
         poly_geoms.append(QgsGeometry(polygon))
 
     result_layer.startEditing()
-    num_features = 0
+    
     for polygon in poly_geoms:
-        num_features = num_features + 1
-
-        num_lines = 0
         for initial_geom, attributes in \
                 itertools.izip(line_geoms, line_attributes):
 

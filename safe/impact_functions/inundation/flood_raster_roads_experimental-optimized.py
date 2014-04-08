@@ -1,7 +1,4 @@
-import logging
-import time
-from numbers import Number
-
+# coding=utf-8
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -11,6 +8,18 @@ from qgis.core import (
     QgsVectorFileWriter
 )
 
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_metres_depth,
+    unit_feet_depth,
+    layer_raster_numeric,
+    exposure_road,
+    unit_road_type_type,
+    layer_vector_line,
+    hazard_definition,
+    exposure_definition
+)
 from safe.common.utilities import OrderedDict
 from safe.common.utilities import unique_filename
 from safe.impact_functions.core import FunctionProvider
@@ -18,6 +27,8 @@ from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
@@ -26,12 +37,9 @@ from safe.common.qgis_raster_tools import polygonize, clip_raster,\
 from safe.common.qgis_vector_tools import split_by_polygon,\
     clip_by_polygon, split_by_polygon_in_out
 
-LOGGER = logging.getLogger('InaSAFE')
-
 
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
-    """
-    Simple experimental impact function for inundation
+    """Simple experimental impact function for inundation.
 
     :author Dmitry Kolesov
     :rating 1
@@ -42,8 +50,57 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                     subcategory in ['road'] and \
                     layertype=='vector'
     """
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodRasterRoadsExperimentalFunction
 
-    title = tr('OPTMIZED-TEST-Be flooded in given thresholds')
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'FloodRasterRoadsExperimentalFunction',
+                'name': tr('Flood Raster Roads Experimental Function'),
+                'impact': tr('OPTIMIZED-TEST-Be flooded in given thresholds'),
+                'author': 'Dmitry Kolesov',
+                'date_implemented': 'N/A',
+                'overview': tr('N/A'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
+                        'units': [
+                            unit_metres_depth,
+                            unit_feet_depth
+                        ],
+                        'layer_constraints': [layer_raster_numeric]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_road,
+                        'units': [unit_road_type_type],
+                        'layer_constraints': [layer_vector_line]
+                    }
+                }
+            }
+            return dict_meta
+
+    title = tr('OPTIMIZED-TEST-Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
@@ -53,7 +110,6 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         ('road_type_field', 'TYPE'),
         ('min threshold [m]', 1.0),
         ('max threshold [m]', float('inf')),
-#        ('max threshold [m]', 10000),
 
          ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
@@ -66,16 +122,14 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """
-        Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
         Mandatory method.
         """
         self.extent = extent
 
     def run(self, layers):
-        """
-        Experimental impact function
+        """Experimental impact function.
 
         Input
           layers: List of layers expected to contain
@@ -86,18 +140,6 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         road_type_field = self.parameters['road_type_field']
         threshold_min = self.parameters['min threshold [m]']
         threshold_max = self.parameters['max threshold [m]']
-
-        #reset to default if invalid (interface not working?).
-        if not isinstance(threshold_min, Number):
-            threshold_min = 1.0
-        if not isinstance(threshold_max, Number):
-            threshold_max = float('inf')
-        if target_field == 'None':
-            target_field = 'flooded'
-        if road_type_field == 'None':
-            road_type_field = 'TYPE'
-
-        start_time_function = time.clock()
 
         if threshold_min > threshold_max:
             message = tr('''The minimal threshold is
@@ -116,7 +158,6 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         E = E.get_layer()
 
         # Get necessary width and height of raster
-        #print 'self extent %s ' % self.extent
         height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
         height = int(height)
         width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
@@ -146,16 +187,12 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                 break
             y += y_delta
         clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
+
         # Clip and polygonize
-        print 'clip extent(): %s' % clip_extent
         small_raster = clip_raster(
             H, width, height, QgsRectangle(*clip_extent))
-        #small_raster = clip_raster(
-        #    H, width, height, QgsRectangle(*self.extent))
-        start_time = time.clock()
         (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
             small_raster, threshold_min, threshold_max)
-        end_time = time.clock() - start_time
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
@@ -177,21 +214,13 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         #    E,
         #    extent_as_polygon
         #)
-
         # Find inundated roads, mark them
-        print ' start split_by_polygon'
-        start_time = time.clock()
         line_layer = split_by_polygon_in_out(
             E,
             flooded_polygon_inside,
             flooded_polygon_outside,
             target_field, 1, request)
-
-        print ' end split_by_polygon'
-        end_time = time.clock() - start_time
-        LOGGER.debug(' split_by_polygon: %ss' % end_time)
-        print 'split_by_polygon: %ss' % end_time
-
+        
         target_field_index = line_layer.dataProvider().\
             fieldNameIndex(target_field)
 
@@ -257,8 +286,4 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                              'map_title': map_title,
                              'target_field': target_field},
                    style_info=style_info)
-
-        end_time = time.clock() - start_time_function
-        LOGGER.debug('the whole function : %ss' % end_time)
-        print 'the whole function: %ss' % end_time
         return line_layer

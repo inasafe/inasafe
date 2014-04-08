@@ -22,9 +22,10 @@ from safe.common.utilities import unique_filename
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def polygonize_thresholds(raster_file_name,
-                          threshold_min=0.0,
-                          threshold_max=float('inf')):
+def polygonize_thresholds(
+    raster_file_name,
+    threshold_min=0.0,
+    threshold_max=float('inf')):
     """
     Function to polygonize raster. Areas (pixels) with threshold_min <
     pixel_values < threshold_max will be converted to polygons.
@@ -69,8 +70,8 @@ def polygonize_thresholds(raster_file_name,
         outband = outdataset.GetRasterBand(iBand)
 
         for i in range(inband.YSize - 1, -1, -1):
-            scanline = \
-                inband.ReadAsArray(0, i, inband.XSize, 1, inband.XSize, 1)
+            scanline = inband.ReadAsArray(
+                0, i, inband.XSize, 1, inband.XSize, 1)
 
             if threshold_min >= 0:
                 scanline = \
