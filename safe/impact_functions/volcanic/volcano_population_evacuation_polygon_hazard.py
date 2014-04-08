@@ -13,8 +13,20 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.metadata import (
+    hazard_volcano,
+    unit_volcano_categorical,
+    layer_vector_polygon,
+    layer_vector_point,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from third_party.odict import OrderedDict
-
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
     FunctionProvider,
@@ -22,7 +34,8 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -31,7 +44,8 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator)
+    get_thousand_separator
+)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -39,7 +53,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
 class VolcanoPolygonHazardPopulation(FunctionProvider):
-    """Impact function for volcano hazard zones impact on population
+    """Impact function for volcano hazard zones impact on population.
 
     :author AIFDR
     :rating 4
@@ -51,6 +65,54 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Volcano Polygon Hazard Population.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'VolcanoPolygonHazardPopulation',
+                'name': tr('Volcano Polygon Hazard Population'),
+                'impact': tr('Need evacuation'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr('To assess the impacts of volcano eruption '
+                               'on population.'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': hazard_volcano,
+                        'units': [unit_volcano_categorical],
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point
+                        ]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Need evacuation')
     target_field = 'population'
@@ -87,7 +149,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             ('MinimumNeeds', {'on': True})]))])
 
     def run(self, layers):
-        """Risk plugin for volcano population evacuation
+        """Risk plugin for volcano population evacuation.
 
         :param layers: List of layers expected to contain where two layers
             should be present.

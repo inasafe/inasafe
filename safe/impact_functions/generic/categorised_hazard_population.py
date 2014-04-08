@@ -1,21 +1,33 @@
+# coding=utf-8
 import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
-from safe.impact_functions.core import (FunctionProvider,
-                                        get_hazard_layer,
-                                        get_exposure_layer,
-                                        get_question,
-                                        get_function_title)
+from safe.impact_functions.core import (
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layer,
+    get_question,
+    get_function_title
+)
 from safe.impact_functions.styles import flood_population_style as style_info
+from safe.metadata import (
+    hazard_all,
+    unit_normalised,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from safe.storage.raster import Raster
-from safe.common.utilities import (ugettext as tr,
-                                   format_int,
-                                   round_thousand)
+from safe.common.utilities import ugettext as tr, format_int, round_thousand
 from safe.common.tables import Table, TableRow
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
-    """Plugin for impact of population as derived by categorised hazard
+    """Plugin for impact of population as derived by categorised hazard.
 
     :author AIFDR
     :rating 2
@@ -27,6 +39,53 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Categorised Hazard Population Impact Function.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'CategorisedHazardPopulationImpactFunction',
+                'name': tr('Categorised Hazard Population Impact Function'),
+                'impact': tr('Be impacted'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of categorized hazards in raster '
+                    'format on population raster layer.'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': hazard_all,
+                        'units': [unit_normalised],
+                        'layer_constraints': [layer_raster_numeric]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
+                    }
+                }
+            }
+            return dict_meta
+
     # Function documentation
     title = tr('Be impacted')
     synopsis = tr('To assess the impacts of categorized hazards in raster '
@@ -40,12 +99,12 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                         'population count.')
     output = tr('Map of population exposed to high category and a table with '
                 'number of people in each category')
-    detailed_description = \
-        tr('This function will calculate how many people will be impacted '
-           'per each category for all categories in the hazard layer. '
-           'Currently there should be 3 categories in the hazard layer. After '
-           'that it will show the result and the total amount of people that '
-           'will be impacted for the hazard given.')
+    detailed_description = tr(
+        'This function will calculate how many people will be impacted '
+        'per each category for all categories in the hazard layer. '
+        'Currently there should be 3 categories in the hazard layer. After '
+        'that it will show the result and the total amount of people that '
+        'will be impacted for the hazard given.')
     limitation = tr('The number of categories is three.')
 
     # Configurable parameters
@@ -62,7 +121,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
-        """Plugin for impact of population as derived by categorised hazard
+        """Plugin for impact of population as derived by categorised hazard.
 
         Input
           layers: List of layers expected to contain
