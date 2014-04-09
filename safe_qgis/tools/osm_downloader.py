@@ -182,6 +182,39 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.max_longitude.setText(str(extent[2]))
         self.max_latitude.setText(str(extent[3]))
 
+    def validate_extent(self):
+        """Validate the bounding box before user click OK to download.
+
+        :return: True if the bounding box is valid, otherwise False
+        :rtype: bool
+        """
+        min_latitude = float(str(self.min_latitude.text()))
+        max_latitude = float(str(self.max_latitude.text()))
+        min_longitude = float(str(self.min_longitude.text()))
+        max_longitude = float(str(self.max_longitude.text()))
+
+        # min_latitude < max_latitude
+        if min_latitude >= max_latitude:
+            return False
+
+        # min_longitude < max_longitude
+        if min_longitude >= max_longitude:
+            return False
+
+        # -90 <= latitude <= 90
+        if min_latitude < -90 or min_latitude > 90:
+            return False
+        if max_latitude < -90 or max_latitude > 90:
+            return False
+
+        # -180 <= longitude <= 180
+        if min_longitude < -180 or min_longitude > 180:
+            return False
+        if max_longitude < -180 or max_longitude > 180:
+            return False
+
+        return True
+
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_button_clicked(self):
         """ Show a dialog to choose directory """
@@ -191,7 +224,22 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
     def accept(self):
         """Do osm download and display it in QGIS."""
+        error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
 
+        # Validate extent
+        valid_flag = self.validate_extent()
+        if not valid_flag:
+            message = self.tr('The bounding box is not valid. '
+                              'Please make sure it is valid or check your '
+                              'projection!')
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+            QMessageBox.warning(
+                self,
+                error_dialog_title,
+                message)
+            return
+
+        # Get all the feature types
         index = self.feature_type.currentIndex()
         if index == 0:
             feature_types = ['buildings', 'roads']
@@ -215,7 +263,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 self,
-                self.tr("InaSAFE OpenStreetMap downloader error"),
+                error_dialog_title,
                 str(myEx))
 
             self.progress_dialog.cancel()

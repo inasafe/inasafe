@@ -168,12 +168,12 @@ def setup_logger(log_file=None, sentry_url=None):
     flag = settings.value('inasafe/useSentry', False)
     if 'INASAFE_SENTRY' in os.environ or flag:
         if sentry_url is None:
-            myClient = Client(
+            client = Client(
                 'http://c64a83978732474ea751d432ab943a6b'
                 ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
         else:
-            myClient = Client(sentry_url)
-        sentry_handler = SentryHandler(myClient)
+            client = Client(sentry_url)
+        sentry_handler = SentryHandler(client)
         sentry_handler.setFormatter(formatter)
         sentry_handler.setLevel(logging.ERROR)
         if add_logging_handler_once(logger, sentry_handler):
