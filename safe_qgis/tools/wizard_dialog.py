@@ -69,7 +69,6 @@ exposure_question = QApplication.translate(
     'able to use this exposure layer with impact functions such '
     'as <b>flood impact on population</b>.')
 
-
 # Constants for units
 unit_question = QApplication.translate(
     'WizardDialog',
@@ -132,7 +131,6 @@ field_question_aggregation = QApplication.translate(
     'layer. Please select the attribute in this layer that represents '
     'names of the aggregation areas.')
 
-
 # Constants for classify values for categorized units
 classify_question = QApplication.translate(
     'WizardDialog',
@@ -141,7 +139,6 @@ classify_question = QApplication.translate(
     'can see all unique values found in that column. Please drag them '
     'to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, unit, field)
-
 
 # Constants: tab numbers for steps
 step_category = 1
@@ -170,6 +167,7 @@ def get_question_text(constant):
 
 
 class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
+
     """Dialog implementation class for the InaSAFE keywords wizard."""
 
     def __init__(self, parent, iface, dock=None, layer=None):
@@ -183,25 +181,22 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :param parent: Parent widget of this dialog.
         :type parent: QWidget
 
-        :param iface: Quantum GIS QGisAppInterface instance.
+        :param iface: QGIS QGisAppInterface instance.
         :type iface: QGisAppInterface
 
         :param dock: Dock widget instance that we can notify of changes to
             the keywords. Optional.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle('InaSAFE')
         # Note the keys should remain untranslated as we need to write
         # english to the keywords file.
-
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
         self.dock = dock
-
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
         if self.layer_type == 'vector':
@@ -213,22 +208,18 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.data_type = 'line'
         else:
             self.data_type = 'numeric'
-
         self.update_category_tab()
-
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
-
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
-
         self.go_to_step(1)
 
     def selected_category(self):
         """Obtain the category selected by user.
 
         :returns: metadata of the selected category
-        :rtype: dict or None
+        :rtype: dict, None
         """
         item = self.lstCategories.currentItem()
         try:
@@ -240,7 +231,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Obtain the subcategory selected by user.
 
         :returns: metadata of the selected subcategory
-        :rtype: dict or None
+        :rtype: dict, None
         """
         item = self.lstSubcategories.currentItem()
         try:
@@ -252,7 +243,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Obtain the unit selected by user.
 
         :returns: metadata of the selected unit
-        :rtype: dict or None
+        :rtype: dict, None
         """
         item = self.lstUnits.currentItem()
         try:
@@ -264,7 +255,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Obtain the field selected by user.
 
         :returns: keyword of the selected field
-        :rtype: string or None
+        :rtype: string, None
         """
         item = self.lstFields.currentItem()
         if item:
@@ -289,9 +280,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         return value_map
 
     def update_dragged_item_flags(self, item, column):
-        """A slot executed when thee item change. Check if it looks like
-        an item  dragged from QListWidget to QTreeWidget and disable the
-        drop flag. For some reasons the flag is set when dragging.
+        """A slot executed when the item change.
+
+        Check if it looks like an item dragged from QListWidget
+        to QTreeWidget and disable the drop flag.
+        For some reasons the flag is set when dragging.
         """
         if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
                 and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
@@ -300,66 +293,64 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # prevents actions being handled twice
     @pyqtSignature('')
     def on_lstCategories_itemSelectionChanged(self):
-        """Automatic slot executed when category change. Set description label
-           and subcategory widgets according to the selected category
+        """Automatic slot executed when category change.
+
+        Set description label and subcategory widgets according
+        to the selected category
         """
         self.lstSubcategories.clear()
-
         category = self.selected_category()
         # Exit if no selection
         if not category:
             return
-
         # Set description label
         self.lblDescribeCategory.setText(category["description"])
         self.lblIconCategory.setPixmap(
             QPixmap(':/plugins/inasafe/keyword-category-%s.svg'
                     % (category['id'] or 'notset')))
-
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
     def on_lstSubcategories_itemSelectionChanged(self):
-        """Automatic slot executed when subcategory change. Set description
-          label and unit widgets according to the selected category
+        """Automatic slot executed when subcategory change.
+
+        Set description label and unit widgets according
+        to the selected category
         """
         self.lstUnits.clear()
-
         subcategory = self.selected_subcategory()
         # Exit if no selection
         if not subcategory:
             return
-
         # Set description label
         self.lblDescribeSubcategory.setText(subcategory['description'])
         self.lblIconSubcategory.setPixmap(QPixmap(
             ':/plugins/inasafe/keyword-subcategory-%s.svg'
             % (subcategory['id'] or 'notset')))
-
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
     def on_lstUnits_itemSelectionChanged(self):
-        """Automatic slot executed when unit change. Set description label
-           and field widgets according to the selected category
+        """Automatic slot executed when unit change.
+
+        Set description label and field widgets according
+        to the selected category
         """
         self.lstFields.clear()
-
         unit = self.selected_unit()
         # Exit if no selection
         if not unit:
             return
         self.lblDescribeUnit.setText(unit['description'])
-
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
     def on_lstFields_itemSelectionChanged(self):
         """Automatic slot executed when field change.
-           Unlocks the Next button.
+
+        Unlocks the Next button.
         """
         self.treeClasses.clear()
-
         field = self.selected_field()
         # Exit if no selection
         if not field:
@@ -375,20 +366,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
         desc += self.tr('Unique values: %s') % ', '.join(unique_values_str)
         self.lblDescribeField.setText(desc)
-
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
     def on_leTitle_textChanged(self):
         """Automatic slot executed when the title change.
-           Unlocks the Next button.
+
+        Unlocks the Next button.
         """
         # Enable the next button
         self.pbnNext.setEnabled(bool(self.leTitle.text()))
 
     def update_category_tab(self):
-        """Set widgets on the Category tab
-        """
+        """Set widgets on the Category tab."""
         self.lstCategories.clear()
         self.lstSubcategories.clear()
         self.lstUnits.clear()
@@ -409,8 +399,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.lstCategories.addItem(item)
 
     def update_subcategory_tab(self):
-        """Set widgets on the Subcategory tab
-        """
+        """Set widgets on the Subcategory tab."""
         category = self.selected_category()
         self.lstSubcategories.clear()
         self.lstUnits.clear()
@@ -425,8 +414,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.lstSubcategories.addItem(item)
 
     def update_unit_tab(self):
-        """Set widgets on the Unit tab
-        """
+        """Set widgets on the Unit tab."""
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         self.lblSelectUnit.setText(
@@ -441,12 +429,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.lstUnits.addItem(item)
 
     def update_field_tab(self):
-        """Set widgets on the Field tab (lblSelectField and lstFields)
-        """
+        """Set widgets on the Field tab."""
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         unit = self.selected_unit()
-
         if subcategory and unit:
             subcategory_unit_relation = get_question_text(
                 '%s_%s_question' % (subcategory['id'], unit['id']))
@@ -454,7 +440,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             subcategory_unit_relation = self.tr(
                 '<b><font color="red">ERROR! '
                 'Missing subcategory or unit!</font></b>')
-
         if category['id'] == 'aggregation':
             question_text = field_question_aggregation
         else:
@@ -467,7 +452,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
         default_item = None
-
         for field in self.layer.dataProvider().fields():
             field_name = field.name()
             item = QListWidgetItem(field_name, self.lstFields)
@@ -486,8 +470,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeField.clear()
 
     def update_classify_tab(self):
-        """Set widgets on the Classify tab
-        """
+        """Set widgets on the Classify tab."""
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         unit = self.selected_unit()
@@ -499,7 +482,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblClassify.setText(classify_question %
                                 (subcategory['name'], category['name'],
                                  unit['name'], field.upper()))
-
         # Assign unique values to classes
         unassigned_values = list()
         assigned_values = dict()
@@ -518,7 +500,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if not assigned:
                 # add to unassigned values list otherwise
                 unassigned_values += [val_str]
-
         # Populate the unique vals list
         self.lstUniqueValues.clear()
         for val in unassigned_values:
@@ -528,7 +509,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                                QtCore.Qt.ItemIsDragEnabled)
             list_item.setText(val)
             self.lstUniqueValues.addItem(list_item)
-
         # Populate assigned values tree
         self.treeClasses.clear()
         bold_font = QtGui.QFont()
@@ -555,7 +535,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf.setText(0, val)
 
     def go_to_step(self, step):
-        """Set the stacked widget to the given step
+        """Set the stacked widget to the given step.
 
         :param step: The step number to be moved to
         :type step: int
@@ -585,7 +565,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # Complete
             self.accept()
             return
-
         # Set Next button label
         if new_step == self.stackedWidget.count():
             self.pbnNext.setText(self.tr('Finish'))
@@ -605,7 +584,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.go_to_step(new_step)
 
     def is_ready_to_next_step(self, step):
-        """Check if widgets are filled an new step can be enabled
+        """Check if widgets are filled an new step can be enabled.
 
         :param step: The present step number
         :type step: int
@@ -631,7 +610,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return bool(self.leTitle.text())
 
     def compute_next_step(self, current_step):
-        """Determine the next step to be switched to
+        """Determine the next step to be switched to.
 
         :param current_step: The present step number
         :type current_step: int
@@ -668,15 +647,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             new_step = None
         else:
             raise Exception('Unexpected number of steps')
-
         # Skip the field (and classify) tab if raster layer
         if new_step == step_field and is_raster_layer(self.layer):
             new_step = step_source
-
         return new_step
 
     def compute_previous_step(self, current_step):
-        """Determine the previous step to be switched to (by the Back button)
+        """Determine the previous step to be switched to (by the Back button).
 
         :param current_step: The present step number
         :type current_step: int
