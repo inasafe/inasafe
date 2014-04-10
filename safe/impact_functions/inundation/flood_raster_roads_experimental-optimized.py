@@ -1,11 +1,11 @@
 # coding=utf-8
+"""Impact of flood on roads."""
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry,
     QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform,
-    QgsVectorFileWriter
+    QgsCoordinateTransform
 )
 
 from safe.metadata import (
@@ -21,7 +21,6 @@ from safe.metadata import (
     exposure_definition
 )
 from safe.common.utilities import OrderedDict
-from safe.common.utilities import unique_filename
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
@@ -32,10 +31,9 @@ from safe.impact_functions.impact_function_metadata import (
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_raster_tools import polygonize, clip_raster,\
-    polygonize_gdal
-from safe.common.qgis_vector_tools import split_by_polygon,\
-    clip_by_polygon, split_by_polygon_in_out
+from safe.common.qgis_raster_tools import (
+    polygonize, clip_raster, polygonize_gdal)
+from safe.common.qgis_vector_tools import split_by_polygon_in_out
 
 
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
@@ -50,6 +48,10 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                     subcategory in ['road'] and \
                     layertype=='vector'
     """
+    def __init__(self):
+        """Constructor."""
+        self.extent = None
+
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodRasterRoadsExperimentalFunction
 
@@ -110,8 +112,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         ('road_type_field', 'TYPE'),
         ('min threshold [m]', 1.0),
         ('max threshold [m]', float('inf')),
-
-         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
+        ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
 
     def get_function_type(self):
@@ -122,19 +123,25 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+        """Set up the extent of area of interest.
 
-        Mandatory method.
+        It is mandatory to call this method before running the analysis.
+
+        :param extent: Extents mutator [xmin, ymin, xmax, ymax].
+        :type extent: list
         """
         self.extent = extent
 
     def run(self, layers):
         """Experimental impact function.
 
-        Input
-          layers: List of layers expected to contain
-              H: Polygon layer of inundation areas
-              E: Vector layer of roads
+        :param layers: List of layers expected to contain at least:
+            H: Polygon layer of inundation areas
+            E: Vector layer of roads
+        :type layers: list
+
+        :returns: A new line layer with inundated roads marked.
+        :type: safe_layer
         """
         target_field = self.parameters['target_field']
         road_type_field = self.parameters['road_type_field']
@@ -220,7 +227,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             flooded_polygon_inside,
             flooded_polygon_outside,
             target_field, 1, request)
-        
+
         target_field_index = line_layer.dataProvider().\
             fieldNameIndex(target_field)
 
@@ -280,10 +287,12 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(data=line_layer,
-                   name=tr('Flooded roads'),
-                   keywords={'impact_summary': impact_summary,
-                             'map_title': map_title,
-                             'target_field': target_field},
-                   style_info=style_info)
+        line_layer = Vector(
+            data=line_layer,
+            name=tr('Flooded roads'),
+            keywords={
+                'impact_summary': impact_summary,
+                'map_title': map_title,
+                'target_field': target_field},
+            style_info=style_info)
         return line_layer
