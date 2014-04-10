@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-InaSAFE uDisaster risk assessment tool developed by AusAid and World Bank
+InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -73,7 +73,8 @@ def clone_shp_layer(name='tsunami_polygon'):
 
 def remove_temp_file(file_path):
     """Helper function that removes temp file created during test.
-       Also its keywords file will be removed
+
+    Also its keywords file will be removed.
 
     :param file_name: File to remove.
     """
@@ -85,10 +86,12 @@ def remove_temp_file(file_path):
 
 
 class WizardDialogTest(unittest.TestCase):
+
     """Test the InaSAFE wizard GUI"""
 
     def test_keywords_creation_wizard(self):
-        """Test how the widgets work"""
+
+        """Test how the widgets work."""
 
         expected_category_count = 3
         expected_second_category = "exposure"
