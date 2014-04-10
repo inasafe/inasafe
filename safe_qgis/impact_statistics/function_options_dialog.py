@@ -19,10 +19,19 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import ast
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (QGroupBox, QLineEdit, QDialog, QLabel, QCheckBox,
-                         QFormLayout, QWidget)
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import (
+    QGroupBox,
+    QLineEdit,
+    QDialog,
+    QLabel,
+    QCheckBox,
+    QFormLayout,
+    QWidget)
 from third_party.odict import OrderedDict
 
 from safe_qgis.ui.function_options_dialog_base import (
@@ -37,8 +46,7 @@ except AttributeError:
 
 # FIXME (Tim and Ole): Change to ConfigurationDialog throughout
 # Maybe also change filename and Base name accordingly.
-class FunctionOptionsDialog(QtGui.QDialog,
-                            Ui_FunctionOptionsDialogBase):
+class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
     """ConfigurableImpactFunctions Dialog for InaSAFE.
     """
 
@@ -63,8 +71,10 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         :param widget: QWidget instance
         :type widget: QWidget
+
         :param property_name: The name of property inside QWidget instance
         :type property_name: str
+
         :param function: A function to convert the property value
         :type function: Callable
 
@@ -74,7 +84,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         return lambda: function(widget.property(property_name))
 
     def build_form(self, parameters):
-        """we build a form from impact functions parameter
+        """Build a form from impact functions parameter.
 
         .. note:: see http://tinyurl.com/pyqt-differences
 
@@ -93,7 +103,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
                     value)
 
     def build_minimum_needs_form(self, parameters):
-        """Build minimum needs tab
+        """Build minimum needs tab.
 
         :param parameters: A Dictionary containing element of form
         """
@@ -117,7 +127,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.values['minimum needs'] = values
 
     def build_post_processor_form(self, parameters):
-        """Build Post Processor Tab
+        """Build Post Processor Tab.
 
         :param  parameters: A Dictionary containing element of form
         """
@@ -131,14 +141,14 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         # create element for the tab
         values = OrderedDict()
-        for myLabel, options in parameters.items():
+        for label, options in parameters.items():
             input_values = OrderedDict()
 
             # NOTE (gigih) : 'params' is assumed as dictionary
             if 'params' in options:
                 group_box = QGroupBox()
                 group_box.setCheckable(True)
-                group_box.setTitle(get_postprocessor_human_name(myLabel))
+                group_box.setTitle(get_postprocessor_human_name(label))
 
                 # NOTE (gigih): is 'on' always exist??
                 # (MB) should always be there
@@ -158,7 +168,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
             elif 'on' in options:
                 checkbox = QCheckBox()
-                checkbox.setText(get_postprocessor_human_name(myLabel))
+                checkbox.setText(get_postprocessor_human_name(label))
                 checkbox.setChecked(options['on'])
 
                 input_values['on'] = self.bind(checkbox, 'checked', bool)
@@ -166,7 +176,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
             else:
                 raise NotImplementedError('This case is not handled for now')
 
-            values[myLabel] = input_values
+            values[label] = input_values
 
         self.values['postprocessors'] = values
 
