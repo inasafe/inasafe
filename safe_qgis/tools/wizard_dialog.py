@@ -280,11 +280,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         return value_map
 
     def update_dragged_item_flags(self, item, column):
-        """A slot executed when the item change.
+        """Fix the drop flag after the item is dropped.
 
         Check if it looks like an item dragged from QListWidget
         to QTreeWidget and disable the drop flag.
         For some reasons the flag is set when dragging.
+
+        .. note:: This is a slot executed when the item change.
         """
         if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
                 and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
@@ -293,10 +295,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # prevents actions being handled twice
     @pyqtSignature('')
     def on_lstCategories_itemSelectionChanged(self):
-        """Automatic slot executed when category change.
+        """Update category description label and subcategory widgets.
 
-        Set description label and subcategory widgets according
-        to the selected category
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
         """
         self.lstSubcategories.clear()
         category = self.selected_category()
@@ -312,10 +314,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnNext.setEnabled(True)
 
     def on_lstSubcategories_itemSelectionChanged(self):
-        """Automatic slot executed when subcategory change.
+        """Update subcategory description label and unit widgets.
 
-        Set description label and unit widgets according
-        to the selected category
+        .. note:: This is an automatic Qt slot
+           executed when the subcategory selection changes.
         """
         self.lstUnits.clear()
         subcategory = self.selected_subcategory()
@@ -331,10 +333,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnNext.setEnabled(True)
 
     def on_lstUnits_itemSelectionChanged(self):
-        """Automatic slot executed when unit change.
+        """Update unit description label and field widgets.
 
-        Set description label and field widgets according
-        to the selected category
+        .. note:: This is an automatic Qt slot
+           executed when the unit selection changes.
         """
         self.lstFields.clear()
         unit = self.selected_unit()
@@ -346,9 +348,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnNext.setEnabled(True)
 
     def on_lstFields_itemSelectionChanged(self):
-        """Automatic slot executed when field change.
+        """Update field description label and unlock the Next button.
 
-        Unlocks the Next button.
+        .. note:: This is an automatic Qt slot
+           executed when the field selection changes.
         """
         self.treeClasses.clear()
         field = self.selected_field()
@@ -370,11 +373,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnNext.setEnabled(True)
 
     def on_leTitle_textChanged(self):
-        """Automatic slot executed when the title change.
+        """Unlock the Next button
 
-        Unlocks the Next button.
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
         """
-        # Enable the next button
         self.pbnNext.setEnabled(bool(self.leTitle.text()))
 
     def update_category_tab(self):
@@ -547,7 +550,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # prevents actions being handled twice
     @pyqtSignature('')
     def on_pbnNext_released(self):
-        """Automatic slot executed when the pbnNext button is released."""
+        """Handle the Next button release.
+
+        .. note:: This is an automatic Qt slot
+           executed when the Next button is released.
+        """
         current_step = self.stackedWidget.currentIndex() + 1
         # Determine the new step to be switched
         new_step = self.compute_next_step(current_step)
@@ -575,7 +582,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # prevents actions being handled twice
     @pyqtSignature('')
     def on_pbnBack_released(self):
-        """Automatic slot executed when the pbnBack button is released."""
+        """Handle the Back button release.
+
+        .. note:: This is an automatic Qt slot
+           executed when the Back button is released.
+        """
         current_step = self.stackedWidget.currentIndex() + 1
         new_step = self.compute_previous_step(current_step)
         # Set Next button label
@@ -584,7 +595,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.go_to_step(new_step)
 
     def is_ready_to_next_step(self, step):
-        """Check if widgets are filled an new step can be enabled.
+        """Check if the present step is complete.
 
         :param step: The present step number
         :type step: int
