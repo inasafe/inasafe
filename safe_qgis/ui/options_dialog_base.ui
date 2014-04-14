@@ -355,7 +355,7 @@
            </sizepolicy>
           </property>
          </widget>
-         <widget class="QToolButton" name="toolNorthArrowPath_2">
+         <widget class="QToolButton" name="toolNorthArrowPath">
           <property name="text">
            <string>...</string>
           </property>
@@ -365,7 +365,7 @@
        <item>
         <widget class="QCheckBox" name="custom_templates_dir_checkbox">
          <property name="text">
-          <string>Use custom report templates directory</string>
+          <string>Add report templates directory</string>
          </property>
          <property name="checked">
           <bool>false</bool>
@@ -388,7 +388,7 @@
            </sizepolicy>
           </property>
          </widget>
-         <widget class="QToolButton" name="toolReportTemplatePath_2">
+         <widget class="QToolButton" name="toolReportTemplatePath">
           <property name="text">
            <string>...</string>
           </property>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Fri Apr 11 17:55:51 2014
+# Created: Mon Apr 14 11:56:06 2014
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -177,8 +177,8 @@ class Ui_OptionsDialogBase(object):
         sizePolicy.setHeightForWidth(self.leNorthArrowPath.sizePolicy().hasHeightForWidth())
         self.leNorthArrowPath.setSizePolicy(sizePolicy)
         self.leNorthArrowPath.setObjectName(_fromUtf8("leNorthArrowPath"))
-        self.toolNorthArrowPath_2 = QtGui.QToolButton(self.splitter_north_arrow)
-        self.toolNorthArrowPath_2.setObjectName(_fromUtf8("toolNorthArrowPath_2"))
+        self.toolNorthArrowPath = QtGui.QToolButton(self.splitter_north_arrow)
+        self.toolNorthArrowPath.setObjectName(_fromUtf8("toolNorthArrowPath"))
         self.verticalLayout_2.addWidget(self.splitter_north_arrow)
         self.custom_templates_dir_checkbox = QtGui.QCheckBox(self.tab_templates)
         self.custom_templates_dir_checkbox.setChecked(False)
@@ -195,8 +195,8 @@ class Ui_OptionsDialogBase(object):
         sizePolicy.setHeightForWidth(self.leReportTemplatePath.sizePolicy().hasHeightForWidth())
         self.leReportTemplatePath.setSizePolicy(sizePolicy)
         self.leReportTemplatePath.setObjectName(_fromUtf8("leReportTemplatePath"))
-        self.toolReportTemplatePath_2 = QtGui.QToolButton(self.splitter_custom_report)
-        self.toolReportTemplatePath_2.setObjectName(_fromUtf8("toolReportTemplatePath_2"))
+        self.toolReportTemplatePath = QtGui.QToolButton(self.splitter_custom_report)
+        self.toolReportTemplatePath.setObjectName(_fromUtf8("toolReportTemplatePath"))
         self.verticalLayout_2.addWidget(self.splitter_custom_report)
         self.custom_org_disclaimer_checkbox = QtGui.QCheckBox(self.tab_templates)
         self.custom_org_disclaimer_checkbox.setChecked(False)
@@ -313,9 +313,9 @@ class Ui_OptionsDialogBase(object):
         self.toolOrganisationLogoPath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.organisation_on_dock_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Show organisation logo on main panel too", None, QtGui.QApplication.UnicodeUTF8))
         self.custom_north_arrow_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom north arrow image", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolNorthArrowPath_2.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.custom_templates_dir_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom report templates directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolReportTemplatePath_2.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolNorthArrowPath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.custom_templates_dir_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Add report templates directory", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolReportTemplatePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.custom_org_disclaimer_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom organisation disclaimer text", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_templates), QtGui.QApplication.translate("OptionsDialogBase", "Template Options", None, QtGui.QApplication.UnicodeUTF8))
         self.lblKeywordCache.setText(QtGui.QApplication.translate("OptionsDialogBase", "Keyword cache for remote datasources", None, QtGui.QApplication.UnicodeUTF8))
