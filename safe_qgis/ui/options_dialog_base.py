@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Mon Apr 14 11:56:06 2014
+# Created: Wed Apr 16 09:50:43 2014
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -314,7 +314,7 @@ class Ui_OptionsDialogBase(object):
         self.organisation_on_dock_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Show organisation logo on main panel too", None, QtGui.QApplication.UnicodeUTF8))
         self.custom_north_arrow_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom north arrow image", None, QtGui.QApplication.UnicodeUTF8))
         self.toolNorthArrowPath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.custom_templates_dir_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Add report templates directory", None, QtGui.QApplication.UnicodeUTF8))
+        self.custom_templates_dir_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Additional report templates directory", None, QtGui.QApplication.UnicodeUTF8))
         self.toolReportTemplatePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.custom_org_disclaimer_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom organisation disclaimer text", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_templates), QtGui.QApplication.translate("OptionsDialogBase", "Template Options", None, QtGui.QApplication.UnicodeUTF8))

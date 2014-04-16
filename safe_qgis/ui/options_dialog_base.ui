@@ -365,7 +365,7 @@
        <item>
         <widget class="QCheckBox" name="custom_templates_dir_checkbox">
          <property name="text">
-          <string>Add report templates directory</string>
+          <string>Additional report templates directory</string>
          </property>
          <property name="checked">
           <bool>false</bool>
