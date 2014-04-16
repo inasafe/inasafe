@@ -264,7 +264,7 @@ class Test_gis_native_impact_functions(unittest.TestCase):
     test_polygon_roads_impact.slow = True
 
     def test_raster_roads_impact(self):
-        """Test FloodVectorRoadsExperimentalFunction work
+        """Test FloodRasterRoadsExperimentalFunction work
         """
         hazard_name = os.path.join(
             UNITDATA,
@@ -309,6 +309,53 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         count = sum(impact.get_data(attribute=keywords['target_field']))
         self.assertEquals(count, 25)
     test_raster_roads_impact.slow = True
+
+    def test_raster_roads_impact_optimized(self):
+        """Test FloodRasterRoadsExperimentalFunction-Optimized work
+        """
+        hazard_name = os.path.join(
+            UNITDATA,
+            'hazard',
+            'jakarta_flood_design.tif')
+        qgis_hazard = QgsRasterLayer(
+            hazard_name,
+            'HAZARD'
+        )
+
+        exposure_name = os.path.join(
+            UNITDATA,
+            'exposure',
+            'roads_osm_4326.shp')
+        qgis_exposure = QgsVectorLayer(
+            exposure_name,
+            'EXPOSURE',
+            'ogr'
+        )
+
+        plugin_name = "FloodRasterRoadsExperimentalFunction2"
+
+        params = OrderedDict([
+            ('target_field', 'flooded'),
+            ('road_type_field', 'TYPE'),
+            ('min threshold [m]', 0.005),
+            ('max threshold [m]', float('inf'))
+        ])
+
+        impact = self._get_impact_function(
+            qgis_hazard,
+            qgis_exposure,
+            plugin_name,
+            params
+        )
+
+        keywords = impact.get_keywords()
+        self.assertEquals(
+            params['target_field'],
+            keywords['target_field']
+        )
+        count = sum(impact.get_data(attribute=keywords['target_field']))
+        self.assertEquals(count, 25)
+    
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_gis_native_impact_functions, 'test')
