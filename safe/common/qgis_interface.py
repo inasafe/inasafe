@@ -264,5 +264,12 @@ class QgisInterface(QObject):
         pass
 
     def legendInterface(self):
-        """Get the legend."""
-        return self.canvas
+        """Get the legend.
+
+        TODO: Implement this when it is needed one day...
+
+        See also discussion at:
+
+        https://github.com/AIFDR/inasafe/pull/924/
+        """
+        return None
