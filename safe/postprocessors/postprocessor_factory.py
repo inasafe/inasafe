@@ -80,7 +80,6 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
 
     for name, values in requested_postprocessors.iteritems():
         constr_id = name + 'Postprocessor'
-        
         # Flag specifying if aggregation is required. If set, postprocessor
         # will be disabled when AOI mode is enabled.
         requires_aggregation = True
