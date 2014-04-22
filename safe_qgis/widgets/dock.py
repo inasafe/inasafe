@@ -24,7 +24,9 @@ from functools import partial
 
 import numpy
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 from qgis.core import (
     QgsMapLayer,
@@ -570,6 +572,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.function_parameters = None
             if hasattr(self.active_function, 'parameters'):
                 self.function_parameters = self.active_function.parameters
+            self.set_function_options_status()
+        else:
+            self.function_parameters = None
             self.set_function_options_status()
 
         self.toggle_aggregation_combo()
