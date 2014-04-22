@@ -30,7 +30,10 @@ from safe_qgis.exceptions import (
     ReportCreationError,
     TemplateElementMissingError)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.defaults import disclaimer
+from safe_qgis.utilities.defaults import (
+    disclaimer,
+    default_organisation_logo_path,
+    default_north_arrow_path)
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -53,8 +56,8 @@ class Map():
         self.composition = None
         self.extent = iface.mapCanvas().extent()
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
-        self.north_arrow = ':/plugins/inasafe/simple_north_arrow.png'
-        self.org_logo = ':/plugins/inasafe/supporters.png'
+        self.north_arrow = default_north_arrow_path()
+        self.org_logo = default_organisation_logo_path()
         self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
         self.disclaimer = disclaimer()
         self.page_width = 0  # width in mm
@@ -172,12 +175,10 @@ class Map():
         :rtype: str
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
-        # if self.composition != None, the template has been loaded before
-        if self.composition is None:
-            try:
-                self.load_template()
-            except TemplateElementMissingError, msg:
-                raise TemplateElementMissingError(msg)
+        try:
+            self.load_template()
+        except TemplateElementMissingError, msg:
+            raise TemplateElementMissingError(msg)
 
         if filename is None:
             map_pdf_path = unique_filename(
@@ -305,8 +306,7 @@ class Map():
                 raise TemplateElementMissingError(
                     self.tr(
                         'The composer template you are printing to is missing '
-                        'these elements: %s') % missing_elements_string
-                )
+                        'these elements: %s') % missing_elements_string)
 
         # set InaSAFE logo
         image = self.composition.getComposerItemById('safe-logo')

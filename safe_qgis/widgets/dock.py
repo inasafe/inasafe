@@ -44,7 +44,9 @@ from safe_qgis.utilities.utilities import (
     extent_to_geo_array,
     viewport_geo_array,
     read_impact_layer)
-from safe_qgis.utilities.defaults import disclaimer
+from safe_qgis.utilities.defaults import (
+    disclaimer,
+    default_organisation_logo_path)
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -341,7 +343,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # whether to show or not a custom Logo
         self.organisation_logo_path = settings.value(
             'inasafe/organisationLogoPath',
-            ':/plugins/inasafe/bnpb_logo_64.png',
+            default_organisation_logo_path(),
             type=str)
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
