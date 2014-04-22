@@ -19,15 +19,22 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
+from safe_qgis.exceptions import (
+    KeywordNotFoundError,
+    ReportCreationError,
+    TemplateElementMissingError)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.defaults import disclaimer
+from safe_qgis.utilities.defaults import (
+    disclaimer,
+    default_organisation_logo_path,
+    default_north_arrow_path)
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -50,14 +57,20 @@ class Map():
         self.composition = None
         self.extent = iface.mapCanvas().extent()
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
-        self.north_arrow = ':/plugins/inasafe/simple_north_arrow.png'
-        self.org_logo = ':/plugins/inasafe/supporters.png'
+        self.north_arrow = default_north_arrow_path()
+        self.org_logo = default_organisation_logo_path()
         self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
         self.disclaimer = disclaimer()
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0
         self.show_frames = False  # intended for debugging use only
+
+        # List of all component id that should be exist on the template
+        self.component_ids = []
+
+        # Prompt user if template does not contain some elements
+        self.template_warning_verbose = False
 
     @staticmethod
     def tr(string):
@@ -112,6 +125,23 @@ class Map():
         """
         self.template = template
 
+    def set_component_ids(self, component_ids):
+        """Set component_ids that should be present on the standard template.
+
+        :param component_ids: List of component id on the standard template
+        :type component_ids: list
+        """
+        self.component_ids = component_ids
+
+    def set_template_warning_verbose(self, verbose):
+        """Set the choice to prompt user the error or not if template does
+        not have some elements.
+
+        :param verbose: the choice to keep it verbose or not
+        :type verbose: bool
+        """
+        self.template_warning_verbose = verbose
+
     def set_extent(self, extent):
         """Set extent or the report map
 
@@ -138,11 +168,19 @@ class Map():
             saved. If None, a generated file name will be used.
         :type filename: str
 
+        :raises: TemplateElementMissingError - when template elements are
+            missing
+
         :returns: File name of the output file (equivalent to filename if
                 provided).
         :rtype: str
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
+        try:
+            self.load_template()
+        except TemplateElementMissingError, msg:
+            raise TemplateElementMissingError(msg)
+
         if filename is None:
             map_pdf_path = unique_filename(
                 prefix='report', suffix='.pdf', dir=temp_dir())
@@ -150,7 +188,6 @@ class Map():
             # We need to cast to python string in case we receive a QString
             map_pdf_path = str(filename)
 
-        self.load_template()
         self.composition.exportAsPDF(map_pdf_path)
         return map_pdf_path
 
@@ -193,8 +230,25 @@ class Map():
                 pass
         return legend_attribute_dict
 
+    def validate_template(self):
+        """Validate template to check the missing elements on self.composition.
+
+        :return: Sublist of component_ids missing from composition
+        :rtype: list
+        """
+        missing_elements = []
+        for component_id in self.component_ids:
+            component = self.composition.getComposerItemById(component_id)
+            if component is None:
+                missing_elements.append(component_id)
+
+        return missing_elements
+
     def load_template(self):
         """Load a QgsComposer map from a template.
+
+        :raises: TemplateElementMissingError - when template elements are
+            missing
         """
         self.setup_composition()
 
@@ -241,6 +295,19 @@ class Map():
 
         self.page_width = self.composition.paperWidth()
         self.page_height = self.composition.paperHeight()
+
+        # Validate the template components
+        if self.template_warning_verbose:
+            missing_elements = self.validate_template()
+            if len(missing_elements) > 0:
+                missing_elements_string = ''
+                for missing_element in missing_elements:
+                    missing_elements_string += missing_element + ', '
+                missing_elements_string = missing_elements_string[:-2]
+                raise TemplateElementMissingError(
+                    self.tr(
+                        'The composer template you are printing to is missing '
+                        'these elements: %s') % missing_elements_string)
 
         # set InaSAFE logo
         image = self.composition.getComposerItemById('safe-logo')

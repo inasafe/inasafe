@@ -25,7 +25,10 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.utilities.help import show_context_help
-from safe_qgis.utilities.defaults import disclaimer
+from safe_qgis.utilities.defaults import (
+    disclaimer,
+    default_organisation_logo_path,
+    default_north_arrow_path)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import DEFAULTS
@@ -56,11 +59,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.parent = parent
         self.dock = dock
         self.keyword_io = KeywordIO()
-
-        # Default values for options
-        self.default_org_logo_path = ':/plugins/inasafe/bnpb_logo_64.png'
-        self.default_north_arrow_path = (
-            ':/plugins/inasafe/simple_north_arrow.png')
 
         # Set up things for context help
         button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
@@ -133,12 +131,17 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keyword_io.default_keyword_db_path(), type=str)
         self.leKeywordCachePath.setText(path)
 
+        flag = bool(settings.value(
+            'inasafe/template_warning_verbose', True, type=bool))
+        self.template_warning_checkbox.setChecked(flag)
+
         # Restore Organisation Logo Path
         org_logo_path = settings.value(
-            'inasafe/organisationLogoPath',
-            self.default_org_logo_path,
+            'inasafe/organisation_logo_path',
+            default_organisation_logo_path(),
             type=str)
-        custom_org_logo_flag = (org_logo_path != self.default_org_logo_path)
+        custom_org_logo_flag = (
+            org_logo_path != default_organisation_logo_path())
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
 
@@ -149,9 +152,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         # Restore North Arrow Image Path
         north_arrow_path = settings.value(
-            'inasafe/northArrowPath', self.default_north_arrow_path, type=str)
+            'inasafe/north_arrow_path', default_north_arrow_path(), type=str)
         custom_north_arrow_flag = (
-            north_arrow_path != self.default_north_arrow_path)
+            north_arrow_path != default_north_arrow_path())
         self.custom_north_arrow_checkbox.setChecked(custom_north_arrow_flag)
         self.leNorthArrowPath.setText(north_arrow_path)
 
@@ -217,10 +220,13 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/keywordCachePath',
             self.leKeywordCachePath.text())
         settings.setValue(
-            'inasafe/northArrowPath',
+            'inasafe/template_warning_verbose',
+            self.template_warning_checkbox.isChecked())
+        settings.setValue(
+            'inasafe/north_arrow_path',
             self.leNorthArrowPath.text())
         settings.setValue(
-            'inasafe/organisationLogoPath',
+            'inasafe/organisation_logo_path',
             self.leOrganisationLogoPath.text())
         settings.setValue(
             'inasafe/showOrganisationLogoInDockFlag',
@@ -305,12 +311,12 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         if self.custom_org_logo_checkbox.isChecked():
             # Use previous org logo path
             path = settings.value(
-                'inasafe/organisationLogoPath',
-                self.default_org_logo_path,
+                'inasafe/organisation_logo_path',
+                default_organisation_logo_path(),
                 type=str)
         else:
             # Set organisation path line edit to default one
-            path = self.default_org_logo_path
+            path = default_organisation_logo_path()
 
         self.leOrganisationLogoPath.setText(path)
 
@@ -320,12 +326,12 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         if self.custom_north_arrow_checkbox.isChecked():
             # Show previous north arrow path
             path = settings.value(
-                'inasafe/northArrowPath',
-                self.default_north_arrow_path,
+                'inasafe/north_arrow_path',
+                default_north_arrow_path(),
                 type=str)
         else:
             # Set the north arrow line edit to default one
-            path = self.default_north_arrow_path
+            path = default_north_arrow_path()
 
         self.leNorthArrowPath.setText(path)
 
