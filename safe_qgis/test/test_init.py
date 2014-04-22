@@ -1,7 +1,5 @@
 # coding=utf-8
-"""**Tests for map creation in QGIS plugin.**
-
-"""
+"""Tests for map creation in QGIS plugin."""
 
 __author__ = 'Tim Sutton <tim@linfiniti.com>'
 __revision__ = '$Format:%H$'
@@ -29,37 +27,39 @@ class TestInit(unittest.TestCase):
 
     """
 
-    def testReadInit(self):
+    def test_read_init(self):
         """Test that the plugin __init__ will validate on plugins.qgis.org."""
 
         # You should update this list according to the latest in
         # https://github.com/qgis/qgis-django/blob/master/qgis-app/
         #        plugins/validator.py
 
-        myRequiredMetadata = ['name',
-                              'description',
-                              'version',
-                              'qgisMinimumVersion',
-                              'email',
-                              'author']
+        required_metadata = [
+            'name',
+            'description',
+            'version',
+            'qgisMinimumVersion',
+            'email',
+            'author']
 
-        myFilePath = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), os.pardir,
-                         '../metadata.txt'))
-        LOGGER.info(myFilePath)
-        myMetadata = []
+        file_path = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                os.pardir,
+                '../metadata.txt'))
+        LOGGER.info(file_path)
+        metadata = []
         parser = ConfigParser.ConfigParser()
         parser.optionxform = str
-        parser.read(myFilePath)
-        message = 'Cannot find a section named "general" in %s' % myFilePath
-        assert parser.has_section('general'), message
-        myMetadata.extend(parser.items('general'))
+        parser.read(file_path)
+        message = 'Cannot find a section named "general" in %s' % file_path
+        self.assertTrue(parser.has_section('general'), message)
+        metadata.extend(parser.items('general'))
 
-        for md in myRequiredMetadata:
-            message = 'Cannot find myMetadata "%s" '\
-                        'in myMetadata source (%s).' % (md, myFilePath)
-            assert md in dict(myMetadata) or dict(myMetadata)[md], \
-                message
+        for expectation in required_metadata:
+            message = ('Cannot find metadata "%s" in metadata source (%s).' % (
+                expectation, file_path))
+            self.assertIn(expectation, dict(metadata), message)
 
 if __name__ == '__main__':
     unittest.main()
