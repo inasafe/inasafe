@@ -46,8 +46,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
     load_layers,
     setup_scenario,
-    canvas_list,
-    compare_result_to_expected_file)
+    canvas_list)
 
 from safe_qgis.safe_interface import TESTDATA
 
