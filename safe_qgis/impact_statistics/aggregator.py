@@ -731,21 +731,20 @@ class Aggregator(QtCore.QObject):
             for myFeature in provider.getFeatures():
                 feature_id = myFeature.id()
                 if feature_id not in zonal_statistics:
-                    # Blindly ignoring - @mbernasocchi can you review? TS (YA: see #877)
+                    # Blindly ignoring - @mbernasocchi can you review?
+                    # TS (YA: see #877)
                     attributes = {
                         sum_index: 0,
                         count_index: 0,
                         mean_index: 0
-                        }
+                    }
                 else:
                     statistics = zonal_statistics[feature_id]
-                    #          minIndex: statistics['min'],
-                    #          maxIndex: statistics['max']}
                     attributes = {
                         sum_index: statistics['sum'],
                         count_index: statistics['count'],
                         mean_index: statistics['mean']
-                        }
+                    }
                 provider.changeAttributeValues({feature_id: attributes})
 
     def _aggregate_polygon_impact(self, safe_impact_layer):

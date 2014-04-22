@@ -38,4 +38,3 @@ class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr('About InaSAFE %s' % get_version()))
         self.parent = parent
-
