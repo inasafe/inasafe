@@ -19,6 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,

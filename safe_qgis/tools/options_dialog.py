@@ -132,12 +132,12 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.leKeywordCachePath.setText(path)
 
         flag = bool(settings.value(
-            'inasafe/templateWarningVerbose', True, type=bool))
+            'inasafe/template_warning_verbose', True, type=bool))
         self.template_warning_checkbox.setChecked(flag)
 
         # Restore Organisation Logo Path
         org_logo_path = settings.value(
-            'inasafe/organisationLogoPath',
+            'inasafe/organisation_logo_path',
             default_organisation_logo_path(),
             type=str)
         custom_org_logo_flag = (
@@ -152,7 +152,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         # Restore North Arrow Image Path
         north_arrow_path = settings.value(
-            'inasafe/northArrowPath', default_north_arrow_path(), type=str)
+            'inasafe/north_arrow_path', default_north_arrow_path(), type=str)
         custom_north_arrow_flag = (
             north_arrow_path != default_north_arrow_path())
         self.custom_north_arrow_checkbox.setChecked(custom_north_arrow_flag)
@@ -220,13 +220,13 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/keywordCachePath',
             self.leKeywordCachePath.text())
         settings.setValue(
-            'inasafe/templateWarningVerbose',
+            'inasafe/template_warning_verbose',
             self.template_warning_checkbox.isChecked())
         settings.setValue(
-            'inasafe/northArrowPath',
+            'inasafe/north_arrow_path',
             self.leNorthArrowPath.text())
         settings.setValue(
-            'inasafe/organisationLogoPath',
+            'inasafe/organisation_logo_path',
             self.leOrganisationLogoPath.text())
         settings.setValue(
             'inasafe/showOrganisationLogoInDockFlag',
@@ -311,7 +311,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         if self.custom_org_logo_checkbox.isChecked():
             # Use previous org logo path
             path = settings.value(
-                'inasafe/organisationLogoPath',
+                'inasafe/organisation_logo_path',
                 default_organisation_logo_path(),
                 type=str)
         else:
@@ -326,7 +326,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         if self.custom_north_arrow_checkbox.isChecked():
             # Show previous north arrow path
             path = settings.value(
-                'inasafe/northArrowPath',
+                'inasafe/north_arrow_path',
                 default_north_arrow_path(),
                 type=str)
         else:

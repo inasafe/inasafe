@@ -17,6 +17,7 @@ __date__ = '29/10/2013'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 # This call needs to be made directly to safe.defaults and not over

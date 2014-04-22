@@ -342,7 +342,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to show or not a custom Logo
         self.organisation_logo_path = settings.value(
-            'inasafe/organisationLogoPath',
+            'inasafe/organisation_logo_path',
             default_organisation_logo_path(),
             type=str)
         flag = bool(settings.value(
@@ -1963,7 +1963,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value('inasafe/organisationLogoPath', '', type=str)
+        logo_path = settings.value('inasafe/organisation_logo_path', '',
+                                   type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
@@ -1973,12 +1974,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_disclaimer(disclaimer_text)
 
         north_arrow_path = settings.value(
-            'inasafe/northArrowPath', '', type=str)
+            'inasafe/north_arrow_path', '', type=str)
         if north_arrow_path != '':
             print_map.set_north_arrow_image(north_arrow_path)
 
         template_warning_verbose = bool(settings.value(
-            'inasafe/templateWarningVerbose', True, type=bool))
+            'inasafe/template_warning_verbose', True, type=bool))
         print_map.set_template_warning_verbose(template_warning_verbose)
 
         print_map.set_template(template_path)

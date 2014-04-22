@@ -301,7 +301,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Organisation logo
         organisation_logo_path = settings.value(
-            'inasafe/organisationLogoPath', '', type=str)
+            'inasafe/organisation_logo_path', '', type=str)
         if organisation_logo_path != '':
             self.organisation_logo_path = organisation_logo_path
 
