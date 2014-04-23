@@ -1180,7 +1180,7 @@ class Aggregator(QtCore.QObject):
         youth_ratio_key = self.get_default_keyword('YOUTH_RATIO_ATTR_KEY')
         youth_ratio_attribute = self.read_keywords(
             self.layer,
-            female_ratio_key)
+            youth_ratio_key)
         if ((youth_ratio_attribute != self.tr('Don\'t use')) and
                 (youth_ratio_attribute != self.tr('Use default'))):
             self.attributes[youth_ratio_key] = \

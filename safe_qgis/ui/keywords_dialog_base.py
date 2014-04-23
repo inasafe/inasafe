@@ -270,9 +270,23 @@ class Ui_KeywordsDialogBase(object):
         KeywordsDialogBase.setTabOrder(self.radExposure, self.radPostprocessing)
         KeywordsDialogBase.setTabOrder(self.radPostprocessing, self.cboSubcategory)
         KeywordsDialogBase.setTabOrder(self.cboSubcategory, self.cboAggregationAttribute)
+
         KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboFemaleRatioAttribute)
         KeywordsDialogBase.setTabOrder(self.cboFemaleRatioAttribute, self.dsbFemaleRatioDefault)
         KeywordsDialogBase.setTabOrder(self.dsbFemaleRatioDefault, self.pbnAdvanced)
+
+        KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboYouthRatioAttribute)
+        KeywordsDialogBase.setTabOrder(self.cboYouthRatioAttribute, self.dsbYouthRatioDefault)
+        KeywordsDialogBase.setTabOrder(self.dsbYouthRatioDefault, self.pbnAdvanced)
+
+        KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboAdultRatioAttribute)
+        KeywordsDialogBase.setTabOrder(self.cboAdultRatioAttribute, self.dsbAdultRatioDefault)
+        KeywordsDialogBase.setTabOrder(self.dsbAdultRatioDefault, self.pbnAdvanced)
+
+        KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboElderRatioAttribute)
+        KeywordsDialogBase.setTabOrder(self.cboElderRatioAttribute, self.dsbElderRatioDefault)
+        KeywordsDialogBase.setTabOrder(self.dsbElderRatioDefault, self.pbnAdvanced)
+
         KeywordsDialogBase.setTabOrder(self.pbnAdvanced, self.radPredefined)
         KeywordsDialogBase.setTabOrder(self.radPredefined, self.radUserDefined)
         KeywordsDialogBase.setTabOrder(self.radUserDefined, self.cboKeyword)

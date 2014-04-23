@@ -66,16 +66,16 @@ class AgePostprocessor(AbstractPostprocessor):
             #either all 3 ratio are custom set or we use defaults
             self.youth_ratio = params['youth_ratio']
             self.adult_ratio = params['adult_ratio']
-            self.elder_ratio = params['elder_ratio']
+            self.elderly_ratio = params['elderly_ratio']
 
             ratios_total = (self.youth_ratio +
                             self.adult_ratio +
-                            self.elder_ratio)
+                            self.elderly_ratio)
             if ratios_total > 1:
                 self._raise_error('Age ratios should sum up to 1. Found: '
                                   '%s + %s + %s = %s ' % (self.youth_ratio,
                                                           self.adult_ratio,
-                                                          self.elder_ratio,
+                                                          self.elderly_ratio,
                                                           ratios_total))
         except KeyError:
             self._log_message('either all 3 age ratio are custom set or we'
@@ -106,7 +106,7 @@ class AgePostprocessor(AbstractPostprocessor):
             self._calculate_total()
             self._calculate_youth()
             self._calculate_adult()
-            self._calculate_elder()
+            self._calculate_elderly()
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
@@ -185,7 +185,7 @@ class AgePostprocessor(AbstractPostprocessor):
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
-    def _calculate_elder(self):
+    def _calculate_elderly(self):
         """Indicator that shows population above 64 years old.
 
         this indicator reports the amount of young population according to the
