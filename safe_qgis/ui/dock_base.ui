@@ -112,6 +112,9 @@
        </item>
        <item row="5" column="1">
         <widget class="QPushButton" name="toolFunctionOptions">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Options ...</string>
          </property>

@@ -10,7 +10,21 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs
+)
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_feet_depth,
+    unit_metres_depth,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -28,7 +42,7 @@ from safe.common.exceptions import ZeroImpactException
 # noinspection PyClassHasNoInit
 class FloodEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
-    """Impact function for flood evacuation
+    """Impact function for flood evacuation.
 
         :author AIFDR
         :rating 4
@@ -41,6 +55,58 @@ class FloodEvacuationFunction(FunctionProvider):
                         subcategory=='population' and \
                         layertype=='raster'
         """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodEvacuationFunction.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'FloodEvacuationFunction',
+                'name': tr('Flood Evacuation Function'),
+                'impact': tr('Need evacuation'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami)inundation '
+                    'in raster format on population.'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
+                        'units': [
+                            unit_feet_depth,
+                            unit_metres_depth
+                        ],
+                        'layer_constraints': [layer_raster_numeric]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Need evacuation')
     defaults = get_defaults()
@@ -96,7 +162,7 @@ class FloodEvacuationFunction(FunctionProvider):
     ])
 
     def run(self, layers):
-        """Risk plugin for flood population evacuation
+        """Risk plugin for flood population evacuation.
 
         :param layers: List of layers expected to contain
               my_hazard: Raster layer of flood depth

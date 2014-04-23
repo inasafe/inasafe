@@ -1,4 +1,4 @@
-
+# coding=utf-8
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -7,12 +7,26 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_metres_depth,
+    unit_feet_depth,
+    layer_raster_numeric,
+    exposure_road,
+    unit_road_type_type,
+    layer_vector_line,
+    hazard_definition,
+    exposure_definition
+)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
@@ -21,8 +35,7 @@ from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
-    """
-    Simple experimental impact function for inundation
+    """Simple experimental impact function for inundation.
 
     :author Dmitry Kolesov
     :rating 1
@@ -33,6 +46,55 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                     subcategory in ['road'] and \
                     layertype=='vector'
     """
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodRasterRoadsExperimentalFunction
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'FloodRasterRoadsExperimentalFunction',
+                'name': tr('Flood Raster Roads Experimental Function'),
+                'impact': tr('Be flooded in given thresholds'),
+                'author': 'Dmitry Kolesov',
+                'date_implemented': 'N/A',
+                'overview': tr('N/A'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
+                        'units': [
+                            unit_metres_depth,
+                            unit_feet_depth
+                        ],
+                        'layer_constraints': [layer_raster_numeric]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_road,
+                        'units': [unit_road_type_type],
+                        'layer_constraints': [layer_vector_line]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Be flooded in given thresholds')
 
@@ -56,16 +118,14 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """
-        Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
         Mandatory method.
         """
         self.extent = extent
 
     def run(self, layers):
-        """
-        Experimental impact function
+        """Experimental impact function.
 
         Input
           layers: List of layers expected to contain

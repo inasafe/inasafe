@@ -24,7 +24,9 @@ from functools import partial
 
 import numpy
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 from qgis.core import (
     QgsMapLayer,
@@ -42,7 +44,9 @@ from safe_qgis.utilities.utilities import (
     extent_to_geo_array,
     viewport_geo_array,
     read_impact_layer)
-from safe_qgis.utilities.defaults import disclaimer
+from safe_qgis.utilities.defaults import (
+    disclaimer,
+    default_organisation_logo_path)
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -87,7 +91,8 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregatioError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    TemplateElementMissingError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -337,8 +342,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to show or not a custom Logo
         self.organisation_logo_path = settings.value(
-            'inasafe/organisationLogoPath',
-            ':/plugins/inasafe/bnpb_logo_64.png',
+            'inasafe/organisation_logo_path',
+            default_organisation_logo_path(),
             type=str)
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
@@ -569,6 +574,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.function_parameters = None
             if hasattr(self.active_function, 'parameters'):
                 self.function_parameters = self.active_function.parameters
+            self.set_function_options_status()
+        else:
+            self.function_parameters = None
             self.set_function_options_status()
 
         self.toggle_aggregation_combo()
@@ -1947,6 +1955,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
 
+        # Set all the map components
         print_map.set_impact_layer(self.iface.activeLayer())
         if use_full_extent:
             print_map.set_extent(self.iface.activeLayer().extent())
@@ -1954,8 +1963,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value(
-            'inasafe/organisationLogoPath', '', type=str)
+        logo_path = settings.value('inasafe/organisation_logo_path', '',
+                                   type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
@@ -1965,14 +1974,36 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_disclaimer(disclaimer_text)
 
         north_arrow_path = settings.value(
-            'inasafe/northArrowPath', '', type=str)
+            'inasafe/north_arrow_path', '', type=str)
         if north_arrow_path != '':
             print_map.set_north_arrow_image(north_arrow_path)
 
+        template_warning_verbose = bool(settings.value(
+            'inasafe/template_warning_verbose', True, type=bool))
+        print_map.set_template_warning_verbose(template_warning_verbose)
+
         print_map.set_template(template_path)
+        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
+                         'impact-report', 'impact-map', 'impact-legend']
+        print_map.set_component_ids(component_ids)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
+            try:
+                print_map.load_template()
+            except TemplateElementMissingError, msg:
+                title = self.tr('Template is missing some elements')
+                question = self.tr('%s. Do you still want to continue?') % msg
+                # noinspection PyCallByClass,PyTypeChecker
+                answer = QtGui.QMessageBox.question(
+                    self,
+                    title,
+                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+
+                if answer == QtGui.QMessageBox.No:
+                    return
+            print_map.template_warning_verbose = False
+
             if print_map.map_title() is not None:
                 default_file_name = print_map.map_title() + '.pdf'
             else:
@@ -2031,21 +2062,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             QtCore.QUrl.TolerantMode))
             self.show_dynamic_message(status)
         else:
-            self.composer = self.iface.createNewComposer()
-            # pylint: disable=W0703
-            # noinspection PyBroadException
             try:
                 print_map.load_template()
-            except Exception:
+            except TemplateElementMissingError, msg:
+                title = self.tr('Template is missing some elements')
+                question = self.tr('%s. Do you still want to continue?') % msg
                 # noinspection PyCallByClass,PyTypeChecker
-                # TODO: This is a but sucky - we should show informative msg TS
-                QtGui.QMessageBox.warning(
+                answer = QtGui.QMessageBox.question(
                     self,
-                    self.tr('InaSAFE Error'),
-                    self.tr('Error on loading template'))
-                return
-            # pylint: enable=W0703
+                    title,
+                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
 
+                if answer == QtGui.QMessageBox.Yes:
+                    print_map.template_warning_verbose = False
+                    print_map.load_template()
+                else:
+                    return
+            self.composer = self.iface.createNewComposer()
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
             # Zoom to Full Extent

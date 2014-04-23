@@ -192,6 +192,10 @@ class InvalidLayerError(Exception):
     pass
 
 
+class TemplateElementMissingError(Exception):
+    """Raised when some element ids are missing from template."""
+
+
 class ReportCreationError(Exception):
     """Raised when error occurs during report generation."""
     pass
