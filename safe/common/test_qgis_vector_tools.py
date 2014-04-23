@@ -254,7 +254,7 @@ class TestQGISVectorTools(unittest.TestCase):
 
     def test_split_by_polygon_in_out(self):
         """Test split_by_polygon in-out work"""
- 
+
         raster_name = os.path.join(
             UNITDATA,
             'hazard',
@@ -292,10 +292,7 @@ class TestQGISVectorTools(unittest.TestCase):
             attrs = feature.attributes()
             if (attrs[3] == 1):
                 flooded = flooded + 1
-        self.assertEqual(flooded, 25)        
-
-
-
+        self.assertEqual(flooded, 25)
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestQGISVectorTools, 'test')
     runner = unittest.TextTestRunner()

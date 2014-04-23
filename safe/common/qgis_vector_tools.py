@@ -459,7 +459,6 @@ def split_by_polygon2(
         poly_geoms.append(QgsGeometry(polygon))
 
     result_layer.startEditing()
-    
     for polygon in poly_geoms:
         for initial_geom, attributes in \
                 itertools.izip(line_geoms, line_attributes):

@@ -164,7 +164,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             '',
             type=str)
         custom_templates_dir_flag = (report_template_dir != '')
-        self.custom_templates_dir_checkbox.setChecked(custom_templates_dir_flag)
+        self.custom_templates_dir_checkbox.\
+            setChecked(custom_templates_dir_flag)
         self.leReportTemplatePath.setText(report_template_dir)
 
         # Restore Disclaimer

@@ -67,7 +67,7 @@ def clone_shp_layer(name='tsunami_polygon'):
         trg_path = temp_path + ext
         shutil.copy2(src_path, trg_path)
     # return a single predefined layer
-    layer = QgsVectorLayer(temp_path+'.shp', 'TestLayer', 'ogr')
+    layer = QgsVectorLayer(temp_path + '.shp', 'TestLayer', 'ogr')
     return layer
 
 
