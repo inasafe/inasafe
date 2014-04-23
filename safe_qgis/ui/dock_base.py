@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Fri Feb 21 11:13:27 2014
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Thu Apr 10 10:22:52 2014
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,27 +12,20 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+    _fromUtf8 = lambda s: s
 
 class Ui_DockBase(object):
     def setupUi(self, DockBase):
         DockBase.setObjectName(_fromUtf8("DockBase"))
-        DockBase.resize(393, 547)
+        DockBase.resize(393, 668)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         DockBase.setWindowIcon(icon)
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)
+        self.gridLayout.setMargin(0)
+        self.gridLayout.setHorizontalSpacing(0)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.pbnShowQuestion = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnShowQuestion.setObjectName(_fromUtf8("pbnShowQuestion"))
@@ -73,12 +66,10 @@ class Ui_DockBase(object):
         self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
         self.gridLayout_3.addWidget(self.cboFunction, 5, 0, 1, 1)
         self.toolFunctionOptions = QtGui.QPushButton(self.grpQuestion)
+        self.toolFunctionOptions.setEnabled(False)
         self.toolFunctionOptions.setObjectName(_fromUtf8("toolFunctionOptions"))
         self.gridLayout_3.addWidget(self.toolFunctionOptions, 5, 1, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 1, 0, 1, 1)
-        self.verticalLayout_4 = QtGui.QVBoxLayout()
-        self.verticalLayout_4.setContentsMargins(3, -1, -1, -1)
-        self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
         self.wvResults = MessageViewer(self.dockWidgetContents)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -88,43 +79,48 @@ class Ui_DockBase(object):
         self.wvResults.setMinimumSize(QtCore.QSize(0, 50))
         self.wvResults.setProperty("url", QtCore.QUrl(_fromUtf8("about:blank")))
         self.wvResults.setObjectName(_fromUtf8("wvResults"))
-        self.verticalLayout_4.addWidget(self.wvResults)
+        self.gridLayout.addWidget(self.wvResults, 2, 0, 1, 1)
         self.org_logo_placeholder = QtGui.QHBoxLayout()
+        self.org_logo_placeholder.setSpacing(0)
         self.org_logo_placeholder.setObjectName(_fromUtf8("org_logo_placeholder"))
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem = QtGui.QSpacerItem(40, 0, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.org_logo_placeholder.addItem(spacerItem)
-        self.org_logo = QtGui.QLabel(self.dockWidgetContents)
+        self.organisation_logo = QtGui.QLabel(self.dockWidgetContents)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.org_logo.sizePolicy().hasHeightForWidth())
-        self.org_logo.setSizePolicy(sizePolicy)
-        self.org_logo.setMaximumSize(QtCore.QSize(0, 64))
-        self.org_logo.setText(_fromUtf8(""))
-        self.org_logo.setScaledContents(True)
-        self.org_logo.setAlignment(QtCore.Qt.AlignCenter)
-        self.org_logo.setObjectName(_fromUtf8("org_logo"))
-        self.org_logo_placeholder.addWidget(self.org_logo)
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        sizePolicy.setHeightForWidth(self.organisation_logo.sizePolicy().hasHeightForWidth())
+        self.organisation_logo.setSizePolicy(sizePolicy)
+        self.organisation_logo.setMaximumSize(QtCore.QSize(0, 64))
+        self.organisation_logo.setText(_fromUtf8(""))
+        self.organisation_logo.setScaledContents(True)
+        self.organisation_logo.setAlignment(QtCore.Qt.AlignCenter)
+        self.organisation_logo.setObjectName(_fromUtf8("organisation_logo"))
+        self.org_logo_placeholder.addWidget(self.organisation_logo)
+        spacerItem1 = QtGui.QSpacerItem(40, 0, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.org_logo_placeholder.addItem(spacerItem1)
-        self.verticalLayout_4.addLayout(self.org_logo_placeholder)
-        self.gridLayout.addLayout(self.verticalLayout_4, 2, 0, 1, 1)
+        self.gridLayout.addLayout(self.org_logo_placeholder, 3, 0, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.pbnHelp = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnHelp.setObjectName(_fromUtf8("pbnHelp"))
         self.horizontalLayout.addWidget(self.pbnHelp)
-        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem2 = QtGui.QSpacerItem(17, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
+        self.about_button = QtGui.QPushButton(self.dockWidgetContents)
+        self.about_button.setObjectName(_fromUtf8("about_button"))
+        self.horizontalLayout.addWidget(self.about_button)
+        spacerItem3 = QtGui.QSpacerItem(17, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem3)
         self.pbnPrint = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnPrint.setObjectName(_fromUtf8("pbnPrint"))
         self.horizontalLayout.addWidget(self.pbnPrint)
-        spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
+        spacerItem4 = QtGui.QSpacerItem(17, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem4)
         self.pbnRunStop = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnRunStop.setObjectName(_fromUtf8("pbnRunStop"))
         self.horizontalLayout.addWidget(self.pbnRunStop)
-        self.gridLayout.addLayout(self.horizontalLayout, 3, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout, 4, 0, 1, 1)
         DockBase.setWidget(self.dockWidgetContents)
         self.label_8.setBuddy(self.cboFunction)
         self.label_7.setBuddy(self.cboExposure)
@@ -133,22 +129,28 @@ class Ui_DockBase(object):
         QtCore.QObject.connect(self.pbnShowQuestion, QtCore.SIGNAL(_fromUtf8("clicked()")), self.pbnShowQuestion.hide)
         QtCore.QObject.connect(self.pbnShowQuestion, QtCore.SIGNAL(_fromUtf8("clicked()")), self.grpQuestion.show)
         QtCore.QMetaObject.connectSlotsByName(DockBase)
+        DockBase.setTabOrder(self.pbnShowQuestion, self.cboHazard)
         DockBase.setTabOrder(self.cboHazard, self.cboExposure)
         DockBase.setTabOrder(self.cboExposure, self.cboFunction)
-        DockBase.setTabOrder(self.cboFunction, self.pbnRunStop)
-        DockBase.setTabOrder(self.pbnRunStop, self.pbnHelp)
+        DockBase.setTabOrder(self.cboFunction, self.toolFunctionOptions)
+        DockBase.setTabOrder(self.toolFunctionOptions, self.cboAggregation)
+        DockBase.setTabOrder(self.cboAggregation, self.pbnHelp)
+        DockBase.setTabOrder(self.pbnHelp, self.about_button)
+        DockBase.setTabOrder(self.about_button, self.pbnPrint)
+        DockBase.setTabOrder(self.pbnPrint, self.pbnRunStop)
 
     def retranslateUi(self, DockBase):
-        DockBase.setWindowTitle(_translate("DockBase", "InaSAFE", None))
-        self.pbnShowQuestion.setText(_translate("DockBase", "Show question form", None))
-        self.grpQuestion.setTitle(_translate("DockBase", "Question: In the event of", None))
-        self.label_8.setText(_translate("DockBase", "&Might", None))
-        self.label_2.setText(_translate("DockBase", "Aggregate results by", None))
-        self.label_7.setText(_translate("DockBase", "How many", None))
-        self.toolFunctionOptions.setText(_translate("DockBase", "Options ...", None))
-        self.pbnHelp.setText(_translate("DockBase", "Help", None))
-        self.pbnPrint.setText(_translate("DockBase", "Print ...", None))
-        self.pbnRunStop.setText(_translate("DockBase", "Run", None))
+        DockBase.setWindowTitle(QtGui.QApplication.translate("DockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnShowQuestion.setText(QtGui.QApplication.translate("DockBase", "Show question form", None, QtGui.QApplication.UnicodeUTF8))
+        self.grpQuestion.setTitle(QtGui.QApplication.translate("DockBase", "Question: In the event of", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate results by", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolFunctionOptions.setText(QtGui.QApplication.translate("DockBase", "Options ...", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.about_button.setText(QtGui.QApplication.translate("DockBase", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnPrint.setText(QtGui.QApplication.translate("DockBase", "Print ...", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnRunStop.setText(QtGui.QApplication.translate("DockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
 
 from ..widgets.message_viewer import MessageViewer
 import resources_rc

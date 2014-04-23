@@ -78,12 +78,15 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         self.show_table()
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
+        # Hey we should be using autoconnect here TS
         reset_button = self.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
         reset_button.clicked.connect(self.reset_button_clicked)
 
+        # and autoconenct here too! TS
         help_button = self.myButtonBox.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
-        # Combo box change event
+
+        # Combo box change event ... and all of these! TS
         self.comboBox_id.currentIndexChanged.connect(self.update_table)
         self.comboBox_title.currentIndexChanged.connect(self.update_table)
         self.comboBox_category.currentIndexChanged.connect(self.update_table)

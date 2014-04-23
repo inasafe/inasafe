@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-21 10:33+0700\n"
+"POT-Creation-Date: 2014-02-27 15:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,8 +49,8 @@ msgstr "Total"
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:186
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:210
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:243
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:216
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:205
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:214
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:202
 msgid "All"
 msgstr "All"
 
@@ -209,7 +209,7 @@ msgstr ""
 "available. <br>"
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:124
-#: safe/impact_functions/core.py:703 safe/impact_functions/styles.py:125
+#: safe/impact_functions/core.py:702 safe/impact_functions/styles.py:125
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:144
 msgid "Category"
 msgstr "Category"
@@ -1046,18 +1046,18 @@ msgstr "Population Count"
 msgid "Population affected by flood prone areas"
 msgstr "Population affected by flood prone areas"
 
-#: safe/impact_functions/core.py:703
+#: safe/impact_functions/core.py:702
 msgid "Title"
 msgstr "Title"
 
-#: safe/impact_functions/core.py:703
+#: safe/impact_functions/core.py:702
 msgid "ID"
 msgstr "ID"
 
 msgid "Requirements"
 msgstr "Requirements"
 
-#: safe/impact_functions/core.py:776
+#: safe/impact_functions/core.py:775
 msgid "Available Impact Functions"
 msgstr "Available Impact Functions"
 
@@ -1204,19 +1204,19 @@ msgstr ""
 "If no, where can we obtain additional relief items from and how will we "
 "transport them to here?"
 
-#: safe/impact_functions/core.py:704
+#: safe/impact_functions/core.py:703
 msgid "Sub Category"
 msgstr "Sub Category"
 
-#: safe/impact_functions/core.py:704
+#: safe/impact_functions/core.py:703
 msgid "Layer type"
 msgstr "Layer type"
 
-#: safe/impact_functions/core.py:704
+#: safe/impact_functions/core.py:703
 msgid "Data type"
 msgstr "Data type"
 
-#: safe/impact_functions/core.py:705
+#: safe/impact_functions/core.py:704
 msgid "Unit"
 msgstr "Unit"
 
@@ -1233,7 +1233,7 @@ msgid "Be impacted"
 msgstr "Be impacted"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:43
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:42
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:40
 msgid "Be flooded"
 msgstr "Be flooded"
 
@@ -1434,8 +1434,8 @@ msgstr "Values are in units of 1 million Australian Dollars"
 msgid "Buildings affected"
 msgstr "Buildings affected"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:226
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:216
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:224
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:213
 msgid "Roads inundated"
 msgstr "Roads inundated"
 
@@ -2234,15 +2234,15 @@ msgstr ""
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:223
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:314
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:228
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:218
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:226
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:215
 msgid "Not Inundated"
 msgstr "Not Inundated"
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:225
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:316
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:230
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:220
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:228
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:217
 msgid "Inundated"
 msgstr "Inundated"
 
@@ -2522,13 +2522,13 @@ msgstr "Female population (affected)"
 msgid "Area"
 msgstr "Area"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:212
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:200
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:210
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:197
 msgid "Road Type"
 msgstr "Road Type"
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:239
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:228
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:237
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:225
 msgid "Flooded roads"
 msgstr "Flooded roads"
 
@@ -2721,7 +2721,7 @@ msgstr ""
 msgid "Flooded buildings"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:104
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:102
 #, python-format
 msgid ""
 "Parameter \"Affected Field\"(='%s')\n"
@@ -2729,7 +2729,7 @@ msgid ""
 "                "
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:163
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:161
 #, python-format
 msgid ""
 "There are no objects in the hazard layer with\n"
@@ -2737,37 +2737,37 @@ msgid ""
 "                different extent."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:196
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:184
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:194
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:181
 msgid "Other"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:213
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:211
 msgid "Temporarily closed (m)"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:214
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:202
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:212
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:199
 msgid "Total (m)"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:217
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:209
+#: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:215
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:206
 msgid "Breakdown by road type"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:41
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:37
 msgid "Be flooded in given thresholds"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:85
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:81
 msgid ""
 "The minimal threshold is\n"
 "                greater then the maximal specified threshold.\n"
 "                Please check the values."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:142
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:139
 #, python-format
 msgid ""
 "There are no objects\n"
@@ -2777,7 +2777,7 @@ msgid ""
 "                extent."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:201
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:198
 msgid "Flooded in the threshold (m)"
 msgstr ""
 

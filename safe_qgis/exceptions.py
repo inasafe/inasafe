@@ -192,6 +192,10 @@ class InvalidLayerError(Exception):
     pass
 
 
+class TemplateElementMissingError(Exception):
+    """Raised when some element ids are missing from template."""
+
+
 class ReportCreationError(Exception):
     """Raised when error occurs during report generation."""
     pass
@@ -199,4 +203,9 @@ class ReportCreationError(Exception):
 
 class EmptyDirectoryError(Exception):
     """Raised when output directory is empty string path."""
+    pass
+
+
+class DownloadError(Exception):
+    """Raised when downloading file is error."""
     pass

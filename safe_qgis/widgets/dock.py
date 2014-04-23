@@ -20,13 +20,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import logging
-from ConfigParser import ConfigParser
 from functools import partial
 
 import numpy
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtGui import QFileDialog
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 from qgis.core import (
     QgsMapLayer,
@@ -44,7 +44,9 @@ from safe_qgis.utilities.utilities import (
     extent_to_geo_array,
     viewport_geo_array,
     read_impact_layer)
-from safe_qgis.utilities.defaults import disclaimer
+from safe_qgis.utilities.defaults import (
+    disclaimer,
+    default_organisation_logo_path)
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -89,11 +91,13 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregatioError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    TemplateElementMissingError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
+from safe_qgis.tools.about_dialog import AboutDialog
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
@@ -164,7 +168,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Flag so we can see if the dock is busy processing
         self.busy = False
 
-        # Values for settings these gets set in read_settings.
+        # Values for settings these get set in read_settings.
         self.run_in_thread_flag = None
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
@@ -240,6 +244,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnHelp.clicked.connect(self.show_help)
         self.pbnPrint.clicked.connect(self.print_map)
         self.pbnRunStop.clicked.connect(self.accept)
+        self.about_button.clicked.connect(self.about)
+
+    def about(self):
+        """Open the About dialog."""
+        dialog = AboutDialog(self)
+        dialog.show()
 
     def show_static_message(self, message):
         """Send a static message to the message viewer.
@@ -331,16 +341,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/developer_mode', False, type=bool)
 
         # whether to show or not a custom Logo
-        self.org_logo_path = settings.value(
-            'inasafe/orgLogoPath', '', type=str)
+        self.organisation_logo_path = settings.value(
+            'inasafe/organisation_logo_path',
+            default_organisation_logo_path(),
+            type=str)
+        flag = bool(settings.value(
+            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
-        if self.org_logo_path:
+        if self.organisation_logo_path and flag:
             dock_width = self.width()
-            self.org_logo.setMaximumWidth(dock_width)
-            self.org_logo.setPixmap(QtGui.QPixmap(self.org_logo_path))
-            self.org_logo.show()
+            self.organisation_logo.setMaximumWidth(dock_width)
+            self.organisation_logo.setPixmap(
+                QtGui.QPixmap(self.organisation_logo_path))
+            self.organisation_logo.show()
         else:
-            self.org_logo.hide()
+            self.organisation_logo.hide()
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -559,6 +574,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.function_parameters = None
             if hasattr(self.active_function, 'parameters'):
                 self.function_parameters = self.active_function.parameters
+            self.set_function_options_status()
+        else:
+            self.function_parameters = None
             self.set_function_options_status()
 
         self.toggle_aggregation_combo()
@@ -999,8 +1017,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'in the question area and then press run again.')
             message = m.Message(
                 LOGO_ELEMENT,
-                 m.Heading(title, **WARNING_STYLE),
-                 m.Paragraph(details))
+                m.Heading(title, **WARNING_STYLE),
+                m.Paragraph(details))
             self.show_static_message(message)
             self.grpQuestion.show()
             self.pbnRunStop.setDisabled(True)
@@ -1035,7 +1053,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             # add which postprocessors will run when appropriated
             post_processors_names = self.function_parameters['postprocessors']
-            post_processors = get_postprocessors(post_processors_names)
+            # aggregator is not ready yet here so we can't use
+            # self.aggregator.aoi_mode
+            aoi_mode = self.get_aggregation_layer() is None
+            post_processors = get_postprocessors(
+                post_processors_names, aoi_mode)
             message.add(m.Paragraph(self.tr(
                 'The following postprocessors will be used:')))
 
@@ -1160,8 +1182,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'in the question area and then press run again.')
             message = m.Message(
                 LOGO_ELEMENT,
-                 m.Heading(title, **WARNING_STYLE),
-                 m.Paragraph(details))
+                m.Heading(title, **WARNING_STYLE),
+                m.Paragraph(details))
             self.show_static_message(message)
             return
 
@@ -1645,6 +1667,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # as centers for evacuation circles: See issue #285
             if hazard_layer.geometryType() == QGis.Point:
                 geo_extent = exposure_geoextent
+                buffered_geoextent = geo_extent
 
         return (
             extra_exposure_keywords,
@@ -1932,6 +1955,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
 
+        # Set all the map components
         print_map.set_impact_layer(self.iface.activeLayer())
         if use_full_extent:
             print_map.set_extent(self.iface.activeLayer().extent())
@@ -1939,7 +1963,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value('inasafe/orgLogoPath', '', type=str)
+        logo_path = settings.value('inasafe/organisation_logo_path', '',
+                                   type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
@@ -1948,10 +1973,37 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if disclaimer_text != '':
             print_map.set_disclaimer(disclaimer_text)
 
+        north_arrow_path = settings.value(
+            'inasafe/north_arrow_path', '', type=str)
+        if north_arrow_path != '':
+            print_map.set_north_arrow_image(north_arrow_path)
+
+        template_warning_verbose = bool(settings.value(
+            'inasafe/template_warning_verbose', True, type=bool))
+        print_map.set_template_warning_verbose(template_warning_verbose)
+
         print_map.set_template(template_path)
+        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
+                         'impact-report', 'impact-map', 'impact-legend']
+        print_map.set_component_ids(component_ids)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
+            try:
+                print_map.load_template()
+            except TemplateElementMissingError, msg:
+                title = self.tr('Template is missing some elements')
+                question = self.tr('%s. Do you still want to continue?') % msg
+                # noinspection PyCallByClass,PyTypeChecker
+                answer = QtGui.QMessageBox.question(
+                    self,
+                    title,
+                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+
+                if answer == QtGui.QMessageBox.No:
+                    return
+            print_map.template_warning_verbose = False
+
             if print_map.map_title() is not None:
                 default_file_name = print_map.map_title() + '.pdf'
             else:
@@ -2010,8 +2062,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             QtCore.QUrl.TolerantMode))
             self.show_dynamic_message(status)
         else:
+            try:
+                print_map.load_template()
+            except TemplateElementMissingError, msg:
+                title = self.tr('Template is missing some elements')
+                question = self.tr('%s. Do you still want to continue?') % msg
+                # noinspection PyCallByClass,PyTypeChecker
+                answer = QtGui.QMessageBox.question(
+                    self,
+                    title,
+                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+
+                if answer == QtGui.QMessageBox.Yes:
+                    print_map.template_warning_verbose = False
+                    print_map.load_template()
+                else:
+                    return
             self.composer = self.iface.createNewComposer()
-            print_map.load_template()
             self.composition = print_map.composition
             self.composer.setComposition(self.composition)
             # Zoom to Full Extent
@@ -2046,136 +2113,3 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         item_data = self.cboFunction.itemData(index, QtCore.Qt.UserRole)
         function_id = '' if item_data is None else str(item_data)
         return function_id
-
-    @staticmethod
-    def scenario_layer_paths(exposure_path, hazard_path, scenario_path):
-        """Calculate the paths for hazard and exposure relative to scenario.
-
-        :param exposure_path: Public path for exposure.
-        :type exposure_path: str
-
-        :param hazard_path: Public path for hazard.
-        :type hazard_path: str
-
-        :param scenario_path: Path to scenario file.
-        :type scenario_path: str
-
-        :return: Tuple of relative paths for exposure and hazard.
-        :rtype: (str, str)
-        """
-        start_path = os.path.dirname(scenario_path)
-        try:
-            relative_exposure_path = os.path.relpath(
-                exposure_path, start_path)
-        except ValueError, e:
-            LOGGER.info(e.message)
-            relative_exposure_path = exposure_path
-        try:
-            relative_hazard_path = os.path.relpath(hazard_path, start_path)
-        except ValueError, e:
-            LOGGER.info(e.message)
-            relative_hazard_path = hazard_path
-
-        return relative_exposure_path, relative_hazard_path
-
-    def save_current_scenario(self, scenario_file_path=None):
-        """Save current scenario to a text file.
-
-        You can use the saved scenario with the batch runner.
-
-        :param scenario_file_path: A path to the scenario file.
-        :type scenario_file_path: str
-
-        """
-        LOGGER.info('saveCurrentScenario')
-        warning_title = self.tr('InaSAFE Save Scenario Warning')
-        # get data layer
-        # get absolute path of exposure & hazard layer, or the contents
-        exposure_layer = self.get_exposure_layer()
-        hazard_layer = self.get_hazard_layer()
-        aggregation_layer = self.get_aggregation_layer()
-        function_id = self.get_function_id(self.cboFunction.currentIndex())
-        extent = viewport_geo_array(self.iface.mapCanvas())
-        # make it look like this:
-        # 109.829170982, -8.13333290561, 111.005344795, -7.49226294379
-        extent_string = ', '.join(('%f' % x) for x in extent)
-
-        # Checking f exposure and hazard layer is not None
-        if exposure_layer is None:
-            warning_message = self.tr(
-                'Exposure layer is not found, can not save scenario. Please '
-                'add exposure layer to do so.')
-            # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.warning(self, warning_title, warning_message)
-            return
-        if hazard_layer is None:
-            warning_message = self.tr(
-                'Hazard layer is not found, can not save scenario. Please add '
-                'hazard layer to do so.')
-            # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.warning(self, warning_title, warning_message)
-            return
-
-        # Checking if function id is not None
-        if function_id == '' or function_id is None:
-            warning_message = self.tr(
-                'The impact function is empty, can not save scenario')
-            # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.question(self, warning_title, warning_message)
-            return
-
-        exposure_path = str(exposure_layer.publicSource())
-        hazard_path = str(hazard_layer.publicSource())
-
-        title = self.keyword_io.read_keywords(hazard_layer, 'title')
-        title = safeTr(title)
-
-        title_dialog = self.tr('Save Scenario')
-        # get last dir from setting
-        settings = QSettings()
-        last_save_dir = settings.value('inasafe/lastSourceDir', '.', type=str)
-        default_name = title.replace(
-            ' ', '_').replace('(', '').replace(')', '')
-        if scenario_file_path is None:
-            # noinspection PyCallByClass,PyTypeChecker
-            file_name = str(QFileDialog.getSaveFileName(
-                self, title_dialog,
-                os.path.join(last_save_dir, default_name + '.txt'),
-                "Text files (*.txt)"))
-        else:
-            file_name = scenario_file_path
-
-        relative_exposure_path, relative_hazard_path = \
-            self.scenario_layer_paths(
-                exposure_path, hazard_path, file_name)
-        #  write to file
-        parser = ConfigParser()
-        parser.add_section(title)
-        parser.set(title, 'exposure', relative_exposure_path)
-        parser.set(title, 'hazard', relative_hazard_path)
-        parser.set(title, 'function', function_id)
-        parser.set(title, 'extent', extent_string)
-
-        if aggregation_layer is not None:
-            aggregation_path = str(aggregation_layer.publicSource())
-            try:
-                relative_aggregation_path = os.path.relpath(
-                    aggregation_path, os.path.dirname(file_name))
-            except ValueError, e:
-                LOGGER.info(e.message)
-                relative_aggregation_path = aggregation_path
-            parser.set(title, 'aggregation', relative_aggregation_path)
-
-        if file_name is None or file_name == '':
-            return
-
-        try:
-            parser.write(open(file_name, 'a'))
-            # Save directory settings
-            last_save_dir = os.path.dirname(file_name)
-            settings.setValue('inasafe/lastSourceDir', last_save_dir)
-        except IOError:
-            # noinspection PyTypeChecker,PyCallByClass
-            QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                self.tr('Failed to save scenario to ' + file_name))

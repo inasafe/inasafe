@@ -54,6 +54,7 @@ from safe.api import (
     BoundingBoxError,
     GetDataError,
     ReadLayerError,
+    PostProcessorError,
     get_plugins, get_version,
     in_and_outside_polygon as points_in_and_outside_polygon,
     calculate_polygon_centroid,

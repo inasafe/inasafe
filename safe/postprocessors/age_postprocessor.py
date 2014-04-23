@@ -66,14 +66,24 @@ class AgePostprocessor(AbstractPostprocessor):
             #either all 3 ratio are custom set or we use defaults
             self.youth_ratio = params['youth_ratio']
             self.adult_ratio = params['adult_ratio']
-            self.elderly_ratio = params['elderly_ratio']
+            self.elder_ratio = params['elder_ratio']
+
+            ratios_total = (self.youth_ratio +
+                            self.adult_ratio +
+                            self.elder_ratio)
+            if ratios_total > 1:
+                self._raise_error('Age ratios should sum up to 1. Found: '
+                                  '%s + %s + %s = %s ' % (self.youth_ratio,
+                                                          self.adult_ratio,
+                                                          self.elder_ratio,
+                                                          ratios_total))
         except KeyError:
             self._log_message('either all 3 age ratio are custom set or we'
                               ' use defaults')
             defaults = get_defaults()
             self.youth_ratio = defaults['YOUTH_RATIO']
             self.adult_ratio = defaults['ADULT_RATIO']
-            self.elderly_ratio = defaults['ELDERLY_RATIO']
+            self.elder_ratio = defaults['ELDER_RATIO']
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
@@ -179,7 +189,7 @@ class AgePostprocessor(AbstractPostprocessor):
         """Indicator that shows population above 64 years old.
 
         this indicator reports the amount of young population according to the
-        set elderly_ratio
+        set elder_ratio
 
         Args:
             None
@@ -188,14 +198,8 @@ class AgePostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Elder count (affected)')
-
-        #FIXME (MB) Shameless hack to deal with issue #368
-        if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT)
-            return
-
-        myResult = self.impact_total * self.elderly_ratio
+        myName = tr('Elderly count (affected)')
+        myResult = self.impact_total * self.elder_ratio
         try:
             myResult = int(round(myResult))
         except ValueError:

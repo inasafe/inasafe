@@ -1,4 +1,4 @@
-
+# coding=utf-8
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
@@ -8,7 +8,16 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsGeometry
 )
-
+from safe.metadata import (
+    unit_wetdry,
+    hazard_flood,
+    hazard_tsunami,
+    layer_vector_polygon,
+    exposure_structure,
+    unit_building_type_type,
+    exposure_definition,
+    hazard_definition
+)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -17,12 +26,12 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
-    """
-    Simple experimental impact function for inundation
-    (polygon-polygon)
+    """Simple experimental impact function for inundation (polygon-polygon).
 
     :author Dmitry Kolesov
     :rating 1
@@ -33,6 +42,51 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                     subcategory in ['structure'] and \
                     layertype=='vector'
     """
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for FloodNativePolygonExperimentalFunction.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'FloodNativePolygonExperimentalFunction',
+                'name': tr('Flood Native Polygon Experimental Function'),
+                'impact': tr('Be-flooded'),
+                'author': 'Dmitry Kolesov',
+                'date_implemented': 'N/A',
+                'overview': tr('N/A'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
+                        'units': unit_wetdry,
+                        'layer_constraints': [layer_vector_polygon]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_structure,
+                        'units': [unit_building_type_type],
+                        'layer_constraints': [layer_vector_polygon]
+                    }
+                }
+            }
+            return dict_meta
 
     title = tr('Be-flooded')
 
@@ -60,16 +114,14 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """
-        Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
         Mandatory method.
         """
         self.extent = extent
 
     def run(self, layers):
-        """
-        Experimental impact function
+        """Experimental impact function.
 
         Input
           layers: List of layers expected to contain
@@ -228,7 +280,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # Convert QgsVectorLayer to inasafe layer and return it
+        # Convert QgsVectorLayer to inasafe layer and return it.
         building_layer = Vector(data=building_layer,
                    name=tr('Flooded buildings'),
                    keywords={'impact_summary': impact_summary,

@@ -17,6 +17,7 @@ __date__ = '29/10/2013'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 # This call needs to be made directly to safe.defaults and not over
@@ -92,3 +93,23 @@ def disclaimer():
         'correctness of outputs from InaSAFE or decisions derived as '
         'a consequence.')
     return text
+
+
+def default_organisation_logo_path():
+    """Get a default organisation logo path.
+
+    :return: Default organisation logo path.
+    :rtype: str
+    """
+    default_path = ':/plugins/inasafe/supporters.png'
+    return default_path
+
+
+def default_north_arrow_path():
+    """Get a default north arrow image path.
+
+    :return: Default north arrow path.
+    :rtype: str
+    """
+    default_path = ':/plugins/inasafe/simple_north_arrow.png'
+    return default_path
