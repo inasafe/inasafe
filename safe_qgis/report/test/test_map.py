@@ -100,6 +100,7 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
+            138471,  # Ubuntu 14.04 644 AG
             414589,  # Slackware64 14.0
             143874,  # Linux Mint 14_64
             150412,  # Windows 7 64
@@ -141,6 +142,7 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
+            76191,  # Ubuntu 14.04 64 AG
             367934,  # Slackware64 14.0
             81594,  # Linux Mint 14_64
             88779,  # Windows 7 64bit
