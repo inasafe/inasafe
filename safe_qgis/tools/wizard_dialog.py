@@ -543,7 +543,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :param step: The step number to be moved to
         :type step: int
         """
-        self.stackedWidget.setCurrentIndex(step-1)
+        self.stackedWidget.setCurrentIndex(step - 1)
         self.lblStep.setText(self.tr('step %d') % step)
         self.pbnBack.setEnabled(step > 1)
 
