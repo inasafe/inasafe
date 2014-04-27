@@ -272,4 +272,4 @@ class QgisInterface(QObject):
 
         https://github.com/AIFDR/inasafe/pull/924/
         """
-        return None
+        return self.canvas
