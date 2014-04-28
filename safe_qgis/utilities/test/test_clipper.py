@@ -23,6 +23,7 @@ import unittest
 import sys
 import os
 import shutil
+from nose.tools import assert_almost_equal
 from unittest import expectedFailure
 
 # Add PARENT directory to path to make test aware of other modules
@@ -167,11 +168,13 @@ class ClipperTest(unittest.TestCase):
         myResult = clip_layer(myRasterLayer, myRect, mySize)
         myNewRasterLayer = QgsRasterLayer(myResult.source(), myName)
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
-        message = ('Resampled raster has incorrect pixel size. Expected: '
-                   '%.14f, Actual: %.14f' % (
-            mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
-
-        assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, message
+        message = (
+            'Resampled raster has incorrect pixel size. Expected: %.14f, '
+            'Actual: %.14f' % (
+                mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
+        result_size = myNewRasterLayer.rasterUnitsPerPixelX()
+        assert_almost_equal(result_size, mySize, places=13, msg=message)
+        # assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, message
 
     def test_clip_raster_with_no_extension(self):
         """Test we can clip a raster with no extension - see #659."""
