@@ -73,6 +73,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
+                'disabled': True,
                 'id': 'FloodRasterRoadsExperimentalFunction',
                 'name': tr('Flood Raster Roads Experimental Function'),
                 'impact': tr('OPTIMIZED-TEST-Be flooded in given thresholds'),
