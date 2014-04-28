@@ -134,8 +134,6 @@ class ClipperTest(unittest.TestCase):
         myResult = clip_layer(myRasterLayer, myRect, mySize)
         myNewRasterLayer = QgsRasterLayer(myResult.source(), myName)
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
-        print 'expected size: ', mySize
-        print 'real size', myNewRasterLayer.rasterUnitsPerPixelX()
         message = (
             'Resampled raster has incorrect pixel size. Expected: %5f, '
             'Actual: %5f' % (mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
@@ -172,9 +170,6 @@ class ClipperTest(unittest.TestCase):
         message = ('Resampled raster has incorrect pixel size. Expected: '
                    '%.14f, Actual: %.14f' % (
             mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
-        print myNewRasterLayer.rasterUnitsPerPixelX()
-        print type(myNewRasterLayer.rasterUnitsPerPixelX())
-        print mySize
 
         assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, message
 
