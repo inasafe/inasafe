@@ -41,8 +41,9 @@ class FileDownloaderTest(unittest.TestCase):
         # this is the hash of google front page.
         # I think we can safely assume that the content
         # of google.com never changes (probably).
-        # ...or not...changed on 5 Dec 2013 by Tim to hash below...
-        unique_hash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
+        # ...or not...changed on 5 Dec 2013 ...
+        # ...and changed on 28 Apr 2014 by Tim to hash below
+        unique_hash = '996867a4a23eaa123fa9475ff4de4414'
         url = 'http://google.com'
         path = tempfile.mktemp()
 
