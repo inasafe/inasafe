@@ -254,7 +254,7 @@ class TestQGISVectorTools(unittest.TestCase):
 
     def test_split_by_polygon_in_out(self):
         """Test split_by_polygon in-out work"""
- 
+
         raster_name = os.path.join(
             UNITDATA,
             'hazard',
@@ -269,9 +269,12 @@ class TestQGISVectorTools(unittest.TestCase):
             'EXPOSURE',
             'ogr')
 
-        (inside_file_name, inside_layer_name, outside_file_name, \
-             outside_layer_name) = \
-             polygonize_thresholds(raster_name, 0.1)
+        (
+            inside_file_name,
+            inside_layer_name,
+            outside_file_name,
+            outside_layer_name
+        ) = polygonize_thresholds(raster_name, 0.1)
 
         polygon_in = \
             QgsVectorLayer(inside_file_name, inside_layer_name, 'ogr')
@@ -292,8 +295,7 @@ class TestQGISVectorTools(unittest.TestCase):
             attrs = feature.attributes()
             if (attrs[3] == 1):
                 flooded = flooded + 1
-        self.assertEqual(flooded, 25)        
-
+        self.assertEqual(flooded, 25)
 
 
 if __name__ == '__main__':

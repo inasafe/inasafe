@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-
 import os
 import unittest
 from osgeo import ogr
@@ -33,16 +32,19 @@ class TestGDALOGRTools(unittest.TestCase):
     def test_polygonize_thresholds(self):
         """Test polygonize raster using gdal
         """
-        
+
         raster_name = os.path.join(
             UNITDATA,
             'hazard',
             'jakarta_flood_design.tif')
 
-        (inside_file_name, inside_layer_name, outside_file_name, \
-             outside_layer_name) = \
-             polygonize_thresholds(raster_name, 0.5)
-        
+        (
+            inside_file_name,
+            inside_layer_name,
+            outside_file_name,
+            outside_layer_name
+        ) = polygonize_thresholds(raster_name, 0.5)
+
         driver = ogr.GetDriverByName('ESRI Shapefile')
 
         dataSource = driver.Open(inside_file_name, 0)
