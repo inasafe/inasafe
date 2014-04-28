@@ -16,6 +16,8 @@ __author__ = 'assefay@gmail.com'
 __date__ = '20/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+
 import os
 import unittest
 from osgeo import ogr
@@ -36,9 +38,12 @@ class TestGDALOGRTools(unittest.TestCase):
             'hazard',
             'jakarta_flood_design.tif')
 
-        (inside_file_name, inside_layer_name, outside_file_name, \
-             outside_layer_name) = \
-             polygonize_thresholds(raster_name, 0.5)
+        (
+            inside_file_name,
+            inside_layer_name,
+            outside_file_name,
+            outside_layer_name
+        ) = polygonize_thresholds(raster_name, 0.5)
 
         driver = ogr.GetDriverByName('ESRI Shapefile')
 

@@ -269,9 +269,12 @@ class TestQGISVectorTools(unittest.TestCase):
             'EXPOSURE',
             'ogr')
 
-        (inside_file_name, inside_layer_name, outside_file_name, \
-             outside_layer_name) = \
-             polygonize_thresholds(raster_name, 0.1)
+        (
+            inside_file_name,
+            inside_layer_name,
+            outside_file_name,
+            outside_layer_name
+        ) = polygonize_thresholds(raster_name, 0.1)
 
         polygon_in = \
             QgsVectorLayer(inside_file_name, inside_layer_name, 'ogr')
@@ -293,6 +296,8 @@ class TestQGISVectorTools(unittest.TestCase):
             if (attrs[3] == 1):
                 flooded = flooded + 1
         self.assertEqual(flooded, 25)
+
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestQGISVectorTools, 'test')
     runner = unittest.TextTestRunner()

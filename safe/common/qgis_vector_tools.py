@@ -338,12 +338,18 @@ def split_by_polygon_in_out(
     file_name_poly_in = base_name + '_poly_in.shp'
     file_name_poly_out = base_name + '_poly_out.shp'
 
-    line_layer_in = \
-        split_by_polygon2(vector, polygon_in, request,\
-                              False, mark_value=(target_field, value))
-    line_layer_out = \
-        split_by_polygon2(vector, polygon_out, request,\
-                              True, mark_value=(target_field, 0))
+    line_layer_in = split_by_polygon2(
+        vector,
+        polygon_in,
+        request,
+        False,
+        mark_value=(target_field, value))
+    line_layer_out = split_by_polygon2(
+        vector,
+        polygon_out,
+        request,
+        True,
+        mark_value=(target_field, 0))
 
     QgsVectorFileWriter.writeAsVectorFormat(
         line_layer_in, file_name_in, "utf-8", None, "ESRI Shapefile")
@@ -459,6 +465,7 @@ def split_by_polygon2(
         poly_geoms.append(QgsGeometry(polygon))
 
     result_layer.startEditing()
+
     for polygon in poly_geoms:
         for initial_geom, attributes in \
                 itertools.izip(line_geoms, line_attributes):
@@ -469,10 +476,10 @@ def split_by_polygon2(
                 poly_contains = False
 
             poly_intersect = False
-            if poly_contains == False:
+            if not poly_contains:
                 poly_intersect = polygon.intersects(initial_geom)
 
-            if  poly_contains or poly_intersect:
+            if poly_contains or poly_intersect:
             # Find parts of initial_geom, intersecting
             # with the polygon, then mark them if needed
                 if poly_contains:
