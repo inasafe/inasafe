@@ -42,9 +42,9 @@ class FileDownloaderTest(unittest.TestCase):
         # I think we can safely assume that the content
         # of google.com never changes (probably).
         # ...or not...changed on 5 Dec 2013 ...
-        # ...and changed on 28 Apr 2014 by Tim to hash below
-        unique_hash = '996867a4a23eaa123fa9475ff4de4414'
-        url = 'http://google.com'
+        # ...and changed on 28 Apr 2014 by Tim to hash and url  below
+        unique_hash = '32230a09ffe7b0011095e8cd627097a5'
+        url = 'http://inasafe.org/en/_static/img/logo.png'
         path = tempfile.mktemp()
 
         file_downloader = FileDownloader(
