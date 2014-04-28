@@ -180,7 +180,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
 
         self.values['postprocessors'] = values
 
-    def build_widget(self, form_layout, name, value):
+    def build_widget(self, form_layout, name, key_value):
         """Create a new form element dynamically based from theValue type.
         The element will be inserted to theFormLayout.
 
@@ -191,9 +191,9 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
          configurable parameters dictionary.
         :type name: str
 
-        :param value: Mandatory representing the value referenced by the
+        :param key_value: Mandatory representing the value referenced by the
          key.
-        :type value: object
+        :type key_value: object
 
         :returns: a function that return the value of widget
 
@@ -206,11 +206,11 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
             label.setObjectName(_fromUtf8(name + "Label"))
             label_text = name.replace('_', ' ').capitalize()
             label.setText(safeTr(label_text))
-            label.setToolTip(str(type(value)))
+            label.setToolTip(str(type(key_value)))
         else:
             label = name
 
-        # create widget based on the type of theValue variable
+        # create widget based on the type of key_value variable
         # if widget is a QLineEdit, value needs to be set
         # if widget is NOT a QLineEdit, property_name needs to be set
         value = None
@@ -219,27 +219,27 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         # can be used for widgets that have their own text like QCheckBox
         hide_label = False
 
-        if isinstance(value, list):
+        if isinstance(key_value, list):
             widget = QLineEdit()
-            value = ', '.join([str(x) for x in value])
+            value = ', '.join([str(x) for x in key_value])
             # NOTE: we assume that all element in list have same type
-            value_type = type(value[0])
+            value_type = type(key_value[0])
             function = lambda x: [value_type(y) for y in str(x).split(',')]
-        elif isinstance(value, dict):
+        elif isinstance(key_value, dict):
             widget = QLineEdit()
-            value = str(value)
+            value = str(key_value)
             function = lambda x: ast.literal_eval(str(x))
-        elif isinstance(value, bool):
+        elif isinstance(key_value, bool):
             widget = QCheckBox()
-            widget.setChecked(value)
+            widget.setChecked(key_value)
             widget.setText(label.text())
             property_name = 'checked'
             function = bool
             hide_label = True
         else:
             widget = QLineEdit()
-            value = str(value)
-            function = type(value)
+            value = str(key_value)
+            function = type(key_value)
 
         if hide_label:
             form_layout.addRow(widget)
