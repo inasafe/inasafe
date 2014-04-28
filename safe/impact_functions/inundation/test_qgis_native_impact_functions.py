@@ -355,7 +355,7 @@ class Test_gis_native_impact_functions(unittest.TestCase):
         )
         count = sum(impact.get_data(attribute=keywords['target_field']))
         self.assertEquals(count, 25)
-    
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_gis_native_impact_functions, 'test')
