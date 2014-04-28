@@ -172,6 +172,10 @@ class ClipperTest(unittest.TestCase):
         message = ('Resampled raster has incorrect pixel size. Expected: '
                    '%.14f, Actual: %.14f' % (
             mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
+        print myNewRasterLayer.rasterUnitsPerPixelX()
+        print type(myNewRasterLayer.rasterUnitsPerPixelX())
+        print mySize
+
         assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, message
 
     def test_clip_raster_with_no_extension(self):
