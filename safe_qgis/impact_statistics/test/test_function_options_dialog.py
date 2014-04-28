@@ -77,7 +77,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'on': True,
                     'params': {
                         'youth_ratio': 0.263,
-                        'elder_ratio': 0.078,
+                        'elderly_ratio': 0.078,
                         'adult_ratio': 0.659}}}}
 
         myDialog.build_form(myParameters)
@@ -104,7 +104,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'on': True,
                     'params': {
                         'youth_ratio': 0.263,
-                        'elder_ratio': 0.078,
+                        'elderly_ratio': 0.078,
                         'adult_ratio': 0.659}}}}
 
         myDialog.build_form(myParameters)
@@ -147,7 +147,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'on': lambda: True,
                     'params': {
                         'youth_ratio': lambda: 0.263,
-                        'elder_ratio': lambda: 0.078,
+                        'elderly_ratio': lambda: 0.078,
                         'adult_ratio': lambda: 0.659}}}}
 
         myDialog = FunctionOptionsDialog(None)
@@ -161,7 +161,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     ('on', True),
                     ('params', OrderedDict([
                         ('youth_ratio', 0.263),
-                        ('elder_ratio', 0.078),
+                        ('elderly_ratio', 0.078),
                         ('adult_ratio', 0.659)]))]))]))])
 
 if __name__ == '__main__':

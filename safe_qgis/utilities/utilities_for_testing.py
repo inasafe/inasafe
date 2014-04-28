@@ -217,6 +217,12 @@ def set_small_jakarta_extent():
     CANVAS.setExtent(rect)
 
 
+def set_manila_extent():
+    """Zoom to an area occupied by both Manila layers in Geo."""
+    rect = QgsRectangle(120.866995, 14.403305, 121.193824, 14.784944)
+    CANVAS.setExtent(rect)
+
+
 def set_geo_extent(bounding_box):
     """Zoom to an area specified given bounding box.
 

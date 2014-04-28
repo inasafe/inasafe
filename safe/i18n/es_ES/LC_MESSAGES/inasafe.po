@@ -1479,7 +1479,7 @@ msgstr ""
 msgid "Adult count"
 msgstr ""
 
-msgid "Elderly count"
+msgid "Elder count"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation.py:173
@@ -2255,7 +2255,7 @@ msgid "Adult count (affected)"
 msgstr ""
 
 #: safe/postprocessors/age_postprocessor.py:191
-msgid "Elderly count (affected)"
+msgid "Elder count (affected)"
 msgstr ""
 
 #: safe/postprocessors/gender_postprocessor.py:134

@@ -178,7 +178,6 @@ class Aggregator(QtCore.QObject):
 
         :param keyword: Optional specific keyword you want the value for.
         :type keyword: str
-
         :returns:   KeywordIO.read_keywords object
         :rtype:     KeywordIO.read_keywords
 
@@ -210,7 +209,6 @@ class Aggregator(QtCore.QObject):
 
         :param layer: Layer you want to get the keywords for.
         :type layer: QgsMapLayer
-
         :returns:   KeywordIO.get_statistics object
         :rtype:     KeywordIO.get_statistics
 
@@ -230,7 +228,6 @@ class Aggregator(QtCore.QObject):
         :param out_filename: Output filename that the keywords should be
             written to.
         :type out_filename: str
-
         :raises:  All exceptions are propagated.
         """
         try:
@@ -246,7 +243,6 @@ class Aggregator(QtCore.QObject):
 
         :param keywords: Dict of keywords to write.
         :type keywords: dict
-
         :raises:  All exceptions are propagated.
         """
         try:
@@ -297,8 +293,14 @@ class Aggregator(QtCore.QObject):
             keywords = {}
 
         if self.aoi_mode:
-            keywords[self.get_default_keyword('FEM_RATIO_ATTR_KEY')] = self.tr(
-                'Use default')
+            keywords[self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')] = \
+                self.tr('Use default')
+            keywords[self.get_default_keyword('YOUTH_RATIO_ATTR_KEY')] = \
+                self.tr('Use default')
+            keywords[self.get_default_keyword('ADULT_RATIO_ATTR_KEY')] = \
+                self.tr('Use default')
+            keywords[self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')] = \
+                self.tr('Use default')
             self.update_keywords(self.layer, keywords)
             self.is_valid = True
             return
@@ -315,14 +317,31 @@ class Aggregator(QtCore.QObject):
             #keywords are already complete
             category = keywords['category']
             aggregation_attribute = self.get_default_keyword('AGGR_ATTR_KEY')
-            female_ratio = self.get_default_keyword('FEM_RATIO_ATTR_KEY')
-            female_ratio_key = self.get_default_keyword('FEM_RATIO_KEY')
-            if ('category' in keywords and
-                category == 'postprocessing' and
-                aggregation_attribute in keywords and
-                female_ratio in keywords and
-                (female_ratio != self.tr('Use default') or
-                 female_ratio_key in keywords)):
+            female_ratio = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
+            female_ratio_key = self.get_default_keyword('FEMALE_RATIO_KEY')
+            youth_ratio = self.get_default_keyword('YOUTH_RATIO_ATTR_KEY')
+            youth_ratio_key = self.get_default_keyword('YOUTH_RATIO_KEY')
+            adult_ratio = self.get_default_keyword('ADULT_RATIO_ATTR_KEY')
+            adult_ratio_key = self.get_default_keyword('ADULT_RATIO_KEY')
+            elderly_ratio = self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')
+            elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
+
+            if (aggregation_attribute in keywords
+                and ('category' in keywords and
+                        category == 'postprocessing')
+                and (female_ratio in keywords and
+                         (female_ratio != self.tr('Use default') or
+                          female_ratio_key in keywords))
+                and (youth_ratio in keywords and
+                         (youth_ratio != self.tr('Use default') or
+                          youth_ratio_key in keywords))
+                and (adult_ratio in keywords and
+                         (adult_ratio != self.tr('Use default') or
+                          adult_ratio_key in keywords))
+                and (elderly_ratio in keywords and
+                         (elderly_ratio != self.tr('Use default') or
+                          elderly_ratio_key in keywords))
+            ):
                 self.is_valid = True
             #some keywords are needed
             else:
@@ -337,14 +356,45 @@ class Aggregator(QtCore.QObject):
                     keywords[self.get_default_keyword('AGGR_ATTR_KEY')] = \
                         my_attributes[0]
 
-                if self.get_default_keyword('FEM_RATIO_ATTR_KEY') not in \
+                if self.get_default_keyword('FEMALE_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'FEM_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'FEMALE_RATIO_ATTR_KEY')] = self.tr('Use default')
 
-                if self.get_default_keyword('FEM_RATIO_KEY') not in keywords:
-                    keywords[self.get_default_keyword('FEM_RATIO_KEY')] = \
-                        self.get_default_keyword('FEM_RATIO')
+                if self.get_default_keyword('FEMALE_RATIO_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword('FEMALE_RATIO_KEY')] = \
+                        self.get_default_keyword('FEMALE_RATIO')
+
+                if self.get_default_keyword('YOUTH_RATIO_ATTR_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword(
+                        'YOUTH_RATIO_ATTR_KEY')] = self.tr('Use default')
+
+                if self.get_default_keyword('YOUTH_RATIO_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword('YOUTH_RATIO_KEY')] = \
+                        self.get_default_keyword('YOUTH_RATIO')
+
+                if self.get_default_keyword('ADULT_RATIO_ATTR_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword(
+                        'ADULT_RATIO_ATTR_KEY')] = self.tr('Use default')
+
+                if self.get_default_keyword('ADULT_RATIO_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword('ADULT_RATIO_KEY')] = \
+                        self.get_default_keyword('ADULT_RATIO')
+
+                if self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword(
+                        'ELDERLY_RATIO_ATTR_KEY')] = self.tr('Use default')
+
+                if self.get_default_keyword('ELDERLY_RATIO_KEY') not in \
+                        keywords:
+                    keywords[self.get_default_keyword('ELDERLY_RATIO_KEY')] = \
+                        self.get_default_keyword('ELDERLY_RATIO')
 
                 self.update_keywords(self.layer, keywords)
                 self.is_valid = False
@@ -687,16 +737,14 @@ class Aggregator(QtCore.QObject):
                         sum_index: 0,
                         count_index: 0,
                         mean_index: 0
-                        }
+                    }
                 else:
                     statistics = zonal_statistics[feature_id]
-                    #          minIndex: statistics['min'],
-                    #          maxIndex: statistics['max']}
                     attributes = {
                         sum_index: statistics['sum'],
                         count_index: statistics['count'],
                         mean_index: statistics['mean']
-                        }
+                    }
                 provider.changeAttributeValues({feature_id: attributes})
 
     def _aggregate_polygon_impact(self, safe_impact_layer):
@@ -1120,14 +1168,41 @@ class Aggregator(QtCore.QObject):
                     self.layer,
                     self.get_default_keyword('AGGR_ATTR_KEY')))
 
-        female_ratio_key = self.get_default_keyword('FEM_RATIO_ATTR_KEY')
-        female_ration_attribute = self.read_keywords(
+        female_ratio_key = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
+        female_ratio_attribute = self.read_keywords(
             self.layer,
             female_ratio_key)
-        if ((female_ration_attribute != self.tr('Don\'t use')) and
-                (female_ration_attribute != self.tr('Use default'))):
+        if ((female_ratio_attribute != self.tr('Don\'t use')) and
+                (female_ratio_attribute != self.tr('Use default'))):
             self.attributes[female_ratio_key] = \
-                female_ration_attribute
+                female_ratio_attribute
+
+        youth_ratio_key = self.get_default_keyword('YOUTH_RATIO_ATTR_KEY')
+        youth_ratio_attribute = self.read_keywords(
+            self.layer,
+            youth_ratio_key)
+        if ((youth_ratio_attribute != self.tr('Don\'t use')) and
+                (youth_ratio_attribute != self.tr('Use default'))):
+            self.attributes[youth_ratio_key] = \
+                youth_ratio_attribute
+
+        adult_ratio_key = self.get_default_keyword('ADULT_RATIO_ATTR_KEY')
+        adult_ratio_attribute = self.read_keywords(
+            self.layer,
+            adult_ratio_key)
+        if ((adult_ratio_attribute != self.tr('Don\'t use')) and
+                (adult_ratio_attribute != self.tr('Use default'))):
+            self.attributes[adult_ratio_key] = \
+                adult_ratio_attribute
+
+        elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')
+        elderly_ratio_attribute = self.read_keywords(
+            self.layer,
+            elderly_ratio_key)
+        if ((elderly_ratio_key != self.tr('Don\'t use')) and
+                (elderly_ratio_attribute != self.tr('Use default'))):
+            self.attributes[elderly_ratio_key] = \
+                elderly_ratio_attribute
 
     def _prepare_polygon_layer(self, layer):
         """Create a new layer with no intersecting features to self.layer.

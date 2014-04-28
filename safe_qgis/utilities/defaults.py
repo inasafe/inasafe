@@ -50,8 +50,23 @@ def breakdown_defaults(default=None):
 
     value = settings.value(
         'inasafe/defaultFemaleRatio',
-        DEFAULTS['FEM_RATIO'], type=float)
-    defaults['FEM_RATIO'] = float(value)
+        DEFAULTS['FEMALE_RATIO'], type=float)
+    defaults['FEMALE_RATIO'] = float(value)
+
+    value = settings.value(
+        'inasafe/defaultYouthRatio',
+        DEFAULTS['YOUTH_RATIO'], type=float)
+    defaults['YOUTH_RATIO'] = float(value)
+
+    value = settings.value(
+        'inasafe/defaultAdultRatio',
+        DEFAULTS['ADULT_RATIO'], type=float)
+    defaults['ADULT_RATIO'] = float(value)
+
+    value = settings.value(
+        'inasafe/defaultElderlyRatio',
+        DEFAULTS['ELDERLY_RATIO'], type=float)
+    defaults['ELDERLY_RATIO'] = float(value)
 
     if default is None:
         return defaults

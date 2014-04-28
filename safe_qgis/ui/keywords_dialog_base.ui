@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
-    <height>697</height>
+    <width>597</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -58,6 +58,9 @@
       <string>Quick edit</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="13" column="2">
+       <widget class="QComboBox" name="cboElderlyRatioAttribute"/>
+      </item>
       <item row="2" column="2">
        <widget class="QLineEdit" name="leSource">
         <property name="dragEnabled">
@@ -185,6 +188,63 @@
       </item>
       <item row="1" column="2">
        <widget class="QLineEdit" name="leTitle"/>
+      </item>
+      <item row="12" column="2">
+       <widget class="QDoubleSpinBox" name="dsbAdultRatioDefault"/>
+      </item>
+      <item row="9" column="2">
+       <widget class="QComboBox" name="cboYouthRatioAttribute"/>
+      </item>
+      <item row="10" column="2">
+       <widget class="QDoubleSpinBox" name="dsbYouthRatioDefault"/>
+      </item>
+      <item row="11" column="2">
+       <widget class="QComboBox" name="cboAdultRatioAttribute"/>
+      </item>
+      <item row="14" column="2">
+       <widget class="QDoubleSpinBox" name="dsbElderlyRatioDefault"/>
+      </item>
+      <item row="14" column="0">
+       <widget class="QLabel" name="lblElderlyRatioDefault">
+        <property name="text">
+         <string>Elderly ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="QLabel" name="lblElderlyRatioAttribute">
+        <property name="text">
+         <string>Elderly ratio attribute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0">
+       <widget class="QLabel" name="lblAdultRatioDefault">
+        <property name="text">
+         <string>Adult ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="lblAdultRatioAttribute">
+        <property name="text">
+         <string>Adult ratio attribute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="lblYouthRatioDefault">
+        <property name="text">
+         <string>Youth ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="lblYouthRatioAttribute">
+        <property name="text">
+         <string>Youth ratio attribute</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
