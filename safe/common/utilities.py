@@ -206,7 +206,7 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
     """
 
     # go to the directory
-    my_cwd = os.getcwd()
+    current_working_dir = os.getcwd()
     shp_dir, shp_name = os.path.split(shp_path)
     os.chdir(shp_dir)
 
@@ -228,7 +228,7 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
             if os.path.isfile(shp_basename + ext):
                 os.remove(shp_basename + ext)
 
-    os.chdir(my_cwd)
+    os.chdir(current_working_dir)
 
 
 def get_free_memory():
@@ -496,8 +496,8 @@ def humanize_class(my_classes):
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
-        humanize_classes.append(humanize_min_max(min_value, max_value,
-                                                 interval))
+        humanize_classes.append(
+            humanize_min_max(min_value, max_value, interval))
         min_value = max_value
         try:
             if humanize_classes[-1][0] == humanize_classes[-1][-1]:
@@ -509,14 +509,14 @@ def humanize_class(my_classes):
 
 def unhumanize_class(my_classes):
     """Return class as interval without formatting."""
-    my_result = []
+    result = []
     interval = my_classes[-1] - my_classes[-2]
     min_value = 0
     for max_value in my_classes:
-        my_result.append((format_decimal(interval, min_value),
-                          format_decimal(interval, max_value)))
+        result.append((format_decimal(interval, min_value),
+                       format_decimal(interval, max_value)))
         min_value = max_value
-    return my_result
+    return result
 
 
 def unhumanize_number(number):
@@ -538,7 +538,7 @@ def unhumanize_number(number):
     return number
 
 
-def create_classes(my_list, num_classes):
+def create_classes(class_list, num_classes):
     """Create classes from my_list.
 
     Classes will use linspace from numpy.
@@ -546,8 +546,8 @@ def create_classes(my_list, num_classes):
     it won't be included. The number of classes is equal to num_classes.
     Please see the unit test for this function for more explanation
     """
-    min_value = numpy.nanmin(my_list)
-    max_value = numpy.nanmax(my_list)
+    min_value = numpy.nanmin(class_list)
+    max_value = numpy.nanmax(class_list)
     print 'min_value, max_value: ', min_value, max_value
     if min_value == 0:
         num_classes += 1
@@ -559,7 +559,7 @@ def create_classes(my_list, num_classes):
     return classes
 
 
-def create_label(my_tuple, extra_label=None):
+def create_label(label_tuple, extra_label=None):
     """Return a label based on my_tuple (a,b) and extra label.
 
     a and b are string.
@@ -568,9 +568,9 @@ def create_label(my_tuple, extra_label=None):
                 [a - b] extra_label
     """
     if extra_label is not None:
-        return '[' + ' - '.join(my_tuple) + '] ' + str(extra_label)
+        return '[' + ' - '.join(label_tuple) + '] ' + str(extra_label)
     else:
-        return '[' + ' - '.join(my_tuple) + ']'
+        return '[' + ' - '.join(label_tuple) + ']'
 
 
 def get_utm_zone(longitude):
