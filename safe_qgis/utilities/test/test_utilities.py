@@ -1,9 +1,12 @@
+# coding=utf-8
+"""Tests for utilities."""
 import unittest
 import sys
 import os
 
 from unittest import expectedFailure
 
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules
@@ -72,58 +75,58 @@ class UtilitiesTest(unittest.TestCase):
             assert str(e) in message
 
             message = message.decode('string_escape')
-            myExpectedResult = open(
+            expected_results = open(
                 TEST_FILES_DIR +
                 '/test-stacktrace-html.txt', 'r').read().replace('\n', '')
-            self.assertIn(myExpectedResult, message)
+            self.assertIn(expected_results, message)
 
         # pylint: enable=W0703
 
-    def test_getQgisVersion(self):
+    def test_get_qgis_version(self):
         """Test we can get the version of QGIS"""
-        myVersion = qgis_version()
+        version = qgis_version()
         message = 'Got version %s of QGIS, but at least 107000 is needed'
-        assert myVersion > 10700, message
+        assert version > 10700, message
 
-    def test_getLayerAttributeNames(self):
+    def test_get_layer_attribute_names(self):
         """Test we can get the correct attributes back"""
         layer = make_polygon_layer()
 
         #with good attribute name
-        myAttrs, myPos = layer_attribute_names(layer, [
+        attributes, position = layer_attribute_names(layer, [
             QVariant.Int, QVariant.String],
             'TEST_STRIN')  # Not a typo...
-        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
-        myExpectedPos = 2
-        message = 'myExpectedAttrs, got %s, expected %s' % (
-            myAttrs, myExpectedAttrs)
-        assert (myAttrs == myExpectedAttrs), message
-        message = 'myExpectedPos, got %s, expected %s' % (
-            myPos, myExpectedPos)
-        assert (myPos == myExpectedPos), message
+        expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        expected_position = 2
+        message = 'expected_attributes, got %s, expected %s' % (
+            attributes, expected_attributes)
+        assert (attributes == expected_attributes), message
+        message = 'expected_position, got %s, expected %s' % (
+            position, expected_position)
+        assert (position == expected_position), message
 
-        #with inexistent attribute name
-        myAttrs, myPos = layer_attribute_names(
+        #with non existing attribute name
+        attributes, position = layer_attribute_names(
             layer,
             [QVariant.Int, QVariant.String],
             'MISSING_ATTR')
-        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
-        myExpectedPos = None
-        message = 'myExpectedAttrs, got %s, expected %s' % (
-            myAttrs, myExpectedAttrs)
-        assert (myAttrs == myExpectedAttrs), message
-        message = 'myExpectedPos, got %s, expected %s' % (
-            myPos, myExpectedPos)
-        assert (myPos == myExpectedPos), message
+        expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        expected_position = None
+        message = 'expected_attributes, got %s, expected %s' % (
+            attributes, expected_attributes)
+        assert (attributes == expected_attributes), message
+        message = 'expected_position, got %s, expected %s' % (
+            position, expected_position)
+        assert (position == expected_position), message
 
         #with raster layer
         layer = make_padang_layer()
-        myAttrs, myPos = layer_attribute_names(layer, [], '')
+        attributes, position = layer_attribute_names(layer, [], '')
         message = 'Should return None, None for raster layer, got %s, %s' % (
-            myAttrs, myPos)
-        assert (myAttrs is None and myPos is None), message
+            attributes, position)
+        assert (attributes is None and position is None), message
 
-    def test_isLayerPolygonal(self):
+    def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back"""
         layer = make_polygon_layer()
         message = 'isPolygonLayer, %s layer should be polygonal' % layer
@@ -139,39 +142,42 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_get_defaults(self):
         """Test defaults for post processing can be obtained properly."""
-        expected_defaults = {
+        # Warning this code is duplicated from test_defaults...TS
+        expected = {
+            'ADULT_RATIO_KEY': 'adult ratio default',
+            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
+            'ADULT_RATIO': 0.659,
+
             'FEMALE_RATIO_KEY': 'female ratio default',
             'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
-            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
-            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
-            'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
-            'YOUTH_RATIO_KEY': 'youth ratio default',
-            'ADULT_RATIO_KEY': 'adult ratio default',
-            'ELDERLY_RATIO_KEY': 'elderly ratio default',
-            'YOUTH_RATIO': 0.263,
-            'ADULT_RATIO': 0.659,
-            'ELDERLY_RATIO': 0.078,
-            'NO_DATA': 'No data',
             'FEMALE_RATIO': 0.5,
+
+            'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
+            'ELDERLY_RATIO_KEY': 'elderly ratio default',
+            'ELDERLY_RATIO': 0.078,
+
+            'YOUTH_RATIO': 0.263,
+            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
+            'YOUTH_RATIO_KEY': 'youth ratio default',
+
+            'NO_DATA': u'No data',
+
             'AGGR_ATTR_KEY': 'aggregation attribute'}
-        actual_defaults = breakdown_defaults()
-        print actual_defaults
-        message = 'Defaults: got %s, expected %s' % (
-            actual_defaults, expected_defaults)
-        self.assertEqual(actual_defaults, expected_defaults, message)
+        defaults = breakdown_defaults()
+        self.assertDictEqual(defaults, expected)
 
     def test_mm_to_points(self):
         """Test that conversions between pixel and page dimensions work."""
 
         dpi = 300
-        myPixels = 300
+        pixels = 300
         mm = 25.4  # 1 inch
-        result = points_to_mm(myPixels, dpi)
+        result = points_to_mm(pixels, dpi)
         message = "Expected: %s\nGot: %s" % (mm, result)
         assert result == mm, message
         result = mm_to_points(mm, dpi)
-        message = "Expected: %s\nGot: %s" % (myPixels, result)
-        assert result == myPixels, message
+        message = "Expected: %s\nGot: %s" % (pixels, result)
+        assert result == pixels, message
 
     def test_humanize_seconds(self):
         """Test that humanise seconds works."""
@@ -184,35 +190,39 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_impact_layer_attribution(self):
         """Test we get an attribution html snippet nicely for impact layers."""
-        keywords = {'hazard_title': 'Sample Hazard Title',
-                      'hazard_source': 'Sample Hazard Source',
-                      'exposure_title': 'Sample Exposure Title',
-                      'exposure_source': 'Sample Exposure Source'}
-        myAttribution = impact_attribution(keywords)
-        print myAttribution
-        self.assertEqual(len(myAttribution.to_text()), 170)
+        keywords = {
+            'hazard_title': 'Sample Hazard Title',
+            'hazard_source': 'Sample Hazard Source',
+            'exposure_title': 'Sample Exposure Title',
+            'exposure_source': 'Sample Exposure Source'}
+        attribution = impact_attribution(keywords)
+        print attribution
+        # noinspection PyArgumentList
+        self.assertEqual(len(attribution.to_text()), 170)
 
     @expectedFailure
     def test_localised_attribution(self):
         """Test we can localise attribution."""
         os.environ['LANG'] = 'id'
-        keywords = {'hazard_title': 'Jakarta 2007 flood',
-                      'hazard_source': 'Sample Hazard Source',
-                      'exposure_title': 'People in Jakarta',
-                      'exposure_source': 'Sample Exposure Source'}
-        myHtml = impact_attribution(keywords, True)
-        print myHtml
-        assert myHtml == '11'
+        keywords = {
+            'hazard_title': 'Jakarta 2007 flood',
+            'hazard_source': 'Sample Hazard Source',
+            'exposure_title': 'People in Jakarta',
+            'exposure_source': 'Sample Exposure Source'}
+        html = impact_attribution(keywords, True)
+        print html
+        assert html == '11'
 
     def test_dpi_to_meters(self):
         """Test conversion from dpi to dpm."""
-        myDpi = 300
-        myDpm = dpi_to_meters(myDpi)
-        myExpectedDpm = 11811.023622
-        message = ('Conversion from dpi to dpm failed\n'
-                     ' Got: %s Expected: %s\n' %
-                     (myDpm, myExpectedDpm))
-        self.assertAlmostEqual(myDpm, myExpectedDpm, msg=message)
+        dpi = 300
+        dpm = dpi_to_meters(dpi)
+        expected_dpm = 11811.023622
+        message = (
+            'Conversion from dpi to dpm failed\n'
+            ' Got: %s Expected: %s\n' %
+            (dpm, expected_dpm))
+        self.assertAlmostEqual(dpm, expected_dpm, msg=message)
 
     def test_qt_at_least(self):
         """Test that we can compare the installed qt version"""
@@ -224,6 +234,6 @@ class UtilitiesTest(unittest.TestCase):
         assert not qt_at_least('4.8.4', test_version)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(UtilitiesTest, 'test')
+    suite = unittest.makeSuite(UtilitiesTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

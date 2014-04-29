@@ -304,7 +304,7 @@ def mm_to_points(mm, dpi):
     """Convert measurement in mm to one in points.
 
     :param mm: A distance in millimeters.
-    :type mm: int
+    :type mm: int, float
 
     :returns: mm converted value as points.
     :rtype: int, float
