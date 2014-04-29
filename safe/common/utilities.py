@@ -26,17 +26,15 @@ except ImportError:
     try:
         from third_party.odict import OrderedDict
     except ImportError:
-        raise RuntimeError(("Could not find an"
-                            "available OrderedDict implementation"))
+        raise RuntimeError(
+            'Could not find an available OrderedDict implementation')
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class MEMORYSTATUSEX(ctypes.Structure):
-    """
-    This class is used for getting the free memory on Windows
-    """
+    """This class is used for getting the free memory on Windows."""
     _fields_ = [
         ("dwLength", ctypes.c_ulong),
         ("dwMemoryLoad", ctypes.c_ulong),
@@ -55,7 +53,7 @@ class MEMORYSTATUSEX(ctypes.Structure):
 
 
 def verify(statement, message=None):
-    """Verification of logical statement similar to assertions
+    """Verification of logical statement similar to assertions.
 
     Input:
       statement: expression
@@ -75,18 +73,17 @@ def verify(statement, message=None):
 
 
 def ugettext(s):
-    """Translation support
-    """
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        '..', 'i18n'))
+    """Translation support."""
+    path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '..', 'i18n'))
     if 'LANG' not in os.environ:
         return s
     if not s:
         return s
     lang = os.environ['LANG']
     filename_prefix = 'inasafe'
-    t = gettext.translation(filename_prefix,
-                            path, languages=[lang], fallback=True)
+    t = gettext.translation(
+        filename_prefix, path, languages=[lang], fallback=True)
     return t.ugettext(s)
 
 
@@ -209,7 +206,7 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
     """
 
     # go to the directory
-    my_cwd = os.getcwd()
+    current_working_dir = os.getcwd()
     shp_dir, shp_name = os.path.split(shp_path)
     os.chdir(shp_dir)
 
@@ -231,7 +228,7 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
             if os.path.isfile(shp_basename + ext):
                 os.remove(shp_basename + ext)
 
-    os.chdir(my_cwd)
+    os.chdir(current_working_dir)
 
 
 def get_free_memory():
@@ -419,8 +416,7 @@ def format_decimal(interval, my_number):
 
 
 def get_decimal_separator():
-    """Return decimal separator according to the locale
-    """
+    """Return decimal separator according to the locale."""
     lang = os.getenv('LANG')
     if lang == 'id':
         return ','
@@ -429,8 +425,7 @@ def get_decimal_separator():
 
 
 def get_thousand_separator():
-    """Return decimal separator according to the locale
-    """
+    """Return decimal separator according to the locale."""
     lang = os.getenv('LANG')
     if lang == 'id':
         return '.'
@@ -439,8 +434,7 @@ def get_thousand_separator():
 
 
 def get_significant_decimal(my_decimal):
-    """Return a truncated decimal by last three digit after leading zero
-    """
+    """Return a truncated decimal by last three digit after leading zero."""
     if isinstance(my_decimal, Integral):
         return my_decimal
     if my_decimal != my_decimal:
@@ -471,7 +465,7 @@ def get_significant_decimal(my_decimal):
 
 
 def humanize_class(my_classes):
-    """Return humanize interval of an array
+    """Return humanize interval of an array.
 
     For example::
 
@@ -502,8 +496,8 @@ def humanize_class(my_classes):
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
-        humanize_classes.append(humanize_min_max(min_value, max_value,
-                                                 interval))
+        humanize_classes.append(
+            humanize_min_max(min_value, max_value, interval))
         min_value = max_value
         try:
             if humanize_classes[-1][0] == humanize_classes[-1][-1]:
@@ -514,17 +508,15 @@ def humanize_class(my_classes):
 
 
 def unhumanize_class(my_classes):
-    """Return class as interval without formatting
-    @param my_classes:
-    """
-    my_result = []
+    """Return class as interval without formatting."""
+    result = []
     interval = my_classes[-1] - my_classes[-2]
     min_value = 0
     for max_value in my_classes:
-        my_result.append((format_decimal(interval, min_value),
-                          format_decimal(interval, max_value)))
+        result.append((format_decimal(interval, min_value),
+                       format_decimal(interval, max_value)))
         min_value = max_value
-    return my_result
+    return result
 
 
 def unhumanize_number(number):
@@ -546,14 +538,16 @@ def unhumanize_number(number):
     return number
 
 
-def create_classes(my_list, num_classes):
-    """Create classes from my_list. Classes will use linspace from numpy.
+def create_classes(class_list, num_classes):
+    """Create classes from my_list.
+
+    Classes will use linspace from numpy.
     It will extend from min and max of elements in my_list. If min == 0,
     it won't be included. The number of classes is equal to num_classes.
     Please see the unit test for this function for more explanation
     """
-    min_value = numpy.nanmin(my_list)
-    max_value = numpy.nanmax(my_list)
+    min_value = numpy.nanmin(class_list)
+    max_value = numpy.nanmax(class_list)
     print 'min_value, max_value: ', min_value, max_value
     if min_value == 0:
         num_classes += 1
@@ -565,23 +559,22 @@ def create_classes(my_list, num_classes):
     return classes
 
 
-def create_label(my_tuple, extra_label=None):
+def create_label(label_tuple, extra_label=None):
     """Return a label based on my_tuple (a,b) and extra label.
+
     a and b are string.
 
     The output will be something like:
                 [a - b] extra_label
     """
     if extra_label is not None:
-        return '[' + ' - '.join(my_tuple) + '] ' + str(extra_label)
+        return '[' + ' - '.join(label_tuple) + '] ' + str(extra_label)
     else:
-        return '[' + ' - '.join(my_tuple) + ']'
+        return '[' + ' - '.join(label_tuple) + ']'
 
 
 def get_utm_zone(longitude):
-    """
-    Return utm zone.
-    """
+    """Return utm zone."""
     zone = int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
     if zone == 0:
         zone = 60
@@ -589,8 +582,8 @@ def get_utm_zone(longitude):
 
 
 def get_utm_epsg(longitude, latitude):
-    """
-    Return epsg code of the utm zone.
+    """Return epsg code of the utm zone.
+
     The code is based on the code:
     http://gis.stackexchange.com/questions/34401
     """
