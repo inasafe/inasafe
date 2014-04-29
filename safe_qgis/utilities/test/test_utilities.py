@@ -137,21 +137,28 @@ class UtilitiesTest(unittest.TestCase):
         message = ('%s raster layer should not be polygonal' % layer)
         assert not is_polygon_layer(layer), message
 
-    def test_getDefaults(self):
+    def test_get_defaults(self):
         """Test defaults for post processing can be obtained properly."""
-        myExpectedDefaults = {
-            'FEM_RATIO_KEY': 'female ratio default',
+        expected_defaults = {
+            'FEMALE_RATIO_KEY': 'female ratio default',
+            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
+            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
+            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
+            'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
+            'YOUTH_RATIO_KEY': 'youth ratio default',
+            'ADULT_RATIO_KEY': 'adult ratio default',
+            'ELDERLY_RATIO_KEY': 'elderly ratio default',
             'YOUTH_RATIO': 0.263,
-            'ELDER_RATIO': 0.078,
+            'ADULT_RATIO': 0.659,
+            'ELDERLY_RATIO': 0.078,
             'NO_DATA': 'No data',
-            'FEM_RATIO': 0.5,
-            'AGGR_ATTR_KEY': 'aggregation attribute',
-            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
-            'ADULT_RATIO': 0.659}
-        myDefaults = breakdown_defaults()
+            'FEMALE_RATIO': 0.5,
+            'AGGR_ATTR_KEY': 'aggregation attribute'}
+        actual_defaults = breakdown_defaults()
+        print actual_defaults
         message = 'Defaults: got %s, expected %s' % (
-            myDefaults, myExpectedDefaults)
-        assert (myDefaults == myExpectedDefaults), message
+            actual_defaults, expected_defaults)
+        self.assertEqual(actual_defaults, expected_defaults, message)
 
     def test_mm_to_points(self):
         """Test that conversions between pixel and page dimensions work."""
