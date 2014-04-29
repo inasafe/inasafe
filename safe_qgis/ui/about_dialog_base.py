@@ -14,6 +14,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+
 class Ui_AboutDialogBase(object):
     def setupUi(self, AboutDialogBase):
         AboutDialogBase.setObjectName(_fromUtf8("AboutDialogBase"))
@@ -32,12 +33,14 @@ class Ui_AboutDialogBase(object):
         self.gridLayout.addWidget(self.about_text, 0, 0, 1, 1)
         self.tab_widget.addTab(self.about_tab, _fromUtf8(""))
         self.getting_started_tab = QtGui.QWidget()
-        self.getting_started_tab.setObjectName(_fromUtf8("getting_started_tab"))
+        self.getting_started_tab.setObjectName(_fromUtf8(
+            "getting_started_tab"))
         self.gridLayout_2 = QtGui.QGridLayout(self.getting_started_tab)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.getting_started_text = QtGui.QTextEdit(self.getting_started_tab)
         self.getting_started_text.setReadOnly(True)
-        self.getting_started_text.setObjectName(_fromUtf8("getting_started_text"))
+        self.getting_started_text.setObjectName(_fromUtf8(
+            "getting_started_text"))
         self.gridLayout_2.addWidget(self.getting_started_text, 0, 0, 1, 1)
         self.tab_widget.addTab(self.getting_started_tab, _fromUtf8(""))
         self.limitations_tab = QtGui.QWidget()
@@ -71,13 +74,20 @@ class Ui_AboutDialogBase(object):
         self.label = QtGui.QLabel(AboutDialogBase)
         self.label.setMaximumSize(QtCore.QSize(600, 100))
         self.label.setText(_fromUtf8(""))
-        self.label.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/supporters.png")))
+        self.label.setPixmap(QtGui.QPixmap(_fromUtf8(
+            ":/plugins/inasafe/supporters.png")))
         self.label.setScaledContents(True)
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout_6.addWidget(self.label, 1, 1, 2, 1)
-        spacerItem = QtGui.QSpacerItem(11, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem = QtGui.QSpacerItem(11,
+                                       20,
+                                       QtGui.QSizePolicy.Expanding,
+                                       QtGui.QSizePolicy.Minimum)
         self.gridLayout_6.addItem(spacerItem, 1, 2, 1, 1)
-        spacerItem1 = QtGui.QSpacerItem(24, 17, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem1 = QtGui.QSpacerItem(24,
+                                        17,
+                                        QtGui.QSizePolicy.Expanding,
+                                        QtGui.QSizePolicy.Minimum)
         self.gridLayout_6.addItem(spacerItem1, 2, 0, 1, 1)
         self.buttonBox = QtGui.QDialogButtonBox(AboutDialogBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -87,8 +97,10 @@ class Ui_AboutDialogBase(object):
 
         self.retranslateUi(AboutDialogBase)
         self.tab_widget.setCurrentIndex(4)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), AboutDialogBase.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), AboutDialogBase.reject)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8(
+            "accepted()")), AboutDialogBase.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8(
+            "rejected()")), AboutDialogBase.reject)
         QtCore.QMetaObject.connectSlotsByName(AboutDialogBase)
 
     def retranslateUi(self, AboutDialogBase):

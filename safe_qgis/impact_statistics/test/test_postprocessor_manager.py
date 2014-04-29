@@ -37,27 +37,19 @@ sys.path.append(pardir)
 from safe_qgis.utilities.utilities_for_testing import (
     set_canvas_crs,
     set_jakarta_extent,
-    set_manila_extent,
     GEOCRS)
 
 from safe_qgis.widgets.dock import Dock
 
 from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
-    load_layers,
     setup_scenario,
-    canvas_list,
-    compare_result_to_expected_file)
-
-from safe_qgis.safe_interface import TESTDATA
+    canvas_list)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')
-
-TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
-                              '../../test/test_data/test_files')
 
 
 #noinspection PyArgumentList
@@ -162,40 +154,6 @@ class PostprocessorManagerTest(unittest.TestCase):
                     total += float(token.replace(',', '.'))
 
                 assert total != 0, message
-
-    #noinspection PyMethodMayBeStatic
-    def test_post_processor_data_driven_output(self):
-        """Check that the post processor does not add spurious report rows."""
-
-        # with KAB_NAME aggregation attribute defined in .keyword using
-        # kabupaten_jakarta_singlepart.shp
-        file_list = [
-            join(TESTDATA, 'data_driven_aggr.shp'),
-            join(TESTDATA, 'data_driven_haz.tif'),
-            join(TESTDATA, 'data_driven_exp.tif')]
-        load_layers(file_list, data_directory=None, dock=DOCK)
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='data_driven_haz',
-            exposure='data_driven_exp',
-            function='Need evacuation',
-            function_id='Flood Evacuation Function',
-            aggregation_layer='data_driven_aggr')
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_manila_extent()
-
-        assert result, message
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-        expected_result_file = (TEST_FILES_DIR +
-                                '/test-data-driven-run-results.txt')
-        compare_result_to_expected_file(result, expected_result_file)
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(PostprocessorManagerTest)

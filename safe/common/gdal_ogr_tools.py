@@ -52,10 +52,12 @@ def polygonize_thresholds(
 
     indataset = gdal.Open(raster_file_name, gdal.GA_ReadOnly)
     out_driver = gdal.GetDriverByName('GTiff')
-    outdataset = \
-        out_driver.Create(outfile, indataset.RasterXSize, \
-                              indataset.RasterYSize, indataset.RasterCount, \
-                              gdal.GDT_Byte)
+    outdataset = out_driver.Create(
+        outfile,
+        indataset.RasterXSize,
+        indataset.RasterYSize,
+        indataset.RasterCount,
+        gdal.GDT_Byte)
 
     gt = indataset.GetGeoTransform()
     if gt is not None and gt != (0.0, 1.0, 0.0, 0.0, 0.0, 1.0):
@@ -138,5 +140,8 @@ def polygonize_thresholds(
     inside_ds.Destroy()
     outside_ds.Destroy()
     dst_ds.Destroy()
-    return (inside_shape_file, inside_layer_name, outside_shape_file, \
-            outside_layer_name)
+    return (
+        inside_shape_file,
+        inside_layer_name,
+        outside_shape_file,
+        outside_layer_name)

@@ -578,17 +578,6 @@ def create_label(my_tuple, extra_label=None):
         return '[' + ' - '.join(my_tuple) + ']'
 
 
-# Prefer python's own OrderedDict if it exists
-try:
-    from collections import OrderedDict
-except ImportError:
-    try:
-        from third_party.odict import OrderedDict
-    except ImportError:
-        raise RuntimeError(("Could not find an"
-                            "available OrderedDict implementation"))
-
-
 def get_utm_zone(longitude):
     """
     Return utm zone.

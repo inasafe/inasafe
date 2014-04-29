@@ -137,8 +137,9 @@ class HtmlRendererTest(unittest.TestCase):
             20936,  # as rendered on linux ub 12.04 64
             21523,  # as rendered on linux ub 12.10 64
             20605,  # as rendered on linux ub 13.04 64
-            20601,  # as rendered on linux ub 13.10 64
+            13965,  # as rendered on linux ub 13.10 64
             14220,  # as rendered on linux ub 13.04 64 MB
+            13842,  # as rendered on linux ub 14.04 64 AG
             21287,  # as rendered on Jenkins post 19 February 2014
             377191,  # as rendered on OSX
             16163L,  # as rendered on Windows 7 64 bit Ultimate i3
@@ -163,16 +164,16 @@ class HtmlRendererTest(unittest.TestCase):
         LOGGER.debug(path)
         width = 250
         pixmap = renderer.html_to_image(html, width)
-        assert not pixmap.isNull()
+        self.assertFalse(pixmap.isNull())
         LOGGER.debug(pixmap.__class__)
         pixmap.save(path)
         message = 'Rendered output does not exist: %s' % path
-        assert os.path.exists(path), message
+        self.assertTrue(os.path.exists(path), message)
 
         tolerance = 1000  # to allow for version number changes in disclaimer
         flag, message = check_images(
             'renderHtmlToImage', path, tolerance)
-        assert flag, message + '\n' + path
+        self.assertTrue(flag, message + '\n' + path)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(HtmlRendererTest, 'test')

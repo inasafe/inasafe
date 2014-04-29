@@ -40,7 +40,7 @@ Current test status for develop branch:
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/) - utilities-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/) - widgets-test
 
-PyPi Donwloads for the 'safe' library:
+PyPi Downloads for the 'safe' library:
 [![Downloads](https://pypip.in/d/python-safe/badge.png)](https://crate.io/packages/python-safe)
 [![Downloads](https://pypip.in/v/python-safe/badge.png)](https://crate.io/packages/python-safe)
 

@@ -731,21 +731,20 @@ class Aggregator(QtCore.QObject):
             for myFeature in provider.getFeatures():
                 feature_id = myFeature.id()
                 if feature_id not in zonal_statistics:
-                    # Blindly ignoring - @mbernasocchi can you review? TS (YA: see #877)
+                    # Blindly ignoring - @mbernasocchi can you review? TS
+                    # (YA: see #877)
                     attributes = {
                         sum_index: 0,
                         count_index: 0,
                         mean_index: 0
-                        }
+                    }
                 else:
                     statistics = zonal_statistics[feature_id]
-                    #          minIndex: statistics['min'],
-                    #          maxIndex: statistics['max']}
                     attributes = {
                         sum_index: statistics['sum'],
                         count_index: statistics['count'],
                         mean_index: statistics['mean']
-                        }
+                    }
                 provider.changeAttributeValues({feature_id: attributes})
 
     def _aggregate_polygon_impact(self, safe_impact_layer):
@@ -1181,7 +1180,7 @@ class Aggregator(QtCore.QObject):
         youth_ratio_key = self.get_default_keyword('YOUTH_RATIO_ATTR_KEY')
         youth_ratio_attribute = self.read_keywords(
             self.layer,
-            female_ratio_key)
+            youth_ratio_key)
         if ((youth_ratio_attribute != self.tr('Don\'t use')) and
                 (youth_ratio_attribute != self.tr('Use default'))):
             self.attributes[youth_ratio_key] = \

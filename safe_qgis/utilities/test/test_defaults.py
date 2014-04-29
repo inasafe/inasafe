@@ -28,16 +28,29 @@ class TestDefaults(unittest.TestCase):
         """Test we can get breakdown defaults.
         """
         expected = {
-            'FEM_RATIO_KEY': 'female ratio default',
+            'ADULT_RATIO_KEY': 'adult ratio default',
+            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
+            'ADULT_RATIO': 0.659,
+
+            'FEMALE_RATIO_KEY': 'female ratio default',
+            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
+            'FEMALE_RATIO': 0.5,
+
+            'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
+            'ELDERLY_RATIO_KEY': 'elderly ratio default',
+            'ELDERLY_RATIO': 0.078,
+
             'YOUTH_RATIO': 0.263,
-            'ELDER_RATIO': 0.078,
+            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
+            'YOUTH_RATIO_KEY': 'youth ratio default',
+
             'NO_DATA': u'No data',
-            'FEM_RATIO': 0.5,
-            'AGGR_ATTR_KEY': 'aggregation attribute',
-            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
-            'ADULT_RATIO': 0.659}
+
+            'AGGR_ATTR_KEY': 'aggregation attribute'}
+
         actual = breakdown_defaults()
-        self.assertEquals(expected, actual)
+        self.maxDiff = None
+        self.assertDictEqual(expected, actual)
 
     def test_disclaimer(self):
         """Verify the disclaimer works.
