@@ -73,10 +73,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'disabled': True,
                 'id': 'FloodRasterRoadsExperimentalFunction',
                 'name': tr('Flood Raster Roads Experimental Function'),
-                'impact': tr('OPTIMIZED-TEST-Be flooded in given thresholds'),
+                'impact': tr('Be flooded in given thresholds'),
                 'author': 'Dmitry Kolesov',
                 'date_implemented': 'N/A',
                 'overview': tr('N/A'),
@@ -103,7 +102,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('OPTIMIZED-TEST-Be flooded in given thresholds')
+    title = tr('Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value

@@ -41,7 +41,8 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
     :rating 1
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami'] and \
-                    layertype=='raster'
+                    layertype=='raster'  and \
+                    disabled=='True'
     :param requires category=='exposure' and \
                     subcategory in ['road'] and \
                     layertype=='vector'
@@ -67,6 +68,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
+                'disabled': True,
                 'id': 'FloodRasterRoadsExperimentalFunction',
                 'name': tr('Flood Raster Roads Experimental Function'),
                 'impact': tr('Be flooded in given thresholds'),
