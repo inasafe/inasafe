@@ -23,7 +23,6 @@ import unittest
 import sys
 import os
 import shutil
-from nose.tools import assert_almost_equal
 from unittest import expectedFailure
 
 # Add PARENT directory to path to make test aware of other modules
@@ -173,8 +172,7 @@ class ClipperTest(unittest.TestCase):
             'Actual: %.14f' % (
                 mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
         result_size = myNewRasterLayer.rasterUnitsPerPixelX()
-        assert_almost_equal(result_size, mySize, places=13, msg=message)
-        # assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, message
+        self.assertAlmostEqual(result_size, mySize, places=13, msg=message)
 
     def test_clip_raster_with_no_extension(self):
         """Test we can clip a raster with no extension - see #659."""
