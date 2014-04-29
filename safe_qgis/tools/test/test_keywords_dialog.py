@@ -258,14 +258,14 @@ class KeywordsDialogTest(unittest.TestCase):
             'female ratio attribute to the keywords list.')
 
         self.assertEqual(dialog.get_value_for_key(
-            defaults['FEM_RATIO_ATTR_KEY']), dialog.tr('Use default'),
+            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.tr('Use default'),
             message)
 
         message = (
             'Toggling the postprocessing radio did not add a '
             'female ratio default value to the keywords list.')
         self.assertEqual(float(dialog.get_value_for_key(
-            defaults['FEM_RATIO_KEY'])), defaults['FEM_RATIO'], message)
+            defaults['FEMALE_RATIO_KEY'])), defaults['FEMALE_RATIO'], message)
 
     def test_on_dsb_female_ratio_default_value_changed(self):
         """Test hazard radio button toggle behaviour works"""
@@ -287,7 +287,7 @@ class KeywordsDialogTest(unittest.TestCase):
             'Toggling the female ratio attribute combo to'
             ' "Don\'t use" did not add it to the keywords list.')
         self.assertEqual(dialog.get_value_for_key(
-            defaults['FEM_RATIO_ATTR_KEY']), dialog.tr('Don\'t use'),
+            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.tr('Don\'t use'),
             message)
 
         message = (
@@ -299,7 +299,7 @@ class KeywordsDialogTest(unittest.TestCase):
         message = (
             'Toggling the female ratio attribute combo to'
             ' "Don\'t use" did not remove the keyword.')
-        assert (dialog.get_value_for_key(defaults['FEM_RATIO']) is None), \
+        assert (dialog.get_value_for_key(defaults['FEMALE_RATIO']) is None), \
             message
 
         #set to TEST_REAL
@@ -312,7 +312,7 @@ class KeywordsDialogTest(unittest.TestCase):
             'Toggling the female ratio attribute combo to "TEST_REAL"'
             ' did not add it to the keywords list.')
         assert dialog.get_value_for_key(
-            defaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', message
+            defaults['FEMALE_RATIO_ATTR_KEY']) == 'TEST_REAL', message
 
         message = (
             'Toggling the female ratio attribute combo to "TEST_REAL"'
@@ -323,7 +323,7 @@ class KeywordsDialogTest(unittest.TestCase):
         message = (
             'Toggling the female ratio attribute combo to "TEST_REAL"'
             ' did not remove the keyword.')
-        assert (dialog.get_value_for_key(defaults['FEM_RATIO']) is
+        assert (dialog.get_value_for_key(defaults['FEMALE_RATIO']) is
                 None), message
 
     def Xtest_on_radExposure_toggled(self):
