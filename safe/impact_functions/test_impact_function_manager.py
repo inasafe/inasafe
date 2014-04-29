@@ -91,7 +91,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         assert set(result) == set(expected_result), msg
 
         result = ifm.allowed_data_types('structure')
-        expected_result = ['polygon']
+        expected_result = ['polygon', 'point']
         msg = ('I expect %s but I got %s.' % (expected_result, result))
         assert set(result) == set(expected_result), msg
 
@@ -189,7 +189,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.categories_for_layer(
             layer_type='vector', data_type='point')
-        expected_result = [hazard_definition]
+        expected_result = [hazard_definition, exposure_definition]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
         assert result == expected_result, msg
 
