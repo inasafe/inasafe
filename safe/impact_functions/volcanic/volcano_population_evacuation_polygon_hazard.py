@@ -164,6 +164,11 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             The returned dict will include a table with number of people
             evacuated and supplies required.
         :rtype: dict
+
+        :raises:
+            * Exception - When hazard layer is not vector layer
+            * RadiiException - When radii are not valid (they need to be
+                monotonically increasing)
         """
 
         # Identify hazard and exposure layers
