@@ -80,7 +80,10 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         'definition': exposure_definition,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
-                        'layer_constraints': [layer_vector_polygon, layer_vector_point]
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point
+                        ]
                     }
                 }
             }

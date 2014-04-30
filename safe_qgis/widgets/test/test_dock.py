@@ -230,8 +230,9 @@ class TestDock(TestCase):
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '847529 , received: \n %s' % result)
-        self.assertTrue(format_int(847529) in result, message)
+            '847596 , received: \n %s' % result)
+        print format_int(847529), 'expect'
+        self.assertTrue(format_int(847596) in result, message)
 
     def test_runEarthquakeFatalityFunction_Padang_full(self):
         """Padang 2009 fatalities estimated correctly (large extent)"""
@@ -288,8 +289,8 @@ class TestDock(TestCase):
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '31372262 , received: \n %s' % result)
-        self.assertTrue(format_int(31372262) in result, message)
+            '31374747 , received: \n %s' % result)
+        self.assertTrue(format_int(31374747) in result, message)
 
     def test_runTsunamiBuildingImpactFunction(self):
         """Tsunami function runs in GUI as expected."""
@@ -428,8 +429,8 @@ class TestDock(TestCase):
 
         # Check numbers are OK (within expected errors from resampling)
         # These are expected impact number
-        self.assertTrue(format_int(10484) in result, message)
-        self.assertTrue(format_int(977) in result, message)
+        self.assertTrue(format_int(10473000) in result, message)
+        self.assertTrue(format_int(978000) in result, message)
 
     def test_runFloodPopulationPolygonHazardImpactFunction(self):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
