@@ -11,7 +11,7 @@ from safe.common.utilities import verify
 from safe.common.utilities import ugettext as tr
 from safe.common.numerics import ensure_numeric
 from safe.common.geodesy import Point
-from safe.common.exceptions import InaSAFEError, BoundsError
+from safe.common.exceptions import InaSAFEError, BoundsError, RadiiException
 from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
 
@@ -612,23 +612,27 @@ def interpolate_raster_raster(source, target):
 def make_circular_polygon(centers, radii, attributes=None):
     """Create circular polygon in geographic coordinates
 
-    Args:
-        centers: list of (longitude, latitude)
+    :param centers: The center of the circular polygon (longitude, latitude)
+    :type centers: list
 
-        radii: desired approximate radii in meters (must be
-        monotonically ascending).
+    :param radii: Desired approximate radii in meters (must be
+        monotonically ascending). Can be either one number or list of numbers
+    :type radii: int, list
 
-        Can be either one number or list of numbers
-        attributes (optional): Attributes for each center
+    :param attributes: Attributes for each center (optional)
+    :type attributes: list
 
-    Returns:
-        Vector polygon layer representing circle in WGS84
+    :return: Vector polygon layer representing circle in WGS84
+    :rtype: Vector
     """
-
     if not isinstance(radii, list):
         radii = [radii]
 
-    # FIXME (Ole): Check that radii are monotonically increasing
+    # Check that radii are monotonically increasing
+    monotonically_increasing_flag = all(
+        x < y for x, y in zip(radii,radii[1:]))
+    if not monotonically_increasing_flag:
+        raise RadiiException(RadiiException.suggestion)
 
     circles = []
     new_attributes = []
