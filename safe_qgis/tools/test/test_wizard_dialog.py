@@ -30,6 +30,7 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
 from qgis.core import QgsVectorLayer
@@ -58,7 +59,11 @@ def clone_csv_layer():
 
 
 def clone_shp_layer(name='tsunami_polygon'):
-    """Helper function that copies a test shplayer and returns it."""
+    """Helper function that copies a test shplayer and returns it.
+
+    :param name: The default name for the shp layer
+    :type name: str
+    """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
     temp_path = unique_filename()
     # copy to temp file
@@ -76,7 +81,8 @@ def remove_temp_file(file_path):
 
     Also its keywords file will be removed.
 
-    :param file_name: File to remove.
+    :param file_path: File path to be removed.
+    :type file_path: str
     """
     file_path = file_path[:-4]
     extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
@@ -90,17 +96,23 @@ class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
 
     def test_keywords_creation_wizard(self):
-
         """Test how the widgets work."""
-
         expected_category_count = 3
-        expected_second_category = "exposure"
+        expected_categories = ['exposure', 'hazard', 'aggregation']
+        chosen_category = 'hazard'
+
         expected_subcategory_count = 4
-        expected_second_subcategory = "tsunami"
+        expected_subcategories = ['volcano', 'earthquake', 'flood', 'tsunami']
+        chosen_subcategory = "tsunami"
+
         expected_unit_count = 3
-        expected_third_unit = "feet_depth"
+        expected_units = ['wetdry', 'metres_depth', 'feet_depth']
+        expected_chosen_unit = 'feet_depth'
+
         expected_field_count = 5
-        expected_second_field = "GRIDCODE"
+        expected_fields = ['OBJECTID', 'GRIDCODE', 'Shape_Leng', 'Shape_Area',
+                           'Category']
+        expected_chosen_field = 'GRIDCODE'
 
         expected_keywords = {
             'category': 'hazard',
@@ -114,128 +126,167 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer()
 
         # check the environment first
-        self.assertFalse(
-            layer.dataProvider() is None,
-            'Test layer is not readable. Check environment variables.')
+        message = 'Test layer is not readable. Check environment variables.'
+        self.assertIsNotNone(layer.dataProvider(), message)
 
+        # Initialize dialog
+        # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
         # step 1 of 7 - select category
         count = dialog.lstCategories.count()
-        self.assertTrue(
-            count == expected_category_count,
-            'Invalid category count! There should be %d while there were: %d'
-            % (expected_category_count, count))
-        second_category = dialog.lstCategories.item(1).data(Qt.UserRole)
-        second_category = eval(second_category)['id']
-        self.assertTrue(
-            second_category == expected_second_category,
-            'Invalid second category! It should be "%s" while it was: "%s"'
-            % (expected_second_category, second_category))
+        message = ('Invalid category count! There should be %d while there '
+                   'were: %d') % (expected_category_count, count)
+        self.assertEqual(count, expected_category_count, message)
 
+        # Get all the categories given by wizards and save the 'hazard' index
+        categories = []
+        hazard_index = -1
+        for i in range(expected_category_count):
+            category_name = eval(
+                dialog.lstCategories.item(i).data(Qt.UserRole))['id']
+            categories.append(category_name)
+            if category_name == chosen_category:
+                hazard_index = i
+        # Check if categories is the same with expected_categories
+        message = 'Invalid categories! It should be "%s" while it was %s' % (
+            expected_categories, categories)
+        self.assertEqual(set(categories), set(expected_categories), message)
+        # Check if the Next button state is on the right state
+        message = ('Invalid Next button state in step 1! Enabled while '
+                   'there\'s nothing selected yet')
         self.assertTrue(
-            not dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 1! Enabled while there\'s nothing selected yet')
-        dialog.lstCategories.setCurrentRow(0)
+            not dialog.pbnNext.isEnabled(), message)
+        # Select hazard one
+        dialog.lstCategories.setCurrentRow(hazard_index)
+        message = ('Invalid Next button state in step 1! Still disabled after '
+                   'an item selected')
         self.assertTrue(
-            dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            'state in step 1! Still disabled after an item selected')
-
+            dialog.pbnNext.isEnabled(), message)
+        # Click Next
         dialog.pbnNext.click()
 
         # step 2 of 7 - select hazard
+        # Check the number of sub categories
         count = dialog.lstSubcategories.count()
-        self.assertTrue(
-            count == expected_subcategory_count,
-            'Invalid subcategory count! There should be %d and there were: %d'
-            % (expected_subcategory_count, count))
-        second_subcategory = dialog.lstSubcategories.item(1).data(Qt.UserRole)
-        second_subcategory = eval(second_subcategory)['id']
-        self.assertTrue(
-            second_subcategory == expected_second_subcategory,
-            'Invalid second subcategory! It should be "%s" while it was: "%s"'
-            % (expected_second_subcategory, second_subcategory))
+        message = ('Invalid subcategory count! There should be %d and there '
+                   'were: %d') % (expected_subcategory_count, count)
+        self.assertEqual(count, expected_subcategory_count, message)
 
+        # Get all the subcategories given and save the 'tsunami' index
+        subcategories = []
+        tsunami_index = -1
+        for i in range(expected_subcategory_count):
+            subcategory_name = eval(
+                dialog.lstSubcategories.item(i).data(Qt.UserRole))['id']
+            subcategories.append(subcategory_name)
+            if subcategory_name == chosen_subcategory:
+                tsunami_index = i
+        # Check if subcategories is the same with expected_subcategories
+        message = ('Invalid sub categories! It should be "%s" while it was '
+                   '%s') % (expected_subcategories, subcategories)
+        self.assertEqual(
+            set(subcategories), set(expected_subcategories), message)
+        # The Next button should be on disabled state first
         self.assertTrue(
             not dialog.pbnNext.isEnabled(), 'Invalid Next button'
             ' state in step 2! Enabled while there\'s nothing selected yet')
-        dialog.lstSubcategories.setCurrentRow(1)
-        self.assertTrue(
-            dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 2! Still disabled after an item selected')
-
+        # Set to tsunami subcategories
+        dialog.lstSubcategories.setCurrentRow(tsunami_index)
+        message = ('Invalid Next button state in step 2! Still disabled after '
+                   'an item selected')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+        # Click next button
         dialog.pbnNext.click()
 
         # step 3 of 7 - select tsunami units
+        # Check if the number of unit for tsunami is 3
         count = dialog.lstUnits.count()
+        message = ('Invalid unit count! There should be %d while there were: '
+                   '%d') % (expected_unit_count, count)
+        self.assertEqual(count, expected_unit_count, message)
+        # Get all the units given and save the 'feet_depth' index
+        units = []
+        feet_unit_index = -1
+        for i in range(expected_unit_count):
+            unit_name = eval(
+                dialog.lstUnits.item(i).data(Qt.UserRole))['id']
+            units.append(unit_name)
+            if unit_name == expected_chosen_unit:
+                feet_unit_index = i
+        # Check if units is the same with expected_units
+        message = ('Invalid units! It should be "%s" while it was '
+                   '%s') % (expected_units, units)
+        self.assertEqual(
+            set(expected_units), set(units), message)
+        # The button should be on disabled state first
+        message = ('Invalid Next button state in step 3! Enabled while '
+                   'there\'s nothing selected yet')
         self.assertTrue(
-            count == expected_unit_count,
-            'Invalid unit count! There should be %d while there were: %d'
-            % (expected_unit_count, count))
-        third_unit = dialog.lstUnits.item(2).data(Qt.UserRole)
-        third_unit = eval(third_unit)['id']
+            not dialog.pbnNext.isEnabled(), message)
+        dialog.lstUnits.setCurrentRow(feet_unit_index)
+        message = ('Invalid Next button state in step 3! Enabled while '
+                   'there\'s nothing selected yet')
         self.assertTrue(
-            third_unit == expected_third_unit,
-            'Invalid fourth unit! It should be "%s" while it was: "%s"'
-            % (expected_third_unit, third_unit))
-
-        self.assertTrue(
-            not dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 3! Enabled while there\'s nothing selected yet')
-        dialog.lstUnits.setCurrentRow(2)
-        self.assertTrue(
-            dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 3! Still disabled after an item selected')
+            dialog.pbnNext.isEnabled(), message)
 
         dialog.pbnNext.click()
 
         # step 4 of 7 - select data field for tsunami feet
         count = dialog.lstFields.count()
-        self.assertTrue(
-            count == expected_field_count,
-            'Invalid field count! There should be %d while there were: %d'
-            % (expected_field_count, count))
-        second_field = dialog.lstFields.item(1).data(Qt.UserRole)
-        self.assertTrue(
-            second_field == expected_second_field,
-            'Invalid second field ! It should be "%s" while it was: "%s"'
-            % (expected_second_field, second_field))
-
-        self.assertTrue(
-            not dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 4! Enabled while there\'s nothing selected yet')
-        dialog.lstFields.setCurrentRow(1)
-        self.assertTrue(
-            dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 4! Still disabled after an item selected')
-
+        message = ('Invalid field count! There should be %d while there were: '
+                   '%d') % (expected_field_count, count)
+        self.assertEqual(count, expected_field_count, message)
+        # Get all the fields given and save the 'GRIDCODE' index
+        fields = []
+        gridcode_index = -1
+        for i in range(expected_field_count):
+            field_name = dialog.lstFields.item(i).text()
+            fields.append(field_name)
+            if field_name == expected_chosen_field:
+                gridcode_index = i
+        # Check if fields is the same with expected_fields
+        message = ('Invalid fields! It should be "%s" while it was '
+                   '%s') % (expected_fields, fields)
+        self.assertEqual(
+            set(expected_fields), set(fields), message)
+        # The button should be on disabled first
+        message = ('Invalid Next button state in step 4! Enabled while '
+                   'there\'s nothing selected yet')
+        self.assertTrue(not dialog.pbnNext.isEnabled(), message)
+        dialog.lstFields.setCurrentRow(gridcode_index)
+        message = ('Invalid Next button state in step 4! Still disabled after '
+                   'an item selected')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+        # Click next
         dialog.pbnNext.click()
 
         # step 6 of 7 - enter source
-        self.assertTrue(
-            dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            ' state in step 6! Disabled while source is optional')
+        message = ('Invalid Next button state in step 6! Disabled while '
+                   'source is optional')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
         dialog.leSource.setText('some source')
         dialog.pbnNext.click()
 
         # step 7 of 7 - enter title
-        self.assertTrue(
-            not dialog.pbnNext.isEnabled(), 'Invalid Next button'
-            'state in step 7! Enabled while there\'s nothing entered yet')
+        message = ('Invalid Next button state in step 7! Enabled while '
+                   'there\'s nothing entered yet')
+        self.assertTrue(not dialog.pbnNext.isEnabled(), message)
         dialog.leTitle.setText('some title')
-        self.assertTrue(
-            dialog.pbnNext.isEnabled(), 'Invalid Next button state'
-            'in step 7! Still disabled after a text entered')
+        message = ('Invalid Next button state in step 7! Still disabled '
+                   'after a text entered')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
         dialog.pbnNext.click()
 
         # test the resulting keywords
         keyword_io = KeywordIO()
+        # noinspection PyTypeChecker
         keywords = keyword_io.read_keywords(layer)
 
-        self.assertTrue(
-            keywords == expected_keywords,
-            'Invalid metadata!\n Was: %s\n Should be: %s' %
-            (unicode(keywords), unicode(expected_keywords)))
+        message = 'Invalid metadata!\n Was: %s\n Should be: %s' % (
+            unicode(keywords), unicode(expected_keywords))
+
+        self.assertEqual(keywords, expected_keywords, message)
 
         remove_temp_file(layer.source())
 

@@ -7,6 +7,7 @@ from safe.impact_functions.core import (
 from safe.metadata import (
     hazard_earthquake,
     layer_vector_polygon,
+    layer_vector_point,
     layer_raster_numeric,
     unit_mmi_depth,
     exposure_structure,
@@ -79,7 +80,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         'definition': exposure_definition,
                         'subcategory': exposure_structure,
                         'units': [unit_building_type_type],
-                        'layer_constraints': [layer_vector_polygon]
+                        'layer_constraints': [layer_vector_polygon, layer_vector_point]
                     }
                 }
             }
