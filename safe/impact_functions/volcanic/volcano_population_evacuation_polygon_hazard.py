@@ -246,7 +246,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # from input polygon and a population count of zero
         new_attributes = my_hazard.get_data()
 
-        # Delete the attribute that has the name (insensitive case) with
+        # Delete the attribute that has the same name (insensitive case) with
         # target field
         for datum in new_attributes:
             attribute_names = datum.keys()
