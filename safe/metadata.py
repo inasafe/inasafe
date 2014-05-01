@@ -185,9 +185,10 @@ unit_people_per_pixel = {
     'id': 'people_per_pixel',
     'name': tr('people per pixel'),
     'description': tr(
-        '<b>Density</b> is the number of features within a defined '
-        'area. For example <b>population density</b> might be measured '
-        'as the number of people per square kilometre.'),
+        '<b>Count</b> is the number of people in each cell. For example <b>'
+        'population count</b> might be measured as the number of people per '
+        'pixel in a raster data set. This unit is relevant for population '
+        'rasters in geographic coordinates.'),
     'constraint': 'continuous'
 }
 unit_road_type_type = {
