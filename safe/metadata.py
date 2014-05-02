@@ -249,8 +249,8 @@ unit_wetdry = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
-            'optional': True,
-            },
+            'optional': True
+        },
         {
             'name': 'dry',
             'description': tr('No water above ground height.'),
