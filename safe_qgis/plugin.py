@@ -27,11 +27,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 # Import the PyQt and QGIS libraries
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
     QTranslator,
     QCoreApplication,
-    Qt)
+    Qt
+)
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 try:
     # When upgrading, using the plugin manager, you may get an error when
@@ -46,7 +49,7 @@ except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
     # yet.
-    # noinspection PyTypeChecker,PyArgumentList
+    # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
     myWarning = QCoreApplication.translate(
         'Plugin', 'Please restart QGIS to use this plugin.')
     # noinspection PyTypeChecker,PyArgumentList
@@ -59,7 +62,7 @@ class Plugin:
     """The QGIS interface implementation for the InaSAFE plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
-    It creates a toolbar and menubar entry and launches the InaSAFE user
+    It creates a toolbar and menu bar entry and launches the InaSAFE user
     interface if these are activated.
     """
 
@@ -84,6 +87,7 @@ class Plugin:
         self.action_batch_runner = None
         self.action_shake_converter = None
         self.action_minimum_needs = None
+        self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_function_browser = None
         self.action_options = None
@@ -438,7 +442,7 @@ class Plugin:
         self.clear_modules()
 
     def toggle_inasafe_action(self, checked):
-        """Check or uncheck the toggle inaSAFE toolbar button.
+        """Check or un-check the toggle inaSAFE toolbar button.
 
         This slot is called when the user hides the inaSAFE panel using its
         close button or using view->panels.
@@ -499,6 +503,7 @@ class Plugin:
             keyword_io.read_keywords(self.iface.activeLayer())
         except UnsupportedProviderError:
             # noinspection PyUnresolvedReferences,PyCallByClass
+            # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 None,
                 self.tr('Unsupported layer type'),

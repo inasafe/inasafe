@@ -12,6 +12,7 @@ __copyright__ += 'Disaster Reduction'
 from safe.common.utilities import unique_filename
 from safe.storage.raster import qgis_imported
 from safe.common.gdal_ogr_tools import polygonize_thresholds
+from safe.common.exceptions import GetDataError
 
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
     # noinspection PyPackageRequirements
@@ -54,6 +55,7 @@ def _get_pixel_coordinates(extent, width, height, row, col):
     :returns: output_x,output_y Output coordinates
     :rtype: (double, double)
     """
+    # pylint: disable=
     x_minimum = extent.xMinimum()
     y_maximum = extent.yMaximum()
     x_resolution = (extent.xMaximum() - extent.xMinimum()) / width

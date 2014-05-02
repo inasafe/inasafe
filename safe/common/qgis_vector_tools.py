@@ -1,4 +1,4 @@
-
+# coding=utf-8
 """**Utilities around QgsVectorLayer**
 """
 
@@ -24,7 +24,6 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsPoint,
         QgsGeometry,
         QgsFeatureRequest,
-        QgsRectangle,
         QgsVectorFileWriter
     )
 
@@ -62,6 +61,7 @@ def points_to_rectangles(points, dx, dy):
         attrs = feature.attributes()
         point = feature.geometry().asPoint()
         x, y = point.x(), point.y()
+        # noinspection PyCallByClass,PyTypeChecker
         g = QgsGeometry.fromPolygon([
             [QgsPoint(x, y),
              QgsPoint(x + dx, y),
@@ -118,7 +118,7 @@ def create_layer(vector):
     :param vector:  Vector layer
     :type vector:   QgsVectorLayer
 
-    :returns: Emply vector layer (stored in memory)
+    :returns: Empty vector layer (stored in memory)
     :rtype: QgsVectorLayer
     """
     crs = vector.crs().toWkt()
@@ -216,13 +216,13 @@ def split_by_polygon(
     :rtype: QgsVectorLayer
     """
 
-    def _set_feature(geometry, attributes):
+    def _set_feature(geometry, feature_attributes):
         """
         Helper to create and set up feature
         """
         included_feature = QgsFeature()
         included_feature.setGeometry(geometry)
-        included_feature.setAttributes(attributes)
+        included_feature.setAttributes(feature_attributes)
         return included_feature
 
     def _update_attr_list(attributes, index, value, add_attribute=False):
@@ -324,13 +324,23 @@ def split_by_polygon(
 
 
 def split_by_polygon_in_out(
-    vector,
-    polygon_in,
-    polygon_out,
-    target_field, value,
-    request=QgsFeatureRequest()
-    ):
+        vector,
+        polygon_in,
+        polygon_out,
+        target_field,
+        value,
+        request=QgsFeatureRequest()):
 
+    """
+
+    :param vector:
+    :param polygon_in:
+    :param polygon_out:
+    :param target_field:
+    :param value:
+    :param request:
+    :return:
+    """
     base_name = unique_filename()
     file_name_in = base_name + '_in.shp'
     file_name_out = base_name + '_out.shp'
@@ -338,6 +348,7 @@ def split_by_polygon_in_out(
     file_name_poly_in = base_name + '_poly_in.shp'
     file_name_poly_out = base_name + '_poly_out.shp'
 
+    # noinspection PyArgumentEqualDefault
     line_layer_in = split_by_polygon2(
         vector,
         polygon_in,
@@ -388,11 +399,14 @@ def split_by_polygon2(
     :param vector:  Vector layer
     :type vector:   QgsVectorLayer
 
-    :param polygon: Splitting polygons layer
-    :type polygon:  QgsVectorLayer
+    :param polygon_layer: Splitting polygons layer
+    :type polygon_layer:  QgsVectorLayer
 
     :param request: Filter for vector objects
     :type request:  QgsFeatureRequest
+
+    :param use_contains_operation: Whether to use geometrical containment.
+    :type use_contains_operation: bool
 
     :param mark_value:  Field value to mark the objects.
     :type mark_value:   (field_name, field_value).or None
@@ -459,7 +473,6 @@ def split_by_polygon2(
         geometry_type = initial_geom.type()
 
     poly_geoms = []
-    poly_bboxs = []
     for polygon_feature in polygon_layer.getFeatures(request):
         polygon = polygon_feature.geometry()
         poly_geoms.append(QgsGeometry(polygon))
@@ -490,7 +503,7 @@ def split_by_polygon2(
                             target_field_index,
                             target_value,
                             add_attribute=new_field_added
-                            )
+                        )
                     else:
                         new_attributes = attributes
                     feature = _set_feature(g, new_attributes)
@@ -499,7 +512,7 @@ def split_by_polygon2(
                 else:
                     intersection = QgsGeometry(
                         initial_geom.intersection(polygon)
-                        ).asGeometryCollection()
+                    ).asGeometryCollection()
 
                     for g in intersection:
                         if g.type() == geometry_type:
@@ -509,7 +522,7 @@ def split_by_polygon2(
                                     target_field_index,
                                     target_value,
                                     add_attribute=new_field_added
-                                    )
+                                )
                             else:
                                 new_attributes = attributes
                             feature = _set_feature(g, new_attributes)
