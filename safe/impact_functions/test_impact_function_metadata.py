@@ -33,11 +33,13 @@ from safe.metadata import (
     unit_building_type_type,
     unit_mmi_depth,
     layer_raster_numeric,
-    layer_vector_polygon
+    layer_vector_polygon,
+    layer_vector_point
 )
 from exceptions import NotImplementedError
 
 
+# noinspection PyUnresolvedReferences
 class TestImpactFunctionMetadata(unittest.TestCase):
     """Test for ImpactFunctionMetadata.
 
@@ -95,9 +97,9 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_data_types API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata.allowed_data_types('structure')
-        expected_result = ['polygon']
+        expected_result = ['polygon', 'point']
         msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        self.assertEqual(set(result), set(expected_result), msg)
 
         result = my_impact_function.Metadata .allowed_data_types('earthquake')
         expected_result = ['numeric', 'polygon']
@@ -135,7 +137,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_layer_constraints API."""
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata.allowed_layer_constraints()
-        expected_result = [layer_vector_polygon, layer_raster_numeric]
+        expected_result = [
+            layer_vector_polygon, layer_raster_numeric, layer_vector_point]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
@@ -147,7 +150,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
         result = my_impact_function.Metadata.allowed_layer_constraints(
             'exposure')
-        expected_result = [layer_vector_polygon]
+        expected_result = [layer_vector_polygon, layer_vector_point]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
