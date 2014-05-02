@@ -287,3 +287,29 @@ layer_vector_polygon = {
     'layer_type': 'vector',
     'data_type': 'polygon'
 }
+
+# Converter new keywords to old keywords
+converter_dict = {
+    'subcategory': {
+        'all': [],
+        'earthquake': [],
+        'flood': [],
+        'population': [],
+        'road': [],
+        'structure': [],
+        'tephra': [],
+        'tsunami': [],
+        'volcano': []
+    },
+    'layertype':{
+        'raster': [],
+        'vector': []
+    },
+    'date_type':{
+    },
+    'unit': {
+        'm': ['metres_depth','feet_depth'],
+        'MMI': ['mmi_depth'],
+        'normalised': ['normalized']
+    }
+}
