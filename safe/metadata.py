@@ -301,14 +301,14 @@ converter_dict = {
         'tsunami': [],
         'volcano': []
     },
-    'layertype':{
+    'layertype': {
         'raster': [],
         'vector': []
     },
-    'date_type':{
+    'date_type': {
     },
     'unit': {
-        'm': ['metres_depth','feet_depth'],
+        'm': ['metres_depth', 'feet_depth'],
         'MMI': ['mmi_depth'],
         'normalised': ['normalized']
     }
