@@ -79,8 +79,10 @@ exposure_structure = {
 
 hazard_all = {
     'id': 'all',
-    'name': '',
-    'description': ''
+    'name': tr('all'),
+    'description': tr(
+        'An <b>all</b> hazard can be used to all types of hazard. For '
+        'example: earthquake, flood, volcano, or tsunami.')
 }
 hazard_earthquake = {
     'id': 'earthquake',
