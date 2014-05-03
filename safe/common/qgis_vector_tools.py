@@ -331,15 +331,36 @@ def split_by_polygon_in_out(
         value,
         request=QgsFeatureRequest()):
 
-    """
+    """Split a polygon layer updating the target field with the value.
 
-    :param vector:
-    :param polygon_in:
-    :param polygon_out:
-    :param target_field:
-    :param value:
-    :param request:
-    :return:
+    All parts of vector layer will have their target_field updated to
+    value if they fall within polygon_in.
+
+    :param vector: A polygon vector layer to split.
+    :type vector: QgsVectorLayer
+
+    :param polygon_in: Polygon within which vector features will be considered
+        to be contained.
+    :type polygon_in: QgsGeometry
+
+    :param polygon_out: Polygon within which vector features will be considered
+        to be NOT contained.
+    :type polygon_out: QgsGeometry
+
+    :param target_field: Field in vector layer to be updated if features
+        are within polygon_in.
+    :type target_field: QgsField
+
+    :param value: Value to update the target field with if polygons are in.
+    :type value: int, float, str
+
+    :param request: Optional feature request used to subset the features
+        in vector.
+    :type request: QgsFeatureRequest
+
+    :return: QgsVectorLayer of split line for whichever is greater,
+        in our out polygons.
+    :rtype: QgsVectorLayer
     """
     base_name = unique_filename()
     file_name_in = base_name + '_in.shp'
@@ -353,13 +374,13 @@ def split_by_polygon_in_out(
         vector,
         polygon_in,
         request,
-        False,
+        use_contains_operation=False,
         mark_value=(target_field, value))
     line_layer_out = split_by_polygon2(
         vector,
         polygon_out,
         request,
-        True,
+        use_contains_operation=True,
         mark_value=(target_field, 0))
 
     QgsVectorFileWriter.writeAsVectorFormat(
