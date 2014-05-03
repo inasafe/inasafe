@@ -1,15 +1,15 @@
 import numpy
-from safe.impact_functions.core import (FunctionProvider,
-                                        get_hazard_layer,
-                                        get_exposure_layers)
+from safe.impact_functions.core import (
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layers)
 from safe.storage.raster import Raster
-from safe.common.utilities import (verify,
-                                   format_int)
+from safe.common.utilities import verify, format_int
 
-# Want to use the human readably name in the impact function
-# pylint: disable=W0622
-from numpy import nansum as sum
-# pylint: enable=W0622
+# Want to use the human readable name in the impact function
+# pylint: disable=E0611
+from numpy import nansum
+# pylint: enable=E0611
 
 
 class HKVFloodImpactFunctionTEST(FunctionProvider):
@@ -102,8 +102,8 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
             I_male = I - I_female
 
         # Generate text with result for this study
-        total = format_int(int(sum(P.flat) / 1000))
-        count = format_int(int(sum(I.flat) / 1000))
+        total = format_int(int(nansum(P.flat) / 1000))
+        count = format_int(int(nansum(I.flat) / 1000))
 
         # Create report
         impact_summary = ('<table border="0" width="320px">'
@@ -111,8 +111,8 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
                    '<td align="right"><b>%s</b></td></tr>'
                    % ('Jumlah Penduduk', total))
         if gender_ratio is not None:
-            total_female = format_int(int(sum(P_female.flat) / 1000))
-            total_male = format_int(int(sum(P_male.flat) / 1000))
+            total_female = format_int(int(nansum(P_female.flat) / 1000))
+            total_male = format_int(int(nansum(P_male.flat) / 1000))
 
             impact_summary += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
@@ -128,8 +128,8 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
                        count))
 
         if gender_ratio is not None:
-            affected_female = format_int(int(sum(I_female.flat) / 1000))
-            affected_male = format_int(int(sum(I_male.flat) / 1000))
+            affected_female = format_int(int(nansum(I_female.flat) / 1000))
+            affected_male = format_int(int(nansum(I_male.flat) / 1000))
 
             impact_summary += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'

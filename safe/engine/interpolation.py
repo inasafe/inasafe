@@ -630,7 +630,7 @@ def make_circular_polygon(centers, radii, attributes=None):
 
     # Check that radii are monotonically increasing
     monotonically_increasing_flag = all(
-        x < y for x, y in zip(radii,radii[1:]))
+        x < y for x, y in zip(radii, radii[1:]))
     if not monotonically_increasing_flag:
         raise RadiiException(RadiiException.suggestion)
 
