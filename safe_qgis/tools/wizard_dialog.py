@@ -77,7 +77,7 @@ unit_question = QApplication.translate(
     'data are in. For example in a raster layer, each cell might '
     'represent depth in metres or depth in feet. If the dataset '
     'is a vector layer, each polygon might represent an inundated '
-    'area, while ares with no polygon coverage would be assumed '
+    'area, while areas with no polygon coverage would be assumed '
     'to be dry.')   # (subcategory, category)
 
 # Constants for subcategory-unit relations
