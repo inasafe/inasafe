@@ -100,7 +100,7 @@ DEFAULT_TABLE_CLASS = 'table table-striped condensed'
 CAPTION_BOTTOM_CLASS = ' class="caption-bottom"'
 
 
-class TableCell (object):
+class TableCell(object):
     """
     A TableCell object is used to create a cell in a HTML table. (td or th)
 
@@ -184,7 +184,7 @@ class TableCell (object):
             return '   <td%s>%s</td>\n' % (attribs_str, text)
 
 
-class TableRow (object):
+class TableRow(object):
     """
     A TableRow object is used to create a row in a HTML table. (tr tag)
 
@@ -446,7 +446,7 @@ class Table(object):
         return retval
 
 
-class List (object):
+class List(object):
     """
     a List object is used to create an ordered or unordered list in HTML.
     (UL/OL tag)
