@@ -923,7 +923,7 @@ def convert_to_old_keywords(converter, keywords):
      objective.
 
      :param converter: a dictionary that contains all possible aliases
-     from new keywords to old keywords.
+        from new keywords to old keywords.
      :type converter: dict
 
      :param keywords: list of dictionary keyword
@@ -933,7 +933,6 @@ def convert_to_old_keywords(converter, keywords):
     """
     for keyword in keywords:
         for key, value in keyword.iteritems():
-            print key, value
             try:
                 aliases = converter[key]
                 for alias_key, alias_value in aliases.iteritems():
