@@ -2,12 +2,12 @@
 """Miscellaneous utility functions for InaSAFE
 """
 
-# Mandatory keywords that must be present in layers
 from safe.common.exceptions import RadiiException
 from safe.common.geodesy import Point
 from safe.storage.geometry import Polygon
 from safe.storage.vector import Vector
 
+# Mandatory keywords that must be present in layers
 REQUIRED_KEYWORDS = ['category', 'subcategory']
 
 
