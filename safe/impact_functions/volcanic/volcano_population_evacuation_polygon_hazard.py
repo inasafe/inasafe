@@ -196,8 +196,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
             centers = hazard_layer.get_geometry()
             rad_m = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = buffer_points(
-                centers, rad_m, data_table=data_table)
+            hazard_layer = buffer_points(centers, rad_m, data_table=data_table)
 
             category_title = 'Radius'
             category_header = tr('Distance [km]')
