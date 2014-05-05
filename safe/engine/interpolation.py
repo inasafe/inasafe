@@ -609,8 +609,8 @@ def interpolate_raster_raster(source, target):
 
 
 # FIXME (Ole): Not sure this is the place for this function
-def make_circular_polygon(centers, radii, attributes=None):
-    """Create circular polygon in geographic coordinates
+def make_circular_polygon(centers, radii, data_table=None):
+    """Create circular polygon in geographic coordinates.
 
     :param centers: The center of the circular polygon (longitude, latitude)
     :type centers: list
@@ -619,8 +619,8 @@ def make_circular_polygon(centers, radii, attributes=None):
         monotonically ascending). Can be either one number or list of numbers
     :type radii: int, list
 
-    :param attributes: Attributes for each center (optional)
-    :type attributes: list
+    :param data_table: Data for each center (optional)
+    :type data_table: list
 
     :return: Vector polygon layer representing circle in WGS84
     :rtype: Vector
@@ -635,7 +635,7 @@ def make_circular_polygon(centers, radii, attributes=None):
         raise RadiiException(RadiiException.suggestion)
 
     circles = []
-    new_attributes = []
+    new_data_table = []
     for i, center in enumerate(centers):
         p = Point(longitude=center[0], latitude=center[1])
         inner_rings = None
@@ -647,22 +647,23 @@ def make_circular_polygon(centers, radii, attributes=None):
             # Store current circle and inner ring for next poly
             inner_rings = [C]
 
-            # Carry attributes for center forward
-            attr = {}
-            if attributes is not None:
-                for key in attributes[i]:
-                    attr[key] = attributes[i][key]
+            # Carry attributes for center forward (deep copy)
+            row = {}
+            if data_table is not None:
+                for key in data_table[i]:
+                    row[key] = data_table[i][key]
 
             # Add radius to this ring
-            attr['Radius'] = radius
+            row['Radius'] = radius
 
-            new_attributes.append(attr)
+            new_data_table.append(row)
 
-    Z = Vector(geometry=circles,  # List with circular polygons
-               data=new_attributes,  # Associated attributes
-               geometry_type='polygon')
+    circular_polygon = Vector(
+        geometry=circles,  # List with circular polygons
+        data=new_data_table,  # Associated attributes
+        geometry_type='polygon')
 
-    return Z
+    return circular_polygon
 
 
 def tag_polygons_by_grid(polygons, grid, threshold=0, tag='affected'):
