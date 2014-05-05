@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Interpolation from hazard to exposure layers.**
 
 Provides interpolation functionality to assign values from one layer instance
@@ -10,15 +11,12 @@ from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as tr
 from safe.common.numerics import ensure_numeric
-from safe.common.geodesy import Point
-from safe.common.exceptions import InaSAFEError, BoundsError, RadiiException
+from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
-
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometry_type_to_string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.storage.geometry import Polygon
 
 
 def assign_hazard_values_to_exposure_data(hazard, exposure,

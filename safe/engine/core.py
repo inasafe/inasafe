@@ -1,3 +1,4 @@
+# coding=utf-8
 """Computational engine for InaSAFE core.
 
 Provides the function calculate_impact()

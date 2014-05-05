@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from exceptions import NotImplementedError
 from safe.impact_functions.utilities import add_to_list
 
 
@@ -50,28 +49,28 @@ class ImpactFunctionMetadata():
         pass
 
     @staticmethod
-    def is_subset(my_element, my_bigger_element):
-        """Check the membership of my_element from my_bigger_element.
+    def is_subset(element, container):
+        """Check the membership of element from container.
 
         It will check based on the type. Only valid for string and list.
 
-        :param my_element: element that will be checked its membership
-        :type my_element: list, str
+        :param element: Element that will be searched for in container.
+        :type element: list, str
 
-        :param my_element: element that will be checked its element
-        :type my_element: list, str
+        :param container: Container that will be checked.
+        :type container: list, str
 
         :returns: boolean of the membership
         :rtype: bool
         """
-        if type(my_element) is list:
-            if type(my_bigger_element) is list:
-                return set(my_element) <= set(my_bigger_element)
+        if type(element) is list:
+            if type(container) is list:
+                return set(element) <= set(container)
         else:
-            if type(my_bigger_element) is list:
-                return my_element in my_bigger_element
+            if type(container) is list:
+                return element in container
             else:
-                return my_element == my_bigger_element
+                return element == container
         return False
 
     @staticmethod
