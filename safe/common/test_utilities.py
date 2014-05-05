@@ -1,3 +1,4 @@
+# coding=utf-8
 """InaSAFE Disaster risk assessment tool developed by AusAid -
   **Utilities Tests implementation.**
 
@@ -13,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'imajimatika@gmail.com'
 __version__ = '1.1.1'
 __revision__ = '$Format:%H$'
-__date__ = '17/04/20113'
+__date__ = '05/05/2014'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
@@ -27,7 +28,8 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator,
     get_decimal_separator,
-    get_utm_epsg)
+    get_utm_epsg,
+    get_non_conflicting_attribute_name)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -232,6 +234,17 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(get_utm_epsg(178, -20), 32760)
         self.assertEqual(get_utm_epsg(-3, -30), 32730)
 
+    def test_get_non_conflicting_attribute_name(self):
+        """Test we can get a non conflicting attribute name."""
+        default_name = 'population'
+        attribute_names = ['POPULATION', 'id', 'location', 'latitude']
+        non_conflicting_attribute_name = get_non_conflicting_attribute_name(
+            default_name, attribute_names)
+        expected_result = 'populati_1'
+        message = 'The expected result should be %s, but it gives %s' % (
+            expected_result, non_conflicting_attribute_name)
+        self.assertEqual(
+            expected_result, non_conflicting_attribute_name, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

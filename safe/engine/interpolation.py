@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Interpolation from hazard to exposure layers.**
 
 Provides interpolation functionality to assign values from one layer instance
@@ -10,15 +11,12 @@ from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as tr
 from safe.common.numerics import ensure_numeric
-from safe.common.geodesy import Point
-from safe.common.exceptions import InaSAFEError, BoundsError, RadiiException
+from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
-
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometry_type_to_string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.storage.geometry import Polygon
 
 
 def assign_hazard_values_to_exposure_data(hazard, exposure,
@@ -606,63 +604,6 @@ def interpolate_raster_raster(source, target):
     else:
         # Rasters are aligned, no need to interpolate
         return target
-
-
-# FIXME (Ole): Not sure this is the place for this function
-def make_circular_polygon(centers, radii, attributes=None):
-    """Create circular polygon in geographic coordinates
-
-    :param centers: The center of the circular polygon (longitude, latitude)
-    :type centers: list
-
-    :param radii: Desired approximate radii in meters (must be
-        monotonically ascending). Can be either one number or list of numbers
-    :type radii: int, list
-
-    :param attributes: Attributes for each center (optional)
-    :type attributes: list
-
-    :return: Vector polygon layer representing circle in WGS84
-    :rtype: Vector
-    """
-    if not isinstance(radii, list):
-        radii = [radii]
-
-    # Check that radii are monotonically increasing
-    monotonically_increasing_flag = all(
-        x < y for x, y in zip(radii, radii[1:]))
-    if not monotonically_increasing_flag:
-        raise RadiiException(RadiiException.suggestion)
-
-    circles = []
-    new_attributes = []
-    for i, center in enumerate(centers):
-        p = Point(longitude=center[0], latitude=center[1])
-        inner_rings = None
-        for radius in radii:
-            # Generate circle polygon
-            C = p.generate_circle(radius)
-            circles.append(Polygon(outer_ring=C, inner_rings=inner_rings))
-
-            # Store current circle and inner ring for next poly
-            inner_rings = [C]
-
-            # Carry attributes for center forward
-            attr = {}
-            if attributes is not None:
-                for key in attributes[i]:
-                    attr[key] = attributes[i][key]
-
-            # Add radius to this ring
-            attr['Radius'] = radius
-
-            new_attributes.append(attr)
-
-    Z = Vector(geometry=circles,  # List with circular polygons
-               data=new_attributes,  # Associated attributes
-               geometry_type='polygon')
-
-    return Z
 
 
 def tag_polygons_by_grid(polygons, grid, threshold=0, tag='affected'):
