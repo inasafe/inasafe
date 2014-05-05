@@ -34,6 +34,7 @@ class ImpactFunctionManager:
         self.impact_functions = []
         self.load_impact_functions()
 
+    # noinspection PyUnresolvedReferences
     def load_impact_functions(self):
         """Load all impact functions.
 

@@ -35,8 +35,7 @@ from safe.metadata import (
     hazard_volcano,
     unit_building_type_type,
     unit_people_per_pixel,
-    unit_mmi,
-    unit_mmi_depth
+    unit_mmi
 )
 
 
@@ -132,7 +131,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = ifm.allowed_units('earthquake', 'numeric')
         result = [x['id'] for x in result]
-        expected_result = [unit_mmi_depth, unit_mmi]
+        expected_result = [unit_mmi]
         expected_result = [x['id'] for x in expected_result]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(set(result), set(expected_result), msg)
