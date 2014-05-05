@@ -79,8 +79,10 @@ exposure_structure = {
 
 hazard_all = {
     'id': 'all',
-    'name': '',
-    'description': ''
+    'name': tr('all'),
+    'description': tr(
+        'An <b>all</b> hazard can be used to all types of hazard. For '
+        'example: earthquake, flood, volcano, or tsunami.')
 }
 hazard_earthquake = {
     'id': 'earthquake',
@@ -167,11 +169,12 @@ unit_mmi = {
 }
 unit_mmi_depth = {
     'id': 'mmi_depth',
-    'name': tr('MMI'),
+    'name': tr('MMI Depth'),
     'description': tr(
         'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
         'the intensity of ground shaking from a earthquake based on the '
-        'effects observed by people at the surface.'),
+        'effects observed by people at the surface. It will use <i>depth</> '
+        'as default attribute in vector layer.'),
     'constraint': 'continuous',
     'default_attribute': 'depth'
 }
@@ -247,8 +250,8 @@ unit_wetdry = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
-            'optional': True,
-            },
+            'optional': True
+        },
         {
             'name': 'dry',
             'description': tr('No water above ground height.'),
