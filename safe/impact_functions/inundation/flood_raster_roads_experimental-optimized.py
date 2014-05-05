@@ -3,7 +3,6 @@
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
-    QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform
 )
@@ -32,7 +31,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.common.qgis_raster_tools import (
-    polygonize, clip_raster, polygonize_gdal)
+    clip_raster, polygonize_gdal)
 from safe.common.qgis_vector_tools import split_by_polygon_in_out
 
 
@@ -215,7 +214,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             raise GetDataError(message)
 
         # Clip exposure by the extent
-        extent_as_polygon = QgsGeometry().fromRect(extent)
+        #extent_as_polygon = QgsGeometry().fromRect(extent)
         #no need to clip since It is using a bbox request
         #line_layer = clip_by_polygon(
         #    E,

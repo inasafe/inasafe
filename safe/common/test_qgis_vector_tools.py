@@ -20,12 +20,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 
-from safe.common.utilities import unique_filename
 from safe.common.testing import UNITDATA, get_qgis_app
 from safe.storage.raster import qgis_imported
 from safe.common.gdal_ogr_tools import (
     polygonize_thresholds)
-if qgis_imported:   # Import QgsRasterLayer if qgis is available
+if qgis_imported:  # Import QgsRasterLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
     from PyQt4.QtCore import QVariant
     from qgis.core import (
@@ -34,8 +33,7 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsField,
         QgsFeature,
         QgsGeometry,
-        QgsRectangle,
-        QgsVectorFileWriter)
+        QgsRectangle)
 
 
 from safe.common.qgis_vector_tools import (
@@ -203,14 +201,14 @@ class TestQGISVectorTools(unittest.TestCase):
 
         # Split by the extent (The result is the copy of the layer)
         line_before.updateExtents()
-        # Expand extent to cover the lines (add EPSILON to bounds)
-        EPSILON = 0.0001    # A small number
+        # Expand extent to cover the lines (add epsilon to bounds)
+        epsilon = 0.0001    # A small number
         extent = line_before.extent()
         new_extent = QgsRectangle(
-            extent.xMinimum() - EPSILON,
-            extent.yMinimum() - EPSILON,
-            extent.xMaximum() + EPSILON,
-            extent.yMaximum() + EPSILON
+            extent.xMinimum() - epsilon,
+            extent.yMinimum() - epsilon,
+            extent.xMaximum() + epsilon,
+            extent.yMaximum() + epsilon
         )
         new_extent = QgsGeometry().fromRect(new_extent)
         split_lines = split_by_polygon(
@@ -269,32 +267,26 @@ class TestQGISVectorTools(unittest.TestCase):
             'EXPOSURE',
             'ogr')
 
-        (
-            inside_file_name,
-            inside_layer_name,
-            outside_file_name,
-            outside_layer_name
-        ) = polygonize_thresholds(raster_name, 0.1)
+        inside_file_name, inside_layer_name, outside_file_name, \
+            outside_layer_name = polygonize_thresholds(raster_name, 0.1)
 
         polygon_in = \
             QgsVectorLayer(inside_file_name, inside_layer_name, 'ogr')
         polygon_out = \
             QgsVectorLayer(outside_file_name, outside_layer_name, 'ogr')
 
-        layer = split_by_polygon_in_out(qgis_exposure,
-                                        polygon_in,
-                                        polygon_out,
-                                        'flooded', 1)
+        layer = split_by_polygon_in_out(
+            qgis_exposure, polygon_in, polygon_out, 'flooded', 1)
 
-        featureCount = layer.featureCount()
-        self.assertEqual(featureCount, 184)
+        feature_count = layer.featureCount()
+        self.assertEqual(feature_count, 184)
 
         flooded = 0
-        iter = layer.getFeatures()
-        for feature in iter:
-            attrs = feature.attributes()
-            if (attrs[3] == 1):
-                flooded = flooded + 1
+        iterator = layer.getFeatures()
+        for feature in iterator:
+            attributes = feature.attributes()
+            if attributes[3] == 1:
+                flooded += 1
         self.assertEqual(flooded, 25)
 
 

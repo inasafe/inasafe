@@ -36,7 +36,6 @@ from safe.metadata import (
     layer_vector_polygon,
     layer_vector_point
 )
-from exceptions import NotImplementedError
 
 
 # noinspection PyUnresolvedReferences
