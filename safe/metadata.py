@@ -165,18 +165,8 @@ unit_mmi = {
         'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
         'the intensity of ground shaking from a earthquake based on the '
         'effects observed by people at the surface.'),
-    'constraint': 'continuous'
-}
-unit_mmi_depth = {
-    'id': 'mmi_depth',
-    'name': tr('MMI Depth'),
-    'description': tr(
-        'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
-        'the intensity of ground shaking from a earthquake based on the '
-        'effects observed by people at the surface. It will use <i>depth</> '
-        'as default attribute in vector layer.'),
     'constraint': 'continuous',
-    'default_attribute': 'depth'
+    'default_attribute': 'mmi'
 }
 unit_normalised = {
     'id': 'normalized',

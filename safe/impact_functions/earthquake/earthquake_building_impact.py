@@ -9,7 +9,7 @@ from safe.metadata import (
     layer_vector_polygon,
     layer_vector_point,
     layer_raster_numeric,
-    unit_mmi_depth,
+    unit_mmi,
     exposure_structure,
     unit_building_type_type,
     hazard_definition,
@@ -70,7 +70,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategory': hazard_earthquake,
-                        'units': [unit_mmi_depth],
+                        'units': [unit_mmi],
                         'layer_constraints': [
                             layer_vector_polygon,
                             layer_raster_numeric
@@ -129,18 +129,20 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         class_3 = {'label': tr('High'), 'class': 3}
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)  # Depth
-        my_exposure = get_exposure_layer(layers)  # Building locations
+        hazard_layer = get_hazard_layer(layers)  # Depth
+        exposure_layer = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(my_hazard.get_name(),
-                                my_exposure.get_name(),
-                                self)
+        question = get_question(
+            hazard_layer.get_name(),
+            exposure_layer.get_name(),
+            self
+        )
 
         # Define attribute name for hazard levels.
         hazard_attribute = 'mmi'
 
         # Determine if exposure data have NEXIS attributes.
-        attribute_names = my_exposure.get_attribute_names()
+        attribute_names = exposure_layer.get_attribute_names()
         if ('FLOOR_AREA' in attribute_names and
             'BUILDING_C' in attribute_names and
                 'CONTENTS_C' in attribute_names):
@@ -150,7 +152,10 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
         # Interpolate hazard level to building locations.
         my_interpolate_result = assign_hazard_values_to_exposure_data(
-            my_hazard, my_exposure, attribute_name=hazard_attribute)
+            hazard_layer,
+            exposure_layer,
+            attribute_name=hazard_attribute
+        )
 
         # Extract relevant exposure data
         #attribute_names = my_interpolate_result.get_attribute_names()

@@ -28,10 +28,10 @@ from safe.metadata import (
     unit_wetdry,
     unit_metres_depth,
     unit_feet_depth,
+    unit_mmi,
     exposure_structure,
     hazard_earthquake,
     unit_building_type_type,
-    unit_mmi_depth,
     layer_raster_numeric,
     layer_vector_polygon,
     layer_vector_point
@@ -159,7 +159,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         my_impact_function = EarthquakeBuildingImpactFunction()
         result = my_impact_function.Metadata.units_for_layer(
             subcategory='earthquake', layer_type='raster', data_type='numeric')
-        expected_result = [unit_mmi_depth]
+        expected_result = [unit_mmi]
         msg = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, msg)
 
