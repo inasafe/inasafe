@@ -667,3 +667,27 @@ def which(name, flags=os.X_OK):
                 result.append(path_extensions)
 
     return result
+
+
+def get_non_conflicting_attribute_name(default_name, attribute_names):
+    """Get a non conflicting attribute name from a set of attribute names.
+
+    It also complies the shp attribute name restriction that the name length
+    must be less than 10 character.
+
+    :param default_name: The default name for the attribute.
+    :type default_name: str
+
+    :param attribute_names: Set of attribute names that should not be
+        conflicted.
+    :type attribute_names: list
+    """
+    uppercase_attribute_names = [
+        x.upper() for x in attribute_names]
+    # For shp file, the attribute name must be <= 10
+    new_name = default_name[:10]
+    i = 0
+    while new_name.upper() in uppercase_attribute_names:
+        i += 1
+        new_name = '%s_%s' % (new_name[:8], i)
+    return new_name

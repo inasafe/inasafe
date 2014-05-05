@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+from safe.engine.utilities import buffer_points
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.metadata import (
@@ -24,8 +25,7 @@ from safe.metadata import (
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition
-)
+    exposure_definition)
 from third_party.odict import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
@@ -34,8 +34,7 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs
-)
+    evacuated_population_weekly_needs)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -44,11 +43,11 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator
-)
+    get_thousand_separator,
+    get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
-    assign_hazard_values_to_exposure_data, make_circular_polygon)
+    assign_hazard_values_to_exposure_data)
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
@@ -197,7 +196,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
             centers = hazard_layer.get_geometry()
             rad_m = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = make_circular_polygon(
+            hazard_layer = buffer_points(
                 centers, rad_m, data_table=data_table)
 
             category_title = 'Radius'
@@ -239,14 +238,9 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             raise InaSAFEError(msg)
 
         # Find the target field name that has no conflict with default target
-        insensitive_attribute_names = [
-            x.upper() for x in hazard_layer.get_attribute_names()]
-        # In shp file, the attribute name must be <= 10
-        new_target_field = self.target_field[:10]
-        i = 0
-        while new_target_field.upper() in insensitive_attribute_names:
-            i += 1
-            new_target_field = '%s_%s' % (new_target_field[:8], i)
+        attribute_names = hazard_layer.get_attribute_names()
+        new_target_field = get_non_conflicting_attribute_name(
+            self.target_field, attribute_names)
         self.target_field = new_target_field
 
         # Run interpolation function for polygon2raster
@@ -326,32 +320,28 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                           format_int(all_categories_population[name]),
                           format_int(all_categories_cumulative[name])]))
 
-        table_body.extend([TableRow(tr('Map shows population affected in '
-                                       'each of volcano hazard polygons.')),
-                           TableRow([tr('Needs per week'), tr('Total'),
-                                     blank_cell],
-                                    header=True),
-                           [tr('Rice [kg]'), format_int(total_needs['rice']),
-                            blank_cell],
-                           [tr('Drinking Water [l]'),
-                            format_int(total_needs['drinking_water']),
-                            blank_cell],
-                           [tr('Clean Water [l]'),
-                            format_int(total_needs['water']),
-                            blank_cell],
-                           [tr('Family Kits'),
-                            format_int(total_needs['family_kits']),
-                            blank_cell],
-                           [tr('Toilets'), format_int(total_needs['toilets']),
-                            blank_cell]])
+        table_body.extend(
+            [TableRow(tr('Map shows population affected in '
+                         'each of volcano hazard polygons.')),
+             TableRow([tr('Needs per week'), tr('Total'), blank_cell],
+                      header=True),
+             [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell],
+             [tr('Drinking Water [l]'), format_int(
+                 total_needs['drinking_water']), blank_cell],
+             [tr('Clean Water [l]'), format_int(total_needs['water']),
+              blank_cell],
+             [tr('Family Kits'), format_int(total_needs['family_kits']),
+              blank_cell],
+             [tr('Toilets'), format_int(total_needs['toilets']), blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population %s in the exposure layer')
-                           % format_int(total),
-                           tr('People need evacuation if they are within the '
-                              'volcanic hazard zones.')])
+        table_body.extend(
+            [TableRow(tr('Notes'), header=True),
+             tr('Total population %s in the exposure layer') % format_int(
+                 total),
+             tr('People need evacuation if they are within the '
+                'volcanic hazard zones.')])
 
         population_counts = [x[self.target_field] for x in new_data_table]
         impact_summary = Table(table_body).toNewlineFreeString()

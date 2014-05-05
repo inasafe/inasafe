@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.engine.utilities import buffer_points
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.impact_functions.impact_function_metadata import (
@@ -36,7 +37,7 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
-    assign_hazard_values_to_exposure_data, make_circular_polygon)
+    assign_hazard_values_to_exposure_data)
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
@@ -170,7 +171,7 @@ class VolcanoBuildingImpact(FunctionProvider):
             centers = my_hazard.get_geometry()
             attributes = my_hazard.get_data()
             rad_m = [x * 1000 for x in radii]  # Convert to meters
-            Z = make_circular_polygon(centers, rad_m, data_table=attributes)
+            Z = buffer_points(centers, rad_m, data_table=attributes)
             # To check
             category_title = 'Radius'
             my_hazard = Z
