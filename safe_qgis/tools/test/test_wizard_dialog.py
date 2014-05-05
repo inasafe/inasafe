@@ -58,19 +58,26 @@ def clone_csv_layer():
     return layer
 
 
-def clone_shp_layer(name='tsunami_polygon'):
+def clone_shp_layer(name='tsunami_polygon', include_keywords=False):
     """Helper function that copies a test shplayer and returns it.
 
     :param name: The default name for the shp layer
     :type name: str
+
+    :param include_keywords: include keywords file if True
+    :type include_keywords: bool
+
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
+    if include_keywords:
+        extensions.append('.keywords')
     temp_path = unique_filename()
     # copy to temp file
     for ext in extensions:
         src_path = os.path.join(TESTDATA, name + ext)
-        trg_path = temp_path + ext
-        shutil.copy2(src_path, trg_path)
+        if os.path.exists(src_path):
+            trg_path = temp_path + ext
+            shutil.copy2(src_path, trg_path)
     # return a single predefined layer
     layer = QgsVectorLayer(temp_path + '.shp', 'TestLayer', 'ogr')
     return layer
@@ -166,7 +173,7 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 2 of 7 - select hazard
+        # step 2 of 7 - select subcategory
         # Check the number of sub categories
         count = dialog.lstSubcategories.count()
         message = ('Invalid subcategory count! There should be %d and there '
@@ -289,6 +296,93 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(keywords, expected_keywords, message)
 
         remove_temp_file(layer.source())
+
+    def test_existed_keywords(self):
+        """Test if keywords are already exist."""
+        expected_field_count = 5
+        expected_fields = ['OBJECTID', 'GRIDCODE', 'Shape_Leng', 'Shape_Area',
+                           'Category']
+        expected_chosen_field = 'GRIDCODE'
+
+        layer = clone_shp_layer(include_keywords=True)
+
+        # check the environment first
+        message = 'Test layer is not readable. Check environment variables.'
+        self.assertIsNotNone(layer.dataProvider(), message)
+
+        # Initialize dialog
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        # step 1 of 7 - select category
+        expected_category_text = 'hazard'
+        category_text = dialog.lstCategories.currentItem().text()
+        msg = 'Expect category text %s but I got %s' % (
+            expected_category_text, category_text)
+        self.assertEqual(expected_category_text, category_text, msg)
+
+        message = ('Invalid Next button state in step 1! Still disabled after '
+                   'an item selected')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+        # Click Next
+        dialog.pbnNext.click()
+
+        # step 2 of 7 - select subcategory
+        # noinspection PyTypeChecker
+        expected_subcategory_text = 'tsunami'
+        subcategory_text = dialog.lstSubcategories.currentItem().text()
+        msg = 'Expect subcategory text %s but I got %s' % (
+            expected_subcategory_text, subcategory_text)
+        self.assertEqual(expected_subcategory_text, subcategory_text, msg)
+
+        message = ('Invalid Next button state in step 2! Still disabled after '
+                   'an item selected')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+        # Click Next
+        dialog.pbnNext.click()
+
+        # step 3 of 7 - select tsunami units
+        expected_unit_text = 'metres'
+        unit_text = dialog.lstUnits.currentItem().text()
+        msg = 'Expect unit text %s but I got %s' % (
+            expected_unit_text, unit_text)
+        self.assertEqual(expected_unit_text, unit_text, msg)
+
+        message = ('Invalid Next button state in step 2! Still disabled after '
+                   'an item selected')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+        # Click Next
+        dialog.pbnNext.click()
+
+        # step 4 of 7 - select data field for tsunami feet
+        count = dialog.lstFields.count()
+        message = ('Invalid field count! There should be %d while there were: '
+                   '%d') % (expected_field_count, count)
+        self.assertEqual(count, expected_field_count, message)
+        # Get all the fields given and save the 'GRIDCODE' index
+        fields = []
+        gridcode_index = -1
+        for i in range(expected_field_count):
+            field_name = dialog.lstFields.item(i).text()
+            fields.append(field_name)
+            if field_name == expected_chosen_field:
+                gridcode_index = i
+        # Check if fields is the same with expected_fields
+        message = ('Invalid fields! It should be "%s" while it was '
+                   '%s') % (expected_fields, fields)
+        self.assertEqual(
+            set(expected_fields), set(fields), message)
+        # The button should be on disabled first
+        message = ('Invalid Next button state in step 4! Enabled while '
+                   'there\'s nothing selected yet')
+        self.assertTrue(not dialog.pbnNext.isEnabled(), message)
+        dialog.lstFields.setCurrentRow(gridcode_index)
+        message = ('Invalid Next button state in step 4! Still disabled after '
+                   'an item selected')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+        # Click next
+        dialog.pbnNext.click()
+
 
 
 if __name__ == '__main__':

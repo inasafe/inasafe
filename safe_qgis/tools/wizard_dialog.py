@@ -26,8 +26,8 @@ from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 from PyQt4.QtGui import QApplication
 
-# from third_party.odict import OrderedDict
 from safe.api import ImpactFunctionManager as IFM
+from safe.api import metadata  # pylint: disable=W0612
 
 from safe_qgis.safe_interface import InaSAFEError
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
@@ -197,6 +197,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
+        self.keyword_io = KeywordIO()
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
         if self.layer_type == 'vector':
@@ -208,9 +209,17 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.data_type = 'line'
         else:
             self.data_type = 'numeric'
+        try:
+            self.existed_keywords = self.keyword_io.read_keywords(self.layer)
+            print 'Existed Keywords'
+            print self.existed_keywords
+        except Exception:
+            print 'Existed keywords not found'
+            self.existed_keywords = None
         self.update_category_tab()
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
+        self.set_existed_options(step_category)
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
         self.go_to_step(1)
@@ -222,6 +231,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: dict, None
         """
         item = self.lstCategories.currentItem()
+
         try:
             return eval(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
@@ -404,7 +414,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if type(category) != dict:
                 # pylint: disable=W0612
                 # noinspection PyUnresolvedReferences
-                from safe import metadata
                 category = eval('metadata.%s_definition' % category)
                 # pylint: enable=W0612
             item = QListWidgetItem(category['name'], self.lstCategories)
@@ -572,18 +581,24 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Prepare the next tab
         if new_step == step_subcategory:
             self.update_subcategory_tab()
+            self.set_existed_options(step_subcategory)
         elif new_step == step_unit:
             self.update_unit_tab()
+            self.set_existed_options(step_unit)
         elif new_step == step_field:
             self.update_field_tab()
+            self.set_existed_options(step_field)
         elif new_step == step_classify:
             self.update_classify_tab()
+        elif new_step == step_source:
+            self.set_existed_options(step_source)
         elif new_step is None:
             # Complete
             self.accept()
             return
         # Set Next button label
         if new_step == self.stackedWidget.count():
+            self.set_existed_options(self.stackedWidget.count())
             self.pbnNext.setText(self.tr('Finish'))
         # Disable the Next button unless new data already entered
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
@@ -640,6 +655,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: int
         """
         if current_step == step_category:
+            # category_keywords = self.get_existed_keywords('category')
             category = self.selected_category()
             if category['id'] == 'aggregation':
                 new_step = step_field
@@ -740,7 +756,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         It will write out the keywords for the layer that is active.
         This method is based on the KeywordsDialog class.
         """
-        self.keyword_io = KeywordIO()
         my_keywords = self.get_keywords()
         try:
             self.keyword_io.write_keywords(
@@ -756,3 +771,65 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if self.dock is not None:
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
+
+    def get_existed_keywords(self, keyword):
+        """Obtain existed keywords.
+
+        :param keyword: a keyword from keywords
+        :type keyword: str
+
+        :returns: the value of the keyword
+        :rtype: str
+        """
+        if keyword is not None:
+            return self.existed_keywords.get(keyword, None)
+        else:
+            return None
+
+    def set_existed_options(self, current_step):
+        if current_step == step_category:
+            category_keyword = self.get_existed_keywords('category')
+            categories = []
+            for index in xrange(self.lstCategories.count()):
+                categories.append(self.lstCategories.item(index).text())
+            if category_keyword in categories:
+                self.lstCategories.setCurrentRow(
+                    categories.index(category_keyword))
+        elif current_step == step_subcategory:
+            subcategory_keyword = self.get_existed_keywords('subcategory')
+            subcategories = []
+            for index in xrange(self.lstSubcategories.count()):
+                subcategories.append(str(self.lstSubcategories.item(index)
+                                     .text()))
+            if subcategory_keyword in subcategories:
+                self.lstSubcategories.setCurrentRow(
+                    subcategories.index(subcategory_keyword))
+        elif current_step == step_unit:
+            unit_keyword = self.get_existed_keywords('unit')
+            unit_keyword = metadata.old_to_new_keywords.get(
+                unit_keyword, unit_keyword)
+            units = []
+            for index in xrange(self.lstUnits.count()):
+                units.append(str(self.lstUnits.item(index).text()))
+            if unit_keyword in units:
+                self.lstUnits.setCurrentRow(units.index(unit_keyword))
+        elif current_step == step_field:
+            field = self.get_existed_keywords('field')
+            fields = []
+            for index in xrange(self.lstFields.count()):
+                fields.append(str(self.lstFields.item(index).text()))
+            if field in fields:
+                self.lstFields.setCurrentRow(fields.index(field))
+        elif current_step == step_source:
+            source = self.get_existed_keywords('source')
+            self.leSource.setText(source)
+            source_scale = self.get_existed_keywords('source_scale')
+            self.leSource_scale.setText(source_scale)
+            source_date = self.get_existed_keywords('source_date')
+            self.leSource_date.setText(source_date)
+            source_url = self.get_existed_keywords('source_url')
+            self.leSource_url.setText(source_url)
+        elif current_step == step_title:
+            title = self.layer.name()
+            self.leTitle.setText(title)
+

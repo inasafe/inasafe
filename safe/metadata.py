@@ -166,9 +166,9 @@ unit_mmi = {
         'the intensity of ground shaking from a earthquake based on the '
         'effects observed by people at the surface.'),
     'constraint': 'continuous',
-    'default_attribute': 'mmi'
+    'default_attribute': 'mmi'  # applies to vector only
 }
-unit_normalised = {
+unit_normalized = {
     'id': 'normalized',
     'name': tr('normalized'),
     'description': tr(''),
@@ -298,8 +298,19 @@ converter_dict = {
     'date_type': {
     },
     'unit': {
-        'm': ['metres_depth', 'feet_depth'],
-        'MMI': ['mmi_depth'],
+        'm': ['metres_depth'],  # FIXME(Ismail): Please check for feet_depth
+        'MMI': ['mmi'],
         'normalised': ['normalized']
     }
 }
+
+
+# These converter is used for wizard only, converting old keywords to new
+# keywords as default value when run the wizard.
+old_to_new_keywords = {
+    'm': 'metres',
+    'normalised': 'normalized',
+    'mmi': 'MMI'
+}
+
+# def get_name(unit_name)

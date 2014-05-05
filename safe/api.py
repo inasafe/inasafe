@@ -89,6 +89,7 @@ from safe.common.signals import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe.messaging import ErrorMessage
+from safe import metadata
 
 # hack for excluding test-related import in builded package
 try:
