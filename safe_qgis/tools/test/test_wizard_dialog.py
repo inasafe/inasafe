@@ -383,6 +383,17 @@ class WizardDialogTest(unittest.TestCase):
         # Click next
         dialog.pbnNext.click()
 
+    def test_random(self):
+        layer = clone_shp_layer(include_keywords=True)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog.lstCategories.setCurrentRow(1)
+        dialog.pbnNext.click()
+        dialog.lstSubcategories.setCurrentRow(3)
+        dialog.pbnNext.click()
+        dialog.lstUnits.setCurrentRow(0)
+        dialog.pbnNext.click()
+        dialog.lstFields.setCurrentRow(1)
+        dialog.pbnNext.click()
 
 
 if __name__ == '__main__':

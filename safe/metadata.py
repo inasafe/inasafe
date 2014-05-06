@@ -193,13 +193,15 @@ unit_road_type_type = {
 }
 unit_volcano_categorical = {
     'id': 'volcano_categorical',
+    'name': tr('volcano categorical'),
+    'description': tr(''),
     'constraint': 'categorical',
     'default_attribute': 'affected',
     'default_category': 'high',
     'classes': [
         {
             'name': 'high',
-            'description': tr('Water above ground height.'),
+            'description': tr('Distance from the volcano.'),
             'string_defaults': ['Kawasan Rawan Bencana I',
                                 'high'],
             'numeric_default_min': 0,
@@ -208,7 +210,7 @@ unit_volcano_categorical = {
         },
         {
             'name': 'medium',
-            'description': tr('Water above ground height.'),
+            'description': tr('Distance from the volcano.'),
             'string_defaults': ['Kawasan Rawan Bencana II',
                                 'medium'],
             'numeric_default_min': 3,
@@ -217,16 +219,14 @@ unit_volcano_categorical = {
         },
         {
             'name': 'low',
-            'description': tr('Water above ground height.'),
+            'description': tr('Distance from the volcano.'),
             'string_defaults': ['Kawasan Rawan Bencana III',
                                 'low'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
             'optional': False
         }
-    ],
-    'name': tr('volcano categorical'),
-    'description': tr('')
+    ]
 }
 unit_wetdry = {
     'id': 'wetdry',
@@ -305,12 +305,31 @@ converter_dict = {
 }
 
 
-# These converter is used for wizard only, converting old keywords to new
-# keywords as default value when run the wizard.
-old_to_new_keywords = {
-    'm': 'metres',
-    'normalised': 'normalized',
-    'mmi': 'MMI'
-}
+def get_name(unit_id):
+    """Obtain unit name from unit_id.
 
-# def get_name(unit_name)
+    :param unit_id: id value of a unit
+    :type unit_id: str
+
+    :returns: unit name
+    :rtype: str
+    """
+
+    # These converter is used for wizard only, converting old keywords to new
+    # keywords as default value when run the wizard.
+    old_to_new_keywords = {
+        'm': 'metres',
+        'normalised': 'normalized',
+        'mmi': 'MMI'
+    }
+
+    if unit_id in old_to_new_keywords.keys():
+        unit_name = old_to_new_keywords.get(
+            unit_id, unit_id)
+    else:
+        try:
+            unit = eval('unit_%s' % unit_id)
+            unit_name = unit['name']
+        except KeyError:
+            return
+    return unit_name
