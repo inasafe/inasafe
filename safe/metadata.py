@@ -306,12 +306,15 @@ converter_dict = {
 
 
 def get_name(unit_id):
-    """Obtain unit name from unit_id.
+    """Obtain unit name from a unit_id.
 
-    :param unit_id: id value of a unit
+    If unit_id is using old keywords system, it needs to be converted to
+    respective unit_id in new keywords system.
+
+    :param unit_id: Id value of a unit.
     :type unit_id: str
 
-    :returns: unit name
+    :returns: Unit name of the unit_id
     :rtype: str
     """
 
