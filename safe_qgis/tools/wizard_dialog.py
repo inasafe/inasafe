@@ -695,29 +695,29 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: Keywords reflecting the state of the dialog.
         :rtype: dict
         """
-        my_keywords = {}
+        keywords = {}
         if self.selected_category():
-            my_keywords['category'] = self.selected_category()['id']
+            keywords['category'] = self.selected_category()['id']
         if self.selected_subcategory():
-            my_keywords['subcategory'] = self.selected_subcategory()['id']
+            keywords['subcategory'] = self.selected_subcategory()['id']
         if self.selected_unit():
-            my_keywords['unit'] = self.selected_unit()['id']
+            keywords['unit'] = self.selected_unit()['id']
         if self.lstFields.currentItem():
-            my_keywords['field'] = self.lstFields.currentItem().text()
+            keywords['field'] = self.lstFields.currentItem().text()
         if self.leSource.text():
-            my_keywords['source'] = self.leSource.text()
+            keywords['source'] = self.leSource.text()
         if self.leSource_url.text():
-            my_keywords['source_url'] = self.leSource_url.text()
+            keywords['source_url'] = self.leSource_url.text()
         if self.leSource_scale.text():
-            my_keywords['source_scale'] = self.leSource_scale.text()
+            keywords['source_scale'] = self.leSource_scale.text()
         if self.leSource_date.text():
-            my_keywords['source_date'] = self.leSource_date.text()
+            keywords['source_date'] = self.leSource_date.text()
         if self.leTitle.text():
-            my_keywords['title'] = self.leTitle.text()
+            keywords['title'] = self.leTitle.text()
         value_map = self.selected_mapping()
         if value_map:
-            my_keywords['value_map'] = json.dumps(value_map)
-        return my_keywords
+            keywords['value_map'] = json.dumps(value_map)
+        return keywords
 
     def accept(self):
         """Automatic slot executed when the Finish button is pressed.
@@ -730,13 +730,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=my_keywords)
         except InaSAFEError, e:
-            myErrorMessage = get_error_message(e)
+            error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 ((self.tr(
                     'An error was encountered when saving the keywords:\n'
-                    '%s') % myErrorMessage.to_html())))
+                    '%s') % error_message.to_html())))
         if self.dock is not None:
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
@@ -744,10 +744,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def get_existing_keywords(self, keyword):
         """Obtain the value of existing keywords depend on the keyword.
 
-        :param keyword: a keyword from keywords
+        :param keyword: A keyword from keywords.
         :type keyword: str
 
-        :returns: the value of the keyword
+        :returns: The value of the keyword.
         :rtype: str
         """
         if self.existing_keywords is None:
@@ -760,7 +760,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_existing_options(self, current_step):
         """Set options in wizard based on existing keywords.
 
-        :param current_step: step of the wizard
+        :param current_step: The present step number of the wizard.
         :type current_step: int
         """
         if current_step == step_category:
@@ -861,16 +861,16 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self, unassigned_values, assigned_values, default_classes):
         """Populate lstUniqueValues and treeClasses.from the parameters.
 
-        :param unassigned_values: list of values that haven't been assigned
+        :param unassigned_values: List of values that haven't been assigned
             to a class. It will be put in self.lstUniqueValues.
         :type unassigned_values: list
 
-        :param assigned_values: dictionary with class as key and list of value
-            as the the value of the dictionary. It will be put in
-            self.treeClasses
+        :param assigned_values: Dictionary with class as the key and list of
+            value as the the value of the dictionary. It will be put in
+            self.treeClasses.
         :type assigned_values: dict
 
-        :param default_classes: default class from unit
+        :param default_classes: Default classes from unit.
         :type default_classes: list
 
         """

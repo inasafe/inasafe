@@ -487,8 +487,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         for index in range(dialog.lstUniqueValues.count()):
-            message = ('%s Should be in unassigned values' % dialog
-                   .lstUniqueValues.item(index).text())
+            message = ('%s Should be in unassigned values' %
+                       dialog.lstUniqueValues.item(index).text())
             self.assertIn(
                 dialog.lstUniqueValues.item(index).text(),
                 unassigned_values,
