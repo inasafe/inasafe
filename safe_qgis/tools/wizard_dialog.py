@@ -211,13 +211,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             self.data_type = 'numeric'
         try:
-            self.existed_keywords = self.keyword_io.read_keywords(self.layer)
+            self.existing_keywords = self.keyword_io.read_keywords(self.layer)
         except Exception:
-            self.existed_keywords = None
+            self.existing_keywords = None
         self.update_category_tab()
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
-        self.set_existed_options(step_category)
+        self.set_existing_options(step_category)
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
         self.go_to_step(1)
@@ -376,10 +376,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         fields = self.layer.dataProvider().fields()
         field_type = fields.field(field).typeName()
-        field_idx = fields.indexFromName(self.selected_field())
-        unique_values = self.layer.uniqueValues(field_idx)[0:48]
+        field_index = fields.indexFromName(self.selected_field())
+        unique_values = self.layer.uniqueValues(field_index)[0:48]
         unique_values_str = [i and unicode(i) or 'NULL' for i in unique_values]
-        if unique_values != self.layer.uniqueValues(field_idx):
+        if unique_values != self.layer.uniqueValues(field_index):
             unique_values_str += ['...']
         desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
         desc += self.tr('Unique values: %s') % ', '.join(unique_values_str)
@@ -496,30 +496,32 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         unit = self.selected_unit()
         default_classes = unit['classes']
         field = self.selected_field()
-        field_idx = self.layer.dataProvider().fields().indexFromName(
+        field_index = self.layer.dataProvider().fields().indexFromName(
             self.selected_field())
-        field_type = self.layer.dataProvider().fields()[field_idx].type()
+        field_type = self.layer.dataProvider().fields()[field_index].type()
         self.lblClassify.setText(classify_question %
                                 (subcategory['name'], category['name'],
                                  unit['name'], field.upper()))
         # Assign unique values to classes
         unassigned_values = list()
         assigned_values = dict()
-        for cls in default_classes:
-            assigned_values[cls['name']] = list()
-        for val in self.layer.uniqueValues(field_idx):
-            val_str = val and unicode(val) or 'NULL'
+        for default_class in default_classes:
+            assigned_values[default_class['name']] = list()
+        for value in self.layer.uniqueValues(field_index):
+            value_as_string = value and unicode(value) or 'NULL'
             assigned = False
-            for cls in default_classes:
-                if (field_type > 9 and val_str in cls['string_defaults']) \
+            for default_class in default_classes:
+                if (field_type > 9
+                    and value_as_string in default_class['string_defaults']) \
                         or (field_type < 10
-                            and cls['numeric_default_min'] <= val < cls[
-                                'numeric_default_max']):
-                    assigned_values[cls['name']] += [val_str]
+                            and (default_class['numeric_default_min'] <=
+                                 value < default_class[
+                                 'numeric_default_max'])):
+                    assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
             if not assigned:
                 # add to unassigned values list otherwise
-                unassigned_values += [val_str]
+                unassigned_values += [value_as_string]
         self.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
 
@@ -548,25 +550,25 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Prepare the next tab
         if new_step == step_subcategory:
             self.update_subcategory_tab()
-            self.set_existed_options(step_subcategory)
+            self.set_existing_options(step_subcategory)
         elif new_step == step_unit:
             self.update_unit_tab()
-            self.set_existed_options(step_unit)
+            self.set_existing_options(step_unit)
         elif new_step == step_field:
             self.update_field_tab()
-            self.set_existed_options(step_field)
+            self.set_existing_options(step_field)
         elif new_step == step_classify:
             self.update_classify_tab()
-            self.set_existed_options(step_classify)
+            self.set_existing_options(step_classify)
         elif new_step == step_source:
-            self.set_existed_options(step_source)
+            self.set_existing_options(step_source)
         elif new_step is None:
             # Complete
             self.accept()
             return
         # Set Next button label
         if new_step == self.stackedWidget.count():
-            self.set_existed_options(self.stackedWidget.count())
+            self.set_existing_options(self.stackedWidget.count())
             self.pbnNext.setText(self.tr('Finish'))
         # Disable the Next button unless new data already entered
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
@@ -623,7 +625,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: int
         """
         if current_step == step_category:
-            # category_keywords = self.get_existed_keywords('category')
             category = self.selected_category()
             if category['id'] == 'aggregation':
                 new_step = step_field
@@ -740,8 +741,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
 
-    def get_existed_keywords(self, keyword):
-        """Obtain existed keywords.
+    def get_existing_keywords(self, keyword):
+        """Obtain the value of existing keywords depend on the keyword.
 
         :param keyword: a keyword from keywords
         :type keyword: str
@@ -749,16 +750,21 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: the value of the keyword
         :rtype: str
         """
-        if self.existed_keywords is None:
+        if self.existing_keywords is None:
             return None
         if keyword is not None:
-            return self.existed_keywords.get(keyword, None)
+            return self.existing_keywords.get(keyword, None)
         else:
             return None
 
-    def set_existed_options(self, current_step):
+    def set_existing_options(self, current_step):
+        """Set options in wizard based on existing keywords.
+
+        :param current_step: step of the wizard
+        :type current_step: int
+        """
         if current_step == step_category:
-            category_keyword = self.get_existed_keywords('category')
+            category_keyword = self.get_existing_keywords('category')
             if category_keyword is None:
                 return
             categories = []
@@ -768,7 +774,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.lstCategories.setCurrentRow(
                     categories.index(category_keyword))
         elif current_step == step_subcategory:
-            subcategory_keyword = self.get_existed_keywords('subcategory')
+            subcategory_keyword = self.get_existing_keywords('subcategory')
             if subcategory_keyword is None:
                 return
             subcategories = []
@@ -779,7 +785,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.lstSubcategories.setCurrentRow(
                     subcategories.index(subcategory_keyword))
         elif current_step == step_unit:
-            unit_keyword = self.get_existed_keywords('unit')
+            unit_keyword = self.get_existing_keywords('unit')
             if unit_keyword is None:
                 return
             unit_name = metadata.get_name(unit_keyword)
@@ -789,7 +795,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if unit_name in units:
                 self.lstUnits.setCurrentRow(units.index(unit_name))
         elif current_step == step_field:
-            field = self.get_existed_keywords('field')
+            field = self.get_existing_keywords('field')
             if field is None:
                 return
             fields = []
@@ -798,19 +804,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if field in fields:
                 self.lstFields.setCurrentRow(fields.index(field))
         elif current_step == step_classify:
-            unit_keyword = self.get_existed_keywords('unit')
+            unit_keyword = self.get_existing_keywords('unit')
             unit_name = metadata.get_name(unit_keyword)
             # Do not continue if user select different unit
             if unit_name != self.selected_unit()['name']:
                 return
 
-            field = self.get_existed_keywords('field')
+            field = self.get_existing_keywords('field')
             # Do not continue if user select different field
             if field != self.selected_field():
                 return
 
             # Do not continue if there is no value_map in existing keywords
-            value_map = self.get_existed_keywords('value_map')
+            value_map = self.get_existing_keywords('value_map')
             if value_map is None:
                 return
 
@@ -819,33 +825,33 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             default_classes = unit['classes']
             unassigned_values = list()
             assigned_values = dict()
-            for cls in default_classes:
-                assigned_values[cls['name']] = list()
+            for default_class in default_classes:
+                assigned_values[default_class['name']] = list()
             if type(value_map) == str:
                 value_map = json.loads(value_map)
-            field_idx = self.layer.dataProvider().fields().indexFromName(
+            field_index = self.layer.dataProvider().fields().indexFromName(
                 self.selected_field())
-            for val in self.layer.uniqueValues(field_idx):
-                val_str = val and unicode(val) or 'NULL'
+            for value in self.layer.uniqueValues(field_index):
+                value_as_string = value and unicode(value) or 'NULL'
                 # check in value map
                 assigned = False
                 for key, value in value_map.iteritems():
-                    if val_str in value:
-                        assigned_values[key] += [val_str]
+                    if value_as_string in value:
+                        assigned_values[key] += [value_as_string]
                         assigned = True
                 if not assigned:
-                    unassigned_values += [val_str]
+                    unassigned_values += [value_as_string]
             self.populate_classified_values(
                 unassigned_values, assigned_values, default_classes)
 
         elif current_step == step_source:
-            source = self.get_existed_keywords('source')
+            source = self.get_existing_keywords('source')
             self.leSource.setText(source)
-            source_scale = self.get_existed_keywords('source_scale')
+            source_scale = self.get_existing_keywords('source_scale')
             self.leSource_scale.setText(source_scale)
-            source_date = self.get_existed_keywords('source_date')
+            source_date = self.get_existing_keywords('source_date')
             self.leSource_date.setText(source_date)
-            source_url = self.get_existed_keywords('source_url')
+            source_url = self.get_existing_keywords('source_url')
             self.leSource_url.setText(source_url)
         elif current_step == step_title:
             title = self.layer.name()
@@ -853,14 +859,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def populate_classified_values(
             self, unassigned_values, assigned_values, default_classes):
-        """Populate self.lstUniqueValues and self.treeClasses.
+        """Populate lstUniqueValues and treeClasses.from the parameters.
 
         :param unassigned_values: list of values that haven't been assigned
             to a class. It will be put in self.lstUniqueValues.
         :type unassigned_values: list
 
         :param assigned_values: dictionary with class as key and list of value
-        as the the value of the dictionary. It will be put in self.treeClasses
+            as the the value of the dictionary. It will be put in
+            self.treeClasses
         :type assigned_values: dict
 
         :param default_classes: default class from unit
@@ -869,12 +876,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         # Populate the unique values list
         self.lstUniqueValues.clear()
-        for val in unassigned_values:
+        for value in unassigned_values:
             list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
             list_item.setFlags(QtCore.Qt.ItemIsEnabled |
                                QtCore.Qt.ItemIsSelectable |
                                QtCore.Qt.ItemIsDragEnabled)
-            list_item.setText(val)
+            list_item.setText(value)
             self.lstUniqueValues.addItem(list_item)
         # Populate assigned values tree
         self.treeClasses.clear()
@@ -884,20 +891,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         bold_font.setWeight(75)
         self.treeClasses.invisibleRootItem().setFlags(
             QtCore.Qt.ItemIsEnabled)
-        for cls in default_classes:
+        for default_class in default_classes:
             # Create branch for class
             tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
             tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
                                  QtCore.Qt.ItemIsEnabled)
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
-            tree_branch.setText(0, cls['name'])
-            if 'description' in cls:
-                tree_branch.setToolTip(0, cls['description'])
+            tree_branch.setText(0, default_class['name'])
+            if 'description' in default_class:
+                tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
-            for val in assigned_values[cls['name']]:
+            for value in assigned_values[default_class['name']]:
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
                                    QtCore.Qt.ItemIsSelectable |
                                    QtCore.Qt.ItemIsDragEnabled)
-                tree_leaf.setText(0, val)
+                tree_leaf.setText(0, value)

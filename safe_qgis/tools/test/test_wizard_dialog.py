@@ -486,11 +486,11 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        for idx in range(dialog.lstUniqueValues.count()):
+        for index in range(dialog.lstUniqueValues.count()):
             msg = ('%s Should be in unassigned values' % dialog
-                   .lstUniqueValues.item(idx).text())
+                   .lstUniqueValues.item(index).text())
             self.assertIn(
-                dialog.lstUniqueValues.item(idx).text(),
+                dialog.lstUniqueValues.item(index).text(),
                 unassigned_values,
                 msg)
         real_assigned_values = dialog.selected_mapping()
