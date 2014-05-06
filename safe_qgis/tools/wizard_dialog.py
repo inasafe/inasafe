@@ -212,10 +212,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.data_type = 'numeric'
         try:
             self.existed_keywords = self.keyword_io.read_keywords(self.layer)
-            print 'Existed Keywords'
-            print self.existed_keywords
         except Exception:
-            print 'Existed keywords not found'
             self.existed_keywords = None
         self.update_category_tab()
         self.pbnBack.setEnabled(False)
@@ -447,7 +444,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lstFields.clear()
         for i in IFM().units_for_layer(
                 subcategory['id'], self.layer_type, self.data_type):
-            print i, i['name'], 'tahu'
             item = QListWidgetItem(i['name'], self.lstUnits)
             item.setData(QtCore.Qt.UserRole, unicode(i))
             self.lstUnits.addItem(item)
@@ -511,7 +507,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         assigned_values = dict()
         for cls in default_classes:
             assigned_values[cls['name']] = list()
-        print 'KUDA', self.layer.uniqueValues(field_idx)
         for val in self.layer.uniqueValues(field_idx):
             val_str = val and unicode(val) or 'NULL'
             assigned = False
@@ -522,43 +517,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                                 'numeric_default_max']):
                     assigned_values[cls['name']] += [val_str]
                     assigned = True
-                    print cls, val_str, 'assigned'
             if not assigned:
                 # add to unassigned values list otherwise
                 unassigned_values += [val_str]
-        # Populate the unique vals list
-        self.lstUniqueValues.clear()
-        for val in unassigned_values:
-            list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
-            list_item.setFlags(QtCore.Qt.ItemIsEnabled |
-                               QtCore.Qt.ItemIsSelectable |
-                               QtCore.Qt.ItemIsDragEnabled)
-            list_item.setText(val)
-            self.lstUniqueValues.addItem(list_item)
-        # Populate assigned values tree
-        self.treeClasses.clear()
-        bold_font = QtGui.QFont()
-        bold_font.setItalic(True)
-        bold_font.setBold(True)
-        bold_font.setWeight(75)
-        self.treeClasses.invisibleRootItem().setFlags(QtCore.Qt.ItemIsEnabled)
-        for cls in default_classes:
-            # Create branch for class
-            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
-            tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
-                                 QtCore.Qt.ItemIsEnabled)
-            tree_branch.setExpanded(True)
-            tree_branch.setFont(0, bold_font)
-            tree_branch.setText(0, cls['name'])
-            if 'description' in cls:
-                tree_branch.setToolTip(0, cls['description'])
-            # Assign known values
-            for val in assigned_values[cls['name']]:
-                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
-                                   QtCore.Qt.ItemIsSelectable |
-                                   QtCore.Qt.ItemIsDragEnabled)
-                tree_leaf.setText(0, val)
+        self.populate_classified_values(
+            unassigned_values, assigned_values, default_classes)
 
     def go_to_step(self, step):
         """Set the stacked widget to the given step.
@@ -786,6 +749,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: the value of the keyword
         :rtype: str
         """
+        if self.existed_keywords is None:
+            return None
         if keyword is not None:
             return self.existed_keywords.get(keyword, None)
         else:
@@ -794,6 +759,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_existed_options(self, current_step):
         if current_step == step_category:
             category_keyword = self.get_existed_keywords('category')
+            if category_keyword is None:
+                return
             categories = []
             for index in xrange(self.lstCategories.count()):
                 categories.append(self.lstCategories.item(index).text())
@@ -802,6 +769,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     categories.index(category_keyword))
         elif current_step == step_subcategory:
             subcategory_keyword = self.get_existed_keywords('subcategory')
+            if subcategory_keyword is None:
+                return
             subcategories = []
             for index in xrange(self.lstSubcategories.count()):
                 subcategories.append(str(self.lstSubcategories.item(index)
@@ -811,6 +780,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     subcategories.index(subcategory_keyword))
         elif current_step == step_unit:
             unit_keyword = self.get_existed_keywords('unit')
+            if unit_keyword is None:
+                return
             unit_name = metadata.get_name(unit_keyword)
             units = []
             for index in xrange(self.lstUnits.count()):
@@ -819,6 +790,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.lstUnits.setCurrentRow(units.index(unit_name))
         elif current_step == step_field:
             field = self.get_existed_keywords('field')
+            if field is None:
+                return
             fields = []
             for index in xrange(self.lstFields.count()):
                 fields.append(str(self.lstFields.item(index).text()))
@@ -838,7 +811,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
             # Do not continue if there is no value_map in existing keywords
             value_map = self.get_existed_keywords('value_map')
-            print value_map
             if value_map is None:
                 return
 
@@ -849,7 +821,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             assigned_values = dict()
             for cls in default_classes:
                 assigned_values[cls['name']] = list()
-            print type(value_map)
             if type(value_map) == str:
                 value_map = json.loads(value_map)
             field_idx = self.layer.dataProvider().fields().indexFromName(
@@ -864,42 +835,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                         assigned = True
                 if not assigned:
                     unassigned_values += [val_str]
-            print 'unassigned', unassigned_values
-            print 'assigned', assigned_values
-            # Populate the unique vals list
-            self.lstUniqueValues.clear()
-            for val in unassigned_values:
-                list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
-                list_item.setFlags(QtCore.Qt.ItemIsEnabled |
-                                   QtCore.Qt.ItemIsSelectable |
-                                   QtCore.Qt.ItemIsDragEnabled)
-                list_item.setText(val)
-                self.lstUniqueValues.addItem(list_item)
-            # Populate assigned values tree
-            self.treeClasses.clear()
-            bold_font = QtGui.QFont()
-            bold_font.setItalic(True)
-            bold_font.setBold(True)
-            bold_font.setWeight(75)
-            self.treeClasses.invisibleRootItem().setFlags(
-                QtCore.Qt.ItemIsEnabled)
-            for cls in default_classes:
-                # Create branch for class
-                tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
-                tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
-                                     QtCore.Qt.ItemIsEnabled)
-                tree_branch.setExpanded(True)
-                tree_branch.setFont(0, bold_font)
-                tree_branch.setText(0, cls['name'])
-                if 'description' in cls:
-                    tree_branch.setToolTip(0, cls['description'])
-                # Assign known values
-                for val in assigned_values[cls['name']]:
-                    tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                    tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
-                                       QtCore.Qt.ItemIsSelectable |
-                                       QtCore.Qt.ItemIsDragEnabled)
-                    tree_leaf.setText(0, val)
+            self.populate_classified_values(
+                unassigned_values, assigned_values, default_classes)
 
         elif current_step == step_source:
             source = self.get_existed_keywords('source')
@@ -914,3 +851,53 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             title = self.layer.name()
             self.leTitle.setText(title)
 
+    def populate_classified_values(
+            self, unassigned_values, assigned_values, default_classes):
+        """Populate self.lstUniqueValues and self.treeClasses.
+
+        :param unassigned_values: list of values that haven't been assigned
+            to a class. It will be put in self.lstUniqueValues.
+        :type unassigned_values: list
+
+        :param assigned_values: dictionary with class as key and list of value
+        as the the value of the dictionary. It will be put in self.treeClasses
+        :type assigned_values: dict
+
+        :param default_classes: default class from unit
+        :type default_classes: list
+
+        """
+        # Populate the unique values list
+        self.lstUniqueValues.clear()
+        for val in unassigned_values:
+            list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
+            list_item.setFlags(QtCore.Qt.ItemIsEnabled |
+                               QtCore.Qt.ItemIsSelectable |
+                               QtCore.Qt.ItemIsDragEnabled)
+            list_item.setText(val)
+            self.lstUniqueValues.addItem(list_item)
+        # Populate assigned values tree
+        self.treeClasses.clear()
+        bold_font = QtGui.QFont()
+        bold_font.setItalic(True)
+        bold_font.setBold(True)
+        bold_font.setWeight(75)
+        self.treeClasses.invisibleRootItem().setFlags(
+            QtCore.Qt.ItemIsEnabled)
+        for cls in default_classes:
+            # Create branch for class
+            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
+            tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
+                                 QtCore.Qt.ItemIsEnabled)
+            tree_branch.setExpanded(True)
+            tree_branch.setFont(0, bold_font)
+            tree_branch.setText(0, cls['name'])
+            if 'description' in cls:
+                tree_branch.setToolTip(0, cls['description'])
+            # Assign known values
+            for val in assigned_values[cls['name']]:
+                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
+                                   QtCore.Qt.ItemIsSelectable |
+                                   QtCore.Qt.ItemIsDragEnabled)
+                tree_leaf.setText(0, val)
