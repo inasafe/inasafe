@@ -314,9 +314,9 @@ class WizardDialogTest(unittest.TestCase):
         # step 1 of 7 - select category
         expected_category_text = 'hazard'
         category_text = dialog.lstCategories.currentItem().text()
-        msg = 'Expect category text %s but I got %s' % (
+        message = 'Expect category text %s but I got %s' % (
             expected_category_text, category_text)
-        self.assertEqual(expected_category_text, category_text, msg)
+        self.assertEqual(expected_category_text, category_text, message)
 
         message = ('Invalid Next button state in step 1! Still disabled after '
                    'an item selected')
@@ -328,9 +328,9 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         expected_subcategory_text = 'tsunami'
         subcategory_text = dialog.lstSubcategories.currentItem().text()
-        msg = 'Expect subcategory text %s but I got %s' % (
+        message = 'Expect subcategory text %s but I got %s' % (
             expected_subcategory_text, subcategory_text)
-        self.assertEqual(expected_subcategory_text, subcategory_text, msg)
+        self.assertEqual(expected_subcategory_text, subcategory_text, message)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -341,9 +341,9 @@ class WizardDialogTest(unittest.TestCase):
         # step 3 of 7 - select tsunami units
         expected_unit_text = 'metres'
         unit_text = dialog.lstUnits.currentItem().text()
-        msg = 'Expect unit text %s but I got %s' % (
+        message = 'Expect unit text %s but I got %s' % (
             expected_unit_text, unit_text)
-        self.assertEqual(expected_unit_text, unit_text, msg)
+        self.assertEqual(expected_unit_text, unit_text, message)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -384,20 +384,20 @@ class WizardDialogTest(unittest.TestCase):
         message = ('Invalid Next button state in step 6! Disabled while '
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
-        msg = 'Source should be empty'
-        self.assertEqual(dialog.leSource.text(), '', msg)
-        msg = 'Source Url should be empty'
-        self.assertEqual(dialog.leSource_url.text(), '', msg)
-        msg = 'Source Date should be empty'
-        self.assertEqual(dialog.leSource_date.text(), '', msg)
-        msg = 'Source Scale should be empty'
-        self.assertEqual(dialog.leSource_scale.text(), '', msg)
+        message = 'Source should be empty'
+        self.assertEqual(dialog.leSource.text(), '', message)
+        message = 'Source Url should be empty'
+        self.assertEqual(dialog.leSource_url.text(), '', message)
+        message = 'Source Date should be empty'
+        self.assertEqual(dialog.leSource_date.text(), '', message)
+        message = 'Source Scale should be empty'
+        self.assertEqual(dialog.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
 
         # step 7 of 7 - enter title
-        msg = 'Title should be %s but I got %s' % (
+        message = 'Title should be %s but I got %s' % (
             dialog.layer.name(), dialog.leTitle.text())
-        self.assertEqual(dialog.layer.name(), dialog.leTitle.text(), msg)
+        self.assertEqual(dialog.layer.name(), dialog.leTitle.text(), message)
         message = ('Invalid Next button state in step 7! Still disabled '
                    'after a text entered')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
@@ -448,9 +448,9 @@ class WizardDialogTest(unittest.TestCase):
         # step 1 of 7 - select category
         expected_category_text = 'hazard'
         category_text = dialog.lstCategories.currentItem().text()
-        msg = 'Expect category text %s but I got %s' % (
+        message = 'Expect category text %s but I got %s' % (
             expected_category_text, category_text)
-        self.assertEqual(expected_category_text, category_text, msg)
+        self.assertEqual(expected_category_text, category_text, message)
 
         # Click Next
         dialog.pbnNext.click()
@@ -459,9 +459,9 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         expected_subcategory_text = 'volcano'
         subcategory_text = dialog.lstSubcategories.currentItem().text()
-        msg = 'Expect subcategory text %s but I got %s' % (
+        message = 'Expect subcategory text %s but I got %s' % (
             expected_subcategory_text, subcategory_text)
-        self.assertEqual(expected_subcategory_text, subcategory_text, msg)
+        self.assertEqual(expected_subcategory_text, subcategory_text, message)
 
         # Click Next
         dialog.pbnNext.click()
@@ -469,9 +469,9 @@ class WizardDialogTest(unittest.TestCase):
         # step 3 of 7 - select volcano units
         expected_unit_text = 'volcano categorical'
         unit_text = dialog.lstUnits.currentItem().text()
-        msg = 'Expect unit text %s but I got %s' % (
+        message = 'Expect unit text %s but I got %s' % (
             expected_unit_text, unit_text)
-        self.assertEqual(expected_unit_text, unit_text, msg)
+        self.assertEqual(expected_unit_text, unit_text, message)
 
         # Click Next
         dialog.pbnNext.click()
@@ -479,20 +479,20 @@ class WizardDialogTest(unittest.TestCase):
         # step 4 of 7 - select field
         expected_unit_text = 'GRIDCODE'
         unit_text = dialog.lstFields.currentItem().text()
-        msg = 'Expect unit text %s but I got %s' % (
+        message = 'Expect unit text %s but I got %s' % (
             expected_unit_text, unit_text)
-        self.assertEqual(expected_unit_text, unit_text, msg)
+        self.assertEqual(expected_unit_text, unit_text, message)
 
         # Click Next
         dialog.pbnNext.click()
 
         for index in range(dialog.lstUniqueValues.count()):
-            msg = ('%s Should be in unassigned values' % dialog
+            message = ('%s Should be in unassigned values' % dialog
                    .lstUniqueValues.item(index).text())
             self.assertIn(
                 dialog.lstUniqueValues.item(index).text(),
                 unassigned_values,
-                msg)
+                message)
         real_assigned_values = dialog.selected_mapping()
         self.assertDictEqual(real_assigned_values, assigned_values)
 
@@ -504,14 +504,14 @@ class WizardDialogTest(unittest.TestCase):
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
-        msg = 'Source should be %s' % source
-        self.assertEqual(dialog.leSource.text(), source, msg)
-        msg = 'Source Url should be %s' % source_url
-        self.assertEqual(dialog.leSource_url.text(), source_url, msg)
-        msg = 'Source Date should be %s' % source_date
-        self.assertEqual(dialog.leSource_date.text(), source_date, msg)
-        msg = 'Source Scale should be %s' % source_scale
-        self.assertEqual(dialog.leSource_scale.text(), source_scale, msg)
+        message = 'Source should be %s' % source
+        self.assertEqual(dialog.leSource.text(), source, message)
+        message = 'Source Url should be %s' % source_url
+        self.assertEqual(dialog.leSource_url.text(), source_url, message)
+        message = 'Source Date should be %s' % source_date
+        self.assertEqual(dialog.leSource_date.text(), source_date, message)
+        message = 'Source Scale should be %s' % source_scale
+        self.assertEqual(dialog.leSource_scale.text(), source_scale, message)
         dialog.pbnNext.click()
 
         dialog.pbnCancel.click()
