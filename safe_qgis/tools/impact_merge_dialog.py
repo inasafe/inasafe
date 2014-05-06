@@ -210,7 +210,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_chooser_clicked(self):
-        """ how a dialog to choose directory."""
+        """Show a dialog to choose directory."""
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
             self, self.tr("Select Output Directory")))
