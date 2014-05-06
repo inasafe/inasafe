@@ -14,10 +14,12 @@ from safe.impact_functions.core import (
     parse_single_requirement,
     get_metadata,
     evacuated_population_weekly_needs,
-    aggregate)
+    aggregate,
+    convert_to_old_keywords
+)
 from safe.impact_functions.utilities import pretty_string
 from safe.common.utilities import format_int
-# from safe.impact_functions.core import get_dict_doc_func
+from safe.metadata import converter_dict
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -318,6 +320,23 @@ class Test_plugin_core(unittest.TestCase):
         # Test Not Point Data nor raster Data:
         other_data = MockOtherData()
         self.assertRaises(Exception, aggregate, other_data)
+
+    def test_convert_to_old_keywords(self):
+        """Test to convert new keywords to old keywords system."""
+        new_keywords = {
+            'category': 'hazard',
+            'subcategory': 'tsunami',
+            'unit': 'metres_depth'
+        }
+
+        convert_to_old_keywords(converter_dict, [new_keywords])
+        expected_keywords = {
+            'category': 'hazard',
+            'subcategory': 'tsunami',
+            'unit': 'm'
+        }
+        msg = 'Expected %s but I got %s' % (expected_keywords, new_keywords)
+        self.assertDictEqual(new_keywords, expected_keywords, msg)
 
 
 if __name__ == '__main__':

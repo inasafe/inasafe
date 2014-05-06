@@ -138,8 +138,8 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         else:
             raise Exception("Fail: must be raise an exception")
 
-    def test_parseInput(self):
-        input = {
+    def test_parse_input(self):
+        function_input = {
             'thresholds': lambda: [1.0],
             'postprocessors': {
                 'Gender': {'on': lambda: True},
@@ -151,7 +151,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         'adult_ratio': lambda: 0.659}}}}
 
         dialog = FunctionOptionsDialog(None)
-        result = dialog.parse_input(input)
+        result = dialog.parse_input(function_input)
         print result
         expected = OrderedDict([
             ('thresholds', [1.0]),
@@ -163,6 +163,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         ('elderly_ratio', 0.078),
                         ('youth_ratio', 0.263),
                         ('adult_ratio', 0.659)]))]))]))])
+        # noinspection PyPep8Naming
         self.maxDiff = None
         self.assertDictEqual(result, expected)
 

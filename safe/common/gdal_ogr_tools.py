@@ -14,7 +14,6 @@ import logging
 import os
 
 import numpy
-import math
 from osgeo import gdal, ogr, osr
 
 from safe.common.utilities import unique_filename
@@ -23,15 +22,15 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def polygonize_thresholds(
-    raster_file_name,
-    threshold_min=0.0,
-    threshold_max=float('inf')):
+        raster_file_name,
+        threshold_min=0.0,
+        threshold_max=float('inf')):
     """
     Function to polygonize raster. Areas (pixels) with threshold_min <
     pixel_values < threshold_max will be converted to polygons.
 
-    :param raster:  Raster file name
-    :type raster: string
+    :param raster_file_name:  Raster file name
+    :type raster_file_name: string
 
     :param threshold_min: Value that splits raster to
                     flooded or not flooded.

@@ -17,14 +17,12 @@ __date__ = '20/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import os
 import unittest
 from osgeo import ogr
-from safe.common.testing import UNITDATA
 
-from safe.common.gdal_ogr_tools import (
-    polygonize_thresholds)
+from safe.common.testing import UNITDATA
+from safe.common.gdal_ogr_tools import polygonize_thresholds
 
 
 class TestGDALOGRTools(unittest.TestCase):
@@ -38,26 +36,27 @@ class TestGDALOGRTools(unittest.TestCase):
             'hazard',
             'jakarta_flood_design.tif')
 
-        (
-            inside_file_name,
-            inside_layer_name,
-            outside_file_name,
-            outside_layer_name
-        ) = polygonize_thresholds(raster_name, 0.5)
+        inside_file_name, inside_layer_name, outside_file_name, \
+            outside_layer_name = polygonize_thresholds(
+                raster_name, 0.5)
+
+        # Syntactic sugar to ignore unused vars.
+        _ = inside_layer_name
+        _ = outside_layer_name
 
         driver = ogr.GetDriverByName('ESRI Shapefile')
 
-        dataSource = driver.Open(inside_file_name, 0)
-        layer = dataSource.GetLayer()
-        featureCount = layer.GetFeatureCount()
+        data_source = driver.Open(inside_file_name, 0)
+        layer = data_source.GetLayer()
+        feature_count = layer.GetFeatureCount()
         #print 'inside %s' % (inside_file_name)
-        self.assertEquals(featureCount, 3)
+        self.assertEquals(feature_count, 3)
 
-        dataSource2 = driver.Open(outside_file_name, 0)
-        layer2 = dataSource2.GetLayer()
-        featureCount2 = layer2.GetFeatureCount()
+        data_source2 = driver.Open(outside_file_name, 0)
+        layer2 = data_source2.GetLayer()
+        feature_count2 = layer2.GetFeatureCount()
         #print 'outside %s' % (outside_file_name)
-        self.assertEquals(featureCount2, 1)
+        self.assertEquals(feature_count2, 1)
 
 
 if __name__ == '__main__':

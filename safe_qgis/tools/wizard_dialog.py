@@ -286,8 +286,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         to QTreeWidget and disable the drop flag.
         For some reasons the flag is set when dragging.
 
+        :param item:
+        :param column:
+
         .. note:: This is a slot executed when the item change.
         """
+
+        # Treat var as unused
+        _ = column
+
         if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
                 and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
             item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
@@ -395,8 +402,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             categories += ['aggregation']
         for category in categories:
             if type(category) != dict:
+                # pylint: disable=W0612
+                # noinspection PyUnresolvedReferences
                 from safe import metadata
                 category = eval('metadata.%s_definition' % category)
+                # pylint: enable=W0612
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, unicode(category))
             self.lstCategories.addItem(item)
