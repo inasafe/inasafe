@@ -36,7 +36,6 @@ from qgis.core import (
     QgsMapRenderer,
     QgsComposition)
 
-from safe.common.utilities import temp_dir
 #noinspection PyPackageRequirements
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
 from safe_qgis.utilities.utilities_for_testing import (
@@ -46,7 +45,9 @@ from safe_qgis.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
     InvalidLayerError)
-from safe_qgis.safe_interface import UNITDATA
+from safe_qgis.safe_interface import (
+    UNITDATA,
+    temp_dir)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
