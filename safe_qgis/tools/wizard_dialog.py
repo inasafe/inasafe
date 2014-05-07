@@ -703,7 +703,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if self.selected_unit():
             keywords['unit'] = self.selected_unit()['id']
         if self.lstFields.currentItem():
-            keywords['field'] = self.lstFields.currentItem().text()
+            if keywords['category'] != 'aggregation':
+                key_field = 'field'
+            else:
+                key_field = 'aggregation attribute'
+            keywords[key_field] = self.lstFields.currentItem().text()
         if self.leSource.text():
             keywords['source'] = self.leSource.text()
         if self.leSource_url.text():
@@ -765,6 +769,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         if current_step == step_category:
             category_keyword = self.get_existing_keyword('category')
+            if category_keyword == 'postprocessing':
+                category_keyword = 'aggregation'
             if category_keyword is None:
                 return
             categories = []
@@ -795,7 +801,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if unit_name in units:
                 self.lstUnits.setCurrentRow(units.index(unit_name))
         elif current_step == step_field:
-            field = self.get_existing_keyword('field')
+            if self.selected_category()['name'] != 'aggregation':
+                field = self.get_existing_keyword('field')
+            else:
+                field = self.get_existing_keyword('aggregation attribute')
             if field is None:
                 return
             fields = []
@@ -803,6 +812,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 fields.append(str(self.lstFields.item(index).text()))
             if field in fields:
                 self.lstFields.setCurrentRow(fields.index(field))
+
         elif current_step == step_classify:
             unit_keyword = self.get_existing_keyword('unit')
             unit_name = metadata.get_name(unit_keyword)
