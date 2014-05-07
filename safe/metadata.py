@@ -166,9 +166,9 @@ unit_mmi = {
         'the intensity of ground shaking from a earthquake based on the '
         'effects observed by people at the surface.'),
     'constraint': 'continuous',
-    'default_attribute': 'mmi'
+    'default_attribute': 'mmi'  # applies to vector only
 }
-unit_normalised = {
+unit_normalized = {
     'id': 'normalized',
     'name': tr('normalized'),
     'description': tr(''),
@@ -193,13 +193,15 @@ unit_road_type_type = {
 }
 unit_volcano_categorical = {
     'id': 'volcano_categorical',
+    'name': tr('volcano categorical'),
+    'description': tr(''),
     'constraint': 'categorical',
     'default_attribute': 'affected',
     'default_category': 'high',
     'classes': [
         {
             'name': 'high',
-            'description': tr('Water above ground height.'),
+            'description': tr('Distance from the volcano.'),
             'string_defaults': ['Kawasan Rawan Bencana I',
                                 'high'],
             'numeric_default_min': 0,
@@ -208,7 +210,7 @@ unit_volcano_categorical = {
         },
         {
             'name': 'medium',
-            'description': tr('Water above ground height.'),
+            'description': tr('Distance from the volcano.'),
             'string_defaults': ['Kawasan Rawan Bencana II',
                                 'medium'],
             'numeric_default_min': 3,
@@ -217,16 +219,14 @@ unit_volcano_categorical = {
         },
         {
             'name': 'low',
-            'description': tr('Water above ground height.'),
+            'description': tr('Distance from the volcano.'),
             'string_defaults': ['Kawasan Rawan Bencana III',
                                 'low'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
             'optional': False
         }
-    ],
-    'name': tr('volcano categorical'),
-    'description': tr('')
+    ]
 }
 unit_wetdry = {
     'id': 'wetdry',
@@ -298,8 +298,41 @@ converter_dict = {
     'date_type': {
     },
     'unit': {
-        'm': ['metres_depth', 'feet_depth'],
-        'MMI': ['mmi_depth'],
+        'm': ['metres_depth'],  # FIXME(Ismail): Please check for feet_depth
+        'MMI': ['mmi'],
         'normalised': ['normalized']
     }
 }
+
+
+def get_name(unit_id):
+    """Obtain unit name from a unit_id.
+
+    If unit_id is using old keywords system, it needs to be converted to
+    respective unit_id in new keywords system.
+
+    :param unit_id: Id value of a unit.
+    :type unit_id: str
+
+    :returns: Unit name of the unit_id
+    :rtype: str
+    """
+
+    # These converter is used for wizard only, converting old keywords to new
+    # keywords as default value when run the wizard.
+    old_to_new_keywords = {
+        'm': 'metres',
+        'normalised': 'normalized',
+        'mmi': 'MMI'
+    }
+
+    if unit_id in old_to_new_keywords.keys():
+        unit_name = old_to_new_keywords.get(
+            unit_id, unit_id)
+    else:
+        try:
+            unit = eval('unit_%s' % unit_id)
+            unit_name = unit['name']
+        except KeyError:
+            return
+    return unit_name
