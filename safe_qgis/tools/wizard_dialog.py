@@ -698,16 +698,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         keywords = {}
         if self.selected_category():
             keywords['category'] = self.selected_category()['id']
+            if keywords['category'] == 'aggregation':
+                keywords['category'] = 'postprocessing'
         if self.selected_subcategory():
             keywords['subcategory'] = self.selected_subcategory()['id']
         if self.selected_unit():
             keywords['unit'] = self.selected_unit()['id']
         if self.lstFields.currentItem():
-            if keywords['category'] != 'aggregation':
-                key_field = 'field'
-            else:
-                key_field = 'aggregation attribute'
-            keywords[key_field] = self.lstFields.currentItem().text()
+            if 'category' in keywords.keys():
+                if keywords['category'] != 'postprocessing':
+                    key_field = 'field'
+                else:
+                    key_field = 'aggregation attribute'
+                keywords[key_field] = self.lstFields.currentItem().text()
         if self.leSource.text():
             keywords['source'] = self.leSource.text()
         if self.leSource_url.text():
