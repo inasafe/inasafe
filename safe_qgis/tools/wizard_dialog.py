@@ -741,8 +741,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
 
-    def get_existing_keywords(self, keyword):
-        """Obtain the value of existing keywords depend on the keyword.
+    def get_existing_keyword(self, keyword):
+        """Obtain an existing keyword's value.
 
         :param keyword: A keyword from keywords.
         :type keyword: str
@@ -764,7 +764,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :type current_step: int
         """
         if current_step == step_category:
-            category_keyword = self.get_existing_keywords('category')
+            category_keyword = self.get_existing_keyword('category')
             if category_keyword is None:
                 return
             categories = []
@@ -774,7 +774,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.lstCategories.setCurrentRow(
                     categories.index(category_keyword))
         elif current_step == step_subcategory:
-            subcategory_keyword = self.get_existing_keywords('subcategory')
+            subcategory_keyword = self.get_existing_keyword('subcategory')
             if subcategory_keyword is None:
                 return
             subcategories = []
@@ -785,7 +785,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.lstSubcategories.setCurrentRow(
                     subcategories.index(subcategory_keyword))
         elif current_step == step_unit:
-            unit_keyword = self.get_existing_keywords('unit')
+            unit_keyword = self.get_existing_keyword('unit')
             if unit_keyword is None:
                 return
             unit_name = metadata.get_name(unit_keyword)
@@ -795,7 +795,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if unit_name in units:
                 self.lstUnits.setCurrentRow(units.index(unit_name))
         elif current_step == step_field:
-            field = self.get_existing_keywords('field')
+            field = self.get_existing_keyword('field')
             if field is None:
                 return
             fields = []
@@ -804,19 +804,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if field in fields:
                 self.lstFields.setCurrentRow(fields.index(field))
         elif current_step == step_classify:
-            unit_keyword = self.get_existing_keywords('unit')
+            unit_keyword = self.get_existing_keyword('unit')
             unit_name = metadata.get_name(unit_keyword)
             # Do not continue if user select different unit
             if unit_name != self.selected_unit()['name']:
                 return
 
-            field = self.get_existing_keywords('field')
+            field = self.get_existing_keyword('field')
             # Do not continue if user select different field
             if field != self.selected_field():
                 return
 
             # Do not continue if there is no value_map in existing keywords
-            value_map = self.get_existing_keywords('value_map')
+            value_map = self.get_existing_keyword('value_map')
             if value_map is None:
                 return
 
@@ -845,13 +845,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 unassigned_values, assigned_values, default_classes)
 
         elif current_step == step_source:
-            source = self.get_existing_keywords('source')
+            source = self.get_existing_keyword('source')
             self.leSource.setText(source)
-            source_scale = self.get_existing_keywords('source_scale')
+            source_scale = self.get_existing_keyword('source_scale')
             self.leSource_scale.setText(source_scale)
-            source_date = self.get_existing_keywords('source_date')
+            source_date = self.get_existing_keyword('source_date')
             self.leSource_date.setText(source_date)
-            source_url = self.get_existing_keywords('source_url')
+            source_url = self.get_existing_keyword('source_url')
             self.leSource_url.setText(source_url)
         elif current_step == step_title:
             title = self.layer.name()
