@@ -58,9 +58,9 @@ class FloodRoadImpactFunction(FunctionProvider):
             dep = float(depth[i]['flood_lev'])
             affected = classes[0]
             for level in classes:
-                normalized_depth = dep - min_value
+                normalised_depth = dep - min_value
                 level_value = level * difference
-                if normalized_depth > level_value:
+                if normalised_depth > level_value:
                     affected = level
 
             # Collect depth and calculated damage
