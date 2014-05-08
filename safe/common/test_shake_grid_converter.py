@@ -29,26 +29,29 @@ class ConverterTest(unittest.TestCase):
     def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)
         """
-        my_grid_path = os.path.join(TESTDATA, 'grid.xml')
-        my_output_raster = unique_filename(
+        grid_path = os.path.join(TESTDATA, 'grid.xml')
+        grid_title = 'Earthquake'
+        grid_source = 'USGS'
+        output_raster = unique_filename(
             prefix='result_grid',
             suffix='.tif',
             dir=temp_dir('test'))
-        my_result = convert_mmi_data(my_grid_path, my_output_raster)
-        my_expected_result = my_output_raster.replace('.tif', '-nearest.tif')
+        result = convert_mmi_data(
+            grid_path, grid_title, grid_source, output_raster)
+        expected_result = output_raster.replace('.tif', '-nearest.tif')
         self.assertEqual(
-            my_result, my_expected_result,
+            result, expected_result,
             'Result path not as expected')
-        exists = os.path.exists(my_result)
-        self.assertTrue(exists, 'File result : %s does not exist' % my_result)
-        exists = os.path.exists(my_result[:-3] + 'keywords')
+        exists = os.path.exists(result)
+        self.assertTrue(exists, 'File result : %s does not exist' % result)
+        exists = os.path.exists(result[:-3] + 'keywords')
         self.assertTrue(
             exists,
-            'File result : %s does not exist' % my_result[:-3] + 'keywords')
-        exists = os.path.exists(my_result[:-3] + 'qml')
+            'File result : %s does not exist' % result[:-3] + 'keywords')
+        exists = os.path.exists(result[:-3] + 'qml')
         self.assertTrue(
             exists,
-            'File result : %s does not exist' % my_result[:-3] + 'qml')
+            'File result : %s does not exist' % result[:-3] + 'qml')
     test_convert_grid_to_raster.slow = True
 
 
