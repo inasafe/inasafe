@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
-    <height>545</height>
+    <width>526</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>InaSAFE - Shakemap Importer</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QWebView" name="webView">
      <property name="url">
@@ -28,31 +28,8 @@
      <property name="title">
       <string>Input</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblInput">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="font">
-         <font>
-          <weight>50</weight>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>The input should be a grid.xml file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QLineEdit" name="input_path">
@@ -73,7 +50,48 @@
         </item>
        </layout>
       </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_title">
+        <property name="text">
+         <string>Title</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Input File (grid.xml)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_source">
+        <property name="text">
+         <string>Source</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLineEdit" name="line_edit_title"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLineEdit" name="line_edit_source"/>
+      </item>
      </layout>
+     <zorder>label_3</zorder>
+     <zorder>lineEdit</zorder>
+     <zorder>lineEdit_3</zorder>
+     <zorder>label_6</zorder>
+     <zorder>input_path</zorder>
+     <zorder>label</zorder>
+     <zorder>lineEdit</zorder>
+     <zorder>label_3</zorder>
+     <zorder>line_edit_title</zorder>
+     <zorder>label_title</zorder>
+     <zorder>line_edit_source</zorder>
+     <zorder>label</zorder>
+     <zorder>label_source</zorder>
+     <zorder>horizontalLayoutWidget</zorder>
     </widget>
    </item>
    <item row="2" column="0">

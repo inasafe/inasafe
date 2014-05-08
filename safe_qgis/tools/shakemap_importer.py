@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
-__date__ = '12/2/2013'
+__date__ = '08/5/2014'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -173,23 +173,25 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
     def get_output_from_input(self):
         """Create default output location based on input location.
         """
-        my_input_path = str(self.input_path.text())
-        if my_input_path.endswith('.xml'):
-            my_output_path = my_input_path[:-3] + 'tif'
-        elif my_input_path == '':
-            my_output_path = ''
+        input_path = str(self.input_path.text())
+        if input_path.endswith('.xml'):
+            outputh_path = input_path[:-3] + 'tif'
+        elif input_path == '':
+            outputh_path = ''
         else:
-            last_dot = my_input_path.rfind('.')
+            last_dot = input_path.rfind('.')
             if last_dot == -1:
-                my_output_path = ''
+                outputh_path = ''
             else:
-                my_output_path = my_input_path[:last_dot + 1] + 'tif'
-        self.output_path.setText(my_output_path)
+                outputh_path = input_path[:last_dot + 1] + 'tif'
+        self.output_path.setText(outputh_path)
 
     def accept(self):
         """Handler for when OK is clicked.
         """
         input_path = str(self.input_path.text())
+        input_title = str(self.line_edit_title.text())
+        input_source = str(self.line_edit_source.text())
         output_path = str(self.output_path.text())
         if not output_path.endswith('.tif'):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
@@ -206,15 +208,18 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             return
 
         if self.nearest_mode.isChecked():
-            my_algorithm = 'nearest'
+            algorithm = 'nearest'
         else:
-            my_algorithm = 'invdist'
+            algorithm = 'invdist'
 
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         file_name = convert_mmi_data(
-            input_path, output_path,
-            algorithm=my_algorithm,
+            input_path,
+            input_title,
+            input_source,
+            output_path,
+            algorithm=algorithm,
             algorithm_filename_flag=False)
 
         QtGui.qApp.restoreOverrideCursor()

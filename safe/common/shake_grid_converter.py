@@ -387,7 +387,7 @@ class ShakeGridConverter(object):
                 raise Exception(message)
 
     def mmi_to_raster(
-            self, force_flag=False, algorithm='nearest'):
+            self, title, source, force_flag=False, algorithm='nearest'):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -404,6 +404,14 @@ class ShakeGridConverter(object):
            -ot Float16 -l mmi mmi.vrt mmi.tif
 
         .. note:: It is assumed that gdal_grid is in your path.
+
+        :param title: The title of the earthquake. This also will be used for
+            keyword file.
+        :type title: str
+
+        :param source: The source of the shake data. This also will be used
+            for keyword file.
+        :type source: str
 
         :param force_flag: Whether to force the regeneration of the output
             file. Defaults to False.
@@ -481,7 +489,7 @@ class ShakeGridConverter(object):
         self._run_command(command)
 
         # copy the keywords file from fixtures for this layer
-        self.create_keyword_file(algorithm)
+        self.create_keyword_file(title, source, algorithm)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         if self.algorithm_name:
@@ -495,11 +503,17 @@ class ShakeGridConverter(object):
         shutil.copyfile(my_source_qml, qml_path)
         return my_tif_path
 
-    def create_keyword_file(self, algorithm):
+    def create_keyword_file(self, title, source, algorithm):
         """Create keyword file for the raster file created.
 
         Basically copy a template from keyword file in converter data
         and add extra keyword (usually a title)
+
+        :param title: The title field for keywords.
+        :type title: str
+
+        :param source: The source field for keywords.
+        :type source: str
 
         :param algorithm: Which re-sampling algorithm to use.
             valid options are 'nearest' (for nearest neighbour), 'invdist'
@@ -518,13 +532,20 @@ class ShakeGridConverter(object):
                 self.output_dir, '%s.keywords' % self.output_basename)
         mmi_keywords = os.path.join(data_dir(), 'mmi.keywords')
         shutil.copyfile(mmi_keywords, keyword_path)
-        # append title to the keywords file
-        with open(keyword_path, 'a') as my_file:
-            my_file.write('title: ' + self.output_basename)
+        # append title and source to the keywords file
+        if len(title.strip()) == 0:
+            keyword_title = self.output_basename
+        else:
+            keyword_title = title
+        with open(keyword_path, 'a') as keyword_file:
+            keyword_file.write('title: %s \n' % keyword_title)
+            keyword_file.write('source: %s ' % source)
 
 
 def convert_mmi_data(
         grid_xml_path,
+        title,
+        source,
         output_path=None,
         algorithm=None,
         algorithm_filename_flag=True):
@@ -532,6 +553,12 @@ def convert_mmi_data(
 
     :param grid_xml_path: Path to the xml shake grid file.
     :type grid_xml_path: str
+
+    :param title: The title of the earthquake.
+    :type title: str
+
+    :param source: The source of the shake data.
+    :type source: str
 
     :param output_path: Specify which path to use as an alternative to the
         default.
@@ -559,4 +586,5 @@ def convert_mmi_data(
         output_basename = None
     converter = ShakeGridConverter(
         grid_xml_path, output_dir, output_basename, algorithm_filename_flag)
-    return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)
+    return converter.mmi_to_raster(
+        title, source, force_flag=True, algorithm=algorithm)
