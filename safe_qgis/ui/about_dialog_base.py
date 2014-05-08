@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'about_dialog_base.ui'
 #
-# Created: Fri Feb 28 11:06:03 2014
+# Created: Thu May  8 16:19:34 2014
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,6 @@ try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
-
 
 class Ui_AboutDialogBase(object):
     def setupUi(self, AboutDialogBase):
@@ -33,14 +32,12 @@ class Ui_AboutDialogBase(object):
         self.gridLayout.addWidget(self.about_text, 0, 0, 1, 1)
         self.tab_widget.addTab(self.about_tab, _fromUtf8(""))
         self.getting_started_tab = QtGui.QWidget()
-        self.getting_started_tab.setObjectName(_fromUtf8(
-            "getting_started_tab"))
+        self.getting_started_tab.setObjectName(_fromUtf8("getting_started_tab"))
         self.gridLayout_2 = QtGui.QGridLayout(self.getting_started_tab)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.getting_started_text = QtGui.QTextEdit(self.getting_started_tab)
         self.getting_started_text.setReadOnly(True)
-        self.getting_started_text.setObjectName(_fromUtf8(
-            "getting_started_text"))
+        self.getting_started_text.setObjectName(_fromUtf8("getting_started_text"))
         self.gridLayout_2.addWidget(self.getting_started_text, 0, 0, 1, 1)
         self.tab_widget.addTab(self.getting_started_tab, _fromUtf8(""))
         self.limitations_tab = QtGui.QWidget()
@@ -48,6 +45,9 @@ class Ui_AboutDialogBase(object):
         self.gridLayout_3 = QtGui.QGridLayout(self.limitations_tab)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.limitations_text = QtGui.QTextEdit(self.limitations_tab)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.limitations_text.setFont(font)
         self.limitations_text.setReadOnly(True)
         self.limitations_text.setObjectName(_fromUtf8("limitations_text"))
         self.gridLayout_3.addWidget(self.limitations_text, 0, 0, 1, 1)
@@ -74,20 +74,13 @@ class Ui_AboutDialogBase(object):
         self.label = QtGui.QLabel(AboutDialogBase)
         self.label.setMaximumSize(QtCore.QSize(600, 100))
         self.label.setText(_fromUtf8(""))
-        self.label.setPixmap(QtGui.QPixmap(_fromUtf8(
-            ":/plugins/inasafe/supporters.png")))
+        self.label.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/supporters.png")))
         self.label.setScaledContents(True)
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout_6.addWidget(self.label, 1, 1, 2, 1)
-        spacerItem = QtGui.QSpacerItem(11,
-                                       20,
-                                       QtGui.QSizePolicy.Expanding,
-                                       QtGui.QSizePolicy.Minimum)
+        spacerItem = QtGui.QSpacerItem(11, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.gridLayout_6.addItem(spacerItem, 1, 2, 1, 1)
-        spacerItem1 = QtGui.QSpacerItem(24,
-                                        17,
-                                        QtGui.QSizePolicy.Expanding,
-                                        QtGui.QSizePolicy.Minimum)
+        spacerItem1 = QtGui.QSpacerItem(24, 17, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.gridLayout_6.addItem(spacerItem1, 2, 0, 1, 1)
         self.buttonBox = QtGui.QDialogButtonBox(AboutDialogBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -96,11 +89,9 @@ class Ui_AboutDialogBase(object):
         self.gridLayout_6.addWidget(self.buttonBox, 3, 0, 1, 3)
 
         self.retranslateUi(AboutDialogBase)
-        self.tab_widget.setCurrentIndex(4)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8(
-            "accepted()")), AboutDialogBase.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8(
-            "rejected()")), AboutDialogBase.reject)
+        self.tab_widget.setCurrentIndex(0)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), AboutDialogBase.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), AboutDialogBase.reject)
         QtCore.QMetaObject.connectSlotsByName(AboutDialogBase)
 
     def retranslateUi(self, AboutDialogBase):
@@ -128,17 +119,13 @@ class Ui_AboutDialogBase(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt;\">1. InaSAFE is not a hazard modelling tool.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt;\">2. Polygon area analysis (such as land use) is not yet supported.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt;\">3. Population density data (raster) must be provided in WGS84 geographic coordinates.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt;\">4. Population by administration boundary is not yet supported.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt;\">5. InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.limitations_tab), QtGui.QApplication.translate("AboutDialogBase", "Limitations", None, QtGui.QApplication.UnicodeUTF8))
         self.disclaimer_text.setHtml(QtGui.QApplication.translate("AboutDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:11pt;\">InaSAFE has been jointly developed by Indonesian Government-BNPB, Australian Government-AIFDR and the World Bank-GFDRR. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.disclaimer_tab), QtGui.QApplication.translate("AboutDialogBase", "Disclaimer", None, QtGui.QApplication.UnicodeUTF8))
         self.supporters_text.setHtml(QtGui.QApplication.translate("AboutDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

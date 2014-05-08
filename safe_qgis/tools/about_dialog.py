@@ -22,6 +22,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui
 from safe_qgis.ui.about_dialog_base import Ui_AboutDialogBase
 from safe_qgis.safe_interface import get_version
+from safe_qgis.utilities.defaults import (
+    limitations,
+    disclaimer)
 
 
 class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):
@@ -38,3 +41,14 @@ class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr('About InaSAFE %s' % get_version()))
         self.parent = parent
+
+        # Set Limitations Text
+        limitations_text = ''
+        for index, limitation in enumerate(limitations()):
+            limitations_text += '%s. %s \n' % (index + 1, limitation)
+        self.limitations_text.setFontPointSize(11)
+        self.limitations_text.setText(limitations_text)
+
+        # Set Disclaimer Text
+        self.disclaimer_text.setFontPointSize(11)
+        self.disclaimer_text.setText(disclaimer())
