@@ -117,7 +117,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>7</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1091,7 +1091,14 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="dsbFemaleRatioDefault"/>
+          <widget class="QDoubleSpinBox" name="dsbFemaleRatioDefault">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.010000000000000</double>
+           </property>
+          </widget>
          </item>
          <item row="2" column="1">
           <widget class="QComboBox" name="cboYouthRatioAttribute"/>
@@ -1104,7 +1111,14 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QDoubleSpinBox" name="dsbAdultRatioDefault"/>
+          <widget class="QDoubleSpinBox" name="dsbAdultRatioDefault">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.010000000000000</double>
+           </property>
+          </widget>
          </item>
          <item row="6" column="1">
           <widget class="QComboBox" name="cboElderlyRatioAttribute"/>
@@ -1144,7 +1158,14 @@
           <widget class="QComboBox" name="cboAdultRatioAttribute"/>
          </item>
          <item row="3" column="1">
-          <widget class="QDoubleSpinBox" name="dsbYouthRatioDefault"/>
+          <widget class="QDoubleSpinBox" name="dsbYouthRatioDefault">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.010000000000000</double>
+           </property>
+          </widget>
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="lblFemaleRatioAttribute">
@@ -1161,7 +1182,14 @@
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="QDoubleSpinBox" name="dsbElderlyRatioDefault"/>
+          <widget class="QDoubleSpinBox" name="dsbElderlyRatioDefault">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.010000000000000</double>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

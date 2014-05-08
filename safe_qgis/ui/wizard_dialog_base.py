@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Thu May  8 17:34:06 2014
+# Created: Thu May  8 20:56:11 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -339,6 +339,8 @@ class Ui_WizardDialogBase(object):
         self.lblYouthRatioAttribute.setObjectName(_fromUtf8("lblYouthRatioAttribute"))
         self.gridLayout_7.addWidget(self.lblYouthRatioAttribute, 2, 0, 1, 1)
         self.dsbFemaleRatioDefault = QtGui.QDoubleSpinBox(self.pg6Aggregations)
+        self.dsbFemaleRatioDefault.setMaximum(1.0)
+        self.dsbFemaleRatioDefault.setSingleStep(0.01)
         self.dsbFemaleRatioDefault.setObjectName(_fromUtf8("dsbFemaleRatioDefault"))
         self.gridLayout_7.addWidget(self.dsbFemaleRatioDefault, 1, 1, 1, 1)
         self.cboYouthRatioAttribute = QtGui.QComboBox(self.pg6Aggregations)
@@ -348,6 +350,8 @@ class Ui_WizardDialogBase(object):
         self.lblAdultRatioAttribute.setObjectName(_fromUtf8("lblAdultRatioAttribute"))
         self.gridLayout_7.addWidget(self.lblAdultRatioAttribute, 4, 0, 1, 1)
         self.dsbAdultRatioDefault = QtGui.QDoubleSpinBox(self.pg6Aggregations)
+        self.dsbAdultRatioDefault.setMaximum(1.0)
+        self.dsbAdultRatioDefault.setSingleStep(0.01)
         self.dsbAdultRatioDefault.setObjectName(_fromUtf8("dsbAdultRatioDefault"))
         self.gridLayout_7.addWidget(self.dsbAdultRatioDefault, 5, 1, 1, 1)
         self.cboElderlyRatioAttribute = QtGui.QComboBox(self.pg6Aggregations)
@@ -372,6 +376,8 @@ class Ui_WizardDialogBase(object):
         self.cboAdultRatioAttribute.setObjectName(_fromUtf8("cboAdultRatioAttribute"))
         self.gridLayout_7.addWidget(self.cboAdultRatioAttribute, 4, 1, 1, 1)
         self.dsbYouthRatioDefault = QtGui.QDoubleSpinBox(self.pg6Aggregations)
+        self.dsbYouthRatioDefault.setMaximum(1.0)
+        self.dsbYouthRatioDefault.setSingleStep(0.01)
         self.dsbYouthRatioDefault.setObjectName(_fromUtf8("dsbYouthRatioDefault"))
         self.gridLayout_7.addWidget(self.dsbYouthRatioDefault, 3, 1, 1, 1)
         self.lblFemaleRatioAttribute = QtGui.QLabel(self.pg6Aggregations)
@@ -381,6 +387,8 @@ class Ui_WizardDialogBase(object):
         self.lblElderlyRatioDefault.setObjectName(_fromUtf8("lblElderlyRatioDefault"))
         self.gridLayout_7.addWidget(self.lblElderlyRatioDefault, 7, 0, 1, 1)
         self.dsbElderlyRatioDefault = QtGui.QDoubleSpinBox(self.pg6Aggregations)
+        self.dsbElderlyRatioDefault.setMaximum(1.0)
+        self.dsbElderlyRatioDefault.setSingleStep(0.01)
         self.dsbElderlyRatioDefault.setObjectName(_fromUtf8("dsbElderlyRatioDefault"))
         self.gridLayout_7.addWidget(self.dsbElderlyRatioDefault, 7, 1, 1, 1)
         self.verticalLayout_8.addLayout(self.gridLayout_7)
@@ -490,7 +498,7 @@ class Ui_WizardDialogBase(object):
         self.lblTitle.setBuddy(self.leTitle)
 
         self.retranslateUi(WizardDialogBase)
-        self.stackedWidget.setCurrentIndex(7)
+        self.stackedWidget.setCurrentIndex(5)
         QtCore.QMetaObject.connectSlotsByName(WizardDialogBase)
         WizardDialogBase.setTabOrder(self.pbnCancel, self.pbnBack)
         WizardDialogBase.setTabOrder(self.pbnBack, self.pbnNext)
