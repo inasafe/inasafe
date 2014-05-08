@@ -113,3 +113,28 @@ def default_north_arrow_path():
     """
     default_path = ':/plugins/inasafe/simple_north_arrow.png'
     return default_path
+
+
+def limitations():
+    """Get InaSAFE limitations.
+
+    :return: All limitations on current InaSAFE.
+    :rtype: list
+    """
+    #import tr here to avoid side effects with safe (see notes above in import
+    #section.
+    from safe_qgis.utilities.utilities import tr
+    limitation_list = list()
+    limitation_list.append(tr('InaSAFE is not a hazard modelling tool.'))
+    limitation_list.append(
+        tr('Polygon area analysis (such as land use) is not yet supported.'))
+    limitation_list.append(
+        tr('Population density data (raster) must be provided in WGS84 '
+           'geographic coordinates.'))
+    limitation_list.append(
+        tr('Population by administration boundary is not yet supported.'))
+    limitation_list.append(
+        tr('InaSAFE is a Free and Open Source Software (FOSS) project, '
+           'published under the GPL V3 license. As such you may freely '
+           'download, share and (if you like) modify the software.'))
+    return limitation_list
