@@ -798,6 +798,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if unit_keyword is None:
                 return
             unit_name = metadata.get_name(unit_keyword)
+            # To handle unknown unit in keywords
+            if unit_name is None:
+                return
             units = []
             for index in xrange(self.lstUnits.count()):
                 units.append(str(self.lstUnits.item(index).text()))
