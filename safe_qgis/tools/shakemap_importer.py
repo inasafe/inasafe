@@ -175,16 +175,16 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         """
         input_path = str(self.input_path.text())
         if input_path.endswith('.xml'):
-            outputh_path = input_path[:-3] + 'tif'
+            output_path = input_path[:-3] + 'tif'
         elif input_path == '':
-            outputh_path = ''
+            output_path = ''
         else:
             last_dot = input_path.rfind('.')
             if last_dot == -1:
-                outputh_path = ''
+                output_path = ''
             else:
-                outputh_path = input_path[:last_dot + 1] + 'tif'
-        self.output_path.setText(outputh_path)
+                output_path = input_path[:last_dot + 1] + 'tif'
+        self.output_path.setText(output_path)
 
     def accept(self):
         """Handler for when OK is clicked.
