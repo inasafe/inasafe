@@ -21,13 +21,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 import re
+import json
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 from PyQt4.QtGui import QApplication
 
-# from third_party.odict import OrderedDict
 from safe.api import ImpactFunctionManager as IFM
+from safe.api import metadata  # pylint: disable=W0612
 
 from safe_qgis.safe_interface import InaSAFEError
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
@@ -197,6 +198,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
+        self.keyword_io = KeywordIO()
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
         if self.layer_type == 'vector':
@@ -208,9 +210,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.data_type = 'line'
         else:
             self.data_type = 'numeric'
+        try:
+            self.existing_keywords = self.keyword_io.read_keywords(self.layer)
+        except Exception:
+            self.existing_keywords = None
         self.update_category_tab()
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
+        self.set_existing_options(step_category)
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
         self.go_to_step(1)
@@ -222,6 +229,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: dict, None
         """
         item = self.lstCategories.currentItem()
+
         try:
             return eval(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
@@ -368,10 +376,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         fields = self.layer.dataProvider().fields()
         field_type = fields.field(field).typeName()
-        field_idx = fields.indexFromName(self.selected_field())
-        unique_values = self.layer.uniqueValues(field_idx)[0:48]
+        field_index = fields.indexFromName(self.selected_field())
+        unique_values = self.layer.uniqueValues(field_index)[0:48]
         unique_values_str = [i and unicode(i) or 'NULL' for i in unique_values]
-        if unique_values != self.layer.uniqueValues(field_idx):
+        if unique_values != self.layer.uniqueValues(field_index):
             unique_values_str += ['...']
         desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
         desc += self.tr('Unique values: %s') % ', '.join(unique_values_str)
@@ -404,7 +412,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if type(category) != dict:
                 # pylint: disable=W0612
                 # noinspection PyUnresolvedReferences
-                from safe import metadata
                 category = eval('metadata.%s_definition' % category)
                 # pylint: enable=W0612
             item = QListWidgetItem(category['name'], self.lstCategories)
@@ -489,63 +496,34 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         unit = self.selected_unit()
         default_classes = unit['classes']
         field = self.selected_field()
-        field_idx = self.layer.dataProvider().fields().indexFromName(
+        field_index = self.layer.dataProvider().fields().indexFromName(
             self.selected_field())
-        field_type = self.layer.dataProvider().fields()[field_idx].type()
+        field_type = self.layer.dataProvider().fields()[field_index].type()
         self.lblClassify.setText(classify_question %
                                 (subcategory['name'], category['name'],
                                  unit['name'], field.upper()))
         # Assign unique values to classes
         unassigned_values = list()
         assigned_values = dict()
-        for cls in default_classes:
-            assigned_values[cls['name']] = list()
-        for val in self.layer.uniqueValues(field_idx):
-            val_str = val and unicode(val) or 'NULL'
+        for default_class in default_classes:
+            assigned_values[default_class['name']] = list()
+        for value in self.layer.uniqueValues(field_index):
+            value_as_string = value and unicode(value) or 'NULL'
             assigned = False
-            for cls in default_classes:
-                if (field_type > 9 and val_str in cls['string_defaults']) \
+            for default_class in default_classes:
+                if (field_type > 9
+                    and value_as_string in default_class['string_defaults']) \
                         or (field_type < 10
-                            and val >= cls['numeric_default_min']
-                            and val <= cls['numeric_default_max']):
-                    assigned_values[cls['name']] += [val_str]
+                            and (default_class['numeric_default_min'] <=
+                                 value < default_class[
+                                 'numeric_default_max'])):
+                    assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
             if not assigned:
                 # add to unassigned values list otherwise
-                unassigned_values += [val_str]
-        # Populate the unique vals list
-        self.lstUniqueValues.clear()
-        for val in unassigned_values:
-            list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
-            list_item.setFlags(QtCore.Qt.ItemIsEnabled |
-                               QtCore.Qt.ItemIsSelectable |
-                               QtCore.Qt.ItemIsDragEnabled)
-            list_item.setText(val)
-            self.lstUniqueValues.addItem(list_item)
-        # Populate assigned values tree
-        self.treeClasses.clear()
-        bold_font = QtGui.QFont()
-        bold_font.setItalic(True)
-        bold_font.setBold(True)
-        bold_font.setWeight(75)
-        self.treeClasses.invisibleRootItem().setFlags(QtCore.Qt.ItemIsEnabled)
-        for cls in default_classes:
-            # Create branch for class
-            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
-            tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
-                                 QtCore.Qt.ItemIsEnabled)
-            tree_branch.setExpanded(True)
-            tree_branch.setFont(0, bold_font)
-            tree_branch.setText(0, cls['name'])
-            if 'description' in cls:
-                tree_branch.setToolTip(0, cls['description'])
-            # Assign known values
-            for val in assigned_values[cls['name']]:
-                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
-                                   QtCore.Qt.ItemIsSelectable |
-                                   QtCore.Qt.ItemIsDragEnabled)
-                tree_leaf.setText(0, val)
+                unassigned_values += [value_as_string]
+        self.populate_classified_values(
+            unassigned_values, assigned_values, default_classes)
 
     def go_to_step(self, step):
         """Set the stacked widget to the given step.
@@ -572,18 +550,25 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Prepare the next tab
         if new_step == step_subcategory:
             self.update_subcategory_tab()
+            self.set_existing_options(step_subcategory)
         elif new_step == step_unit:
             self.update_unit_tab()
+            self.set_existing_options(step_unit)
         elif new_step == step_field:
             self.update_field_tab()
+            self.set_existing_options(step_field)
         elif new_step == step_classify:
             self.update_classify_tab()
+            self.set_existing_options(step_classify)
+        elif new_step == step_source:
+            self.set_existing_options(step_source)
         elif new_step is None:
             # Complete
             self.accept()
             return
         # Set Next button label
         if new_step == self.stackedWidget.count():
+            self.set_existing_options(self.stackedWidget.count())
             self.pbnNext.setText(self.tr('Finish'))
         # Disable the Next button unless new data already entered
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
@@ -710,29 +695,29 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: Keywords reflecting the state of the dialog.
         :rtype: dict
         """
-        my_keywords = {}
+        keywords = {}
         if self.selected_category():
-            my_keywords['category'] = self.selected_category()['id']
+            keywords['category'] = self.selected_category()['id']
         if self.selected_subcategory():
-            my_keywords['subcategory'] = self.selected_subcategory()['id']
+            keywords['subcategory'] = self.selected_subcategory()['id']
         if self.selected_unit():
-            my_keywords['unit'] = self.selected_unit()['id']
+            keywords['unit'] = self.selected_unit()['id']
         if self.lstFields.currentItem():
-            my_keywords['field'] = self.lstFields.currentItem().text()
+            keywords['field'] = self.lstFields.currentItem().text()
         if self.leSource.text():
-            my_keywords['source'] = self.leSource.text()
+            keywords['source'] = self.leSource.text()
         if self.leSource_url.text():
-            my_keywords['source_url'] = self.leSource_url.text()
+            keywords['source_url'] = self.leSource_url.text()
         if self.leSource_scale.text():
-            my_keywords['source_scale'] = self.leSource_scale.text()
+            keywords['source_scale'] = self.leSource_scale.text()
         if self.leSource_date.text():
-            my_keywords['source_date'] = self.leSource_date.text()
+            keywords['source_date'] = self.leSource_date.text()
         if self.leTitle.text():
-            my_keywords['title'] = self.leTitle.text()
+            keywords['title'] = self.leTitle.text()
         value_map = self.selected_mapping()
         if value_map:
-            my_keywords['value_map'] = str(value_map)
-        return my_keywords
+            keywords['value_map'] = json.dumps(value_map)
+        return keywords
 
     def accept(self):
         """Automatic slot executed when the Finish button is pressed.
@@ -740,19 +725,186 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         It will write out the keywords for the layer that is active.
         This method is based on the KeywordsDialog class.
         """
-        self.keyword_io = KeywordIO()
         my_keywords = self.get_keywords()
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=my_keywords)
         except InaSAFEError, e:
-            myErrorMessage = get_error_message(e)
+            error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 ((self.tr(
                     'An error was encountered when saving the keywords:\n'
-                    '%s') % myErrorMessage.to_html())))
+                    '%s') % error_message.to_html())))
         if self.dock is not None:
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
+
+    def get_existing_keyword(self, keyword):
+        """Obtain an existing keyword's value.
+
+        :param keyword: A keyword from keywords.
+        :type keyword: str
+
+        :returns: The value of the keyword.
+        :rtype: str
+        """
+        if self.existing_keywords is None:
+            return None
+        if keyword is not None:
+            return self.existing_keywords.get(keyword, None)
+        else:
+            return None
+
+    def set_existing_options(self, current_step):
+        """Set options in wizard based on existing keywords.
+
+        :param current_step: The present step number of the wizard.
+        :type current_step: int
+        """
+        if current_step == step_category:
+            category_keyword = self.get_existing_keyword('category')
+            if category_keyword is None:
+                return
+            categories = []
+            for index in xrange(self.lstCategories.count()):
+                categories.append(self.lstCategories.item(index).text())
+            if category_keyword in categories:
+                self.lstCategories.setCurrentRow(
+                    categories.index(category_keyword))
+        elif current_step == step_subcategory:
+            subcategory_keyword = self.get_existing_keyword('subcategory')
+            if subcategory_keyword is None:
+                return
+            subcategories = []
+            for index in xrange(self.lstSubcategories.count()):
+                subcategories.append(str(self.lstSubcategories.item(index)
+                                     .text()))
+            if subcategory_keyword in subcategories:
+                self.lstSubcategories.setCurrentRow(
+                    subcategories.index(subcategory_keyword))
+        elif current_step == step_unit:
+            unit_keyword = self.get_existing_keyword('unit')
+            if unit_keyword is None:
+                return
+            unit_name = metadata.get_name(unit_keyword)
+            units = []
+            for index in xrange(self.lstUnits.count()):
+                units.append(str(self.lstUnits.item(index).text()))
+            if unit_name in units:
+                self.lstUnits.setCurrentRow(units.index(unit_name))
+        elif current_step == step_field:
+            field = self.get_existing_keyword('field')
+            if field is None:
+                return
+            fields = []
+            for index in xrange(self.lstFields.count()):
+                fields.append(str(self.lstFields.item(index).text()))
+            if field in fields:
+                self.lstFields.setCurrentRow(fields.index(field))
+        elif current_step == step_classify:
+            unit_keyword = self.get_existing_keyword('unit')
+            unit_name = metadata.get_name(unit_keyword)
+            # Do not continue if user select different unit
+            if unit_name != self.selected_unit()['name']:
+                return
+
+            field = self.get_existing_keyword('field')
+            # Do not continue if user select different field
+            if field != self.selected_field():
+                return
+
+            # Do not continue if there is no value_map in existing keywords
+            value_map = self.get_existing_keyword('value_map')
+            if value_map is None:
+                return
+
+            # Assign unique values to classes
+            unit = self.selected_unit()
+            default_classes = unit['classes']
+            unassigned_values = list()
+            assigned_values = dict()
+            for default_class in default_classes:
+                assigned_values[default_class['name']] = list()
+            if type(value_map) == str:
+                value_map = json.loads(value_map)
+            field_index = self.layer.dataProvider().fields().indexFromName(
+                self.selected_field())
+            for value in self.layer.uniqueValues(field_index):
+                value_as_string = value and unicode(value) or 'NULL'
+                # check in value map
+                assigned = False
+                for key, value in value_map.iteritems():
+                    if value_as_string in value:
+                        assigned_values[key] += [value_as_string]
+                        assigned = True
+                if not assigned:
+                    unassigned_values += [value_as_string]
+            self.populate_classified_values(
+                unassigned_values, assigned_values, default_classes)
+
+        elif current_step == step_source:
+            source = self.get_existing_keyword('source')
+            self.leSource.setText(source)
+            source_scale = self.get_existing_keyword('source_scale')
+            self.leSource_scale.setText(source_scale)
+            source_date = self.get_existing_keyword('source_date')
+            self.leSource_date.setText(source_date)
+            source_url = self.get_existing_keyword('source_url')
+            self.leSource_url.setText(source_url)
+        elif current_step == step_title:
+            title = self.layer.name()
+            self.leTitle.setText(title)
+
+    def populate_classified_values(
+            self, unassigned_values, assigned_values, default_classes):
+        """Populate lstUniqueValues and treeClasses.from the parameters.
+
+        :param unassigned_values: List of values that haven't been assigned
+            to a class. It will be put in self.lstUniqueValues.
+        :type unassigned_values: list
+
+        :param assigned_values: Dictionary with class as the key and list of
+            value as the the value of the dictionary. It will be put in
+            self.treeClasses.
+        :type assigned_values: dict
+
+        :param default_classes: Default classes from unit.
+        :type default_classes: list
+
+        """
+        # Populate the unique values list
+        self.lstUniqueValues.clear()
+        for value in unassigned_values:
+            list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
+            list_item.setFlags(QtCore.Qt.ItemIsEnabled |
+                               QtCore.Qt.ItemIsSelectable |
+                               QtCore.Qt.ItemIsDragEnabled)
+            list_item.setText(value)
+            self.lstUniqueValues.addItem(list_item)
+        # Populate assigned values tree
+        self.treeClasses.clear()
+        bold_font = QtGui.QFont()
+        bold_font.setItalic(True)
+        bold_font.setBold(True)
+        bold_font.setWeight(75)
+        self.treeClasses.invisibleRootItem().setFlags(
+            QtCore.Qt.ItemIsEnabled)
+        for default_class in default_classes:
+            # Create branch for class
+            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
+            tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
+                                 QtCore.Qt.ItemIsEnabled)
+            tree_branch.setExpanded(True)
+            tree_branch.setFont(0, bold_font)
+            tree_branch.setText(0, default_class['name'])
+            if 'description' in default_class:
+                tree_branch.setToolTip(0, default_class['description'])
+            # Assign known values
+            for value in assigned_values[default_class['name']]:
+                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
+                                   QtCore.Qt.ItemIsSelectable |
+                                   QtCore.Qt.ItemIsDragEnabled)
+                tree_leaf.setText(0, value)

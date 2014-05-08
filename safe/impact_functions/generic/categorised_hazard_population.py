@@ -12,7 +12,7 @@ from safe.impact_functions.core import (
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
     hazard_all,
-    unit_normalised,
+    unit_normalized,
     layer_raster_numeric,
     exposure_population,
     unit_people_per_pixel,
@@ -73,7 +73,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategory': hazard_all,
-                        'units': [unit_normalised],
+                        'units': [unit_normalized],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
