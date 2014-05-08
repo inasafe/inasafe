@@ -27,7 +27,6 @@ from safe.metadata import (
     exposure_population,
     exposure_road,
     exposure_structure,
-    hazard_all,
     hazard_definition,
     hazard_earthquake,
     hazard_flood,
@@ -35,8 +34,10 @@ from safe.metadata import (
     hazard_volcano,
     unit_building_type_type,
     unit_people_per_pixel,
-    unit_mmi
-)
+    unit_mmi,
+    hazard_tephra,
+    unit_normalised,
+    hazard_generic)
 
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -46,205 +47,195 @@ class TestImpactFunctionManager(unittest.TestCase):
     """
 
     flood_OSM_building_hazard_units = [
-        unit_wetdry, unit_metres_depth, unit_feet_depth]
+        unit_wetdry, unit_metres_depth, unit_feet_depth, unit_normalised]
 
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
-        ifm = ImpactFunctionManager()
+        impact_function_manager = ImpactFunctionManager()
         expected_result = 12
-        result = len(ifm.impact_functions)
-        msg = ('I expect %s but I got %s, please check the number of current '
-               'enabled impact functions' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        result = len(impact_function_manager.impact_functions)
+        message = (
+            'I expect %s but I got %s, please check the number of current '
+            'enabled impact functions' % (expected_result, result))
+        self.assertEqual(result, expected_result, message)
 
     def test_allowed_subcategories(self):
         """Test allowed_subcategories API."""
-        ifm = ImpactFunctionManager()
-        result = ifm.allowed_subcategories()
-        result = [x['id'] for x in result]
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.allowed_subcategories()
         expected_result = [
             exposure_structure,
             hazard_earthquake,
             exposure_population,
-            hazard_all,
             hazard_flood,
             hazard_tsunami,
             exposure_road,
-            hazard_volcano
-        ]
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+            hazard_volcano,
+            hazard_tephra,
+            hazard_generic]
+        message = (
+            'I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
     def test_allowed_data_types(self):
         """Test allowed_data_types API."""
-        ifm = ImpactFunctionManager()
-        result = ifm.allowed_data_types('flood')
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.allowed_data_types('flood')
         expected_result = ['polygon', 'numeric']
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.allowed_data_types('volcano')
-        expected_result = ['point', 'polygon']
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        result = impact_function_manager.allowed_data_types('volcano')
+        expected_result = ['point', 'polygon', 'numeric']
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.allowed_data_types('structure')
+        result = impact_function_manager.allowed_data_types('structure')
         expected_result = ['polygon', 'point']
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.allowed_data_types('earthquake')
+        result = impact_function_manager.allowed_data_types('earthquake')
         expected_result = ['polygon', 'numeric']
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.allowed_data_types('tsunami')
+        result = impact_function_manager.allowed_data_types('tsunami')
         expected_result = ['polygon', 'numeric']
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.allowed_data_types('population')
+        result = impact_function_manager.allowed_data_types('population')
         expected_result = ['numeric']
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
     def test_allowed_units(self):
         """Test allowed_units API."""
-        ifm = ImpactFunctionManager()
-        result = ifm.allowed_units('structure', 'polygon')
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.allowed_units('structure', 'polygon')
         expected_result = [unit_building_type_type]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertEqual(result, expected_result, message)
 
-        result = ifm.allowed_units('structure', 'raster')
+        result = impact_function_manager.allowed_units('structure', 'raster')
         expected_result = []
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertEqual(set(result), set(expected_result), message)
 
-        result = ifm.allowed_units('flood', 'numeric')
-        result = [x['id'] for x in result]
+        result = impact_function_manager.allowed_units('flood', 'numeric')
         expected_result = self.flood_OSM_building_hazard_units
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.allowed_units('earthquake', 'numeric')
-        result = [x['id'] for x in result]
-        expected_result = [unit_mmi]
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        result = impact_function_manager.allowed_units('earthquake', 'numeric')
+        expected_result = [unit_mmi, unit_normalised]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
     def test_units_for_layer(self):
         """Test units_for_layer API."""
-        ifm = ImpactFunctionManager()
+        impact_function_manager = ImpactFunctionManager()
 
-        result = ifm.units_for_layer(
+        result = impact_function_manager.units_for_layer(
             subcategory='flood', layer_type='raster', data_type='numeric')
-        result = [x['id'] for x in result]
         expected_result = self.flood_OSM_building_hazard_units
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.units_for_layer(
+        result = impact_function_manager.units_for_layer(
             subcategory='volcano', layer_type='raster', data_type='numeric')
-        expected_result = []
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        expected_result = [unit_normalised]
+        print result
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.units_for_layer(
+        result = impact_function_manager.units_for_layer(
             subcategory='population', layer_type='raster', data_type='numeric')
         expected_result = [unit_people_per_pixel]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
     def test_categories_for_layer(self):
         """Test categories_for_layer API."""
-        ifm = ImpactFunctionManager()
+        impact_function_manager = ImpactFunctionManager()
 
-        result = ifm.categories_for_layer(
+        result = impact_function_manager.categories_for_layer(
             layer_type='raster', data_type='numeric')
         expected_result = [hazard_definition, exposure_definition]
-        result = [x['id'] for x in result]
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.categories_for_layer(
+        result = impact_function_manager.categories_for_layer(
             layer_type='vector', data_type='line')
         expected_result = [exposure_definition]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.categories_for_layer(
+        result = impact_function_manager.categories_for_layer(
             layer_type='vector', data_type='polygon')
         expected_result = [exposure_definition, hazard_definition]
-        result = [x['id'] for x in result]
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.categories_for_layer(
+        result = impact_function_manager.categories_for_layer(
             layer_type='vector', data_type='point')
         expected_result = [hazard_definition, exposure_definition]
-        result = [x['id'] for x in result]
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.categories_for_layer(
+        result = impact_function_manager.categories_for_layer(
             layer_type='raster', data_type='line')
         expected_result = []
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
     def test_subcategories_for_layer(self):
         """Test subcategories_for_layer API."""
-        ifm = ImpactFunctionManager()
+        impact_function_manager = ImpactFunctionManager()
 
-        result = ifm.subcategories_for_layer(
+        result = impact_function_manager.subcategories_for_layer(
             category='hazard', layer_type='raster', data_type='numeric')
-        result = [x['id'] for x in result]
         expected_result = [
-            hazard_earthquake, hazard_all, hazard_flood, hazard_tsunami]
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+            hazard_earthquake,
+            hazard_flood,
+            hazard_tsunami,
+            hazard_tephra,
+            hazard_volcano,
+            hazard_generic]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.subcategories_for_layer(
+        result = impact_function_manager.subcategories_for_layer(
             category='hazard', layer_type='vector', data_type='point')
         expected_result = [hazard_volcano]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.subcategories_for_layer(
+        result = impact_function_manager.subcategories_for_layer(
             category='hazard', layer_type='vector', data_type='polygon')
-        result = [x['id'] for x in result]
         expected_result = [
             hazard_earthquake, hazard_flood, hazard_tsunami, hazard_volcano]
-        expected_result = [x['id'] for x in expected_result]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(set(result), set(expected_result), msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.subcategories_for_layer(
+        result = impact_function_manager.subcategories_for_layer(
             category='exposure', layer_type='raster', data_type='numeric')
         expected_result = [exposure_population]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.subcategories_for_layer(
+        result = impact_function_manager.subcategories_for_layer(
             category='exposure', layer_type='vector', data_type='line')
         expected_result = [exposure_road]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
-        result = ifm.subcategories_for_layer(
+        result = impact_function_manager.subcategories_for_layer(
             category='exposure', layer_type='vector', data_type='polygon')
         expected_result = [exposure_structure]
-        msg = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, msg)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
 if __name__ == '__main__':
     unittest.main()

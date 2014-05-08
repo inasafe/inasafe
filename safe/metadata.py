@@ -77,12 +77,13 @@ exposure_structure = {
         'bridge.')
 }
 
-hazard_all = {
-    'id': 'all',
-    'name': tr('all'),
+hazard_generic = {
+    'id': 'generic',
+    'name': tr('generic'),
     'description': tr(
-        'An <b>all</b> hazard can be used to all types of hazard. For '
-        'example: earthquake, flood, volcano, or tsunami.')
+        'A generic hazard can be used for any type of hazard where the data '
+        'have been classified or generalised. For example: earthquake, flood, '
+        'volcano, or tsunami.')
 }
 hazard_earthquake = {
     'id': 'earthquake',
@@ -130,6 +131,15 @@ hazard_volcano = {
         'ejected depends on the type of <b>volcano</b>.')
 }
 
+hazard_all = [
+    hazard_earthquake,
+    hazard_flood,
+    hazard_tephra,
+    hazard_tsunami,
+    hazard_volcano,
+    hazard_generic
+]
+
 # units
 unit_building_type_type = {
     'id': 'building_type',
@@ -168,10 +178,13 @@ unit_mmi = {
     'constraint': 'continuous',
     'default_attribute': 'mmi'  # applies to vector only
 }
-unit_normalized = {
-    'id': 'normalized',
-    'name': tr('normalized'),
-    'description': tr(''),
+unit_normalised = {
+    'id': 'normalised',
+    'name': tr('normalised'),
+    'description': tr(
+        'Normalised data can be hazard or exposure data where the values '
+        'have been classified or coded.'
+    ),
     'constraint': 'continuous'
 }
 unit_people_per_pixel = {
@@ -300,7 +313,6 @@ converter_dict = {
     'unit': {
         'm': ['metres_depth'],  # FIXME(Ismail): Please check for feet_depth
         'MMI': ['mmi'],
-        'normalised': ['normalized']
     }
 }
 
@@ -322,7 +334,6 @@ def get_name(unit_id):
     # keywords as default value when run the wizard.
     old_to_new_keywords = {
         'm': 'metres',
-        'normalised': 'normalized',
         'mmi': 'MMI'
     }
 
