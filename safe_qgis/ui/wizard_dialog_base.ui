@@ -117,7 +117,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1064,7 +1064,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pg55Aggregations">
+     <widget class="QWidget" name="pg6Aggregations">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -1180,7 +1180,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pg6Source">
+     <widget class="QWidget" name="pg7Source">
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QLabel" name="lblSelectSource">
@@ -1362,7 +1362,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pg7Title">
+     <widget class="QWidget" name="pg8Title">
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
         <widget class="QLabel" name="lblSelectTitle">
