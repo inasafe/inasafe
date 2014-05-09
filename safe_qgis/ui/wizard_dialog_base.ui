@@ -1242,7 +1242,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="4" column="1">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="lblScale">
            <property name="text">
             <string>Scale</string>
            </property>
@@ -1252,7 +1252,7 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="lblDate">
            <property name="text">
             <string>Date</string>
            </property>
@@ -1332,7 +1332,7 @@
           </spacer>
          </item>
          <item row="2" column="1">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="lblURL">
            <property name="text">
             <string>URL</string>
            </property>

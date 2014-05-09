@@ -249,8 +249,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # noinspection PyUnresolvedReferences
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
-        self.current_step = 0
         self.go_to_step(1)
+        self.set_tool_tip()
 
     def selected_category(self):
         """Obtain the category selected by user.
@@ -1158,3 +1158,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                                    QtCore.Qt.ItemIsSelectable |
                                    QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setText(0, value)
+
+    def set_tool_tip(self):
+        """Set tool tip as helper text for some objects."""
+        self.lblTitle.setTootTip(self.tr('Title of the layer.'))
+        self.lblSource.setTootTip(self.tr(
+            'Please record who is the custodian of this layer i.e. '
+            'OpenStreetMap URL: Does the custodians have their own website '
+            'i.e. www.openstreetmap.org'))
+        self.lblDate.setTootTip(self.tr(
+            'When was this data collected or downloaded i.e. 1-May-2014'))
+        self.lblScale.setTootTip(self.tr(
+            'What is the scale of this layer?.'))

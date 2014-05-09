@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Fri May  9 14:31:53 2014
+# Created: Fri May  9 22:51:01 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -408,12 +408,12 @@ class Ui_WizardDialogBase(object):
         self.verticalLayout_6.addItem(spacerItem36)
         self.gridLayout_4 = QtGui.QGridLayout()
         self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
-        self.label_2 = QtGui.QLabel(self.pg7Source)
-        self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.gridLayout_4.addWidget(self.label_2, 4, 1, 1, 1)
-        self.label_3 = QtGui.QLabel(self.pg7Source)
-        self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.gridLayout_4.addWidget(self.label_3, 6, 1, 1, 1)
+        self.lblScale = QtGui.QLabel(self.pg7Source)
+        self.lblScale.setObjectName(_fromUtf8("lblScale"))
+        self.gridLayout_4.addWidget(self.lblScale, 4, 1, 1, 1)
+        self.lblDate = QtGui.QLabel(self.pg7Source)
+        self.lblDate.setObjectName(_fromUtf8("lblDate"))
+        self.gridLayout_4.addWidget(self.lblDate, 6, 1, 1, 1)
         self.leSource_url = QtGui.QLineEdit(self.pg7Source)
         self.leSource_url.setObjectName(_fromUtf8("leSource_url"))
         self.gridLayout_4.addWidget(self.leSource_url, 2, 2, 1, 1)
@@ -435,9 +435,9 @@ class Ui_WizardDialogBase(object):
         self.gridLayout_4.addWidget(self.leSource, 0, 2, 1, 1)
         spacerItem39 = QtGui.QSpacerItem(36, 20, QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Minimum)
         self.gridLayout_4.addItem(spacerItem39, 0, 3, 1, 1)
-        self.label = QtGui.QLabel(self.pg7Source)
-        self.label.setObjectName(_fromUtf8("label"))
-        self.gridLayout_4.addWidget(self.label, 2, 1, 1, 1)
+        self.lblURL = QtGui.QLabel(self.pg7Source)
+        self.lblURL.setObjectName(_fromUtf8("lblURL"))
+        self.gridLayout_4.addWidget(self.lblURL, 2, 1, 1, 1)
         spacerItem40 = QtGui.QSpacerItem(20, 8, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         self.gridLayout_4.addItem(spacerItem40, 1, 2, 1, 1)
         spacerItem41 = QtGui.QSpacerItem(20, 8, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
@@ -491,10 +491,10 @@ class Ui_WizardDialogBase(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.label_8.setBuddy(self.treeClasses)
         self.label_7.setBuddy(self.lstUniqueValues)
-        self.label_2.setBuddy(self.leSource_scale)
-        self.label_3.setBuddy(self.leSource_date)
+        self.lblScale.setBuddy(self.leSource_scale)
+        self.lblDate.setBuddy(self.leSource_date)
         self.lblSource.setBuddy(self.leSource)
-        self.label.setBuddy(self.leSource_url)
+        self.lblURL.setBuddy(self.leSource_url)
         self.lblTitle.setBuddy(self.leTitle)
 
         self.retranslateUi(WizardDialogBase)
@@ -542,10 +542,10 @@ class Ui_WizardDialogBase(object):
         self.lblFemaleRatioAttribute.setText(QtGui.QApplication.translate("WizardDialogBase", "Female ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
         self.lblElderlyRatioDefault.setText(QtGui.QApplication.translate("WizardDialogBase", "Elderly ratio default", None, QtGui.QApplication.UnicodeUTF8))
         self.lblSelectSource.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>Where does the data come from? You may want to write more or less short comment about its source.</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("WizardDialogBase", "Scale", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("WizardDialogBase", "Date", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblScale.setText(QtGui.QApplication.translate("WizardDialogBase", "Scale", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblDate.setText(QtGui.QApplication.translate("WizardDialogBase", "Date", None, QtGui.QApplication.UnicodeUTF8))
         self.lblSource.setText(QtGui.QApplication.translate("WizardDialogBase", "Source", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("WizardDialogBase", "URL", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblURL.setText(QtGui.QApplication.translate("WizardDialogBase", "URL", None, QtGui.QApplication.UnicodeUTF8))
         self.lblSelectTitle.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be \'A flood in Jakarta\' (for a hazard layer) or \'People living in jakarta\' (for an exposure layer).</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.lblTitle.setText(QtGui.QApplication.translate("WizardDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnCancel.setText(QtGui.QApplication.translate("WizardDialogBase", "Cancel", None, QtGui.QApplication.UnicodeUTF8))
