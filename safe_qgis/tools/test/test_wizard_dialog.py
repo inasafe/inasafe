@@ -103,6 +103,7 @@ def remove_temp_file(file_path):
             os.remove(file_path + ext)
 
 
+# noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
 
     """Test the InaSAFE wizard GUI"""
@@ -558,11 +559,22 @@ class WizardDialogTest(unittest.TestCase):
             'adult ratio default': 0.66
         }
         aggregation_attributes = dialog.get_aggregation_attributes()
-        print aggregation_attributes
         message = 'Expected %s but I got %s.' % (
             expected_aggregation_attributes, aggregation_attributes)
         self.assertDictEqual(
             expected_aggregation_attributes, aggregation_attributes, message)
+        dialog.cboFemaleRatioAttribute.setCurrentIndex(2)
+        expected_female_attribute_key = 'PEREMPUAN'
+        female_attribute_key = dialog.cboFemaleRatioAttribute.currentText()
+        message = 'Expected %s but I got %s.' % (
+            expected_female_attribute_key, female_attribute_key)
+        self.assertEqual(
+            expected_female_attribute_key, female_attribute_key, message)
+        is_enabled = dialog.dsbFemaleRatioDefault.isEnabled()
+        message = 'Expected disabled but I got enabled.'
+        self.assertEqual(is_enabled, False, message)
+
+        remove_temp_file(layer.source())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')

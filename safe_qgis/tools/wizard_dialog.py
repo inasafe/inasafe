@@ -244,6 +244,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
         self.set_existing_options(step_category)
+        # noinspection PyUnresolvedReferences
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
         self.go_to_step(1)
@@ -338,6 +339,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             .dsbElderlyRatioDefault.value()
         return aggregation_attributes
 
+    # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):
         """Fix the drop flag after the item is dropped.
 
@@ -357,6 +359,78 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
                 and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
             item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
+
+    # noinspection PyPep8Naming,PyMethodMayBeStatic
+    def on_cboFemaleRatioAttribute_currentIndexChanged(self, index=None):
+        """Automatic slot executed when the female ratio attribute is changed.
+
+        When the use changes the female ratio attribute
+        (cboFemaleRatioAttribute), it will change the enable value of
+        dsbFemaleRatioDefault. If value is 'Use default', enable
+        dsbFemaleRatioDefault. Otherwise, disabled it.
+
+        :param index: Not used but required for Qt slot.
+        :type index: None
+        """
+        value = self.cboFemaleRatioAttribute.currentText()
+        if value == self.tr('Use default'):
+            self.dsbFemaleRatioDefault.setEnabled(True)
+        else:
+            self.dsbFemaleRatioDefault.setEnabled(False)
+
+    # noinspection PyPep8Naming,PyMethodMayBeStatic
+    def on_cboYouthRatioAttribute_currentIndexChanged(self, index=None):
+        """Automatic slot executed when the youth ratio attribute is changed.
+
+        When the use changes the youth ratio attribute
+        (cboYouthRatioAttribute), it will change the enable value of
+        dsbYouthRatioDefault. If value is 'Use default', enable
+        dsbYouthRatioDefault. Otherwise, disabled it.
+
+        :param index: Not used but required for Qt slot.
+        :type index: None
+        """
+        value = self.cboYouthRatioAttribute.currentText()
+        if value == self.tr('Use default'):
+            self.dsbYouthRatioDefault.setEnabled(True)
+        else:
+            self.dsbYouthRatioDefault.setEnabled(False)
+
+    # noinspection PyPep8Naming,PyMethodMayBeStatic
+    def on_cboAdultRatioAttribute_currentIndexChanged(self, index=None):
+        """Automatic slot executed when the adult ratio attribute is changed.
+
+        When the use changes the adult ratio attribute
+        (cboAdultRatioAttribute), it will change the enable value of
+        dsbAdultRatioDefault. If value is 'Use default', enable
+        dsbAdultRatioDefault. Otherwise, disabled it.
+
+        :param index: Not used but required for Qt slot.
+        :type index: None
+        """
+        value = self.cboAdultRatioAttribute.currentText()
+        if value == self.tr('Use default'):
+            self.dsbAdultRatioDefault.setEnabled(True)
+        else:
+            self.dsbAdultRatioDefault.setEnabled(False)
+
+    # noinspection PyPep8Naming,PyMethodMayBeStatic
+    def on_cboElderlyRatioAttribute_currentIndexChanged(self, index=None):
+        """Automatic slot executed when the adult ratio attribute is changed.
+
+        When the use changes the elderly ratio attribute
+        (cboElderlyRatioAttribute), it will change the enable value of
+        dsbElderlyRatioDefault. If value is 'Use default', enable
+        dsbElderlyRatioDefault. Otherwise, disabled it.
+
+        :param index: Not used but required for Qt slot.
+        :type index: None
+        """
+        value = self.cboElderlyRatioAttribute.currentText()
+        if value == self.tr('Use default'):
+            self.dsbElderlyRatioDefault.setEnabled(True)
+        else:
+            self.dsbElderlyRatioDefault.setEnabled(False)
 
     # prevents actions being handled twice
     @pyqtSignature('')
@@ -413,6 +487,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
+    # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):
         """Update field description label and unlock the Next button.
 
@@ -438,6 +513,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
+    # noinspection PyPep8Naming
     def on_leTitle_textChanged(self):
         """Unlock the Next button
 
@@ -727,6 +803,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if current_step == step_source:
             if self.selected_mapping():
                 new_step = step_classify
+            elif self.selected_category()['id'] == 'aggregation':
+                new_step = step_aggregation
             elif self.selected_field():
                 new_step = step_field
             elif self.selected_unit():
@@ -807,6 +885,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     'An error was encountered when saving the keywords:\n'
                     '%s') % error_message.to_html())))
         if self.dock is not None:
+            # noinspection PyUnresolvedReferences
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
 
@@ -974,9 +1053,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         for i in range(len(cbo_ratio_attributes)):
             self.populate_cbo_aggregation_attribute(
-                ratio_attribute_keys[i],cbo_ratio_attributes[i])
-
-    # def populate_aggregation_ratio_attribute(self):
+                ratio_attribute_keys[i], cbo_ratio_attributes[i])
 
     # noinspection PyUnresolvedReferences,PyStatementEffect
     def populate_cbo_aggregation_attribute(
