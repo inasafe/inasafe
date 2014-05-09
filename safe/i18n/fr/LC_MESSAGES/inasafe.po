@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: safe/metadata.py:135 safe/metadata.py:181 safe/metadata.py:196
-#: safe/metadata.py:235
+#: safe/metadata.py:147 safe/metadata.py:203 safe/metadata.py:210
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-29 16:59+0700\n"
+"POT-Creation-Date: 2014-05-09 14:53+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,9 +34,9 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:312
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:331
 #: safe/impact_functions/inundation/flood_population_evacuation.py:247
-#: safe/impact_functions/volcanic/volcano_building_impact.py:244
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:306
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:316
+#: safe/impact_functions/volcanic/volcano_building_impact.py:249
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:313
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:325
 #: safe/postprocessors/age_postprocessor.py:137
 #: safe/postprocessors/aggregation_postprocessor.py:113
 #: safe/postprocessors/building_type_postprocessor.py:141
@@ -52,8 +51,8 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:262
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:313
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:267
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:269
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:262
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:267
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:264
 msgid "All"
 msgstr ""
 
@@ -122,7 +121,7 @@ msgstr ""
 msgid "Buildings that will need to closed when floodingmore than %.1f m"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:286
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:295
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:401
 msgid "Estimated buildings affected"
 msgstr ""
@@ -131,7 +130,7 @@ msgstr ""
 #: extras/retired_impact_functions/tsunami_building_impact.py:130
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:128
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:141
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:123
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:127
 #: safe/impact_functions/styles.py:26 safe/impact_functions/styles.py:71
 msgid "Low"
 msgstr ""
@@ -140,7 +139,7 @@ msgstr ""
 #: extras/retired_impact_functions/tsunami_building_impact.py:131
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:127
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:143
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:124
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:128
 #: safe/impact_functions/styles.py:30
 msgid "Medium"
 msgstr ""
@@ -149,7 +148,7 @@ msgstr ""
 #: extras/retired_impact_functions/tsunami_building_impact.py:132
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:126
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:145
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:125
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:129
 #: safe/impact_functions/styles.py:34 safe/impact_functions/styles.py:81
 msgid "High"
 msgstr ""
@@ -205,8 +204,8 @@ msgid ""
 msgstr ""
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:124
-#: safe/impact_functions/core.py:702 safe/impact_functions/styles.py:125
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:206
+#: safe/impact_functions/core.py:705 safe/impact_functions/styles.py:125
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:209
 msgid "Category"
 msgstr ""
 
@@ -269,8 +268,8 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:128
 #: safe/impact_functions/inundation/flood_population_evacuation.py:82
 #: safe/impact_functions/inundation/flood_population_evacuation.py:111
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:92
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:117
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:91
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:116
 msgid "Need evacuation"
 msgstr ""
 
@@ -352,8 +351,8 @@ msgstr ""
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:314
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:301
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:349
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:308
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:353
 msgid "People needing evacuation"
 msgstr ""
 
@@ -361,7 +360,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:372
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:333
 #: safe/impact_functions/inundation/flood_population_evacuation.py:248
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:319
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:327
 msgid "Rice [kg]"
 msgstr ""
 
@@ -369,7 +368,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:373
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:334
 #: safe/impact_functions/inundation/flood_population_evacuation.py:249
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:321
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:328
 msgid "Drinking Water [l]"
 msgstr ""
 
@@ -377,24 +376,24 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:375
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:336
 #: safe/impact_functions/inundation/flood_population_evacuation.py:251
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:324
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:330
 msgid "Clean Water [l]"
 msgstr ""
 
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:239
-#: safe/impact_functions/core.py:72 safe/impact_functions/core.py:113
+#: safe/impact_functions/core.py:73 safe/impact_functions/core.py:114
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:376
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:337
 #: safe/impact_functions/inundation/flood_population_evacuation.py:252
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:327
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:332
 msgid "Family Kits"
 msgstr ""
 
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:240
-#: safe/impact_functions/core.py:73 safe/impact_functions/core.py:114
+#: safe/impact_functions/core.py:74 safe/impact_functions/core.py:115
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:339
 #: safe/impact_functions/inundation/flood_population_evacuation.py:253
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:330
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:334
 msgid "Toilets"
 msgstr ""
 
@@ -427,12 +426,12 @@ msgid "People in need of evacuation"
 msgstr ""
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:122
-#: safe/impact_functions/generic/categorised_hazard_population.py:213
+#: safe/impact_functions/generic/categorised_hazard_population.py:211
 msgid "Population Density"
 msgstr ""
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:128
-#: safe/impact_functions/generic/categorised_hazard_population.py:219
+#: safe/impact_functions/generic/categorised_hazard_population.py:217
 #: safe/impact_functions/inundation/flood_population_evacuation.py:342
 #, python-format
 msgid "Population which %s"
@@ -450,7 +449,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:370
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:331
 #: safe/impact_functions/inundation/flood_population_evacuation.py:247
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:316
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:325
 msgid "Needs per week"
 msgstr ""
 
@@ -899,14 +898,14 @@ msgid ""
 "message: %s"
 msgstr ""
 
-#: safe/impact_functions/core.py:461
+#: safe/impact_functions/core.py:462
 #, python-format
 msgid ""
 "In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
 "%(impact)s</i>"
 msgstr ""
 
-#: safe/engine/interpolation.py:428
+#: safe/engine/interpolation.py:426
 #, python-format
 msgid ""
 "Could not interpolate from raster layer %(raster)s to vector layer "
@@ -920,17 +919,17 @@ msgstr ""
 msgid "%.2f people/cell)"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:209
+#: safe/impact_functions/generic/categorised_hazard_population.py:207
 #, python-format
 msgid "Low [%i people/cell]"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:210
+#: safe/impact_functions/generic/categorised_hazard_population.py:208
 #, python-format
 msgid "Medium [%i people/cell]"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:211
+#: safe/impact_functions/generic/categorised_hazard_population.py:209
 #, python-format
 msgid "High [%i people/cell]"
 msgstr ""
@@ -979,27 +978,27 @@ msgstr ""
 msgid "be impacted"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:176
+#: safe/impact_functions/generic/categorised_hazard_population.py:174
 msgid "People impacted "
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:179
+#: safe/impact_functions/generic/categorised_hazard_population.py:177
 msgid "People in high hazard area "
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:182
+#: safe/impact_functions/generic/categorised_hazard_population.py:180
 msgid "People in medium hazard area "
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:185
+#: safe/impact_functions/generic/categorised_hazard_population.py:183
 msgid "People in low hazard area"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:193
+#: safe/impact_functions/generic/categorised_hazard_population.py:191
 msgid "Map shows population density in high or medium hazard area"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:197
+#: safe/impact_functions/generic/categorised_hazard_population.py:195
 msgid "People in high hazard areas"
 msgstr ""
 
@@ -1025,18 +1024,18 @@ msgstr ""
 msgid "Population affected by flood prone areas"
 msgstr ""
 
-#: safe/impact_functions/core.py:702
+#: safe/impact_functions/core.py:705
 msgid "Title"
 msgstr ""
 
-#: safe/impact_functions/core.py:702
+#: safe/impact_functions/core.py:705
 msgid "ID"
 msgstr ""
 
 msgid "Requirements"
 msgstr ""
 
-#: safe/impact_functions/core.py:775
+#: safe/impact_functions/core.py:778
 msgid "Available Impact Functions"
 msgstr ""
 
@@ -1046,15 +1045,15 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:269
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:194
 #: safe/engine/impact_functions_for_testing/padang_building_impact_model.py:136
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:249
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:258
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:395
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:410
-#: safe/impact_functions/generic/categorised_hazard_population.py:192
+#: safe/impact_functions/generic/categorised_hazard_population.py:190
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:371
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:353
 #: safe/impact_functions/inundation/flood_population_evacuation.py:267
-#: safe/impact_functions/volcanic/volcano_building_impact.py:263
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:335
+#: safe/impact_functions/volcanic/volcano_building_impact.py:268
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:339
 msgid "Notes"
 msgstr ""
 
@@ -1088,8 +1087,8 @@ msgid "%i - %i"
 msgstr ""
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:30
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:61
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:91
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:62
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:95
 #: safe/impact_functions/volcanic/volcano_building_impact.py:80
 #: safe/impact_functions/volcanic/volcano_building_impact.py:105
 msgid "Be affected"
@@ -1106,7 +1105,7 @@ msgstr ""
 msgid "be affected"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:314
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:323
 msgid "Map shows population affected in each of volcano hazard polygons."
 msgstr ""
 
@@ -1114,15 +1113,15 @@ msgstr ""
 msgid "Total population %i in view port"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:338
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:342
 msgid "People need evacuation if they are within the volcanic hazard zones."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:382
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:386
 msgid "People affected by volcanic hazard zone"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:392
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:397
 msgid "Population affected by volcanic hazard zone"
 msgstr ""
 
@@ -1181,19 +1180,19 @@ msgid ""
 "transport them to here?"
 msgstr ""
 
-#: safe/impact_functions/core.py:703
+#: safe/impact_functions/core.py:706
 msgid "Sub Category"
 msgstr ""
 
-#: safe/impact_functions/core.py:703
+#: safe/impact_functions/core.py:706
 msgid "Layer type"
 msgstr ""
 
-#: safe/impact_functions/core.py:703
+#: safe/impact_functions/core.py:706
 msgid "Data type"
 msgstr ""
 
-#: safe/impact_functions/core.py:704
+#: safe/impact_functions/core.py:707
 msgid "Unit"
 msgstr ""
 
@@ -1205,8 +1204,8 @@ msgstr ""
 msgid "Total population %i in the viewable area"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:66
-#: safe/impact_functions/generic/categorised_hazard_population.py:90
+#: safe/impact_functions/generic/categorised_hazard_population.py:64
+#: safe/impact_functions/generic/categorised_hazard_population.py:88
 msgid "Be impacted"
 msgstr ""
 
@@ -1221,12 +1220,12 @@ msgstr ""
 msgid "An eruption"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:245
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:306
+#: safe/impact_functions/volcanic/volcano_building_impact.py:250
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:313
 msgid "Cumulative"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:258
+#: safe/impact_functions/volcanic/volcano_building_impact.py:263
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 
@@ -1237,8 +1236,8 @@ msgstr ""
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:307
-#: safe/impact_functions/volcanic/volcano_building_impact.py:317
+#: safe/impact_functions/volcanic/volcano_building_impact.py:312
+#: safe/impact_functions/volcanic/volcano_building_impact.py:323
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 
@@ -1323,43 +1322,43 @@ msgstr ""
 msgid "# Fatalities"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:225
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:242
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:234
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:251
 msgid "Hazard Level"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:226
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:243
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:235
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:252
 msgid "Buildings Affected"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:227
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:236
 msgid "Buildings value ($M)"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:228
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:237
 msgid "Contents value ($M)"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:250
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:259
 #, python-format
 msgid ""
 "High hazard is defined as shake levels greater than %i on the MMI scale."
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:252
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:261
 #, python-format
 msgid ""
 "Medium hazard is defined as shake levels between %i and %i on the MMI scale."
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:254
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:263
 #, python-format
 msgid ""
 "Low hazard is defined as shake levels between %i and %i on the MMI scale."
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:257
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:266
 msgid "Values are in units of 1 million Australian Dollars"
 msgstr ""
 
@@ -1367,16 +1366,16 @@ msgid "Buildings affected"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:277
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:280
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:273
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:278
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:275
 msgid "Roads inundated"
 msgstr ""
 
 msgid "Estimated roads affected"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:202
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:228
+#: safe/impact_functions/volcanic/volcano_building_impact.py:199
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:230
 msgid "Not specified in data"
 msgstr ""
 
@@ -1420,7 +1419,7 @@ msgstr ""
 msgid "Buildings in Jakarta"
 msgstr ""
 
-#: safe/engine/core.py:94
+#: safe/engine/core.py:95
 msgid "Not specified"
 msgstr ""
 
@@ -1428,8 +1427,8 @@ msgstr ""
 msgid "Number flooded"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:244
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:199
+#: safe/impact_functions/volcanic/volcano_building_impact.py:249
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:202
 msgid "Distance [km]"
 msgstr ""
 
@@ -1532,7 +1531,7 @@ msgid "Are there enough shelters and relief items available for %s people?"
 msgstr ""
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:396
-#: safe/impact_functions/generic/categorised_hazard_population.py:195
+#: safe/impact_functions/generic/categorised_hazard_population.py:193
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:354
 #: safe/impact_functions/inundation/flood_population_evacuation.py:268
 #, python-format
@@ -1609,11 +1608,11 @@ msgstr ""
 msgid "High [%.2f people/cell]"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:266
+#: safe/impact_functions/volcanic/volcano_building_impact.py:271
 msgid "Only buildings available in OpenStreetMap are considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:264
+#: safe/impact_functions/volcanic/volcano_building_impact.py:269
 #, python-format
 msgid "Total number of buildings %s in the viewable area"
 msgstr ""
@@ -1708,10 +1707,10 @@ msgid ""
 "A hazard raster layer where each cell represents flood depth (in meters)."
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:98
+#: safe/impact_functions/generic/categorised_hazard_population.py:96
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:149
 #: safe/impact_functions/inundation/flood_population_evacuation.py:139
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:133
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:132
 msgid "An exposure raster layer where each cell represent population count."
 msgstr ""
 
@@ -1833,7 +1832,7 @@ msgstr ""
 msgid "aggregation"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:180 safe/metadata.py:134
+#: safe/common/dynamic_translations.py:180 safe/metadata.py:146
 msgid "building type"
 msgstr ""
 
@@ -1875,7 +1874,7 @@ msgid ""
 msgstr ""
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:35
-#: safe/impact_functions/generic/categorised_hazard_population.py:95
+#: safe/impact_functions/generic/categorised_hazard_population.py:93
 msgid ""
 "A hazard raster layer where each cell represents the category of the hazard. "
 "There should be 3 categories: 1, 2, and 3."
@@ -1902,23 +1901,23 @@ msgid ""
 msgstr ""
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:49
-#: safe/impact_functions/generic/categorised_hazard_population.py:108
+#: safe/impact_functions/generic/categorised_hazard_population.py:106
 msgid "The number of categories is three."
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:275
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:284
 msgid "Building affected by earthquake"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:276
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:285
 msgid "The level of the impact is according to the threshold the user input."
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:278
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:287
 msgid "(mmi)"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:279
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:288
 msgid "Impact level"
 msgstr ""
 
@@ -1981,7 +1980,7 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:451
 #: safe/impact_functions/inundation/flood_population_evacuation.py:332
-#: safe/impact_functions/volcanic/volcano_building_impact.py:308
+#: safe/impact_functions/volcanic/volcano_building_impact.py:313
 #, python-format
 msgid "Thousand separator is represented by %s"
 msgstr ""
@@ -2012,26 +2011,26 @@ msgid ""
 "S. Geological Survey Open-File    Report 2009-1136."
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:70
-#: safe/impact_functions/generic/categorised_hazard_population.py:91
+#: safe/impact_functions/generic/categorised_hazard_population.py:68
+#: safe/impact_functions/generic/categorised_hazard_population.py:89
 msgid ""
 "To assess the impacts of categorized hazards in raster format on population "
 "raster layer."
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:93
+#: safe/impact_functions/generic/categorised_hazard_population.py:91
 msgid ""
 "Provide details about how many people would likely need to be impacted for "
 "each category."
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:100
+#: safe/impact_functions/generic/categorised_hazard_population.py:98
 msgid ""
 "Map of population exposed to high category and a table with number of people "
 "in each category"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:103
+#: safe/impact_functions/generic/categorised_hazard_population.py:101
 msgid ""
 "This function will calculate how many people will be impacted per each "
 "category for all categories in the hazard layer. Currently there should be 3 "
@@ -2048,16 +2047,16 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:275
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:384
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:279
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:282
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:275
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:280
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:277
 msgid "Not Inundated"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:277
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:386
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:281
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:284
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:277
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:282
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:279
 msgid "Inundated"
 msgstr ""
 
@@ -2154,30 +2153,30 @@ msgid ""
 "each Kawasan Rawan Bencana or radius."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:275
+#: safe/impact_functions/volcanic/volcano_building_impact.py:280
 msgid "Number of buildings affected"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:310
+#: safe/impact_functions/volcanic/volcano_building_impact.py:315
 msgid "(building)"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:311
+#: safe/impact_functions/volcanic/volcano_building_impact.py:316
 msgid "Building count"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:95
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:121
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:94
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:120
 msgid "To assess the impacts of volcano eruption on population."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:122
 msgid ""
 "Provide details about how many population would likely be affected by each "
 "hazard zones."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:126
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:125
 msgid ""
 "A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
 "\" attribute and the valuefor it are \"Kawasan Rawan Bencana I\", \"Kawasan "
@@ -2186,27 +2185,27 @@ msgid ""
 "point data or \"GUNUNG\" attribute for polygon data."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:135
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:134
 msgid ""
 "Vector layer contains population affected and the minimum needs based on the "
 "population affected."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:336
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:340
 #, python-format
 msgid "Total population %s in the exposure layer"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:383
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:387
 #, python-format
 msgid "Thousand separator is represented by  %s"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:385
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:389
 msgid "(people)"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:386
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:390
 msgid "Population count"
 msgstr ""
 
@@ -2258,15 +2257,15 @@ msgstr ""
 msgid "Calculates gender related statistics."
 msgstr ""
 
-#: safe/impact_functions/core.py:69 safe/impact_functions/core.py:110
+#: safe/impact_functions/core.py:70 safe/impact_functions/core.py:111
 msgid "Rice"
 msgstr ""
 
-#: safe/impact_functions/core.py:70 safe/impact_functions/core.py:111
+#: safe/impact_functions/core.py:71 safe/impact_functions/core.py:112
 msgid "Drinking Water"
 msgstr ""
 
-#: safe/impact_functions/core.py:71 safe/impact_functions/core.py:112
+#: safe/impact_functions/core.py:72 safe/impact_functions/core.py:113
 #: safe/impact_functions/earthquake/pager_earthquake_fatality_model.py:102
 msgid "Water"
 msgstr ""
@@ -2298,15 +2297,15 @@ msgid "Area"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:263
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:264
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:257
-#: safe/metadata.py:195
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:262
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:259
+#: safe/metadata.py:202
 msgid "Road Type"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:290
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:293
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:285
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:291
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:287
 msgid "Flooded roads"
 msgstr ""
 
@@ -2432,8 +2431,8 @@ msgstr ""
 msgid "Table below shows the weekly minimum needs for all evacuated people"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:241
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:298
+#: safe/impact_functions/volcanic/volcano_building_impact.py:246
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:305
 msgid "Volcanoes considered"
 msgstr ""
 
@@ -2484,8 +2483,8 @@ msgid ""
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:247
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:248
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:241
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:246
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:243
 msgid "Other"
 msgstr ""
 
@@ -2494,32 +2493,34 @@ msgid "Temporarily closed (m)"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:265
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:266
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:259
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:264
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:261
 msgid "Total (m)"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:268
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:273
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:266
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:271
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:268
 msgid "Breakdown by road type"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:72
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:99
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:77
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:104
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:74
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:101
 msgid "Be flooded in given thresholds"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:153
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:141
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:151
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:143
 msgid ""
 "The minimal threshold is\n"
 "                greater then the maximal specified threshold.\n"
 "                Please check the values."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:211
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:199
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:209
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:201
 #, python-format
 msgid ""
 "There are no objects\n"
@@ -2529,8 +2530,8 @@ msgid ""
 "                extent."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:265
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:258
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:263
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:260
 msgid "Flooded in the threshold (m)"
 msgstr ""
 
@@ -2550,11 +2551,11 @@ msgstr ""
 msgid "Elderly ratio"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:60
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:61
 msgid "Earthquake Building Impact Function"
 msgstr ""
 
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:65
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:66
 msgid ""
 "This impact function will calculate the impact of an earthquake on "
 "buildings, reporting how many are expected to be damaged etc."
@@ -2568,7 +2569,7 @@ msgstr ""
 msgid "PAG Fatality Function."
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:65
+#: safe/impact_functions/generic/categorised_hazard_population.py:63
 msgid "Categorised Hazard Population Impact Function"
 msgstr ""
 
@@ -2578,8 +2579,8 @@ msgstr ""
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:70
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:77
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:82
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:75
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:80
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:77
 msgid "N/A"
 msgstr ""
 
@@ -2611,21 +2612,16 @@ msgid ""
 "population."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:78
-#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:71
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:76
+#: safe/impact_functions/inundation/flood_raster_roads_experimental.py:73
 msgid "Flood Raster Roads Experimental Function"
-msgstr ""
-
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:79
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:106
-msgid "OPTIMIZED-TEST-Be flooded in given thresholds"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:79
 msgid "Volcano Building Impact"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:91
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:90
 msgid "Volcano Polygon Hazard Population"
 msgstr ""
 
@@ -2688,21 +2684,32 @@ msgid ""
 "telecommunications facility or a bridge."
 msgstr ""
 
-#: safe/metadata.py:87
+#: safe/metadata.py:82
+msgid "generic"
+msgstr ""
+
+#: safe/metadata.py:84
+msgid ""
+"A generic hazard can be used for any type of hazard where the data have been "
+"classified or generalised. For example: earthquake, flood, volcano, or "
+"tsunami."
+msgstr ""
+
+#: safe/metadata.py:90
 msgid "earthquake"
 msgstr ""
 
-#: safe/metadata.py:89
+#: safe/metadata.py:92
 msgid ""
 "An <b>earthquake</b> describes the sudden violent shaking of the ground that "
 "occurs as a result of volcanic activity or movement in the earth's crust."
 msgstr ""
 
-#: safe/metadata.py:95
+#: safe/metadata.py:98
 msgid "flood"
 msgstr ""
 
-#: safe/metadata.py:97
+#: safe/metadata.py:100
 msgid ""
 "A <b>flood</b> describes the inundation of land that is normally dry by a "
 "large amount of water. For example: A <b>flood</b> can occur after heavy "
@@ -2710,21 +2717,21 @@ msgid ""
 "of a <b>flood</b> is for land that is normally dry to become wet."
 msgstr ""
 
-#: safe/metadata.py:106
+#: safe/metadata.py:109
 msgid "tephra"
 msgstr ""
 
-#: safe/metadata.py:108
+#: safe/metadata.py:111
 msgid ""
 "<b>Tephra</b> describes the material, such as rock fragments and ash "
 "particles ejected by a volcanic eruption."
 msgstr ""
 
-#: safe/metadata.py:113
+#: safe/metadata.py:116
 msgid "tsunami"
 msgstr ""
 
-#: safe/metadata.py:115
+#: safe/metadata.py:118
 msgid ""
 "A <b>tsunami</b> describes a large ocean wave or series or waves usually "
 "caused by an under water earthquake or volcano.A <b>tsunami</b> at sea may "
@@ -2732,82 +2739,92 @@ msgid ""
 "destruction and flooding."
 msgstr ""
 
-#: safe/metadata.py:123
+#: safe/metadata.py:126
 msgid "volcano"
 msgstr ""
 
-#: safe/metadata.py:125
+#: safe/metadata.py:128
 msgid ""
 "A <b>volcano</b> describes a mountain which has a vent through which rock "
 "fragments, ash, lava, steam and gases can be ejected from below the earth's "
 "surface. The type of material ejected depends on the type of <b>volcano</b>."
 msgstr ""
 
-#: safe/metadata.py:141
+#: safe/metadata.py:153
 msgid "feet"
 msgstr ""
 
-#: safe/metadata.py:143
+#: safe/metadata.py:155
 msgid ""
 "<b>Feet</b> are an imperial unit of measure. There are 12 inches in 1 foot "
 "and 3 feet in 1 yard. In this case <b>feet</b> are used to describe the "
 "water depth."
 msgstr ""
 
-#: safe/metadata.py:151
+#: safe/metadata.py:163
 msgid "metres"
 msgstr ""
 
-#: safe/metadata.py:153
+#: safe/metadata.py:165
 msgid ""
 "<b>metres</b> are a metric unit of measure. There are 100 centimetres in 1 "
 "metre. In this case <b>metres</b> are used to describe the water depth."
 msgstr ""
 
-#: safe/metadata.py:161 safe/metadata.py:170
+#: safe/metadata.py:173
 msgid "MMI"
 msgstr ""
 
-#: safe/metadata.py:163 safe/metadata.py:172
+#: safe/metadata.py:175
 msgid ""
 "The <b>Modified Mercalli Intensity (MMI)</b> scale describes the intensity "
 "of ground shaking from a earthquake based on the effects observed by people "
 "at the surface."
 msgstr ""
 
-#: safe/metadata.py:180
-msgid "normalized"
+#: safe/metadata.py:183
+msgid "normalised"
 msgstr ""
 
-#: safe/metadata.py:186
+#: safe/metadata.py:185
+msgid ""
+"Normalised data can be hazard or exposure data where the values have been "
+"classified or coded."
+msgstr ""
+
+#: safe/metadata.py:192
 msgid "people per pixel"
 msgstr ""
 
-#: safe/metadata.py:188
+#: safe/metadata.py:194
 msgid ""
-"<b>Density</b> is the number of features within a defined area. For example "
-"<b>population density</b> might be measured as the number of people per "
-"square kilometre."
+"<b>Count</b> is the number of people in each cell. For example <b>population "
+"count</b> might be measured as the number of people per pixel in a raster "
+"data set. This unit is relevant for population rasters in geographic "
+"coordinates."
 msgstr ""
 
-#: safe/metadata.py:208 safe/metadata.py:217 safe/metadata.py:226
-#: safe/metadata.py:245
-msgid "Water above ground height."
-msgstr ""
-
-#: safe/metadata.py:234
+#: safe/metadata.py:209
 msgid "volcano categorical"
 msgstr ""
 
-#: safe/metadata.py:253
-msgid "No water above ground height."
+#: safe/metadata.py:217 safe/metadata.py:226 safe/metadata.py:235
+msgid "Distance from the volcano."
+msgstr ""
+
+#: safe/metadata.py:252
+msgid "Water above ground height."
 msgstr ""
 
 #: safe/metadata.py:260
+msgid "No water above ground height."
+msgstr ""
+
+#: safe/metadata.py:267
 msgid "wet / dry"
 msgstr ""
 
-#: safe/metadata.py:262
+#: safe/metadata.py:269
 msgid ""
 "This is a binary description for an area. The area is either <b>wet</b> "
 "(affected by flood water) or <b>dry</b> (not affected by flood water). This "

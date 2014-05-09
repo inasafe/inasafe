@@ -114,11 +114,11 @@ def initialise_qgis_plugin_repo(web_directory='/home/web/inasafe-test'):
 @hosts('linfiniti3')
 @task
 def build_test_package(
-        branch='master',
+        branch='develop',
         web_directory='/home/web/inasafe-test'):
     """Create a test package and publish it in our repo.
 
-    :param branch: The name of the branch to build from. Defaults to 'master'.
+    :param branch: The name of the branch to build from. Defaults to 'develop'.
     :type branch: str
 
     :param web_directory: Directory for experimental plugin that will be

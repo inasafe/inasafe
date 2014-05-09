@@ -518,6 +518,26 @@ class WizardDialogTest(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
+    # noinspection PyTypeChecker
+    def test_existing_aggregation_keywords(self):
+        """Test for case existing keywords in aggregation layer."""
+        layer = clone_shp_layer(
+            name='kabupaten_jakarta_singlepart', include_keywords=True)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        category = dialog.lstCategories.currentItem().text()
+        expected_category = 'aggregation'
+        message = 'Expected %s but I got %s.' % (expected_category, category)
+        self.assertEqual(expected_category, category, message)
+
+        dialog.pbnNext.click()
+
+        expected_aggregation_attribute = 'KAB_NAME'
+        aggregation_attribute = dialog.lstFields.currentItem().text()
+        message = 'Expected %s but I got %s.' % (
+            expected_aggregation_attribute, aggregation_attribute)
+        self.assertEqual(
+            expected_aggregation_attribute, aggregation_attribute, message)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')

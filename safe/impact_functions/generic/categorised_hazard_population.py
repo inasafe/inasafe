@@ -7,18 +7,16 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    get_function_title
-)
+    get_function_title)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
     hazard_all,
-    unit_normalized,
     layer_raster_numeric,
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition
-)
+    exposure_definition,
+    unit_normalised)
 from safe.storage.raster import Raster
 from safe.common.utilities import ugettext as tr, format_int, round_thousand
 from safe.common.tables import Table, TableRow
@@ -73,7 +71,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategory': hazard_all,
-                        'units': [unit_normalized],
+                        'units': [unit_normalised],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
