@@ -37,7 +37,8 @@ from safe.metadata import (
     unit_mmi,
     hazard_tephra,
     unit_normalised,
-    hazard_generic)
+    hazard_generic,
+    unit_no_type)
 
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -114,7 +115,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test allowed_units API."""
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.allowed_units('structure', 'polygon')
-        expected_result = [unit_building_type_type]
+        expected_result = [unit_building_type_type, unit_no_type]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 

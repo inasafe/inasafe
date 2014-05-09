@@ -125,6 +125,9 @@ population_density_question = QApplication.translate(
 road_roadclass_question = QApplication.translate(
     'WizardDialog',
     'type for your road')
+structure_building_type_question = QApplication.translate(
+    'WizardDialog',
+    'type for your building')
 
 # Constants for field selection
 field_question_subcategory_unit = QApplication.translate(
@@ -246,6 +249,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # noinspection PyUnresolvedReferences
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
+        self.current_step = 0
         self.go_to_step(1)
 
     def selected_category(self):
@@ -603,14 +607,18 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             item = QListWidgetItem(field_name, self.lstFields)
             item.setData(QtCore.Qt.UserRole, field_name)
             # Select the item if it match the unit's default_attribute
-            if unit and 'default_attribute' in unit \
-                    and field_name == unit['default_attribute']:
-                default_item = item
-            # For continuous data, gray out id, gid, fid and text fields
-            if unit and unit['constraint'] == 'continuous':
-                field_type = field.type()
-                if field_type > 9 or re.match('.{0,2}id$', field_name, re.I):
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+            if unit and unit['id'] == 'no_type':
+                pass
+            else:
+                if unit and 'default_attribute' in unit \
+                        and field_name == unit['default_attribute']:
+                    default_item = item
+                # For continuous data, gray out id, gid, fid and text fields
+                if unit and unit['constraint'] == 'continuous':
+                    field_type = field.type()
+                    if field_type > 9 or re.match(
+                            '.{0,2}id$', field_name, re.I):
+                        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
         if default_item:
             self.lstFields.setCurrentItem(default_item)
         self.lblDescribeField.clear()
@@ -779,7 +787,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_source
         elif current_step == step_classify:
             new_step = step_source
-        elif current_step in (step_unit, step_aggregation, step_source):
+        elif current_step == step_unit:
+            unit = self.selected_unit()
+            if unit and unit['id'] == 'no_type':
+                new_step = step_source
+            else:
+                new_step = current_step + 1
+        elif current_step in (step_aggregation, step_source):
             new_step = current_step + 1
         elif current_step == step_title:
             new_step = None

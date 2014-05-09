@@ -39,7 +39,7 @@ from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import unique_filename
 from safe_qgis.safe_interface import TESTDATA
 from safe_qgis.safe_interface import BOUNDDATA
-from safe_qgis.tools.wizard_dialog import WizardDialog
+from safe_qgis.tools.wizard_dialog import WizardDialog, step_source, step_title
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 
@@ -575,6 +575,36 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(is_enabled, False, message)
 
         remove_temp_file(layer.source())
+
+    # noinspection PyTypeChecker
+    def test_unit_no_type(self):
+        """Test for case existing no type unit for structure."""
+        layer = clone_shp_layer(
+            name='building_Maumere',
+            include_keywords=True,
+            directory=TESTDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # go to subcategory step 2
+        dialog.pbnNext.click()  # go to unit step 3
+        dialog.lstUnits.setCurrentRow(1)  # select no type
+        dialog.pbnNext.click()  # should be in step source
+        current_index = dialog.stackedWidget.currentIndex() + 1
+        expected_current_index = step_source
+        message = 'Expected %s but I got %s.' % (
+            expected_current_index, current_index)
+        self.assertEqual(expected_current_index, current_index, message)
+        dialog.pbnNext.click()  # should be in step title
+        current_index = dialog.stackedWidget.currentIndex() + 1
+        expected_current_index = step_title
+        message = 'Expected %s but I got %s.' % (
+            expected_current_index, current_index)
+        self.assertEqual(expected_current_index, current_index, message)
+
+        dialog.pbnNext.click()  # finishing
+
+        remove_temp_file(layer.source())
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')

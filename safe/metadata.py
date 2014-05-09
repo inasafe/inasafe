@@ -185,10 +185,19 @@ unit_normalised = {
     'id': 'normalised',
     'name': tr('normalised'),
     'description': tr(
-        'Normalised data can be hazard or exposure data where the values '
+        '<b>Normalised</b> data can be hazard or exposure data where the '
+        'values '
         'have been classified or coded.'
     ),
     'constraint': 'continuous'
+}
+unit_no_type = {
+    'id': 'no_type',
+    'name': tr('no type'),
+    'description': tr(
+        '<b>No type</b> unit means that there is no building type attribute '
+        'in the exposure data.'
+    ),
 }
 unit_people_per_pixel = {
     'id': 'people_per_pixel',
