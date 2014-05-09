@@ -22,6 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import logging
 import re
 import json
+from sqlite3 import OperationalError
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem, QPixmap
@@ -30,14 +31,21 @@ from PyQt4.QtGui import QApplication
 from safe.api import ImpactFunctionManager as IFM
 from safe.api import metadata  # pylint: disable=W0612
 
-from safe_qgis.safe_interface import InaSAFEError
+from safe_qgis.safe_interface import InaSAFEError, DEFAULTS
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     get_error_message,
     is_point_layer,
     is_polygon_layer,
-    is_raster_layer)
+    is_raster_layer,
+    layer_attribute_names)
+from safe_qgis.exceptions import (
+    HashNotFoundError,
+    NoKeywordsFoundError,
+    KeywordNotFoundError,
+    InvalidParameterError,
+    UnsupportedProviderError)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -147,17 +155,29 @@ step_subcategory = 2
 step_unit = 3
 step_field = 4
 step_classify = 5
-step_source = 6
-step_title = 7
+step_aggregation = 6
+step_source = 7
+step_title = 8
+
+
+# Aggregations' key
+female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
+female_ratio_default_key = DEFAULTS['FEMALE_RATIO_KEY']
+youth_ratio_attribute_key = DEFAULTS['YOUTH_RATIO_ATTR_KEY']
+youth_ratio_default_key = DEFAULTS['YOUTH_RATIO_KEY']
+adult_ratio_attribute_key = DEFAULTS['ADULT_RATIO_ATTR_KEY']
+adult_ratio_default_key = DEFAULTS['ADULT_RATIO_KEY']
+elderly_ratio_attribute_key = DEFAULTS['ELDERLY_RATIO_ATTR_KEY']
+elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
 
 
 def get_question_text(constant):
     """Find a constant by name and return its value.
 
-    :param constant: The name of the constant to look for
+    :param constant: The name of the constant to look for.
     :type constant: string
 
-    :returns: The value of the constant or red error message
+    :returns: The value of the constant or red error message.
     :rtype: string
 
     """
@@ -212,7 +232,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.data_type = 'numeric'
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
-        except Exception:
+        except (HashNotFoundError,
+                Exception,
+                OperationalError,
+                NoKeywordsFoundError,
+                KeywordNotFoundError,
+                InvalidParameterError,
+                UnsupportedProviderError):
             self.existing_keywords = None
         self.update_category_tab()
         self.pbnBack.setEnabled(False)
@@ -225,7 +251,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def selected_category(self):
         """Obtain the category selected by user.
 
-        :returns: metadata of the selected category
+        :returns: Metadata of the selected category.
         :rtype: dict, None
         """
         item = self.lstCategories.currentItem()
@@ -238,7 +264,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def selected_subcategory(self):
         """Obtain the subcategory selected by user.
 
-        :returns: metadata of the selected subcategory
+        :returns: Metadata of the selected subcategory.
         :rtype: dict, None
         """
         item = self.lstSubcategories.currentItem()
@@ -250,7 +276,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def selected_unit(self):
         """Obtain the unit selected by user.
 
-        :returns: metadata of the selected unit
+        :returns: Metadata of the selected unit.
         :rtype: dict, None
         """
         item = self.lstUnits.currentItem()
@@ -262,7 +288,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def selected_field(self):
         """Obtain the field selected by user.
 
-        :returns: keyword of the selected field
+        :returns: Keyword of the selected field.
         :rtype: string, None
         """
         item = self.lstFields.currentItem()
@@ -274,7 +300,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def selected_mapping(self):
         """Obtain the value-to-class mapping set by user.
 
-        :returns: the complete mapping as a dict of lists
+        :returns: The complete mapping as a dict of lists.
         :rtype: dict
         """
         value_map = {}
@@ -286,6 +312,31 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if value_list:
                 value_map[tree_branch.text(0)] = value_list
         return value_map
+
+    def get_aggregation_attributes(self):
+        """Obtain the value of aggregation attributes set by user.
+
+        :returns: The key and value of aggregation attributes.
+        :rtype: dict
+        """
+        aggregation_attributes = dict()
+        aggregation_attributes[female_ratio_attribute_key] = self\
+            .cboFemaleRatioAttribute.currentText()
+        aggregation_attributes[female_ratio_default_key] = self\
+            .dsbFemaleRatioDefault.value()
+        aggregation_attributes[youth_ratio_attribute_key] = self \
+            .cboYouthRatioAttribute.currentText()
+        aggregation_attributes[youth_ratio_default_key] = self \
+            .dsbYouthRatioDefault.value()
+        aggregation_attributes[adult_ratio_attribute_key] = self \
+            .cboAdultRatioAttribute.currentText()
+        aggregation_attributes[adult_ratio_default_key] = self \
+            .dsbAdultRatioDefault.value()
+        aggregation_attributes[elderly_ratio_attribute_key] = self \
+            .cboElderlyRatioAttribute.currentText()
+        aggregation_attributes[elderly_ratio_default_key] = self \
+            .dsbElderlyRatioDefault.value()
+        return aggregation_attributes
 
     def update_dragged_item_flags(self, item, column):
         """Fix the drop flag after the item is dropped.
@@ -560,8 +611,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         elif new_step == step_classify:
             self.update_classify_tab()
             self.set_existing_options(step_classify)
-        elif new_step == step_source:
-            self.set_existing_options(step_source)
+        elif new_step in [step_source, step_aggregation]:
+            self.set_existing_options(new_step)
         elif new_step is None:
             # Complete
             self.accept()
@@ -612,6 +663,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if step == step_source:
             # The source_* keywords are not required
             return True
+        if step == step_aggregation:
+            # Not required
+            return True
         if step == step_title:
             return bool(self.leTitle.text())
 
@@ -641,13 +695,16 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 new_step = step_field
         elif current_step == step_field:
-            subcategory = self.selected_subcategory()
             unit = self.selected_unit()
             if unit and unit['constraint'] == 'categorical':
                 new_step = step_classify
+            elif self.selected_category()['id'] == 'aggregation':
+                new_step = step_aggregation
             else:
                 new_step = step_source
-        elif current_step in (step_unit, step_classify, step_source):
+        elif current_step == step_classify:
+            new_step = step_source
+        elif current_step in (step_unit, step_aggregation, step_source):
             new_step = current_step + 1
         elif current_step == step_title:
             new_step = None
@@ -683,8 +740,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_unit
             elif self.selected_subcategory():
                 new_step = step_subcategory
+            elif self.selected_category()['id'] == 'aggregation':
+                new_step = step_category
             else:
                 new_step = step_category
+        elif current_step == step_aggregation:
+            new_step = step_field
         else:
             new_step = current_step - 1
         return new_step
@@ -700,6 +761,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             keywords['category'] = self.selected_category()['id']
             if keywords['category'] == 'aggregation':
                 keywords['category'] = 'postprocessing'
+                keywords.update(self.get_aggregation_attributes())
         if self.selected_subcategory():
             keywords['subcategory'] = self.selected_subcategory()['id']
         if self.selected_unit():
@@ -818,7 +880,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 fields.append(str(self.lstFields.item(index).text()))
             if field in fields:
                 self.lstFields.setCurrentRow(fields.index(field))
-
         elif current_step == step_classify:
             unit_keyword = self.get_existing_keyword('unit')
             unit_name = metadata.get_name(unit_keyword)
@@ -859,6 +920,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     unassigned_values += [value_as_string]
             self.populate_classified_values(
                 unassigned_values, assigned_values, default_classes)
+        elif current_step == step_aggregation:
+            self.set_existing_aggregation_attributes()
 
         elif current_step == step_source:
             source = self.get_existing_keyword('source')
@@ -872,6 +935,83 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         elif current_step == step_title:
             title = self.layer.name()
             self.leTitle.setText(title)
+
+    def set_existing_aggregation_attributes(self):
+        """Set values in aggregation step wizard based on existing keywords."""
+        female_ratio_default = self.get_existing_keyword(
+            female_ratio_default_key)
+        if female_ratio_default:
+            self.dsbFemaleRatioDefault.setValue(
+                float(female_ratio_default))
+
+        youth_ratio_default = self.get_existing_keyword(
+            youth_ratio_default_key)
+        if youth_ratio_default:
+            self.dsbYouthRatioDefault.setValue(float(youth_ratio_default))
+
+        adult_ratio_default = self.get_existing_keyword(
+            adult_ratio_default_key)
+        if adult_ratio_default:
+            self.dsbAdultRatioDefault.setValue(float(adult_ratio_default))
+
+        elderly_ratio_default = self.get_existing_keyword(
+            elderly_ratio_default_key)
+        if elderly_ratio_default:
+            self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
+
+        ratio_attribute_keys = [
+            female_ratio_attribute_key,
+            youth_ratio_attribute_key,
+            adult_ratio_attribute_key,
+            elderly_ratio_default_key
+        ]
+        cbo_ratio_attributes = [
+            self.cboFemaleRatioAttribute,
+            self.cboYouthRatioAttribute,
+            self.cboAdultRatioAttribute,
+            self.cboElderlyRatioAttribute
+        ]
+
+        for i in range(len(cbo_ratio_attributes)):
+            self.populate_cbo_aggregation_attribute(
+                ratio_attribute_keys[i],cbo_ratio_attributes[i])
+
+    # def populate_aggregation_ratio_attribute(self):
+
+    # noinspection PyUnresolvedReferences,PyStatementEffect
+    def populate_cbo_aggregation_attribute(
+            self, ratio_attribute_key, cbo_ratio_attribute):
+        """Populate the combo box cbo_ratio_attribute for ratio_attribute_key.
+
+        :param ratio_attribute_key: A ratio attribute key that saved in
+        keywords.
+        :type ratio_attribute_key: str
+
+        :param cbo_ratio_attribute: A combo box that wants to be populated.
+        :type cbo_ratio_attribute: QComboBox
+        """
+        cbo_ratio_attribute.clear()
+        ratio_attribute = self.get_existing_keyword(ratio_attribute_key)
+        fields, attribute_position = layer_attribute_names(
+            self.layer,
+            [QtCore.QVariant.Double],
+            ratio_attribute
+        )
+        fields.insert(0, self.tr('Use default'))
+        fields.insert(1, self.tr('Don\'t use'))
+        cbo_ratio_attribute.addItems(fields)
+
+        if ratio_attribute == self.tr('Use default'):
+            cbo_ratio_attribute.setCurrentIndex(0)
+        elif ratio_attribute == self.tr('Don\'t use'):
+            cbo_ratio_attribute.setCurrentIndex(1)
+        elif ratio_attribute is None or attribute_position is None:
+            # current_keyword was not found in the attribute table.
+            # Use default
+            cbo_ratio_attribute.setCurrentIndex(0)
+        else:
+            # + 2 is because we add use defaults and don't use
+            cbo_ratio_attribute.setCurrentIndex(attribute_position + 2)
 
     def populate_classified_values(
             self, unassigned_values, assigned_values, default_classes):
