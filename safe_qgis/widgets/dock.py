@@ -45,6 +45,7 @@ from safe_qgis.utilities.utilities import (
     viewport_geo_array,
     read_impact_layer)
 from safe_qgis.utilities.defaults import (
+    limitations,
     disclaimer,
     default_organisation_logo_path)
 from safe_qgis.utilities.styling import (
@@ -423,21 +424,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         message.add(m.Heading('Limitations', **WARNING_STYLE))
         caveat_list = m.NumberedList()
-        caveat_list.add(
-            self.tr('InaSAFE is not a hazard modelling tool.'))
-        caveat_list.add(
-            self.tr(
-                'Polygon area analysis (such as land use) is not yet '
-                'supported.'))
-        caveat_list.add(
-            self.tr(
-                'Population density data (raster) must be provided in WGS84 '
-                'geographic coordinates.'))
-        caveat_list.add(
-            self.tr(
-                'Population by administration boundary is not yet supported.'))
-        caveat_list.add(disclaimer())
+        for limitation in limitations():
+            caveat_list.add(limitation)
         message.add(caveat_list)
+
+        message.add(m.Heading('Disclaimer', **WARNING_STYLE))
+        message.add(m.Paragraph(disclaimer()))
+
         return message
 
     def ready_message(self):
