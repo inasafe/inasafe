@@ -179,7 +179,6 @@ def get_question_text(constant):
 
     :returns: The value of the constant or red error message.
     :rtype: string
-
     """
     try:
         return eval(constant)
@@ -361,7 +360,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
 
     # noinspection PyPep8Naming,PyMethodMayBeStatic
-    def on_cboFemaleRatioAttribute_currentIndexChanged(self, index=None):
+    def on_cboFemaleRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the female ratio attribute is changed.
 
         When the use changes the female ratio attribute
@@ -379,7 +378,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.dsbFemaleRatioDefault.setEnabled(False)
 
     # noinspection PyPep8Naming,PyMethodMayBeStatic
-    def on_cboYouthRatioAttribute_currentIndexChanged(self, index=None):
+    def on_cboYouthRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the youth ratio attribute is changed.
 
         When the use changes the youth ratio attribute
@@ -397,7 +396,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.dsbYouthRatioDefault.setEnabled(False)
 
     # noinspection PyPep8Naming,PyMethodMayBeStatic
-    def on_cboAdultRatioAttribute_currentIndexChanged(self, index=None):
+    def on_cboAdultRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the adult ratio attribute is changed.
 
         When the use changes the adult ratio attribute
@@ -415,7 +414,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.dsbAdultRatioDefault.setEnabled(False)
 
     # noinspection PyPep8Naming,PyMethodMayBeStatic
-    def on_cboElderlyRatioAttribute_currentIndexChanged(self, index=None):
+    def on_cboElderlyRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the adult ratio attribute is changed.
 
         When the use changes the elderly ratio attribute
@@ -655,7 +654,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def go_to_step(self, step):
         """Set the stacked widget to the given step.
 
-        :param step: The step number to be moved to
+        :param step: The step number to be moved to.
         :type step: int
         """
         self.stackedWidget.setCurrentIndex(step - 1)
@@ -719,10 +718,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def is_ready_to_next_step(self, step):
         """Check if the present step is complete.
 
-        :param step: The present step number
+        :param step: The present step number.
         :type step: int
 
-        :returns: True if new step may be enabled
+        :returns: True if new step may be enabled.
         :rtype: bool
         """
         if step == step_category:
@@ -748,10 +747,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def compute_next_step(self, current_step):
         """Determine the next step to be switched to.
 
-        :param current_step: The present step number
+        :param current_step: The present step number.
         :type current_step: int
 
-        :returns: The next step number or None if finished
+        :returns: The next step number or None if finished.
         :rtype: int
         """
         if current_step == step_category:
@@ -794,10 +793,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def compute_previous_step(self, current_step):
         """Determine the previous step to be switched to (by the Back button).
 
-        :param current_step: The present step number
+        :param current_step: The present step number.
         :type current_step: int
 
-        :returns: The previous step number
+        :returns: The previous step number.
         :rtype: int
         """
         if current_step == step_source:
@@ -923,6 +922,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if category_keyword in categories:
                 self.lstCategories.setCurrentRow(
                     categories.index(category_keyword))
+
         elif current_step == step_subcategory:
             subcategory_keyword = self.get_existing_keyword('subcategory')
             if subcategory_keyword is None:
@@ -934,6 +934,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if subcategory_keyword in subcategories:
                 self.lstSubcategories.setCurrentRow(
                     subcategories.index(subcategory_keyword))
+
         elif current_step == step_unit:
             unit_keyword = self.get_existing_keyword('unit')
             if unit_keyword is None:
@@ -947,6 +948,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 units.append(str(self.lstUnits.item(index).text()))
             if unit_name in units:
                 self.lstUnits.setCurrentRow(units.index(unit_name))
+
         elif current_step == step_field:
             if self.selected_category()['name'] != 'aggregation':
                 field = self.get_existing_keyword('field')
@@ -959,6 +961,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 fields.append(str(self.lstFields.item(index).text()))
             if field in fields:
                 self.lstFields.setCurrentRow(fields.index(field))
+
         elif current_step == step_classify:
             unit_keyword = self.get_existing_keyword('unit')
             unit_name = metadata.get_name(unit_keyword)
@@ -999,6 +1002,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     unassigned_values += [value_as_string]
             self.populate_classified_values(
                 unassigned_values, assigned_values, default_classes)
+
         elif current_step == step_aggregation:
             self.set_existing_aggregation_attributes()
 
@@ -1011,6 +1015,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.leSource_date.setText(source_date)
             source_url = self.get_existing_keyword('source_url')
             self.leSource_url.setText(source_url)
+
         elif current_step == step_title:
             title = self.layer.name()
             self.leTitle.setText(title)
@@ -1042,14 +1047,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             female_ratio_attribute_key,
             youth_ratio_attribute_key,
             adult_ratio_attribute_key,
-            elderly_ratio_default_key
-        ]
+            elderly_ratio_default_key]
+
         cbo_ratio_attributes = [
             self.cboFemaleRatioAttribute,
             self.cboYouthRatioAttribute,
             self.cboAdultRatioAttribute,
-            self.cboElderlyRatioAttribute
-        ]
+            self.cboElderlyRatioAttribute]
 
         for i in range(len(cbo_ratio_attributes)):
             self.populate_cbo_aggregation_attribute(
@@ -1105,7 +1109,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         :param default_classes: Default classes from unit.
         :type default_classes: list
-
         """
         # Populate the unique values list
         self.lstUniqueValues.clear()
