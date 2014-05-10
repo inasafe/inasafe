@@ -556,31 +556,35 @@ def create_classes(class_list, num_classes):
     min_value = numpy.nanmin(unique_class_list)
     max_value = numpy.nanmax(unique_class_list)
 
-    # If min_value == 0, get the 2nd smallest number
-    if min_value == 0:
-        if len(unique_class_list) > 1:
-            index = 1
-        else:
-            # class_list can't be zero impact, so len(class_list) must be 1.
-            # Then it's safe to make this assignment.
-            index = 0
-        unique_class_list.sort()
-        min_value = unique_class_list[index]
-
-    # To prevent numpy.linspace generate the same classes for all
     if min_value == max_value:
+        # noinspection PyTypeChecker,PyUnresolvedReferences
+        classes = numpy.linspace(0, max_value, num_classes + 1).tolist()
+        return classes[1:]
+
+    # Get the 2nd smallest number
+    if len(unique_class_list) > 1:
+        index = 1
+    else:
+        # class_list can't be zero impact, so len(class_list) must be 1.
+        # Then it's safe to make this assignment.
+        index = 0
+    unique_class_list.sort()
+    second_min_value = unique_class_list[index]
+
+    # If second_min_value <= 1, then create class 1: 0-1
+    # Else create class 1: 0 - second_min_value
+    if second_min_value <= 1:
         min_value = 1
-
-    # To classify the 2nd smallest number not to the 1st class
-    if min_value != 1:
-        min_value -= 1
-
-    # In case the impact is all 1
-    if max_value == 1:
-        min_value = 0
+    else:
+        min_value = math.floor(second_min_value)
+        # To get the 2nd smallest number into the 2nd class, we need to make
+        # the range from class 1 into 0 - (second_min_value - 1)
+        if min_value != 1:
+            min_value -= 1
 
     # noinspection PyTypeChecker,PyUnresolvedReferences
     classes = numpy.linspace(min_value, max_value, num_classes).tolist()
+
     return classes
 
 
