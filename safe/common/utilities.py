@@ -542,20 +542,45 @@ def create_classes(class_list, num_classes):
     """Create classes from my_list.
 
     Classes will use linspace from numpy.
-    It will extend from min and max of elements in my_list. If min == 0,
+    It will extend from min and max of elcements in my_list. If min == 0,
     it won't be included. The number of classes is equal to num_classes.
     Please see the unit test for this function for more explanation
+
+    :param class_list: All values as a basis to create classes.
+    :type class_list: list
+
+    :param num_classes: The number of class to hold all values in class_list.
+    :type num_classes: int
     """
-    min_value = numpy.nanmin(class_list)
-    max_value = numpy.nanmax(class_list)
-    print 'min_value, max_value: ', min_value, max_value
+    unique_class_list = list(set(class_list))
+    min_value = numpy.nanmin(unique_class_list)
+    max_value = numpy.nanmax(unique_class_list)
+
+    # If min_value == 0, get the 2nd smallest number
     if min_value == 0:
-        num_classes += 1
-        # noinspection PyTypeChecker,PyUnresolvedReferences
-    # noinspection PyUnresolvedReferences,PyTypeChecker
+        if len(unique_class_list) > 1:
+            index = 1
+        else:
+            # class_list can't be zero impact, so len(class_list) must be 1.
+            # Then it's safe to make this assignment.
+            index = 0
+        unique_class_list.sort()
+        min_value = unique_class_list[index]
+
+    # To prevent numpy.linspace generate the same classes for all
+    if min_value == max_value:
+        min_value = 1
+
+    # To classify the 2nd smallest number not to the 1st class
+    if min_value != 1:
+        min_value -= 1
+
+    # In case the impact is all 1
+    if max_value == 1:
+        min_value = 0
+
+    # noinspection PyTypeChecker,PyUnresolvedReferences
     classes = numpy.linspace(min_value, max_value, num_classes).tolist()
-    if min_value == 0:
-        classes = classes[1:]
     return classes
 
 
