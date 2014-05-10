@@ -539,10 +539,10 @@ def unhumanize_number(number):
 
 
 def create_classes(class_list, num_classes):
-    """Create classes from my_list.
+    """Create classes from class_list.
 
     Classes will use linspace from numpy.
-    It will extend from min and max of elcements in my_list. If min == 0,
+    It will extend from min and max of elements in class_list. If min == 0,
     it won't be included. The number of classes is equal to num_classes.
     Please see the unit test for this function for more explanation
 
