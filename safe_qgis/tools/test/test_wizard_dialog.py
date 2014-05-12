@@ -709,6 +709,33 @@ class WizardDialogTest(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
+    def test_point_layer(self):
+        """Wizard for point layer."""
+        layer = clone_shp_layer(
+            name='Marapi',
+            include_keywords=True,
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose hazard go to subcategory  step
+        dialog.pbnNext.click()  # choose volcano  go to source step
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to title step
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_title
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        remove_temp_file(layer.source())
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

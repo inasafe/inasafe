@@ -768,7 +768,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_field
         elif current_step == step_subcategory:
             subcategory = self.selected_subcategory()
-            if IFM().units_for_layer(
+            # skip field and classify step if point layer and it's a volcano
+            if self.data_type == 'point' and subcategory['id'] == 'volcano':
+                new_step = step_source
+            elif IFM().units_for_layer(
                     subcategory['id'], self.layer_type, self.data_type):
                 new_step = step_unit
             else:
@@ -798,6 +801,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Skip the field (and classify) tab if raster layer
         if new_step == step_field and is_raster_layer(self.layer):
             new_step = step_source
+
         return new_step
 
     def compute_previous_step(self, current_step):
