@@ -539,23 +539,50 @@ def unhumanize_number(number):
 
 
 def create_classes(class_list, num_classes):
-    """Create classes from my_list.
+    """Create classes from class_list.
 
     Classes will use linspace from numpy.
-    It will extend from min and max of elements in my_list. If min == 0,
+    It will extend from min and max of elements in class_list. If min == 0,
     it won't be included. The number of classes is equal to num_classes.
     Please see the unit test for this function for more explanation
+
+    :param class_list: All values as a basis to create classes.
+    :type class_list: list
+
+    :param num_classes: The number of class to hold all values in class_list.
+    :type num_classes: int
     """
-    min_value = numpy.nanmin(class_list)
-    max_value = numpy.nanmax(class_list)
-    print 'min_value, max_value: ', min_value, max_value
-    if min_value == 0:
-        num_classes += 1
+    unique_class_list = list(set(class_list))
+    min_value = numpy.nanmin(unique_class_list)
+    max_value = numpy.nanmax(unique_class_list)
+
+    # If min_value == max_value (it only has 1 unique class), or
+    # max_value <= 1.0, then we will populate the classes from 0 - max_value
+    if (min_value == max_value) or (max_value <= 1):
         # noinspection PyTypeChecker,PyUnresolvedReferences
-    # noinspection PyUnresolvedReferences,PyTypeChecker
-    classes = numpy.linspace(min_value, max_value, num_classes).tolist()
-    if min_value == 0:
-        classes = classes[1:]
+        classes = numpy.linspace(0, max_value, num_classes + 1).tolist()
+        return classes[1:]
+
+    # Else from above cases, we will populate the 1st class by these rules:
+    # 1. The 1st class range: 0 - math.ceil(the smallest value that is not 0)
+    # 2. If math.ceil(the smallest value that's not 0) != 1, then subtract by
+    #    1 so that the this smallest value goes into the 2nd class.
+    # 3. (AG) Yes! The idea is to classify the non affected value to the 1st
+    #    class (see #637, #702)
+
+    # Now, Get the smallest value that is not 0
+    non_zero_min_value = max_value
+    for value in unique_class_list:
+        if value < non_zero_min_value and value != 0:
+            non_zero_min_value = value
+
+    lower_bound = math.ceil(non_zero_min_value)
+    if lower_bound != 1:
+        lower_bound -= 1
+
+    # noinspection PyTypeChecker,PyUnresolvedReferences
+    classes = numpy.linspace(lower_bound, max_value, num_classes).tolist()
+
     return classes
 
 
