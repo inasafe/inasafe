@@ -1037,21 +1037,29 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if female_ratio_default:
             self.dsbFemaleRatioDefault.setValue(
                 float(female_ratio_default))
+        else:
+            self.dsbFemaleRatioDefault.setValue(DEFAULTS['FEMALE_RATIO'])
 
         youth_ratio_default = self.get_existing_keyword(
             youth_ratio_default_key)
         if youth_ratio_default:
             self.dsbYouthRatioDefault.setValue(float(youth_ratio_default))
+        else:
+            self.dsbYouthRatioDefault.setValue(DEFAULTS['YOUTH_RATIO'])
 
         adult_ratio_default = self.get_existing_keyword(
             adult_ratio_default_key)
         if adult_ratio_default:
             self.dsbAdultRatioDefault.setValue(float(adult_ratio_default))
+        else:
+            self.dsbAdultRatioDefault.setValue(DEFAULTS['ADULT_RATIO'])
 
         elderly_ratio_default = self.get_existing_keyword(
             elderly_ratio_default_key)
         if elderly_ratio_default:
             self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
+        else:
+            self.dsbElderlyRatioDefault.setValue(DEFAULTS['ELDERLY_RATIO'])
 
         ratio_attribute_keys = [
             female_ratio_attribute_key,

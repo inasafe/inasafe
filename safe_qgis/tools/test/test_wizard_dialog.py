@@ -605,6 +605,58 @@ class WizardDialogTest(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
+    def test_default_attributes_value(self):
+        layer = clone_shp_layer(
+            name='kecamatan_jakarta',
+            include_keywords=True,
+            directory=BOUNDDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose aggregation go to field step
+        dialog.pbnNext.click()  # choose KEC_NAME go to aggregation step
+
+        ratio_attribute = dialog.cboFemaleRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        ratio_attribute = dialog.cboElderlyRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        ratio_attribute = dialog.cboAdultRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        ratio_attribute = dialog.cboYouthRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        default_value = dialog.dsbFemaleRatioDefault.value()
+        expected_default_value = 0.50
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        default_value = dialog.dsbYouthRatioDefault.value()
+        expected_default_value = 0.26
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        default_value = dialog.dsbAdultRatioDefault.value()
+        expected_default_value = 0.66
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        default_value = dialog.dsbElderlyRatioDefault.value()
+        expected_default_value = 0.08
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        remove_temp_file(layer.source())
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')
