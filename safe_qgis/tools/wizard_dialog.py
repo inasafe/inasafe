@@ -681,12 +681,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if new_step == step_subcategory:
             self.update_subcategory_tab()
             self.set_existing_options(step_subcategory)
+            self.auto_select_one_item(self.lstSubcategories)
         elif new_step == step_unit:
             self.update_unit_tab()
             self.set_existing_options(step_unit)
+            self.auto_select_one_item(self.lstUnits)
         elif new_step == step_field:
             self.update_field_tab()
             self.set_existing_options(step_field)
+            self.auto_select_one_item(self.lstFields)
         elif new_step == step_classify:
             self.update_classify_tab()
             self.set_existing_options(step_classify)
@@ -1192,3 +1195,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.leSource_date.setToolTip(date_tooltip)
         self.leSource_scale.setToolTip(scale_tooltip)
         self.leSource_url.setToolTip(url_tooltip)
+
+    # noinspection PyUnresolvedReferences
+    def auto_select_one_item(self, list_widget):
+        """Select item in the list in list_widget if it's the only item.
+
+        :param list_widget: The list widget that want to be checked.
+        :type list_widget: QListWidget
+        """
+        if list_widget.count() == 1 and list_widget.currentRow() == -1:
+            list_widget.setCurrentRow(0)

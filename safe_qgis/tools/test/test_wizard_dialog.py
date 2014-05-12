@@ -736,6 +736,33 @@ class WizardDialogTest(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
+    def test_auto_select_one_item(self):
+        """Test auto select if there is only one item in a list."""
+        layer = clone_shp_layer(
+            name='Marapi_evac_zone_3000m',
+            include_keywords=True,
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose hazard go to subcategory  step
+        dialog.pbnNext.click()  # choose volcano  go to unit  step
+
+        message = 'It should auto select, but it does not.'
+        self.assertTrue(dialog.lstUnits.currentRow() == 0, message)
+        num_item = dialog.lstUnits.count()
+        message = 'There is should be only one item, I got %s' % num_item
+        self.assertTrue(num_item == 1, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to field  step
+        message = 'It should auto select, but it does not.'
+        self.assertTrue(dialog.lstFields.currentRow() == 0, message)
+        num_item = dialog.lstFields.count()
+        message = 'There is should be only one item, I got %s' % num_item
+        self.assertTrue(num_item == 1, message)
+
+        remove_temp_file(layer.source())
+
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
