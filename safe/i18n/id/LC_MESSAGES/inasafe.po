@@ -16,6 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Language: id_ID\n"
+"X-Source-Language: en\n"
 
 #: safe/common/dynamic_translations.py:101
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:131
@@ -94,8 +97,8 @@ msgstr "Ditutup sementara"
 
 #, python-format
 msgid ""
-"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of &#58;"
-"</b><br><br><p>"
+"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of "
+"&#58;</b><br><br><p>"
 msgstr ""
 "<b>Apabila dalam kasus \"%s\" merupakan perkiraan dampak dengan \"%s\" "
 "kemungkinan &#58;</b><br><br><p>"
@@ -194,8 +197,8 @@ msgstr "Berdasarkan BNPB Perka 2 - 2012"
 msgid ""
 "<b>In case of \"%s\" the estimated impact to \"%s\" is&#58;</b><br><br><p>"
 msgstr ""
-"<b>Dalam kasus \"%s\" estimasi pengaruhnya terhadap \"%s\" is&#58;</"
-"b><br><br><p>"
+"<b>Dalam kasus \"%s\" estimasi pengaruhnya terhadap \"%s\" "
+"is&#58;</b><br><br><p>"
 
 msgid ""
 "- Levels of impact are defined by post 2009 Padang earthquake survey "
@@ -244,14 +247,17 @@ msgstr "Ketinggian Tsunami"
 
 #, python-format
 msgid ""
-"<table border=\"0\" width=\"320px\">   <tr><th><b>%s</b></th><th><b>%s</b></"
-"th></tr>   <tr></tr>   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>   <tr><td>"
-"%s&#58;</td><td>%s&#58;</td></tr>   <tr><td>%s&#58;</td><td>%s&#58;</td></"
-"tr></table>"
+"<table border=\"0\" width=\"320px\">   "
+"<tr><th><b>%s</b></th><th><b>%s</b></th></tr>   <tr></tr>   "
+"<tr><td>%s&#58;</td><td>%s&#58;</td></tr>   "
+"<tr><td>%s&#58;</td><td>%s&#58;</td></tr>   "
+"<tr><td>%s&#58;</td><td>%s&#58;</td></tr></table>"
 msgstr ""
-"<table border=\"0\" width=\"320px\"> <tr><th><b>%s</b></th><th><b>%s</b></"
-"th></tr> <tr></tr> <tr><td>%s&#58;</td><td>%s&#58;</td></tr> <tr><td>%s&#58;"
-"</td><td>%s&#58;</td></tr> <tr><td>%s&#58;</td><td>%s&#58;</td></tr></table>"
+"<table border=\"0\" width=\"320px\"> "
+"<tr><th><b>%s</b></th><th><b>%s</b></th></tr> <tr></tr> "
+"<tr><td>%s&#58;</td><td>%s&#58;</td></tr> "
+"<tr><td>%s&#58;</td><td>%s&#58;</td></tr> "
+"<tr><td>%s&#58;</td><td>%s&#58;</td></tr></table>"
 
 msgid "Be inundated"
 msgstr "Terkena banjir"
@@ -936,8 +942,8 @@ msgstr ""
 #: safe/impact_functions/core.py:462
 #, python-format
 msgid ""
-"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
-"%(impact)s</i>"
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might "
+"<i>%(impact)s</i>"
 msgstr ""
 "Apabila terjadi <i>%(hazard)s</i> berapa banyak <i>%(exposure)s</i> yang "
 "mungkin <i>%(impact)s</i>"
@@ -989,8 +995,7 @@ msgstr ""
 "Banjir di Jakarta di wilayah RW yang telah teridentifikasi sebagai rawan "
 "banjir"
 
-#: safe/common/dynamic_translations.py:83
-#: safe/common/dynamic_translations.py:94
+#: safe/common/dynamic_translations.py:83 safe/common/dynamic_translations.py:94
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr "Gempa bumi di Yogyakarta seperti pada tahun 2006"
 
@@ -2063,8 +2068,8 @@ msgstr "Jarak [km]"
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:31
 msgid ""
-"To assess the impacts of categorized hazard in raster format on structure/"
-"building raster layer."
+"To assess the impacts of categorized hazard in raster format on "
+"structure/building raster layer."
 msgstr ""
 "Untuk menghitung dampak ancaman yang dikategorikan dalam format raster pada "
 "layer data raster struktur/bangunan."
@@ -2263,8 +2268,8 @@ msgstr ""
 #: safe/impact_functions/earthquake/pager_earthquake_fatality_model.py:91
 msgid ""
 " * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).    Estimating "
-"casualties for large worldwide earthquakes using    an empirical approach. U."
-"S. Geological Survey Open-File    Report 2009-1136."
+"casualties for large worldwide earthquakes using    an empirical approach. "
+"U.S. Geological Survey Open-File    Report 2009-1136."
 msgstr ""
 "Jaiswal, K. S., Wald, D. J., dan Hearne, M. (2009a). Estimating casualties "
 "for large worldwide earthquakes using an empirical approach. U.S. Geological "
@@ -2440,8 +2445,8 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:117
 msgid ""
-"A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
-"\" attribute and the values for it are \"Kawasan Rawan Bencana I\", "
+"A hazard vector layer can be polygon or point. If polygon, it must have "
+"\"KRB\" attribute and the values for it are \"Kawasan Rawan Bencana I\", "
 "\"Kawasan Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\" If you want "
 "to see the name of the volcano in the result, you need to add \"NAME\" "
 "attribute for point data or \"GUNUNG\" attribute for polygon data."
@@ -2488,11 +2493,11 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:125
 msgid ""
-"A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
-"\" attribute and the valuefor it are \"Kawasan Rawan Bencana I\", \"Kawasan "
-"Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\"If you want to see the "
-"name of the volcano in the result, you need to add \"NAME\" attribute for "
-"point data or \"GUNUNG\" attribute for polygon data."
+"A hazard vector layer can be polygon or point. If polygon, it must have "
+"\"KRB\" attribute and the valuefor it are \"Kawasan Rawan Bencana I\", "
+"\"Kawasan Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\"If you want "
+"to see the name of the volcano in the result, you need to add \"NAME\" "
+"attribute for point data or \"GUNUNG\" attribute for polygon data."
 msgstr ""
 "Layer data vektor ancaman dapat berupa poligon atau titik. Jika poligon, "
 "maka harus memiliki attribut \"KRB\" dan nilai untuk itu adalah  \"Kawasan "
@@ -2940,7 +2945,7 @@ msgstr ""
 
 #: safe/common/dynamic_translations.py:160
 msgid "Elderly ratio"
-msgstr ""
+msgstr "Rasio orang tua"
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:61
 msgid "Earthquake Building Impact Function"
@@ -3267,6 +3272,6 @@ msgstr ""
 
 #: safe/metadata.py:225
 msgid ""
-"This is a ternary description for an area. The area is either has <b>low</"
-"b>, <b>medium</b>, or <b>high</b> impact from the volcano."
+"This is a ternary description for an area. The area is either has "
+"<b>low</b>, <b>medium</b>, or <b>high</b> impact from the volcano."
 msgstr ""
