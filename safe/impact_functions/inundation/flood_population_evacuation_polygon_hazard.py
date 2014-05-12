@@ -360,7 +360,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Create style
         # Define classes for legend for flooded population counts
-        colours = ['#08FFDA', '#38A800', '#79C900', '#CEED00',
+        colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
 
         population_counts = [x['population'] for x in new_attributes]

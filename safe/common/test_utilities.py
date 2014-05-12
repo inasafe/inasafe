@@ -195,19 +195,45 @@ class UtilitiesTest(unittest.TestCase):
     def test_create_classes(self):
         """Test create_classes.
         """
-        my_list = [0, 1, 4, 2, 9, 2, float('nan')]
+        # Normal case
+        class_list = [0, 1, 4, 2, 9, 2, float('nan')]
         num_classes = 2
-        my_expected = [4.5, 9]
-        my_result = create_classes(my_list, num_classes)
-        assert my_result == my_expected, ' %s is not same with %s' % (
-            my_result, my_expected)
+        expected_classes = [1.0, 9.0]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
 
-        my_list = [1, 4, 2, 9, 2, float('nan')]
-        num_classes = 2
-        my_expected = [1, 9]
-        my_result = create_classes(my_list, num_classes)
-        assert my_result == my_expected, ' %s is not same with %s' % (
-            my_result, my_expected)
+        # There's only 1 value
+        class_list = [6]
+        num_classes = 3
+        expected_classes = [2.0, 4.0, 6.0]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
+
+        # Max value <= 1.0
+        class_list = [0.1, 0.3, 0.9]
+        num_classes = 3
+        expected_classes = [0.3, 0.6, 0.9]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
+
+        # There are only 2 values
+        class_list = [2, 6]
+        num_classes = 3
+        expected_classes = [1.0, 3.5, 6.0]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
+
+        # Another 2 values
+        class_list = [2.5, 6]
+        num_classes = 3
+        expected_classes = [2.0, 4.0, 6.0]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
 
     def test_create_label(self):
         """Test create label.
