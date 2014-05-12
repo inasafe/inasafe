@@ -235,7 +235,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
         except (HashNotFoundError,
-                Exception,
                 OperationalError,
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
