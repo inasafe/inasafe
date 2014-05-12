@@ -1158,12 +1158,26 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_tool_tip(self):
         """Set tool tip as helper text for some objects."""
-        self.lblSource.setToolTip(self.tr('Title of the layer.'))
-        self.lblSource.setToolTip(self.tr(
+
+        title_tooltip = self.tr('Title of the layer.')
+        source_tooltip = self.tr(
             'Please record who is the custodian of this layer i.e. '
-            'OpenStreetMap URL: Does the custodians have their own website '
-            'i.e. www.openstreetmap.org'))
-        self.lblDate.setToolTip(self.tr(
-            'When was this data collected or downloaded i.e. 1-May-2014'))
-        self.lblScale.setToolTip(self.tr(
-            'What is the scale of this layer?.'))
+            'OpenStreetMap')
+        date_tooltip = self.tr(
+            'When was this data collected or downloaded i.e. 1-May-2014')
+        scale_tooltip = self.tr('What is the scale of this layer?')
+        url_tooltip = self.tr(
+            'Does the custodians have their own website '
+            'i.e. www.openstreetmap.org')
+
+        self.lblTitle.setToolTip(title_tooltip)
+        self.lblSource.setToolTip(source_tooltip)
+        self.lblDate.setToolTip(date_tooltip)
+        self.lblScale.setToolTip(scale_tooltip)
+        self.lblURL.setToolTip(url_tooltip)
+
+        self.leTitle.setToolTip(title_tooltip)
+        self.leSource.setToolTip(source_tooltip)
+        self.leSource_date.setToolTip(date_tooltip)
+        self.leSource_scale.setToolTip(scale_tooltip)
+        self.leSource_url.setToolTip(url_tooltip)
