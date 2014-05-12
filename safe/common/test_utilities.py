@@ -195,9 +195,42 @@ class UtilitiesTest(unittest.TestCase):
     def test_create_classes(self):
         """Test create_classes.
         """
+        # Normal case
         class_list = [0, 1, 4, 2, 9, 2, float('nan')]
         num_classes = 2
         expected_classes = [1.0, 9.0]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
+
+        # There's only 1 value
+        class_list = [6]
+        num_classes = 3
+        expected_classes = [2.0, 4.0, 6.0]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
+
+        # Max value <= 1.0
+        class_list = [0.1, 0.3, 0.9]
+        num_classes = 3
+        expected_classes = [0.3, 0.6, 0.9]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
+
+        # There are only 2 values
+        class_list = [2, 6]
+        num_classes = 3
+        expected_classes = [1.0, 3.5, 6.0]
+        result = create_classes(class_list, num_classes)
+        message = '%s is not same with %s' % (result, expected_classes)
+        self.assertEqual(result, expected_classes, message)
+
+        # Another 2 values
+        class_list = [2.5, 6]
+        num_classes = 3
+        expected_classes = [2.0, 4.0, 6.0]
         result = create_classes(class_list, num_classes)
         message = '%s is not same with %s' % (result, expected_classes)
         self.assertEqual(result, expected_classes, message)

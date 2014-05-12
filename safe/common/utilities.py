@@ -556,34 +556,32 @@ def create_classes(class_list, num_classes):
     min_value = numpy.nanmin(unique_class_list)
     max_value = numpy.nanmax(unique_class_list)
 
-    if min_value == max_value:
+    # If min_value == max_value (it only has 1 unique class), or
+    # max_value <= 1.0, then we will populate the classes from 0 - max_value
+    if (min_value == max_value) or (max_value <= 1):
         # noinspection PyTypeChecker,PyUnresolvedReferences
         classes = numpy.linspace(0, max_value, num_classes + 1).tolist()
         return classes[1:]
 
-    # Get the 2nd smallest number
-    if len(unique_class_list) > 1:
-        index = 1
-    else:
-        # class_list can't be zero impact, so len(class_list) must be 1.
-        # Then it's safe to make this assignment.
-        index = 0
-    unique_class_list.sort()
-    second_min_value = unique_class_list[index]
+    # Else from above cases, we will populate the 1st class by these rules:
+    # 1. The 1st class range: 0 - math.ceil(the smallest value that is not 0)
+    # 2. If math.ceil(the smallest value that's not 0) != 1, then subtract by
+    #    1 so that the this smallest value goes into the 2nd class.
+    # 3. (AG) Yes! The idea is to classify the non affected value to the 1st
+    #    class (see #637, #702)
 
-    # If second_min_value <= 1, then create class 1: 0-1
-    # Else create class 1: 0 - second_min_value
-    if second_min_value <= 1:
-        min_value = 1
-    else:
-        min_value = math.floor(second_min_value)
-        # To get the 2nd smallest number into the 2nd class, we need to make
-        # the range from class 1 into 0 - (second_min_value - 1)
-        if min_value != 1:
-            min_value -= 1
+    # Now, Get the smallest value that is not 0
+    non_zero_min_value = max_value
+    for value in unique_class_list:
+        if value < non_zero_min_value and value != 0:
+            non_zero_min_value = value
+
+    lower_bound = math.ceil(non_zero_min_value)
+    if lower_bound != 1:
+        lower_bound -= 1
 
     # noinspection PyTypeChecker,PyUnresolvedReferences
-    classes = numpy.linspace(min_value, max_value, num_classes).tolist()
+    classes = numpy.linspace(lower_bound, max_value, num_classes).tolist()
 
     return classes
 
