@@ -361,6 +361,6 @@ def get_name(unit_id):
         try:
             unit = eval('unit_%s' % unit_id.lower())
             unit_name = unit['name']
-        except (KeyError, NameError):
+        except (KeyError, NameError, AttributeError):
             return None
     return unit_name

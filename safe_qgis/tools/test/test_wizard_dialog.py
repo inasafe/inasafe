@@ -37,9 +37,12 @@ from qgis.core import QgsVectorLayer
 
 from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import unique_filename
-from safe_qgis.safe_interface import TESTDATA
-from safe_qgis.safe_interface import BOUNDDATA
-from safe_qgis.tools.wizard_dialog import WizardDialog, step_source, step_title
+from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA
+from safe_qgis.tools.wizard_dialog import (
+    WizardDialog,
+    step_source,
+    step_title,
+    step_classify)
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 
@@ -606,6 +609,7 @@ class WizardDialogTest(unittest.TestCase):
         remove_temp_file(layer.source())
 
     def test_default_attributes_value(self):
+        """Checking that default attributes is set to the CIA's one."""
         layer = clone_shp_layer(
             name='kecamatan_jakarta',
             include_keywords=True,
@@ -657,6 +661,53 @@ class WizardDialogTest(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
+    def test_unknown_unit(self):
+        """Checking that it works for unknown unit."""
+        layer = clone_shp_layer(
+            name='Marapi_evac_zone_3000m',
+            include_keywords=True,
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose hazard go to subcategory  step
+        dialog.pbnNext.click()  # choose volcano  go to unit step
+        dialog.lstUnits.setCurrentRow(0)  # Choose volcano categorical
+        expected_unit = 'volcano categorical'
+        unit = dialog.lstUnits.currentItem().text()
+        message = ('Expected %s but I got %s' % (
+            expected_unit, unit))
+        self.assertEqual(expected_unit, unit, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to field step
+        dialog.lstFields.setCurrentRow(0)  # Choose Radius
+        expected_fields = 'Radius'
+        fields = dialog.lstFields.currentItem().text()
+        message = ('Expected %s but I got %s' % (
+            expected_fields, fields))
+        self.assertEqual(expected_fields, fields, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to classify step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_classify
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to source step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to title step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_title
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        remove_temp_file(layer.source())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')
