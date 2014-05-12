@@ -40,8 +40,8 @@ class ImpactFunctionMetadata():
           > [structure]
 
     .. note:: We already know that for an IF only hazard and exposure
-       categories are allowed, so there is no explicit method for that (we could
-       change that later.
+       categories are allowed, so there is no explicit method for that
+       (we could change that later).
     """
 
     def __init__(self):
