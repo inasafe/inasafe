@@ -38,7 +38,8 @@ from qgis.core import QgsVectorLayer
 from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import unique_filename
 from safe_qgis.safe_interface import TESTDATA
-from safe_qgis.tools.wizard_dialog import WizardDialog
+from safe_qgis.safe_interface import BOUNDDATA
+from safe_qgis.tools.wizard_dialog import WizardDialog, step_source, step_title
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 
@@ -58,14 +59,18 @@ def clone_csv_layer():
     return layer
 
 
-def clone_shp_layer(name='tsunami_polygon', include_keywords=False):
+def clone_shp_layer(
+        name='tsunami_polygon', include_keywords=False, directory=TESTDATA):
     """Helper function that copies a test shplayer and returns it.
 
-    :param name: The default name for the shp layer
+    :param name: The default name for the shp layer.
     :type name: str
 
-    :param include_keywords: include keywords file if True
+    :param include_keywords: Include keywords file if True.
     :type include_keywords: bool
+
+    :param directory: Directory where the file is located.
+    :type directory: str
 
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
@@ -74,7 +79,7 @@ def clone_shp_layer(name='tsunami_polygon', include_keywords=False):
     temp_path = unique_filename()
     # copy to temp file
     for ext in extensions:
-        src_path = os.path.join(TESTDATA, name + ext)
+        src_path = os.path.join(directory, name + ext)
         if os.path.exists(src_path):
             trg_path = temp_path + ext
             shutil.copy2(src_path, trg_path)
@@ -98,6 +103,7 @@ def remove_temp_file(file_path):
             os.remove(file_path + ext)
 
 
+# noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
 
     """Test the InaSAFE wizard GUI"""
@@ -522,7 +528,9 @@ class WizardDialogTest(unittest.TestCase):
     def test_existing_aggregation_keywords(self):
         """Test for case existing keywords in aggregation layer."""
         layer = clone_shp_layer(
-            name='kabupaten_jakarta_singlepart', include_keywords=True)
+            name='kabupaten_jakarta',
+            include_keywords=True,
+            directory=BOUNDDATA)
         dialog = WizardDialog(PARENT, IFACE, None, layer)
         category = dialog.lstCategories.currentItem().text()
         expected_category = 'aggregation'
@@ -537,6 +545,65 @@ class WizardDialogTest(unittest.TestCase):
             expected_aggregation_attribute, aggregation_attribute)
         self.assertEqual(
             expected_aggregation_attribute, aggregation_attribute, message)
+
+        dialog.pbnNext.click()
+
+        expected_aggregation_attributes = {
+            'elderly ratio attribute': 'Use default',
+            'youth ratio default': 0.26,
+            'elderly ratio default': 0.08,
+            'adult ratio attribute': 'Use default',
+            'female ratio attribute': 'Use default',
+            'youth ratio attribute': 'Use default',
+            'female ratio default': 0.5,
+            'adult ratio default': 0.66
+        }
+        aggregation_attributes = dialog.get_aggregation_attributes()
+        message = 'Expected %s but I got %s.' % (
+            expected_aggregation_attributes, aggregation_attributes)
+        self.assertDictEqual(
+            expected_aggregation_attributes, aggregation_attributes, message)
+        dialog.cboFemaleRatioAttribute.setCurrentIndex(2)
+        expected_female_attribute_key = 'PEREMPUAN'
+        female_attribute_key = dialog.cboFemaleRatioAttribute.currentText()
+        message = 'Expected %s but I got %s.' % (
+            expected_female_attribute_key, female_attribute_key)
+        self.assertEqual(
+            expected_female_attribute_key, female_attribute_key, message)
+        is_enabled = dialog.dsbFemaleRatioDefault.isEnabled()
+        message = 'Expected disabled but I got enabled.'
+        self.assertEqual(is_enabled, False, message)
+
+        remove_temp_file(layer.source())
+
+    # noinspection PyTypeChecker
+    def test_unit_no_type(self):
+        """Test for case existing no type unit for structure."""
+        layer = clone_shp_layer(
+            name='building_Maumere',
+            include_keywords=True,
+            directory=TESTDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # go to subcategory step 2
+        dialog.pbnNext.click()  # go to unit step 3
+        dialog.lstUnits.setCurrentRow(1)  # select no type
+        dialog.pbnNext.click()  # should be in step source
+        current_index = dialog.stackedWidget.currentIndex() + 1
+        expected_current_index = step_source
+        message = 'Expected %s but I got %s.' % (
+            expected_current_index, current_index)
+        self.assertEqual(expected_current_index, current_index, message)
+        dialog.pbnNext.click()  # should be in step title
+        current_index = dialog.stackedWidget.currentIndex() + 1
+        expected_current_index = step_title
+        message = 'Expected %s but I got %s.' % (
+            expected_current_index, current_index)
+        self.assertEqual(expected_current_index, current_index, message)
+
+        dialog.pbnNext.click()  # finishing
+
+        remove_temp_file(layer.source())
 
 
 if __name__ == '__main__':

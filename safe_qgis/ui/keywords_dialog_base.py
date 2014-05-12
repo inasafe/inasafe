@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Thu Feb 20 13:24:44 2014
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Fri May  9 14:31:52 2014
+#      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -51,9 +51,9 @@ class Ui_KeywordsDialogBase(object):
         self.grpSimple.setObjectName(_fromUtf8("grpSimple"))
         self.gridLayout_2 = QtGui.QGridLayout(self.grpSimple)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.cboElderRatioAttribute = QtGui.QComboBox(self.grpSimple)
-        self.cboElderRatioAttribute.setObjectName(_fromUtf8("cboElderRatioAttribute"))
-        self.gridLayout_2.addWidget(self.cboElderRatioAttribute, 13, 2, 1, 1)
+        self.cboElderlyRatioAttribute = QtGui.QComboBox(self.grpSimple)
+        self.cboElderlyRatioAttribute.setObjectName(_fromUtf8("cboElderlyRatioAttribute"))
+        self.gridLayout_2.addWidget(self.cboElderlyRatioAttribute, 13, 2, 1, 1)
         self.leSource = QtGui.QLineEdit(self.grpSimple)
         self.leSource.setDragEnabled(True)
         self.leSource.setObjectName(_fromUtf8("leSource"))
@@ -124,15 +124,15 @@ class Ui_KeywordsDialogBase(object):
         self.cboAdultRatioAttribute = QtGui.QComboBox(self.grpSimple)
         self.cboAdultRatioAttribute.setObjectName(_fromUtf8("cboAdultRatioAttribute"))
         self.gridLayout_2.addWidget(self.cboAdultRatioAttribute, 11, 2, 1, 1)
-        self.dsbElderRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
-        self.dsbElderRatioDefault.setObjectName(_fromUtf8("dsbElderRatioDefault"))
-        self.gridLayout_2.addWidget(self.dsbElderRatioDefault, 14, 2, 1, 1)
-        self.lblElderRatioDefault = QtGui.QLabel(self.grpSimple)
-        self.lblElderRatioDefault.setObjectName(_fromUtf8("lblElderRatioDefault"))
-        self.gridLayout_2.addWidget(self.lblElderRatioDefault, 14, 0, 1, 1)
-        self.lblElderRatioAttribute = QtGui.QLabel(self.grpSimple)
-        self.lblElderRatioAttribute.setObjectName(_fromUtf8("lblElderRatioAttribute"))
-        self.gridLayout_2.addWidget(self.lblElderRatioAttribute, 13, 0, 1, 1)
+        self.dsbElderlyRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
+        self.dsbElderlyRatioDefault.setObjectName(_fromUtf8("dsbElderlyRatioDefault"))
+        self.gridLayout_2.addWidget(self.dsbElderlyRatioDefault, 14, 2, 1, 1)
+        self.lblElderlyRatioDefault = QtGui.QLabel(self.grpSimple)
+        self.lblElderlyRatioDefault.setObjectName(_fromUtf8("lblElderlyRatioDefault"))
+        self.gridLayout_2.addWidget(self.lblElderlyRatioDefault, 14, 0, 1, 1)
+        self.lblElderlyRatioAttribute = QtGui.QLabel(self.grpSimple)
+        self.lblElderlyRatioAttribute.setObjectName(_fromUtf8("lblElderlyRatioAttribute"))
+        self.gridLayout_2.addWidget(self.lblElderlyRatioAttribute, 13, 0, 1, 1)
         self.lblAdultRatioDefault = QtGui.QLabel(self.grpSimple)
         self.lblAdultRatioDefault.setObjectName(_fromUtf8("lblAdultRatioDefault"))
         self.gridLayout_2.addWidget(self.lblAdultRatioDefault, 12, 0, 1, 1)
@@ -270,23 +270,9 @@ class Ui_KeywordsDialogBase(object):
         KeywordsDialogBase.setTabOrder(self.radExposure, self.radPostprocessing)
         KeywordsDialogBase.setTabOrder(self.radPostprocessing, self.cboSubcategory)
         KeywordsDialogBase.setTabOrder(self.cboSubcategory, self.cboAggregationAttribute)
-
         KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboFemaleRatioAttribute)
         KeywordsDialogBase.setTabOrder(self.cboFemaleRatioAttribute, self.dsbFemaleRatioDefault)
         KeywordsDialogBase.setTabOrder(self.dsbFemaleRatioDefault, self.pbnAdvanced)
-
-        KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboYouthRatioAttribute)
-        KeywordsDialogBase.setTabOrder(self.cboYouthRatioAttribute, self.dsbYouthRatioDefault)
-        KeywordsDialogBase.setTabOrder(self.dsbYouthRatioDefault, self.pbnAdvanced)
-
-        KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboAdultRatioAttribute)
-        KeywordsDialogBase.setTabOrder(self.cboAdultRatioAttribute, self.dsbAdultRatioDefault)
-        KeywordsDialogBase.setTabOrder(self.dsbAdultRatioDefault, self.pbnAdvanced)
-
-        KeywordsDialogBase.setTabOrder(self.cboAggregationAttribute, self.cboElderRatioAttribute)
-        KeywordsDialogBase.setTabOrder(self.cboElderRatioAttribute, self.dsbElderRatioDefault)
-        KeywordsDialogBase.setTabOrder(self.dsbElderRatioDefault, self.pbnAdvanced)
-
         KeywordsDialogBase.setTabOrder(self.pbnAdvanced, self.radPredefined)
         KeywordsDialogBase.setTabOrder(self.radPredefined, self.radUserDefined)
         KeywordsDialogBase.setTabOrder(self.radUserDefined, self.cboKeyword)
@@ -315,8 +301,8 @@ class Ui_KeywordsDialogBase(object):
         self.radPostprocessing.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Postprocessing", None, QtGui.QApplication.UnicodeUTF8))
         self.lblTitle.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
         self.lblCategory.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblElderRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elder ratio default", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblElderRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elder ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblElderlyRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elderly ratio default", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblElderlyRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elderly ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
         self.lblAdultRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Adult ratio default", None, QtGui.QApplication.UnicodeUTF8))
         self.lblAdultRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Adult ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
         self.lblYouthRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Youth ratio default", None, QtGui.QApplication.UnicodeUTF8))

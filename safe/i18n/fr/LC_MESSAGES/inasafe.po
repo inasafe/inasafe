@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: safe/metadata.py:147 safe/metadata.py:203 safe/metadata.py:210
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-09 14:53+0700\n"
+"POT-Creation-Date: 2014-05-09 22:07+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +33,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:312
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:331
 #: safe/impact_functions/inundation/flood_population_evacuation.py:247
-#: safe/impact_functions/volcanic/volcano_building_impact.py:249
+#: safe/impact_functions/volcanic/volcano_building_impact.py:250
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:313
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:325
 #: safe/postprocessors/age_postprocessor.py:137
@@ -1052,7 +1051,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:371
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:353
 #: safe/impact_functions/inundation/flood_population_evacuation.py:267
-#: safe/impact_functions/volcanic/volcano_building_impact.py:268
+#: safe/impact_functions/volcanic/volcano_building_impact.py:269
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:339
 msgid "Notes"
 msgstr ""
@@ -1089,8 +1088,8 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:30
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:62
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:95
-#: safe/impact_functions/volcanic/volcano_building_impact.py:80
-#: safe/impact_functions/volcanic/volcano_building_impact.py:105
+#: safe/impact_functions/volcanic/volcano_building_impact.py:81
+#: safe/impact_functions/volcanic/volcano_building_impact.py:106
 msgid "Be affected"
 msgstr ""
 
@@ -1220,12 +1219,12 @@ msgstr ""
 msgid "An eruption"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:250
+#: safe/impact_functions/volcanic/volcano_building_impact.py:251
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:313
 msgid "Cumulative"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:263
+#: safe/impact_functions/volcanic/volcano_building_impact.py:264
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 
@@ -1236,8 +1235,8 @@ msgstr ""
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:312
-#: safe/impact_functions/volcanic/volcano_building_impact.py:323
+#: safe/impact_functions/volcanic/volcano_building_impact.py:313
+#: safe/impact_functions/volcanic/volcano_building_impact.py:324
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 
@@ -1374,7 +1373,7 @@ msgstr ""
 msgid "Estimated roads affected"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:199
+#: safe/impact_functions/volcanic/volcano_building_impact.py:200
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:230
 msgid "Not specified in data"
 msgstr ""
@@ -1427,7 +1426,7 @@ msgstr ""
 msgid "Number flooded"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:249
+#: safe/impact_functions/volcanic/volcano_building_impact.py:250
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:202
 msgid "Distance [km]"
 msgstr ""
@@ -1608,11 +1607,11 @@ msgstr ""
 msgid "High [%.2f people/cell]"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:271
+#: safe/impact_functions/volcanic/volcano_building_impact.py:272
 msgid "Only buildings available in OpenStreetMap are considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:269
+#: safe/impact_functions/volcanic/volcano_building_impact.py:270
 #, python-format
 msgid "Total number of buildings %s in the viewable area"
 msgstr ""
@@ -1666,7 +1665,7 @@ msgid ""
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:142
-#: safe/impact_functions/volcanic/volcano_building_impact.py:121
+#: safe/impact_functions/volcanic/volcano_building_impact.py:122
 msgid ""
 "Vector polygon layer extracted from OSM where each polygon represents the "
 "footprint of a building."
@@ -1980,7 +1979,7 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:451
 #: safe/impact_functions/inundation/flood_population_evacuation.py:332
-#: safe/impact_functions/volcanic/volcano_building_impact.py:313
+#: safe/impact_functions/volcanic/volcano_building_impact.py:314
 #, python-format
 msgid "Thousand separator is represented by %s"
 msgstr ""
@@ -2127,18 +2126,18 @@ msgid ""
 "population affected."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:83
-#: safe/impact_functions/volcanic/volcano_building_impact.py:109
+#: safe/impact_functions/volcanic/volcano_building_impact.py:84
+#: safe/impact_functions/volcanic/volcano_building_impact.py:110
 msgid "To assess the impacts of volcano eruption on building."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:111
+#: safe/impact_functions/volcanic/volcano_building_impact.py:112
 msgid ""
 "Provide details about how many building would likely be affected by each "
 "hazard zones."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:114
+#: safe/impact_functions/volcanic/volcano_building_impact.py:115
 msgid ""
 "A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
 "\" attribute and the values for it are \"Kawasan Rawan Bencana I\", "
@@ -2147,21 +2146,21 @@ msgid ""
 "attribute for point data or \"GUNUNG\" attribute for polygon data."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:124
+#: safe/impact_functions/volcanic/volcano_building_impact.py:125
 msgid ""
 "Vector layer contains Map of building exposed to volcanic hazard zones for "
 "each Kawasan Rawan Bencana or radius."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:280
+#: safe/impact_functions/volcanic/volcano_building_impact.py:281
 msgid "Number of buildings affected"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:315
+#: safe/impact_functions/volcanic/volcano_building_impact.py:316
 msgid "(building)"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:316
+#: safe/impact_functions/volcanic/volcano_building_impact.py:317
 msgid "Building count"
 msgstr ""
 
@@ -2299,7 +2298,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:263
 #: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:262
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:259
-#: safe/metadata.py:202
+#: safe/metadata.py:214
 msgid "Road Type"
 msgstr ""
 
@@ -2431,7 +2430,7 @@ msgstr ""
 msgid "Table below shows the weekly minimum needs for all evacuated people"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:246
+#: safe/impact_functions/volcanic/volcano_building_impact.py:247
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:305
 msgid "Volcanoes considered"
 msgstr ""
@@ -2617,7 +2616,10 @@ msgstr ""
 msgid "Flood Raster Roads Experimental Function"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:79
+msgid "OPTIMIZED-TEST-Be flooded in given thresholds"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:80
 msgid "Volcano Building Impact"
 msgstr ""
 
@@ -2684,17 +2686,6 @@ msgid ""
 "telecommunications facility or a bridge."
 msgstr ""
 
-#: safe/metadata.py:82
-msgid "generic"
-msgstr ""
-
-#: safe/metadata.py:84
-msgid ""
-"A generic hazard can be used for any type of hazard where the data have been "
-"classified or generalised. For example: earthquake, flood, volcano, or "
-"tsunami."
-msgstr ""
-
 #: safe/metadata.py:90
 msgid "earthquake"
 msgstr ""
@@ -2750,73 +2741,60 @@ msgid ""
 "surface. The type of material ejected depends on the type of <b>volcano</b>."
 msgstr ""
 
-#: safe/metadata.py:153
+#: safe/metadata.py:156
 msgid "feet"
 msgstr ""
 
-#: safe/metadata.py:155
+#: safe/metadata.py:158
 msgid ""
 "<b>Feet</b> are an imperial unit of measure. There are 12 inches in 1 foot "
 "and 3 feet in 1 yard. In this case <b>feet</b> are used to describe the "
 "water depth."
 msgstr ""
 
-#: safe/metadata.py:163
+#: safe/metadata.py:166
 msgid "metres"
 msgstr ""
 
-#: safe/metadata.py:165
+#: safe/metadata.py:168
 msgid ""
 "<b>metres</b> are a metric unit of measure. There are 100 centimetres in 1 "
 "metre. In this case <b>metres</b> are used to describe the water depth."
 msgstr ""
 
-#: safe/metadata.py:173
+#: safe/metadata.py:176
 msgid "MMI"
 msgstr ""
 
-#: safe/metadata.py:175
+#: safe/metadata.py:178
 msgid ""
 "The <b>Modified Mercalli Intensity (MMI)</b> scale describes the intensity "
 "of ground shaking from a earthquake based on the effects observed by people "
 "at the surface."
 msgstr ""
 
-#: safe/metadata.py:183
-msgid "normalised"
+msgid "normalized"
 msgstr ""
 
-#: safe/metadata.py:185
-msgid ""
-"Normalised data can be hazard or exposure data where the values have been "
-"classified or coded."
-msgstr ""
-
-#: safe/metadata.py:192
+#: safe/metadata.py:204
 msgid "people per pixel"
 msgstr ""
 
-#: safe/metadata.py:194
 msgid ""
-"<b>Count</b> is the number of people in each cell. For example <b>population "
-"count</b> might be measured as the number of people per pixel in a raster "
-"data set. This unit is relevant for population rasters in geographic "
-"coordinates."
+"<b>Density</b> is the number of features within a defined area. For example "
+"<b>population density</b> might be measured as the number of people per "
+"square kilometre."
 msgstr ""
 
-#: safe/metadata.py:209
-msgid "volcano categorical"
-msgstr ""
-
-#: safe/metadata.py:217 safe/metadata.py:226 safe/metadata.py:235
-msgid "Distance from the volcano."
-msgstr ""
-
-#: safe/metadata.py:252
+#: safe/metadata.py:276
 msgid "Water above ground height."
 msgstr ""
 
-#: safe/metadata.py:260
+#: safe/metadata.py:224
+msgid "volcano categorical"
+msgstr ""
+
+#: safe/metadata.py:284
 msgid "No water above ground height."
 msgstr ""
 
@@ -2833,4 +2811,70 @@ msgstr ""
 
 #: safe/postprocessors/age_postprocessor.py:201
 msgid "Elder count (affected)"
+msgstr ""
+
+#: safe/metadata.py:82
+msgid "generic"
+msgstr ""
+
+#: safe/metadata.py:84
+msgid ""
+"A generic hazard can be used for any type of hazard where the data have been "
+"classified or generalised. For example: earthquake, flood, volcano, or "
+"tsunami."
+msgstr ""
+
+#: safe/metadata.py:186
+msgid "normalised"
+msgstr ""
+
+msgid ""
+"Normalised data can be hazard or exposure data where the values have been "
+"classified or coded."
+msgstr ""
+
+#: safe/metadata.py:206
+msgid ""
+"<b>Count</b> is the number of people in each cell. For example <b>population "
+"count</b> might be measured as the number of people per pixel in a raster "
+"data set. This unit is relevant for population rasters in geographic "
+"coordinates."
+msgstr ""
+
+#: safe/metadata.py:235 safe/metadata.py:244 safe/metadata.py:253
+msgid "Distance from the volcano."
+msgstr ""
+
+#: safe/metadata.py:148
+msgid ""
+"<b>Building type</b> is a unit that represent the type of the building. In "
+"this case, building type will be used to group the result of impact function."
+msgstr ""
+
+#: safe/metadata.py:188
+msgid ""
+"<b>Normalised</b> data can be hazard or exposure data where the values have "
+"been classified or coded."
+msgstr ""
+
+#: safe/metadata.py:196
+msgid "no type"
+msgstr ""
+
+#: safe/metadata.py:198
+msgid ""
+"<b>No type</b> unit means that there is no building type attribute in the "
+"exposure data."
+msgstr ""
+
+#: safe/metadata.py:216
+msgid ""
+"<b>Road type</b> is a unit that represent the type of the road. In this "
+"case, road type will be used to group the result of impact function."
+msgstr ""
+
+#: safe/metadata.py:226
+msgid ""
+"This is a ternary description for an area. The area is either has <b>low</"
+"b>, <b>medium</b>, or <b>high</b> impact from the volcano."
 msgstr ""

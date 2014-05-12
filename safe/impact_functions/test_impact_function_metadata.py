@@ -38,7 +38,8 @@ from safe.metadata import (
     layer_vector_polygon,
     layer_vector_point,
     unit_normalised,
-    hazard_all)
+    hazard_all,
+    unit_no_type)
 
 
 # noinspection PyUnresolvedReferences
@@ -120,9 +121,9 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = EarthquakeBuildingImpactFunction()
         result = impact_function.Metadata .allowed_units(
             'structure', 'polygon')
-        expected_result = [unit_building_type_type]
+        expected_result = [unit_building_type_type, unit_no_type]
         message = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, message)
+        self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function.Metadata .allowed_units(
             'structure', 'numeric')
@@ -133,9 +134,9 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = FloodBuildingImpactFunction
         result = impact_function.Metadata.allowed_units(
             'structure', 'polygon')
-        expected_result = [unit_building_type_type]
+        expected_result = [unit_building_type_type, unit_no_type]
         message = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertEqual(result, expected_result, message)
+        self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function.Metadata .allowed_units('flood', 'numeric')
         expected_result = [unit_wetdry, unit_metres_depth, unit_feet_depth]

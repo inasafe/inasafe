@@ -31,7 +31,8 @@ UI_FILES = \
 	options_dialog_base.ui \
 	osm_downloader_base.ui \
 	shakemap_importer_base.ui \
-        function_browser_base.ui
+    function_browser_base.ui \
+    wizard_dialog_base.ui
 
 ###################### EDITABLE AREA ENDS ###################################
 
