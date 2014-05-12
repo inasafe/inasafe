@@ -324,22 +324,31 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: dict
         """
         aggregation_attributes = dict()
-        aggregation_attributes[female_ratio_attribute_key] = self\
-            .cboFemaleRatioAttribute.currentText()
-        aggregation_attributes[female_ratio_default_key] = self\
-            .dsbFemaleRatioDefault.value()
-        aggregation_attributes[youth_ratio_attribute_key] = self \
-            .cboYouthRatioAttribute.currentText()
-        aggregation_attributes[youth_ratio_default_key] = self \
-            .dsbYouthRatioDefault.value()
-        aggregation_attributes[adult_ratio_attribute_key] = self \
-            .cboAdultRatioAttribute.currentText()
-        aggregation_attributes[adult_ratio_default_key] = self \
-            .dsbAdultRatioDefault.value()
-        aggregation_attributes[elderly_ratio_attribute_key] = self \
-            .cboElderlyRatioAttribute.currentText()
-        aggregation_attributes[elderly_ratio_default_key] = self \
-            .dsbElderlyRatioDefault.value()
+
+        value = self.cboFemaleRatioAttribute.currentText()
+        aggregation_attributes[female_ratio_attribute_key] = value
+
+        value = self.dsbFemaleRatioDefault.value()
+        aggregation_attributes[female_ratio_default_key] = value
+
+        value = self.cboYouthRatioAttribute.currentText()
+        aggregation_attributes[youth_ratio_attribute_key] = value
+
+        value = self.dsbYouthRatioDefault.value()
+        aggregation_attributes[youth_ratio_default_key] = value
+
+        value = self.cboAdultRatioAttribute.currentText()
+        aggregation_attributes[adult_ratio_attribute_key] = value
+
+        value = self.dsbAdultRatioDefault.value()
+        aggregation_attributes[adult_ratio_default_key] = value
+
+        value = self.cboElderlyRatioAttribute.currentText()
+        aggregation_attributes[elderly_ratio_attribute_key] = value
+
+        value = self.dsbElderlyRatioDefault.value()
+        aggregation_attributes[elderly_ratio_default_key] = value
+
         return aggregation_attributes
 
     # noinspection PyMethodMayBeStatic
@@ -367,13 +376,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def on_cboFemaleRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the female ratio attribute is changed.
 
-        When the use changes the female ratio attribute
-        (cboFemaleRatioAttribute), it will change the enable value of
+        When the user changes the female ratio attribute
+        (cboFemaleRatioAttribute), it will change the enabled value of
         dsbFemaleRatioDefault. If value is 'Use default', enable
         dsbFemaleRatioDefault. Otherwise, disabled it.
-
-        :param index: Not used but required for Qt slot.
-        :type index: None
         """
         value = self.cboFemaleRatioAttribute.currentText()
         if value == self.tr('Use default'):
@@ -385,13 +391,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def on_cboYouthRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the youth ratio attribute is changed.
 
-        When the use changes the youth ratio attribute
-        (cboYouthRatioAttribute), it will change the enable value of
+        When the user changes the youth ratio attribute
+        (cboYouthRatioAttribute), it will change the enabled value of
         dsbYouthRatioDefault. If value is 'Use default', enable
         dsbYouthRatioDefault. Otherwise, disabled it.
-
-        :param index: Not used but required for Qt slot.
-        :type index: None
         """
         value = self.cboYouthRatioAttribute.currentText()
         if value == self.tr('Use default'):
@@ -403,13 +406,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def on_cboAdultRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the adult ratio attribute is changed.
 
-        When the use changes the adult ratio attribute
-        (cboAdultRatioAttribute), it will change the enable value of
+        When the user changes the adult ratio attribute
+        (cboAdultRatioAttribute), it will change the enabled value of
         dsbAdultRatioDefault. If value is 'Use default', enable
         dsbAdultRatioDefault. Otherwise, disabled it.
-
-        :param index: Not used but required for Qt slot.
-        :type index: None
         """
         value = self.cboAdultRatioAttribute.currentText()
         if value == self.tr('Use default'):
@@ -421,13 +421,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def on_cboElderlyRatioAttribute_currentIndexChanged(self):
         """Automatic slot executed when the adult ratio attribute is changed.
 
-        When the use changes the elderly ratio attribute
-        (cboElderlyRatioAttribute), it will change the enable value of
+        When the user changes the elderly ratio attribute
+        (cboElderlyRatioAttribute), it will change the enabled value of
         dsbElderlyRatioDefault. If value is 'Use default', enable
         dsbElderlyRatioDefault. Otherwise, disabled it.
-
-        :param index: Not used but required for Qt slot.
-        :type index: None
         """
         value = self.cboElderlyRatioAttribute.currentText()
         if value == self.tr('Use default'):
