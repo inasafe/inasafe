@@ -577,8 +577,8 @@ class WizardDialogTest(unittest.TestCase):
         remove_temp_file(layer.source())
 
     # noinspection PyTypeChecker
-    def test_unit_no_type(self):
-        """Test for case existing no type unit for structure."""
+    def test_unit_building_generic(self):
+        """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
             name='building_Maumere',
             include_keywords=True,

@@ -603,7 +603,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             item = QListWidgetItem(field_name, self.lstFields)
             item.setData(QtCore.Qt.UserRole, field_name)
             # Select the item if it match the unit's default_attribute
-            if unit and unit['id'] == 'no_type':
+            if unit and unit['id'] == 'building_generic':
                 pass
             else:
                 if unit and 'default_attribute' in unit \
@@ -785,7 +785,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             new_step = step_source
         elif current_step == step_unit:
             unit = self.selected_unit()
-            if unit and unit['id'] == 'no_type':
+            if unit and unit['id'] == 'building_generic':
                 new_step = step_source
             else:
                 new_step = current_step + 1
