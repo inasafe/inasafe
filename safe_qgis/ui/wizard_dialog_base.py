@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Mon May 12 22:21:02 2014
+# Created: Mon May 12 22:29:33 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -579,7 +579,7 @@ class Ui_WizardDialogBase(object):
         self.lblFemaleRatioAttribute.setText(QtGui.QApplication.translate("WizardDialogBase", "Female ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
         self.lblElderlyRatioDefault.setText(QtGui.QApplication.translate("WizardDialogBase", "Elderly ratio default", None, QtGui.QApplication.UnicodeUTF8))
         self.lblYouthRatioDefault.setText(QtGui.QApplication.translate("WizardDialogBase", "Youth ratio default", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSelectSource.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>Where does the data come from? You may want to write more or less short comment about its source.</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblSelectSource.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>Where does the data come from? You may want to write more or less short comment about its source.</p><p>This step is optional.</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.lblScale.setText(QtGui.QApplication.translate("WizardDialogBase", "Scale", None, QtGui.QApplication.UnicodeUTF8))
         self.lblDate.setText(QtGui.QApplication.translate("WizardDialogBase", "Date", None, QtGui.QApplication.UnicodeUTF8))
         self.lblSource.setText(QtGui.QApplication.translate("WizardDialogBase", "Source", None, QtGui.QApplication.UnicodeUTF8))

@@ -761,6 +761,12 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(num_item == 1, message)
 
         remove_temp_file(layer.source())
+    # def test_integrated_point(self):
+    #     """Test for point layer and all possibilities."""
+    #     layer = clone_shp_layer(
+    #         name='Marapi',
+    #         directory=HAZDATA)
+    #     dialog = WizardDialog(PARENT, IFACE, None, layer)
 
 
 if __name__ == '__main__':
