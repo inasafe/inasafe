@@ -3126,42 +3126,42 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="513"/>
+        <location filename="wizard_dialog.py" line="509"/>
         <source>Field type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="514"/>
+        <location filename="wizard_dialog.py" line="510"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="590"/>
+        <location filename="wizard_dialog.py" line="586"/>
         <source>&lt;b&gt;&lt;font color=&quot;red&quot;&gt;ERROR! Missing subcategory or unit!&lt;/font&gt;&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="669"/>
+        <location filename="wizard_dialog.py" line="665"/>
         <source>step %d</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="706"/>
+        <location filename="wizard_dialog.py" line="702"/>
         <source>Finish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="722"/>
+        <location filename="wizard_dialog.py" line="718"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="895"/>
+        <location filename="wizard_dialog.py" line="891"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="895"/>
+        <location filename="wizard_dialog.py" line="891"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>Terjadi kesalahan saat penyimpanan kata kunci (keyword):
@@ -3178,145 +3178,170 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1099"/>
+        <location filename="wizard_dialog.py" line="1103"/>
         <source>Use default</source>
         <translation type="unfinished">Pergunakan default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1101"/>
+        <location filename="wizard_dialog.py" line="1105"/>
         <source>Don&apos;t use</source>
         <translation type="unfinished">Jangan digunakan</translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="1169"/>
+        <source>Title of the layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="1170"/>
+        <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="1173"/>
+        <source>When was this data collected or downloaded i.e. 1-May-2014</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="1175"/>
+        <source>What is the scale of this layer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="1176"/>
+        <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WizardDialogBase</name>
     <message>
-        <location filename="wizard_dialog_base.py" line="518"/>
+        <location filename="wizard_dialog_base.py" line="506"/>
         <source>InaSAFE Keywords Creation Wizard...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="519"/>
+        <location filename="wizard_dialog_base.py" line="507"/>
         <source>InaSAFE Wizard...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="530"/>
+        <location filename="wizard_dialog_base.py" line="518"/>
         <source>[placeholder]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="531"/>
+        <location filename="wizard_dialog_base.py" line="519"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="532"/>
+        <location filename="wizard_dialog_base.py" line="520"/>
         <source>Classes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="533"/>
+        <location filename="wizard_dialog_base.py" line="521"/>
         <source>Classified unique values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="534"/>
+        <location filename="wizard_dialog_base.py" line="522"/>
         <source>Unclassified unique values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="544"/>
+        <location filename="wizard_dialog_base.py" line="532"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Where does the data come from? You may want to write more or less short comment about its source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="545"/>
+        <location filename="wizard_dialog_base.py" line="533"/>
         <source>Scale</source>
         <translation>Skala</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="546"/>
+        <location filename="wizard_dialog_base.py" line="534"/>
         <source>Date</source>
         <translation>Tanggal</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="547"/>
+        <location filename="wizard_dialog_base.py" line="535"/>
         <source>Source</source>
         <translation>Sumber</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="548"/>
+        <location filename="wizard_dialog_base.py" line="536"/>
         <source>URL</source>
         <translation>Pranala</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="549"/>
+        <location filename="wizard_dialog_base.py" line="537"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be &apos;A flood in Jakarta&apos; (for a hazard layer) or &apos;People living in jakarta&apos; (for an exposure layer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="550"/>
+        <location filename="wizard_dialog_base.py" line="538"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="551"/>
+        <location filename="wizard_dialog_base.py" line="539"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="552"/>
+        <location filename="wizard_dialog_base.py" line="540"/>
         <source>Back</source>
         <translation>Kembali</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="553"/>
+        <location filename="wizard_dialog_base.py" line="541"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="535"/>
+        <location filename="wizard_dialog_base.py" line="523"/>
         <source>Please input these ratio attribute below for aggregation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="536"/>
+        <location filename="wizard_dialog_base.py" line="524"/>
         <source>Youth ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="537"/>
+        <location filename="wizard_dialog_base.py" line="525"/>
         <source>Adult ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="538"/>
+        <location filename="wizard_dialog_base.py" line="526"/>
         <source>Youth ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="539"/>
+        <location filename="wizard_dialog_base.py" line="527"/>
         <source>Female ratio default</source>
         <translation type="unfinished">Nilai default perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="540"/>
+        <location filename="wizard_dialog_base.py" line="528"/>
         <source>Adult ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="541"/>
+        <location filename="wizard_dialog_base.py" line="529"/>
         <source>Elderly ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="542"/>
+        <location filename="wizard_dialog_base.py" line="530"/>
         <source>Female ratio attribute</source>
         <translation type="unfinished">Atribut perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="543"/>
+        <location filename="wizard_dialog_base.py" line="531"/>
         <source>Elderly ratio default</source>
         <translation type="unfinished"></translation>
     </message>
