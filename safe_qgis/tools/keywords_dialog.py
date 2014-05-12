@@ -121,9 +121,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.dsbAdultRatioDefault.blockSignals(True)
         self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
         self.dsbAdultRatioDefault.blockSignals(False)
-        self.dsbElderRatioDefault.blockSignals(True)
-        self.dsbElderRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
-        self.dsbElderRatioDefault.blockSignals(False)
+        self.dsbElderlyRatioDefault.blockSignals(True)
+        self.dsbElderlyRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
+        self.dsbElderlyRatioDefault.blockSignals(False)
 
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
@@ -365,13 +365,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.lblAdultRatioDefault.setVisible(visible_flag)
 
     def show_elderly_ratio_attribute(self, visible_flag):
-        """Hide or show the elder ratio attribute in the dialog.
+        """Hide or show the elderly ratio attribute in the dialog.
 
-        :param visible_flag: Flag indicating if the elder ratio attribute
+        :param visible_flag: Flag indicating if the elderly ratio attribute
             should be hidden or shown.
         :type visible_flag: bool
         """
-        box = self.cboElderRatioAttribute
+        box = self.cboElderlyRatioAttribute
         box.blockSignals(True)
         box.clear()
         box.blockSignals(False)
@@ -397,16 +397,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 # + 2 is because we add use defaults and don't use
                 box.setCurrentIndex(attribute_position + 2)
         box.setVisible(visible_flag)
-        self.lblElderRatioAttribute.setVisible(visible_flag)
+        self.lblElderlyRatioAttribute.setVisible(visible_flag)
 
     def show_elderly_ratio_default(self, visible_flag):
-        """Hide or show the elder ratio default attribute in the dialog.
+        """Hide or show the elderly ratio default attribute in the dialog.
 
-        :param visible_flag: Flag indicating if the elder ratio
+        :param visible_flag: Flag indicating if the elderly ratio
             default attribute should be hidden or shown.
         :type visible_flag: bool
         """
-        box = self.dsbElderRatioDefault
+        box = self.dsbElderlyRatioDefault
         if visible_flag:
             current_value = self.get_value_for_key(
                 self.defaults['ELDERLY_RATIO_KEY'])
@@ -417,7 +417,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             box.setValue(val)
 
         box.setVisible(visible_flag)
-        self.lblElderRatioDefault.setVisible(visible_flag)
+        self.lblElderlyRatioDefault.setVisible(visible_flag)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -495,23 +495,23 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.remove_item_by_key(self.defaults['ADULT_RATIO_KEY'])
         self.add_list_entry(self.defaults['ADULT_RATIO_ATTR_KEY'], text)
 
-    def on_cboElderRatioAttribute_currentIndexChanged(self, index=None):
-        """Handler for elder ratio attribute change.
+    def on_cboElderlyRatioAttribute_currentIndexChanged(self, index=None):
+        """Handler for elderly ratio attribute change.
 
         :param index: Not used but required for slot.
         """
         del index
-        text = self.cboElderRatioAttribute.currentText()
+        text = self.cboElderlyRatioAttribute.currentText()
         if text == self.tr('Use default'):
-            self.dsbElderRatioDefault.setEnabled(True)
+            self.dsbElderlyRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ELDERLY_RATIO_KEY'])
             if current_default is None:
                 self.add_list_entry(
                     self.defaults['ELDERLY_RATIO_KEY'],
-                    self.dsbElderRatioDefault.value())
+                    self.dsbElderlyRatioDefault.value())
         else:
-            self.dsbElderRatioDefault.setEnabled(False)
+            self.dsbElderlyRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['ELDERLY_RATIO_KEY'])
         self.add_list_entry(self.defaults['ELDERLY_RATIO_ATTR_KEY'], text)
 
@@ -554,13 +554,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.defaults['ADULT_RATIO_KEY'],
                 box.value())
 
-    def on_dsbElderRatioDefault_valueChanged(self, value):
+    def on_dsbElderlyRatioDefault_valueChanged(self, value):
         """Handler for elder ration default value changing.
 
         :param value: Not used but required for slot.
         """
         del value
-        box = self.dsbElderRatioDefault
+        box = self.dsbElderlyRatioDefault
         if box.isEnabled():
             self.add_list_entry(
                 self.defaults['ELDERLY_RATIO_KEY'],

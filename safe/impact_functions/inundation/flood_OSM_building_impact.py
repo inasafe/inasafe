@@ -22,8 +22,8 @@ from safe.metadata import (
     exposure_structure,
     unit_building_type_type,
     hazard_definition,
-    exposure_definition
-)
+    exposure_definition,
+    unit_no_type)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -102,7 +102,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     'exposure': {
                         'definition': exposure_definition,
                         'subcategory': exposure_structure,
-                        'units': [unit_building_type_type],
+                        'units': [unit_building_type_type, unit_no_type],
                         'layer_constraints': [layer_vector_polygon]
                     }
                 }

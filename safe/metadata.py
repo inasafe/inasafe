@@ -144,7 +144,10 @@ hazard_all = [
 unit_building_type_type = {
     'id': 'building_type',
     'name': tr('building type'),
-    'description': tr(''),
+    'description': tr(
+        '<b>Building type</b> is a unit that represent the type of the '
+        'building. In this case, building type will be used to group the '
+        'result of impact function.'),
     'constraint': 'unique values',
     'default_attribute': 'type'
 }
@@ -182,10 +185,19 @@ unit_normalised = {
     'id': 'normalised',
     'name': tr('normalised'),
     'description': tr(
-        'Normalised data can be hazard or exposure data where the values '
+        '<b>Normalised</b> data can be hazard or exposure data where the '
+        'values '
         'have been classified or coded.'
     ),
     'constraint': 'continuous'
+}
+unit_no_type = {
+    'id': 'no_type',
+    'name': tr('no type'),
+    'description': tr(
+        '<b>No type</b> unit means that there is no building type attribute '
+        'in the exposure data.'
+    ),
 }
 unit_people_per_pixel = {
     'id': 'people_per_pixel',
@@ -200,14 +212,20 @@ unit_people_per_pixel = {
 unit_road_type_type = {
     'id': 'road_type',
     'name': tr('Road Type'),
-    'description': tr(''),
+    'description': tr(
+        '<b>Road type</b> is a unit that represent the type of the road. '
+        'In this case, road type will be used to group the result of impact '
+        'function.'),
     'constraint': 'unique values',
     'default_attribute': 'type'
 }
 unit_volcano_categorical = {
     'id': 'volcano_categorical',
     'name': tr('volcano categorical'),
-    'description': tr(''),
+    'description': tr(
+        'This is a ternary description for an area. The area is either '
+        'has <b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
+        'volcano.'),
     'constraint': 'categorical',
     'default_attribute': 'affected',
     'default_category': 'high',
@@ -246,6 +264,12 @@ unit_wetdry = {
     'constraint': 'categorical',
     'default_attribute': 'affected',
     'default_category': 'wet',
+    'name': tr('wet / dry'),
+    'description': tr(
+        'This is a binary description for an area. The area is either '
+        '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
+        'by flood water). This unit does not describe how <b>wet</b> or '
+        '<b>dry</b> an area is.'),
     'classes': [
         {
             'name': 'wet',
@@ -263,13 +287,7 @@ unit_wetdry = {
             'numeric_default_max': (1 - small_number),
             'optional': True
         }
-    ],
-    'name': tr('wet / dry'),
-    'description': tr(
-        'This is a binary description for an area. The area is either '
-        '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
-        'by flood water). This unit does not describe how <b>wet</b> or '
-        '<b>dry</b> an area is.')
+    ]
 }
 
 

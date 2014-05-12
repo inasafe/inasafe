@@ -24,7 +24,8 @@ from safe.metadata import (
     exposure_structure,
     unit_building_type_type,
     exposure_definition,
-    hazard_definition)
+    hazard_definition,
+    unit_no_type)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -95,7 +96,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                     'exposure': {
                         'definition': exposure_definition,
                         'subcategory': exposure_structure,
-                        'units': [unit_building_type_type],
+                        'units': [unit_building_type_type, unit_no_type],
                         'layer_constraints': [layer_vector_polygon]
                     }
                 }
@@ -286,19 +287,21 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+
+        # Create Classes
         classes = create_classes(building_counts, len(colours))
+        # Create Interval Classes
         interval_classes = humanize_class(classes)
+
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
             if i == 0:
-                transparency = 100
                 style_class['min'] = 0
             else:
-                transparency = 30
                 style_class['min'] = classes[i - 1]
-            style_class['transparency'] = transparency
+            style_class['transparency'] = 30
             style_class['colour'] = colours[i]
             style_class['max'] = classes[i]
             style_classes.append(style_class)

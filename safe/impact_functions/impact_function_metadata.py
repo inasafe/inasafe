@@ -6,9 +6,9 @@ InaSAFE Disaster risk assessment tool developed by AusAid -
 Contact : ole.moller.nielsen@gmail.com
 
 .. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 """
 
 __author__ = 'imajimatika@gmail.com'
@@ -32,16 +32,16 @@ class ImpactFunctionMetadata():
 
         Example usage::
 
-        foo = IF()
-        meta = IF.metadata
+          foo = IF()
+          meta = IF.metadata
 
-        bar = meta.allowed_subcategories('exposure')
-        bar
-        > [structure]
+          bar = meta.allowed_subcategories('exposure')
+          bar
+          > [structure]
 
     .. note:: We already know that for an IF only hazard and exposure
-    categories are allowed, so there is no explicit method for that (we could
-    change that later.
+       categories are allowed, so there is no explicit method for that
+       (we could change that later).
     """
 
     def __init__(self):
