@@ -21,7 +21,7 @@ import socket
 import urllib2
 import logging
 
-# The logger is intialised in utils.py by init
+# The logger is initialised in realtime/__init__
 LOGGER = logging.getLogger('InaSAFE')
 
 

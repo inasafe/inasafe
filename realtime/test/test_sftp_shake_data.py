@@ -64,17 +64,11 @@ class SFtpShakeDataTest(unittest.TestCase):
     #noinspection PyMethodMayBeStatic
     def test_reconnect_sftp(self):
         """Test to reconnect SFTP."""
-        sftp_client = sftp_data.sftpclient
+        sftp_client = sftp_data.sftp_client
         sftp_data.reconnect_sftp()
-        new_sftp_client = sftp_data.sftpclient
+        new_sftp_client = sftp_data.sftp_client
         assert sftp_client != new_sftp_client, 'message'
         assert new_sftp_client is not None, 'new sftp is none'
-
-    #noinspection PyMethodMayBeStatic
-    def test_filename(self):
-        """Test filename."""
-        filename = sftp_data.file_name()
-        assert filename == 'grid.xml', 'File name is not same'
 
     #noinspection PyMethodMayBeStatic
     def test_is_on_server(self):

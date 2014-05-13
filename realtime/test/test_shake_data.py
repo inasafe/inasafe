@@ -23,7 +23,7 @@ import shutil
 import unittest
 
 from realtime.shake_data import ShakeData
-from realtime.utils import (
+from realtime.utilities import (
     shakemap_zip_dir,
     purge_working_data,
     shakemap_extract_dir)

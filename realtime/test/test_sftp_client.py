@@ -17,29 +17,31 @@ __version__ = '0.5.0'
 __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
 import unittest
-from realtime.sftp_client import SFtpClient
 import os
+
+from realtime.sftp_client import SFtpClient
 
 
 class SFtpClientTest(unittest.TestCase):
     #noinspection PyMethodMayBeStatic
     def test_get_list_events(self):
         """Test to get all event ids."""
-        my_ssh_client = SFtpClient()
-        assert(my_ssh_client is not None)
+        sftp_client = SFtpClient()
+        self.assertIsNotNone(sftp_client)
 
     #noinspection PyMethodMayBeStatic
     def test_download_path(self):
         """Test to download all directories and files under a path."""
-        my_ssh_client = SFtpClient(working_dir='shakemaps')
-        assert(my_ssh_client is not None)
+        sftp_client = SFtpClient(working_dir='shakemaps')
+        self.assertIsNotNone(sftp_client)
 
         remote_path = os.path.join(
-            my_ssh_client.sftp.getcwd(), '20130113003746/output/grid.xml')
+            sftp_client.sftp.getcwd(), '20130113003746/output/grid.xml')
         local_path = '/tmp/inasafe/'
-        print local_path
-        my_ssh_client.download_path(remote_path, local_path)
+
+        sftp_client.download_path(remote_path, local_path)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(SFtpClientTest, 'test')

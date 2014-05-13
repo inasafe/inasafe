@@ -26,7 +26,7 @@ from zipfile import BadZipfile
 
 from ftp_client import FtpClient
 from sftp_client import SFtpClient
-from utils import setup_logger, data_dir, is_event_id
+from utilities import setup_logger, data_dir, is_event_id
 from shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setup_logger()
@@ -119,7 +119,7 @@ elif len(sys.argv) == 2:
 #        ftp_client = FtpClient()
         sftp_client = SFtpClient()
 #        myListing = ftp_client.get_listing()
-        dir_listing = sftp_client.get_listing(my_func=is_event_id)
+        dir_listing = sftp_client.get_listing(function=is_event_id)
         for event in dir_listing:
             print event
         sys.exit(0)

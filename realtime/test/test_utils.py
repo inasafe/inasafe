@@ -21,7 +21,7 @@ import os
 import unittest
 from datetime import date
 
-from realtime.utils import (
+from realtime.utilities import (
     base_data_dir,
     shakemap_zip_dir,
     shakemap_extract_dir,
@@ -34,7 +34,7 @@ from realtime.utils import (
 # Clear away working dirs so we can be sure they
 # are actually created
 purge_working_data()
-# The logger is intiailsed in utils.py by init
+# The logger is intiailsed in utilities.py by init
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 

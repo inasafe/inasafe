@@ -39,9 +39,9 @@ from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
-from realtime.utils import shakemap_extract_dir, shakemap_zip_dir, data_dir
+from realtime.utilities import shakemap_extract_dir, shakemap_zip_dir, data_dir
 from realtime.shake_event import ShakeEvent
-# The logger is intialised in utils.py by init
+# The logger is intialised in utilities.py by init
 LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -83,7 +83,7 @@ class TestShakeEvent(unittest.TestCase):
         """Test eventFilePath works (using cached data)"""
         shake_id = '20120726022003'
         shake_event = ShakeEvent(shake_id)
-        self.assertEquals(26, shake_event.day)
+        self.assertEquals(26, shake_event.shake_grid_converter.day)
         self.assertEquals(7, shake_event.month)
         self.assertEquals(2012, shake_event.year)
         self.assertEquals(2, shake_event.hour)

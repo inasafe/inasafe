@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
-Adapted from shake_event.py
+Initially this was adapted from shake_event.py and now realtime uses this.
 """
 __author__ = 'imajimatika@gmail.com'
 __version__ = '0.5.0'
@@ -26,12 +26,10 @@ from subprocess import call, CalledProcessError
 import logging
 
 from safe.common.utilities import which
-
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError)
 
-# The logger is initialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -111,8 +109,7 @@ class ShakeGridConverter(object):
     def extract_date_time(self, the_time_stamp):
         """Extract the parts of a date given a timestamp as per below example.
 
-        :param the_time_stamp: Is the 'event_timestamp' attribute from  grid
-         .xml.
+        :param the_time_stamp: The 'event_timestamp' attribute from  grid.xml.
         :type the_time_stamp: str
 
         # now separate out its parts
@@ -124,14 +121,15 @@ class ShakeGridConverter(object):
         #>>> e[-3:]
         #'WIB'   (WIB = Western Indonesian Time)
         """
-        my_date_tokens = the_time_stamp[0:10].split('-')
-        self.year = int(my_date_tokens[0])
-        self.month = int(my_date_tokens[1])
-        self.day = int(my_date_tokens[2])
-        my_time_tokens = the_time_stamp[11:-3].split(':')
-        self.hour = int(my_time_tokens[0])
-        self.minute = int(my_time_tokens[1])
-        self.second = int(my_time_tokens[2])
+        date_tokens = the_time_stamp[0:10].split('-')
+        self.year = int(date_tokens[0])
+        self.month = int(date_tokens[1])
+        self.day = int(date_tokens[2])
+
+        time_tokens = the_time_stamp[11:-3].split(':')
+        self.hour = int(time_tokens[0])
+        self.minute = int(time_tokens[1])
+        self.second = int(time_tokens[2])
 
     def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
@@ -182,75 +180,76 @@ class ShakeGridConverter(object):
            single file.
         """
         LOGGER.debug('ParseGridXml requested.')
-        my_path = self.grid_file_path()
+        grid_path = self.grid_file_path()
         try:
-            document = minidom.parse(my_path)
+            document = minidom.parse(grid_path)
             event_element = document.getElementsByTagName('event')
             event_element = event_element[0]
-            self.magnitude = float(event_element.attributes[
-                'magnitude'].nodeValue)
-            self.longitude = float(event_element.attributes[
-                'lon'].nodeValue)
-            self.latitude = float(event_element.attributes[
-                'lat'].nodeValue)
+            self.magnitude = float(
+                event_element.attributes['magnitude'].nodeValue)
+            self.longitude = float(
+                event_element.attributes['lon'].nodeValue)
+            self.latitude = float(
+                event_element.attributes['lat'].nodeValue)
             self.location = event_element.attributes[
                 'event_description'].nodeValue.strip()
-            self.depth = float(event_element.attributes['depth'].nodeValue)
-            # Get the date - its going to look something like this:
+            self.depth = float(
+                event_element.attributes['depth'].nodeValue)
+            # Get the date - it's going to look something like this:
             # 2012-08-07T01:55:12WIB
-            my_time_stamp = event_element.attributes[
-                'event_timestamp'].nodeValue
-            self.extract_date_time(my_time_stamp)
+            time_stamp = event_element.attributes['event_timestamp'].nodeValue
+            self.extract_date_time(time_stamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
-            self.time_zone = my_time_stamp[-3:]
+            self.time_zone = time_stamp[-3:]
 
-            my_specification_element = document.getElementsByTagName(
+            specification_element = document.getElementsByTagName(
                 'grid_specification')
-            my_specification_element = my_specification_element[0]
-            self.x_minimum = float(my_specification_element.attributes[
-                'lon_min'].nodeValue)
-            self.x_maximum = float(my_specification_element.attributes[
-                'lon_max'].nodeValue)
-            self.y_minimum = float(my_specification_element.attributes[
-                'lat_min'].nodeValue)
-            self.y_maximum = float(my_specification_element.attributes[
-                'lat_max'].nodeValue)
-            self.rows = float(my_specification_element.attributes[
-                'nlat'].nodeValue)
-            self.columns = float(my_specification_element.attributes[
-                'nlon'].nodeValue)
+            specification_element = specification_element[0]
+            self.x_minimum = float(
+                specification_element.attributes['lon_min'].nodeValue)
+            self.x_maximum = float(
+                specification_element.attributes['lon_max'].nodeValue)
+            self.y_minimum = float(
+                specification_element.attributes['lat_min'].nodeValue)
+            self.y_maximum = float(
+                specification_element.attributes['lat_max'].nodeValue)
+            self.rows = float(
+                specification_element.attributes['nlat'].nodeValue)
+            self.columns = float(
+                specification_element.attributes['nlon'].nodeValue)
             data_element = document.getElementsByTagName(
                 'grid_data')
             data_element = data_element[0]
-            my_data = data_element.firstChild.nodeValue
+            data = data_element.firstChild.nodeValue
+
             # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
             longitude_column = 0
-            my_latitude_column = 1
-            my_mmi_column = 4
+            latitude_column = 1
+            mmi_column = 4
             self.mmi_data = []
-            for my_line in my_data.split('\n'):
-                if not my_line:
+            for line in data.split('\n'):
+                if not line:
                     continue
-                my_tokens = my_line.split(' ')
+                my_tokens = line.split(' ')
                 my_longitude = my_tokens[longitude_column]
-                my_latitude = my_tokens[my_latitude_column]
-                my_mmi = my_tokens[my_mmi_column]
+                my_latitude = my_tokens[latitude_column]
+                my_mmi = my_tokens[mmi_column]
                 my_tuple = (my_longitude, my_latitude, my_mmi)
                 self.mmi_data.append(my_tuple)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
-            raise GridXmlParseError('Failed to parse grid file.\n%s\n%s'
-                                    % (e.__class__, str(e)))
+            raise GridXmlParseError(
+                'Failed to parse grid file.\n%s\n%s' % (e.__class__, str(e)))
 
     def grid_file_path(self):
-        """ Validate that grid file path points to a file.
+        """Validate that grid file path points to a file.
+
+        :return: The grid xml file path.
+        :rtype: str
 
         :raises: GridXmlFileNotFoundError
-
-        :return: grid xml file path
-        :rtype: str
         """
         if os.path.isfile(self.grid_xml_path):
             return self.grid_xml_path
@@ -260,7 +259,7 @@ class ShakeGridConverter(object):
     def mmi_to_delimited_text(self):
         """Return the mmi data as a delimited test string.
 
-        :returns: a delimited text string that can easily be written to disk
+        :returns: A delimited text string that can easily be written to disk
             for e.g. use by gdal_grid.
         :rtype: str
 
@@ -272,10 +271,10 @@ class ShakeGridConverter(object):
            123.1500,01.7900,1.16
            etc...
         """
-        my_string = 'lon,lat,mmi\n'
-        for my_row in self.mmi_data:
-            my_string += '%s,%s,%s\n' % (my_row[0], my_row[1], my_row[2])
-        return my_string
+        delimited_text = 'lon,lat,mmi\n'
+        for row in self.mmi_data:
+            delimited_text += '%s,%s,%s\n' % (row[0], row[1], row[2])
+        return delimited_text
 
     def mmi_to_delimited_file(self, force_flag=True):
         """Save mmi_data to delimited text file suitable for gdal_grid.
@@ -299,23 +298,23 @@ class ShakeGridConverter(object):
         """
         LOGGER.debug('mmi_to_delimited_text requested.')
 
-        # TODO(Sunni): I'm not sure how this 'mmi' will work
-        my_path = os.path.join(self.output_dir, 'mmi.csv')
-        # TODO(Sunni): I'm not sure how this 'mmi' will work
+        csv_path = os.path.join(
+            self.output_dir, self.output_basename, 'mmi.csv')
         #short circuit if the csv is already created.
-        if os.path.exists(my_path) and force_flag is not True:
-            return my_path
-        my_file = file(my_path, 'w')
-        my_file.write(self.mmi_to_delimited_text())
-        my_file.close()
+        if os.path.exists(csv_path) and force_flag is not True:
+            return csv_path
+        csv_file = file(csv_path, 'w')
+        csv_file.write(self.mmi_to_delimited_text())
+        csv_file.close()
 
-        # Also write the .csv which contains metadata about field types
-        my_csv_path = os.path.join(
+        # Also write the .csvt which contains metadata about field types
+        csvt_path = os.path.join(
             self.output_dir, self.output_basename + '.csvt')
-        my_file = file(my_csv_path, 'w')
-        my_file.write('"Real","Real","Real"')
-        my_file.close()
-        return my_path
+        csvt_file = file(csvt_path, 'w')
+        csvt_file.write('"Real","Real","Real"')
+        csvt_file.close()
+
+        return csv_path
 
     def mmi_to_vrt(self, force_flag=True):
         """Save the mmi_data to an ogr vrt text file.
@@ -328,22 +327,23 @@ class ShakeGridConverter(object):
         :returns: The absolute file system path to the .vrt text file.
         :rtype: str
 
-        Raises: None
+        :raises: None
         """
         # Ensure the delimited mmi file exists
         LOGGER.debug('mmi_to_vrt requested.')
 
-        my_vrt_path = os.path.join(
+        vrt_path = os.path.join(
             self.output_dir,
-            self.output_basename + '.vrt')
+            self.output_basename,
+            '.vrt')
 
         #short circuit if the vrt is already created.
-        if os.path.exists(my_vrt_path) and force_flag is not True:
-            return my_vrt_path
+        if os.path.exists(vrt_path) and force_flag is not True:
+            return vrt_path
 
-        my_csv_path = self.mmi_to_delimited_file(True)
+        csv_path = self.mmi_to_delimited_file(True)
 
-        my_vrt_string = (
+        vrt_string = (
             '<OGRVRTDataSource>'
             '  <OGRVRTLayer name="mmi">'
             '    <SrcDataSource>%s</SrcDataSource>'
@@ -351,11 +351,38 @@ class ShakeGridConverter(object):
             '    <GeometryField encoding="PointFromColumns"'
             '                      x="lon" y="lat" z="mmi"/>'
             '  </OGRVRTLayer>'
-            '</OGRVRTDataSource>' % my_csv_path)
-        my_file = file(my_vrt_path, 'w')
-        my_file.write(my_vrt_string)
-        my_file.close()
-        return my_vrt_path
+            '</OGRVRTDataSource>' % csv_path)
+        vrt_file = file(vrt_path, 'w')
+        vrt_file.write(vrt_string)
+        vrt_file.close()
+
+        return vrt_path
+
+        #noinspection PyMethodMayBeStatic
+
+    def _add_executable_prefix(self, command):
+        """Add the executable prefix for gdal binaries.
+
+        This is primarily needed for OSX where gdal tools are tucked away in
+        the Library path.
+
+        :param command: A string containing the command to
+        which the prefix will be prepended
+        :type command: str
+
+        :return: A copy of the command with the prefix added.
+        :rtype: str
+
+        :raises: None
+        """
+
+        executable_prefix = ''
+        if sys.platform == 'darwin':  # Mac OS X
+            # .. todo:: FIXME - softcode gdal version in this path
+            executable_prefix = ('/Library/Frameworks/GDAL.framework/'
+                                 'Versions/1.9/Programs/')
+        command = executable_prefix + command
+        return command
 
     def _run_command(self, command):
         """Run a command and raise any error as needed.
@@ -367,7 +394,7 @@ class ShakeGridConverter(object):
 
         :raises: Any exceptions will be propagated.
         """
-
+        command = self._add_executable_prefix(command)
         try:
             my_result = call(command, shell=True)
             del my_result
@@ -443,18 +470,18 @@ class ShakeGridConverter(object):
             algorithm = 'nearest'
 
         if self.algorithm_name:
-            my_tif_path = os.path.join(
+            tif_path = os.path.join(
                 self.output_dir, '%s-%s.tif' % (
                     self.output_basename, algorithm))
         else:
-            my_tif_path = os.path.join(
+            tif_path = os.path.join(
                 self.output_dir, '%s.tif' % self.output_basename)
         #short circuit if the tif is already created.
-        if os.path.exists(my_tif_path) and force_flag is not True:
-            return my_tif_path
+        if os.path.exists(tif_path) and force_flag is not True:
+            return tif_path
 
         # Ensure the vrt mmi file exists (it will generate csv too if needed)
-        my_vrt_path = self.mmi_to_vrt(force_flag)
+        vrt_path = self.mmi_to_vrt(force_flag)
 
         # now generate the tif using default nearest neighbour interpolation
         # options. This gives us the same output as the mi.grd generated by
@@ -480,8 +507,8 @@ class ShakeGridConverter(object):
                 'yMax': self.y_maximum,
                 'dimX': self.columns,
                 'dimY': self.rows,
-                'vrt': my_vrt_path,
-                'tif': my_tif_path
+                'vrt': vrt_path,
+                'tif': tif_path
             })
 
         LOGGER.info('Created this gdal command:\n%s' % command)
@@ -501,7 +528,7 @@ class ShakeGridConverter(object):
                 self.output_dir, '%s.qml' % self.output_basename)
         my_source_qml = os.path.join(data_dir(), 'mmi.qml')
         shutil.copyfile(my_source_qml, qml_path)
-        return my_tif_path
+        return tif_path
 
     def create_keyword_file(self, title, source, algorithm):
         """Create keyword file for the raster file created.

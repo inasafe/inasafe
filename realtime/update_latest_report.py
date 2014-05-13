@@ -21,10 +21,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import sys
-from utils import is_event_id
+from utilities import is_event_id
 import logging
 
-# The logger is initialized in utils.py by init
+# The logger is initialized in utilities.py by init
 LOGGER = logging.getLogger('InaSAFE')
 try:
     earth_quake_source_path = os.environ['EQ_SOURCE_PATH']

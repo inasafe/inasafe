@@ -22,11 +22,11 @@ import os
 import shutil
 from datetime import datetime
 from zipfile import ZipFile
-# The logger is intiailsed in utils.py by init
+# The logger is intiailsed in utilities.py by init
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 
-from rt_exceptions import (
+from exceptions import (
     EventUndefinedError,
     EventIdError,
     NetworkError,
@@ -34,7 +34,7 @@ from rt_exceptions import (
     InvalidInputZipError,
     ExtractionError)
 from ftp_client import FtpClient
-from utils import shakemap_zip_dir, shakemap_extract_dir
+from utilities import shakemap_zip_dir, shakemap_extract_dir
 
 
 class ShakeData:

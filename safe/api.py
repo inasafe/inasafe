@@ -75,7 +75,9 @@ from safe.common.utilities import (
     get_utm_epsg,
     feature_attributes_as_dict,
     which)
-from safe.common.shake_grid_converter import convert_mmi_data
+from safe.common.shake_grid_converter import (
+    ShakeGridConverter,
+    convert_mmi_data)
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
@@ -91,7 +93,7 @@ from safe.common.signals import (
 from safe.messaging import ErrorMessage
 from safe import metadata
 
-# hack for excluding test-related import in builded package
+# hack for excluding test-related import in built package
 try:
     from safe.common.testing import (
         HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
