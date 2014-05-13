@@ -42,7 +42,8 @@ from safe_qgis.tools.wizard_dialog import (
     WizardDialog,
     step_source,
     step_title,
-    step_classify)
+    step_classify,
+    step_subcategory)
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 
@@ -761,13 +762,66 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(num_item == 1, message)
 
         remove_temp_file(layer.source())
-    # def test_integrated_point(self):
-    #     """Test for point layer and all possibilities."""
-    #     layer = clone_shp_layer(
-    #         name='Marapi',
-    #         directory=HAZDATA)
-    #     dialog = WizardDialog(PARENT, IFACE, None, layer)
 
+    def test_integrated_point(self):
+        """Test for point layer and all possibilities."""
+        layer = clone_shp_layer(
+            name='Marapi',
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        num_categories = dialog.lstCategories.count()
+        expected_num_categories = 1  # hazard
+        message = ('There is should be %d categories, but I got %d' %
+                   (expected_num_categories, num_categories))
+        self.assertEqual(expected_num_categories, num_categories, message)
+
+        expected_category = 'hazard'
+        categories = dialog.lstCategories.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_category, categories))
+        self.assertEqual(expected_category, categories, message)
+
+        dialog.pbnNext.click()  # go to subcategory
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_subcategory
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        num_subcategories = dialog.lstSubcategories.count()
+        expected_num_subcategories = 1  # hazard
+        message = ('There is should be %d categories, but I got %d' %
+                   (expected_num_subcategories, num_subcategories))
+        self.assertEqual(
+            expected_num_subcategories, num_subcategories, message)
+
+        expected_subcategory = 'volcano'
+        subcategories = dialog.lstSubcategories.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_subcategory, subcategories))
+        self.assertEqual(expected_subcategory, subcategories, message)
+
+        dialog.pbnNext.click()  # go to source
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # go to title
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_title
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnCancel.click()
+
+        remove_temp_file(layer.source())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')

@@ -241,9 +241,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 InvalidParameterError,
                 UnsupportedProviderError):
             self.existing_keywords = None
-        self.update_category_tab()
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
+        self.update_category_tab()
+        self.auto_select_one_item(self.lstCategories)
         self.set_existing_options(step_category)
         # noinspection PyUnresolvedReferences
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
@@ -534,6 +535,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.layer_type, self.data_type)
         if self.data_type == 'polygon':
             categories += ['aggregation']
+        if self.data_type == 'point':
+            categories = ['hazard']
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=W0612
