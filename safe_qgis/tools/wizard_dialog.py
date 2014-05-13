@@ -573,9 +573,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lstFields.clear()
         for i in IFM().units_for_layer(
                 subcategory['id'], self.layer_type, self.data_type):
-            item = QListWidgetItem(i['name'], self.lstUnits)
-            item.setData(QtCore.Qt.UserRole, unicode(i))
-            self.lstUnits.addItem(item)
+            if (self.layer_type == 'raster' and
+                    i['constraint'] == 'categorical'):
+                continue
+            else:
+                item = QListWidgetItem(i['name'], self.lstUnits)
+                item.setData(QtCore.Qt.UserRole, unicode(i))
+                self.lstUnits.addItem(item)
 
     def update_field_tab(self):
         """Set widgets on the Field tab."""
