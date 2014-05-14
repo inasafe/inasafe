@@ -914,6 +914,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             # See if the inputs need further refinement for aggregations
             try:
+                # This line is a fix for #997
+                self.aggregator.validate_keywords()
                 self.aggregator.deintersect()
             except (InvalidLayerError,
                     UnsupportedProviderError,
@@ -1184,6 +1186,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Start the analysis
         try:
+
             self.setup_calculator()
         except CallGDALError, e:
             self.analysis_error(e, self.tr(
