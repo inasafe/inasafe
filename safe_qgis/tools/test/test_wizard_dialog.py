@@ -33,13 +33,18 @@ sys.path.append(pardir)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
-from qgis.core import QgsVectorLayer
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import unique_filename
-from safe_qgis.safe_interface import TESTDATA
-from safe_qgis.safe_interface import BOUNDDATA
-from safe_qgis.tools.wizard_dialog import WizardDialog, step_source, step_title
+from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA
+from safe_qgis.tools.wizard_dialog import (
+    WizardDialog,
+    step_source,
+    step_title,
+    step_classify,
+    step_subcategory,
+    step_unit)
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 
@@ -88,6 +93,33 @@ def clone_shp_layer(
     return layer
 
 
+def clone_raster_layer(name, extension, include_keywords, directory):
+    """Helper function that copies a test raster and returns it.
+
+    :param name: The default name for the raster layer.
+    :type name: str
+
+    :param include_keywords: Include keywords file if True.
+    :type include_keywords: bool
+
+    :param directory: Directory where the file is located.
+    :type directory: str
+    """
+    extensions = ['.prj', '.sld', 'qml', '.prj', extension]
+    if include_keywords:
+        extensions.append('.keywords')
+    temp_path = unique_filename()
+
+    # copy to temp file
+    for ext in extensions:
+        src_path = os.path.join(directory, name + ext)
+        if os.path.exists(src_path):
+            trg_path = temp_path + ext
+            shutil.copy2(src_path, trg_path)
+    layer = QgsRasterLayer(temp_path + extension, os.path.basename(temp_path))
+    return layer
+
+
 def remove_temp_file(file_path):
     """Helper function that removes temp file created during test.
 
@@ -98,6 +130,7 @@ def remove_temp_file(file_path):
     """
     file_path = file_path[:-4]
     extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
+    extensions.extend(['.prj', '.sld', 'qml'])
     for ext in extensions:
         if os.path.exists(file_path + ext):
             os.remove(file_path + ext)
@@ -577,8 +610,8 @@ class WizardDialogTest(unittest.TestCase):
         remove_temp_file(layer.source())
 
     # noinspection PyTypeChecker
-    def test_unit_no_type(self):
-        """Test for case existing no type unit for structure."""
+    def test_unit_building_generic(self):
+        """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
             name='building_Maumere',
             include_keywords=True,
@@ -602,6 +635,391 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(expected_current_index, current_index, message)
 
         dialog.pbnNext.click()  # finishing
+
+        remove_temp_file(layer.source())
+
+    def test_default_attributes_value(self):
+        """Checking that default attributes is set to the CIA's one."""
+        layer = clone_shp_layer(
+            name='kecamatan_jakarta',
+            include_keywords=True,
+            directory=BOUNDDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose aggregation go to field step
+        dialog.pbnNext.click()  # choose KEC_NAME go to aggregation step
+
+        ratio_attribute = dialog.cboFemaleRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        ratio_attribute = dialog.cboElderlyRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        ratio_attribute = dialog.cboAdultRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        ratio_attribute = dialog.cboYouthRatioAttribute.currentText()
+        message = 'Expected Use default but I got %s' % ratio_attribute
+        self.assertEqual('Use default', ratio_attribute, message)
+
+        default_value = dialog.dsbFemaleRatioDefault.value()
+        expected_default_value = 0.50
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        default_value = dialog.dsbYouthRatioDefault.value()
+        expected_default_value = 0.26
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        default_value = dialog.dsbAdultRatioDefault.value()
+        expected_default_value = 0.66
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        default_value = dialog.dsbElderlyRatioDefault.value()
+        expected_default_value = 0.08
+        message = ('Expected %s but I got %s' % (
+            expected_default_value, default_value))
+        self.assertEqual(expected_default_value, default_value, message)
+
+        remove_temp_file(layer.source())
+
+    def test_unknown_unit(self):
+        """Checking that it works for unknown unit."""
+        layer = clone_shp_layer(
+            name='Marapi_evac_zone_3000m',
+            include_keywords=True,
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose hazard go to subcategory  step
+        dialog.pbnNext.click()  # choose volcano  go to unit step
+        dialog.lstUnits.setCurrentRow(0)  # Choose volcano categorical
+        expected_unit = 'volcano categorical'
+        unit = dialog.lstUnits.currentItem().text()
+        message = ('Expected %s but I got %s' % (
+            expected_unit, unit))
+        self.assertEqual(expected_unit, unit, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to field step
+        dialog.lstFields.setCurrentRow(0)  # Choose Radius
+        expected_fields = 'Radius'
+        fields = dialog.lstFields.currentItem().text()
+        message = ('Expected %s but I got %s' % (
+            expected_fields, fields))
+        self.assertEqual(expected_fields, fields, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to classify step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_classify
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to source step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to title step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_title
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        remove_temp_file(layer.source())
+
+    def test_point_layer(self):
+        """Wizard for point layer."""
+        layer = clone_shp_layer(
+            name='Marapi',
+            include_keywords=True,
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose hazard go to subcategory  step
+        dialog.pbnNext.click()  # choose volcano  go to source step
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to title step
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_title
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        remove_temp_file(layer.source())
+
+    def test_auto_select_one_item(self):
+        """Test auto select if there is only one item in a list."""
+        layer = clone_shp_layer(
+            name='Marapi_evac_zone_3000m',
+            include_keywords=True,
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        dialog.pbnNext.click()  # choose hazard go to subcategory  step
+        dialog.pbnNext.click()  # choose volcano  go to unit  step
+
+        message = 'It should auto select, but it does not.'
+        self.assertTrue(dialog.lstUnits.currentRow() == 0, message)
+        num_item = dialog.lstUnits.count()
+        message = 'There is should be only one item, I got %s' % num_item
+        self.assertTrue(num_item == 1, message)
+
+        dialog.pbnNext.click()  # choose volcano  go to field  step
+        message = 'It should auto select, but it does not.'
+        self.assertTrue(dialog.lstFields.currentRow() == 0, message)
+        num_item = dialog.lstFields.count()
+        message = 'There is should be only one item, I got %s' % num_item
+        self.assertTrue(num_item == 1, message)
+
+        remove_temp_file(layer.source())
+
+    def test_integrated_point(self):
+        """Test for point layer and all possibilities."""
+        layer = clone_shp_layer(
+            name='Marapi',
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        num_categories = dialog.lstCategories.count()
+        expected_num_categories = 1  # hazard
+        message = ('There is should be %d categories, but I got %d' %
+                   (expected_num_categories, num_categories))
+        self.assertEqual(expected_num_categories, num_categories, message)
+
+        expected_category = 'hazard'
+        categories = dialog.lstCategories.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_category, categories))
+        self.assertEqual(expected_category, categories, message)
+
+        dialog.pbnNext.click()  # go to subcategory
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_subcategory
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        num_subcategories = dialog.lstSubcategories.count()
+        expected_num_subcategories = 1  # hazard
+        message = ('There is should be %d categories, but I got %d' %
+                   (expected_num_subcategories, num_subcategories))
+        self.assertEqual(
+            expected_num_subcategories, num_subcategories, message)
+
+        expected_subcategory = 'volcano'
+        subcategories = dialog.lstSubcategories.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_subcategory, subcategories))
+        self.assertEqual(expected_subcategory, subcategories, message)
+
+        dialog.pbnNext.click()  # go to source
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnNext.click()  # go to title
+
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_title
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnCancel.click()
+
+        remove_temp_file(layer.source())
+
+    def test_integrated_raster(self):
+        """Test for raster layer and all possibilities."""
+        layer = clone_raster_layer(
+            name='eq_yogya_2006',
+            extension='.asc',
+            include_keywords=False,
+            directory=HAZDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        num_categories = dialog.lstCategories.count()
+        expected_num_categories = 2  # hazard and exposure
+        message = ('There is should be %d categories, but I got %d' %
+                   (expected_num_categories, num_categories))
+        self.assertEqual(expected_num_categories, num_categories, message)
+
+        # check if no option is selected
+        expected_category = -1
+        categories = dialog.lstCategories.currentRow()
+        message = ('Expected %s, but I got %s' %
+                   (expected_category, categories))
+        self.assertEqual(expected_category, categories, message)
+
+        # choosing hazard
+        for i in range(dialog.lstCategories.count()):
+            if dialog.lstCategories.item(i).text() == 'hazard':
+                dialog.lstCategories.setCurrentRow(i)
+                break
+
+        dialog.pbnNext.click()  # Go to subcategory
+
+        # check if in step subcategory
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_subcategory
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        # check number of subcategories
+        num_subcategories = dialog.lstSubcategories.count()
+        expected_num_subcategories = 6
+        message = ('There is should be %d categories, but I got %d' %
+                   (expected_num_subcategories, num_subcategories))
+        self.assertEqual(
+            expected_num_subcategories, num_subcategories, message)
+
+        # check the values of subcategories options
+        expected_subcategories = [
+            'flood',
+            'tephra',
+            'volcano',
+            'earthquake',
+            'tsunami',
+            'generic']
+        subcategories = []
+        for i in range(dialog.lstSubcategories.count()):
+            subcategories.append(dialog.lstSubcategories.item(i).text())
+        message = ('Expected %s but I got %s' % (
+            expected_subcategories, subcategories))
+        self.assertItemsEqual(expected_subcategories, subcategories, message)
+
+        # check if no option is selected
+        expected_subcategory_index = -1
+        subcategory_index = dialog.lstSubcategories.currentRow()
+        message = ('Expected %s, but I got %s' %
+                   (expected_subcategory_index, subcategory_index))
+        self.assertEqual(
+            expected_subcategory_index, subcategory_index, message)
+
+        # choosing flood
+        for i in range(dialog.lstSubcategories.count()):
+            if dialog.lstSubcategories.item(i).text() == 'flood':
+                dialog.lstSubcategories.setCurrentRow(i)
+                break
+
+        dialog.pbnNext.click()  # Go to unit
+
+        # check if in step unit
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_unit
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        # check the values of units options
+        expected_units = [
+            'normalised',
+            'metres',
+            'feet']
+        units = []
+        for i in range(dialog.lstUnits.count()):
+            units.append(dialog.lstUnits.item(i).text())
+        message = ('Expected %s but I got %s' % (
+            expected_units, units))
+        self.assertItemsEqual(expected_units, units, message)
+
+        # choosing metres
+        for i in range(dialog.lstUnits.count()):
+            if dialog.lstUnits.item(i).text() == 'metres':
+                dialog.lstUnits.setCurrentRow(i)
+                break
+
+        dialog.pbnNext.click()  # Go to source
+
+        # check if in step source
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnBack.click()  # back to step unit
+        dialog.pbnBack.click()  # back to step subcategory
+
+        # check if in step subcategory
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_subcategory
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        # check if flood is selected
+        expected_subcategory = 'flood'
+        subcategory = dialog.lstSubcategories.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_subcategory, subcategory))
+        self.assertEqual(
+            expected_subcategory, subcategory, message)
+
+        # choosing earthquake
+        for i in range(dialog.lstSubcategories.count()):
+            if dialog.lstSubcategories.item(i).text() == 'earthquake':
+                dialog.lstSubcategories.setCurrentRow(i)
+                break
+
+        dialog.pbnNext.click()  # Go to unit
+
+        # check if in step unit
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_unit
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        # check the values of units options
+        expected_units = [
+            'normalised',
+            'MMI']
+        units = []
+        for i in range(dialog.lstUnits.count()):
+            units.append(dialog.lstUnits.item(i).text())
+        message = ('Expected %s but I got %s' % (
+            expected_units, units))
+        self.assertItemsEqual(expected_units, units, message)
+
+        # choosing MMI
+        for i in range(dialog.lstUnits.count()):
+            if dialog.lstUnits.item(i).text() == 'MMI':
+                dialog.lstUnits.setCurrentRow(i)
+                break
+
+        dialog.pbnNext.click()  # Go to source
+
+        # check if in step source
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
 
         remove_temp_file(layer.source())
 

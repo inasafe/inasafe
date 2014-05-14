@@ -235,16 +235,16 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
         except (HashNotFoundError,
-                Exception,
                 OperationalError,
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
                 InvalidParameterError,
                 UnsupportedProviderError):
             self.existing_keywords = None
-        self.update_category_tab()
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
+        self.update_category_tab()
+        self.auto_select_one_item(self.lstCategories)
         self.set_existing_options(step_category)
         # noinspection PyUnresolvedReferences
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
@@ -535,6 +535,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.layer_type, self.data_type)
         if self.data_type == 'polygon':
             categories += ['aggregation']
+        if self.data_type == 'point':
+            categories = ['hazard']
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=W0612
@@ -571,9 +573,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lstFields.clear()
         for i in IFM().units_for_layer(
                 subcategory['id'], self.layer_type, self.data_type):
-            item = QListWidgetItem(i['name'], self.lstUnits)
-            item.setData(QtCore.Qt.UserRole, unicode(i))
-            self.lstUnits.addItem(item)
+            if (self.layer_type == 'raster' and
+                    i['constraint'] == 'categorical'):
+                continue
+            else:
+                item = QListWidgetItem(i['name'], self.lstUnits)
+                item.setData(QtCore.Qt.UserRole, unicode(i))
+                self.lstUnits.addItem(item)
 
     def update_field_tab(self):
         """Set widgets on the Field tab."""
@@ -604,7 +610,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             item = QListWidgetItem(field_name, self.lstFields)
             item.setData(QtCore.Qt.UserRole, field_name)
             # Select the item if it match the unit's default_attribute
-            if unit and unit['id'] == 'no_type':
+            if unit and unit['id'] == 'building_generic':
                 pass
             else:
                 if unit and 'default_attribute' in unit \
@@ -682,12 +688,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if new_step == step_subcategory:
             self.update_subcategory_tab()
             self.set_existing_options(step_subcategory)
+            self.auto_select_one_item(self.lstSubcategories)
         elif new_step == step_unit:
             self.update_unit_tab()
             self.set_existing_options(step_unit)
+            self.auto_select_one_item(self.lstUnits)
         elif new_step == step_field:
             self.update_field_tab()
             self.set_existing_options(step_field)
+            self.auto_select_one_item(self.lstFields)
         elif new_step == step_classify:
             self.update_classify_tab()
             self.set_existing_options(step_classify)
@@ -769,7 +778,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_field
         elif current_step == step_subcategory:
             subcategory = self.selected_subcategory()
-            if IFM().units_for_layer(
+            # skip field and classify step if point layer and it's a volcano
+            if self.data_type == 'point' and subcategory['id'] == 'volcano':
+                new_step = step_source
+            elif IFM().units_for_layer(
                     subcategory['id'], self.layer_type, self.data_type):
                 new_step = step_unit
             else:
@@ -786,7 +798,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             new_step = step_source
         elif current_step == step_unit:
             unit = self.selected_unit()
-            if unit and unit['id'] == 'no_type':
+            if unit and unit['id'] == 'building_generic':
                 new_step = step_source
             else:
                 new_step = current_step + 1
@@ -799,6 +811,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Skip the field (and classify) tab if raster layer
         if new_step == step_field and is_raster_layer(self.layer):
             new_step = step_source
+
         return new_step
 
     def compute_previous_step(self, current_step):
@@ -1038,21 +1051,29 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if female_ratio_default:
             self.dsbFemaleRatioDefault.setValue(
                 float(female_ratio_default))
+        else:
+            self.dsbFemaleRatioDefault.setValue(DEFAULTS['FEMALE_RATIO'])
 
         youth_ratio_default = self.get_existing_keyword(
             youth_ratio_default_key)
         if youth_ratio_default:
             self.dsbYouthRatioDefault.setValue(float(youth_ratio_default))
+        else:
+            self.dsbYouthRatioDefault.setValue(DEFAULTS['YOUTH_RATIO'])
 
         adult_ratio_default = self.get_existing_keyword(
             adult_ratio_default_key)
         if adult_ratio_default:
             self.dsbAdultRatioDefault.setValue(float(adult_ratio_default))
+        else:
+            self.dsbAdultRatioDefault.setValue(DEFAULTS['ADULT_RATIO'])
 
         elderly_ratio_default = self.get_existing_keyword(
             elderly_ratio_default_key)
         if elderly_ratio_default:
             self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
+        else:
+            self.dsbElderlyRatioDefault.setValue(DEFAULTS['ELDERLY_RATIO'])
 
         ratio_attribute_keys = [
             female_ratio_attribute_key,
@@ -1181,3 +1202,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.leSource_date.setToolTip(date_tooltip)
         self.leSource_scale.setToolTip(scale_tooltip)
         self.leSource_url.setToolTip(url_tooltip)
+
+    # noinspection PyUnresolvedReferences
+    def auto_select_one_item(self, list_widget):
+        """Select item in the list in list_widget if it's the only item.
+
+        :param list_widget: The list widget that want to be checked.
+        :type list_widget: QListWidget
+        """
+        if list_widget.count() == 1 and list_widget.currentRow() == -1:
+            list_widget.setCurrentRow(0)

@@ -14,7 +14,7 @@ from safe.metadata import (
     unit_building_type_type,
     hazard_definition,
     exposure_definition,
-    unit_no_type)
+    unit_building_generic)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr, format_int
 from safe.common.tables import Table, TableRow
@@ -79,7 +79,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     'exposure': {
                         'definition': exposure_definition,
                         'subcategory': exposure_structure,
-                        'units': [unit_building_type_type, unit_no_type],
+                        'units': [
+                            unit_building_type_type,
+                            unit_building_generic],
                         'layer_constraints': [
                             layer_vector_polygon,
                             layer_vector_point
