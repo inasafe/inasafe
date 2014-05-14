@@ -1014,10 +1014,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if type(value_map) == str:
                 try:
                     value_map = json.loads(value_map)
-                    field_index = self.layer.dataProvider().fields().indexFromName(
-                        self.selected_field())
                 except ValueError:
                     return
+            field_index = self.layer.dataProvider().fields().indexFromName(
+                self.selected_field())
             for unique_value in self.layer.uniqueValues(field_index):
                 value_as_string = (
                     unique_value and unicode(unique_value) or 'NULL')
