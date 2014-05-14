@@ -141,6 +141,13 @@ hazard_all = [
 ]
 
 # units
+unit_building_generic = {
+    'id': 'building_generic',
+    'name': tr('building generic'),
+    'description': tr(
+        '<b>Building generic</b> unit means that there is no building type '
+        'attribute in the exposure data.')
+}
 unit_building_type_type = {
     'id': 'building_type',
     'name': tr('building type'),
@@ -190,14 +197,6 @@ unit_normalised = {
         'have been classified or coded.'
     ),
     'constraint': 'continuous'
-}
-unit_no_type = {
-    'id': 'no_type',
-    'name': tr('no type'),
-    'description': tr(
-        '<b>No type</b> unit means that there is no building type attribute '
-        'in the exposure data.'
-    ),
 }
 unit_people_per_pixel = {
     'id': 'people_per_pixel',
@@ -362,6 +361,6 @@ def get_name(unit_id):
         try:
             unit = eval('unit_%s' % unit_id.lower())
             unit_name = unit['name']
-        except (KeyError, NameError):
+        except (KeyError, NameError, AttributeError):
             return None
     return unit_name
