@@ -237,7 +237,11 @@ class Map():
         :rtype: list
         """
         missing_elements = []
+        # see issue #994 - some missing elements may be ok
+        allowed_missing_elements = ['impact-report']
         for component_id in self.component_ids:
+            if component_id in allowed_missing_elements:
+                continue
             component = self.composition.getComposerItemById(component_id)
             if component is None:
                 missing_elements.append(component_id)
