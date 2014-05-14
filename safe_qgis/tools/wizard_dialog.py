@@ -1000,6 +1000,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
             # Do not continue if there is no value_map in existing keywords
             value_map = self.get_existing_keyword('value_map')
+
             if value_map is None:
                 return
 
@@ -1011,11 +1012,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             for default_class in default_classes:
                 assigned_values[default_class['name']] = list()
             if type(value_map) == str:
-                value_map = json.loads(value_map)
-            field_index = self.layer.dataProvider().fields().indexFromName(
-                self.selected_field())
-            for value in self.layer.uniqueValues(field_index):
-                value_as_string = value and unicode(value) or 'NULL'
+                try:
+                    value_map = json.loads(value_map)
+                    field_index = self.layer.dataProvider().fields().indexFromName(
+                        self.selected_field())
+                except ValueError:
+                    return
+            for unique_value in self.layer.uniqueValues(field_index):
+                value_as_string = (
+                    unique_value and unicode(unique_value) or 'NULL')
                 # check in value map
                 assigned = False
                 for key, value in value_map.iteritems():
