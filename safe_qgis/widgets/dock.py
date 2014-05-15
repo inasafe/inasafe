@@ -1980,7 +1980,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         print_map.set_template(template_path)
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-report', 'impact-map', 'impact-legend']
+                         'impact-map', 'impact-legend']
         print_map.set_component_ids(component_ids)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
