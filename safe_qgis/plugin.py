@@ -579,18 +579,32 @@ class Plugin:
             dock=self.dock_widget)
         dialog.save_scenario()
 
+    def _disable_keyword_tools(self):
+        """Internal helper to disable the keyword and wizard actions."""
+        self.action_keywords_dialog.setEnabled(False)
+        self.action_keywords_wizard.setEnabled(False)
+
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
+
         :param layer: The layer that is now active.
         :type layer: QgsMapLayer
         """
-        if not layer or layer.providerType() == 'wms' \
-                or (is_raster_layer(layer) and layer.bandCount() > 1):
-            self.action_keywords_dialog.setEnabled(False)
-            self.action_keywords_wizard.setEnabled(False)
-        else:
-            self.action_keywords_dialog.setEnabled(True)
-            self.action_keywords_wizard.setEnabled(True)
+        if not layer:
+            self._disable_keyword_tools()
+            return
+        if not hasattr(layer, 'providerType'):
+            self._disable_keyword_tools()
+            return
+        if layer.providerType() == 'wms':
+            self._disable_keyword_tools()
+            return
+        if is_raster_layer(layer) and layer.bandCount() > 1:
+            self._disable_keyword_tools()
+            return
+
+        self.action_keywords_dialog.setEnabled(True)
+        self.action_keywords_wizard.setEnabled(True)
 
     def shortcut_f7(self):
         """Executed when user press F7 - will show the shakemap importer."""
