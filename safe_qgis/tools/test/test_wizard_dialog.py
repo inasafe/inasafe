@@ -474,9 +474,9 @@ class WizardDialogTest(unittest.TestCase):
             sub_category_name = dialog.lstSubcategories.item(i).text()
             if sub_category_name == chosen_sub_category:
                 chosen_sub_category_index = i
-            message = 'There is no %s in the list widget of sub category.' % (
-                chosen_sub_category)
-            self.assertIsNot(chosen_sub_category_index, -1, message)
+        message = 'There is no %s in the list widget of sub category.' % (
+            chosen_sub_category)
+        self.assertIsNot(chosen_sub_category_index, -1, message)
         # Choose the row and click!
         dialog.lstSubcategories.setCurrentRow(chosen_sub_category_index)
         dialog.pbnNext.click()
