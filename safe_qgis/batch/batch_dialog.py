@@ -214,8 +214,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             elif extension == '.txt':
                 # insert scenarios from file into table widget
                 try:
-                    for key, value\
-                            in read_scenarios(absolute_path).iteritems():
+                    scenarios = read_scenarios(absolute_path)
+                    for key, value in scenarios.iteritems():
                         append_row(self.table, key, value)
                     parsed_files.append(current_path)
                 except ParsingError:

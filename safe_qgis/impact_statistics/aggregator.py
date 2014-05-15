@@ -162,8 +162,7 @@ class Aggregator(QtCore.QObject):
         # If keywords don't assigned with self.layer,
         # set up dummy keywords
         try:
-            _ = self.read_keywords(
-                self.layer)
+            _ = self.read_keywords(self.layer)
         except NoKeywordsFoundError:
             # No kw file was found for layer - create an empty one.
             keywords = {}
@@ -328,7 +327,7 @@ class Aggregator(QtCore.QObject):
 
             if (aggregation_attribute in keywords
                 and ('category' in keywords and
-                        category == 'postprocessing')
+                             category == 'postprocessing')
                 and (female_ratio in keywords and
                          (female_ratio != self.tr('Use default') or
                           female_ratio_key in keywords))
@@ -340,8 +339,7 @@ class Aggregator(QtCore.QObject):
                           adult_ratio_key in keywords))
                 and (elderly_ratio in keywords and
                          (elderly_ratio != self.tr('Use default') or
-                          elderly_ratio_key in keywords))
-            ):
+                          elderly_ratio_key in keywords))):
                 self.is_valid = True
             #some keywords are needed
             else:
