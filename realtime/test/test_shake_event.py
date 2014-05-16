@@ -28,6 +28,7 @@ import shutil
 import unittest
 import logging
 import difflib
+import zipfile
 
 import ogr
 #noinspection PyPackageRequirements
@@ -39,87 +40,60 @@ from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
-from realtime.utilities import shakemap_extract_dir, shakemap_zip_dir, data_dir
+from realtime.utilities import (
+    shakemap_extract_dir,
+    shakemap_cache_dir,
+    shakemap_zip_dir,
+    data_dir)
 from realtime.shake_event import ShakeEvent
 # The logger is intialised in utilities.py by init
 LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+# Shake ID for this test
+SHAKE_ID = '20120726022003'
+
 
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
-
     #noinspection PyPep8Naming
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir."""
-        output_file = '20120726022003.out.zip'
-        input_file = '20120726022003.inp.zip'
-        output_path = os.path.abspath(os.path.join(
-            os.path.dirname(__file__),
-            '../fixtures',
-            output_file))
-        input_path = os.path.abspath(os.path.join(
-            os.path.dirname(__file__),
-            '../fixtures',
-            input_file))
-        shutil.copyfile(output_path,
-                        os.path.join(shakemap_zip_dir(), output_file))
-        shutil.copyfile(input_path,
-                        os.path.join(shakemap_zip_dir(), input_file))
+        # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
+        # file inside 20120726022003 folder to
+        # shakemap_cache_dir/20120726022003/grid.xml
+        input_path = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                '../fixtures/shake_data',
+                SHAKE_ID,
+                'output/grid.xml'))
+        target_folder = os.path.join(
+            shakemap_extract_dir(), SHAKE_ID)
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
 
-        #TODO Downloaded data should be removed before each test
+        target_path = os.path.abspath(os.path.join(target_folder, 'grid.xml'))
+        shutil.copyfile(input_path, target_path)
 
-    def test_grid_xml_file_path(self):
-        """Test eventFilePath works(using cached data)."""
-        shake_id = '20120726022003'
-        expected_path = os.path.join(shakemap_extract_dir(),
-                                     shake_id,
-                                     'grid.xml')
-        shake_event = ShakeEvent(shake_id)
+    #noinspection PyPep8Naming
+    def tearDown(self):
+        """Delete the cached data."""
+        target_path = os.path.join(shakemap_extract_dir(), SHAKE_ID)
+        shutil.rmtree(target_path)
+
+    def test_grid_file_path(self):
+        """Test grid_file_path works using cached data."""
+        expected_path = os.path.join(
+            shakemap_extract_dir(), SHAKE_ID, 'grid.xml')
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         grid_path = shake_event.grid_file_path()
         self.assertEquals(expected_path, grid_path)
-
-    def test_event_parser(self):
-        """Test eventFilePath works (using cached data)"""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
-        self.assertEquals(26, shake_event.shake_grid_converter.day)
-        self.assertEquals(7, shake_event.month)
-        self.assertEquals(2012, shake_event.year)
-        self.assertEquals(2, shake_event.hour)
-        self.assertEquals(15, shake_event.minute)
-        self.assertEquals(35, shake_event.second)
-        self.assertEquals('WIB', shake_event.timezone)
-        self.assertEquals(124.45, shake_event.longitude)
-        self.assertEquals(-0.21, shake_event.latitude)
-        self.assertEquals(11.0, shake_event.depth)
-        self.assertEquals('Southern Molucca Sea', shake_event.location)
-        self.assertEquals(122.45, shake_event.x_minimum)
-        self.assertEquals(126.45, shake_event.x_maximum)
-        self.assertEquals(-2.21, shake_event.y_minimum)
-        self.assertEquals(1.79, shake_event.y_maximum)
-
-        grid_xml_data = shake_event.mmi_data
-        self.assertEquals(25921, len(grid_xml_data))
-
-        delimited_string = shake_event.mmi_data_to_delimited_text()
-        self.assertEqual(578234, len(delimited_string))
-
-    def test_event_grid_to_csv(self):
-        """Test grid data can be written to csv"""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
-        file_path = shake_event.mmi_data_to_delimited_file(force_flag=True)
-        delimited_file = file(file_path)
-        delimited_string = delimited_file.readlines()
-        delimited_file.close()
-        self.assertEqual(25922, len(delimited_string))
 
     #noinspection PyMethodMayBeStatic
     def test_event_to_raster(self):
         """Check we can convert the shake event to a raster"""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         expected_state = """latitude: -0.21
 longitude: 124.45
 event_id: 20120726022003
@@ -164,8 +138,7 @@ search_boxes: None
     #noinspection PyMethodMayBeStatic
     def test_event_to_shapefile(self):
         """Check we can convert the shake event to a raster"""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.mmi_data_to_shapefile(force_flag=True)
         assert os.path.exists(file_path)
         expected_qml = file_path.replace('shp', 'qml')
@@ -191,8 +164,7 @@ search_boxes: None
 
     def test_event_to_contours(self):
         """Check we can extract contours from the event"""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.mmi_data_to_contours(force_flag=True,
                                                      algorithm='invdist')
         assert self.check_feature_count(file_path, 16)
@@ -210,8 +182,7 @@ search_boxes: None
 
     def test_local_cities(self):
         """Test that we can retrieve the cities local to the event"""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         # Get teh mem layer
         cities_layer = shake_event.local_cities_memory_layer()
         provider = cities_layer.dataProvider()
@@ -260,16 +231,14 @@ search_boxes: None
     #noinspection PyMethodMayBeStatic
     def test_cities_to_shape(self):
         """Test that we can retrieve the cities local to the event."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.cities_to_shapefile()
         assert os.path.exists(file_path)
 
     #noinspection PyMethodMayBeStatic
     def test_cities_search_boxes_to_shape(self):
         """Test that we can retrieve the search boxes used to find cities."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.city_search_boxes_to_shapefile()
         assert os.path.exists(file_path)
 
@@ -277,8 +246,7 @@ search_boxes: None
     def test_calculate_fatalities(self):
         """Test that we can calculate fatalities."""
         LOGGER.debug(QGIS_APP.showSettings())
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         result, fatalities_html = shake_event.calculate_impacts()
 
         expected_result = (
@@ -312,20 +280,18 @@ search_boxes: None
     #noinspection PyMethodMayBeStatic
     def test_bounds_to_rect(self):
         """Test that we can calculate the event bounds properly"""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         bounds = shake_event.bounds_to_rectangle().toString()
         expected_result = (
             '122.4500000000000028,-2.2100000000000000 : '
             '126.4500000000000028,1.7900000000000000')
         message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
-        assert bounds == expected_result, message
+        self.assertEqual(bounds, expected_result, message)
 
     #noinspection PyMethodMayBeStatic
     def test_romanize(self):
         """Test we can convert MMI values to float."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
 
         values = range(2, 10)
         expected_result = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
@@ -333,12 +299,11 @@ search_boxes: None
         for value in values:
             result.append(shake_event.romanize(value))
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
-        assert result == expected_result, message
+        self.assertEqual(result, expected_result, message)
 
     def test_sorted_impacted_cities(self):
         """Test getting impacted cities sorted by mmi then population."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         table = shake_event.sorted_impacted_cities()
 
         file_path = unique_filename(
@@ -363,8 +328,7 @@ search_boxes: None
 
     def test_impacted_cities_table(self):
         """Test getting impacted cities table."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         table, path = shake_event.impacted_cities_table()
         expected_string = [
             '<td>Tondano</td><td>33</td><td>I</td>',
@@ -373,21 +337,20 @@ search_boxes: None
             '<td>Manado</td><td>451</td><td>I</td>',
             '<td>Gorontalo</td><td>144</td><td>II</td>']
         table = table.toNewlineFreeString().replace('   ', '')
-        for myString in expected_string:
-            self.assertIn(myString, table)
+        for string in expected_string:
+            self.assertIn(string, table)
 
         self.max_diff = None
         expected_path = (
             '/tmp/inasafe/realtime/shakemaps-extracted/'
             '20120726022003/affected-cities.html')
         message = 'Got:\n%s\nExpected:\n%s\n' % (path, expected_path)
-        assert path == expected_path, message
+        self.assertEqual(path, expected_path, message)
 
     #noinspection PyMethodMayBeStatic
     def test_fatalities_table(self):
         """Test rendering a fatalities table."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         shake_event.calculate_impacts()
         result = shake_event.impact_table()
         # TODO compare actual content of impact table...
@@ -400,8 +363,7 @@ search_boxes: None
 
     def test_event_info_dict(self):
         """Test we can get a dictionary of location info nicely."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         result = shake_event.event_dict()
         #noinspection PyUnresolvedReferences
         expected_dict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
@@ -473,8 +435,7 @@ search_boxes: None
     #noinspection PyMethodMayBeStatic
     def test_event_info_string(self):
         """Test we can get a location info string nicely."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         degree_symbol = unichr(176)
         expected_result = (
             'M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S Longitude: '
@@ -488,50 +449,35 @@ search_boxes: None
     #noinspection PyMethodMayBeStatic
     def test_bearing_to_cardinal(self):
         """Test we can convert a bearing to a cardinal direction."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id)
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
 
         # Ints should work
         expected_result = 'SSE'
         result = shake_event.bearing_to_cardinal(160)
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
-        assert result == expected_result, message
+        self.assertEqual(result, expected_result, message)
 
         # Floats should work
         expected_result = 'SW'
         result = shake_event.bearing_to_cardinal(225.4)
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
-        assert result == expected_result, message
+        self.assertEqual(result, expected_result, message)
 
         # non numeric data as input should return None
         expected_result = None
         result = shake_event.bearing_to_cardinal('foo')
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
-        assert result == expected_result, message
+        self.assertEqual(result, expected_result, message)
 
     def test_i18n(self):
         """See if internationalisation is working."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id, locale='id')
+        shake_event = ShakeEvent(SHAKE_ID, locale='id', data_is_local_flag=True)
         shaking = shake_event.mmi_shaking(5)
         expected_shaking = 'Sedang'
         self.assertEqual(expected_shaking, shaking)
-
-    def test_extract_date_time(self):
-        """Check that we extract date and time correctly."""
-        shake_id = '20120726022003'
-        shake_event = ShakeEvent(shake_id, locale='en')
-        shake_event.extract_datetime('2012-08-07T01:55:12WIB')
-        self.assertEqual(1, shake_event.hour)
-        self.assertEqual(55, shake_event.minute)
-        self.assertEqual(12, shake_event.second)
-        shake_event.extract_datetime('2013-02-07T22:22:37WIB')
-        self.assertEqual(22, shake_event.hour)
-        self.assertEqual(22, shake_event.minute)
-        self.assertEqual(37, shake_event.second)
 
 
 class DictDiffer(object):

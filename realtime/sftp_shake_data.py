@@ -166,7 +166,6 @@ class SftpShakeData:
             shakemap_cache_dir(), self.event_id, xml_file_name)
         return xml_file_path
 
-
     def is_on_server(self):
         """Check the event associated with this instance exists on the server.
 
