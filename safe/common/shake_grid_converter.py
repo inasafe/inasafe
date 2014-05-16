@@ -299,7 +299,7 @@ class ShakeGridConverter(object):
         LOGGER.debug('mmi_to_delimited_text requested.')
 
         csv_path = os.path.join(
-            self.output_dir, self.output_basename, 'mmi.csv')
+            self.output_dir, 'mmi.csv')
         #short circuit if the csv is already created.
         if os.path.exists(csv_path) and force_flag is not True:
             return csv_path
@@ -334,8 +334,7 @@ class ShakeGridConverter(object):
 
         vrt_path = os.path.join(
             self.output_dir,
-            self.output_basename,
-            '.vrt')
+            self.output_basename + '.vrt')
 
         #short circuit if the vrt is already created.
         if os.path.exists(vrt_path) and force_flag is not True:
