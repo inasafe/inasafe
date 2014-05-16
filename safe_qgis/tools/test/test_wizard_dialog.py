@@ -448,14 +448,65 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(include_keywords=True)
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE, None, layer)
-        dialog.lstCategories.setCurrentRow(1)  # hazard
+
+        # All desired item
+        chosen_category = 'hazard'
+        chosen_sub_category = 'volcano'
+        chosen_unit = 'volcano categorical'
+        chosen_field = 'GRIDCODE'
+
+        # Get index for hazard category
+        chosen_category_index = -1
+        for i in range(dialog.lstCategories.count()):
+            category_name = dialog.lstCategories.item(i).text()
+            if category_name == chosen_category:
+                chosen_category_index = i
+        message = 'There is no %s in the list widget of category.' % (
+            chosen_category)
+        self.assertIsNot(chosen_category_index, -1, message)
+        # Choose the row and click!
+        dialog.lstCategories.setCurrentRow(chosen_category_index)
         dialog.pbnNext.click()
-        dialog.lstSubcategories.setCurrentRow(3)  # volcano
+
+        # Get index for sub category volcano
+        chosen_sub_category_index = -1
+        for i in range(dialog.lstSubcategories.count()):
+            sub_category_name = dialog.lstSubcategories.item(i).text()
+            if sub_category_name == chosen_sub_category:
+                chosen_sub_category_index = i
+        message = 'There is no %s in the list widget of sub category.' % (
+            chosen_sub_category)
+        self.assertIsNot(chosen_sub_category_index, -1, message)
+        # Choose the row and click!
+        dialog.lstSubcategories.setCurrentRow(chosen_sub_category_index)
         dialog.pbnNext.click()
-        dialog.lstUnits.setCurrentRow(0)  # volcano categorical
+
+        # Get index for volcano categorical unit
+        chosen_unit_index = -1
+        for i in range(dialog.lstUnits.count()):
+            unit_name = dialog.lstUnits.item(i).text()
+            if unit_name == chosen_unit:
+                chosen_unit_index = i
+        message = 'There is no %s in the list widget of unit.' % (
+            chosen_unit)
+        self.assertIsNot(chosen_unit_index, -1, message)
+        # Choose the row and click!
+        dialog.lstUnits.setCurrentRow(chosen_unit_index)
         dialog.pbnNext.click()
-        dialog.lstFields.setCurrentRow(1)  # GRIDCODE
+
+        # Get index for GRIDCODE field
+        chosen_field_index = -1
+        for i in range(dialog.lstFields.count()):
+            field_name = dialog.lstFields.item(i).text()
+            if field_name == chosen_field:
+                chosen_field_index = i
+        message = 'There is no %s in the list widget of field.' % (
+            chosen_field)
+        self.assertIsNot(chosen_field_index, -1, message)
+        # Choose the row and click!
+        dialog.lstFields.setCurrentRow(chosen_field_index)
         dialog.pbnNext.click()
+
         unit = dialog.selected_unit()
         default_classes = unit['classes']
         unassigned_values = []  # no need to check actually, not save in
