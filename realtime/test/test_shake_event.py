@@ -28,7 +28,6 @@ import shutil
 import unittest
 import logging
 import difflib
-import zipfile
 
 import ogr
 #noinspection PyPackageRequirements
@@ -46,7 +45,9 @@ from realtime.utilities import (
     shakemap_zip_dir,
     data_dir)
 from realtime.shake_event import ShakeEvent
-# The logger is intialised in utilities.py by init
+from realtime.utilities import base_data_dir
+
+# The logger is initialised in realtime/__init__
 LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -94,46 +95,48 @@ class TestShakeEvent(unittest.TestCase):
     def test_event_to_raster(self):
         """Check we can convert the shake event to a raster"""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        expected_state = """latitude: -0.21
-longitude: 124.45
-event_id: 20120726022003
-magnitude: 5.0
-depth: 11.0
-description: None
-location: Southern Molucca Sea
-day: 26
-month: 7
-year: 2012
-time: None
-time_zone: WIB
-x_minimum: 122.45
-x_maximum: 126.45
-y_minimum: -2.21
-y_maximum: 1.79
-rows: 161.0
-columns: 161.0
-mmi_data: Populated
-population_raster_path: None
-impact_file: None
-impact_keywords_file: None
-fatality_counts: None
-displaced_counts: None
-affected_counts: None
-extent_with_cities: Not set
-zoom_factor: 1.25
-search_boxes: None
-"""
+        expected_state = (
+            'latitude: -0.21\n'
+            'longitude: 124.45\n'
+            'event_id: 20120726022003\n'
+            'magnitude: 5.0\n'
+            'depth: 11.0\n'
+            'description: None\n'
+            'location: Southern Molucca Sea\n'
+            'day: 26\n'
+            'month: 7\n'
+            'year: 2012\n'
+            'time: None\n'
+            'time_zone: WIB\n'
+            'x_minimum: 122.45\n'
+            'x_maximum: 126.45\n'
+            'y_minimum: -2.21\n'
+            'y_maximum: 1.79\n'
+            'rows: 161.0\n'
+            'columns: 161.0\n'
+            'mmi_data: Populated\n'
+            'population_raster_path: None\n'
+            'impact_file: None\n'
+            'impact_keywords_file: None\n'
+            'fatality_counts: None\n'
+            'displaced_counts: None\n'
+            'affected_counts: None\n'
+            'extent_with_cities: Not set\n'
+            'zoom_factor: 1.25\n'
+            'search_boxes: None\n')
+
         state = str(shake_event)
+        print state
         message = (('Expected:\n----------------\n%s'
                     '\n\nGot\n------------------\n%s\n') %
                    (expected_state, state))
-        assert state == expected_state, message
+        self.assertEqual(state, expected_state, message)
         raster_path = shake_event.mmi_data_to_raster(force_flag=True)
-        assert os.path.exists(raster_path)
+        self.assertTrue(os.path.exists(raster_path))
         expected_qml = raster_path.replace('tif', 'qml')
-        assert os.path.exists(expected_qml)
+        self.assertTrue(os.path.exists(expected_qml))
         expected_keywords = raster_path.replace('tif', 'keywords')
-        assert os.path.exists(expected_keywords)
+        self.assertTrue(os.path.exists(expected_keywords))
 
     #noinspection PyMethodMayBeStatic
     def test_event_to_shapefile(self):
@@ -196,7 +199,7 @@ search_boxes: None
             attributes = cities_layer.dataProvider().attributeIndexes()
             for attribute_key in attributes:
                 strings.append("%d: %s\n" % (
-                    attribute_key, feature[attribute_key].toString()))
+                    attribute_key, feature[attribute_key]))
             strings.append('------------------\n')
         LOGGER.debug('Mem table:\n %s' % strings)
         file_path = unique_filename(prefix='test_local_cities',
@@ -249,20 +252,19 @@ search_boxes: None
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         result, fatalities_html = shake_event.calculate_impacts()
 
-        expected_result = (
-            '/tmp/inasafe/realtime/shakemaps-extracted'
-            '/20120726022003/impact-nearest.tif')
-        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
-        assert result == expected_result, message
+        # Get the os environment INASAFE_WORK_DIR if it exists
+        inasafe_work_dir = base_data_dir()
 
-        expected_result = (
-            '/tmp/inasafe/realtime/shakemaps-extracted'
-            '/20120726022003/impacts.html')
+        expected_result = ('%s/shakemaps-extracted/20120726022003/impact'
+                           '-nearest.tif') % inasafe_work_dir
+        message = 'Got: %s, Expected: %s' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
 
-        message = 'Got:\n%s\nExpected:\n%s\n' % (
-            fatalities_html,
-            expected_result)
-        assert fatalities_html == expected_result, message
+        expected_result = ('%s/shakemaps-extracted/20120726022003/impacts'
+                           '.html') % inasafe_work_dir
+
+        message = 'Got: %s, Expected: %s' % (fatalities_html, expected_result)
+        self.assertEqual(fatalities_html, expected_result, message)
 
         expected_fatalities = {2: 0.0,  # rounded from 0.47386375223673427,
                                3: 0.0,  # rounded from 0.024892573693488258,
@@ -272,10 +274,10 @@ search_boxes: None
                                7: 0.0,
                                8: 0.0,
                                9: 0.0}
-
-        message = 'Got:\n%s\nExpected:\n%s\n' % (
+        message = 'Got: %s, Expected: %s' % (
             shake_event.fatality_counts, expected_fatalities)
-        assert shake_event.fatality_counts == expected_fatalities, message
+        self.assertEqual(
+            shake_event.fatality_counts, expected_fatalities, message)
 
     #noinspection PyMethodMayBeStatic
     def test_bounds_to_rect(self):
@@ -324,7 +326,8 @@ search_boxes: None
         expected_string = expected_string.replace(', \'', ',\n\'')
 
         self.max_diff = None
-        self.assertEqual(expected_string, table)
+        message = 'Expectation:\n%s, Got\n%s' % (expected_string, table)
+        self.assertEqual(expected_string, table, message)
 
     def test_impacted_cities_table(self):
         """Test getting impacted cities table."""
@@ -341,9 +344,12 @@ search_boxes: None
             self.assertIn(string, table)
 
         self.max_diff = None
+
+        # Get the os environment INASAFE_WORK_DIR if it exists
+        inasafe_work_dir = base_data_dir()
         expected_path = (
-            '/tmp/inasafe/realtime/shakemaps-extracted/'
-            '20120726022003/affected-cities.html')
+            '%s/shakemaps-extracted/20120726022003/affected-cities.html' %
+            inasafe_work_dir)
         message = 'Got:\n%s\nExpected:\n%s\n' % (path, expected_path)
         self.assertEqual(path, expected_path, message)
 
@@ -353,78 +359,69 @@ search_boxes: None
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         shake_event.calculate_impacts()
         result = shake_event.impact_table()
+
         # TODO compare actual content of impact table...
+
+        # Get the os environment INASAFE_WORK_DIR if it exists
+        inasafe_work_dir = base_data_dir()
         expected_result = (
-            '/tmp/inasafe/realtime/shakemaps-extracted/'
-            '20120726022003/impacts.html')
-        message = ('Got:\n%s\nExpected:\n%s' %
-                   (result, expected_result))
-        assert result == expected_result, message
+            '%s/shakemaps-extracted/20120726022003/impacts.html' %
+            inasafe_work_dir)
+        message = 'Got:\n%s\nExpected:\n%s' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
 
     def test_event_info_dict(self):
         """Test we can get a dictionary of location info nicely."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         result = shake_event.event_dict()
         #noinspection PyUnresolvedReferences
-        expected_dict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
-                         'depth-name': PyQt4.QtCore.QString(u'Depth'),
-                         'fatalities-name': PyQt4.QtCore.QString(
-                             u'Estimated fatalities'),
-                         'fatalities-count': u'0',  # 44 only after render
-                         'elapsed-time': u'',  # empty as it will change
-                         'legend-name': PyQt4.QtCore.QString(
-                             u'Population density'),
-                         'fatalities-range': '0 - 100',
-                         'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
-                         'located-label': PyQt4.QtCore.QString(u'Located'),
-                         'distance-unit': PyQt4.QtCore.QString(u'km'),
-                         'bearing-compass': u'n/a',
-                         'elapsed-time-name': PyQt4.QtCore.QString(
-                             u'Elapsed time since event'),
-                         'exposure-table-name': PyQt4.QtCore.QString(
-                             u'Estimated number of people affected by each '
-                             u'MMI level'),
-                         'longitude-value': u'124\xb027\'0.00"E',
-                         'city-table-name': PyQt4.QtCore.QString(
-                             u'Places Affected'),
-                         'bearing-text': PyQt4.QtCore.QString(u'bearing'),
-                         'limitations': PyQt4.QtCore.QString(
-                             u'This impact estimation is automatically '
-                             u'generated and only takes into account the '
-                             u'population and cities affected by different '
-                             u'levels of ground shaking. The estimate is '
-                             u'based on ground shaking data from BMKG, '
-                             u'population density data from asiapop.org, '
-                             u'place information from geonames.org and '
-                             u'software developed by BNPB. Limitations in '
-                             u'the estimates of ground shaking, '
-                             u'population  data and place names datasets may'
-                             u' result in significant misrepresentation of '
-                             u'the on-the-ground situation in the figures '
-                             u'shown here. Consequently decisions should not'
-                             u' be made solely on the information presented '
-                             u'here and should always be verified by ground '
-                             u'truthing and other reliable information '
-                             u'sources. The fatality calculation assumes '
-                             u'that no fatalities occur for shake levels '
-                             u'below MMI 4. Fatality counts of less than 50 '
-                             u'are disregarded.'),
-                         'depth-unit': PyQt4.QtCore.QString(u'km'),
-                         'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
-                         'mmi': '5.0',
-                         'map-name': PyQt4.QtCore.QString(
-                             u'Estimated Earthquake Impact'),
-                         'date': '26-7-2012',
-                         'bearing-degrees': '0.00\xb0',
-                         'formatted-date-time': '26-Jul-12 02:15:35 ',
-                         'distance': '0.00',
-                         'direction-relation': PyQt4.QtCore.QString(u'of'),
-                         'credits': PyQt4.QtCore.QString(
-                             u'Supported by the Australia-Indonesia Facility'
-                             u' for Disaster Reduction, Geoscience Australia '
-                             u'and the World Bank-GFDRR.'),
-                         'latitude-value': u'0\xb012\'36.00"S',
-                         'time': '2:15:35', 'depth-value': '11.0'}
+        expected_dict = {
+            'place-name': u'n/a',
+            'depth-name': u'Depth',
+            'fatalities-name': u'Estimated fatalities',
+            'fatalities-count': u'0',  # 44 only after render
+            'elapsed-time': u'',  # empty as it will change
+            'legend-name': u'Population density',
+            'fatalities-range': '0 - 100',
+            'longitude-name': u'Longitude',
+            'located-label': u'Located',
+            'distance-unit': u'km',
+            'bearing-compass': u'n/a',
+            'elapsed-time-name': u'Elapsed time since event',
+            'exposure-table-name': u'Estimated number of people '
+                                   u'affected by each MMI level',
+            'longitude-value': u'124\xb027\'0.00"E',
+            'city-table-name': u'Places Affected',
+            'bearing-text': u'bearing',
+            'limitations': (
+                u'This impact estimation is automatically generated and only '
+                u'takes into account the population and cities affected by '
+                u'different levels of ground shaking. The estimate is based on '
+                u'ground shaking data from BMKG, population density data from '
+                u'asiapop.org, place information from geonames.org and software '
+                u'developed by BNPB. Limitations in the estimates of ground '
+                u'shaking, population  data and place names datasets may '
+                u'result in significant misrepresentation of the on-the-ground '
+                u'situation in the figures shown here. Consequently decisions '
+                u'should not be made solely on the information presented here '
+                u'and should always be verified by ground truthing and other '
+                u'reliable information sources. The fatality calculation '
+                u'assumes that no fatalities occur for shake levels below MMI '
+                u'4. Fatality counts of less than 50 are disregarded.'),
+            'depth-unit': u'km',
+            'latitude-name': u'Latitude',
+            'mmi': '5.0',
+            'map-name': u'Estimated Earthquake Impact',
+            'date': '26-7-2012',
+            'bearing-degrees': '0.00\xb0',
+            'formatted-date-time': '26-Jul-12 02:15:35 ',
+            'distance': '0.00',
+            'direction-relation': u'of',
+            'credits': (
+                u'Supported by the Australia-Indonesia Facility for Disaster '
+                u'Reduction, Geoscience Australia and the World Bank-GFDRR.'),
+            'latitude-value': u'0\xb012\'36.00"S',
+            'time': '2:15:35', 'depth-value': '11.0'}
         result['elapsed-time'] = u''
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_dict)
         self.max_diff = None
@@ -444,7 +441,7 @@ search_boxes: None
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
-        assert result == expected_result, message
+        self.assertEqual(result, expected_result, message)
 
     #noinspection PyMethodMayBeStatic
     def test_bearing_to_cardinal(self):

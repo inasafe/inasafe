@@ -1409,7 +1409,7 @@ class ShakeEvent(QObject):
 
         result = safe_calculate_impact(layers, function)
         try:
-            fatalities = result.keywords['fatalites_per_mmi']
+            fatalities = result.keywords['fatalities_per_mmi']
             affected = result.keywords['exposed_per_mmi']
             displaced = result.keywords['displaced_per_mmi']
             total_fatalities = result.keywords['total_fatalities']
@@ -1557,6 +1557,7 @@ class ShakeEvent(QObject):
         if self.population_raster_path is not None:
             return self.population_raster_path
         elif 'INASAFE_POPULATION_PATH' in os.environ:
+            a = os.environ['INASAFE_POPULATION_PATH']
             return os.environ['INASAFE_POPULATION_PATH']
         elif os.path.exists(fixture_path):
             return fixture_path
