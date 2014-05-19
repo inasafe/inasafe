@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -30,8 +29,6 @@ import logging
 import difflib
 
 import ogr
-#noinspection PyPackageRequirements
-import PyQt4
 
 # pylint: disable=E0611
 # pylint: disable=W0611
@@ -39,10 +36,9 @@ from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
+from safe.common.testing import get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
-    shakemap_cache_dir,
-    shakemap_zip_dir,
     data_dir)
 from realtime.shake_event import ShakeEvent
 from realtime.utilities import base_data_dir
@@ -143,10 +139,10 @@ class TestShakeEvent(unittest.TestCase):
         """Check we can convert the shake event to a raster"""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.mmi_data_to_shapefile(force_flag=True)
-        assert os.path.exists(file_path)
+        self.assertTrue(os.path.exists(file_path))
         expected_qml = file_path.replace('shp', 'qml')
         message = '%s not found' % expected_qml
-        assert os.path.exists(expected_qml), message
+        self.assertTrue(os.path.exists(expected_qml), message)
 
     #noinspection PyMethodMayBeStatic
     def check_feature_count(self, path, count):
@@ -168,20 +164,20 @@ class TestShakeEvent(unittest.TestCase):
     def test_event_to_contours(self):
         """Check we can extract contours from the event"""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='invdist')
-        assert self.check_feature_count(file_path, 16)
-        assert os.path.exists(file_path)
+        file_path = shake_event.mmi_data_to_contours(
+            force_flag=True, algorithm='invdist')
+        self.assertTrue(self.check_feature_count(file_path, 16))
+        self.assertTrue(os.path.exists(file_path))
         expected_qml = file_path.replace('shp', 'qml')
         message = '%s not found' % expected_qml
-        assert os.path.exists(expected_qml), message
+        self.assertTrue(os.path.exists(expected_qml), message)
 
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='nearest')
-        assert self.check_feature_count(file_path, 132)
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='average')
-        assert self.check_feature_count(file_path, 132)
+        file_path = shake_event.mmi_data_to_contours(
+            force_flag=True, algorithm='nearest')
+        self.assertTrue(self.check_feature_count(file_path, 132))
+        file_path = shake_event.mmi_data_to_contours(
+            force_flag=True, algorithm='average')
+        self.assertTrue(self.check_feature_count(file_path, 132))
 
     def test_local_cities(self):
         """Test that we can retrieve the cities local to the event"""
@@ -236,14 +232,14 @@ class TestShakeEvent(unittest.TestCase):
         """Test that we can retrieve the cities local to the event."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.cities_to_shapefile()
-        assert os.path.exists(file_path)
+        self.assertTrue(os.path.exists(file_path))
 
     #noinspection PyMethodMayBeStatic
     def test_cities_search_boxes_to_shape(self):
         """Test that we can retrieve the search boxes used to find cities."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.city_search_boxes_to_shapefile()
-        assert os.path.exists(file_path)
+        self.assertTrue(os.path.exists(file_path))
 
     #noinspection PyMethodMayBeStatic
     def test_calculate_fatalities(self):
@@ -398,16 +394,17 @@ class TestShakeEvent(unittest.TestCase):
                 u'takes into account the population and cities affected by '
                 u'different levels of ground shaking. The estimate is based on '
                 u'ground shaking data from BMKG, population density data from '
-                u'asiapop.org, place information from geonames.org and software '
-                u'developed by BNPB. Limitations in the estimates of ground '
-                u'shaking, population  data and place names datasets may '
-                u'result in significant misrepresentation of the on-the-ground '
-                u'situation in the figures shown here. Consequently decisions '
-                u'should not be made solely on the information presented here '
-                u'and should always be verified by ground truthing and other '
-                u'reliable information sources. The fatality calculation '
-                u'assumes that no fatalities occur for shake levels below MMI '
-                u'4. Fatality counts of less than 50 are disregarded.'),
+                u'asiapop.org, place information from geonames.org and '
+                u'software developed by BNPB. Limitations in the estimates of '
+                u'ground shaking, population  data and place names datasets '
+                u'may result in significant misrepresentation of the '
+                u'on-the-ground situation in the figures shown here. '
+                u'Consequently decisions should not be made solely on the '
+                u'information presented here and should always be verified by '
+                u'ground truthing and other reliable information sources. The '
+                u'fatality calculation assumes that no fatalities occur for '
+                u'shake levels below MMI 4. Fatality counts of less than 50 '
+                u'are disregarded.'),
             'depth-unit': u'km',
             'latitude-name': u'Latitude',
             'mmi': '5.0',
