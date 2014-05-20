@@ -17,11 +17,16 @@ __version__ = '0.5.0'
 __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import unittest
-from realtime.sftp_shake_data import SftpShakeData
 import os
+import unittest
 
-sftp_data = SftpShakeData()
+from realtime.sftp_shake_data import SftpShakeData
+
+# Shake event ID for this test
+SHAKE_ID = '20120726022003'
+
+# Create sftp client once
+SFTP_CLIENT = SftpShakeData()
 
 
 class SFtpShakeDataTest(unittest.TestCase):
@@ -31,56 +36,60 @@ class SFtpShakeDataTest(unittest.TestCase):
         """Test create shake data."""
         try:
             event_one = SftpShakeData()
-            event_two = SftpShakeData(event='20130110041009')
+            event_two = SftpShakeData(event=SHAKE_ID)
             event_three = SftpShakeData(
-                event='20130110041009',
+                event=SHAKE_ID,
                 force_flag=True)
-            assert event_one is not None
-            assert event_two is not None
-            assert event_three is not None
+            self.assertIsNotNone(event_one)
+            self.assertIsNotNone(event_two)
+            self.assertIsNotNone(event_three)
         except:
             raise
 
     #noinspection PyMethodMayBeStatic
     def test_download_data(self):
         """Test downloading data from server."""
-        print sftp_data.fetch_file()
+        print SFTP_CLIENT.fetch_file()
 
     #noinspection PyMethodMayBeStatic
     def test_get_latest_event_id(self):
         """Test get latest event id
         """
-        latest_id = sftp_data.get_latest_event_id()
+        latest_id = SFTP_CLIENT.get_latest_event_id()
         print latest_id
-        assert latest_id is not None, 'There is not latest event, please check'
+        self.assertIsNotNone(
+            latest_id, 'There is not latest event, please check')
 
     #noinspection PyMethodMayBeStatic
     def test_get_list_event_ids(self):
         """Test get list event id."""
-        list_id = sftp_data.get_list_event_ids()
+        list_id = SFTP_CLIENT.get_list_event_ids()
         print list_id
-        assert len(list_id) > 0, 'num of list event is zero, please check'
+        self.assertTrue(
+            len(list_id) > 0, 'num of list event is zero, please check')
 
     #noinspection PyMethodMayBeStatic
     def test_reconnect_sftp(self):
         """Test to reconnect SFTP."""
-        sftp_client = sftp_data.sftp_client
-        sftp_data.reconnect_sftp()
-        new_sftp_client = sftp_data.sftp_client
-        assert sftp_client != new_sftp_client, 'message'
-        assert new_sftp_client is not None, 'new sftp is none'
+        sftp_client = SFTP_CLIENT.sftp_client
+        SFTP_CLIENT.reconnect_sftp()
+        new_sftp_client = SFTP_CLIENT.sftp_client
+        self.assertNotEqual(sftp_client, new_sftp_client, 'message')
+        self.assertIsNotNone(new_sftp_client, 'new sftp is none')
 
     #noinspection PyMethodMayBeStatic
     def test_is_on_server(self):
         """Test to check if a event is in server."""
-        assert sftp_data.is_on_server(), 'Event is not in server'
+        self.assertTrue(SFTP_CLIENT.is_on_server(), 'Event is not in server')
 
     #noinspection PyMethodMayBeStatic
     def test_extract(self):
         """Test extracting data to be used in earth quake realtime."""
-        sftp_data.extract()
-        final_grid_xml_file = os.path.join(sftp_data.extract_dir(), 'grid.xml')
-        assert os.path.exists(final_grid_xml_file), 'grid.xml not found'
+        SFTP_CLIENT.extract()
+        final_grid_xml_file = os.path.join(
+            SFTP_CLIENT.extract_dir(), 'grid.xml')
+        self.assertTrue(
+            os.path.exists(final_grid_xml_file), 'grid.xml not found')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(SFtpShakeDataTest, 'test')
