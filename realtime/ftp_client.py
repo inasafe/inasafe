@@ -21,6 +21,7 @@ import socket
 import urllib2
 import logging
 
+from realtime.server_config import BASE_URL
 # The logger is initialised in realtime/__init__
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -29,15 +30,17 @@ class FtpClient:
     """A utility class that contains methods to fetch a listings and files
         from an FTP server"""
     def __init__(self,
-                 base_url='118.97.83.243',
+                 base_url=BASE_URL,
                  pasv_mode=True):
         """Constructor for the FtpClient class.
 
-        :param base_url: (Optional) an ftp server to connect to. If ommitted
-              it will default to ftp://118.97.83.243/
+        :param base_url: (Optional) an ftp server to connect to. If omitted
+              it will default to BASE_URL.
+        :type base_url: str
 
         :param pasv_mode - (Optional) whether passive connections should be
               made. Defaults to True.
+        :type pasv_mode: bool
         """
         self.base_url = base_url
         self.pasv = pasv_mode
