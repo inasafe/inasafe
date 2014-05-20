@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import logging
 import unittest
-from datetime import date
+import datetime
 
 from realtime.utilities import (
     base_data_dir,
@@ -87,8 +87,8 @@ class UtilsTest(unittest.TestCase):
     #noinspection PyMethodMayBeStatic
     def test_logging(self):
         path = os.path.join(log_dir(), 'realtime.log')
-        current_date = date.today()
-        date_string = current_date.strftime('%d-%m-%Y-%s')
+        current_date = datetime.datetime.now()
+        date_string = current_date.strftime('%d-%m-%Y-%H:%M:%S')
         message = 'Testing logger %s' % date_string
         LOGGER.info(message)
         log_file = open(path)
