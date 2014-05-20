@@ -18,6 +18,7 @@ __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
+import logging
 import unittest
 from datetime import date
 
@@ -34,15 +35,12 @@ from realtime.utilities import (
 # Clear away working dirs so we can be sure they
 # are actually created
 purge_working_data()
-# The logger is intiailsed in utilities.py by init
-import logging
+
+# The logger is initialised in utilities.py by init
 LOGGER = logging.getLogger('InaSAFE')
 
-# Check if os.environ['INASAFE_WORK_DIR'] exists
-if 'INASAFE_WORK_DIR' in os.environ:
-    INASAFE_WORK_DIR = os.environ['INASAFE_WORK_DIR']
-else:
-    INASAFE_WORK_DIR = '/tmp/inasafe/realtime'
+# InaSAFE Working Directory
+INASAFE_WORK_DIR = base_data_dir()
 
 
 class UtilsTest(unittest.TestCase):
@@ -94,18 +92,21 @@ class UtilsTest(unittest.TestCase):
         message = 'Testing logger %s' % date_string
         LOGGER.info(message)
         log_file = open(path)
-        log_lines = log_file.readlines()
-        if message not in log_lines:
-            assert 'Error, expected log message not shown in logs'
+        log_lines = str(log_file.readlines())
+        self.assertIn(
+            message,
+            log_lines,
+            'Error, expected log message not shown in logs')
         log_file.close()
 
     #noinspection PyMethodMayBeStatic
     def test_is_event_id(self):
         """Test to check if a event is in server."""
-        assert is_event_id('20130110041009'), 'should be event id'
-        assert not is_event_id('20130110041090'), 'should not be event id'
-        assert not is_event_id('2013'), 'should not be event id'
-        assert not is_event_id('AAA'), 'should not be event id'
+        self.assertTrue(is_event_id('20130110041009'), 'should be event id')
+        self.assertFalse(
+            is_event_id('20130110041090'), 'should not be event id')
+        self.assertFalse(is_event_id('2013'), 'should not be event id')
+        self.assertFalse(is_event_id('AAA'), 'should not be event id')
 
 if __name__ == '__main__':
     unittest.main()

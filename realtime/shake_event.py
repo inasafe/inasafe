@@ -1558,16 +1558,19 @@ class ShakeEvent(QObject):
         if self.population_raster_path is not None:
             if os.path.exists(self.population_raster_path):
                 return self.population_raster_path
-        elif 'INASAFE_POPULATION_PATH' in os.environ:
+
+        if 'INASAFE_POPULATION_PATH' in os.environ:
             population_path = os.environ['INASAFE_POPULATION_PATH']
             if os.path.exists(population_path):
                 return population_path
-        elif os.path.exists(fixture_path):
+
+        if os.path.exists(fixture_path):
             return fixture_path
-        elif os.path.exists(local_path):
+
+        if os.path.exists(local_path):
             return local_path
-        else:
-            raise FileNotFoundError('Population file could not be found')
+
+        raise FileNotFoundError('Population file could not be found')
 
     def render_map(self, force_flag=False):
         """This is the 'do it all' method to render a pdf.
