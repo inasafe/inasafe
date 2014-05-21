@@ -1102,7 +1102,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Populate the combo box cbo_ratio_attribute for ratio_attribute_key.
 
         :param ratio_attribute_key: A ratio attribute key that saved in
-        keywords.
+               keywords.
         :type ratio_attribute_key: str
 
         :param cbo_ratio_attribute: A combo box that wants to be populated.

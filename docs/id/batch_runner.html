@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Batch Runner &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
+    <title>Batch Runner &mdash; InaSAFE Documentation 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +17,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -26,11 +27,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
     <link rel="next" title="Simpan Skenario" href="save_scenario.html" />
     <link rel="prev" title="Konverter" href="converter.html" />
 
@@ -142,7 +142,7 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="Indeks Umum"
+                   title="General Index"
                    style="z-index:;"
                 accesskey="I">index</a>
                 </li>
@@ -152,7 +152,7 @@
                 <a href="save_scenario.html"
                    title="Simpan Skenario"
                    style="z-index:;"
-                accesskey="N">berikut</a>
+                accesskey="N">next</a>
                 </li>
                 
                 <li class="right"
@@ -160,7 +160,7 @@
                 <a href="converter.html"
                    title="Konverter"
                    style="z-index:;"
-                accesskey="P">sebelum</a>
+                accesskey="P">previous</a>
                 </li>
                 
 
@@ -183,14 +183,14 @@
         <div class="span12">
                 
   <div class="section" id="batch-runner">
-<span id="id1"></span><h1>Batch Runner<a class="headerlink" href="#batch-runner" title="Link permanent untuk headline ini">¶</a></h1>
+<span id="id1"></span><h1>Batch Runner<a class="headerlink" href="#batch-runner" title="Permalink to this headline">¶</a></h1>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/batch_runner.png"><img alt="Batch Runner" src="_images/batch_runner.png" style="width: 334.5px; height: 477.75px;" /></a>
 <p class="caption">Batch Runner</p>
 </div>
 <p>Dengan alat ini Anda dapat mengatur berbagai skenario dan menjalankan mereka semua dalam satu kesempatan. Sebuah kasus penggunaan yang khas mungkin ketika Anda menetapkan sejumlah skenario misalnya skenario dampak banjir semua skenario menggunakan dataset standar misalnya <tt class="docutils literal"><span class="pre">flood.shp</span></tt>. Sebagai data banjir baru telah tersedia Anda mengganti <tt class="docutils literal"><span class="pre">flood.shp</span></tt> dan kembali menjalankan skenario menggunakan batch runner. Menggunakan pendekatan ini Anda dapat dengan cepat menghasilkan rencana kontingensi daerah dengan pemahaman Anda akan perubahan-perubahan bencana. Ketika Anda menjalankan skenario batch, laporan pdf akan dihasilkan otomatis dan semua ditempatkan dalam sebuah direktori umum sehingga memudahkan Anda untuk mencari dan menyebarkan laporan tersebut.</p>
 <p>Ketika proses batch telah selesai, proses tersebut juga akan menghasilkan ringkasan laporan seperti ini:</p>
-<div class="highlight-python"><div class="highlight"><pre>InaSAFE Batch Report File
+<div class="highlight-python"><pre>InaSAFE Batch Report File
 -----------------------------
 P: gempa bumi Sumatran fault (Mw7.8)
 P: gempa di Yogya tahun 2006
@@ -202,8 +202,7 @@ P: gunung merapi meletus
 Total passed: 6
 Total failed: 0
 Total tasks: 6
------------------------------
-</pre></div>
+-----------------------------</pre>
 </div>
 <p>Untuk pengguna tingkat lanjut, tersedia juga pilihan untuk menjalankan script python menggunakan alat ini, tapi ini masih dianggap sebagai fitur ** eksperimental ** pada tahap ini.</p>
 <p>Sebelum menjalankan Batch Runner anda mungkin ini menggunakan alat <em class="xref std std-ref">tb_save_scenario</em> untuk menyimpan beberapa skenario yang ingin anda jalankan di batch runner. Alat ini memungkinkan anda untuk menjalankan semua skenario yang telah disimpan sekaligus. Ini juga memungkinkan anda memilih skenario atau menjalankan semua skenario sekaligus.</p>

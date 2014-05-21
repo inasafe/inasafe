@@ -28,7 +28,7 @@ __copyright__ = (
 
 import logging
 from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import QgsMapLayerRegistry, QGis
 from qgis.gui import QgsMapCanvasLayer
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -66,8 +66,13 @@ class QgisInterface(QObject):
         # instance is the actual one. It will also ensure that the processing
         # algorithms are nicely loaded and available for use.
 
+        # Since QGIS > 2.0, the module is moved from QGisLayers to dataobjects
         # pylint: disable=F0401
-        from processing.core import QGisLayers
+        if QGis.QGIS_VERSION_INT > 20001:
+            from processing.tools import dataobjects
+        else:
+            from processing.core import QGisLayers as dataobjects
+
         import processing
         from processing.core.Processing import Processing
         # pylint: enable=F0401
@@ -96,10 +101,10 @@ class QgisInterface(QObject):
 
         # Now we let the monkey loose!
         Processing.getAlgorithm = mock_getAlgorithm
-        # We also need to make QGisLayers think that this iface is 'the one'
+        # We also need to make dataobjects think that this iface is 'the one'
         # Note. the placement here (after the getAlgorithm monkey patch above)
         # is significant, so don't move it!
-        QGisLayers.iface = self
+        dataobjects.iface = self
 
     def __getattr__(self, *args, **kwargs):
         # It's for processing module
