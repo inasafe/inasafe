@@ -30,7 +30,8 @@ from realtime.utilities import (
     report_data_dir,
     log_dir,
     is_event_id,
-    purge_working_data)
+    purge_working_data,
+    get_path_tail)
 
 # Clear away working dirs so we can be sure they
 # are actually created
@@ -84,7 +85,6 @@ class UtilsTest(unittest.TestCase):
         message = 'Got %s, Expectation %s' % (expected_dir, data_dir)
         self.assertEqual(data_dir, expected_dir, message)
 
-    #noinspection PyMethodMayBeStatic
     def test_logging(self):
         path = os.path.join(log_dir(), 'realtime.log')
         current_date = datetime.datetime.now()
@@ -99,7 +99,6 @@ class UtilsTest(unittest.TestCase):
             'Error, expected log message not shown in logs')
         log_file.close()
 
-    #noinspection PyMethodMayBeStatic
     def test_is_event_id(self):
         """Test to check if a event is in server."""
         self.assertTrue(is_event_id('20130110041009'), 'should be event id')
@@ -107,6 +106,20 @@ class UtilsTest(unittest.TestCase):
             is_event_id('20130110041090'), 'should not be event id')
         self.assertFalse(is_event_id('2013'), 'should not be event id')
         self.assertFalse(is_event_id('AAA'), 'should not be event id')
+
+    def test_get_path_tail(self):
+        """Test to check if get_path_tail is working correctly."""
+        path = '/tmp/quake/realtime.log'
+        expected_tail = 'realtime.log'
+        actual_tail = get_path_tail(path)
+        message = 'Expected %s, I got %s' % (expected_tail, actual_tail)
+        self.assertEqual(expected_tail, actual_tail, message)
+
+        path = 'C:/Windows/Program Files/realtime.log'
+        expected_tail = 'realtime.log'
+        actual_tail = get_path_tail(path)
+        message = 'Expected %s, I got %s' % (expected_tail, actual_tail)
+        self.assertEqual(expected_tail, actual_tail, message)
 
 if __name__ == '__main__':
     unittest.main()
