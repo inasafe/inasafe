@@ -106,7 +106,7 @@ def mk_dir(dir_path):
 
 def purge_working_data():
     """Get rid of the shakemaps-* directories - mainly intended for
-    invocation from unit tests to ensure there is a clean slate before
+    invocation from unit tests to ensure there is a clean state before
     testing."""
     shutil.rmtree(shakemap_extract_dir())
     shutil.rmtree(shakemap_data_dir())
