@@ -110,12 +110,15 @@ tsunami_feet_depth_question = QApplication.translate(
 tsunami_wetdry_question = QApplication.translate(
     'WizardDialog',
     'tsunami extent as wet/dry')
-earthquake_question = QApplication.translate(
+earthquake_mmi_question = QApplication.translate(
     'WizardDialog',
     'earthquake intensity in MMI')
 tephra_kgm2_question = QApplication.translate(
     'WizardDialog',
     'tephra intensity in kg/m<sup>2</sup>')
+volcano_volcano_categorical_question = QApplication.translate(
+    'WizardDialog',
+    'volcano hazard categorical level')
 population_number_question = QApplication.translate(
     'WizardDialog',
     'the number of people')
