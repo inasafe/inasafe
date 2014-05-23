@@ -44,7 +44,8 @@ from safe_qgis.tools.wizard_dialog import (
     step_title,
     step_classify,
     step_subcategory,
-    step_unit)
+    step_unit,
+    step_aggregation)
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 
@@ -1071,6 +1072,78 @@ class WizardDialogTest(unittest.TestCase):
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
         self.assertEqual(expected_step, current_step, message)
+
+        remove_temp_file(layer.source())
+
+    def test_sum_ratio_behavior(self):
+        """Test for wizard's behavior related sum of age ratio."""
+        layer = clone_shp_layer(
+            name='kabupaten_jakarta',
+            include_keywords=True,
+            directory=BOUNDDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog.test = True
+        category = dialog.lstCategories.currentItem().text()
+        expected_category = 'aggregation'
+        message = 'Expected %s but I got %s.' % (expected_category, category)
+        self.assertEqual(expected_category, category, message)
+
+        dialog.pbnNext.click()  # Go to unit step
+
+        expected_aggregation_attribute = 'KAB_NAME'
+        aggregation_attribute = dialog.lstFields.currentItem().text()
+        message = 'Expected %s but I got %s.' % (
+            expected_aggregation_attribute, aggregation_attribute)
+        self.assertEqual(
+            expected_aggregation_attribute, aggregation_attribute, message)
+
+        dialog.pbnNext.click()  # Go to aggregation step
+
+        dialog.dsbYouthRatioDefault.setValue(1.0)
+
+        dialog.pbnNext.click()  # Try to go to  source step
+
+        # check if still in aggregation step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_aggregation
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.cboYouthRatioAttribute.setCurrentIndex(1)  # set don't use
+
+        dialog.pbnNext.click()  # Try to go to  source step
+
+        # check if in source step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnBack.click()
+
+        # check if in aggregation step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_aggregation
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.cboYouthRatioAttribute.setCurrentIndex(0)  # set use default
+
+        dialog.dsbYouthRatioDefault.setValue(0.0)
+
+        dialog.pbnNext.click()  # Try to go to  source step
+
+        # check if in source step
+        current_step = dialog.stackedWidget.currentIndex() + 1
+        expected_step = step_source
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        dialog.pbnCancel.click()
 
         remove_temp_file(layer.source())
 

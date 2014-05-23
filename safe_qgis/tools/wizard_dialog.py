@@ -223,6 +223,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
+        self.test = False
         self.keyword_io = KeywordIO()
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
@@ -684,6 +685,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
            executed when the Next button is released.
         """
         current_step = self.stackedWidget.currentIndex() + 1
+
+        if current_step == step_aggregation:
+            good_ratio, sum_ratio = self.is_good_age_ratios()
+            if not good_ratio:
+                message = self.tr(
+                    'The sum of age ratio default is %s and it is more '
+                    'than 1. Please adjust the ratio default so that they '
+                    'will not more than 1.' % sum_ratio)
+                if not self.test:
+                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+                    QtGui.QMessageBox.warning(
+                        self, self.tr('InaSAFE'), message)
+                return
+
         # Determine the new step to be switched
         new_step = self.compute_next_step(current_step)
 
@@ -1220,3 +1235,34 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         if list_widget.count() == 1 and list_widget.currentRow() == -1:
             list_widget.setCurrentRow(0)
+
+    def is_good_age_ratios(self):
+        """Return true if the sum of age ratios is good, otherwise False.
+
+        Good means their sum does not exceed 1.
+
+        :returns: Tuple of boolean and float. Boolean represent good or not
+            good, while float represent the summation of age ratio. If some
+            ratio do not use global default, the summation is set to 0.
+        :rtype: tuple
+
+        """
+        youth_ratio_index = self.cboYouthRatioAttribute.currentIndex()
+        adult_ratio_index = self.cboAdultRatioAttribute.currentIndex()
+        elderly_ratio_index = self.cboElderlyRatioAttribute.currentIndex()
+
+        ratio_indexes = [
+            youth_ratio_index, adult_ratio_index, elderly_ratio_index]
+
+        if ratio_indexes.count(0) == len(ratio_indexes):
+            youth_ratio_default = self.dsbYouthRatioDefault.value()
+            adult_ratio_default = self.dsbAdultRatioDefault.value()
+            elderly_ratio_default = self.dsbElderlyRatioDefault.value()
+
+            sum_ratio_default = youth_ratio_default + adult_ratio_default
+            sum_ratio_default += elderly_ratio_default
+            if sum_ratio_default > 1:
+                return False, sum_ratio_default
+            else:
+                return True, sum_ratio_default
+        return True, 0
