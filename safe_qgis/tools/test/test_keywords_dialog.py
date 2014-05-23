@@ -258,7 +258,7 @@ class KeywordsDialogTest(unittest.TestCase):
             'female ratio attribute to the keywords list.')
 
         self.assertEqual(dialog.get_value_for_key(
-            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.tr('Use default'),
+            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.global_default_string,
             message)
 
         message = (
@@ -278,8 +278,8 @@ class KeywordsDialogTest(unittest.TestCase):
         female_ratio_box = dialog.cboFemaleRatioAttribute
 
         #set to Don't use
-        index = female_ratio_box.findText(dialog.tr('Don\'t use'))
-        message = (dialog.tr('Don\'t use') + ' not found')
+        index = female_ratio_box.findText(dialog.do_not_use_string)
+        message = (dialog.do_not_use_string + ' not found')
         self.assertNotEqual(index, -1, message)
         female_ratio_box.setCurrentIndex(index)
 
@@ -287,7 +287,7 @@ class KeywordsDialogTest(unittest.TestCase):
             'Toggling the female ratio attribute combo to'
             ' "Don\'t use" did not add it to the keywords list.')
         self.assertEqual(dialog.get_value_for_key(
-            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.tr('Don\'t use'),
+            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.do_not_use_string,
             message)
 
         message = (

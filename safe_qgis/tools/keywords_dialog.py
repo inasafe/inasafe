@@ -74,6 +74,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.parent = parent
         self.dock = dock
 
+        # string constants
+        self.global_default_string = self.tr('Global default')
+        self.do_not_use_string = self.tr('Don\'t use')
+
         if layer is None:
             self.layer = iface.activeLayer()
         else:
@@ -217,12 +221,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -272,12 +276,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -327,12 +331,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -382,12 +386,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -442,7 +446,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboFemaleRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbFemaleRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['FEMALE_RATIO_KEY'])
@@ -462,7 +466,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboYouthRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbYouthRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['YOUTH_RATIO_KEY'])
@@ -482,7 +486,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboAdultRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbAdultRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ADULT_RATIO_KEY'])
@@ -502,7 +506,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboElderlyRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbElderlyRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ELDERLY_RATIO_KEY'])
