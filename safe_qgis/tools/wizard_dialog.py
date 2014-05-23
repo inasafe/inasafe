@@ -40,6 +40,7 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     is_raster_layer,
     layer_attribute_names)
+from safe_qgis.utilities.defaults import breakdown_defaults
 from safe_qgis.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -166,7 +167,7 @@ step_source = 7
 step_title = 8
 
 
-# Aggregations' key
+# Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
 female_ratio_default_key = DEFAULTS['FEMALE_RATIO_KEY']
 youth_ratio_attribute_key = DEFAULTS['YOUTH_RATIO_ATTR_KEY']
@@ -1073,34 +1074,37 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_existing_aggregation_attributes(self):
         """Set values in aggregation step wizard based on existing keywords."""
+
+        self.defaults = breakdown_defaults()
+
         female_ratio_default = self.get_existing_keyword(
             female_ratio_default_key)
         if female_ratio_default:
             self.dsbFemaleRatioDefault.setValue(
                 float(female_ratio_default))
         else:
-            self.dsbFemaleRatioDefault.setValue(DEFAULTS['FEMALE_RATIO'])
+            self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
 
         youth_ratio_default = self.get_existing_keyword(
             youth_ratio_default_key)
         if youth_ratio_default:
             self.dsbYouthRatioDefault.setValue(float(youth_ratio_default))
         else:
-            self.dsbYouthRatioDefault.setValue(DEFAULTS['YOUTH_RATIO'])
+            self.dsbYouthRatioDefault.setValue(self.defaults['YOUTH_RATIO'])
 
         adult_ratio_default = self.get_existing_keyword(
             adult_ratio_default_key)
         if adult_ratio_default:
             self.dsbAdultRatioDefault.setValue(float(adult_ratio_default))
         else:
-            self.dsbAdultRatioDefault.setValue(DEFAULTS['ADULT_RATIO'])
+            self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
 
         elderly_ratio_default = self.get_existing_keyword(
             elderly_ratio_default_key)
         if elderly_ratio_default:
             self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
         else:
-            self.dsbElderlyRatioDefault.setValue(DEFAULTS['ELDERLY_RATIO'])
+            self.dsbElderlyRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
 
         ratio_attribute_keys = [
             female_ratio_attribute_key,
