@@ -692,12 +692,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         current_step = self.stackedWidget.currentIndex() + 1
 
         if current_step == step_aggregation:
-            good_ratio, sum_ratio = self.is_good_age_ratios()
-            if not good_ratio:
+            good_age_ratio, sum_age_ratios = self.is_good_age_ratios()
+            if not good_age_ratio:
                 message = self.tr(
                     'The sum of age ratio default is %s and it is more '
                     'than 1. Please adjust the ratio default so that they '
-                    'will not more than 1.' % sum_ratio)
+                    'will not more than 1.' % sum_age_ratios)
                 if not self.test:
                     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                     QtGui.QMessageBox.warning(
