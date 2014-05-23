@@ -256,6 +256,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.go_to_step(1)
         self.set_tool_tip()
 
+        # string constants
+        self.global_default_string = self.tr('Global default')
+        self.do_not_use_string = self.tr('Don\'t use')
+
     def selected_category(self):
         """Obtain the category selected by user.
 
@@ -386,7 +390,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbFemaleRatioDefault. Otherwise, disabled it.
         """
         value = self.cboFemaleRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbFemaleRatioDefault.setEnabled(True)
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
@@ -401,7 +405,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbYouthRatioDefault. Otherwise, disabled it.
         """
         value = self.cboYouthRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbYouthRatioDefault.setEnabled(True)
         else:
             self.dsbYouthRatioDefault.setEnabled(False)
@@ -416,7 +420,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbAdultRatioDefault. Otherwise, disabled it.
         """
         value = self.cboAdultRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbAdultRatioDefault.setEnabled(True)
         else:
             self.dsbAdultRatioDefault.setEnabled(False)
@@ -431,7 +435,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbElderlyRatioDefault. Otherwise, disabled it.
         """
         value = self.cboElderlyRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbElderlyRatioDefault.setEnabled(True)
         else:
             self.dsbElderlyRatioDefault.setEnabled(False)
@@ -1133,13 +1137,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             [QtCore.QVariant.Double],
             ratio_attribute
         )
-        fields.insert(0, self.tr('Use default'))
-        fields.insert(1, self.tr('Don\'t use'))
+        fields.insert(0, self.global_default_string)
+        fields.insert(1, self.do_not_use_string)
         cbo_ratio_attribute.addItems(fields)
 
-        if ratio_attribute == self.tr('Use default'):
+        # For backward compatibility, still use Use default
+        if (ratio_attribute == self.global_default_string or
+                ratio_attribute == self.tr('Use default')):
             cbo_ratio_attribute.setCurrentIndex(0)
-        elif ratio_attribute == self.tr('Don\'t use'):
+        elif ratio_attribute == self.do_not_use_string:
             cbo_ratio_attribute.setCurrentIndex(1)
         elif ratio_attribute is None or attribute_position is None:
             # current_keyword was not found in the attribute table.

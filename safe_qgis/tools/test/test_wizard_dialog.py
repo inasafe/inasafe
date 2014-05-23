@@ -634,12 +634,12 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         expected_aggregation_attributes = {
-            'elderly ratio attribute': 'Use default',
+            'elderly ratio attribute': 'Global default',
             'youth ratio default': 0.26,
             'elderly ratio default': 0.08,
-            'adult ratio attribute': 'Use default',
-            'female ratio attribute': 'Use default',
-            'youth ratio attribute': 'Use default',
+            'adult ratio attribute': 'Global default',
+            'female ratio attribute': 'Global default',
+            'youth ratio attribute': 'Global default',
             'female ratio default': 0.5,
             'adult ratio default': 0.66
         }
@@ -702,20 +702,20 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose KEC_NAME go to aggregation step
 
         ratio_attribute = dialog.cboFemaleRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         ratio_attribute = dialog.cboElderlyRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         ratio_attribute = dialog.cboAdultRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         ratio_attribute = dialog.cboYouthRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         default_value = dialog.dsbFemaleRatioDefault.value()
         expected_default_value = 0.50
