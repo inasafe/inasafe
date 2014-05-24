@@ -696,7 +696,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if not good_age_ratio:
                 message = self.tr(
                     'The sum of age ratio default is %s and it is more '
-                    'than 1. Please adjust the ratio default so that they '
+                    'than 1. Please adjust the age ratio default so that they '
                     'will not more than 1.' % sum_age_ratios)
                 if not self.test:
                     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
@@ -1104,7 +1104,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if elderly_ratio_default:
             self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
         else:
-            self.dsbElderlyRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
+            self.dsbElderlyRatioDefault.setValue(
+                self.defaults['ELDERLY_RATIO'])
 
         ratio_attribute_keys = [
             female_ratio_attribute_key,

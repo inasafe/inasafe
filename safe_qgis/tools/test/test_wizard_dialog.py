@@ -47,6 +47,8 @@ from safe_qgis.tools.wizard_dialog import (
     step_unit,
     step_aggregation)
 from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.utilities_for_testing import (
+    clone_raster_layer, clone_shp_layer, remove_temp_file)
 
 
 # Get QGis app handle
@@ -63,78 +65,6 @@ def clone_csv_layer():
     # return a single predefined layer
     layer = QgsVectorLayer(temp_path, '', 'delimitedtext')
     return layer
-
-
-def clone_shp_layer(
-        name='tsunami_polygon', include_keywords=False, directory=TESTDATA):
-    """Helper function that copies a test shplayer and returns it.
-
-    :param name: The default name for the shp layer.
-    :type name: str
-
-    :param include_keywords: Include keywords file if True.
-    :type include_keywords: bool
-
-    :param directory: Directory where the file is located.
-    :type directory: str
-
-    """
-    extensions = ['.shp', '.shx', '.dbf', '.prj']
-    if include_keywords:
-        extensions.append('.keywords')
-    temp_path = unique_filename()
-    # copy to temp file
-    for ext in extensions:
-        src_path = os.path.join(directory, name + ext)
-        if os.path.exists(src_path):
-            trg_path = temp_path + ext
-            shutil.copy2(src_path, trg_path)
-    # return a single predefined layer
-    layer = QgsVectorLayer(temp_path + '.shp', 'TestLayer', 'ogr')
-    return layer
-
-
-def clone_raster_layer(name, extension, include_keywords, directory):
-    """Helper function that copies a test raster and returns it.
-
-    :param name: The default name for the raster layer.
-    :type name: str
-
-    :param include_keywords: Include keywords file if True.
-    :type include_keywords: bool
-
-    :param directory: Directory where the file is located.
-    :type directory: str
-    """
-    extensions = ['.prj', '.sld', 'qml', '.prj', extension]
-    if include_keywords:
-        extensions.append('.keywords')
-    temp_path = unique_filename()
-
-    # copy to temp file
-    for ext in extensions:
-        src_path = os.path.join(directory, name + ext)
-        if os.path.exists(src_path):
-            trg_path = temp_path + ext
-            shutil.copy2(src_path, trg_path)
-    layer = QgsRasterLayer(temp_path + extension, os.path.basename(temp_path))
-    return layer
-
-
-def remove_temp_file(file_path):
-    """Helper function that removes temp file created during test.
-
-    Also its keywords file will be removed.
-
-    :param file_path: File path to be removed.
-    :type file_path: str
-    """
-    file_path = file_path[:-4]
-    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
-    extensions.extend(['.prj', '.sld', 'qml'])
-    for ext in extensions:
-        if os.path.exists(file_path + ext):
-            os.remove(file_path + ext)
 
 
 # noinspection PyTypeChecker

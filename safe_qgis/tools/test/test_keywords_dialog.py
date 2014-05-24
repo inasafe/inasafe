@@ -41,11 +41,13 @@ from qgis.core import (
 from third_party.odict import OrderedDict
 from safe.common.testing import get_qgis_app
 from safe_qgis.utilities.utilities_for_testing import (
-    test_data_path)
+    test_data_path, clone_shp_layer, remove_temp_file)
 from safe_qgis.safe_interface import (
     read_file_keywords,
     unique_filename,
-    HAZDATA, TESTDATA)
+    HAZDATA,
+    TESTDATA,
+    BOUNDDATA)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.utilities.utilities import qgis_version
@@ -127,18 +129,6 @@ def make_point_layer():
     # noinspection PyArgumentList
     QgsMapLayerRegistry.instance().addMapLayer(layer)
     return layer
-
-
-def remove_temp_file(file_name='temp_Shakemap_Padang_2009'):
-    """Helper function that removes temp file that created during test.
-
-    :param file_name: File to remove.
-    """
-    #file_name = 'temp_Shakemap_Padang_2009'
-    extensions = [
-        '.asc', '.asc.aux.xml', '.keywords', '.lic', '.prj', '.qml', '.sld']
-    for ext in extensions:
-        os.remove(os.path.join(HAZDATA, file_name + ext))
 
 
 def make_keywordless_layer():
@@ -399,7 +389,6 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.on_pbnAddToList2_clicked()
         result = dialog.get_value_for_key('foo')
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
-        # print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
 
     def test_on_pbn_remove_clicked(self):
@@ -410,14 +399,12 @@ class KeywordsDialogTest(unittest.TestCase):
         result = dialog.lstKeywords.count()
         expected_result = 0
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
 
         dialog.add_list_entry('bar', 'foo')
         result = dialog.lstKeywords.count()
         expected_result = 1
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
 
     def test_add_list_entry(self):
@@ -428,7 +415,6 @@ class KeywordsDialogTest(unittest.TestCase):
         result = dialog.get_value_for_key('bar')
         expected_result = 'foo'
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
 
     def test_add_warnings_for_colons(self):
@@ -439,7 +425,6 @@ class KeywordsDialogTest(unittest.TestCase):
         result = dialog.get_value_for_key('bar')
         expected_result = 'fo.o'
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
         #
         # Check the user gets a message if they put colons in the value
@@ -449,7 +434,6 @@ class KeywordsDialogTest(unittest.TestCase):
         message = (
             'lblMessage error \nGot: %s\nExpected: %s\n' %
             (result, expected_result))
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
         #
         # Check the user gets a message if they put colons in the key
@@ -460,7 +444,6 @@ class KeywordsDialogTest(unittest.TestCase):
         message = (
             'lblMessage error \nGot: %s\nExpected: %s\n' %
             (result, expected_result))
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
 
     def test_set_category(self):
@@ -471,7 +454,6 @@ class KeywordsDialogTest(unittest.TestCase):
         expected_result = 'hazard'
         result = dialog.get_value_for_key('category')
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
 
     def test_reset(self):
@@ -493,7 +475,6 @@ class KeywordsDialogTest(unittest.TestCase):
         result = dialog.lstKeywords.count()
         expected_result = 0
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
-        #print 'Dict', dialog.getKeywords()
         self.assertEqual(result, expected_result, message)
 
     def test_remove_item_by_value(self):
@@ -559,6 +540,85 @@ class KeywordsDialogTest(unittest.TestCase):
         expected_result = 'bar'
         result = dialog.get_value_for_key('foo')
         self.assertEqual(result, expected_result)
+
+    def test_check_aggregation(self):
+        """Test for keywords dialog's behavior for aggregation layer."""
+        layer = clone_shp_layer(
+            name='kabupaten_jakarta',
+            include_keywords=True,
+            directory=BOUNDDATA)
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
+
+        # Load existing keywords
+        keywords = dialog.get_keywords()
+        expected_keywords = {
+            'category': 'postprocessing',
+            'aggregation attribute': 'KAB_NAME',
+            'title': 'kabupaten jakarta',
+            'elderly ratio attribute': 'Global default',
+            'youth ratio default': '0.263',
+            'source': 'OpenStreetMap',
+            'elderly ratio default': '0.078',
+            'adult ratio attribute': 'Global default',
+            'female ratio attribute': 'Global default',
+            'youth ratio attribute': 'Global default',
+            'female ratio default': '0.5',
+            'adult ratio default': '0.659'}
+        message = 'Expected %s but I got %s' % (expected_keywords, keywords)
+        self.assertDictEqual(expected_keywords, keywords, message)
+
+        good_sum_ratio, sum_ratio = dialog.is_good_age_ratios(keywords)
+        message = 'Expected %s but I got %s' % (True, good_sum_ratio)
+        self.assertEqual(True, good_sum_ratio, message)
+
+        # Change youth ratio attribute to Don't Use
+        dialog.cboYouthRatioAttribute.setCurrentIndex(1)
+        keywords = dialog.get_keywords()
+        expected_keywords = {
+            'category': 'postprocessing',
+            'aggregation attribute': 'KAB_NAME',
+            'title': 'kabupaten jakarta',
+            'elderly ratio attribute': 'Global default',
+            'source': 'OpenStreetMap',
+            'elderly ratio default': '0.078',
+            'adult ratio attribute': 'Global default',
+            'female ratio attribute': 'Global default',
+            'youth ratio attribute': 'Don\'t use',
+            'female ratio default': '0.5',
+            'adult ratio default': '0.659'}
+        message = 'Expected %s but I got %s' % (expected_keywords, keywords)
+        self.assertDictEqual(expected_keywords, keywords, message)
+
+        good_sum_ratio, sum_ratio = dialog.is_good_age_ratios(keywords)
+        message = 'Expected %s but I got %s' % (True, good_sum_ratio)
+        self.assertEqual(True, good_sum_ratio, message)
+
+        # Change youth ratio attribute to Global Default
+        # Change youth ratio default to 0.99
+        dialog.cboYouthRatioAttribute.setCurrentIndex(0)
+        dialog.dsbYouthRatioDefault.setValue(0.99)
+        keywords = dialog.get_keywords()
+        expected_keywords = {
+            'category': 'postprocessing',
+            'aggregation attribute': 'KAB_NAME',
+            'title': 'kabupaten jakarta',
+            'elderly ratio attribute': 'Global default',
+            'youth ratio default': '0.99',
+            'source': 'OpenStreetMap',
+            'elderly ratio default': '0.078',
+            'adult ratio attribute': 'Global default',
+            'female ratio attribute': 'Global default',
+            'youth ratio attribute': 'Global default',
+            'female ratio default': '0.5',
+            'adult ratio default': '0.659'}
+        message = 'Expected %s but I got %s' % (expected_keywords, keywords)
+        self.assertDictEqual(expected_keywords, keywords, message)
+
+        good_sum_ratio, sum_ratio = dialog.is_good_age_ratios(keywords)
+        message = 'Expected %s but I got %s' % (False, good_sum_ratio)
+        self.assertEqual(False, good_sum_ratio, message)
+
+        remove_temp_file(layer.source())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordsDialogTest, 'test')

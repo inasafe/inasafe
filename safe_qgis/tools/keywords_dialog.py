@@ -1136,11 +1136,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.apply_changes()
         keywords = self.get_keywords()
         good_age_ratio, sum_age_ratios = self.is_good_age_ratios(keywords)
-        print good_age_ratio, sum_age_ratios, 'mana tahan'
         if not good_age_ratio:
             message = self.tr(
                 'The sum of age ratio default is %s and it is more '
-                'than 1. Please adjust the ratio default so that they '
+                'than 1. Please adjust the age ratio default so that they '
                 'will not more than 1.' % sum_age_ratios)
             if not self.test:
                 # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
@@ -1229,9 +1228,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         sum_ratio_default = float(youth_ratio_default)
         sum_ratio_default += float(adult_ratio_default)
         sum_ratio_default += float(elderly_ratio_default)
-        print sum_ratio_default, 'jaran goreng enak'
         if sum_ratio_default > 1:
             return False, sum_ratio_default
         else:
             return True, 0
-
