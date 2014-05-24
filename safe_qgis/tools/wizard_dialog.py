@@ -23,12 +23,14 @@ import logging
 import re
 import json
 from sqlite3 import OperationalError
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
-from PyQt4.QtGui import QListWidgetItem, QPixmap
-from PyQt4.QtGui import QApplication
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
 
-from safe.api import ImpactFunctionManager as IFM
+from safe.api import ImpactFunctionManager
 from safe.api import metadata  # pylint: disable=W0612
 
 from safe_qgis.safe_interface import InaSAFEError, DEFAULTS
@@ -126,7 +128,7 @@ population_number_question = QApplication.translate(
 population_density_question = QApplication.translate(
     'WizardDialog',
     'people density in people/km<sup>2</sup>')
-road_roadclass_question = QApplication.translate(
+road_road_type_question = QApplication.translate(
     'WizardDialog',
     'type for your road')
 structure_building_type_question = QApplication.translate(
@@ -260,6 +262,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # string constants
         self.global_default_string = self.tr('Global default')
         self.do_not_use_string = self.tr('Don\'t use')
+        self.defaults = breakdown_defaults()
 
     def selected_category(self):
         """Obtain the category selected by user.
@@ -442,6 +445,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.dsbElderlyRatioDefault.setEnabled(False)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_lstCategories_itemSelectionChanged(self):
         """Update category description label and subcategory widgets.
@@ -462,6 +466,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
+    # noinspection PyPep8Naming
     def on_lstSubcategories_itemSelectionChanged(self):
         """Update subcategory description label and unit widgets.
 
@@ -481,6 +486,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
+    # noinspection PyPep8Naming
     def on_lstUnits_itemSelectionChanged(self):
         """Update unit description label and field widgets.
 
@@ -540,7 +546,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblIconCategory.setPixmap(QPixmap())
         self.lblSelectCategory.setText(
             category_question % self.layer.name())
-        categories = IFM().categories_for_layer(
+        categories = ImpactFunctionManager().categories_for_layer(
             self.layer_type, self.data_type)
         if self.data_type == 'polygon':
             categories += ['aggregation']
@@ -565,7 +571,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblIconSubcategory.setPixmap(QPixmap())
         self.lblSelectSubcategory.setText(
             get_question_text('%s_question' % category['id']))
-        for i in IFM().subcategories_for_layer(
+        for i in ImpactFunctionManager().subcategories_for_layer(
                 category['id'], self.layer_type, self.data_type):
             item = QListWidgetItem(i['name'], self.lstSubcategories)
             item.setData(QtCore.Qt.UserRole, unicode(i))
@@ -580,7 +586,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         self.lstFields.clear()
-        for i in IFM().units_for_layer(
+        for i in ImpactFunctionManager().units_for_layer(
                 subcategory['id'], self.layer_type, self.data_type):
             if (self.layer_type == 'raster' and
                     i['constraint'] == 'categorical'):
@@ -682,6 +688,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnBack.setEnabled(step > 1)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnNext_released(self):
         """Handle the Next button release.
@@ -689,7 +696,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        current_step = self.stackedWidget.currentIndex() + 1
+        current_step = self.get_current_step()
 
         if current_step == step_aggregation:
             good_age_ratio, sum_age_ratios = self.is_good_age_ratios()
@@ -738,6 +745,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.go_to_step(new_step)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnBack_released(self):
         """Handle the Back button release.
@@ -745,7 +753,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the Back button is released.
         """
-        current_step = self.stackedWidget.currentIndex() + 1
+        current_step = self.get_current_step()
         new_step = self.compute_previous_step(current_step)
         # Set Next button label
         self.pbnNext.setText(self.tr('Next'))
@@ -794,7 +802,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             category = self.selected_category()
             if category['id'] == 'aggregation':
                 new_step = step_field
-            elif IFM().subcategories_for_layer(
+            elif ImpactFunctionManager().subcategories_for_layer(
                     category['id'], self.layer_type, self.data_type):
                 new_step = step_subcategory
             else:
@@ -804,7 +812,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # skip field and classify step if point layer and it's a volcano
             if self.data_type == 'point' and subcategory['id'] == 'volcano':
                 new_step = step_source
-            elif IFM().units_for_layer(
+            elif ImpactFunctionManager().units_for_layer(
                     subcategory['id'], self.layer_type, self.data_type):
                 new_step = step_unit
             else:
@@ -1074,7 +1082,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_existing_aggregation_attributes(self):
         """Set values in aggregation step wizard based on existing keywords."""
-
         self.defaults = breakdown_defaults()
 
         female_ratio_default = self.get_existing_keyword(
@@ -1237,7 +1244,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.leSource_scale.setToolTip(scale_tooltip)
         self.leSource_url.setToolTip(url_tooltip)
 
-    # noinspection PyUnresolvedReferences
+    # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
     def auto_select_one_item(self, list_widget):
         """Select item in the list in list_widget if it's the only item.
 
@@ -1277,3 +1284,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 return True, sum_ratio_default
         return True, 0
+
+    def get_current_step(self):
+        """Return current step of the wizard.
+
+        :returns: Current step of the wizard.
+        :rtype: int
+        """
+        return self.stackedWidget.currentIndex() + 1

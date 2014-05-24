@@ -33,11 +33,11 @@ sys.path.append(pardir)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
-from qgis.core import QgsVectorLayer, QgsRasterLayer
+from qgis.core import QgsVectorLayer
 
 from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import unique_filename
-from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA
+from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
 from safe_qgis.tools.wizard_dialog import (
     WizardDialog,
     step_source,
@@ -45,7 +45,8 @@ from safe_qgis.tools.wizard_dialog import (
     step_classify,
     step_subcategory,
     step_unit,
-    step_aggregation)
+    step_aggregation,
+    step_field)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities_for_testing import (
     clone_raster_layer, clone_shp_layer, remove_temp_file)
@@ -604,13 +605,13 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to unit step 3
         dialog.lstUnits.setCurrentRow(1)  # select no type
         dialog.pbnNext.click()  # should be in step source
-        current_index = dialog.stackedWidget.currentIndex() + 1
+        current_index = dialog.get_current_step()
         expected_current_index = step_source
         message = 'Expected %s but I got %s.' % (
             expected_current_index, current_index)
         self.assertEqual(expected_current_index, current_index, message)
         dialog.pbnNext.click()  # should be in step title
-        current_index = dialog.stackedWidget.currentIndex() + 1
+        current_index = dialog.get_current_step()
         expected_current_index = step_title
         message = 'Expected %s but I got %s.' % (
             expected_current_index, current_index)
@@ -699,21 +700,21 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(expected_fields, fields, message)
 
         dialog.pbnNext.click()  # choose volcano  go to classify step
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_classify
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
         self.assertEqual(expected_step, current_step, message)
 
         dialog.pbnNext.click()  # choose volcano  go to source step
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_source
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
         self.assertEqual(expected_step, current_step, message)
 
         dialog.pbnNext.click()  # choose volcano  go to title step
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_title
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -732,7 +733,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to source step
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_source
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -740,7 +741,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose volcano  go to title step
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_title
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -795,15 +796,15 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to subcategory
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_subcategory
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
         self.assertEqual(expected_step, current_step, message)
 
         num_subcategories = dialog.lstSubcategories.count()
-        expected_num_subcategories = 1  # hazard
-        message = ('There is should be %d categories, but I got %d' %
+        expected_num_subcategories = 1  # volcano
+        message = ('There is should be %d subcategories, but I got %d' %
                    (expected_num_subcategories, num_subcategories))
         self.assertEqual(
             expected_num_subcategories, num_subcategories, message)
@@ -816,7 +817,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to source
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_source
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -824,7 +825,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to title
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_title
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -865,7 +866,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check if in step subcategory
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_subcategory
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -911,7 +912,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_unit
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -938,7 +939,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_source
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -948,7 +949,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()  # back to step subcategory
 
         # check if in step subcategory
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_subcategory
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -971,7 +972,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_unit
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -997,11 +998,106 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_source
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
         self.assertEqual(expected_step, current_step, message)
+
+        remove_temp_file(layer.source())
+
+    def test_integrated_line(self):
+        """Test for line layer and all possibilities."""
+        layer = clone_shp_layer(
+            name='jakarta_roads',
+            directory=EXPDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        num_categories = dialog.lstCategories.count()
+        expected_num_categories = 1  # exposure
+        message = ('There is should be %d categories, but I got %d' %
+                   (expected_num_categories, num_categories))
+        self.assertEqual(expected_num_categories, num_categories, message)
+
+        expected_category = 'exposure'
+        categories = dialog.lstCategories.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_category, categories))
+        self.assertEqual(expected_category, categories, message)
+
+        dialog.pbnNext.click()  # go to subcategory
+
+        current_step = dialog.get_current_step()
+        expected_step = step_subcategory
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        num_subcategories = dialog.lstSubcategories.count()
+        expected_num_subcategories = 1  # road
+        message = ('There is should be %d subcategories, but I got %d' %
+                   (expected_num_subcategories, num_subcategories))
+        self.assertEqual(
+            expected_num_subcategories, num_subcategories, message)
+
+        expected_subcategory = 'road'
+        subcategories = dialog.lstSubcategories.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_subcategory, subcategories))
+        self.assertEqual(expected_subcategory, subcategories, message)
+
+        dialog.pbnNext.click()  # go to unit
+
+        current_step = dialog.get_current_step()
+        expected_step = step_unit
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        num_units = dialog.lstUnits.count()
+        expected_num_units = 1  # Road Type
+        message = ('There is should be %d units, but I got %d' %
+                   (expected_num_units, num_units))
+        self.assertEqual(expected_num_units, num_units, message)
+
+        expected_unit = 'Road Type'
+        unit = dialog.lstUnits.currentItem().text()
+        message = ('Expected %s, but I got %s' %
+                   (expected_unit, unit))
+        self.assertEqual(expected_unit, unit, message)
+
+        dialog.pbnNext.click()  # go to field
+
+        current_step = dialog.get_current_step()
+        expected_step = step_field
+        message = ('Expected %s but I got %s' % (
+            expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+        num_fields = dialog.lstFields.count()
+        expected_num_fields = 4  # There are 4 fields according to the data set
+        message = ('There is should be %d fields, but I got %d' %
+                   (expected_num_fields, num_fields))
+        self.assertEqual(expected_num_fields, num_fields, message)
+
+        # Get index for TYPE field
+        chosen_field = 'TYPE'
+        chosen_field_index = -1
+        for i in range(dialog.lstFields.count()):
+            field_name = dialog.lstFields.item(i).text()
+            if field_name == chosen_field:
+                chosen_field_index = i
+        message = 'There is no %s in the list widget of field.' % (
+            chosen_field)
+        self.assertIsNot(chosen_field_index, -1, message)
+
+        # Choose the row and click!
+        dialog.lstFields.setCurrentRow(chosen_field_index)
+
+        dialog.pbnNext.click()  # go to source step
+        dialog.pbnNext.click()  # go to title step
+
+        dialog.pbnCancel.click()  # cancel
 
         remove_temp_file(layer.source())
 
@@ -1034,7 +1130,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Try to go to  source step
 
         # check if still in aggregation step
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_aggregation
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -1045,7 +1141,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Try to go to  source step
 
         # check if in source step
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_source
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -1054,7 +1150,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()
 
         # check if in aggregation step
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_aggregation
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
@@ -1067,7 +1163,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Try to go to  source step
 
         # check if in source step
-        current_step = dialog.stackedWidget.currentIndex() + 1
+        current_step = dialog.get_current_step()
         expected_step = step_source
         message = ('Expected %s but I got %s' % (
             expected_step, current_step))
