@@ -90,10 +90,10 @@ class WizardDialogTest(unittest.TestCase):
     def check_current_step(self, expected_step, dialog):
         """Helper function to check the current step is expected_step
 
-        :param expected_step: The expected current step
+        :param expected_step: The expected current step.
         :type expected_step: int
 
-        :param dialog: The dialog that contains a wizard
+        :param dialog: The dialog that contains a wizard.
         :type dialog: WizardDialog
         """
         current_step = dialog.get_current_step()
@@ -103,7 +103,7 @@ class WizardDialogTest(unittest.TestCase):
     def check_current_text(self, expected_text, list_widget):
         """Check the current text in list widget is expected_text
 
-        :param expected_text: The expected current step
+        :param expected_text: The expected current step.
         :type expected_text: int
 
         :param list_widget: List widget that wants to be checked.
@@ -113,6 +113,23 @@ class WizardDialogTest(unittest.TestCase):
         current_text = list_widget.currentItem().text()
         message = ('Expected %s but I got %s' % (expected_text, current_text))
         self.assertEqual(expected_text, current_text, message)
+
+    # noinspection PyUnresolvedReferences
+    def select_from_list_widget(self, option, list_widget):
+        """Helper function to select option from list_widget
+
+        :param option: Option to be chosen
+        :type option: str
+
+        :param list_widget: List widget that wants to be checked.
+        :type list_widget: QListWidget
+        """
+        for i in range(list_widget.count()):
+            if list_widget.item(i).text() == option:
+                list_widget.setCurrentRow(i)
+                break
+
+
 
     def test_keywords_creation_wizard(self):
         """Test how the widgets work."""
@@ -410,68 +427,25 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
-        # All desired item
-        chosen_category = 'hazard'
-        chosen_sub_category = 'volcano'
-        chosen_unit = 'volcano categorical'
-        chosen_field = 'GRIDCODE'
-
-        # Get index for hazard category
-        chosen_category_index = -1
-        for i in range(dialog.lstCategories.count()):
-            category_name = dialog.lstCategories.item(i).text()
-            if category_name == chosen_category:
-                chosen_category_index = i
-        message = 'There is no %s in the list widget of category.' % (
-            chosen_category)
-        self.assertIsNot(chosen_category_index, -1, message)
-        # Choose the row and click!
-        dialog.lstCategories.setCurrentRow(chosen_category_index)
+        # select hazard
+        self.select_from_list_widget('hazard', dialog.lstCategories)
         dialog.pbnNext.click()
 
-        # Get index for sub category volcano
-        chosen_sub_category_index = -1
-        for i in range(dialog.lstSubcategories.count()):
-            sub_category_name = dialog.lstSubcategories.item(i).text()
-            if sub_category_name == chosen_sub_category:
-                chosen_sub_category_index = i
-        message = 'There is no %s in the list widget of sub category.' % (
-            chosen_sub_category)
-        self.assertIsNot(chosen_sub_category_index, -1, message)
-        # Choose the row and click!
-        dialog.lstSubcategories.setCurrentRow(chosen_sub_category_index)
+        # select volcano
+        self.select_from_list_widget('volcano', dialog.lstSubcategories)
         dialog.pbnNext.click()
 
-        # Get index for volcano categorical unit
-        chosen_unit_index = -1
-        for i in range(dialog.lstUnits.count()):
-            unit_name = dialog.lstUnits.item(i).text()
-            if unit_name == chosen_unit:
-                chosen_unit_index = i
-        message = 'There is no %s in the list widget of unit.' % (
-            chosen_unit)
-        self.assertIsNot(chosen_unit_index, -1, message)
-        # Choose the row and click!
-        dialog.lstUnits.setCurrentRow(chosen_unit_index)
+        # select volcano categorical unit
+        self.select_from_list_widget('volcano categorical', dialog.lstUnits)
         dialog.pbnNext.click()
 
-        # Get index for GRIDCODE field
-        chosen_field_index = -1
-        for i in range(dialog.lstFields.count()):
-            field_name = dialog.lstFields.item(i).text()
-            if field_name == chosen_field:
-                chosen_field_index = i
-        message = 'There is no %s in the list widget of field.' % (
-            chosen_field)
-        self.assertIsNot(chosen_field_index, -1, message)
-        # Choose the row and click!
-        dialog.lstFields.setCurrentRow(chosen_field_index)
+        # select GRIDCODE
+        self.select_from_list_widget('GRIDCODE', dialog.lstFields)
         dialog.pbnNext.click()
 
         unit = dialog.selected_unit()
         default_classes = unit['classes']
-        unassigned_values = []  # no need to check actually, not save in
-        # file
+        unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
             'high': ['4.0', '5.0'],
             'medium': ['3.0'],
@@ -815,10 +789,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(expected_category, categories, message)
 
         # choosing hazard
-        for i in range(dialog.lstCategories.count()):
-            if dialog.lstCategories.item(i).text() == 'hazard':
-                dialog.lstCategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('hazard', dialog.lstCategories)
 
         dialog.pbnNext.click()  # Go to subcategory
 
@@ -839,10 +810,7 @@ class WizardDialogTest(unittest.TestCase):
             expected_subcategory_index, subcategory_index, message)
 
         # choosing flood
-        for i in range(dialog.lstSubcategories.count()):
-            if dialog.lstSubcategories.item(i).text() == 'flood':
-                dialog.lstSubcategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('flood', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -854,10 +822,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing metres
-        for i in range(dialog.lstUnits.count()):
-            if dialog.lstUnits.item(i).text() == 'metres':
-                dialog.lstUnits.setCurrentRow(i)
-                break
+        self.select_from_list_widget('metres', dialog.lstUnits)
 
         dialog.pbnNext.click()  # Go to source
 
@@ -879,10 +844,7 @@ class WizardDialogTest(unittest.TestCase):
             expected_subcategory, subcategory, message)
 
         # choosing earthquake
-        for i in range(dialog.lstSubcategories.count()):
-            if dialog.lstSubcategories.item(i).text() == 'earthquake':
-                dialog.lstSubcategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('earthquake', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -894,10 +856,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing MMI
-        for i in range(dialog.lstUnits.count()):
-            if dialog.lstUnits.item(i).text() == 'MMI':
-                dialog.lstUnits.setCurrentRow(i)
-                break
+        self.select_from_list_widget('MMI', dialog.lstUnits)
 
         dialog.pbnNext.click()  # Go to source
 
@@ -943,25 +902,11 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step field
         self.check_current_step(step_field, dialog)
 
-        num_fields = dialog.lstFields.count()
-        expected_num_fields = 4  # There are 4 fields according to the data set
-        message = ('There is should be %d fields, but I got %d' %
-                   (expected_num_fields, num_fields))
-        self.assertEqual(expected_num_fields, num_fields, message)
+        expected_fields = ['TYPE', 'NAME', 'ONEWAY', 'LANES']
+        self.check_list(expected_fields, dialog.lstFields)
 
-        # Get index for TYPE field
-        chosen_field = 'TYPE'
-        chosen_field_index = -1
-        for i in range(dialog.lstFields.count()):
-            field_name = dialog.lstFields.item(i).text()
-            if field_name == chosen_field:
-                chosen_field_index = i
-        message = 'There is no %s in the list widget of field.' % (
-            chosen_field)
-        self.assertIsNot(chosen_field_index, -1, message)
-
-        # Choose the row and click!
-        dialog.lstFields.setCurrentRow(chosen_field_index)
+        # select Type
+        self.select_from_list_widget('TYPE', dialog.lstFields)
 
         dialog.pbnNext.click()  # go to source step
         dialog.pbnNext.click()  # go to title step
@@ -982,10 +927,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_categories, dialog.lstCategories)
 
         # choosing exposure
-        for i in range(dialog.lstCategories.count()):
-            if dialog.lstCategories.item(i).text() == 'exposure':
-                dialog.lstCategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('exposure', dialog.lstCategories)
 
         dialog.pbnNext.click()  # Go to subcategory
 
@@ -1007,10 +949,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing building type
-        for i in range(dialog.lstUnits.count()):
-            if dialog.lstUnits.item(i).text() == 'building type':
-                dialog.lstUnits.setCurrentRow(i)
-                break
+        self.select_from_list_widget('building type', dialog.lstUnits)
 
         dialog.pbnNext.click()  # Go to field
 
@@ -1023,10 +962,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_fields, dialog.lstFields)
 
         # choosing KAB_NAME
-        for i in range(dialog.lstFields.count()):
-            if dialog.lstFields.item(i).text() == 'KAB_NAME':
-                dialog.lstFields.setCurrentRow(i)
-                break
+        self.select_from_list_widget('KAB_NAME', dialog.lstFields)
 
         dialog.pbnNext.click()  # Go to source
 
@@ -1038,10 +974,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()  # back to unit step
 
         # choosing building generic
-        for i in range(dialog.lstUnits.count()):
-            if dialog.lstUnits.item(i).text() == 'building generic':
-                dialog.lstUnits.setCurrentRow(i)
-                break
+        self.select_from_list_widget('building generic', dialog.lstUnits)
 
         dialog.pbnNext.click()  # Go to source
 
@@ -1055,10 +988,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()  # back to category step
 
         # choosing hazard
-        for i in range(dialog.lstCategories.count()):
-            if dialog.lstCategories.item(i).text() == 'hazard':
-                dialog.lstCategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('hazard', dialog.lstCategories)
 
         dialog.pbnNext.click()  # Go to subcategory
 
@@ -1067,10 +997,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # choosing earthquake
-        for i in range(dialog.lstSubcategories.count()):
-            if dialog.lstSubcategories.item(i).text() == 'earthquake':
-                dialog.lstSubcategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('earthquake', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to unit
 
