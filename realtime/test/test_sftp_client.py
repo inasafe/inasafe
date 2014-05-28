@@ -23,93 +23,71 @@ import os
 import shutil
 
 from safe.api import temp_dir
+from realtime.sftp_client import SFtpClient
 from realtime.server_config import (
     BASE_URL,
     USERNAME,
     PASSWORD,
     BASE_PATH)
-from realtime.utilities import get_path_tail, mk_dir, is_event_id
+from realtime.utilities import is_event_id
 
 # Shake ID for this test
 SHAKE_ID = '20120726022003'
 
 
-class MockSFtpClient(object):
-    """A fake class to mock SFtpClient behavior.
+def mock_init(self,
+              host=BASE_URL,
+              username=USERNAME,
+              password=PASSWORD,
+              working_dir=BASE_PATH):
+    """Mock method init of SFTPClient class.
 
-    .. versionadded:: 2.1
+    :param host: The remote host.
+    :type host: str
+
+    :param username: The username for the host.
+    :type username: str
+
+    :param password: The password for given username.
+    :type password: str
+
+    :param working_dir: The base path to fetch the files.
+    :type working_dir: str
     """
-    def __init__(self,
-                 host=BASE_URL,
-                 username=USERNAME,
-                 password=PASSWORD,
-                 working_dir=BASE_PATH):
-        """Constructor of the class."""
-        self.host = host
-        self.username = username
-        self.password = password
-        self.working_dir = working_dir
-        self.working_dir_path = working_dir
+    self.host = host
+    self.username = username
+    self.password = password
+    self.working_dir = working_dir
+    self.working_dir_path = working_dir
+    self.sftp = shutil
 
-    def download_path(self, remote_path, local_path):
-        """Mock SftpClient.download_path.
 
-        :param remote_path: Remote path that will be downloaded. Remember
-            that since this is a mock, it will actually refer to the local path.
-        :type remote_path: str
+def mock_is_dir(self, path):
+    """Mock method is_dir of SFTPClient class.
 
-        :param local_path: The local path that will contain the downloaded
-            file.
-        :type local_path: str
-        """
-        # Check if remote_path is exist
-        if not os.path.exists(remote_path):
-            print 'Remote path %s does not exist.' % remote_path
-            return False
+    :param path: The target path that will be tested.
+    :type path: str
+    """
+    return os.path.isdir(path)
 
-        # If the remote_path is a dir, download all files on that dir
-        if os.path.isdir(remote_path):
-            # get directory name
-            dir_name = get_path_tail(remote_path)
-            # create directory in local machine
-            local_dir_path = os.path.join(local_path, dir_name)
-            mk_dir(local_dir_path)
-            # list all directories in remote path
-            directories = os.listdir(remote_path)
-            # iterate recursive
-            for directory in directories:
-                directory_path = os.path.join(remote_path, directory)
-                self.download_path(directory_path, local_dir_path)
-        else:
-            # download file to local_path
-            file_name = get_path_tail(remote_path)
-            local_file_path = os.path.join(local_path, file_name)
 
-            shutil.copyfile(remote_path, local_file_path)
+def mock_path_exists(self, path):
+    """Mock method path_exists of SFTPClient class.
 
-    def get_listing(self, remote_dir=None, function=None):
-        """Return list of files and directories name under a remote_dir if
-        the directory/file is valid for a function.
+    :param path: The target path that will be tested.
+    :type path: str
+    """
+    return os.path.exists(path)
 
-        :param remote_dir: The remote directory that we want to get the list
-            of directory inside it. Remember again it's a mock. So, it will
-            refer to local path.
-        :type remote_dir: str
+# The monkey patching to some methods of SFTPClient
+SFtpClient.__init__ = mock_init
+SFtpClient.is_dir = mock_is_dir
+SFtpClient.path_exists = mock_path_exists
 
-        :param function: The function that use the directory.
-        :type function: object
-        """
-        if remote_dir is None:
-            remote_dir = self.working_dir_path
-        if os.path.exists(remote_dir):
-            directories = os.listdir(remote_dir)
-        else:
-            return None
-        valid_list = []
-        for directory in directories:
-            if function(directory):
-                valid_list.append(directory)
-        return valid_list
+# The monkey patching to some objects of SFTPClient
+sftp_client = SFtpClient(working_dir=temp_dir('realtime-test'))
+sftp_client.sftp.get = shutil.copy
+sftp_client.sftp.listdir = os.listdir
 
 
 class SFtpClientTest(unittest.TestCase):
@@ -131,7 +109,6 @@ class SFtpClientTest(unittest.TestCase):
 
     def test_download_path(self):
         """Test to download all directories and files under a path."""
-        sftp_client = MockSFtpClient(working_dir=temp_dir('realtime-test'))
         self.assertIsNotNone(sftp_client)
 
         # Download directories
@@ -166,7 +143,6 @@ class SFtpClientTest(unittest.TestCase):
 
     def test_get_listing(self):
         """Test get_listing if it's working correctly."""
-        sftp_client = MockSFtpClient(working_dir=temp_dir('realtime-test'))
         self.assertIsNotNone(sftp_client)
 
         # Download directories
