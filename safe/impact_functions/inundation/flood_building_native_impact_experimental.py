@@ -88,7 +88,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Be-flooded')
+    title = tr('Be flooded (experimental)')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
