@@ -21,26 +21,25 @@ __copyright__ += 'Disaster Reduction'
 import os
 import sys
 import logging
-from datetime import date
-import getpass
-from tempfile import mkstemp
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-myDir = os.path.abspath(
+third_party_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../', 'third_party'))
-if myDir not in sys.path:
-    sys.path.append(myDir)
-
+if third_party_dir not in sys.path:
+    sys.path.append(third_party_dir)
 # pylint: disable=F0401
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven.handlers.logging import SentryHandler
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven import Client
 # pylint: enable=F0401
-LOGGER = logging.getLogger('InaSAFE')
 
+from safe.api import temp_dir
 from safe_qgis.utilities.utilities import tr
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class QgsLogHandler(logging.Handler):
@@ -64,10 +63,11 @@ class QgsLogHandler(logging.Handler):
         except ImportError:
             pass
         except MemoryError:
-            msg = tr('Due to memory limitations on this machine, InaSAFE can '
-                     'not handle the full log')
-            print msg
-            QgsMessageLog.logMessage(msg, 'InaSAFE', 0)
+            message = tr(
+                'Due to memory limitations on this machine, InaSAFE can not '
+                'handle the full log')
+            print message
+            QgsMessageLog.logMessage(message, 'InaSAFE', 0)
 
 
 def add_logging_handler_once(logger, handler):
@@ -189,52 +189,3 @@ def setup_logger(log_file=None, sentry_url=None):
     add_logging_handler_once(logger, file_handler)
     add_logging_handler_once(logger, console_handler)
     add_logging_handler_once(logger, qgis_handler)
-
-
-def temp_dir(sub_dir='work'):
-    r"""Obtain the temporary working directory for the operating system.
-
-    An inasafe subdirectory will automatically be created under this and
-    if specified, a user subdirectory under that.
-
-    .. note:: You can use this together with unique_filename to create
-       a file in a temporary directory under the inasafe workspace. e.g.::
-
-           tmpdir = temp_dir('testing')
-           tmpfile = unique_filename(dir=tmpdir)
-           print tmpfile
-           /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C
-
-    If you specify INASAFE_WORK_DIR as an environment var, it will be
-    used in preference to the system temp directory.
-
-    :param sub_dir: Optional argument which will cause an additional
-        subdirectory to be created e.g. \/tmp\/inasafe\/foo\/
-    :type sub_dir: str
-
-    :returns: Path to the output clipped layer (placed in the system temp dir).
-    :rtype: str
-    """
-    user = getpass.getuser().replace(' ', '_')
-    current_date = date.today()
-    date_string = current_date.isoformat()
-    if 'INASAFE_WORK_DIR' in os.environ:
-        new_directory = os.environ['INASAFE_WORK_DIR']
-    else:
-        # Following 4 lines are a workaround for tempfile.tempdir()
-        # unreliabilty
-        handle, filename = mkstemp()
-        os.close(handle)
-        new_directory = os.path.dirname(filename)
-        os.remove(filename)
-
-    path = os.path.join(new_directory, 'inasafe', date_string, user, sub_dir)
-
-    if not os.path.exists(path):
-        # Ensure that the dir is world writable
-        # Umask sets the new mask and returns the old
-        old_mask = os.umask(0000)
-        os.makedirs(path, 0777)
-        # Reinstate the old mask for tmp
-        os.umask(old_mask)
-    return path

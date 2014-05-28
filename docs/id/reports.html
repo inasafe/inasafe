@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Laporan &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
+    <title>Laporan &mdash; InaSAFE Documentation 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +17,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -26,11 +27,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
     <link rel="next" title="Pilihan" href="options.html" />
     <link rel="prev" title="Sistem Kata kunci" href="keywords.html" />
 
@@ -142,7 +142,7 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="Indeks Umum"
+                   title="General Index"
                    style="z-index:;"
                 accesskey="I">index</a>
                 </li>
@@ -152,7 +152,7 @@
                 <a href="options.html"
                    title="Pilihan"
                    style="z-index:;"
-                accesskey="N">berikut</a>
+                accesskey="N">next</a>
                 </li>
                 
                 <li class="right"
@@ -160,7 +160,7 @@
                 <a href="keywords.html"
                    title="Sistem Kata kunci"
                    style="z-index:;"
-                accesskey="P">sebelum</a>
+                accesskey="P">previous</a>
                 </li>
                 
 
@@ -183,32 +183,29 @@
         <div class="span12">
                 
   <div class="section" id="reports">
-<span id="toolbar-reports"></span><h1>Laporan<a class="headerlink" href="#reports" title="Link permanent untuk headline ini">¶</a></h1>
+<span id="toolbar-reports"></span><h1>Laporan<a class="headerlink" href="#reports" title="Permalink to this headline">¶</a></h1>
 <p>Laporan tentang proyek skenario dampak dibuat menggunakan QGIS template komposer. Pengaturan bawaan template sudah menjadi bagian dari plugin, tapi anda dapat dengan mudah membuat template anda sendiri di QGIS dan menggunakannya sebagai dasar dalam laporan anda.</p>
 <p>Template lokal didukung melalui skema sederhana berikut ini:</p>
 <p>Jika ada sebuah template tertentu yang disebut <tt class="file docutils literal"><span class="pre">/path/to/template/foo.qpt</span></tt> lalu plugin terlihat di direktori template <tt class="file docutils literal"><span class="pre">/path/to/template/</span></tt> untuk sebuah file memanggil file <tt class="file docutils literal"><span class="pre">foo-LANG.qpt</span></tt>, dimana &#8220;LANG&#8221; adalah kode bahasa untuk sistem lokal.</p>
 <p>Jika sebuah file ada maka akan digunakan untuk membuat laporan sebaliknya template asli <tt class="file docutils literal"><span class="pre">/path/to/template/foo.qpt</span></tt> akan digunakan</p>
 <div class="section" id="report-template-elements">
-<h2>Laporan Elemen Template<a class="headerlink" href="#report-template-elements" title="Link permanent untuk headline ini">¶</a></h2>
+<h2>Laporan Elemen Template<a class="headerlink" href="#report-template-elements" title="Permalink to this headline">¶</a></h2>
 <p>Template ini mencakup 3 kelompok elemen selanjutnya :</p>
 <ul class="simple">
-<li><p class="first"><strong>Elemen statis</strong>.</p>
-</li>
-<li><p class="first"><strong>Elemen yang mencakup token-token untuk penggantian</strong>.</p>
-</li>
-<li><p class="first"><strong>Elemen yang mana ter-update secara langsung oleh para penyaji</strong>.</p>
-</li>
+<li><strong>Elemen statis</strong>.</li>
+<li><strong>Elemen yang mencakup token-token untuk penggantian</strong>.</li>
+<li><strong>Elemen yang mana ter-update secara langsung oleh para penyaji</strong>.</li>
 </ul>
 <div class="section" id="static-elements">
-<h3>Elemen Statis<a class="headerlink" href="#static-elements" title="Link permanent untuk headline ini">¶</a></h3>
+<h3>Elemen Statis<a class="headerlink" href="#static-elements" title="Permalink to this headline">¶</a></h3>
 <p>Ini adalah elemen-elemen yang tidak diubah selama pembuatan laporan. seperti beberapa logo/gambar. teks tambahan, dll. Anda dapat menghapus beberapa elemen atau menggantinya dengan yang anda inginkan jika itu diperlukan.</p>
 </div>
 <div class="section" id="elements-containing-tokens-for-replacement">
-<h3>Elemen yang mencakup token-token untuk penggantian<a class="headerlink" href="#elements-containing-tokens-for-replacement" title="Link permanent untuk headline ini">¶</a></h3>
+<h3>Elemen yang mencakup token-token untuk penggantian<a class="headerlink" href="#elements-containing-tokens-for-replacement" title="Permalink to this headline">¶</a></h3>
 <p>Dalam kasus ini elemen nama tidak signifikan, hanya sebuah (beberapa) tanda yang ada. Saat ini tanda-tanda yang ada di elemen akan diganti dengan konten yang telah diterjemahkan (jika alternatif lokal berlaku) dari plugin sesuai dengan kata kunci yang tertulis pada dokumen di bawah ini.</p>
 </div>
 <div class="section" id="elements-that-are-directly-updated-by-the-renderer">
-<h3>Elemen yang mana ter-update secara langsung oleh para penyaji<a class="headerlink" href="#elements-that-are-directly-updated-by-the-renderer" title="Link permanent untuk headline ini">¶</a></h3>
+<h3>Elemen yang mana ter-update secara langsung oleh para penyaji<a class="headerlink" href="#elements-that-are-directly-updated-by-the-renderer" title="Permalink to this headline">¶</a></h3>
 <p>Dalam kasus ini semua konten yang mungkin hadir di elemen seluruhnya telah diganti oleh peta realtime, walaupun pilihan gaya tampilan ini (contoh pengaturan graticule pada peta) akan menyisakan efek tertentu</p>
 <p>Elemen ini dikenali dengan ID-nya dan plugin saat ini mendukung elemen-elemen berikut:</p>
 <ul>
@@ -222,7 +219,7 @@
 </li>
 <li><p class="first"><strong>laporan-dampak</strong> &#8212; label komposer QGIS, yang akan digunakan untuk menampilkan tabel laporan dampak.</p>
 <div class="admonition note">
-<p class="first admonition-title">Catatan</p>
+<p class="first admonition-title">Note</p>
 <p class="last">Karena komposer QGIS tidak mendukung pembesaran elemen secara otomatis berdasarkan konten, maka pastikan label telah memiliki dimensi yang cukup besar agar tabel dapat ditampilkan secara keseluruhan.</p>
 </div>
 </li>
@@ -230,32 +227,24 @@
 </div>
 </div>
 <div class="section" id="replaceable-keywords">
-<h2>Kata kunci yang dapat diganti<a class="headerlink" href="#replaceable-keywords" title="Link permanent untuk headline ini">¶</a></h2>
+<h2>Kata kunci yang dapat diganti<a class="headerlink" href="#replaceable-keywords" title="Permalink to this headline">¶</a></h2>
 <p>Bagian ini mendeskripsikan <em>tokenised keyword</em> yang akan diturunkan pada template peta. Untuk memasukan keyword apapun pada template peta, cukup lampirkan key pada [] (misal [nama-tempat]) dan key ini akan tergantikan dengan nilai teks (misal Tondano). Daftar termasuk frasa statis yang telah di-internasionalisasikan (sehingga mereka akan ditampilkan sesuai dengan bahasa yang dipilih secara lokal pada peta, jika tidak ada terjemahan yang tersedia maka akan ditampilkan ke dalam bahasa Inggris sesuai dengan pengaturan bawaan).</p>
 <p>Kata kunci tokenized berikut ini didukung:</p>
 <ul class="simple">
-<li><p class="first"><strong>judul-dampak</strong> &#8212; judul dari peta skenario dampak.</p>
-</li>
-<li><p class="first"><strong>tanggal</strong> &#8212; tanggal pengukuran.</p>
-</li>
-<li><p class="first"><strong>waktu</strong> &#8212; waktu pengukuran.</p>
-</li>
-<li><p class="first"><strong>versi-safe</strong> &#8212; versi plugin yang digunakan.</p>
-</li>
-<li><p class="first"><strong>disclaimer</strong> &#8212; disclaimer text. Pengaturan awal menggunakan teks: &#8220;InaSAFE telah dikembangkan bersama sama oleh Pemerintah Indonesia-BNPB, Pemerintah Australia-AIFDR dan Bank Dunia-GFDRR. Badan-badan tersebut dan individu pengembang perangkat lunak InaSAFE tidak bertanggung jawab atas kebenaran yang dihasilkan dari InaSAFEE atau keputusan yang mengikutinya sebagai konsekuensi.&#8221; Untuk menggunakan teks peringatan terkostumisasi, masukkan teks yang diinginkan pada dialog Pengaturan plugin (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk lebih detail).</p>
-</li>
+<li><strong>judul-dampak</strong> &#8212; judul dari peta skenario dampak.</li>
+<li><strong>tanggal</strong> &#8212; tanggal pengukuran.</li>
+<li><strong>waktu</strong> &#8212; waktu pengukuran.</li>
+<li><strong>versi-safe</strong> &#8212; versi plugin yang digunakan.</li>
+<li><strong>disclaimer</strong> &#8212; disclaimer text. Pengaturan awal menggunakan teks: &#8220;InaSAFE telah dikembangkan bersama sama oleh Pemerintah Indonesia-BNPB, Pemerintah Australia-AIFDR dan Bank Dunia-GFDRR. Badan-badan tersebut dan individu pengembang perangkat lunak InaSAFE tidak bertanggung jawab atas kebenaran yang dihasilkan dari InaSAFEE atau keputusan yang mengikutinya sebagai konsekuensi.&#8221; Untuk menggunakan teks peringatan terkostumisasi, masukkan teks yang diinginkan pada dialog Pengaturan plugin (lihat <a class="reference internal" href="options.html#toolbar-options"><em>Pilihan</em></a> untuk lebih detail).</li>
 </ul>
 </div>
 <div class="section" id="custom-templates">
-<h2>Template yang lazim digunakan<a class="headerlink" href="#custom-templates" title="Link permanent untuk headline ini">¶</a></h2>
+<h2>Template yang lazim digunakan<a class="headerlink" href="#custom-templates" title="Permalink to this headline">¶</a></h2>
 <p>Anda memiliki beberapa pilihan untuk mengatur template <strong>tanpa melakukan proses pemprograman apapun</strong>. Ada 3 cara utama untuk melakukan ini:</p>
 <ul class="simple">
-<li><p class="first">Pindahkan kata kunci yang dapat diganti ke dalam elemen yang berbeda atau pindahkan seluruhnya.</p>
-</li>
-<li><p class="first">Ubah tampilan elemen template (contoh mengatur huruf, warna, garis, dll). pindahkan elemen template itu sendiri di sekitarnya atau tambahkan/hapus seluruhnya.</p>
-</li>
-<li><p class="first">Buat template anda sendiri dan gunakan template itu daripada template bawaan.</p>
-</li>
+<li>Pindahkan kata kunci yang dapat diganti ke dalam elemen yang berbeda atau pindahkan seluruhnya.</li>
+<li>Ubah tampilan elemen template (contoh mengatur huruf, warna, garis, dll). pindahkan elemen template itu sendiri di sekitarnya atau tambahkan/hapus seluruhnya.</li>
+<li>Buat template anda sendiri dan gunakan template itu daripada template bawaan.</li>
 </ul>
 <p>Template pengaturan bawaan yang disediakan seperti <tt class="file docutils literal"><span class="pre">inasafe/safe_qgis/resources/qgis-composer-templates/inasafe.qpt</span></tt> dapat anda modifikasi dengan membuka template tersebut menggunakan komposer peta QGIS, membuat perubahan anda dan menimpa ulang template atau menyimpannya kembali pada direktori manapun.</p>
 <p>Anda harus mencoba melakukan tes pada perubahan template anda sebelum menggunakannya pada lingkungan produksi.</p>
