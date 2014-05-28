@@ -23,6 +23,8 @@ import shutil
 from datetime import datetime
 
 from safe.api import temp_dir
+from realtime.sftp_client import SFtpClient
+from realtime.test.test_sftp_client import run_monkey_patching_sftp_client
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.server_config import (
     BASE_URL,
@@ -37,7 +39,6 @@ from realtime.utilities import (
 from realtime.exceptions import (
     EventIdError,
     NetworkError)
-from realtime.test.test_sftp_client import MockSFtpClient
 
 # Shake event ID for this test
 SHAKE_ID = '20120726022003'
@@ -65,7 +66,8 @@ class MockSFtpShakeData(object):
         self.force_flag = force_flag
         self.input_file_name = 'grid.xml'
 
-        self.sftp_client = MockSFtpClient(
+        run_monkey_patching_sftp_client()
+        self.sftp_client = SFtpClient(
             self.host, self.username, self.password, self.working_dir)
 
         # Make working dir point to the local directory

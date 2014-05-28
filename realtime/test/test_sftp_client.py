@@ -60,6 +60,8 @@ def mock_init(self,
     self.working_dir = working_dir
     self.working_dir_path = working_dir
     self.sftp = shutil
+    self.sftp.get = shutil.copy
+    self.sftp.listdir = os.listdir
 
 
 def mock_is_dir(self, path):
@@ -79,15 +81,12 @@ def mock_path_exists(self, path):
     """
     return os.path.exists(path)
 
-# The monkey patching to some methods of SFTPClient
-SFtpClient.__init__ = mock_init
-SFtpClient.is_dir = mock_is_dir
-SFtpClient.path_exists = mock_path_exists
 
-# The monkey patching to some objects of SFTPClient
-sftp_client = SFtpClient(working_dir=temp_dir('realtime-test'))
-sftp_client.sftp.get = shutil.copy
-sftp_client.sftp.listdir = os.listdir
+def run_monkey_patching_sftp_client():
+    """The monkey patching to some methods of SFTPClient."""
+    SFtpClient.__init__ = mock_init
+    SFtpClient.is_dir = mock_is_dir
+    SFtpClient.path_exists = mock_path_exists
 
 
 class SFtpClientTest(unittest.TestCase):
@@ -99,6 +98,7 @@ class SFtpClientTest(unittest.TestCase):
     """
     def setUp(self):
         """Setup before each test call."""
+        run_monkey_patching_sftp_client()
         # Make temp dir
         temp_dir('realtime-test')
 
@@ -109,6 +109,7 @@ class SFtpClientTest(unittest.TestCase):
 
     def test_download_path(self):
         """Test to download all directories and files under a path."""
+        sftp_client = SFtpClient(working_dir=temp_dir('realtime-test'))
         self.assertIsNotNone(sftp_client)
 
         # Download directories
@@ -143,6 +144,7 @@ class SFtpClientTest(unittest.TestCase):
 
     def test_get_listing(self):
         """Test get_listing if it's working correctly."""
+        sftp_client = SFtpClient(working_dir=temp_dir('realtime-test'))
         self.assertIsNotNone(sftp_client)
 
         # Download directories
