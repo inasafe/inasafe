@@ -22,19 +22,23 @@ import os
 import shutil
 from datetime import datetime
 from zipfile import ZipFile
-# The logger is intiailsed in utilities.py by init
 import logging
-LOGGER = logging.getLogger('InaSAFE')
 
-from exceptions import (
+from realtime.exceptions import (
     EventUndefinedError,
     EventIdError,
     NetworkError,
     EventValidationError,
     InvalidInputZipError,
     ExtractionError)
-from ftp_client import FtpClient
-from utilities import shakemap_zip_dir, shakemap_extract_dir
+from realtime.ftp_client import FtpClient
+from realtime.utilities import (
+    shakemap_zip_dir,
+    shakemap_extract_dir)
+from realtime.server_config import BASE_URL
+
+# The logger is initialised in realtime/__init__
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class ShakeData:
@@ -62,7 +66,7 @@ class ShakeData:
     then extracting various by products from it.
     """
 
-    def __init__(self, event=None, host='118.97.83.243'):
+    def __init__(self, event=None, host=BASE_URL):
         """Constructor for the ShakeData class.
 
         :param event: (Optional) a string representing the event id
@@ -73,7 +77,7 @@ class ShakeData:
         :param host: (Optional) a string representing the ip address
                   or host name of the server from which the data should be
                   retrieved. It assumes that the data is in the root directory.
-                  Defaults to 118.97.83.243
+                  Defaults to BASE_URL
 
         :returns: None
 

@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '19/07/2012'
@@ -21,7 +20,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 from datetime import datetime
-from safe_qgis.utilities.custom_logging import setup_logger as setupLoggerSQ
+import ntpath
+
+from safe_qgis.utilities.custom_logging import (
+    setup_logger as setup_logger_safe_qgis)
 
 
 def base_data_dir():
@@ -104,7 +106,7 @@ def mk_dir(dir_path):
 
 def purge_working_data():
     """Get rid of the shakemaps-* directories - mainly intended for
-    invocation from unit tests to ensure there is a clean slate before
+    invocation from unit tests to ensure there is a clean state before
     testing."""
     shutil.rmtree(shakemap_extract_dir())
     shutil.rmtree(shakemap_data_dir())
@@ -120,7 +122,7 @@ def setup_logger():
     sentry_url = (
         'http://fda607badbe440be9a2fa6b22e759c72'
         ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
-    setupLoggerSQ(log_file=log_file_path, sentry_url=sentry_url)
+    setup_logger_safe_qgis(log_file=log_file_path, sentry_url=sentry_url)
 
 
 def is_event_id(event_id):
@@ -138,3 +140,15 @@ def is_event_id(event_id):
     except ValueError:
         return False
     return True
+
+
+def get_path_tail(input_path):
+    """Return tail of a input_path no matter what the OS is.
+
+    :param input_path: The input_path that we want to get the tail from.
+    :type input_path: str
+
+    Reference : http://stackoverflow.com/a/8384788/1198772
+    """
+    head, tail = ntpath.split(input_path)
+    return tail or ntpath.basename(head)

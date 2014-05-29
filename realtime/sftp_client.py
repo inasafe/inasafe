@@ -17,7 +17,6 @@ __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import ntpath
 from stat import S_ISDIR
 from errno import ENOENT
 import os
@@ -26,7 +25,7 @@ import logging
 # noinspection PyPackageRequirements
 import paramiko
 
-from realtime.utilities import mk_dir
+from realtime.utilities import mk_dir, get_path_tail
 from realtime.server_config import (
     BASE_URL,
     USERNAME,
@@ -171,15 +170,3 @@ class SFtpClient:
             if function(directory):
                 valid_list.append(directory)
         return valid_list
-
-
-def get_path_tail(path):
-    """Return tail of a path no matter what the OS is.
-
-    :param path: The path that we want to get the tail from.
-    :type path: str
-
-    Reference : http://stackoverflow.com/a/8384788/1198772
-    """
-    head, tail = ntpath.split(path)
-    return tail or ntpath.basename(head)

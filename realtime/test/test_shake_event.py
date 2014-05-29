@@ -164,19 +164,19 @@ class TestShakeEvent(unittest.TestCase):
     def test_event_to_contours(self):
         """Check we can extract contours from the event"""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        file_path = shake_event.mmi_data_to_contours(
-            force_flag=True, algorithm='invdist')
+        file_path = shake_event.mmi_data_to_contours(force_flag=True,
+                                                     algorithm='invdist')
         self.assertTrue(self.check_feature_count(file_path, 16))
         self.assertTrue(os.path.exists(file_path))
         expected_qml = file_path.replace('shp', 'qml')
         message = '%s not found' % expected_qml
         self.assertTrue(os.path.exists(expected_qml), message)
 
-        file_path = shake_event.mmi_data_to_contours(
-            force_flag=True, algorithm='nearest')
+        file_path = shake_event.mmi_data_to_contours(force_flag=True,
+                                                     algorithm='nearest')
         self.assertTrue(self.check_feature_count(file_path, 132))
-        file_path = shake_event.mmi_data_to_contours(
-            force_flag=True, algorithm='average')
+        file_path = shake_event.mmi_data_to_contours(force_flag=True,
+                                                     algorithm='average')
         self.assertTrue(self.check_feature_count(file_path, 132))
 
     def test_local_cities(self):

@@ -1524,13 +1524,14 @@ class ShakeEvent(QObject):
         return clipped_hazard, clipped_exposure
 
     def _get_population_path(self):
-        """Helper to determine population raster spath.
+        """Helper to determine population raster's path.
 
         The following priority will be used to determine the path:
             1) the class attribute self.population_raster_path
-                will be checked and if not None it will be used.
+               will be checked and if not None and the file exists it will be
+               used.
             2) the environment variable 'INASAFE_POPULATION_PATH' will be
-               checked if set it will be used.
+               checked and if the file exists if set it will be used.
             4) A hard coded path of
                :file:`/fixtures/exposure/population.tif` will be appended
                to os.path.abspath(os.path.curdir)
@@ -1555,16 +1556,21 @@ class ShakeEvent(QObject):
 
         local_path = '/usr/local/share/inasafe/exposure/population.tif'
         if self.population_raster_path is not None:
-            return self.population_raster_path
-        elif 'INASAFE_POPULATION_PATH' in os.environ:
-            a = os.environ['INASAFE_POPULATION_PATH']
-            return os.environ['INASAFE_POPULATION_PATH']
-        elif os.path.exists(fixture_path):
+            if os.path.exists(self.population_raster_path):
+                return self.population_raster_path
+
+        if 'INASAFE_POPULATION_PATH' in os.environ:
+            population_path = os.environ['INASAFE_POPULATION_PATH']
+            if os.path.exists(population_path):
+                return population_path
+
+        if os.path.exists(fixture_path):
             return fixture_path
-        elif os.path.exists(local_path):
+
+        if os.path.exists(local_path):
             return local_path
-        else:
-            raise FileNotFoundError('Population file could not be found')
+
+        raise FileNotFoundError('Population file could not be found')
 
     def render_map(self, force_flag=False):
         """This is the 'do it all' method to render a pdf.
