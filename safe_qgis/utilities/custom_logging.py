@@ -36,7 +36,7 @@ from raven.handlers.logging import SentryHandler
 from raven import Client
 # pylint: enable=F0401
 
-from safe.api import temp_dir
+from safe.api import temp_dir, log_file_path
 from safe_qgis.utilities.utilities import tr
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -143,10 +143,9 @@ def setup_logger(log_file=None, sentry_url=None):
     #               /var/log/syslog
     # (Tim) Ole and I discussed this - we prefer to log into the
     # user's temporary working directory.
-    log_temp_dir = temp_dir('logs')
-    path = os.path.join(log_temp_dir, 'inasafe.log')
+    inasafe_log_path = log_file_path()
     if log_file is None:
-        file_handler = logging.FileHandler(path)
+        file_handler = logging.FileHandler(inasafe_log_path)
     else:
         file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(default_handler_level)

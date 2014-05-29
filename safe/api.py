@@ -74,7 +74,8 @@ from safe.common.utilities import (
     get_decimal_separator,
     get_utm_epsg,
     feature_attributes_as_dict,
-    which)
+    which,
+    log_file_path)
 from safe.common.shake_grid_converter import (
     ShakeGridConverter,
     convert_mmi_data)

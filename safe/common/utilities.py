@@ -718,3 +718,14 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
         i += 1
         new_name = '%s_%s' % (new_name[:8], i)
     return new_name
+
+
+def log_file_path():
+    """Get InaSAFE log file path.
+
+    :return: InaSAFE log file path.
+    :rtype: str
+    """
+    log_temp_dir = temp_dir('logs')
+    path = os.path.join(log_temp_dir, 'inasafe.log')
+    return path

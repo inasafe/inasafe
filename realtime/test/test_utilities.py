@@ -22,13 +22,13 @@ import logging
 import unittest
 import datetime
 
+from safe.api import log_file_path
 from realtime.utilities import (
     base_data_dir,
     shakemap_zip_dir,
     shakemap_extract_dir,
     shakemap_data_dir,
     report_data_dir,
-    log_dir,
     is_event_id,
     purge_working_data,
     get_path_tail)
@@ -86,12 +86,12 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(data_dir, expected_dir, message)
 
     def test_logging(self):
-        path = os.path.join(log_dir(), 'realtime.log')
+        inasafe_log_path = log_file_path()
         current_date = datetime.datetime.now()
         date_string = current_date.strftime('%d-%m-%Y-%H:%M:%S')
         message = 'Testing logger %s' % date_string
         LOGGER.info(message)
-        log_file = open(path)
+        log_file = open(log_file_path())
         log_lines = str(log_file.readlines())
         self.assertIn(
             message,

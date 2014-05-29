@@ -83,13 +83,6 @@ def report_data_dir():
     return dir_path
 
 
-def log_dir():
-    """Create (if needed) and return the path to the log directory."""
-    dir_path = os.path.join(base_data_dir(), 'logs')
-    make_directory(dir_path)
-    return dir_path
-
-
 def make_directory(dir_path):
     """Make a directory, making sure it is world writable.
 
@@ -121,11 +114,10 @@ def setup_logger():
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
     """
-    log_file_path = os.path.join(log_dir(), 'realtime.log')
     sentry_url = (
         'http://fda607badbe440be9a2fa6b22e759c72'
         ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
-    setup_logger_safe_qgis(log_file=log_file_path, sentry_url=sentry_url)
+    setup_logger_safe_qgis(sentry_url=sentry_url)
 
 
 def is_event_id(event_id):
