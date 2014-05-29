@@ -148,8 +148,8 @@ class FtpClient:
         LOGGER.debug('Checking for ftp file: %s', checked_files)
         # Note we don't delegate to has_file as we want to limit network IO
         file_list = self.get_listing()
-        for myFile in checked_files:
-            url = self.ftp_url_for_file(myFile)
+        for input_file in checked_files:
+            url = self.ftp_url_for_file(input_file)
             if not url in file_list:
                 LOGGER.debug('** %s NOT found on server**' % url)
                 return False
