@@ -27,7 +27,7 @@ from realtime.utilities import is_event_id
 from realtime.utilities import (
     shakemap_cache_dir,
     shakemap_extract_dir,
-    mk_dir)
+    make_directory)
 from realtime.exceptions import (
     FileNotFoundError,
     EventIdError,
@@ -239,8 +239,8 @@ class SftpShakeData:
         for counter in trials:
             last_error = None
             try:
-                mk_dir(local_path)
-                mk_dir(os.path.join(local_path, 'output'))
+                make_directory(local_path)
+                make_directory(os.path.join(local_path, 'output'))
                 self.sftp_client.download_path(
                     xml_remote_path, local_parent_path)
             except NetworkError, e:
@@ -286,7 +286,7 @@ class SftpShakeData:
         """
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')
         if not os.path.exists(self.extract_dir()):
-            mk_dir(self.extract_dir())
+            make_directory(self.extract_dir())
         if force_flag or self.force_flag:
             self.remove_extracted_files()
         elif os.path.exists(final_grid_xml_file):

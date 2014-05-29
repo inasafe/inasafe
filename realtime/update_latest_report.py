@@ -93,7 +93,7 @@ def filter_eq_map(eq_map_path):
 #        print 're'
 #        return False
     my_event_id = get_event_id(eq_map_path)
-    print 'my_event_id', my_event_id
+    print 'event_id', my_event_id
     if is_event_id(my_event_id):
         return True
     else:

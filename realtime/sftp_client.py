@@ -25,7 +25,7 @@ import logging
 # noinspection PyPackageRequirements
 import paramiko
 
-from realtime.utilities import mk_dir, get_path_tail
+from realtime.utilities import make_directory, get_path_tail
 from realtime.server_config import (
     BASE_URL,
     USERNAME,
@@ -100,7 +100,7 @@ class SFtpClient:
             dir_name = get_path_tail(remote_path)
             # create directory in local machine
             local_dir_path = os.path.join(local_path, dir_name)
-            mk_dir(local_dir_path)
+            make_directory(local_dir_path)
             # list all directories in remote path
             directories = self.sftp.listdir(remote_path)
             # iterate recursive

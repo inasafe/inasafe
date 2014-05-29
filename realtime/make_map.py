@@ -24,10 +24,10 @@ import logging
 from urllib2 import URLError
 from zipfile import BadZipfile
 
-from ftp_client import FtpClient
-from sftp_client import SFtpClient
-from utilities import setup_logger, data_dir, is_event_id
-from shake_event import ShakeEvent
+from realtime.ftp_client import FtpClient
+from realtime.sftp_client import SFtpClient
+from realtime.utilities import setup_logger, data_dir, is_event_id
+from realtime.shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setup_logger()
 LOGGER = logging.getLogger('InaSAFE')
@@ -104,9 +104,9 @@ def process_event(event_id=None, locale='en'):
 LOGGER.info('-------------------------------------------')
 
 if 'INASAFE_LOCALE' in os.environ:
-    my_locale = os.environ['INASAFE_LOCALE']
+    locale = os.environ['INASAFE_LOCALE']
 else:
-    my_locale = 'en'
+    locale = 'en'
 
 if len(sys.argv) > 2:
     sys.exit('Usage:\n%s [optional shakeid]\nor\n%s --list' % (
@@ -114,16 +114,14 @@ if len(sys.argv) > 2:
 elif len(sys.argv) == 2:
     print('Processing shakemap %s' % sys.argv[1])
 
-    my_event_id = sys.argv[1]
-    if my_event_id in '--list':
-#        ftp_client = FtpClient()
+    event_id = sys.argv[1]
+    if event_id in '--list':
         sftp_client = SFtpClient()
-#        myListing = ftp_client.get_listing()
         dir_listing = sftp_client.get_listing(function=is_event_id)
         for event in dir_listing:
             print event
         sys.exit(0)
-    elif my_event_id in '--run-all':
+    elif event_id in '--run-all':
         #
         # Caution, this code path gets memory leaks, use the
         # batch file approach rather!
@@ -138,18 +136,18 @@ elif len(sys.argv) == 2:
             print 'Processing %s' % event
             # noinspection PyBroadException
             try:
-                process_event(event, my_locale)
+                process_event(event, locale)
             except:  # pylint: disable=W0702
                 LOGGER.exception('Failed to process %s' % event)
         sys.exit(0)
     else:
-        process_event(my_event_id, my_locale)
+        process_event(event_id, locale)
 
 else:
-    my_event_id = None
+    event_id = None
     print('Processing latest shakemap')
     # noinspection PyBroadException
     try:
-        process_event(locale=my_locale)
+        process_event(locale=locale)
     except:  # pylint: disable=W0702
         LOGGER.exception('Process event failed')
