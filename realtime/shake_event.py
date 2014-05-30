@@ -1451,7 +1451,8 @@ class ShakeEvent(QObject):
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
-        mmi_shape_file = self.shake_grid_converter(force_flag=force_flag)
+        mmi_shape_file = self.shake_grid_converter.mmi_to_shapefile(
+            force_flag=force_flag)
         logging.info('Created: %s', mmi_shape_file)
         cities_html_path = None
         cities_shape_file = None
