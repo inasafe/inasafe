@@ -3,8 +3,8 @@
 export QGIS_DEBUG=1
 export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log
 
-export QGIS_PREFIX_PATH=/usr/local/qgis-2.0
-export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:`pwd`
+export QGIS_PREFIX_PATH=/usr/local/qgis-2.2
+export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 
 export INASAFE_WORK_DIR=/home/web/quake
