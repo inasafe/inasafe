@@ -87,9 +87,8 @@ class TestShakeEvent(unittest.TestCase):
         grid_path = shake_event.grid_file_path()
         self.assertEquals(expected_path, grid_path)
 
-    #noinspection PyMethodMayBeStatic
-    def test_event_to_raster(self):
-        """Check we can convert the shake event to a raster"""
+    def test_to_string(self):
+        """Test __str__ works properly."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         expected_state = (
             'latitude: -0.21\n'
@@ -122,29 +121,11 @@ class TestShakeEvent(unittest.TestCase):
             'search_boxes: None\n')
 
         state = str(shake_event)
-        print state
         message = (('Expected:\n----------------\n%s'
                     '\n\nGot\n------------------\n%s\n') %
                    (expected_state, state))
         self.assertEqual(state, expected_state, message)
-        raster_path = shake_event.mmi_data_to_raster(force_flag=True)
-        self.assertTrue(os.path.exists(raster_path))
-        expected_qml = raster_path.replace('tif', 'qml')
-        self.assertTrue(os.path.exists(expected_qml))
-        expected_keywords = raster_path.replace('tif', 'keywords')
-        self.assertTrue(os.path.exists(expected_keywords))
 
-    #noinspection PyMethodMayBeStatic
-    def test_event_to_shapefile(self):
-        """Check we can convert the shake event to a raster"""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        file_path = shake_event.mmi_data_to_shapefile(force_flag=True)
-        self.assertTrue(os.path.exists(file_path))
-        expected_qml = file_path.replace('shp', 'qml')
-        message = '%s not found' % expected_qml
-        self.assertTrue(os.path.exists(expected_qml), message)
-
-    #noinspection PyMethodMayBeStatic
     def check_feature_count(self, path, count):
         data_source = ogr.Open(path)
         base_name = os.path.splitext(os.path.basename(path))[0]
@@ -227,21 +208,18 @@ class TestShakeEvent(unittest.TestCase):
                     diff_string))
         self.assertEqual(diff_string, '', message)
 
-    #noinspection PyMethodMayBeStatic
     def test_cities_to_shape(self):
         """Test that we can retrieve the cities local to the event."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.cities_to_shapefile()
         self.assertTrue(os.path.exists(file_path))
 
-    #noinspection PyMethodMayBeStatic
     def test_cities_search_boxes_to_shape(self):
         """Test that we can retrieve the search boxes used to find cities."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         file_path = shake_event.city_search_boxes_to_shapefile()
         self.assertTrue(os.path.exists(file_path))
 
-    #noinspection PyMethodMayBeStatic
     def test_calculate_fatalities(self):
         """Test that we can calculate fatalities."""
         LOGGER.debug(QGIS_APP.showSettings())
@@ -275,7 +253,6 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEqual(
             shake_event.fatality_counts, expected_fatalities, message)
 
-    #noinspection PyMethodMayBeStatic
     def test_bounds_to_rect(self):
         """Test that we can calculate the event bounds properly"""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
@@ -285,19 +262,6 @@ class TestShakeEvent(unittest.TestCase):
             '126.4500000000000028,1.7900000000000000')
         message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
         self.assertEqual(bounds, expected_result, message)
-
-    #noinspection PyMethodMayBeStatic
-    def test_romanize(self):
-        """Test we can convert MMI values to float."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-
-        values = range(2, 10)
-        expected_result = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
-        result = []
-        for value in values:
-            result.append(shake_event.romanize(value))
-        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
-        self.assertEqual(result, expected_result, message)
 
     def test_sorted_impacted_cities(self):
         """Test getting impacted cities sorted by mmi then population."""
@@ -349,7 +313,6 @@ class TestShakeEvent(unittest.TestCase):
         message = 'Got:\n%s\nExpected:\n%s\n' % (path, expected_path)
         self.assertEqual(path, expected_path, message)
 
-    #noinspection PyMethodMayBeStatic
     def test_fatalities_table(self):
         """Test rendering a fatalities table."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
@@ -426,7 +389,6 @@ class TestShakeEvent(unittest.TestCase):
         print difference.all()
         self.assertDictEqual(expected_dict, result, message)
 
-    #noinspection PyMethodMayBeStatic
     def test_event_info_string(self):
         """Test we can get a location info string nicely."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
@@ -440,7 +402,6 @@ class TestShakeEvent(unittest.TestCase):
                    (result, expected_result))
         self.assertEqual(result, expected_result, message)
 
-    #noinspection PyMethodMayBeStatic
     def test_bearing_to_cardinal(self):
         """Test we can convert a bearing to a cardinal direction."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)

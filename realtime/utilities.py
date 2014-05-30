@@ -147,3 +147,24 @@ def get_path_tail(input_path):
     """
     head, tail = ntpath.split(input_path)
     return tail or ntpath.basename(head)
+
+
+def romanise(mmi_value):
+    """Return the roman numeral for an mmi value.
+
+    :param mmi_value: The MMI value that will be romanised
+    :type mmi_value: float
+
+    :return Roman numeral equivalent of the value
+    :rtype: str
+    """
+    if mmi_value is None:
+        return ''
+
+    roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                  'IX', 'X', 'XI', 'XII']
+    try:
+        roman = roman_list[int(float(mmi_value))]
+    except ValueError:
+        return None
+    return roman

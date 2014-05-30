@@ -231,12 +231,12 @@ class ShakeGridConverter(object):
             for line in data.split('\n'):
                 if not line:
                     continue
-                my_tokens = line.split(' ')
-                my_longitude = my_tokens[longitude_column]
-                my_latitude = my_tokens[latitude_column]
-                my_mmi = my_tokens[mmi_column]
-                my_tuple = (my_longitude, my_latitude, my_mmi)
-                self.mmi_data.append(my_tuple)
+                tokens = line.split(' ')
+                longitude = tokens[longitude_column]
+                latitude = tokens[latitude_column]
+                mmi = tokens[mmi_column]
+                mmi_tuple = (longitude, latitude, mmi)
+                self.mmi_data.append(mmi_tuple)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
@@ -357,8 +357,6 @@ class ShakeGridConverter(object):
 
         return vrt_path
 
-        #noinspection PyMethodMayBeStatic
-
     def _add_executable_prefix(self, command):
         """Add the executable prefix for gdal binaries.
 
@@ -413,7 +411,8 @@ class ShakeGridConverter(object):
                 raise Exception(message)
 
     def mmi_to_raster(
-            self, title, source, force_flag=False, algorithm='nearest'):
+            self, title, source, force_flag=False,
+            algorithm='nearest'):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -525,9 +524,55 @@ class ShakeGridConverter(object):
         else:
             qml_path = os.path.join(
                 self.output_dir, '%s.qml' % self.output_basename)
-        my_source_qml = os.path.join(data_dir(), 'mmi.qml')
-        shutil.copyfile(my_source_qml, qml_path)
+        qml_source_path = os.path.join(data_dir(), 'mmi.qml')
+        shutil.copyfile(qml_source_path, qml_path)
         return tif_path
+
+    def mmi_to_shapefile(self, force_flag=False):
+        """Convert grid.xml's mmi column to a vector shp file using ogr2ogr.
+
+        An ESRI shape file will be created.
+
+        :param force_flag: bool (Optional). Whether to force the regeneration
+            of the output file. Defaults to False.
+
+        :return: Path to the resulting tif file.
+        :rtype: str
+
+        Example of the ogr2ogr call we generate::
+
+           ogr2ogr -select mmi -a_srs EPSG:4326 mmi.shp mmi.vrt mmi
+
+        .. note:: It is assumed that ogr2ogr is in your path.
+        """
+        LOGGER.debug('mmi_to_shapefile requested.')
+
+        shp_path = os.path.join(
+            self.output_dir, '%s-points.shp' % self.output_basename)
+        # Short circuit if the tif is already created.
+        if os.path.exists(shp_path) and force_flag is not True:
+            return shp_path
+
+        # Ensure the vrt mmi file exists (it will generate csv too if needed)
+        vrt_path = self.mmi_to_vrt(force_flag)
+
+        #now generate the tif using default interpolation options
+
+        command = (
+            ('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '
+             '%(shp)s %(vrt)s mmi') % {'shp': shp_path, 'vrt': vrt_path})
+
+        LOGGER.info('Created this gdal command:\n%s' % command)
+        # Now run GDAL warp scottie...
+        # noinspection PyProtectedMember
+        self._run_command(command)
+
+        # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
+        qml_path = os.path.join(
+            self.output_dir, '%s-points.qml' % self.output_basename)
+        source_qml = os.path.join(data_dir(), 'mmi-shape.qml')
+        shutil.copyfile(source_qml, qml_path)
+        return shp_path
 
     def create_keyword_file(self, title, source, algorithm):
         """Create keyword file for the raster file created.

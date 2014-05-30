@@ -87,6 +87,14 @@ class ConverterTest(unittest.TestCase):
         grid_xml_data = SHAKE_GRID_CONVERTER.mmi_data
         self.assertEquals(21442, len(grid_xml_data))
 
+    def test_grid_file_path(self):
+        """Test grid_file_path works properly."""
+        grid_path = SHAKE_GRID_CONVERTER.grid_file_path()
+        expected_path = GRID_PATH
+        message = 'Grid path should be %s, but I got %s' % (
+            expected_path, grid_path)
+        self.assertEqual(grid_path, expected_path, message)
+
     def test_mmi_to_delimited_text(self):
         """Test mmi_to_delimited_text works."""
         delimited_string = SHAKE_GRID_CONVERTER.mmi_to_delimited_text()
@@ -100,6 +108,29 @@ class ConverterTest(unittest.TestCase):
         delimited_string = delimited_file.readlines()
         delimited_file.close()
         self.assertEqual(21443, len(delimited_string))
+
+    def test_mmi_to_raster(self):
+        """Check we can convert the shake event to a raster."""
+        # Check the tif file
+        raster_path = SHAKE_GRID_CONVERTER.mmi_to_raster(
+            'title', 'source', force_flag=True)
+        self.assertTrue(os.path.exists(raster_path))
+        # Check the qml file
+        expected_qml = raster_path.replace('tif', 'qml')
+        self.assertTrue(os.path.exists(expected_qml))
+        # Check the keywords file
+        expected_keywords = raster_path.replace('tif', 'keywords')
+        self.assertTrue(os.path.exists(expected_keywords))
+
+    def test_mmi_to_shapefile(self):
+        """Check we can convert the shake event to a shapefile."""
+        # Check the shp file
+        file_path = SHAKE_GRID_CONVERTER.mmi_to_shapefile(force_flag=True)
+        self.assertTrue(os.path.exists(file_path))
+        # Check the qml file
+        expected_qml = file_path.replace('shp', 'qml')
+        message = '%s not found' % expected_qml
+        self.assertTrue(os.path.exists(expected_qml), message)
 
     def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)"""
