@@ -106,12 +106,12 @@ class Plugin:
     def change_i18n(self, new_locale):
         """Change internationalisation for the plugin.
 
-        Override the system locale
-        and then see if we can get a valid translation file
-        for whatever locale is effectively being used.
+        Override the system locale  and then see if we can get a valid
+        translation file for whatever locale is effectively being used.
 
         :param new_locale: the new locale i.e. 'id', 'af', etc.
         :type new_locale: str
+
         :raises: TranslationLoadException
         """
 

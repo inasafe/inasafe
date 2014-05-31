@@ -1340,6 +1340,27 @@ Click for Diagnostic Information:
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
 
+    def test_generate_insufficient_overlap_message(self):
+        """Test we generate insufficent overlap messages nicely."""
+
+        class FakeLayer(object):
+            source = None
+
+        exposure_layer = FakeLayer()
+        exposure_layer.source = 'Fake exposure layer'
+
+        hazard_layer = FakeLayer()
+        hazard_layer.source = 'Fake hazard layer'
+
+        message = DOCK.generate_insufficient_overlap_message(
+            Exception('Dummy exception'),
+            exposure_geoextent=[10.0, 10.0, 20.0, 20.0],
+            exposure_layer=exposure_layer,
+            hazard_geoextent=[15.0, 15.0, 20.0, 20.0],
+            hazard_layer=hazard_layer,
+            viewport_geoextent=[5.0, 5.0, 12.0, 12.0])
+        self.assertIn('insufficient overlap', message)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDock)
     runner = unittest.TextTestRunner(verbosity=2)
