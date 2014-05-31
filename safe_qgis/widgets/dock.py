@@ -28,11 +28,15 @@ import numpy
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+from PyQt4.QtGui import QColor
 from qgis.core import (
+    QgsRectangle,
+    QgsPoint,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis)
+from qgis.gui import QgsRubberBand
 from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
@@ -112,7 +116,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -137,9 +141,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True,
-        #    stderrToServer=True)
+        pydevd.settrace(
+           'localhost', port=5678, stdoutToServer=True,
+           stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -201,6 +205,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
+        # Rubber band for showing analysis extent etc.
+        # Added by Tim in version 2.1.0
+        self.rubberband = None
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -886,6 +893,59 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
+    def hide_extent(self):
+        """Clear extent rubber band if any.
+
+        This method can safely be called even if there is no rubber band set.
+
+        .. versionadded:: 2.1.0
+        """
+        if self.rubberband is not None:
+            self.rubberband.reset(QGis.Polygon)
+            self.rubberband = None
+
+    def show_extent(self, extent):
+        """Show an extent as a rubber band on the canvas.
+
+        .. seealso:: hide_extent()
+
+        .. versionadded:: 2.1.0
+
+        :param extent: A rectangle to display on the canvas. If parameter is
+            a list it should be in the form of [xmin, ymin, xmax, ymax]
+            otherwise it will be silently ignored and this method will
+            do nothing.
+        :type extent: QgsRectangle, list
+        """
+        if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
+            return
+        if isinstance(extent, list):
+            try:
+                extent = QgsRectangle(
+                    extent[0],
+                    extent[1],
+                    extent[2],
+                    extent[3])
+            except:  # yes we want to catch all exception types here
+                return
+
+        self.hide_extent()
+        self.rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
+        self.rubberband.setColor(QColor(255, 0, 0, 100))
+        self.rubberband.setWidth(3)
+        update_display_flag = False
+        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
+        self.rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
+        self.rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
+        self.rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
+        self.rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
+        update_display_flag = True
+        self.rubberband.addPoint(point, update_display_flag)
+
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
 
@@ -902,6 +962,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
          exposure_layer,
          geo_extent,
          hazard_layer) = self.clip_parameters
+
+        self.show_extent(buffered_geo_extent)
         # pylint: enable=W0633,W0612
 
         if self.calculator.requires_clipping():
@@ -1959,8 +2021,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
-        logo_path = settings.value('inasafe/organisation_logo_path', '',
-                                   type=str)
+        logo_path = settings.value(
+            'inasafe/organisation_logo_path', '', type=str)
         if logo_path != '':
             print_map.set_organisation_logo(logo_path)
 
