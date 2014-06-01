@@ -183,6 +183,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.clip_hard = None
         self.show_intermediate_layers = None
         self.developer_mode = None
+        self.organisation_logo_path = None
+
 
         self.read_settings()  # get_project_layers called by this
         self.clip_parameters = None
@@ -211,6 +213,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # This is a rubber band to show what the AOI of the
         # next analysis will be. Also added in 2.1.0
         self.next_analysis_rubberband = None
+        # Whether to show rubber band of last and next scenario
+        self.show_rubber_bands = False
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -367,6 +371,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.organisation_logo.show()
         else:
             self.organisation_logo.hide()
+
+        flag = bool(settings.value(
+            'inasafe/showRubberBands', False, type=bool))
+        self.show_rubber_bands = flag
+
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -533,6 +542,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             message = self.ready_message()
             return True, message
 
+    # noinspection PyPep8Naming
     @pyqtSlot(int)
     def on_cboHazard_currentIndexChanged(self, index):
         """Automatic slot executed when the Hazard combo is changed.
@@ -904,6 +914,28 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
+    @pyqtSlot('bool')
+    def toggle_rubber_bands(self, flag):
+        """Disabled/enable the rendering of rubber bands.
+
+        :param flag: Flag to indicate if drawing of bands is active.
+        :type flag: bool
+        """
+        self.show_rubber_bands = flag
+        settings = QSettings()
+        settings.setValue('inasafe/showRubberBands', flag)
+        if not flag:
+            self.hide_extent()
+            self.hide_next_analysis_extent()
+        else:
+            self.show_next_analysis_extent()
+
+    def hide_next_analysis_extent(self):
+        """Hide the rubber band showing extent of the next analysis."""
+        if self.next_analysis_rubberband is not None:
+            self.next_analysis_rubberband.reset(QGis.Polygon)
+            self.next_analysis_rubberband = None
+
     def show_next_analysis_extent(self):
         """Update the rubber band showing where the next analysis extent is.
 
@@ -915,10 +947,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         .. versionadded:: 2.1.0
         """
+        if not self.show_rubber_bands:
+            return
 
-        if self.next_analysis_rubberband is not None:
-            self.next_analysis_rubberband.reset(QGis.Polygon)
-            self.next_analysis_rubberband = None
+        self.hide_next_analysis_extent()
         try:
             extent = self.get_clip_parameters()[1]
 
@@ -979,6 +1011,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             do nothing.
         :type extent: QgsRectangle, list
         """
+        if not self.show_rubber_bands:
+            return
+
         if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
             return
         if isinstance(extent, list):
