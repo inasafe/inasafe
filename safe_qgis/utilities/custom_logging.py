@@ -36,7 +36,7 @@ from raven.handlers.logging import SentryHandler
 from raven import Client
 # pylint: enable=F0401
 
-from safe.api import temp_dir, log_file_path
+from safe.api import log_file_path
 from safe_qgis.utilities.utilities import tr
 
 LOGGER = logging.getLogger('InaSAFE')

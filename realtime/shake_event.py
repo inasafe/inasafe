@@ -33,6 +33,8 @@ import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
+# This import is required to enable PyQt API v2
+import qgis
 # TODO: I think QCoreApplication is needed for tr() check before removing
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -68,7 +70,8 @@ from qgis.core import (
     QgsMapRenderer,
     QgsPalLabeling,
     QgsProviderRegistry,
-    QgsFeatureRequest)
+    QgsFeatureRequest,
+    QgsVectorDataProvider)
 
 # pylint: enable=E0611
 # pylint: enable=W0611
@@ -457,19 +460,13 @@ class ShakeEvent(QObject):
 
             # Get length
             length = feature.geometry().length()
-            # AG: Woah, we still need to convert it using toString() even
-            # though the SIP API has been changed:
-            # hub.qgis.org/wiki/17/Python_plugin_API_changes_from_18_to_20
-            mmi_value = float(feature['MMI'].toString())
 
+            mmi_value = float(feature['MMI'])
             # We only want labels on the whole number contours
             if mmi_value != round(mmi_value):
                 roman = ''
             else:
                 roman = romanise(mmi_value)
-
-            #LOGGER.debug('MMI: %s ----> %s' % (
-            #    myAttributes[myMMIIndex].toString(), roman))
 
             # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
             rgb = mmi_colour(mmi_value)
@@ -712,7 +709,6 @@ class ShakeEvent(QObject):
 
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
-
         attempts_limit = 5
         minimum_city_count = 1
         found_flag = False
@@ -751,17 +747,6 @@ class ShakeEvent(QObject):
         # Setup field indexes of our input and out datasets
         cities = []
 
-        #myFields = QgsFields()
-        #myFields.append(QgsField('id', QVariant.Int))
-        #myFields.append(QgsField('name', QVariant.String))
-        #myFields.append(QgsField('population', QVariant.Int))
-        #myFields.append(QgsField('mmi', QVariant.Double))
-        #myFields.append(QgsField('dist_to', QVariant.Double))
-        #myFields.append(QgsField('dir_to', QVariant.Double))
-        #myFields.append(QgsField('dir_from', QVariant.Double))
-        #myFields.append(QgsField('roman', QVariant.String))
-        #myFields.append(QgsField('colour', QVariant.String))
-
         # For measuring distance and direction from each city to epicenter
         epicenter = QgsPoint(
             self.shake_grid_converter.longitude,
@@ -783,7 +768,7 @@ class ShakeEvent(QObject):
                 continue
 
             # Make sure the place is populated
-            population = feature['population']
+            population = int(feature['population'])
             if population < 1:
                 continue
 
@@ -805,14 +790,14 @@ class ShakeEvent(QObject):
                 # position not found on raster
                 continue
             value = raster_values[0]  # Band 1
-            LOGGER.debug('MyValue: %s' % value)
+            LOGGER.debug('Raster Value: %s' % value)
             if 'no data' not in str(value):
                 mmi = float(value)
             else:
                 mmi = 0
 
-            LOGGER.debug('Looked up mmi of %s on raster for %s' %
-                         (mmi, point.toString()))
+            LOGGER.debug(
+                'Looked up mmi of %s on raster for %s' % (mmi, str(point)))
 
             roman = romanise(mmi)
             if roman is None:
@@ -832,6 +817,7 @@ class ShakeEvent(QObject):
                 mmi_colour(mmi)]
             new_feature.setAttributes(attributes)
             cities.append(new_feature)
+
         return cities
 
     def local_cities_memory_layer(self):
@@ -845,33 +831,39 @@ class ShakeEvent(QObject):
         LOGGER.debug('local_cities_memory_layer requested.')
         # Now store the selection in a temporary memory layer
         memory_layer = QgsVectorLayer('Point', 'affected_cities', 'memory')
+        layer_provider = memory_layer.dataProvider()
+        provider_capabilities = layer_provider.capabilities()
 
-        memory_provider = memory_layer.dataProvider()
-        # add field defs
-        memory_provider.addAttributes([
-            QgsField('id', QVariant.Int),
-            QgsField('name', QVariant.String),
-            QgsField('population', QVariant.Int),
-            QgsField('mmi', QVariant.Double),
-            QgsField('dist_to', QVariant.Double),
-            QgsField('dir_to', QVariant.Double),
-            QgsField('dir_from', QVariant.Double),
-            QgsField('roman', QVariant.String),
-            QgsField('colour', QVariant.String)])
-        cities = self.local_city_features()
-        result = memory_provider.addFeatures(cities)
-        if not result:
-            LOGGER.exception('Unable to add features to cities memory layer')
-            raise CityMemoryLayerCreationError(
-                'Could not add any features to cities memory layer.')
+        if provider_capabilities & QgsVectorDataProvider.AddAttributes:
+            memory_layer.startEditing()
+            # add field defs
+            layer_provider.addAttributes([
+                QgsField('id', QVariant.Int),
+                QgsField('name', QVariant.String),
+                QgsField('population', QVariant.Int),
+                QgsField('mmi', QVariant.Double),
+                QgsField('dist_to', QVariant.Double),
+                QgsField('dir_to', QVariant.Double),
+                QgsField('dir_from', QVariant.Double),
+                QgsField('roman', QVariant.String),
+                QgsField('colour', QVariant.String)])
+            cities = self.local_city_features()
+            result = layer_provider.addFeatures(cities)
+            if not result:
+                LOGGER.exception(
+                    'Unable to add features to cities memory layer')
+                raise CityMemoryLayerCreationError(
+                    'Could not add any features to cities memory layer.')
 
-        memory_layer.commitChanges()
-        memory_layer.updateExtents()
+            memory_layer.commitChanges()
+            memory_layer.updateExtents()
 
-        LOGGER.debug('Feature count of mem layer:  %s' %
-                     memory_layer.featureCount())
-
-        return memory_layer
+            LOGGER.debug('Feature count of mem layer:  %s' %
+                         memory_layer.featureCount())
+            return memory_layer
+        else:
+            raise InvalidLayerError(
+                'Could not add new attributes to this layer.')
 
     def city_search_box_memory_layer(self, force_flag=False):
         """Return the search boxes used to search for cities as a memory layer.
@@ -1599,8 +1591,8 @@ class ShakeEvent(QObject):
         # Now add our layers to the renderer so they appear in the print out
         layers = reversed(CANVAS.layers())
         layer_list = []
-        for myLayer in layers:
-            layer_list.append(myLayer.id())
+        for layer in layers:
+            layer_list.append(layer.id())
 
         layer_list.append(contours_layer.id())
         if cities_layer is not None and cities_layer.isValid():
