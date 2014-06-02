@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>597</width>
-    <height>865</height>
+    <height>898</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -190,19 +190,40 @@
        <widget class="QLineEdit" name="leTitle"/>
       </item>
       <item row="12" column="2">
-       <widget class="QDoubleSpinBox" name="dsbAdultRatioDefault"/>
+       <widget class="QDoubleSpinBox" name="dsbAdultRatioDefault">
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="9" column="2">
        <widget class="QComboBox" name="cboYouthRatioAttribute"/>
       </item>
       <item row="10" column="2">
-       <widget class="QDoubleSpinBox" name="dsbYouthRatioDefault"/>
+       <widget class="QDoubleSpinBox" name="dsbYouthRatioDefault">
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="11" column="2">
        <widget class="QComboBox" name="cboAdultRatioAttribute"/>
       </item>
       <item row="14" column="2">
-       <widget class="QDoubleSpinBox" name="dsbElderlyRatioDefault"/>
+       <widget class="QDoubleSpinBox" name="dsbElderlyRatioDefault">
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="14" column="0">
        <widget class="QLabel" name="lblElderlyRatioDefault">

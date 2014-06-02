@@ -60,7 +60,7 @@ class TestAgePostprocessor(unittest.TestCase):
         pprint(results)
         assert results['Youth count (affected)']['value'] == '38,518'
         assert results['Adult count (affected)']['value'] == '96,516'
-        assert results['Elder count (affected)']['value'] == '11,424'
+        assert results['Elderly count (affected)']['value'] == '11,424'
 
 
 if __name__ == '__main__':
