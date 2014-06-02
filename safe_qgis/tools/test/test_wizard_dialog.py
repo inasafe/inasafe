@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'borysjurgiel.pl'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -19,6 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 #noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore
 
 import unittest
 import sys
@@ -127,9 +128,9 @@ class WizardDialogTest(unittest.TestCase):
         for i in range(list_widget.count()):
             if list_widget.item(i).text() == option:
                 list_widget.setCurrentRow(i)
-                break
-
-
+                return
+        message = 'There is no %s in the list widget' % option
+        self.assertTrue(False, message)
 
     def test_keywords_creation_wizard(self):
         """Test how the widgets work."""
@@ -916,7 +917,7 @@ class WizardDialogTest(unittest.TestCase):
         remove_temp_file(layer.source())
 
     def test_integrated_polygon(self):
-        """Test for line layer and all possibilities."""
+        """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
             name='Jakarta_RW_2007flood',
             directory=HAZDATA,
@@ -970,7 +971,6 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_source, dialog)
 
         dialog.pbnBack.click()  # back to field step
-
         dialog.pbnBack.click()  # back to unit step
 
         # choosing building generic
@@ -982,9 +982,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_source, dialog)
 
         dialog.pbnBack.click()  # back to unit step
-
         dialog.pbnBack.click()  # back to subcategory step
-
         dialog.pbnBack.click()  # back to category step
 
         # choosing hazard
@@ -993,7 +991,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['flood', 'volcano', 'earthquake', 'tsunami']
+        expected_subcategories = ['earthquake', 'flood','tsunami', 'volcano']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # choosing earthquake
@@ -1004,6 +1002,24 @@ class WizardDialogTest(unittest.TestCase):
         # check the values of units options
         expected_units = ['MMI']
         self.check_list(expected_units, dialog.lstUnits)
+        self.select_from_list_widget('MMI', dialog.lstUnits)
+        dialog.pbnNext.click()  # go to field step
+
+        # check in field step
+        self.check_current_step(step_field, dialog)
+
+        for i in range(dialog.lstFields.count()):
+            item_flag = dialog.lstFields.item(i).flags()
+            message = 'Item should be disabled'
+            self.assertTrue(item_flag & ~QtCore.Qt.ItemIsEnabled, message)
+
+        dialog.pbnBack.click()  # back  to unit step
+        dialog.pbnBack.click()  # back  to unit subcategory
+
+        self.select_from_list_widget('flood', dialog.lstSubcategories)
+
+        # go to unit
+        dialog.pbnNext.click()
 
         remove_temp_file(layer.source())
 

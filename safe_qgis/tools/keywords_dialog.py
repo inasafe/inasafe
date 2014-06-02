@@ -1135,12 +1135,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.apply_changes()
         keywords = self.get_keywords()
-        good_age_ratio, sum_age_ratios = self.is_good_age_ratios(keywords)
-        if not good_age_ratio:
+        valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(keywords)
+        if not valid_age_ratio:
             message = self.tr(
-                'The sum of age ratio default is %s and it is more '
-                'than 1. Please adjust the age ratio default so that they '
-                'will not more than 1.' % sum_age_ratios)
+                'The sum of age ratios is %s which exceeds 1. Please adjust '
+                'the age ration defaults so that their cumulative value is '
+                'not greater than 1.' % sum_age_ratios)
             if not self.test:
                 # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                 QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
@@ -1195,11 +1195,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.leKey.setText(temp_key)
                 self.leValue.setText(temp_value)
 
-    def is_good_age_ratios(self, keywords):
+    def age_ratios_are_valid(self, keywords):
         """Check whether keywords is valid or not.
 
         Valid means, the sum of age ratios is not exceeding one if they use
-        Global default values. Apply for aggregation only.
+        Global default values. Applies to aggregation only.
 
         :param keywords: A dictionary that contains the keywords
         :type keywords: dict

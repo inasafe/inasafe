@@ -699,7 +699,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         current_step = self.get_current_step()
 
         if current_step == step_aggregation:
-            good_age_ratio, sum_age_ratios = self.is_good_age_ratios()
+            good_age_ratio, sum_age_ratios = self.age_ratios_are_valid()
             if not good_age_ratio:
                 message = self.tr(
                     'The sum of age ratio default is %s and it is more '
@@ -1254,7 +1254,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if list_widget.count() == 1 and list_widget.currentRow() == -1:
             list_widget.setCurrentRow(0)
 
-    def is_good_age_ratios(self):
+    def age_ratios_are_valid(self):
         """Return true if the sum of age ratios is good, otherwise False.
 
         Good means their sum does not exceed 1.
