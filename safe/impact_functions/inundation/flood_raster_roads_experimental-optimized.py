@@ -163,40 +163,38 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         H = H.get_layer()
         E = E.get_layer()
 
-        # Get necessary width and height of raster
-        height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
-        height = int(height)
-        width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
-        width = int(width)
-
         # Align raster extent and self.extent
+        #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
-        xmin = raster_extent.xMinimum()
-        xmax = raster_extent.xMaximum()
-        ymin = raster_extent.yMinimum()
-        ymax = raster_extent.yMaximum()
+        clip_xmin = raster_extent.xMinimum()
+        clip_xmax = raster_extent.xMaximum()
+        clip_ymin = raster_extent.yMinimum()
+        clip_ymax = raster_extent.yMaximum()
+        if (self.extent[0] > clip_xmin):
+            clip_xmin = self.extent[0]
+        if (self.extent[1] > clip_ymin):
+            clip_ymin = self.extent[1]
+        if (self.extent[2] < clip_xmax):
+            clip_xmax = self.extent[2]
+        if (self.extent[3] < clip_ymax):
+            clip_ymax = self.extent[3]
+        
+        raster_extent = H.dataProvider().extent()
+        x_full_delta = raster_extent.xMaximum() - raster_extent.xMinimum()
+        x_new_delta = clip_xmax - clip_xmin
+        clip_width = (x_new_delta * H.width())/x_full_delta
+        clip_width  = int(clip_width)
 
-        x_delta = (xmax - xmin) / H.width()
-        x = xmin
-        for i in range(H.width()):
-            if abs(x - self.extent[0]) < x_delta:
-                # We have found the aligned raster boundary
-                break
-            x += x_delta
-            _ = i
-
-        y_delta = (ymax - ymin) / H.height()
-        y = ymin
-        for i in range(H.width()):
-            if abs(y - self.extent[1]) < y_delta:
-                # We have found the aligned raster boundary
-                break
-            y += y_delta
-        clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
-
+        y_full_delta = raster_extent.yMaximum() - raster_extent.yMinimum()
+        y_new_delta = clip_ymax - clip_ymin
+        clip_height = (y_new_delta * H.height())/y_full_delta
+        clip_height  = int(clip_height)
+         
+        clip_extent = [clip_xmin, clip_ymin, clip_xmax, clip_ymax]
+        
         # Clip and polygonize
         small_raster = clip_raster(
-            H, width, height, QgsRectangle(*clip_extent))
+            H, clip_width, clip_height, QgsRectangle(*clip_extent))
         (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
             small_raster, threshold_min, threshold_max)
 
