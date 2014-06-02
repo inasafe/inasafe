@@ -991,7 +991,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['earthquake', 'flood','tsunami', 'volcano']
+        expected_subcategories = ['earthquake', 'flood', 'tsunami', 'volcano']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # choosing earthquake
@@ -1016,10 +1016,122 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()  # back  to unit step
         dialog.pbnBack.click()  # back  to unit subcategory
 
+        # select flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)
+        dialog.pbnNext.click()  # go to unit
+        self.check_current_step(step_unit, dialog)
 
-        # go to unit
-        dialog.pbnNext.click()
+        expected_units = ['wet / dry', 'metres', 'feet']
+        self.check_list(expected_units, dialog.lstUnits)
+
+        # select wet / dry
+        self.select_from_list_widget('wet / dry', dialog.lstUnits)
+        dialog.pbnNext.click()  # go to fields
+        self.check_current_step(step_field, dialog)
+
+        expected_fields = [
+            'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW', 'FLOODPRONE']
+        self.check_list(expected_fields, dialog.lstFields)
+
+        # select FLOODPRONE
+        self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
+        dialog.pbnNext.click()  # go to classify
+        self.check_current_step(step_classify, dialog)
+
+        # check unclassified
+        expected_unique_values = ['Yes']  # Unclassified value
+        self.check_list(expected_unique_values, dialog.lstUniqueValues)
+
+        # check classified
+        root = dialog.treeClasses.invisibleRootItem()
+        expected_classes = ['wet', 'dry']
+        child_count = root.childCount()
+        message = 'Child count must be %s' % len(expected_classes)
+        self.assertEqual(len(expected_classes), child_count, message)
+        for i in range(child_count):
+            item = root.child(i)
+            class_name = item.text(0)
+            message = '%s should not be in classes name' % class_name
+            self.assertIn(class_name, expected_classes, message)
+            if class_name == 'wet':
+                expected_num_child = 1
+                num_child = item.childCount()
+                message = 'The child of wet should be %s' % expected_num_child
+                self.assertEqual(expected_num_child, num_child, message)
+            if class_name == 'dry':
+                expected_num_child = 0
+                num_child = item.childCount()
+                message = 'The child of dry should be %s' % expected_num_child
+                self.assertEqual(expected_num_child, num_child, message)
+
+        dialog.pbnNext.click()  # go to source
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnBack.click()  # back to classify
+        dialog.pbnBack.click()  # back to field
+        dialog.pbnBack.click()  # back to unit
+
+        self.select_from_list_widget('metres', dialog.lstUnits)
+        dialog.pbnNext.click()  # go to field
+
+        # check in field step
+        self.check_current_step(step_field, dialog)
+
+        # check if all options are disabled
+        for i in range(dialog.lstFields.count()):
+            item_flag = dialog.lstFields.item(i).flags()
+            message = 'Item should be disabled'
+            self.assertTrue(item_flag & ~QtCore.Qt.ItemIsEnabled, message)
+
+        dialog.pbnBack.click()  # back to unit
+        dialog.pbnBack.click()  # back to subcategory
+
+        self.select_from_list_widget('tsunami', dialog.lstSubcategories)
+        dialog.pbnNext.click()  # go to unit
+        self.check_current_step(step_unit, dialog)
+
+        # back again since tsunami similar to flood
+        dialog.pbnBack.click()  # back to subcategory
+
+        self.select_from_list_widget('volcano', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # go to unit
+
+        expected_units = ['volcano categorical']
+        self.check_list(expected_units, dialog.lstUnits)
+
+        # no need to select, use auto select
+        dialog.pbnNext.click()  # go to field
+        self.check_current_step(step_field, dialog)
+
+        self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
+        dialog.pbnNext.click()  # go to classify
+        self.check_current_step(step_classify, dialog)
+
+        # check unclassified
+        expected_unique_values = ['Yes', 'YES']  # Unclassified value
+        self.check_list(expected_unique_values, dialog.lstUniqueValues)
+
+        # check classified
+        root = dialog.treeClasses.invisibleRootItem()
+        expected_classes = ['low', 'medium', 'high']
+        child_count = root.childCount()
+        message = 'Child count must be %s' % len(expected_classes)
+        self.assertEqual(len(expected_classes), child_count, message)
+        for i in range(child_count):
+            item = root.child(i)
+            class_name = item.text(0)
+            message = '%s should not be in classes name' % class_name
+            self.assertIn(class_name, expected_classes, message)
+            expected_num_child = 0
+            num_child = item.childCount()
+            message = 'The child of wet should be %s' % expected_num_child
+            self.assertEqual(expected_num_child, num_child, message)
+
+        dialog.pbnNext.click()  # go to source
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnCancel.click()
 
         remove_temp_file(layer.source())
 
@@ -1054,15 +1166,15 @@ class WizardDialogTest(unittest.TestCase):
         # check if in source step
         self.check_current_step(step_source, dialog)
 
-        dialog.pbnBack.click()
+        dialog.pbnBack.click()  # Go to aggregation step
 
         # check if in aggregation step
         self.check_current_step(step_aggregation, dialog)
-        dialog.cboYouthRatioAttribute.setCurrentIndex(0)  # set use default
+        dialog.cboYouthRatioAttribute.setCurrentIndex(0)  # set global default
 
         dialog.dsbYouthRatioDefault.setValue(0.0)
 
-        dialog.pbnNext.click()  # Try to go to  source step
+        dialog.pbnNext.click()  # Try to go to source step
 
         # check if in source step
         self.check_current_step(step_source, dialog)
