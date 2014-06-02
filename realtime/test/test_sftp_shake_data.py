@@ -28,7 +28,7 @@ from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import shakemap_cache_dir
 
 # Shake event ID for this test
-SHAKE_ID = '20120726022003'
+SHAKE_ID = '20131105060809'
 
 
 class SFtpShakeDataTest(unittest.TestCase):

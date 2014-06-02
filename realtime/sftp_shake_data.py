@@ -265,7 +265,7 @@ class SftpShakeData:
 
         :return: A string representing the absolute local filesystem path to
             the unzipped shake event dir. e.g.
-            :file:`/tmp/inasafe/realtime/shakemaps-extracted/20120726022003`
+            :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809`
         :rtype: str
 
         :raises: Any exceptions will be propagated.
@@ -282,7 +282,7 @@ class SftpShakeData:
         :return: a string containing the grid.xml paths e.g.::
             grid_xml = myShakeData.extract()
             print grid_xml
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
+            /tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml
         """
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')
         if not os.path.exists(self.extract_dir()):

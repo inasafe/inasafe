@@ -1,1 +1,17 @@
-[{'dir_from': -61.62042695334337, 'dir_to': 118.37957304665663, 'roman': 'II', 'dist_to': 2.497791690000008, 'mmi-int': 2, 'name': 'Gorontalo', 'mmi': 2.25, 'id': 5L, 'population': 144195}, {'dir_from': 13.119078876624664, 'dir_to': -166.88092112337534, 'roman': 'I', 'dist_to': 3.036229249999999, 'mmi-int': 1, 'name': 'Manado', 'mmi': 1.81, 'id': 3L, 'population': 451893}, {'dir_from': 23.869918386702665, 'dir_to': -156.13008161329734, 'roman': 'I', 'dist_to': 3.2757657699999974, 'mmi-int': 1, 'name': 'Bitung', 'mmi': 1.54, 'id': 6L, 'population': 137364}, {'dir_from': -114.0404645423494, 'dir_to': 65.9595354576506, 'roman': 'I', 'dist_to': 3.3138768100000284, 'mmi-int': 1, 'name': 'Luwuk', 'mmi': 1.53, 'id': 4L, 'population': 47778}, {'dir_from': 16.944078718097554, 'dir_to': -163.05592128190247, 'roman': 'I', 'dist_to': 2.504295879999992, 'mmi-int': 1, 'name': 'Tondano', 'mmi': 1.91, 'id': 1L, 'population': 33317}]
+[{'dir_from': 142.25229993059455,
+'dir_to': -37.74770006940543,
+'roman': 'I',
+'dist_to': 0.017077088899997393,
+'mmi-int': 1,
+'name': 'Jayapura',
+'mmi': 1.83,
+'id': 1L,
+'population': 134895}, {'dir_from': -169.77675761575796,
+'dir_to': 10.223242384242017,
+'roman': 'I',
+'dist_to': 0.04268777780000102,
+'mmi-int': 1,
+'name': 'Abepura',
+'mmi': 1.62,
+'id': 2L,
+'population': 62248}]

@@ -49,7 +49,7 @@ class TestShakeMap(unittest.TestCase):
         """Copy our cached dataset from the fixture dir to the cache dir."""
         # Run monkey patching to ftp_client
         run_monkey_patching_ftp_client()
-        
+
         output_file = '20120726022003.out.zip'
         input_file = '20120726022003.inp.zip'
         output_path = os.path.abspath(

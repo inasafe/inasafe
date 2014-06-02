@@ -48,7 +48,7 @@ LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Shake ID for this test
-SHAKE_ID = '20120726022003'
+SHAKE_ID = '20131105060809'
 
 
 class TestShakeEvent(unittest.TestCase):
@@ -57,8 +57,8 @@ class TestShakeEvent(unittest.TestCase):
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir."""
         # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
-        # file inside 20120726022003 folder to
-        # shakemap_cache_dir/20120726022003/grid.xml
+        # file inside 20131105060809 folder to
+        # shakemap_cache_dir/20131105060809/grid.xml
         input_path = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),
@@ -91,24 +91,24 @@ class TestShakeEvent(unittest.TestCase):
         """Test __str__ works properly."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         expected_state = (
-            'latitude: -0.21\n'
-            'longitude: 124.45\n'
-            'event_id: 20120726022003\n'
-            'magnitude: 5.0\n'
-            'depth: 11.0\n'
+            'latitude: -2.43\n'
+            'longitude: 140.62\n'
+            'event_id: 20131105060809\n'
+            'magnitude: 3.6\n'
+            'depth: 10.0\n'
             'description: None\n'
-            'location: Southern Molucca Sea\n'
-            'day: 26\n'
-            'month: 7\n'
-            'year: 2012\n'
+            'location: Papua\n'
+            'day: 5\n'
+            'month: 11\n'
+            'year: 2013\n'
             'time: None\n'
             'time_zone: WIB\n'
-            'x_minimum: 122.45\n'
-            'x_maximum: 126.45\n'
-            'y_minimum: -2.21\n'
-            'y_maximum: 1.79\n'
-            'rows: 161.0\n'
-            'columns: 161.0\n'
+            'x_minimum: 139.37\n'
+            'x_maximum: 141.87\n'
+            'y_minimum: -3.67875\n'
+            'y_maximum: -1.18125\n'
+            'rows: 101.0\n'
+            'columns: 101.0\n'
             'mmi_data: Populated\n'
             'population_raster_path: None\n'
             'impact_file: None\n'
@@ -167,7 +167,7 @@ class TestShakeEvent(unittest.TestCase):
         cities_layer = shake_event.local_cities_memory_layer()
         provider = cities_layer.dataProvider()
 
-        expected_feature_count = 6
+        expected_feature_count = 2
         self.assertEquals(provider.featureCount(), expected_feature_count)
         strings = []
         request = QgsFeatureRequest()
@@ -229,20 +229,20 @@ class TestShakeEvent(unittest.TestCase):
         # Get the os environment INASAFE_WORK_DIR if it exists
         inasafe_work_dir = base_data_dir()
 
-        expected_result = ('%s/shakemaps-extracted/20120726022003/impact'
+        expected_result = ('%s/shakemaps-extracted/20131105060809/impact'
                            '-nearest.tif') % inasafe_work_dir
         message = 'Got: %s, Expected: %s' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
 
-        expected_result = ('%s/shakemaps-extracted/20120726022003/impacts'
+        expected_result = ('%s/shakemaps-extracted/20131105060809/impacts'
                            '.html') % inasafe_work_dir
 
         message = 'Got: %s, Expected: %s' % (fatalities_html, expected_result)
         self.assertEqual(fatalities_html, expected_result, message)
 
-        expected_fatalities = {2: 0.0,  # rounded from 0.47386375223673427,
-                               3: 0.0,  # rounded from 0.024892573693488258,
-                               4: 0.0,
+        expected_fatalities = {2: 0.0,
+                               3: 0.0,
+                               4: 0.000036387775168853676,
                                5: 0.0,
                                6: 0.0,
                                7: 0.0,
@@ -258,8 +258,8 @@ class TestShakeEvent(unittest.TestCase):
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         bounds = shake_event.bounds_to_rectangle().toString()
         expected_result = (
-            '122.4500000000000028,-2.2100000000000000 : '
-            '126.4500000000000028,1.7900000000000000')
+            '139.3700000000000045,-3.6787500000000000 : '
+            '141.8700000000000045,-1.1812499999999999')
         message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
         self.assertEqual(bounds, expected_result, message)
 
@@ -294,11 +294,8 @@ class TestShakeEvent(unittest.TestCase):
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         table, path = shake_event.impacted_cities_table()
         expected_string = [
-            '<td>Tondano</td><td>33</td><td>I</td>',
-            '<td>Luwuk</td><td>47</td><td>I</td>',
-            '<td>Bitung</td><td>137</td><td>I</td>',
-            '<td>Manado</td><td>451</td><td>I</td>',
-            '<td>Gorontalo</td><td>144</td><td>II</td>']
+            '<td>Jayapura</td><td>134</td><td>I</td>',
+            '<td>Abepura</td><td>62</td><td>I</td>']
         table = table.toNewlineFreeString().replace('   ', '')
         for string in expected_string:
             self.assertIn(string, table)
@@ -308,7 +305,7 @@ class TestShakeEvent(unittest.TestCase):
         # Get the os environment INASAFE_WORK_DIR if it exists
         inasafe_work_dir = base_data_dir()
         expected_path = (
-            '%s/shakemaps-extracted/20120726022003/affected-cities.html' %
+            '%s/shakemaps-extracted/20131105060809/affected-cities.html' %
             inasafe_work_dir)
         message = 'Got:\n%s\nExpected:\n%s\n' % (path, expected_path)
         self.assertEqual(path, expected_path, message)
@@ -324,7 +321,7 @@ class TestShakeEvent(unittest.TestCase):
         # Get the os environment INASAFE_WORK_DIR if it exists
         inasafe_work_dir = base_data_dir()
         expected_result = (
-            '%s/shakemaps-extracted/20120726022003/impacts.html' %
+            '%s/shakemaps-extracted/20131105060809/impacts.html' %
             inasafe_work_dir)
         message = 'Got:\n%s\nExpected:\n%s' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
@@ -349,7 +346,7 @@ class TestShakeEvent(unittest.TestCase):
             'elapsed-time-name': u'Elapsed time since event',
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
-            'longitude-value': u'124\xb027\'0.00"E',
+            'longitude-value': u'140\xb037\'12.00"E',
             'city-table-name': u'Places Affected',
             'bearing-text': u'bearing',
             'limitations': (
@@ -370,18 +367,19 @@ class TestShakeEvent(unittest.TestCase):
                 u'are disregarded.'),
             'depth-unit': u'km',
             'latitude-name': u'Latitude',
-            'mmi': '5.0',
+            'mmi': '3.6',
             'map-name': u'Estimated Earthquake Impact',
-            'date': '26-7-2012',
+            'date': '5-11-2013',
             'bearing-degrees': '0.00\xb0',
-            'formatted-date-time': '26-Jul-12 02:15:35 ',
+            'formatted-date-time': '05-Nov-13 06:08:09 ',
             'distance': '0.00',
             'direction-relation': u'of',
             'credits': (
                 u'Supported by the Australia-Indonesia Facility for Disaster '
                 u'Reduction, Geoscience Australia and the World Bank-GFDRR.'),
-            'latitude-value': u'0\xb012\'36.00"S',
-            'time': '2:15:35', 'depth-value': '11.0'}
+            'latitude-value': u'2\xb025\'48.00"S',
+            'time': '6:8:9',
+            'depth-value': '10.0'}
         result['elapsed-time'] = u''
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_dict)
         self.max_diff = None
@@ -394,8 +392,8 @@ class TestShakeEvent(unittest.TestCase):
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         degree_symbol = unichr(176)
         expected_result = (
-            'M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S Longitude: '
-            '124%s27\'0.00"E Depth: 11.0km Located 0.00km n/a of n/a'
+            'M 3.6 5-11-2013 6:8:9 Latitude: 2%s25\'48.00"S Longitude: '
+            '140%s37\'12.00"E Depth: 10.0km Located 0.00km n/a of n/a'
             % (degree_symbol, degree_symbol))
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %

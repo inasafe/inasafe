@@ -32,7 +32,7 @@ from realtime.server_config import (
 from realtime.utilities import is_event_id
 
 # Shake ID for this test
-SHAKE_ID = '20120726022003'
+SHAKE_ID = '20131105060809'
 
 
 def mock_init(self,

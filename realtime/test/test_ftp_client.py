@@ -107,7 +107,7 @@ class FtpClientTest(unittest.TestCase):
 
         local_path = os.path.join(
             temp_dir('realtime-test'),
-            '20120726022003.input.zip')
+            '20120726022003.inp.zip')
         client.get_file('20120726022003.inp.zip', local_path)
         message = 'Function get_file is not working correctly.'
         self.assertTrue(os.path.exists(local_path), message)

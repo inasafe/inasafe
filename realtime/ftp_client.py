@@ -88,7 +88,7 @@ class FtpClient:
         :param url_path: (Mandatory) The path (relative to the ftp root)
               from which the file should be retrieved.
 
-        :return: An ftp url e.g. ftp://118.97.83.243/20120726022003.inp.zip
+        :return: An ftp url e.g. ftp://118.97.83.243/20131105060809.inp.zip
         :rtype: str
 
         :raises: None
@@ -122,7 +122,7 @@ class FtpClient:
         """Check if a file is on the ftp server.
 
          :param checked_file: (Mandatory) The paths (relative to the ftp
-                root) to be checked. e.g. '20120726022003.inp.zip',
+                root) to be checked. e.g. '20131105060809.inp.zip',
 
          :return: True if the file exists on the server, otherwise False.
          :rtype: bool
@@ -139,7 +139,7 @@ class FtpClient:
 
         :param checked_files: The paths (relative to the ftp root) to be
             checked. e.g.
-            ['20120726022003.inp.zip', '20120726022003.inp.zip']
+            ['20131105060809.inp.zip', '20131105060809.inp.zip']
          :type checked_files: list
 
         :return: True if **all** files exists on the server, otherwise False.
