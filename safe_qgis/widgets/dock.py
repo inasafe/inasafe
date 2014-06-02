@@ -185,8 +185,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.developer_mode = None
         self.organisation_logo_path = None
 
-
-        self.read_settings()  # get_project_layers called by this
         self.clip_parameters = None
         self.aggregator = None
         self.postprocessor_manager = None
@@ -215,6 +213,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.next_analysis_rubberband = None
         # Whether to show rubber band of last and next scenario
         self.show_rubber_bands = False
+
+        self.read_settings()  # get_project_layers called by this
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
