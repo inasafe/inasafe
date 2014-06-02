@@ -4,7 +4,7 @@
 
 from shake_event import ShakeEvent
 
-SHAKE_ID = '20131103085938'
+SHAKE_ID = '20131105060809'
 
 shake_event = ShakeEvent(
     event_id=SHAKE_ID,

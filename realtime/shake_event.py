@@ -418,15 +418,12 @@ class ShakeEvent(QObject):
         return my_damage_dict[mmi_value]
 
     def set_contour_properties(self, input_file):
-        """
-        Set the X, Y, RGB, ROMAN attributes of the contour layer.
+        """Set the X, Y, RGB, ROMAN attributes of the contour layer.
 
         :param input_file: (Required) Name of the contour layer.
         :type input_file: str
 
-        :return: None
-
-        :raise InvalidLayerError if anything is amiss with the layer.
+        :raise: InvalidLayerError if anything is amiss with the layer.
         """
         LOGGER.debug('set_contour_properties requested for %s.' % input_file)
         layer = QgsVectorLayer(input_file, 'mmi-contours', "ogr")
@@ -460,8 +457,10 @@ class ShakeEvent(QObject):
 
             # Get length
             length = feature.geometry().length()
-
-            mmi_value = float(str(feature['MMI']))
+            # AG: Woah, we still need to convert it using toString() even
+            # though the SIP API has been changed:
+            # hub.qgis.org/wiki/17/Python_plugin_API_changes_from_18_to_20
+            mmi_value = float(feature['MMI'].toString())
 
             # We only want labels on the whole number contours
             if mmi_value != round(mmi_value):
