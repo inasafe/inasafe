@@ -226,7 +226,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
-        self.test = False
+        self.suppress_warning_dialog = False
         self.keyword_io = KeywordIO()
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
@@ -705,7 +705,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     'The sum of age ratio default is %s and it is more '
                     'than 1. Please adjust the age ratio default so that they '
                     'will not more than 1.' % sum_age_ratios)
-                if not self.test:
+                if not self.suppress_warning_dialog:
                     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                     QtGui.QMessageBox.warning(
                         self, self.tr('InaSAFE'), message)

@@ -1142,7 +1142,7 @@ class WizardDialogTest(unittest.TestCase):
             include_keywords=True,
             directory=BOUNDDATA)
         dialog = WizardDialog(PARENT, IFACE, None, layer)
-        dialog.test = True
+        dialog.suppress_warning_dialog = True
 
         self.check_current_text('aggregation', dialog.lstCategories)
 
