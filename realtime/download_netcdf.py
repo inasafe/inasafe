@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import urllib2
 import os
+
 #noinspection PyPackageRequirements
 from BeautifulSoup import BeautifulSoup
 
