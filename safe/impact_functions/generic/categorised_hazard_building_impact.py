@@ -4,10 +4,22 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_question)
 from safe.common.utilities import (ugettext as tr,
                                    format_int)
+from safe.metadata import (
+    hazard_all,
+    layer_raster_numeric,
+    exposure_structure,
+    unit_building_type_type,
+    unit_building_generic,
+    hazard_definition,
+    layer_vector_polygon,
+    exposure_definition,
+    unit_normalised)
 from safe.storage.vector import Vector
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.common.utilities import OrderedDict
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 
 #FIXME: need to normalise all raster data Ole/Kristy
@@ -25,9 +37,57 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                     layertype=='vector'
     """
 
-    target_field = 'ICLASS'
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Categorised Hazard Population Impact Function.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            print('HERE\n\n\nReally\n\n')
+            dict_meta = {
+                'id': 'CategorisedHazardBuildingImpactFunction',
+                'name': tr('Categorised Hazard Building Impact Function'),
+                'impact': tr('Be impacted'),
+                'author': 'AIFDR',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of categorized hazards in raster '
+                    'format on building vector layer.'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': hazard_all,
+                        'units': [unit_normalised],
+                        'layer_constraints': [layer_raster_numeric]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_structure,
+                        'units': [
+                            unit_building_type_type,
+                            unit_building_generic],
+                        'layer_constraints': [layer_vector_polygon]
+                    }
+                }
+            }
+            return dict_meta
+
     # Function documentation
-    title = tr('Be affected')
+    title = tr('Be impacted')
     synopsis = tr('To assess the impacts of categorized hazard in raster '
                   'format on structure/building raster layer.')
     actions = tr('Provide details about how many building would likely need '
@@ -35,17 +95,17 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     hazard_input = tr('A hazard raster layer where each cell represents '
                       'the category of the hazard. There should be 3 '
                       'categories: 1, 2, and 3.')
-    exposure_input = \
-        tr('Vector polygon layer which can be extracted from OSM '
-           'where each polygon represents the footprint of a building.')
+    exposure_input = tr(
+        'Vector polygon layer which can be extracted from OSM '
+        'where each polygon represents the footprint of a building.')
     output = tr('Map of structure exposed to high category and a table with '
                 'number of structure in each category')
-    detailed_description = \
-        tr('This function will calculate how many buildings will be affected '
-           'per each category for all categories in the hazard layer. '
-           'Currently there should be 3 categories in the hazard layer. After '
-           'that it will show the result and the total of buildings that '
-           'will be affected for the hazard given.')
+    detailed_description = tr(
+        'This function will calculate how many buildings will be affected '
+        'per each category for all categories in the hazard layer. '
+        'Currently there should be 3 categories in the hazard layer. After '
+        'that it will show the result and the total of buildings that '
+        'will be affected for the hazard given.')
     limitation = tr('The number of categories is three.')
     statistics_type = 'class_count'
     statistics_classes = ['None', 1, 2, 3]
