@@ -57,7 +57,7 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
                         'params': {
                             'youth_ratio': defaults['YOUTH_RATIO'],
                             'adult_ratio': defaults['ADULT_RATIO'],
-                            'elder_ratio': defaults['ELDER_RATIO']
+                            'elderly_ratio': defaults['ELDERLY_RATIO']
                             }
                         }
                 }

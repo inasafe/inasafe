@@ -23,12 +23,14 @@ import logging
 import re
 import json
 from sqlite3 import OperationalError
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
-from PyQt4.QtGui import QListWidgetItem, QPixmap
-from PyQt4.QtGui import QApplication
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
 
-from safe.api import ImpactFunctionManager as IFM
+from safe.api import ImpactFunctionManager
 from safe.api import metadata  # pylint: disable=W0612
 
 from safe_qgis.safe_interface import InaSAFEError, DEFAULTS
@@ -40,6 +42,7 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     is_raster_layer,
     layer_attribute_names)
+from safe_qgis.utilities.defaults import breakdown_defaults
 from safe_qgis.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -110,19 +113,22 @@ tsunami_feet_depth_question = QApplication.translate(
 tsunami_wetdry_question = QApplication.translate(
     'WizardDialog',
     'tsunami extent as wet/dry')
-earthquake_question = QApplication.translate(
+earthquake_mmi_question = QApplication.translate(
     'WizardDialog',
     'earthquake intensity in MMI')
 tephra_kgm2_question = QApplication.translate(
     'WizardDialog',
     'tephra intensity in kg/m<sup>2</sup>')
+volcano_volcano_categorical_question = QApplication.translate(
+    'WizardDialog',
+    'volcano hazard categorical level')
 population_number_question = QApplication.translate(
     'WizardDialog',
     'the number of people')
 population_density_question = QApplication.translate(
     'WizardDialog',
     'people density in people/km<sup>2</sup>')
-road_roadclass_question = QApplication.translate(
+road_road_type_question = QApplication.translate(
     'WizardDialog',
     'type for your road')
 structure_building_type_question = QApplication.translate(
@@ -163,7 +169,7 @@ step_source = 7
 step_title = 8
 
 
-# Aggregations' key
+# Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
 female_ratio_default_key = DEFAULTS['FEMALE_RATIO_KEY']
 youth_ratio_attribute_key = DEFAULTS['YOUTH_RATIO_ATTR_KEY']
@@ -220,6 +226,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
+        self.test = False
         self.keyword_io = KeywordIO()
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
@@ -251,6 +258,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnCancel.released.connect(self.reject)
         self.go_to_step(1)
         self.set_tool_tip()
+
+        # string constants
+        self.global_default_string = self.tr('Global default')
+        self.do_not_use_string = self.tr('Don\'t use')
+        self.defaults = breakdown_defaults()
 
     def selected_category(self):
         """Obtain the category selected by user.
@@ -382,7 +394,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbFemaleRatioDefault. Otherwise, disabled it.
         """
         value = self.cboFemaleRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbFemaleRatioDefault.setEnabled(True)
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
@@ -397,7 +409,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbYouthRatioDefault. Otherwise, disabled it.
         """
         value = self.cboYouthRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbYouthRatioDefault.setEnabled(True)
         else:
             self.dsbYouthRatioDefault.setEnabled(False)
@@ -412,7 +424,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbAdultRatioDefault. Otherwise, disabled it.
         """
         value = self.cboAdultRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbAdultRatioDefault.setEnabled(True)
         else:
             self.dsbAdultRatioDefault.setEnabled(False)
@@ -427,12 +439,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbElderlyRatioDefault. Otherwise, disabled it.
         """
         value = self.cboElderlyRatioAttribute.currentText()
-        if value == self.tr('Use default'):
+        if value == self.global_default_string:
             self.dsbElderlyRatioDefault.setEnabled(True)
         else:
             self.dsbElderlyRatioDefault.setEnabled(False)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_lstCategories_itemSelectionChanged(self):
         """Update category description label and subcategory widgets.
@@ -453,6 +466,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
+    # noinspection PyPep8Naming
     def on_lstSubcategories_itemSelectionChanged(self):
         """Update subcategory description label and unit widgets.
 
@@ -472,6 +486,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
+    # noinspection PyPep8Naming
     def on_lstUnits_itemSelectionChanged(self):
         """Update unit description label and field widgets.
 
@@ -531,7 +546,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblIconCategory.setPixmap(QPixmap())
         self.lblSelectCategory.setText(
             category_question % self.layer.name())
-        categories = IFM().categories_for_layer(
+        categories = ImpactFunctionManager().categories_for_layer(
             self.layer_type, self.data_type)
         if self.data_type == 'polygon':
             categories += ['aggregation']
@@ -556,7 +571,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblIconSubcategory.setPixmap(QPixmap())
         self.lblSelectSubcategory.setText(
             get_question_text('%s_question' % category['id']))
-        for i in IFM().subcategories_for_layer(
+        for i in ImpactFunctionManager().subcategories_for_layer(
                 category['id'], self.layer_type, self.data_type):
             item = QListWidgetItem(i['name'], self.lstSubcategories)
             item.setData(QtCore.Qt.UserRole, unicode(i))
@@ -571,7 +586,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         self.lstFields.clear()
-        for i in IFM().units_for_layer(
+        for i in ImpactFunctionManager().units_for_layer(
                 subcategory['id'], self.layer_type, self.data_type):
             if (self.layer_type == 'raster' and
                     i['constraint'] == 'categorical'):
@@ -673,6 +688,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnBack.setEnabled(step > 1)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnNext_released(self):
         """Handle the Next button release.
@@ -680,7 +696,21 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        current_step = self.stackedWidget.currentIndex() + 1
+        current_step = self.get_current_step()
+
+        if current_step == step_aggregation:
+            good_age_ratio, sum_age_ratios = self.age_ratios_are_valid()
+            if not good_age_ratio:
+                message = self.tr(
+                    'The sum of age ratio default is %s and it is more '
+                    'than 1. Please adjust the age ratio default so that they '
+                    'will not more than 1.' % sum_age_ratios)
+                if not self.test:
+                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+                    QtGui.QMessageBox.warning(
+                        self, self.tr('InaSAFE'), message)
+                return
+
         # Determine the new step to be switched
         new_step = self.compute_next_step(current_step)
 
@@ -715,6 +745,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.go_to_step(new_step)
 
     # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnBack_released(self):
         """Handle the Back button release.
@@ -722,7 +753,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the Back button is released.
         """
-        current_step = self.stackedWidget.currentIndex() + 1
+        current_step = self.get_current_step()
         new_step = self.compute_previous_step(current_step)
         # Set Next button label
         self.pbnNext.setText(self.tr('Next'))
@@ -771,7 +802,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             category = self.selected_category()
             if category['id'] == 'aggregation':
                 new_step = step_field
-            elif IFM().subcategories_for_layer(
+            elif ImpactFunctionManager().subcategories_for_layer(
                     category['id'], self.layer_type, self.data_type):
                 new_step = step_subcategory
             else:
@@ -781,7 +812,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # skip field and classify step if point layer and it's a volcano
             if self.data_type == 'point' and subcategory['id'] == 'volcano':
                 new_step = step_source
-            elif IFM().units_for_layer(
+            elif ImpactFunctionManager().units_for_layer(
                     subcategory['id'], self.layer_type, self.data_type):
                 new_step = step_unit
             else:
@@ -1051,34 +1082,37 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_existing_aggregation_attributes(self):
         """Set values in aggregation step wizard based on existing keywords."""
+        self.defaults = breakdown_defaults()
+
         female_ratio_default = self.get_existing_keyword(
             female_ratio_default_key)
         if female_ratio_default:
             self.dsbFemaleRatioDefault.setValue(
                 float(female_ratio_default))
         else:
-            self.dsbFemaleRatioDefault.setValue(DEFAULTS['FEMALE_RATIO'])
+            self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
 
         youth_ratio_default = self.get_existing_keyword(
             youth_ratio_default_key)
         if youth_ratio_default:
             self.dsbYouthRatioDefault.setValue(float(youth_ratio_default))
         else:
-            self.dsbYouthRatioDefault.setValue(DEFAULTS['YOUTH_RATIO'])
+            self.dsbYouthRatioDefault.setValue(self.defaults['YOUTH_RATIO'])
 
         adult_ratio_default = self.get_existing_keyword(
             adult_ratio_default_key)
         if adult_ratio_default:
             self.dsbAdultRatioDefault.setValue(float(adult_ratio_default))
         else:
-            self.dsbAdultRatioDefault.setValue(DEFAULTS['ADULT_RATIO'])
+            self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
 
         elderly_ratio_default = self.get_existing_keyword(
             elderly_ratio_default_key)
         if elderly_ratio_default:
             self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
         else:
-            self.dsbElderlyRatioDefault.setValue(DEFAULTS['ELDERLY_RATIO'])
+            self.dsbElderlyRatioDefault.setValue(
+                self.defaults['ELDERLY_RATIO'])
 
         ratio_attribute_keys = [
             female_ratio_attribute_key,
@@ -1115,13 +1149,15 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             [QtCore.QVariant.Double],
             ratio_attribute
         )
-        fields.insert(0, self.tr('Use default'))
-        fields.insert(1, self.tr('Don\'t use'))
+        fields.insert(0, self.global_default_string)
+        fields.insert(1, self.do_not_use_string)
         cbo_ratio_attribute.addItems(fields)
 
-        if ratio_attribute == self.tr('Use default'):
+        # For backward compatibility, still use Use default
+        if (ratio_attribute == self.global_default_string or
+                ratio_attribute == self.tr('Use default')):
             cbo_ratio_attribute.setCurrentIndex(0)
-        elif ratio_attribute == self.tr('Don\'t use'):
+        elif ratio_attribute == self.do_not_use_string:
             cbo_ratio_attribute.setCurrentIndex(1)
         elif ratio_attribute is None or attribute_position is None:
             # current_keyword was not found in the attribute table.
@@ -1208,7 +1244,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.leSource_scale.setToolTip(scale_tooltip)
         self.leSource_url.setToolTip(url_tooltip)
 
-    # noinspection PyUnresolvedReferences
+    # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
     def auto_select_one_item(self, list_widget):
         """Select item in the list in list_widget if it's the only item.
 
@@ -1217,3 +1253,42 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         if list_widget.count() == 1 and list_widget.currentRow() == -1:
             list_widget.setCurrentRow(0)
+
+    def age_ratios_are_valid(self):
+        """Return true if the sum of age ratios is good, otherwise False.
+
+        Good means their sum does not exceed 1.
+
+        :returns: Tuple of boolean and float. Boolean represent good or not
+            good, while float represent the summation of age ratio. If some
+            ratio do not use global default, the summation is set to 0.
+        :rtype: tuple
+
+        """
+        youth_ratio_index = self.cboYouthRatioAttribute.currentIndex()
+        adult_ratio_index = self.cboAdultRatioAttribute.currentIndex()
+        elderly_ratio_index = self.cboElderlyRatioAttribute.currentIndex()
+
+        ratio_indexes = [
+            youth_ratio_index, adult_ratio_index, elderly_ratio_index]
+
+        if ratio_indexes.count(0) == len(ratio_indexes):
+            youth_ratio_default = self.dsbYouthRatioDefault.value()
+            adult_ratio_default = self.dsbAdultRatioDefault.value()
+            elderly_ratio_default = self.dsbElderlyRatioDefault.value()
+
+            sum_ratio_default = youth_ratio_default + adult_ratio_default
+            sum_ratio_default += elderly_ratio_default
+            if sum_ratio_default > 1:
+                return False, sum_ratio_default
+            else:
+                return True, sum_ratio_default
+        return True, 0
+
+    def get_current_step(self):
+        """Return current step of the wizard.
+
+        :returns: Current step of the wizard.
+        :rtype: int
+        """
+        return self.stackedWidget.currentIndex() + 1

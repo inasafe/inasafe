@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Fri May  9 14:31:52 2014
+# Created: Thu May 22 16:26:13 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_KeywordsDialogBase(object):
     def setupUi(self, KeywordsDialogBase):
         KeywordsDialogBase.setObjectName(_fromUtf8("KeywordsDialogBase"))
-        KeywordsDialogBase.resize(597, 865)
+        KeywordsDialogBase.resize(597, 898)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -113,18 +113,24 @@ class Ui_KeywordsDialogBase(object):
         self.leTitle.setObjectName(_fromUtf8("leTitle"))
         self.gridLayout_2.addWidget(self.leTitle, 1, 2, 1, 1)
         self.dsbAdultRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
+        self.dsbAdultRatioDefault.setMaximum(1.0)
+        self.dsbAdultRatioDefault.setSingleStep(0.01)
         self.dsbAdultRatioDefault.setObjectName(_fromUtf8("dsbAdultRatioDefault"))
         self.gridLayout_2.addWidget(self.dsbAdultRatioDefault, 12, 2, 1, 1)
         self.cboYouthRatioAttribute = QtGui.QComboBox(self.grpSimple)
         self.cboYouthRatioAttribute.setObjectName(_fromUtf8("cboYouthRatioAttribute"))
         self.gridLayout_2.addWidget(self.cboYouthRatioAttribute, 9, 2, 1, 1)
         self.dsbYouthRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
+        self.dsbYouthRatioDefault.setMaximum(1.0)
+        self.dsbYouthRatioDefault.setSingleStep(0.01)
         self.dsbYouthRatioDefault.setObjectName(_fromUtf8("dsbYouthRatioDefault"))
         self.gridLayout_2.addWidget(self.dsbYouthRatioDefault, 10, 2, 1, 1)
         self.cboAdultRatioAttribute = QtGui.QComboBox(self.grpSimple)
         self.cboAdultRatioAttribute.setObjectName(_fromUtf8("cboAdultRatioAttribute"))
         self.gridLayout_2.addWidget(self.cboAdultRatioAttribute, 11, 2, 1, 1)
         self.dsbElderlyRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
+        self.dsbElderlyRatioDefault.setMaximum(1.0)
+        self.dsbElderlyRatioDefault.setSingleStep(0.01)
         self.dsbElderlyRatioDefault.setObjectName(_fromUtf8("dsbElderlyRatioDefault"))
         self.gridLayout_2.addWidget(self.dsbElderlyRatioDefault, 14, 2, 1, 1)
         self.lblElderlyRatioDefault = QtGui.QLabel(self.grpSimple)
