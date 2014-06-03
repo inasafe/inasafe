@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'borysjurgiel.pl'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -19,6 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 #noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore
 
 import unittest
 import sys
@@ -33,19 +34,23 @@ sys.path.append(pardir)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
-from qgis.core import QgsVectorLayer, QgsRasterLayer
+from qgis.core import QgsVectorLayer
 
 from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import unique_filename
-from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA
+from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
 from safe_qgis.tools.wizard_dialog import (
     WizardDialog,
     step_source,
     step_title,
     step_classify,
     step_subcategory,
-    step_unit)
+    step_unit,
+    step_aggregation,
+    step_field)
 from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.utilities_for_testing import (
+    clone_raster_layer, clone_shp_layer, remove_temp_file)
 
 
 # Get QGis app handle
@@ -64,82 +69,68 @@ def clone_csv_layer():
     return layer
 
 
-def clone_shp_layer(
-        name='tsunami_polygon', include_keywords=False, directory=TESTDATA):
-    """Helper function that copies a test shplayer and returns it.
-
-    :param name: The default name for the shp layer.
-    :type name: str
-
-    :param include_keywords: Include keywords file if True.
-    :type include_keywords: bool
-
-    :param directory: Directory where the file is located.
-    :type directory: str
-
-    """
-    extensions = ['.shp', '.shx', '.dbf', '.prj']
-    if include_keywords:
-        extensions.append('.keywords')
-    temp_path = unique_filename()
-    # copy to temp file
-    for ext in extensions:
-        src_path = os.path.join(directory, name + ext)
-        if os.path.exists(src_path):
-            trg_path = temp_path + ext
-            shutil.copy2(src_path, trg_path)
-    # return a single predefined layer
-    layer = QgsVectorLayer(temp_path + '.shp', 'TestLayer', 'ogr')
-    return layer
-
-
-def clone_raster_layer(name, extension, include_keywords, directory):
-    """Helper function that copies a test raster and returns it.
-
-    :param name: The default name for the raster layer.
-    :type name: str
-
-    :param include_keywords: Include keywords file if True.
-    :type include_keywords: bool
-
-    :param directory: Directory where the file is located.
-    :type directory: str
-    """
-    extensions = ['.prj', '.sld', 'qml', '.prj', extension]
-    if include_keywords:
-        extensions.append('.keywords')
-    temp_path = unique_filename()
-
-    # copy to temp file
-    for ext in extensions:
-        src_path = os.path.join(directory, name + ext)
-        if os.path.exists(src_path):
-            trg_path = temp_path + ext
-            shutil.copy2(src_path, trg_path)
-    layer = QgsRasterLayer(temp_path + extension, os.path.basename(temp_path))
-    return layer
-
-
-def remove_temp_file(file_path):
-    """Helper function that removes temp file created during test.
-
-    Also its keywords file will be removed.
-
-    :param file_path: File path to be removed.
-    :type file_path: str
-    """
-    file_path = file_path[:-4]
-    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
-    extensions.extend(['.prj', '.sld', 'qml'])
-    for ext in extensions:
-        if os.path.exists(file_path + ext):
-            os.remove(file_path + ext)
-
-
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
-
     """Test the InaSAFE wizard GUI"""
+
+    def check_list(self, expected_list, list_widget):
+        """Helper function to check that list_widget is equal to expected_list.
+
+        :param expected_list: List of expected values to be found.
+        :type expected_list: list
+
+        :param list_widget: List widget that wants to be checked.
+        :type expected_list: QListWidget
+        """
+        real_list = []
+        for i in range(list_widget.count()):
+            real_list.append(list_widget.item(i).text())
+        message = ('Expected %s but I got %s' % (expected_list, real_list))
+        self.assertItemsEqual(expected_list, real_list, message)
+
+    def check_current_step(self, expected_step, dialog):
+        """Helper function to check the current step is expected_step
+
+        :param expected_step: The expected current step.
+        :type expected_step: int
+
+        :param dialog: The dialog that contains a wizard.
+        :type dialog: WizardDialog
+        """
+        current_step = dialog.get_current_step()
+        message = ('Expected %s but I got %s' % (expected_step, current_step))
+        self.assertEqual(expected_step, current_step, message)
+
+    def check_current_text(self, expected_text, list_widget):
+        """Check the current text in list widget is expected_text
+
+        :param expected_text: The expected current step.
+        :type expected_text: int
+
+        :param list_widget: List widget that wants to be checked.
+        :type list_widget: QListWidget
+        """
+        # noinspection PyUnresolvedReferences
+        current_text = list_widget.currentItem().text()
+        message = ('Expected %s but I got %s' % (expected_text, current_text))
+        self.assertEqual(expected_text, current_text, message)
+
+    # noinspection PyUnresolvedReferences
+    def select_from_list_widget(self, option, list_widget):
+        """Helper function to select option from list_widget
+
+        :param option: Option to be chosen
+        :type option: str
+
+        :param list_widget: List widget that wants to be checked.
+        :type list_widget: QListWidget
+        """
+        for i in range(list_widget.count()):
+            if list_widget.item(i).text() == option:
+                list_widget.setCurrentRow(i)
+                return
+        message = 'There is no %s in the list widget' % option
+        self.assertTrue(False, message)
 
     def test_keywords_creation_wizard(self):
         """Test how the widgets work."""
@@ -333,7 +324,7 @@ class WizardDialogTest(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
-    def test_existed_keywords(self):
+    def test_existing_keywords(self):
         """Test if keywords are already exist."""
         expected_field_count = 5
         expected_fields = [
@@ -351,11 +342,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
         # step 1 of 7 - select category
-        expected_category_text = 'hazard'
-        category_text = dialog.lstCategories.currentItem().text()
-        message = 'Expect category text %s but I got %s' % (
-            expected_category_text, category_text)
-        self.assertEqual(expected_category_text, category_text, message)
+        self.check_current_text('hazard', dialog.lstCategories)
 
         message = ('Invalid Next button state in step 1! Still disabled after '
                    'an item selected')
@@ -365,11 +352,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 2 of 7 - select subcategory
         # noinspection PyTypeChecker
-        expected_subcategory_text = 'tsunami'
-        subcategory_text = dialog.lstSubcategories.currentItem().text()
-        message = 'Expect subcategory text %s but I got %s' % (
-            expected_subcategory_text, subcategory_text)
-        self.assertEqual(expected_subcategory_text, subcategory_text, message)
+        self.check_current_text('tsunami', dialog.lstSubcategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -378,11 +361,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 of 7 - select tsunami units
-        expected_unit_text = 'metres'
-        unit_text = dialog.lstUnits.currentItem().text()
-        message = 'Expect unit text %s but I got %s' % (
-            expected_unit_text, unit_text)
-        self.assertEqual(expected_unit_text, unit_text, message)
+        self.check_current_text('metres', dialog.lstUnits)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -449,68 +428,25 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
-        # All desired item
-        chosen_category = 'hazard'
-        chosen_sub_category = 'volcano'
-        chosen_unit = 'volcano categorical'
-        chosen_field = 'GRIDCODE'
-
-        # Get index for hazard category
-        chosen_category_index = -1
-        for i in range(dialog.lstCategories.count()):
-            category_name = dialog.lstCategories.item(i).text()
-            if category_name == chosen_category:
-                chosen_category_index = i
-        message = 'There is no %s in the list widget of category.' % (
-            chosen_category)
-        self.assertIsNot(chosen_category_index, -1, message)
-        # Choose the row and click!
-        dialog.lstCategories.setCurrentRow(chosen_category_index)
+        # select hazard
+        self.select_from_list_widget('hazard', dialog.lstCategories)
         dialog.pbnNext.click()
 
-        # Get index for sub category volcano
-        chosen_sub_category_index = -1
-        for i in range(dialog.lstSubcategories.count()):
-            sub_category_name = dialog.lstSubcategories.item(i).text()
-            if sub_category_name == chosen_sub_category:
-                chosen_sub_category_index = i
-        message = 'There is no %s in the list widget of sub category.' % (
-            chosen_sub_category)
-        self.assertIsNot(chosen_sub_category_index, -1, message)
-        # Choose the row and click!
-        dialog.lstSubcategories.setCurrentRow(chosen_sub_category_index)
+        # select volcano
+        self.select_from_list_widget('volcano', dialog.lstSubcategories)
         dialog.pbnNext.click()
 
-        # Get index for volcano categorical unit
-        chosen_unit_index = -1
-        for i in range(dialog.lstUnits.count()):
-            unit_name = dialog.lstUnits.item(i).text()
-            if unit_name == chosen_unit:
-                chosen_unit_index = i
-        message = 'There is no %s in the list widget of unit.' % (
-            chosen_unit)
-        self.assertIsNot(chosen_unit_index, -1, message)
-        # Choose the row and click!
-        dialog.lstUnits.setCurrentRow(chosen_unit_index)
+        # select volcano categorical unit
+        self.select_from_list_widget('volcano categorical', dialog.lstUnits)
         dialog.pbnNext.click()
 
-        # Get index for GRIDCODE field
-        chosen_field_index = -1
-        for i in range(dialog.lstFields.count()):
-            field_name = dialog.lstFields.item(i).text()
-            if field_name == chosen_field:
-                chosen_field_index = i
-        message = 'There is no %s in the list widget of field.' % (
-            chosen_field)
-        self.assertIsNot(chosen_field_index, -1, message)
-        # Choose the row and click!
-        dialog.lstFields.setCurrentRow(chosen_field_index)
+        # select GRIDCODE
+        self.select_from_list_widget('GRIDCODE', dialog.lstFields)
         dialog.pbnNext.click()
 
         unit = dialog.selected_unit()
         default_classes = unit['classes']
-        unassigned_values = []  # no need to check actually, not save in
-        # file
+        unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
             'high': ['4.0', '5.0'],
             'medium': ['3.0'],
@@ -536,42 +472,26 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
         # step 1 of 7 - select category
-        expected_category_text = 'hazard'
-        category_text = dialog.lstCategories.currentItem().text()
-        message = 'Expect category text %s but I got %s' % (
-            expected_category_text, category_text)
-        self.assertEqual(expected_category_text, category_text, message)
+        self.check_current_text('hazard', dialog.lstCategories)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 2 of 7 - select subcategory
         # noinspection PyTypeChecker
-        expected_subcategory_text = 'volcano'
-        subcategory_text = dialog.lstSubcategories.currentItem().text()
-        message = 'Expect subcategory text %s but I got %s' % (
-            expected_subcategory_text, subcategory_text)
-        self.assertEqual(expected_subcategory_text, subcategory_text, message)
+        self.check_current_text('volcano', dialog.lstSubcategories)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 3 of 7 - select volcano units
-        expected_unit_text = 'volcano categorical'
-        unit_text = dialog.lstUnits.currentItem().text()
-        message = 'Expect unit text %s but I got %s' % (
-            expected_unit_text, unit_text)
-        self.assertEqual(expected_unit_text, unit_text, message)
+        self.check_current_text('volcano categorical', dialog.lstUnits)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 4 of 7 - select field
-        expected_unit_text = 'GRIDCODE'
-        unit_text = dialog.lstFields.currentItem().text()
-        message = 'Expect unit text %s but I got %s' % (
-            expected_unit_text, unit_text)
-        self.assertEqual(expected_unit_text, unit_text, message)
+        self.check_current_text('GRIDCODE', dialog.lstFields)
 
         # Click Next
         dialog.pbnNext.click()
@@ -623,22 +543,17 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()
 
-        expected_aggregation_attribute = 'KAB_NAME'
-        aggregation_attribute = dialog.lstFields.currentItem().text()
-        message = 'Expected %s but I got %s.' % (
-            expected_aggregation_attribute, aggregation_attribute)
-        self.assertEqual(
-            expected_aggregation_attribute, aggregation_attribute, message)
+        self.check_current_text('KAB_NAME', dialog.lstFields)
 
         dialog.pbnNext.click()
 
         expected_aggregation_attributes = {
-            'elderly ratio attribute': 'Use default',
+            'elderly ratio attribute': 'Global default',
             'youth ratio default': 0.26,
             'elderly ratio default': 0.08,
-            'adult ratio attribute': 'Use default',
-            'female ratio attribute': 'Use default',
-            'youth ratio attribute': 'Use default',
+            'adult ratio attribute': 'Global default',
+            'female ratio attribute': 'Global default',
+            'youth ratio attribute': 'Global default',
             'female ratio default': 0.5,
             'adult ratio default': 0.66
         }
@@ -647,6 +562,7 @@ class WizardDialogTest(unittest.TestCase):
             expected_aggregation_attributes, aggregation_attributes)
         self.assertDictEqual(
             expected_aggregation_attributes, aggregation_attributes, message)
+
         dialog.cboFemaleRatioAttribute.setCurrentIndex(2)
         expected_female_attribute_key = 'PEREMPUAN'
         female_attribute_key = dialog.cboFemaleRatioAttribute.currentText()
@@ -673,17 +589,14 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to unit step 3
         dialog.lstUnits.setCurrentRow(1)  # select no type
         dialog.pbnNext.click()  # should be in step source
-        current_index = dialog.stackedWidget.currentIndex() + 1
-        expected_current_index = step_source
-        message = 'Expected %s but I got %s.' % (
-            expected_current_index, current_index)
-        self.assertEqual(expected_current_index, current_index, message)
+
+        # check if in step source
+        self.check_current_step(step_source, dialog)
+
         dialog.pbnNext.click()  # should be in step title
-        current_index = dialog.stackedWidget.currentIndex() + 1
-        expected_current_index = step_title
-        message = 'Expected %s but I got %s.' % (
-            expected_current_index, current_index)
-        self.assertEqual(expected_current_index, current_index, message)
+
+        # check if in step title
+        self.check_current_step(step_title, dialog)
 
         dialog.pbnNext.click()  # finishing
 
@@ -701,20 +614,20 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose KEC_NAME go to aggregation step
 
         ratio_attribute = dialog.cboFemaleRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         ratio_attribute = dialog.cboElderlyRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         ratio_attribute = dialog.cboAdultRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         ratio_attribute = dialog.cboYouthRatioAttribute.currentText()
-        message = 'Expected Use default but I got %s' % ratio_attribute
-        self.assertEqual('Use default', ratio_attribute, message)
+        message = 'Expected Global default but I got %s' % ratio_attribute
+        self.assertEqual('Global default', ratio_attribute, message)
 
         default_value = dialog.dsbFemaleRatioDefault.value()
         expected_default_value = 0.50
@@ -753,40 +666,24 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to unit step
         dialog.lstUnits.setCurrentRow(0)  # Choose volcano categorical
-        expected_unit = 'volcano categorical'
-        unit = dialog.lstUnits.currentItem().text()
-        message = ('Expected %s but I got %s' % (
-            expected_unit, unit))
-        self.assertEqual(expected_unit, unit, message)
+
+        self.check_current_text('volcano categorical', dialog.lstUnits)
 
         dialog.pbnNext.click()  # choose volcano  go to field step
         dialog.lstFields.setCurrentRow(0)  # Choose Radius
-        expected_fields = 'Radius'
-        fields = dialog.lstFields.currentItem().text()
-        message = ('Expected %s but I got %s' % (
-            expected_fields, fields))
-        self.assertEqual(expected_fields, fields, message)
+        self.check_current_text('Radius', dialog.lstFields)
 
         dialog.pbnNext.click()  # choose volcano  go to classify step
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_classify
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step classify
+        self.check_current_step(step_classify, dialog)
 
         dialog.pbnNext.click()  # choose volcano  go to source step
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_source
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step source
+        self.check_current_step(step_source, dialog)
 
         dialog.pbnNext.click()  # choose volcano  go to title step
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_title
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step title
+        self.check_current_step(step_title, dialog)
 
         remove_temp_file(layer.source())
 
@@ -801,19 +698,13 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to source step
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_source
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step source
+        self.check_current_step(step_source, dialog)
 
         dialog.pbnNext.click()  # choose volcano  go to title step
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_title
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step title
+        self.check_current_step(step_title, dialog)
 
         remove_temp_file(layer.source())
 
@@ -850,54 +741,30 @@ class WizardDialogTest(unittest.TestCase):
             directory=HAZDATA)
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
-        num_categories = dialog.lstCategories.count()
-        expected_num_categories = 1  # hazard
-        message = ('There is should be %d categories, but I got %d' %
-                   (expected_num_categories, num_categories))
-        self.assertEqual(expected_num_categories, num_categories, message)
+        expected_categories = ['hazard']
+        self.check_list(expected_categories, dialog.lstCategories)
 
-        expected_category = 'hazard'
-        categories = dialog.lstCategories.currentItem().text()
-        message = ('Expected %s, but I got %s' %
-                   (expected_category, categories))
-        self.assertEqual(expected_category, categories, message)
+        self.check_current_text('hazard', dialog.lstCategories)
 
         dialog.pbnNext.click()  # go to subcategory
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_subcategory
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step subcategory
+        self.check_current_step(step_subcategory, dialog)
 
-        num_subcategories = dialog.lstSubcategories.count()
-        expected_num_subcategories = 1  # hazard
-        message = ('There is should be %d categories, but I got %d' %
-                   (expected_num_subcategories, num_subcategories))
-        self.assertEqual(
-            expected_num_subcategories, num_subcategories, message)
+        expected_subcategories = ['volcano']
+        self.check_list(expected_subcategories, dialog.lstSubcategories)
 
-        expected_subcategory = 'volcano'
-        subcategories = dialog.lstSubcategories.currentItem().text()
-        message = ('Expected %s, but I got %s' %
-                   (expected_subcategory, subcategories))
-        self.assertEqual(expected_subcategory, subcategories, message)
+        self.check_current_text('volcano', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # go to source
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_source
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step source
+        self.check_current_step(step_source, dialog)
 
         dialog.pbnNext.click()  # go to title
 
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_title
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        # check if in step title
+        self.check_current_step(step_title, dialog)
 
         dialog.pbnCancel.click()
 
@@ -912,11 +779,8 @@ class WizardDialogTest(unittest.TestCase):
             directory=HAZDATA)
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 
-        num_categories = dialog.lstCategories.count()
-        expected_num_categories = 2  # hazard and exposure
-        message = ('There is should be %d categories, but I got %d' %
-                   (expected_num_categories, num_categories))
-        self.assertEqual(expected_num_categories, num_categories, message)
+        expected_categories = ['hazard', 'exposure']
+        self.check_list(expected_categories, dialog.lstCategories)
 
         # check if no option is selected
         expected_category = -1
@@ -926,42 +790,17 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(expected_category, categories, message)
 
         # choosing hazard
-        for i in range(dialog.lstCategories.count()):
-            if dialog.lstCategories.item(i).text() == 'hazard':
-                dialog.lstCategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('hazard', dialog.lstCategories)
 
         dialog.pbnNext.click()  # Go to subcategory
 
         # check if in step subcategory
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_subcategory
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
-
-        # check number of subcategories
-        num_subcategories = dialog.lstSubcategories.count()
-        expected_num_subcategories = 6
-        message = ('There is should be %d categories, but I got %d' %
-                   (expected_num_subcategories, num_subcategories))
-        self.assertEqual(
-            expected_num_subcategories, num_subcategories, message)
+        self.check_current_step(step_subcategory, dialog)
 
         # check the values of subcategories options
         expected_subcategories = [
-            'flood',
-            'tephra',
-            'volcano',
-            'earthquake',
-            'tsunami',
-            'generic']
-        subcategories = []
-        for i in range(dialog.lstSubcategories.count()):
-            subcategories.append(dialog.lstSubcategories.item(i).text())
-        message = ('Expected %s but I got %s' % (
-            expected_subcategories, subcategories))
-        self.assertItemsEqual(expected_subcategories, subcategories, message)
+            'flood', 'tephra', 'volcano', 'earthquake', 'tsunami', 'generic']
+        self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if no option is selected
         expected_subcategory_index = -1
@@ -972,56 +811,30 @@ class WizardDialogTest(unittest.TestCase):
             expected_subcategory_index, subcategory_index, message)
 
         # choosing flood
-        for i in range(dialog.lstSubcategories.count()):
-            if dialog.lstSubcategories.item(i).text() == 'flood':
-                dialog.lstSubcategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('flood', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_unit
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        self.check_current_step(step_unit, dialog)
 
         # check the values of units options
-        expected_units = [
-            'normalised',
-            'metres',
-            'feet']
-        units = []
-        for i in range(dialog.lstUnits.count()):
-            units.append(dialog.lstUnits.item(i).text())
-        message = ('Expected %s but I got %s' % (
-            expected_units, units))
-        self.assertItemsEqual(expected_units, units, message)
+        expected_units = ['normalised', 'metres', 'feet']
+        self.check_list(expected_units, dialog.lstUnits)
 
         # choosing metres
-        for i in range(dialog.lstUnits.count()):
-            if dialog.lstUnits.item(i).text() == 'metres':
-                dialog.lstUnits.setCurrentRow(i)
-                break
+        self.select_from_list_widget('metres', dialog.lstUnits)
 
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_source
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        self.check_current_step(step_source, dialog)
 
         dialog.pbnBack.click()  # back to step unit
         dialog.pbnBack.click()  # back to step subcategory
 
         # check if in step subcategory
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_subcategory
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        self.check_current_step(step_subcategory, dialog)
 
         # check if flood is selected
         expected_subcategory = 'flood'
@@ -1032,45 +845,341 @@ class WizardDialogTest(unittest.TestCase):
             expected_subcategory, subcategory, message)
 
         # choosing earthquake
-        for i in range(dialog.lstSubcategories.count()):
-            if dialog.lstSubcategories.item(i).text() == 'earthquake':
-                dialog.lstSubcategories.setCurrentRow(i)
-                break
+        self.select_from_list_widget('earthquake', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_unit
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        self.check_current_step(step_unit, dialog)
 
         # check the values of units options
-        expected_units = [
-            'normalised',
-            'MMI']
-        units = []
-        for i in range(dialog.lstUnits.count()):
-            units.append(dialog.lstUnits.item(i).text())
-        message = ('Expected %s but I got %s' % (
-            expected_units, units))
-        self.assertItemsEqual(expected_units, units, message)
+        expected_units = ['normalised', 'MMI']
+        self.check_list(expected_units, dialog.lstUnits)
 
         # choosing MMI
-        for i in range(dialog.lstUnits.count()):
-            if dialog.lstUnits.item(i).text() == 'MMI':
-                dialog.lstUnits.setCurrentRow(i)
-                break
+        self.select_from_list_widget('MMI', dialog.lstUnits)
 
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        current_step = dialog.stackedWidget.currentIndex() + 1
-        expected_step = step_source
-        message = ('Expected %s but I got %s' % (
-            expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        self.check_current_step(step_source, dialog)
+
+        remove_temp_file(layer.source())
+
+    def test_integrated_line(self):
+        """Test for line layer and all possibilities."""
+        layer = clone_shp_layer(
+            name='jakarta_roads',
+            directory=EXPDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        expected_categories = ['exposure']
+        self.check_list(expected_categories, dialog.lstCategories)
+
+        self.check_current_text('exposure', dialog.lstCategories)
+
+        dialog.pbnNext.click()  # go to subcategory
+
+        # check if in step subcategory
+        self.check_current_step(step_subcategory, dialog)
+
+        expected_subcategories = ['road']
+        self.check_list(expected_subcategories, dialog.lstSubcategories)
+
+        self.check_current_text('road', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # go to unit
+
+        # check if in step unit
+        self.check_current_step(step_unit, dialog)
+
+        expected_units = ['Road Type']
+        self.check_list(expected_units, dialog.lstUnits)
+
+        self.check_current_text(expected_units[0], dialog.lstUnits)
+
+        dialog.pbnNext.click()  # go to field
+
+        # check if in step field
+        self.check_current_step(step_field, dialog)
+
+        expected_fields = ['TYPE', 'NAME', 'ONEWAY', 'LANES']
+        self.check_list(expected_fields, dialog.lstFields)
+
+        # select Type
+        self.select_from_list_widget('TYPE', dialog.lstFields)
+
+        dialog.pbnNext.click()  # go to source step
+        dialog.pbnNext.click()  # go to title step
+
+        dialog.pbnCancel.click()  # cancel
+
+        remove_temp_file(layer.source())
+
+    def test_integrated_polygon(self):
+        """Test for polygon layer and all possibilities."""
+        layer = clone_shp_layer(
+            name='Jakarta_RW_2007flood',
+            directory=HAZDATA,
+            include_keywords=False)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+
+        expected_categories = ['hazard', 'exposure', 'aggregation']
+        self.check_list(expected_categories, dialog.lstCategories)
+
+        # choosing exposure
+        self.select_from_list_widget('exposure', dialog.lstCategories)
+
+        dialog.pbnNext.click()  # Go to subcategory
+
+        # check number of subcategories
+        expected_subcategories = ['structure']
+        self.check_list(expected_subcategories, dialog.lstSubcategories)
+
+        # check if automatically select the only option
+        self.check_current_text(
+            expected_subcategories[0], dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # Go to unit
+
+        # check if in step unit
+        self.check_current_step(step_unit, dialog)
+
+        # check the values of units options
+        expected_units = ['building type', 'building generic']
+        self.check_list(expected_units, dialog.lstUnits)
+
+        # choosing building type
+        self.select_from_list_widget('building type', dialog.lstUnits)
+
+        dialog.pbnNext.click()  # Go to field
+
+        # check if in step field
+        self.check_current_step(step_field, dialog)
+
+        # check the values of field options
+        expected_fields = [
+            'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW', 'FLOODPRONE']
+        self.check_list(expected_fields, dialog.lstFields)
+
+        # choosing KAB_NAME
+        self.select_from_list_widget('KAB_NAME', dialog.lstFields)
+
+        dialog.pbnNext.click()  # Go to source
+
+        # check if in source step
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnBack.click()  # back to field step
+        dialog.pbnBack.click()  # back to unit step
+
+        # choosing building generic
+        self.select_from_list_widget('building generic', dialog.lstUnits)
+
+        dialog.pbnNext.click()  # Go to source
+
+        # check if in source source
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnBack.click()  # back to unit step
+        dialog.pbnBack.click()  # back to subcategory step
+        dialog.pbnBack.click()  # back to category step
+
+        # choosing hazard
+        self.select_from_list_widget('hazard', dialog.lstCategories)
+
+        dialog.pbnNext.click()  # Go to subcategory
+
+        # check the values of subcategories options
+        expected_subcategories = ['earthquake', 'flood', 'tsunami', 'volcano']
+        self.check_list(expected_subcategories, dialog.lstSubcategories)
+
+        # choosing earthquake
+        self.select_from_list_widget('earthquake', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # Go to unit
+
+        # check the values of units options
+        expected_units = ['MMI']
+        self.check_list(expected_units, dialog.lstUnits)
+        self.select_from_list_widget('MMI', dialog.lstUnits)
+        dialog.pbnNext.click()  # go to field step
+
+        # check in field step
+        self.check_current_step(step_field, dialog)
+
+        for i in range(dialog.lstFields.count()):
+            item_flag = dialog.lstFields.item(i).flags()
+            message = 'Item should be disabled'
+            self.assertTrue(item_flag & ~QtCore.Qt.ItemIsEnabled, message)
+
+        dialog.pbnBack.click()  # back  to unit step
+        dialog.pbnBack.click()  # back  to unit subcategory
+
+        # select flood
+        self.select_from_list_widget('flood', dialog.lstSubcategories)
+        dialog.pbnNext.click()  # go to unit
+        self.check_current_step(step_unit, dialog)
+
+        expected_units = ['wet / dry', 'metres', 'feet']
+        self.check_list(expected_units, dialog.lstUnits)
+
+        # select wet / dry
+        self.select_from_list_widget('wet / dry', dialog.lstUnits)
+        dialog.pbnNext.click()  # go to fields
+        self.check_current_step(step_field, dialog)
+
+        expected_fields = [
+            'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW', 'FLOODPRONE']
+        self.check_list(expected_fields, dialog.lstFields)
+
+        # select FLOODPRONE
+        self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
+        dialog.pbnNext.click()  # go to classify
+        self.check_current_step(step_classify, dialog)
+
+        # check unclassified
+        expected_unique_values = ['Yes']  # Unclassified value
+        self.check_list(expected_unique_values, dialog.lstUniqueValues)
+
+        # check classified
+        root = dialog.treeClasses.invisibleRootItem()
+        expected_classes = ['wet', 'dry']
+        child_count = root.childCount()
+        message = 'Child count must be %s' % len(expected_classes)
+        self.assertEqual(len(expected_classes), child_count, message)
+        for i in range(child_count):
+            item = root.child(i)
+            class_name = item.text(0)
+            message = '%s should not be in classes name' % class_name
+            self.assertIn(class_name, expected_classes, message)
+            if class_name == 'wet':
+                expected_num_child = 1
+                num_child = item.childCount()
+                message = 'The child of wet should be %s' % expected_num_child
+                self.assertEqual(expected_num_child, num_child, message)
+            if class_name == 'dry':
+                expected_num_child = 0
+                num_child = item.childCount()
+                message = 'The child of dry should be %s' % expected_num_child
+                self.assertEqual(expected_num_child, num_child, message)
+
+        dialog.pbnNext.click()  # go to source
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnBack.click()  # back to classify
+        dialog.pbnBack.click()  # back to field
+        dialog.pbnBack.click()  # back to unit
+
+        self.select_from_list_widget('metres', dialog.lstUnits)
+        dialog.pbnNext.click()  # go to field
+
+        # check in field step
+        self.check_current_step(step_field, dialog)
+
+        # check if all options are disabled
+        for i in range(dialog.lstFields.count()):
+            item_flag = dialog.lstFields.item(i).flags()
+            message = 'Item should be disabled'
+            self.assertTrue(item_flag & ~QtCore.Qt.ItemIsEnabled, message)
+
+        dialog.pbnBack.click()  # back to unit
+        dialog.pbnBack.click()  # back to subcategory
+
+        self.select_from_list_widget('tsunami', dialog.lstSubcategories)
+        dialog.pbnNext.click()  # go to unit
+        self.check_current_step(step_unit, dialog)
+
+        # back again since tsunami similar to flood
+        dialog.pbnBack.click()  # back to subcategory
+
+        self.select_from_list_widget('volcano', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # go to unit
+
+        expected_units = ['volcano categorical']
+        self.check_list(expected_units, dialog.lstUnits)
+
+        # no need to select, use auto select
+        dialog.pbnNext.click()  # go to field
+        self.check_current_step(step_field, dialog)
+
+        self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
+        dialog.pbnNext.click()  # go to classify
+        self.check_current_step(step_classify, dialog)
+
+        # check unclassified
+        expected_unique_values = ['Yes', 'YES']  # Unclassified value
+        self.check_list(expected_unique_values, dialog.lstUniqueValues)
+
+        # check classified
+        root = dialog.treeClasses.invisibleRootItem()
+        expected_classes = ['low', 'medium', 'high']
+        child_count = root.childCount()
+        message = 'Child count must be %s' % len(expected_classes)
+        self.assertEqual(len(expected_classes), child_count, message)
+        for i in range(child_count):
+            item = root.child(i)
+            class_name = item.text(0)
+            message = '%s should not be in classes name' % class_name
+            self.assertIn(class_name, expected_classes, message)
+            expected_num_child = 0
+            num_child = item.childCount()
+            message = 'The child of wet should be %s' % expected_num_child
+            self.assertEqual(expected_num_child, num_child, message)
+
+        dialog.pbnNext.click()  # go to source
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnCancel.click()
+
+        remove_temp_file(layer.source())
+
+    def test_sum_ratio_behavior(self):
+        """Test for wizard's behavior related sum of age ratio."""
+        layer = clone_shp_layer(
+            name='kabupaten_jakarta',
+            include_keywords=True,
+            directory=BOUNDDATA)
+        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog.test = True
+
+        self.check_current_text('aggregation', dialog.lstCategories)
+
+        dialog.pbnNext.click()  # Go to unit step
+
+        self.check_current_text('KAB_NAME', dialog.lstFields)
+
+        dialog.pbnNext.click()  # Go to aggregation step
+
+        dialog.dsbYouthRatioDefault.setValue(1.0)
+
+        dialog.pbnNext.click()  # Try to go to  source step
+
+        # check if still in aggregation step
+        self.check_current_step(step_aggregation, dialog)
+
+        dialog.cboYouthRatioAttribute.setCurrentIndex(1)  # set don't use
+
+        dialog.pbnNext.click()  # Try to go to  source step
+
+        # check if in source step
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnBack.click()  # Go to aggregation step
+
+        # check if in aggregation step
+        self.check_current_step(step_aggregation, dialog)
+        dialog.cboYouthRatioAttribute.setCurrentIndex(0)  # set global default
+
+        dialog.dsbYouthRatioDefault.setValue(0.0)
+
+        dialog.pbnNext.click()  # Try to go to source step
+
+        # check if in source step
+        self.check_current_step(step_source, dialog)
+
+        dialog.pbnCancel.click()
 
         remove_temp_file(layer.source())
 

@@ -40,6 +40,17 @@ from safe_qgis.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
+from safe_qgis.safe_interface import DEFAULTS
+
+# Aggregations' keywords
+female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
+female_ratio_default_key = DEFAULTS['FEMALE_RATIO_KEY']
+youth_ratio_attribute_key = DEFAULTS['YOUTH_RATIO_ATTR_KEY']
+youth_ratio_default_key = DEFAULTS['YOUTH_RATIO_KEY']
+adult_ratio_attribute_key = DEFAULTS['ADULT_RATIO_ATTR_KEY']
+adult_ratio_default_key = DEFAULTS['ADULT_RATIO_KEY']
+elderly_ratio_attribute_key = DEFAULTS['ELDERLY_RATIO_ATTR_KEY']
+elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -73,6 +84,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
+
+        # string constants
+        self.global_default_string = self.tr('Global default')
+        self.do_not_use_string = self.tr('Don\'t use')
 
         if layer is None:
             self.layer = iface.activeLayer()
@@ -141,6 +156,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         reload_button.clicked.connect(self.load_state_from_keywords)
         self.grpAdvanced.setVisible(False)
         self.resize_dialog()
+        self.test = False
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.
@@ -217,12 +233,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -272,12 +288,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -327,12 +343,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -382,12 +398,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.layer,
                 [QtCore.QVariant.Double],
                 current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
+            fields.insert(0, self.global_default_string)
+            fields.insert(1, self.do_not_use_string)
             box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
+            if current_keyword == self.global_default_string:
                 box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
+            elif current_keyword == self.do_not_use_string:
                 box.setCurrentIndex(1)
             elif attribute_position is None:
                 # current_keyword was not found in the attribute table.
@@ -442,7 +458,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboFemaleRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbFemaleRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['FEMALE_RATIO_KEY'])
@@ -462,7 +478,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboYouthRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbYouthRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['YOUTH_RATIO_KEY'])
@@ -482,7 +498,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboAdultRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbAdultRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ADULT_RATIO_KEY'])
@@ -502,7 +518,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         text = self.cboElderlyRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if text == self.global_default_string:
             self.dsbElderlyRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ELDERLY_RATIO_KEY'])
@@ -1119,6 +1135,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.apply_changes()
         keywords = self.get_keywords()
+        valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(keywords)
+        if not valid_age_ratio:
+            message = self.tr(
+                'The sum of age ratios is %s which exceeds 1. Please adjust '
+                'the age ration defaults so that their cumulative value is '
+                'not greater than 1.' % sum_age_ratios)
+            if not self.test:
+                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+                QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
+            return
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=keywords)
@@ -1168,3 +1194,41 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.radUserDefined.setChecked(True)
                 self.leKey.setText(temp_key)
                 self.leValue.setText(temp_value)
+
+    def age_ratios_are_valid(self, keywords):
+        """Check whether keywords is valid or not.
+
+        Valid means, the sum of age ratios is not exceeding one if they use
+        Global default values. Applies to aggregation only.
+
+        :param keywords: A dictionary that contains the keywords
+        :type keywords: dict
+
+        :returns: Tuple of boolean and float. Boolean represent good or not
+            good, while float represent the summation of age ratio. If some
+            ratio do not use global default, the summation is set to 0.
+        :rtype: tuple
+        """
+        if keywords['category'] != 'postprocessing':
+            return True, 0
+        if (keywords.get(youth_ratio_attribute_key, '') !=
+                self.global_default_string):
+            return True, 0
+        if (keywords.get(adult_ratio_attribute_key, '') !=
+                self.global_default_string):
+            return True, 0
+        if (keywords.get(elderly_ratio_attribute_key, '') !=
+                self.global_default_string):
+            return True, 0
+
+        youth_ratio_default = keywords[youth_ratio_default_key]
+        adult_ratio_default = keywords[adult_ratio_default_key]
+        elderly_ratio_default = keywords[elderly_ratio_default_key]
+
+        sum_ratio_default = float(youth_ratio_default)
+        sum_ratio_default += float(adult_ratio_default)
+        sum_ratio_default += float(elderly_ratio_default)
+        if sum_ratio_default > 1:
+            return False, sum_ratio_default
+        else:
+            return True, 0
