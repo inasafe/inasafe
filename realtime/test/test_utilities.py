@@ -92,7 +92,7 @@ class UtilsTest(unittest.TestCase):
         date_string = current_date.strftime('%d-%m-%Y-%H:%M:%S')
         message = 'Testing logger %s' % date_string
         LOGGER.info(message)
-        log_file = open(log_file_path())
+        log_file = open(inasafe_log_path)
         log_lines = str(log_file.readlines())
         self.assertIn(
             message,

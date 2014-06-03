@@ -50,6 +50,7 @@ def mock_get_listing(self, extension='zip'):
     return file_list
 
 
+# noinspection PyUnusedLocal
 def mock_get_file(self, url_path, file_path):
     """Mock get_file of ftp_client.
 
