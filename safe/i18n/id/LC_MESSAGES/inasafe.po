@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-12 18:17+0700\n"
+"POT-Creation-Date: 2014-06-04 06:26+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,9 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: id_ID\n"
-"X-Source-Language: en\n"
 
 #: safe/common/dynamic_translations.py:101
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:131
@@ -53,7 +50,7 @@ msgstr "Jumlah"
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:262
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:315
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:267
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:267
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:265
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:264
 msgid "All"
 msgstr "Semua"
@@ -97,8 +94,8 @@ msgstr "Ditutup sementara"
 
 #, python-format
 msgid ""
-"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of "
-"&#58;</b><br><br><p>"
+"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of &#58;"
+"</b><br><br><p>"
 msgstr ""
 "<b>Apabila dalam kasus \"%s\" merupakan perkiraan dampak dengan \"%s\" "
 "kemungkinan &#58;</b><br><br><p>"
@@ -197,8 +194,8 @@ msgstr "Berdasarkan BNPB Perka 2 - 2012"
 msgid ""
 "<b>In case of \"%s\" the estimated impact to \"%s\" is&#58;</b><br><br><p>"
 msgstr ""
-"<b>Dalam kasus \"%s\" estimasi pengaruhnya terhadap \"%s\" "
-"is&#58;</b><br><br><p>"
+"<b>Dalam kasus \"%s\" estimasi pengaruhnya terhadap \"%s\" is&#58;</"
+"b><br><br><p>"
 
 msgid ""
 "- Levels of impact are defined by post 2009 Padang earthquake survey "
@@ -247,17 +244,14 @@ msgstr "Ketinggian Tsunami"
 
 #, python-format
 msgid ""
-"<table border=\"0\" width=\"320px\">   "
-"<tr><th><b>%s</b></th><th><b>%s</b></th></tr>   <tr></tr>   "
-"<tr><td>%s&#58;</td><td>%s&#58;</td></tr>   "
-"<tr><td>%s&#58;</td><td>%s&#58;</td></tr>   "
-"<tr><td>%s&#58;</td><td>%s&#58;</td></tr></table>"
+"<table border=\"0\" width=\"320px\">   <tr><th><b>%s</b></th><th><b>%s</b></"
+"th></tr>   <tr></tr>   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>   <tr><td>"
+"%s&#58;</td><td>%s&#58;</td></tr>   <tr><td>%s&#58;</td><td>%s&#58;</td></"
+"tr></table>"
 msgstr ""
-"<table border=\"0\" width=\"320px\"> "
-"<tr><th><b>%s</b></th><th><b>%s</b></th></tr> <tr></tr> "
-"<tr><td>%s&#58;</td><td>%s&#58;</td></tr> "
-"<tr><td>%s&#58;</td><td>%s&#58;</td></tr> "
-"<tr><td>%s&#58;</td><td>%s&#58;</td></tr></table>"
+"<table border=\"0\" width=\"320px\"> <tr><th><b>%s</b></th><th><b>%s</b></"
+"th></tr> <tr></tr> <tr><td>%s&#58;</td><td>%s&#58;</td></tr> <tr><td>%s&#58;"
+"</td><td>%s&#58;</td></tr> <tr><td>%s&#58;</td><td>%s&#58;</td></tr></table>"
 
 msgid "Be inundated"
 msgstr "Terkena banjir"
@@ -942,8 +936,8 @@ msgstr ""
 #: safe/impact_functions/core.py:462
 #, python-format
 msgid ""
-"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might "
-"<i>%(impact)s</i>"
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
+"%(impact)s</i>"
 msgstr ""
 "Apabila terjadi <i>%(hazard)s</i> berapa banyak <i>%(exposure)s</i> yang "
 "mungkin <i>%(impact)s</i>"
@@ -995,7 +989,8 @@ msgstr ""
 "Banjir di Jakarta di wilayah RW yang telah teridentifikasi sebagai rawan "
 "banjir"
 
-#: safe/common/dynamic_translations.py:83 safe/common/dynamic_translations.py:94
+#: safe/common/dynamic_translations.py:83
+#: safe/common/dynamic_translations.py:94
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr "Gempa bumi di Yogyakarta seperti pada tahun 2006"
 
@@ -1310,8 +1305,8 @@ msgstr "Total bangunan %i di area yang terlihat"
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr "Hanya bangunan yang tersedia di OpenStreetMap yang diperhitungkan."
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:315
-#: safe/impact_functions/volcanic/volcano_building_impact.py:326
+#: safe/impact_functions/volcanic/volcano_building_impact.py:317
+#: safe/impact_functions/volcanic/volcano_building_impact.py:328
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 "Bangunan yang terkena dampak daerah rawan ancaman letusan gunung berapi"
@@ -1498,7 +1493,7 @@ msgid "Buildings affected"
 msgstr "Bangunan terdampak"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:277
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:278
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:276
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:275
 msgid "Roads inundated"
 msgstr "Jalan raya yang tergenang"
@@ -2068,8 +2063,8 @@ msgstr "Jarak [km]"
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:31
 msgid ""
-"To assess the impacts of categorized hazard in raster format on "
-"structure/building raster layer."
+"To assess the impacts of categorized hazard in raster format on structure/"
+"building raster layer."
 msgstr ""
 "Untuk menghitung dampak ancaman yang dikategorikan dalam format raster pada "
 "layer data raster struktur/bangunan."
@@ -2239,7 +2234,7 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:451
 #: safe/impact_functions/inundation/flood_population_evacuation.py:332
-#: safe/impact_functions/volcanic/volcano_building_impact.py:316
+#: safe/impact_functions/volcanic/volcano_building_impact.py:318
 #, python-format
 msgid "Thousand separator is represented by %s"
 msgstr "Ribuan pemisah diwaliki oleh %s"
@@ -2268,8 +2263,8 @@ msgstr ""
 #: safe/impact_functions/earthquake/pager_earthquake_fatality_model.py:91
 msgid ""
 " * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).    Estimating "
-"casualties for large worldwide earthquakes using    an empirical approach. "
-"U.S. Geological Survey Open-File    Report 2009-1136."
+"casualties for large worldwide earthquakes using    an empirical approach. U."
+"S. Geological Survey Open-File    Report 2009-1136."
 msgstr ""
 "Jaiswal, K. S., Wald, D. J., dan Hearne, M. (2009a). Estimating casualties "
 "for large worldwide earthquakes using an empirical approach. U.S. Geological "
@@ -2324,7 +2319,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:275
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:386
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:279
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:280
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:278
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:277
 msgid "Not Inundated"
 msgstr "Tidak tergenang"
@@ -2332,7 +2327,7 @@ msgstr "Tidak tergenang"
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:277
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:388
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:281
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:282
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:280
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:279
 msgid "Inundated"
 msgstr "Tergenang"
@@ -2445,8 +2440,8 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:117
 msgid ""
-"A hazard vector layer can be polygon or point. If polygon, it must have "
-"\"KRB\" attribute and the values for it are \"Kawasan Rawan Bencana I\", "
+"A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
+"\" attribute and the values for it are \"Kawasan Rawan Bencana I\", "
 "\"Kawasan Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\" If you want "
 "to see the name of the volcano in the result, you need to add \"NAME\" "
 "attribute for point data or \"GUNUNG\" attribute for polygon data."
@@ -2470,11 +2465,11 @@ msgstr ""
 msgid "Number of buildings affected"
 msgstr "Jumlah bangunan yang terkena dampak"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:318
+#: safe/impact_functions/volcanic/volcano_building_impact.py:320
 msgid "(building)"
 msgstr "(bangunan)"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:319
+#: safe/impact_functions/volcanic/volcano_building_impact.py:321
 msgid "Building count"
 msgstr "Jumlah Bangunan"
 
@@ -2493,11 +2488,11 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:125
 msgid ""
-"A hazard vector layer can be polygon or point. If polygon, it must have "
-"\"KRB\" attribute and the valuefor it are \"Kawasan Rawan Bencana I\", "
-"\"Kawasan Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\"If you want "
-"to see the name of the volcano in the result, you need to add \"NAME\" "
-"attribute for point data or \"GUNUNG\" attribute for polygon data."
+"A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
+"\" attribute and the valuefor it are \"Kawasan Rawan Bencana I\", \"Kawasan "
+"Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\"If you want to see the "
+"name of the volcano in the result, you need to add \"NAME\" attribute for "
+"point data or \"GUNUNG\" attribute for polygon data."
 msgstr ""
 "Layer data vektor ancaman dapat berupa poligon atau titik. Jika poligon, "
 "maka harus memiliki attribut \"KRB\" dan nilai untuk itu adalah  \"Kawasan "
@@ -2614,6 +2609,7 @@ msgstr "Jumlah usia muda (yang terdampak)"
 msgid "Adult count (affected)"
 msgstr "Jumlah usia dewasa (yang terdampak)"
 
+#: safe/postprocessors/age_postprocessor.py:201
 msgid "Elderly count (affected)"
 msgstr "Jumlah usia lanjut (yang terdampak)"
 
@@ -2626,14 +2622,14 @@ msgid "Area"
 msgstr "Area"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:263
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:262
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:260
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:259
 #: safe/metadata.py:213
 msgid "Road Type"
 msgstr "Jenis Jalan"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:290
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:291
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:289
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:287
 msgid "Flooded roads"
 msgstr "Jalan yang tergenang"
@@ -2809,7 +2805,6 @@ msgid "Volcanoes considered"
 msgstr "Nama gunung api yang dipilih"
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:67
-#: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:91
 msgid "Be-flooded"
 msgstr "mengalami banjir"
 
@@ -2868,7 +2863,7 @@ msgstr ""
 "extent lain."
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:247
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:246
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:244
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:243
 msgid "Other"
 msgstr "Lain-lain"
@@ -2878,13 +2873,13 @@ msgid "Temporarily closed (m)"
 msgstr "Ditutup untuk sementara (m)"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:265
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:264
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:262
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:261
 msgid "Total (m)"
 msgstr "Total (m)"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:268
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:271
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:269
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:268
 msgid "Breakdown by road type"
 msgstr "Perincian berdasarkan tipe jalan"
@@ -2907,7 +2902,7 @@ msgstr ""
 "lebih besar dari ambang batas maksimal yang ditentukan.\n"
 "Silahkan cek kembali nilai tersebut."
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:209
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:207
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:201
 #, python-format
 msgid ""
@@ -2923,7 +2918,7 @@ msgstr ""
 "Silahkan cek kembali nilai tersebut atau gunakan\n"
 "extent lain."
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:263
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:261
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:260
 msgid "Flooded in the threshold (m)"
 msgstr "Mengalami banjir pada ambang batas (m)"
@@ -3206,7 +3201,6 @@ msgid ""
 "unit does not describe how <b>wet</b> or <b>dry</b> an area is."
 msgstr ""
 
-#: safe/postprocessors/age_postprocessor.py:201
 msgid "Elder count (affected)"
 msgstr ""
 
@@ -3272,6 +3266,10 @@ msgstr ""
 
 #: safe/metadata.py:225
 msgid ""
-"This is a ternary description for an area. The area is either has "
-"<b>low</b>, <b>medium</b>, or <b>high</b> impact from the volcano."
+"This is a ternary description for an area. The area is either has <b>low</"
+"b>, <b>medium</b>, or <b>high</b> impact from the volcano."
+msgstr ""
+
+#: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:91
+msgid "Be flooded (experimental)"
 msgstr ""

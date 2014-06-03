@@ -448,9 +448,9 @@ class WizardDialogTest(unittest.TestCase):
         default_classes = unit['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
-            'high': ['4.0', '5.0'],
-            'medium': ['3.0'],
-            'low': ['2.0']
+            'low': ['5.0'],
+            'medium': ['3.0', '4.0'],
+            'high': ['2.0']
         }
         dialog.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
