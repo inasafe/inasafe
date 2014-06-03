@@ -57,7 +57,6 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                 concrete impact function.
             :rtype: dict
             """
-            print('HERE\n\n\nReally\n\n')
             dict_meta = {
                 'id': 'CategorisedHazardBuildingImpactFunction',
                 'name': tr('Categorised Hazard Building Impact Function'),
