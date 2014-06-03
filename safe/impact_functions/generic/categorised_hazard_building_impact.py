@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""Categorised raster hazard impacting vector layer of buildings
+"""
+
+__license__ = "GPL"
+__copyright__ = 'Copyright 2014, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
@@ -20,6 +27,7 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
+from numpy import round
 
 
 #FIXME: need to normalise all raster data Ole/Kristy
@@ -87,18 +95,22 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
     # Function documentation
     title = tr('Be impacted')
-    synopsis = tr('To assess the impacts of categorized hazard in raster '
-                  'format on structure/building raster layer.')
-    actions = tr('Provide details about how many building would likely need '
-                 'to be affected for each category.')
-    hazard_input = tr('A hazard raster layer where each cell represents '
-                      'the category of the hazard. There should be 3 '
-                      'categories: 1, 2, and 3.')
+    synopsis = tr(
+        'To assess the impacts of categorized hazard in raster '
+        'format on structure/building raster layer.')
+    actions = tr(
+        'Provide details about how many building would likely need '
+        'to be affected for each category.')
+    hazard_input = tr(
+        'A hazard raster layer where each cell represents '
+        'the category of the hazard. There should be 3 '
+        'categories: 1, 2, and 3.')
     exposure_input = tr(
         'Vector polygon layer which can be extracted from OSM '
         'where each polygon represents the footprint of a building.')
-    output = tr('Map of structure exposed to high category and a table with '
-                'number of structure in each category')
+    output = tr(
+        'Map of structure exposed to high category and a table with '
+        'number of structure in each category')
     detailed_description = tr(
         'This function will calculate how many buildings will be affected '
         'per each category for all categories in the hazard layer. '
@@ -113,7 +125,18 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     ])
 
     def run(self, layers):
-        """Impact plugin for hazard impact
+        """Impact plugin for hazard impact.
+
+        Counts number of building exposed to each categorised hazard zones.
+
+        :param layers: List of layers expected to contain.
+                * hazard_layer: Hazard layer of volcano
+                * exposure_layer: Vector layer of structure data on
+                the same grid as hazard_layer
+
+        :returns: Map of building exposed to volcanic hazard zones.
+                  Table with number of buildings affected
+        :rtype: dict
         """
 
         # Extract data
@@ -158,13 +181,14 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 ##                count0 += 1
             ## FIXME it would be good if the affected were words not numbers
             ## FIXME need to read hazard layer and see category or keyword
-            if val == 3:
+            val_cat = round(val)
+            if val_cat == 3:
                 affected = 3
                 count2 += 1
-            elif val == 2:
+            elif val_cat == 2:
                 affected = 2
                 count1 += 1
-            elif val == 1:
+            elif val_cat == 1:
                 affected = 1
                 count0 += 1
             else:

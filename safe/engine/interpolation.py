@@ -50,7 +50,7 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
                  If hazard and exposure layers are both of type raster,
                  this attribute is ignored.
 
-            * mode:
+           * mode:
                  Interpolation mode for raster to point interpolation only.
                  Permissible values are 'linear' (default) which will employ
                  billinear interpolation and 'constant' which will employ a
