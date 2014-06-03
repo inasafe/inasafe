@@ -105,7 +105,7 @@ class WizardDialogTest(unittest.TestCase):
         """Check the current text in list widget is expected_text
 
         :param expected_text: The expected current step.
-        :type expected_text: int
+        :type expected_text: str
 
         :param list_widget: List widget that wants to be checked.
         :type list_widget: QListWidget

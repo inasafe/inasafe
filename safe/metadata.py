@@ -350,7 +350,7 @@ def get_name(unit_id):
     # These converter is used for wizard only, converting old keywords to new
     # keywords as default value when run the wizard.
     old_to_new_keywords = {
-        'm': 'metres',
+        'm': 'metres_depth',
         'mmi': 'MMI'
     }
 

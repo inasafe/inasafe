@@ -260,8 +260,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.set_tool_tip()
 
         # string constants
-        self.global_default_string = self.tr('Global default')
+        self.global_default_data = 'Global default'
         self.do_not_use_string = self.tr('Don\'t use')
+        self.global_default_string = self.tr('Global default')
+        self.do_not_use_data = 'Don\'t use'
         self.defaults = breakdown_defaults()
 
     def selected_category(self):
@@ -337,26 +339,31 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         aggregation_attributes = dict()
 
-        value = self.cboFemaleRatioAttribute.currentText()
-        aggregation_attributes[female_ratio_attribute_key] = value
+        current_index = self.cboFemaleRatioAttribute.currentIndex()
+        data = self.cboFemaleRatioAttribute.itemData(current_index)
+        # value = eval(item.data(QtCore.Qt.UserRole))
+        aggregation_attributes[female_ratio_attribute_key] = data
 
         value = self.dsbFemaleRatioDefault.value()
         aggregation_attributes[female_ratio_default_key] = value
 
-        value = self.cboYouthRatioAttribute.currentText()
-        aggregation_attributes[youth_ratio_attribute_key] = value
+        current_index = self.cboYouthRatioAttribute.currentIndex()
+        data = self.cboYouthRatioAttribute.itemData(current_index)
+        aggregation_attributes[youth_ratio_attribute_key] = data
 
         value = self.dsbYouthRatioDefault.value()
         aggregation_attributes[youth_ratio_default_key] = value
 
-        value = self.cboAdultRatioAttribute.currentText()
-        aggregation_attributes[adult_ratio_attribute_key] = value
+        current_index = self.cboAdultRatioAttribute.currentIndex()
+        data = self.cboAdultRatioAttribute.itemData(current_index)
+        aggregation_attributes[adult_ratio_attribute_key] = data
 
         value = self.dsbAdultRatioDefault.value()
         aggregation_attributes[adult_ratio_default_key] = value
 
-        value = self.cboElderlyRatioAttribute.currentText()
-        aggregation_attributes[elderly_ratio_attribute_key] = value
+        current_index = self.cboElderlyRatioAttribute.currentIndex()
+        data = self.cboElderlyRatioAttribute.itemData(current_index)
+        aggregation_attributes[elderly_ratio_attribute_key] = data
 
         value = self.dsbElderlyRatioDefault.value()
         aggregation_attributes[elderly_ratio_default_key] = value
@@ -394,7 +401,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbFemaleRatioDefault. Otherwise, disabled it.
         """
         value = self.cboFemaleRatioAttribute.currentText()
-        if value == self.global_default_string:
+        if value == self.global_default_data:
             self.dsbFemaleRatioDefault.setEnabled(True)
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
@@ -409,7 +416,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbYouthRatioDefault. Otherwise, disabled it.
         """
         value = self.cboYouthRatioAttribute.currentText()
-        if value == self.global_default_string:
+        if value == self.global_default_data:
             self.dsbYouthRatioDefault.setEnabled(True)
         else:
             self.dsbYouthRatioDefault.setEnabled(False)
@@ -424,7 +431,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbAdultRatioDefault. Otherwise, disabled it.
         """
         value = self.cboAdultRatioAttribute.currentText()
-        if value == self.global_default_string:
+        if value == self.global_default_data:
             self.dsbAdultRatioDefault.setEnabled(True)
         else:
             self.dsbAdultRatioDefault.setEnabled(False)
@@ -439,7 +446,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbElderlyRatioDefault. Otherwise, disabled it.
         """
         value = self.cboElderlyRatioAttribute.currentText()
-        if value == self.global_default_string:
+        if value == self.global_default_data:
             self.dsbElderlyRatioDefault.setEnabled(True)
         else:
             self.dsbElderlyRatioDefault.setEnabled(False)
@@ -973,7 +980,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 return
             categories = []
             for index in xrange(self.lstCategories.count()):
-                categories.append(self.lstCategories.item(index).text())
+                item = self.lstCategories.item(index)
+                category = eval(item.data(QtCore.Qt.UserRole))
+                categories.append(category['id'])
             if category_keyword in categories:
                 self.lstCategories.setCurrentRow(
                     categories.index(category_keyword))
@@ -984,8 +993,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 return
             subcategories = []
             for index in xrange(self.lstSubcategories.count()):
-                subcategories.append(str(self.lstSubcategories.item(index)
-                                     .text()))
+                item = self.lstSubcategories.item(index)
+                subcategory = eval(item.data(QtCore.Qt.UserRole))
+                subcategories.append(subcategory['id'])
             if subcategory_keyword in subcategories:
                 self.lstSubcategories.setCurrentRow(
                     subcategories.index(subcategory_keyword))
@@ -1000,7 +1010,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 return
             units = []
             for index in xrange(self.lstUnits.count()):
-                units.append(str(self.lstUnits.item(index).text()))
+                item = self.lstUnits.item(index)
+                unit = eval(item.data(QtCore.Qt.UserRole))
+                units.append(unit['id'])
             if unit_name in units:
                 self.lstUnits.setCurrentRow(units.index(unit_name))
 
@@ -1149,9 +1161,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             [QtCore.QVariant.Double],
             ratio_attribute
         )
-        fields.insert(0, self.global_default_string)
-        fields.insert(1, self.do_not_use_string)
-        cbo_ratio_attribute.addItems(fields)
+        cbo_ratio_attribute.addItem(
+            self.global_default_string, self.global_default_data)
+        cbo_ratio_attribute.addItem(
+            self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            cbo_ratio_attribute.addItem(field, field)
 
         # For backward compatibility, still use Use default
         if (ratio_attribute == self.global_default_string or
