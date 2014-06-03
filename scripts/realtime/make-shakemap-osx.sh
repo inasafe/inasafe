@@ -6,7 +6,7 @@ export QGIS_PREFIX_PATH=${QGISPATH}/contents/MacOS
 
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
 
-PYTHONPATH=${PYTHONPATH}:"${QGISPATH}/Contents/Resources/python"
+PYTHONPATH=${PYTHONPATH}:"${QGISPATH}/Contents/Resources/python":"${QGISPATH}/Contents/Resources/python/plugins"
 PYTHONPATH=${PYTHONPATH}:'/Library/Frameworks/GDAL.framework/Versions/1.9/Python/2.7/site-packages'
 export PYTHONPATH
 

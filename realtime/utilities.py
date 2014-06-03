@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '19/07/2012'
@@ -21,7 +20,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 from datetime import datetime
-from safe_qgis.utilities.custom_logging import setup_logger as setupLoggerSQ
+import ntpath
+
+from safe_qgis.utilities.custom_logging import (
+    setup_logger as setup_logger_safe_qgis)
 
 
 def base_data_dir():
@@ -31,7 +33,7 @@ def base_data_dir():
     else:
         # TODO: support env var setting here too
         base_data_directory = '/tmp/inasafe/realtime'
-    mk_dir(base_data_directory)
+    make_directory(base_data_directory)
     return base_data_directory
 
 
@@ -39,14 +41,14 @@ def data_dir():
     """Return the path to the standard data dir for e.g. geonames data."""
     dir_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'fixtures'))
-    mk_dir(dir_path)
+    make_directory(dir_path)
     return dir_path
 
 
 def shakemap_zip_dir():
     """Create (if needed) and return the path to the base shakemap zip dir."""
     dir_path = os.path.join(base_data_dir(), 'shakemaps-zipped')
-    mk_dir(dir_path)
+    make_directory(dir_path)
     return dir_path
 
 
@@ -54,7 +56,7 @@ def shakemap_extract_dir():
     """Create (if needed) and return the path to the base shakemap extract dir.
     """
     dir_path = os.path.join(base_data_dir(), 'shakemaps-extracted')
-    mk_dir(dir_path)
+    make_directory(dir_path)
     return dir_path
 
 
@@ -63,32 +65,25 @@ def shakemap_data_dir():
     procesed (tifs and pickled events) data dir.
     """
     dir_path = os.path.join(base_data_dir(), 'shakemaps-processed')
-    mk_dir(dir_path)
+    make_directory(dir_path)
     return dir_path
 
 
 def shakemap_cache_dir():
     """Create (if needed) and return the path to the base shakemap zip dir."""
     dir_path = os.path.join(base_data_dir(), 'shakemaps-cache')
-    mk_dir(dir_path)
+    make_directory(dir_path)
     return dir_path
 
 
 def report_data_dir():
     """Create (if needed) and return the path to the base report data dir."""
     dir_path = os.path.join(base_data_dir(), 'reports')
-    mk_dir(dir_path)
+    make_directory(dir_path)
     return dir_path
 
 
-def log_dir():
-    """Create (if needed) and return the path to the log directory."""
-    dir_path = os.path.join(base_data_dir(), 'logs')
-    mk_dir(dir_path)
-    return dir_path
-
-
-def mk_dir(dir_path):
+def make_directory(dir_path):
     """Make a directory, making sure it is world writable.
 
     :param dir_path: The directory path.
@@ -103,24 +98,26 @@ def mk_dir(dir_path):
 
 
 def purge_working_data():
-    """Get rid of the shakemaps-* directories - mainly intended for
-    invocation from unit tests to ensure there is a clean slate before
-    testing."""
+    """Get rid of the shakemaps-* directories.
+
+    Mainly intended for invocation from unit tests to ensure
+    there is a clean state before testing.
+    """
     shutil.rmtree(shakemap_extract_dir())
     shutil.rmtree(shakemap_data_dir())
     shutil.rmtree(shakemap_zip_dir())
 
 
 def setup_logger():
-    """Run once when the module is loaded and enable logging
+    """Run once when the module is loaded and enable logging.
+
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
     """
-    log_file_path = os.path.join(log_dir(), 'realtime.log')
     sentry_url = (
         'http://fda607badbe440be9a2fa6b22e759c72'
         ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
-    setupLoggerSQ(log_file=log_file_path, sentry_url=sentry_url)
+    setup_logger_safe_qgis(sentry_url=sentry_url)
 
 
 def is_event_id(event_id):
@@ -138,3 +135,36 @@ def is_event_id(event_id):
     except ValueError:
         return False
     return True
+
+
+def get_path_tail(input_path):
+    """Return tail of a input_path no matter what the OS is.
+
+    :param input_path: The input_path that we want to get the tail from.
+    :type input_path: str
+
+    Reference : http://stackoverflow.com/a/8384788/1198772
+    """
+    head, tail = ntpath.split(input_path)
+    return tail or ntpath.basename(head)
+
+
+def romanise(mmi_value):
+    """Return the roman numeral for an mmi value.
+
+    :param mmi_value: The MMI value that will be romanised
+    :type mmi_value: float
+
+    :return Roman numeral equivalent of the value
+    :rtype: str
+    """
+    if mmi_value is None:
+        return ''
+
+    roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                  'IX', 'X', 'XI', 'XII']
+    try:
+        roman = roman_list[int(float(mmi_value))]
+    except ValueError:
+        return None
+    return roman
