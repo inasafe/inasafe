@@ -260,9 +260,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.set_tool_tip()
 
         # string constants
+        self.global_default_string = self.tr('Global default')
         self.global_default_data = 'Global default'
         self.do_not_use_string = self.tr('Don\'t use')
-        self.global_default_string = self.tr('Global default')
         self.do_not_use_data = 'Don\'t use'
         self.defaults = breakdown_defaults()
 
@@ -1001,23 +1001,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     subcategories.index(subcategory_keyword))
 
         elif current_step == step_unit:
-            unit_keyword = self.get_existing_keyword('unit')
-            if unit_keyword is None:
-                return
-            unit_name = metadata.get_name(unit_keyword)
-            # To handle unknown unit in keywords
-            if unit_name is None:
+            unit_id = self.get_existing_keyword('unit')
+            unit_id = metadata.old_to_new_unit_id(unit_id)
+            if unit_id is None:
                 return
             units = []
             for index in xrange(self.lstUnits.count()):
                 item = self.lstUnits.item(index)
                 unit = eval(item.data(QtCore.Qt.UserRole))
                 units.append(unit['id'])
-            if unit_name in units:
-                self.lstUnits.setCurrentRow(units.index(unit_name))
+            if unit_id in units:
+                self.lstUnits.setCurrentRow(units.index(unit_id))
 
         elif current_step == step_field:
-            if self.selected_category()['name'] != 'aggregation':
+            if self.selected_category()['id'] != 'aggregation':
                 field = self.get_existing_keyword('field')
             else:
                 field = self.get_existing_keyword('aggregation attribute')
@@ -1030,8 +1027,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 self.lstFields.setCurrentRow(fields.index(field))
 
         elif current_step == step_classify:
-            unit_keyword = self.get_existing_keyword('unit')
-            unit_name = metadata.get_name(unit_keyword)
+            unit_id = self.get_existing_keyword('unit')
+            unit_name = metadata.old_to_new_unit_id(unit_id)
             # Do not continue if user select different unit
             if unit_name != self.selected_unit()['name']:
                 return
@@ -1169,10 +1166,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             cbo_ratio_attribute.addItem(field, field)
 
         # For backward compatibility, still use Use default
-        if (ratio_attribute == self.global_default_string or
+        if (ratio_attribute == self.global_default_data or
                 ratio_attribute == self.tr('Use default')):
             cbo_ratio_attribute.setCurrentIndex(0)
-        elif ratio_attribute == self.do_not_use_string:
+        elif ratio_attribute == self.do_not_use_data:
             cbo_ratio_attribute.setCurrentIndex(1)
         elif ratio_attribute is None or attribute_position is None:
             # current_keyword was not found in the attribute table.
