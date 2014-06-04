@@ -1344,13 +1344,16 @@ Click for Diagnostic Information:
         """Test we generate insufficent overlap messages nicely."""
 
         class FakeLayer(object):
-            source = None
+            layer_source = None
+
+            def source(self):
+                return self.layer_source
 
         exposure_layer = FakeLayer()
-        exposure_layer.source = 'Fake exposure layer'
+        exposure_layer.layer_source = 'Fake exposure layer'
 
         hazard_layer = FakeLayer()
-        hazard_layer.source = 'Fake hazard layer'
+        hazard_layer.layer_source = 'Fake hazard layer'
 
         message = DOCK.generate_insufficient_overlap_message(
             Exception('Dummy exception'),
@@ -1359,7 +1362,7 @@ Click for Diagnostic Information:
             hazard_geoextent=[15.0, 15.0, 20.0, 20.0],
             hazard_layer=hazard_layer,
             viewport_geoextent=[5.0, 5.0, 12.0, 12.0])
-        self.assertIn('insufficient overlap', message)
+        self.assertIn('insufficient overlap', message.to_text())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDock)
