@@ -60,7 +60,6 @@ from safe.api import (
     calculate_polygon_centroid,
     get_postprocessors,
     get_postprocessor_human_name,
-    convert_mmi_data,
     format_int,
     get_unique_values,
     get_plugins_as_table,

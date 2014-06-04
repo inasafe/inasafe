@@ -84,12 +84,12 @@ from safe.api import (
     Table,
     TableCell,
     TableRow,
-    get_version,
-    ShakeGridConverter)
+    get_version)
 from safe_qgis.utilities.utilities import get_wgs84_resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
 from safe_qgis.exceptions import TranslationLoadError
+from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -114,7 +114,7 @@ class ShakeEvent(QObject):
     Including epicenter, magnitude etc.
 
     .. todo:: There is a lot of duplicated code in here -  code that was
-        refactored into safe.common.shake_grid_converter and never removed
+        refactored into safe.common.shake_grid and never removed
         here. we should resolve that by removing it here and then simply
         using an instance of ShakeGridConverter here when needed.
 
@@ -177,7 +177,7 @@ class ShakeEvent(QObject):
             self.event_id = self.data.event_id
 
         # Convert grid.xml
-        self.shake_grid_converter = ShakeGridConverter(self.grid_file_path())
+        self.shake_grid = ShakeGrid(self.grid_file_path())
 
         self.population_raster_path = population_raster_path
         # Path to tif of impact result - probably we wont even use it
@@ -289,7 +289,7 @@ class ShakeEvent(QObject):
                     'Old contour files not deleted'
                     ' - this may indicate a file permissions issue.')
 
-        tif_path = self.shake_grid_converter.mmi_to_raster(
+        tif_path = self.shake_grid.mmi_to_raster(
             self.event_id, 'BMKG', force_flag, algorithm)
         # Based largely on
         # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
@@ -498,10 +498,10 @@ class ShakeEvent(QObject):
         :raises: None
         """
         LOGGER.debug('bounds to rectangle called.')
-        rectangle = QgsRectangle(self.shake_grid_converter.x_minimum,
-                                 self.shake_grid_converter.y_maximum,
-                                 self.shake_grid_converter.x_maximum,
-                                 self.shake_grid_converter.y_minimum)
+        rectangle = QgsRectangle(self.shake_grid.x_minimum,
+                                 self.shake_grid.y_maximum,
+                                 self.shake_grid.x_maximum,
+                                 self.shake_grid.y_minimum)
         return rectangle
 
     def cities_to_shapefile(self, force_flag=False):
@@ -686,7 +686,7 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('localCityValues requested.')
         # Setup the raster layer for interpolated mmi lookups
-        path = self.shake_grid_converter.mmi_to_raster(
+        path = self.shake_grid.mmi_to_raster(
             self.event_id, 'BMKG')
         file_info = QFileInfo(path)
         base_name = file_info.baseName()
@@ -750,8 +750,8 @@ class ShakeEvent(QObject):
 
         # For measuring distance and direction from each city to epicenter
         epicenter = QgsPoint(
-            self.shake_grid_converter.longitude,
-            self.shake_grid_converter.latitude)
+            self.shake_grid.longitude,
+            self.shake_grid.latitude)
 
         # Now loop through the db adding selected features to mem layer
         for feature in layer.getFeatures(request):
@@ -1212,7 +1212,7 @@ class ShakeEvent(QObject):
         else:
             exposure_path = population_raster_path
 
-        hazard_path = self.shake_grid_converter.mmi_to_raster(
+        hazard_path = self.shake_grid.mmi_to_raster(
             self.event_id,
             'BMKG',
             force_flag=force_flag,
@@ -1443,7 +1443,7 @@ class ShakeEvent(QObject):
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
-        mmi_shape_file = self.shake_grid_converter.mmi_to_shapefile(
+        mmi_shape_file = self.shake_grid.mmi_to_shapefile(
             force_flag=force_flag)
         logging.info('Created: %s', mmi_shape_file)
         cities_html_path = None
@@ -1732,8 +1732,8 @@ class ShakeEvent(QObject):
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
         #Format the lat lon from decimal degrees to dms
         point = QgsPoint(
-            self.shake_grid_converter.longitude,
-            self.shake_grid_converter.latitude)
+            self.shake_grid.longitude,
+            self.shake_grid.latitude)
         coordinates = point.toDegreesMinutesSeconds(2)
         tokens = coordinates.split(',')
         longitude = tokens[0]
@@ -1769,22 +1769,22 @@ class ShakeEvent(QObject):
             'fatalities-name': fatalities_name,
             'fatalities-range': fatalities_range,
             'fatalities-count': '%s' % fatalities_count,
-            'mmi': '%s' % self.shake_grid_converter.magnitude,
+            'mmi': '%s' % self.shake_grid.magnitude,
             'date': '%s-%s-%s' % (
-                self.shake_grid_converter.day,
-                self.shake_grid_converter.month,
-                self.shake_grid_converter.year),
+                self.shake_grid.day,
+                self.shake_grid.month,
+                self.shake_grid.year),
             'time': '%s:%s:%s' % (
-                self.shake_grid_converter.hour,
-                self.shake_grid_converter.minute,
-                self.shake_grid_converter.second),
+                self.shake_grid.hour,
+                self.shake_grid.minute,
+                self.shake_grid.second),
             'formatted-date-time': self.elapsed_time()[0],
             'latitude-name': self.tr('Latitude'),
             'latitude-value': '%s' % latitude,
             'longitude-name': self.tr('Longitude'),
             'longitude-value': '%s' % longitude,
             'depth-name': self.tr('Depth'),
-            'depth-value': '%s' % self.shake_grid_converter.depth,
+            'depth-value': '%s' % self.shake_grid.depth,
             'depth-unit': km_text,
             'located-label': self.tr('Located'),
             'distance': '%.2f' % distance,
@@ -1810,12 +1810,12 @@ class ShakeEvent(QObject):
         .. note:: Code based on Ole's original impact_map work.
         """
         # Work out interval since earthquake (assume both are GMT)
-        year = self.shake_grid_converter.year
-        month = self.shake_grid_converter.month
-        day = self.shake_grid_converter.day
-        hour = self.shake_grid_converter.hour
-        minute = self.shake_grid_converter.minute
-        second = self.shake_grid_converter.second
+        year = self.shake_grid.year
+        month = self.shake_grid.month
+        day = self.shake_grid.day
+        hour = self.shake_grid.hour
+        minute = self.shake_grid.minute
+        second = self.shake_grid.second
 
         eq_date = datetime(year, month, day, hour, minute, second)
 
@@ -1900,29 +1900,29 @@ class ShakeEvent(QObject):
         else:
             extent_with_cities = 'Not set'
 
-        if self.shake_grid_converter.mmi_data:
+        if self.shake_grid.mmi_data:
             mmi_data = 'Populated'
         else:
             mmi_data = 'Not populated'
 
-        event_dict = {'latitude': self.shake_grid_converter.latitude,
-                      'longitude': self.shake_grid_converter.longitude,
+        event_dict = {'latitude': self.shake_grid.latitude,
+                      'longitude': self.shake_grid.longitude,
                       'event_id': self.event_id,
-                      'magnitude': self.shake_grid_converter.magnitude,
-                      'depth': self.shake_grid_converter.depth,
-                      'description': self.shake_grid_converter.description,
-                      'location': self.shake_grid_converter.location,
-                      'day': self.shake_grid_converter.day,
-                      'month': self.shake_grid_converter.month,
-                      'year': self.shake_grid_converter.year,
-                      'time': self.shake_grid_converter.time,
-                      'time_zone': self.shake_grid_converter.time_zone,
-                      'x_minimum': self.shake_grid_converter.x_minimum,
-                      'x_maximum': self.shake_grid_converter.x_maximum,
-                      'y_minimum': self.shake_grid_converter.y_minimum,
-                      'y_maximum': self.shake_grid_converter.y_maximum,
-                      'rows': self.shake_grid_converter.rows,
-                      'columns': self.shake_grid_converter.columns,
+                      'magnitude': self.shake_grid.magnitude,
+                      'depth': self.shake_grid.depth,
+                      'description': self.shake_grid.description,
+                      'location': self.shake_grid.location,
+                      'day': self.shake_grid.day,
+                      'month': self.shake_grid.month,
+                      'year': self.shake_grid.year,
+                      'time': self.shake_grid.time,
+                      'time_zone': self.shake_grid.time_zone,
+                      'x_minimum': self.shake_grid.x_minimum,
+                      'x_maximum': self.shake_grid.x_maximum,
+                      'y_minimum': self.shake_grid.y_minimum,
+                      'y_maximum': self.shake_grid.y_maximum,
+                      'rows': self.shake_grid.rows,
+                      'columns': self.shake_grid.columns,
                       'mmi_data': mmi_data,
                       'population_raster_path': self.population_raster_path,
                       'impact_file': self.impact_file,
