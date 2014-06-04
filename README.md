@@ -5,9 +5,7 @@ InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
 response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
 
-For more information about InaSAFE please visit
-[inasafe.org](http://www.inasafe.org) and look at the documentation at
-[inasafe.readthedocs.org](http://inasafe.readthedocs.org>).
+For more information about InaSAFE and its documentation please visit [inasafe.org] (http://www.inasafe.org).
 
 The latest source code is available at
 [https://github.com/AIFDR/inasafe](https://github.com/AIFDR/inasafe),
