@@ -26,4 +26,3 @@ PASSWORD = ''
 
 # The base path in the server
 BASE_PATH = 'shakemaps'
-

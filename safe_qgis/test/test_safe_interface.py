@@ -21,10 +21,10 @@ import os
 import numpy
 import unittest
 from safe_qgis.safe_interface import (
-    getOptimalExtent,
-    availableFunctions,
+    get_optimal_extent,
+    available_functions,
     read_file_keywords,
-    readSafeLayer,
+    read_safe_layer,
     TESTDATA, HAZDATA, EXPDATA,
     BoundingBoxError)
 from safe_qgis.exceptions import (
@@ -71,8 +71,8 @@ class SafeInterfaceTest(unittest.TestCase):
                                        0.0083333333333333003)}
 
         # Verify relevant metada is ok
-        H = readSafeLayer(hazard_path)
-        E = readSafeLayer(exposure_path)
+        H = read_safe_layer(hazard_path)
+        E = read_safe_layer(exposure_path)
 
         hazard_bbox = H.get_bounding_box()
         assert numpy.allclose(hazard_bbox, haz_metadata['bounding_box'],
@@ -94,24 +94,24 @@ class SafeInterfaceTest(unittest.TestCase):
         ref_box = [105.3000035, -8.3749995, 110.2914705, -5.5667785]
         view_port = [94.972335, -11.009721, 141.014002, 6.073612]
 
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+        bbox = get_optimal_extent(hazard_bbox, exposure_bbox, view_port)
         assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
         #testing with viewport clipping disabled
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, None)
+        bbox = get_optimal_extent(hazard_bbox, exposure_bbox, None)
         assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
         view_port = [105.3000035,
                      -8.3749994999999995,
                      110.2914705,
                      -5.5667784999999999]
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+        bbox = get_optimal_extent(hazard_bbox, exposure_bbox, view_port)
         assert numpy.allclose(bbox, ref_box,
                               rtol=1.0e-12, atol=1.0e-12)
 
         # Very small viewport fully inside other layers
         view_port = [106.0, -6.0, 108.0, -5.8]
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+        bbox = get_optimal_extent(hazard_bbox, exposure_bbox, view_port)
 
         assert numpy.allclose(bbox, view_port,
                               rtol=1.0e-12, atol=1.0e-12)
@@ -120,14 +120,14 @@ class SafeInterfaceTest(unittest.TestCase):
         view_port = [107.0, -6.0, 112.0, -3.0]
         ref_box = [107, -6, 110.2914705, -5.5667785]
 
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+        bbox = get_optimal_extent(hazard_bbox, exposure_bbox, view_port)
         assert numpy.allclose(bbox, ref_box,
                               rtol=1.0e-12, atol=1.0e-12)
 
         # Then one where boxes don't overlap
         view_port = [105.3, -4.3, 110.29, -2.5]
         try:
-            getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+            get_optimal_extent(hazard_bbox, exposure_bbox, view_port)
         except InsufficientOverlapError, e:
             message = 'Did not find expected error message in %s' % str(e)
             assert 'did not overlap' in str(e), message
@@ -138,7 +138,7 @@ class SafeInterfaceTest(unittest.TestCase):
 
         # Try with wrong input data
         try:
-            getOptimalExtent(haz_metadata, exp_metadata, view_port)
+            get_optimal_extent(haz_metadata, exp_metadata, view_port)
         except BoundingBoxError:
             #good this was expected
             pass
@@ -150,7 +150,7 @@ class SafeInterfaceTest(unittest.TestCase):
             raise Exception(message)
 
         try:
-            getOptimalExtent(None, None, view_port)
+            get_optimal_extent(None, None, view_port)
         except BoundingBoxError, e:
             message = 'Did not find expected error message in %s' % str(e)
             assert 'cannot be None' in str(e), message
@@ -159,7 +159,7 @@ class SafeInterfaceTest(unittest.TestCase):
             raise Exception(message)
 
         try:
-            getOptimalExtent('aoeush', 'oeuuoe', view_port)
+            get_optimal_extent('aoeush', 'oeuuoe', view_port)
         except BoundingBoxError, e:
             message = 'Did not find expected error message in %s' % str(e)
             assert 'Instead i got "aoeush"' in str(e), message
@@ -170,7 +170,7 @@ class SafeInterfaceTest(unittest.TestCase):
     def test_availableFunctions(self):
         """Check we can get the available functions from the impact calculator.
         """
-        myList = availableFunctions()
+        myList = available_functions()
         message = 'No functions available (len=%ss)' % len(myList)
         assert len(myList) > 0, message
 
@@ -184,7 +184,7 @@ class SafeInterfaceTest(unittest.TestCase):
         keywords2['layertype'] = 'vector'
 
         myList = [keywords1, keywords2]
-        myList = availableFunctions(myList)
+        myList = available_functions(myList)
         message = 'No functions available (len=%ss)' % len(myList)
         assert len(myList) > 0, message
 

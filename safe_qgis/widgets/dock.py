@@ -60,11 +60,11 @@ from safe_qgis.utilities.memory_checker import check_memory_usage
 from safe_qgis.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
     load_plugins,
-    availableFunctions,
+    available_functions,
     get_function_title,
-    getOptimalExtent,
-    getBufferedExtent,
-    getSafeImpactFunctions,
+    get_optimal_extent,
+    get_buffered_extent,
+    get_safe_impact_function,
     safeTr,
     get_version,
     temp_dir,
@@ -569,7 +569,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if index > -1:
             function_id = self.get_function_id()
 
-            functions = getSafeImpactFunctions(function_id)
+            functions = get_safe_impact_function(function_id)
             self.active_function = functions[0][function_id]
             self.function_parameters = None
             if hasattr(self.active_function, 'parameters'):
@@ -812,7 +812,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Find out which functions can be used with these layers
         func_list = [hazard_keywords, exposure_keywords]
         try:
-            func_dict = availableFunctions(func_list)
+            func_dict = available_functions(func_list)
             # Populate the hazard combo with the available functions
             for myFunctionID in func_dict:
                 function = func_dict[myFunctionID]
@@ -1628,12 +1628,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
             if self.clip_to_viewport:
-                geo_extent = getOptimalExtent(
+                geo_extent = get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
                     viewport_geoextent)
             else:
-                geo_extent = getOptimalExtent(
+                geo_extent = get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent)
 
@@ -1714,7 +1714,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # resolution to be available
                 if exposure_layer.type() != QgsMapLayer.VectorLayer:
                     raise RuntimeError
-                buffered_geoextent = getBufferedExtent(
+                buffered_geoextent = get_buffered_extent(
                     geo_extent,
                     hazard_geo_cell_size)
         else:

@@ -28,9 +28,9 @@ from safe_qgis.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
 from safe_qgis.safe_interface import (
-    convertToSafeLayer,
-    getSafeImpactFunctions,
-    getSafeImpactFunctionType)
+    convert_to_safe_layer,
+    get_safe_impact_function,
+    get_safe_impact_function_type)
 
 
 class ImpactCalculator(QObject):
@@ -77,9 +77,9 @@ class ImpactCalculator(QObject):
 
         # Get type of the impact function (old-style or new-style)
         try:
-            func_type = getSafeImpactFunctionType(self._function)
+            func_type = get_safe_impact_function_type(self._function)
             if func_type == 'old-style':
-                return convertToSafeLayer(layer)
+                return convert_to_safe_layer(layer)
             elif func_type == 'qgis2.0':
                 # convert for new style impact function
                 return QgisWrapper(layer)
@@ -185,7 +185,7 @@ class ImpactCalculator(QObject):
         hazard_layer = self.hazard_layer()
         exposure_layer = self.exposure_layer()
 
-        functions = getSafeImpactFunctions(self._function)
+        functions = get_safe_impact_function(self._function)
         function = functions[0][self._function]
         return ImpactCalculatorThread(
             hazard_layer,
@@ -211,7 +211,7 @@ class ImpactCalculator(QObject):
             message = self.tr('Error: Function is not provided.')
             raise InsufficientParametersError(message)
 
-        style = getSafeImpactFunctionType(f)
+        style = get_safe_impact_function_type(f)
         if style == 'old-style':
             return True
         elif style == 'qgis2.0':
