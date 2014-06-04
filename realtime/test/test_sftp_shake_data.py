@@ -105,7 +105,7 @@ class SFtpShakeDataTest(unittest.TestCase):
         local_path = sftp_shake_data.fetch_file()
         expected_path = os.path.join(shakemap_cache_dir(), SHAKE_ID)
         message = 'File should be fetched to %s, I got %s' % (
-            expected_path,  local_path)
+            expected_path, local_path)
         self.assertEqual(local_path, expected_path, message)
 
     def test_is_on_server(self):

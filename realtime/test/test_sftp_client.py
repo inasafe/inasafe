@@ -64,6 +64,7 @@ def mock_init(self,
     self.sftp.listdir = os.listdir
 
 
+# noinspection PyUnusedLocal
 def mock_is_dir(self, path):
     """Mock method is_dir of SFTPClient class.
 
@@ -73,6 +74,7 @@ def mock_is_dir(self, path):
     return os.path.isdir(path)
 
 
+# noinspection PyUnusedLocal
 def mock_path_exists(self, path):
     """Mock method path_exists of SFTPClient class.
 

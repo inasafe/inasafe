@@ -34,6 +34,7 @@ import gdal
 from gdalconst import GA_ReadOnly
 
 # This import is required to enable PyQt API v2
+# noinspection PyUnresolvedReferences
 import qgis
 # TODO: I think QCoreApplication is needed for tr() check before removing
 #noinspection PyPackageRequirements
