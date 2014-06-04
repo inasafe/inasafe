@@ -34,7 +34,8 @@ from PyQt4.QtCore import (
     QLocale,
     QTranslator,
     QCoreApplication,
-    Qt
+    Qt,
+    QSettings
 )
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
@@ -99,6 +100,7 @@ class Plugin:
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
         self.action_dock = None
+        self.action_toggle_rubberbands = None
         #print self.tr('InaSAFE')
         custom_logging.setup_logger()
         # For enable/disable the keyword editor icon
@@ -108,12 +110,12 @@ class Plugin:
     def change_i18n(self, new_locale):
         """Change internationalisation for the plugin.
 
-        Override the system locale
-        and then see if we can get a valid translation file
-        for whatever locale is effectively being used.
+        Override the system locale  and then see if we can get a valid
+        translation file for whatever locale is effectively being used.
 
         :param new_locale: the new locale i.e. 'id', 'af', etc.
         :type new_locale: str
+
         :raises: TranslationLoadException
         """
 
@@ -382,8 +384,28 @@ class Plugin:
         # or  view-panels
         #
         self.dock_widget.visibilityChanged.connect(self.toggle_inasafe_action)
-
         # pylint: disable=W0201
+
+        #---------------------------------------
+        # Create action for toggling rubber bands
+        #---------------------------------------
+        self.action_toggle_rubberbands = QAction(
+            QIcon(':/plugins/inasafe/toggle-rubber-bands.svg'),
+            self.tr('Toggle scenario outlines'), self.iface.mainWindow())
+
+        message = self.tr('Toggle rubber bands showing scenarion extents.')
+        self.action_toggle_rubberbands.setStatusTip(message)
+        self.action_toggle_rubberbands.setWhatsThis(message)
+        # Set initial state
+        self.action_toggle_rubberbands.setCheckable(True)
+        settings = QSettings()
+        flag = bool(settings.value(
+            'inasafe/showRubberBands', False, type=bool))
+        self.action_toggle_rubberbands.setChecked(flag)
+        # noinspection PyUnresolvedReferences
+        self.action_toggle_rubberbands.triggered.connect(
+            self.dock_widget.toggle_rubber_bands)
+        self.add_action(self.action_toggle_rubberbands)
 
     # noinspection PyMethodMayBeStatic
     def clear_modules(self):
