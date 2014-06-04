@@ -954,7 +954,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             extent = self.get_clip_parameters()[1]
 
-        except AttributeError:
+        except (AttributeError, InsufficientOverlapError):
             # No layers loaded etc.
             return
 
