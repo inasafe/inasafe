@@ -20,10 +20,22 @@ import unittest
 import os
 import sys
 
+skipped_reason = (
+    'These tests are skipped because it will make a segmentation fault. Just '
+    'run in separately.')
 
+@unittest.skip(skipped_reason)
 class TestWizardDialogLocale(unittest.TestCase):
     """Test for Wizard Dialog in Locale mode."""
     def setUp(self):
+        # safe_module_keywords = []
+        # for keyword in sys.modules.iterkeys():
+        #     if 'safe' in keyword and 'safe_qgis' not in keyword:
+        #         safe_module_keywords.append(keyword)
+        # from pprint import pprint
+        # pprint(safe_module_keywords)
+        # for safe_module_keyword in safe_module_keywords:
+        #     del sys.modules[safe_module_keyword]
         if 'safe.metadata' in sys.modules.keys():
             del sys.modules['safe.metadata']
         self.assertFalse('safe.metadata' in sys.modules.keys())
@@ -45,7 +57,6 @@ class TestWizardDialogLocale(unittest.TestCase):
         real_list = []
         for i in range(list_widget.count()):
             real_list.append(list_widget.item(i).text())
-        print real_list
         message = ('Expected %s but I got %s' % (expected_list, real_list))
         self.assertItemsEqual(expected_list, real_list, message)
 
@@ -99,6 +110,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         message += '\n The options are %s' % items
         self.assertTrue(False, message)
 
+    @unittest.skip(skipped_reason)
     def test_translation(self):
         """Test for metadata translation."""
         from safe_qgis.tools.wizard_dialog import WizardDialog
@@ -127,6 +139,7 @@ class TestWizardDialogLocale(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
+    @unittest.skip(skipped_reason)
     def test_existing_complex_keywords(self):
         """Test for existing complex keywords in wizard in locale mode."""
         from safe_qgis.tools.wizard_dialog import WizardDialog
