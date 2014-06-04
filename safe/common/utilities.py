@@ -14,6 +14,8 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
+# noinspection PyPackageRequirements
+from roman import toRoman, OutOfRangeError
 
 from safe.common.exceptions import VerificationError
 
@@ -729,3 +731,24 @@ def log_file_path():
     log_temp_dir = temp_dir('logs')
     path = os.path.join(log_temp_dir, 'inasafe.log')
     return path
+
+
+def romanise(number):
+    """Return the roman numeral for a number.
+
+    Note that this only works for number in interval range [0, 5000)
+
+    :param number: The number that will be romanised
+    :type number: float
+
+    :return Roman numeral equivalent of the value
+    :rtype: str
+    """
+    if number == 0:
+        return '0'
+
+    try:
+        output = toRoman(int(number))
+    except OutOfRangeError:
+        return ''
+    return output

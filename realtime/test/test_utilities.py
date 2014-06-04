@@ -31,8 +31,7 @@ from realtime.utilities import (
     report_data_dir,
     is_event_id,
     purge_working_data,
-    get_path_tail,
-    romanise)
+    get_path_tail)
 
 # Clear away working dirs so we can be sure they
 # are actually created
@@ -121,16 +120,6 @@ class UtilsTest(unittest.TestCase):
         actual_tail = get_path_tail(path)
         message = 'Expected %s, I got %s' % (expected_tail, actual_tail)
         self.assertEqual(expected_tail, actual_tail, message)
-
-    def test_romanise(self):
-        """Test we can convert MMI values to float."""
-        values = range(2, 10)
-        expected_result = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
-        result = []
-        for value in values:
-            result.append(romanise(value))
-        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
-        self.assertEqual(result, expected_result, message)
 
 if __name__ == '__main__':
     unittest.main()

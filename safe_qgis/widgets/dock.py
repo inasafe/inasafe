@@ -30,6 +30,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 from PyQt4.QtGui import QColor
 from qgis.core import (
+    QgsCoordinateTransform,
     QgsRectangle,
     QgsPoint,
     QgsMapLayer,
@@ -953,7 +954,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             extent = self.get_clip_parameters()[1]
 
-        except AttributeError:
+        except (AttributeError, InsufficientOverlapError):
             # No layers loaded etc.
             return
 
@@ -969,8 +970,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             except:  # yes we want to catch all exception types here
                 return
 
-        self.next_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), True)
+        extent = self._geo_extent_to_canvas_crs(extent)
+        self.next_analysis_rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
         self.next_analysis_rubberband.setColor(QColor(0, 255, 0, 100))
         self.next_analysis_rubberband.setWidth(1)
         update_display_flag = False
@@ -996,6 +997,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.last_analysis_rubberband is not None:
             self.last_analysis_rubberband.reset(QGis.Polygon)
             self.last_analysis_rubberband = None
+
+    def _geo_extent_to_canvas_crs(self, extent):
+        """Transform a bounding box into the CRS of the canvas.
+
+        :param extent: An extent in geographic coordinates.
+        :type extent: QgsRectangle
+
+        :returns: The extent in CRS of the canvas.
+        :rtype: QgsRectangle
+        """
+
+        # make sure the extent is in the same crs as the canvas
+        dest_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        source_crs = QgsCoordinateReferenceSystem()
+        source_crs.createFromSrid(4326)
+        transform = QgsCoordinateTransform(source_crs, dest_crs)
+        extent = transform.transformBoundingBox(extent)
+        return extent
 
     def show_extent(self, extent):
         """Show an extent as a rubber band on the canvas.
@@ -1026,8 +1045,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 return
 
         self.hide_extent()
-        self.last_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), True)
+        extent = self._geo_extent_to_canvas_crs(extent)
+
+        self.last_analysis_rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
         self.last_analysis_rubberband.setColor(QColor(255, 0, 0, 100))
         self.last_analysis_rubberband.setWidth(2)
         update_display_flag = False

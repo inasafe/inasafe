@@ -169,7 +169,7 @@ class TestDock(TestCase):
             'Validation expected to pass on a populated DOCK with selections.')
         self.assertTrue(flag, message)
 
-    def test_runEarthQuakeGuidelinesFunction(self):
+    def test_run_earthquake_guidelines_function(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
@@ -201,7 +201,7 @@ class TestDock(TestCase):
             'received: \n %s' % result)
         self.assertTrue(format_int(2993) in result, message)
 
-    def test_runEarthquakeFatalityFunction_small(self):
+    def test_run_earthquake_fatality_function_small(self):
         """Padang 2009 fatalities estimated correctly (small extent)."""
 
         # Push OK with the left mouse button
@@ -234,7 +234,7 @@ class TestDock(TestCase):
         print format_int(847529), 'expect'
         self.assertTrue(format_int(847596) in result, message)
 
-    def test_runEarthquakeFatalityFunction_Padang_full(self):
+    def test_run_earthquake_fatality_function_padang_full(self):
         """Padang 2009 fatalities estimated correctly (large extent)"""
 
         # Push OK with the left mouse button
@@ -292,7 +292,7 @@ class TestDock(TestCase):
             '31374747 , received: \n %s' % result)
         self.assertTrue(format_int(31374747) in result, message)
 
-    def test_runTsunamiBuildingImpactFunction(self):
+    def test_run_tsunami_building_impact_function(self):
         """Tsunami function runs in GUI as expected."""
 
         # Push OK with the left mouse button
@@ -372,7 +372,7 @@ class TestDock(TestCase):
         # This is the expected impact number
         self.assertIn(expected_string, result, message)
 
-    def test_runFloodPopulationImpactFunction(self):
+    def test_run_flood_population_impact_function(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
 
@@ -404,7 +404,7 @@ class TestDock(TestCase):
         # This is the expected impact number
         self.assertTrue(format_int(2480) in result, message)
 
-    def test_runFloodPopulationImpactFunction_scaling(self):
+    def test_run_flood_population_impact_function_scaling(self):
         """Flood function runs in GUI with 5x5km population data
            Raster on raster based function runs as expected with scaling."""
 
@@ -432,7 +432,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(10473000) in result, message)
         self.assertTrue(format_int(978000) in result, message)
 
-    def test_runFloodPopulationPolygonHazardImpactFunction(self):
+    def test_run_flood_population_polygon_hazard_impact_function(self):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
            Uses population raster exposure layer"""
 
@@ -456,7 +456,7 @@ class TestDock(TestCase):
         # This is the expected number of people needing evacuation
         self.assertTrue(format_int(1349000) in result, message)
 
-    def test_runCategorizedHazardBuildingImpact(self):
+    def test_run_categorized_hazard_building_impact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
             Uses DKI buildings exposure data."""
 
@@ -482,7 +482,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(453) in result, message)
         self.assertTrue(format_int(436) in result, message)
 
-    def test_runCategorisedHazardPopulationImpactFunction(self):
+    def test_run_categorised_hazard_population_impact_function(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
             Uses Penduduk Jakarta as exposure data."""
 
@@ -517,7 +517,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(256769000) in result, message)  # low
 
     #noinspection PyArgumentList
-    def test_runEarthquakeBuildingImpactFunction(self):
+    def test_run_earthquake_building_impact_function(self):
         """Earthquake function runs in GUI with An earthquake in Yogyakarta
         like in 2006 hazard data uses OSM Building Polygons exposure data."""
 
@@ -544,7 +544,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(15528) in result, message)
         self.assertTrue(format_int(177) in result, message)
 
-    def test_runVolcanoBuildingImpact(self):
+    def test_run_volcano_building_impact(self):
         """Volcano function runs in GUI with An donut (merapi hazard map)
          hazard data uses OSM Building Polygons exposure data."""
 
@@ -569,7 +569,7 @@ class TestDock(TestCase):
         # This is the expected number of building might be affected
         self.assertTrue(format_int(288) in result, message)
 
-    def test_runVolcanoPopulationImpact(self):
+    def test_run_volcano_population_impact(self):
         """Volcano function runs in GUI with a donut (merapi hazard map)
          hazard data uses population density grid."""
 
@@ -608,7 +608,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(84) in result, message)
         self.assertTrue(format_int(28) in result, message)
 
-    def test_runVolcanoCirclePopulation(self):
+    def test_run_volcano_circle_population(self):
         """Volcano function runs in GUI with a circular evacuation zone.
 
         Uses population density grid as exposure."""
@@ -648,7 +648,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(124000) in result, message)
 
     # disabled this test until further coding
-    def Xtest_printMap(self):
+    def xtest_print_map(self):
         """Test print map, especially on Windows."""
 
         result, message = setup_scenario(
@@ -678,7 +678,7 @@ class TestDock(TestCase):
         except Exception, e:
             raise Exception('Exception is not expected, %s' % e)
 
-    def test_resultStyling(self):
+    def test_result_styling(self):
         """Test that ouputs from a model are correctly styled (colours and
         opacity. """
 
@@ -822,7 +822,7 @@ class TestDock(TestCase):
         # ANSWER
         #DOCK.calculator.impactLayer()
 
-    def test_loadLayers(self):
+    def test_load_layers(self):
         """Layers can be loaded and list widget was updated appropriately
         """
 
@@ -1120,7 +1120,7 @@ class TestDock(TestCase):
             line = line.replace('\n', '')
             self.assertIn(line, result)
 
-    def test_layerChanged(self):
+    def test_layer_changed(self):
         """Test the metadata is updated as the user highlights different
         QGIS layers. For inasafe outputs, the table of results should be shown
         See also
@@ -1141,7 +1141,7 @@ class TestDock(TestCase):
             expected)
         self.assertTrue(expected in html, message)
 
-    def test_newLayersShowInCanvas(self):
+    def test_new_layers_show_in_canvas(self):
         """Check that when we add a layer we can see it in the canvas list."""
         LOGGER.info("Canvas list before:\n%s" % canvas_list())
         before_count = len(CANVAS.layers())
@@ -1170,7 +1170,7 @@ class TestDock(TestCase):
         DOCK.get_functions()
         self.assertTrue(result, message)
 
-    def Xtest_runnerExceptions(self):
+    def Xtest_runner_exceptions(self):
         """Test runner exceptions"""
 
         result, message = setup_scenario(
@@ -1201,7 +1201,7 @@ Click for Diagnostic Information:
             (expected_result, result))
         self.assertEqual(expected_result, result, message)
 
-    def Xtest_runnerIsNone(self):
+    def xtest_runner_is_none(self):
         """Test for none runner exceptions"""
         result, message = setup_scenario(
             DOCK,
@@ -1232,7 +1232,7 @@ Click for Diagnostic Information:
             (expected_result, result))
         self.assertEqual(expected_result, result, message)
 
-    def test_hasParametersButtonDisabled(self):
+    def test_has_parameters_button_disabled(self):
         """Function configuration button is disabled
         when layers not compatible."""
         set_canvas_crs(GEOCRS, True)
@@ -1254,7 +1254,7 @@ Click for Diagnostic Information:
             not flag,
             'Expected configuration options button to be disabled')
 
-    def test_hasParametersButtonEnabled(self):
+    def test_has_parameters_button_enabled(self):
         """Function configuration button is enabled when layers are compatible.
         """
         set_canvas_crs(GEOCRS, True)
@@ -1273,7 +1273,7 @@ Click for Diagnostic Information:
 
     # I disabled the test for now as checkMemory now returns None unless
     # there is a problem. TS
-    def Xtest_extentsChanged(self):
+    def xtest_extents_changed(self):
         """Memory requirements are calculated correctly when extents change.
         """
         set_canvas_crs(GEOCRS, True)
@@ -1289,7 +1289,7 @@ Click for Diagnostic Information:
         self.assertTrue(result is not None, 'Check memory reported None')
         self.assertTrue('3mb' in result, message)
 
-    def test_cboAggregationEmptyProject(self):
+    def test_cbo_aggregation_empty_project(self):
         """Aggregation combo changes properly according on no loaded layers"""
         self.tearDown()
         message = (
@@ -1306,7 +1306,7 @@ Click for Diagnostic Information:
 
         self.assertTrue(not DOCK.cboAggregation.isEnabled(), message)
 
-    def test_cboAggregationToggle(self):
+    def test_cbo_aggregation_toggle(self):
         """Aggregation Combobox toggles on and off as expected."""
 
         # With aggregation layer
@@ -1363,6 +1363,63 @@ Click for Diagnostic Information:
             hazard_layer=hazard_layer,
             viewport_geoextent=[5.0, 5.0, 12.0, 12.0])
         self.assertIn('insufficient overlap', message.to_text())
+
+    def test_rubber_bands(self):
+        """Test that the rubber bands get updated."""
+
+        setup_scenario(
+            DOCK,
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_enabled_flag=True)
+
+        DOCK.show_rubber_bands = True
+        expected_vertex_count = 5
+
+        # 4326 with disabled on-the-fly reprojection - check next
+        set_canvas_crs(GEOCRS, True)
+        set_small_jakarta_extent()
+        DOCK.show_next_analysis_extent()
+        next_band = DOCK.next_analysis_rubberband
+        self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
+
+        # 4326 with enabled on-the-fly reprojection - check next
+        set_canvas_crs(GEOCRS, False)
+        set_small_jakarta_extent()
+        DOCK.show_next_analysis_extent()
+        next_band = DOCK.next_analysis_rubberband
+        self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
+
+        # 900913 with enabled on-the-fly reprojection - check next
+        set_canvas_crs(GOOGLECRS, True)
+        set_jakarta_google_extent()
+        next_band = DOCK.next_analysis_rubberband
+        self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
+
+        # 900913 with enabled on-the-fly reprojection - check last
+        set_canvas_crs(GOOGLECRS, True)
+        set_jakarta_google_extent()
+        # Press RUN
+        # noinspection PyCallByClass,PyTypeChecker
+        DOCK.accept()
+        #DOCK.show_extent()
+        last_band = DOCK.last_analysis_rubberband
+        geometry = last_band.asGeometry().exportToWkt()
+        expected_wkt = (
+            'LINESTRING(11876228.33329810947179794 -695798.00000000046566129, '
+            '11908350.67106631398200989 -695798.00000000046566129, '
+            '11908350.67106631398200989 -678083.54461829818319529, '
+            '11876228.33329810947179794 -678083.54461829818319529, '
+            '11876228.33329810947179794 -695798.00000000046566129)')
+        self.assertEqual(geometry, expected_wkt)
+        self.assertEqual(
+            expected_vertex_count,
+            last_band.numberOfVertices()
+        )
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDock)
