@@ -20,7 +20,7 @@ JAKARTA TIMUR 253,961 126,981 100,785 11,833
 JAKARTA PUSAT 66,693 33,347 26,467 3,107
 JAKARTA SELATAN 30,847 15,424 12,242 1,437
 Detailed age report
-Kab_name Total Youth count (affected) Adult count (affected) Elder count (affected)
+Kab_name Total Youth count (affected) Adult count (affected) Elderly count (affected)
 JAKARTA UTARA 344,468 90,595 227,004 26,868
 JAKARTA BARAT 278,763 73,315 183,705 21,744
 JAKARTA TIMUR 253,961 66,792 167,361 19,809
