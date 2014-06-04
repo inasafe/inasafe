@@ -24,6 +24,7 @@ skipped_reason = (
     'These tests are skipped because it will make a segmentation fault. Just '
     'run in separately.')
 
+
 @unittest.skip(skipped_reason)
 class TestWizardDialogLocale(unittest.TestCase):
     """Test for Wizard Dialog in Locale mode."""
@@ -110,7 +111,6 @@ class TestWizardDialogLocale(unittest.TestCase):
         message += '\n The options are %s' % items
         self.assertTrue(False, message)
 
-    @unittest.skip(skipped_reason)
     def test_translation(self):
         """Test for metadata translation."""
         from safe_qgis.tools.wizard_dialog import WizardDialog
@@ -139,7 +139,6 @@ class TestWizardDialogLocale(unittest.TestCase):
 
         remove_temp_file(layer.source())
 
-    @unittest.skip(skipped_reason)
     def test_existing_complex_keywords(self):
         """Test for existing complex keywords in wizard in locale mode."""
         from safe_qgis.tools.wizard_dialog import WizardDialog
