@@ -31,7 +31,8 @@ from safe.common.utilities import (
     get_utm_epsg,
     get_non_conflicting_attribute_name,
     temp_dir,
-    log_file_path)
+    log_file_path,
+    romanise)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -281,6 +282,16 @@ class UtilitiesTest(unittest.TestCase):
         message = 'Actual log path: %s, I got %s' % (
             actual_path, log_file_path())
         self.assertEqual(actual_path, log_file_path(), message)
+
+    def test_romanise(self):
+        """Test we can convert MMI values to float."""
+        values = range(2, 10)
+        expected_result = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
+        result = []
+        for value in values:
+            result.append(romanise(value))
+        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

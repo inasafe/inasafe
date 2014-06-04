@@ -28,10 +28,6 @@ from datetime import datetime
 import numpy
 #noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
-import ogr
-#noinspection PyPackageRequirements
-import gdal
-from gdalconst import GA_ReadOnly
 
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
@@ -84,7 +80,8 @@ from safe.api import (
     Table,
     TableCell,
     TableRow,
-    get_version)
+    get_version,
+    romanise)
 from safe_qgis.utilities.utilities import get_wgs84_resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
@@ -93,11 +90,9 @@ from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
-    data_dir,
-    romanise)
+    data_dir)
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
-    ContourCreationError,
     InvalidLayerError,
     ShapefileCreationError,
     CityMemoryLayerCreationError,
@@ -244,143 +239,6 @@ class ShakeEvent(QObject):
             LOGGER.error('Event file not found. %s' % grid_xml_path)
             raise GridXmlFileNotFoundError('%s not found' % grid_xml_path)
 
-    def mmi_data_to_contours(self, force_flag=True, algorithm='nearest'):
-        """Extract contours from the event's tif file.
-
-        Contours are extracted at a 0.5 MMI interval. The resulting file will
-        be saved in the extract directory. In the easiest use case you can
-
-        :param force_flag:  (Optional). Whether to force the
-        regeneration of contour product. Defaults to False.
-        :type force_flag: bool
-
-        :param algorithm: (Optional) Which interpolation algorithm to
-                  use to create the underlying raster. Defaults to 'nearest'.
-        :type algorithm: str
-        **Only enforced if theForceFlag is true!**
-
-        :returns: An absolute filesystem path pointing to the generated
-            contour dataset.
-        :exception: ContourCreationError
-        simply do::
-
-           myShakeEvent = myShakeData.shakeEvent()
-           myContourPath = myShakeEvent.mmiToContours()
-
-        which will return the contour dataset for the latest event on the
-        ftp server.
-        """
-        LOGGER.debug('mmi_data_to_contours requested.')
-        # TODO: Use sqlite rather?
-        output_file_base = os.path.join(shakemap_extract_dir(),
-                                        self.event_id,
-                                        'mmi-contours-%s.' % algorithm)
-        output_file = output_file_base + 'shp'
-        if os.path.exists(output_file) and force_flag is not True:
-            return output_file
-        elif os.path.exists(output_file):
-            try:
-                os.remove(output_file_base + 'shp')
-                os.remove(output_file_base + 'shx')
-                os.remove(output_file_base + 'dbf')
-                os.remove(output_file_base + 'prj')
-            except OSError:
-                LOGGER.exception(
-                    'Old contour files not deleted'
-                    ' - this may indicate a file permissions issue.')
-
-        tif_path = self.shake_grid.mmi_to_raster(
-            self.event_id, 'BMKG', force_flag, algorithm)
-        # Based largely on
-        # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
-        driver = ogr.GetDriverByName('ESRI Shapefile')
-        ogr_dataset = driver.CreateDataSource(output_file)
-        if ogr_dataset is None:
-            # Probably the file existed and could not be overriden
-            raise ContourCreationError('Could not create datasource for:\n%s'
-                                       'Check that the file does not already '
-                                       'exist and that you '
-                                       'do not have file system permissions '
-                                       'issues')
-        layer = ogr_dataset.CreateLayer('contour')
-        field_definition = ogr.FieldDefn('ID', ogr.OFTInteger)
-        layer.CreateField(field_definition)
-        field_definition = ogr.FieldDefn('MMI', ogr.OFTReal)
-        layer.CreateField(field_definition)
-        # So we can fix the x pos to the same x coord as centroid of the
-        # feature so labels line up nicely vertically
-        field_definition = ogr.FieldDefn('X', ogr.OFTReal)
-        layer.CreateField(field_definition)
-        # So we can fix the y pos to the min y coord of the whole contour so
-        # labels line up nicely vertically
-        field_definition = ogr.FieldDefn('Y', ogr.OFTReal)
-        layer.CreateField(field_definition)
-        # So that we can set the html hex colour based on its MMI class
-        field_definition = ogr.FieldDefn('RGB', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set the label in it roman numeral form
-        field_definition = ogr.FieldDefn('ROMAN', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set the label horizontal alignment
-        field_definition = ogr.FieldDefn('ALIGN', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set the label vertical alignment
-        field_definition = ogr.FieldDefn('VALIGN', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set feature length to filter out small features
-        field_definition = ogr.FieldDefn('LEN', ogr.OFTReal)
-        layer.CreateField(field_definition)
-
-        tif_dataset = gdal.Open(tif_path, GA_ReadOnly)
-        # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
-        band = 1
-        contour_interval = 0.5
-        contour_base = 0
-        fixed_level_list = []
-        use_no_data_flag = 0
-        no_data_value = -9999
-        id_field = 0  # first field defined above
-        elevation_field = 1  # second (MMI) field defined above
-        try:
-            gdal.ContourGenerate(tif_dataset.GetRasterBand(band),
-                                 contour_interval,
-                                 contour_base,
-                                 fixed_level_list,
-                                 use_no_data_flag,
-                                 no_data_value,
-                                 layer,
-                                 id_field,
-                                 elevation_field)
-        except Exception, e:
-            LOGGER.exception('Contour creation failed')
-            raise ContourCreationError(str(e))
-        finally:
-            del tif_dataset
-            ogr_dataset.Release()
-
-        # Copy over the standard .prj file since ContourGenerate does not
-        # create a projection definition
-        qml_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-contours-%s.prj' % algorithm)
-        source_qml = os.path.join(data_dir(), 'mmi-contours.prj')
-        shutil.copyfile(source_qml, qml_path)
-
-        # Lastly copy over the standard qml (QGIS Style file)
-        qml_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-contours-%s.qml' % algorithm)
-        source_qml = os.path.join(data_dir(), 'mmi-contours.qml')
-        shutil.copyfile(source_qml, qml_path)
-
-        # Now update the additional columns - X,Y, ROMAN and RGB
-        try:
-            self.set_contour_properties(output_file)
-        except InvalidLayerError:
-            raise
-
-        return output_file
-
     def mmi_shaking(self, mmi_value):
         """Return the perceived shaking for an mmi value as translated string.
         :param mmi_value: float or int required.
@@ -420,76 +278,6 @@ class ShakeEvent(QObject):
             10: self.tr('Very heavy')
         }
         return my_damage_dict[mmi_value]
-
-    def set_contour_properties(self, input_file):
-        """Set the X, Y, RGB, ROMAN attributes of the contour layer.
-
-        :param input_file: (Required) Name of the contour layer.
-        :type input_file: str
-
-        :raise: InvalidLayerError if anything is amiss with the layer.
-        """
-        LOGGER.debug('set_contour_properties requested for %s.' % input_file)
-        layer = QgsVectorLayer(input_file, 'mmi-contours', "ogr")
-        if not layer.isValid():
-            raise InvalidLayerError(input_file)
-
-        layer.startEditing()
-        # Now loop through the db adding selected features to mem layer
-        request = QgsFeatureRequest()
-        fields = layer.dataProvider().fields()
-
-        for feature in layer.getFeatures(request):
-            if not feature.isValid():
-                LOGGER.debug('Skipping feature')
-                continue
-            # Work out x and y
-            line = feature.geometry().asPolyline()
-            y = line[0].y()
-
-            x_max = line[0].x()
-            x_min = x_max
-            for point in line:
-                if point.y() < y:
-                    y = point.y()
-                x = point.x()
-                if x < x_min:
-                    x_min = x
-                if x > x_max:
-                    x_max = x
-            x = x_min + ((x_max - x_min) / 2)
-
-            # Get length
-            length = feature.geometry().length()
-
-            mmi_value = float(feature['MMI'])
-            # We only want labels on the whole number contours
-            if mmi_value != round(mmi_value):
-                roman = ''
-            else:
-                roman = romanise(mmi_value)
-
-            # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
-            rgb = mmi_colour(mmi_value)
-
-            # Now update the feature
-            feature_id = feature.id()
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('X'), x)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('Y'), y)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('RGB'), rgb)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ROMAN'), roman)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ALIGN'), 'Center')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('VALIGN'), 'HALF')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('LEN'), length)
-
-        layer.commitChanges()
 
     def bounds_to_rectangle(self):
         """Convert the event bounding box to a QgsRectangle.

@@ -20,6 +20,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 
+import ogr
+
 from safe_qgis.tools.shake_grid.shake_grid import (
     ShakeGrid,
     convert_mmi_data)
@@ -32,7 +34,33 @@ GRID_PATH = os.path.join(TESTDATA, 'grid.xml')
 SHAKE_GRID = ShakeGrid(GRID_PATH)
 
 
-class ConverterTest(unittest.TestCase):
+class ShakeGridTest(unittest.TestCase):
+    """Class to test ShakeGrid."""
+    def check_feature_count(self, path, count):
+        """Method to check the features number of a vector layer.
+
+        :param path: Path to vector layer.
+        :type path: str
+
+        :param count: The base number to check against.
+        :type count: int
+        """
+
+        data_source = ogr.Open(path)
+        base_name = os.path.splitext(os.path.basename(path))[0]
+        # do a little query to make sure we got some results...
+        sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
+        #print sql_statement
+        layer = data_source.ExecuteSQL(sql_statement)
+        feature_count = layer.GetFeatureCount()
+        flag = feature_count == count
+        message = ''
+        if not flag:
+            message = 'Expected %s features, got %s' % (count, feature_count)
+        data_source.ReleaseResultSet(layer)
+        data_source.Destroy()
+        return flag, message
+
     def test_extract_date_time(self):
         """Test extract_date_time giving the correct output."""
         # Test on SHAKE_GRID
@@ -165,6 +193,23 @@ class ConverterTest(unittest.TestCase):
         os.remove(file_path.replace('-points.shp', '.csv'))
         os.remove(file_path.replace('-points.shp', '.csvt'))
 
+    def test_event_to_contours(self):
+        """Check we can extract contours from the event"""
+        file_path = SHAKE_GRID.mmi_to_contours(
+            force_flag=True, algorithm='invdist')
+        self.assertTrue(self.check_feature_count(file_path, 16))
+        self.assertTrue(os.path.exists(file_path))
+        expected_qml = file_path.replace('shp', 'qml')
+        message = '%s not found' % expected_qml
+        self.assertTrue(os.path.exists(expected_qml), message)
+
+        file_path = SHAKE_GRID.mmi_to_contours(
+            force_flag=True, algorithm='nearest')
+        self.assertTrue(self.check_feature_count(file_path, 132))
+        file_path = SHAKE_GRID.mmi_to_contours(
+            force_flag=True, algorithm='average')
+        self.assertTrue(self.check_feature_count(file_path, 132))
+
     def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)"""
         grid_path = os.path.join(TESTDATA, 'grid.xml')
@@ -195,6 +240,6 @@ class ConverterTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ConverterTest)
+    suite = unittest.makeSuite(ShakeGridTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

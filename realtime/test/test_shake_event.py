@@ -28,8 +28,6 @@ import unittest
 import logging
 import difflib
 
-import ogr
-
 # pylint: disable=E0611
 # pylint: disable=W0611
 from qgis.core import QgsFeatureRequest
@@ -125,40 +123,6 @@ class TestShakeEvent(unittest.TestCase):
                     '\n\nGot\n------------------\n%s\n') %
                    (expected_state, state))
         self.assertEqual(state, expected_state, message)
-
-    def check_feature_count(self, path, count):
-        data_source = ogr.Open(path)
-        base_name = os.path.splitext(os.path.basename(path))[0]
-        # do a little query to make sure we got some results...
-        sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
-        #print sql_statement
-        layer = data_source.ExecuteSQL(sql_statement)
-        feature_count = layer.GetFeatureCount()
-        flag = feature_count == count
-        message = ''
-        if not flag:
-            message = 'Expected %s features, got %s' % (count, feature_count)
-        data_source.ReleaseResultSet(layer)
-        data_source.Destroy()
-        return flag, message
-
-    def test_event_to_contours(self):
-        """Check we can extract contours from the event"""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='invdist')
-        self.assertTrue(self.check_feature_count(file_path, 16))
-        self.assertTrue(os.path.exists(file_path))
-        expected_qml = file_path.replace('shp', 'qml')
-        message = '%s not found' % expected_qml
-        self.assertTrue(os.path.exists(expected_qml), message)
-
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='nearest')
-        self.assertTrue(self.check_feature_count(file_path, 132))
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='average')
-        self.assertTrue(self.check_feature_count(file_path, 132))
 
     def test_local_cities(self):
         """Test that we can retrieve the cities local to the event"""

@@ -75,7 +75,8 @@ from safe.common.utilities import (
     get_utm_epsg,
     feature_attributes_as_dict,
     which,
-    log_file_path)
+    log_file_path,
+    romanise)
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
