@@ -148,9 +148,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         threshold_max = self.parameters['max threshold [m]']
 
         if threshold_min > threshold_max:
-            message = tr('''The minimal threshold is
-                greater then the maximal specified threshold.
-                Please check the values.''')
+            message = tr(
+                'The minimal threshold is greater then the maximal specified '
+                'threshold. Please check the values.')
             raise GetDataError(message)
 
         # Extract data
@@ -204,11 +204,10 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         request.setFilterRect(extent)
 
         if flooded_polygon_inside is None:
-            message = tr('''There are no objects
-                in the hazard layer with
-                "value">'%s'.
-                Please check the value or use other
-                extent.''' % (threshold_min, ))
+            message = tr(
+                'There are no objects in the hazard layer with "value">%s.'
+                'Please check the value or use other extent.' % (
+                    threshold_min, ))
             raise GetDataError(message)
 
         # Clip exposure by the extent
@@ -261,10 +260,8 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                 tr('Flooded in the threshold (m)'),
                 tr('Total (m)')],
                 header=True),
-            TableRow([
-                tr('All'),
-                int(flooded_len),
-                int(road_len)])]
+            TableRow([tr('All'), int(flooded_len), int(road_len)])
+        ]
         table_body.append(TableRow(
             tr('Breakdown by road type'), header=True))
         for t, v in roads_by_type.iteritems():

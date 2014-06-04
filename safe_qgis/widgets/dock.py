@@ -376,7 +376,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/showRubberBands', False, type=bool))
         self.show_rubber_bands = flag
 
-
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
 
@@ -389,8 +388,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(self.show_next_analysis_extent)
-
+        self.iface.mapCanvas().extentsChanged.connect(
+            self.show_next_analysis_extent)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -405,8 +404,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.disconnect(self.show_next_analysis_extent)
-
+        self.iface.mapCanvas().extentsChanged.disconnect(
+            self.show_next_analysis_extent)
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -970,7 +969,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             except:  # yes we want to catch all exception types here
                 return
 
-        self.next_analysis_rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
+        self.next_analysis_rubberband = QgsRubberBand(
+            self.iface.mapCanvas(), True)
         self.next_analysis_rubberband.setColor(QColor(0, 255, 0, 100))
         self.next_analysis_rubberband.setWidth(1)
         update_display_flag = False
@@ -985,7 +985,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         point = QgsPoint(extent.xMinimum(), extent.yMinimum())
         update_display_flag = True
         self.next_analysis_rubberband.addPoint(point, update_display_flag)
-
 
     def hide_extent(self):
         """Clear extent rubber band if any.
@@ -1027,7 +1026,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 return
 
         self.hide_extent()
-        self.last_analysis_rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
+        self.last_analysis_rubberband = QgsRubberBand(
+            self.iface.mapCanvas(), True)
         self.last_analysis_rubberband.setColor(QColor(255, 0, 0, 100))
         self.last_analysis_rubberband.setWidth(2)
         update_display_flag = False
