@@ -181,14 +181,14 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 ##                count0 += 1
             ## FIXME it would be good if the affected were words not numbers
             ## FIXME need to read hazard layer and see category or keyword
-            val_cat = round(val)
-            if val_cat == 3:
+            val = int(round(val))
+            if val == 3:
                 affected = 3
                 count2 += 1
-            elif val_cat == 2:
+            elif val == 2:
                 affected = 2
                 count1 += 1
-            elif val_cat == 1:
+            elif val == 1:
                 affected = 1
                 count0 += 1
             else:
