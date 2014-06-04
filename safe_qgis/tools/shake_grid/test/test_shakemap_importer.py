@@ -18,16 +18,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 #noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 import unittest
 import os
+
+# This is to enable API V2
+import qgis  # pylint: disable=W0611
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe.common.testing import get_qgis_app
-from safe_qgis.tools.shakemap_importer import ShakemapImporter
+from safe_qgis.tools.shake_grid.shakemap_importer import ShakemapImporter
 from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

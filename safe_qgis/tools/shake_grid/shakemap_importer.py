@@ -31,12 +31,13 @@ from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
 from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
-from safe_qgis.safe_interface import get_version, convert_mmi_data
+from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import html_footer, html_header
 from safe_qgis.utilities.styling import mmi_ramp
+from safe_qgis.tools.shake_grid.shake_grid import convert_mmi_data
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -228,6 +229,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             file_info = QFileInfo(file_name)
             base_name = file_info.baseName()
             layer = QgsRasterLayer(file_name, base_name)
+            # noinspection PyTypeChecker
             mmi_ramp(layer)
             layer.saveDefaultStyle()
             if not layer.isValid():
