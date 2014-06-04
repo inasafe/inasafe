@@ -1376,30 +1376,46 @@ Click for Diagnostic Information:
         DOCK.show_rubber_bands = True
         expected_vertex_count = 5
 
-        # 4326 with disabled on-the-fly reprojection
+        # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
         set_small_jakarta_extent()
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
-        # 4326 with enabled on-the-fly reprojection
+        # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
         set_small_jakarta_extent()
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
-        # 900913 with enabled on-the-fly reprojection
+        # 900913 with enabled on-the-fly reprojection - check next
+        set_canvas_crs(GOOGLECRS, True)
+        set_jakarta_google_extent()
+        next_band = DOCK.next_analysis_rubberband
+        self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
+
+        # 900913 with enabled on-the-fly reprojection - check last
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent()
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
         #DOCK.show_extent()
+        last_band = DOCK.last_analysis_rubberband
+        geometry = last_band.asGeometry().exportToWkt()
+        expected_wkt = (
+            'LINESTRING(11876228.33329810947179794 -695798.00000000046566129, '
+            '11908350.67106631398200989 -695798.00000000046566129, '
+            '11908350.67106631398200989 -678083.54461829818319529, '
+            '11876228.33329810947179794 -678083.54461829818319529, '
+            '11876228.33329810947179794 -695798.00000000046566129)')
+        self.assertEqual(geometry, expected_wkt)
         self.assertEqual(
             expected_vertex_count,
-            DOCK.last_analysis_rubberband.numberOfVertices())
+            last_band.numberOfVertices()
+        )
 
 
 if __name__ == '__main__':
