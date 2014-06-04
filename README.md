@@ -19,7 +19,6 @@ Story queue on Waffle:
 
 Current test status for master branch:
 * [![Build Status](http://jenkins.inasafe.org/job/inasafe-qgis2/badge/icon)](http://jenkins.inasafe.org/job/inasafe-qgis2/) - ALL Tests
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-batch-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-batch-test/) - batch-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-impact-stats-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-impact-stats-test/) - impact-stats-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-realtime-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-realtime-test/) - realtime-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-report-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-report-test/) - report-test
@@ -30,7 +29,6 @@ Current test status for master branch:
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/) - widgets-test
 
 Current test status for develop branch:
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/batch-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/batch-test/) - batch-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/impact-stats-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/impact-stats-test/) - impact-stats-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/realtime-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/realtime-test/) - realtime-test
 * [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/report-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/report-test/) - report-test
