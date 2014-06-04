@@ -39,12 +39,12 @@ def data_dir():
     :returns: Returns the default data directory.
     :rtype: str
     """
-    my_dir = os.path.abspath(
+    dir_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'converter_data'))
-    return my_dir
+    return dir_path
 
 
-class ShakeGridConverter(object):
+class ShakeGrid(object):
     """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
@@ -69,7 +69,7 @@ class ShakeGridConverter(object):
         :type algorithm_filename_flag: bool
 
         :returns: Instance
-        :rtype: ShakeGridConverter
+        :rtype: ShakeGrid
 
         :raises: EventXmlParseError
         """
@@ -322,7 +322,6 @@ class ShakeGridConverter(object):
         :param force_flag: Whether to force the regeneration of the output
             file. Defaults to False.
         :type force_flag: bool
-
 
         :returns: The absolute file system path to the .vrt text file.
         :rtype: str
@@ -655,7 +654,7 @@ def convert_mmi_data(
     else:
         output_dir = output_path
         output_basename = None
-    converter = ShakeGridConverter(
+    converter = ShakeGrid(
         grid_xml_path, output_dir, output_basename, algorithm_filename_flag)
     return converter.mmi_to_raster(
         title, source, force_flag=True, algorithm=algorithm)
