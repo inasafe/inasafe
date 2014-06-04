@@ -178,20 +178,20 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             clip_xmax = self.extent[2]
         if (self.extent[3] < clip_ymax):
             clip_ymax = self.extent[3]
-        
+
         raster_extent = H.dataProvider().extent()
         x_full_delta = raster_extent.xMaximum() - raster_extent.xMinimum()
         x_new_delta = clip_xmax - clip_xmin
-        clip_width = (x_new_delta * H.width())/x_full_delta
-        clip_width  = int(clip_width)
+        clip_width = (x_new_delta * H.width()) / x_full_delta
+        clip_width = int(clip_width)
 
         y_full_delta = raster_extent.yMaximum() - raster_extent.yMinimum()
         y_new_delta = clip_ymax - clip_ymin
-        clip_height = (y_new_delta * H.height())/y_full_delta
-        clip_height  = int(clip_height)
-         
+        clip_height = (y_new_delta * H.height()) / y_full_delta
+        clip_height = int(clip_height)
+
         clip_extent = [clip_xmin, clip_ymin, clip_xmax, clip_ymax]
-        
+
         # Clip and polygonize
         small_raster = clip_raster(
             H, clip_width, clip_height, QgsRectangle(*clip_extent))

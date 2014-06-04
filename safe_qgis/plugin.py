@@ -19,9 +19,11 @@ __copyright__ += 'Disaster Reduction'
 import sys
 import os
 import logging
+
 from safe_qgis.utilities import custom_logging
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import is_raster_layer
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -584,7 +586,7 @@ class Plugin:
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
-        from safe_qgis.batch.batch_dialog import BatchDialog
+        from safe_qgis.tools.batch.batch_dialog import BatchDialog
 
         dialog = BatchDialog(
             parent=self.iface.mainWindow(),

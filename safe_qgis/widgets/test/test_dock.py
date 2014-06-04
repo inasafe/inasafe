@@ -152,7 +152,7 @@ class TestDock(TestCase):
             'Validation expected to pass on a populated dock with selections.')
         self.assertTrue(flag, message)
 
-    def test_setOkButtonStatus(self):
+    def test_set_ok_button_status(self):
         """OK button changes properly according to DOCK validity"""
         # First check that we ok ISNT enabled on a clear DOCK
         self.tearDown()

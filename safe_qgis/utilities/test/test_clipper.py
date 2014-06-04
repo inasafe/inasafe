@@ -40,8 +40,8 @@ from qgis.core import (
 
 from safe.common.testing import get_qgis_app
 from safe_qgis.safe_interface import (
-    readSafeLayer,
-    getOptimalExtent,
+    read_safe_layer,
+    get_optimal_extent,
     HAZDATA, TESTDATA, EXPDATA, UNITDATA,
     nan_allclose,
     GetDataError,
@@ -295,7 +295,7 @@ class ClipperTest(unittest.TestCase):
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
         # Extent is returned as an array [xmin,ymin,xmax,ymax]
-        geo_extent = getOptimalExtent(
+        geo_extent = get_optimal_extent(
             hazard_geo_extent, exposure_geo_extent, view_port_geo_extent)
 
         # Clip the vector to the bbox
@@ -303,14 +303,14 @@ class ClipperTest(unittest.TestCase):
 
         # Check the output is valid
         assert os.path.exists(result.source())
-        readSafeLayer(result.source())
+        read_safe_layer(result.source())
 
         # Clip the raster to the bbox
         result = clip_layer(raster_layer, geo_extent)
 
         # Check the output is valid
         assert os.path.exists(result.source())
-        readSafeLayer(result.source())
+        read_safe_layer(result.source())
 
         # -------------------------------
         # Check the extra keywords option
@@ -321,7 +321,7 @@ class ClipperTest(unittest.TestCase):
 
         # Check the output is valid
         assert os.path.exists(result.source())
-        safe_layer = readSafeLayer(result.source())
+        safe_layer = read_safe_layer(result.source())
         keywords = safe_layer.get_keywords()
         # message = 'Extra keyword was not found in %s: %s' % (myResult,
         # keywords)
@@ -333,7 +333,7 @@ class ClipperTest(unittest.TestCase):
 
         # Check the output is valid
         assert os.path.exists(result.source())
-        safe_layer = readSafeLayer(result.source())
+        safe_layer = read_safe_layer(result.source())
         keywords = safe_layer.get_keywords()
 
         message = ('Extra keyword was not found in %s: %s' %
@@ -369,7 +369,7 @@ class ClipperTest(unittest.TestCase):
             raster_path = ('%s/%s' % (TESTDATA, filename))
 
             # Get reference values
-            safe_layer = readSafeLayer(raster_path)
+            safe_layer = read_safe_layer(raster_path)
             min_value, max_value = safe_layer.get_extrema()
             del max_value
             del min_value
@@ -405,7 +405,7 @@ class ClipperTest(unittest.TestCase):
                     extra_keywords=extra_keywords
                 )
 
-                safe_layer = readSafeLayer(result.source())
+                safe_layer = read_safe_layer(result.source())
                 native_data = safe_layer.get_data(scaling=False)
                 scaled_data = safe_layer.get_data(scaling=True)
 
@@ -501,7 +501,7 @@ class ClipperTest(unittest.TestCase):
         raster_path = ('%s/%s' % (TESTDATA, test_filename))
 
         # Get reference values
-        safe_layer = readSafeLayer(raster_path)
+        safe_layer = read_safe_layer(raster_path)
         min_value, max_value = safe_layer.get_extrema()
         native_resolution = safe_layer.get_resolution()
 

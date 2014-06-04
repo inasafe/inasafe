@@ -191,8 +191,8 @@ class SftpShakeData:
 
         now = datetime.now()
         now = int(
-            '%04d%02d%02d%02d%02d%02d' % (
-                now.year, now.month, now.day, now.hour, now.minute, now.second))
+            '%04d%02d%02d%02d%02d%02d' %
+            (now.year, now.month, now.day, now.hour, now.minute, now.second))
 
         if event_ids is not None:
             event_ids.sort()

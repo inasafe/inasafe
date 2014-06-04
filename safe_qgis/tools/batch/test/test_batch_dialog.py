@@ -19,12 +19,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 #noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 import unittest
 
+import qgis  # pylint: disable=W0611
+
 from safe.common.testing import get_qgis_app
-from safe_qgis.batch.batch_dialog import BatchDialog
+from safe_qgis.tools.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
     SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir

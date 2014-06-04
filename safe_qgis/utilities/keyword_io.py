@@ -34,7 +34,7 @@ from safe_qgis.exceptions import (
 from safe_qgis.safe_interface import (
     verify,
     read_file_keywords,
-    writeKeywordsToFile)
+    write_keywords_to_file)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -139,7 +139,7 @@ class KeywordIO(QObject):
         source = str(layer.source())
         try:
             if flag:
-                writeKeywordsToFile(source, keywords)
+                write_keywords_to_file(source, keywords)
             else:
                 self.write_keywords_for_uri(source, keywords)
             return
@@ -217,7 +217,7 @@ class KeywordIO(QObject):
         try:
             for key in extra_keywords:
                 keywords[key] = extra_keywords[key]
-            writeKeywordsToFile(new_destination, keywords)
+            write_keywords_to_file(new_destination, keywords)
         except Exception, e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (

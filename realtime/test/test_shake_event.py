@@ -352,9 +352,9 @@ class TestShakeEvent(unittest.TestCase):
             'limitations': (
                 u'This impact estimation is automatically generated and only '
                 u'takes into account the population and cities affected by '
-                u'different levels of ground shaking. The estimate is based on '
-                u'ground shaking data from BMKG, population density data from '
-                u'asiapop.org, place information from geonames.org and '
+                u'different levels of ground shaking. The estimate is based '
+                u'on ground shaking data from BMKG, population density data '
+                u'from asiapop.org, place information from geonames.org and '
                 u'software developed by BNPB. Limitations in the estimates of '
                 u'ground shaking, population  data and place names datasets '
                 u'may result in significant misrepresentation of the '
@@ -427,7 +427,8 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_i18n(self):
         """See if internationalisation is working."""
-        shake_event = ShakeEvent(SHAKE_ID, locale='id', data_is_local_flag=True)
+        shake_event = ShakeEvent(
+            SHAKE_ID, locale='id', data_is_local_flag=True)
         shaking = shake_event.mmi_shaking(5)
         expected_shaking = 'Sedang'
         self.assertEqual(expected_shaking, shaking)
