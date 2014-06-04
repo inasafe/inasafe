@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
@@ -20,13 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import sys
 import shutil
 #noinspection PyPep8Naming
 import cPickle as pickle
-from xml.dom import minidom
 import math
-from subprocess import call, CalledProcessError
 import logging
 from datetime import datetime
 
@@ -38,9 +33,9 @@ import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
-from sftp_shake_data import SftpShakeData
-
-
+# This import is required to enable PyQt API v2
+# noinspection PyUnresolvedReferences
+import qgis
 # TODO: I think QCoreApplication is needed for tr() check before removing
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -76,32 +71,39 @@ from qgis.core import (
     QgsMapRenderer,
     QgsPalLabeling,
     QgsProviderRegistry,
-    QgsFeatureRequest)
+    QgsFeatureRequest,
+    QgsVectorDataProvider)
+
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe_qgis.exceptions import TranslationLoadError
-from safe.common.version import get_version
+from safe.common.testing import get_qgis_app
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
-from safe.api import Table, TableCell, TableRow
+from safe.api import (
+    Table,
+    TableCell,
+    TableRow,
+    get_version,
+    ShakeGridConverter)
 from safe_qgis.utilities.utilities import get_wgs84_resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
-from utils import shakemap_extract_dir, data_dir
-from rt_exceptions import (
+from safe_qgis.exceptions import TranslationLoadError
+from realtime.sftp_shake_data import SftpShakeData
+from realtime.utilities import (
+    shakemap_extract_dir,
+    data_dir,
+    romanise)
+from realtime.exceptions import (
     GridXmlFileNotFoundError,
-    GridXmlParseError,
     ContourCreationError,
     InvalidLayerError,
     ShapefileCreationError,
     CityMemoryLayerCreationError,
     FileNotFoundError,
     MapComposerError)
-from realtime.utils import setup_logger
-# from shake_data import ShakeData
 
-setup_logger()
 LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -116,7 +118,6 @@ class ShakeEvent(QObject):
         here. we should resolve that by removing it here and then simply
         using an instance of ShakeGridConverter here when needed.
 
-
     """
 
     def __init__(self,
@@ -128,29 +129,31 @@ class ShakeEvent(QObject):
         """Constructor for the shake event class.
 
         :param event_id: (Optional) Id of the event. Will be used to
-                fetch the ShakeData for this event (either from cache or from
-                ftp server as required). The grid.xml file in the unpacked
-                event will be used to intialise the state of the
-                a ShakeGridConvert instance.
-                If no event id is supplied, the most recent event recorded
-                on the server will be used.
+            fetch the ShakeData for this event (either from cache or from ftp
+            server as required). The grid.xml file in the unpacked event will
+            be used to initialise the state of the a ShakeGridConvert instance.
+            If no event id is supplied, the most recent event recorded on the
+            server will be used.
+        :type event_id: str
 
         :param locale:(Optional) string for iso locale to use for outputs.
-                Defaults to en. Can also use 'id' or possibly more as
-                translations are added.
+            Defaults to en. Can also use 'id' or possibly more as translations
+            are added.
+        :type locale: str
 
-        :param population_raster_path: (Optional)path to the population raster
-                that will be used if you want to calculate the impact. This
-                is optional because there are various ways this can be
-                specified before calling :func:`calculate_impacts`.
+        :param population_raster_path: (Optional) Path to the population
+            raster that will be used if you want to calculate the impact.
+            This is optional because there are various ways this can be
+            specified before calling :func:`calculate_impacts`.
+        :type population_raster_path: str
 
-        :param force_flag: Whether to force retrieval of the dataset from
-                the ftp server.
+        :param force_flag: Whether to force retrieval of the dataset from the
+            ftp server.
         :type force_flag: bool
 
-        :param data_is_local_flag: Whether the data is already extracted
-                and exists locally. Use this in cases where you manually want
-                to run a grid.xml without first doing a download.
+        :param data_is_local_flag: Whether the data is already extracted and
+            exists locally. Use this in cases where you manually want to run
+            a grid.xml without first doing a download.
         :type data_is_local_flag: bool
 
         :return: Instance
@@ -173,27 +176,9 @@ class ShakeEvent(QObject):
             self.data.extract()
             self.event_id = self.data.event_id
 
-        self.latitude = None
-        self.longitude = None
-        self.magnitude = None
-        self.depth = None
-        self.description = None
-        self.location = None
-        self.day = None
-        self.month = None
-        self.year = None
-        self.time = None
-        self.hour = None
-        self.minute = None
-        self.second = None
-        self.timezone = None
-        self.x_minimum = None
-        self.x_maximum = None
-        self.y_minimum = None
-        self.y_maximum = None
-        self.rows = None
-        self.columns = None
-        self.mmi_data = None
+        # Convert grid.xml
+        self.shake_grid_converter = ShakeGridConverter(self.grid_file_path())
+
         self.population_raster_path = population_raster_path
         # Path to tif of impact result - probably we wont even use it
         self.impact_file = None
@@ -229,7 +214,6 @@ class ShakeEvent(QObject):
         self.translator = None
         self.locale = locale
         self.setup_i18n()
-        self.parse_grid_xml()
 
     #noinspection PyMethodMayBeStatic
     def check_environment(self):
@@ -259,445 +243,6 @@ class ShakeEvent(QObject):
         else:
             LOGGER.error('Event file not found. %s' % grid_xml_path)
             raise GridXmlFileNotFoundError('%s not found' % grid_xml_path)
-
-    def extract_datetime(self, timestamp):
-        """Extract the parts of a date given a timestamp as per below example.
-
-        :param timestamp: (str) as provided by the 'event_timestamp'
-                attribute in the grid.xml.
-
-        # now separate out its parts
-        # >>> e = "2012-08-07T01:55:12WIB"
-        #>>> e[0:10]
-        #'2012-08-07'
-        #>>> e[12:-3]
-        #'01:55:11'
-        #>>> e[-3:]
-        #'WIB'   (WIB = Western Indonesian Time)
-        """
-        date_tokens = timestamp[0:10].split('-')
-        self.year = int(date_tokens[0])
-        self.month = int(date_tokens[1])
-        self.day = int(date_tokens[2])
-        time_tokens = timestamp[11:-3].split(':')
-        self.hour = int(time_tokens[0])
-        self.minute = int(time_tokens[1])
-        self.second = int(time_tokens[2])
-
-    def parse_grid_xml(self):
-        """Parse the grid xyz and calculate the bounding box of the event.
-
-        :raise GridXmlParseError
-
-        The grid xyz dataset looks like this::
-
-           <?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
-           <shakemap_grid xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns="http://earthquake.usgs.gov/eqcenter/shakemap"
-           xsi:schemaLocation="http://earthquake.usgs.gov
-           http://earthquake.usgs.gov/eqcenter/shakemap/xml/schemas/
-           shakemap.xsd" event_id="20120807015938" shakemap_id="20120807015938"
-           shakemap_version="1" code_version="3.5"
-           process_timestamp="2012-08-06T18:28:37Z" shakemap_originator="us"
-           map_status="RELEASED" shakemap_event_type="ACTUAL">
-           <event magnitude="5.1" depth="206" lat="2.800000"
-               lon="128.290000" event_timestamp="2012-08-07T01:55:12WIB"
-               event_network="" event_description="Halmahera, Indonesia    " />
-           <grid_specification lon_min="126.290000" lat_min="0.802000"
-               lon_max="130.290000" lat_max="4.798000"
-               nominal_lon_spacing="0.025000" nominal_lat_spacing="0.024975"
-               nlon="161" nlat="161" />
-           <grid_field index="1" name="LON" units="dd" />
-           <grid_field index="2" name="LAT" units="dd" />
-           <grid_field index="3" name="PGA" units="pctg" />
-           <grid_field index="4" name="PGV" units="cms" />
-           <grid_field index="5" name="MMI" units="intensity" />
-           <grid_field index="6" name="PSA03" units="pctg" />
-           <grid_field index="7" name="PSA10" units="pctg" />
-           <grid_field index="8" name="PSA30" units="pctg" />
-           <grid_field index="9" name="STDPGA" units="pctg" />
-           <grid_field index="10" name="URAT" units="" />
-           <grid_field index="11" name="SVEL" units="ms" />
-           <grid_data>
-           126.2900 04.7980 0.01 0.02 1.16 0.05 0.02 0 0.5 1 600
-           126.3150 04.7980 0.01 0.02 1.16 0.05 0.02 0 0.5 1 600
-           126.3400 04.7980 0.01 0.02 1.17 0.05 0.02 0 0.5 1 600
-           126.3650 04.7980 0.01 0.02 1.17 0.05 0.02 0 0.5 1 600
-           ...
-           ... etc
-
-        .. note:: We could have also obtained some of this data from the
-           grid.xyz and event.xml but the **grid.xml** is preferred because it
-           contains clear and unequivical metadata describing the various
-           fields and attributes. Also it provides all the data we need in a
-           single file.
-        """
-        LOGGER.debug('ParseGridXml requested.')
-        path = self.grid_file_path()
-        try:
-            document = minidom.parse(path)
-            event_element = document.getElementsByTagName('event')
-            event_element = event_element[0]
-            self.magnitude = float(
-                event_element.attributes['magnitude'].nodeValue)
-            self.longitude = float(
-                event_element.attributes['lon'].nodeValue)
-            self.latitude = float(
-                event_element.attributes['lat'].nodeValue)
-            self.location = event_element.attributes[
-                'event_description'].nodeValue.strip()
-            self.depth = float(event_element.attributes['depth'].nodeValue)
-            # Get the date - its going to look something like this:
-            # 2012-08-07T01:55:12WIB
-            timestamp = event_element.attributes['event_timestamp'].nodeValue
-            self.extract_datetime(timestamp)
-            # Note the timezone here is inconsistent with YZ from grid.xml
-            # use the latter
-            self.timezone = timestamp[-3:]
-
-            specification_element = document.getElementsByTagName(
-                'grid_specification')
-            specification_element = specification_element[0]
-            self.x_minimum = float(
-                specification_element.attributes['lon_min'].nodeValue)
-            self.x_maximum = float(
-                specification_element.attributes['lon_max'].nodeValue)
-            self.y_minimum = float(
-                specification_element.attributes['lat_min'].nodeValue)
-            self.y_maximum = float(
-                specification_element.attributes['lat_max'].nodeValue)
-            self.rows = float(
-                specification_element.attributes['nlat'].nodeValue)
-            self.columns = float(
-                specification_element.attributes['nlon'].nodeValue)
-            data_element = document.getElementsByTagName('grid_data')
-            data_element = data_element[0]
-            data = data_element.firstChild.nodeValue
-
-            # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
-            lon_column = 0
-            lat_column = 1
-            mmi_column = 4
-            self.mmi_data = []
-            for line in data.split('\n'):
-                if not line:
-                    continue
-                tokens = line.split(' ')
-                lon = tokens[lon_column]
-                lat = tokens[lat_column]
-                mmi = tokens[mmi_column]
-                datum_tuple = (lon, lat, mmi)
-                self.mmi_data.append(datum_tuple)
-
-        except Exception, e:
-            LOGGER.exception('Event parse failed')
-            raise GridXmlParseError(
-                'Failed to parse grid file.\n%s\n%s'
-                % (e.__class__, str(e)))
-
-    def mmi_data_to_delimited_text(self):
-        """Return the mmi data as a delimited test string.
-
-        :return: a delimited text string that can easily be written to
-            disk for e.g. use by gdal_grid.
-        :rtype:  str
-
-        The returned string will look like this::
-
-           123.0750,01.7900,1
-           123.1000,01.7900,1.14
-           123.1250,01.7900,1.15
-           123.1500,01.7900,1.16
-           etc...
-        """
-        string = 'lon,lat,mmi\n'
-        for row in self.mmi_data:
-            string += '%s,%s,%s\n' % (row[0], row[1], row[2])
-        return string
-
-    def mmi_data_to_delimited_file(self, force_flag=True):
-        """Save the mmi_data to a delimited text file suitable for processing
-        with gdal_grid.
-
-        :param force_flag: Optional. Whether to force the regeneration of the
-        output file. Defaults to False.
-        :type force_flag: bool
-
-        :return: The absolute file system path to the delimited text file.
-        :rtype: str
-
-        The output file will be of the same format as strings returned from
-        :func:`mmi_to_delimited_text`.
-
-        .. note:: An accompanying .csvt will be created which gdal uses to
-           determine field types. The csvt will contain the following string:
-           "Real","Real","Real". These types will be used in other conversion
-           operations. For example to convert the csv to a shp you would do::
-
-              ogr2ogr -select mmi -a_srs EPSG:4326 mmi.shp mmi.vrt mmi
-        """
-        LOGGER.debug('mmi_to_delimited_text requested.')
-
-        path = os.path.join(shakemap_extract_dir(),
-                            self.event_id,
-                            'mmi.csv')
-        #short circuit if the csv is already created.
-        if os.path.exists(path) and force_flag is not True:
-            return path
-        result_file = file(path, 'w')
-        result_file.write(self.mmi_data_to_delimited_text())
-        result_file.close()
-
-        # Also write the .csv which contains metadata about field types
-        csv_path = os.path.join(
-            shakemap_extract_dir(), self.event_id, 'mmi.csvt')
-        result_file = file(csv_path, 'w')
-        result_file.write('"Real","Real","Real"')
-        result_file.close()
-        return path
-
-    def mmi_data_to_vrt(self, force_flag=True):
-        """Save the mmi_data to an ogr vrt text file.
-
-        :param force_flag: Optional. Whether to force the regeneration
-            of the output file. Defaults to False.
-        :type force_flag: bool
-
-        :return: The absolute file system path to the .vrt text file.
-        :rtype: str
-
-        :raises: None
-        """
-        # Ensure the delimited mmi file exists
-        LOGGER.debug('mmi_to_vrt requested.')
-
-        vrt_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi.vrt')
-
-        #short circuit if the vrt is already created.
-        if os.path.exists(vrt_path) and force_flag is not True:
-            return vrt_path
-
-        csv_path = self.mmi_data_to_delimited_file(force_flag)
-
-        vrt_string = ('<OGRVRTDataSource>'
-                      '  <OGRVRTLayer name="mmi">'
-                      '    <SrcDataSource>%s</SrcDataSource>'
-                      '    <GeometryType>wkbPoint</GeometryType>'
-                      '    <GeometryField encoding="PointFromColumns"'
-                      '                      x="lon" y="lat" z="mmi"/>'
-                      '  </OGRVRTLayer>'
-                      '</OGRVRTDataSource>' % csv_path)
-        result_file = file(vrt_path, 'w')
-        result_file.write(vrt_string)
-        result_file.close()
-        return vrt_path
-
-    #noinspection PyMethodMayBeStatic
-    def _add_executable_prefix(self, command):
-        """Add the executable prefix for gdal binaries.
-
-        This is primarily needed for OSX where gdal tools are tucked away in
-        the Library path.
-
-        :param command: A string containing the command to
-        which the prefix will be prepended
-        :type command: str
-
-        :return: A copy of the command with the prefix added.
-        :rtype: str
-
-        :raises: None
-        """
-
-        executable_prefix = ''
-        if sys.platform == 'darwin':  # Mac OS X
-            # .. todo:: FIXME - softcode gdal version in this path
-            executable_prefix = ('/Library/Frameworks/GDAL.framework/'
-                                 'Versions/1.9/Programs/')
-        command = executable_prefix + command
-        return command
-
-    def _run_command(self, command):
-        """Run a command and raise any error as needed.
-
-        This is a simple runner for executing gdal commands.
-
-        :param command: Required. A command string to be run.
-        :type command: str
-
-        :return: None
-
-        :raises: Any exceptions will be propagated.
-        """
-
-        the_command = self._add_executable_prefix(command)
-
-        try:
-            result = call(the_command, shell=True)
-            del result
-        except CalledProcessError, e:
-            LOGGER.exception('Running command failed %s' % the_command)
-            message = ('Error while executing the following shell '
-                       'command: %s\nError message: %s'
-                       % (the_command, str(e)))
-            # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
-            if sys.platform == 'darwin':  # Mac OS X
-                if 'Errno 4' in str(e):
-                    # continue as the error seems to be non critical
-                    pass
-                else:
-                    raise Exception(message)
-            else:
-                raise Exception(message)
-
-    def mmi_data_to_shapefile(self, force_flag=False):
-        """Convert grid.xml's mmi column to a vector shp file using ogr2ogr.
-
-        An ESRI shape file will be created.
-
-        :param force_flag: bool (Optional). Whether to force the regeneration
-            of the output file. Defaults to False.
-
-        :return: Path to the resulting tif file.
-        :rtype: str
-
-        Example of the ogr2ogr call we generate::
-
-           ogr2ogr -select mmi -a_srs EPSG:4326 mmi.shp mmi.vrt mmi
-
-        .. note:: It is assumed that ogr2ogr is in your path.
-        """
-        LOGGER.debug('mmi_data_to_shapefile requested.')
-
-        shp_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-points.shp')
-        # Short circuit if the tif is already created.
-        if os.path.exists(shp_path) and force_flag is not True:
-            return shp_path
-
-        # Ensure the vrt mmi file exists (it will generate csv too if needed)
-        vrt_path = self.mmi_data_to_vrt(force_flag)
-
-        #now generate the tif using default interpolation options
-
-        the_command = (
-            ('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '
-             '%(shp)s %(vrt)s mmi') % {'shp': shp_path, 'vrt': vrt_path})
-
-        LOGGER.info('Created this gdal command:\n%s' % the_command)
-        # Now run GDAL warp scottie...
-        self._run_command(the_command)
-
-        # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        qml_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-points.qml')
-        source_qml = os.path.join(data_dir(), 'mmi-shape.qml')
-        shutil.copyfile(source_qml, qml_path)
-        return shp_path
-
-    def mmi_data_to_raster(self, force_flag=False, algorithm='nearest'):
-        """Convert the grid.xml's mmi column to a raster using gdal_grid.
-
-        A geotiff file will be created.
-
-        Unfortunately no python bindings exist for doing this so we are
-        going to do it using a shell call.
-
-        :param force_flag: (Optional). Whether to force the regeneration
-            of the output file. Defaults to False.
-        :type force_flag: bool
-        :param algorithm: (Optional). Which resampling algorithm to use.
-            Valid options are 'nearest' (for nearest neighbour), 'invdist'
-            (for inverse distance), 'average' (for moving average). Defaults
-            to 'nearest' if not specified. Note that passing resampling alg
-            parameters is currently not supported. If None is passed it will
-            be replaced with 'nearest'.
-        :type algorithm: str
-        .. seealso:: http://www.gdal.org/gdal_grid.html
-
-        :return: Path to the resulting tif file.
-        :rtype: str
-
-        :raises: None
-
-        Example of the gdal_grid call we generate::
-
-           gdal_grid -zfield "mmi" -a invdist:power=2.0:smoothing=1.0 \
-           -txe 126.29 130.29 -tye 0.802 4.798 -outsize 400 400 -of GTiff \
-           -ot Float16 -l mmi mmi.vrt mmi.tif
-
-        .. note:: It is assumed that gdal_grid is in your path.
-
-        .. note:: For interest you can also make quite beautiful smoothed
-          rasters using this:
-
-          gdal_grid -zfield "mmi" -a_srs EPSG:4326
-          -a invdist:power=2.0:smoothing=1.0 -txe 122.45 126.45
-          -tye -2.21 1.79 -outsize 400 400 -of GTiff
-          -ot Float16 -l mmi mmi.vrt mmi-trippy.tif
-        """
-        LOGGER.debug('mmi_to_raster requested.')
-
-        if algorithm is None:
-            algorithm = 'nearest'
-
-        tif_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-%s.tif' % algorithm)
-        #short circuit if the tif is already created.
-        if os.path.exists(tif_path) and force_flag is not True:
-            return tif_path
-
-        # Ensure the vrt mmi file exists (it will generate csv too if needed)
-        vrt_path = self.mmi_data_to_vrt(force_flag)
-
-        # now generate the tif using default nearest neighbour interpolation
-        # options. This gives us the same output as the mi.grd generated by
-        # the earthquake server.
-
-        if 'invdist' in algorithm:
-            the_algorithm = 'invdist:power=2.0:smoothing=1.0'
-        else:
-            the_algorithm = algorithm
-
-        options = {
-            'alg': the_algorithm,
-            'xMin': self.x_minimum,
-            'xMax': self.x_maximum,
-            'yMin': self.y_minimum,
-            'yMax': self.y_maximum,
-            'dimX': self.columns,
-            'dimY': self.rows,
-            'vrt': vrt_path,
-            'tif': tif_path}
-
-        command = (('gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
-                    '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
-                    '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
-                    '%(vrt)s %(tif)s') % options)
-
-        LOGGER.info('Created this gdal command:\n%s' % command)
-        # Now run GDAL warp scottie...
-        self._run_command(command)
-
-        # copy the keywords file from fixtures for this layer
-        keyword_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            'mmi-%s.keywords' % algorithm)
-        source_keywords = os.path.join(data_dir(), 'mmi.keywords')
-        shutil.copyfile(source_keywords, keyword_path)
-        # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        qml_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-%s.qml' % algorithm)
-        source_qml = os.path.join(data_dir(), 'mmi.qml')
-        shutil.copyfile(source_qml, qml_path)
-        return tif_path
 
     def mmi_data_to_contours(self, force_flag=True, algorithm='nearest'):
         """Extract contours from the event's tif file.
@@ -744,7 +289,8 @@ class ShakeEvent(QObject):
                     'Old contour files not deleted'
                     ' - this may indicate a file permissions issue.')
 
-        tif_path = self.mmi_data_to_raster(force_flag, algorithm)
+        tif_path = self.shake_grid_converter.mmi_to_raster(
+            self.event_id, 'BMKG', force_flag, algorithm)
         # Based largely on
         # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
         driver = ogr.GetDriverByName('ESRI Shapefile')
@@ -835,30 +381,6 @@ class ShakeEvent(QObject):
 
         return output_file
 
-    #noinspection PyMethodMayBeStatic
-    def romanize(self, mmi_value):
-        """Return the roman numeral for an mmi value.
-
-        :param mmi_value: The MMI value that will be romanized
-        :type mmi_value: float
-
-        :return Roman numeral equivalent of the value
-        :rtype: str
-        """
-        if mmi_value is None:
-            LOGGER.debug('Romanize passed None')
-            return ''
-
-        LOGGER.debug('Romanising %f' % float(mmi_value))
-        roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
-                      'IX', 'X', 'XI', 'XII']
-        try:
-            roman = roman_list[int(float(mmi_value))]
-        except ValueError:
-            LOGGER.exception('Error converting MMI value to roman')
-            return None
-        return roman
-
     def mmi_shaking(self, mmi_value):
         """Return the perceived shaking for an mmi value as translated string.
         :param mmi_value: float or int required.
@@ -900,15 +422,12 @@ class ShakeEvent(QObject):
         return my_damage_dict[mmi_value]
 
     def set_contour_properties(self, input_file):
-        """
-        Set the X, Y, RGB, ROMAN attributes of the contour layer.
+        """Set the X, Y, RGB, ROMAN attributes of the contour layer.
 
         :param input_file: (Required) Name of the contour layer.
         :type input_file: str
 
-        :return: None
-
-        :raise InvalidLayerError if anything is amiss with the layer.
+        :raise: InvalidLayerError if anything is amiss with the layer.
         """
         LOGGER.debug('set_contour_properties requested for %s.' % input_file)
         layer = QgsVectorLayer(input_file, 'mmi-contours', "ogr")
@@ -943,16 +462,12 @@ class ShakeEvent(QObject):
             # Get length
             length = feature.geometry().length()
 
-            mmi_value = float(str(feature['MMI']))
-
+            mmi_value = float(feature['MMI'])
             # We only want labels on the whole number contours
             if mmi_value != round(mmi_value):
                 roman = ''
             else:
-                roman = self.romanize(mmi_value)
-
-            #LOGGER.debug('MMI: %s ----> %s' % (
-            #    myAttributes[myMMIIndex].toString(), roman))
+                roman = romanise(mmi_value)
 
             # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
             rgb = mmi_colour(mmi_value)
@@ -983,10 +498,10 @@ class ShakeEvent(QObject):
         :raises: None
         """
         LOGGER.debug('bounds to rectangle called.')
-        rectangle = QgsRectangle(self.x_minimum,
-                                 self.y_maximum,
-                                 self.x_maximum,
-                                 self.y_minimum)
+        rectangle = QgsRectangle(self.shake_grid_converter.x_minimum,
+                                 self.shake_grid_converter.y_maximum,
+                                 self.shake_grid_converter.x_maximum,
+                                 self.shake_grid_converter.y_minimum)
         return rectangle
 
     def cities_to_shapefile(self, force_flag=False):
@@ -1171,7 +686,8 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('localCityValues requested.')
         # Setup the raster layer for interpolated mmi lookups
-        path = self.mmi_data_to_raster()
+        path = self.shake_grid_converter.mmi_to_raster(
+            self.event_id, 'BMKG')
         file_info = QFileInfo(path)
         base_name = file_info.baseName()
         raster_layer = QgsRasterLayer(path, base_name)
@@ -1194,7 +710,6 @@ class ShakeEvent(QObject):
 
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
-
         attempts_limit = 5
         minimum_city_count = 1
         found_flag = False
@@ -1233,19 +748,10 @@ class ShakeEvent(QObject):
         # Setup field indexes of our input and out datasets
         cities = []
 
-        #myFields = QgsFields()
-        #myFields.append(QgsField('id', QVariant.Int))
-        #myFields.append(QgsField('name', QVariant.String))
-        #myFields.append(QgsField('population', QVariant.Int))
-        #myFields.append(QgsField('mmi', QVariant.Double))
-        #myFields.append(QgsField('dist_to', QVariant.Double))
-        #myFields.append(QgsField('dir_to', QVariant.Double))
-        #myFields.append(QgsField('dir_from', QVariant.Double))
-        #myFields.append(QgsField('roman', QVariant.String))
-        #myFields.append(QgsField('colour', QVariant.String))
-
         # For measuring distance and direction from each city to epicenter
-        epicenter = QgsPoint(self.longitude, self.latitude)
+        epicenter = QgsPoint(
+            self.shake_grid_converter.longitude,
+            self.shake_grid_converter.latitude)
 
         # Now loop through the db adding selected features to mem layer
         for feature in layer.getFeatures(request):
@@ -1263,7 +769,7 @@ class ShakeEvent(QObject):
                 continue
 
             # Make sure the place is populated
-            population = feature['population']
+            population = int(feature['population'])
             if population < 1:
                 continue
 
@@ -1285,16 +791,16 @@ class ShakeEvent(QObject):
                 # position not found on raster
                 continue
             value = raster_values[0]  # Band 1
-            LOGGER.debug('MyValue: %s' % value)
+            LOGGER.debug('Raster Value: %s' % value)
             if 'no data' not in str(value):
                 mmi = float(value)
             else:
                 mmi = 0
 
-            LOGGER.debug('Looked up mmi of %s on raster for %s' %
-                         (mmi, point.toString()))
+            LOGGER.debug(
+                'Looked up mmi of %s on raster for %s' % (mmi, str(point)))
 
-            roman = self.romanize(mmi)
+            roman = romanise(mmi)
             if roman is None:
                 continue
 
@@ -1312,6 +818,7 @@ class ShakeEvent(QObject):
                 mmi_colour(mmi)]
             new_feature.setAttributes(attributes)
             cities.append(new_feature)
+
         return cities
 
     def local_cities_memory_layer(self):
@@ -1325,33 +832,39 @@ class ShakeEvent(QObject):
         LOGGER.debug('local_cities_memory_layer requested.')
         # Now store the selection in a temporary memory layer
         memory_layer = QgsVectorLayer('Point', 'affected_cities', 'memory')
+        layer_provider = memory_layer.dataProvider()
+        provider_capabilities = layer_provider.capabilities()
 
-        memory_provider = memory_layer.dataProvider()
-        # add field defs
-        memory_provider.addAttributes([
-            QgsField('id', QVariant.Int),
-            QgsField('name', QVariant.String),
-            QgsField('population', QVariant.Int),
-            QgsField('mmi', QVariant.Double),
-            QgsField('dist_to', QVariant.Double),
-            QgsField('dir_to', QVariant.Double),
-            QgsField('dir_from', QVariant.Double),
-            QgsField('roman', QVariant.String),
-            QgsField('colour', QVariant.String)])
-        cities = self.local_city_features()
-        result = memory_provider.addFeatures(cities)
-        if not result:
-            LOGGER.exception('Unable to add features to cities memory layer')
-            raise CityMemoryLayerCreationError(
-                'Could not add any features to cities memory layer.')
+        if provider_capabilities & QgsVectorDataProvider.AddAttributes:
+            memory_layer.startEditing()
+            # add field defs
+            layer_provider.addAttributes([
+                QgsField('id', QVariant.Int),
+                QgsField('name', QVariant.String),
+                QgsField('population', QVariant.Int),
+                QgsField('mmi', QVariant.Double),
+                QgsField('dist_to', QVariant.Double),
+                QgsField('dir_to', QVariant.Double),
+                QgsField('dir_from', QVariant.Double),
+                QgsField('roman', QVariant.String),
+                QgsField('colour', QVariant.String)])
+            cities = self.local_city_features()
+            result = layer_provider.addFeatures(cities)
+            if not result:
+                LOGGER.exception(
+                    'Unable to add features to cities memory layer')
+                raise CityMemoryLayerCreationError(
+                    'Could not add any features to cities memory layer.')
 
-        memory_layer.commitChanges()
-        memory_layer.updateExtents()
+            memory_layer.commitChanges()
+            memory_layer.updateExtents()
 
-        LOGGER.debug('Feature count of mem layer:  %s' %
-                     memory_layer.featureCount())
-
-        return memory_layer
+            LOGGER.debug('Feature count of mem layer:  %s' %
+                         memory_layer.featureCount())
+            return memory_layer
+        else:
+            raise InvalidLayerError(
+                'Could not add new attributes to this layer.')
 
     def city_search_box_memory_layer(self, force_flag=False):
         """Return the search boxes used to search for cities as a memory layer.
@@ -1636,7 +1149,7 @@ class ShakeEvent(QObject):
         impact_row = [TableCell(self.tr('Perceived Shaking'), header=True)]
         for mmi in range(2, 10):
             header.append(
-                TableCell(self.romanize(mmi),
+                TableCell(romanise(mmi),
                           cell_class='mmi-%s' % mmi,
                           header=True))
             if mmi in self.affected_counts:
@@ -1699,7 +1212,9 @@ class ShakeEvent(QObject):
         else:
             exposure_path = population_raster_path
 
-        hazard_path = self.mmi_data_to_raster(
+        hazard_path = self.shake_grid_converter.mmi_to_raster(
+            self.event_id,
+            'BMKG',
             force_flag=force_flag,
             algorithm=algorithm)
 
@@ -1718,7 +1233,7 @@ class ShakeEvent(QObject):
 
         result = safe_calculate_impact(layers, function)
         try:
-            fatalities = result.keywords['fatalites_per_mmi']
+            fatalities = result.keywords['fatalities_per_mmi']
             affected = result.keywords['exposed_per_mmi']
             displaced = result.keywords['displaced_per_mmi']
             total_fatalities = result.keywords['total_fatalities']
@@ -1833,13 +1348,14 @@ class ShakeEvent(QObject):
         return clipped_hazard, clipped_exposure
 
     def _get_population_path(self):
-        """Helper to determine population raster spath.
+        """Helper to determine population raster's path.
 
         The following priority will be used to determine the path:
             1) the class attribute self.population_raster_path
-                will be checked and if not None it will be used.
+               will be checked and if not None and the file exists it will be
+               used.
             2) the environment variable 'INASAFE_POPULATION_PATH' will be
-               checked if set it will be used.
+               checked and if the file exists if set it will be used.
             4) A hard coded path of
                :file:`/fixtures/exposure/population.tif` will be appended
                to os.path.abspath(os.path.curdir)
@@ -1864,15 +1380,21 @@ class ShakeEvent(QObject):
 
         local_path = '/usr/local/share/inasafe/exposure/population.tif'
         if self.population_raster_path is not None:
-            return self.population_raster_path
-        elif 'INASAFE_POPULATION_PATH' in os.environ:
-            return os.environ['INASAFE_POPULATION_PATH']
-        elif os.path.exists(fixture_path):
+            if os.path.exists(self.population_raster_path):
+                return self.population_raster_path
+
+        if 'INASAFE_POPULATION_PATH' in os.environ:
+            population_path = os.environ['INASAFE_POPULATION_PATH']
+            if os.path.exists(population_path):
+                return population_path
+
+        if os.path.exists(fixture_path):
             return fixture_path
-        elif os.path.exists(local_path):
+
+        if os.path.exists(local_path):
             return local_path
-        else:
-            raise FileNotFoundError('Population file could not be found')
+
+        raise FileNotFoundError('Population file could not be found')
 
     def render_map(self, force_flag=False):
         """This is the 'do it all' method to render a pdf.
@@ -1921,7 +1443,8 @@ class ShakeEvent(QObject):
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
-        mmi_shape_file = self.mmi_data_to_shapefile(force_flag=force_flag)
+        mmi_shape_file = self.shake_grid_converter.mmi_to_shapefile(
+            force_flag=force_flag)
         logging.info('Created: %s', mmi_shape_file)
         cities_html_path = None
         cities_shape_file = None
@@ -2069,8 +1592,8 @@ class ShakeEvent(QObject):
         # Now add our layers to the renderer so they appear in the print out
         layers = reversed(CANVAS.layers())
         layer_list = []
-        for myLayer in layers:
-            layer_list.append(myLayer.id())
+        for layer in layers:
+            layer_list.append(layer.id())
 
         layer_list.append(contours_layer.id())
         if cities_layer is not None and cities_layer.isValid():
@@ -2208,7 +1731,9 @@ class ShakeEvent(QObject):
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
         #Format the lat lon from decimal degrees to dms
-        point = QgsPoint(self.longitude, self.latitude)
+        point = QgsPoint(
+            self.shake_grid_converter.longitude,
+            self.shake_grid_converter.latitude)
         coordinates = point.toDegreesMinutesSeconds(2)
         tokens = coordinates.split(',')
         longitude = tokens[0]
@@ -2244,18 +1769,22 @@ class ShakeEvent(QObject):
             'fatalities-name': fatalities_name,
             'fatalities-range': fatalities_range,
             'fatalities-count': '%s' % fatalities_count,
-            'mmi': '%s' % self.magnitude,
+            'mmi': '%s' % self.shake_grid_converter.magnitude,
             'date': '%s-%s-%s' % (
-                self.day, self.month, self.year),
+                self.shake_grid_converter.day,
+                self.shake_grid_converter.month,
+                self.shake_grid_converter.year),
             'time': '%s:%s:%s' % (
-                self.hour, self.minute, self.second),
+                self.shake_grid_converter.hour,
+                self.shake_grid_converter.minute,
+                self.shake_grid_converter.second),
             'formatted-date-time': self.elapsed_time()[0],
             'latitude-name': self.tr('Latitude'),
             'latitude-value': '%s' % latitude,
             'longitude-name': self.tr('Longitude'),
             'longitude-value': '%s' % longitude,
             'depth-name': self.tr('Depth'),
-            'depth-value': '%s' % self.depth,
+            'depth-value': '%s' % self.shake_grid_converter.depth,
             'depth-unit': km_text,
             'located-label': self.tr('Located'),
             'distance': '%.2f' % distance,
@@ -2281,12 +1810,12 @@ class ShakeEvent(QObject):
         .. note:: Code based on Ole's original impact_map work.
         """
         # Work out interval since earthquake (assume both are GMT)
-        year = self.year
-        month = self.month
-        day = self.day
-        hour = self.hour
-        minute = self.minute
-        second = self.second
+        year = self.shake_grid_converter.year
+        month = self.shake_grid_converter.month
+        day = self.shake_grid_converter.day
+        hour = self.shake_grid_converter.hour
+        minute = self.shake_grid_converter.minute
+        second = self.shake_grid_converter.second
 
         eq_date = datetime(year, month, day, hour, minute, second)
 
@@ -2371,29 +1900,29 @@ class ShakeEvent(QObject):
         else:
             extent_with_cities = 'Not set'
 
-        if self.mmi_data:
+        if self.shake_grid_converter.mmi_data:
             mmi_data = 'Populated'
         else:
             mmi_data = 'Not populated'
 
-        event_dict = {'latitude': self.latitude,
-                      'longitude': self.longitude,
+        event_dict = {'latitude': self.shake_grid_converter.latitude,
+                      'longitude': self.shake_grid_converter.longitude,
                       'event_id': self.event_id,
-                      'magnitude': self.magnitude,
-                      'depth': self.depth,
-                      'description': self.description,
-                      'location': self.location,
-                      'day': self.day,
-                      'month': self.month,
-                      'year': self.year,
-                      'time': self.time,
-                      'time_zone': self.timezone,
-                      'x_minimum': self.x_minimum,
-                      'x_maximum': self.x_maximum,
-                      'y_minimum': self.y_minimum,
-                      'y_maximum': self.y_maximum,
-                      'rows': self.rows,
-                      'columns': self.columns,
+                      'magnitude': self.shake_grid_converter.magnitude,
+                      'depth': self.shake_grid_converter.depth,
+                      'description': self.shake_grid_converter.description,
+                      'location': self.shake_grid_converter.location,
+                      'day': self.shake_grid_converter.day,
+                      'month': self.shake_grid_converter.month,
+                      'year': self.shake_grid_converter.year,
+                      'time': self.shake_grid_converter.time,
+                      'time_zone': self.shake_grid_converter.time_zone,
+                      'x_minimum': self.shake_grid_converter.x_minimum,
+                      'x_maximum': self.shake_grid_converter.x_maximum,
+                      'y_minimum': self.shake_grid_converter.y_minimum,
+                      'y_maximum': self.shake_grid_converter.y_maximum,
+                      'rows': self.shake_grid_converter.rows,
+                      'columns': self.shake_grid_converter.columns,
                       'mmi_data': mmi_data,
                       'population_raster_path': self.population_raster_path,
                       'impact_file': self.impact_file,

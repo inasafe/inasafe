@@ -29,7 +29,9 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_decimal_separator,
     get_utm_epsg,
-    get_non_conflicting_attribute_name)
+    get_non_conflicting_attribute_name,
+    temp_dir,
+    log_file_path)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -271,6 +273,14 @@ class UtilitiesTest(unittest.TestCase):
             expected_result, non_conflicting_attribute_name)
         self.assertEqual(
             expected_result, non_conflicting_attribute_name, message)
+
+    def test_log_file_path(self):
+        """Test the log_file_path returns correct path."""
+        log_temp_dir = temp_dir('logs')
+        actual_path = os.path.join(log_temp_dir, 'inasafe.log')
+        message = 'Actual log path: %s, I got %s' % (
+            actual_path, log_file_path())
+        self.assertEqual(actual_path, log_file_path(), message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

@@ -15,7 +15,7 @@
 
 # Configuration option:
 # Add packages to this list if you want to be able to run the tests for that package
-ALLOWED_TESTS="safe batch impact_stats report test tools utilities widgets"
+ALLOWED_TESTS="safe realtime batch impact_stats report test tools utilities widgets"
 
 # You should not need to edit anything after this point.
 # -------------------------------------------------------------------------
@@ -83,8 +83,8 @@ source /var/lib/jenkins/jobs/InaSAFE-QGIS2/env.sh
 
 #Go on with metrics and tests
 make clean
-if [[ $TEST_PACKAGE == 'safe' ]]; then
-    # special case for safe package
+if [[ $TEST_PACKAGE == 'safe' ]] || [[ $TEST_PACKAGE == 'realtime' ]]; then
+    # special case for safe or realtime package
     TEST_PATH="$DIR/$TEST_PACKAGE"
     xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
         --with-id --with-xcoverage --with-xunit --verbose \

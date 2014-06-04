@@ -247,7 +247,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             else:
                 msg = (tr(
                     'Unknown hazard type %s. Must be either "depth" or "grid"')
-                       % mode)
+                    % mode)
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
