@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OpenStreetMap Downloader &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>OpenStreetMap Downloader &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -27,10 +26,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
     <link rel="next" title="Tool Menggabungkan Layer Dampak" href="impact_layer_merge_tool.html" />
     <link rel="prev" title="Simpan Skenario" href="save_scenario.html" />
 
@@ -142,7 +142,7 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="General Index"
+                   title="Indeks Umum"
                    style="z-index:;"
                 accesskey="I">index</a>
                 </li>
@@ -152,7 +152,7 @@
                 <a href="impact_layer_merge_tool.html"
                    title="Tool Menggabungkan Layer Dampak"
                    style="z-index:;"
-                accesskey="N">next</a>
+                accesskey="N">berikut</a>
                 </li>
                 
                 <li class="right"
@@ -160,7 +160,7 @@
                 <a href="save_scenario.html"
                    title="Simpan Skenario"
                    style="z-index:;"
-                accesskey="P">previous</a>
+                accesskey="P">sebelum</a>
                 </li>
                 
 
@@ -183,7 +183,7 @@
         <div class="span12">
                 
   <div class="section" id="openstreetmap-downloader">
-<span id="id1"></span><h1>OpenStreetMap Downloader<a class="headerlink" href="#openstreetmap-downloader" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>OpenStreetMap Downloader<a class="headerlink" href="#openstreetmap-downloader" title="Link permanent untuk headline ini">¶</a></h1>
 <p>Tool ini akan membantu Anda memperoleh data (&#8216;struktur&#8217;) bangunan dan jaringan jalan (&#8216;jalan&#8217;) dari projek OpenStreetMap.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/openstreetmap_downloader.png"><img alt="OpenStreetMap Downloader" src="_images/openstreetmap_downloader.png" style="width: 393.0px; height: 474.0px;" /></a>
@@ -192,69 +192,101 @@
 <p>Tool ini membutuhkan koneksi internet karena tool ini mengambil data dari layanan situs <a class="reference external" href="http://osm.linfiniti.com">Laporan OSM Linfiniti</a></p>
 <p>Data, setelah didownload akan tersedia untuk Anda sebagai sebuah shapefile. Sebuah gaya file secara otomatis dibuat sehingga dilambangkan dengan baik dalam QGIS. Selain itu, metadata kata kunci yang benar dibuat untuk dataset didownload sehingga dapat digunakan secara langsung dalam skenario analisis dampak menggunakan InaSAFE.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Layanan <em>download</em> ini memiliki keterbatasan terhadap besarnya dataset yang dapat diterima. Kemungkinan Anda akan mendapati isu ketika mencoba untuk mengambil misalnya untuk data batas tapak bangunan seluas satu negara. Umumnya pen-<em>download</em>-an dataset pada level perkotaan dan di bawahnya seharusnya mampu bekerja lebih baik.</p>
 </div>
 <p>Untuk menggunakan alat ini secara efektif:</p>
 <ul class="simple">
-<li>Gunakan QGIS untuk memperbesar ke daerah yang Anda ingin dapatkan datanya. Untuk mendapatkan area yang Anda inginkan, anda bisa mengatur kotak secara manual di area yang disediakan pada bagian bawah dari dialog.</li>
-<li>Periksa apakah direktori output sudah benar. Catatan bahwa set data yang tersimpan akan diberi nama buildings.shp dan roads.shp (beserta berkas-berkas yang terhubung dengannya)</li>
-<li>Secara default, nama file yang sederhana akan digunakan (misalnya roads.shp, buildings.shp). Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &#8216;padang-&#8216; akan mengubah file yang di-download menjadi &#8216;padang-roads.shp&#8217; dan &#8216;padang-buildings.shp&#8217;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &#8216;-&#8216;, dan &#8216;_&#8217;. Anda dapat mengosongkan pilihan ini.</li>
-<li>Tekan <em class="guilabel">OK</em> dan tunggu data untuk diambil.</li>
+<li><p class="first">Gunakan QGIS untuk memperbesar ke daerah yang Anda ingin dapatkan datanya. Untuk mendapatkan area yang Anda inginkan, anda bisa mengatur kotak secara manual di area yang disediakan pada bagian bawah dari dialog.</p>
+</li>
+<li><p class="first">Periksa apakah direktori output sudah benar. Catatan bahwa set data yang tersimpan akan diberi nama buildings.shp dan roads.shp (beserta berkas-berkas yang terhubung dengannya)</p>
+</li>
+<li><p class="first">Secara default, nama file yang sederhana akan digunakan (misalnya roads.shp, buildings.shp). Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &#8216;padang-&#8216; akan mengubah file yang di-download menjadi &#8216;padang-roads.shp&#8217; dan &#8216;padang-buildings.shp&#8217;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &#8216;-&#8216;, dan &#8216;_&#8217;. Anda dapat mengosongkan pilihan ini.</p>
+</li>
+<li><p class="first">Tekan <em class="guilabel">OK</em> dan tunggu data untuk diambil.</p>
+</li>
 </ul>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<p class="first admonition-title">Peringatan</p>
 <p class="last">Jika dataset sudah ada di direktori output, dataset tersebut akan ditimpa. Alat ini memerlukan koneksi internet untuk bekerja dan mengambil bangunan akan menggunakan bandwidth Anda.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Data yang didownload adalah hak cipta kontributor OpenStreetMap (klik untuk info lebih lanjut).</p>
 </div>
 <div class="section" id="building-data">
-<h2>Data bangunan<a class="headerlink" href="#building-data" title="Permalink to this headline">¶</a></h2>
+<h2>Data bangunan<a class="headerlink" href="#building-data" title="Link permanent untuk headline ini">¶</a></h2>
 <p>InaSAFE mendukung penggunaan data bangunan pada berbagai macam fungsi dampak. Pada umumnya kami mendukung batas tapak bangunan yang bersumber dari proyek <a class="reference external" href="https://openstreetmap.org">OpenStreetMap (OSM)</a></p>
 <p>Tipe bangunan berikut ini yang berasal (tergantung dari berbagai tags yang diberikan pada OSM) adalah sebagai berikut:</p>
 <ul class="simple">
-<li>Sekolah</li>
-<li>Universitas/Kampus</li>
-<li>Pemerintahan</li>
-<li>Klinik/Dokter</li>
-<li>Rumah Sakit</li>
-<li>Stasiun Pemadam Kebakaran</li>
-<li>Kantor Polisi</li>
-<li>Bangunan Publik</li>
-<li>Tempat Ibadah - Islam</li>
-<li>Tempat Ibadah - Unitarian</li>
-<li>Tempat Ibadah - Buddha</li>
-<li>Tempat Ibadah - Unitarian</li>
+<li><p class="first">Sekolah</p>
+</li>
+<li><p class="first">Universitas/Kampus</p>
+</li>
+<li><p class="first">Pemerintahan</p>
+</li>
+<li><p class="first">Klinik/Dokter</p>
+</li>
+<li><p class="first">Rumah Sakit</p>
+</li>
+<li><p class="first">Stasiun Pemadam Kebakaran</p>
+</li>
+<li><p class="first">Kantor Polisi</p>
+</li>
+<li><p class="first">Bangunan Publik</p>
+</li>
+<li><p class="first">Tempat Ibadah - Islam</p>
+</li>
+<li><p class="first">Tempat Ibadah - Unitarian</p>
+</li>
+<li><p class="first">Tempat Ibadah - Buddha</p>
+</li>
+<li><p class="first">Tempat Ibadah - Unitarian</p>
+</li>
 <li>Supermarket</li>
-<li>Permukiman</li>
-<li>Fasilitas Olahraga</li>
-<li>Tempat Beribadah</li>
-<li>Komersil</li>
-<li>Industri</li>
+<li><p class="first">Permukiman</p>
+</li>
+<li><p class="first">Fasilitas Olahraga</p>
+</li>
+<li><p class="first">Tempat Beribadah</p>
+</li>
+<li><p class="first">Komersil</p>
+</li>
+<li><p class="first">Industri</p>
+</li>
 </ul>
 <p>Jenis turunan akan hadir dalam sebuah <em>field</em> yang disebut &#8216;type&#8217; saat men-<em>download</em> data bangunan. Perhatikan bahwa hal ini tergantung pada daerah mana yang anda <em>download</em>, kemungkinan hanya beberapa dari kategori ini yang akan muncul pada set data bangunan Anda.</p>
 </div>
 <div class="section" id="roads-data">
-<h2>Data jalan<a class="headerlink" href="#roads-data" title="Permalink to this headline">¶</a></h2>
+<h2>Data jalan<a class="headerlink" href="#roads-data" title="Link permanent untuk headline ini">¶</a></h2>
 <p>InaSAFE mendukung penggunaan data bangunan untuk berbagai fungsi dampak. Pada umumnya kami mendukung jalan yang bersumber dari proyek <a class="reference external" href="https://openstreetmap.org">OpenStreetMap (OSM)</a></p>
 <p>Tipe jalan berikut ini yang berasal (tergantung dari berbagai tags yang diberikan pada OSM) adalah sebagai berikut:</p>
 <ul class="simple">
-<li>Jalan besar / jalan bebas hambatan (termasuk &#8216;trunk&#8217; / jalan penting dari OSM)</li>
-<li>Percabangan jalan besar</li>
-<li>Jalan primer</li>
-<li>Percabangan jalan primer</li>
-<li>Jalan tertier</li>
-<li>Percabangan jalan tertier</li>
-<li>Jalan Sekunder</li>
-<li>Percabangan jalan sekunder</li>
-<li>Jalan, perumahan, permukiman, etc. (termasuk semua jalan yang diberi tag &#8216;living_street&#8217;, &#8216;residential&#8217;, &#8216;yes&#8217;, &#8216;road&#8217;, &#8216;unclassified&#8217;, &#8216;service&#8217;, &#8216;&#8217; dan NULL)</li>
-<li><em>Track</em></li>
-<li>Jalur sepeda, jalan kecil, etc. (termasuk jalan dengan tag  &#8216;cycleway&#8217;, &#8216;footpath&#8217;, &#8216;pedestrian&#8217;, &#8216;footway&#8217; dan &#8216;path&#8217; )</li>
+<li><p class="first">Jalan besar / jalan bebas hambatan (termasuk &#8216;trunk&#8217; / jalan penting dari OSM)</p>
+</li>
+<li><p class="first">Percabangan jalan besar</p>
+</li>
+<li><p class="first">Jalan primer</p>
+</li>
+<li><p class="first">Percabangan jalan primer</p>
+</li>
+<li><p class="first">Jalan tertier</p>
+</li>
+<li><p class="first">Percabangan jalan tertier</p>
+</li>
+<li><p class="first">Jalan Sekunder</p>
+</li>
+<li><p class="first">Percabangan jalan sekunder</p>
+</li>
+<li><p class="first">Jalan, perumahan, permukiman, etc. (termasuk semua jalan yang diberi tag &#8216;living_street&#8217;, &#8216;residential&#8217;, &#8216;yes&#8217;, &#8216;road&#8217;, &#8216;unclassified&#8217;, &#8216;service&#8217;, &#8216;&#8217; dan NULL)</p>
+</li>
+<li><p class="first"><em>Track</em></p>
+</li>
+<li><p class="first">Jalur sepeda, jalan kecil, etc. (termasuk jalan dengan tag  &#8216;cycleway&#8217;, &#8216;footpath&#8217;, &#8216;pedestrian&#8217;, &#8216;footway&#8217; dan &#8216;path&#8217; )</p>
+</li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Data jalan telah disimbolisasi menggunakan aturan-aturan yang disesuaikan dengan yang ada di QGIS. Seperti bila Anda mencoba untuk memperkecilnya hingga terlihat jalan-jalannya akan disesuaikan dengan gaya (<em>style</em>) yang berbeda untuk menghindari peta terlalu nampak berantakan dalam skala yang lebih kecil.</p>
 </div>
 </div>
