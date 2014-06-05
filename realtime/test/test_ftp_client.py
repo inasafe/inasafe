@@ -27,6 +27,7 @@ from safe.api import temp_dir
 from realtime.ftp_client import FtpClient
 
 
+# pylint: disable=W0613
 def mock_get_listing(self, extension='zip'):
     """Mock get_listing of ftp_client.
 
@@ -48,7 +49,7 @@ def mock_get_listing(self, extension='zip'):
         if filename.endswith('.%s' % extension):
             file_list.append(base_url + '/' + filename)
     return file_list
-
+# pylint: enable=W0613
 
 # noinspection PyUnusedLocal
 def mock_get_file(self, url_path, file_path):
