@@ -828,7 +828,7 @@ class Vector(Layer):
                       keywords=self.get_keywords())
 
     def get_attribute_names(self):
-        """Get available attribute names
+        """Get available attribute names.
 
         These are the ones that can be used with get_data
         """
@@ -836,17 +836,17 @@ class Vector(Layer):
         return self.data[0].keys()
 
     def get_data(self, attribute=None, index=None, copy=False):
-        """Get vector attributes
+        """Get vector attributes.
 
         :param attribute: Specify an attribute name of which to return data.
         :type attribute: str
 
         :param index: Indicates a specific value on which to call the
-         attribute. Ignored if no attribute is set.
+            attribute. Ignored if no attribute is set.
         :type index: int
 
         :param copy: Indicate whether to return a pointer to the data,
-         or a copy of.
+            or a copy of.
         :type copy: bool
 
         :raises: GetDataError
