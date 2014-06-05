@@ -45,7 +45,6 @@ class ShakeGridTest(unittest.TestCase):
         :param count: The base number to check against.
         :type count: int
         """
-
         data_source = ogr.Open(path)
         base_name = os.path.splitext(os.path.basename(path))[0]
         # do a little query to make sure we got some results...
@@ -115,6 +114,14 @@ class ShakeGridTest(unittest.TestCase):
 
         grid_xml_data = SHAKE_GRID.mmi_data
         self.assertEquals(21442, len(grid_xml_data))
+
+        # Check SHAKE_GRID.grid_bounding_box
+        bounds = SHAKE_GRID.grid_bounding_box.toString()
+        expected_result = (
+            '-156.8816999999999950,18.2424500000000016 : '
+            '-154.3816999999999950,20.5999499999999998')
+        message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
+        self.assertEqual(bounds, expected_result, message)
 
     def test_grid_file_path(self):
         """Test grid_file_path works properly."""

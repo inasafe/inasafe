@@ -217,16 +217,6 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEqual(
             shake_event.fatality_counts, expected_fatalities, message)
 
-    def test_bounds_to_rect(self):
-        """Test that we can calculate the event bounds properly"""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        bounds = shake_event.bounds_to_rectangle().toString()
-        expected_result = (
-            '139.3700000000000045,-3.6787500000000000 : '
-            '141.8700000000000045,-1.1812499999999999')
-        message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
-        self.assertEqual(bounds, expected_result, message)
-
     def test_sorted_impacted_cities(self):
         """Test getting impacted cities sorted by mmi then population."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
