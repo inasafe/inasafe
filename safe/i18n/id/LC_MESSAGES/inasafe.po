@@ -3,24 +3,24 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# adissadis <adz.only@gmail.com>, 2014
-# akbargumbira <akbargumbira@gmail.com>, 2014
-# akbargumbira <akbargumbira@gmail.com>, 2014
-# dewisulistio <dewi.sulistioningrum@hotosm.org>, 2013
-# dika <mahardika.fadmastuti@gmail.com>, 2013
-# emirhartato <emir.hartato@gmail.com>, 2014
+# adityo dwijananto <adz.only@gmail.com>, 2014
+# Akbar Gumbira <akbargumbira@gmail.com>, 2014
+# Akbar Gumbira <akbargumbira@gmail.com>, 2014
+# Dewi Sulistioningrum <dewi.sulistioningrum@hotosm.org>, 2013
+# mahardika fadmastuti <mahardika.fadmastuti@gmail.com>, 2013
+# Emir Hartato <emir.hartato@gmail.com>, 2014
 # Ismail Sunni, 2014
-# dika <mahardika.fadmastuti@gmail.com>, 2014
-# raniedwianugrah <raniedwianugrah@gmail.com>, 2013
-# Riangga <riangga_miko@yahoo.com>, 2013
-# uswatunkh21 <uswatunkh21@yahoo.com>, 2014
+# mahardika fadmastuti <mahardika.fadmastuti@gmail.com>, 2014
+# Ranie Dwi Anugrah <raniedwianugrah@gmail.com>, 2013
+# Riangga Sujatmiko <riangga_miko@yahoo.com>, 2013
+# elida nurrohmah <uswatunkh21@yahoo.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: inasafe-develop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-06-04 06:26+0700\n"
-"PO-Revision-Date: 2014-06-04 08:55+0000\n"
-"Last-Translator: emirhartato <emir.hartato@gmail.com>\n"
+"PO-Revision-Date: 2014-06-05 03:04+0000\n"
+"Last-Translator: Ismail Sunni\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe-develop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2804,30 +2804,30 @@ msgid ""
 "This is a binary description for an area. The area is either <b>wet</b> "
 "(affected by flood water) or <b>dry</b> (not affected by flood water). This "
 "unit does not describe how <b>wet</b> or <b>dry</b> an area is."
-msgstr ""
+msgstr "Ini adalah deskripsi biner untuk wilayah. Wilayah bisa berupa <b>basah</b> (terdampak oleh air banjir) atau <b>kering</b> (tidak terdampak oleh air banjir). Unit ini tidak mendeskripsikan seberapa <b>basah</b> atau <b>kering</b> wilayah tersebut."
 
 msgid "Elder count (affected)"
-msgstr ""
+msgstr "Jumlah orang tua (terdampak)"
 
 #: safe/metadata.py:82
 msgid "generic"
-msgstr ""
+msgstr "umum"
 
 #: safe/metadata.py:84
 msgid ""
 "A generic hazard can be used for any type of hazard where the data have been"
 " classified or generalised. For example: earthquake, flood, volcano, or "
 "tsunami."
-msgstr ""
+msgstr "Ancaman umum dapat digunakan untuk segala tipe ancaman dimana data telah diklasifikasikan atau diperumum. Sebagai contoh: gempa bumi, banjir, gunung berapi, atau tsunami."
 
 #: safe/metadata.py:193
 msgid "normalised"
-msgstr ""
+msgstr "ternormalisasi"
 
 msgid ""
 "Normalised data can be hazard or exposure data where the values have been "
 "classified or coded."
-msgstr ""
+msgstr "Data ternormalisasi dapat berupa data ancaman atau keterpaparan dimana nilainya telah diklasifikasikan atau dikodekan."
 
 #: safe/metadata.py:205
 msgid ""
@@ -2835,24 +2835,24 @@ msgid ""
 " count</b> might be measured as the number of people per pixel in a raster "
 "data set. This unit is relevant for population rasters in geographic "
 "coordinates."
-msgstr ""
+msgstr "<b>Jumlah</b> adalah banyak penduduk tiap sel. Sebagai contoh <b>jumlah penduduk</b> bisa dihitung sebagai banyak penduduk per pixel pada data raster. Unit ini cocok untuk raster penduduk di koordinat geografis."
 
 #: safe/metadata.py:234 safe/metadata.py:243 safe/metadata.py:252
 msgid "Distance from the volcano."
-msgstr ""
+msgstr "Jarak dari gunung berapi"
 
 #: safe/metadata.py:155
 msgid ""
 "<b>Building type</b> is a unit that represent the type of the building. In "
 "this case, building type will be used to group the result of impact "
 "function."
-msgstr ""
+msgstr "<b>Jenis bangunan</b> adalah unit yang merepresentasikan jenis dari bangunan. Pada kasus ini, jenis bangunan akan digunakan untuk mengelompokan hasil dari fungsi dampak."
 
 #: safe/metadata.py:195
 msgid ""
 "<b>Normalised</b> data can be hazard or exposure data where the values have "
 "been classified or coded."
-msgstr ""
+msgstr "Data <b>ternormalisasi</b> dapat berupa data ancaman atau keterpaparan dimana nilainya telah diklasifikasikan atau dikodekan"
 
 msgid "no type"
 msgstr "tidak ada tipe"
@@ -2860,30 +2860,30 @@ msgstr "tidak ada tipe"
 msgid ""
 "<b>No type</b> unit means that there is no building type attribute in the "
 "exposure data."
-msgstr ""
+msgstr "Unit <b>tanpa tipe</b> berarti bahwa tidak ada atribut jenis bangunan pada data keterpaparan."
 
 #: safe/metadata.py:215
 msgid ""
 "<b>Road type</b> is a unit that represent the type of the road. In this "
 "case, road type will be used to group the result of impact function."
-msgstr ""
+msgstr "<b>Jenis jalan</b> adalah unit yang merepresentasikan jenis dari jalan. Pada kasus ini, jenis jalan akan digunakan untuk mengelompokan hasil dari fungsi dampak."
 
 #: safe/metadata.py:225
 msgid ""
 "This is a ternary description for an area. The area is either has "
 "<b>low</b>, <b>medium</b>, or <b>high</b> impact from the volcano."
-msgstr ""
+msgstr "Ini adalah deskripsi ternari untuk sebuah wilayah. WIlayah memiliki dampak <low>rendah</low>, <b>sedang</b>, atau <b>tinggi</b> dari gunung berapi."
 
 #: safe/metadata.py:146
 msgid "building generic"
-msgstr ""
+msgstr "bangunan umum"
 
 #: safe/metadata.py:148
 msgid ""
 "<b>Building generic</b> unit means that there is no building type attribute "
 "in the exposure data."
-msgstr ""
+msgstr "<b>Bangunan umum</b> berarti bahwa tidak ada atribut jenis bangunan pada data keterpaparan."
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:91
 msgid "Be flooded (experimental)"
-msgstr ""
+msgstr "Kebanjiran (uji coba)"
