@@ -25,10 +25,8 @@ from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
 
-import ogr
-#noinspection PyPackageRequirements
-import gdal
-from gdalconst import GA_ReadOnly
+from osgeo import gdal, ogr
+from osgeo.gdalconst import GA_ReadOnly
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis
@@ -689,15 +687,16 @@ class ShakeGrid(object):
         id_field = 0  # first field defined above
         elevation_field = 1  # second (MMI) field defined above
         try:
-            gdal.ContourGenerate(tif_dataset.GetRasterBand(band),
-                                 contour_interval,
-                                 contour_base,
-                                 fixed_level_list,
-                                 use_no_data_flag,
-                                 no_data_value,
-                                 layer,
-                                 id_field,
-                                 elevation_field)
+            gdal.ContourGenerate(
+                tif_dataset.GetRasterBand(band),
+                contour_interval,
+                contour_base,
+                fixed_level_list,
+                use_no_data_flag,
+                no_data_value,
+                layer,
+                id_field,
+                elevation_field)
         except Exception, e:
             LOGGER.exception('Contour creation failed')
             raise ContourCreationError(str(e))
