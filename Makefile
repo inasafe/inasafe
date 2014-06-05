@@ -77,6 +77,25 @@ lines-of-code:
 	@git log | head -3
 	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
+changelog:
+	@echo "----------------------"
+	@echo "Generate changelog and append it to CHANGELOG"
+	@echo "----------------------"
+	@read -p "Version e.g. 1.0.0: " VERSION; \
+	    scripts/update-changelog.sh $$VERSION
+
+tag:
+	@echo
+	@echo "------------------------------------"
+	@echo "Tagging the release."
+	@echo "------------------------------------"
+	@# Note that make runs commands in a subshell so
+	@# variable context is lost from one line to the next
+	@# So we need to do everything as a single line command
+	@read -p "Version e.g. 1.0.0: " VERSION; \
+	    scripts/tag-release.sh $$VERSION
+
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
