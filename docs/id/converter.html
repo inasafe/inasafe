@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Konverter &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Konverter &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -27,10 +26,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
     <link rel="next" title="Batch Runner" href="batch_runner.html" />
     <link rel="prev" title="Alat kebutuhan minimum" href="minimum_needs.html" />
 
@@ -142,7 +142,7 @@
                 <li class="right"
                 style="margin-right: 10px" >
                 <a href="genindex.html"
-                   title="General Index"
+                   title="Indeks Umum"
                    style="z-index:;"
                 accesskey="I">index</a>
                 </li>
@@ -152,7 +152,7 @@
                 <a href="batch_runner.html"
                    title="Batch Runner"
                    style="z-index:;"
-                accesskey="N">next</a>
+                accesskey="N">berikut</a>
                 </li>
                 
                 <li class="right"
@@ -160,7 +160,7 @@
                 <a href="minimum_needs.html"
                    title="Alat kebutuhan minimum"
                    style="z-index:;"
-                accesskey="P">previous</a>
+                accesskey="P">sebelum</a>
                 </li>
                 
 
@@ -183,7 +183,7 @@
         <div class="span12">
                 
   <div class="section" id="converter">
-<span id="id1"></span><h1>Konverter<a class="headerlink" href="#converter" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Konverter<a class="headerlink" href="#converter" title="Link permanent untuk headline ini">¶</a></h1>
 <p>Peta guncangan berguna untuk melaksanakan perencanaan kontinjensi dalam kejadian gempa bumi. Biasanya hal ini didistribusikan sebagai file grid.xml yang tidak dapat digunakan dalam InaSAFE atau QGIS. Alat ini akan mengimpor file grid.xml sebagai file GEOTIFF yang nantinya dapat digunakan dalam InaSAFE.</p>
 <p>Dua algoritma interpolasi yang berbeda dapat digunakan selama proses impor - <tt class="docutils literal"><span class="pre">Nearest</span> <span class="pre">Neighbour</span></tt> dan <tt class="docutils literal"><span class="pre">Inverse</span> <span class="pre">Distance</span></tt>. Setelah konversi, alat tersebut secara otomatis membuat metadata katakunci InaSAFE untuk  layer sehingga dapat segera digunakan untuk analisis.</p>
 <div class="figure align-center">
@@ -193,21 +193,26 @@
 <p>Untuk menggunakan alat ini secara efektif:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Pilih grid.xml untk layer input.</li>
-<li>Pilih lokasi untuk menulis layer output.</li>
-<li>Pilih algoritma interpolasi yang harus digunakan ketika mengubah grid xml menjadi raster. Jika tidak yakin simpan sebagai default.</li>
+<li><p class="first">Pilih grid.xml untk layer input.</p>
+</li>
+<li><p class="first">Pilih lokasi untuk menulis layer output.</p>
+</li>
+<li><p class="first">Pilih algoritma interpolasi yang harus digunakan ketika mengubah grid xml menjadi raster. Jika tidak yakin simpan sebagai default.</p>
+</li>
 </ul>
 </div></blockquote>
 <p>Anda dapat memperoleh data guncangan secara gratis dari <a class="reference external" href="http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013">situs peta guncangan USGS</a>.</p>
 <p>Jika Anda mendownload file grid. Anda harus klik-kanan file ini dan pilih <em class="menuselection">Simpan sebagai</em> untuk memastikan bahwa file ini disimpan dengan benar. Pengguna OSX dan Linux juga dapat mempertimbangkan untuk menggunakan perintah tool garis untuk mengambil file grid:</p>
 <p>OSX:</p>
-<div class="highlight-python"><pre>curl -O http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml</pre>
+<div class="highlight-python"><div class="highlight"><pre>curl -O http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml
+</pre></div>
 </div>
 <p>Linux:</p>
-<div class="highlight-python"><pre>wget -C http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml</pre>
+<div class="highlight-python"><div class="highlight"><pre>wget -C http://earthquake.usgs.gov/earthquakes/shakemap/global/shake/&lt;shake id&gt;/download/grid.xml
+</pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="first admonition-title">Catatan</p>
 <p class="last">Ganti &lt;shake id&gt; dalam perintah di atas dengan identitas guncangan yang sesungguhnya.</p>
 </div>
 </div>
