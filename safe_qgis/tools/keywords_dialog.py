@@ -170,7 +170,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     #noinspection PyMethodMayBeStatic
     def show_help(self):
         """Load the help text for the keywords dialog."""
-        show_context_help(context='keywords')
+        show_context_help(context='keywords_editor')
 
     def toggle_postprocessing_widgets(self):
         """Hide or show the post processing widgets depending on context."""
