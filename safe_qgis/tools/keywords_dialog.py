@@ -571,7 +571,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 box.value())
 
     def on_dsbElderlyRatioDefault_valueChanged(self, value):
-        """Handler for elder ration default value changing.
+        """Handler for elderly ration default value changing.
 
         :param value: Not used but required for slot.
         """

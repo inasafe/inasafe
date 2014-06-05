@@ -377,7 +377,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/showRubberBands', False, type=bool))
         self.show_rubber_bands = flag
 
-
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
 
@@ -390,8 +389,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(self.show_next_analysis_extent)
-
+        self.iface.mapCanvas().extentsChanged.connect(
+            self.show_next_analysis_extent)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -406,8 +405,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.disconnect(self.show_next_analysis_extent)
-
+        self.iface.mapCanvas().extentsChanged.disconnect(
+            self.show_next_analysis_extent)
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -970,6 +969,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     extent[3])
             except:  # yes we want to catch all exception types here
                 return
+
         extent = self._geo_extent_to_canvas_crs(extent)
         self.next_analysis_rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
         self.next_analysis_rubberband.setColor(QColor(0, 255, 0, 100))
@@ -986,7 +986,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         point = QgsPoint(extent.xMinimum(), extent.yMinimum())
         update_display_flag = True
         self.next_analysis_rubberband.addPoint(point, update_display_flag)
-
 
     def hide_extent(self):
         """Clear extent rubber band if any.

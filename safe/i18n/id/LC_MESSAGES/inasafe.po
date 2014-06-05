@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: inasafe-develop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-06-04 06:26+0700\n"
-"PO-Revision-Date: 2014-06-03 23:33+0000\n"
-"Last-Translator: Ismail Sunni\n"
+"PO-Revision-Date: 2014-06-04 08:55+0000\n"
+"Last-Translator: emirhartato <emir.hartato@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe-develop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2586,7 +2586,7 @@ msgstr "Fungsi Bangunan Terdampak Banjir"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:73
 msgid "Flood Vector Roads Experimental Function"
-msgstr ""
+msgstr "Fungsi percobaan jalan yang terdampak banjir dalam format vektor"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:101
 msgid "Flood Evacuation Function Vector Hazard"
@@ -2596,7 +2596,7 @@ msgstr "Vektor Ancaman Fungsi Evakuasi Banjir"
 msgid ""
 "To assess the impacts of (flood or tsunami)inundation in vector format on "
 "population."
-msgstr ""
+msgstr "Untuk menilai dampak dari genangan (banjir atau tsunami) dalam format vektor terhadap penduduk."
 
 #: safe/impact_functions/inundation/flood_population_evacuation.py:81
 msgid "Flood Evacuation Function"
@@ -2606,15 +2606,15 @@ msgstr "Fungsi Evakuasi Banjir"
 msgid ""
 "To assess the impacts of (flood or tsunami)inundation in raster format on "
 "population."
-msgstr ""
+msgstr "Untuk menilai dampak dari genangan (banjir atau tsunami) dalam format raster terhadap penduduk."
 
 #: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:76
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:73
 msgid "Flood Raster Roads Experimental Function"
-msgstr ""
+msgstr "Fungsi percobaan jalan yang terdampak banjir dalam format raster"
 
 msgid "OPTIMIZED-TEST-Be flooded in given thresholds"
-msgstr ""
+msgstr "Optimalisasi-Percobaan-Terdampak banjir pada ambang batas yang diberikan"
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:80
 msgid "Volcano Building Impact"
@@ -2633,7 +2633,7 @@ msgid ""
 "A <b>hazard</b> layer represents something that will impact on the people or"
 " infrastructure in an area. For example; flood, earthquake, tsunami and  "
 "volcano are all examples of hazards."
-msgstr ""
+msgstr "Sebuah layer <b>ancaman</b> menggambarkan sesuatu yang akan berdampak pada penduduk atau infrastruktur di sebuah area. Sebagai contoh; banjir, gempa bumi, tsunami, dan gunung berapi merupakan contoh dari ancaman."
 
 #: safe/metadata.py:39
 msgid "exposure"
@@ -2643,14 +2643,14 @@ msgstr "keterpaparan"
 msgid ""
 "An <b>exposure</b> layer represents people, property or infrastructure that "
 "may be affected in the event of a flood, earthquake, volcano etc."
-msgstr ""
+msgstr "Sebuah layer <b>paparan</b> menggambarkan penduduk, properti atau infrastruktur yang mungkin akan terdampak dari sebuah kejadian banjir, gempa bumi, gunung berapi, dsb. "
 
 #: safe/metadata.py:49
 msgid ""
 "An <b>aggregation</b> layer represents regions you can use to summarise the "
 "results by. For example, we might summarise the affected people aftera flood"
 " according to city districts."
-msgstr ""
+msgstr "Sebuah layer <b>agregasi</b> menggambarkan area yang dapat anda gunakan untuk menyimpulkan hasil terhadap area tersbeut. Sebagai contoh, kita mungkin ingin menyimpulkan jumlah penduduk yang terdampak banjir berdasarkan kabupaten. "
 
 #: safe/metadata.py:58
 msgid "population"
@@ -2660,7 +2660,7 @@ msgstr "penduduk"
 msgid ""
 "The <b>population</b> describes the people that might be exposed to a "
 "particular hazard."
-msgstr ""
+msgstr "<b>Penduduk</b> mendeskripsikan orang yang mungkin akan terdampak suatu anaman. "
 
 #: safe/metadata.py:65
 msgid "road"
@@ -2670,7 +2670,7 @@ msgstr "jalan"
 msgid ""
 "A <b>road</b> is a defined route used by a vehicle or people to travel "
 "between two or more points."
-msgstr ""
+msgstr "<b>Jalan</b> didefinisikan sebagai jalur yang digunakan oleh kendaraan atau orang untuk pergi dari satu titik ke satu titik lainnya atau lebih. "
 
 #: safe/metadata.py:72
 msgid "structure"
@@ -2681,17 +2681,17 @@ msgid ""
 "A <b>structure</b> can be any relatively permanent man made feature such as "
 "a building (an enclosed structure with walls and a roof) or a "
 "telecommunications facility or a bridge."
-msgstr ""
+msgstr "<b>Struktur</b> dapat berupa apapun yang berhubungan dengan buatan manusia yang sifatnya permanen misalnya sebuah bangunan (sebuah struktur tertutup dengan dinding dan atap) atau sebuah fasilitas komunikasi atau sebuah jembatan. "
 
 #: safe/metadata.py:90
 msgid "earthquake"
-msgstr ""
+msgstr "gempa bumi"
 
 #: safe/metadata.py:92
 msgid ""
 "An <b>earthquake</b> describes the sudden violent shaking of the ground that"
 " occurs as a result of volcanic activity or movement in the earth's crust."
-msgstr ""
+msgstr "<b>Gempa bumi</b> mendeskripsikan suatu kejadian dimana permukaan tanah bergetar kuat secara tiba-tiba berdasarkan aktivitas gunung berapi atau pergerakan lempeng bumi."
 
 #: safe/metadata.py:98
 msgid "flood"
@@ -2703,7 +2703,7 @@ msgid ""
 "large amount of water. For example: A <b>flood</b> can occur after heavy "
 "rainfall, when a river overflows its banks or when a dam breaks. The effect "
 "of a <b>flood</b> is for land that is normally dry to become wet."
-msgstr ""
+msgstr "<b>Banjir</b> mendeskripsikan terjadinya genangan pada suatu lahan kering oleh air dalam jumlah besar. Sebagai contoh: Suatu <b>banjir</b> dapat terjadi setelah hujan turun secara deras, ketika sebuah sungai meluap dari bataran atau ketika bendungan rusak. Efek dari <b>flood</b> adalah lahan yang normalnya kering menjadi basah. "
 
 #: safe/metadata.py:109
 msgid "tephra"
@@ -2713,7 +2713,7 @@ msgstr "tephra (abu vulkanik)"
 msgid ""
 "<b>Tephra</b> describes the material, such as rock fragments and ash "
 "particles ejected by a volcanic eruption."
-msgstr ""
+msgstr "<b>Tephra</b> mendeskripsikan material, misalnya fragmen-fragmen batuan dan partikel debu yang dikeluarkan oleh letusan gunung berapi."
 
 #: safe/metadata.py:116
 msgid "tsunami"
@@ -2725,7 +2725,7 @@ msgid ""
 "caused by an under water earthquake or volcano.A <b>tsunami</b> at sea may "
 "go unnoticed but a <b>tsunami</b> wave that strikes land may cause massive "
 "destruction and flooding."
-msgstr ""
+msgstr "<b>Tsunami</b> mendeskripsikan sebuah atau beberapa seri gelombang laut yang besar, atau gelombang yang biasanya disebabkan oleh gempa bumi bawah laut atau gunung berapi. <b>Tsunami</b> di laut mungkin tidak dapat terdeteksi tetapi gelombang <b>tsunami</b>  yang menghantam daratan dapat menyebabkan kerusakan yang besar dan banjir. "
 
 #: safe/metadata.py:126
 msgid "volcano"
@@ -2736,7 +2736,7 @@ msgid ""
 "A <b>volcano</b> describes a mountain which has a vent through which rock "
 "fragments, ash, lava, steam and gases can be ejected from below the earth's "
 "surface. The type of material ejected depends on the type of <b>volcano</b>."
-msgstr ""
+msgstr "<b>Gunung berapi</b> mendeskripsikan sebuah gunung yang memiliki sebuah ventilasi dimana fragmen-fragmen batuan, debu, lava, uap dan gas dari bawah permukaan bumi dapat dikeluarkan dari ventilasi tersebut. Tipe material yang dikeluarkan tergantung dari tipe  <b>gunung berapi</b>."
 
 #: safe/metadata.py:163
 msgid "feet"
@@ -2747,17 +2747,17 @@ msgid ""
 "<b>Feet</b> are an imperial unit of measure. There are 12 inches in 1 foot "
 "and 3 feet in 1 yard. In this case <b>feet</b> are used to describe the "
 "water depth."
-msgstr ""
+msgstr "<b>Feet</b> merupakan salah satu unit pengukuran imperial. 1 foot sama dengan 12 inci dan 3 feet sama dengan 1 yard. Dalam kasus ini <b>feet</b> digunakan untuk mendeskripsikan kedalaman air. "
 
 #: safe/metadata.py:173
 msgid "metres"
-msgstr ""
+msgstr "meter"
 
 #: safe/metadata.py:175
 msgid ""
 "<b>metres</b> are a metric unit of measure. There are 100 centimetres in 1 "
 "metre. In this case <b>metres</b> are used to describe the water depth."
-msgstr ""
+msgstr "<b>Meter</b> merupakan sebuah unit pengukuran metrik. 1 meter sama dengan 100 sentimeter. Pada kasus ini <b>meter</b> digunakan untuk mendeksripsikan kedalaman air. "
 
 #: safe/metadata.py:183
 msgid "MMI"
@@ -2768,36 +2768,36 @@ msgid ""
 "The <b>Modified Mercalli Intensity (MMI)</b> scale describes the intensity "
 "of ground shaking from a earthquake based on the effects observed by people "
 "at the surface."
-msgstr ""
+msgstr "Skala <b>Modified Mercalli Intensity (MMI)</b> mendeskripsikan intensitas getaran tanah dari sebuah kejadian gempa bumi berdasarkan efek yang diamati oleh orang-orang di permukaan. "
 
 msgid "normalized"
-msgstr ""
+msgstr "normalisasi"
 
 #: safe/metadata.py:203
 msgid "people per pixel"
-msgstr ""
+msgstr "orang per piksel"
 
 msgid ""
 "<b>Density</b> is the number of features within a defined area. For example "
 "<b>population density</b> might be measured as the number of people per "
 "square kilometre."
-msgstr ""
+msgstr "<b>Kepadatan</b> merupakan jumlah fitur yang terdapat dalam satuan area tertentu. Misalnya <b>kepadatan penduduk</b> yang akan diukur adalah jumlah orang per-kilometer. "
 
 #: safe/metadata.py:275
 msgid "Water above ground height."
-msgstr ""
+msgstr "Air di atas ketinggian tanah."
 
 #: safe/metadata.py:223
 msgid "volcano categorical"
-msgstr "Kategori gunung berapi"
+msgstr "kategori gunung berapi"
 
 #: safe/metadata.py:283
 msgid "No water above ground height."
-msgstr ""
+msgstr "Tidak ada air pada ketinggian air tanah."
 
 #: safe/metadata.py:266
 msgid "wet / dry"
-msgstr ""
+msgstr "basah / kering"
 
 #: safe/metadata.py:268
 msgid ""
@@ -2855,7 +2855,7 @@ msgid ""
 msgstr ""
 
 msgid "no type"
-msgstr ""
+msgstr "tidak ada tipe"
 
 msgid ""
 "<b>No type</b> unit means that there is no building type attribute in the "
