@@ -14,8 +14,6 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
-# noinspection PyPackageRequirements
-from roman import toRoman, OutOfRangeError
 
 from safe.common.exceptions import VerificationError
 
