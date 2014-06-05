@@ -20,7 +20,6 @@ import sys
 import os
 import logging
 
-from safe_qgis.utilities import custom_logging
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import is_raster_layer
 
@@ -102,7 +101,6 @@ class Plugin:
         self.action_dock = None
         self.action_toggle_rubberbands = None
         #print self.tr('InaSAFE')
-        custom_logging.setup_logger()
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
 
