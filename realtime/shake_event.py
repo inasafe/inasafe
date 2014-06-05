@@ -31,7 +31,9 @@ import pytz  # sudo apt-get install python-tz
 
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
+# pylint: disable=W0611
 import qgis
+# pylint: enable=W0611
 # TODO: I think QCoreApplication is needed for tr() check before removing
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -164,8 +166,9 @@ class ShakeEvent(QObject):
             self.data.extract()
             self.event_id = self.data.event_id
 
-        # Convert grid.xml
-        self.shake_grid = ShakeGrid(self.grid_file_path())
+        # Convert grid.xml (we'll give the title with event_id)
+        self.shake_grid = ShakeGrid(
+            self.event_id, GRID_SOURCE, self.grid_file_path())
 
         self.population_raster_path = population_raster_path
         # Path to tif of impact result - probably we wont even use it
@@ -464,8 +467,7 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('localCityValues requested.')
         # Setup the raster layer for interpolated mmi lookups
-        path = self.shake_grid.mmi_to_raster(
-            title=self.event_id, source=GRID_SOURCE)
+        path = self.shake_grid.mmi_to_raster()
         file_info = QFileInfo(path)
         base_name = file_info.baseName()
         raster_layer = QgsRasterLayer(path, base_name)
@@ -997,8 +999,6 @@ class ShakeEvent(QObject):
             exposure_path = population_raster_path
 
         hazard_path = self.shake_grid.mmi_to_raster(
-            title=self.event_id,
-            source=GRID_SOURCE,
             force_flag=force_flag,
             algorithm=algorithm)
 
@@ -1237,7 +1237,7 @@ class ShakeEvent(QObject):
         # 'average', 'invdist', 'nearest' - currently only nearest works
         algorithm = 'nearest'
         try:
-            contours_shapefile = self.mmi_data_to_contours(
+            contours_shapefile = self.shake_grid.mmi_to_contours(
                 force_flag=force_flag,
                 algorithm=algorithm)
         except:

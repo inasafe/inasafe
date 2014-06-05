@@ -236,7 +236,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
                 LOGGER.debug("Failed to load")
             else:
                 # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayer(layer)
+                QgsMapLayerRegistry.instance().addMapLayers([layer])
         self.done(self.Accepted)
 
     @pyqtSignature('')  # prevents actions being handled twice
