@@ -14,3 +14,5 @@ UNDER_VERSION=`echo $VERSION | sed 's/\./\_/g'`
 echo "Git friendly Version: ${UNDER_VERSION}"
 git tag -s version-${UNDER_VERSION} -m "Version ${VERSION}"
 git push --tags origin version-${UNDER_VERSION}
+
+

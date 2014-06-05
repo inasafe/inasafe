@@ -81,7 +81,8 @@ changelog:
 	@echo "----------------------"
 	@echo "Generate changelog and append it to CHANGELOG"
 	@echo "----------------------"
-	@scripts/update-changlog.sh
+	@read -p "Version e.g. 1.0.0: " VERSION; \
+	    scripts/update-changelog.sh $$VERSION
 
 tag:
 	@echo
