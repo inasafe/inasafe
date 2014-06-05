@@ -1562,6 +1562,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             layers_to_add.append(self.aggregator.layer)
         layers_to_add.append(qgis_impact_layer)
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+        # make sure it is active in the legend - needed since QGIS 2.4
+        self.iface.setActiveLayer(qgis_impact_layer)
         # then zoom to it
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()

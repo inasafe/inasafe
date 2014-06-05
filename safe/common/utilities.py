@@ -14,8 +14,6 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
-# noinspection PyPackageRequirements
-from roman import toRoman, OutOfRangeError
 
 from safe.common.exceptions import VerificationError
 
@@ -736,7 +734,8 @@ def log_file_path():
 def romanise(number):
     """Return the roman numeral for a number.
 
-    Note that this only works for number in interval range [0, 5000)
+    Note that this only works for number in interval range [0, 12] since at
+    the moment we only use it on realtime earthquake to conver MMI value.
 
     :param number: The number that will be romanised
     :type number: float
@@ -744,11 +743,13 @@ def romanise(number):
     :return Roman numeral equivalent of the value
     :rtype: str
     """
-    if number == 0:
-        return '0'
-
-    try:
-        output = toRoman(int(number))
-    except OutOfRangeError:
+    if number is None:
         return ''
-    return output
+
+    roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                  'IX', 'X', 'XI', 'XII']
+    try:
+        roman = roman_list[int(number)]
+    except ValueError:
+        return None
+    return roman

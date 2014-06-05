@@ -25,16 +25,15 @@ from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
 
-import ogr
-#noinspection PyPackageRequirements
-import gdal
-from gdalconst import GA_ReadOnly
+from osgeo import gdal, ogr
+from osgeo.gdalconst import GA_ReadOnly
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis
 from qgis.core import (
     QgsVectorLayer,
-    QgsFeatureRequest)
+    QgsFeatureRequest,
+    QgsRectangle)
 
 from safe.api import which, romanise
 from safe.common.testing import get_qgis_app
@@ -84,7 +83,7 @@ class ShakeGrid(object):
             the output file's name.
         :type algorithm_filename_flag: bool
 
-        :returns: Instance
+        :returns: The instance of the class.
         :rtype: ShakeGrid
 
         :raises: EventXmlParseError
@@ -107,6 +106,8 @@ class ShakeGrid(object):
         self.x_maximum = None
         self.y_minimum = None
         self.y_maximum = None
+        # The bounding box of the grid as QgsRectangle
+        self.grid_bounding_box = None
         self.rows = None
         self.columns = None
         self.mmi_data = None
@@ -230,6 +231,8 @@ class ShakeGrid(object):
                 specification_element.attributes['lat_min'].nodeValue)
             self.y_maximum = float(
                 specification_element.attributes['lat_max'].nodeValue)
+            self.grid_bounding_box = QgsRectangle(
+                self.x_minimum, self.y_maximum, self.x_maximum, self.y_minimum)
             self.rows = float(
                 specification_element.attributes['nlat'].nodeValue)
             self.columns = float(
@@ -426,8 +429,7 @@ class ShakeGrid(object):
                 raise Exception(message)
 
     def mmi_to_raster(
-            self, title, source, force_flag=False,
-            algorithm='nearest'):
+            self, title, source, force_flag=False, algorithm='nearest'):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -476,7 +478,6 @@ class ShakeGrid(object):
           -tye -2.21 1.79 -outsize 400 400 -of GTiff
           -ot Float16 -l mmi mmi.vrt mmi-trippy.tif
         """
-
         LOGGER.debug('mmi_to_raster requested.')
 
         if algorithm is None:
@@ -609,8 +610,8 @@ class ShakeGrid(object):
         :exception: ContourCreationError
         simply do::
 
-           myShakeEvent = myShakeData.shakeEvent()
-           myContourPath = myShakeEvent.mmiToContours()
+           shake_grid = ShakeGrid()
+           contour_path = shake_grid.mmi_to_contours()
 
         which will return the contour dataset for the latest event on the
         ftp server.
@@ -686,15 +687,16 @@ class ShakeGrid(object):
         id_field = 0  # first field defined above
         elevation_field = 1  # second (MMI) field defined above
         try:
-            gdal.ContourGenerate(tif_dataset.GetRasterBand(band),
-                                 contour_interval,
-                                 contour_base,
-                                 fixed_level_list,
-                                 use_no_data_flag,
-                                 no_data_value,
-                                 layer,
-                                 id_field,
-                                 elevation_field)
+            gdal.ContourGenerate(
+                tif_dataset.GetRasterBand(band),
+                contour_interval,
+                contour_base,
+                fixed_level_list,
+                use_no_data_flag,
+                no_data_value,
+                layer,
+                id_field,
+                elevation_field)
         except Exception, e:
             LOGGER.exception('Contour creation failed')
             raise ContourCreationError(str(e))

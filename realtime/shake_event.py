@@ -57,7 +57,6 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRaster,
     QgsRasterLayer,
-    QgsRectangle,
     QgsDataSourceURI,
     QgsVectorFileWriter,
     QgsCoordinateReferenceSystem,
@@ -91,6 +90,7 @@ from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir)
+from realtime.server_config import GRID_SOURCE
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
     InvalidLayerError,
@@ -107,14 +107,7 @@ class ShakeEvent(QObject):
     """Behaviour and data relating to an earthquake.
 
     Including epicenter, magnitude etc.
-
-    .. todo:: There is a lot of duplicated code in here -  code that was
-        refactored into safe.common.shake_grid and never removed
-        here. we should resolve that by removing it here and then simply
-        using an instance of ShakeGridConverter here when needed.
-
     """
-
     def __init__(self,
                  event_id=None,
                  locale='en',
@@ -241,11 +234,15 @@ class ShakeEvent(QObject):
 
     def mmi_shaking(self, mmi_value):
         """Return the perceived shaking for an mmi value as translated string.
-        :param mmi_value: float or int required.
-        :return str: internationalised string representing perceived shaking
-             level e.g. weak, severe etc.
+
+        :param mmi_value: The MMI value.
+        :type mmi_value: int, float
+
+        :return Internationalised string representing perceived shaking
+            level e.g. weak, severe etc.
+        :rtype: str
         """
-        my_shaking_dict = {
+        shaking_dict = {
             1: self.tr('Not felt'),
             2: self.tr('Weak'),
             3: self.tr('Weak'),
@@ -257,7 +254,7 @@ class ShakeEvent(QObject):
             9: self.tr('Violent'),
             10: self.tr('Extreme'),
         }
-        return my_shaking_dict[mmi_value]
+        return shaking_dict[mmi_value]
 
     def mmi_potential_damage(self, mmi_value):
         """Return the potential damage for an mmi value as translated string.
@@ -265,7 +262,7 @@ class ShakeEvent(QObject):
         :return str: internationalised string representing potential damage
             level e.g. Light, Moderate etc.
         """
-        my_damage_dict = {
+        damage_dict = {
             1: self.tr('None'),
             2: self.tr('None'),
             3: self.tr('None'),
@@ -277,20 +274,7 @@ class ShakeEvent(QObject):
             9: self.tr('Heavy'),
             10: self.tr('Very heavy')
         }
-        return my_damage_dict[mmi_value]
-
-    def bounds_to_rectangle(self):
-        """Convert the event bounding box to a QgsRectangle.
-
-        :return: QgsRectangle
-        :raises: None
-        """
-        LOGGER.debug('bounds to rectangle called.')
-        rectangle = QgsRectangle(self.shake_grid.x_minimum,
-                                 self.shake_grid.y_maximum,
-                                 self.shake_grid.x_maximum,
-                                 self.shake_grid.y_minimum)
-        return rectangle
+        return damage_dict[mmi_value]
 
     def cities_to_shapefile(self, force_flag=False):
         """Write a cities memory layer to a shapefile.
@@ -318,13 +302,16 @@ class ShakeEvent(QObject):
 
         :param force_flag: bool (Optional). Whether to force the overwrite
                 of any existing data. Defaults to False.
+        :type force_flag: bool
         .. note:: The file will be saved into the shakemap extract dir
            event id folder. Any existing shp by the same name will be
-           overwritten if theForceFlag is False, otherwise it will
+           overwritten if force_flag is False, otherwise it will
            be returned directly without creating a new file.
 
-        :return str Path to the created shapefile
-        :raise ShapefileCreationError
+        :return: Path to the created shapefile.
+        :rtype: str
+
+        :raise: ShapefileCreationError
         """
         filename = 'city-search-boxes'
         memory_layer = self.city_search_box_memory_layer()
@@ -338,11 +325,11 @@ class ShakeEvent(QObject):
                                   force_flag=False):
         """Write a memory layer to a shapefile.
 
-        :param file_name: Filename excluding path and ext. e.g.
-        'mmi-cities'
+        :param file_name: Filename excluding path and ext. e.g. 'mmi-cities'
         :type file_name: str
 
         :param memory_layer: QGIS memory layer instance.
+        :type memory_layer: QgsVectorLayer
 
         :param force_flag: (Optional). Whether to force the overwrite
                 of any existing data. Defaults to False.
@@ -354,8 +341,10 @@ class ShakeEvent(QObject):
            Any existing shp by the same name will be overridden if
            theForceFlag is True, otherwise the existing file will be returned.
 
-        :return str Path to the created shapefile
-        :raise ShapefileCreationError
+        :return: Path to the created shapefile.
+        :rtype: str
+
+        :raise: ShapefileCreationError
         """
         LOGGER.debug('memory_layer_to_shapefile requested.')
 
@@ -397,6 +386,7 @@ class ShakeEvent(QObject):
         skip_attributes_flag = False
         # May differ from output_file
         actual_new_file_name = ''
+        # noinspection PyCallByClass
         result = QgsVectorFileWriter.writeAsVectorFormat(
             memory_layer,
             output_file,
@@ -475,7 +465,7 @@ class ShakeEvent(QObject):
         LOGGER.debug('localCityValues requested.')
         # Setup the raster layer for interpolated mmi lookups
         path = self.shake_grid.mmi_to_raster(
-            self.event_id, 'BMKG')
+            title=self.event_id, source=GRID_SOURCE)
         file_info = QFileInfo(path)
         base_name = file_info.baseName()
         raster_layer = QgsRasterLayer(path, base_name)
@@ -494,7 +484,8 @@ class ShakeEvent(QObject):
         layer = QgsVectorLayer(uri.uri(), 'Towns', 'spatialite')
         if not layer.isValid():
             raise InvalidLayerError(db_path)
-        rectangle = self.bounds_to_rectangle()
+
+        rectangle = self.shake_grid.grid_bounding_box
 
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
@@ -615,7 +606,7 @@ class ShakeEvent(QObject):
         :return: A QGIS memory layer
         :rtype: QgsVectorLayer
 
-        :raises: an exceptions will be propagated
+        :raises: Any exceptions will be propagated.
         """
         LOGGER.debug('local_cities_memory_layer requested.')
         # Now store the selection in a temporary memory layer
@@ -666,7 +657,7 @@ class ShakeEvent(QObject):
         :return: A QGIS memory layer
         :rtype: QgsVectorLayer
 
-        :raise: an exceptions will be propagated
+        :raise: Any exceptions will be propagated.
         """
         LOGGER.debug('city_search_box_memory_layer requested.')
         # There is a dependency on local_cities_memory_layer so run it first
@@ -713,7 +704,7 @@ class ShakeEvent(QObject):
         :type row_count: int
 
         :return: An list of dicts containing the sorted cities and their
-                attributes. See below for example output.
+            attributes. See below for example output.
 
                 [{'dir_from': 16.94407844543457,
                  'dir_to': -163.05592346191406,
@@ -824,7 +815,11 @@ class ShakeEvent(QObject):
         where the table is written.
 
         :param file_name: file name (without full path) .e.g foo.html
+        :type file_name: str
+
         :param table: A Table instance.
+        :type table: Table
+
         :return: Full path to file that was created on disk.
         :rtype: str
         """
@@ -845,18 +840,18 @@ class ShakeEvent(QObject):
         html_file.write(footer)
         html_file.close()
         # Also bootstrap gets copied to extract dir
-        my_destination = os.path.join(shakemap_extract_dir(),
-                                      self.event_id,
-                                      'bootstrap.css')
-        my_source = os.path.join(data_dir(), 'bootstrap.css')
-        shutil.copyfile(my_source, my_destination)
+        destination_path = os.path.join(
+            shakemap_extract_dir(), self.event_id, 'bootstrap.css')
+        source_path = os.path.join(data_dir(), 'bootstrap.css')
+        shutil.copyfile(source_path, destination_path)
 
         return path
 
     def impacted_cities_table(self, row_count=5):
         """Return a table object of sorted impacted cities.
-        :param row_count:optional maximum number of cities to show.
-                Default is 5.
+
+        :param row_count:optional maximum number of cities to show. Default
+            is 5.
 
         The cities will be listed in the order computed by
         sorted_impacted_cities
@@ -955,8 +950,9 @@ class ShakeEvent(QObject):
         table_body.append(impact_row)
         table = Table(table_body, header_row=header,
                       table_class='table table-striped table-condensed')
-        path = self.write_html_table(file_name='impacts.html',
-                                     table=table)
+        # noinspection PyTypeChecker
+        path = self.write_html_table(file_name='impacts.html', table=table)
+
         return path
 
     def calculate_impacts(self,
@@ -1001,8 +997,8 @@ class ShakeEvent(QObject):
             exposure_path = population_raster_path
 
         hazard_path = self.shake_grid.mmi_to_raster(
-            self.event_id,
-            'BMKG',
+            title=self.event_id,
+            source=GRID_SOURCE,
             force_flag=force_flag,
             algorithm=algorithm)
 
@@ -1066,8 +1062,10 @@ class ShakeEvent(QObject):
         It is possible (though unlikely) that the shake may be clipped too.
 
         :param shake_raster_path: Path to the shake raster.
+        :type shake_raster_path: str
 
         :param population_raster_path: Path to the population raster.
+        :type population_raster_path: str
 
         :return: Path to the clipped datasets (clipped shake, clipped pop).
         :rtype: tuple(str, str)
@@ -1075,7 +1073,6 @@ class ShakeEvent(QObject):
         :raise
             FileNotFoundError
         """
-
         # _ is a syntactical trick to ignore second returned value
         base_name, _ = os.path.splitext(shake_raster_path)
         hazard_layer = QgsRasterLayer(shake_raster_path, base_name)
@@ -1460,9 +1457,9 @@ class ShakeEvent(QObject):
         """Get a short paragraph describing the event.
 
         :return: A string describing the event e.g.
-                'M 5.0 26-7-2012 2:15:35 Latitude: 0°12'36.00"S
-                 Longitude: 124°27'0.00"E Depth: 11.0km
-                 Located 2.50km SSW of Tondano'
+            'M 5.0 26-7-2012 2:15:35 Latitude: 0°12'36.00"S
+            Longitude: 124°27'0.00"E Depth: 11.0km
+            Located 2.50km SSW of Tondano'
         :rtype: str
         """
         event_dict = self.event_dict()
@@ -1479,10 +1476,9 @@ class ShakeEvent(QObject):
         """Get a dict of key value pairs that describe the event.
 
         :return: key-value pairs describing the event.
-        :rtype: dict:
+        :rtype: dict
 
         :raises: Propagates any exceptions
-
         """
         map_name = self.tr('Estimated Earthquake Impact')
         exposure_table_name = self.tr(
@@ -1664,15 +1660,6 @@ class ShakeEvent(QObject):
         Returns: str
         """
         return self.tr('Version: %s' % get_version())
-
-    #noinspection PyMethodMayBeStatic
-    def get_city_by_id(self, city_id):
-        """A helper to get the info of an affected city given it's id.
-
-        :param city_id: int mandatory, the id number of the city to retrieve.
-        :return dict: various properties for the given city including distance
-                from the epicenter and direction to and from the epicenter.
-        """
 
     def __str__(self):
         """The unicode representation for an event object's state.
