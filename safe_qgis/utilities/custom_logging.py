@@ -84,8 +84,8 @@ def add_logging_handler_once(logger, handler):
     :rtype: bool
     """
     class_name = handler.__class__.__name__
-    for handler in logger.handlers:
-        if handler.__class__.__name__ == class_name:
+    for logger_handler in logger.handlers:
+        if logger_handler.__class__.__name__ == class_name:
             return False
 
     logger.addHandler(handler)
