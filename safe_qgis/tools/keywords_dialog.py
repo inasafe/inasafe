@@ -125,7 +125,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         # set some initial ui state:
         self.defaults = breakdown_defaults()
-        self.pbnAdvanced.setChecked(False)
         self.radPredefined.setChecked(True)
         self.dsbFemaleRatioDefault.blockSignals(True)
         self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
@@ -154,7 +153,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         reload_button = self.buttonBox.addButton(
             self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
         reload_button.clicked.connect(self.load_state_from_keywords)
-        self.grpAdvanced.setVisible(False)
         self.resize_dialog()
         self.test = False
 
@@ -175,6 +173,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     def toggle_postprocessing_widgets(self):
         """Hide or show the post processing widgets depending on context."""
         LOGGER.debug('togglePostprocessingWidgets')
+        # TODO Too much baggage here - can't we just hide & show the tab? TS
         postprocessing_flag = self.radPostprocessing.isChecked()
         self.cboSubcategory.setVisible(not postprocessing_flag)
         self.lblSubcategory.setVisible(not postprocessing_flag)
@@ -187,6 +186,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.show_adult_ratio_default(postprocessing_flag)
         self.show_elderly_ratio_attribute(postprocessing_flag)
         self.show_elderly_ratio_default(postprocessing_flag)
+        # Also hide and show the tab
+        self.aggregation_tab.setVisible(postprocessing_flag)
 
     def show_aggregation_attribute(self, visible_flag):
         """Hide or show the aggregation attribute in the keyword editor dialog.
@@ -581,34 +582,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.add_list_entry(
                 self.defaults['ELDERLY_RATIO_KEY'],
                 box.value())
-
-    # prevents actions being handled twice
-    # noinspection PyPep8Naming
-    @pyqtSignature('bool')
-    def on_pbnAdvanced_toggled(self, flag):
-        """Automatic slot executed when the advanced button is toggled.
-
-        .. note:: some of the behaviour for hiding widgets is done using
-           the signal/slot editor in designer, so if you are trying to figure
-           out how the interactions work, look there too!
-
-        :param flag: Flag indicating the new checked state of the button.
-        :type flag: bool
-        """
-        self.toggle_advanced(flag)
-
-    def toggle_advanced(self, flag):
-        """Hide or show advanced editor.
-
-        :param flag: Desired state for advanced editor visibility.
-        :type flag: bool
-        """
-        if flag:
-            self.pbnAdvanced.setText(self.tr('Hide advanced editor'))
-        else:
-            self.pbnAdvanced.setText(self.tr('Show advanced editor'))
-        self.grpAdvanced.setVisible(flag)
-        self.resize_dialog()
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
