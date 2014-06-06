@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Mon May 12 22:29:33 2014
+# Created: Thu Jun  5 14:15:19 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -515,15 +515,23 @@ class Ui_WizardDialogBase(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setContentsMargins(0, -1, 0, -1)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        self.pbnHelp = QtGui.QPushButton(WizardDialogBase)
+        self.pbnHelp.setAutoDefault(False)
+        self.pbnHelp.setObjectName(_fromUtf8("pbnHelp"))
+        self.horizontalLayout_2.addWidget(self.pbnHelp)
         self.pbnCancel = QtGui.QPushButton(WizardDialogBase)
+        self.pbnCancel.setAutoDefault(False)
         self.pbnCancel.setObjectName(_fromUtf8("pbnCancel"))
         self.horizontalLayout_2.addWidget(self.pbnCancel)
         spacerItem41 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem41)
         self.pbnBack = QtGui.QPushButton(WizardDialogBase)
+        self.pbnBack.setAutoDefault(False)
         self.pbnBack.setObjectName(_fromUtf8("pbnBack"))
         self.horizontalLayout_2.addWidget(self.pbnBack)
         self.pbnNext = QtGui.QPushButton(WizardDialogBase)
+        self.pbnNext.setAutoDefault(False)
+        self.pbnNext.setDefault(False)
         self.pbnNext.setObjectName(_fromUtf8("pbnNext"))
         self.horizontalLayout_2.addWidget(self.pbnNext)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
@@ -586,6 +594,7 @@ class Ui_WizardDialogBase(object):
         self.lblURL.setText(QtGui.QApplication.translate("WizardDialogBase", "URL", None, QtGui.QApplication.UnicodeUTF8))
         self.lblSelectTitle.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be \'A flood in Jakarta\' (for a hazard layer) or \'People living in jakarta\' (for an exposure layer).</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.lblTitle.setText(QtGui.QApplication.translate("WizardDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnHelp.setText(QtGui.QApplication.translate("WizardDialogBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnCancel.setText(QtGui.QApplication.translate("WizardDialogBase", "Cancel", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnBack.setText(QtGui.QApplication.translate("WizardDialogBase", "Back", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnNext.setText(QtGui.QApplication.translate("WizardDialogBase", "Next", None, QtGui.QApplication.UnicodeUTF8))

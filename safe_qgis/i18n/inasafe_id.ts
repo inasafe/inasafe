@@ -318,7 +318,7 @@
     <message>
         <location filename="defaults.py" line="136"/>
         <source>InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</source>
-        <translation type="unfinished"/>
+        <translation>InaSAFE adalah sebuah proyek Free and Open Source Software (FOSS), diterbitkan di bawah GPL V3 license. Sehingga Anda bisa mengunduhnya dengan gratis, membagikannya dan (jika Anda suka) memodifikasinya.</translation>
     </message>
 </context>
 <context>
@@ -429,7 +429,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+ style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -1967,7 +1971,7 @@ ke
     <message>
         <location filename="map.py" line="307"/>
         <source>The composer template you are printing to is missing these elements: %s</source>
-        <translation type="unfinished"/>
+        <translation>Template komposer yang akan Anda cetak kehilangan bagian-bagian berikut: %s</translation>
     </message>
 </context>
 <context>
@@ -2277,7 +2281,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.py" line="316"/>
         <source>Prompt me in cases when a template has missing elements</source>
-        <translation type="unfinished"/>
+        <translation>Beri tahu saya jika template kehilangan element.</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="317"/>
@@ -2403,7 +2407,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader.py" line="232"/>
         <source>The bounding box is not valid. Please make sure it is valid or check your projection!</source>
-        <translation type="unfinished"/>
+        <translation>Kotak batas tidak valid. Silahkan pastikan bahwa itu valid atau cek proyeksi Anda!</translation>
     </message>
 </context>
 <context>
@@ -3047,17 +3051,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog.py" line="58"/>
         <source>By following the simple steps in this wizard, you can assign keywords to your layer: &lt;b&gt;%s&lt;/b&gt;. First you need to define the category of your layer.</source>
-        <translation type="unfinished"/>
+        <translation>Dengan mengikuti beberapa langkah sederhana di wizard ini, Anda dapat memberikan kata kunci pada layer Anda: &lt;b&gt;%s&lt;/b&gt;. Pertama Anda perlu mendefinisikan kategori layer Anda.</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="65"/>
         <source>What kind of hazard does this layer represent? The choice you make here will determine which impact functions this hazard layer can be used with. For example, if you choose &lt;b&gt;flood&lt;/b&gt; you will be able to use this hazard layer with impact functions such as &lt;b&gt;flood impact on population&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Ancaman apakah yang direpresentasikan oleh lapisan ini? Pilihan Anda di sini akan menentukan fungsi dampak mana yang dapat digunakan oleh layer ini. Sebagai contoh, jika Anda memilih &lt;b&gt;banjir&lt;/b&gt; Anda akan dapa menggunakan layer ancaman ini untuk fungsi dampak seperti &lt;b&gt;flood impact on population&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="75"/>
         <source>What kind of exposure does this layer represent? The choice you make here will determine which impact functions this exposure layer can be used with. For example, if you choose &lt;b&gt;population&lt;/b&gt; you will be able to use this exposure layer with impact functions such as &lt;b&gt;flood impact on population&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Keterpapran apakah yang direpresentasikan oleh lapisan ini? Pilihan Anda di sini akan menentukan fungsi dampak mana yang dapat digunakan oleh layer ini. Sebagai contoh, jika Anda memilih &lt;b&gt;penduduk&lt;/b&gt; Anda akan dapa menggunakan layer ancaman ini untuk fungsi dampak seperti &lt;b&gt;flood impact on population&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="98"/>
@@ -3117,17 +3121,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog.py" line="139"/>
         <source>You have selected a &lt;b&gt;%s %s&lt;/b&gt; layer measured in &lt;b&gt;%s&lt;/b&gt;, and the selected layer is a vector layer. Please select the attribute in this layer that represents %s.</source>
-        <translation type="unfinished"/>
+        <translation>Anda telah memilih sebuah lapisan &lt;b&gt;%s %s&lt;/b&gt; diukur dalam &lt;b&gt; %s&lt;/b&gt;, dan layer yang dipiliah adalah layer vektor. Silahkan plih atribut dari layer ini yang merepresentasikan %s.</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="146"/>
         <source>You have selected an aggregation layer, and it is a vector layer. Please select the attribute in this layer that represents names of the aggregation areas.</source>
-        <translation type="unfinished"/>
+        <translation>Anda telah memilih layer agregasi, dan itu adalah layer vektor. Silahkan pilih atribut yang merepresentasikan nama dari wilayah agregasi.</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="153"/>
         <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; measured in &lt;b&gt;%s&lt;/b&gt; categorical unit, and the data column is &lt;b&gt;%s&lt;/b&gt;. Below on the left you can see all unique values found in that column. Please drag them to the right panel in order to classify them to appropriate categories.</source>
-        <translation type="unfinished"/>
+        <translation>Anda telah memilih sebuah laposan &lt;b&gt;%s %s&lt;/b&gt; yang diukur dalam unit kategorikal &lt;b&gt;%s&lt;/b&gt;, dan kolom data adalah &lt;b&gt;%s&lt;/b&gt;. Di kiri bawah ini Anda dapat melihat semua nilai unik yang ditemukan pada kolom tersebut. Silahkan geser ke panel sebelah kanan untuk mengelompokan mereka ke kategori yang tepat.</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="532"/>
@@ -3174,7 +3178,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog.py" line="85"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer type. We need to know what units the data are in. For example in a raster layer, each cell might represent depth in metres or depth in feet. If the dataset is a vector layer, each polygon might represent an inundated area, while areas with no polygon coverage would be assumed to be dry.</source>
-        <translation type="unfinished"/>
+        <translation>Anda telah  memilih &lt;b&gt;%s&lt;/b&gt; untuk jenis lapisan &lt;b&gt;%s&lt;/b&gt;. Kami perlu mengetahui dalam unit apa data ini. Sebagai conoth dalam lapisan raster, setiap sel bisa merepresentasikan kedalaman dalam meter atau kedalaman dalam kaki. Jika dataset berupa lapisan vektor, setiap poligon dapat merepresentasikan wilayah tergenang, sedang wilayah tanpa poligon akan diasumsikan dengan tidak tergenang atau kering.</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="134"/>
@@ -3237,7 +3241,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog_base.py" line="556"/>
         <source>InaSAFE Keywords Creation Wizard...</source>
-        <translation type="unfinished"/>
+        <translation>Wizard Pembuat Keyword InaSAFE</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.py" line="557"/>
@@ -3292,7 +3296,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog_base.py" line="587"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be &apos;A flood in Jakarta&apos; (for a hazard layer) or &apos;People living in jakarta&apos; (for an exposure layer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apa judul dataset ini? Sebuah judul memberikan membuat pengguna lebih nyaman daripada nama filenya. Judul dapat memiliki spasi. Sebagai contoh sebuah judul yang bagus &apos;Banjir di Jakarta&apos; (untuk lapisan ancaman) atau &apos;Penduduk yang tinggal di Jakarta&apos; (untuk lapisan keterpaparan).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.py" line="588"/>
@@ -3362,7 +3366,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog_base.py" line="582"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Where does the data come from? You may want to write more or less short comment about its source.&lt;/p&gt;&lt;p&gt;This step is optional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dari mana data ini berasal? Anda mungkin ingin menulis sedikit komentar mengenai sumbernya&lt;/p&gt;&lt;p&gt;Langkah ini opsional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 </TS>

@@ -1,7 +1,10 @@
-Changelog for version x.x.x
-===========================
+Changelog for version 2.1.0
+================================
 
-196ee94 (HEAD, timlinux/develop, develop) Fixed issue with QGIS 2.4 support - legend layer not focussed by default anymore meant impact layer was not selected and results were not showing in dock.
+5d6cb83 (HEAD, timlinux/develop, develop) Added make tag target to makefile.
+d72871b Updated user docs for release
+4861ba7 Added changelog script
+196ee94 Fixed issue with QGIS 2.4 support - legend layer not focussed by default anymore meant impact layer was not selected and results were not showing in dock.
 1d617f2 Fixed rubber band to work when canvas is in projected crs
 02018c8 Test s added for rubber bands. Refactored test method names in dock test for pep compliance.
 4d50a20 Resolved merge conflicts
