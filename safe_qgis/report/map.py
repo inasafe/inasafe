@@ -28,8 +28,7 @@ from qgis.core import (
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
-    ReportCreationError,
-    TemplateElementMissingError)
+    ReportCreationError)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.defaults import (
     disclaimer,
