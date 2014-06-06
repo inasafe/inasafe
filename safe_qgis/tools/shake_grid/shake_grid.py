@@ -603,18 +603,19 @@ class ShakeGrid(object):
         be saved in the extract directory. In the easiest use case you can
 
         :param force_flag:  (Optional). Whether to force the
-        regeneration of contour product. Defaults to False.
+         regeneration of contour product. Defaults to False.
         :type force_flag: bool
 
         :param algorithm: (Optional) Which interpolation algorithm to
                   use to create the underlying raster. Defaults to 'nearest'.
         :type algorithm: str
-        **Only enforced if theForceFlag is true!**
+         **Only enforced if theForceFlag is true!**
 
         :returns: An absolute filesystem path pointing to the generated
             contour dataset.
         :exception: ContourCreationError
-        simply do::
+
+         simply do::
 
            shake_grid = ShakeGrid()
            contour_path = shake_grid.mmi_to_contours()

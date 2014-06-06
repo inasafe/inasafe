@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Impact of flood on roads."""
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
