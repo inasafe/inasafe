@@ -153,10 +153,8 @@ class Map():
         :rtype: str
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
-        try:
-            self.load_template()
-        except TemplateElementMissingError, msg:
-            raise TemplateElementMissingError(msg)
+        self.setup_composition()
+        self.load_template()
 
         if filename is None:
             map_pdf_path = unique_filename(
