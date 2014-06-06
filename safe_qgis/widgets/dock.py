@@ -2280,6 +2280,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             QtCore.QUrl.TolerantMode))
             self.show_dynamic_message(status)
         else:
+            # AG:
+            # See https://github.com/AIFDR/inasafe/issues/911
+            # We need to set the composition to the composer before loading
+            # the template
             print_map.setup_composition()
             self.composer = self.iface.createNewComposer()
             self.composer.setComposition(print_map.composition)
