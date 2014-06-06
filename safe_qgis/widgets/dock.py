@@ -97,8 +97,7 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregatioError,
-    UnsupportedProviderError,
-    TemplateElementMissingError)
+    UnsupportedProviderError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -971,7 +970,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 return
 
         extent = self._geo_extent_to_canvas_crs(extent)
-        self.next_analysis_rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
+        self.next_analysis_rubberband = QgsRubberBand(
+            self.iface.mapCanvas(), True)
         self.next_analysis_rubberband.setColor(QColor(0, 255, 0, 100))
         self.next_analysis_rubberband.setWidth(1)
         update_display_flag = False
@@ -1047,7 +1047,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hide_extent()
         extent = self._geo_extent_to_canvas_crs(extent)
 
-        self.last_analysis_rubberband = QgsRubberBand(self.iface.mapCanvas(), True)
+        self.last_analysis_rubberband = QgsRubberBand(
+            self.iface.mapCanvas(), True)
         self.last_analysis_rubberband.setColor(QColor(255, 0, 0, 100))
         self.last_analysis_rubberband.setWidth(2)
         update_display_flag = False
@@ -2121,23 +2122,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def print_map(self):
         """Slot to open impact report dialog that used to tune report
-        when print map button pressed
-        ."""
-        dlg = ImpactReportDialog(self.iface)
-        if not dlg.exec_() == QtGui.QDialog.Accepted:
+        when print map button pressed."""
+        print_dialog = ImpactReportDialog(self.iface)
+        if not print_dialog.exec_() == QtGui.QDialog.Accepted:
             self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Report generation cancelled!'))))
             return
 
-        use_full_extent = dlg.analysis_extent_radio.isChecked()
-        create_pdf = dlg.create_pdf
-        if dlg.default_template_radio.isChecked():
-            template_path = dlg.template_combo.itemData(
-                dlg.template_combo.currentIndex())
+        use_full_extent = print_dialog.analysis_extent_radio.isChecked()
+        create_pdf = print_dialog.create_pdf
+        if print_dialog.default_template_radio.isChecked():
+            template_path = print_dialog.template_combo.itemData(
+                print_dialog.template_combo.currentIndex())
         else:
-            template_path = dlg.template_path.text()
+            template_path = print_dialog.template_path.text()
 
         print_map = Map(self.iface)
         if self.iface.activeLayer() is None:
@@ -2157,7 +2157,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Set all the map components
         print_map.set_impact_layer(self.iface.activeLayer())
         if use_full_extent:
-            print_map.set_extent(self.iface.activeLayer().extent())
+            map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+            layer_crs = self.iface.activeLayer().crs()
+            layer_extent = self.iface.activeLayer().extent()
+            if map_crs != layer_crs:
+                transform = QgsCoordinateTransform(layer_crs, map_crs)
+                layer_extent = transform.transformBoundingBox(layer_extent)
+            print_map.set_extent(layer_extent)
         else:
             print_map.set_extent(self.iface.mapCanvas().extent())
 
@@ -2179,30 +2185,43 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         template_warning_verbose = bool(settings.value(
             'inasafe/template_warning_verbose', True, type=bool))
-        print_map.set_template_warning_verbose(template_warning_verbose)
 
         print_map.set_template(template_path)
+
+        # Get missing elements on template
+        # AG: This is a quick fix to adapt with QGIS >= 2.4
+        # https://github.com/AIFDR/inasafe/issues/911
+        # We'll need to refactor report modules
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
-        print_map.set_component_ids(component_ids)
+        missing_elements = []
+        template_file = QtCore.QFile(template_path)
+        template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
+        template_content = template_file.readAll()
+        for component_id in component_ids:
+            if component_id not in template_content:
+                missing_elements.append(component_id)
+
+        if template_warning_verbose and len(missing_elements) != 0:
+            title = self.tr('Template is missing some elements')
+            question = self.tr(
+                'The composer template you are printing to is missing '
+                'these elements: %s. Do you still want to continue') % (
+                    ', '.join(missing_elements))
+            # noinspection PyCallByClass,PyTypeChecker
+            answer = QtGui.QMessageBox.question(
+                self,
+                title,
+                question,
+                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+
+            if answer == QtGui.QMessageBox.No:
+                return
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
-            try:
-                print_map.load_template()
-            except TemplateElementMissingError, msg:
-                title = self.tr('Template is missing some elements')
-                question = self.tr('%s. Do you still want to continue?') % msg
-                # noinspection PyCallByClass,PyTypeChecker
-                answer = QtGui.QMessageBox.question(
-                    self,
-                    title,
-                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-
-                if answer == QtGui.QMessageBox.No:
-                    return
-            print_map.template_warning_verbose = False
-
+            print_map.setup_composition()
+            print_map.load_template()
             if print_map.map_title() is not None:
                 default_file_name = print_map.map_title() + '.pdf'
             else:
@@ -2261,34 +2280,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             QtCore.QUrl.TolerantMode))
             self.show_dynamic_message(status)
         else:
-            try:
-                print_map.load_template()
-            except TemplateElementMissingError, msg:
-                title = self.tr('Template is missing some elements')
-                question = self.tr('%s. Do you still want to continue?') % msg
-                # noinspection PyCallByClass,PyTypeChecker
-                answer = QtGui.QMessageBox.question(
-                    self,
-                    title,
-                    question, QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-
-                if answer == QtGui.QMessageBox.Yes:
-                    print_map.template_warning_verbose = False
-                    print_map.load_template()
-                else:
-                    return
+            # AG:
+            # See https://github.com/AIFDR/inasafe/issues/911
+            # We need to set the composition to the composer before loading
+            # the template
+            print_map.setup_composition()
             self.composer = self.iface.createNewComposer()
-            self.composition = print_map.composition
-            self.composer.setComposition(self.composition)
+            self.composer.setComposition(print_map.composition)
+            print_map.load_template()
+
             # Zoom to Full Extent
-            number_pages = self.composition.numPages()
+            number_pages = print_map.composition.numPages()
             if number_pages > 0:
                 height = \
-                    self.composition.paperHeight() * number_pages + \
-                    self.composition.spaceBetweenPages() * (number_pages - 1)
+                    print_map.composition.paperHeight() * number_pages + \
+                    print_map.composition.spaceBetweenPages() * \
+                    (number_pages - 1)
                 self.composer.fitInView(
                     0, 0,
-                    self.composition.paperWidth() + 1,
+                    print_map.composition.paperWidth() + 1,
                     height + 1,
                     QtCore.Qt.KeepAspectRatio)
 

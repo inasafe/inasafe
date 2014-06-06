@@ -66,12 +66,6 @@ class Map():
         self.page_dpi = 300.0
         self.show_frames = False  # intended for debugging use only
 
-        # List of all component id that should be exist on the template
-        self.component_ids = []
-
-        # Prompt user if template does not contain some elements
-        self.template_warning_verbose = False
-
     @staticmethod
     def tr(string):
         """We implement this since we do not inherit QObject.
@@ -124,23 +118,6 @@ class Map():
         :type template: str
         """
         self.template = template
-
-    def set_component_ids(self, component_ids):
-        """Set component_ids that should be present on the standard template.
-
-        :param component_ids: List of component id on the standard template
-        :type component_ids: list
-        """
-        self.component_ids = component_ids
-
-    def set_template_warning_verbose(self, verbose):
-        """Set the choice to prompt user the error or not if template does
-        not have some elements.
-
-        :param verbose: the choice to keep it verbose or not
-        :type verbose: bool
-        """
-        self.template_warning_verbose = verbose
 
     def set_extent(self, extent):
         """Set extent or the report map
@@ -230,28 +207,12 @@ class Map():
                 pass
         return legend_attribute_dict
 
-    def validate_template(self):
-        """Validate template to check the missing elements on self.composition.
-
-        :return: Sublist of component_ids missing from composition
-        :rtype: list
-        """
-        missing_elements = []
-        for component_id in self.component_ids:
-            component = self.composition.getComposerItemById(component_id)
-            if component is None:
-                missing_elements.append(component_id)
-
-        return missing_elements
-
     def load_template(self):
         """Load a QgsComposer map from a template.
 
         :raises: TemplateElementMissingError - when template elements are
             missing
         """
-        self.setup_composition()
-
         template_file = QtCore.QFile(self.template)
         template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
         template_content = template_file.readAll()
@@ -295,19 +256,6 @@ class Map():
 
         self.page_width = self.composition.paperWidth()
         self.page_height = self.composition.paperHeight()
-
-        # Validate the template components
-        if self.template_warning_verbose:
-            missing_elements = self.validate_template()
-            if len(missing_elements) > 0:
-                missing_elements_string = ''
-                for missing_element in missing_elements:
-                    missing_elements_string += missing_element + ', '
-                missing_elements_string = missing_elements_string[:-2]
-                raise TemplateElementMissingError(
-                    self.tr(
-                        'The composer template you are printing to is missing '
-                        'these elements: %s') % missing_elements_string)
 
         # set InaSAFE logo
         image = self.composition.getComposerItemById('safe-logo')
