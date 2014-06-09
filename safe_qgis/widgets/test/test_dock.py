@@ -753,7 +753,8 @@ class TestDock(TestCase):
         self.assertTrue(format_int(2366) in result, message)
 
     def test_issue306(self):
-        """Issue306: CANVAS doesnt add generated layers in tests
+        """Issue306: CANVAS doesnt add generated layers in tests.
+
         See https://github.com/AIFDR/inasafe/issues/306"""
 
         result, message = setup_scenario(
