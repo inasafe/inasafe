@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Fri Jun  6 16:36:36 2014
+# Created: Mon Jun  9 08:59:14 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -107,7 +107,7 @@ class Ui_KeywordsDialogBase(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName(_fromUtf8("scrollArea_2"))
         self.scrollAreaWidgetContents_2 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 678, 428))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 276, 423))
         self.scrollAreaWidgetContents_2.setObjectName(_fromUtf8("scrollAreaWidgetContents_2"))
         self.verticalLayout = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -308,7 +308,7 @@ class Ui_KeywordsDialogBase(object):
         self.label_4.setBuddy(self.cboKeyword)
 
         self.retranslateUi(KeywordsDialogBase)
-        self.tab_widget.setCurrentIndex(2)
+        self.tab_widget.setCurrentIndex(0)
         QtCore.QObject.connect(self.radPredefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frameUserDefined.setHidden)
         QtCore.QObject.connect(self.radUserDefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.framePredefined.setHidden)
         QtCore.QObject.connect(self.radPredefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.framePredefined.setVisible)
