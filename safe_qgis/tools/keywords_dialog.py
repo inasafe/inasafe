@@ -84,6 +84,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
+        self.defaults = None
 
         # string constants
         self.global_default_string = self.tr('Global default')
@@ -577,16 +578,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.set_category('postprocessing')
             self.update_controls_from_list()
             return
-
-        self.remove_item_by_key(self.defaults['AGGR_ATTR_KEY'])
-        self.remove_item_by_key(self.defaults['FEMALE_RATIO_ATTR_KEY'])
-        self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
-        self.remove_item_by_key(self.defaults['YOUTH_RATIO_ATTR_KEY'])
-        self.remove_item_by_key(self.defaults['YOUTH_RATIO_KEY'])
-        self.remove_item_by_key(self.defaults['ADULT_RATIO_ATTR_KEY'])
-        self.remove_item_by_key(self.defaults['ADULT_RATIO_KEY'])
-        self.remove_item_by_key(self.defaults['ELDERLY_RATIO_ATTR_KEY'])
-        self.remove_item_by_key(self.defaults['ELDERLY_RATIO_KEY'])
+        if self.defaults is not None:
+            self.remove_item_by_key(self.defaults['AGGR_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
+            self.remove_item_by_key(self.defaults['YOUTH_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['YOUTH_RATIO_KEY'])
+            self.remove_item_by_key(self.defaults['ADULT_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['ADULT_RATIO_KEY'])
+            self.remove_item_by_key(self.defaults['ELDERLY_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['ELDERLY_RATIO_KEY'])
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1140,6 +1141,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             ratio do not use global default, the summation is set to 0.
         :rtype: tuple
         """
+        if not self.radPostprocessing.isChecked():
+            return
         if keywords['category'] != 'postprocessing':
             return True, 0
         if (keywords.get(youth_ratio_attribute_key, '') !=
