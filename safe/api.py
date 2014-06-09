@@ -80,6 +80,7 @@ from safe.common.utilities import (
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
+from safe.common.custom_logging import add_logging_handler_once
 from safe.postprocessors import (
     get_postprocessors,
     get_postprocessor_human_name)
