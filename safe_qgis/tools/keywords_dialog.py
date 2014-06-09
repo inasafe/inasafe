@@ -123,31 +123,28 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         help_button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
-        # set some initial ui state:
-        self.defaults = breakdown_defaults()
-        self.radPredefined.setChecked(True)
-        self.dsbFemaleRatioDefault.blockSignals(True)
-        self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
-        self.dsbFemaleRatioDefault.blockSignals(False)
+        if is_polygon_layer(self.layer):
+            # set some initial ui state:
+            self.defaults = breakdown_defaults()
+            self.radPredefined.setChecked(True)
+            self.dsbFemaleRatioDefault.blockSignals(True)
+            self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
+            self.dsbFemaleRatioDefault.blockSignals(False)
 
-        self.dsbYouthRatioDefault.blockSignals(True)
-        self.dsbYouthRatioDefault.setValue(self.defaults['YOUTH_RATIO'])
-        self.dsbYouthRatioDefault.blockSignals(False)
+            self.dsbYouthRatioDefault.blockSignals(True)
+            self.dsbYouthRatioDefault.setValue(self.defaults['YOUTH_RATIO'])
+            self.dsbYouthRatioDefault.blockSignals(False)
 
-        self.dsbAdultRatioDefault.blockSignals(True)
-        self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
-        self.dsbAdultRatioDefault.blockSignals(False)
+            self.dsbAdultRatioDefault.blockSignals(True)
+            self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
+            self.dsbAdultRatioDefault.blockSignals(False)
 
-        self.dsbElderlyRatioDefault.blockSignals(True)
-        self.dsbElderlyRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
-        self.dsbElderlyRatioDefault.blockSignals(False)
-
-        #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
-        #myButton.setEnabled(False)
-        if layer is None:
-            self.layer = self.iface.activeLayer()
+            self.dsbElderlyRatioDefault.blockSignals(True)
+            self.dsbElderlyRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
+            self.dsbElderlyRatioDefault.blockSignals(False)
         else:
-            self.layer = layer
+            self.radPostprocessing.hide()
+            self.tab_widget.removeTab(1)
 
         if self.layer:
             self.load_state_from_keywords()
@@ -463,7 +460,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
-        aggregation_tab_index = 1
         if not self.radPostprocessing.isChecked():
             return
         text = self.cboElderlyRatioAttribute.currentText()
@@ -971,9 +967,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         if not is_polygon_layer(self.layer):
             self.radPostprocessing.setEnabled(False)
-
-        # adapt gui if we are in postprocessing category
-        self.toggle_postprocessing_widgets()
+        else:
+            # adapt gui if we are in postprocessing category
+            self.toggle_postprocessing_widgets()
 
         if self.radExposure.isChecked():
             if subcategory is not None and data_type is not None:
