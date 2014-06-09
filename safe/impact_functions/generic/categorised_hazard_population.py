@@ -25,6 +25,7 @@ from safe.impact_functions.impact_function_metadata import (
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by categorised hazard.
 
     :author AIFDR
@@ -211,13 +212,14 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return
-        R = Raster(M,
-                   projection=my_hazard.get_projection(),
-                   geotransform=my_hazard.get_geotransform(),
-                   name=tr('Population which %s') % (
-                       get_function_title(self).lower()),
-                   keywords={'impact_summary': impact_summary,
+        raster_layer = Raster(
+            M,
+            projection=my_hazard.get_projection(),
+            geotransform=my_hazard.get_geotransform(),
+            name=tr('Population which %s') % (
+                get_function_title(self).lower()),
+            keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},
                    style_info=style_info)
-        return R
+        return raster_layer

@@ -62,6 +62,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Impact function for vector flood evacuation.
 
     :author AIFDR
@@ -395,18 +396,19 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         legend_title = tr('Population Count')
 
         # Create vector layer and return
-        V = Vector(data=new_attributes,
-                   projection=my_hazard.get_projection(),
-                   geometry=my_hazard.get_geometry(),
-                   name=tr('Population affected by flood prone areas'),
-                   keywords={'impact_summary': impact_summary,
-                             'impact_table': impact_table,
-                             'target_field': self.target_field,
-                             'map_title': map_title,
-                             'legend_notes': legend_notes,
-                             'legend_units': legend_units,
-                             'legend_title': legend_title,
-                             'affected_population': affected_population,
-                             'total_population': total},
-                   style_info=style_info)
-        return V
+        vector_layer = Vector(
+            data=new_attributes,
+            projection=my_hazard.get_projection(),
+            geometry=my_hazard.get_geometry(),
+            name=tr('Population affected by flood prone areas'),
+            keywords={'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'affected_population': affected_population,
+            'total_population': total},
+            style_info=style_info)
+        return vector_layer

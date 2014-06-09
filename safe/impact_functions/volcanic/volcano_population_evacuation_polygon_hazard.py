@@ -52,6 +52,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
 class VolcanoPolygonHazardPopulation(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Impact function for volcano hazard zones impact on population.
 
     :author AIFDR

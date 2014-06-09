@@ -152,9 +152,10 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         affected_field_index = hazard_provider.fieldNameIndex(affected_field)
         #see #818: should still work if there is no valid attribute
         if affected_field_index == -1:
-            message = tr('''Parameter "Affected Field"(='%s')
-                is not present in the attribute table of the hazard layer.
-                ''' % (affected_field, ))
+            pass
+            # message = tr('''Parameter "Affected Field"(='%s')
+            #     is not present in the attribute table of the hazard layer.
+            #     ''' % (affected_field, ))
             #raise GetDataError(message)
 
         LOGGER.info('Affected field: %s' % affected_field)
