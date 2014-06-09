@@ -60,6 +60,8 @@ class QgisInterface(QObject):
 
         # For processing module
         self.destCrs = None
+        # For keeping track of which layer is active in the legend.
+        self.active_layer = None
 
         # In the next section of code, we are going to do some monkey patching
         # to make the QGIS processing framework think that this mock QGIS IFACE
@@ -215,12 +217,16 @@ class QgisInterface(QObject):
         """
         pass
 
+    def setActiveLayer(self, layer):
+        """Set the currently active layer in the legend.
+        :param layer: Layer to make active.
+        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        """
+        self.active_layer = layer
+
     def activeLayer(self):
         """Get pointer to the active layer (layer selected in the legend)."""
-        # noinspection PyArgumentList
-        layers = QgsMapLayerRegistry.instance().mapLayers()
-        for item in layers:
-            return layers[item]
+        return self.active_layer
 
     def addToolBarIcon(self, action):
         """Add an icon to the plugins toolbar.
