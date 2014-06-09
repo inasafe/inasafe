@@ -183,33 +183,6 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertTrue(dialog.helpDialog is not None, message)
         #pylint: enable=W0101
 
-    def test_on_advanced_mode_toggled(self):
-        """Test advanced button toggle behaviour works"""
-        make_padang_layer()
-        dialog = KeywordsDialog(PARENT, IFACE)
-        button = dialog.pbnAdvanced
-        button.setChecked(False)
-        button.click()
-        state = dialog.grpAdvanced.isHidden()
-        expected_state = False
-        message = (
-            'Advanced options did not become visible when'
-            ' the advanced button was clicked\nGot'
-            '%s\nExpected\n%s\n' % (state, expected_state))
-
-        self.assertEqual(state, expected_state, message)
-
-        # Now hide advanced again and test...
-        button.click()
-        state = dialog.grpAdvanced.isHidden()
-        expected_state = True
-
-        message = (
-            'Advanced options did not become hidden when'
-            ' the advanced button was clicked again\nGot'
-            '%s\nExpected\n%s\n' % (state, expected_state))
-        self.assertTrue(not dialog.grpAdvanced.isVisible(), message)
-
     def test_on_rad_hazard_toggled(self):
         """Test hazard radio button toggle behaviour works"""
         dialog = KeywordsDialog(PARENT, IFACE)
