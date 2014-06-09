@@ -334,7 +334,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         box.setValue(val)
 
     def show_elderly_ratio_attribute(self):
-        """Hide or show the elderly ratio attribute in the dialog.
+        """Show the elderly ratio attribute in the dialog.
         """
         box = self.cboElderlyRatioAttribute
         box.blockSignals(True)
@@ -362,7 +362,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             box.setCurrentIndex(attribute_position + 2)
 
     def show_elderly_ratio_default(self):
-        """Hide or show the elderly ratio default attribute in the dialog.
+        """Show the elderly ratio default attribute in the dialog.
         """
         box = self.dsbElderlyRatioDefault
         current_value = self.get_value_for_key(
@@ -382,6 +382,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
+        if not self.radPostprocessing.isChecked():
+            return
         self.add_list_entry(
             self.defaults['AGGR_ATTR_KEY'],
             self.cboAggregationAttribute.currentText())
@@ -395,6 +397,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
+        if not self.radPostprocessing.isChecked():
+            return
         text = self.cboFemaleRatioAttribute.currentText()
         if text == self.global_default_string:
             self.dsbFemaleRatioDefault.setEnabled(True)
@@ -415,6 +419,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
+        if not self.radPostprocessing.isChecked():
+            return
         text = self.cboYouthRatioAttribute.currentText()
         if text == self.global_default_string:
             self.dsbYouthRatioDefault.setEnabled(True)
@@ -435,6 +441,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
+        if not self.radPostprocessing.isChecked():
+            return
         text = self.cboAdultRatioAttribute.currentText()
         if text == self.global_default_string:
             self.dsbAdultRatioDefault.setEnabled(True)
@@ -455,6 +463,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
+        aggregation_tab_index = 1
+        if not self.radPostprocessing.isChecked():
+            return
         text = self.cboElderlyRatioAttribute.currentText()
         if text == self.global_default_string:
             self.dsbElderlyRatioDefault.setEnabled(True)
@@ -478,6 +489,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param value: Not used but required for slot.
         """
         del value
+        if not self.radPostprocessing.isChecked():
+            return
         box = self.dsbFemaleRatioDefault
         if box.isEnabled():
             self.add_list_entry(
@@ -491,6 +504,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param value: Not used but required for slot.
         """
         del value
+        if not self.radPostprocessing.isChecked():
+            return
         box = self.dsbYouthRatioDefault
         if box.isEnabled():
             self.add_list_entry(
@@ -503,6 +518,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param value: Not used but required for slot.
         """
         del value
+        if not self.radPostprocessing.isChecked():
+            return
         box = self.dsbAdultRatioDefault
         if box.isEnabled():
             self.add_list_entry(
@@ -515,6 +532,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param value: Not used but required for slot.
         """
         del value
+        if not self.radPostprocessing.isChecked():
+            return
         box = self.dsbElderlyRatioDefault
         if box.isEnabled():
             self.add_list_entry(
@@ -847,7 +866,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             key = tokens[0]
             if removal_key == key:
                 # remove it since the removal_key is already present
+                self.blockSignals(True)
                 self.lstKeywords.takeItem(counter)
+                self.blockSignals(False)
                 break
 
     def remove_item_by_value(self, removal_value):
@@ -863,7 +884,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             value = tokens[1]
             if removal_value == value:
                 # remove it since the key is already present
+                self.blockSignals(True)
                 self.lstKeywords.takeItem(counter)
+                self.blockSignals(False)
                 break
 
     def get_value_for_key(self, lookup_key):
