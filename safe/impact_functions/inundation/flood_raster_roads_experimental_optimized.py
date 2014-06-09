@@ -32,7 +32,8 @@ from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.common.qgis_raster_tools import (
     clip_raster, polygonize_gdal)
-from safe.common.qgis_vector_tools import split_by_polygon_in_out
+from safe.common.qgis_vector_tools import split_by_polygon_in_out, extent_to_geo_array,  reproject_vector_layer
+
 
 
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
@@ -101,7 +102,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Be flooded in given thresholds')
+    title = tr('Be flooded in given thresholds-MINE')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
@@ -163,6 +164,17 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         H = H.get_layer()
         E = E.get_layer()
 
+        #reproject self.extent to the hazard projection
+        hazard_crs = H.crs()
+        hazard_srsid = hazard_crs.srsid()
+        
+        if (hazard_srsid == 4326):
+            viewport_extent = self.extent
+        else:
+            geo_crs = QgsCoordinateReferenceSystem()
+            geo_crs.createFromSrid(4326)
+            viewport_extent = extent_to_geo_array(QgsRectangle(*self.extent), geo_crs, hazard_crs)
+        
         # Align raster extent and self.extent
         #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
@@ -170,14 +182,14 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         clip_xmax = raster_extent.xMaximum()
         clip_ymin = raster_extent.yMinimum()
         clip_ymax = raster_extent.yMaximum()
-        if (self.extent[0] > clip_xmin):
-            clip_xmin = self.extent[0]
-        if (self.extent[1] > clip_ymin):
-            clip_ymin = self.extent[1]
-        if (self.extent[2] < clip_xmax):
-            clip_xmax = self.extent[2]
-        if (self.extent[3] < clip_ymax):
-            clip_ymax = self.extent[3]
+        if (viewport_extent[0] > clip_xmin):
+            clip_xmin = viewport_extent[0]
+        if (viewport_extent[1] > clip_ymin):
+            clip_ymin = viewport_extent[1]
+        if (viewport_extent[2] < clip_xmax):
+            clip_xmax = viewport_extent[2]
+        if (viewport_extent[3] < clip_ymax):
+            clip_ymax = viewport_extent[3]
 
         raster_extent = H.dataProvider().extent()
         x_full_delta = raster_extent.xMaximum() - raster_extent.xMinimum()
@@ -198,6 +210,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
             small_raster, threshold_min, threshold_max)
 
+
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
         request = QgsFeatureRequest()
@@ -210,6 +223,14 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                     threshold_min, ))
             raise GetDataError(message)
 
+        #reproject the flood polygons to exposure projection
+        exposure_crs = E.crs()
+        exposure_srsid = exposure_crs.srsid()
+
+        if (hazard_srsid != exposure_srsid):
+            flooded_polygon_inside = reproject_vector_layer(flooded_polygon_inside, E.crs())        
+            flooded_polygon_outside = reproject_vector_layer(flooded_polygon_outside, E.crs())
+        
         # Clip exposure by the extent
         #extent_as_polygon = QgsGeometry().fromRect(extent)
         #no need to clip since It is using a bbox request
