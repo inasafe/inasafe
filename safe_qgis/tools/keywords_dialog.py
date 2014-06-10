@@ -1067,16 +1067,18 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.apply_changes()
         keywords = self.get_keywords()
-        valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(keywords)
-        if not valid_age_ratio:
-            message = self.tr(
-                'The sum of age ratios is %s which exceeds 1. Please adjust '
-                'the age ration defaults so that their cumulative value is '
-                'not greater than 1.' % sum_age_ratios)
-            if not self.test:
-                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
-            return
+        if self.radPredefined.isChecked():
+            valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(
+                keywords)
+            if not valid_age_ratio:
+                message = self.tr(
+                    'The sum of age ratios is %s which exceeds 1. Please '
+                    'adjust  the age ration defaults so that their cumulative '
+                    'value is not greater than 1.' % sum_age_ratios)
+                if not self.test:
+                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+                    QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
+                return
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=keywords)
