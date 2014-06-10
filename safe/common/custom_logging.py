@@ -61,8 +61,11 @@ def add_logging_handler_once(logger, handler):
     return True
 
 
-def setup_logger(log_file=None, sentry_url=None):
+def setup_logger(logger_name, log_file=None, sentry_url=None):
     """Run once when the module is loaded and enable logging.
+
+    :param logger_name: The logger name that we want to set up.
+    :type logger_name: str
 
     :param log_file: Optional full path to a file to write logs to.
     :type log_file: str
@@ -84,7 +87,7 @@ def setup_logger(log_file=None, sentry_url=None):
        /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
 
     """
-    logger = logging.getLogger('InaSAFE')
+    logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
     default_handler_level = logging.DEBUG
     # create formatter that will be added to the handlers
@@ -109,7 +112,7 @@ def setup_logger(log_file=None, sentry_url=None):
     # It will only log if pip install raven. If raven is available
     # logging messages will be sent to http://sentry.linfiniti.com
     # We will log exceptions only there. You need to either:
-    #  * Set env var 'INSAFE_SENTRY=1' present (value can be anything)
+    #  * Set env var 'INASAFE_SENTRY=1' present (value can be anything)
     # before this will be enabled.
     if 'INASAFE_SENTRY' in os.environ:
         if sentry_url is None:

@@ -107,6 +107,7 @@ def setup_logger(sentry_url=None):
        /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
 
     """
+    print 'setup logger qgis'
     logger = logging.getLogger('InaSAFE')
     # create formatter that will be added to the handlers
     formatter = logging.Formatter(

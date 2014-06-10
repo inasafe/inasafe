@@ -25,10 +25,11 @@ from urllib2 import URLError
 from zipfile import BadZipfile
 
 from realtime.sftp_client import SFtpClient
-from realtime.utilities import data_dir, is_event_id
+from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 from realtime.shake_event import ShakeEvent
 
-LOGGER = logging.getLogger('InaSAFE')
+# Initialised in realtime.__init__
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 def process_event(event_id=None, locale='en'):

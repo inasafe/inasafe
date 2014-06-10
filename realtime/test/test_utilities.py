@@ -31,14 +31,15 @@ from realtime.utilities import (
     report_data_dir,
     is_event_id,
     purge_working_data,
-    get_path_tail)
+    get_path_tail,
+    realtime_logger_name)
 
 # Clear away working dirs so we can be sure they
 # are actually created
 purge_working_data()
 
 # The logger is initialised in utilities.py by init
-LOGGER = logging.getLogger('InaSAFE')
+LOGGER = logging.getLogger(realtime_logger_name())
 
 # InaSAFE Working Directory
 INASAFE_WORK_DIR = base_data_dir()

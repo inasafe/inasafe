@@ -25,15 +25,15 @@ import logging
 # noinspection PyPackageRequirements
 import paramiko
 
-from realtime.utilities import make_directory, get_path_tail
+from realtime.utilities import make_directory, get_path_tail, realtime_logger_name
 from realtime.server_config import (
     BASE_URL,
     USERNAME,
     PASSWORD,
     BASE_PATH)
 
-# The logger is initialised in utilities.py by init
-LOGGER = logging.getLogger('InaSAFE')
+# The logger is initialised in realtime.__init__
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 class SFtpClient:
