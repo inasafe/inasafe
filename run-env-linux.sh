@@ -23,6 +23,10 @@ export PATH=${QGIS_PREFIX_PATH}/bin:$PATH
 export INASAFE_WORK_DIR=/tmp/quake
 export INASAFE_POPULATION_PATH=`pwd`/realtime/fixtures/exposure/population.tif
 export INASAFE_LOCALE=id
+
+# The following line enables remote logging to sentry and may reveal
+# IP address / host name / file system paths (which could include your user
+# name)
 export INASAFE_SENTRY=1
 
 echo "This script is intended to be sourced to set up your shell to"
