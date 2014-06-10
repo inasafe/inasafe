@@ -121,7 +121,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.common.testing import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
-        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+        _, _, IFACE, PARENT = get_qgis_app()
 
         layer = clone_shp_layer(
             name='kabupaten_jakarta',
@@ -149,7 +149,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.common.testing import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
-        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+        _, _, IFACE, PARENT = get_qgis_app()
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE, None, layer)
 

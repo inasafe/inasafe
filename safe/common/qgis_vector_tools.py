@@ -572,7 +572,7 @@ def extent_to_geo_array(extent, source_crs, dest_crs=None):
 
     """
 
-    if (dest_crs == None):
+    if dest_crs is None:
         geo_crs = QgsCoordinateReferenceSystem()
         geo_crs.createFromSrid(4326)
     else:
@@ -595,7 +595,7 @@ def reproject_vector_layer(layer, crs):
     """Reproject a vector layer to given CRS
 
     :param layer: Vector layer
-    :type extent: QgsVectorLayer
+    :type layer: QgsVectorLayer
 
     :param crs: Coordinate system for reprojection.
     :type crs: QgsCoordinateReferenceSystem

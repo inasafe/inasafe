@@ -32,8 +32,10 @@ from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.common.qgis_raster_tools import (
     clip_raster, polygonize_gdal)
-from safe.common.qgis_vector_tools import split_by_polygon_in_out, extent_to_geo_array,  reproject_vector_layer
-
+from safe.common.qgis_vector_tools import (
+    split_by_polygon_in_out,
+    extent_to_geo_array,
+    reproject_vector_layer)
 
 
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
@@ -167,14 +169,15 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         #reproject self.extent to the hazard projection
         hazard_crs = H.crs()
         hazard_srsid = hazard_crs.srsid()
-        
-        if (hazard_srsid == 4326):
+
+        if hazard_srsid == 4326:
             viewport_extent = self.extent
         else:
             geo_crs = QgsCoordinateReferenceSystem()
             geo_crs.createFromSrid(4326)
-            viewport_extent = extent_to_geo_array(QgsRectangle(*self.extent), geo_crs, hazard_crs)
-        
+            viewport_extent = extent_to_geo_array(
+                QgsRectangle(*self.extent), geo_crs, hazard_crs)
+
         # Align raster extent and self.extent
         #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
@@ -210,7 +213,6 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
             small_raster, threshold_min, threshold_max)
 
-
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
         request = QgsFeatureRequest()
@@ -227,10 +229,12 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         exposure_crs = E.crs()
         exposure_srsid = exposure_crs.srsid()
 
-        if (hazard_srsid != exposure_srsid):
-            flooded_polygon_inside = reproject_vector_layer(flooded_polygon_inside, E.crs())        
-            flooded_polygon_outside = reproject_vector_layer(flooded_polygon_outside, E.crs())
-        
+        if hazard_srsid != exposure_srsid:
+            flooded_polygon_inside = reproject_vector_layer(
+                flooded_polygon_inside, E.crs())
+            flooded_polygon_outside = reproject_vector_layer(
+                flooded_polygon_outside, E.crs())
+
         # Clip exposure by the extent
         #extent_as_polygon = QgsGeometry().fromRect(extent)
         #no need to clip since It is using a bbox request
