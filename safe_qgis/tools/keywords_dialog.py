@@ -141,7 +141,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.dsbAdultRatioDefault.blockSignals(False)
 
             self.dsbElderlyRatioDefault.blockSignals(True)
-            self.dsbElderlyRatioDefault.setValue(self.defaults['ELDERLY_RATIO'])
+            self.dsbElderlyRatioDefault.setValue(
+                self.defaults['ELDERLY_RATIO'])
             self.dsbElderlyRatioDefault.blockSignals(False)
         else:
             self.radPostprocessing.hide()
@@ -1079,7 +1080,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                     'value is not greater than 1.' % sum_age_ratios)
                 if not self.test:
                     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                    QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
+                    QtGui.QMessageBox.warning(
+                        self,
+                        self.tr('InaSAFE'),
+                        message)
                 return
 
         try:

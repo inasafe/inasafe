@@ -162,7 +162,6 @@ class KeywordsDialogTest(unittest.TestCase):
     def setUp(self):
         """Create fresh dialog for each test."""
         IFACE.setActiveLayer(None)
-        pass
 
     def tearDown(self):
         """Destroy the dialog after each test."""
@@ -539,7 +538,7 @@ class KeywordsDialogTest(unittest.TestCase):
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
-        good_sum_ratio, sum_ratio = dialog.age_ratios_are_valid(keywords)
+        good_sum_ratio, _ = dialog.age_ratios_are_valid(keywords)
         message = 'Expected %s but I got %s' % (True, good_sum_ratio)
         self.assertEqual(True, good_sum_ratio, message)
 
@@ -561,7 +560,7 @@ class KeywordsDialogTest(unittest.TestCase):
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
-        good_sum_ratio, sum_ratio = dialog.age_ratios_are_valid(keywords)
+        good_sum_ratio, _ = dialog.age_ratios_are_valid(keywords)
         message = 'Expected %s but I got %s' % (True, good_sum_ratio)
         self.assertEqual(True, good_sum_ratio, message)
 
@@ -586,7 +585,7 @@ class KeywordsDialogTest(unittest.TestCase):
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
-        good_sum_ratio, sum_ratio = dialog.age_ratios_are_valid(keywords)
+        good_sum_ratio, _ = dialog.age_ratios_are_valid(keywords)
         message = 'Expected %s but I got %s' % (False, good_sum_ratio)
         self.assertEqual(False, good_sum_ratio, message)
 
