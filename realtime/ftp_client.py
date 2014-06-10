@@ -124,7 +124,7 @@ class FtpClient:
         """Check if a file is on the ftp server.
 
          :param checked_file: (Mandatory) The paths (relative to the ftp
-                root) to be checked. e.g. '20131105060809.inp.zip',
+          root) to be checked. e.g. '20131105060809.inp.zip',
 
          :return: True if the file exists on the server, otherwise False.
          :rtype: bool
@@ -142,6 +142,7 @@ class FtpClient:
         :param checked_files: The paths (relative to the ftp root) to be
             checked. e.g.
             ['20131105060809.inp.zip', '20131105060809.inp.zip']
+
          :type checked_files: list
 
         :return: True if **all** files exists on the server, otherwise False.

@@ -48,12 +48,13 @@ class ShakeData:
 
     Shake files are provided on an ftp server. There are two files for every
     event:
+
        * an 'inp' file
        * an 'out' file
 
     These files are provided on the ftp server as zip files. For example:
-        * `ftp://118.97.83.243/20110413170148.inp.zip`_
-        * `ftp://118.97.83.243/20110413170148.out.zip`_
+        * `<ftp://118.97.83.243/20110413170148.inp.zip>`_
+        * `<ftp://118.97.83.243/20110413170148.out.zip>`_
 
     There are numerous files provided within these two zip files, but there
     is only really one that we are interested in:
@@ -152,8 +153,7 @@ class ShakeData:
 
         e.g. 20131105060809.inp.zip, 20131105060809.out.zip
 
-        :return: Tuple Consisting of inp and out local cache
-        paths.
+        :return: Tuple Consisting of inp and out local cache paths.
         :rtype: tuple (str, str)
 
         :raises: None
@@ -316,7 +316,7 @@ class ShakeData:
         the event id associated with this class.
 
         :return: A two tuple where the first item is the inp dataset path and
-        the second the out dataset path on the local storage system.
+         the second the out dataset path on the local storage system.
 
         :raises: EventUndefinedError, NetworkError
         """
@@ -338,8 +338,7 @@ class ShakeData:
 
         After extraction the complete path will appear something like this:
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
-               20131105060809/usr/local/smap/data/20131105060809`
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809/usr/local/smap/data/20131105060809`
 
         with input and output directories appearing beneath that.
 
@@ -348,8 +347,7 @@ class ShakeData:
 
         After this final step, the following file will be present:
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
-               20131105060809/grid.xml`
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml`
 
         If the zips have not already been retrieved from the ftp server,
         they will be fetched first automatically.
@@ -373,7 +371,6 @@ class ShakeData:
             myGridXml = myShakeData.extract()
             print myGridXml
             /tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml
-
 
         :raises: InvalidInputZipError, InvalidOutputZipError
         """
