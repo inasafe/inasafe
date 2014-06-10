@@ -68,6 +68,7 @@ def make_padang_layer():
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
+        IFACE.setActiveLayer(layer)
     else:
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer)
@@ -160,6 +161,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def setUp(self):
         """Create fresh dialog for each test."""
+        IFACE.setActiveLayer(None)
         pass
 
     def tearDown(self):
@@ -312,8 +314,7 @@ class KeywordsDialogTest(unittest.TestCase):
         combo = dialog.cboSubcategory
         combo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
         message = (
-            'Changing the subcategory did not add %s '
-            'to the keywords list' %
+            'Changing the subcategory did not add %s to the keywords list' %
             combo.currentText())
         key = dialog.get_value_for_key('subcategory')
 
@@ -339,7 +340,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_on_pbn_add_to_list1_clicked(self):
         """Test adding an item to the list using predefined form works"""
-        dialog = KeywordsDialog(PARENT, IFACE)
+        dialog = KeywordsDialog(PARENT, IFACE, layer=None)
         dialog.reset(False)
         dialog.radPredefined.setChecked(True)
         dialog.cboKeyword.setCurrentIndex(2)
@@ -381,7 +382,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
     def test_add_list_entry(self):
-        """Test add entry to list works"""
+        """Test add entry to list works."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.reset(False)
         dialog.add_list_entry('bar', 'foo')
@@ -391,7 +392,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
     def test_add_warnings_for_colons(self):
-        """Test add entry to list works"""
+        """Test add entry to list works."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.reset(False)
         dialog.add_list_entry('bar', 'fo:o')
@@ -420,7 +421,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
     def test_set_category(self):
-        """Test set category works"""
+        """Test set category works."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.reset(False)
         dialog.set_category('hazard')
@@ -430,7 +431,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
     def test_reset(self):
-        """Test form reset works"""
+        """Test form reset works."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.leTitle.setText('Foo')
         dialog.reset(False)
@@ -440,7 +441,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
     def test_remove_iItem_by_key(self):
-        """Test remove item by its key works"""
+        """Test remove item by its key works."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.reset(False)
         dialog.add_list_entry('bar', 'foo')
@@ -451,7 +452,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
     def test_remove_item_by_value(self):
-        """Test remove item by its value works"""
+        """Test remove item by its value works."""
         make_padang_layer()
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.remove_item_by_value('hazard')
@@ -465,7 +466,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(keywords, expected_keywords)
 
     def test_get_value_for_key(self):
-        """Test get value for key works"""
+        """Test get value for key works."""
         make_padang_layer()
         dialog = KeywordsDialog(PARENT, IFACE)
         expected_value = 'hazard'
@@ -473,10 +474,9 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(value, expected_value)
 
     def test_load_state_from_keywords(self):
-        """Test load state from keywords works"""
-        dialog = KeywordsDialog(PARENT, IFACE)
+        """Test load state from keywords works."""
         layer = make_padang_layer()
-        dialog.layer = layer
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         dialog.load_state_from_keywords()
         keywords = dialog.get_keywords()
 
@@ -489,10 +489,9 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(keywords, expected_keywords)
 
     def test_layer_without_keywords(self):
-        """Test load state from keywords works"""
-        dialog = KeywordsDialog(PARENT, IFACE)
+        """Test load state from keywords works."""
         layer = make_keywordless_layer()
-        dialog.layer = layer
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         dialog.load_state_from_keywords()
 
     def test_add_keyword_when_press_ok_button(self):
@@ -594,6 +593,6 @@ class KeywordsDialogTest(unittest.TestCase):
         remove_temp_file(layer.source())
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(KeywordsDialogTest, 'test')
+    suite = unittest.makeSuite(KeywordsDialogTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

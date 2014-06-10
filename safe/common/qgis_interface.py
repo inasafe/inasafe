@@ -165,9 +165,15 @@ class QgisInterface(QObject):
         pass
 
     @pyqtSlot()
-    def removeAllLayers(self):
-        """Remove layers from the canvas before they get deleted."""
+    def removeAllLayers(self, ):
+        """Remove layers from the canvas before they get deleted.
+
+        .. note:: This is NOT part of the QGisInterface API but is needed
+            to support QgsMapLayerRegistry.removeAllLayers().
+
+        """
         self.canvas.setLayerSet([])
+        self.active_layer = None
 
     def newProject(self):
         """Create new project."""
@@ -226,7 +232,10 @@ class QgisInterface(QObject):
 
     def activeLayer(self):
         """Get pointer to the active layer (layer selected in the legend)."""
-        return self.active_layer
+        if self.active_layer is not None:
+            return self.active_layer
+        else:
+            return None
 
     def addToolBarIcon(self, action):
         """Add an icon to the plugins toolbar.
