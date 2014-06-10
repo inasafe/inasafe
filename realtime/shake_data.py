@@ -336,18 +336,19 @@ class ShakeData:
 
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809`
 
-        After extraction the complete path will appear something like this:
+        After extraction, under that directory, there will be directory that
+        appears something like this:
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809/usr/local/smap/data/20131105060809`
+        :file:`/usr/local/smap/data/20131105060809`
 
         with input and output directories appearing beneath that.
 
         This method will then move the grid.xml file up to the root of
         the extract dir and recursively remove the extracted dirs.
 
-        After this final step, the following file will be present:
+        After this final step, :file:`grid.xml` will be present under:
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml`
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809/`
 
         If the zips have not already been retrieved from the ftp server,
         they will be fetched first automatically.
