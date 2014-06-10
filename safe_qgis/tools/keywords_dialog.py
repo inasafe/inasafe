@@ -1150,10 +1150,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             ratio do not use global default, the summation is set to 0.
         :rtype: tuple
         """
-        if not self.radPostprocessing.isChecked():
-            return
         if keywords['category'] != 'postprocessing':
-            return True, 0
+            return True, 0 
         if (keywords.get(youth_ratio_attribute_key, '') !=
                 self.global_default_string):
             return True, 0
