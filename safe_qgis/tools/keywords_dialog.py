@@ -1051,8 +1051,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.add_list_entry('source', str(self.leSource.text()))
 
         keywords = {}
-        for myCounter in range(self.lstKeywords.count()):
-            existing_item = self.lstKeywords.item(myCounter)
+        for counter in range(self.lstKeywords.count()):
+            existing_item = self.lstKeywords.item(counter)
             text = existing_item.text()
             tokens = text.split(':')
             key = str(tokens[0]).strip()
@@ -1067,7 +1067,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.apply_changes()
         keywords = self.get_keywords()
-        if self.radPredefined.isChecked():
+
+        # If it's postprocessing layer, we need to check if age ratio is valid
+        if self.radPostprocessing.isChecked():
             valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(
                 keywords)
             if not valid_age_ratio:
@@ -1079,6 +1081,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                     QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
                 return
+
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=keywords)
