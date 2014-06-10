@@ -91,7 +91,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.do_not_use_string = self.tr('Don\'t use')
 
         if layer is None:
-            self.layer = iface.activeLayer()
+            self.layer = self.iface.activeLayer()
         else:
             self.layer = layer
 
@@ -124,7 +124,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         help_button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
-        if is_polygon_layer(self.layer):
+        if self.layer is not None and is_polygon_layer(self.layer):
             # set some initial ui state:
             self.defaults = breakdown_defaults()
             self.radPredefined.setChecked(True)
@@ -1067,16 +1067,18 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.apply_changes()
         keywords = self.get_keywords()
-        valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(keywords)
-        if not valid_age_ratio:
-            message = self.tr(
-                'The sum of age ratios is %s which exceeds 1. Please adjust '
-                'the age ration defaults so that their cumulative value is '
-                'not greater than 1.' % sum_age_ratios)
-            if not self.test:
-                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
-            return
+        if self.radPredefined.isChecked():
+            valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(
+                keywords)
+            if not valid_age_ratio:
+                message = self.tr(
+                    'The sum of age ratios is %s which exceeds 1. Please '
+                    'adjust  the age ration defaults so that their cumulative '
+                    'value is not greater than 1.' % sum_age_ratios)
+                if not self.test:
+                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+                    QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
+                return
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=keywords)
