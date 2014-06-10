@@ -91,7 +91,8 @@ from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
-    data_dir)
+    data_dir,
+    realtime_logger_name)
 from realtime.server_config import GRID_SOURCE
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
@@ -101,7 +102,7 @@ from realtime.exceptions import (
     FileNotFoundError,
     MapComposerError)
 
-LOGGER = logging.getLogger('InaSAFE')
+LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 

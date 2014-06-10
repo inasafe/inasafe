@@ -34,11 +34,12 @@ from realtime.exceptions import (
 from realtime.ftp_client import FtpClient
 from realtime.utilities import (
     shakemap_zip_dir,
-    shakemap_extract_dir)
+    shakemap_extract_dir,
+    realtime_logger_name)
 from realtime.server_config import BASE_URL
 
 # The logger is initialised in realtime/__init__
-LOGGER = logging.getLogger('InaSAFE')
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 class ShakeData:

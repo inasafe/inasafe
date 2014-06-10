@@ -37,12 +37,13 @@ from safe.api import unique_filename, temp_dir
 from safe.common.testing import get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
-    data_dir)
+    data_dir,
+    realtime_logger_name)
 from realtime.shake_event import ShakeEvent
 from realtime.utilities import base_data_dir
 
-# The logger is initialised in realtime/__init__
-LOGGER = logging.getLogger('InaSAFE')
+# The logger is initialised in realtime.__init__
+LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Shake ID for this test
