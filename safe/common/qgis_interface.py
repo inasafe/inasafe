@@ -57,6 +57,12 @@ class QgisInterface(QObject):
         QgsMapLayerRegistry.instance().layerWasAdded.connect(self.addLayer)
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAll.connect(self.removeAllLayers)
+        # # noinspection PyArgumentList
+        # QgsMapLayerRegistry.instance().removeMapLayers.connect(
+        #     self.removeMapLayers)
+        # # noinspection PyArgumentList
+        # QgsMapLayerRegistry.instance().removeMapLayer.connect(
+        #     self.removeMapLayer)
 
         # For processing module
         self.destCrs = None
@@ -165,9 +171,46 @@ class QgisInterface(QObject):
         pass
 
     @pyqtSlot()
-    def removeAllLayers(self):
-        """Remove layers from the canvas before they get deleted."""
+    def removeAllLayers(self, ):
+        """Remove layers from the canvas before they get deleted.
+
+        .. note:: This is NOT part of the QGisInterface API but is needed
+            to support QgsMapLayerRegistry.removeAllLayers().
+
+        """
         self.canvas.setLayerSet([])
+        self.active_layer = None
+
+    # @pyqtSlot()
+    # def removeMapLayers(self, layers):
+    #     """Remove layers from the canvas before they get deleted.
+    #
+    #     .. note:: This is NOT part of the QGisInterface API but is needed
+    #         to support QgsMapLayerRegistry.removeAllLayers().
+    #
+    #     :param layers: List of layers to remove from the canvas.
+    #     :type layers: list
+    #     """
+    #     for layer in layers:
+    #         self.removeMapLayer(layer)
+    #
+    # @pyqtSlot()
+    # def removeMapLayer(self, layer):
+    #     """Remove a layer from the canvas before they get deleted.
+    #
+    #     .. note:: This is NOT part of the QGisInterface API but is needed
+    #         to support QgsMapLayerRegistry.removeAllLayers().
+    #
+    #     :param layer: Layers to remove from the canvas.
+    #     :type layer: QgsMapCanvasLayer, QgsMapLayer
+    #
+    #     """
+    #     layers = self.canvas.layers()
+    #     if layer in layers:
+    #         layers.pop(layer)
+    #     self.canvas.setLayerSet(layers)
+    #     if layer == self.active_layer:
+    #         self.active_layer = None
 
     def newProject(self):
         """Create new project."""
@@ -226,7 +269,10 @@ class QgisInterface(QObject):
 
     def activeLayer(self):
         """Get pointer to the active layer (layer selected in the legend)."""
-        return self.active_layer
+        if self.active_layer is not None:
+            return self.active_layer
+        else:
+            return None
 
     def addToolBarIcon(self, action):
         """Add an icon to the plugins toolbar.

@@ -91,7 +91,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.do_not_use_string = self.tr('Don\'t use')
 
         if layer is None:
-            self.layer = iface.activeLayer()
+            self.layer = self.iface.activeLayer()
         else:
             self.layer = layer
 
@@ -124,7 +124,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         help_button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
-        if is_polygon_layer(self.layer):
+        if self.layer is not None and is_polygon_layer(self.layer):
             # set some initial ui state:
             self.defaults = breakdown_defaults()
             self.radPredefined.setChecked(True)
