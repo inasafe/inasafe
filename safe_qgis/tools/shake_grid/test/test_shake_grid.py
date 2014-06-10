@@ -31,7 +31,7 @@ from safe.common.testing import TESTDATA
 
 # Parse the grid once and use it for all tests to fasten the tests
 GRID_PATH = os.path.join(TESTDATA, 'grid.xml')
-SHAKE_GRID = ShakeGrid(GRID_PATH)
+SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH)
 
 
 class ShakeGridTest(unittest.TestCase):
@@ -160,8 +160,7 @@ class ShakeGridTest(unittest.TestCase):
     def test_mmi_to_raster(self):
         """Check we can convert the shake event to a raster."""
         # Check the tif file
-        raster_path = SHAKE_GRID.mmi_to_raster(
-            'title', 'source', force_flag=True)
+        raster_path = SHAKE_GRID.mmi_to_raster(force_flag=True)
         self.assertTrue(os.path.exists(raster_path))
         # Check the qml file
         expected_qml = raster_path.replace('tif', 'qml')

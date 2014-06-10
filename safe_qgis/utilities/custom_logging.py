@@ -36,7 +36,7 @@ from raven.handlers.logging import SentryHandler
 from raven import Client
 # pylint: enable=F0401
 
-from safe.api import log_file_path
+from safe.api import log_file_path, add_logging_handler_once
 from safe_qgis.utilities.utilities import tr
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -70,33 +70,8 @@ class QgsLogHandler(logging.Handler):
             QgsMessageLog.logMessage(message, 'InaSAFE', 0)
 
 
-def add_logging_handler_once(logger, handler):
-    """A helper to add a handler to a logger, ensuring there are no duplicates.
-
-    :param logger: Logger that should have a handler added.
-    :type logger: logging.logger
-
-    :param handler: Handler instance to be added. It will not be added if an
-        instance of that Handler subclass already exists.
-    :type handler: logging.Handler
-
-    :returns: True if the logging handler was added, otherwise False.
-    :rtype: bool
-    """
-    class_name = handler.__class__.__name__
-    for handler in logger.handlers:
-        if handler.__class__.__name__ == class_name:
-            return False
-
-    logger.addHandler(handler)
-    return True
-
-
-def setup_logger(log_file=None, sentry_url=None):
+def setup_logger(sentry_url=None):
     """Run once when the module is loaded and enable logging.
-
-    :param log_file: Optional full path to a file to write logs to.
-    :type log_file: str
 
     :param sentry_url: Optional url to sentry api for remote
         logging. Defaults to http://c64a83978732474ea751d432ab943a6b:
@@ -133,27 +108,13 @@ def setup_logger(log_file=None, sentry_url=None):
 
     """
     logger = logging.getLogger('InaSAFE')
-    logger.setLevel(logging.DEBUG)
-    default_handler_level = logging.DEBUG
     # create formatter that will be added to the handlers
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    # create syslog handler which logs even debug messages
-    # (ariel): Make this log to /var/log/safe.log instead of
-    #               /var/log/syslog
-    # (Tim) Ole and I discussed this - we prefer to log into the
-    # user's temporary working directory.
-    inasafe_log_path = log_file_path()
-    if log_file is None:
-        file_handler = logging.FileHandler(inasafe_log_path)
-    else:
-        file_handler = logging.FileHandler(log_file)
-    file_handler.setLevel(default_handler_level)
-    # create console handler with a higher log level
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
 
     qgis_handler = QgsLogHandler()
+    qgis_handler.setFormatter(formatter)
+    add_logging_handler_once(logger, qgis_handler)
 
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
@@ -176,15 +137,8 @@ def setup_logger(log_file=None, sentry_url=None):
         sentry_handler.setFormatter(formatter)
         sentry_handler.setLevel(logging.ERROR)
         if add_logging_handler_once(logger, sentry_handler):
-            logger.debug('Sentry logging enabled')
+            logger.debug('Sentry logging enabled in safe_qgis')
+        elif 'INASAFE_SENTRY' in os.environ:
+            logger.debug('Sentry logging already enabled in safe')
     else:
-        logger.debug('Sentry logging disabled')
-    # Set formatters
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
-    qgis_handler.setFormatter(formatter)
-
-    # add the handlers to the logger
-    add_logging_handler_once(logger, file_handler)
-    add_logging_handler_once(logger, console_handler)
-    add_logging_handler_once(logger, qgis_handler)
+        logger.debug('Sentry logging disabled in safe_qgis')
