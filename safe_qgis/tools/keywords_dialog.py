@@ -1151,7 +1151,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :rtype: tuple
         """
         if keywords['category'] != 'postprocessing':
-            return True, 0 
+            return True, 0
         if (keywords.get(youth_ratio_attribute_key, '') !=
                 self.global_default_string):
             return True, 0
