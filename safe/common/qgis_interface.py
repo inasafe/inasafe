@@ -69,7 +69,7 @@ class QgisInterface(QObject):
         # algorithms are nicely loaded and available for use.
 
         # Since QGIS > 2.0, the module is moved from QGisLayers to dataobjects
-        # pylint: disable=F0401
+        # pylint: disable=F0401, E0611
         if QGis.QGIS_VERSION_INT > 20001:
             from processing.tools import dataobjects
         else:
@@ -77,7 +77,7 @@ class QgisInterface(QObject):
 
         import processing
         from processing.core.Processing import Processing
-        # pylint: enable=F0401
+        # pylint: enable=F0401, E0611
         processing.classFactory(self)
 
         # We create our own getAlgorithm function below which will will monkey
