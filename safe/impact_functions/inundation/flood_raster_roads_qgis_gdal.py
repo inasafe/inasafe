@@ -104,7 +104,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Be flooded in given thresholds-MINE')
+    title = tr('Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value

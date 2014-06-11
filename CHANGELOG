@@ -1,15 +1,86 @@
 Changelog for version 2.1.0
 ================================
 
-5d6cb83 (HEAD, timlinux/develop, develop) Added make tag target to makefile.
+2aa1982 (HEAD, timlinux/develop, develop) #1052 Removed some commented out qgis_interface code added while debugging keyword editor errors.
+5cca558 #1052 All keywords editor tests passing now.
+639ffd9 #1052 Fi x keywords editor issues reported by @akbargumbiar
+4b3ed6c Merge pull request #1052 from timlinux/develop
+acac0ac #1052 Fi x keywords editor issues reported by @akbargumbiar
+a8bcab8 Merge pull request #1055 from assefay/develop
+7a226ec Merge pull request #1056 from mbernasocchi/inasafe-1048
+6c5cc66 Merge pull request #1058 from timlinux/inasafe-1057
+347595f (timlinux/inasafe-1057, inasafe-1057) #1057 Fix failing tests caused by layer focus fix for QGIS 2.4
+a6cf7da All keywords editor dialog tests passing.
+c3c973c Fix for keywords editor throwing error when raster layers are used.
+3abe498 Completed refactor of keywords editor to use tab for aggregation properties.
+6bf3a93 Updates for keywords editor to use tabs etc.
+547ad4c fix #1048 All the logging related  code was moved to safe. in safe_qgis we only add the qgis handler and if needed sentry
+f6b7e1e Take into account hazard and exposure projections #1009
+a709d3a fix problems for compiling documentation (including renaming one file)
+74cde58 Merge pull request #1054 from akbargumbira/inasafe_911
+bf75157 Change hash value of the report generated.
+6025df4 Merge pull request #1053 from akbargumbira/inasafe_911
+6231806 [Reporting] Delete unused TemplateMissingElementError exception.
+f9783a2 Added missing label on keywords dialog
+4810cc9 Resolved merge conflicts with origin
+776db45 [Reporting] Fix make_pdf function.
+a622af3 Further tweaks for keywords editor tab support - in progress
+c625152 Merge pull request #1051 from akbargumbira/inasafe_911
+befa718 [Reporting] Add comment as a note about the importance of order in opening the template on composer.
+7f611b9 Added missing rubber bands icons to resource file.
+c65e80f [Needs Documentation Update] Arrange keywords editor widgets into tabs.
+b2a8d8d Merge develop to this branch.
+fb8b6e6 [Reporting] Set map property of inasafe-portrait-a4 template to render mode.
+7db511c [Reporting] Set layer CRS to the same map canvas CRS before printing/opening the template on composer and change the flow of opening composer in regard to QGIS 2.4 composer behaviour changes.
+e089ab3 Merge pull request #1050 from timlinux/develop
+00cf10d Use the A4 Portrait map template by default.
+d64a6af Merge pull request #1049 from timlinux/develop
+733fbf9 Merge pull request #1043 from ismailsunni/fix_wizard
+f6eb193 Merge pull request #1047 from mbernasocchi/inasafe-1015
+12637dc Added make changelog target to makefile.
+88259db clean up double init
+096ecf3 fix #1015
+5d6cb83 Added make tag target to makefile.
+58d8b79 Merge pull request #1046 from akbargumbira/develop
+10e1172 [Realtime] Last pylint violation.
+4bafafc Merge pull request #1045 from akbargumbira/develop
+407dddc Merge pull request #1044 from timlinux/develop
+c29d7f0 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+4a7bd7a [Realtime] Better way to include title and source in grid and pep8 pylint fix.
 d72871b Updated user docs for release
+2ebae64 Add help button in wizard and translation
 4861ba7 Added changelog script
+f621170 Merge remote-tracking branch 'origin/develop' into fix_tests
+d044ef6 Update all translations.
+9cfbdb7 Merge pull request #1033 from ismailsunni/fix_tests
+4092e2b Merge pull request #1042 from akbargumbira/develop
+8b59ce4 Merge pull request #1041 from timlinux/develop
+6b2ee15 Fix gdal import.
 196ee94 Fixed issue with QGIS 2.4 support - legend layer not focussed by default anymore meant impact layer was not selected and results were not showing in dock.
+6229abb Merge pull request #1039 from akbargumbira/develop
+3fa9fde Delete roman from the earth.
+fd5b139 Merge pull request #1038 from akbargumbira/develop
+2894b68 [Realtime] Refactor things.
+d717bb1 Fix conflict.
+2270d02 Merge pull request #1037 from timlinux/develop
 1d617f2 Fixed rubber band to work when canvas is in projected crs
+1c17e4c Merge pull request #1036 from akbargumbira/develop
+d05d4f6 [Realtime] Refactor things on realtime.
+e89d14d Fix unit test.
+0f024fd Merge pull request #1035 from timlinux/develop
+ec4f3b8 Elder to Elderly.
 02018c8 Test s added for rubber bands. Refactored test method names in dock test for pep compliance.
+df8e725 Merge pull request #1034 from akbargumbira/develop
+4b9a6f3 Delete batch test build status on readme.
+cd0ca51 Update translation and pep8.
+ee90864 Merge remote-tracking branch 'origin/develop' into fix_tests
+188cb65 Make test pass #1030 and pep8.
+0c7cc19 Merge pull request #1032 from akbargumbira/realtime_2.1
+07ca30b [Realtime] Refactor shakegrid to safe_qgis package, clear temp files in inasafe_data folder.
+b29ecb0 Merge pull request #1020 from timlinux/develop
 4d50a20 Resolved merge conflicts
 5fefaba Resolved merge conflict
-fd9c43e (origin/develop) Merge pull request #1031 from ismailsunni/fix_tests
+fd9c43e Merge pull request #1031 from ismailsunni/fix_tests
 f5da158 Merge remote-tracking branch 'origin/develop' into fix_tests
 fe00973 Fix failed unittests.
 3b81f02 Merge pull request #1029 from ismailsunni/fix_wizard
