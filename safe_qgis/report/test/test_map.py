@@ -105,7 +105,7 @@ class MapTest(unittest.TestCase):
             414589,  # Slackware64 14.0
             144542,  # Linux Mint 14_64
             150412,  # Windows 7 64
-            143836,  # UB 12.04 Jenkins
+            143652,  # UB 12.04 Jenkins
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -148,7 +148,7 @@ class MapTest(unittest.TestCase):
             367934,  # Slackware64 14.0
             82263,  # Linux Mint 14_64
             88779,  # Windows 7 64bit
-            81557,   # Jenkins ub 12.04
+            81373,   # Jenkins ub 12.04
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
