@@ -583,7 +583,7 @@ def extent_to_geo_array(extent, source_crs, dest_crs=None):
 
     """
 
-    if (dest_crs == None):
+    if dest_crs is None:
         geo_crs = QgsCoordinateReferenceSystem()
         geo_crs.createFromSrid(4326)
     else:

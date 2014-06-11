@@ -91,7 +91,8 @@ from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
-    data_dir)
+    data_dir,
+    realtime_logger_name)
 from realtime.server_config import GRID_SOURCE
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
@@ -101,7 +102,7 @@ from realtime.exceptions import (
     FileNotFoundError,
     MapComposerError)
 
-LOGGER = logging.getLogger('InaSAFE')
+LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
@@ -243,6 +244,7 @@ class ShakeEvent(QObject):
 
         :return Internationalised string representing perceived shaking
             level e.g. weak, severe etc.
+
         :rtype: str
         """
         shaking_dict = {
@@ -261,9 +263,11 @@ class ShakeEvent(QObject):
 
     def mmi_potential_damage(self, mmi_value):
         """Return the potential damage for an mmi value as translated string.
+
         :param mmi_value: float or int required.
+
         :return str: internationalised string representing potential damage
-            level e.g. Light, Moderate etc.
+         level e.g. Light, Moderate etc.
         """
         damage_dict = {
             1: self.tr('None'),
@@ -306,6 +310,7 @@ class ShakeEvent(QObject):
         :param force_flag: bool (Optional). Whether to force the overwrite
                 of any existing data. Defaults to False.
         :type force_flag: bool
+
         .. note:: The file will be saved into the shakemap extract dir
            event id folder. Any existing shp by the same name will be
            overwritten if force_flag is False, otherwise it will
@@ -707,36 +712,40 @@ class ShakeEvent(QObject):
 
         :return: An list of dicts containing the sorted cities and their
             attributes. See below for example output.
+            ::
 
-                [{'dir_from': 16.94407844543457,
-                 'dir_to': -163.05592346191406,
-                 'roman': 'II',
-                 'dist_to': 2.504295825958252,
-                 'mmi': 1.909999966621399,
-                 'name': 'Tondano',
-                 'id': 57,
-                 'population': 33317}]
+                  [{'dir_from': 16.94407844543457,
+                  'dir_to': -163.05592346191406,
+                  'roman': 'II',
+                  'dist_to': 2.504295825958252,
+                  'mmi': 1.909999966621399,
+                  'name': 'Tondano',
+                  'id': 57,
+                  'population': 33317}]
+
         :rtype: list
 
         Straw man illustrating how sorting is done:
+        ::
 
-        m = [
+         m = [
              {'name': 'b', 'mmi': 10,  'pop':10},
              {'name': 'a', 'mmi': 100, 'pop': 20},
              {'name': 'c', 'mmi': 10, 'pop': 14}]
 
-        sorted(m, key=lambda d: (-d['mmi'], -d['pop'], d['name']))
-        Out[10]:
-        [{'mmi': 100, 'name': 'a', 'pop': 20},
-         {'mmi': 10, 'name': 'c', 'pop': 14},
-         {'mmi': 10, 'name': 'b', 'pop': 10}]
+        ::
+
+         sorted(m, key=lambda d: (-d['mmi'], -d['pop'], d['name']))
+         Out[10]:
+         [{'mmi': 100, 'name': 'a', 'pop': 20},
+          {'mmi': 10, 'name': 'c', 'pop': 14},
+          {'mmi': 10, 'name': 'b', 'pop': 10}]
 
         .. note:: self.most_affected_city will also be populated with
             the dictionary of details for the most affected city.
 
         .. note:: It is possible that there is no affected city! e.g. if
             all nearby cities fall outside of the shake raster.
-
         """
         layer = self.local_cities_memory_layer()
         fields = layer.dataProvider().fields()

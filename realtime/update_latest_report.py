@@ -24,8 +24,11 @@ import sys
 from utilities import is_event_id
 import logging
 
-# The logger is initialized in utilities.py by init
-LOGGER = logging.getLogger('InaSAFE')
+from realtime.utilities import realtime_logger_name
+
+# The logger is initialized in realtime.__init__
+LOGGER = logging.getLogger(realtime_logger_name())
+
 try:
     earth_quake_source_path = os.environ['EQ_SOURCE_PATH']
     earth_quake_public_path = os.environ['EQ_PUBLIC_PATH']

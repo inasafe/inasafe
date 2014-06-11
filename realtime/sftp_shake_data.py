@@ -27,7 +27,8 @@ from realtime.utilities import is_event_id
 from realtime.utilities import (
     shakemap_cache_dir,
     shakemap_extract_dir,
-    make_directory)
+    make_directory,
+    realtime_logger_name)
 from realtime.exceptions import (
     FileNotFoundError,
     EventIdError,
@@ -40,7 +41,7 @@ from realtime.server_config import (
     PASSWORD,
     BASE_PATH)
 
-LOGGER = logging.getLogger('InaSAFE')
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 class SftpShakeData:

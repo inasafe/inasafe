@@ -26,9 +26,9 @@ from safe_qgis.tools.shake_grid.shake_grid import (
     ShakeGrid,
     convert_mmi_data)
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import TESTDATA
+from safe.common.testing import TESTDATA, get_qgis_app
 
-
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # Parse the grid once and use it for all tests to fasten the tests
 GRID_PATH = os.path.join(TESTDATA, 'grid.xml')
 SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH)
