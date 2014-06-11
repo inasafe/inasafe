@@ -12,8 +12,8 @@ def create_index(shakemap_dir, locale):
     """Pass dictionary from pickle to index.html.
 
     :param shakemap_dir: Directory containing pickle shakemap metadata. For
-    real use based on current environment, this would be a published directory
-    either public/en or public/id.
+     real use based on current environment, this would be a published directory
+     either public/en or public/id.
     :type shakemap_dir: str
 
     :param locale: Language of output index.html. id = Bahasa, en = English
@@ -122,13 +122,13 @@ def generate_pages(shakemap_dir_en, shakemap_dir_id):
     them.
 
     :param shakemap_dir_en: Shakemap directory for en locale where pickles are
-    located. For real use based on current environment, this would be a
-    published directory public/en
+     located. For real use based on current environment, this would be a
+     published directory public/en
     :type shakemap_dir_en: str
 
     :param shakemap_dir_id: Shakemap directory for id locale where pickles are
-    located. For real use based on current environment, this would be a
-    published directory public/id
+     located. For real use based on current environment, this would be a
+     published directory public/id
     :type shakemap_dir_id: str
 
     :returns: en_index_path, id_index_path

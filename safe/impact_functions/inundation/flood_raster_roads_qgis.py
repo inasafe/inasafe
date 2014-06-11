@@ -1,8 +1,14 @@
 # coding=utf-8
-"""Impact of flood on roads."""
+"""Impact of flood on roads.
+
+.. warning:: This Impact Function is currently disabled in
+    favour of flood_raster_roads_qgis_gdal which provides
+    better performance. TS 11 June 2014
+"""
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
+    QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform
 )
@@ -30,13 +36,11 @@ from safe.impact_functions.impact_function_metadata import (
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_raster_tools import (
-    clip_raster, polygonize_gdal)
-from safe.common.qgis_vector_tools import split_by_polygon_in_out, extent_to_geo_array,  reproject_vector_layer
+from safe.common.qgis_raster_tools import polygonize, clip_raster
+from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 
-
-class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
+class FloodRasterRoadsExperimentalFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation.
 
@@ -44,15 +48,12 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
     :rating 1
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami'] and \
-                    layertype=='raster'
+                    layertype=='raster'  and \
+                    disabled=='True'
     :param requires category=='exposure' and \
                     subcategory in ['road'] and \
                     layertype=='vector'
         """
-    def __init__(self):
-        """Constructor."""
-        self.extent = None
-
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodRasterRoadsExperimentalFunction
 
@@ -74,6 +75,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
+                'disabled': True,
                 'id': 'FloodRasterRoadsExperimentalFunction',
                 'name': tr('Flood Raster Roads Experimental Function'),
                 'impact': tr('Be flooded in given thresholds'),
@@ -103,7 +105,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Be flooded in given thresholds-MINE')
+    title = tr('Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
@@ -113,7 +115,8 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         ('road_type_field', 'TYPE'),
         ('min threshold [m]', 1.0),
         ('max threshold [m]', float('inf')),
-        ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
+
+         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
 
     def get_function_type(self):
@@ -124,25 +127,19 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         return 'qgis2.0'
 
     def set_extent(self, extent):
-        """Set up the extent of area of interest.
+        """Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
 
-        It is mandatory to call this method before running the analysis.
-
-        :param extent: Extents mutator [xmin, ymin, xmax, ymax].
-        :type extent: list
+        Mandatory method.
         """
         self.extent = extent
 
     def run(self, layers):
         """Experimental impact function.
 
-        :param layers: List of layers expected to contain at least:
-            H: Polygon layer of inundation areas
-            E: Vector layer of roads
-        :type layers: list
-
-        :returns: A new line layer with inundated roads marked.
-        :type: safe_layer
+        Input
+          layers: List of layers expected to contain
+              H: Polygon layer of inundation areas
+              E: Vector layer of roads
         """
         target_field = self.parameters['target_field']
         road_type_field = self.parameters['road_type_field']
@@ -150,9 +147,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         threshold_max = self.parameters['max threshold [m]']
 
         if threshold_min > threshold_max:
-            message = tr(
-                'The minimal threshold is greater then the maximal specified '
-                'threshold. Please check the values.')
+            message = tr('''The minimal threshold is
+                greater then the maximal specified threshold.
+                Please check the values.''')
             raise GetDataError(message)
 
         # Extract data
@@ -165,87 +162,75 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         H = H.get_layer()
         E = E.get_layer()
 
-        #reproject self.extent to the hazard projection
-        hazard_crs = H.crs()
-        hazard_srsid = hazard_crs.srsid()
-        
-        if (hazard_srsid == 4326):
-            viewport_extent = self.extent
-        else:
-            geo_crs = QgsCoordinateReferenceSystem()
-            geo_crs.createFromSrid(4326)
-            viewport_extent = extent_to_geo_array(QgsRectangle(*self.extent), geo_crs, hazard_crs)
-        
+        # Get necessary width and height of raster
+        height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
+        height = int(height)
+        width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
+        width = int(width)
+
         # Align raster extent and self.extent
-        #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
-        clip_xmin = raster_extent.xMinimum()
-        clip_xmax = raster_extent.xMaximum()
-        clip_ymin = raster_extent.yMinimum()
-        clip_ymax = raster_extent.yMaximum()
-        if (viewport_extent[0] > clip_xmin):
-            clip_xmin = viewport_extent[0]
-        if (viewport_extent[1] > clip_ymin):
-            clip_ymin = viewport_extent[1]
-        if (viewport_extent[2] < clip_xmax):
-            clip_xmax = viewport_extent[2]
-        if (viewport_extent[3] < clip_ymax):
-            clip_ymax = viewport_extent[3]
+        xmin = raster_extent.xMinimum()
+        xmax = raster_extent.xMaximum()
+        ymin = raster_extent.yMinimum()
+        ymax = raster_extent.yMaximum()
 
-        raster_extent = H.dataProvider().extent()
-        x_full_delta = raster_extent.xMaximum() - raster_extent.xMinimum()
-        x_new_delta = clip_xmax - clip_xmin
-        clip_width = (x_new_delta * H.width()) / x_full_delta
-        clip_width = int(clip_width)
+        x_delta = (xmax - xmin) / H.width()
+        x = xmin
+        for i in range(H.width()):
+            if abs(x - self.extent[0]) < x_delta:
+                # We have found the aligned raster boundary
+                break
+            x += x_delta
+            _ = i
 
-        y_full_delta = raster_extent.yMaximum() - raster_extent.yMinimum()
-        y_new_delta = clip_ymax - clip_ymin
-        clip_height = (y_new_delta * H.height()) / y_full_delta
-        clip_height = int(clip_height)
-
-        clip_extent = [clip_xmin, clip_ymin, clip_xmax, clip_ymax]
+        y_delta = (ymax - ymin) / H.height()
+        y = ymin
+        for i in range(H.width()):
+            if abs(y - self.extent[1]) < y_delta:
+                # We have found the aligned raster boundary
+                break
+            y += y_delta
+        clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
 
         # Clip and polygonize
         small_raster = clip_raster(
-            H, clip_width, clip_height, QgsRectangle(*clip_extent))
-        (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
+            H, width, height, QgsRectangle(*clip_extent))
+        flooded_polygon = polygonize(
             small_raster, threshold_min, threshold_max)
-
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.extent)
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
-        if flooded_polygon_inside is None:
-            message = tr(
-                'There are no objects in the hazard layer with "value">%s.'
-                'Please check the value or use other extent.' % (
-                    threshold_min, ))
+        if flooded_polygon is None:
+            message = tr('''There are no objects
+                in the hazard layer with
+                "value">'%s'.
+                Please check the value or use other
+                extent.''' % (threshold_min, ))
             raise GetDataError(message)
 
-        #reproject the flood polygons to exposure projection
-        exposure_crs = E.crs()
-        exposure_srsid = exposure_crs.srsid()
-
-        if (hazard_srsid != exposure_srsid):
-            flooded_polygon_inside = reproject_vector_layer(flooded_polygon_inside, E.crs())        
-            flooded_polygon_outside = reproject_vector_layer(flooded_polygon_outside, E.crs())
-        
         # Clip exposure by the extent
-        #extent_as_polygon = QgsGeometry().fromRect(extent)
-        #no need to clip since It is using a bbox request
-        #line_layer = clip_by_polygon(
-        #    E,
-        #    extent_as_polygon
-        #)
-        # Find inundated roads, mark them
-        line_layer = split_by_polygon_in_out(
+        extent_as_polygon = QgsGeometry().fromRect(extent)
+        line_layer = clip_by_polygon(
             E,
-            flooded_polygon_inside,
-            flooded_polygon_outside,
-            target_field, 1, request)
+            extent_as_polygon
+        )
+        # Find inundated roads, mark them
+        line_layer = split_by_polygon(
+            line_layer,
+            flooded_polygon,
+            request,
+            mark_value=(target_field, 1))
 
+        # Find inundated roads, mark them
+        # line_layer = split_by_polygon(
+        #     E,
+        #     flooded_polygon,
+        #     request,
+        #     mark_value=(target_field, 1))
         target_field_index = line_layer.dataProvider().\
             fieldNameIndex(target_field)
 
@@ -282,8 +267,10 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                 tr('Flooded in the threshold (m)'),
                 tr('Total (m)')],
                 header=True),
-            TableRow([tr('All'), int(flooded_len), int(road_len)])
-        ]
+            TableRow([
+                tr('All'),
+                int(flooded_len),
+                int(road_len)])]
         table_body.append(TableRow(
             tr('Breakdown by road type'), header=True))
         for t, v in roads_by_type.iteritems():
@@ -303,12 +290,10 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(
-            data=line_layer,
-            name=tr('Flooded roads'),
-            keywords={
-                'impact_summary': impact_summary,
-                'map_title': map_title,
-                'target_field': target_field},
-            style_info=style_info)
+        line_layer = Vector(data=line_layer,
+                   name=tr('Flooded roads'),
+                   keywords={'impact_summary': impact_summary,
+                             'map_title': map_title,
+                             'target_field': target_field},
+                   style_info=style_info)
         return line_layer

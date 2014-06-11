@@ -38,7 +38,6 @@ from qgis.core import (
     QgsRectangle)
 
 from safe.api import which, romanise
-from safe.common.testing import get_qgis_app
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
@@ -46,7 +45,6 @@ from safe.common.exceptions import (
     InvalidLayerError)
 from safe_qgis.utilities.styling import mmi_colour
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -534,6 +532,11 @@ class ShakeGrid(object):
         LOGGER.info('Created this gdal command:\n%s' % command)
         # Now run GDAL warp scottie...
         self._run_command(command)
+
+        # We will use keywords file name with simple algorithm name since it
+        # will raise an error in windows related to having double colon in path
+        if 'invdist' in algorithm:
+            algorithm = 'invdist'
 
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
