@@ -19,12 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import urllib2
 import os
+import sys
 
-try:
-    #noinspection PyPackageRequirements
-    from BeautifulSoup import BeautifulSoup
-except ImportError:
-    raise ImportError('BeautifulSoup is not available, please install it.')
 
 netcdf_url = 'http://bfews.pusair-pu.go.id/Sobek-Floodmaps/'
 _download_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood' \
@@ -135,5 +131,13 @@ def download_file_url(url, download_directory=_download_directory, name=None):
     return str(retval)
 
 if __name__ == '__main__':
+    # I know this is ugly, but this is good for removing warning in api-doc.
+    try:
+        #noinspection PyPackageRequirements
+        from BeautifulSoup import BeautifulSoup
+    except ImportError:
+        BeautifulSoup = None  # super dirty hack to remove warning.
+        message = 'BeautifulSoup is not available, please install it.'
+        sys.exit(message)
     download_file_url(netcdf_url)
     print 'fin'

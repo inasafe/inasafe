@@ -17,19 +17,15 @@ Contact : ole.moller.nielsen@gmail.com
 import os
 import numpy
 
-try:
-    # This module requires the package: python-scientific
-    # To query netcdf files with ncdump also install netcdf-bin
-    # The package libnetcdf-dev is also required but is automatically
-    # installed as a dependency on python-scientific
-    # Disabling this check because on OSX and Windows we probably don't
-    # have scipy
-    #pylint: disable=F0401
-    from Scientific.IO.NetCDF import NetCDFFile
-    #pylint: enable=F0401
-except ImportError:
-    raise ImportError(
-        'Scientific.IO.NetCDF.NetCDFFile is not available, please install it.')
+# This module requires the package: python-scientific
+# To query netcdf files with ncdump also install netcdf-bin
+# The package libnetcdf-dev is also required but is automatically
+# installed as a dependency on python-scientific
+# Disabling this check because on OSX and Windows we probably don't
+# have scipy
+#pylint: disable=F0401
+from Scientific.IO.NetCDF import NetCDFFile
+#pylint: enable=F0401
 
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry_to_geotransform
@@ -41,34 +37,39 @@ def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
     """Convert netcdf to tif aggregating first n bands.
 
     :param filename: NetCDF multiband raster with extension .nc
+    :type filename: str
 
     :param n: Positive integer determining how many bands to use
+    :type n: int
 
-    :param verbose: Boolean flag controlling whether diagnostics
-          will be printed to screen. This is useful when run from
-          a command line script.
+    :param verbose: Boolean flag controlling whether diagnostics will be
+        printed to screen. This is useful when run from a command line script.
+    :type verbose: bool
 
     :param output_dir: The output dir for the converted tif.
+    :type output_dir: str
 
-    :return: Raster file in tif format. Each pixel will be the maximum
-          of that pixel in the first n bands in the input file.
+    :return: Raster file in tif format. Each pixel will be the maximum of
+        that pixel in the first n bands in the input file. Ony the path.
+    :rtype: str
     """
 
     if not isinstance(filename, basestring):
-        msg = 'Argument filename should be a string. I got %s' % filename
-        raise RuntimeError(msg)
+        message = 'Argument filename should be a string. I got %s' % filename
+        raise RuntimeError(message)
 
     basename, ext = os.path.splitext(filename)
-    msg = ('Expected NetCDF file with extension .nc - '
-           'Instead I got %s' % filename)
+    message = (
+        'Expected NetCDF file with extension .nc - Instead I got %s' %
+        filename)
     if ext != '.nc':
-        raise RuntimeError(msg)
+        raise RuntimeError(message)
 
     try:
         n = int(n)
     except:
-        msg = 'Argument N should be an integer. I got %s' % n
-        raise RuntimeError(msg)
+        message = 'Argument N should be an integer. I got %s' % n
+        raise RuntimeError(message)
 
     if verbose:
         print filename, n, 'hours'
@@ -110,10 +111,11 @@ def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
     N = inundation_depth.shape[2]  # Steps in the x direction
 
     if n > T:
-        msg = ('You requested %i hours prediction, but the '
+        message = ('You requested %i hours prediction, but the '
                'forecast only contains %i hours' % (n, T))
-        raise RuntimeError(msg)
+        raise RuntimeError(message)
 
+    total_max = 0
     # Compute the max of the first n timesteps
     A = numpy.zeros((M, N), dtype='float')
     for i in range(n):
@@ -124,7 +126,7 @@ def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
         total_max = numpy.max(A[:])
         #print i, numpy.max(B[:]), total_max
 
-    geotransform = raster_geometry_to_geotransform(x, y)
+    geo_transform = raster_geometry_to_geotransform(x, y)
 
     # Write result to tif file
     # NOTE: This assumes a default projection (WGS 84, geographic)
@@ -132,19 +134,21 @@ def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
 
     if verbose:
         print 'Overall max depth over %i hours: %.2f m' % (n, total_max)
-        print 'Geotransform', geotransform
+        print 'Geotransform', geo_transform
         print 'date', date
 
     # Flip array upside down as it comes with rows ordered from south to north
     A = numpy.flipud(A)
 
-    R = Raster(data=A,
-               geotransform=geotransform,
-               keywords={'category': 'hazard',
-                         'subcategory': 'flood',
-                         'unit': 'm',
-                         'title': ('%d hour flood forecast grid '
-                                   'in Jakarta at %s' % (n, date))})
+    R = Raster(
+        data=A,
+        geotransform=geo_transform,
+        keywords={
+            'category': 'hazard',
+            'subcategory': 'flood',
+            'unit': 'm',
+            'title': (
+                '%d hour flood forecast grid in Jakarta at %s' % (n, date))})
 
     tif_filename = '%s_%d_hours_max_%.2f.tif' % (basename, n, total_max)
     if output_dir is not None:
@@ -160,3 +164,7 @@ def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
         print 'Success: %d hour forecast written to %s' % (n, R.filename)
 
     return tif_filename
+
+
+if __name__ == '__main__':
+    pass
