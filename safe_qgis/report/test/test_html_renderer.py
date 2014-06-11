@@ -143,6 +143,7 @@ class HtmlRendererTest(unittest.TestCase):
             20184,  # as rendered on linux ub 14.04_64 TS
             21287,  # as rendered on Jenkins post 19 February 2014
             377191,  # as rendered on OSX
+            17556,  # as rendered on Windows 7_32
             16163L,  # as rendered on Windows 7 64 bit Ultimate i3
             251782L,  # as rendered on Windows 8 64 bit amd
             21491,  # as rendered on Slackware64 14.0
