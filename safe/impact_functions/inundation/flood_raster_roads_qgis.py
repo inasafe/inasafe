@@ -1,5 +1,10 @@
 # coding=utf-8
-"""Impact of flood on roads."""
+"""Impact of flood on roads.
+
+.. warning:: This Impact Function is currently disabled in
+    favour of flood_raster_roads_qgis_gdal which provides
+    better performance. TS 11 June 2014
+"""
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,

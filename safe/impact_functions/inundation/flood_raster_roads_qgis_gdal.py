@@ -102,7 +102,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Be flooded in given thresholds-MINE')
+    title = tr('Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
@@ -167,14 +167,14 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         #reproject self.extent to the hazard projection
         hazard_crs = H.crs()
         hazard_srsid = hazard_crs.srsid()
-        
+
         if (hazard_srsid == 4326):
             viewport_extent = self.extent
         else:
             geo_crs = QgsCoordinateReferenceSystem()
             geo_crs.createFromSrid(4326)
             viewport_extent = extent_to_geo_array(QgsRectangle(*self.extent), geo_crs, hazard_crs)
-        
+
         # Align raster extent and self.extent
         #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
@@ -228,9 +228,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         exposure_srsid = exposure_crs.srsid()
 
         if (hazard_srsid != exposure_srsid):
-            flooded_polygon_inside = reproject_vector_layer(flooded_polygon_inside, E.crs())        
+            flooded_polygon_inside = reproject_vector_layer(flooded_polygon_inside, E.crs())
             flooded_polygon_outside = reproject_vector_layer(flooded_polygon_outside, E.crs())
-        
+
         # Clip exposure by the extent
         #extent_as_polygon = QgsGeometry().fromRect(extent)
         #no need to clip since It is using a bbox request
