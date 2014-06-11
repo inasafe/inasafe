@@ -533,6 +533,11 @@ class ShakeGrid(object):
         # Now run GDAL warp scottie...
         self._run_command(command)
 
+        # We will use keywords file name with simple algorithm name since it
+        # will raise an error in windows related to having double colon in path
+        if 'invdist' in algorithm:
+            algorithm = 'invdist'
+
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
 
