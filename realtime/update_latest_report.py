@@ -29,14 +29,6 @@ from realtime.utilities import realtime_logger_name
 # The logger is initialized in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
 
-try:
-    earth_quake_source_path = os.environ['EQ_SOURCE_PATH']
-    earth_quake_public_path = os.environ['EQ_PUBLIC_PATH']
-    earth_quake_guide_path = os.environ['EQ_GUIDE_PATH']
-except KeyError:
-    LOGGER.exception('EQ_SOURCE_PATH or EQ_PUBLIC_PATH are not set!')
-    sys.exit()
-
 
 def get_list_dir(path_dir, filter_function=None):
     """Return list of file or directory in path_dir
@@ -156,8 +148,15 @@ def update_report(source_path, public_path, last_event_id):
 
 
 def main():
-    """The implementation
-    """
+    """The implementation"""
+    try:
+        earth_quake_source_path = os.environ['EQ_SOURCE_PATH']
+        earth_quake_public_path = os.environ['EQ_PUBLIC_PATH']
+        earth_quake_guide_path = os.environ['EQ_GUIDE_PATH']
+    except KeyError:
+        LOGGER.exception('EQ_SOURCE_PATH or EQ_PUBLIC_PATH are not set!')
+        sys.exit()
+
     source_path = earth_quake_source_path
     public_path = earth_quake_public_path
     # guide path is a path that has list of event id to be pushed on the

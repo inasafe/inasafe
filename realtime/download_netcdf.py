@@ -20,8 +20,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import urllib2
 import os
 
-#noinspection PyPackageRequirements
-from BeautifulSoup import BeautifulSoup
+try:
+    #noinspection PyPackageRequirements
+    from BeautifulSoup import BeautifulSoup
+except ImportError:
+    raise ImportError('BeautifulSoup is not available, please install it.')
 
 netcdf_url = 'http://bfews.pusair-pu.go.id/Sobek-Floodmaps/'
 _download_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood' \
