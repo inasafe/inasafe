@@ -272,7 +272,7 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
         keywords = impact.get_keywords()
         self.assertEquals(params['target_field'], keywords['target_field'])
         count = sum(impact.get_data(attribute=keywords['target_field']))
-        self.assertEquals(count, 21)
+        self.assertEquals(count, 25)
 
 
 if __name__ == '__main__':
