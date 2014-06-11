@@ -608,12 +608,31 @@ def combos_to_string(dock):
     return string
 
 
+def get_function_index(dock, function_id):
+    """Get the combo index for a function given its function_id.
+
+    :param dock: A dock instance.
+    :type dock: Dock
+
+    :param function_id: The function id e.g. FloodEvacuationImpactFunction.
+    :type function_id: str
+    """
+
+    index = -1
+    for count in range(dock.cboFunction.count()):
+        next_function_id = dock.get_function_id(count)
+        if function_id == next_function_id:
+            index = count
+            break
+    return index
+
+
 def setup_scenario(
         dock,
         hazard,
         exposure,
-        function,
         function_id,
+        function=None,
         ok_button_flag=True,
         aggregation_layer=None,
         aggregation_enabled_flag=None):
@@ -673,8 +692,8 @@ def setup_scenario(
             return False, message
         dock.cboExposure.setCurrentIndex(index)
 
-    if function is not None:
-        index = dock.cboFunction.findText(function)
+    if function_id is not None:
+        index = get_function_index(dock, function_id)
         message = ('\nImpact Function Not Found: %s\n Combo State:\n%s' %
                    (function, combos_to_string(dock)))
         if index == -1:
@@ -700,10 +719,13 @@ def setup_scenario(
     state = get_ui_state(dock)
 
     expected_state = {'Run Button Enabled': ok_button_flag,
-                      'Impact Function Title': function,
                       'Impact Function Id': function_id,
                       'Hazard': hazard,
                       'Exposure': exposure}
+    if function is not None:
+        expected_state['Impact Function Title'] = function
+    else:
+        state.pop('Impact Function Title')
 
     message = 'Expected versus Actual State\n'
     message += '--------------------------------------------------------\n'
