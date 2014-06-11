@@ -101,7 +101,7 @@ class MapTest(unittest.TestCase):
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
             138471,  # Ubuntu 14.04_64 AG
-            152326,  # Ubuntu 14.04_64 TS
+            152980,  # Ubuntu 14.04_64 TS
             414589,  # Slackware64 14.0
             144542,  # Linux Mint 14_64
             150412,  # Windows 7 64
@@ -144,7 +144,7 @@ class MapTest(unittest.TestCase):
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
             76191,  # Ubuntu 14.04_64 AG
-            90046,  # Ubuntu 14.04_64 TS
+            90704,  # Ubuntu 14.04_64 TS
             367934,  # Slackware64 14.0
             82263,  # Linux Mint 14_64
             88779,  # Windows 7 64bit
