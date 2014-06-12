@@ -39,6 +39,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ITBFatalityFunction(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Indonesian Earthquake Fatality Model.
 
     This model was developed by Institut Teknologi Bandung (ITB) and
@@ -245,9 +246,9 @@ class ITBFatalityFunction(FunctionProvider):
 
         :param layers: List of layers expected to contain,
 
-                my_hazard: Raster layer of MMI ground shaking
+                hazard: Raster layer of MMI ground shaking
 
-                my_exposure: Raster layer of population density
+                exposure: Raster layer of population density
         """
 
         displacement_rate = self.parameters['displacement_rate']
@@ -264,8 +265,8 @@ class ITBFatalityFunction(FunctionProvider):
                                 self)
 
         # Extract data grids
-        my_hazard = intensity.get_data()   # Ground Shaking
-        my_exposure = population.get_data(scaling=True)  # Population Density
+        hazard = intensity.get_data()   # Ground Shaking
+        exposure = population.get_data(scaling=True)  # Population Density
 
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
@@ -275,16 +276,16 @@ class ITBFatalityFunction(FunctionProvider):
         number_of_displaced = {}
         number_of_fatalities = {}
 
-        # Calculate fatality rates for observed Intensity values (my_hazard
+        # Calculate fatality rates for observed Intensity values (hazard
         # based on ITB power model
-        R = numpy.zeros(my_hazard.shape)
+        R = numpy.zeros(hazard.shape)
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
             # count population affected by this shake level
             I = numpy.where(
-                (my_hazard > mmi - self.parameters['step']) * (
-                    my_hazard <= mmi + self.parameters['step']),
-                my_exposure, 0)
+                (hazard > mmi - self.parameters['step']) * (
+                    hazard <= mmi + self.parameters['step']),
+                exposure, 0)
 
             # Calculate expected number of fatalities per level
             fatality_rate = self.fatality_rate(mmi)
@@ -318,7 +319,7 @@ class ITBFatalityFunction(FunctionProvider):
         R[R < tolerance] = numpy.nan
 
         # Total statistics
-        total = int(round(numpy.nansum(my_exposure.flat) / 1000) * 1000)
+        total = int(round(numpy.nansum(exposure.flat) / 1000) * 1000)
 
         # Compute number of fatalities
         fatalities = int(round(numpy.nansum(number_of_fatalities.values())

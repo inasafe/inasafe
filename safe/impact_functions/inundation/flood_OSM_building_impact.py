@@ -40,6 +40,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Inundation impact on building data.
 
     :author Ole Nielsen, Kristy van Putten
@@ -397,17 +398,19 @@ class FloodBuildingImpactFunction(FunctionProvider):
         legend_title = tr('Structure inundated status')
 
         # Create vector layer and return
-        V = Vector(data=attributes,
-                   projection=I.get_projection(),
-                   geometry=I.get_geometry(),
-                   name=tr('Estimated buildings affected'),
-                   keywords={'impact_summary': impact_summary,
-                             'impact_table': impact_table,
-                             'target_field': self.target_field,
-                             'map_title': map_title,
-                             'legend_units': legend_units,
-                             'legend_title': legend_title,
-                             'buildings_total': N,
-                             'buildings_affected': count},
-                   style_info=style_info)
-        return V
+        vector_layer = Vector(
+            data=attributes,
+            projection=I.get_projection(),
+            geometry=I.get_geometry(),
+            name=tr('Estimated buildings affected'),
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'buildings_total': N,
+                'buildings_affected': count},
+            style_info=style_info)
+        return vector_layer
