@@ -31,6 +31,7 @@ from safe.impact_functions.impact_function_metadata import (
 
 
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation (polygon-polygon).
 
     :author Dmitry Kolesov
@@ -188,8 +189,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         h_data = H.getFeatures(request)
         hazard_poly = None
         for mpolygon in h_data:
-            attrs = mpolygon.attributes()
-            if attrs[affected_field_index] != affected_value:
+            attributes = mpolygon.attributes()
+            if attributes[affected_field_index] != affected_value:
                 continue
             if hazard_poly is None:
                 hazard_poly = QgsGeometry(mpolygon.geometry())
@@ -215,17 +216,16 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         e_data = E.getFeatures(request)
         for feat in e_data:
             building_geom = feat.geometry()
-            attrs = feat.attributes()
+            attributes = feat.attributes()
             l_feat = QgsFeature()
             l_feat.setGeometry(building_geom)
-            l_feat.setAttributes(attrs)
+            l_feat.setAttributes(attributes)
             if hazard_poly.intersects(building_geom):
                 l_feat.setAttribute(target_field_index, 1)
             else:
 
                 l_feat.setAttribute(target_field_index, 0)
-            (_, __) = \
-                    building_layer.dataProvider().addFeatures([l_feat])
+            (_, __) = building_layer.dataProvider().addFeatures([l_feat])
         building_layer.updateExtents()
 
         # Generate simple impact report
@@ -238,32 +238,29 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
             building_layer.fieldNameIndex(building_type_field)
         for building in buildings_data:
             building_count += 1
-            attrs = building.attributes()
-            building_type = attrs[building_type_field_index]
-            if building_type in [None,
-                                 'NULL', 'null',
-                                 'Null'
-            ]:
+            attributes = building.attributes()
+            building_type = attributes[building_type_field_index]
+            if building_type in [None, 'NULL', 'null', 'Null']:
                 building_type = 'Unknown type'
-
             if not building_type in buildings_by_type:
                 buildings_by_type[building_type] = {'flooded': 0, 'total': 0}
             buildings_by_type[building_type]['total'] += 1
 
-            if attrs[target_field_index] == 1:
+            if attributes[target_field_index] == 1:
                 flooded_count += 1
                 buildings_by_type[building_type]['flooded'] += 1
 
-        table_body = [question,
-                      TableRow([tr('Building Type'),
-                                tr('Flooded'),
-                                tr('Total')],
-                               header=True),
-                      TableRow([tr('All'),
-                                int(flooded_count),
-                                int(building_count)])]
-        table_body.append(TableRow(tr('Breakdown by building type'),
-                                       header=True))
+        table_body = [
+            question,
+            TableRow([tr('Building Type'),
+                      tr('Flooded'),
+                      tr('Total')],
+                     header=True),
+            TableRow([tr('All'),
+                      int(flooded_count),
+                      int(building_count)]),
+            TableRow(tr('Breakdown by building type'),
+                     header=True)]
         for t, v in buildings_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
@@ -281,10 +278,12 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it.
-        building_layer = Vector(data=building_layer,
-                   name=tr('Flooded buildings'),
-                   keywords={'impact_summary': impact_summary,
-                             'map_title': map_title,
-                             'target_field': target_field},
-                   style_info=style_info)
+        building_layer = Vector(
+            data=building_layer,
+            name=tr('Flooded buildings'),
+            keywords={
+                'impact_summary': impact_summary,
+                'map_title': map_title,
+                'target_field': target_field},
+            style_info=style_info)
         return building_layer

@@ -42,6 +42,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
 class VolcanoBuildingImpact(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Risk plugin for volcano building impact.
 
     :author AIFDR

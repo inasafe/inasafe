@@ -44,17 +44,17 @@ class FloodEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Impact function for flood evacuation.
 
-        :author AIFDR
-        :rating 4
-        :param requires category=='hazard' and \
-                        subcategory in ['flood', 'tsunami'] and \
-                        layertype=='raster' and \
-                        unit=='m'
+    :author AIFDR
+    :rating 4
+    :param requires category=='hazard' and \
+                    subcategory in ['flood', 'tsunami'] and \
+                    layertype=='raster' and \
+                    unit=='m'
 
-        :param requires category=='exposure' and \
-                        subcategory=='population' and \
-                        layertype=='raster'
-        """
+    :param requires category=='exposure' and \
+                    subcategory=='population' and \
+                    layertype=='raster'
+    """
 
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodEvacuationFunction.

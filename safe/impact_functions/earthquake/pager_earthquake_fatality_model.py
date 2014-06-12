@@ -19,6 +19,7 @@ from safe.common.utilities import ugettext as tr
 
 
 class PAGFatalityFunction(ITBFatalityFunction):
+    # noinspection PyUnresolvedReferences
     """Population Vulnerability Model Pager.
 
     Loss ratio(MMI) = standard normal distrib( 1 / BETA * ln(MMI/THETA)).
@@ -127,6 +128,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
             ('MinimumNeeds', {'on': True})])),
         ('minimum needs', default_needs)])
 
+    # noinspection PyPep8Naming
     def fatality_rate(self, mmi):
         """Pager method to compute fatality rate."""
 
