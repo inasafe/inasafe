@@ -1305,7 +1305,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # disable gui elements that should not be applicable for this
             self.runtime_keywords_dialog.radExposure.setEnabled(False)
             self.runtime_keywords_dialog.radHazard.setEnabled(False)
-            self.runtime_keywords_dialog.pbnAdvanced.setEnabled(False)
             self.runtime_keywords_dialog.setModal(True)
             self.runtime_keywords_dialog.show()
 
