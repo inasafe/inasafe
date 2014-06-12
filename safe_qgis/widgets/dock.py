@@ -1842,10 +1842,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
                 keywords = self.keyword_io.read_keywords(exposure_layer)
-                flag = False
+                allow_resampling_flag = True
                 if 'allow_resampling' in keywords:
-                    flag = keywords['allow_resampling'].lower() == 'false'
-                if hazard_geo_cell_size < exposure_geo_cell_size and not flag:
+                    allow_resampling_flag = keywords[
+                        'allow_resampling'].lower() == 'true'
+                if hazard_geo_cell_size < exposure_geo_cell_size and \
+                        allow_resampling_flag:
                     cell_size = hazard_geo_cell_size
                 else:
                     cell_size = exposure_geo_cell_size
