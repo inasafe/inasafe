@@ -27,6 +27,7 @@ from safe.api import temp_dir
 from realtime.ftp_client import FtpClient
 
 
+# pylint: disable=W0613
 def mock_get_listing(self, extension='zip'):
     """Mock get_listing of ftp_client.
 
@@ -48,9 +49,11 @@ def mock_get_listing(self, extension='zip'):
         if filename.endswith('.%s' % extension):
             file_list.append(base_url + '/' + filename)
     return file_list
+# pylint: enable=W0613
 
 
 # noinspection PyUnusedLocal
+# pylint: disable=W0613
 def mock_get_file(self, url_path, file_path):
     """Mock get_file of ftp_client.
 
@@ -68,6 +71,7 @@ def mock_get_file(self, url_path, file_path):
             '../fixtures/shake_data'))
     source_file_path = os.path.join(local_shake_dir, url_path)
     shutil.copy(source_file_path, file_path)
+# pylint: enable=W0613
 
 
 def run_monkey_patching_ftp_client():

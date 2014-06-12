@@ -729,3 +729,27 @@ def log_file_path():
     log_temp_dir = temp_dir('logs')
     path = os.path.join(log_temp_dir, 'inasafe.log')
     return path
+
+
+def romanise(number):
+    """Return the roman numeral for a number.
+
+    Note that this only works for number in interval range [0, 12] since at
+    the moment we only use it on realtime earthquake to conver MMI value.
+
+    :param number: The number that will be romanised
+    :type number: float
+
+    :return Roman numeral equivalent of the value
+    :rtype: str
+    """
+    if number is None:
+        return ''
+
+    roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                  'IX', 'X', 'XI', 'XII']
+    try:
+        roman = roman_list[int(number)]
+    except ValueError:
+        return None
+    return roman

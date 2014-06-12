@@ -28,8 +28,6 @@ import unittest
 import logging
 import difflib
 
-import ogr
-
 # pylint: disable=E0611
 # pylint: disable=W0611
 from qgis.core import QgsFeatureRequest
@@ -39,12 +37,13 @@ from safe.api import unique_filename, temp_dir
 from safe.common.testing import get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
-    data_dir)
+    data_dir,
+    realtime_logger_name)
 from realtime.shake_event import ShakeEvent
 from realtime.utilities import base_data_dir
 
-# The logger is initialised in realtime/__init__
-LOGGER = logging.getLogger('InaSAFE')
+# The logger is initialised in realtime.__init__
+LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Shake ID for this test
@@ -125,40 +124,6 @@ class TestShakeEvent(unittest.TestCase):
                     '\n\nGot\n------------------\n%s\n') %
                    (expected_state, state))
         self.assertEqual(state, expected_state, message)
-
-    def check_feature_count(self, path, count):
-        data_source = ogr.Open(path)
-        base_name = os.path.splitext(os.path.basename(path))[0]
-        # do a little query to make sure we got some results...
-        sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
-        #print sql_statement
-        layer = data_source.ExecuteSQL(sql_statement)
-        feature_count = layer.GetFeatureCount()
-        flag = feature_count == count
-        message = ''
-        if not flag:
-            message = 'Expected %s features, got %s' % (count, feature_count)
-        data_source.ReleaseResultSet(layer)
-        data_source.Destroy()
-        return flag, message
-
-    def test_event_to_contours(self):
-        """Check we can extract contours from the event"""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='invdist')
-        self.assertTrue(self.check_feature_count(file_path, 16))
-        self.assertTrue(os.path.exists(file_path))
-        expected_qml = file_path.replace('shp', 'qml')
-        message = '%s not found' % expected_qml
-        self.assertTrue(os.path.exists(expected_qml), message)
-
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='nearest')
-        self.assertTrue(self.check_feature_count(file_path, 132))
-        file_path = shake_event.mmi_data_to_contours(force_flag=True,
-                                                     algorithm='average')
-        self.assertTrue(self.check_feature_count(file_path, 132))
 
     def test_local_cities(self):
         """Test that we can retrieve the cities local to the event"""
@@ -253,16 +218,6 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEqual(
             shake_event.fatality_counts, expected_fatalities, message)
 
-    def test_bounds_to_rect(self):
-        """Test that we can calculate the event bounds properly"""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        bounds = shake_event.bounds_to_rectangle().toString()
-        expected_result = (
-            '139.3700000000000045,-3.6787500000000000 : '
-            '141.8700000000000045,-1.1812499999999999')
-        message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
-        self.assertEqual(bounds, expected_result, message)
-
     def test_sorted_impacted_cities(self):
         """Test getting impacted cities sorted by mmi then population."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
@@ -352,9 +307,9 @@ class TestShakeEvent(unittest.TestCase):
             'limitations': (
                 u'This impact estimation is automatically generated and only '
                 u'takes into account the population and cities affected by '
-                u'different levels of ground shaking. The estimate is based on '
-                u'ground shaking data from BMKG, population density data from '
-                u'asiapop.org, place information from geonames.org and '
+                u'different levels of ground shaking. The estimate is based '
+                u'on ground shaking data from BMKG, population density data '
+                u'from asiapop.org, place information from geonames.org and '
                 u'software developed by BNPB. Limitations in the estimates of '
                 u'ground shaking, population  data and place names datasets '
                 u'may result in significant misrepresentation of the '
@@ -427,7 +382,8 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_i18n(self):
         """See if internationalisation is working."""
-        shake_event = ShakeEvent(SHAKE_ID, locale='id', data_is_local_flag=True)
+        shake_event = ShakeEvent(
+            SHAKE_ID, locale='id', data_is_local_flag=True)
         shaking = shake_event.mmi_shaking(5)
         expected_shaking = 'Sedang'
         self.assertEqual(expected_shaking, shaking)

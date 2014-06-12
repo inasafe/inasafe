@@ -1,0 +1,576 @@
+Changelog for version 2.1.0
+================================
+
+2aa1982 (HEAD, timlinux/develop, develop) #1052 Removed some commented out qgis_interface code added while debugging keyword editor errors.
+5cca558 #1052 All keywords editor tests passing now.
+639ffd9 #1052 Fi x keywords editor issues reported by @akbargumbiar
+4b3ed6c Merge pull request #1052 from timlinux/develop
+acac0ac #1052 Fi x keywords editor issues reported by @akbargumbiar
+a8bcab8 Merge pull request #1055 from assefay/develop
+7a226ec Merge pull request #1056 from mbernasocchi/inasafe-1048
+6c5cc66 Merge pull request #1058 from timlinux/inasafe-1057
+347595f (timlinux/inasafe-1057, inasafe-1057) #1057 Fix failing tests caused by layer focus fix for QGIS 2.4
+a6cf7da All keywords editor dialog tests passing.
+c3c973c Fix for keywords editor throwing error when raster layers are used.
+3abe498 Completed refactor of keywords editor to use tab for aggregation properties.
+6bf3a93 Updates for keywords editor to use tabs etc.
+547ad4c fix #1048 All the logging related  code was moved to safe. in safe_qgis we only add the qgis handler and if needed sentry
+f6b7e1e Take into account hazard and exposure projections #1009
+a709d3a fix problems for compiling documentation (including renaming one file)
+74cde58 Merge pull request #1054 from akbargumbira/inasafe_911
+bf75157 Change hash value of the report generated.
+6025df4 Merge pull request #1053 from akbargumbira/inasafe_911
+6231806 [Reporting] Delete unused TemplateMissingElementError exception.
+f9783a2 Added missing label on keywords dialog
+4810cc9 Resolved merge conflicts with origin
+776db45 [Reporting] Fix make_pdf function.
+a622af3 Further tweaks for keywords editor tab support - in progress
+c625152 Merge pull request #1051 from akbargumbira/inasafe_911
+befa718 [Reporting] Add comment as a note about the importance of order in opening the template on composer.
+7f611b9 Added missing rubber bands icons to resource file.
+c65e80f [Needs Documentation Update] Arrange keywords editor widgets into tabs.
+b2a8d8d Merge develop to this branch.
+fb8b6e6 [Reporting] Set map property of inasafe-portrait-a4 template to render mode.
+7db511c [Reporting] Set layer CRS to the same map canvas CRS before printing/opening the template on composer and change the flow of opening composer in regard to QGIS 2.4 composer behaviour changes.
+e089ab3 Merge pull request #1050 from timlinux/develop
+00cf10d Use the A4 Portrait map template by default.
+d64a6af Merge pull request #1049 from timlinux/develop
+733fbf9 Merge pull request #1043 from ismailsunni/fix_wizard
+f6eb193 Merge pull request #1047 from mbernasocchi/inasafe-1015
+12637dc Added make changelog target to makefile.
+88259db clean up double init
+096ecf3 fix #1015
+5d6cb83 Added make tag target to makefile.
+58d8b79 Merge pull request #1046 from akbargumbira/develop
+10e1172 [Realtime] Last pylint violation.
+4bafafc Merge pull request #1045 from akbargumbira/develop
+407dddc Merge pull request #1044 from timlinux/develop
+c29d7f0 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+4a7bd7a [Realtime] Better way to include title and source in grid and pep8 pylint fix.
+d72871b Updated user docs for release
+2ebae64 Add help button in wizard and translation
+4861ba7 Added changelog script
+f621170 Merge remote-tracking branch 'origin/develop' into fix_tests
+d044ef6 Update all translations.
+9cfbdb7 Merge pull request #1033 from ismailsunni/fix_tests
+4092e2b Merge pull request #1042 from akbargumbira/develop
+8b59ce4 Merge pull request #1041 from timlinux/develop
+6b2ee15 Fix gdal import.
+196ee94 Fixed issue with QGIS 2.4 support - legend layer not focussed by default anymore meant impact layer was not selected and results were not showing in dock.
+6229abb Merge pull request #1039 from akbargumbira/develop
+3fa9fde Delete roman from the earth.
+fd5b139 Merge pull request #1038 from akbargumbira/develop
+2894b68 [Realtime] Refactor things.
+d717bb1 Fix conflict.
+2270d02 Merge pull request #1037 from timlinux/develop
+1d617f2 Fixed rubber band to work when canvas is in projected crs
+1c17e4c Merge pull request #1036 from akbargumbira/develop
+d05d4f6 [Realtime] Refactor things on realtime.
+e89d14d Fix unit test.
+0f024fd Merge pull request #1035 from timlinux/develop
+ec4f3b8 Elder to Elderly.
+02018c8 Test s added for rubber bands. Refactored test method names in dock test for pep compliance.
+df8e725 Merge pull request #1034 from akbargumbira/develop
+4b9a6f3 Delete batch test build status on readme.
+cd0ca51 Update translation and pep8.
+ee90864 Merge remote-tracking branch 'origin/develop' into fix_tests
+188cb65 Make test pass #1030 and pep8.
+0c7cc19 Merge pull request #1032 from akbargumbira/realtime_2.1
+07ca30b [Realtime] Refactor shakegrid to safe_qgis package, clear temp files in inasafe_data folder.
+b29ecb0 Merge pull request #1020 from timlinux/develop
+4d50a20 Resolved merge conflicts
+5fefaba Resolved merge conflict
+fd9c43e Merge pull request #1031 from ismailsunni/fix_tests
+f5da158 Merge remote-tracking branch 'origin/develop' into fix_tests
+fe00973 Fix failed unittests.
+3b81f02 Merge pull request #1029 from ismailsunni/fix_wizard
+d910f41 Merge pull request #1027 from akbargumbira/develop
+15f8dde Move import order.
+b899fc8 [#1013] Move batch package.
+84e51c7 Pep8.
+9a1440c Update test data sha.
+e88e34a Merge remote-tracking branch 'origin/develop' into fix_wizard
+a05ae02 Skip locale test since it will cause a problem to other tests.
+5d49586 Merge pull request #1026 from akbargumbira/develop
+2944763 Fix doc links.
+65c863e Merge remote-tracking branch 'origin/develop' into fix_wizard
+6dcd5ca Add wizard test for locale mode.
+945c15c Update translations.
+51644bd Translation update and fix unit test.
+2be1acb Merge pull request #1023 from akbargumbira/realtime_2.1
+4072403 [Realtime] Added realtime test status on readme.
+95197cf Wizard works in locale mode.
+41cc720 Use item data instead the text of a wizard.
+c1f1244 Merge pull request #1022 from akbargumbira/realtime_2.1
+eb62224 [Realtime] Code cleaning.
+db2f8b0 Merge pull request #1021 from akbargumbira/realtime_2.1
+c6a25c0 [Realtime] Fix jenkins scripts.
+e63086a Merge pull request #996 from akbargumbira/realtime_2.1
+b43afc5 [Realtime] Add realtime on jenkins.
+6508696 Refactor variable.
+d8d5bd9 [Realtime] Delete flood forecast related on realtime.
+f3e87a9 Merge branch 'develop' of github.com:AIFDR/inasafe into realtime_2.1
+a7a3cbf [Realtime] Move some scripts to /scripts/realtime/. Not tested: make-shakemap-local-osx.sh, make-shakemap-osx.sh
+33c39e1 [Realtime] Changed data test.
+0c69cb0 [Realtime] Use QGIS API 2.
+f2f679f Coding standard.
+65253ee Merge pull request #1017 from ismailsunni/fix_wizard
+910c14e [Realtime] Fix set_contour_properties.
+d8265cf Coding standard.
+72abe5d Merge remote-tracking branch 'origin/develop' into fix_wizard
+e5283a1 Test integrated polygon.
+104355f Fix for rubber band not showing on first load of QGIS
+c5bd6e9 Tim's review
+89b38e6 Added button to toggle rubber bands. Needs translation!
+9afbe3e Merge remote-tracking branch 'origin/develop' into develop
+4908952 Show green rubber band representing what the next analysis extent will be.
+e0888b8 Merge pull request #1018 from assefay/develop
+249bc62 Merge pull request #1018 from assefay/inasafe
+6f4bdea Merge pull request #1019 from timlinux/develop
+8590efb (refs/pr/timlinux/inasafe/develop) Disabled pydev
+b7ba19b Show rubber band where analysis extent was carried out.
+eab4677 (refs/pr/assefay/inasafe/develop) fix clip extent issue #1009
+dc90fc4 (refs/pr/akbargumbira/inasafe/realtime_2.1) [Realtime] Update make local map.
+de9035d [Realtime] Add realtime.server_config to gitignore.
+dd4266c [Realtime] Update make-latest-shakemap.
+6cf8209 [Realtime] Fix mmi to shapefile.
+33ace13 [Realtime] Refactor things.
+a0ea0ac [Realtime] Use the same InaSAFE log file for logging instead of realtime.log for Realtime.
+68eb577 [Realtime] Cleaning up.
+b3d3f60 Merge branch 'realtime_2.1' of github.com:akbargumbira/inasafe into realtime_2.1
+9967eee [Realtime] Monkey patching ftp_client and shake_data.
+f78dfb9 [Realtime] Merging remote.
+82f5909 [Realtime] Monkey patching to SFTP Shake Data.
+b285e44 [Realtime] A better monking patching of sftp_client.
+188a4df [Realtime] Do monkey patching to SFTPClient.
+12ff252 (refs/pr/ismailsunni/inasafe/fix_wizard) Cleaner unit test.
+1cf0cd4 Merge remote-tracking branch 'origin/develop' into fix_wizard
+6c95712 add experimental to impact functions title.
+afe02b0 Merge branch 'develop' of github.com:AIFDR/inasafe into realtime_2.1
+74478e8 Refactor unit test.
+402ec05 Merge pull request #1016 from akbargumbira/fixing_bad_codes
+eb4984f (refs/pr/akbargumbira/inasafe/fixing_bad_codes) Remove codes duplication.
+38161ac Add integrated unit test.
+5a7bb4c Add unit test in keywords dialog.
+3c0bc93 Check sum age ratios in keywords dialog.
+906f244 Use breakdown_defaults.
+8194b61 Global default in keywords dialog.
+561ce15 Change use default to global default in wizard.
+6690804 Check total ratio before continue the wizard.
+0ceea98 Elder to elderly.
+b5c398e Add question to wizard.
+fecdab5 Set max and step of combo box in aggregation keywords dialogs.
+1c64951 [Realtime] Make all tests in test_sftp_shake_data pass.
+6498661 Merge branch 'realtime_2.1' of github.com:akbargumbira/inasafe into realtime_2.1
+1e0f24a [Realtime] Make all tests in test_sftp_client pass by making a mock of sftp_client.
+7c130fc [Realtime] Make all the tests in test_sftp_client by making a mock of sftp_client.
+0a7ead0 [Realtime] Move get_path_tail from sftp_client to utilities.
+8e90270 (refs/pr/ismailsunni/inasafe/develop) updating documentations, fixes AIFDR/inasafe-doc#152
+0fbc4be fix documentation compile
+dcd7e67 [Realtime] Coding standard test_sftp_shake_data.
+588405b [Realtime] Various works in ftp client, shake data, and the shake data tests.
+064a9ed [Realtime] A better logging tests in realtime.
+b32680a [Realtime] Coding standards, PEP8, Pylint
+303ce48 Merge branch 'develop' of github.com:AIFDR/inasafe into realtime_2.1
+bb4d1ff [Realtime] Fix get_population_path and use QGIS 2.2 for testing.
+6fcad74 [Realtime] Deleted test_utils.
+bcfe819 Merge pull request #962 from akbargumbira/inasafe_824
+942b1da [Realtime] Pep8 Pylint test_shake_event.
+49a9a99 [Realtime] Fix all the tests in test_utilities.
+7077637 [Realtime] Fix all the tests in test_shake_event.
+f181308 [Realtime] Use local data in test_shake_event and Move some tests from test_shake_event to test_shake_grid_converter.
+1de6450 Fix failing test.
+6fe852c Merge branch 'develop' of github.com:AIFDR/inasafe into realtime_2.1
+6233521 (coding_standards) Merge pull request #1006 from akbargumbira/develop
+341192c (refs/pr/akbargumbira/inasafe/develop) Move all tests in safe.common to safe.common.test
+25f0b14 Merge branch 'develop' of github.com:AIFDR/inasafe into realtime_2.1
+ce8fb6d Merge pull request #1005 from timlinux/inasafe-1004
+0dace89 (timlinux/inasafe-1004, refs/pr/timlinux/inasafe/inasafe-1004) Fix #1004 Bug - OpenLayers Plugin - Add OpenStreetMap Layer
+26ac02f Merge pull request #1003 from akbargumbira/develop
+93b0e54 Fix bad copy paste.
+a5e4454 Merge pull request #1002 from akbargumbira/develop
+75c1b2c Fix failing test on keyword wizard.
+ce1f066 Merge remote-tracking branch 'origin/develop' into realtime_2.1
+cbfa74e Merge pull request #1001 from akbargumbira/inasafe-994
+a82a537 (refs/pr/akbargumbira/inasafe/inasafe-994) Exclude impact-report from must-have element ids for printing impact result.
+2d34e9a Merge pull request #998 from ismailsunni/fix_wizard
+69039d1 Merge pull request #999 from timlinux/inasafe-997
+c696f64 (timlinux/inasafe-997, refs/pr/timlinux/inasafe/inasafe-997) Fix #997 Aggregation fails on deintersect - disable debug stuff
+5e1c137 Fix #997 Aggregation fails on deintersect
+c097815 Merge remote-tracking branch 'origin/develop' into fix_wizard
+bac647a Fix for corrupt keywords.
+38bcefd Merge pull request #995 from ismailsunni/fix_wizard
+0c82bbb [Realtime] Clean up, Refactor ShakeEvent to use ShakeGridConverter.
+c369ece Add handler for raster hazard.
+c2c5776 Add handler for point hazard #993.
+d6bac31 Merge remote-tracking branch 'origin/develop' into fix_wizard
+99c4321 Add optional notes in wizard step source.
+9817213 Make wizard font size bigger to Ubuntu-11
+7eb12dc Auto select one item, for #961.
+9004a04 Point hazard for wizards.
+fe7047c Update translations.
+f19a8d5 Translation file updates
+5f8e9f5 Fix #979 and #988.
+26147b7 Fix building_generic related error.
+202e714 Merge pull request #992 from timlinux/develop
+eae8e24 Updated control images for ub14.04 64
+bb229a8 Fix pep8 check so it ignores venv dir if present
+5f030cb Merge pull request #991 from timlinux/develop
+f9a2e48 Added a couple more git ignore rules
+f60019a Add aggregation's default value for #977
+63332d2 unit_no_type to unit_building_generic #980.
+1385ebe Merge pull request #989 from akbargumbira/inasafe_702
+c1837b6 (refs/pr/akbargumbira/inasafe/inasafe_702) More robust code for making impact layer classes.
+1187b97 Pylint.
+5ce38a5 Merge pull request #985 from ismailsunni/fix_wizard
+3e4c6e8 PEP8.
+413ed45 Merge remote-tracking branch 'origin/develop' into fix_wizard
+5bdd89c Put icon on top, text on below.
+34c77fe Fix tooltips.
+5ad1a42 Fix typo.
+2e7d7f2 Tim's review.
+0b303ab fix compile issues for documentation
+89e61b9 Fix typo.
+aa7ad47 Improvement on creating class.
+2b18344 Change classes for the impact layer.
+607821b For tooltip on source stepd due to #961.
+98d9ab0 Add translations for #959. Verified that the translations appear in UI.
+52f4e06 Merge with inasafe/develop.
+5440fe6 for #980
+da4f3ef Add description for units.
+5483d0a Merge pull request #987 from timlinux/develop
+4d22cf9 Make test package builder build packages from develop branch by default
+519d28d Merge pull request #986 from akbargumbira/develop
+345fac6 Update Translations.
+fc4abec Merge with origin/develop.
+ff75c2d Elderly to elder.
+a185a50 Pep8.
+29b22b0 Add behaviour for wizard.
+cb59cfc Almost done, needs codes for behaviour.
+f41284e Set max value and step of combo box.
+1e7ab07 Merge pull request #984 from akbargumbira/inasafe_782
+60d32e4 (refs/pr/akbargumbira/inasafe/inasafe_782) Fix typo
+df39489 Address #782. Address source and title of the shake data.
+55b432d Change object name.
+e877dc8 Add wizard_dialog_base.py to Makefile and compile it.
+20877b9 Add new step on wizard.
+af3acda Merge pull request #983 from akbargumbira/inasafe_840
+9b5dd90 (refs/pr/akbargumbira/inasafe/inasafe_840) For the sake of the easiness of changing texts.
+1f897b9 Merge pull request #982 from ismailsunni/fix_wizard
+7749014 Replace all normalized to normalised.
+96f82a5 Merge remote-tracking branch 'origin/develop' into fix_aggregation
+0b8f466 for #978
+c32a91f Add handler for unknown unit keyword.
+8c596f0 Another fix for writing keywords.
+6225a01 Fix for aggregations.
+54b8c51 Merge pull request #976 from ismailsunni/fix_975
+19ac371 Merge remote-tracking branch 'origin/develop' into fix_975
+d4a9611 Fix for #975.
+8f58fdd Merge pull request #974 from akbargumbira/develop
+f5e79bc Fix option dialog can't be opened.
+0ce20b6 Merge pull request #972 from ismailsunni/fix_955
+dd724ee Merge remote-tracking branch 'origin/develop' into fix_955
+8cdfda9 Tim's Review.
+a9cd2ea Merge pull request #973 from akbargumbira/coding_standard
+a68b2c9 (refs/pr/akbargumbira/inasafe/coding_standard) Coding standard again, don't import safe directly from safe_qgis.
+0c272b0 Fix typo.
+adc7e0f Don't import safe directly from safe_qgis.
+2936277 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+f5df03e Akbar's review.
+a0b4d78 Another Tim's review.
+080f925 s/msg/message
+56f2fdc Tim's review.
+f9e6aa0 Merge remote-tracking branch 'origin/develop' into fix_955
+5efca04 Pep8
+85dcc2d Fix for #955
+942f830 It works, needed a better test.
+841031d Almost done, except the hard one.
+edf7ddb Merge pull request #971 from ismailsunni/fix_pylint
+0da1f8e Pylint
+534b763 Merge pull request #970 from akbargumbira/revisit_IF
+79b0b29 (refs/pr/akbargumbira/inasafe/revisit_IF) Fix IF Volcano Building for preventing using the same target field with one of the hazard attributes.
+2298178 Merge pull request #963 from ismailsunni/fix_953
+35eaeca Merge with develop.
+11d9d8d Code standard.
+1b67509 Remove unit_mmi_depth.
+780df45 Merge pull request #951 from akbargumbira/develop
+8a5e049 Address Tim's review.
+290cdd1 Merge remote-tracking branch 'akbargumbira/develop' into develop
+8c7c0f8 Merge pull request #969 from timlinux/develop
+71aba77 Hopefully final pep8 fix for jenkins
+5353270 Merge pull request #968 from timlinux/develop
+fc0c9be Try to fix last 4 pylint errors under jenkins
+a9fee3b Merge pull request #967 from timlinux/develop
+e4cb483 Allow old style python classes in jenkins pylint
+0cafff8 Merge pull request #966 from timlinux/develop
+1e68fde Allow assert with parenthesis in jenkins pylint
+298f752 Merge pull request #965 from timlinux/develop
+06205ea Fixes for pylint under jenkins
+b639530 Merge pull request #964 from timlinux/coding_standards
+2d98cbf (timlinux/coding_standards, refs/pr/timlinux/inasafe/coding_standards) Better docstring comments as per PR #964
+80c106e Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+6616f47 Fix pylint and pep8 errors (all resolved now).
+6498c4a pep8 fix
+98fc0eb (refs/pr/ismailsunni/inasafe/fix_953) Add coverter to old keywords and unittest.
+42c26f6 (refs/pr/akbargumbira/inasafe/inasafe_824) Support testing using QGIS > 2.0
+3970658 Add converter dictionary.
+041b121 (refs/pr/ismailsunni/inasafe/fix_952) Update metadata for mmi depth.
+d813d03 Fix weak warning.
+c0bbcfd Add metadata value for 'all' hazard for fixing #952.
+db879c6 Merge pull request #958 from timlinux/develop
+9f25c00 Fix #954 Fix - Keyword Wizard - Exposure Data - Population - Step 3
+1334ad3 Merge pull request #957 from timlinux/develop
+71e8e3d Fix #956 Fix Typo Please - /develop/safe_qgis/tools/wizard_dialog.py
+a5c8b62 Use different target field if there's similar name on hazard layer for volcano population.
+8d6c5a0 Merge pull request #948 from akbargumbira/volcano_issues
+17b3ea6 Check if radii on volcano buffer are monotonically increasing.
+e4570dd Merge pull request #947 from ismailsunni/fix_test_impact_function
+db9ce5c (refs/pr/ismailsunni/inasafe/fix_test_impact_function) Update controller value for test related to clip raster.
+43371d8 Fix test in test_dock due to raster clipping.
+0632fdb PEP8.
+75f4ef7 Fix failed test in impact_function_manager/metadata.
+21a880c Merge pull request #946 from assefay/develop
+05e1c74 Correct test case: allow point layers to be used as exposure in Earthquake IF #334
+616ff8a Merge pull request #945 from assefay/develop
+7ad45c1 Merge pull request #944 from akbargumbira/develop
+0e820bc Allow point layer as part the valid list of exposure layers #334
+6ede969 Fix wizard dialog tests.
+d593988 Merge pull request #943 from assefay/develop
+a732c0e Re-enable optimized version of flood raster/roads disable previus one #906
+20b56a8 Merge pull request #936 from ismailsunni/clip_raster_small
+dbdb526 Merge pull request #941 from ismailsunni/tuesday_sprint
+7e9bfa8 (refs/pr/ismailsunni/inasafe/tuesday_sprint) Rename variables.
+9d268e2 (refs/pr/ismailsunni/inasafe/clip_raster_small) coding standard.
+0290283 Merge pull request #942 from timlinux/test-fixes
+dd72b1d (timlinux/test-fixes, refs/pr/timlinux/inasafe/test-fixes) Fix for failing batch test
+0bd1ed7 Fix failed test on test_translations.
+774042b Merge pull request #940 from timlinux/test-fixes
+82b91b0 Fix fail introduced by my merge
+e036c5b Resolved merge conflicts
+e251da5 Merge pull request #939 from akbargumbira/fixes_sprint
+ee9244f Fixes for utilities test and cleanups to code conventions in test_utilities
+ba5e3d4 (refs/pr/akbargumbira/inasafe/fixes_sprint) Fix for dianne's PR on safe_qgis.utilities and safe_qigs.tools package.
+65df034 Merge pull request #938 from timlinux/test-fixes
+b24df43 Fixed failing aggregation test
+ea0d0a2 Merge remote-tracking branch 'origin/develop' into test-fixes
+e845ff6 Merge pull request #937 from ismailsunni/safe_sprint
+023a1c9 Update sha for test data to fix 9 failing tests from data driven age.
+e06e197 (refs/pr/ismailsunni/inasafe/safe_sprint) Fix 2 unit tests in test_age_postprocessor.py.
+992fe8b Use assertAlmostEqual from unittest.
+5d07ade (tag: post-data-driven-age) Merge pull request #925 from essc/data_driven_age
+48bfa3a (tag: pre-data-driven-age) Merge pull request #935 from assefay/develop
+74e2d60 Make a better unit test #710.
+c4d392c Fix wrong commit in previous one.
+1e2635b Change %f to %.14f for gdal command.
+25c0b4f Add unit test for clip raster on small and precise size.
+a570f4d disable impact function until tests pass #906
+addb874 Merge remote-tracking branch 'upstream/develop' into develop
+ec73393 Merge pull request #932 from timlinux/test-fixes
+0cf9529 (test-fixes) Further fix for file downloader test.
+0f9933e Merge pull request #931 from timlinux/test-fixes
+e5e5b7c Fix failing file downloader test caused by google home page change
+d42dcca fixed merge conflicts
+28924e4 Merge pull request #929 from timlinux/pep8
+2a13ae3 Merge branch 'develop' of https://github.com/AIFDR/inasafe into data_driven_age
+bf2831b Merge pull request #930 from timlinux/pull-924
+8ec188a (timlinux/pull-924, refs/pr/timlinux/inasafe/pull-924, pull-924) Fix issue with test breakage when using canvas on qgis api. See #924
+65c49ef (timlinux/pep8, refs/pr/timlinux/inasafe/pep8, pep8) Fix pep8 errors in develop branch
+f099c17 Merge pull request #927 from akbargumbira/inasafe-903
+23ac9d7 (refs/pr/akbargumbira/inasafe/inasafe-903) [#903] Fix #903
+ff798eb Merge pull request #926 from akbargumbira/develop
+acbe2f4 Fix various tests on develop on Ubuntu 14.04
+bed1b41 Merge remote-tracking branch 'upstream/develop' into develop
+ea583a0 arranged typo
+957f29d another pep8
+c484652 pep8
+aa22b9a fixed merged conflicts
+ca01617 fixed wrong output in aggregator
+0d0e886 Merge pull request #924 from timlinux/develop
+692791f Merge pull request #919 from borysiasty/develop
+b01683e More wizard docstrings PEP8 compliancy fixes
+7644c99 Fix translation bug when the source string is empty
+3a78965 Exclude wizard_dialog_base.py from pep8 and pylint checks
+d670df0 Wizard docstrings fixes according to PEP8
+d5f164a [FEATURE] Inasafe Wizard for keyword creation
+e9e1cc8 fixed another pylint violation
+85014a1 fixed pylint violation
+f5c3b08 Improvements based on code review from @akbargumbira
+76e0331 fixed pep8 issue
+d2b84c1 fixed merged conflicts
+46480ec Code standards cleanups
+db31334 Merge pull request #917 from akbargumbira/inasafe-869
+6f69440 (refs/pr/akbargumbira/inasafe/inasafe-869) [#869] Renamed some setting variables and added some tests.
+deb6281 [#869] Move some default variables to safe_qgis.utilites.defaults.
+d855cc3 [#869] Merge develop and resolve conflict.
+8400f8c Merge pull request #921 from akbargumbira/inasafe-854
+bd2e906 Merge pull request #907 from assefay/develop
+82b4f89 (refs/pr/akbargumbira/inasafe/inasafe-854) [#854] Changed the label of report templates dir option.
+310ea6b Merge remote-tracking branch 'upstream/develop' into develop
+de409b7 [#854] The implementation of new template option's behavior
+7fe3b84 [#854] Changed the UI for template option.
+f656229 Merge pull request #1 from timlinux/develop
+7c29703 Code formatting and variable naming cleanups.
+b86e8b2 Merge pull request #907 from assefay/inasafe
+fed7013 Merge pull request #918 from akbargumbira/inasafe-904
+7a8805c (refs/pr/akbargumbira/inasafe/inasafe-904) [#904] Fix #904
+ed2b010 [#869] Changed the default tab to basic setting.
+1e77729 Merge upstream
+f5957be Correct code style. Update impact function metadata #906
+555771a Merge remote-tracking branch 'upstream/develop' into develop
+00bbf22 Merge pull request #914 from timlinux/develop
+99b43a7 Fix more badly named vars
+ef49a67 Merge pull request #915 from timlinux/master
+e0a6807 (timlinux/master, origin/master, origin/HEAD, refs/pr/timlinux/inasafe/master, master) [Backport] Indentation fixes.
+0af2fc6 Naming convention fixes
+e5fd13a [Backport] Indentation fixes.
+cf657da Merge pull request #913 from ismailsunni/develop
+11b6433 Letfover from previous commit.
+151a7e4 Fix failed test due to random order dictionary.
+dd378f5 Merge pull request #902 from ismailsunni/develop
+c265939 Docstring in all impact functions.
+4c34311 Fix code standard in test_impact_function_manager/metadata.py.
+c0250e4 Doctring for impact_function_metadata and manager.
+84884b4 Add .. versionadded:: 2.1 to all new classes.
+f3fa41a Definitions to definition.
+187be64 Fix import bad code.
+4574653 Merge pull request #908 from akbargumbira/inasafe-905
+b8f5347 Merge pull request #908 from akbargumbira/inasafe
+60d41ab unit tests for raster flood optimization #906
+08ec344 fixed merge conflicts
+2fb8cb4 (refs/pr/akbargumbira/inasafe/inasafe-905) [#905] Changed the bounding box's text to west, east, north, and south.
+38ba900 optimization work for raster flood on roads #906
+13dfc66 [#905] Added extent validation and its test.
+68985b0 pep8 again.
+6c1ccba pylint.
+7a8a506 PEP8.
+1103e05 Fix inconsistent unittest under ubuntu.
+1bf371a Merge remote-tracking branch 'aifdr/develop' into develop
+7be9e46 Replace string with dictionary.
+31266fe Checkout metadata.py from borys.
+b5783e6 Fix some wrong metadata.
+11c37a0 Merge pull request #899 from mbernasocchi/fix-native-stats-checkbox
+2c81c61 Fix use native zonal stats checkbox
+010df83 Merge pull request #898 from mbernasocchi/inasafe-893
+2c4fc3a fix 893
+cd73fe0 Working implementation. Report modules need to be refactored to optimise things.
+4a8aabe Merging develop branch and resolve conflict.
+d275f14 Use metadata.py for DRY
+3623b34 Consistency in parameter.
+f1503f4 subcategories_for_layer API and test.
+6a1f7c3 categories_for_layer API and test.
+1a2302e Fix typo :)'
+8a49d11 unit_for_layer API and test.
+01558d9 Add allowed_layer_constraints and unit_tests.
+3fce452 Add ImpactFunctionManager to safe.api
+756054d Impact Function Manager and the unit test.
+8815bcb Update unit test.
+ec3d067 Fix wrong indentation in volcano.
+77a2a90 Fix wrong indentation.
+ecaf6a8 Move add_to_list functions and add test_utilities.
+627df30 Update unit test.
+86f22fd Use id for units.
+5ba7eba Merge pull request #895 from waldoj/patch-1
+05ae66d Miscellaneous Markdown fixes
+367a951 little pep8.
+3d08491 Add Metadata class for all IFs
+68a662d Metadata for earthquake and categorized IF.
+b143bfe API for allowed_units.
+8622b1d API for allowed_data_types.
+bb14e80 API for allowed_subcategories.
+a5eb73d Metadata in improper format.
+ac88154 Add several unit tests.
+1c8b73b Initial IF API implementations
+9ffefa6 Merge pull request #884 from mbernasocchi/inasafe-781
+5aac8cf code cleanup
+586753d addressed timlinux code review
+b9993c5 Initial commit for impact_funtion_metadata.py
+9c3d7d9 Merge pull request #891 from akbargumbira/develop
+70273e6 Fix failing tests on jenkins develop branch due to version change.
+6869ebc Merge pull request #888 from timlinux/develop
+7aeb091 Bumped develop version to 2.1.0 beta. Do not merge this change to master until we are ready for release.
+903e3d1 Merge pull request #886 from akbargumbira/fix-864-comments
+3ca90ca Allow adding a on_when_not_aggregating param to an IF. This allows the IF to control if a postprocessor should be turned off when the analysis is running in aoi_mode (not aggregating). Also added GUI for QCheckBoxes in function_options_dialog so that params with bool type will now be displayed as checkbox.
+8307243 Merge remote-tracking branch 'upstream/develop' into develop
+67337cd First Unfinished implementaion of #869.
+1c5e611 Merge branch 'develop' of https://github.com/AIFDR/inasafe into data_driven_age
+e7694f7 Merge branch 'develop' of https://github.com/AIFDR/inasafe into data_driven_age
+b7fd38a Merge branch 'master' of https://github.com/essc/inasafe into data_driven_age
+09ade21 Merge branch 'develop' of https://github.com/AIFDR/inasafe
+3b3b4e9 Merge branch 'master' of https://github.com/essc/inasafe into data_driven_age
+683b074 Merge branch 'develop' of https://github.com/AIFDR/inasafe
+5dca089 Merge branch 'master' of https://github.com/AIFDR/inasafe into data_driven_age
+7a6bda5 Merge branch 'master' of https://github.com/AIFDR/inasafe
+90c0b6f merged latest commit
+6ff073f added new line at the end of file
+5aa0a0d added new line at the end of file
+5bff01a removed some unrelated stuff
+754b2db removed some unrelated stuff
+1633305 Merge branch 'master' of https://github.com/essc/inasafe into data_driven_age
+7f78bd6 Merge branch 'master' of https://github.com/AIFDR/inasafe
+364bcd7 fixed merged conflicts from latest commit
+209a183 Merge branch 'master' of https://github.com/AIFDR/inasafe
+53408ff Merge branch 'master' of https://github.com/AIFDR/inasafe
+fcee0d2 fixed merge conflicts from latest commits
+e7e4fc0 fixed some merge conflicts
+56617fe Merge branch 'master' of https://github.com/AIFDR/inasafe into data_driven_age
+ff2a84a Merge branch 'master' of https://github.com/AIFDR/inasafe
+cd83950 Merge branch 'master' of https://github.com/AIFDR/inasafe
+c5e9c09 Merge branch 'master' of https://github.com/AIFDR/inasafe into data_driven_age
+56c2fa2 Merge branch 'master' of https://github.com/essc/inasafe
+64e5553 Merge branch 'master' of https://github.com/AIFDR/inasafe into data_driven_age
+3e8dbb1 Merge branch 'master' of https://github.com/AIFDR/inasafe
+a87c25f Merge branch 'master' of https://github.com/AIFDR/inasafe
+ce6327f Merge branch 'master' of https://github.com/AIFDR/inasafe
+dbf04f7 fixed some merge conflicts from latest commit
+3251af2 Merge branch 'master' of https://github.com/AIFDR/inasafe
+0edfe1f Merge branch 'master' of https://github.com/AIFDR/inasafe into data_driven_age
+4357fb8 Merge branch 'master' of https://github.com/AIFDR/inasafe into data_driven_age
+015a2a9 Merge branch 'master' of https://github.com/AIFDR/inasafe
+73fd8be Merge branch 'master' of https://github.com/AIFDR/inasafe into data_driven_age
+c33040d Merge branch 'master' of https://github.com/AIFDR/inasafe
+3e2b248 merged latest commits
+5572dce fixed merge conflicts
+2b268ec Merge branch 'master' of https://github.com/AIFDR/inasafe
+79084ba merged latest commits from upstream
+6511b8a fixed options_dialog
+771e2d8 merged latest commits from upstream
+118e898 Merge branch 'master' of https://github.com/essc/inasafe into data_driven_age
+954bdad Merge branch 'master' of https://github.com/AIFDR/inasafe
+1cc2484 pulled latest commits
+40e1aee fixed pep8 violations
+df6de24 merged latest commits from upstream
+b46e23a merged latest commits from upstream
+01155e7 merged from upstream
+8dc21ff merged from upstream
+55a9220 pulled latest commits from upstream
+05d0418 resolved some pylint issues
+48f2aff fixed pep8 issues
+5bdc319 merged from upstream
+49669c1 Merge branch 'master' of https://github.com/AIFDR/inasafe
+cc29b47 Merge branch 'master' of https://github.com/AIFDR/inasafe
+d11e4d3 Merge branch 'master' of https://github.com/AIFDR/inasafe
+ed28295 Merge branch 'master' of https://github.com/AIFDR/inasafe
+434bccf Merge branch 'master' of https://github.com/AIFDR/inasafe
+62f4a1b merged from origin
+413d7de Merge branch 'master' of https://github.com/AIFDR/inasafe
+ad7cf71 updated resources.py
+2fa7489 solved pep8 and pylint issues
+75b6712 Merge branch 'master' of https://github.com/AIFDR/inasafe
+88bcf49 fixed pep8 and pylint warnings
+cf2deb4 merged files from master
+07f1fbd Merge branch 'master' of https://github.com/AIFDR/inasafe
+920f80f Merge branch 'master' of https://github.com/AIFDR/inasafe
+90ddd4a pep8 and lint issues resolved
+a23767e Added data driven functioning test
+53a1530 test data driven analysis
+271024a added utility method (compare_result_to_expected_file) to compare rusults to expected file
+6af5cf6 clean up
+d9b66a2 test infrastucture for data driven aggregation
+661a462 clean up
+d0d0a73 Working data driven age ratios
+789268c Added connection and signals
+458e7f6 Added Youth, Adult and Elderly ratio in Postprocessor
+9f0e947 Renamed  FEM_ATTRIBUTE to FEMALE_ATTRIBUTE and Refractor toggle ratio
+0c706d0 Added UI elements for Youth, Adult and  Elderly Data driven ratios
+b101ad2 Refractor show_female_ratio methods to allow generic use
+

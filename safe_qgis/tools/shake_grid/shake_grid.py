@@ -25,10 +25,25 @@ from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
 
-from safe.common.utilities import which
+from osgeo import gdal, ogr
+from osgeo.gdalconst import GA_ReadOnly
+# This import is required to enable PyQt API v2
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0611
+import qgis
+# pylint: enable=W0611
+from qgis.core import (
+    QgsVectorLayer,
+    QgsFeatureRequest,
+    QgsRectangle)
+
+from safe.api import which, romanise
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
-    GridXmlParseError)
+    GridXmlParseError,
+    ContourCreationError,
+    InvalidLayerError)
+from safe_qgis.utilities.styling import mmi_colour
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -39,24 +54,34 @@ def data_dir():
     :returns: Returns the default data directory.
     :rtype: str
     """
-    my_dir = os.path.abspath(
+    dir_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'converter_data'))
-    return my_dir
+    return dir_path
 
 
-class ShakeGridConverter(object):
+class ShakeGrid(object):
     """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
             self,
+            title,
+            source,
             grid_xml_path,
             output_dir=None,
             output_basename=None,
             algorithm_filename_flag=True):
         """Constructor.
 
+        :param title: The title of the earthquake that will be also added to
+            keywords file on some generated products.
+        :type title: str
+
+        :param source: The source of the earthquake that will be also added
+            to keywords file on some generated products.
+        :type source: str
+
         :param grid_xml_path: Path to grid XML file.
-        :type grid_xml_path:str
+        :type grid_xml_path: str
 
         :param output_dir: mmi output directory
         :type output_dir: str
@@ -68,11 +93,13 @@ class ShakeGridConverter(object):
             the output file's name.
         :type algorithm_filename_flag: bool
 
-        :returns: Instance
-        :rtype: ShakeGridConverter
+        :returns: The instance of the class.
+        :rtype: ShakeGrid
 
         :raises: EventXmlParseError
         """
+        self.title = title
+        self.source = source
         self.latitude = None
         self.longitude = None
         self.magnitude = None
@@ -91,6 +118,8 @@ class ShakeGridConverter(object):
         self.x_maximum = None
         self.y_minimum = None
         self.y_maximum = None
+        # The bounding box of the grid as QgsRectangle
+        self.grid_bounding_box = None
         self.rows = None
         self.columns = None
         self.mmi_data = None
@@ -214,6 +243,8 @@ class ShakeGridConverter(object):
                 specification_element.attributes['lat_min'].nodeValue)
             self.y_maximum = float(
                 specification_element.attributes['lat_max'].nodeValue)
+            self.grid_bounding_box = QgsRectangle(
+                self.x_minimum, self.y_maximum, self.x_maximum, self.y_minimum)
             self.rows = float(
                 specification_element.attributes['nlat'].nodeValue)
             self.columns = float(
@@ -323,7 +354,6 @@ class ShakeGridConverter(object):
             file. Defaults to False.
         :type force_flag: bool
 
-
         :returns: The absolute file system path to the .vrt text file.
         :rtype: str
 
@@ -411,8 +441,7 @@ class ShakeGridConverter(object):
                 raise Exception(message)
 
     def mmi_to_raster(
-            self, title, source, force_flag=False,
-            algorithm='nearest'):
+            self, force_flag=False, algorithm='nearest'):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -429,14 +458,6 @@ class ShakeGridConverter(object):
            -ot Float16 -l mmi mmi.vrt mmi.tif
 
         .. note:: It is assumed that gdal_grid is in your path.
-
-        :param title: The title of the earthquake. This also will be used for
-            keyword file.
-        :type title: str
-
-        :param source: The source of the shake data. This also will be used
-            for keyword file.
-        :type source: str
 
         :param force_flag: Whether to force the regeneration of the output
             file. Defaults to False.
@@ -461,7 +482,6 @@ class ShakeGridConverter(object):
           -tye -2.21 1.79 -outsize 400 400 -of GTiff
           -ot Float16 -l mmi mmi.vrt mmi-trippy.tif
         """
-
         LOGGER.debug('mmi_to_raster requested.')
 
         if algorithm is None:
@@ -513,8 +533,13 @@ class ShakeGridConverter(object):
         # Now run GDAL warp scottie...
         self._run_command(command)
 
+        # We will use keywords file name with simple algorithm name since it
+        # will raise an error in windows related to having double colon in path
+        if 'invdist' in algorithm:
+            algorithm = 'invdist'
+
         # copy the keywords file from fixtures for this layer
-        self.create_keyword_file(title, source, algorithm)
+        self.create_keyword_file(algorithm)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         if self.algorithm_name:
@@ -574,17 +599,218 @@ class ShakeGridConverter(object):
         shutil.copyfile(source_qml, qml_path)
         return shp_path
 
-    def create_keyword_file(self, title, source, algorithm):
+    def mmi_to_contours(self, force_flag=True, algorithm='nearest'):
+        """Extract contours from the event's tif file.
+
+        Contours are extracted at a 0.5 MMI interval. The resulting file will
+        be saved in the extract directory. In the easiest use case you can
+
+        :param force_flag:  (Optional). Whether to force the
+         regeneration of contour product. Defaults to False.
+        :type force_flag: bool
+
+        :param algorithm: (Optional) Which interpolation algorithm to
+                  use to create the underlying raster. Defaults to 'nearest'.
+        :type algorithm: str
+         **Only enforced if theForceFlag is true!**
+
+        :returns: An absolute filesystem path pointing to the generated
+            contour dataset.
+        :exception: ContourCreationError
+
+         simply do::
+
+           shake_grid = ShakeGrid()
+           contour_path = shake_grid.mmi_to_contours()
+
+        which will return the contour dataset for the latest event on the
+        ftp server.
+        """
+        LOGGER.debug('mmi_to_contours requested.')
+        # TODO: Use sqlite rather?
+        output_file_base = os.path.join(
+            self.output_dir,
+            '%s-contours-%s.' % (self.output_basename, algorithm))
+        output_file = output_file_base + 'shp'
+        if os.path.exists(output_file) and force_flag is not True:
+            return output_file
+        elif os.path.exists(output_file):
+            try:
+                os.remove(output_file_base + 'shp')
+                os.remove(output_file_base + 'shx')
+                os.remove(output_file_base + 'dbf')
+                os.remove(output_file_base + 'prj')
+            except OSError:
+                LOGGER.exception(
+                    'Old contour files not deleted'
+                    ' - this may indicate a file permissions issue.')
+
+        tif_path = self.mmi_to_raster(force_flag, algorithm)
+        # Based largely on
+        # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
+        driver = ogr.GetDriverByName('ESRI Shapefile')
+        ogr_dataset = driver.CreateDataSource(output_file)
+        if ogr_dataset is None:
+            # Probably the file existed and could not be overriden
+            raise ContourCreationError(
+                'Could not create datasource for:\n%s. Check that the file '
+                'does not already exist and that you do not have file system '
+                'permissions issues' % output_file)
+        layer = ogr_dataset.CreateLayer('contour')
+        field_definition = ogr.FieldDefn('ID', ogr.OFTInteger)
+        layer.CreateField(field_definition)
+        field_definition = ogr.FieldDefn('MMI', ogr.OFTReal)
+        layer.CreateField(field_definition)
+        # So we can fix the x pos to the same x coord as centroid of the
+        # feature so labels line up nicely vertically
+        field_definition = ogr.FieldDefn('X', ogr.OFTReal)
+        layer.CreateField(field_definition)
+        # So we can fix the y pos to the min y coord of the whole contour so
+        # labels line up nicely vertically
+        field_definition = ogr.FieldDefn('Y', ogr.OFTReal)
+        layer.CreateField(field_definition)
+        # So that we can set the html hex colour based on its MMI class
+        field_definition = ogr.FieldDefn('RGB', ogr.OFTString)
+        layer.CreateField(field_definition)
+        # So that we can set the label in it roman numeral form
+        field_definition = ogr.FieldDefn('ROMAN', ogr.OFTString)
+        layer.CreateField(field_definition)
+        # So that we can set the label horizontal alignment
+        field_definition = ogr.FieldDefn('ALIGN', ogr.OFTString)
+        layer.CreateField(field_definition)
+        # So that we can set the label vertical alignment
+        field_definition = ogr.FieldDefn('VALIGN', ogr.OFTString)
+        layer.CreateField(field_definition)
+        # So that we can set feature length to filter out small features
+        field_definition = ogr.FieldDefn('LEN', ogr.OFTReal)
+        layer.CreateField(field_definition)
+
+        tif_dataset = gdal.Open(tif_path, GA_ReadOnly)
+        # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
+        band = 1
+        contour_interval = 0.5
+        contour_base = 0
+        fixed_level_list = []
+        use_no_data_flag = 0
+        no_data_value = -9999
+        id_field = 0  # first field defined above
+        elevation_field = 1  # second (MMI) field defined above
+        try:
+            gdal.ContourGenerate(
+                tif_dataset.GetRasterBand(band),
+                contour_interval,
+                contour_base,
+                fixed_level_list,
+                use_no_data_flag,
+                no_data_value,
+                layer,
+                id_field,
+                elevation_field)
+        except Exception, e:
+            LOGGER.exception('Contour creation failed')
+            raise ContourCreationError(str(e))
+        finally:
+            del tif_dataset
+            ogr_dataset.Release()
+
+        # Copy over the standard .prj file since ContourGenerate does not
+        # create a projection definition
+        qml_path = os.path.join(
+            self.output_dir,
+            '%s-contours-%s.prj' % (self.output_basename, algorithm))
+        source_qml = os.path.join(data_dir(), 'mmi-contours.prj')
+        shutil.copyfile(source_qml, qml_path)
+
+        # Lastly copy over the standard qml (QGIS Style file)
+        qml_path = os.path.join(
+            self.output_dir,
+            '%s-contours-%s.qml' % (self.output_basename, algorithm))
+        source_qml = os.path.join(data_dir(), 'mmi-contours.qml')
+        shutil.copyfile(source_qml, qml_path)
+
+        # Now update the additional columns - X,Y, ROMAN and RGB
+        try:
+            self.set_contour_properties(output_file)
+        except InvalidLayerError:
+            raise
+
+        return output_file
+
+    def set_contour_properties(self, input_file):
+        """Set the X, Y, RGB, ROMAN attributes of the contour layer.
+
+        :param input_file: (Required) Name of the contour layer.
+        :type input_file: str
+
+        :raise: InvalidLayerError if anything is amiss with the layer.
+        """
+        LOGGER.debug('set_contour_properties requested for %s.' % input_file)
+        layer = QgsVectorLayer(input_file, 'mmi-contours', "ogr")
+        if not layer.isValid():
+            raise InvalidLayerError(input_file)
+
+        layer.startEditing()
+        # Now loop through the db adding selected features to mem layer
+        request = QgsFeatureRequest()
+        fields = layer.dataProvider().fields()
+
+        for feature in layer.getFeatures(request):
+            if not feature.isValid():
+                LOGGER.debug('Skipping feature')
+                continue
+            # Work out x and y
+            line = feature.geometry().asPolyline()
+            y = line[0].y()
+
+            x_max = line[0].x()
+            x_min = x_max
+            for point in line:
+                if point.y() < y:
+                    y = point.y()
+                x = point.x()
+                if x < x_min:
+                    x_min = x
+                if x > x_max:
+                    x_max = x
+            x = x_min + ((x_max - x_min) / 2)
+
+            # Get length
+            length = feature.geometry().length()
+
+            mmi_value = float(feature['MMI'])
+            # We only want labels on the whole number contours
+            if mmi_value != round(mmi_value):
+                roman = ''
+            else:
+                roman = romanise(mmi_value)
+
+            # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
+            rgb = mmi_colour(mmi_value)
+
+            # Now update the feature
+            feature_id = feature.id()
+            layer.changeAttributeValue(
+                feature_id, fields.indexFromName('X'), x)
+            layer.changeAttributeValue(
+                feature_id, fields.indexFromName('Y'), y)
+            layer.changeAttributeValue(
+                feature_id, fields.indexFromName('RGB'), rgb)
+            layer.changeAttributeValue(
+                feature_id, fields.indexFromName('ROMAN'), roman)
+            layer.changeAttributeValue(
+                feature_id, fields.indexFromName('ALIGN'), 'Center')
+            layer.changeAttributeValue(
+                feature_id, fields.indexFromName('VALIGN'), 'HALF')
+            layer.changeAttributeValue(
+                feature_id, fields.indexFromName('LEN'), length)
+
+        layer.commitChanges()
+
+    def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
 
         Basically copy a template from keyword file in converter data
         and add extra keyword (usually a title)
-
-        :param title: The title field for keywords.
-        :type title: str
-
-        :param source: The source field for keywords.
-        :type source: str
 
         :param algorithm: Which re-sampling algorithm to use.
             valid options are 'nearest' (for nearest neighbour), 'invdist'
@@ -604,13 +830,13 @@ class ShakeGridConverter(object):
         mmi_keywords = os.path.join(data_dir(), 'mmi.keywords')
         shutil.copyfile(mmi_keywords, keyword_path)
         # append title and source to the keywords file
-        if len(title.strip()) == 0:
+        if len(self.title.strip()) == 0:
             keyword_title = self.output_basename
         else:
-            keyword_title = title
+            keyword_title = self.title
         with open(keyword_path, 'a') as keyword_file:
             keyword_file.write('title: %s \n' % keyword_title)
-            keyword_file.write('source: %s ' % source)
+            keyword_file.write('source: %s ' % self.source)
 
 
 def convert_mmi_data(
@@ -655,7 +881,11 @@ def convert_mmi_data(
     else:
         output_dir = output_path
         output_basename = None
-    converter = ShakeGridConverter(
-        grid_xml_path, output_dir, output_basename, algorithm_filename_flag)
-    return converter.mmi_to_raster(
-        title, source, force_flag=True, algorithm=algorithm)
+    converter = ShakeGrid(
+        title=title,
+        source=source,
+        grid_xml_path=grid_xml_path,
+        output_dir=output_dir,
+        output_basename=output_basename,
+        algorithm_filename_flag=algorithm_filename_flag)
+    return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)

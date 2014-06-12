@@ -75,13 +75,12 @@ from safe.common.utilities import (
     get_utm_epsg,
     feature_attributes_as_dict,
     which,
-    log_file_path)
-from safe.common.shake_grid_converter import (
-    ShakeGridConverter,
-    convert_mmi_data)
+    log_file_path,
+    romanise)
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
+from safe.common.custom_logging import add_logging_handler_once, setup_logger
 from safe.postprocessors import (
     get_postprocessors,
     get_postprocessor_human_name)

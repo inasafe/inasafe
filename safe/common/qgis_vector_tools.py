@@ -24,7 +24,9 @@ if qgis_imported:   # Import QgsRasterLayer if qgis is available
         QgsPoint,
         QgsGeometry,
         QgsFeatureRequest,
-        QgsVectorFileWriter
+        QgsVectorFileWriter,
+        QgsCoordinateReferenceSystem,
+        QgsCoordinateTransform
     )
 
 
@@ -553,3 +555,60 @@ def split_by_polygon2(
     result_layer.commitChanges()
     result_layer.updateExtents()
     return result_layer
+
+
+def extent_to_geo_array(extent, source_crs, dest_crs=None):
+    """Convert the supplied extent to geographic and return as an array.
+
+    :param extent: Rectangle defining a spatial extent in any CRS.
+    :type extent: QgsRectangle
+
+    :param source_crs: Coordinate system used for extent.
+    :type source_crs: QgsCoordinateReferenceSystem
+
+    :returns: a list in the form [xmin, ymin, xmax, ymax] where all
+            coordinates provided are in Geographic / EPSG:4326.
+    :rtype: list
+
+    """
+
+    if dest_crs is None:
+        geo_crs = QgsCoordinateReferenceSystem()
+        geo_crs.createFromSrid(4326)
+    else:
+        geo_crs = dest_crs
+
+    transform = QgsCoordinateTransform(source_crs, geo_crs)
+
+    # Get the clip area in the layer's crs
+    transformed_extent = transform.transformBoundingBox(extent)
+
+    geo_extent = [
+        transformed_extent.xMinimum(),
+        transformed_extent.yMinimum(),
+        transformed_extent.xMaximum(),
+        transformed_extent.yMaximum()]
+    return geo_extent
+
+
+def reproject_vector_layer(layer, crs):
+    """Reproject a vector layer to given CRS
+
+    :param layer: Vector layer
+    :type layer: QgsVectorLayer
+
+    :param crs: Coordinate system for reprojection.
+    :type crs: QgsCoordinateReferenceSystem
+
+    :returns: a vector layer with the specified projection
+    :rtype: QgsVectorLayer
+
+    """
+
+    base_name = unique_filename()
+    file_name = base_name + '.shp'
+    print "reprojected layer1 %s" % file_name
+    QgsVectorFileWriter.writeAsVectorFormat(
+        layer, file_name, "utf-8", crs, "ESRI Shapefile")
+
+    return QgsVectorLayer(file_name, base_name, "ogr")

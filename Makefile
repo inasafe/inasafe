@@ -77,6 +77,25 @@ lines-of-code:
 	@git log | head -3
 	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
+changelog:
+	@echo "----------------------"
+	@echo "Generate changelog and append it to CHANGELOG"
+	@echo "----------------------"
+	@read -p "Version e.g. 1.0.0: " VERSION; \
+	    scripts/update-changelog.sh $$VERSION
+
+tag:
+	@echo
+	@echo "------------------------------------"
+	@echo "Tagging the release."
+	@echo "------------------------------------"
+	@# Note that make runs commands in a subshell so
+	@# variable context is lost from one line to the next
+	@# So we need to do everything as a single line command
+	@read -p "Version e.g. 1.0.0: " VERSION; \
+	    scripts/tag-release.sh $$VERSION
+
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -178,7 +197,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh c679ba7fbcb42afa259f94fa21cb5b2377cc88a8 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 42f6df0d7ad37a7601741cfc194870219b3d2dd1 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:

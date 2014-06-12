@@ -65,6 +65,7 @@ def mock_init(self,
 
 
 # noinspection PyUnusedLocal
+# pylint: disable=W0613
 def mock_is_dir(self, path):
     """Mock method is_dir of SFTPClient class.
 
@@ -72,9 +73,11 @@ def mock_is_dir(self, path):
     :type path: str
     """
     return os.path.isdir(path)
+# pylint: enable=W0613
 
 
 # noinspection PyUnusedLocal
+# pylint: disable=W0613
 def mock_path_exists(self, path):
     """Mock method path_exists of SFTPClient class.
 
@@ -82,10 +85,18 @@ def mock_path_exists(self, path):
     :type path: str
     """
     return os.path.exists(path)
+# pylint: enable=W0613
 
 
 def run_monkey_patching_sftp_client():
-    """The monkey patching to some methods of SFTPClient."""
+    """The monkey patching to some methods of SFTPClient.
+
+    ..note:
+    AG: I monkey-patched these 3 functions (instead of inheriting the sftp
+    client  class and changing some methods) since we also use sftp client in
+    sftp shake data. By doing this, we only need to run this patch in
+    test sftp shake data. No need to make another mock.
+    """
     SFtpClient.__init__ = mock_init
     SFtpClient.is_dir = mock_is_dir
     SFtpClient.path_exists = mock_path_exists

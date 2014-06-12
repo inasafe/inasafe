@@ -28,14 +28,12 @@ from datetime import datetime
 import numpy
 #noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
-import ogr
-#noinspection PyPackageRequirements
-import gdal
-from gdalconst import GA_ReadOnly
 
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
+# pylint: disable=W0611
 import qgis
+# pylint: enable=W0611
 # TODO: I think QCoreApplication is needed for tr() check before removing
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -61,7 +59,6 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRaster,
     QgsRasterLayer,
-    QgsRectangle,
     QgsDataSourceURI,
     QgsVectorFileWriter,
     QgsCoordinateReferenceSystem,
@@ -85,26 +82,27 @@ from safe.api import (
     TableCell,
     TableRow,
     get_version,
-    ShakeGridConverter)
+    romanise)
 from safe_qgis.utilities.utilities import get_wgs84_resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
 from safe_qgis.exceptions import TranslationLoadError
+from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
-    romanise)
+    realtime_logger_name)
+from realtime.server_config import GRID_SOURCE
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
-    ContourCreationError,
     InvalidLayerError,
     ShapefileCreationError,
     CityMemoryLayerCreationError,
     FileNotFoundError,
     MapComposerError)
 
-LOGGER = logging.getLogger('InaSAFE')
+LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
@@ -112,14 +110,7 @@ class ShakeEvent(QObject):
     """Behaviour and data relating to an earthquake.
 
     Including epicenter, magnitude etc.
-
-    .. todo:: There is a lot of duplicated code in here -  code that was
-        refactored into safe.common.shake_grid_converter and never removed
-        here. we should resolve that by removing it here and then simply
-        using an instance of ShakeGridConverter here when needed.
-
     """
-
     def __init__(self,
                  event_id=None,
                  locale='en',
@@ -176,8 +167,9 @@ class ShakeEvent(QObject):
             self.data.extract()
             self.event_id = self.data.event_id
 
-        # Convert grid.xml
-        self.shake_grid_converter = ShakeGridConverter(self.grid_file_path())
+        # Convert grid.xml (we'll give the title with event_id)
+        self.shake_grid = ShakeGrid(
+            self.event_id, GRID_SOURCE, self.grid_file_path())
 
         self.population_raster_path = population_raster_path
         # Path to tif of impact result - probably we wont even use it
@@ -244,150 +236,18 @@ class ShakeEvent(QObject):
             LOGGER.error('Event file not found. %s' % grid_xml_path)
             raise GridXmlFileNotFoundError('%s not found' % grid_xml_path)
 
-    def mmi_data_to_contours(self, force_flag=True, algorithm='nearest'):
-        """Extract contours from the event's tif file.
-
-        Contours are extracted at a 0.5 MMI interval. The resulting file will
-        be saved in the extract directory. In the easiest use case you can
-
-        :param force_flag:  (Optional). Whether to force the
-        regeneration of contour product. Defaults to False.
-        :type force_flag: bool
-
-        :param algorithm: (Optional) Which interpolation algorithm to
-                  use to create the underlying raster. Defaults to 'nearest'.
-        :type algorithm: str
-        **Only enforced if theForceFlag is true!**
-
-        :returns: An absolute filesystem path pointing to the generated
-            contour dataset.
-        :exception: ContourCreationError
-        simply do::
-
-           myShakeEvent = myShakeData.shakeEvent()
-           myContourPath = myShakeEvent.mmiToContours()
-
-        which will return the contour dataset for the latest event on the
-        ftp server.
-        """
-        LOGGER.debug('mmi_data_to_contours requested.')
-        # TODO: Use sqlite rather?
-        output_file_base = os.path.join(shakemap_extract_dir(),
-                                        self.event_id,
-                                        'mmi-contours-%s.' % algorithm)
-        output_file = output_file_base + 'shp'
-        if os.path.exists(output_file) and force_flag is not True:
-            return output_file
-        elif os.path.exists(output_file):
-            try:
-                os.remove(output_file_base + 'shp')
-                os.remove(output_file_base + 'shx')
-                os.remove(output_file_base + 'dbf')
-                os.remove(output_file_base + 'prj')
-            except OSError:
-                LOGGER.exception(
-                    'Old contour files not deleted'
-                    ' - this may indicate a file permissions issue.')
-
-        tif_path = self.shake_grid_converter.mmi_to_raster(
-            self.event_id, 'BMKG', force_flag, algorithm)
-        # Based largely on
-        # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
-        driver = ogr.GetDriverByName('ESRI Shapefile')
-        ogr_dataset = driver.CreateDataSource(output_file)
-        if ogr_dataset is None:
-            # Probably the file existed and could not be overriden
-            raise ContourCreationError('Could not create datasource for:\n%s'
-                                       'Check that the file does not already '
-                                       'exist and that you '
-                                       'do not have file system permissions '
-                                       'issues')
-        layer = ogr_dataset.CreateLayer('contour')
-        field_definition = ogr.FieldDefn('ID', ogr.OFTInteger)
-        layer.CreateField(field_definition)
-        field_definition = ogr.FieldDefn('MMI', ogr.OFTReal)
-        layer.CreateField(field_definition)
-        # So we can fix the x pos to the same x coord as centroid of the
-        # feature so labels line up nicely vertically
-        field_definition = ogr.FieldDefn('X', ogr.OFTReal)
-        layer.CreateField(field_definition)
-        # So we can fix the y pos to the min y coord of the whole contour so
-        # labels line up nicely vertically
-        field_definition = ogr.FieldDefn('Y', ogr.OFTReal)
-        layer.CreateField(field_definition)
-        # So that we can set the html hex colour based on its MMI class
-        field_definition = ogr.FieldDefn('RGB', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set the label in it roman numeral form
-        field_definition = ogr.FieldDefn('ROMAN', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set the label horizontal alignment
-        field_definition = ogr.FieldDefn('ALIGN', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set the label vertical alignment
-        field_definition = ogr.FieldDefn('VALIGN', ogr.OFTString)
-        layer.CreateField(field_definition)
-        # So that we can set feature length to filter out small features
-        field_definition = ogr.FieldDefn('LEN', ogr.OFTReal)
-        layer.CreateField(field_definition)
-
-        tif_dataset = gdal.Open(tif_path, GA_ReadOnly)
-        # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
-        band = 1
-        contour_interval = 0.5
-        contour_base = 0
-        fixed_level_list = []
-        use_no_data_flag = 0
-        no_data_value = -9999
-        id_field = 0  # first field defined above
-        elevation_field = 1  # second (MMI) field defined above
-        try:
-            gdal.ContourGenerate(tif_dataset.GetRasterBand(band),
-                                 contour_interval,
-                                 contour_base,
-                                 fixed_level_list,
-                                 use_no_data_flag,
-                                 no_data_value,
-                                 layer,
-                                 id_field,
-                                 elevation_field)
-        except Exception, e:
-            LOGGER.exception('Contour creation failed')
-            raise ContourCreationError(str(e))
-        finally:
-            del tif_dataset
-            ogr_dataset.Release()
-
-        # Copy over the standard .prj file since ContourGenerate does not
-        # create a projection definition
-        qml_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-contours-%s.prj' % algorithm)
-        source_qml = os.path.join(data_dir(), 'mmi-contours.prj')
-        shutil.copyfile(source_qml, qml_path)
-
-        # Lastly copy over the standard qml (QGIS Style file)
-        qml_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                'mmi-contours-%s.qml' % algorithm)
-        source_qml = os.path.join(data_dir(), 'mmi-contours.qml')
-        shutil.copyfile(source_qml, qml_path)
-
-        # Now update the additional columns - X,Y, ROMAN and RGB
-        try:
-            self.set_contour_properties(output_file)
-        except InvalidLayerError:
-            raise
-
-        return output_file
-
     def mmi_shaking(self, mmi_value):
         """Return the perceived shaking for an mmi value as translated string.
-        :param mmi_value: float or int required.
-        :return str: internationalised string representing perceived shaking
-             level e.g. weak, severe etc.
+
+        :param mmi_value: The MMI value.
+        :type mmi_value: int, float
+
+        :return Internationalised string representing perceived shaking
+            level e.g. weak, severe etc.
+
+        :rtype: str
         """
-        my_shaking_dict = {
+        shaking_dict = {
             1: self.tr('Not felt'),
             2: self.tr('Weak'),
             3: self.tr('Weak'),
@@ -399,15 +259,17 @@ class ShakeEvent(QObject):
             9: self.tr('Violent'),
             10: self.tr('Extreme'),
         }
-        return my_shaking_dict[mmi_value]
+        return shaking_dict[mmi_value]
 
     def mmi_potential_damage(self, mmi_value):
         """Return the potential damage for an mmi value as translated string.
+
         :param mmi_value: float or int required.
+
         :return str: internationalised string representing potential damage
-            level e.g. Light, Moderate etc.
+         level e.g. Light, Moderate etc.
         """
-        my_damage_dict = {
+        damage_dict = {
             1: self.tr('None'),
             2: self.tr('None'),
             3: self.tr('None'),
@@ -419,90 +281,7 @@ class ShakeEvent(QObject):
             9: self.tr('Heavy'),
             10: self.tr('Very heavy')
         }
-        return my_damage_dict[mmi_value]
-
-    def set_contour_properties(self, input_file):
-        """Set the X, Y, RGB, ROMAN attributes of the contour layer.
-
-        :param input_file: (Required) Name of the contour layer.
-        :type input_file: str
-
-        :raise: InvalidLayerError if anything is amiss with the layer.
-        """
-        LOGGER.debug('set_contour_properties requested for %s.' % input_file)
-        layer = QgsVectorLayer(input_file, 'mmi-contours', "ogr")
-        if not layer.isValid():
-            raise InvalidLayerError(input_file)
-
-        layer.startEditing()
-        # Now loop through the db adding selected features to mem layer
-        request = QgsFeatureRequest()
-        fields = layer.dataProvider().fields()
-
-        for feature in layer.getFeatures(request):
-            if not feature.isValid():
-                LOGGER.debug('Skipping feature')
-                continue
-            # Work out x and y
-            line = feature.geometry().asPolyline()
-            y = line[0].y()
-
-            x_max = line[0].x()
-            x_min = x_max
-            for point in line:
-                if point.y() < y:
-                    y = point.y()
-                x = point.x()
-                if x < x_min:
-                    x_min = x
-                if x > x_max:
-                    x_max = x
-            x = x_min + ((x_max - x_min) / 2)
-
-            # Get length
-            length = feature.geometry().length()
-
-            mmi_value = float(feature['MMI'])
-            # We only want labels on the whole number contours
-            if mmi_value != round(mmi_value):
-                roman = ''
-            else:
-                roman = romanise(mmi_value)
-
-            # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
-            rgb = mmi_colour(mmi_value)
-
-            # Now update the feature
-            feature_id = feature.id()
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('X'), x)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('Y'), y)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('RGB'), rgb)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ROMAN'), roman)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ALIGN'), 'Center')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('VALIGN'), 'HALF')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('LEN'), length)
-
-        layer.commitChanges()
-
-    def bounds_to_rectangle(self):
-        """Convert the event bounding box to a QgsRectangle.
-
-        :return: QgsRectangle
-        :raises: None
-        """
-        LOGGER.debug('bounds to rectangle called.')
-        rectangle = QgsRectangle(self.shake_grid_converter.x_minimum,
-                                 self.shake_grid_converter.y_maximum,
-                                 self.shake_grid_converter.x_maximum,
-                                 self.shake_grid_converter.y_minimum)
-        return rectangle
+        return damage_dict[mmi_value]
 
     def cities_to_shapefile(self, force_flag=False):
         """Write a cities memory layer to a shapefile.
@@ -530,13 +309,17 @@ class ShakeEvent(QObject):
 
         :param force_flag: bool (Optional). Whether to force the overwrite
                 of any existing data. Defaults to False.
+        :type force_flag: bool
+
         .. note:: The file will be saved into the shakemap extract dir
            event id folder. Any existing shp by the same name will be
-           overwritten if theForceFlag is False, otherwise it will
+           overwritten if force_flag is False, otherwise it will
            be returned directly without creating a new file.
 
-        :return str Path to the created shapefile
-        :raise ShapefileCreationError
+        :return: Path to the created shapefile.
+        :rtype: str
+
+        :raise: ShapefileCreationError
         """
         filename = 'city-search-boxes'
         memory_layer = self.city_search_box_memory_layer()
@@ -550,11 +333,11 @@ class ShakeEvent(QObject):
                                   force_flag=False):
         """Write a memory layer to a shapefile.
 
-        :param file_name: Filename excluding path and ext. e.g.
-        'mmi-cities'
+        :param file_name: Filename excluding path and ext. e.g. 'mmi-cities'
         :type file_name: str
 
         :param memory_layer: QGIS memory layer instance.
+        :type memory_layer: QgsVectorLayer
 
         :param force_flag: (Optional). Whether to force the overwrite
                 of any existing data. Defaults to False.
@@ -566,8 +349,10 @@ class ShakeEvent(QObject):
            Any existing shp by the same name will be overridden if
            theForceFlag is True, otherwise the existing file will be returned.
 
-        :return str Path to the created shapefile
-        :raise ShapefileCreationError
+        :return: Path to the created shapefile.
+        :rtype: str
+
+        :raise: ShapefileCreationError
         """
         LOGGER.debug('memory_layer_to_shapefile requested.')
 
@@ -609,6 +394,7 @@ class ShakeEvent(QObject):
         skip_attributes_flag = False
         # May differ from output_file
         actual_new_file_name = ''
+        # noinspection PyCallByClass
         result = QgsVectorFileWriter.writeAsVectorFormat(
             memory_layer,
             output_file,
@@ -686,8 +472,7 @@ class ShakeEvent(QObject):
         """
         LOGGER.debug('localCityValues requested.')
         # Setup the raster layer for interpolated mmi lookups
-        path = self.shake_grid_converter.mmi_to_raster(
-            self.event_id, 'BMKG')
+        path = self.shake_grid.mmi_to_raster()
         file_info = QFileInfo(path)
         base_name = file_info.baseName()
         raster_layer = QgsRasterLayer(path, base_name)
@@ -706,7 +491,8 @@ class ShakeEvent(QObject):
         layer = QgsVectorLayer(uri.uri(), 'Towns', 'spatialite')
         if not layer.isValid():
             raise InvalidLayerError(db_path)
-        rectangle = self.bounds_to_rectangle()
+
+        rectangle = self.shake_grid.grid_bounding_box
 
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
@@ -750,8 +536,8 @@ class ShakeEvent(QObject):
 
         # For measuring distance and direction from each city to epicenter
         epicenter = QgsPoint(
-            self.shake_grid_converter.longitude,
-            self.shake_grid_converter.latitude)
+            self.shake_grid.longitude,
+            self.shake_grid.latitude)
 
         # Now loop through the db adding selected features to mem layer
         for feature in layer.getFeatures(request):
@@ -827,7 +613,7 @@ class ShakeEvent(QObject):
         :return: A QGIS memory layer
         :rtype: QgsVectorLayer
 
-        :raises: an exceptions will be propagated
+        :raises: Any exceptions will be propagated.
         """
         LOGGER.debug('local_cities_memory_layer requested.')
         # Now store the selection in a temporary memory layer
@@ -878,7 +664,7 @@ class ShakeEvent(QObject):
         :return: A QGIS memory layer
         :rtype: QgsVectorLayer
 
-        :raise: an exceptions will be propagated
+        :raise: Any exceptions will be propagated.
         """
         LOGGER.debug('city_search_box_memory_layer requested.')
         # There is a dependency on local_cities_memory_layer so run it first
@@ -925,37 +711,41 @@ class ShakeEvent(QObject):
         :type row_count: int
 
         :return: An list of dicts containing the sorted cities and their
-                attributes. See below for example output.
+            attributes. See below for example output.
+            ::
 
-                [{'dir_from': 16.94407844543457,
-                 'dir_to': -163.05592346191406,
-                 'roman': 'II',
-                 'dist_to': 2.504295825958252,
-                 'mmi': 1.909999966621399,
-                 'name': 'Tondano',
-                 'id': 57,
-                 'population': 33317}]
+                  [{'dir_from': 16.94407844543457,
+                  'dir_to': -163.05592346191406,
+                  'roman': 'II',
+                  'dist_to': 2.504295825958252,
+                  'mmi': 1.909999966621399,
+                  'name': 'Tondano',
+                  'id': 57,
+                  'population': 33317}]
+
         :rtype: list
 
         Straw man illustrating how sorting is done:
+        ::
 
-        m = [
+         m = [
              {'name': 'b', 'mmi': 10,  'pop':10},
              {'name': 'a', 'mmi': 100, 'pop': 20},
              {'name': 'c', 'mmi': 10, 'pop': 14}]
 
-        sorted(m, key=lambda d: (-d['mmi'], -d['pop'], d['name']))
-        Out[10]:
-        [{'mmi': 100, 'name': 'a', 'pop': 20},
-         {'mmi': 10, 'name': 'c', 'pop': 14},
-         {'mmi': 10, 'name': 'b', 'pop': 10}]
+        ::
+
+         sorted(m, key=lambda d: (-d['mmi'], -d['pop'], d['name']))
+         Out[10]:
+         [{'mmi': 100, 'name': 'a', 'pop': 20},
+          {'mmi': 10, 'name': 'c', 'pop': 14},
+          {'mmi': 10, 'name': 'b', 'pop': 10}]
 
         .. note:: self.most_affected_city will also be populated with
             the dictionary of details for the most affected city.
 
         .. note:: It is possible that there is no affected city! e.g. if
             all nearby cities fall outside of the shake raster.
-
         """
         layer = self.local_cities_memory_layer()
         fields = layer.dataProvider().fields()
@@ -1036,7 +826,11 @@ class ShakeEvent(QObject):
         where the table is written.
 
         :param file_name: file name (without full path) .e.g foo.html
+        :type file_name: str
+
         :param table: A Table instance.
+        :type table: Table
+
         :return: Full path to file that was created on disk.
         :rtype: str
         """
@@ -1057,18 +851,18 @@ class ShakeEvent(QObject):
         html_file.write(footer)
         html_file.close()
         # Also bootstrap gets copied to extract dir
-        my_destination = os.path.join(shakemap_extract_dir(),
-                                      self.event_id,
-                                      'bootstrap.css')
-        my_source = os.path.join(data_dir(), 'bootstrap.css')
-        shutil.copyfile(my_source, my_destination)
+        destination_path = os.path.join(
+            shakemap_extract_dir(), self.event_id, 'bootstrap.css')
+        source_path = os.path.join(data_dir(), 'bootstrap.css')
+        shutil.copyfile(source_path, destination_path)
 
         return path
 
     def impacted_cities_table(self, row_count=5):
         """Return a table object of sorted impacted cities.
-        :param row_count:optional maximum number of cities to show.
-                Default is 5.
+
+        :param row_count:optional maximum number of cities to show. Default
+            is 5.
 
         The cities will be listed in the order computed by
         sorted_impacted_cities
@@ -1167,8 +961,9 @@ class ShakeEvent(QObject):
         table_body.append(impact_row)
         table = Table(table_body, header_row=header,
                       table_class='table table-striped table-condensed')
-        path = self.write_html_table(file_name='impacts.html',
-                                     table=table)
+        # noinspection PyTypeChecker
+        path = self.write_html_table(file_name='impacts.html', table=table)
+
         return path
 
     def calculate_impacts(self,
@@ -1212,9 +1007,7 @@ class ShakeEvent(QObject):
         else:
             exposure_path = population_raster_path
 
-        hazard_path = self.shake_grid_converter.mmi_to_raster(
-            self.event_id,
-            'BMKG',
+        hazard_path = self.shake_grid.mmi_to_raster(
             force_flag=force_flag,
             algorithm=algorithm)
 
@@ -1278,8 +1071,10 @@ class ShakeEvent(QObject):
         It is possible (though unlikely) that the shake may be clipped too.
 
         :param shake_raster_path: Path to the shake raster.
+        :type shake_raster_path: str
 
         :param population_raster_path: Path to the population raster.
+        :type population_raster_path: str
 
         :return: Path to the clipped datasets (clipped shake, clipped pop).
         :rtype: tuple(str, str)
@@ -1287,7 +1082,6 @@ class ShakeEvent(QObject):
         :raise
             FileNotFoundError
         """
-
         # _ is a syntactical trick to ignore second returned value
         base_name, _ = os.path.splitext(shake_raster_path)
         hazard_layer = QgsRasterLayer(shake_raster_path, base_name)
@@ -1443,7 +1237,7 @@ class ShakeEvent(QObject):
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
-        mmi_shape_file = self.shake_grid_converter.mmi_to_shapefile(
+        mmi_shape_file = self.shake_grid.mmi_to_shapefile(
             force_flag=force_flag)
         logging.info('Created: %s', mmi_shape_file)
         cities_html_path = None
@@ -1452,7 +1246,7 @@ class ShakeEvent(QObject):
         # 'average', 'invdist', 'nearest' - currently only nearest works
         algorithm = 'nearest'
         try:
-            contours_shapefile = self.mmi_data_to_contours(
+            contours_shapefile = self.shake_grid.mmi_to_contours(
                 force_flag=force_flag,
                 algorithm=algorithm)
         except:
@@ -1672,9 +1466,9 @@ class ShakeEvent(QObject):
         """Get a short paragraph describing the event.
 
         :return: A string describing the event e.g.
-                'M 5.0 26-7-2012 2:15:35 Latitude: 0°12'36.00"S
-                 Longitude: 124°27'0.00"E Depth: 11.0km
-                 Located 2.50km SSW of Tondano'
+            'M 5.0 26-7-2012 2:15:35 Latitude: 0°12'36.00"S
+            Longitude: 124°27'0.00"E Depth: 11.0km
+            Located 2.50km SSW of Tondano'
         :rtype: str
         """
         event_dict = self.event_dict()
@@ -1691,10 +1485,9 @@ class ShakeEvent(QObject):
         """Get a dict of key value pairs that describe the event.
 
         :return: key-value pairs describing the event.
-        :rtype: dict:
+        :rtype: dict
 
         :raises: Propagates any exceptions
-
         """
         map_name = self.tr('Estimated Earthquake Impact')
         exposure_table_name = self.tr(
@@ -1732,8 +1525,8 @@ class ShakeEvent(QObject):
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
         #Format the lat lon from decimal degrees to dms
         point = QgsPoint(
-            self.shake_grid_converter.longitude,
-            self.shake_grid_converter.latitude)
+            self.shake_grid.longitude,
+            self.shake_grid.latitude)
         coordinates = point.toDegreesMinutesSeconds(2)
         tokens = coordinates.split(',')
         longitude = tokens[0]
@@ -1769,22 +1562,22 @@ class ShakeEvent(QObject):
             'fatalities-name': fatalities_name,
             'fatalities-range': fatalities_range,
             'fatalities-count': '%s' % fatalities_count,
-            'mmi': '%s' % self.shake_grid_converter.magnitude,
+            'mmi': '%s' % self.shake_grid.magnitude,
             'date': '%s-%s-%s' % (
-                self.shake_grid_converter.day,
-                self.shake_grid_converter.month,
-                self.shake_grid_converter.year),
+                self.shake_grid.day,
+                self.shake_grid.month,
+                self.shake_grid.year),
             'time': '%s:%s:%s' % (
-                self.shake_grid_converter.hour,
-                self.shake_grid_converter.minute,
-                self.shake_grid_converter.second),
+                self.shake_grid.hour,
+                self.shake_grid.minute,
+                self.shake_grid.second),
             'formatted-date-time': self.elapsed_time()[0],
             'latitude-name': self.tr('Latitude'),
             'latitude-value': '%s' % latitude,
             'longitude-name': self.tr('Longitude'),
             'longitude-value': '%s' % longitude,
             'depth-name': self.tr('Depth'),
-            'depth-value': '%s' % self.shake_grid_converter.depth,
+            'depth-value': '%s' % self.shake_grid.depth,
             'depth-unit': km_text,
             'located-label': self.tr('Located'),
             'distance': '%.2f' % distance,
@@ -1810,12 +1603,12 @@ class ShakeEvent(QObject):
         .. note:: Code based on Ole's original impact_map work.
         """
         # Work out interval since earthquake (assume both are GMT)
-        year = self.shake_grid_converter.year
-        month = self.shake_grid_converter.month
-        day = self.shake_grid_converter.day
-        hour = self.shake_grid_converter.hour
-        minute = self.shake_grid_converter.minute
-        second = self.shake_grid_converter.second
+        year = self.shake_grid.year
+        month = self.shake_grid.month
+        day = self.shake_grid.day
+        hour = self.shake_grid.hour
+        minute = self.shake_grid.minute
+        second = self.shake_grid.second
 
         eq_date = datetime(year, month, day, hour, minute, second)
 
@@ -1877,15 +1670,6 @@ class ShakeEvent(QObject):
         """
         return self.tr('Version: %s' % get_version())
 
-    #noinspection PyMethodMayBeStatic
-    def get_city_by_id(self, city_id):
-        """A helper to get the info of an affected city given it's id.
-
-        :param city_id: int mandatory, the id number of the city to retrieve.
-        :return dict: various properties for the given city including distance
-                from the epicenter and direction to and from the epicenter.
-        """
-
     def __str__(self):
         """The unicode representation for an event object's state.
 
@@ -1900,29 +1684,29 @@ class ShakeEvent(QObject):
         else:
             extent_with_cities = 'Not set'
 
-        if self.shake_grid_converter.mmi_data:
+        if self.shake_grid.mmi_data:
             mmi_data = 'Populated'
         else:
             mmi_data = 'Not populated'
 
-        event_dict = {'latitude': self.shake_grid_converter.latitude,
-                      'longitude': self.shake_grid_converter.longitude,
+        event_dict = {'latitude': self.shake_grid.latitude,
+                      'longitude': self.shake_grid.longitude,
                       'event_id': self.event_id,
-                      'magnitude': self.shake_grid_converter.magnitude,
-                      'depth': self.shake_grid_converter.depth,
-                      'description': self.shake_grid_converter.description,
-                      'location': self.shake_grid_converter.location,
-                      'day': self.shake_grid_converter.day,
-                      'month': self.shake_grid_converter.month,
-                      'year': self.shake_grid_converter.year,
-                      'time': self.shake_grid_converter.time,
-                      'time_zone': self.shake_grid_converter.time_zone,
-                      'x_minimum': self.shake_grid_converter.x_minimum,
-                      'x_maximum': self.shake_grid_converter.x_maximum,
-                      'y_minimum': self.shake_grid_converter.y_minimum,
-                      'y_maximum': self.shake_grid_converter.y_maximum,
-                      'rows': self.shake_grid_converter.rows,
-                      'columns': self.shake_grid_converter.columns,
+                      'magnitude': self.shake_grid.magnitude,
+                      'depth': self.shake_grid.depth,
+                      'description': self.shake_grid.description,
+                      'location': self.shake_grid.location,
+                      'day': self.shake_grid.day,
+                      'month': self.shake_grid.month,
+                      'year': self.shake_grid.year,
+                      'time': self.shake_grid.time,
+                      'time_zone': self.shake_grid.time_zone,
+                      'x_minimum': self.shake_grid.x_minimum,
+                      'x_maximum': self.shake_grid.x_maximum,
+                      'y_minimum': self.shake_grid.y_minimum,
+                      'y_maximum': self.shake_grid.y_maximum,
+                      'rows': self.shake_grid.rows,
+                      'columns': self.shake_grid.columns,
                       'mmi_data': mmi_data,
                       'population_raster_path': self.population_raster_path,
                       'impact_file': self.impact_file,

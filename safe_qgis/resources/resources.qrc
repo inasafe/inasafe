@@ -12,6 +12,7 @@
         <file alias="save-as-scenario.svg">img/icons/save-as-scenario.svg</file>
         <file alias="show-converter-tool.svg">img/icons/show-converter-tool.svg</file>
         <file alias="show-impact-merge.svg">img/icons/show-impact-merge.svg</file>
+        <file alias="toggle-rubber-bands.svg">img/icons/toggle-rubber-bands.svg</file>
         <!-- North arrows -->
         <file alias="simple_north_arrow.png">img/north_arrows/simple_north_arrow.png</file>
         <!-- wizard images -->

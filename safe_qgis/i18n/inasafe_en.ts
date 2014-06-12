@@ -3,56 +3,56 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="safe_interface.py" line="185"/>
+        <location filename="safe_interface.py" line="182"/>
         <source>theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: /ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s</source>
         <translation>theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: /ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="203"/>
+        <location filename="safe_interface.py" line="197"/>
         <source>Bounding boxes of hazard data, exposure data and viewport did not overlap, so no computation was done. Please make sure you pan to where the data is and that hazard and exposure data overlaps.</source>
         <translation>Bounding boxes of hazard data, exposure data and viewport did not overlap, so no computation was done. Please make sure you pan to where the data is and that hazard and exposure data overlaps.</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="355"/>
+        <location filename="safe_interface.py" line="346"/>
         <source>Keyword retrieval failed for %s (%s) 
  %s</source>
         <translation>Keyword retrieval failed for %s (%s) 
  %s</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="302"/>
+        <location filename="safe_interface.py" line="295"/>
         <source>No value was found for keyword %s in layer %s</source>
         <translation>No value was found for keyword %s in layer %s</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="338"/>
+        <location filename="safe_interface.py" line="331"/>
         <source>Cannot get keywords from a non-existent file.%s does not exist.</source>
         <translation>Cannot get keywords from a non-existent file.%s does not exist.</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="346"/>
+        <location filename="safe_interface.py" line="339"/>
         <source>No keywords file found for %s</source>
         <translation>No keywords file found for %s</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="364"/>
+        <location filename="safe_interface.py" line="355"/>
         <source>No value was found in file %s for keyword %s</source>
         <translation>No value was found in file %s for keyword %s</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="418"/>
+        <location filename="safe_interface.py" line="408"/>
         <source>Argument &quot;%s&quot; was not a valid layer instance</source>
         <translation>Argument &quot;%s&quot; was not a valid layer instance</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="426"/>
+        <location filename="safe_interface.py" line="414"/>
         <source>Styleinfo retrieval failed for %s
  %s</source>
         <translation>Styleinfo retrieval failed for %s
  %s</translation>
     </message>
     <message>
-        <location filename="test_translations.py" line="147"/>
+        <location filename="test_translations.py" line="142"/>
         <source>No styleInfo was found for layer %s</source>
         <translation>No styleInfo was found for layer %s</translation>
     </message>
@@ -282,7 +282,7 @@
         <translation>Loaded impact layer &quot;%s&quot; is not valid</translation>
     </message>
     <message>
-        <location filename="custom_logging.py" line="67"/>
+        <location filename="custom_logging.py" line="66"/>
         <source>Due to memory limitations on this machine, InaSAFE can not handle the full log</source>
         <translation>Due to memory limitations on this machine, InaSAFE can not handle the full log</translation>
     </message>
@@ -413,147 +413,147 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Aggregator</name>
     <message>
-        <location filename="aggregator.py" line="1202"/>
+        <location filename="aggregator.py" line="1200"/>
         <source>Use default</source>
         <translation>Use default</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="308"/>
+        <location filename="aggregator.py" line="307"/>
         <source>Select attribute</source>
         <translation>Select attribute</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="308"/>
+        <location filename="aggregator.py" line="307"/>
         <source>Please select which attribute you want to use as ID for the aggregated results</source>
         <translation>Please select which attribute you want to use as ID for the aggregated results</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="476"/>
+        <location filename="aggregator.py" line="474"/>
         <source>Aggregating results</source>
         <translation>Aggregating results</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="516"/>
+        <location filename="aggregator.py" line="514"/>
         <source>Could not remove the unneeded fields</source>
         <translation>Could not remove the unneeded fields</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="659"/>
+        <location filename="aggregator.py" line="657"/>
         <source>Calculating zonal statistics</source>
         <translation>Calculating zonal statistics</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="659"/>
+        <location filename="aggregator.py" line="657"/>
         <source>Abort...</source>
         <translation>Abort...</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="667"/>
+        <location filename="aggregator.py" line="665"/>
         <source>ZonalStats: Error</source>
         <translation>ZonalStats: Error</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="667"/>
+        <location filename="aggregator.py" line="665"/>
         <source>You aborted aggregation, so there are no data for analysis. Exiting...</source>
         <translation>You aborted aggregation, so there are no data for analysis. Exiting...</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1053"/>
+        <location filename="aggregator.py" line="1051"/>
         <source>Preparing aggregation layer</source>
         <translation>Preparing aggregation layer</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1053"/>
+        <location filename="aggregator.py" line="1051"/>
         <source>We are clipping the aggregation layer to match the intersection of the hazard and exposure layer extents.</source>
         <translation>We are clipping the aggregation layer to match the intersection of the hazard and exposure layer extents.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1084"/>
+        <location filename="aggregator.py" line="1082"/>
         <source>aggregation</source>
         <translation>aggregation</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1202"/>
+        <location filename="aggregator.py" line="1200"/>
         <source>Don&apos;t use</source>
         <translation>Don&apos;t use</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1501"/>
+        <location filename="aggregator.py" line="1499"/>
         <source>preprocessed</source>
         <translation>preprocessed</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1581"/>
+        <location filename="aggregator.py" line="1579"/>
         <source>Entire area</source>
         <translation>Entire area</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1561"/>
+        <location filename="aggregator.py" line="1559"/>
         <source>An exception occurred when creating the entire area layer.</source>
         <translation>An exception occurred when creating the entire area layer.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1567"/>
+        <location filename="aggregator.py" line="1565"/>
         <source>Area</source>
         <translation>Area</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="436"/>
+        <location filename="aggregator.py" line="434"/>
         <source>Error: hazard layer is not provided.</source>
         <translation>Error: hazard layer is not provided.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="440"/>
+        <location filename="aggregator.py" line="438"/>
         <source>Error: exposure layer is not provided.</source>
         <translation>Error: exposure layer is not provided.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="476"/>
+        <location filename="aggregator.py" line="474"/>
         <source>This may take a little while - we are aggregating the impact by %s</source>
         <translation>This may take a little while - we are aggregating the impact by %s</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="486"/>
+        <location filename="aggregator.py" line="484"/>
         <source>Error when reading %s</source>
         <translation>Error when reading %s</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="494"/>
+        <location filename="aggregator.py" line="492"/>
         <source>%s aggregated to %s</source>
         <translation>%s aggregated to %s</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="535"/>
+        <location filename="aggregator.py" line="533"/>
         <source>%s is %s but it should be either vector or raster</source>
         <translation>%s is %s but it should be either vector or raster</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1227"/>
+        <location filename="aggregator.py" line="1225"/>
         <source>Pre-clipping input data...</source>
         <translation>Pre-clipping input data...</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1227"/>
+        <location filename="aggregator.py" line="1225"/>
         <source>Modifying %s to avoid intersections with the aggregation layer</source>
         <translation>Modifying %s to avoid intersections with the aggregation layer</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1635"/>
+        <location filename="aggregator.py" line="1633"/>
         <source>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</source>
         <translation>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1647"/>
+        <location filename="aggregator.py" line="1645"/>
         <source>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</source>
         <translation>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="639"/>
+        <location filename="aggregator.py" line="637"/>
         <source>Aggregation on vector impact layers other than points or polygons or lines yet not implemented yet. Called on %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1016"/>
+        <location filename="aggregator.py" line="1014"/>
         <source>The target_field contains Null values. The impact function should define this.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -561,61 +561,61 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>BatchDialog</name>
     <message>
-        <location filename="batch_dialog.py" line="472"/>
+        <location filename="batch_dialog.py" line="470"/>
         <source>Running</source>
         <translation>Running</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="486"/>
+        <location filename="batch_dialog.py" line="484"/>
         <source>Script OK</source>
         <translation>Script OK</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="489"/>
+        <location filename="batch_dialog.py" line="487"/>
         <source>Script Fail</source>
         <translation>Script Fail</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="501"/>
+        <location filename="batch_dialog.py" line="499"/>
         <source>Analysis Fail</source>
         <translation>Analysis Fail</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="513"/>
+        <location filename="batch_dialog.py" line="511"/>
         <source>Analysis Ok</source>
         <translation>Analysis Ok</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="516"/>
+        <location filename="batch_dialog.py" line="514"/>
         <source>Report Ok</source>
         <translation>Report Ok</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="519"/>
+        <location filename="batch_dialog.py" line="517"/>
         <source>Report Failed</source>
         <translation>Report Failed</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="620"/>
+        <location filename="batch_dialog.py" line="618"/>
         <source>The file(s) below were parsed successfully:
 </source>
         <translation>The file(s) below were parsed successfully:
 </translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="622"/>
+        <location filename="batch_dialog.py" line="620"/>
         <source>The file(s) below were not parsed successfully:
 </source>
         <translation>The file(s) below were not parsed successfully:
 </translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="677"/>
+        <location filename="batch_dialog.py" line="675"/>
         <source>Set the source directory for script and scenario</source>
         <translation>Set the source directory for script and scenario</translation>
     </message>
     <message>
-        <location filename="batch_dialog.py" line="684"/>
+        <location filename="batch_dialog.py" line="682"/>
         <source>Set the output directory for pdf report files</source>
         <translation>Set the output directory for pdf report files</translation>
     </message>
@@ -684,429 +684,429 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="465"/>
+        <location filename="dock.py" line="488"/>
         <source>No valid functions:</source>
         <translation>No valid functions:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="472"/>
+        <location filename="dock.py" line="495"/>
         <source>Hazard keywords:</source>
         <translation>Hazard keywords:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="475"/>
+        <location filename="dock.py" line="498"/>
         <source>Exposure keywords:</source>
         <translation>Exposure keywords:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="443"/>
+        <location filename="dock.py" line="466"/>
         <source>Ready</source>
         <translation>Ready</translation>
     </message>
     <message>
-        <location filename="dock.py" line="760"/>
+        <location filename="dock.py" line="786"/>
         <source>Entire area</source>
         <translation>Entire area</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1939"/>
+        <location filename="dock.py" line="2145"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1101"/>
+        <location filename="dock.py" line="1282"/>
         <source>You may not have sufficient free system memory to carry out this analysis. See the dock panel message for more information. Would you like to continue regardless?</source>
         <translation>You may not have sufficient free system memory to carry out this analysis. See the dock panel message for more information. Would you like to continue regardless?</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1189"/>
+        <location filename="dock.py" line="1371"/>
         <source>An error occurred when calling a GDAL command</source>
         <translation>An error occurred when calling a GDAL command</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1193"/>
+        <location filename="dock.py" line="1375"/>
         <source>An error occurred when writing clip file</source>
         <translation>An error occurred when writing clip file</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1197"/>
+        <location filename="dock.py" line="1379"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation>An exception occurred when setting up the impact calculator.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1202"/>
+        <location filename="dock.py" line="1384"/>
         <source>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</source>
         <translation>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1215"/>
+        <location filename="dock.py" line="1397"/>
         <source>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</source>
         <translation>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1229"/>
+        <location filename="dock.py" line="1411"/>
         <source>An exception occurred when setting up the model runner.</source>
         <translation>An exception occurred when setting up the model runner.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1240"/>
+        <location filename="dock.py" line="1422"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1259"/>
+        <location filename="dock.py" line="1441"/>
         <source>An exception occurred when starting the model.</source>
         <translation>An exception occurred when starting the model.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1939"/>
+        <location filename="dock.py" line="2145"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Please select a valid impact layer before trying to print.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2038"/>
+        <location filename="dock.py" line="2244"/>
         <source>Map Creator</source>
         <translation>Map Creator</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1946"/>
+        <location filename="dock.py" line="2152"/>
         <source>Preparing map and report</source>
         <translation>Preparing map and report</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2009"/>
+        <location filename="dock.py" line="2215"/>
         <source>Write to PDF</source>
         <translation>Write to PDF</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2009"/>
+        <location filename="dock.py" line="2215"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Pdf File (*.pdf)</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2016"/>
+        <location filename="dock.py" line="2222"/>
         <source>Printing cancelled!</source>
         <translation>Printing cancelled!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="403"/>
+        <location filename="dock.py" line="426"/>
         <source>hazard</source>
         <translation>hazard</translation>
     </message>
     <message>
-        <location filename="dock.py" line="407"/>
+        <location filename="dock.py" line="430"/>
         <source>exposure</source>
         <translation>exposure</translation>
     </message>
     <message>
-        <location filename="dock.py" line="445"/>
+        <location filename="dock.py" line="468"/>
         <source>Run</source>
         <translation>Run</translation>
     </message>
     <message>
-        <location filename="dock.py" line="445"/>
+        <location filename="dock.py" line="468"/>
         <source>You can now proceed to run your model by clicking the</source>
         <translation>You can now proceed to run your model by clicking the</translation>
     </message>
     <message>
-        <location filename="dock.py" line="445"/>
+        <location filename="dock.py" line="468"/>
         <source>button.</source>
         <translation>button.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="467"/>
+        <location filename="dock.py" line="490"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual for details on what constitute valid inputs for a given risk function.</source>
         <translation>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual for details on what constitute valid inputs for a given risk function.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="991"/>
+        <location filename="dock.py" line="1172"/>
         <source>Processing started</source>
         <translation>Processing started</translation>
     </message>
     <message>
-        <location filename="dock.py" line="992"/>
+        <location filename="dock.py" line="1173"/>
         <source>Please wait - processing may take a while depending on your hardware configuration and the analysis extents and data.</source>
         <translation>Please wait - processing may take a while depending on your hardware configuration and the analysis extents and data.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1020"/>
+        <location filename="dock.py" line="1201"/>
         <source>This analysis will calculate the impact of</source>
         <translation>This analysis will calculate the impact of</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1020"/>
+        <location filename="dock.py" line="1201"/>
         <source>on</source>
         <translation>on</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1030"/>
+        <location filename="dock.py" line="1211"/>
         <source>aggregated by</source>
         <translation>aggregated by</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1054"/>
+        <location filename="dock.py" line="1235"/>
         <source>The following postprocessors will be used:</source>
         <translation>The following postprocessors will be used:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1077"/>
+        <location filename="dock.py" line="1258"/>
         <source>A problem was encountered when trying to read keywords.</source>
         <translation>A problem was encountered when trying to read keywords.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1271"/>
         <source>A problem was encountered when trying to determine the analysis extents.</source>
         <translation>A problem was encountered when trying to determine the analysis extents.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1208"/>
+        <location filename="dock.py" line="1390"/>
         <source>An error occurred because you are using a layer containing density data (e.g. population density) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</source>
         <translation>An error occurred because you are using a layer containing density data (e.g. population density) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1239"/>
+        <location filename="dock.py" line="1421"/>
         <source>Calculating impact</source>
         <translation>Calculating impact</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1300"/>
+        <location filename="dock.py" line="1482"/>
         <source>Error loading impact layer.</source>
         <translation>Error loading impact layer.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1754"/>
+        <location filename="dock.py" line="1960"/>
         <source>Analysis Results</source>
         <translation>Analysis Results</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1448"/>
+        <location filename="dock.py" line="1632"/>
         <source>Notes</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1459"/>
+        <location filename="dock.py" line="1643"/>
         <source>Check that the exposure is not no-data or zero for the entire area of your analysis.</source>
         <translation>Check that the exposure is not no-data or zero for the entire area of your analysis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1462"/>
+        <location filename="dock.py" line="1646"/>
         <source>Check that your impact function thresholds do not exclude all features unintentionally.</source>
         <translation>Check that your impact function thresholds do not exclude all features unintentionally.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1496"/>
+        <location filename="dock.py" line="1680"/>
         <source>Aggregation error occurred.</source>
         <translation>Aggregation error occurred.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1577"/>
+        <location filename="dock.py" line="1724"/>
         <source>There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:</source>
         <translation>There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1584"/>
+        <location filename="dock.py" line="1731"/>
         <source>Failed to obtain the optimal extent given:</source>
         <translation>Failed to obtain the optimal extent given:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1702"/>
+        <location filename="dock.py" line="1908"/>
         <source>Preparing hazard data</source>
         <translation>Preparing hazard data</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1703"/>
+        <location filename="dock.py" line="1909"/>
         <source>We are resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</source>
         <translation>We are resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1721"/>
+        <location filename="dock.py" line="1927"/>
         <source>Preparing exposure data</source>
         <translation>Preparing exposure data</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1722"/>
+        <location filename="dock.py" line="1928"/>
         <source>We are resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</source>
         <translation>We are resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1778"/>
+        <location filename="dock.py" line="1984"/>
         <source>Layer keywords:</source>
         <translation>Layer keywords:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1780"/>
+        <location filename="dock.py" line="1986"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation>The following keywords are defined for the active layer:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1808"/>
+        <location filename="dock.py" line="2014"/>
         <source>Layer keywords missing:</source>
         <translation>Layer keywords missing:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1810"/>
+        <location filename="dock.py" line="2016"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the </source>
         <translation>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1810"/>
+        <location filename="dock.py" line="2016"/>
         <source> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</source>
         <translation> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2038"/>
+        <location filename="dock.py" line="2244"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2038"/>
+        <location filename="dock.py" line="2244"/>
         <source>and</source>
         <translation>and</translation>
     </message>
     <message>
-        <location filename="dock.py" line="216"/>
+        <location filename="dock.py" line="231"/>
         <source>InaSAFE %s %s</source>
         <translation>InaSAFE %s %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1030"/>
+        <location filename="dock.py" line="1211"/>
         <source>and bullet_list the results</source>
         <translation>and bullet_list the results</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1372"/>
+        <location filename="dock.py" line="1554"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Impact layer %s was neither a raster or a vector layer</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1438"/>
+        <location filename="dock.py" line="1622"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>No impact layer was calculated. Error message: %s
 </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1449"/>
+        <location filename="dock.py" line="1633"/>
         <source>It appears that no %s are affected by %s. You may want to consider:</source>
         <translation>It appears that no %s are affected by %s. You may want to consider:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1455"/>
+        <location filename="dock.py" line="1639"/>
         <source>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</source>
         <translation>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1472"/>
+        <location filename="dock.py" line="1656"/>
         <source>An exception occurred when calculating the results. %s</source>
         <translation>An exception occurred when calculating the results. %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1589"/>
+        <location filename="dock.py" line="1736"/>
         <source>Hazard: %s</source>
         <translation>Hazard: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1593"/>
+        <location filename="dock.py" line="1739"/>
         <source>Exposure: %s</source>
         <translation>Exposure: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1597"/>
+        <location filename="dock.py" line="1742"/>
         <source>Viewable area Geo Extent: %s</source>
         <translation>Viewable area Geo Extent: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1601"/>
+        <location filename="dock.py" line="1745"/>
         <source>Hazard Geo Extent: %s</source>
         <translation>Hazard Geo Extent: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1605"/>
+        <location filename="dock.py" line="1748"/>
         <source>Exposure Geo Extent: %s</source>
         <translation>Exposure Geo Extent: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1609"/>
+        <location filename="dock.py" line="1751"/>
         <source>Viewable area clipping enabled: %s</source>
         <translation>Viewable area clipping enabled: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1612"/>
+        <location filename="dock.py" line="1754"/>
         <source>Details: %s</source>
         <translation>Details: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1922"/>
+        <location filename="dock.py" line="2128"/>
         <source>Report generation cancelled!</source>
         <translation>Report generation cancelled!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2003"/>
+        <location filename="dock.py" line="2209"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation>Keyword &quot;map_title&quot; not found.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="397"/>
+        <location filename="dock.py" line="420"/>
         <source>These are the minimum steps you need to follow in order to use InaSAFE:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="407"/>
+        <location filename="dock.py" line="430"/>
         <source>Add at least one </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="403"/>
+        <location filename="dock.py" line="426"/>
         <source> layer (e.g. earthquake MMI) to QGIS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="407"/>
+        <location filename="dock.py" line="430"/>
         <source> layer (e.g. structures) to QGIS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="411"/>
+        <location filename="dock.py" line="434"/>
         <source>Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="411"/>
+        <location filename="dock.py" line="434"/>
         <source> in the InaSAFE toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="419"/>
+        <location filename="dock.py" line="442"/>
         <source>Click on the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="419"/>
+        <location filename="dock.py" line="442"/>
         <source> button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1172"/>
+        <location filename="dock.py" line="1353"/>
         <source>No valid layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1173"/>
+        <location filename="dock.py" line="1354"/>
         <source>Please ensure your hazard and exposure layers are set in the question area and then press run again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="958"/>
+        <location filename="dock.py" line="1139"/>
         <source>Clip parameters are not set!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="2061"/>
+        <location filename="dock.py" line="2267"/>
         <source>Template is missing some elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="2062"/>
+        <location filename="dock.py" line="2268"/>
         <source>%s. Do you still want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1656,277 +1656,282 @@ to
 <context>
     <name>KeywordsDialog</name>
     <message>
-        <location filename="keywords_dialog.py" line="88"/>
+        <location filename="keywords_dialog.py" line="103"/>
         <source>population</source>
         <translation>population</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="88"/>
+        <location filename="keywords_dialog.py" line="103"/>
         <source>structure</source>
         <translation>structure</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="1049"/>
+        <location filename="keywords_dialog.py" line="1065"/>
         <source>Not Set</source>
         <translation>Not Set</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>earthquake [MMI]</source>
         <translation>earthquake [MMI]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>tsunami [m]</source>
         <translation>tsunami [m]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>tsunami [wet/dry]</source>
         <translation>tsunami [wet/dry]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>tsunami [feet]</source>
         <translation>tsunami [feet]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>flood [m]</source>
         <translation>flood [m]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>flood [wet/dry]</source>
         <translation>flood [wet/dry]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>flood [feet]</source>
         <translation>flood [feet]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>tephra [kg2/m2]</source>
         <translation>tephra [kg2/m2]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="108"/>
         <source>volcano</source>
         <translation>volcano</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="139"/>
+        <location filename="keywords_dialog.py" line="154"/>
         <source>Reload</source>
         <translation>Reload</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="505"/>
-        <source>Use default</source>
-        <translation>Use default</translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="390"/>
+        <location filename="keywords_dialog.py" line="90"/>
         <source>Don&apos;t use</source>
         <translation>Don&apos;t use</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="591"/>
+        <location filename="keywords_dialog.py" line="607"/>
         <source>Hide advanced editor</source>
         <translation>Hide advanced editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="593"/>
+        <location filename="keywords_dialog.py" line="609"/>
         <source>Show advanced editor</source>
         <translation>Show advanced editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="817"/>
+        <location filename="keywords_dialog.py" line="833"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation>Colons are not allowed, replaced with &quot;.&quot;</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="1017"/>
+        <location filename="keywords_dialog.py" line="1033"/>
         <source>Keywords for %s</source>
         <translation>Keywords for %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="1128"/>
+        <location filename="keywords_dialog.py" line="1154"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="1128"/>
+        <location filename="keywords_dialog.py" line="1154"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>An error was encountered when saving the keywords:
 %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="70"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>InaSAFE %s Keywords Editor</source>
         <translation>InaSAFE %s Keywords Editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="88"/>
+        <location filename="keywords_dialog.py" line="103"/>
         <source>road</source>
         <translation>road</translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog.py" line="89"/>
+        <source>Global default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog.py" line="1140"/>
+        <source>The sum of age ratios is %s which exceeds 1. Please adjust the age ration defaults so that their cumulative value is not greater than 1.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KeywordsDialogBase</name>
     <message>
-        <location filename="keywords_dialog_base.py" line="289"/>
+        <location filename="keywords_dialog_base.py" line="295"/>
         <source>InaSAFE - Keyword Editor</source>
         <translation>InaSAFE - Keyword Editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="290"/>
+        <location filename="keywords_dialog_base.py" line="296"/>
         <source>Quick edit</source>
         <translation>Quick edit</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="292"/>
+        <location filename="keywords_dialog_base.py" line="298"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation>A subcategory represents the type of hazard.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="294"/>
+        <location filename="keywords_dialog_base.py" line="300"/>
         <source>Subcategory</source>
         <translation>Subcategory</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="291"/>
+        <location filename="keywords_dialog_base.py" line="297"/>
         <source>Aggregation attribute</source>
         <translation>Aggregation attribute</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="303"/>
+        <location filename="keywords_dialog_base.py" line="309"/>
         <source>Category</source>
         <translation>Category</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="297"/>
+        <location filename="keywords_dialog_base.py" line="303"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="298"/>
+        <location filename="keywords_dialog_base.py" line="304"/>
         <source>Hazard</source>
         <translation>Hazard</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="299"/>
+        <location filename="keywords_dialog_base.py" line="305"/>
         <source>Where people and property are situated.</source>
         <translation>Where people and property are situated.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="300"/>
+        <location filename="keywords_dialog_base.py" line="306"/>
         <source>Exposure</source>
         <translation>Exposure</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="301"/>
+        <location filename="keywords_dialog_base.py" line="307"/>
         <source>Postprocessing</source>
         <translation>Postprocessing</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="302"/>
+        <location filename="keywords_dialog_base.py" line="308"/>
         <source>Title</source>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="293"/>
+        <location filename="keywords_dialog_base.py" line="299"/>
         <source>Female ratio attribute</source>
         <translation>Female ratio attribute</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="295"/>
+        <location filename="keywords_dialog_base.py" line="301"/>
         <source>Female ratio default</source>
         <translation>Female ratio default</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="310"/>
+        <location filename="keywords_dialog_base.py" line="316"/>
         <source>Show advanced editor</source>
         <translation>Show advanced editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="311"/>
+        <location filename="keywords_dialog_base.py" line="317"/>
         <source>Advanced editor</source>
         <translation>Advanced editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="312"/>
+        <location filename="keywords_dialog_base.py" line="318"/>
         <source>Predefined</source>
         <translation>Predefined</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="313"/>
+        <location filename="keywords_dialog_base.py" line="319"/>
         <source>User defined</source>
         <translation>User defined</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="314"/>
+        <location filename="keywords_dialog_base.py" line="320"/>
         <source>Keyword</source>
         <translation>Keyword</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="318"/>
+        <location filename="keywords_dialog_base.py" line="324"/>
         <source>Value</source>
         <translation>Value</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="319"/>
+        <location filename="keywords_dialog_base.py" line="325"/>
         <source>Add to list</source>
         <translation>Add to list</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="317"/>
+        <location filename="keywords_dialog_base.py" line="323"/>
         <source>Key</source>
         <translation>Key</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="320"/>
+        <location filename="keywords_dialog_base.py" line="326"/>
         <source>Current keywords</source>
         <translation>Current keywords</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="321"/>
+        <location filename="keywords_dialog_base.py" line="327"/>
         <source>Remove selected</source>
         <translation>Remove selected</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="296"/>
+        <location filename="keywords_dialog_base.py" line="302"/>
         <source>Source</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="304"/>
+        <location filename="keywords_dialog_base.py" line="310"/>
         <source>Elderly ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="305"/>
+        <location filename="keywords_dialog_base.py" line="311"/>
         <source>Elderly ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="306"/>
+        <location filename="keywords_dialog_base.py" line="312"/>
         <source>Adult ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="307"/>
+        <location filename="keywords_dialog_base.py" line="313"/>
         <source>Adult ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="308"/>
+        <location filename="keywords_dialog_base.py" line="314"/>
         <source>Youth ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.py" line="309"/>
+        <location filename="keywords_dialog_base.py" line="315"/>
         <source>Youth ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2452,97 +2457,97 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="195"/>
+        <location filename="plugin.py" line="199"/>
         <source>Toggle InaSAFE Dock</source>
         <translation>Toggle InaSAFE Dock</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="201"/>
+        <location filename="plugin.py" line="205"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation>Show/hide InaSAFE dock widget</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="434"/>
+        <location filename="plugin.py" line="458"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="211"/>
+        <location filename="plugin.py" line="215"/>
         <source>InaSAFE Keyword Editor</source>
         <translation>InaSAFE Keyword Editor</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="217"/>
+        <location filename="plugin.py" line="221"/>
         <source>Open InaSAFE keywords editor</source>
         <translation>Open InaSAFE keywords editor</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="247"/>
+        <location filename="plugin.py" line="251"/>
         <source>InaSAFE Options</source>
         <translation>InaSAFE Options</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="252"/>
+        <location filename="plugin.py" line="256"/>
         <source>Open InaSAFE options dialog</source>
         <translation>Open InaSAFE options dialog</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="261"/>
+        <location filename="plugin.py" line="265"/>
         <source>InaSAFE Impact Functions Browser</source>
         <translation>InaSAFE Impact Functions Browser</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="267"/>
+        <location filename="plugin.py" line="271"/>
         <source>Open InaSAFE Impact Functions Browser</source>
         <translation>Open InaSAFE Impact Functions Browser</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="282"/>
+        <location filename="plugin.py" line="286"/>
         <source>InaSAFE Minimum Needs Tool</source>
         <translation>InaSAFE Minimum Needs Tool</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="287"/>
+        <location filename="plugin.py" line="291"/>
         <source>Open InaSAFE minimum needs tool</source>
         <translation>Open InaSAFE minimum needs tool</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="53"/>
+        <location filename="plugin.py" line="56"/>
         <source>Please restart QGIS to use this plugin.</source>
         <translation>Please restart QGIS to use this plugin.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="296"/>
+        <location filename="plugin.py" line="300"/>
         <source>InaSAFE Converter</source>
         <translation>InaSAFE Converter</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="301"/>
+        <location filename="plugin.py" line="305"/>
         <source>Open InaSAFE Converter</source>
         <translation>Open InaSAFE Converter</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="311"/>
+        <location filename="plugin.py" line="315"/>
         <source>InaSAFE Batch Runner</source>
         <translation>InaSAFE Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="316"/>
+        <location filename="plugin.py" line="320"/>
         <source>Open InaSAFE Batch Runner</source>
         <translation>Open InaSAFE Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="325"/>
+        <location filename="plugin.py" line="329"/>
         <source>Save current scenario</source>
         <translation>Save current scenario</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="329"/>
+        <location filename="plugin.py" line="333"/>
         <source>Save current scenario to text file</source>
         <translation>Save current scenario to text file</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="345"/>
+        <location filename="plugin.py" line="349"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
         <translation>InaSAFE OpenStreetMap Downloader</translation>
     </message>
@@ -2552,28 +2557,38 @@ p, li { white-space: pre-wrap; }
         <translation>Please restart QGIS to use this plugin. If you experience further problems after restarting please report the issue to the InaSAFE team.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="360"/>
+        <location filename="plugin.py" line="364"/>
         <source>InaSAFE Impact Layer Merge</source>
         <translation>InaSAFE Impact Layer Merge</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="507"/>
+        <location filename="plugin.py" line="531"/>
         <source>Unsupported layer type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="507"/>
+        <location filename="plugin.py" line="531"/>
         <source>The layer you have selected cannot be used for analysis because its data type is unsupported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="229"/>
+        <location filename="plugin.py" line="233"/>
         <source>InaSAFE Keywords Creation Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="235"/>
+        <location filename="plugin.py" line="239"/>
         <source>Open InaSAFE keywords creation wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="392"/>
+        <source>Toggle scenario outlines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="396"/>
+        <source>Toggle rubber bands showing scenarion extents.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2656,202 +2671,202 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ShakeEvent</name>
     <message>
-        <location filename="shake_event.py" line="869"/>
+        <location filename="shake_event.py" line="246"/>
         <source>Not felt</source>
         <translation>Not felt</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="871"/>
+        <location filename="shake_event.py" line="248"/>
         <source>Weak</source>
         <translation>Weak</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="894"/>
+        <location filename="shake_event.py" line="271"/>
         <source>Light</source>
         <translation>Light</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="895"/>
+        <location filename="shake_event.py" line="272"/>
         <source>Moderate</source>
         <translation>Moderate</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="874"/>
+        <location filename="shake_event.py" line="251"/>
         <source>Strong</source>
         <translation>Strong</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="875"/>
+        <location filename="shake_event.py" line="252"/>
         <source>Very strong</source>
         <translation>Very strong</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="876"/>
+        <location filename="shake_event.py" line="253"/>
         <source>Severe</source>
         <translation>Severe</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="877"/>
+        <location filename="shake_event.py" line="254"/>
         <source>Violent</source>
         <translation>Violent</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="878"/>
+        <location filename="shake_event.py" line="255"/>
         <source>Extreme</source>
         <translation>Extreme</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="892"/>
+        <location filename="shake_event.py" line="269"/>
         <source>None</source>
         <translation>None</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="893"/>
+        <location filename="shake_event.py" line="270"/>
         <source>Very light</source>
         <translation>Very light</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="896"/>
+        <location filename="shake_event.py" line="273"/>
         <source>Mod/Heavy</source>
         <translation>Mod/Heavy</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="897"/>
+        <location filename="shake_event.py" line="274"/>
         <source>Heavy</source>
         <translation>Heavy</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="898"/>
+        <location filename="shake_event.py" line="275"/>
         <source>Very heavy</source>
         <translation>Very heavy</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1583"/>
+        <location filename="shake_event.py" line="879"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1583"/>
+        <location filename="shake_event.py" line="879"/>
         <source>Affected (x 1000)</source>
         <translation>Affected (x 1000)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1633"/>
+        <location filename="shake_event.py" line="929"/>
         <source>Intensity</source>
         <translation>Intensity</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1635"/>
+        <location filename="shake_event.py" line="931"/>
         <source>People Affected (x 1000)</source>
         <translation>People Affected (x 1000)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1636"/>
+        <location filename="shake_event.py" line="932"/>
         <source>Perceived Shaking</source>
         <translation>Perceived Shaking</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2176"/>
+        <location filename="shake_event.py" line="1483"/>
         <source>Estimated Earthquake Impact</source>
         <translation>Estimated Earthquake Impact</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2177"/>
+        <location filename="shake_event.py" line="1484"/>
         <source>Estimated number of people affected by each MMI level</source>
         <translation>Estimated number of people affected by each MMI level</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2179"/>
+        <location filename="shake_event.py" line="1486"/>
         <source>Estimated fatalities</source>
         <translation>Estimated fatalities</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2190"/>
+        <location filename="shake_event.py" line="1497"/>
         <source>Places Affected</source>
         <translation>Places Affected</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2191"/>
+        <location filename="shake_event.py" line="1498"/>
         <source>Population density</source>
         <translation>Population density</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2192"/>
+        <location filename="shake_event.py" line="1499"/>
         <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population density data from asiapop.org, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population  data and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
         <translation>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population density data from asiapop.org, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population  data and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2207"/>
+        <location filename="shake_event.py" line="1514"/>
         <source>Supported by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the World Bank-GFDRR.</source>
         <translation>Supported by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the World Bank-GFDRR.</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2216"/>
+        <location filename="shake_event.py" line="1525"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2217"/>
+        <location filename="shake_event.py" line="1526"/>
         <source>of</source>
         <translation>of</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2218"/>
+        <location filename="shake_event.py" line="1527"/>
         <source>bearing</source>
         <translation>bearing</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2227"/>
+        <location filename="shake_event.py" line="1536"/>
         <source>n/a</source>
         <translation>n/a</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2234"/>
+        <location filename="shake_event.py" line="1543"/>
         <source>Elapsed time since event</source>
         <translation>Elapsed time since event</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2253"/>
+        <location filename="shake_event.py" line="1566"/>
         <source>Latitude</source>
         <translation>Latitude</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2255"/>
+        <location filename="shake_event.py" line="1568"/>
         <source>Longitude</source>
         <translation>Longitude</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2257"/>
+        <location filename="shake_event.py" line="1570"/>
         <source>Depth</source>
         <translation>Depth</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2260"/>
+        <location filename="shake_event.py" line="1573"/>
         <source>Located</source>
         <translation>Located</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2309"/>
+        <location filename="shake_event.py" line="1622"/>
         <source>minute(s)</source>
         <translation>minute(s)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2309"/>
+        <location filename="shake_event.py" line="1622"/>
         <source>hour(s)</source>
         <translation>hour(s)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2322"/>
+        <location filename="shake_event.py" line="1635"/>
         <source>days</source>
         <translation>days</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2322"/>
+        <location filename="shake_event.py" line="1635"/>
         <source>weeks</source>
         <translation>weeks</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2349"/>
+        <location filename="shake_event.py" line="1662"/>
         <source>Version: %s</source>
         <translation>Version: %s</translation>
     </message>
@@ -2859,82 +2874,82 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ShakemapImporter</name>
     <message>
-        <location filename="shakemap_importer.py" line="160"/>
+        <location filename="shakemap_importer.py" line="161"/>
         <source>Shakemap Grid Importer</source>
         <translation>Shakemap Grid Importer</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="93"/>
+        <location filename="shakemap_importer.py" line="94"/>
         <source>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format to a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require and earthquake layer.  To use this tool effectively:</source>
         <translation>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format to a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require and earthquake layer.  To use this tool effectively:</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="100"/>
+        <location filename="shakemap_importer.py" line="101"/>
         <source>Select a grid.xml for the input layer.</source>
         <translation>Select a grid.xml for the input layer.</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="102"/>
+        <location filename="shakemap_importer.py" line="103"/>
         <source>Choose where to write the output layer to.</source>
         <translation>Choose where to write the output layer to.</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="105"/>
+        <location filename="shakemap_importer.py" line="106"/>
         <source>Choose the interpolation algorithm that should be used when converting the xml grid to a raster. If unsure keep the default.</source>
         <translation>Choose the interpolation algorithm that should be used when converting the xml grid to a raster. If unsure keep the default.</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="109"/>
+        <location filename="shakemap_importer.py" line="110"/>
         <source>If you want to obtain shake data you can get it for free from the USGS shakemap site: http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</source>
         <translation>If you want to obtain shake data you can get it for free from the USGS shakemap site: http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="127"/>
+        <location filename="shakemap_importer.py" line="128"/>
         <source>output file is not .tif</source>
         <translation>output file is not .tif</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="140"/>
+        <location filename="shakemap_importer.py" line="141"/>
         <source>input file is not .xml</source>
         <translation>input file is not .xml</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="204"/>
+        <location filename="shakemap_importer.py" line="205"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="198"/>
+        <location filename="shakemap_importer.py" line="199"/>
         <source>Output file name must be tif file</source>
         <translation>Output file name must be tif file</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="204"/>
+        <location filename="shakemap_importer.py" line="205"/>
         <source>Input file is not exist</source>
         <translation>Input file is not exist</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="245"/>
+        <location filename="shakemap_importer.py" line="247"/>
         <source>Input file</source>
         <translation>Input file</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="245"/>
+        <location filename="shakemap_importer.py" line="247"/>
         <source>Raw grid file(*.xml)</source>
         <translation>Raw grid file(*.xml)</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="255"/>
+        <location filename="shakemap_importer.py" line="257"/>
         <source>Output file</source>
         <translation>Output file</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="255"/>
+        <location filename="shakemap_importer.py" line="257"/>
         <source>Raster file(*.tif)</source>
         <translation>Raster file(*.tif)</translation>
     </message>
     <message>
-        <location filename="shakemap_importer.py" line="60"/>
+        <location filename="shakemap_importer.py" line="61"/>
         <source>InaSAFE %s Shakemap Converter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3015,322 +3030,324 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="55"/>
+        <location filename="wizard_dialog.py" line="58"/>
         <source>By following the simple steps in this wizard, you can assign keywords to your layer: &lt;b&gt;%s&lt;/b&gt;. First you need to define the category of your layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="62"/>
+        <location filename="wizard_dialog.py" line="65"/>
         <source>What kind of hazard does this layer represent? The choice you make here will determine which impact functions this hazard layer can be used with. For example, if you choose &lt;b&gt;flood&lt;/b&gt; you will be able to use this hazard layer with impact functions such as &lt;b&gt;flood impact on population&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="72"/>
+        <location filename="wizard_dialog.py" line="75"/>
         <source>What kind of exposure does this layer represent? The choice you make here will determine which impact functions this exposure layer can be used with. For example, if you choose &lt;b&gt;population&lt;/b&gt; you will be able to use this exposure layer with impact functions such as &lt;b&gt;flood impact on population&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="95"/>
+        <location filename="wizard_dialog.py" line="98"/>
         <source>flood depth in meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="98"/>
+        <location filename="wizard_dialog.py" line="101"/>
         <source>flood depth in feet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="101"/>
+        <location filename="wizard_dialog.py" line="104"/>
         <source>flood extent as wet/dry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="104"/>
+        <location filename="wizard_dialog.py" line="107"/>
         <source>tsunami depth in meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="107"/>
+        <location filename="wizard_dialog.py" line="110"/>
         <source>tsunami depth in feet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="110"/>
+        <location filename="wizard_dialog.py" line="113"/>
         <source>tsunami extent as wet/dry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="113"/>
+        <location filename="wizard_dialog.py" line="116"/>
         <source>earthquake intensity in MMI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="116"/>
+        <location filename="wizard_dialog.py" line="119"/>
         <source>tephra intensity in kg/m&lt;sup&gt;2&lt;/sup&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="119"/>
+        <location filename="wizard_dialog.py" line="125"/>
         <source>the number of people</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="122"/>
+        <location filename="wizard_dialog.py" line="128"/>
         <source>people density in people/km&lt;sup&gt;2&lt;/sup&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="125"/>
+        <location filename="wizard_dialog.py" line="131"/>
         <source>type for your road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="133"/>
+        <location filename="wizard_dialog.py" line="139"/>
         <source>You have selected a &lt;b&gt;%s %s&lt;/b&gt; layer measured in &lt;b&gt;%s&lt;/b&gt;, and the selected layer is a vector layer. Please select the attribute in this layer that represents %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="140"/>
+        <location filename="wizard_dialog.py" line="146"/>
         <source>You have selected an aggregation layer, and it is a vector layer. Please select the attribute in this layer that represents names of the aggregation areas.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="147"/>
+        <location filename="wizard_dialog.py" line="153"/>
         <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; measured in &lt;b&gt;%s&lt;/b&gt; categorical unit, and the data column is &lt;b&gt;%s&lt;/b&gt;. Below on the left you can see all unique values found in that column. Please drag them to the right panel in order to classify them to appropriate categories.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="509"/>
+        <location filename="wizard_dialog.py" line="532"/>
         <source>Field type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="510"/>
+        <location filename="wizard_dialog.py" line="533"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="586"/>
+        <location filename="wizard_dialog.py" line="615"/>
         <source>&lt;b&gt;&lt;font color=&quot;red&quot;&gt;ERROR! Missing subcategory or unit!&lt;/font&gt;&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="665"/>
+        <location filename="wizard_dialog.py" line="694"/>
         <source>step %d</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="702"/>
+        <location filename="wizard_dialog.py" line="749"/>
         <source>Finish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="718"/>
+        <location filename="wizard_dialog.py" line="766"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="891"/>
+        <location filename="wizard_dialog.py" line="943"/>
         <source>InaSAFE</source>
         <translation type="unfinished">InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="891"/>
+        <location filename="wizard_dialog.py" line="943"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished">An error was encountered when saving the keywords:
 %s</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="82"/>
+        <location filename="wizard_dialog.py" line="85"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer type. We need to know what units the data are in. For example in a raster layer, each cell might represent depth in metres or depth in feet. If the dataset is a vector layer, each polygon might represent an inundated area, while areas with no polygon coverage would be assumed to be dry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="128"/>
+        <location filename="wizard_dialog.py" line="134"/>
         <source>type for your building</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1103"/>
+        <location filename="wizard_dialog.py" line="1169"/>
         <source>Use default</source>
         <translation type="unfinished">Use default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1105"/>
+        <location filename="wizard_dialog.py" line="265"/>
         <source>Don&apos;t use</source>
         <translation type="unfinished">Don&apos;t use</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1169"/>
+        <location filename="wizard_dialog.py" line="1236"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1170"/>
+        <location filename="wizard_dialog.py" line="1237"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1173"/>
+        <location filename="wizard_dialog.py" line="1240"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1175"/>
+        <location filename="wizard_dialog.py" line="1242"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1176"/>
+        <location filename="wizard_dialog.py" line="1243"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="122"/>
+        <source>volcano hazard categorical level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="263"/>
+        <source>Global default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="711"/>
+        <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WizardDialogBase</name>
     <message>
-        <location filename="wizard_dialog_base.py" line="506"/>
+        <location filename="wizard_dialog_base.py" line="556"/>
         <source>InaSAFE Keywords Creation Wizard...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="507"/>
+        <location filename="wizard_dialog_base.py" line="557"/>
         <source>InaSAFE Wizard...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="518"/>
+        <location filename="wizard_dialog_base.py" line="568"/>
         <source>[placeholder]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="519"/>
+        <location filename="wizard_dialog_base.py" line="569"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="520"/>
+        <location filename="wizard_dialog_base.py" line="570"/>
         <source>Classes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="521"/>
+        <location filename="wizard_dialog_base.py" line="571"/>
         <source>Classified unique values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="522"/>
+        <location filename="wizard_dialog_base.py" line="572"/>
         <source>Unclassified unique values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="532"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Where does the data come from? You may want to write more or less short comment about its source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.py" line="533"/>
+        <location filename="wizard_dialog_base.py" line="583"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="534"/>
+        <location filename="wizard_dialog_base.py" line="584"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="535"/>
+        <location filename="wizard_dialog_base.py" line="585"/>
         <source>Source</source>
         <translation type="unfinished">Source</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="536"/>
+        <location filename="wizard_dialog_base.py" line="586"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="537"/>
+        <location filename="wizard_dialog_base.py" line="587"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be &apos;A flood in Jakarta&apos; (for a hazard layer) or &apos;People living in jakarta&apos; (for an exposure layer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="538"/>
+        <location filename="wizard_dialog_base.py" line="588"/>
         <source>Title</source>
         <translation type="unfinished">Title</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="539"/>
+        <location filename="wizard_dialog_base.py" line="589"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="540"/>
+        <location filename="wizard_dialog_base.py" line="590"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="541"/>
+        <location filename="wizard_dialog_base.py" line="591"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="523"/>
+        <location filename="wizard_dialog_base.py" line="573"/>
         <source>Please input these ratio attribute below for aggregation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="524"/>
+        <location filename="wizard_dialog_base.py" line="574"/>
         <source>Youth ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="525"/>
+        <location filename="wizard_dialog_base.py" line="575"/>
         <source>Adult ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="526"/>
+        <location filename="wizard_dialog_base.py" line="581"/>
         <source>Youth ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="527"/>
+        <location filename="wizard_dialog_base.py" line="576"/>
         <source>Female ratio default</source>
         <translation type="unfinished">Female ratio default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="528"/>
+        <location filename="wizard_dialog_base.py" line="577"/>
         <source>Adult ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="529"/>
+        <location filename="wizard_dialog_base.py" line="578"/>
         <source>Elderly ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="530"/>
+        <location filename="wizard_dialog_base.py" line="579"/>
         <source>Female ratio attribute</source>
         <translation type="unfinished">Female ratio attribute</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.py" line="531"/>
+        <location filename="wizard_dialog_base.py" line="580"/>
         <source>Elderly ratio default</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>dialog</name>
     <message>
-        <location filename="test_keywords_dialog.py" line="260"/>
-        <source>Use default</source>
-        <translation>Use default</translation>
-    </message>
-    <message>
-        <location filename="test_keywords_dialog.py" line="289"/>
-        <source>Don&apos;t use</source>
-        <translation>Don&apos;t use</translation>
+        <location filename="wizard_dialog_base.py" line="582"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Where does the data come from? You may want to write more or less short comment about its source.&lt;/p&gt;&lt;p&gt;This step is optional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

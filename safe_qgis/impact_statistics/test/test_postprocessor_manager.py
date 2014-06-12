@@ -84,7 +84,6 @@ class PostprocessorManagerTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart')
         assert result, message
@@ -132,7 +131,6 @@ class PostprocessorManagerTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function')
 
         # Enable on-the-fly reprojection

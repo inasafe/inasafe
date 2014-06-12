@@ -44,10 +44,10 @@ if myDir not in sys.path:
 # for whatever locale is effectively being used.
 
 override_flag = QSettings().value(
-    'locale/overrideFlag', False, type=bool)
+    'locale/overrideFlag', True, type=bool)
 
 if override_flag:
-    locale_name = QSettings().value('locale/userLocale', '', type=str)
+    locale_name = QSettings().value('locale/userLocale', 'en_US', type=str)
 else:
     locale_name = QLocale.system().name()
     # NOTES: we split the locale name because we need the first two

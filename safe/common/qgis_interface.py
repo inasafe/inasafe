@@ -60,6 +60,8 @@ class QgisInterface(QObject):
 
         # For processing module
         self.destCrs = None
+        # For keeping track of which layer is active in the legend.
+        self.active_layer = None
 
         # In the next section of code, we are going to do some monkey patching
         # to make the QGIS processing framework think that this mock QGIS IFACE
@@ -67,7 +69,7 @@ class QgisInterface(QObject):
         # algorithms are nicely loaded and available for use.
 
         # Since QGIS > 2.0, the module is moved from QGisLayers to dataobjects
-        # pylint: disable=F0401
+        # pylint: disable=F0401, E0611
         if QGis.QGIS_VERSION_INT > 20001:
             from processing.tools import dataobjects
         else:
@@ -75,7 +77,7 @@ class QgisInterface(QObject):
 
         import processing
         from processing.core.Processing import Processing
-        # pylint: enable=F0401
+        # pylint: enable=F0401, E0611
         processing.classFactory(self)
 
         # We create our own getAlgorithm function below which will will monkey
@@ -163,9 +165,15 @@ class QgisInterface(QObject):
         pass
 
     @pyqtSlot()
-    def removeAllLayers(self):
-        """Remove layers from the canvas before they get deleted."""
+    def removeAllLayers(self, ):
+        """Remove layers from the canvas before they get deleted.
+
+        .. note:: This is NOT part of the QGisInterface API but is needed
+            to support QgsMapLayerRegistry.removeAllLayers().
+
+        """
         self.canvas.setLayerSet([])
+        self.active_layer = None
 
     def newProject(self):
         """Create new project."""
@@ -215,12 +223,19 @@ class QgisInterface(QObject):
         """
         pass
 
+    def setActiveLayer(self, layer):
+        """Set the currently active layer in the legend.
+        :param layer: Layer to make active.
+        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        """
+        self.active_layer = layer
+
     def activeLayer(self):
         """Get pointer to the active layer (layer selected in the legend)."""
-        # noinspection PyArgumentList
-        layers = QgsMapLayerRegistry.instance().mapLayers()
-        for item in layers:
-            return layers[item]
+        if self.active_layer is not None:
+            return self.active_layer
+        else:
+            return None
 
     def addToolBarIcon(self, action):
         """Add an icon to the plugins toolbar.

@@ -22,8 +22,8 @@ import shutil
 from datetime import datetime
 import ntpath
 
-from safe_qgis.utilities.custom_logging import (
-    setup_logger as setup_logger_safe_qgis)
+
+from safe.api import setup_logger as setup_logger_safe
 
 
 def base_data_dir():
@@ -108,6 +108,12 @@ def purge_working_data():
     shutil.rmtree(shakemap_zip_dir())
 
 
+def realtime_logger_name():
+    """Get logger name for Realtime."""
+    logger_name = 'InaSAFE Realtime'
+    return logger_name
+
+
 def setup_logger():
     """Run once when the module is loaded and enable logging.
 
@@ -117,7 +123,7 @@ def setup_logger():
     sentry_url = (
         'http://fda607badbe440be9a2fa6b22e759c72'
         ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
-    setup_logger_safe_qgis(sentry_url=sentry_url)
+    setup_logger_safe(realtime_logger_name(), sentry_url=sentry_url)
 
 
 def is_event_id(event_id):
@@ -147,24 +153,3 @@ def get_path_tail(input_path):
     """
     head, tail = ntpath.split(input_path)
     return tail or ntpath.basename(head)
-
-
-def romanise(mmi_value):
-    """Return the roman numeral for an mmi value.
-
-    :param mmi_value: The MMI value that will be romanised
-    :type mmi_value: float
-
-    :return Roman numeral equivalent of the value
-    :rtype: str
-    """
-    if mmi_value is None:
-        return ''
-
-    roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
-                  'IX', 'X', 'XI', 'XII']
-    try:
-        roman = roman_list[int(float(mmi_value))]
-    except ValueError:
-        return None
-    return roman

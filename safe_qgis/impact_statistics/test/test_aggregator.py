@@ -118,7 +118,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
@@ -144,7 +143,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
         assert result, message
@@ -173,7 +171,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         assert result, message
@@ -199,7 +196,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         assert result, message
@@ -244,7 +240,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='jakarta_crosskabupaten_polygons',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function Vector Hazard',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)

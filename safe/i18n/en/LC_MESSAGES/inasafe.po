@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-12 18:17+0700\n"
+"POT-Creation-Date: 2014-06-05 11:42+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgstr "Total"
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:262
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:315
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:267
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:267
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:263
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:264
 msgid "All"
 msgstr "All"
@@ -1266,8 +1266,8 @@ msgstr "Total number of buildings %i in the viewable area"
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr "Only buildings available in Open Street Mapare considered."
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:315
-#: safe/impact_functions/volcanic/volcano_building_impact.py:326
+#: safe/impact_functions/volcanic/volcano_building_impact.py:317
+#: safe/impact_functions/volcanic/volcano_building_impact.py:328
 msgid "Buildings affected by volcanic hazard zone"
 msgstr "Buildings affected by volcanic hazard zone"
 
@@ -1444,7 +1444,7 @@ msgid "Buildings affected"
 msgstr "Buildings affected"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:277
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:278
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:273
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:275
 msgid "Roads inundated"
 msgstr "Roads inundated"
@@ -2164,7 +2164,7 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:451
 #: safe/impact_functions/inundation/flood_population_evacuation.py:332
-#: safe/impact_functions/volcanic/volcano_building_impact.py:316
+#: safe/impact_functions/volcanic/volcano_building_impact.py:318
 #, python-format
 msgid "Thousand separator is represented by %s"
 msgstr "Thousand separator is represented by %s"
@@ -2248,7 +2248,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:275
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:386
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:279
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:280
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:275
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:277
 msgid "Not Inundated"
 msgstr "Not Inundated"
@@ -2256,7 +2256,7 @@ msgstr "Not Inundated"
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:277
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:388
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:281
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:282
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:277
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:279
 msgid "Inundated"
 msgstr "Inundated"
@@ -2390,11 +2390,11 @@ msgstr ""
 msgid "Number of buildings affected"
 msgstr "Number of buildings affected"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:318
+#: safe/impact_functions/volcanic/volcano_building_impact.py:320
 msgid "(building)"
 msgstr "(building)"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:319
+#: safe/impact_functions/volcanic/volcano_building_impact.py:321
 msgid "Building count"
 msgstr "Building count"
 
@@ -2527,6 +2527,7 @@ msgstr "Youth count (affected)"
 msgid "Adult count (affected)"
 msgstr "Adult count (affected)"
 
+#: safe/postprocessors/age_postprocessor.py:201
 msgid "Elderly count (affected)"
 msgstr "Elderly count (affected)"
 
@@ -2539,14 +2540,14 @@ msgid "Area"
 msgstr "Area"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:263
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:262
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:259
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:259
 #: safe/metadata.py:213
 msgid "Road Type"
 msgstr "Road Type"
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:290
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:291
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:286
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:287
 msgid "Flooded roads"
 msgstr "Flooded roads"
@@ -2714,7 +2715,6 @@ msgid "Volcanoes considered"
 msgstr "Volcanoes considered"
 
 #: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:67
-#: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:91
 msgid "Be-flooded"
 msgstr ""
 
@@ -2760,7 +2760,7 @@ msgid ""
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:247
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:246
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:243
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:243
 msgid "Other"
 msgstr ""
@@ -2770,13 +2770,13 @@ msgid "Temporarily closed (m)"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:265
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:264
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:261
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:261
 msgid "Total (m)"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_polygon_roads_experimental.py:268
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:271
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:266
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:268
 msgid "Breakdown by road type"
 msgstr ""
@@ -2788,7 +2788,6 @@ msgstr ""
 msgid "Be flooded in given thresholds"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:151
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:143
 msgid ""
 "The minimal threshold is\n"
@@ -2796,7 +2795,6 @@ msgid ""
 "                Please check the values."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:209
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:201
 #, python-format
 msgid ""
@@ -2807,7 +2805,7 @@ msgid ""
 "                extent."
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:263
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:260
 #: safe/impact_functions/inundation/flood_raster_roads_experimental.py:260
 msgid "Flooded in the threshold (m)"
 msgstr ""
@@ -3087,7 +3085,6 @@ msgid ""
 "unit does not describe how <b>wet</b> or <b>dry</b> an area is."
 msgstr ""
 
-#: safe/postprocessors/age_postprocessor.py:201
 msgid "Elder count (affected)"
 msgstr ""
 
@@ -3163,4 +3160,21 @@ msgstr ""
 msgid ""
 "<b>Building generic</b> unit means that there is no building type attribute "
 "in the exposure data."
+msgstr ""
+
+#: safe/impact_functions/inundation/flood_building_native_impact_experimental.py:91
+msgid "Be flooded (experimental)"
+msgstr ""
+
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:152
+msgid ""
+"The minimal threshold is greater then the maximal specified threshold. "
+"Please check the values."
+msgstr ""
+
+#: safe/impact_functions/inundation/flood_raster_roads_experimental-optimized.py:208
+#, python-format
+msgid ""
+"There are no objects in the hazard layer with \"value\">%s.Please check the "
+"value or use other extent."
 msgstr ""

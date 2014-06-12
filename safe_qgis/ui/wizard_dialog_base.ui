@@ -1553,9 +1553,22 @@
       <number>0</number>
      </property>
      <item>
+      <widget class="QPushButton" name="pbnHelp">
+       <property name="text">
+        <string>Help</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pbnCancel">
        <property name="text">
         <string>Cancel</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -1577,12 +1590,21 @@
        <property name="text">
         <string>Back</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pbnNext">
        <property name="text">
         <string>Next</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

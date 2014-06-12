@@ -105,10 +105,10 @@ class PluginTest(unittest.TestCase):
         myPlugin.change_i18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        from safe_qgis.safe_interface import getSafeImpactFunctions
-        #myFunctions = getSafeImpactFunctions()
+        from safe_qgis.safe_interface import get_safe_impact_function
+        #myFunctions = get_safe_impact_function()
         #print myFunctions
-        myFunctions = getSafeImpactFunctions('Tydelik gesluit')
+        myFunctions = get_safe_impact_function('Tydelik gesluit')
         assert len(myFunctions) > 0
 
 if __name__ == '__main__':

@@ -27,3 +27,5 @@ PASSWORD = ''
 # The base path in the server
 BASE_PATH = 'shakemaps'
 
+# The default source of the grid.xml that will also be used for keywords file
+GRID_SOURCE = 'BMKG (Badan Meteorologi, Klimatologi, dan Geofisika) Indonesia'

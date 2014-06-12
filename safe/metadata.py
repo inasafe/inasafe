@@ -334,33 +334,21 @@ converter_dict = {
 }
 
 
-def get_name(unit_id):
-    """Obtain unit name from a unit_id.
+def old_to_new_unit_id(old_unit_id):
+    """Convert old unit id to new unit id in keyword system.
 
-    If unit_id is using old keywords system, it needs to be converted to
-    respective unit_id in new keywords system.
+    :param old_unit_id: Unit id in old keyword system.
+    :type old_unit_id: str
 
-    :param unit_id: Id value of a unit.
-    :type unit_id: str
-
-    :returns: Unit name of the unit_id
+    :returns: Unit id in new keyword system.
     :rtype: str
     """
 
     # These converter is used for wizard only, converting old keywords to new
     # keywords as default value when run the wizard.
     old_to_new_keywords = {
-        'm': 'metres',
+        'm': 'metres_depth',
         'mmi': 'MMI'
     }
 
-    if unit_id in old_to_new_keywords.keys():
-        unit_name = old_to_new_keywords.get(
-            unit_id, unit_id)
-    else:
-        try:
-            unit = eval('unit_%s' % unit_id.lower())
-            unit_name = unit['name']
-        except (KeyError, NameError, AttributeError):
-            return None
-    return unit_name
+    return old_to_new_keywords.get(old_unit_id, old_unit_id)

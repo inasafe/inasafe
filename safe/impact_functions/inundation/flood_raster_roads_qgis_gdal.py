@@ -32,7 +32,10 @@ from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.common.qgis_raster_tools import (
     clip_raster, polygonize_gdal)
-from safe.common.qgis_vector_tools import split_by_polygon_in_out
+from safe.common.qgis_vector_tools import (
+    split_by_polygon_in_out,
+    extent_to_geo_array,
+    reproject_vector_layer)
 
 
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
@@ -148,9 +151,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         threshold_max = self.parameters['max threshold [m]']
 
         if threshold_min > threshold_max:
-            message = tr('''The minimal threshold is
-                greater then the maximal specified threshold.
-                Please check the values.''')
+            message = tr(
+                'The minimal threshold is greater then the maximal specified '
+                'threshold. Please check the values.')
             raise GetDataError(message)
 
         # Extract data
@@ -163,38 +166,66 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         H = H.get_layer()
         E = E.get_layer()
 
-        # Align raster extent and self.extent
+        #reproject self.extent to the hazard projection
+        hazard_crs = H.crs()
+        hazard_authid = hazard_crs.authid()
+
+        if hazard_authid == 'EPSG:4326':
+            viewport_extent = self.extent
+        else:
+            geo_crs = QgsCoordinateReferenceSystem()
+            geo_crs.createFromSrid(4326)
+            viewport_extent = extent_to_geo_array(
+                QgsRectangle(*self.extent), geo_crs, hazard_crs)
+
+        #Align raster extent and viewport
         #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
         clip_xmin = raster_extent.xMinimum()
         clip_xmax = raster_extent.xMaximum()
         clip_ymin = raster_extent.yMinimum()
         clip_ymax = raster_extent.yMaximum()
-        if (self.extent[0] > clip_xmin):
-            clip_xmin = self.extent[0]
-        if (self.extent[1] > clip_ymin):
-            clip_ymin = self.extent[1]
-        if (self.extent[2] < clip_xmax):
-            clip_xmax = self.extent[2]
-        if (self.extent[3] < clip_ymax):
-            clip_ymax = self.extent[3]
-        
-        raster_extent = H.dataProvider().extent()
-        x_full_delta = raster_extent.xMaximum() - raster_extent.xMinimum()
-        x_new_delta = clip_xmax - clip_xmin
-        clip_width = (x_new_delta * H.width())/x_full_delta
-        clip_width  = int(clip_width)
+        if (viewport_extent[0] > clip_xmin):
+            clip_xmin = viewport_extent[0]
+        if (viewport_extent[1] > clip_ymin):
+            clip_ymin = viewport_extent[1]
+        if (viewport_extent[2] < clip_xmax):
+            clip_xmax = viewport_extent[2]
+        if (viewport_extent[3] < clip_ymax):
+            clip_ymax = viewport_extent[3]
 
-        y_full_delta = raster_extent.yMaximum() - raster_extent.yMinimum()
-        y_new_delta = clip_ymax - clip_ymin
-        clip_height = (y_new_delta * H.height())/y_full_delta
-        clip_height  = int(clip_height)
-         
-        clip_extent = [clip_xmin, clip_ymin, clip_xmax, clip_ymax]
-        
+        height = (viewport_extent[3] - viewport_extent[1]) / H.rasterUnitsPerPixelY()
+        height = int(height)
+        width = (viewport_extent[2] - viewport_extent[0]) / H.rasterUnitsPerPixelX()
+        width = int(width)
+
+        raster_extent = H.dataProvider().extent()
+        xmin = raster_extent.xMinimum()
+        xmax = raster_extent.xMaximum()
+        ymin = raster_extent.yMinimum()
+        ymax = raster_extent.yMaximum()
+
+        x_delta = (xmax - xmin) / H.width()
+        x = xmin
+        for i in range(H.width()):
+            if abs(x - clip_xmin) < x_delta:
+                # We have found the aligned raster boundary
+                break
+            x += x_delta
+            _ = i
+
+        y_delta = (ymax - ymin) / H.height()
+        y = ymin
+        for i in range(H.width()):
+            if abs(y - clip_ymin) < y_delta:
+                # We have found the aligned raster boundary
+                break
+            y += y_delta
+        clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
+
         # Clip and polygonize
         small_raster = clip_raster(
-            H, clip_width, clip_height, QgsRectangle(*clip_extent))
+            H, width, height, QgsRectangle(*clip_extent))
         (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
             small_raster, threshold_min, threshold_max)
 
@@ -204,12 +235,21 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         request.setFilterRect(extent)
 
         if flooded_polygon_inside is None:
-            message = tr('''There are no objects
-                in the hazard layer with
-                "value">'%s'.
-                Please check the value or use other
-                extent.''' % (threshold_min, ))
+            message = tr(
+                'There are no objects in the hazard layer with "value">%s.'
+                'Please check the value or use other extent.' % (
+                    threshold_min, ))
             raise GetDataError(message)
+
+        #reproject the flood polygons to exposure projection
+        exposure_crs = E.crs()
+        exposure_authid = exposure_crs.authid()
+
+        if hazard_authid != exposure_authid:
+            flooded_polygon_inside = reproject_vector_layer(
+                flooded_polygon_inside, E.crs())
+            flooded_polygon_outside = reproject_vector_layer(
+                flooded_polygon_outside, E.crs())
 
         # Clip exposure by the extent
         #extent_as_polygon = QgsGeometry().fromRect(extent)
@@ -261,10 +301,8 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                 tr('Flooded in the threshold (m)'),
                 tr('Total (m)')],
                 header=True),
-            TableRow([
-                tr('All'),
-                int(flooded_len),
-                int(road_len)])]
+            TableRow([tr('All'), int(flooded_len), int(road_len)])
+        ]
         table_body.append(TableRow(
             tr('Breakdown by road type'), header=True))
         for t, v in roads_by_type.iteritems():

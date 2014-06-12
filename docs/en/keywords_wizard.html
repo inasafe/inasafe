@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Keywords Wizard &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap-responsive.min.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("_static/img/logo.png");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 30px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = 'keywords_wizard.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+        // Make the search button pretty - issue 36
+        $(':submit').addClass('btn btn-warning btn-small');
+    })
+
+    
+    function gotoLang(lang) {
+        var currentPage = 'keywords_wizard.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
+
+<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+
+  </head>
+  <body>
+
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <font color="#333">
+                        <li><h1>Ina<b>SAFE</b></h1></li>
+                        </font>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                
+                
+                <li class="right"
+                style="margin-right: 10px" >
+                <a href="genindex.html"
+                   title="General Index"
+                   style="z-index:;"
+                accesskey="I">index</a>
+                </li>
+                
+
+                
+                <li class="first">
+                    <a style="z-index:100;" href="index.html"> InaSAFE Docs </a>
+                </li>
+                
+                
+                <li><a href="#">Keywords Wizard</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="span12">
+                
+  <div class="section" id="keywords-wizard">
+<span id="id1"></span><h1>Keywords Wizard<a class="headerlink" href="#keywords-wizard" title="Permalink to this headline">¶</a></h1>
+<p>This wizard will lead you through the process of defining keywords for an
+exposure, hazard or aggregation layer. Unlike the
+<a class="reference internal" href="keywords_editor.html#keywords-editor"><em>keywords editor</em></a>, the keywords wizard &#8216;understands&#8217;
+the constraints and rules that determine which keywords can be applied to any
+given layer. For example, if you have a raster layer, the keywords wizard will
+use impact function metadata to prevent you declaring that the layer contains
+road exposure data since by definition, such data must be vector line data.</p>
+<p>Each impact function includes metadata that defines what rules should apply to
+data that will be used with that impact function. At startup, the wizard scans
+these metadata and uses it to define its rules.</p>
+<p>For more general discussion on the keywords system used by InaSAFE, please
+see the <a class="reference internal" href="keywords.html#keywords-system"><em>keywords system</em></a> documentation.</p>
+<div class="section" id="invoking-the-wizard">
+<h2>Invoking the wizard<a class="headerlink" href="#invoking-the-wizard" title="Permalink to this headline">¶</a></h2>
+<p>You can run the wizard by clicking on the icon in the InaSAFE toolbar that
+looks like this:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/keyword-wizard-icon.png"><img alt="InaSAFE Keywords Wizard Icon" src="_images/keyword-wizard-icon.png" style="width: 128.0px; height: 131.0px;" /></a>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You should have at least one layer loaded and active in QGIS before
+attempting to launch the keywords wizard.</p>
+</div>
+<p>Once loaded the wizard will appear:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/keyword-wizard-exposure.png"><img alt="InaSAFE Keywords Wizard Icon" src="_images/keyword-wizard-exposure.png" style="width: 599.25px; height: 376.5px;" /></a>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the layer already has keywords assigned to it, the wizard will
+default to existing keywords on each step (where applicable).</p>
+</div>
+</div>
+<div class="section" id="cancelling-the-wizard">
+<h2>Cancelling the wizard<a class="headerlink" href="#cancelling-the-wizard" title="Permalink to this headline">¶</a></h2>
+<p>The wizard can be cancelled at any time by pressing the <em class="guilabel">Cancel</em>
+button at the bottom of the wizard. No changes will be written to the
+keywords file if the wizard is cancelled.</p>
+</div>
+<div class="section" id="using-the-wizard">
+<h2>Using the wizard<a class="headerlink" href="#using-the-wizard" title="Permalink to this headline">¶</a></h2>
+<p>To use the wizard, simple follow the prompts presented on each page of the
+wizard. There are three standard forms of user input expected in the wizard:</p>
+<p>1.) List selection. In this case options are provided in a list. Clicking on
+an item will usually display additional helpful text in the information area
+of the dialog.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/wizard_gui_list.png"><img alt="InaSAFE Keywords Wizard List Selection" src="_images/wizard_gui_list.png" style="width: 176.25px; height: 219.0px;" /></a>
+</div>
+<p>2) Field selection. Whilst it appears to look like the list selection above,
+in this case the list is automatically generated from the available attributes
+of the layer.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/wizard_field_list.png"><img alt="InaSAFE Keywords Wizard Attribute List Selection" src="_images/wizard_field_list.png" style="width: 373.5px; height: 215.25px;" /></a>
+</div>
+<p>3) Free form text. In some cases you may be prompted to enter free form text
+in order to define some additional metadata.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/wizard_lineedit.png"><img alt="InaSAFE Keywords Wizard Free Form Text" src="_images/wizard_lineedit.png" style="width: 520.5px; height: 136.5px;" /></a>
+</div>
+<p>4) Drag and drop list. In this context the user should make concept mappings
+by dragging items from the left list (represented by unique field values from
+the attributes table) onto concepts in the right hand tree. For example below
+we see the user mapping all polygons that have their &#8216;floodprone&#8217; field value
+as &#8216;YES&#8217; or &#8216;yes&#8217; onto the &#8216;wet&#8217; concept in the tree view on the right.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/wizard_dual_list.png"><img alt="InaSAFE Keywords Wizard Free Form Text" src="_images/wizard_dual_list.png" style="width: 543.75px; height: 204.0px;" /></a>
+</div>
+</div>
+<div class="section" id="completing-the-wizard">
+<h2>Completing the wizard<a class="headerlink" href="#completing-the-wizard" title="Permalink to this headline">¶</a></h2>
+<p>On completion of the keywords wizard, a .keywords file will be written to disk
+and the keywords for the layer will be displayed in the dock area when that
+layer is active in QGIS.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/wizard_result.png"><img alt="InaSAFE Keywords Listing" src="_images/wizard_result.png" style="width: 297.0px; height: 227.25px;" /></a>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>A note on keyword compatibility:</strong> The keywords wizard will
+generate keywords that are note compatible with versions of InaSAFE older
+than 2.1.</p>
+</div>
+</div>
+</div>
+
+
+        </div> 
+        <hr>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact
+            <a href="mailto:info@inasafe.org?subject=[inasafe-info]">
+            <b>info@inasafe.org</b></a> for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.<br>
+            This document is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
+            <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>
