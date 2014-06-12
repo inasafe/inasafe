@@ -138,9 +138,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         H = get_hazard_layer(layers)    # Flood
         E = get_exposure_layer(layers)  # Roads
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
-                                self)
+        question = get_question(
+            H.get_name(), E.get_name(), self)
 
         H = H.get_layer()
         h_provider = H.dataProvider()
@@ -157,8 +156,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         fields = e_provider.fields()
         # If target_field does not exist, add it:
         if fields.indexFromName(target_field) == -1:
-            e_provider.addAttributes([QgsField(target_field,
-                                               QVariant.Int)])
+            e_provider.addAttributes(
+                [QgsField(target_field, QVariant.Int)])
         target_field_index = e_provider.fieldNameIndex(target_field)
         fields = e_provider.fields()
 
@@ -181,8 +180,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         #   1) Filter from H inundated features
         #   2) Mark buildings as inundated (1) or not inundated (0)
 
-        affected_field_type = \
-            h_provider.fields()[affected_field_index].typeName()
+        affected_field_type = h_provider.fields()[
+            affected_field_index].typeName()
         if affected_field_type in ['Real', 'Integer']:
             affected_value = float(affected_value)
 
@@ -206,11 +205,10 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                     pass
 
         if hazard_poly is None:
-            message = tr('''There are no objects
-                in the hazard layer with
-                "Affected value"='%s'.
-                Please check the value or use other
-                extent.''' % (affected_value, ))
+            message = tr(
+                '''There are no objects in the hazard layer with "Affected
+                value"='%s'. Please check the value or use other extent.''' %
+                (affected_value, ))
             raise GetDataError(message)
 
         e_data = E.getFeatures(request)
@@ -234,8 +232,8 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         buildings_by_type = dict()      # Length of flooded roads by types
 
         buildings_data = building_layer.getFeatures()
-        building_type_field_index = \
-            building_layer.fieldNameIndex(building_type_field)
+        building_type_field_index = building_layer.fieldNameIndex(
+            building_type_field)
         for building in buildings_data:
             building_count += 1
             attributes = building.attributes()
@@ -252,30 +250,29 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
 
         table_body = [
             question,
-            TableRow([tr('Building Type'),
-                      tr('Flooded'),
-                      tr('Total')],
-                     header=True),
-            TableRow([tr('All'),
-                      int(flooded_count),
-                      int(building_count)]),
-            TableRow(tr('Breakdown by building type'),
-                     header=True)]
+            TableRow(
+                [tr('Building Type'), tr('Flooded'), tr('Total')],
+                header=True),
+            TableRow(
+                [tr('All'), int(flooded_count), int(building_count)]),
+            TableRow(
+                tr('Breakdown by building type'), header=True)]
         for t, v in buildings_by_type.iteritems():
             table_body.append(
-                TableRow([t, int(v['flooded']), int(v['total'])])
-            )
+                TableRow([t, int(v['flooded']), int(v['total'])]))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Buildings inundated')
 
-        style_classes = [dict(label=tr('Not Inundated'), value=0,
-                              colour='#1EFC7C', transparency=0, size=0.5),
-                         dict(label=tr('Inundated'), value=1,
-                              colour='#F31A1C', transparency=0, size=0.5)]
-        style_info = dict(target_field=target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        style_classes = [
+            dict(label=tr('Not Inundated'), value=0, colour='#1EFC7C',
+                 transparency=0, size=0.5),
+            dict(label=tr('Inundated'), value=1, colour='#F31A1C',
+                 transparency=0, size=0.5)]
+        style_info = dict(
+            target_field=target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it.
         building_layer = Vector(
