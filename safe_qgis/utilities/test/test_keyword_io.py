@@ -11,8 +11,6 @@ import tempfile
 import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-from safe.common.utilities import unique_filename
-
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
@@ -20,6 +18,10 @@ sys.path.append(pardir)
 # For testing and demoing
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.common.utilities import unique_filename
 from safe_qgis.safe_interface import read_file_keywords
 from safe_qgis.utilities.utilities_for_testing import load_layer
@@ -29,8 +31,6 @@ from safe_qgis.tools.test.test_keywords_dialog import clone_padang_layer
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Don't change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'

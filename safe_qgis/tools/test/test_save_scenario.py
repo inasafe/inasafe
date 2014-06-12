@@ -23,6 +23,10 @@ import unittest
 from qgis.core import QgsMapLayerRegistry
 
 from safe.common.testing import TESTDATA, get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.tools.save_scenario import SaveScenarioDialog
 from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
@@ -35,7 +39,7 @@ from safe_qgis.safe_interface import (
     temp_dir)
 from safe_qgis.widgets.dock import Dock
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 DOCK = Dock(IFACE)
 
 
@@ -43,7 +47,7 @@ class SaveScenarioTest(unittest.TestCase):
     """Test save scenario tool."""
 
     def setUp(self):
-        """Fixture run before all tests"""
+        """Fixture run before all tests."""
         os.environ['LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)

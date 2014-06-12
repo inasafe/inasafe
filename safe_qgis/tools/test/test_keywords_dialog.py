@@ -39,7 +39,12 @@ from qgis.core import (
     QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
+
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.utilities.utilities_for_testing import (
     test_data_path, clone_shp_layer, remove_temp_file)
 from safe_qgis.safe_interface import (
@@ -52,10 +57,6 @@ from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.utilities.utilities import qgis_version
 from safe_qgis.utilities.defaults import breakdown_defaults
-
-
-# Get QGis app handle
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def make_padang_layer():

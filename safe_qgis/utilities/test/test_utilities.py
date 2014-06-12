@@ -11,11 +11,14 @@ from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-from safe.common.testing import get_qgis_app
-
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
+
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.utilities.defaults import breakdown_defaults
 from safe_qgis.utilities.utilities import (
@@ -36,8 +39,6 @@ from safe_qgis.tools.test.test_keywords_dialog import (
     make_padang_layer,
     make_point_layer)
 from safe_qgis.safe_interface import bbox_intersection
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class UtilitiesTest(unittest.TestCase):

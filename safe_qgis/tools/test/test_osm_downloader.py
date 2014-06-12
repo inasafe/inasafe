@@ -35,9 +35,12 @@ from PyQt4.QtGui import QDialog
 from PyQt4.QtNetwork import QNetworkReply
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.tools.osm_downloader import OsmDownloader
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 TEST_DATA_DIR = os.path.abspath(

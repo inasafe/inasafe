@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'misugijunz@gmail.com'
 __date__ = '15/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -24,6 +22,11 @@ import logging
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit
 
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
@@ -35,7 +38,6 @@ from third_party.odict import OrderedDict
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

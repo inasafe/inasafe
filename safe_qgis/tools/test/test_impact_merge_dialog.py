@@ -36,11 +36,14 @@ from qgis.core import (
     QgsMapRenderer,
     QgsComposition)
 
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 #noinspection PyPackageRequirements
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
-from safe_qgis.utilities.utilities_for_testing import (
-    get_qgis_app,
-    load_layer)
+from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
@@ -49,7 +52,6 @@ from safe_qgis.safe_interface import (
     UNITDATA,
     temp_dir)
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 population_entire_jakarta_impact_path = os.path.join(
