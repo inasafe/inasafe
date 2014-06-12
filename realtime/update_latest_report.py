@@ -30,7 +30,7 @@ from realtime.utilities import realtime_logger_name
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-def get_list_dir(directory_path, filter_function=None):
+def get_directory_listing(directory_path, filter_function=None):
     """Return list of file or directory in directory_path.
 
     If filter_function is not None, it will be used as filter.
@@ -39,7 +39,7 @@ def get_list_dir(directory_path, filter_function=None):
     :type directory_path: str
 
     :param filter_function: Function for filtering.
-    :type filter_function:
+    :type filter_function: function
 
     :returns: List of files and directory in the directory path.
     :rtype: list
@@ -71,7 +71,7 @@ def get_event_id(report_filename):
     return report_filename[-18:-4]
 
 
-def filter_zip_eq_event(zip_eq_event):
+def earthquake_event_zip_filter(zip_eq_event):
     """Return true if zip_eq_event in the following format:
 
     YYYYBBDDhhmmss.out.zip
@@ -93,23 +93,23 @@ def filter_zip_eq_event(zip_eq_event):
         return False
 
 
-def filter_eq_map(eq_map_path):
-    """Return true if eq_map_path in correct format.
+def earthquake_map_filter(earthquake_map_path):
+    """Return true if earthquake_map_path in correct format.
 
     Correct format : earthquake_impact_map_YYYYBBDDhhmmss.pdf
     For example : earthquake_impact_map_20120216181705.pdf
 
-    :param eq_map_path: A string represent name of the earthquake map.
-    :type eq_map_path: str
+    :param earthquake_map_path: A string represent name of the earthquake map.
+    :type earthquake_map_path: str
 
     :returns: True if in correct format, otherwise false.
     :rtype: bool
     """
     expected_length = len('earthquake_impact_map_20120216181705.pdf')
-    if len(eq_map_path) != expected_length:
+    if len(earthquake_map_path) != expected_length:
         return False
 
-    event_id = get_event_id(eq_map_path)
+    event_id = get_event_id(earthquake_map_path)
     if is_event_id(event_id):
         return True
     else:
@@ -204,11 +204,11 @@ def main():
     # event id
     guide_path = earth_quake_guide_path
 
-    guide_files = get_list_dir(guide_path, filter_zip_eq_event)
+    guide_files = get_directory_listing(guide_path, earthquake_event_zip_filter)
     guide_events = [x[:14] for x in guide_files]
     last_guide = get_last_event_id(guide_events)
 
-    public_files = get_list_dir(public_path, filter_eq_map)
+    public_files = get_directory_listing(public_path, earthquake_map_filter)
     print ' public_files', public_files
     public_events = [get_event_id(x) for x in public_files]
     print 'public_events', public_events
