@@ -35,6 +35,9 @@ from unittest import TestCase, skipIf
 from PyQt4 import QtCore
 
 from safe.common.testing import TESTDATA, BOUNDDATA, get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -89,8 +92,6 @@ from safe.engine.impact_functions_for_testing import \
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'

@@ -27,10 +27,11 @@ from nose import SkipTest
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe.common.testing import get_qgis_app
-from safe_qgis.tools.function_browser import FunctionBrowser
-
-
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+from safe_qgis.tools.function_browser import FunctionBrowser
 
 
 def verifyColumn(table, col, strFilter, mode):

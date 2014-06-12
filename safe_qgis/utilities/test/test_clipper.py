@@ -39,6 +39,10 @@ from qgis.core import (
     QgsPoint)
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.safe_interface import (
     read_safe_layer,
     get_optimal_extent,
@@ -68,10 +72,6 @@ VECTOR_PATH3 = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
 
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
-
-
-# Handle to common QGis test app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 # noinspection PyStringFormat,PyTypeChecker,PyCallByClass,PyArgumentList

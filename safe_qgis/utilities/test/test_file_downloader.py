@@ -23,11 +23,13 @@ import tempfile
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.utilities.file_downloader import FileDownloader
 from safe_qgis.utilities.utilities_for_testing import assert_hash_for_file
 from safe_qgis.exceptions import DownloadError
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class FileDownloaderTest(unittest.TestCase):

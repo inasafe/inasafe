@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
@@ -32,7 +30,10 @@ sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
 
-#from qgis.core import QgsMapLayerRegistry
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.utilities.utilities_for_testing import (
     set_canvas_crs,
@@ -46,7 +47,6 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     canvas_list)
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')
