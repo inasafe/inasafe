@@ -1838,8 +1838,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
                 exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
-
-                if hazard_geo_cell_size < exposure_geo_cell_size:
+                # See issue #1008 - the flag below is used to indicate
+                # if the user wishes to prevent resampling of exposure data
+                keywords = self.keyword_io.read_keywords(exposure_layer)
+                allow_resampling_flag = True
+                if 'allow_resampling' in keywords:
+                    allow_resampling_flag = keywords[
+                        'allow_resampling'].lower() == 'true'
+                if hazard_geo_cell_size < exposure_geo_cell_size and \
+                        allow_resampling_flag:
                     cell_size = hazard_geo_cell_size
                 else:
                     cell_size = exposure_geo_cell_size

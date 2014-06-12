@@ -169,9 +169,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
 
         #reproject self.extent to the hazard projection
         hazard_crs = H.crs()
-        hazard_srsid = hazard_crs.srsid()
+        hazard_authid = hazard_crs.authid()
 
-        if hazard_srsid == 4326:
+        if hazard_authid == 'EPSG:4326':
             viewport_extent = self.extent
         else:
             geo_crs = QgsCoordinateReferenceSystem()
@@ -179,7 +179,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             viewport_extent = extent_to_geo_array(
                 QgsRectangle(*self.extent), geo_crs, hazard_crs)
 
-        # Align raster extent and self.extent
+        #Align raster extent and viewport
         #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
         clip_xmin = raster_extent.xMinimum()
@@ -195,22 +195,38 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         if (viewport_extent[3] < clip_ymax):
             clip_ymax = viewport_extent[3]
 
+        height = (viewport_extent[3] - viewport_extent[1]) / H.rasterUnitsPerPixelY()
+        height = int(height)
+        width = (viewport_extent[2] - viewport_extent[0]) / H.rasterUnitsPerPixelX()
+        width = int(width)
+
         raster_extent = H.dataProvider().extent()
-        x_full_delta = raster_extent.xMaximum() - raster_extent.xMinimum()
-        x_new_delta = clip_xmax - clip_xmin
-        clip_width = (x_new_delta * H.width()) / x_full_delta
-        clip_width = int(clip_width)
+        xmin = raster_extent.xMinimum()
+        xmax = raster_extent.xMaximum()
+        ymin = raster_extent.yMinimum()
+        ymax = raster_extent.yMaximum()
 
-        y_full_delta = raster_extent.yMaximum() - raster_extent.yMinimum()
-        y_new_delta = clip_ymax - clip_ymin
-        clip_height = (y_new_delta * H.height()) / y_full_delta
-        clip_height = int(clip_height)
+        x_delta = (xmax - xmin) / H.width()
+        x = xmin
+        for i in range(H.width()):
+            if abs(x - clip_xmin) < x_delta:
+                # We have found the aligned raster boundary
+                break
+            x += x_delta
+            _ = i
 
-        clip_extent = [clip_xmin, clip_ymin, clip_xmax, clip_ymax]
+        y_delta = (ymax - ymin) / H.height()
+        y = ymin
+        for i in range(H.width()):
+            if abs(y - clip_ymin) < y_delta:
+                # We have found the aligned raster boundary
+                break
+            y += y_delta
+        clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
 
         # Clip and polygonize
         small_raster = clip_raster(
-            H, clip_width, clip_height, QgsRectangle(*clip_extent))
+            H, width, height, QgsRectangle(*clip_extent))
         (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
             small_raster, threshold_min, threshold_max)
 
@@ -228,9 +244,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
 
         #reproject the flood polygons to exposure projection
         exposure_crs = E.crs()
-        exposure_srsid = exposure_crs.srsid()
+        exposure_authid = exposure_crs.authid()
 
-        if hazard_srsid != exposure_srsid:
+        if hazard_authid != exposure_authid:
             flooded_polygon_inside = reproject_vector_layer(
                 flooded_polygon_inside, E.crs())
             flooded_polygon_outside = reproject_vector_layer(
