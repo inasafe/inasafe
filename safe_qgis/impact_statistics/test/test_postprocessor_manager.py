@@ -16,7 +16,6 @@ __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
 import unittest
 import sys
 import os
@@ -38,14 +37,11 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe_qgis.utilities.utilities_for_testing import (
     set_canvas_crs,
     set_jakarta_extent,
-    GEOCRS)
-
-from safe_qgis.widgets.dock import Dock
-
-from safe_qgis.utilities.utilities_for_testing import (
+    GEOCRS,
     load_standard_layers,
     setup_scenario,
     canvas_list)
+from safe_qgis.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
 

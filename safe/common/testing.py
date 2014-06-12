@@ -1,6 +1,9 @@
 # coding=utf-8
 """Common functionality used by regression tests
 """
+# Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
 
 import numpy
 import os
