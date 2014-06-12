@@ -195,9 +195,11 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         if (viewport_extent[3] < clip_ymax):
             clip_ymax = viewport_extent[3]
 
-        height = (viewport_extent[3] - viewport_extent[1]) / H.rasterUnitsPerPixelY()
+        height = ((viewport_extent[3] - viewport_extent[1]) /
+                  H.rasterUnitsPerPixelY())
         height = int(height)
-        width = (viewport_extent[2] - viewport_extent[0]) / H.rasterUnitsPerPixelX()
+        width = ((viewport_extent[2] - viewport_extent[0]) /
+                 H.rasterUnitsPerPixelX())
         width = int(width)
 
         raster_extent = H.dataProvider().extent()

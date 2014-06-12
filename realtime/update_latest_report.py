@@ -204,7 +204,8 @@ def main():
     # event id
     guide_path = earth_quake_guide_path
 
-    guide_files = get_directory_listing(guide_path, earthquake_event_zip_filter)
+    guide_files = get_directory_listing(
+        guide_path, earthquake_event_zip_filter)
     guide_events = [x[:14] for x in guide_files]
     last_guide = get_last_event_id(guide_events)
 

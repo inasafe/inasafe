@@ -265,7 +265,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         for road_type, value in roads_by_type.iteritems():
             table_body.append(
                 TableRow([
-                    road_type,int(value['flooded']), int(value['total'])])
+                    road_type, int(value['flooded']), int(value['total'])])
             )
 
         impact_summary = Table(table_body).toNewlineFreeString()

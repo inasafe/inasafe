@@ -206,7 +206,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         message = (
             'Input hazard must be a polygon layer. I got %s with layer type '
-            '%s' % (hazard_layer.get_name(),hazard_layer.get_geometry_name()))
+            '%s' % (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
         if not hazard_layer.is_polygon_data:
             raise Exception(message)
 
