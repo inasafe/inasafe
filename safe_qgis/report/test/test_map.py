@@ -107,7 +107,7 @@ class MapTest(unittest.TestCase):
             152980,  # Ubuntu 14.04_64 TS
             414589,  # Slackware64 14.0
             144542,  # Linux Mint 14_64
-            148265,  # Windows 7 32
+            148267,  # Windows 7 32
             150412,  # Windows 7 64
             143652,  # UB 12.04 Jenkins
         ]
