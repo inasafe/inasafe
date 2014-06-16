@@ -44,17 +44,17 @@ class FloodEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Impact function for flood evacuation.
 
-        :author AIFDR
-        :rating 4
-        :param requires category=='hazard' and \
-                        subcategory in ['flood', 'tsunami'] and \
-                        layertype=='raster' and \
-                        unit=='m'
+    :author AIFDR
+    :rating 4
+    :param requires category=='hazard' and \
+                    subcategory in ['flood', 'tsunami'] and \
+                    layertype=='raster' and \
+                    unit=='m'
 
-        :param requires category=='exposure' and \
-                        subcategory=='population' and \
-                        layertype=='raster'
-        """
+    :param requires category=='exposure' and \
+                    subcategory=='population' and \
+                    layertype=='raster'
+    """
 
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodEvacuationFunction.
@@ -165,9 +165,9 @@ class FloodEvacuationFunction(FunctionProvider):
         """Risk plugin for flood population evacuation.
 
         :param layers: List of layers expected to contain
-              my_hazard: Raster layer of flood depth
-              my_exposure: Raster layer of population data on the same grid
-              as my_hazard
+              hazard_layer: Raster layer of flood depth
+              exposure_layer: Raster layer of population data on the same grid
+              as hazard_layer
 
         Counts number of people exposed to flood levels exceeding
         specified threshold.
@@ -179,25 +179,25 @@ class FloodEvacuationFunction(FunctionProvider):
         """
 
         # Identify hazard and exposure layers
-        my_hazard = get_hazard_layer(layers)  # Flood inundation [m]
-        my_exposure = get_exposure_layer(layers)
+        hazard_layer = get_hazard_layer(layers)  # Flood inundation [m]
+        exposure_layer = get_exposure_layer(layers)
 
-        question = get_question(my_hazard.get_name(),
-                                my_exposure.get_name(),
-                                self)
+        question = get_question(
+            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
         thresholds = self.parameters['thresholds [m]']
 
-        verify(isinstance(thresholds, list),
-               'Expected thresholds to be a list. Got %s' % str(thresholds))
+        verify(
+            isinstance(thresholds, list),
+            'Expected thresholds to be a list. Got %s' % str(thresholds))
 
         # Extract data as numeric arrays
-        data = my_hazard.get_data(nan=0.0)  # Depth
+        data = hazard_layer.get_data(nan=0.0)  # Depth
 
         # Calculate impact as population exposed to depths > max threshold
-        population = my_exposure.get_data(nan=0.0, scaling=True)
+        population = exposure_layer.get_data(nan=0.0, scaling=True)
 
         # Calculate impact to intermediate thresholds
         counts = []
@@ -297,8 +297,9 @@ class FloodEvacuationFunction(FunctionProvider):
             raise ZeroImpactException(my_message)
 
         # Create style
-        colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
-                   '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+        colours = [
+            '#FFFFFF', '#38A800', '#79C900', '#CEED00',
+            '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         classes = create_classes(impact.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
@@ -323,22 +324,24 @@ class FloodEvacuationFunction(FunctionProvider):
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
 
-        style_info = dict(target_field=None,
-                          style_classes=style_classes,
-                          style_type='rasterStyle')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('People in need of evacuation')
-        legend_notes = tr('Thousand separator is represented by %s' %
-                          get_thousand_separator())
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')
 
         # Create raster object and return
         raster = Raster(
             impact,
-            projection=my_hazard.get_projection(),
-            geotransform=my_hazard.get_geotransform(),
+            projection=hazard_layer.get_projection(),
+            geotransform=hazard_layer.get_geotransform(),
             name=tr('Population which %s') % (
                 get_function_title(self).lower()),
             keywords={

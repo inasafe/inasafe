@@ -24,15 +24,16 @@ import unittest
 import qgis  # pylint: disable=W0611
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.tools.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
     SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.widgets.dock import Dock
 
-
-# Get QGis app handle
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 

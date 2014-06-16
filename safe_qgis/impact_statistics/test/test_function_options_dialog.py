@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'misugijunz@gmail.com'
 __date__ = '15/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -21,7 +19,13 @@ import sys
 import os
 import logging
 
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit
+
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(
@@ -33,29 +37,13 @@ from third_party.odict import OrderedDict
 
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-# pylint: disable=W0611
-# pylint: enable=W0611
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class FunctionOptionsDialogTest(unittest.TestCase):
     """Test the InaSAFE GUI for Configurable Impact Functions"""
-
-    def setUp(self):
-        """Fixture run before all tests"""
-        pass
-
-    def tearUp(self):
-        """Fixture run before each test"""
-        pass
-
-    def tearDown(self):
-        """Fixture run after each test"""
-        pass
-
-    def test_buildForm(self):
+    def test_build_form(self):
         """Test that we can build a form by passing it a function and params.
         """
         # noinspection PyUnresolvedReferences
@@ -63,13 +51,13 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         from safe.engine.impact_functions_for_testing import \
             itb_fatality_model_configurable
         # pylint: enable=W0612
-        myFunctionId = 'I T B Fatality Function Configurable'
-        myFunctionList = get_plugins(myFunctionId)
-        assert len(myFunctionList) == 1
-        assert myFunctionList[0].keys()[0] == myFunctionId
+        function_id = 'I T B Fatality Function Configurable'
+        function_list = get_plugins(function_id)
+        assert len(function_list) == 1
+        assert function_list[0].keys()[0] == function_id
 
-        myDialog = FunctionOptionsDialog(None)
-        myParameters = {
+        dialog = FunctionOptionsDialog(None)
+        parameter = {
             'thresholds': [1.0],
             'postprocessors': {
                 'Gender': {'on': True},
@@ -80,23 +68,23 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         'elderly_ratio': 0.078,
                         'adult_ratio': 0.659}}}}
 
-        myDialog.build_form(myParameters)
+        dialog.build_form(parameter)
 
-        assert myDialog.tabWidget.count() == 2
+        assert dialog.tabWidget.count() == 2
 
-        myChildren = myDialog.tabWidget.findChildren(QLineEdit)
-        assert len(myChildren) == 4
+        children = dialog.tabWidget.findChildren(QLineEdit)
+        assert len(children) == 4
 
-    def test_buildFormMinimumNeeds(self):
+    def test_build_form_minimum_needs(self):
         """Test that we can build a form by passing it a function and params.
         """
-        myFunctionId = 'Flood Evacuation Function Vector Hazard'
-        myFunctionList = get_plugins(myFunctionId)
-        assert len(myFunctionList) == 1
-        assert myFunctionList[0].keys()[0] == myFunctionId
+        function_id = 'Flood Evacuation Function Vector Hazard'
+        function_list = get_plugins(function_id)
+        assert len(function_list) == 1
+        assert function_list[0].keys()[0] == function_id
 
-        myDialog = FunctionOptionsDialog(None)
-        myParameters = {
+        dialog = FunctionOptionsDialog(None)
+        parameters = {
             'thresholds': [1.0],
             'postprocessors': {
                 'Gender': {'on': True},
@@ -107,29 +95,29 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         'elderly_ratio': 0.078,
                         'adult_ratio': 0.659}}}}
 
-        myDialog.build_form(myParameters)
+        dialog.build_form(parameters)
 
-        assert myDialog.tabWidget.count() == 2
+        assert dialog.tabWidget.count() == 2
 
-        myChildren = myDialog.tabWidget.findChildren(QLineEdit)
-        assert len(myChildren) == 4
+        children = dialog.tabWidget.findChildren(QLineEdit)
+        assert len(children) == 4
 
-    def test_buildWidget(self):
-        myDialog = FunctionOptionsDialog(None)
-        value = myDialog.build_widget(myDialog.configLayout, 'foo', [2.3])
-        myWidget = myDialog.findChild(QLineEdit)
+    def test_build_widget(self):
+        dialog = FunctionOptionsDialog(None)
+        value = dialog.build_widget(dialog.configLayout, 'foo', [2.3])
+        widget = dialog.findChild(QLineEdit)
 
         # initial value must be same with default
         assert value() == [2.3]
 
         # change to 5.9
-        myWidget.setText('5.9')
+        widget.setText('5.9')
         assert value() == [5.9]
 
-        myWidget.setText('5.9, 70')
+        widget.setText('5.9, 70')
         assert value() == [5.9, 70]
 
-        myWidget.setText('bar')
+        widget.setText('bar')
         try:
             value()
         except ValueError:

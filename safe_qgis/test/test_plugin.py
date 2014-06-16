@@ -7,8 +7,6 @@
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -25,12 +23,15 @@ sys.path.append(pardir)
 
 from PyQt4.QtGui import QWidget
 
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from qgis.gui import QgsMapCanvas
 from safe.common.qgis_interface import QgisInterface
 from safe_qgis.plugin import Plugin
 from safe_qgis.safe_interface import safeTr
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class PluginTest(unittest.TestCase):

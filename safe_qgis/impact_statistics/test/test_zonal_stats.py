@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'tim@linfiniti.com'
 __date__ = '17/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -22,6 +20,11 @@ import sys
 import os
 
 from qgis.core import QgsRectangle
+
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
@@ -34,8 +37,6 @@ from safe_qgis.impact_statistics.zonal_stats import (
 from safe_qgis.utilities.utilities_for_testing import (
     load_layer)
 from safe_qgis.safe_interface import UNITDATA
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ZonalStatsTest(unittest.TestCase):

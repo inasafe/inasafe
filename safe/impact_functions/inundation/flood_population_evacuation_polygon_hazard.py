@@ -62,6 +62,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Impact function for vector flood evacuation.
 
     :author AIFDR
@@ -177,10 +178,10 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         Input:
           layers: List of layers expected to contain
 
-              my_hazard : Vector polygon layer of flood depth
+              hazard_layer : Vector polygon layer of flood depth
 
-              my_exposure : Raster layer of population data on the same
-                grid as my_hazard
+              exposure_layer : Raster layer of population data on the same
+                grid as hazard_layer
 
         Counts number of people exposed to areas identified as flood prone
 
@@ -190,32 +191,32 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
           Table with number of people evacuated and supplies required
         """
         # Identify hazard and exposure layers
-        my_hazard = get_hazard_layer(layers)  # Flood inundation
-        my_exposure = get_exposure_layer(layers)
+        hazard_layer = get_hazard_layer(layers)  # Flood inundation
+        exposure_layer = get_exposure_layer(layers)
 
-        question = get_question(my_hazard.get_name(),
-                                my_exposure.get_name(),
-                                self)
+        question = get_question(
+            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Check that hazard is polygon type
-        if not my_hazard.is_vector:
-            msg = ('Input hazard %s  was not a vector layer as expected '
-                   % my_hazard.get_name())
-            raise Exception(msg)
+        if not hazard_layer.is_vector:
+            message = (
+                'Input hazard %s  was not a vector layer as expected ' %
+                hazard_layer.get_name())
+            raise Exception(message)
 
-        msg = ('Input hazard must be a polygon layer. I got %s with layer '
-               'type %s' % (my_hazard.get_name(),
-                            my_hazard.get_geometry_name()))
-        if not my_hazard.is_polygon_data:
-            raise Exception(msg)
+        message = (
+            'Input hazard must be a polygon layer. I got %s with layer type '
+            '%s' % (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
+        if not hazard_layer.is_polygon_data:
+            raise Exception(message)
 
         # Run interpolation function for polygon2raster
-        P = assign_hazard_values_to_exposure_data(my_hazard, my_exposure,
-                                                  attribute_name='population')
+        P = assign_hazard_values_to_exposure_data(
+            hazard_layer, exposure_layer, attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
-        new_attributes = my_hazard.get_data()
+        new_attributes = hazard_layer.get_data()
         category_title = 'affected'  # FIXME: Should come from keywords
         deprecated_category_title = 'FLOODPRONE'
         categories = {}
@@ -260,13 +261,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 #assume that every polygon is affected (see #816)
                 affected = True
                 # there is no flood related attribute
-                #msg = ('No flood related attribute found in %s. '
+                #message = ('No flood related attribute found in %s. '
                 #       'I was looking for either "Flooded", "FLOODPRONE" '
                 #       'or "Affected". The latter should have been '
                 #       'automatically set by call to '
                 #       'assign_hazard_values_to_exposure_data(). '
                 #       'Sorry I can\'t help more.')
-                #raise Exception(msg)
+                #raise Exception(message)
 
             if affected:
                 # Get population at this location
@@ -290,11 +291,12 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         affected_population = round_thousand(affected_population)
         # Estimate number of people in need of evacuation
-        evacuated = (affected_population *
-                     self.parameters['evacuation_percentage']
-                     / 100.0)
+        evacuated = (
+            affected_population
+            * self.parameters['evacuation_percentage']
+            / 100.0)
 
-        total = int(numpy.sum(my_exposure.get_data(nan=0, scaling=False)))
+        total = int(numpy.sum(exposure_layer.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
         total = round_thousand(total)
@@ -305,57 +307,55 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
-        table_body = [question,
-                      TableRow([tr('People affected'),
-                                '%s%s' % (format_int(int(affected_population)),
-                                          ('*' if affected_population >= 1000
-                                           else ''))],
-                               header=True),
-                      TableRow([tr('People needing evacuation'),
-                                '%s%s' % (format_int(int(evacuated)),
-                                          ('*' if evacuated >= 1000 else ''))],
-                               header=True),
-                      TableRow([
-                          TableCell(
-                              tr('* Number is rounded to the nearest 1000'),
-                              col_span=2)],
-                          header=False),
-                      TableRow([tr('Evacuation threshold'),
-                                '%s%%' % format_int(
-                                    self.parameters['evacuation_percentage'])],
-                               header=True),
-                      TableRow(tr('Map shows population affected in each flood'
-                                  ' prone area')),
-                      TableRow(tr('Table below shows the weekly minimum needs '
-                                  'for all evacuated people')),
-                      TableRow([tr('Needs per week'), tr('Total')],
-                               header=True),
-                      [tr('Rice [kg]'), format_int(tot_needs['rice'])],
-                      [tr('Drinking Water [l]'),
-                       format_int(tot_needs['drinking_water'])],
-                      [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-                      [tr('Family Kits'), format_int(tot_needs[
-                          'family_kits'])],
-                      [tr('Toilets'), format_int(tot_needs['toilets'])]]
+        table_body = [
+            question,
+            TableRow(
+                [tr('People affected'), '%s%s' % (
+                    format_int(int(affected_population)),
+                    ('*' if affected_population >= 1000 else ''))],
+                header=True),
+            TableRow([tr('People needing evacuation'), '%s%s' % (
+                format_int(int(evacuated)),
+                ('*' if evacuated >= 1000 else ''))], header=True),
+            TableRow(
+                [TableCell(
+                    tr('* Number is rounded to the nearest 1000'),
+                    col_span=2)],
+                header=False),
+            TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
+                self.parameters['evacuation_percentage'])], header=True),
+            TableRow(tr(
+                'Map shows population affected in each flood prone area')),
+            TableRow(tr(
+                'Table below shows the weekly minimum needs for all '
+                'evacuated people')),
+            TableRow([tr('Needs per week'), tr('Total')], header=True),
+            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Drinking Water [l]'),
+             format_int(tot_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
+            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
+            [tr('Toilets'), format_int(tot_needs['toilets'])]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
         table_body.append(TableRow(tr('How will we reach stranded people?')))
         table_body.append(TableRow(tr('Do we have enough relief items?')))
-        table_body.append(TableRow(tr('If yes, where are they located and how '
-                                      'will we distribute them?')))
-        table_body.append(TableRow(tr('If no, where can we obtain additional '
-                                      'relief items from and how will we '
-                                      'transport them to here?')))
+        table_body.append(TableRow(tr(
+            'If yes, where are they located and how will we distribute '
+            'them?')))
+        table_body.append(TableRow(tr(
+            'If no, where can we obtain additional relief items from and '
+            'how will we transport them to here?')))
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %s') % format_int(total),
-                           tr('People need evacuation if in area identified '
-                              'as "Flood Prone"'),
-                           tr('Minimum needs are defined in BNPB '
-                              'regulation 7/2008')])
+        table_body.extend([
+            TableRow(tr('Notes'), header=True),
+            tr('Total population: %s') % format_int(total),
+            tr('People need evacuation if in area identified as '
+               '"Flood Prone"'),
+            tr('Minimum needs are defined in BNPB regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style
@@ -395,18 +395,19 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         legend_title = tr('Population Count')
 
         # Create vector layer and return
-        V = Vector(data=new_attributes,
-                   projection=my_hazard.get_projection(),
-                   geometry=my_hazard.get_geometry(),
-                   name=tr('Population affected by flood prone areas'),
-                   keywords={'impact_summary': impact_summary,
-                             'impact_table': impact_table,
-                             'target_field': self.target_field,
-                             'map_title': map_title,
-                             'legend_notes': legend_notes,
-                             'legend_units': legend_units,
-                             'legend_title': legend_title,
-                             'affected_population': affected_population,
-                             'total_population': total},
-                   style_info=style_info)
-        return V
+        vector_layer = Vector(
+            data=new_attributes,
+            projection=hazard_layer.get_projection(),
+            geometry=hazard_layer.get_geometry(),
+            name=tr('Population affected by flood prone areas'),
+            keywords={'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'affected_population': affected_population,
+            'total_population': total},
+            style_info=style_info)
+        return vector_layer

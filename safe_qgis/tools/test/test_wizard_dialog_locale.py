@@ -29,14 +29,6 @@ skipped_reason = (
 class TestWizardDialogLocale(unittest.TestCase):
     """Test for Wizard Dialog in Locale mode."""
     def setUp(self):
-        # safe_module_keywords = []
-        # for keyword in sys.modules.iterkeys():
-        #     if 'safe' in keyword and 'safe_qgis' not in keyword:
-        #         safe_module_keywords.append(keyword)
-        # from pprint import pprint
-        # pprint(safe_module_keywords)
-        # for safe_module_keyword in safe_module_keywords:
-        #     del sys.modules[safe_module_keyword]
         if 'safe.metadata' in sys.modules.keys():
             del sys.modules['safe.metadata']
         self.assertFalse('safe.metadata' in sys.modules.keys())

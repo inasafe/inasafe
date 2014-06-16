@@ -40,6 +40,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Inundation impact on building data.
 
     :author Ole Nielsen, Kristy van Putten
@@ -237,18 +238,19 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         x = res
                 else:
                     # there is no flood related attribute
-                    msg = ('No flood related attribute found in %s. '
-                           'I was looking for either "affected", "FLOODPRONE" '
-                           'or "inapolygon". The latter should have been '
-                           'automatically set by call to '
-                           'assign_hazard_values_to_exposure_data(). '
-                           'Sorry I can\'t help more.')
-                    raise Exception(msg)
+                    message = (
+                        'No flood related attribute found in %s. I was '
+                        'looking for either "affected", "FLOODPRONE" or '
+                        '"inapolygon". The latter should have been '
+                        'automatically set by call to '
+                        'assign_hazard_values_to_exposure_data(). Sorry I '
+                        'can\'t help more.')
+                    raise Exception(message)
             else:
-                msg = (tr(
+                message = (tr(
                     'Unknown hazard type %s. Must be either "depth" or "grid"')
                     % mode)
-                raise Exception(msg)
+                raise Exception(message)
 
             # Count affected buildings by usage type if available
             if 'type' in attribute_names:
@@ -308,11 +310,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 del affected_buildings[usage]
 
         # Generate simple impact report
-        table_body = [question,
-                      TableRow(
-                          [tr('Building type'), tr('Number flooded'),
-                           tr('Total')], header=True),
-                      TableRow([tr('All'), format_int(count), format_int(N)])]
+        table_body = [
+            question,
+            TableRow([tr('Building type'), tr('Number flooded'),
+                      tr('Total')], header=True),
+            TableRow([tr('All'), format_int(count), format_int(N)])]
 
         school_closed = 0
         hospital_closed = 0
@@ -329,9 +331,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
                 # Lookup internationalised value if available
                 building_type = tr(building_type)
-                building_list.append([building_type.capitalize(),
-                                      format_int(affected_buildings[usage]),
-                                      format_int(buildings[usage])])
+                building_list.append([
+                    building_type.capitalize(),
+                    format_int(affected_buildings[usage]),
+                    format_int(buildings[usage])])
                 if building_type == 'school':
                     school_closed = affected_buildings[usage]
                 if building_type == 'hospital':
@@ -397,17 +400,19 @@ class FloodBuildingImpactFunction(FunctionProvider):
         legend_title = tr('Structure inundated status')
 
         # Create vector layer and return
-        V = Vector(data=attributes,
-                   projection=I.get_projection(),
-                   geometry=I.get_geometry(),
-                   name=tr('Estimated buildings affected'),
-                   keywords={'impact_summary': impact_summary,
-                             'impact_table': impact_table,
-                             'target_field': self.target_field,
-                             'map_title': map_title,
-                             'legend_units': legend_units,
-                             'legend_title': legend_title,
-                             'buildings_total': N,
-                             'buildings_affected': count},
-                   style_info=style_info)
-        return V
+        vector_layer = Vector(
+            data=attributes,
+            projection=I.get_projection(),
+            geometry=I.get_geometry(),
+            name=tr('Estimated buildings affected'),
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'buildings_total': N,
+                'buildings_affected': count},
+            style_info=style_info)
+        return vector_layer

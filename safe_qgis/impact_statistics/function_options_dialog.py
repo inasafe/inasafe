@@ -106,6 +106,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         """Build minimum needs tab.
 
         :param parameters: A Dictionary containing element of form
+        :type parameters: dict
         """
         # create minimum needs tab
         tab = QWidget()
@@ -129,9 +130,9 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
     def build_post_processor_form(self, parameters):
         """Build Post Processor Tab.
 
-        :param  parameters: A Dictionary containing element of form
+        :param parameters: A Dictionary containing element of form
+        :type parameters: dict
         """
-
         # create postprocessors tab
         tab = QWidget()
         form_layout = QFormLayout(tab)
@@ -256,7 +257,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
     def set_dialog_info(self, function_id):
         """Show help text in dialog.
 
-        :param function_id:
+        :param function_id: The id of a function
         """
         text = self.tr(
             'Parameters for impact function "%s" that can be modified are:'
@@ -302,9 +303,5 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
             self.lblErrorMessage.setText(text)
 
     def result(self):
-        """Get the result.
-
-        :return:
-        :rtype:
-        """
+        """Get the result."""
         return self._result

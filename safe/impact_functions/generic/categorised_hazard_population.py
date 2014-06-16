@@ -25,6 +25,7 @@ from safe.impact_functions.impact_function_metadata import (
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
+    # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by categorised hazard.
 
     :author AIFDR
@@ -86,17 +87,20 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
 
     # Function documentation
     title = tr('Be impacted')
-    synopsis = tr('To assess the impacts of categorized hazards in raster '
-                  'format on population raster layer.')
-    actions = tr('Provide details about how many people would likely need '
-                 'to be impacted for each category.')
-    hazard_input = tr('A hazard raster layer where each cell represents '
-                      'the category of the hazard. There should be 3 '
-                      'categories: 1, 2, and 3.')
-    exposure_input = tr('An exposure raster layer where each cell represent '
-                        'population count.')
-    output = tr('Map of population exposed to high category and a table with '
-                'number of people in each category')
+    synopsis = tr(
+        'To assess the impacts of categorized hazards in raster format on '
+        'population raster layer.')
+    actions = tr(
+        'Provide details about how many people would likely need to be '
+        'impacted for each category.')
+    hazard_input = tr(
+        'A hazard raster layer where each cell represents the category of the '
+        'hazard. There should be 3 categories: 1, 2, and 3.')
+    exposure_input = tr(
+        'An exposure raster layer where each cell represent population count.')
+    output = tr(
+        'Map of population exposed to high category and a table with number '
+        'of people in each category')
     detailed_description = tr(
         'This function will calculate how many people will be impacted '
         'per each category for all categories in the hazard layer. '
@@ -123,8 +127,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              my_hazard: Raster layer of categorised hazard
-              my_exposure: Raster layer of population data
+              hazard_layer: Raster layer of categorised hazard
+              exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each category of the hazard
 
@@ -139,18 +143,17 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         low_t = self.parameters['Categorical thresholds'][0]
 
         # Identify hazard and exposure layers
-        my_hazard = get_hazard_layer(layers)    # Categorised Hazard
-        my_exposure = get_exposure_layer(layers)  # Population Raster
+        hazard_layer = get_hazard_layer(layers)    # Categorised Hazard
+        exposure_layer = get_exposure_layer(layers)  # Population Raster
 
-        question = get_question(my_hazard.get_name(),
-                                my_exposure.get_name(),
-                                self)
+        question = get_question(
+            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Extract data as numeric arrays
-        C = my_hazard.get_data(nan=0.0)  # Category
+        C = hazard_layer.get_data(nan=0.0)  # Category
 
         # Calculate impact as population exposed to each category
-        P = my_exposure.get_data(nan=0.0, scaling=True)
+        P = exposure_layer.get_data(nan=0.0, scaling=True)
         H = numpy.where(C <= high_t, P, 0)
         M = numpy.where(C < medium_t, P, 0)
         L = numpy.where(C < low_t, P, 0)
@@ -170,19 +173,20 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         low = round_thousand(low)
 
         # Generate impact report for the pdf map
-        table_body = [question,
-                      TableRow([tr('People impacted '),
-                                '%s' % format_int(total_impact)],
-                               header=True),
-                      TableRow([tr('People in high hazard area '),
-                                '%s' % format_int(high)],
-                               header=True),
-                      TableRow([tr('People in medium hazard area '),
-                                '%s' % format_int(medium)],
-                               header=True),
-                      TableRow([tr('People in low hazard area'),
-                                '%s' % format_int(low)],
-                               header=True)]
+        table_body = [
+            question,
+            TableRow([tr('People impacted '),
+                      '%s' % format_int(total_impact)],
+                     header=True),
+            TableRow([tr('People in high hazard area '),
+                      '%s' % format_int(high)],
+                     header=True),
+            TableRow([tr('People in medium hazard area '),
+                      '%s' % format_int(medium)],
+                     header=True),
+            TableRow([tr('People in low hazard area'),
+                      '%s' % format_int(low)],
+                     header=True)]
 
         impact_table = Table(table_body).toNewlineFreeString()
 
@@ -198,8 +202,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         # 8 is the number of classes in the predefined flood population style
         # as imported
         # noinspection PyTypeChecker
-        classes = numpy.linspace(numpy.nanmin(M.flat[:]),
-                                 numpy.nanmax(M.flat[:]), 8)
+        classes = numpy.linspace(
+            numpy.nanmin(M.flat[:]), numpy.nanmax(M.flat[:]), 8)
 
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
@@ -211,13 +215,15 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return
-        R = Raster(M,
-                   projection=my_hazard.get_projection(),
-                   geotransform=my_hazard.get_geotransform(),
-                   name=tr('Population which %s') % (
-                       get_function_title(self).lower()),
-                   keywords={'impact_summary': impact_summary,
-                             'impact_table': impact_table,
-                             'map_title': map_title},
-                   style_info=style_info)
-        return R
+        raster_layer = Raster(
+            M,
+            projection=hazard_layer.get_projection(),
+            geotransform=hazard_layer.get_geotransform(),
+            name=tr('Population which %s') % (
+                get_function_title(self).lower()),
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'map_title': map_title},
+            style_info=style_info)
+        return raster_layer

@@ -32,6 +32,10 @@ sys.path.append(pardir)
 from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis import breakdown_defaults
 from safe_qgis.safe_interface import (
     UNITDATA,
@@ -56,7 +60,6 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     load_layers)
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')

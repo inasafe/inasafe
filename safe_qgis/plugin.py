@@ -46,7 +46,8 @@ try:
     from safe_qgis.exceptions import (
         TranslationLoadError,
         UnsupportedProviderError,
-        NoKeywordsFoundError)
+        NoKeywordsFoundError,
+        InvalidParameterError)
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
@@ -539,6 +540,14 @@ class Plugin:
             # we will create them from scratch in the dialog
             pass
         # End of fix for #793
+        # Fix for filtered-layer
+        except InvalidParameterError, e:
+            # noinspection PyTypeChecker,PyTypeChecker
+            QMessageBox.warning(
+                None,
+                self.tr('Invalid Layer'),
+                e.message)
+            return
 
         dialog = KeywordsDialog(
             self.iface.mainWindow(),

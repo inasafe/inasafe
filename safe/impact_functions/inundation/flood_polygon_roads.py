@@ -152,9 +152,10 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         affected_field_index = hazard_provider.fieldNameIndex(affected_field)
         #see #818: should still work if there is no valid attribute
         if affected_field_index == -1:
-            message = tr('''Parameter "Affected Field"(='%s')
-                is not present in the attribute table of the hazard layer.
-                ''' % (affected_field, ))
+            pass
+            # message = tr('''Parameter "Affected Field"(='%s')
+            #     is not present in the attribute table of the hazard layer.
+            #     ''' % (affected_field, ))
             #raise GetDataError(message)
 
         LOGGER.info('Affected field: %s' % affected_field)
@@ -171,8 +172,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         #   2) Mark roads as inundated (1) or not inundated (0)
 
         if affected_field_index != -1:
-            affected_field_type = \
-                hazard_provider.fields()[affected_field_index].typeName()
+            affected_field_type = hazard_provider.fields()[
+                affected_field_index].typeName()
             if affected_field_type in ['Real', 'Integer']:
                 affected_value = float(affected_value)
 
@@ -211,23 +212,18 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         ###############################################
 
         if hazard_poly is None:
-            message = tr('''There are no objects in the hazard layer with
-                "Affected value"='%s'. Please check the value or use a
-                different extent.''' % (affected_value, ))
+            message = tr(
+                '''There are no objects in the hazard layer with "Affected
+                value"='%s'. Please check the value or use a different
+                extent.''' % (affected_value, ))
             raise GetDataError(message)
 
         # Clip exposure by the extent
         extent_as_polygon = QgsGeometry().fromRect(extent)
-        line_layer = clip_by_polygon(
-            exposure,
-            extent_as_polygon
-        )
+        line_layer = clip_by_polygon(exposure, extent_as_polygon)
         # Find inundated roads, mark them
         line_layer = split_by_polygon(
-            line_layer,
-            hazard_poly,
-            request,
-            mark_value=(target_field, 1))
+            line_layer, hazard_poly, request, mark_value=(target_field, 1))
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.extent[0], self.extent[1])
@@ -269,8 +265,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         for road_type, value in roads_by_type.iteritems():
             table_body.append(
                 TableRow([
-                    road_type,
-                    int(value['flooded']), int(value['total'])])
+                    road_type, int(value['flooded']), int(value['total'])])
             )
 
         impact_summary = Table(table_body).toNewlineFreeString()

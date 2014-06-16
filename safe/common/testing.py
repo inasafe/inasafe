@@ -1,6 +1,9 @@
 # coding=utf-8
 """Common functionality used by regression tests
 """
+# Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
 
 import numpy
 import os
@@ -684,6 +687,7 @@ def get_qgis_app():
 
     try:
         from PyQt4 import QtGui, QtCore
+        from PyQt4.QtCore import QCoreApplication, QSettings
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
         from safe.common.qgis_interface import QgisInterface
@@ -694,12 +698,25 @@ def get_qgis_app():
 
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
+
+        # For testing purposes, we use our own configuration file instead of
+        # using the QGIS apps conf of the host
+        QCoreApplication.setOrganizationName('QGIS')
+        QCoreApplication.setOrganizationDomain('qgis.org')
+        QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
+
         #noinspection PyPep8Naming
         QGIS_APP = QgsApplication(sys.argv, gui_flag)
+
         # Make sure QGIS_PREFIX_PATH is set in your env if needed!
         QGIS_APP.initQgis()
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
+
+        # Save some settings
+        settings = QSettings()
+        settings.setValue('locale/overrideFlag', True)
+        settings.setValue('locale/userLocale', 'en_US')
 
     global PARENT  # pylint: disable=W0603
     if PARENT is None:

@@ -29,85 +29,101 @@ from realtime.utilities import realtime_logger_name
 # The logger is initialized in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
 
-try:
-    earth_quake_source_path = os.environ['EQ_SOURCE_PATH']
-    earth_quake_public_path = os.environ['EQ_PUBLIC_PATH']
-    earth_quake_guide_path = os.environ['EQ_GUIDE_PATH']
-except KeyError:
-    LOGGER.exception('EQ_SOURCE_PATH or EQ_PUBLIC_PATH are not set!')
-    sys.exit()
 
+def get_directory_listing(directory_path, filter_function=None):
+    """Return list of file or directory in directory_path.
 
-def get_list_dir(path_dir, filter_function=None):
-    """Return list of file or directory in path_dir
-        with filter function filter_function.
-    :param path_dir:
-    :param filter_function:
+    If filter_function is not None, it will be used as filter.
+
+    :param directory_path: Directory path.
+    :type directory_path: str
+
+    :param filter_function: Function for filtering.
+    :type filter_function: function
+
+    :returns: List of files and directory in the directory path.
+    :rtype: list
     """
-    list_dir = os.listdir(path_dir)
-    print 'list_dir', len(list_dir)
+    directories = os.listdir(directory_path)
     if filter_function is None:
-        return list_dir
-    retval = []
-    for my_dir in list_dir:
-        if filter_function(my_dir):
-            retval.append(my_dir)
-    return retval
+        return directories
+    filtered_directory = []
+    for directory in directories:
+        if filter_function(directory):
+            filtered_directory.append(directory)
+    return filtered_directory
 
 
 def get_event_id(report_filename):
     """Custom function to return event id from a filename
-    Thi is for filename format like:
+
+    The filename format like:
     earthquake_impact_map_20120216181705.pdf
-    :param report_filename:
+
+    Will give : 20120216181705
+
+    :param report_filename: Filename of a report.
+    :type report_filename: str
+
+    :returns: Event id based on filename.
+    :rtype: str
     """
     return report_filename[-18:-4]
 
 
-def filter_zip_eq_event(zip_eq_event):
+def earthquake_event_zip_filter(zip_eq_event):
     """Return true if zip_eq_event in the following format:
-        YYYYBBDDhhmmss.out.zip
-        for example : 20130226211002.out.zip
 
-    :param zip_eq_event
+    YYYYBBDDhhmmss.out.zip
+    for example : 20130226211002.out.zip
+
+    :param zip_eq_event: Filename of zip.
+    :type zip_eq_event: str
+
+    :returns: True if it's a valid format.
+    :rtype: bool
     """
-    expected_len = len('20130226211002.out.zip')
-    if len(zip_eq_event) != expected_len:
+    expected_length = len('20130226211002.out.zip')
+    if len(zip_eq_event) != expected_length:
         return False
-    my_event_id = zip_eq_event[:14]
-    if is_event_id(my_event_id):
+    event_id = zip_eq_event[:14]
+    if is_event_id(event_id):
         return True
     else:
         return False
 
 
-def filter_eq_map(eq_map_path):
-    """Return true if eq_map_path in the following format:
-        earthquake_impact_map_YYYYBBDDhhmmss.pdf
-        for example : earthquake_impact_map_20120216181705.pdf
+def earthquake_map_filter(earthquake_map_path):
+    """Return true if earthquake_map_path in correct format.
 
-    :param eq_map_path
+    Correct format : earthquake_impact_map_YYYYBBDDhhmmss.pdf
+    For example : earthquake_impact_map_20120216181705.pdf
+
+    :param earthquake_map_path: A string represent name of the earthquake map.
+    :type earthquake_map_path: str
+
+    :returns: True if in correct format, otherwise false.
+    :rtype: bool
     """
-    expected_len = len('earthquake_impact_map_20120216181705.pdf')
-    if len(eq_map_path) != expected_len:
+    expected_length = len('earthquake_impact_map_20120216181705.pdf')
+    if len(earthquake_map_path) != expected_length:
         return False
-    print 'eq', eq_map_path
-#    if not re.match(eq_map_path, my_regex):
-#        print 're'
-#        return False
-    my_event_id = get_event_id(eq_map_path)
-    print 'event_id', my_event_id
-    if is_event_id(my_event_id):
+
+    event_id = get_event_id(earthquake_map_path)
+    if is_event_id(event_id):
         return True
     else:
-        print 'not event id'
         return False
 
 
 def sort_event(events):
-    """Sort list of event id my_event as list ascending.
+    """Sort list of event id as list ascending.
 
-    :param events:
+    :param events: List of event id.
+    :type events: list
+
+    :returns: Ascending sorted events.
+    :rtype: list
     """
     try:
         sorted_events = sorted([int(x) for x in events])
@@ -117,19 +133,33 @@ def sort_event(events):
 
 
 def get_last_event_id(events):
-    """Return last event id of my_events.
-    :param events:
+    """Return last event id of events.
+
+    :param events: List of event id.
+    :type events: list
+
+    :returns: Last event id.
+    :rtype: int
     """
-    sorted_events = sort_event(events)[-1]
-    return sorted_events
+    last_event_id = sort_event(events)[-1]
+    return last_event_id
 
 
 def update_report(source_path, public_path, last_event_id):
-    """Copy latest report to my_public_path and make a copy with
-    a latest_earthquake_impact_map.pdf and latest_earthquake_impact_map.png
-    :param source_path:
-    :param public_path:
-    :param last_event_id:
+    """Copy latest report to public_path.
+
+    Make a copy with a latest_earthquake_impact_map.pdf and
+    latest_earthquake_impact_map.png
+
+
+    :param source_path: Source path of report.
+    :type source_path: str
+
+    :param public_path: Public path to put the report.
+    :type public_path: str
+
+    :param last_event_id: Last event id of a earthquake.
+    :type last_event_id: str, int
     """
     last_event_id = str(last_event_id)
 
@@ -139,12 +169,12 @@ def update_report(source_path, public_path, last_event_id):
     pdf_path = os.path.join(source_dir, pdf_file)
     png_path = pdf_path.replace('.pdf', '.png')
 
-    public_pdf_file = 'earthquake_impact_map_' + last_event_id + '.pdf'
+    public_pdf_file = 'earthquake_impact_map_%s.pdf' % last_event_id
     public_pdf_path = os.path.join(public_path, public_pdf_file)
-    latest_pdf_path = os.path.join(public_path,
-                                   'latest_earthquake_impact_map.pdf')
-    latest_png_path = os.path.join(public_path,
-                                   'latest_earthquake_impact_map.png')
+    latest_pdf_path = os.path.join(
+        public_path, 'latest_earthquake_impact_map.pdf')
+    latest_png_path = os.path.join(
+        public_path, 'latest_earthquake_impact_map.png')
 
     # copy file
     shutil.copy2(png_path, latest_png_path)
@@ -156,8 +186,15 @@ def update_report(source_path, public_path, last_event_id):
 
 
 def main():
-    """The implementation
-    """
+    """The implementation"""
+    try:
+        earth_quake_source_path = os.environ['EQ_SOURCE_PATH']
+        earth_quake_public_path = os.environ['EQ_PUBLIC_PATH']
+        earth_quake_guide_path = os.environ['EQ_GUIDE_PATH']
+    except KeyError:
+        LOGGER.exception('EQ_SOURCE_PATH or EQ_PUBLIC_PATH are not set!')
+        sys.exit()
+
     source_path = earth_quake_source_path
     public_path = earth_quake_public_path
     # guide path is a path that has list of event id to be pushed on the
@@ -167,11 +204,12 @@ def main():
     # event id
     guide_path = earth_quake_guide_path
 
-    guide_files = get_list_dir(guide_path, filter_zip_eq_event)
+    guide_files = get_directory_listing(
+        guide_path, earthquake_event_zip_filter)
     guide_events = [x[:14] for x in guide_files]
     last_guide = get_last_event_id(guide_events)
 
-    public_files = get_list_dir(public_path, filter_eq_map)
+    public_files = get_directory_listing(public_path, earthquake_map_filter)
     print ' public_files', public_files
     public_events = [get_event_id(x) for x in public_files]
     print 'public_events', public_events
