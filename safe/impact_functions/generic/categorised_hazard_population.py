@@ -7,7 +7,10 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    get_function_title)
+    get_function_title,
+    default_minimum_needs,
+    evacuated_population_weekly_needs
+)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
     hazard_all,
@@ -120,7 +123,11 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elderly_ratio', defaults['ELDERLY_RATIO'])])})]))])
+                    ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
+            ('MinimumNeeds', {'on': True}),
+        ])),
+        ('minimum needs', default_minimum_needs())
+    ])
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard.
@@ -172,6 +179,11 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         medium = round_thousand(medium)
         low = round_thousand(low)
 
+        # Calculate estimated minimum needs
+        minimum_needs = self.parameters['minimum needs']
+        tot_needs = evacuated_population_weekly_needs(
+            total_impact, minimum_needs)
+
         # Generate impact report for the pdf map
         table_body = [
             question,
@@ -191,10 +203,20 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Map shows population density in high or medium '
-                              'hazard area'),
-                           tr('Total population: %s') % format_int(total)])
+        table_body.extend([
+            TableRow(tr('Notes'), header=True),
+            tr('Map shows population density in high or medium hazard area'),
+            tr('Total population: %s') % format_int(total),
+            TableRow(tr(
+                'Table below shows the weekly minimum needs for all '
+                'affected people')),
+            TableRow([tr('Needs per week'), tr('Total')], header=True),
+            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Drinking Water [l]'), format_int(tot_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
+            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
+            [tr('Toilets'), format_int(tot_needs['toilets'])]
+        ])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in high hazard areas')
 

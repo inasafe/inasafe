@@ -360,23 +360,20 @@ class ITBFatalityFunction(FunctionProvider):
         needs = evacuated_population_weekly_needs(displaced, minimum_needs)
 
         # Generate impact report for the pdf map
-        table_body = [question, TableRow([tr('Fatalities'),
-                                          '%s' % format_int(fatalities)],
-                                         header=True),
-                      TableRow([tr('People displaced'),
-                                '%s' % format_int(displaced)],
-                               header=True),
-                      TableRow(tr('Map shows density estimate of '
-                                  'displaced population')),
-                      TableRow([tr('Needs per week'), tr('Total')],
-                               header=True),
-                      [tr('Rice [kg]'), format_int(needs['rice'])],
-                      [tr('Drinking Water [l]'),
-                       format_int(needs['drinking_water'])],
-                      [tr('Clean Water [l]'), format_int(needs['water'])],
-                      [tr('Family Kits'), format_int(needs[
-                          'family_kits'])],
-                      TableRow(tr('Action Checklist:'), header=True)]
+        table_body = [
+            question, TableRow(
+                [tr('Fatalities'), '%s' % format_int(fatalities)],
+                header=True),
+            TableRow(
+                [tr('People displaced'), '%s' % format_int(displaced)],
+                header=True),
+            TableRow(tr('Map shows density estimate of displaced population')),
+            TableRow([tr('Needs per week'), tr('Total')], header=True),
+            [tr('Rice [kg]'), format_int(needs['rice'])],
+            [tr('Drinking Water [l]'), format_int(needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(needs['water'])],
+            [tr('Family Kits'), format_int(needs['family_kits'])],
+            TableRow(tr('Action Checklist:'), header=True)]
 
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
