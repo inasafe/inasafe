@@ -342,7 +342,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         current_index = self.cboFemaleRatioAttribute.currentIndex()
         data = self.cboFemaleRatioAttribute.itemData(current_index)
-        # value = eval(item.data(QtCore.Qt.UserRole))
         aggregation_attributes[female_ratio_attribute_key] = data
 
         value = self.dsbFemaleRatioDefault.value()
@@ -1139,7 +1138,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             female_ratio_attribute_key,
             youth_ratio_attribute_key,
             adult_ratio_attribute_key,
-            elderly_ratio_default_key]
+            elderly_ratio_attribute_key]
 
         cbo_ratio_attributes = [
             self.cboFemaleRatioAttribute,
@@ -1166,17 +1165,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         cbo_ratio_attribute.clear()
         ratio_attribute = self.get_existing_keyword(ratio_attribute_key)
         fields, attribute_position = layer_attribute_names(
-            self.layer,
-            [QtCore.QVariant.Double],
-            ratio_attribute
-        )
+            self.layer, [QtCore.QVariant.Double], ratio_attribute)
+
         cbo_ratio_attribute.addItem(
             self.global_default_string, self.global_default_data)
         cbo_ratio_attribute.addItem(
             self.do_not_use_string, self.do_not_use_data)
         for field in fields:
             cbo_ratio_attribute.addItem(field, field)
-
         # For backward compatibility, still use Use default
         if (ratio_attribute == self.global_default_data or
                 ratio_attribute == self.tr('Use default')):
