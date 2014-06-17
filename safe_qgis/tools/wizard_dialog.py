@@ -402,7 +402,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbFemaleRatioDefault. Otherwise, disabled it.
         """
         value = self.cboFemaleRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbFemaleRatioDefault.setEnabled(True)
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
@@ -417,7 +417,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbYouthRatioDefault. Otherwise, disabled it.
         """
         value = self.cboYouthRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbYouthRatioDefault.setEnabled(True)
         else:
             self.dsbYouthRatioDefault.setEnabled(False)
@@ -432,7 +432,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbAdultRatioDefault. Otherwise, disabled it.
         """
         value = self.cboAdultRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbAdultRatioDefault.setEnabled(True)
         else:
             self.dsbAdultRatioDefault.setEnabled(False)
@@ -447,7 +447,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbElderlyRatioDefault. Otherwise, disabled it.
         """
         value = self.cboElderlyRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbElderlyRatioDefault.setEnabled(True)
         else:
             self.dsbElderlyRatioDefault.setEnabled(False)
@@ -945,10 +945,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         It will write out the keywords for the layer that is active.
         This method is based on the KeywordsDialog class.
         """
-        my_keywords = self.get_keywords()
+        current_keywords = self.get_keywords()
         try:
             self.keyword_io.write_keywords(
-                layer=self.layer, keywords=my_keywords)
+                layer=self.layer, keywords=current_keywords)
         except InaSAFEError, e:
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
