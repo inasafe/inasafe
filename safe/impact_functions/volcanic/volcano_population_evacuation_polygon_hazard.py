@@ -146,7 +146,10 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-            ('MinimumNeeds', {'on': True})]))])
+            ('MinimumNeeds', {'on': True})
+        ])),
+        ('minimum needs', default_minimum_needs())
+    ])
 
     def run(self, layers):
         """Risk plugin for volcano population evacuation.
@@ -298,7 +301,10 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evacuation
         evacuated = cumulative
 
-        total_needs = evacuated_population_weekly_needs(evacuated)
+        # Calculate estimated minimum needs
+        minimum_needs = self.parameters['minimum needs']
+        total_needs = evacuated_population_weekly_needs(
+            evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -320,19 +326,21 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                           format_int(all_categories_population[name]),
                           format_int(all_categories_cumulative[name])]))
 
-        table_body.extend(
-            [TableRow(tr('Map shows population affected in '
-                         'each of volcano hazard polygons.')),
-             TableRow([tr('Needs per week'), tr('Total'), blank_cell],
-                      header=True),
-             [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell],
-             [tr('Drinking Water [l]'), format_int(
-                 total_needs['drinking_water']), blank_cell],
-             [tr('Clean Water [l]'), format_int(total_needs['water']),
-              blank_cell],
-             [tr('Family Kits'), format_int(total_needs['family_kits']),
-              blank_cell],
-             [tr('Toilets'), format_int(total_needs['toilets']), blank_cell]])
+        table_body.extend([
+            TableRow(tr(
+                'Map shows population affected in each of volcano hazard '
+                'polygons.')),
+            TableRow(
+                [tr('Needs per week'), tr('Total'), blank_cell], header=True),
+            [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell], [
+                tr('Drinking Water [l]'),
+                format_int(total_needs['drinking_water']),
+                blank_cell],
+            [tr('Clean Water [l]'), format_int(total_needs['water']),
+                blank_cell],
+            [tr('Family Kits'), format_int(total_needs['family_kits']),
+                blank_cell],
+            [tr('Toilets'), format_int(total_needs['toilets']), blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
