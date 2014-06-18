@@ -40,6 +40,9 @@ class PluginMount(type):
             # This must be a plugin implementation, which should be registered.
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
+            if cls.__name__ in [c.__name__ for c in cls.plugins]:
+                raise LookupError(
+                    "Duplicate impact function name %s" % cls.__name__)
             cls.plugins.append(cls)
 # pylint: enable=W0613,C0203
 
