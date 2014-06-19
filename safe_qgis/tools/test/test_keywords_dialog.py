@@ -590,10 +590,12 @@ class KeywordsDialogTest(unittest.TestCase):
         message = 'Expected %s but I got %s' % (False, good_sum_ratio)
         self.assertEqual(False, good_sum_ratio, message)
 
-        # We need to delete reference to layer on Windows before removing the files
+        # We need to delete reference to layer on Windows before removing
+        # the files
         del layer
         del dialog.layer
-        # Using clone_shp_layer the files are saved in testing dir under InaSAFE temp dir
+        # Using clone_shp_layer the files are saved in testing dir under
+        # InaSAFE temp dir
         shutil.rmtree(temp_dir(sub_dir='testing'))
 
 if __name__ == '__main__':
