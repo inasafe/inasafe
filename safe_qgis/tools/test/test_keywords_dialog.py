@@ -222,8 +222,6 @@ class KeywordsDialogTest(unittest.TestCase):
             'Toggling the postprocessing radio did not add a '
             'female ratio attribute to the keywords list.')
 
-        # print dialog.get_value_for_key(defaults['FEMALE_RATIO_ATTR_KEY']), 'a'
-
         self.assertEqual(dialog.get_value_for_key(
             defaults['FEMALE_RATIO_ATTR_KEY']), dialog.global_default_string,
             message)

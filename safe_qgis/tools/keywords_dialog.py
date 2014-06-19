@@ -409,6 +409,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         current_index = self.cboFemaleRatioAttribute.currentIndex()
         data = self.cboFemaleRatioAttribute.itemData(current_index)
+
         if data == self.global_default_data:
             self.dsbFemaleRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
@@ -420,7 +421,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
-            self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], data)
+        self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], data)
 
 
     # noinspection PyPep8Naming
