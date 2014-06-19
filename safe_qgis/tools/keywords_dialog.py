@@ -41,6 +41,7 @@ from safe_qgis.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError)
 from safe_qgis.safe_interface import DEFAULTS
+from safe.api import metadata
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -87,8 +88,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.defaults = None
 
         # string constants
-        self.global_default_string = self.tr('Global default')
-        self.do_not_use_string = self.tr('Don\'t use')
+        self.global_default_string = metadata.global_default_attribute['name']
+        self.do_not_use_string = metadata.do_not_use_attribute['name']
+        self.global_default_data = metadata.global_default_attribute['id']
+        self.do_not_use_data = metadata.do_not_use_attribute['id']
 
         if layer is None:
             self.layer = self.iface.activeLayer()
@@ -118,6 +121,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
              ('volcano', self.tr('volcano')),
              ('Not Set', self.tr('Not Set'))])
 
+        # noinspection PyUnresolvedReferences
         self.lstKeywords.itemClicked.connect(self.edit_key_value_pair)
 
         # Set up help dialog showing logic.
@@ -222,15 +226,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         current_keyword = self.get_value_for_key(
             self.defaults['FEMALE_RATIO_ATTR_KEY'])
         fields, attribute_position = layer_attribute_names(
-            self.layer,
-            [QtCore.QVariant.Double],
-            current_keyword)
-        fields.insert(0, self.global_default_string)
-        fields.insert(1, self.do_not_use_string)
-        box.addItems(fields)
-        if current_keyword == self.global_default_string:
+            self.layer, [QtCore.QVariant.Double], current_keyword)
+
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
             box.setCurrentIndex(0)
-        elif current_keyword == self.do_not_use_string:
+        elif current_keyword == self.do_not_use_data:
             box.setCurrentIndex(1)
         elif attribute_position is None:
             # current_keyword was not found in the attribute table.
@@ -262,15 +267,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         current_keyword = self.get_value_for_key(
             self.defaults['YOUTH_RATIO_ATTR_KEY'])
         fields, attribute_position = layer_attribute_names(
-            self.layer,
-            [QtCore.QVariant.Double],
-            current_keyword)
-        fields.insert(0, self.global_default_string)
-        fields.insert(1, self.do_not_use_string)
-        box.addItems(fields)
-        if current_keyword == self.global_default_string:
+            self.layer, [QtCore.QVariant.Double], current_keyword)
+
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
             box.setCurrentIndex(0)
-        elif current_keyword == self.do_not_use_string:
+        elif current_keyword == self.do_not_use_data:
             box.setCurrentIndex(1)
         elif attribute_position is None:
             # current_keyword was not found in the attribute table.
@@ -302,15 +308,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         current_keyword = self.get_value_for_key(
             self.defaults['ADULT_RATIO_ATTR_KEY'])
         fields, attribute_position = layer_attribute_names(
-            self.layer,
-            [QtCore.QVariant.Double],
-            current_keyword)
-        fields.insert(0, self.global_default_string)
-        fields.insert(1, self.do_not_use_string)
-        box.addItems(fields)
-        if current_keyword == self.global_default_string:
+            self.layer, [QtCore.QVariant.Double], current_keyword)
+
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
             box.setCurrentIndex(0)
-        elif current_keyword == self.do_not_use_string:
+        elif current_keyword == self.do_not_use_data:
             box.setCurrentIndex(1)
         elif attribute_position is None:
             # current_keyword was not found in the attribute table.
@@ -342,15 +349,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         current_keyword = self.get_value_for_key(
             self.defaults['ELDERLY_RATIO_ATTR_KEY'])
         fields, attribute_position = layer_attribute_names(
-            self.layer,
-            [QtCore.QVariant.Double],
-            current_keyword)
-        fields.insert(0, self.global_default_string)
-        fields.insert(1, self.do_not_use_string)
-        box.addItems(fields)
-        if current_keyword == self.global_default_string:
+            self.layer, [QtCore.QVariant.Double], current_keyword)
+
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
             box.setCurrentIndex(0)
-        elif current_keyword == self.do_not_use_string:
+        elif current_keyword == self.do_not_use_data:
             box.setCurrentIndex(1)
         elif attribute_position is None:
             # current_keyword was not found in the attribute table.
@@ -398,8 +406,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del index
         if not self.radPostprocessing.isChecked():
             return
-        text = self.cboFemaleRatioAttribute.currentText()
-        if text == self.global_default_string:
+
+        current_index = self.cboFemaleRatioAttribute.currentIndex()
+        data = self.cboFemaleRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
             self.dsbFemaleRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['FEMALE_RATIO_KEY'])
@@ -410,8 +421,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
-        self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], text)
+            self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], data)
 
+    # noinspection PyPep8Naming
     def on_cboYouthRatioAttribute_currentIndexChanged(self, index=None):
         """Handler for youth ratio attribute change.
 
@@ -420,8 +432,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del index
         if not self.radPostprocessing.isChecked():
             return
-        text = self.cboYouthRatioAttribute.currentText()
-        if text == self.global_default_string:
+
+        current_index = self.cboYouthRatioAttribute.currentIndex()
+        data = self.cboYouthRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
             self.dsbYouthRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['YOUTH_RATIO_KEY'])
@@ -432,8 +447,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbYouthRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['YOUTH_RATIO_KEY'])
-        self.add_list_entry(self.defaults['YOUTH_RATIO_ATTR_KEY'], text)
+        self.add_list_entry(self.defaults['YOUTH_RATIO_ATTR_KEY'], data)
 
+    # noinspection PyPep8Naming
     def on_cboAdultRatioAttribute_currentIndexChanged(self, index=None):
         """Handler for adult ratio attribute change.
 
@@ -442,8 +458,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del index
         if not self.radPostprocessing.isChecked():
             return
-        text = self.cboAdultRatioAttribute.currentText()
-        if text == self.global_default_string:
+
+        current_index = self.cboAdultRatioAttribute.currentIndex()
+        data = self.cboAdultRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
             self.dsbAdultRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ADULT_RATIO_KEY'])
@@ -454,8 +473,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbAdultRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['ADULT_RATIO_KEY'])
-        self.add_list_entry(self.defaults['ADULT_RATIO_ATTR_KEY'], text)
+        self.add_list_entry(self.defaults['ADULT_RATIO_ATTR_KEY'], data)
 
+    # noinspection PyPep8Naming
     def on_cboElderlyRatioAttribute_currentIndexChanged(self, index=None):
         """Handler for elderly ratio attribute change.
 
@@ -464,8 +484,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del index
         if not self.radPostprocessing.isChecked():
             return
-        text = self.cboElderlyRatioAttribute.currentText()
-        if text == self.global_default_string:
+
+        current_index = self.cboElderlyRatioAttribute.currentIndex()
+        data = self.cboElderlyRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
             self.dsbElderlyRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
                 self.defaults['ELDERLY_RATIO_KEY'])
@@ -476,7 +499,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbElderlyRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['ELDERLY_RATIO_KEY'])
-        self.add_list_entry(self.defaults['ELDERLY_RATIO_ATTR_KEY'], text)
+        self.add_list_entry(self.defaults['ELDERLY_RATIO_ATTR_KEY'], data)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -492,8 +515,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         box = self.dsbFemaleRatioDefault
         if box.isEnabled():
             self.add_list_entry(
-                self.defaults['FEMALE_RATIO_KEY'],
-                box.value())
+                self.defaults['FEMALE_RATIO_KEY'], box.value())
 
     # noinspection PyPep8Naming
     def on_dsbYouthRatioDefault_valueChanged(self, value):
@@ -507,9 +529,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         box = self.dsbYouthRatioDefault
         if box.isEnabled():
             self.add_list_entry(
-                self.defaults['YOUTH_RATIO_KEY'],
-                box.value())
+                self.defaults['YOUTH_RATIO_KEY'], box.value())
 
+    # noinspection PyPep8Naming
     def on_dsbAdultRatioDefault_valueChanged(self, value):
         """Handler for adult ration default value changing.
 
@@ -521,9 +543,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         box = self.dsbAdultRatioDefault
         if box.isEnabled():
             self.add_list_entry(
-                self.defaults['ADULT_RATIO_KEY'],
-                box.value())
+                self.defaults['ADULT_RATIO_KEY'], box.value())
 
+    # noinspection PyPep8Naming
     def on_dsbElderlyRatioDefault_valueChanged(self, value):
         """Handler for elderly ration default value changing.
 
@@ -535,8 +557,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         box = self.dsbElderlyRatioDefault
         if box.isEnabled():
             self.add_list_entry(
-                self.defaults['ELDERLY_RATIO_KEY'],
-                box.value())
+                self.defaults['ELDERLY_RATIO_KEY'], box.value())
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1081,22 +1102,18 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 if not self.test:
                     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                     QtGui.QMessageBox.warning(
-                        self,
-                        self.tr('InaSAFE'),
-                        message)
+                        self, self.tr('InaSAFE'), message)
                 return
 
         try:
-            self.keyword_io.write_keywords(
-                layer=self.layer, keywords=keywords)
+            self.keyword_io.write_keywords(layer=self.layer, keywords=keywords)
         except InaSAFEError, e:
             error_message = get_error_message(e)
+            message = self.tr(
+                'An error was encountered when saving the keywords:\n'
+                '%s' % error_message.to_html())
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                ((self.tr(
-                    'An error was encountered when saving the keywords:\n'
-                    '%s' % error_message.to_html()))))
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
         if self.dock is not None:
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)

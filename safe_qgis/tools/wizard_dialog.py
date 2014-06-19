@@ -261,10 +261,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.set_tool_tip()
 
         # string constants
-        self.global_default_string = self.tr('Global default')
-        self.global_default_data = 'Global default'
-        self.do_not_use_string = self.tr('Don\'t use')
-        self.do_not_use_data = 'Don\'t use'
+        self.global_default_string = metadata.global_default_attribute['name']
+        self.global_default_data = metadata.global_default_attribute['id']
+        self.do_not_use_string = metadata.do_not_use_attribute['name']
+        self.do_not_use_data = metadata.do_not_use_attribute['id']
         self.defaults = breakdown_defaults()
 
     def selected_category(self):
@@ -342,7 +342,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         current_index = self.cboFemaleRatioAttribute.currentIndex()
         data = self.cboFemaleRatioAttribute.itemData(current_index)
-        # value = eval(item.data(QtCore.Qt.UserRole))
         aggregation_attributes[female_ratio_attribute_key] = data
 
         value = self.dsbFemaleRatioDefault.value()
@@ -402,7 +401,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbFemaleRatioDefault. Otherwise, disabled it.
         """
         value = self.cboFemaleRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbFemaleRatioDefault.setEnabled(True)
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
@@ -417,7 +416,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbYouthRatioDefault. Otherwise, disabled it.
         """
         value = self.cboYouthRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbYouthRatioDefault.setEnabled(True)
         else:
             self.dsbYouthRatioDefault.setEnabled(False)
@@ -432,7 +431,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbAdultRatioDefault. Otherwise, disabled it.
         """
         value = self.cboAdultRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbAdultRatioDefault.setEnabled(True)
         else:
             self.dsbAdultRatioDefault.setEnabled(False)
@@ -447,7 +446,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dsbElderlyRatioDefault. Otherwise, disabled it.
         """
         value = self.cboElderlyRatioAttribute.currentText()
-        if value == self.global_default_data:
+        if value == self.global_default_string:
             self.dsbElderlyRatioDefault.setEnabled(True)
         else:
             self.dsbElderlyRatioDefault.setEnabled(False)
@@ -945,10 +944,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         It will write out the keywords for the layer that is active.
         This method is based on the KeywordsDialog class.
         """
-        my_keywords = self.get_keywords()
+        current_keywords = self.get_keywords()
         try:
             self.keyword_io.write_keywords(
-                layer=self.layer, keywords=my_keywords)
+                layer=self.layer, keywords=current_keywords)
         except InaSAFEError, e:
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
@@ -1139,7 +1138,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             female_ratio_attribute_key,
             youth_ratio_attribute_key,
             adult_ratio_attribute_key,
-            elderly_ratio_default_key]
+            elderly_ratio_attribute_key]
 
         cbo_ratio_attributes = [
             self.cboFemaleRatioAttribute,
@@ -1166,17 +1165,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         cbo_ratio_attribute.clear()
         ratio_attribute = self.get_existing_keyword(ratio_attribute_key)
         fields, attribute_position = layer_attribute_names(
-            self.layer,
-            [QtCore.QVariant.Double],
-            ratio_attribute
-        )
+            self.layer, [QtCore.QVariant.Double], ratio_attribute)
+
         cbo_ratio_attribute.addItem(
             self.global_default_string, self.global_default_data)
         cbo_ratio_attribute.addItem(
             self.do_not_use_string, self.do_not_use_data)
         for field in fields:
             cbo_ratio_attribute.addItem(field, field)
-
         # For backward compatibility, still use Use default
         if (ratio_attribute == self.global_default_data or
                 ratio_attribute == self.tr('Use default')):
