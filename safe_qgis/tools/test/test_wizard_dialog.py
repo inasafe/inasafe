@@ -41,7 +41,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.safe_interface import unique_filename
+from safe_qgis.safe_interface import unique_filename, temp_dir
 from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
 from safe_qgis.tools.wizard_dialog import (
     WizardDialog,
@@ -54,7 +54,8 @@ from safe_qgis.tools.wizard_dialog import (
     step_field)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities_for_testing import (
-    clone_raster_layer, clone_shp_layer, remove_temp_file)
+    clone_raster_layer,
+    clone_shp_layer)
 
 
 def clone_csv_layer():
@@ -72,6 +73,10 @@ def clone_csv_layer():
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
+    def tearDown(self):
+        """Run after each test."""
+        # Remove the mess that we made on each test
+        shutil.rmtree(temp_dir(sub_dir='testing'))
 
     def check_list(self, expected_list, list_widget):
         """Helper function to check that list_widget is equal to expected_list.
@@ -160,7 +165,7 @@ class WizardDialogTest(unittest.TestCase):
             'title': 'some title'
         }
 
-        layer = clone_shp_layer()
+        layer = clone_shp_layer(name='tsunami_polygon')
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -168,7 +173,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # Initialize dialog
         # noinspection PyTypeChecker
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(layer=layer)
 
         # step 1 of 7 - select category
         count = dialog.lstCategories.count()
@@ -322,8 +327,6 @@ class WizardDialogTest(unittest.TestCase):
 
         self.assertEqual(keywords, expected_keywords, message)
 
-        remove_temp_file(layer.source())
-
     def test_existing_keywords(self):
         """Test if keywords are already exist."""
         expected_field_count = 5
@@ -331,7 +334,7 @@ class WizardDialogTest(unittest.TestCase):
             'OBJECTID', 'GRIDCODE', 'Shape_Leng', 'Shape_Area', 'Category']
         expected_chosen_field = 'GRIDCODE'
 
-        layer = clone_shp_layer(include_keywords=True)
+        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -339,7 +342,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # Initialize dialog
         # noinspection PyTypeChecker
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(layer=layer)
 
         # step 1 of 7 - select category
         self.check_current_text('hazard', dialog.lstCategories)
@@ -421,12 +424,10 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
         dialog.pbnNext.click()
 
-        remove_temp_file(layer.source())
-
     def test_existing_complex_keywords(self):
-        layer = clone_shp_layer(include_keywords=True)
+        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
         # noinspection PyTypeChecker
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(layer=layer)
 
         # select hazard
         self.select_from_list_widget('hazard', dialog.lstCategories)
@@ -469,7 +470,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # finish
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(layer=layer)
 
         # step 1 of 7 - select category
         self.check_current_text('hazard', dialog.lstCategories)
@@ -526,16 +527,15 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
-        remove_temp_file(layer.source())
-
     # noinspection PyTypeChecker
     def test_existing_aggregation_keywords(self):
         """Test for case existing keywords in aggregation layer."""
         layer = clone_shp_layer(
             name='kabupaten_jakarta',
             include_keywords=True,
-            directory=BOUNDDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=BOUNDDATA)
+        dialog = WizardDialog(layer=layer)
+
         category = dialog.lstCategories.currentItem().text()
         expected_category = 'aggregation'
         message = 'Expected %s but I got %s.' % (expected_category, category)
@@ -574,16 +574,14 @@ class WizardDialogTest(unittest.TestCase):
         message = 'Expected disabled but I got enabled.'
         self.assertEqual(is_enabled, False, message)
 
-        remove_temp_file(layer.source())
-
     # noinspection PyTypeChecker
     def test_unit_building_generic(self):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
             name='building_Maumere',
             include_keywords=True,
-            directory=TESTDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=TESTDATA)
+        dialog = WizardDialog(layer=layer)
 
         dialog.pbnNext.click()  # go to subcategory step 2
         dialog.pbnNext.click()  # go to unit step 3
@@ -600,15 +598,13 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # finishing
 
-        remove_temp_file(layer.source())
-
     def test_default_attributes_value(self):
         """Checking that default attributes is set to the CIA's one."""
         layer = clone_shp_layer(
             name='kecamatan_jakarta',
             include_keywords=True,
-            directory=BOUNDDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=BOUNDDATA)
+        dialog = WizardDialog(layer=layer)
 
         dialog.pbnNext.click()  # choose aggregation go to field step
         dialog.pbnNext.click()  # choose KEC_NAME go to aggregation step
@@ -653,15 +649,13 @@ class WizardDialogTest(unittest.TestCase):
             expected_default_value, default_value))
         self.assertEqual(expected_default_value, default_value, message)
 
-        remove_temp_file(layer.source())
-
     def test_unknown_unit(self):
         """Checking that it works for unknown unit."""
         layer = clone_shp_layer(
             name='Marapi_evac_zone_3000m',
             include_keywords=True,
-            directory=HAZDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=HAZDATA)
+        dialog = WizardDialog(layer=layer)
 
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to unit step
@@ -685,15 +679,13 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step title
         self.check_current_step(step_title, dialog)
 
-        remove_temp_file(layer.source())
-
     def test_point_layer(self):
         """Wizard for point layer."""
         layer = clone_shp_layer(
             name='Marapi',
             include_keywords=True,
-            directory=HAZDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=HAZDATA)
+        dialog = WizardDialog(layer=layer)
 
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to source step
@@ -705,16 +697,15 @@ class WizardDialogTest(unittest.TestCase):
 
         # check if in step title
         self.check_current_step(step_title, dialog)
-
-        remove_temp_file(layer.source())
+        dialog.accept()
 
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
             name='Marapi_evac_zone_3000m',
             include_keywords=True,
-            directory=HAZDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=HAZDATA)
+        dialog = WizardDialog(layer=layer)
 
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to unit  step
@@ -732,14 +723,12 @@ class WizardDialogTest(unittest.TestCase):
         message = 'There is should be only one item, I got %s' % num_item
         self.assertTrue(num_item == 1, message)
 
-        remove_temp_file(layer.source())
-
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
         layer = clone_shp_layer(
             name='Marapi',
-            directory=HAZDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=HAZDATA)
+        dialog = WizardDialog(layer=layer)
 
         expected_categories = ['hazard']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -768,16 +757,14 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
-        remove_temp_file(layer.source())
-
     def test_integrated_raster(self):
         """Test for raster layer and all possibilities."""
         layer = clone_raster_layer(
             name='eq_yogya_2006',
             extension='.asc',
             include_keywords=False,
-            directory=HAZDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=HAZDATA)
+        dialog = WizardDialog(layer=layer)
 
         expected_categories = ['hazard', 'exposure']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -864,14 +851,12 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step source
         self.check_current_step(step_source, dialog)
 
-        remove_temp_file(layer.source())
-
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
             name='jakarta_roads',
-            directory=EXPDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=EXPDATA)
+        dialog = WizardDialog(layer=layer)
 
         expected_categories = ['exposure']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -914,15 +899,13 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()  # cancel
 
-        remove_temp_file(layer.source())
-
     def test_integrated_polygon(self):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
             name='Jakarta_RW_2007flood',
-            directory=HAZDATA,
+            source_directory=HAZDATA,
             include_keywords=False)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(layer=layer)
 
         expected_categories = ['hazard', 'exposure', 'aggregation']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -1133,15 +1116,13 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
-        remove_temp_file(layer.source())
-
     def test_sum_ratio_behavior(self):
         """Test for wizard's behavior related sum of age ratio."""
         layer = clone_shp_layer(
             name='kabupaten_jakarta',
             include_keywords=True,
-            directory=BOUNDDATA)
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+            source_directory=BOUNDDATA)
+        dialog = WizardDialog(layer=layer)
         dialog.suppress_warning_dialog = True
 
         self.check_current_text('aggregation', dialog.lstCategories)
@@ -1180,8 +1161,6 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_source, dialog)
 
         dialog.pbnCancel.click()
-
-        remove_temp_file(layer.source())
 
 
 if __name__ == '__main__':

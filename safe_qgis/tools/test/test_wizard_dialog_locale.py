@@ -107,7 +107,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         """Test for metadata translation."""
         from safe_qgis.tools.wizard_dialog import WizardDialog
         from safe_qgis.utilities.utilities_for_testing import (
-            clone_shp_layer, remove_temp_file)
+            clone_shp_layer, remove_vector_temp_file)
         from safe_qgis.safe_interface import BOUNDDATA
 
         from safe.common.testing import get_qgis_app
@@ -118,7 +118,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         layer = clone_shp_layer(
             name='kabupaten_jakarta',
             include_keywords=True,
-            directory=BOUNDDATA)
+            source_directory=BOUNDDATA)
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE, None, layer)
         expected_categories = ['keterpaparan', 'ancaman', 'agregasi']
@@ -129,13 +129,13 @@ class TestWizardDialogLocale(unittest.TestCase):
 
         dialog.pbnNext.click()
 
-        remove_temp_file(layer.source())
+        remove_vector_temp_file(layer.source())
 
     def test_existing_complex_keywords(self):
         """Test for existing complex keywords in wizard in locale mode."""
         from safe_qgis.tools.wizard_dialog import WizardDialog
         from safe_qgis.utilities.utilities_for_testing import (
-            clone_shp_layer, remove_temp_file)
+            clone_shp_layer, remove_vector_temp_file)
         layer = clone_shp_layer(include_keywords=True)
 
         from safe.common.testing import get_qgis_app
@@ -243,7 +243,7 @@ class TestWizardDialogLocale(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
-        remove_temp_file(layer.source())
+        remove_vector_temp_file(layer.source())
 
 
 if __name__ == '__main__':

@@ -39,7 +39,6 @@ from safe_qgis.safe_interface import (
     temp_dir)
 from safe_qgis.widgets.dock import Dock
 
-
 DOCK = Dock(IFACE)
 
 
