@@ -41,6 +41,7 @@ from safe_qgis.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError)
 from safe_qgis.safe_interface import DEFAULTS
+from safe.api import metadata
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -87,10 +88,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.defaults = None
 
         # string constants
-        self.global_default_string = self.tr('Global default')
-        self.do_not_use_string = self.tr('Don\'t use')
-        self.global_default_data = 'Global default'
-        self.do_not_use_data = 'Don\'t use'
+        self.global_default_string = metadata.global_default_attribute['name']
+        self.do_not_use_string = metadata.do_not_use_attribute['name']
+        self.global_default_data = metadata.global_default_attribute['id']
+        self.do_not_use_data = metadata.do_not_use_attribute['id']
 
         if layer is None:
             self.layer = self.iface.activeLayer()

@@ -308,6 +308,19 @@ layer_vector_polygon = {
     'data_type': 'polygon'
 }
 
+
+# aggregation keywords
+global_default_attribute = {
+    'id': 'Global default',
+    'name': tr('Global default')
+}
+
+do_not_use_attribute = {
+    'id': 'Don\'t use',
+    'name': tr('Don\'t use')
+}
+
+
 # Converter new keywords to old keywords
 converter_dict = {
     'subcategory': {
