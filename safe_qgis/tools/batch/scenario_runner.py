@@ -117,12 +117,12 @@ def add_layers(scenario_dir, paths):
             LOGGER.debug("add raster layer %s" % path)
             layer = QgsRasterLayer(path, base_name)
             # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(layer)
+            QgsMapLayerRegistry.instance().addMapLayers([layer])
         elif extension in ['.shp']:
             LOGGER.debug("add vector layer %s" % path)
             layer = QgsVectorLayer(path, base_name, 'ogr')
             # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(layer)
+            QgsMapLayerRegistry.instance().addMapLayers([layer])
         else:
             raise Exception('File %s had illegal extension' % path)
 

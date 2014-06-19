@@ -72,7 +72,7 @@ def make_padang_layer():
         IFACE.setActiveLayer(layer)
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
@@ -97,7 +97,7 @@ def clone_padang_layer():
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer, temp_path
 
 
@@ -115,7 +115,7 @@ def make_polygon_layer():
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
@@ -129,7 +129,7 @@ def make_point_layer():
         title = 'kabupaten_jakarta_singlepart_3_good_attr'
     layer = QgsVectorLayer(full_path, title, 'ogr')
     # noinspection PyArgumentList
-    QgsMapLayerRegistry.instance().addMapLayer(layer)
+    QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
@@ -145,7 +145,7 @@ def make_keywordless_layer():
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
