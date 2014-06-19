@@ -897,7 +897,10 @@ def compare_wkt(a, b, tol=0.000001):
 
 
 def clone_shp_layer(
-        name='tsunami_polygon', include_keywords=False, source_directory=TESTDATA, target_directory='testing'):
+        name='tsunami_polygon',
+        include_keywords=False,
+        source_directory=TESTDATA,
+        target_directory='testing'):
     """Helper function that copies a test shp layer and returns it.
 
     :param name: The default name for the shp layer.
@@ -909,7 +912,8 @@ def clone_shp_layer(
     :param source_directory: Directory where the file is located.
     :type source_directory: str
 
-    :param target_directory: Subdirectory in InaSAFE temp dir that we want to put the files into. Default to 'testing'.
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'testing'.
     :type target_directory: str
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
@@ -928,7 +932,12 @@ def clone_shp_layer(
     return layer
 
 
-def clone_raster_layer(name, extension, include_keywords, source_directory, target_directory='testing'):
+def clone_raster_layer(
+        name,
+        extension,
+        include_keywords,
+        source_directory,
+        target_directory='testing'):
     """Helper function that copies a test raster.
 
     :param name: The default name for the raster layer.
@@ -943,13 +952,14 @@ def clone_raster_layer(name, extension, include_keywords, source_directory, targ
     :param source_directory: Directory where the file is located.
     :type source_directory: str
 
-    :param target_directory: Subdirectory in InaSAFE temp dir that we want to put the files into. Default to 'testing'.
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'testing'.
     :type target_directory: str
     """
     extensions = ['.prj', '.sld', 'qml', '.prj', extension]
     if include_keywords:
         extensions.append('.keywords')
-    temp_path = unique_filename(dir=temp_dir('testing'))
+    temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
         src_path = os.path.join(source_directory, name + ext)
