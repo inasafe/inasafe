@@ -261,10 +261,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.set_tool_tip()
 
         # string constants
-        self.global_default_string = self.tr('Global default')
-        self.global_default_data = 'Global default'
-        self.do_not_use_string = self.tr('Don\'t use')
-        self.do_not_use_data = 'Don\'t use'
+        self.global_default_string = metadata.global_default_attribute['name']
+        self.global_default_data = metadata.global_default_attribute['id']
+        self.do_not_use_string = metadata.do_not_use_attribute['name']
+        self.do_not_use_data = metadata.do_not_use_attribute['id']
         self.defaults = breakdown_defaults()
 
     def selected_category(self):
