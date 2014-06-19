@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inasafe-develop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-12 14:17+0700\n"
-"PO-Revision-Date: 2014-06-12 07:18+0000\n"
+"POT-Creation-Date: 2014-06-19 09:53+0700\n"
+"PO-Revision-Date: 2014-06-19 02:54+0000\n"
 "Last-Translator: Ismail Sunni\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/inasafe-develop/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
@@ -2899,4 +2899,12 @@ msgid ""
 "There are no objects in the hazard layer with \"Affected\n"
 "                value\"='%s'. Please check the value or use a different\n"
 "                extent."
+msgstr ""
+
+#: safe/metadata.py:315
+msgid "Global default"
+msgstr ""
+
+#: safe/metadata.py:320
+msgid "Don't use"
 msgstr ""
