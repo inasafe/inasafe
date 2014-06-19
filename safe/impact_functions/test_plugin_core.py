@@ -25,7 +25,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 # noinspection PyUnresolvedReferences
-class BasicFunction(FunctionProvider):
+class BasicFunctionCore(FunctionProvider):
     """Risk plugin for testing
 
     :author Allen
@@ -130,7 +130,7 @@ class Test_plugin_core(unittest.TestCase):
     def test_basic_plugin_requirements(self):
         """Basic plugin requirements collection
         """
-        requirelines = requirements_collect(BasicFunction)
+        requirelines = requirements_collect(BasicFunctionCore)
         params = {'category': 'test_cat1', 'unit': 'MMI'}
         assert requirements_met(requirelines, params)
 
@@ -140,7 +140,7 @@ class Test_plugin_core(unittest.TestCase):
     def test_basic_plugin_requirements_met(self):
         """Basic plugin requirements met
         """
-        requirelines = requirements_collect(BasicFunction)
+        requirelines = requirements_collect(BasicFunctionCore)
         valid_return = ['category=="test_cat1"', 'unit=="MMI"']
         for ret1, ret2 in zip(valid_return, requirelines):
             assert ret1 == ret2, "Error in requirements extraction"
@@ -148,7 +148,7 @@ class Test_plugin_core(unittest.TestCase):
     def test_basic_requirements_check(self):
         """Basic plugin requirements check
         """
-        requirelines = requirements_collect(BasicFunction)
+        requirelines = requirements_collect(BasicFunctionCore)
         params = {'category': 'test_cat2'}
         for line in requirelines:
             check = requirement_check(params, line)

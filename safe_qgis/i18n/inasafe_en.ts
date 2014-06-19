@@ -25,11 +25,6 @@
         <translation>No value was found for keyword %s in layer %s</translation>
     </message>
     <message>
-        <location filename="safe_interface.py" line="331"/>
-        <source>Cannot get keywords from a non-existent file.%s does not exist.</source>
-        <translation>Cannot get keywords from a non-existent file.%s does not exist.</translation>
-    </message>
-    <message>
         <location filename="safe_interface.py" line="339"/>
         <source>No keywords file found for %s</source>
         <translation>No keywords file found for %s</translation>
@@ -52,7 +47,7 @@
  %s</translation>
     </message>
     <message>
-        <location filename="test_translations.py" line="142"/>
+        <location filename="test_translations.py" line="143"/>
         <source>No styleInfo was found for layer %s</source>
         <translation>No styleInfo was found for layer %s</translation>
     </message>
@@ -319,6 +314,11 @@
     <message>
         <location filename="defaults.py" line="136"/>
         <source>InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="331"/>
+        <source>Cannot get keywords from a non-existent file. File %s does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -671,12 +671,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DOCK</name>
     <message>
-        <location filename="test_dock.py" line="1301"/>
+        <location filename="test_dock.py" line="1302"/>
         <source>Entire area</source>
         <translation>Entire area</translation>
     </message>
     <message>
-        <location filename="test_aggregator.py" line="101"/>
+        <location filename="test_aggregator.py" line="104"/>
         <source>kabupaten jakarta singlepart</source>
         <translation>kabupaten jakarta singlepart</translation>
     </message>
@@ -1656,114 +1656,104 @@ to
 <context>
     <name>KeywordsDialog</name>
     <message>
-        <location filename="keywords_dialog.py" line="104"/>
+        <location filename="keywords_dialog.py" line="107"/>
         <source>population</source>
         <translation>population</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="104"/>
+        <location filename="keywords_dialog.py" line="107"/>
         <source>structure</source>
         <translation>structure</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="998"/>
+        <location filename="keywords_dialog.py" line="1019"/>
         <source>Not Set</source>
         <translation>Not Set</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>earthquake [MMI]</source>
         <translation>earthquake [MMI]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>tsunami [m]</source>
         <translation>tsunami [m]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>tsunami [wet/dry]</source>
         <translation>tsunami [wet/dry]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>tsunami [feet]</source>
         <translation>tsunami [feet]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>flood [m]</source>
         <translation>flood [m]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>flood [wet/dry]</source>
         <translation>flood [wet/dry]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>flood [feet]</source>
         <translation>flood [feet]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>tephra [kg2/m2]</source>
         <translation>tephra [kg2/m2]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="109"/>
+        <location filename="keywords_dialog.py" line="112"/>
         <source>volcano</source>
         <translation>volcano</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="155"/>
+        <location filename="keywords_dialog.py" line="159"/>
         <source>Reload</source>
         <translation>Reload</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="91"/>
-        <source>Don&apos;t use</source>
-        <translation>Don&apos;t use</translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="762"/>
+        <location filename="keywords_dialog.py" line="783"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation>Colons are not allowed, replaced with &quot;.&quot;</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="966"/>
+        <location filename="keywords_dialog.py" line="987"/>
         <source>Keywords for %s</source>
         <translation>Keywords for %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="1095"/>
+        <location filename="keywords_dialog.py" line="1116"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="1095"/>
+        <location filename="keywords_dialog.py" line="1112"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>An error was encountered when saving the keywords:
 %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="82"/>
         <source>InaSAFE %s Keywords Editor</source>
         <translation>InaSAFE %s Keywords Editor</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="104"/>
+        <location filename="keywords_dialog.py" line="107"/>
         <source>road</source>
         <translation>road</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="90"/>
-        <source>Global default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="1077"/>
+        <location filename="keywords_dialog.py" line="1098"/>
         <source>The sum of age ratios is %s which exceeds 1. Please adjust  the age ration defaults so that their cumulative value is not greater than 1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2457,138 +2447,143 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="197"/>
+        <location filename="plugin.py" line="198"/>
         <source>Toggle InaSAFE Dock</source>
         <translation>Toggle InaSAFE Dock</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="203"/>
+        <location filename="plugin.py" line="204"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation>Show/hide InaSAFE dock widget</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="456"/>
+        <location filename="plugin.py" line="457"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="213"/>
+        <location filename="plugin.py" line="214"/>
         <source>InaSAFE Keyword Editor</source>
         <translation>InaSAFE Keyword Editor</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="219"/>
+        <location filename="plugin.py" line="220"/>
         <source>Open InaSAFE keywords editor</source>
         <translation>Open InaSAFE keywords editor</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="249"/>
+        <location filename="plugin.py" line="250"/>
         <source>InaSAFE Options</source>
         <translation>InaSAFE Options</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="254"/>
+        <location filename="plugin.py" line="255"/>
         <source>Open InaSAFE options dialog</source>
         <translation>Open InaSAFE options dialog</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="263"/>
+        <location filename="plugin.py" line="264"/>
         <source>InaSAFE Impact Functions Browser</source>
         <translation>InaSAFE Impact Functions Browser</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="269"/>
+        <location filename="plugin.py" line="270"/>
         <source>Open InaSAFE Impact Functions Browser</source>
         <translation>Open InaSAFE Impact Functions Browser</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="284"/>
+        <location filename="plugin.py" line="285"/>
         <source>InaSAFE Minimum Needs Tool</source>
         <translation>InaSAFE Minimum Needs Tool</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="289"/>
+        <location filename="plugin.py" line="290"/>
         <source>Open InaSAFE minimum needs tool</source>
         <translation>Open InaSAFE minimum needs tool</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="55"/>
+        <location filename="plugin.py" line="56"/>
         <source>Please restart QGIS to use this plugin.</source>
         <translation>Please restart QGIS to use this plugin.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="298"/>
+        <location filename="plugin.py" line="299"/>
         <source>InaSAFE Converter</source>
         <translation>InaSAFE Converter</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="303"/>
+        <location filename="plugin.py" line="304"/>
         <source>Open InaSAFE Converter</source>
         <translation>Open InaSAFE Converter</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="313"/>
+        <location filename="plugin.py" line="314"/>
         <source>InaSAFE Batch Runner</source>
         <translation>InaSAFE Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="318"/>
+        <location filename="plugin.py" line="319"/>
         <source>Open InaSAFE Batch Runner</source>
         <translation>Open InaSAFE Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="327"/>
+        <location filename="plugin.py" line="328"/>
         <source>Save current scenario</source>
         <translation>Save current scenario</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="331"/>
+        <location filename="plugin.py" line="332"/>
         <source>Save current scenario to text file</source>
         <translation>Save current scenario to text file</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="347"/>
+        <location filename="plugin.py" line="348"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
         <translation>InaSAFE OpenStreetMap Downloader</translation>
     </message>
     <message>
-        <location filename="__init__.py" line="110"/>
+        <location filename="__init__.py" line="111"/>
         <source>Please restart QGIS to use this plugin. If you experience further problems after restarting please report the issue to the InaSAFE team.</source>
         <translation>Please restart QGIS to use this plugin. If you experience further problems after restarting please report the issue to the InaSAFE team.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="362"/>
+        <location filename="plugin.py" line="363"/>
         <source>InaSAFE Impact Layer Merge</source>
         <translation>InaSAFE Impact Layer Merge</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="529"/>
+        <location filename="plugin.py" line="530"/>
         <source>Unsupported layer type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="529"/>
+        <location filename="plugin.py" line="530"/>
         <source>The layer you have selected cannot be used for analysis because its data type is unsupported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="231"/>
+        <location filename="plugin.py" line="232"/>
         <source>InaSAFE Keywords Creation Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="237"/>
+        <location filename="plugin.py" line="238"/>
         <source>Open InaSAFE keywords creation wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="390"/>
+        <location filename="plugin.py" line="391"/>
         <source>Toggle scenario outlines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="394"/>
+        <location filename="plugin.py" line="395"/>
         <source>Toggle rubber bands showing scenarion extents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="546"/>
+        <source>Invalid Layer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3115,42 +3110,42 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="533"/>
+        <location filename="wizard_dialog.py" line="532"/>
         <source>Field type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="534"/>
+        <location filename="wizard_dialog.py" line="533"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="616"/>
+        <location filename="wizard_dialog.py" line="615"/>
         <source>&lt;b&gt;&lt;font color=&quot;red&quot;&gt;ERROR! Missing subcategory or unit!&lt;/font&gt;&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="695"/>
+        <location filename="wizard_dialog.py" line="694"/>
         <source>step %d</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="750"/>
+        <location filename="wizard_dialog.py" line="749"/>
         <source>Finish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="767"/>
+        <location filename="wizard_dialog.py" line="766"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="955"/>
+        <location filename="wizard_dialog.py" line="954"/>
         <source>InaSAFE</source>
         <translation type="unfinished">InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="955"/>
+        <location filename="wizard_dialog.py" line="954"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished">An error was encountered when saving the keywords:
@@ -3167,7 +3162,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1181"/>
+        <location filename="wizard_dialog.py" line="1177"/>
         <source>Use default</source>
         <translation type="unfinished">Use default</translation>
     </message>
@@ -3177,27 +3172,27 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Don&apos;t use</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1248"/>
+        <location filename="wizard_dialog.py" line="1244"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1249"/>
+        <location filename="wizard_dialog.py" line="1245"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1252"/>
+        <location filename="wizard_dialog.py" line="1248"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1254"/>
+        <location filename="wizard_dialog.py" line="1250"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1255"/>
+        <location filename="wizard_dialog.py" line="1251"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3212,7 +3207,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="712"/>
+        <location filename="wizard_dialog.py" line="711"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"></translation>
     </message>
