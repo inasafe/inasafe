@@ -423,7 +423,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
         self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], data)
 
-
     # noinspection PyPep8Naming
     def on_cboYouthRatioAttribute_currentIndexChanged(self, index=None):
         """Handler for youth ratio attribute change.
