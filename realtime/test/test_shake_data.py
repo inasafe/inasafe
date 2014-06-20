@@ -165,8 +165,8 @@ class TestShakeMap(unittest.TestCase):
 
         extract_dir = shakemap_extract_dir()
 
-        expected_grid_xml = (os.path.join(extract_dir,
-                                          '20120726022003/grid.xml'))
+        expected_grid_xml = os.path.join(
+            extract_dir, '20120726022003/grid.xml')
         message = 'Expected: %s\nGot: %s\n' % (
             str(expected_grid_xml), str(grid_xml))
         self.assertEqual(expected_grid_xml, grid_xml, message)
