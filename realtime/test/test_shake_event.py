@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '2/08/2012'
@@ -172,6 +171,19 @@ class TestShakeEvent(unittest.TestCase):
                     file_path,
                     diff_string))
         self.assertEqual(diff_string, '', message)
+
+    def test_mmi_potential_damage(self):
+        """Test mmi_potential_damage function."""
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        values = range(1, 11)
+        expected_result = ['None', 'None', 'None', 'None', 'Very light',
+                           'Light', 'Moderate', 'Mod/Heavy', 'Heavy',
+                           'Very heavy']
+        result = []
+        for value in values:
+            result.append(shake_event.mmi_potential_damage(value))
+        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
 
     def test_cities_to_shape(self):
         """Test that we can retrieve the cities local to the event."""
@@ -354,6 +366,81 @@ class TestShakeEvent(unittest.TestCase):
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
         self.assertEqual(result, expected_result, message)
+
+    def test_render_map(self):
+        """Test render_map function in shake_event."""
+        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        # Render Map
+        shake_event.render_map()
+        # There should be exist:
+        # 1. SHAKE_ID-en.pdf
+        # 2. SHAKE_ID-en.png
+        # 3. SHAKE_ID-thumb-en.png
+        # 4. SHAKE_ID-metadata-en.pickle
+        # 5. mmi-cities.shp, shx, dbf, prj, qml
+        # 6. mmi-contours-nearest.shp, shx, dbf, prj, qml
+        # 7. city-search-boxes.shp, shx, dbf, prj, qml
+        # 8. composer-template.qpt
+        # 9. project.qgs
+        target_dir = os.path.join(shakemap_extract_dir(), SHAKE_ID)
+        shapefile_extension = ['shp', 'shx', 'dbf', 'prj', 'qml']
+        # 1
+        pdf_path = os.path.join(target_dir, '%s-en.pdf' % SHAKE_ID)
+        message = 'PDF Report is not generated successfully in %s' % pdf_path
+        self.assertTrue(os.path.exists(pdf_path), message)
+        # 2
+        png_path = os.path.join(target_dir, '%s-en.png' % SHAKE_ID)
+        message = 'PNG Report is not generated successfully in %s' % png_path
+        self.assertTrue(os.path.exists(png_path), message)
+        # 3
+        thumbnail_path = os.path.join(target_dir, '%s-thumb-en.png' % SHAKE_ID)
+        message = 'PNG Thumbnail is not generated successfully in %s' % (
+            thumbnail_path)
+        self.assertTrue(os.path.exists(thumbnail_path), message)
+        # 4
+        metadata_path = os.path.join(
+            target_dir, '%s-metadata-en.pickle' % SHAKE_ID)
+        message = 'Metadata file is not generated successfully in %s' % (
+            metadata_path)
+        self.assertTrue(os.path.exists(metadata_path), message)
+        # 5. mmi-cities.shp, shx, dbf, prj, qml
+        mmi_cities_path = os.path.join(target_dir, 'mmi-cities.shp')
+        for extension in shapefile_extension:
+            file_path = mmi_cities_path.replace('shp', extension)
+            message = 'mmi-cities.%s is not generated successfully in %s' % (
+                extension, file_path)
+            self.assertTrue(os.path.exists(file_path), message)
+        # 6. mmi-contours-nearest.shp, shx, dbf, prj, qml
+        mmi_contours_path = os.path.join(
+            target_dir, 'mmi-contours-nearest.shp')
+        for extension in shapefile_extension:
+            file_path = mmi_contours_path.replace('shp', extension)
+            message = (
+                'mmi-contours-nearest.%s is not generated successfully in '
+                '%s') % (extension, file_path)
+            self.assertTrue(os.path.exists(file_path), message)
+        # 7. city-search-boxes.shp, shx, dbf, prj, qml
+        city_search_boxes_path = os.path.join(
+            target_dir, 'city-search-boxes.shp')
+        for extension in shapefile_extension:
+            file_path = city_search_boxes_path.replace('shp', extension)
+            message = (
+                'city-search-boxes.%s is not generated successfully in '
+                '%s') % (extension, file_path)
+            self.assertTrue(os.path.exists(file_path), message)
+        # 8
+        composer_template_path = os.path.join(
+            target_dir, 'composer-template.qpt')
+        message = (
+            'Composer template file is not generated successfully in %s' %
+            composer_template_path)
+        self.assertTrue(os.path.exists(composer_template_path), message)
+        # 9
+        qgs_project_path = os.path.join(
+            target_dir, 'project.qgs')
+        message = 'QGIS Project file is not generated successfully in %s' % (
+            qgs_project_path)
+        self.assertTrue(os.path.exists(qgs_project_path), message)
 
     def test_bearing_to_cardinal(self):
         """Test we can convert a bearing to a cardinal direction."""
