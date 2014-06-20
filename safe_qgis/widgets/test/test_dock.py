@@ -1149,7 +1149,7 @@ class TestDock(TestCase):
         before_count = len(CANVAS.layers())
         layer_path = join(TESTDATA, 'polygon_0.shp')
         layer = QgsVectorLayer(layer_path, 'foo', 'ogr')
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
         after_count = len(CANVAS.layers())
         LOGGER.info("Canvas list after:\n%s" % canvas_list())
         message = (

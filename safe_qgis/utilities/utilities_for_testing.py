@@ -13,6 +13,7 @@ import shutil
 from os.path import join
 from itertools import izip
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui
 from qgis.core import (
     QgsVectorLayer,
@@ -896,8 +897,11 @@ def compare_wkt(a, b, tol=0.000001):
 
 
 def clone_shp_layer(
-        name='tsunami_polygon', include_keywords=False, directory=TESTDATA):
-    """Helper function that copies a test shplayer and returns it.
+        name='tsunami_polygon',
+        include_keywords=False,
+        source_directory=TESTDATA,
+        target_directory='testing'):
+    """Helper function that copies a test shp layer and returns it.
 
     :param name: The default name for the shp layer.
     :type name: str
@@ -905,53 +909,70 @@ def clone_shp_layer(
     :param include_keywords: Include keywords file if True.
     :type include_keywords: bool
 
-    :param directory: Directory where the file is located.
-    :type directory: str
+    :param source_directory: Directory where the file is located.
+    :type source_directory: str
 
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'testing'.
+    :type target_directory: str
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
     if include_keywords:
         extensions.append('.keywords')
-    temp_path = unique_filename()
+    temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
-        src_path = os.path.join(directory, name + ext)
+        src_path = os.path.join(source_directory, name + ext)
         if os.path.exists(src_path):
-            trg_path = temp_path + ext
-            shutil.copy2(src_path, trg_path)
-    # return a single predefined layer
-    layer = QgsVectorLayer(temp_path + '.shp', 'TestLayer', 'ogr')
+            target_path = temp_path + ext
+            shutil.copy2(src_path, target_path)
+
+    shp_path = '%s.shp' % temp_path
+    layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
     return layer
 
 
-def clone_raster_layer(name, extension, include_keywords, directory):
-    """Helper function that copies a test raster and returns it.
+def clone_raster_layer(
+        name,
+        extension,
+        include_keywords,
+        source_directory,
+        target_directory='testing'):
+    """Helper function that copies a test raster.
 
     :param name: The default name for the raster layer.
     :type name: str
 
+    :param extension: The extension of the raster file.
+    :type extension: str
+
     :param include_keywords: Include keywords file if True.
     :type include_keywords: bool
 
-    :param directory: Directory where the file is located.
-    :type directory: str
+    :param source_directory: Directory where the file is located.
+    :type source_directory: str
+
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'testing'.
+    :type target_directory: str
     """
     extensions = ['.prj', '.sld', 'qml', '.prj', extension]
     if include_keywords:
         extensions.append('.keywords')
-    temp_path = unique_filename()
-
+    temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
-        src_path = os.path.join(directory, name + ext)
+        src_path = os.path.join(source_directory, name + ext)
         if os.path.exists(src_path):
             trg_path = temp_path + ext
             shutil.copy2(src_path, trg_path)
-    layer = QgsRasterLayer(temp_path + extension, os.path.basename(temp_path))
+
+    raster_path = '%s.shp' % temp_path
+    layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
     return layer
 
 
-def remove_temp_file(file_path):
+def remove_vector_temp_file(file_path):
     """Helper function that removes temp file created during test.
 
     Also its keywords file will be removed.

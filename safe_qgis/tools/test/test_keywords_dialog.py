@@ -46,7 +46,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.utilities.utilities_for_testing import (
-    test_data_path, clone_shp_layer, remove_temp_file)
+    test_data_path, clone_shp_layer, temp_dir)
 from safe_qgis.safe_interface import (
     read_file_keywords,
     unique_filename,
@@ -72,7 +72,7 @@ def make_padang_layer():
         IFACE.setActiveLayer(layer)
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
@@ -97,7 +97,7 @@ def clone_padang_layer():
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer, temp_path
 
 
@@ -115,7 +115,7 @@ def make_polygon_layer():
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
@@ -129,7 +129,7 @@ def make_point_layer():
         title = 'kabupaten_jakarta_singlepart_3_good_attr'
     layer = QgsVectorLayer(full_path, title, 'ogr')
     # noinspection PyArgumentList
-    QgsMapLayerRegistry.instance().addMapLayer(layer)
+    QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
@@ -145,7 +145,7 @@ def make_keywordless_layer():
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
 
 
@@ -518,7 +518,7 @@ class KeywordsDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='kabupaten_jakarta',
             include_keywords=True,
-            directory=BOUNDDATA)
+            source_directory=BOUNDDATA)
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
 
         # Load existing keywords
@@ -590,7 +590,13 @@ class KeywordsDialogTest(unittest.TestCase):
         message = 'Expected %s but I got %s' % (False, good_sum_ratio)
         self.assertEqual(False, good_sum_ratio, message)
 
-        remove_temp_file(layer.source())
+        # We need to delete reference to layer on Windows before removing
+        # the files
+        del layer
+        del dialog.layer
+        # Using clone_shp_layer the files are saved in testing dir under
+        # InaSAFE temp dir
+        shutil.rmtree(temp_dir(sub_dir='testing'))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordsDialogTest)

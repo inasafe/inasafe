@@ -57,7 +57,7 @@ class UtilsTest(unittest.TestCase):
     def test_shakemap_zip_dir(self):
         """Test we can get the shakemap zip dir."""
         data_dir = shakemap_zip_dir()
-        expected_dir = '%s/shakemaps-zipped' % INASAFE_WORK_DIR
+        expected_dir = os.path.join(INASAFE_WORK_DIR, 'shakemaps-zipped')
         self.assertTrue(os.path.exists(expected_dir))
         message = 'Got %s, Expectation %s' % (expected_dir, data_dir)
         self.assertEqual(data_dir, expected_dir, message)
@@ -65,7 +65,7 @@ class UtilsTest(unittest.TestCase):
     def test_shakemap_extract_dir(self):
         """Test we can get the shakemap extracted data dir."""
         data_dir = shakemap_extract_dir()
-        expected_dir = '%s/shakemaps-extracted' % INASAFE_WORK_DIR
+        expected_dir = os.path.join(INASAFE_WORK_DIR, 'shakemaps-extracted')
         self.assertTrue(os.path.exists(expected_dir))
         message = 'Got %s, Expectation %s' % (expected_dir, data_dir)
         self.assertEqual(data_dir, expected_dir, message)
@@ -73,7 +73,7 @@ class UtilsTest(unittest.TestCase):
     def test_shakemap_data_dir(self):
         """Test we can get the shakemap post processed data dir."""
         data_dir = shakemap_data_dir()
-        expected_dir = '%s/shakemaps-processed' % INASAFE_WORK_DIR
+        expected_dir = os.path.join(INASAFE_WORK_DIR, 'shakemaps-processed')
         self.assertTrue(os.path.exists(expected_dir))
         message = 'Got %s, Expectation %s' % (expected_dir, data_dir)
         self.assertEqual(data_dir, expected_dir, message)
@@ -81,7 +81,8 @@ class UtilsTest(unittest.TestCase):
     def test_report_data_dir(self):
         """Test we can get the report data dir."""
         data_dir = report_data_dir()
-        expected_dir = '%s/reports' % INASAFE_WORK_DIR
+
+        expected_dir = os.path.join(INASAFE_WORK_DIR, 'reports')
         self.assertTrue(os.path.exists(expected_dir))
         message = 'Got %s, Expectation %s' % (expected_dir, data_dir)
         self.assertEqual(data_dir, expected_dir, message)

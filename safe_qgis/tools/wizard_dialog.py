@@ -200,7 +200,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     """Dialog implementation class for the InaSAFE keywords wizard."""
 
-    def __init__(self, parent, iface, dock=None, layer=None):
+    def __init__(self, parent=None, iface=None, dock=None, layer=None):
         """Constructor for the dialog.
 
         .. note:: In QtDesigner the advanced editor's predefined keywords

@@ -1085,7 +1085,7 @@ class Aggregator(QtCore.QObject):
             if self.show_intermediate_layers:
                 self.update_keywords(self.layer, {'title': name})
                 #noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayer(self.layer)
+                QgsMapLayerRegistry.instance().addMapLayers([self.layer])
 
     def _count_field_name(self):
         """Field name for the count column."""
@@ -1505,7 +1505,7 @@ class Aggregator(QtCore.QObject):
         if self.show_intermediate_layers:
             self.update_keywords(output_layer, {'title': name})
             #noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(output_layer)
+            QgsMapLayerRegistry.instance().addMapLayers([output_layer])
 
         return output_layer
 

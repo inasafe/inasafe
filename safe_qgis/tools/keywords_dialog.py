@@ -421,7 +421,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
-            self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], data)
+        self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], data)
 
     # noinspection PyPep8Naming
     def on_cboYouthRatioAttribute_currentIndexChanged(self, index=None):
@@ -968,7 +968,18 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             # assume exposure to match ui. See issue #751
             self.add_list_entry('category', 'exposure')
 
+        aggregation_attributes = [
+            DEFAULTS['FEMALE_RATIO_ATTR_KEY'],
+            DEFAULTS['YOUTH_RATIO_ATTR_KEY'],
+            DEFAULTS['ADULT_RATIO_ATTR_KEY'],
+            DEFAULTS['ELDERLY_RATIO_ATTR_KEY'],
+        ]
+
         for key in keywords.iterkeys():
+            if key in aggregation_attributes:
+                if str(keywords[key]) == 'Use default':
+                    self.add_list_entry(key, self.global_default_data)
+                    continue
             self.add_list_entry(key, str(keywords[key]))
 
         # now make the rest of the safe_qgis reflect the list entries
