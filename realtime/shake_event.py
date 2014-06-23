@@ -1197,8 +1197,6 @@ class ShakeEvent(QObject):
                 regeneration of map product. Defaults to False.
         :type force_flag: bool
 
-        :return Path to rendered pdf.
-        :rtype: str
         :raise Propagates any exceptions.
         """
         pdf_path = os.path.join(shakemap_extract_dir(),
