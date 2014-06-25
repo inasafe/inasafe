@@ -142,10 +142,14 @@ class QgisInterface(QObject):
         #LOGGER.debug('Layer Count Before: %s' % len(self.canvas.layers()))
         current_layers = self.canvas.layers()
         final_layers = []
+        # We need to keep the record of the registered layers on our canvas!
+        registered_layers = []
         for layer in current_layers:
             final_layers.append(QgsMapCanvasLayer(layer))
+            registered_layers.append(layer.id())
         for layer in layers:
-            final_layers.append(QgsMapCanvasLayer(layer))
+            if layer.id() not in registered_layers:
+                final_layers.append(QgsMapCanvasLayer(layer))
 
         self.canvas.setLayerSet(final_layers)
         #LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))
