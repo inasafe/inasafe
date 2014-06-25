@@ -21,7 +21,7 @@ import sys
 import os
 import logging
 
-
+from qgis.core import QgsMapLayerRegistry
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -57,7 +57,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
-        load_standard_layers()
+        load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -68,6 +68,13 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.hide_exposure_flag = False
         DOCK.show_intermediate_layers = False
         set_jakarta_extent()
+
+    def tearDown(self):
+        """Run after each test."""
+        # Let's use a fresh registry, canvas, and dock for each test!
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        DOCK.cboHazard.clear()
+        DOCK.cboExposure.clear()
 
     #noinspection PyMethodMayBeStatic
     def test_check_postprocessing_layers_visibility(self):
