@@ -29,7 +29,10 @@ from os.path import join
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem
+from qgis.core import (
+    QgsVectorLayer,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry)
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
@@ -77,7 +80,7 @@ class AggregatorTest(unittest.TestCase):
 
         os.environ['LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
-        load_standard_layers()
+        load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -96,6 +99,13 @@ class AggregatorTest(unittest.TestCase):
         geo_crs = QgsCoordinateReferenceSystem()
         geo_crs.createFromSrid(4326)
         self.extent = extent_to_geo_array(CANVAS.extent(), geo_crs)
+
+    def tearDown(self):
+        """Run after each test."""
+        # Let's use a fresh registry, canvas, and dock for each test!
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        DOCK.cboHazard.clear()
+        DOCK.cboExposure.clear()
 
     def test_combo_aggregation_loaded_project(self):
         """Aggregation combo changes properly according loaded layers"""
