@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Layer Merge Dialog.
+Impact Layer Merge Dialog.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -10,9 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.c/om'
+__author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
-__date__ = '23/10/2013'
+__date__ = '06/05/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
@@ -33,7 +33,6 @@ from qgis.core import (
     QgsRectangle,
     QgsAtlasComposition)
 
-from safe.common.utilities import temp_dir
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 from safe_qgis.exceptions import (
     InvalidLayerError,
@@ -45,7 +44,10 @@ from safe_qgis.exceptions import (
     InvalidParameterError,
     ReportCreationError,
     UnsupportedProviderError)
-from safe_qgis.safe_interface import messaging as m
+from safe_qgis.safe_interface import (
+    messaging as m,
+    styles,
+    temp_dir)
 from safe_qgis.utilities.defaults import disclaimer
 from safe_qgis.utilities.utilities import (
     html_header,
@@ -53,7 +55,6 @@ from safe_qgis.utilities.utilities import (
     html_to_file,
     add_ordered_combo_item)
 from safe_qgis.utilities.help import show_context_help
-from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 INFO_STYLE = styles.INFO_STYLE
@@ -209,14 +210,14 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_chooser_clicked(self):
-        """ Show a dialog to choose directory """
+        """Show a dialog to choose directory."""
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
             self, self.tr("Select Output Directory")))
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_report_template_chooser_clicked(self):
-        """ Show a dialog to choose directory """
+        """Show a dialog to choose directory"""
         # noinspection PyCallByClass,PyTypeChecker
         report_template_path = QtGui.QFileDialog.getOpenFileName(
             self,
@@ -301,7 +302,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Organisation logo
         organisation_logo_path = settings.value(
-            'inasafe/organisationLogoPath', '', type=str)
+            'inasafe/organisation_logo_path', '', type=str)
         if organisation_logo_path != '':
             self.organisation_logo_path = organisation_logo_path
 
@@ -473,9 +474,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         for attribute in required_attribute:
             try:
                 #noinspection PyTypeChecker
-                self.first_impact[attribute] = \
-                    self.keyword_io.read_keywords(
-                        self.first_impact['layer'], attribute)
+                self.first_impact[attribute] = self.keyword_io.read_keywords(
+                    self.first_impact['layer'], attribute)
             except NoKeywordsFoundError:
                 raise NoKeywordsFoundError(
                     self.tr('No keywords found for first impact layer.'))
@@ -488,9 +488,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         for attribute in required_attribute:
             try:
                 #noinspection PyTypeChecker
-                self.second_impact[attribute] = \
-                    self.keyword_io.read_keywords(
-                        self.second_impact['layer'], attribute)
+                self.second_impact[attribute] = self.keyword_io.read_keywords(
+                    self.second_impact['layer'], attribute)
             except NoKeywordsFoundError:
                 raise NoKeywordsFoundError(
                     self.tr('No keywords found for second impact layer.'))
@@ -516,8 +515,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 #noinspection PyTypeChecker
                 self.aggregation['aggregation_attribute'] = \
                     self.keyword_io.read_keywords(
-                        self.aggregation['layer'],
-                        'aggregation attribute')
+                        self.aggregation['layer'], 'aggregation attribute')
             except NoKeywordsFoundError:
                 raise NoKeywordsFoundError(
                     self.tr('No keywords exist in aggregation layer.'))
@@ -571,13 +569,13 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """Generate dictionary representing report from html dom.
 
         :param html_dom: Input representing document dom as report from each
-                         impact layer report.
+            impact layer report.
         :type html_dom: str
 
-        :return: Dictionary representing html_dom
+        :return: Dictionary representing html_dom.
         :rtype: dict
 
-        Dict Structure::
+        Dictionary Structure::
 
             { Aggregation_Area:
                 {Exposure Type:{
@@ -626,12 +624,17 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def generate_report_summary(self, first_report_dict, second_report_dict):
         """Generate report summary for each aggregation area from merged
         report dictionary.
-        For each exposure, search for the total only.
 
-        Report dictionary looks like this:
+        For each exposure, search for the total only. Report dictionary looks
+        like this:
 
-        Dict structure:
-        ::
+        :param first_report_dict: Dictionary report from the first impact.
+        :type first_report_dict: dict
+
+        :param second_report_dict: Dictionary report from the second impact.
+        :type second_report_dict: dict
+
+        Dictionary structure::
 
             { aggregation_area:
                 {exposure_type:{
@@ -648,12 +651,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     }
                 }
             }
-
-        :param first_report_dict: Dictionary report from first impact
-        :type first_report_dict: dict
-
-        :param second_report_dict: Dictionary report from second impact
-        :type second_report_dict: dict
 
         """
         for aggregation_area in first_report_dict:

@@ -304,7 +304,7 @@ def mm_to_points(mm, dpi):
     """Convert measurement in mm to one in points.
 
     :param mm: A distance in millimeters.
-    :type mm: int
+    :type mm: int, float
 
     :returns: mm converted value as points.
     :rtype: int, float
@@ -568,7 +568,7 @@ def is_raster_layer(layer):
         return False
 
 
-def extent_to_geo_array(extent, source_crs):
+def extent_to_geo_array(extent, source_crs, dest_crs=None):
     """Convert the supplied extent to geographic and return as an array.
 
     :param extent: Rectangle defining a spatial extent in any CRS.
@@ -583,8 +583,12 @@ def extent_to_geo_array(extent, source_crs):
 
     """
 
-    geo_crs = QgsCoordinateReferenceSystem()
-    geo_crs.createFromSrid(4326)
+    if dest_crs is None:
+        geo_crs = QgsCoordinateReferenceSystem()
+        geo_crs.createFromSrid(4326)
+    else:
+        geo_crs = dest_crs
+
     transform = QgsCoordinateTransform(source_crs, geo_crs)
 
     # Get the clip area in the layer's crs

@@ -1,7 +1,16 @@
+# coding=utf-8
 import math
 import numpy
+from safe.metadata import (
+    hazard_earthquake,
+    unit_mmi,
+    layer_raster_numeric,
+    exposure_population,
+    unit_people_per_pixel,
+    hazard_definition,
+    exposure_definition
+)
 from third_party.odict import OrderedDict
-
 from safe.defaults import get_defaults
 from safe.impact_functions.core import default_minimum_needs
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
@@ -10,8 +19,9 @@ from safe.common.utilities import ugettext as tr
 
 
 class PAGFatalityFunction(ITBFatalityFunction):
-    """
-    Population Vulnerability Model Pager
+    # noinspection PyUnresolvedReferences
+    """Population Vulnerability Model Pager.
+
     Loss ratio(MMI) = standard normal distrib( 1 / BETA * ln(MMI/THETA)).
     Reference:
     Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).
@@ -30,13 +40,59 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     subcategory=='population' and \
                     layertype=='raster'
     """
+
+    class Metadata(ITBFatalityFunction.Metadata):
+        """Metadata for PAG Fatality Function.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'PAGFatalityFunction.',
+                'name': tr('PAG Fatality Function.'),
+                'impact': tr('Die or be displaced according Pager model'),
+                'author': 'Helen Crowley',
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impact of earthquake on population based '
+                    'on Population Vulnerability Model Pager'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': hazard_earthquake,
+                        'units': [unit_mmi],
+                        'layer_constraints': [layer_raster_numeric]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_population,
+                        'units': [unit_people_per_pixel],
+                        'layer_constraints': [layer_raster_numeric]
+                    }
+                }
+            }
+            return dict_meta
     synopsis = tr('To assess the impact of earthquake on population based on '
                   'Population Vulnerability Model Pager')
-    citations = \
-        tr(' * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
-           '   Estimating casualties for large worldwide earthquakes using '
-           '   an empirical approach. U.S. Geological Survey Open-File '
-           '   Report 2009-1136.')
+    citations = tr(
+        ' * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
+        '   Estimating casualties for large worldwide earthquakes using '
+        '   an empirical approach. U.S. Geological Survey Open-File '
+        '   Report 2009-1136.')
     limitation = ''
     detailed_description = ''
     title = tr('Die or be displaced according Pager model')
@@ -68,12 +124,13 @@ class PAGFatalityFunction(ITBFatalityFunction):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
+                    ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})])),
         ('minimum needs', default_needs)])
 
+    # noinspection PyPep8Naming
     def fatality_rate(self, mmi):
-        """Pager method to compute fatality rate"""
+        """Pager method to compute fatality rate."""
 
         N = math.sqrt(2 * math.pi)
         THETA = self.parameters['Theta']

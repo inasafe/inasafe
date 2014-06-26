@@ -19,18 +19,24 @@ __copyright__ += 'Disaster Reduction'
 import sys
 import os
 import logging
-from safe_qgis.utilities import custom_logging
+
 from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.utilities import is_raster_layer
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 # Import the PyQt and QGIS libraries
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
     QTranslator,
     QCoreApplication,
-    Qt)
+    Qt,
+    QSettings
+)
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 try:
     # When upgrading, using the plugin manager, you may get an error when
@@ -40,12 +46,13 @@ try:
     from safe_qgis.exceptions import (
         TranslationLoadError,
         UnsupportedProviderError,
-        NoKeywordsFoundError)
+        NoKeywordsFoundError,
+        InvalidParameterError)
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
     # yet.
-    # noinspection PyTypeChecker,PyArgumentList
+    # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
     myWarning = QCoreApplication.translate(
         'Plugin', 'Please restart QGIS to use this plugin.')
     # noinspection PyTypeChecker,PyArgumentList
@@ -58,7 +65,7 @@ class Plugin:
     """The QGIS interface implementation for the InaSAFE plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
-    It creates a toolbar and menubar entry and launches the InaSAFE user
+    It creates a toolbar and menu bar entry and launches the InaSAFE user
     interface if these are activated.
     """
 
@@ -83,16 +90,18 @@ class Plugin:
         self.action_batch_runner = None
         self.action_shake_converter = None
         self.action_minimum_needs = None
+        self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_function_browser = None
         self.action_options = None
         self.action_keywords_dialog = None
+        self.action_keywords_wizard = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
         self.action_dock = None
+        self.action_toggle_rubberbands = None
         #print self.tr('InaSAFE')
-        custom_logging.setup_logger()
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
 
@@ -100,12 +109,12 @@ class Plugin:
     def change_i18n(self, new_locale):
         """Change internationalisation for the plugin.
 
-        Override the system locale
-        and then see if we can get a valid translation file
-        for whatever locale is effectively being used.
+        Override the system locale  and then see if we can get a valid
+        translation file for whatever locale is effectively being used.
 
         :param new_locale: the new locale i.e. 'id', 'af', etc.
         :type new_locale: str
+
         :raises: TranslationLoadException
         """
 
@@ -216,6 +225,24 @@ class Plugin:
             self.show_keywords_editor)
 
         self.add_action(self.action_keywords_dialog)
+
+        #--------------------------------------
+        # Create action for keywords creation wizard
+        #--------------------------------------
+        self.action_keywords_wizard = QAction(
+            QIcon(':/plugins/inasafe/show-keyword-wizard.svg'),
+            self.tr('InaSAFE Keywords Creation Wizard'),
+            self.iface.mainWindow())
+        self.action_keywords_wizard.setStatusTip(self.tr(
+            'Open InaSAFE keywords creation wizard'))
+        self.action_keywords_wizard.setWhatsThis(self.tr(
+            'Open InaSAFE keywords creation wizard'))
+        self.action_keywords_wizard.setEnabled(False)
+
+        self.action_keywords_wizard.triggered.connect(
+            self.show_keywords_wizard)
+
+        self.add_action(self.action_keywords_wizard)
 
         #--------------------------------------
         # Create action for options dialog
@@ -356,8 +383,28 @@ class Plugin:
         # or  view-panels
         #
         self.dock_widget.visibilityChanged.connect(self.toggle_inasafe_action)
-
         # pylint: disable=W0201
+
+        #---------------------------------------
+        # Create action for toggling rubber bands
+        #---------------------------------------
+        self.action_toggle_rubberbands = QAction(
+            QIcon(':/plugins/inasafe/toggle-rubber-bands.svg'),
+            self.tr('Toggle scenario outlines'), self.iface.mainWindow())
+
+        message = self.tr('Toggle rubber bands showing scenarion extents.')
+        self.action_toggle_rubberbands.setStatusTip(message)
+        self.action_toggle_rubberbands.setWhatsThis(message)
+        # Set initial state
+        self.action_toggle_rubberbands.setCheckable(True)
+        settings = QSettings()
+        flag = bool(settings.value(
+            'inasafe/showRubberBands', False, type=bool))
+        self.action_toggle_rubberbands.setChecked(flag)
+        # noinspection PyUnresolvedReferences
+        self.action_toggle_rubberbands.triggered.connect(
+            self.dock_widget.toggle_rubber_bands)
+        self.add_action(self.action_toggle_rubberbands)
 
     # noinspection PyMethodMayBeStatic
     def clear_modules(self):
@@ -418,7 +465,7 @@ class Plugin:
         self.clear_modules()
 
     def toggle_inasafe_action(self, checked):
-        """Check or uncheck the toggle inaSAFE toolbar button.
+        """Check or un-check the toggle inaSAFE toolbar button.
 
         This slot is called when the user hides the inaSAFE panel using its
         close button or using view->panels.
@@ -479,6 +526,7 @@ class Plugin:
             keyword_io.read_keywords(self.iface.activeLayer())
         except UnsupportedProviderError:
             # noinspection PyUnresolvedReferences,PyCallByClass
+            # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 None,
                 self.tr('Unsupported layer type'),
@@ -492,8 +540,29 @@ class Plugin:
             # we will create them from scratch in the dialog
             pass
         # End of fix for #793
+        # Fix for filtered-layer
+        except InvalidParameterError, e:
+            # noinspection PyTypeChecker,PyTypeChecker
+            QMessageBox.warning(
+                None,
+                self.tr('Invalid Layer'),
+                e.message)
+            return
 
         dialog = KeywordsDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
+        dialog.exec_()  # modal
+
+    def show_keywords_wizard(self):
+        """Show the keywords creation wizard."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.wizard_dialog import WizardDialog
+
+        if self.iface.activeLayer() is None:
+            return
+        dialog = WizardDialog(
             self.iface.mainWindow(),
             self.iface,
             self.dock_widget)
@@ -510,7 +579,8 @@ class Plugin:
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.shakemap_importer import ShakemapImporter
+        from safe_qgis.tools.shake_grid.shakemap_importer import (
+            ShakemapImporter)
 
         dialog = ShakemapImporter(self.iface.mainWindow())
         dialog.exec_()  # modal
@@ -524,7 +594,7 @@ class Plugin:
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
-        from safe_qgis.batch.batch_dialog import BatchDialog
+        from safe_qgis.tools.batch.batch_dialog import BatchDialog
 
         dialog = BatchDialog(
             parent=self.iface.mainWindow(),
@@ -541,15 +611,32 @@ class Plugin:
             dock=self.dock_widget)
         dialog.save_scenario()
 
+    def _disable_keyword_tools(self):
+        """Internal helper to disable the keyword and wizard actions."""
+        self.action_keywords_dialog.setEnabled(False)
+        self.action_keywords_wizard.setEnabled(False)
+
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
+
         :param layer: The layer that is now active.
         :type layer: QgsMapLayer
         """
-        if layer is None:
-            self.action_keywords_dialog.setEnabled(False)
-        else:
-            self.action_keywords_dialog.setEnabled(True)
+        if not layer:
+            self._disable_keyword_tools()
+            return
+        if not hasattr(layer, 'providerType'):
+            self._disable_keyword_tools()
+            return
+        if layer.providerType() == 'wms':
+            self._disable_keyword_tools()
+            return
+        if is_raster_layer(layer) and layer.bandCount() > 1:
+            self._disable_keyword_tools()
+            return
+
+        self.action_keywords_dialog.setEnabled(True)
+        self.action_keywords_wizard.setEnabled(True)
 
     def shortcut_f7(self):
         """Executed when user press F7 - will show the shakemap importer."""

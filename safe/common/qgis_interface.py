@@ -20,20 +20,22 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
-__copyright__ = ('Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
-                 'Copyright (c) 2011 German Carrillo, '
-                 'geotux_tuxman@linuxmail.org')
+__copyright__ = (
+    'Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
+    'Copyright (c) 2011 German Carrillo, geotux_tuxman@linuxmail.org'
+    'Copyright (c) 2014 Tim Sutton, tim@linfiniti.com'
+)
 
 import logging
 from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import QgsMapLayerRegistry, QGis
 from qgis.gui import QgsMapCanvasLayer
 LOGGER = logging.getLogger('InaSAFE')
 
 
 #noinspection PyMethodMayBeStatic,PyPep8Naming
 class QgisInterface(QObject):
-    """Class to expose qgis objects and functionalities to plugins.
+    """Class to expose qgis objects and functions to plugins.
 
     This class is here for enabling us to run unit tests only,
     so most methods are simply stubs.
@@ -58,17 +60,24 @@ class QgisInterface(QObject):
 
         # For processing module
         self.destCrs = None
+        # For keeping track of which layer is active in the legend.
+        self.active_layer = None
 
         # In the next section of code, we are going to do some monkey patching
         # to make the QGIS processing framework think that this mock QGIS IFACE
         # instance is the actual one. It will also ensure that the processing
         # algorithms are nicely loaded and available for use.
 
-        # pylint: disable=F0401
-        from processing.core import QGisLayers
+        # Since QGIS > 2.0, the module is moved from QGisLayers to dataobjects
+        # pylint: disable=F0401, E0611
+        if QGis.QGIS_VERSION_INT > 20001:
+            from processing.tools import dataobjects
+        else:
+            from processing.core import QGisLayers as dataobjects
+
         import processing
         from processing.core.Processing import Processing
-        # pylint: enable=F0401
+        # pylint: enable=F0401, E0611
         processing.classFactory(self)
 
         # We create our own getAlgorithm function below which will will monkey
@@ -94,10 +103,10 @@ class QgisInterface(QObject):
 
         # Now we let the monkey loose!
         Processing.getAlgorithm = mock_getAlgorithm
-        # We also need to make QGisLayers think that this iface is 'the one'
+        # We also need to make dataobjects think that this iface is 'the one'
         # Note. the placement here (after the getAlgorithm monkey patch above)
         # is significant, so don't move it!
-        QGisLayers.iface = self
+        dataobjects.iface = self
 
     def __getattr__(self, *args, **kwargs):
         # It's for processing module
@@ -120,32 +129,36 @@ class QgisInterface(QObject):
         return QgsMapLayerRegistry.instance().mapLayers().values()
 
     @pyqtSlot('QStringList')
-    def addLayers(self, theLayers):
+    def addLayers(self, layers):
         """Handle layers being added to the registry so they show up in canvas.
 
-        :param theLayers: list<QgsMapLayer> list of map layers that were added
+        :param layers: list<QgsMapLayer> list of map layers that were added
 
         .. note:: The QgsInterface api does not include this method,
             it is added here as a helper to facilitate testing.
         """
         #LOGGER.debug('addLayers called on qgis_interface')
-        #LOGGER.debug('Number of layers being added: %s' % len(theLayers))
+        #LOGGER.debug('Number of layers being added: %s' % len(layers))
         #LOGGER.debug('Layer Count Before: %s' % len(self.canvas.layers()))
-        myLayers = self.canvas.layers()
-        myCanvasLayers = []
-        for myLayer in myLayers:
-            myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-        for myLayer in theLayers:
-            myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
+        current_layers = self.canvas.layers()
+        final_layers = []
+        # We need to keep the record of the registered layers on our canvas!
+        registered_layers = []
+        for layer in current_layers:
+            final_layers.append(QgsMapCanvasLayer(layer))
+            registered_layers.append(layer.id())
+        for layer in layers:
+            if layer.id() not in registered_layers:
+                final_layers.append(QgsMapCanvasLayer(layer))
 
-        self.canvas.setLayerSet(myCanvasLayers)
+        self.canvas.setLayerSet(final_layers)
         #LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))
 
     @pyqtSlot('QgsMapLayer')
-    def addLayer(self, theLayer):
+    def addLayer(self, layer):
         """Handle a layer being added to the registry so it shows up in canvas.
 
-        :param theLayer: list<QgsMapLayer> list of map layers that were added
+        :param layer: list<QgsMapLayer> list of map layers that were added
 
         .. note: The QgsInterface api does not include this method, it is added
                  here as a helper to facilitate testing.
@@ -156,92 +169,131 @@ class QgisInterface(QObject):
         pass
 
     @pyqtSlot()
-    def removeAllLayers(self):
+    def removeAllLayers(self, ):
         """Remove layers from the canvas before they get deleted.
+
+        .. note:: This is NOT part of the QGisInterface API but is needed
+            to support QgsMapLayerRegistry.removeAllLayers().
+
         """
         self.canvas.setLayerSet([])
+        self.active_layer = None
 
     def newProject(self):
-        """Create new project
-        """
+        """Create new project."""
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
     # ---------------- API Mock for QgsInterface follows -------------------
 
     def zoomFull(self):
-        """Zoom to the map full extent"""
+        """Zoom to the map full extent."""
         pass
 
     def zoomToPrevious(self):
-        """Zoom to previous view extent"""
+        """Zoom to previous view extent."""
         pass
 
     def zoomToNext(self):
-        """Zoom to next view extent"""
+        """Zoom to next view extent."""
         pass
 
     def zoomToActiveLayer(self):
-        """Zoom to extent of active layer"""
+        """Zoom to extent of active layer."""
         pass
 
-    def addVectorLayer(self, vectorLayerPath, baseName, providerKey):
-        """Add a vector layer
-        :param baseName:
-        :param providerKey:
-        :param vectorLayerPath:
+    def addVectorLayer(self, path, base_name, provider_key):
+        """Add a vector layer.
+
+        :param path: Path to layer.
+        :type path: str
+
+        :param base_name: Base name for layer.
+        :type base_name: str
+
+        :param provider_key: Provider key e.g. 'ogr'
+        :type provider_key: str
         """
         pass
 
-    def addRasterLayer(self, rasterLayerPath, baseName):
+    def addRasterLayer(self, path, base_name):
         """Add a raster layer given a raster layer file name
-        :param rasterLayerPath:
-        :param baseName:
+
+        :param path: Path to layer.
+        :type path: str
+
+        :param base_name: Base name for layer.
+        :type base_name: str
         """
         pass
+
+    def setActiveLayer(self, layer):
+        """Set the currently active layer in the legend.
+        :param layer: Layer to make active.
+        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        """
+        self.active_layer = layer
 
     def activeLayer(self):
-        """Get pointer to the active layer (layer selected in the legend)"""
-        # noinspection PyArgumentList
-        myLayers = QgsMapLayerRegistry.instance().mapLayers()
-        for myItem in myLayers:
-            return myLayers[myItem]
+        """Get pointer to the active layer (layer selected in the legend)."""
+        if self.active_layer is not None:
+            return self.active_layer
+        else:
+            return None
 
-    def addToolBarIcon(self, qAction):
-        """Add an icon to the plugins toolbar
-        :param qAction:
+    def addToolBarIcon(self, action):
+        """Add an icon to the plugins toolbar.
+
+        :param action: Action to add to the toolbar.
+        :type action: QAction
         """
         pass
 
-    def removeToolBarIcon(self, qAction):
-        """Remove an action (icon) from the plugin toolbar
-        :param qAction:
+    def removeToolBarIcon(self, action):
+        """Remove an action (icon) from the plugin toolbar.
+
+        :param action: Action to add to the toolbar.
+        :type action: QAction
         """
         pass
 
     def addToolBar(self, name):
-        """Add toolbar with specified name
-        :param name:
+        """Add toolbar with specified name.
+
+        :param name: Name for the toolbar.
+        :type name: str
         """
         pass
 
     def mapCanvas(self):
-        """Return a pointer to the map canvas"""
+        """Return a pointer to the map canvas."""
         return self.canvas
 
     def mainWindow(self):
-        """Return a pointer to the main window
+        """Return a pointer to the main window.
 
-        In case of QGIS it returns an instance of QgisApp
+        In case of QGIS it returns an instance of QgisApp.
         """
         pass
 
-    def addDockWidget(self, area, dockwidget):
-        """ Add a dock widget to the main window
-        :param dockwidget:
-        :param area:
+    def addDockWidget(self, area, dock_widget):
+        """Add a dock widget to the main window.
+
+        :param area: Where in the ui the dock should be placed.
+        :type area:
+
+        :param dock_widget: A dock widget to add to the UI.
+        :type dock_widget: QDockWidget
         """
         pass
 
     def legendInterface(self):
+        """Get the legend.
+
+        TODO: Implement this when it is needed one day...
+
+        See also discussion at:
+
+        https://github.com/AIFDR/inasafe/pull/924/
+        """
         return self.canvas

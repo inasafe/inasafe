@@ -9,9 +9,11 @@ import hashlib
 import logging
 import platform
 import glob
+import shutil
 from os.path import join
 from itertools import izip
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui
 from qgis.core import (
     QgsVectorLayer,
@@ -22,6 +24,10 @@ from qgis.core import (
 
 # For testing and demoing
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.safe_interface import (
     read_file_keywords,
     unique_filename,
@@ -30,7 +36,6 @@ from safe_qgis.safe_interface import (
     UNITDATA)
 
 from safe_qgis.safe_interface import HAZDATA, EXPDATA
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
@@ -152,9 +157,12 @@ def load_layer(layer_file, directory=TESTDATA):
         message = 'File %s had illegal extension' % path
         raise Exception(message)
 
+    # noinspection PyUnresolvedReferences
     message = 'Layer "%s" is not valid' % str(layer.source())
+    # noinspection PyUnresolvedReferences
     if not layer.isValid():
         print message
+    # noinspection PyUnresolvedReferences
     assert layer.isValid(), message
     return layer, category
 
@@ -214,6 +222,12 @@ def set_yogya_extent():
 def set_small_jakarta_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
     rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
+    CANVAS.setExtent(rect)
+
+
+def set_manila_extent():
+    """Zoom to an area occupied by both Manila layers in Geo."""
+    rect = QgsRectangle(120.866995, 14.403305, 121.193824, 14.784944)
     CANVAS.setExtent(rect)
 
 
@@ -598,12 +612,31 @@ def combos_to_string(dock):
     return string
 
 
+def get_function_index(dock, function_id):
+    """Get the combo index for a function given its function_id.
+
+    :param dock: A dock instance.
+    :type dock: Dock
+
+    :param function_id: The function id e.g. FloodEvacuationImpactFunction.
+    :type function_id: str
+    """
+
+    index = -1
+    for count in range(dock.cboFunction.count()):
+        next_function_id = dock.get_function_id(count)
+        if function_id == next_function_id:
+            index = count
+            break
+    return index
+
+
 def setup_scenario(
         dock,
         hazard,
         exposure,
-        function,
         function_id,
+        function=None,
         ok_button_flag=True,
         aggregation_layer=None,
         aggregation_enabled_flag=None):
@@ -663,8 +696,8 @@ def setup_scenario(
             return False, message
         dock.cboExposure.setCurrentIndex(index)
 
-    if function is not None:
-        index = dock.cboFunction.findText(function)
+    if function_id is not None:
+        index = get_function_index(dock, function_id)
         message = ('\nImpact Function Not Found: %s\n Combo State:\n%s' %
                    (function, combos_to_string(dock)))
         if index == -1:
@@ -690,10 +723,13 @@ def setup_scenario(
     state = get_ui_state(dock)
 
     expected_state = {'Run Button Enabled': ok_button_flag,
-                      'Impact Function Title': function,
                       'Impact Function Id': function_id,
                       'Hazard': hazard,
                       'Exposure': exposure}
+    if function is not None:
+        expected_state['Impact Function Title'] = function
+    else:
+        state.pop('Impact Function Title')
 
     message = 'Expected versus Actual State\n'
     message += '--------------------------------------------------------\n'
@@ -858,3 +894,95 @@ def compare_wkt(a, b, tol=0.000001):
             return False
 
     return True
+
+
+def clone_shp_layer(
+        name='tsunami_polygon',
+        include_keywords=False,
+        source_directory=TESTDATA,
+        target_directory='testing'):
+    """Helper function that copies a test shp layer and returns it.
+
+    :param name: The default name for the shp layer.
+    :type name: str
+
+    :param include_keywords: Include keywords file if True.
+    :type include_keywords: bool
+
+    :param source_directory: Directory where the file is located.
+    :type source_directory: str
+
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'testing'.
+    :type target_directory: str
+    """
+    extensions = ['.shp', '.shx', '.dbf', '.prj']
+    if include_keywords:
+        extensions.append('.keywords')
+    temp_path = unique_filename(dir=temp_dir(target_directory))
+    # copy to temp file
+    for ext in extensions:
+        src_path = os.path.join(source_directory, name + ext)
+        if os.path.exists(src_path):
+            target_path = temp_path + ext
+            shutil.copy2(src_path, target_path)
+
+    shp_path = '%s.shp' % temp_path
+    layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
+    return layer
+
+
+def clone_raster_layer(
+        name,
+        extension,
+        include_keywords,
+        source_directory,
+        target_directory='testing'):
+    """Helper function that copies a test raster.
+
+    :param name: The default name for the raster layer.
+    :type name: str
+
+    :param extension: The extension of the raster file.
+    :type extension: str
+
+    :param include_keywords: Include keywords file if True.
+    :type include_keywords: bool
+
+    :param source_directory: Directory where the file is located.
+    :type source_directory: str
+
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'testing'.
+    :type target_directory: str
+    """
+    extensions = ['.prj', '.sld', 'qml', '.prj', extension]
+    if include_keywords:
+        extensions.append('.keywords')
+    temp_path = unique_filename(dir=temp_dir(target_directory))
+    # copy to temp file
+    for ext in extensions:
+        src_path = os.path.join(source_directory, name + ext)
+        if os.path.exists(src_path):
+            trg_path = temp_path + ext
+            shutil.copy2(src_path, trg_path)
+
+    raster_path = '%s.shp' % temp_path
+    layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
+    return layer
+
+
+def remove_vector_temp_file(file_path):
+    """Helper function that removes temp file created during test.
+
+    Also its keywords file will be removed.
+
+    :param file_path: File path to be removed.
+    :type file_path: str
+    """
+    file_path = file_path[:-4]
+    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
+    extensions.extend(['.prj', '.sld', 'qml'])
+    for ext in extensions:
+        if os.path.exists(file_path + ext):
+            os.remove(file_path + ext)

@@ -4,7 +4,7 @@
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-disable=R,I,W0404,W0142,W0201,W0212,W0231,W0232,W0403,W0511,E0611,E1103,E1101,C0103,C0111,C0302
+disable=R,I,W0404,W0142,W0201,W0212,W0231,W0232,W0403,W0511,E0611,E1103,E1101,C0103,C0111,C0302,W1201,C0325,C1001
 
 # Note W0404 should only be disabled on Ole's  home computer running pylint
 # version
@@ -35,7 +35,7 @@ profile=no
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
-ignore=third_party,PyQt4,ast,colorsys,ctypes,decimal,encodings,numpy,osgeo,raven,subprocess,urllib2,uuid,webbroser,odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py,resources.py,resources_rc.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,osm_downloader_base.py,shakemap_importer_base.py,osm_downloader_base.py,batch_dialog_base.py,impact_merge_dialog_base.py,impact_report_dialog_base.py
+ignore=third_party,PyQt4,ast,colorsys,ctypes,decimal,encodings,numpy,osgeo,raven,subprocess,urllib2,uuid,webbroser,odict.py,help_base.py,keywords_dialog_base.py,wizard_dialog_base.py,options_dialog_base.py,dock_base.py,resources.py,resources_rc.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,osm_downloader_base.py,shakemap_importer_base.py,osm_downloader_base.py,batch_dialog_base.py,impact_merge_dialog_base.py,impact_report_dialog_base.py,about_dialog_base.py
 
 # Pickle collected data for later comparisons.
 persistent=yes

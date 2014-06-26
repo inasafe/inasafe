@@ -22,19 +22,24 @@ import os
 import shutil
 from datetime import datetime
 from zipfile import ZipFile
-# The logger is intiailsed in utils.py by init
 import logging
-LOGGER = logging.getLogger('InaSAFE')
 
-from rt_exceptions import (
+from realtime.exceptions import (
     EventUndefinedError,
     EventIdError,
     NetworkError,
     EventValidationError,
     InvalidInputZipError,
     ExtractionError)
-from ftp_client import FtpClient
-from utils import shakemap_zip_dir, shakemap_extract_dir
+from realtime.ftp_client import FtpClient
+from realtime.utilities import (
+    shakemap_zip_dir,
+    shakemap_extract_dir,
+    realtime_logger_name)
+from realtime.server_config import BASE_URL
+
+# The logger is initialised in realtime/__init__
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 class ShakeData:
@@ -43,12 +48,13 @@ class ShakeData:
 
     Shake files are provided on an ftp server. There are two files for every
     event:
+
        * an 'inp' file
        * an 'out' file
 
     These files are provided on the ftp server as zip files. For example:
-        * `ftp://118.97.83.243/20110413170148.inp.zip`_
-        * `ftp://118.97.83.243/20110413170148.out.zip`_
+        * `<ftp://118.97.83.243/20110413170148.inp.zip>`_
+        * `<ftp://118.97.83.243/20110413170148.out.zip>`_
 
     There are numerous files provided within these two zip files, but there
     is only really one that we are interested in:
@@ -62,7 +68,7 @@ class ShakeData:
     then extracting various by products from it.
     """
 
-    def __init__(self, event=None, host='118.97.83.243'):
+    def __init__(self, event=None, host=BASE_URL):
         """Constructor for the ShakeData class.
 
         :param event: (Optional) a string representing the event id
@@ -73,7 +79,7 @@ class ShakeData:
         :param host: (Optional) a string representing the ip address
                   or host name of the server from which the data should be
                   retrieved. It assumes that the data is in the root directory.
-                  Defaults to 118.97.83.243
+                  Defaults to BASE_URL
 
         :returns: None
 
@@ -145,10 +151,9 @@ class ShakeData:
     def file_names(self):
         """Return file names for the inp and out files based on the event id.
 
-        e.g. 20120726022003.inp.zip, 20120726022003.out.zip
+        e.g. 20131105060809.inp.zip, 20131105060809.out.zip
 
-        :return: Tuple Consisting of inp and out local cache
-        paths.
+        :return: Tuple Consisting of inp and out local cache paths.
         :rtype: tuple (str, str)
 
         :raises: None
@@ -311,7 +316,7 @@ class ShakeData:
         the event id associated with this class.
 
         :return: A two tuple where the first item is the inp dataset path and
-        the second the out dataset path on the local storage system.
+         the second the out dataset path on the local storage system.
 
         :raises: EventUndefinedError, NetworkError
         """
@@ -329,22 +334,21 @@ class ShakeData:
         """Extract the zipped resources. The two zips associated with this
         shakemap will be extracted to e.g.
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20120726022003`
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809`
 
-        After extraction the complete path will appear something like this:
+        After extraction, under that directory, there will be directory that
+        appears something like this:
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
-               20120726022003/usr/local/smap/data/20120726022003`
+        :file:`/usr/local/smap/data/20131105060809`
 
         with input and output directories appearing beneath that.
 
         This method will then move the grid.xml file up to the root of
         the extract dir and recursively remove the extracted dirs.
 
-        After this final step, the following file will be present:
+        After this final step, :file:`grid.xml` will be present under:
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
-               20120726022003/grid.xml`
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809/`
 
         If the zips have not already been retrieved from the ftp server,
         they will be fetched first automatically.
@@ -367,8 +371,7 @@ class ShakeData:
         :return: a string containing the grid.xml paths e.g.::
             myGridXml = myShakeData.extract()
             print myGridXml
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
-
+            /tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml
 
         :raises: InvalidInputZipError, InvalidOutputZipError
         """
@@ -416,7 +419,7 @@ class ShakeData:
 
         :return: A string representing the absolute local filesystem path to
             the unzipped shake event dir. e.g.
-            :file:`/tmp/inasafe/realtime/shakemaps-extracted/20120726022003`
+            :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809`
 
         :raises: Any exceptions will be propogated
         """

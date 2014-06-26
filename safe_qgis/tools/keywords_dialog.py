@@ -36,11 +36,22 @@ from safe_qgis.utilities.utilities import (
     get_error_message,
     is_polygon_layer,
     layer_attribute_names)
-
 from safe_qgis.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
+from safe_qgis.safe_interface import DEFAULTS
+from safe.api import metadata
+
+# Aggregations' keywords
+female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
+female_ratio_default_key = DEFAULTS['FEMALE_RATIO_KEY']
+youth_ratio_attribute_key = DEFAULTS['YOUTH_RATIO_ATTR_KEY']
+youth_ratio_default_key = DEFAULTS['YOUTH_RATIO_KEY']
+adult_ratio_attribute_key = DEFAULTS['ADULT_RATIO_ATTR_KEY']
+adult_ratio_default_key = DEFAULTS['ADULT_RATIO_KEY']
+elderly_ratio_attribute_key = DEFAULTS['ELDERLY_RATIO_ATTR_KEY']
+elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -74,9 +85,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
+        self.defaults = None
+
+        # string constants
+        self.global_default_string = metadata.global_default_attribute['name']
+        self.do_not_use_string = metadata.do_not_use_attribute['name']
+        self.global_default_data = metadata.global_default_attribute['id']
+        self.do_not_use_data = metadata.do_not_use_attribute['id']
 
         if layer is None:
-            self.layer = iface.activeLayer()
+            self.layer = self.iface.activeLayer()
         else:
             self.layer = layer
 
@@ -103,19 +121,36 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
              ('volcano', self.tr('volcano')),
              ('Not Set', self.tr('Not Set'))])
 
+        # noinspection PyUnresolvedReferences
         self.lstKeywords.itemClicked.connect(self.edit_key_value_pair)
 
         # Set up help dialog showing logic.
         help_button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
-        # set some initial ui state:
-        self.defaults = breakdown_defaults()
-        self.pbnAdvanced.setChecked(False)
-        self.radPredefined.setChecked(True)
-        self.dsbFemaleRatioDefault.blockSignals(True)
-        self.dsbFemaleRatioDefault.setValue(self.defaults['FEM_RATIO'])
-        self.dsbFemaleRatioDefault.blockSignals(False)
+        if self.layer is not None and is_polygon_layer(self.layer):
+            # set some initial ui state:
+            self.defaults = breakdown_defaults()
+            self.radPredefined.setChecked(True)
+            self.dsbFemaleRatioDefault.blockSignals(True)
+            self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
+            self.dsbFemaleRatioDefault.blockSignals(False)
+
+            self.dsbYouthRatioDefault.blockSignals(True)
+            self.dsbYouthRatioDefault.setValue(self.defaults['YOUTH_RATIO'])
+            self.dsbYouthRatioDefault.blockSignals(False)
+
+            self.dsbAdultRatioDefault.blockSignals(True)
+            self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
+            self.dsbAdultRatioDefault.blockSignals(False)
+
+            self.dsbElderlyRatioDefault.blockSignals(True)
+            self.dsbElderlyRatioDefault.setValue(
+                self.defaults['ELDERLY_RATIO'])
+            self.dsbElderlyRatioDefault.blockSignals(False)
+        else:
+            self.radPostprocessing.hide()
+            self.tab_widget.removeTab(1)
 
         if self.layer:
             self.load_state_from_keywords()
@@ -124,8 +159,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         reload_button = self.buttonBox.addButton(
             self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
         reload_button.clicked.connect(self.load_state_from_keywords)
-        self.grpAdvanced.setVisible(False)
         self.resize_dialog()
+        self.tab_widget.setCurrentIndex(0)
+        # TODO No we should not have test related stuff in prod code. TS
+        self.test = False
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.
@@ -139,99 +176,209 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     #noinspection PyMethodMayBeStatic
     def show_help(self):
         """Load the help text for the keywords dialog."""
-        show_context_help(context='keywords')
+        show_context_help(context='keywords_editor')
 
     def toggle_postprocessing_widgets(self):
         """Hide or show the post processing widgets depending on context."""
         LOGGER.debug('togglePostprocessingWidgets')
+        # TODO Too much baggage here. Can't we just disable/enable the tab? TS
         postprocessing_flag = self.radPostprocessing.isChecked()
         self.cboSubcategory.setVisible(not postprocessing_flag)
         self.lblSubcategory.setVisible(not postprocessing_flag)
-        self.show_aggregation_attribute(postprocessing_flag)
-        self.show_female_ratio_attribute(postprocessing_flag)
-        self.show_female_ratio_default(postprocessing_flag)
+        self.show_aggregation_attribute()
+        self.show_female_ratio_attribute()
+        self.show_female_ratio_default()
+        self.show_youth_ratio_attribute()
+        self.show_youth_ratio_default()
+        self.show_adult_ratio_attribute()
+        self.show_adult_ratio_default()
+        self.show_elderly_ratio_attribute()
+        self.show_elderly_ratio_default()
+        # Also enable/disable the aggregation tab
+        self.aggregation_tab.setEnabled(postprocessing_flag)
 
-    def show_aggregation_attribute(self, visible_flag):
+    def show_aggregation_attribute(self):
         """Hide or show the aggregation attribute in the keyword editor dialog.
-
-        :param visible_flag: Flag indicating if the aggregation attribute
-            should be hidden or shown.
-        :type visible_flag: bool
         """
         box = self.cboAggregationAttribute
         box.blockSignals(True)
         box.clear()
         box.blockSignals(False)
-        if visible_flag:
-            current_keyword = self.get_value_for_key(
-                self.defaults['AGGR_ATTR_KEY'])
-            fields, attribute_position = layer_attribute_names(
-                self.layer,
-                [QtCore.QVariant.Int, QtCore.QVariant.String],
-                current_keyword)
-            box.addItems(fields)
-            if attribute_position is None:
-                box.setCurrentIndex(0)
-            else:
-                box.setCurrentIndex(attribute_position)
+        current_keyword = self.get_value_for_key(
+            self.defaults['AGGR_ATTR_KEY'])
+        fields, attribute_position = layer_attribute_names(
+            self.layer,
+            [QtCore.QVariant.Int, QtCore.QVariant.String],
+            current_keyword)
+        box.addItems(fields)
+        if attribute_position is None:
+            box.setCurrentIndex(0)
+        else:
+            box.setCurrentIndex(attribute_position)
 
-        box.setVisible(visible_flag)
-        self.lblAggregationAttribute.setVisible(visible_flag)
-
-    def show_female_ratio_attribute(self, visible_flag):
+    def show_female_ratio_attribute(self):
         """Hide or show the female ratio attribute in the dialog.
-
-        :param visible_flag: Flag indicating if the female ratio attribute
-            should be hidden or shown.
-        :type visible_flag: bool
         """
         box = self.cboFemaleRatioAttribute
         box.blockSignals(True)
         box.clear()
         box.blockSignals(False)
-        if visible_flag:
-            current_keyword = self.get_value_for_key(
-                self.defaults['FEM_RATIO_ATTR_KEY'])
-            fields, attribute_position = layer_attribute_names(
-                self.layer,
-                [QtCore.QVariant.Double],
-                current_keyword)
-            fields.insert(0, self.tr('Use default'))
-            fields.insert(1, self.tr('Don\'t use'))
-            box.addItems(fields)
-            if current_keyword == self.tr('Use default'):
-                box.setCurrentIndex(0)
-            elif current_keyword == self.tr('Don\'t use'):
-                box.setCurrentIndex(1)
-            elif attribute_position is None:
-                # current_keyword was not found in the attribute table.
-                # Use default
-                box.setCurrentIndex(0)
-            else:
-                # + 2 is because we add use defaults and don't use
-                box.setCurrentIndex(attribute_position + 2)
-        box.setVisible(visible_flag)
-        self.lblFemaleRatioAttribute.setVisible(visible_flag)
+        current_keyword = self.get_value_for_key(
+            self.defaults['FEMALE_RATIO_ATTR_KEY'])
+        fields, attribute_position = layer_attribute_names(
+            self.layer, [QtCore.QVariant.Double], current_keyword)
 
-    def show_female_ratio_default(self, visible_flag):
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
+            box.setCurrentIndex(0)
+        elif current_keyword == self.do_not_use_data:
+            box.setCurrentIndex(1)
+        elif attribute_position is None:
+            # current_keyword was not found in the attribute table.
+            # Use default
+            box.setCurrentIndex(0)
+        else:
+            # + 2 is because we add use defaults and don't use
+            box.setCurrentIndex(attribute_position + 2)
+
+    def show_female_ratio_default(self):
         """Hide or show the female ratio default attribute in the dialog.
-
-        :param visible_flag: Flag indicating if the female ratio
-            default attribute should be hidden or shown.
-        :type visible_flag: bool
         """
         box = self.dsbFemaleRatioDefault
-        if visible_flag:
-            current_value = self.get_value_for_key(
-                self.defaults['FEM_RATIO_KEY'])
-            if current_value is None:
-                val = self.defaults['FEM_RATIO']
-            else:
-                val = float(current_value)
-            box.setValue(val)
+        current_value = self.get_value_for_key(
+            self.defaults['FEMALE_RATIO_KEY'])
+        if current_value is None:
+            val = self.defaults['FEMALE_RATIO']
+        else:
+            val = float(current_value)
+        box.setValue(val)
 
-        box.setVisible(visible_flag)
-        self.lblFemaleRatioDefault.setVisible(visible_flag)
+    def show_youth_ratio_attribute(self):
+        """Hide or show the youth ratio attribute in the dialog.
+        """
+        box = self.cboYouthRatioAttribute
+        box.blockSignals(True)
+        box.clear()
+        box.blockSignals(False)
+        current_keyword = self.get_value_for_key(
+            self.defaults['YOUTH_RATIO_ATTR_KEY'])
+        fields, attribute_position = layer_attribute_names(
+            self.layer, [QtCore.QVariant.Double], current_keyword)
+
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
+            box.setCurrentIndex(0)
+        elif current_keyword == self.do_not_use_data:
+            box.setCurrentIndex(1)
+        elif attribute_position is None:
+            # current_keyword was not found in the attribute table.
+            # Use default
+            box.setCurrentIndex(0)
+        else:
+            # + 2 is because we add use defaults and don't use
+            box.setCurrentIndex(attribute_position + 2)
+
+    def show_youth_ratio_default(self):
+        """Hide or show the youth ratio default attribute in the dialog.
+        """
+        box = self.dsbYouthRatioDefault
+        current_value = self.get_value_for_key(
+            self.defaults['YOUTH_RATIO_KEY'])
+        if current_value is None:
+            val = self.defaults['YOUTH_RATIO']
+        else:
+            val = float(current_value)
+        box.setValue(val)
+
+    def show_adult_ratio_attribute(self):
+        """Hide or show the adult ratio attribute in the dialog.
+        """
+        box = self.cboAdultRatioAttribute
+        box.blockSignals(True)
+        box.clear()
+        box.blockSignals(False)
+        current_keyword = self.get_value_for_key(
+            self.defaults['ADULT_RATIO_ATTR_KEY'])
+        fields, attribute_position = layer_attribute_names(
+            self.layer, [QtCore.QVariant.Double], current_keyword)
+
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
+            box.setCurrentIndex(0)
+        elif current_keyword == self.do_not_use_data:
+            box.setCurrentIndex(1)
+        elif attribute_position is None:
+            # current_keyword was not found in the attribute table.
+            # Use default
+            box.setCurrentIndex(0)
+        else:
+            # + 2 is because we add use defaults and don't use
+            box.setCurrentIndex(attribute_position + 2)
+
+    def show_adult_ratio_default(self):
+        """Hide or show the adult ratio default attribute in the dialog.
+        """
+        box = self.dsbAdultRatioDefault
+        current_value = self.get_value_for_key(
+            self.defaults['ADULT_RATIO_KEY'])
+        if current_value is None:
+            val = self.defaults['ADULT_RATIO']
+        else:
+            val = float(current_value)
+        box.setValue(val)
+
+    def show_elderly_ratio_attribute(self):
+        """Show the elderly ratio attribute in the dialog.
+        """
+        box = self.cboElderlyRatioAttribute
+        box.blockSignals(True)
+        box.clear()
+        box.blockSignals(False)
+        current_keyword = self.get_value_for_key(
+            self.defaults['ELDERLY_RATIO_ATTR_KEY'])
+        fields, attribute_position = layer_attribute_names(
+            self.layer, [QtCore.QVariant.Double], current_keyword)
+
+        box.addItem(self.global_default_string, self.global_default_data)
+        box.addItem(self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            box.addItem(field, field)
+
+        if current_keyword == self.global_default_data:
+            box.setCurrentIndex(0)
+        elif current_keyword == self.do_not_use_data:
+            box.setCurrentIndex(1)
+        elif attribute_position is None:
+            # current_keyword was not found in the attribute table.
+            # Use default
+            box.setCurrentIndex(0)
+        else:
+            # + 2 is because we add use defaults and don't use
+            box.setCurrentIndex(attribute_position + 2)
+
+    def show_elderly_ratio_default(self):
+        """Show the elderly ratio default attribute in the dialog.
+        """
+        box = self.dsbElderlyRatioDefault
+        current_value = self.get_value_for_key(
+            self.defaults['ELDERLY_RATIO_KEY'])
+        if current_value is None:
+            val = self.defaults['ELDERLY_RATIO']
+        else:
+            val = float(current_value)
+        box.setValue(val)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -242,6 +389,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
+        if not self.radPostprocessing.isChecked():
+            return
         self.add_list_entry(
             self.defaults['AGGR_ATTR_KEY'],
             self.cboAggregationAttribute.currentText())
@@ -255,19 +404,102 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
-        text = self.cboFemaleRatioAttribute.currentText()
-        if text == self.tr('Use default'):
+        if not self.radPostprocessing.isChecked():
+            return
+
+        current_index = self.cboFemaleRatioAttribute.currentIndex()
+        data = self.cboFemaleRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
             self.dsbFemaleRatioDefault.setEnabled(True)
             current_default = self.get_value_for_key(
-                self.defaults['FEM_RATIO_KEY'])
+                self.defaults['FEMALE_RATIO_KEY'])
             if current_default is None:
                 self.add_list_entry(
-                    self.defaults['FEM_RATIO_KEY'],
+                    self.defaults['FEMALE_RATIO_KEY'],
                     self.dsbFemaleRatioDefault.value())
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
-            self.remove_item_by_key(self.defaults['FEM_RATIO_KEY'])
-        self.add_list_entry(self.defaults['FEM_RATIO_ATTR_KEY'], text)
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
+        self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], data)
+
+    # noinspection PyPep8Naming
+    def on_cboYouthRatioAttribute_currentIndexChanged(self, index=None):
+        """Handler for youth ratio attribute change.
+
+        :param index: Not used but required for slot.
+        """
+        del index
+        if not self.radPostprocessing.isChecked():
+            return
+
+        current_index = self.cboYouthRatioAttribute.currentIndex()
+        data = self.cboYouthRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
+            self.dsbYouthRatioDefault.setEnabled(True)
+            current_default = self.get_value_for_key(
+                self.defaults['YOUTH_RATIO_KEY'])
+            if current_default is None:
+                self.add_list_entry(
+                    self.defaults['YOUTH_RATIO_KEY'],
+                    self.dsbYouthRatioDefault.value())
+        else:
+            self.dsbYouthRatioDefault.setEnabled(False)
+            self.remove_item_by_key(self.defaults['YOUTH_RATIO_KEY'])
+        self.add_list_entry(self.defaults['YOUTH_RATIO_ATTR_KEY'], data)
+
+    # noinspection PyPep8Naming
+    def on_cboAdultRatioAttribute_currentIndexChanged(self, index=None):
+        """Handler for adult ratio attribute change.
+
+        :param index: Not used but required for slot.
+        """
+        del index
+        if not self.radPostprocessing.isChecked():
+            return
+
+        current_index = self.cboAdultRatioAttribute.currentIndex()
+        data = self.cboAdultRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
+            self.dsbAdultRatioDefault.setEnabled(True)
+            current_default = self.get_value_for_key(
+                self.defaults['ADULT_RATIO_KEY'])
+            if current_default is None:
+                self.add_list_entry(
+                    self.defaults['ADULT_RATIO_KEY'],
+                    self.dsbAdultRatioDefault.value())
+        else:
+            self.dsbAdultRatioDefault.setEnabled(False)
+            self.remove_item_by_key(self.defaults['ADULT_RATIO_KEY'])
+        self.add_list_entry(self.defaults['ADULT_RATIO_ATTR_KEY'], data)
+
+    # noinspection PyPep8Naming
+    def on_cboElderlyRatioAttribute_currentIndexChanged(self, index=None):
+        """Handler for elderly ratio attribute change.
+
+        :param index: Not used but required for slot.
+        """
+        del index
+        if not self.radPostprocessing.isChecked():
+            return
+
+        current_index = self.cboElderlyRatioAttribute.currentIndex()
+        data = self.cboElderlyRatioAttribute.itemData(current_index)
+
+        if data == self.global_default_data:
+            self.dsbElderlyRatioDefault.setEnabled(True)
+            current_default = self.get_value_for_key(
+                self.defaults['ELDERLY_RATIO_KEY'])
+            if current_default is None:
+                self.add_list_entry(
+                    self.defaults['ELDERLY_RATIO_KEY'],
+                    self.dsbElderlyRatioDefault.value())
+        else:
+            self.dsbElderlyRatioDefault.setEnabled(False)
+            self.remove_item_by_key(self.defaults['ELDERLY_RATIO_KEY'])
+        self.add_list_entry(self.defaults['ELDERLY_RATIO_ATTR_KEY'], data)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -278,39 +510,54 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param value: Not used but required for slot.
         """
         del value
+        if not self.radPostprocessing.isChecked():
+            return
         box = self.dsbFemaleRatioDefault
         if box.isEnabled():
             self.add_list_entry(
-                self.defaults['FEM_RATIO_KEY'],
-                box.value())
+                self.defaults['FEMALE_RATIO_KEY'], box.value())
 
-    # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('bool')
-    def on_pbnAdvanced_toggled(self, flag):
-        """Automatic slot executed when the advanced button is toggled.
+    def on_dsbYouthRatioDefault_valueChanged(self, value):
+        """Handler for youth ration default value changing.
 
-        .. note:: some of the behaviour for hiding widgets is done using
-           the signal/slot editor in designer, so if you are trying to figure
-           out how the interactions work, look there too!
-
-        :param flag: Flag indicating the new checked state of the button.
-        :type flag: bool
+        :param value: Not used but required for slot.
         """
-        self.toggle_advanced(flag)
+        del value
+        if not self.radPostprocessing.isChecked():
+            return
+        box = self.dsbYouthRatioDefault
+        if box.isEnabled():
+            self.add_list_entry(
+                self.defaults['YOUTH_RATIO_KEY'], box.value())
 
-    def toggle_advanced(self, flag):
-        """Hide or show advanced editor.
+    # noinspection PyPep8Naming
+    def on_dsbAdultRatioDefault_valueChanged(self, value):
+        """Handler for adult ration default value changing.
 
-        :param flag: Desired state for advanced editor visibility.
-        :type flag: bool
+        :param value: Not used but required for slot.
         """
-        if flag:
-            self.pbnAdvanced.setText(self.tr('Hide advanced editor'))
-        else:
-            self.pbnAdvanced.setText(self.tr('Show advanced editor'))
-        self.grpAdvanced.setVisible(flag)
-        self.resize_dialog()
+        del value
+        if not self.radPostprocessing.isChecked():
+            return
+        box = self.dsbAdultRatioDefault
+        if box.isEnabled():
+            self.add_list_entry(
+                self.defaults['ADULT_RATIO_KEY'], box.value())
+
+    # noinspection PyPep8Naming
+    def on_dsbElderlyRatioDefault_valueChanged(self, value):
+        """Handler for elderly ration default value changing.
+
+        :param value: Not used but required for slot.
+        """
+        del value
+        if not self.radPostprocessing.isChecked():
+            return
+        box = self.dsbElderlyRatioDefault
+        if box.isEnabled():
+            self.add_list_entry(
+                self.defaults['ELDERLY_RATIO_KEY'], box.value())
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -349,13 +596,20 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param flag: Flag indicating the new checked state of the button.
         :type flag: bool
         """
-        if not flag:
-            self.remove_item_by_key(self.defaults['AGGR_ATTR_KEY'])
-            self.remove_item_by_key(self.defaults['FEM_RATIO_ATTR_KEY'])
-            self.remove_item_by_key(self.defaults['FEM_RATIO_KEY'])
+        if flag:
+            self.set_category('postprocessing')
+            self.update_controls_from_list()
             return
-        self.set_category('postprocessing')
-        self.update_controls_from_list()
+        if self.defaults is not None:
+            self.remove_item_by_key(self.defaults['AGGR_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
+            self.remove_item_by_key(self.defaults['YOUTH_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['YOUTH_RATIO_KEY'])
+            self.remove_item_by_key(self.defaults['ADULT_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['ADULT_RATIO_KEY'])
+            self.remove_item_by_key(self.defaults['ELDERLY_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['ELDERLY_RATIO_KEY'])
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -622,8 +876,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param removal_key: Key of item to be removed.
         :type removal_key: str
         """
-        for myCounter in range(self.lstKeywords.count()):
-            existing_item = self.lstKeywords.item(myCounter)
+        for counter in range(self.lstKeywords.count()):
+            existing_item = self.lstKeywords.item(counter)
             text = existing_item.text()
             tokens = text.split(':')
             if len(tokens) < 2:
@@ -631,7 +885,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             key = tokens[0]
             if removal_key == key:
                 # remove it since the removal_key is already present
-                self.lstKeywords.takeItem(myCounter)
+                self.blockSignals(True)
+                self.lstKeywords.takeItem(counter)
+                self.blockSignals(False)
                 break
 
     def remove_item_by_value(self, removal_value):
@@ -647,7 +903,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             value = tokens[1]
             if removal_value == value:
                 # remove it since the key is already present
+                self.blockSignals(True)
                 self.lstKeywords.takeItem(counter)
+                self.blockSignals(False)
                 break
 
     def get_value_for_key(self, lookup_key):
@@ -710,7 +968,18 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             # assume exposure to match ui. See issue #751
             self.add_list_entry('category', 'exposure')
 
+        aggregation_attributes = [
+            DEFAULTS['FEMALE_RATIO_ATTR_KEY'],
+            DEFAULTS['YOUTH_RATIO_ATTR_KEY'],
+            DEFAULTS['ADULT_RATIO_ATTR_KEY'],
+            DEFAULTS['ELDERLY_RATIO_ATTR_KEY'],
+        ]
+
         for key in keywords.iterkeys():
+            if key in aggregation_attributes:
+                if str(keywords[key]) == 'Use default':
+                    self.add_list_entry(key, self.global_default_data)
+                    continue
             self.add_list_entry(key, str(keywords[key]))
 
         # now make the rest of the safe_qgis reflect the list entries
@@ -722,7 +991,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         units = self.get_value_for_key('unit')
         data_type = self.get_value_for_key('datatype')
         title = self.get_value_for_key('title')
-
         if title is not None:
             self.leTitle.setText(title)
         elif self.layer is not None:
@@ -733,9 +1001,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         if not is_polygon_layer(self.layer):
             self.radPostprocessing.setEnabled(False)
-
-        # adapt gui if we are in postprocessing category
-        self.toggle_postprocessing_widgets()
+        else:
+            # adapt gui if we are in postprocessing category
+            self.toggle_postprocessing_widgets()
 
         if self.radExposure.isChecked():
             if subcategory is not None and data_type is not None:
@@ -816,8 +1084,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.add_list_entry('source', str(self.leSource.text()))
 
         keywords = {}
-        for myCounter in range(self.lstKeywords.count()):
-            existing_item = self.lstKeywords.item(myCounter)
+        for counter in range(self.lstKeywords.count()):
+            existing_item = self.lstKeywords.item(counter)
             text = existing_item.text()
             tokens = text.split(':')
             key = str(tokens[0]).strip()
@@ -832,17 +1100,31 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         self.apply_changes()
         keywords = self.get_keywords()
+
+        # If it's postprocessing layer, we need to check if age ratio is valid
+        if self.radPostprocessing.isChecked():
+            valid_age_ratio, sum_age_ratios = self.age_ratios_are_valid(
+                keywords)
+            if not valid_age_ratio:
+                message = self.tr(
+                    'The sum of age ratios is %s which exceeds 1. Please '
+                    'adjust  the age ration defaults so that their cumulative '
+                    'value is not greater than 1.' % sum_age_ratios)
+                if not self.test:
+                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+                    QtGui.QMessageBox.warning(
+                        self, self.tr('InaSAFE'), message)
+                return
+
         try:
-            self.keyword_io.write_keywords(
-                layer=self.layer, keywords=keywords)
+            self.keyword_io.write_keywords(layer=self.layer, keywords=keywords)
         except InaSAFEError, e:
             error_message = get_error_message(e)
+            message = self.tr(
+                'An error was encountered when saving the keywords:\n'
+                '%s' % error_message.to_html())
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                ((self.tr(
-                    'An error was encountered when saving the keywords:\n'
-                    '%s' % error_message.to_html()))))
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
         if self.dock is not None:
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
@@ -881,3 +1163,41 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 self.radUserDefined.setChecked(True)
                 self.leKey.setText(temp_key)
                 self.leValue.setText(temp_value)
+
+    def age_ratios_are_valid(self, keywords):
+        """Check whether keywords is valid or not.
+
+        Valid means, the sum of age ratios is not exceeding one if they use
+        Global default values. Applies to aggregation only.
+
+        :param keywords: A dictionary that contains the keywords
+        :type keywords: dict
+
+        :returns: Tuple of boolean and float. Boolean represent good or not
+            good, while float represent the summation of age ratio. If some
+            ratio do not use global default, the summation is set to 0.
+        :rtype: tuple
+        """
+        if keywords['category'] != 'postprocessing':
+            return True, 0
+        if (keywords.get(youth_ratio_attribute_key, '') !=
+                self.global_default_string):
+            return True, 0
+        if (keywords.get(adult_ratio_attribute_key, '') !=
+                self.global_default_string):
+            return True, 0
+        if (keywords.get(elderly_ratio_attribute_key, '') !=
+                self.global_default_string):
+            return True, 0
+
+        youth_ratio_default = keywords[youth_ratio_default_key]
+        adult_ratio_default = keywords[adult_ratio_default_key]
+        elderly_ratio_default = keywords[elderly_ratio_default_key]
+
+        sum_ratio_default = float(youth_ratio_default)
+        sum_ratio_default += float(adult_ratio_default)
+        sum_ratio_default += float(elderly_ratio_default)
+        if sum_ratio_default > 1:
+            return False, sum_ratio_default
+        else:
+            return True, 0

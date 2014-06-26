@@ -29,9 +29,16 @@ from os.path import join
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem
+from qgis.core import (
+    QgsVectorLayer,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry)
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis import breakdown_defaults
 from safe_qgis.safe_interface import (
     UNITDATA,
@@ -56,7 +63,6 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     load_layers)
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -74,7 +80,7 @@ class AggregatorTest(unittest.TestCase):
 
         os.environ['LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
-        load_standard_layers()
+        load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -93,6 +99,13 @@ class AggregatorTest(unittest.TestCase):
         geo_crs = QgsCoordinateReferenceSystem()
         geo_crs.createFromSrid(4326)
         self.extent = extent_to_geo_array(CANVAS.extent(), geo_crs)
+
+    def tearDown(self):
+        """Run after each test."""
+        # Let's use a fresh registry, canvas, and dock for each test!
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        DOCK.cboHazard.clear()
+        DOCK.cboExposure.clear()
 
     def test_combo_aggregation_loaded_project(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -118,7 +131,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
@@ -144,7 +156,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
         assert result, message
@@ -173,7 +184,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         assert result, message
@@ -199,7 +209,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         assert result, message
@@ -244,7 +253,6 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='jakarta_crosskabupaten_polygons',
             exposure='People',
-            function='Need evacuation',
             function_id='Flood Evacuation Function Vector Hazard',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)

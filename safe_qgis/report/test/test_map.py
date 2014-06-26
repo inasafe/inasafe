@@ -28,11 +28,14 @@ from qgis.core import (
 from qgis.gui import QgsMapCanvasLayer
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.report.map import Map
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -99,11 +102,15 @@ class MapTest(unittest.TestCase):
         # with a lower maintenance test strategy.
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
-            135312,  # Ubuntu 13.10_64
+            427172,  # Ubuntu 13.10_64
+            138471,  # Ubuntu 14.04_64 AG
+            152980,  # Ubuntu 14.04_64 TS - pycharm
+            152862,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             414589,  # Slackware64 14.0
-            143046,  # Linux Mint 14_64
+            144542,  # Linux Mint 14_64
+            148267,  # Windows 7 32
             150412,  # Windows 7 64
-            143015,  # UB 12.04 Jenkins inasafe 2.0.5
+            143652,  # UB 12.04 Jenkins
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -140,11 +147,15 @@ class MapTest(unittest.TestCase):
 
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
-            73033,  # Ubuntu 13.10_64
+            400563,  # Ubuntu 13.10_64
+            76191,  # Ubuntu 14.04_64 AG
+            90704,  # Ubuntu 14.04_64 TS pycharm
+            90582,  # Ubuntu 14.04_64 TS make - TODO why is this?
             367934,  # Slackware64 14.0
-            81415,  # Linux Mint 14_64
+            82263,  # Linux Mint 14_64
+            85418,  # Windows 7 32bit
             88779,  # Windows 7 64bit
-            80737,   # Jenkins ub 12.04 inasafe 2.0.5
+            81373,   # Jenkins ub 12.04
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)

@@ -77,6 +77,25 @@ lines-of-code:
 	@git log | head -3
 	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
+changelog:
+	@echo "----------------------"
+	@echo "Generate changelog and append it to CHANGELOG"
+	@echo "----------------------"
+	@read -p "Version e.g. 1.0.0: " VERSION; \
+	    scripts/update-changelog.sh $$VERSION
+
+tag:
+	@echo
+	@echo "------------------------------------"
+	@echo "Tagging the release."
+	@echo "------------------------------------"
+	@# Note that make runs commands in a subshell so
+	@# variable context is lost from one line to the next
+	@# So we need to do everything as a single line command
+	@read -p "Version e.g. 1.0.0: " VERSION; \
+	    scripts/tag-release.sh $$VERSION
+
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -111,7 +130,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py,impact_merge_dialog_base.py,about_dialog_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude venv,pydev,third_party,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py,impact_merge_dialog_base.py,about_dialog_base.py . || true
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
 test_suite: compile testdata
@@ -178,7 +197,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh 7133043e62de5c8d114020867d10507e92632e79 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh ba621c048bd69df813820cea8c4829f3cd8b400e 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -343,7 +362,7 @@ jenkins-pep8:
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py,impact_merge_dialog_base.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py,impact_merge_dialog_base.py,about_dialog_base.py . > pep8.log || :
 
 jenkins-realtime-test:
 

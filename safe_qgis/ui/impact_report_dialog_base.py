@@ -75,4 +75,3 @@ class Ui_ImpactReportDialogBase(object):
         self.current_extent_radio.setText(QtGui.QApplication.translate("ImpactReportDialogBase", "Current extent", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("ImpactReportDialogBase", "Template to use", None, QtGui.QApplication.UnicodeUTF8))
         self.template_chooser.setText(QtGui.QApplication.translate("ImpactReportDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-

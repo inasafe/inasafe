@@ -185,6 +185,13 @@
 <span id="id1"></span><h1>Keywords System<a class="headerlink" href="#keywords-system" title="Permalink to this headline">¶</a></h1>
 <p>This document describes the purpose and usage of the InaSAFE <em>keywords</em>
 system.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Please also refer to the documentation on
+<a class="reference internal" href="keywords_wizard.html#keywords-wizard"><em>the keywords Wizards</em></a> and the
+<a class="reference internal" href="keywords_editor.html#keywords-editor"><em>keywords editor</em></a> which are tools to help you
+to create keywords files.</p>
+</div>
 <div class="section" id="purpose">
 <h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
 <p>The keywords system is used by the <a class="reference internal" href="impact_functions.html#impact-functions"><em>Impact Functions</em></a>
@@ -247,6 +254,9 @@ Category should be written in lower case.</p>
 <tr class="row-odd"><td>category</td>
 <td>exposure</td>
 </tr>
+<tr class="row-even"><td>category</td>
+<td>aggregation</td>
+</tr>
 </tbody>
 </table>
 <p>Example keywords file entry</p>
@@ -276,7 +286,10 @@ Category should be written in lower case.</p>
 <td>flood</td>
 </tr>
 <tr class="row-even"><td>subcategory</td>
-<td>tephra</td>
+<td>volcano</td>
+</tr>
+<tr class="row-odd"><td>subcategory</td>
+<td>earthquake</td>
 </tr>
 </tbody>
 </table>
@@ -297,7 +310,10 @@ Category should be written in lower case.</p>
 <td>population</td>
 </tr>
 <tr class="row-odd"><td>exposure</td>
-<td>building</td>
+<td>structure</td>
+</tr>
+<tr class="row-even"><td>exposure</td>
+<td>road</td>
 </tr>
 </tbody>
 </table>
@@ -309,15 +325,47 @@ subcategory: flood
 </div>
 <div class="section" id="units">
 <h3>Units<a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h3>
-<p>The units keyword is only valid in the context of &#8216;hazard&#8217; layers, and is
-used to indicate the metric or imperial units represented by each data entity
-(a grid cell or a vector feature) in the hazard layer.
-Example keywords file entry</p>
-<div class="highlight-python"><div class="highlight"><pre>category: hazard
+<p>The units keyword is used to indicate the metric or imperial units represented
+by each data entity (a grid cell or a vector feature) in a layer.</p>
+<p>Example keywords file entry:</p>
+<blockquote>
+<div><blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="51%" />
+<col width="37%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Allowed Values (pre InaSAFE 2.1)</th>
+<th class="head">Allowed Values (&gt;= 2.1)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>units</td>
+<td>m</td>
+<td>metres_depth</td>
+</tr>
+<tr class="row-odd"><td>units</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>exposure</td>
+<td>road</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>hazard</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>category: hazard
 subcategory: flood
-units: m
-</pre></div>
-</div>
+units: m</p>
+</div></blockquote>
 <p>In the above case there is a soft constraint to use a value for units of m,
 feet or wet/dry as defined by the table below because the subcategory is
 &#8216;flood&#8217;.
@@ -380,44 +428,8 @@ keywords file.</p>
 </div>
 <div class="section" id="datatype">
 <h3>Datatype<a class="headerlink" href="#datatype" title="Permalink to this headline">¶</a></h3>
-<p>The datatype keyword is specific to exposure layers and represents the datatype
-of people, infrastructure etc. within a given area.</p>
-<p>Valid densities for different subcategories</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="24%" />
-<col width="42%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Subcategory</th>
-<th class="head">Key</th>
-<th class="head">Allowed Values</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>population</td>
-<td>datatype</td>
-<td>count</td>
-</tr>
-<tr class="row-odd"><td>population</td>
-<td>datatype</td>
-<td>density</td>
-</tr>
-<tr class="row-even"><td>building</td>
-<td>datatype</td>
-<td>osm</td>
-</tr>
-<tr class="row-odd"><td>building</td>
-<td>datatype</td>
-<td>sigab</td>
-</tr>
-<tr class="row-even"><td>building</td>
-<td>datatype</td>
-<td>other</td>
-</tr>
-</tbody>
-</table>
+<p>The data type keyword indicate what kind of geospatial data is represented
+(Numeric, Polygon, Line, Point).</p>
 </div>
 </div>
 <div class="section" id="assumptions">
@@ -426,11 +438,6 @@ of people, infrastructure etc. within a given area.</p>
 programmatically enforced by the InaSAFE library and GUI:</p>
 <ul class="simple">
 <li>There should only be <strong>one keyword for a given key</strong> in the keywords file.</li>
-<li>Switching from hazard to exposure will clear parts of the GUI since in
-general most keywords are category dependent.
-In particular, selecting <strong>&#8216;hazard&#8217;</strong> will remove the <strong>&#8216;datatype&#8217;</strong>
-key/value pair, and selecting <strong>&#8216;exposure&#8217;</strong> will remove the <strong>&#8216;units&#8217;</strong>
-key value pair.</li>
 <li>Keywords for <strong>category</strong> are <strong>enforced</strong> to be one of &#8216;hazard&#8217; or
 &#8216;exposure&#8217; by the GUI.</li>
 <li>All keywords should be in <strong>lower case</strong>, <strong>without spaces</strong>
@@ -449,91 +456,6 @@ used but they may produce undesired results.</li>
 <h2>Translations<a class="headerlink" href="#translations" title="Permalink to this headline">¶</a></h2>
 <p>Although InaSAFE is available in different languages, the &#8216;key&#8217; in the
 keywords files should always be written in english.</p>
-</div>
-<div class="section" id="the-keywords-editor-graphical-user-interface">
-<h2>The keywords editor graphical user interface<a class="headerlink" href="#the-keywords-editor-graphical-user-interface" title="Permalink to this headline">¶</a></h2>
-<p>The graphical user interface for keyword editing is divided into two parts:</p>
-<ol class="arabic simple">
-<li><strong>Minimal mode</strong>: In this mode, only following options are provided:<ul>
-<li><strong>Title</strong> - a &#8216;friendly&#8217; name for the dataset which will be displayed in
-reports, the user interface and so on</li>
-<li><strong>Source</strong> - a field to inform from whom/where the dataset is obtained.</li>
-<li><strong>Category</strong> - A mandatory choice between &#8216;hazard&#8217; and &#8216;exposure&#8217;.</li>
-<li><strong>Subcategory</strong> - An amalgamated subcategory/units picklist
-(in the case of hazard) or amalgamated subcategory/datatype (in the case
-of exposure).
-In this case, the secondary characteristic (units or datatype) are
-shown in square brackets after the subcategory name e.g.
-<tt class="samp docutils literal"><span class="pre">flood</span> <span class="pre">[m]</span></tt> is used for subcategory &#8216;flood&#8217;, units &#8216;m&#8217;.</li>
-</ul>
-</li>
-</ol>
-<p>An example of the keywords editor in minimal mode is shown below.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-simple.png"><img alt="Opened keyword editor window" src="_images/keyword-editor-simple.png" style="width: 330.75px; height: 235.5px;" /></a>
-<p class="caption">Opened keyword editor window</p>
-</div>
-<ol class="arabic simple" start="2">
-<li><strong>Advanced mode</strong>: In this mode several extra options are provided in
-addition to the minimal mode options.
-Unlike minimal mode, in advanced mode only basic validation is performed
-and the user is given more flexibility to manually define and remove
-key/value pairs.
-Three sections are provided for this:</li>
-</ol>
-<blockquote>
-<div><ul class="simple">
-<li><strong>Predefined</strong> - In this section, the user selects from a constrained list
-of keywords, enters a free-form value and then adds the key/value pair to
-the keywords list (see below).</li>
-<li><strong>User defined</strong> - In this section, there is no constraint on the keywords
-entered - any single lower case word will be accepted for both the key and
-the value components.</li>
-<li><strong>Current keywords</strong> - In this area a complete list of all the keywords
-for the dataset are displayed.
-The keywords list here is updated when any changes are made in both the
-simple and advanced mode editors.
-It is also possible in this area to manually remove unwanted keywords
-using the &#8216;remove selected&#8217; button.
-Multiple keywords can be removed in a single operation by
-<tt class="kbd docutils literal"><span class="pre">Control-clicking</span></tt> on multiple keyword entries in the current
-keyword list and then clicking <em class="guilabel">Remove selected</em></li>
-</ul>
-</div></blockquote>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-advanced.png"><img alt="Advanced mode of keyword editor" src="_images/keyword-editor-advanced.png" style="width: 331.5px; height: 444.75px;" /></a>
-<p class="caption">Advanced mode of keyword editor</p>
-</div>
-</div>
-<div class="section" id="invoking-the-keywords-editor">
-<h2>Invoking the keywords editor<a class="headerlink" href="#invoking-the-keywords-editor" title="Permalink to this headline">¶</a></h2>
-<p>The keyword editor can easily be invoked by <strong>selecting any layer</strong> in the
-QGIS layers list, and then using the plugin menu to start the editor
-(<em class="menuselection">Plugins ‣ InaSAFE ‣ Keyword Editor</em>).
-Alternatively, you may use the keywords editor icon on the plugins toolbar as
-illustrated below.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-icon.png"><img alt="Keyword editor icon" src="_images/keyword-editor-icon.png" style="width: 353.0px; height: 36.0px;" /></a>
-<p class="caption">Keyword editor icon</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you have not selected a layer in the QGIS legend,
-the keyword editor icon in the toolbar and menus will
-<strong>be disabled</strong> and appear greyed out.</p>
-</div>
-</div>
-<div class="section" id="saving-your-edits">
-<h2>Saving your edits<a class="headerlink" href="#saving-your-edits" title="Permalink to this headline">¶</a></h2>
-<p>To save your keyword edits, simply press the <em class="guilabel">OK</em> button and the
-<tt class="file docutils literal"><span class="pre">*.keywords</span></tt> file will be written to disk.</p>
-</div>
-<div class="section" id="cancelling-your-edits">
-<h2>Cancelling your edits<a class="headerlink" href="#cancelling-your-edits" title="Permalink to this headline">¶</a></h2>
-<p>You can cancel your changes at any time by pressing the <em class="guilabel">Cancel</em>
-button.
-No changes will be written to disk and your <tt class="file docutils literal"><span class="pre">*.keywords</span></tt> file will
-remain in its original state.</p>
 </div>
 <div class="section" id="keywords-for-remote-and-non-file-based-layers">
 <h2>Keywords for remote and non-file based layers<a class="headerlink" href="#keywords-for-remote-and-non-file-based-layers" title="Permalink to this headline">¶</a></h2>

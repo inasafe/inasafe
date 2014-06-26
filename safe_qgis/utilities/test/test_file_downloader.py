@@ -23,11 +23,13 @@ import tempfile
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.utilities.file_downloader import FileDownloader
 from safe_qgis.utilities.utilities_for_testing import assert_hash_for_file
 from safe_qgis.exceptions import DownloadError
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class FileDownloaderTest(unittest.TestCase):
@@ -41,9 +43,10 @@ class FileDownloaderTest(unittest.TestCase):
         # this is the hash of google front page.
         # I think we can safely assume that the content
         # of google.com never changes (probably).
-        # ...or not...changed on 5 Dec 2013 by Tim to hash below...
-        unique_hash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
-        url = 'http://google.com'
+        # ...or not...changed on 5 Dec 2013 ...
+        # ...and changed on 28 Apr 2014 by Tim to hash and url  below
+        unique_hash = '32230a09ffe7b0011095e8cd627097a5'
+        url = 'http://inasafe.org/en/_static/img/logo.png'
         path = tempfile.mktemp()
 
         file_downloader = FileDownloader(

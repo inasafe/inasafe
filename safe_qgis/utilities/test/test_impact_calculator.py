@@ -37,7 +37,7 @@ from safe_qgis.exceptions import (
     StyleInfoNotFoundError)
 
 from safe_qgis.safe_interface import (
-    readKeywordsFromLayer, getStyleInfo, readSafeLayer,
+    read_keywords_from_layer, get_style_info, read_safe_layer,
     HAZDATA, EXPDATA, TESTDATA)
 
 # Retired impact function for characterisation
@@ -53,10 +53,10 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Create shared resources that all tests can use"""
         self.calculator = ImpactCalculator()
         self.vector_path = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        self.vector_layer = readSafeLayer(self.vector_path)
+        self.vector_layer = read_safe_layer(self.vector_path)
         self.raster_shake_path = os.path.join(
             HAZDATA, 'Shakemap_Padang_2009.asc')
-        self.raster_shake = readSafeLayer(self.raster_shake_path)
+        self.raster_shake = read_safe_layer(self.raster_shake_path)
         # UTM projected layer
 
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
@@ -145,12 +145,12 @@ class ImpactCalculatorTest(unittest.TestCase):
         function_runner = self.calculator.get_runner()
         function_runner.run()
         impact_layer = function_runner.impact_layer()
-        keyword = readKeywordsFromLayer(impact_layer, 'impact_summary')
+        keyword = read_keywords_from_layer(impact_layer, 'impact_summary')
         message = 'Keyword request returned an empty string'
         assert(keyword is not ''), message
         # Test we get an exception if keyword is not found
         try:
-            _ = readKeywordsFromLayer(impact_layer, 'boguskeyword')
+            _ = read_keywords_from_layer(impact_layer, 'boguskeyword')
         except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
@@ -166,8 +166,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         hazard_path = os.path.join(
             HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc')
         # Verify relevant metada is ok
-        h = readSafeLayer(hazard_path)
-        e = readSafeLayer(exposure_path)
+        h = read_safe_layer(hazard_path)
+        e = read_safe_layer(exposure_path)
         self.calculator.set_hazard_layer(h)
         self.calculator.set_exposure_layer(e)
         self.calculator.set_function('Flood Building Impact Function')
@@ -198,14 +198,14 @@ class ImpactCalculatorTest(unittest.TestCase):
             'but received a %s' % type(impact_layer))
         assert hasattr(impact_layer, 'get_style_info'), message
 
-        style_info = getStyleInfo(impact_layer)
+        style_info = get_style_info(impact_layer)
         message = 'Style info request returned an empty string'
         assert style_info is not '', message
         #print style_info
 
         # Test we get an exception if style info is not found
         try:
-            getStyleInfo('boguspath')
+            get_style_info('boguspath')
         except StyleInfoNotFoundError:
             pass  # This is good
         except Exception, e:

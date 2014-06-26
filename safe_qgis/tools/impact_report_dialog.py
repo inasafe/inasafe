@@ -119,7 +119,10 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
         self.custom_template_radio.setChecked(not flag)
 
         try:
-            path = settings.value('inasafe/lastTemplate', '', type=str)
+            path = settings.value(
+                'inasafe/lastTemplate',
+                ':/plugins/inasafe/inasafe-portrait-a4.qpt',
+                type=str)
             self.template_combo.setCurrentIndex(
                 self.template_combo.findData(path))
         except TypeError:

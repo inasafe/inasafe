@@ -24,13 +24,12 @@ import logging
 from urllib2 import URLError
 from zipfile import BadZipfile
 
-from ftp_client import FtpClient
-from sftp_client import SFtpClient
-from utils import setup_logger, data_dir, is_event_id
-from shake_event import ShakeEvent
-# Loading from package __init__ not working in this context so manually doing
-setup_logger()
-LOGGER = logging.getLogger('InaSAFE')
+from realtime.sftp_client import SFtpClient
+from realtime.utilities import data_dir, is_event_id, realtime_logger_name
+from realtime.shake_event import ShakeEvent
+
+# Initialised in realtime.__init__
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 def process_event(event_id=None, locale='en'):
@@ -101,55 +100,51 @@ def process_event(event_id=None, locale='en'):
 
         shake_event.render_map(force_flag)
 
-LOGGER.info('-------------------------------------------')
+if __name__ == '__main__':
+    LOGGER.info('-------------------------------------------')
 
-if 'INASAFE_LOCALE' in os.environ:
-    my_locale = os.environ['INASAFE_LOCALE']
-else:
-    my_locale = 'en'
-
-if len(sys.argv) > 2:
-    sys.exit('Usage:\n%s [optional shakeid]\nor\n%s --list' % (
-        sys.argv[0], sys.argv[0]))
-elif len(sys.argv) == 2:
-    print('Processing shakemap %s' % sys.argv[1])
-
-    my_event_id = sys.argv[1]
-    if my_event_id in '--list':
-#        ftp_client = FtpClient()
-        sftp_client = SFtpClient()
-#        myListing = ftp_client.get_listing()
-        dir_listing = sftp_client.get_listing(my_func=is_event_id)
-        for event in dir_listing:
-            print event
-        sys.exit(0)
-    elif my_event_id in '--run-all':
-        #
-        # Caution, this code path gets memory leaks, use the
-        # batch file approach rather!
-        #
-        ftp_client = FtpClient()
-        dir_listing = ftp_client.get_listing()
-        for event in dir_listing:
-            if 'out' not in event:
-                continue
-            event = event.replace('ftp://118.97.83.243/', '')
-            event = event.replace('.out.zip', '')
-            print 'Processing %s' % event
-            # noinspection PyBroadException
-            try:
-                process_event(event, my_locale)
-            except:  # pylint: disable=W0702
-                LOGGER.exception('Failed to process %s' % event)
-        sys.exit(0)
+    if 'INASAFE_LOCALE' in os.environ:
+        locale_option = os.environ['INASAFE_LOCALE']
     else:
-        process_event(my_event_id, my_locale)
+        locale_option = 'en'
 
-else:
-    my_event_id = None
-    print('Processing latest shakemap')
-    # noinspection PyBroadException
-    try:
-        process_event(locale=my_locale)
-    except:  # pylint: disable=W0702
-        LOGGER.exception('Process event failed')
+    if len(sys.argv) > 2:
+        sys.exit(
+            'Usage:\n%s [optional shakeid]\nor\n%s --list\nor%s --run-all' % (
+                sys.argv[0], sys.argv[0], sys.argv[0]))
+    elif len(sys.argv) == 2:
+        print('Processing shakemap %s' % sys.argv[1])
+
+        event_option = sys.argv[1]
+        if event_option in '--list':
+            sftp_client = SFtpClient()
+            dir_listing = sftp_client.get_listing(function=is_event_id)
+            for event in dir_listing:
+                print event
+            sys.exit(0)
+        elif event_option in '--run-all':
+            #
+            # Caution, this code path gets memory leaks, use the
+            # batch file approach rather!
+            #
+            sftp_client = SFtpClient()
+            dir_listing = sftp_client.get_listing()
+            for event in dir_listing:
+                print 'Processing %s' % event
+                # noinspection PyBroadException
+                try:
+                    process_event(event, locale_option)
+                except:  # pylint: disable=W0702
+                    LOGGER.exception('Failed to process %s' % event)
+            sys.exit(0)
+        else:
+            process_event(event_option, locale_option)
+
+    else:
+        event_option = None
+        print('Processing latest shakemap')
+        # noinspection PyBroadException
+        try:
+            process_event(locale=locale_option)
+        except:  # pylint: disable=W0702
+            LOGGER.exception('Process event failed')

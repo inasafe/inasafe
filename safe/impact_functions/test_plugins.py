@@ -50,43 +50,36 @@ class BasicFunction(FunctionProvider):
 
 
 class Test_plugins(unittest.TestCase):
-    """Tests of Risiko calculations
-    """
-
+    """Tests of Risiko calculations"""
     def test_get_plugin_list(self):
-        """It is possible to retrieve the list of functions
-        """
+        """It is possible to retrieve the list of functions."""
 
         plugin_list = get_plugins()
-        msg = ('No plugins were found, not even the built-in ones')
-        assert len(plugin_list) > 0, msg
+        message = 'No plugins were found, not even the built-in ones'
+        assert len(plugin_list) > 0, message
 
     def test_single_get_plugins(self):
-        """Named plugin can be retrieved
-        """
+        """Named plugin can be retrieved"""
         plugin_name = DEFAULT_PLUGINS[0]
         plugin_list = get_plugins(plugin_name)
-        msg = ('No plugins were found matching %s' % plugin_name)
-        assert len(plugin_list) > 0, msg
+        message = 'No plugins were found matching %s' % plugin_name
+        assert len(plugin_list) > 0, message
 
     def test_keywords_to_str(self):
-        """String representation of keywords works
-        """
+        """String representation of keywords works."""
 
-        kwds = {'category': 'hazard',
-                'subcategory': 'tsunami',
-                'unit': 'm'}
+        keywords = {
+            'category': 'hazard', 'subcategory': 'tsunami', 'unit': 'm'}
+        string_keywords = keywords_to_str(keywords)
+        for key in keywords:
+            message = (
+                'Expected key %s to appear in %s' % (key, string_keywords))
+            assert key in string_keywords, message
 
-        s = keywords_to_str(kwds)
-        #print
-        #print s
-        for key in kwds:
-            msg = ('Expected key %s to appear in %s' % (key, s))
-            assert key in s, msg
-
-            val = kwds[key]
-            msg = ('Expected value %s to appear in %s' % (val, s))
-            assert val in s, msg
+            val = keywords[key]
+            message = (
+                'Expected value %s to appear in %s' % (val, string_keywords))
+            assert val in string_keywords, message
 
     def test_get_plugins(self):
         """Plugins can be collected."""
@@ -99,52 +92,52 @@ class Test_plugins(unittest.TestCase):
 
         # Check each plugin
         for plugin in plugin_list.values():
-            # Check that it's name appeears in string representation
+            # Check that it's name appears in string representation
             title = get_function_title(plugin)
-            msg = ('Expected title %s in string representation: %s'
-                   % (title, string_rep))
-            assert title in string_rep, msg
+            message = (
+                'Expected title %s in string representation: %s'
+                % (title, string_rep))
+            assert title in string_rep, message
 
             # Check that every plugin has a requires line
             requirements = requirements_collect(plugin)
-            msg = 'There were no requirements in plugin %s' % plugin
-            assert(len(requirements) > 0), msg
+            message = 'There were no requirements in plugin %s' % plugin
+            assert(len(requirements) > 0), message
 
-            for req_str in requirements:
-                msg = 'All plugins should return True or False'
-                assert(requirement_check({'category': 'hazard',
-                                          'subcategory': 'earthquake',
-                                          'layerType': 'raster'},
-                                         req_str) in [True, False]), msg
+            for required_string in requirements:
+                message = 'All plugins should return True or False'
+                assert(requirement_check(
+                    {'category': 'hazard',
+                     'subcategory': 'earthquake',
+                     'layerType': 'raster'},
+                    required_string) in [True, False]), message
 
     def test_requirements_check(self):
-        """Plugins are correctly filtered based on requirements"""
-
+        """Plugins are correctly filtered based on requirements."""
         plugin_list = get_plugins('BasicFunction')
         self.assertEqual(len(plugin_list), 1)
 
         requirements = requirements_collect(plugin_list[0].values()[0])
-        msg = 'Requirements are %s' % requirements
-        assert(len(requirements) == 1), msg
+        message = 'Requirements are %s' % requirements
+        assert(len(requirements) == 1), message
         for req_str in requirements:
-            msg = 'Should eval to True'
+            message = 'Should eval to True'
             assert(requirement_check({'category': 'hazard'},
-                                     req_str) is True), msg
-            msg = 'Should eval to False'
+                                     req_str) is True), message
+            message = 'Should eval to False'
             assert(requirement_check({'broke': 'broke'},
-                                     req_str) is False), msg
+                                     req_str) is False), message
 
         try:
             plugin_list = get_plugins('NotRegistered')
         except RuntimeError:
             pass
         else:
-            msg = 'Search should fail'
-            raise Exception(msg)
+            message = 'Search should fail'
+            raise Exception(message)
 
     def test_plugin_compatibility(self):
-        """Default plugins perform as expected
-        """
+        """Default plugins perform as expected."""
 
         # Get list of plugins
         plugin_list = get_plugins()
@@ -153,16 +146,16 @@ class Test_plugins(unittest.TestCase):
         # Characterisation test to preserve the behaviour of
         # get_layer_descriptors. FIXME: I think we should change this to be
         # a dictionary of metadata entries (ticket #126).
-        reference = [['lembang_schools',
-                      {'layertype': 'vector',
-                       'category': 'exposure',
-                       'subcategory': 'building',
-                       'title': 'lembang_schools'}],
-                     ['shakemap_padang_20090930',
-                      {'layertype': 'raster',
-                       'category': 'hazard',
-                       'subcategory': 'earthquake',
-                       'title': 'shakemap_padang_20090930'}]]
+        reference = [
+            ['lembang_schools', {'layertype': 'vector',
+                                 'category': 'exposure',
+                                 'subcategory': 'building',
+                                 'title': 'lembang_schools'}],
+            ['shakemap_padang_20090930', {'layertype': 'raster',
+                                          'category': 'hazard',
+                                          'subcategory': 'earthquake',
+                                          'title': 'shakemap_padang_20090930'}
+            ]]
 
         # Check plugins are returned
         metadata = reference
@@ -175,8 +168,7 @@ class Test_plugins(unittest.TestCase):
         assert len(annotated_plugins) > 0, msg
 
     def test_damage_curve(self):
-        """Damage curve class works
-        """
+        """Damage curve class works."""
 
         # Make data
         x = [1.0, 2.0, 4.0]
@@ -203,46 +195,48 @@ class Test_plugins(unittest.TestCase):
         except RuntimeError:
             pass
         else:
-            msg = 'Damage_curve should have raised exception for None'
-            raise Exception(msg)
+            message = 'Damage_curve should have raised exception for None'
+            raise Exception(message)
 
         try:
             Damage_curve([[1, 2], [3, 4, 5]])
         except RuntimeError:
             pass
         else:
-            msg = 'Damage_curve should have raised exception for invalid input'
-            raise Exception(msg)
+            message = (
+                'Damage_curve should have raised exception for invalid input')
+            raise Exception(message)
 
         try:
             Damage_curve(x)
         except RuntimeError:
             pass
         else:
-            msg = 'Damage_curve should have raised exception for 1d array'
-            raise Exception(msg)
+            message = 'Damage_curve should have raised exception for 1d array'
+            raise Exception(message)
 
         try:
             Damage_curve(numpy.zeros((3, 4, 5)))
         except RuntimeError:
             pass
         else:
-            msg = ('Damage_curve should have raised exception for '
-                   'more than two dimensions')
-            raise Exception(msg)
+            message = (
+                'Damage_curve should have raised exception for more than '
+                'two dimensions')
+            raise Exception(message)
 
         try:
             Damage_curve(numpy.zeros((3, 3)))
         except RuntimeError:
             pass
         else:
-            msg = ('Damage_curve should have raised exception for '
-                   'more than two columns')
-            raise Exception(msg)
+            message = (
+                'Damage_curve should have raised exception for more than '
+                'two columns')
+            raise Exception(message)
 
     def test_aggregate(self):
-        """Aggregation by boundaries works
-        """
+        """Aggregation by boundaries works."""
 
         # Name file names for hazard level and exposure
         boundary_filename = ('%s/kecamatan_jakarta_osm.shp' % TESTDATA)
@@ -254,16 +248,17 @@ class Test_plugins(unittest.TestCase):
         boundary_layer = read_layer(boundary_filename)
         building_layer = read_layer(building_filename)
 
-        res = aggregate(data=building_layer,
-                        boundaries=boundary_layer,
-                        attribute_name='AFFECTED',
-                        aggregation_function='count')
+        res = aggregate(
+            data=building_layer,
+            boundaries=boundary_layer,
+            attribute_name='AFFECTED',
+            aggregation_function='count')
 
         #print res, len(res)
         #print boundary_layer, len(boundary_layer)
-        msg = ('Number of aggregations %i should be the same as the '
-               'number of specified boundaries %i' % (len(res),
-                                                      len(boundary_layer)))
+        msg = (
+            'Number of aggregations %i should be the same as the number of '
+            'specified boundaries %i' % (len(res), len(boundary_layer)))
         assert len(res) == len(boundary_layer), msg
 
         # FIXME (Ole): Need test by manual inspection in QGis

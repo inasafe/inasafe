@@ -1,9 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**QGIS plugin test suite.**
-
-Contact : ole.moller.nielsen@gmail.com
+"""QGIS plugin test suite.
 
 .. note:: This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -11,8 +7,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -29,12 +23,15 @@ sys.path.append(pardir)
 
 from PyQt4.QtGui import QWidget
 
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from qgis.gui import QgsMapCanvas
 from safe.common.qgis_interface import QgisInterface
 from safe_qgis.plugin import Plugin
 from safe_qgis.safe_interface import safeTr
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class PluginTest(unittest.TestCase):
@@ -109,10 +106,10 @@ class PluginTest(unittest.TestCase):
         myPlugin.change_i18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        from safe_qgis.safe_interface import getSafeImpactFunctions
-        #myFunctions = getSafeImpactFunctions()
+        from safe_qgis.safe_interface import get_safe_impact_function
+        #myFunctions = get_safe_impact_function()
         #print myFunctions
-        myFunctions = getSafeImpactFunctions('Tydelik gesluit')
+        myFunctions = get_safe_impact_function('Tydelik gesluit')
         assert len(myFunctions) > 0
 
 if __name__ == '__main__':

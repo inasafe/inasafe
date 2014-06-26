@@ -18,6 +18,7 @@ from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string, remove_double_spaces
+from safe.metadata import converter_dict
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -39,6 +40,9 @@ class PluginMount(type):
             # This must be a plugin implementation, which should be registered.
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
+            if cls.__name__ in [c.__name__ for c in cls.plugins]:
+                raise LookupError(
+                    "Duplicate impact function name %s" % cls.__name__)
             cls.plugins.append(cls)
 # pylint: enable=W0613,C0203
 
@@ -613,6 +617,8 @@ def get_admissible_plugins(keywords=None):  # , name=None):
     if isinstance(keywords, dict):
         keywords = [keywords]
 
+    convert_to_old_keywords(converter_dict, keywords)
+
     # Get all impact functions
     plugin_dict = get_plugins()
 
@@ -907,3 +913,34 @@ def is_function_enabled(func):
         if dict_req.get('disabled', False):
             return False
     return True
+
+
+def convert_to_old_keywords(converter, keywords):
+    """Convert new keywords system to old keywords system by aliases.
+
+    Since we have new keywords system in metadata.py and assigned by wizard,
+    it will have backward incompatibility because the current impact function
+    selector still use the old system.
+
+     This method will convert new keywords to old keyword that has the same
+     objective.
+
+     :param converter: a dictionary that contains all possible aliases
+        from new keywords to old keywords.
+     :type converter: dict
+
+     :param keywords: list of dictionary keyword
+     :type keywords: list
+
+     .. versionadded:: 2.1
+    """
+    for keyword in keywords:
+        for key, value in keyword.iteritems():
+            try:
+                aliases = converter[key]
+                for alias_key, alias_value in aliases.iteritems():
+                    if value.lower() in alias_value:
+                        keyword[key] = alias_key
+                        break
+            except KeyError:
+                pass

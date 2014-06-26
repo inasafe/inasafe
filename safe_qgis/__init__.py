@@ -1,3 +1,4 @@
+# coding=utf-8
 """Package safe_qgis."""
 
 import os
@@ -44,10 +45,10 @@ if myDir not in sys.path:
 # for whatever locale is effectively being used.
 
 override_flag = QSettings().value(
-    'locale/overrideFlag', False, type=bool)
+    'locale/overrideFlag', True, type=bool)
 
 if override_flag:
-    locale_name = QSettings().value('locale/userLocale', '', type=str)
+    locale_name = QSettings().value('locale/userLocale', 'en_US', type=str)
 else:
     locale_name = QLocale.system().name()
     # NOTES: we split the locale name because we need the first two
@@ -87,7 +88,7 @@ if os.path.exists(translation_path):
 # see safe_qgis.utilities.defaults for more details
 import safe.defaults
 from safe_qgis.utilities.defaults import breakdown_defaults
-safe.defaults.get_defaults = lambda the_default = None: breakdown_defaults(
+safe.defaults.get_defaults = lambda the_default=None: breakdown_defaults(
     the_default)
 
 try:

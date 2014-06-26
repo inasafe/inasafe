@@ -21,23 +21,28 @@ import socket
 import urllib2
 import logging
 
-# The logger is intialised in utils.py by init
-LOGGER = logging.getLogger('InaSAFE')
+from realtime.server_config import BASE_URL
+from realtime.utilities import realtime_logger_name
+
+# The logger is initialised in realtime/__init__
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 class FtpClient:
     """A utility class that contains methods to fetch a listings and files
         from an FTP server"""
     def __init__(self,
-                 base_url='118.97.83.243',
+                 base_url=BASE_URL,
                  pasv_mode=True):
         """Constructor for the FtpClient class.
 
-        :param base_url: (Optional) an ftp server to connect to. If ommitted
-              it will default to ftp://118.97.83.243/
+        :param base_url: (Optional) an ftp server to connect to. If omitted
+              it will default to BASE_URL.
+        :type base_url: str
 
         :param pasv_mode - (Optional) whether passive connections should be
               made. Defaults to True.
+        :type pasv_mode: bool
         """
         self.base_url = base_url
         self.pasv = pasv_mode
@@ -85,7 +90,7 @@ class FtpClient:
         :param url_path: (Mandatory) The path (relative to the ftp root)
               from which the file should be retrieved.
 
-        :return: An ftp url e.g. ftp://118.97.83.243/20120726022003.inp.zip
+        :return: An ftp url e.g. ftp://118.97.83.243/20131105060809.inp.zip
         :rtype: str
 
         :raises: None
@@ -119,7 +124,7 @@ class FtpClient:
         """Check if a file is on the ftp server.
 
          :param checked_file: (Mandatory) The paths (relative to the ftp
-                root) to be checked. e.g. '20120726022003.inp.zip',
+          root) to be checked. e.g. '20131105060809.inp.zip',
 
          :return: True if the file exists on the server, otherwise False.
          :rtype: bool
@@ -136,7 +141,8 @@ class FtpClient:
 
         :param checked_files: The paths (relative to the ftp root) to be
             checked. e.g.
-            ['20120726022003.inp.zip', '20120726022003.inp.zip']
+            ['20131105060809.inp.zip', '20131105060809.inp.zip']
+
          :type checked_files: list
 
         :return: True if **all** files exists on the server, otherwise False.
@@ -145,8 +151,8 @@ class FtpClient:
         LOGGER.debug('Checking for ftp file: %s', checked_files)
         # Note we don't delegate to has_file as we want to limit network IO
         file_list = self.get_listing()
-        for myFile in checked_files:
-            url = self.ftp_url_for_file(myFile)
+        for input_file in checked_files:
+            url = self.ftp_url_for_file(input_file)
             if not url in file_list:
                 LOGGER.debug('** %s NOT found on server**' % url)
                 return False

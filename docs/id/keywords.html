@@ -185,10 +185,17 @@
   <div class="section" id="keywords-system">
 <span id="id1"></span><h1>Sistem Kata kunci<a class="headerlink" href="#keywords-system" title="Link permanent untuk headline ini">¶</a></h1>
 <p>Dokumentasi ini menjelaskan tujuan dan penggunaan sistem <em>kata kunci</em> InaSAFE</p>
+<div class="admonition seealso">
+<p class="first admonition-title">lihat juga</p>
+<p class="last">Please also refer to the documentation on
+<a class="reference internal" href="keywords_wizard.html#keywords-wizard"><em>the keywords Wizards</em></a> and the
+<a class="reference internal" href="keywords_editor.html#keywords-editor"><em>keywords editor</em></a> which are tools to help you
+to create keywords files.</p>
+</div>
 <div class="section" id="purpose">
 <h2>Tujuan<a class="headerlink" href="#purpose" title="Link permanent untuk headline ini">¶</a></h2>
-<p>Sistem kata kunci digunakan oleh <a class="reference internal" href="impact_functions.html#impact-functions"><em>impact_functions</em></a> untuk menentukan sifat input layer yang telah diberikan untuk mereka.</p>
-<p>Setiap pemasukan set data SIG yang digunakan InaSAFE memerlukan sebuah file kata kunci yang terlampir. Tujuan dari file kata kunci ini adalah untuk menyediakan metadata tambahan yang dibutuhkan oleh fungsi dampak. Sebagai contoh, file kata kunci akan mengindikasikan apakah sebuah dataset harus diperlakukan sebagai sebuah <em>ancaman</em> atau sebuah layer <em>dampak</em>. File kata kunci ini juga digunakan untuk mengindikasikan konteks dari layer (misalnya &#8220;ini adalah layer <em>banjir</em>, ini adalah layer <em>gempa bumi</em>&#8221;).</p>
+<p>Sistem kata kunci digunakan oleh <a class="reference internal" href="impact_functions.html#impact-functions"><em>impact_functions</em></a> untuk menentukan sifat input layer yang telah diberikan kepadanya.</p>
+<p>Setiap pemasukan set data SIG yang digunakan InaSAFE memerlukan sebuah <em>file</em> kata kunci yang terlampir. Tujuan dari <em>file</em> kata kunci ini adalah untuk menyediakan metadata tambahan yang dibutuhkan oleh fungsi dampak. Sebagai contoh, <em>file</em> kata kunci akan mengindikasikan apakah sebuah dataset harus diperlakukan sebagai sebuah <em>ancaman</em> atau sebuah layer <em>dampak</em>. <em>File</em> kata kunci ini juga digunakan untuk mengindikasikan konteks dari layer (misalnya &#8220;ini adalah layer <em>banjir</em>, ini adalah layer <em>gempa bumi</em>&#8221;).</p>
 <p>Dengan konvensi dan ekspektasi, berkas keyword harus diberi nama sama dengan nama dasar dari sumber data GIS yang menyertai. Sebagai contoh sebuah set data banjir disimpan sebagai</p>
 <p><tt class="file docutils literal"><span class="pre">C:\gisdata\flood.tif</span></tt></p>
 <p>akan membutuhkan berkas keyword yang menyertai disimpan sebagai:</p>
@@ -200,7 +207,7 @@
 <p>Plugin InaSAFE di QGIS menyediakan sebuah editor untuk kata kunci ini. Tujuan dari dokumen ini adalah untuk mendeskripsikan editor kata kunci dan untuk menyediakan panduan penggunaan kata kunci tersebut.</p>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
-<p class="last">Saat ini kata kunci tidak tervalidasi oleh pustaka. Ini artinya sebagai contoh jika Anda salah mengeja sebuah kata kunci, menggunakan jenis huruf yang salah (misal huruf besar daripada huruf kecil) atau memberikan kata kunci yang salah untuk konteks (misalnya memberikan sub-kategori banjir pada sebuah kategori keterpaparan), sistem tidak  dapat menerjemahkan apa yang akan dilakukan oleh file tersebut. Karena alasan inilah Anda diharuskan mengikuti panduan di bawah ini secara cermat untuk meyakinkan bahwa Anda telah memasukan kata kunci secara benar.</p>
+<p class="last">Saat ini kata kunci tidak tervalidasi oleh pustaka. Ini artinya sebagai contoh jika Anda salah mengeja sebuah kata kunci, menggunakan jenis huruf yang salah (misal huruf besar daripada huruf kecil) atau memberikan kata kunci dalam konteks yang keliru (misalnya memberikan sub-kategori banjir pada sebuah kategori keterpaparan), sistem tidak  dapat menerjemahkan apa yang akan dilakukan oleh file tersebut. Karena alasan inilah Anda diharuskan mengikuti panduan di bawah ini secara cermat untuk meyakinkan bahwa Anda telah memasukan kata kunci dengan benar.</p>
 </div>
 </div>
 <div class="section" id="guidelines">
@@ -231,6 +238,10 @@
 </td>
 <td><p class="first last">keterpaparan</p>
 </td>
+</tr>
+<tr class="row-even"><td><p class="first last">kategori</p>
+</td>
+<td>aggregation</td>
 </tr>
 </tbody>
 </table>
@@ -267,8 +278,11 @@
 </tr>
 <tr class="row-even"><td><p class="first last">Subkategori</p>
 </td>
-<td><p class="first last">tephra (abu vulkanik)</p>
+<td>volcano</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">Subkategori</p>
 </td>
+<td>earthquake</td>
 </tr>
 </tbody>
 </table>
@@ -294,8 +308,11 @@
 </tr>
 <tr class="row-odd"><td><p class="first last">keterpaparan</p>
 </td>
-<td><p class="first last">bangunan</p>
+<td>structure</td>
+</tr>
+<tr class="row-even"><td><p class="first last">keterpaparan</p>
 </td>
+<td>road</td>
 </tr>
 </tbody>
 </table>
@@ -307,12 +324,52 @@ subcategory: flood
 </div>
 <div class="section" id="units">
 <h3>unit/ satuan<a class="headerlink" href="#units" title="Link permanent untuk headline ini">¶</a></h3>
-<p>Kata kunci unit hanya berlaku pada konteks layer &#8216;ancaman&#8217;, dan digunakan untuk mengindikasikan satuan metrik atau imperial yang digambarkan oleh setiap entitas data (satu sel kotak atau satu fitur vektor) pada layer ancaman. Contoh pemasukan file kata kunci</p>
-<div class="highlight-python"><div class="highlight"><pre>category: hazard
+<p>The units keyword is used to indicate the metric or imperial units represented
+by each data entity (a grid cell or a vector feature) in a layer.</p>
+<p>Example keywords file entry:</p>
+<blockquote>
+<div><blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="51%" />
+<col width="37%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">Kunci</p>
+</th>
+<th class="head">Allowed Values (pre InaSAFE 2.1)</th>
+<th class="head">Allowed Values (&gt;= 2.1)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">unit/ satuan</p>
+</td>
+<td>m</td>
+<td>metres_depth</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">unit/ satuan</p>
+</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><p class="first last">keterpaparan</p>
+</td>
+<td>road</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">ancaman</p>
+</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>category: hazard
 subcategory: flood
-units: m
-</pre></div>
-</div>
+units: m</p>
+</div></blockquote>
 <p>Pada kasus di atas terdapat kendala halus untuk menggunakan nilai satuan m, kaki atau basah/kering sebagaimana yang didefinisikan oleh tabel di bawah ini karena subkategori &#8216;banjir&#8217;. Berikut ini adalah satuan yang diperbolehkan tergantung pada subkategori yang telah ditetapkan.</p>
 <p>Subkategori yang berlaku untuk subkategori &#8216;tsunami&#8217; atau subkategori &#8216;banjir&#8217;:</p>
 <table border="1" class="docutils">
@@ -373,60 +430,9 @@ units: m
 </div>
 </div>
 <div class="section" id="datatype">
-<h3>jenis data<a class="headerlink" href="#datatype" title="Link permanent untuk headline ini">¶</a></h3>
-<p>Kata kunci untuk jenis data ditentukan untuk layer keterpaparan dan menggambarkan jenis data penduduk, infrastruktur, dan sebagainya dalam lingkup area yang diberikan.</p>
-<p>Kepadatan yang berlaku untuk sub-kategori yang berbeda</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="24%" />
-<col width="42%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">Subkategori</p>
-</th>
-<th class="head"><p class="first last">Kunci</p>
-</th>
-<th class="head"><p class="first last">Nilai yang diperbolehkan</p>
-</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><p class="first last">populasi</p>
-</td>
-<td><p class="first last">jenis data</p>
-</td>
-<td><p class="first last">jumlah</p>
-</td>
-</tr>
-<tr class="row-odd"><td><p class="first last">populasi</p>
-</td>
-<td><p class="first last">jenis data</p>
-</td>
-<td><p class="first last">kepadatan</p>
-</td>
-</tr>
-<tr class="row-even"><td><p class="first last">bangunan</p>
-</td>
-<td><p class="first last">jenis data</p>
-</td>
-<td>osm</td>
-</tr>
-<tr class="row-odd"><td><p class="first last">bangunan</p>
-</td>
-<td><p class="first last">jenis data</p>
-</td>
-<td>sigab</td>
-</tr>
-<tr class="row-even"><td><p class="first last">bangunan</p>
-</td>
-<td><p class="first last">jenis data</p>
-</td>
-<td><p class="first last">lainnya</p>
-</td>
-</tr>
-</tbody>
-</table>
+<h3>Jenis data<a class="headerlink" href="#datatype" title="Link permanent untuk headline ini">¶</a></h3>
+<p>The data type keyword indicate what kind of geospatial data is represented
+(Numeric, Polygon, Line, Point).</p>
 </div>
 </div>
 <div class="section" id="assumptions">
@@ -434,8 +440,6 @@ units: m
 <p>Berikut ini asumsi yang dibuat mengenai kata kunci, yang mungkin atau tidak mungkin untuk pemrograman yang diterapkan oleh InaSAFE library dan GUI:</p>
 <ul class="simple">
 <li><p class="first">Seharusnya hanya <strong>satu keyword untuk sebuah key yang diberikan</strong> pada berkas keyword.</p>
-</li>
-<li><p class="first">Beralih dari ancaman ke keterpaparan akan menghapus bagian dari GUI karena pada umumnya sebagian besar kata kunci tergantung pada kategorinya. Secara khusus, pemilihan <strong>&#8216;ancaman&#8217;</strong> akan menghapus <strong>&#8216;datatype&#8217;</strong> pasangan kunci/ nilai, dan pemilihan <strong>&#8216;keterpaparan&#8217;</strong> akan menghapus <strong>&#8216;unit&#8217;</strong> pasangan kunci nilai.</p>
 </li>
 <li><p class="first">Kata kunci untuk <strong>kategori</strong> yang <strong>ditegakkan</strong> menjadi salah satu &#8216;hazard&#8217; atau &#8216;exposure&#8217; oleh GUI.</p>
 </li>
@@ -452,67 +456,6 @@ units: m
 <div class="section" id="translations">
 <h2>Terjemahan<a class="headerlink" href="#translations" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Walaupun InaSAFE kini tersedia dalam berbagai bahasa, tapi &#8216;key&#8217; dalam file kata kunci harus selalu dituliskan dalam bahasa Inggris.</p>
-</div>
-<div class="section" id="the-keywords-editor-graphical-user-interface">
-<h2>Editor kata kunci (keyword) di layar pengguna<a class="headerlink" href="#the-keywords-editor-graphical-user-interface" title="Link permanent untuk headline ini">¶</a></h2>
-<p>User interface grafis untuk mengedit kata kunci (keyword) dibagi menjadi dua bagian:</p>
-<ol class="arabic simple">
-<li><p class="first"><strong>Mode Minimum</strong>: Pada mode ini, hanya mengikuti pengaturan yang disediakan:</p>
-<ul>
-<li><p class="first"><strong>Judul</strong> - nama &#8216;friendly&#8217; untuk dataset yang akan ditampilkan dalam laporan, di layar pengguna, dan sebagainya.</p>
-</li>
-<li><p class="first"><strong>Sumber</strong> - field untuk menginformasikan dari siapa / dari mana dataset tersebut diperoleh</p>
-</li>
-<li><p class="first"><strong>Kategori</strong> - Pilihan wajib antara &#8216;hazard&#8217; dan &#8216;exposure&#8217;.</p>
-</li>
-<li><p class="first"><strong>Subkategori</strong> - Sebuah daftar subkategori/unit-unit yang tercampur (jika kasusnya ancaman) atau subkategori/tipe data yang tercampur (jika kasusnya paparan). Pada kasus ini, karakteristik sekunder (unit atau tipe data) ditunjukan pada kurung persegi setelah nama subkategori contohnya  <tt class="samp docutils literal"><span class="pre">banjir</span> <span class="pre">[m]</span></tt> digunakan untuk subkategori &#8216;banjir&#8217;, unit &#8216;m&#8217;</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>Contoh mengedit kata kunci dalam mode minimal ditunjukkan di bawah ini.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-simple.png"><img alt="Opened keyword editor window" src="_images/keyword-editor-simple.png" style="width: 311.25px; height: 218.25px;" /></a>
-<p class="caption">Jendela editor kata kunci yang dibuka</p>
-</div>
-<ol class="arabic simple" start="2">
-<li><p class="first"><strong>Mode lanjutan</strong>: Dalam mode ini disediakan beberapa pilihan sebagai tambahan untuk pilihan mode minimal. Tidak seperti mode minimal, pada mode lanjutan hanya validasi dasar yang dilakukan dan pengguna diberikan lebih banyak fleksibilitas untuk mendefinisikan dan menghapus pasangan kunci/ nilai secara manual. Tiga bagian yang disediakan untuk ini:</p>
-</li>
-</ol>
-<blockquote>
-<div><ul class="simple">
-<li><p class="first"><strong>Predefined</strong> - Pada bagian ini, pengguna memilih dari daftar terkendala kata kunci, memasukkan nilai bentuk bebas dan kemudian menambahkan kunci/nilai pasangan ke daftar kata kunci (lihat dibawah).</p>
-</li>
-<li><p class="first"><strong>User defined</strong> - Pada bagian ini, tidak ada kendala pada kata kunci yang dimasukkan - setiap kata dalam huruf kecil akan diterima untuk kedua komponen baik kunci dan nilai.</p>
-</li>
-<li><p class="first"><strong>Current keywords</strong> - Di tempat ini telah ditampilkan daftar semua kata kunci lengkap untuk dataset. Daftar kata kunci di sini telah diperbarui seketika setiap terjadi perubahan yang dibuat dalam mode editor sederhana dan canggih. Juga sangat memungkinkan pada tempat ini untuk menghapus kata kunci yang tidak diinginkan dengan menggunakan tombol &#8216;remove selected&#8217;. Beberapa kata kunci dapat dihapus dalam satu operasi dengan <tt class="kbd docutils literal"><span class="pre">Control-clicking</span></tt> pada kata kunci yang telah dimasukkan dalam daftar kata kunci saat ini dan kemudian klik <em class="guilabel">Remove selected</em></p>
-</li>
-</ul>
-</div></blockquote>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-advanced.png"><img alt="Advanced mode of keyword editor" src="_images/keyword-editor-advanced.png" style="width: 431.25px; height: 478.5px;" /></a>
-<p class="caption">Mode Editor kata kunci tingkat lanjut</p>
-</div>
-</div>
-<div class="section" id="invoking-the-keywords-editor">
-<h2>Membuka editor kata kunci (keyword editor)<a class="headerlink" href="#invoking-the-keywords-editor" title="Link permanent untuk headline ini">¶</a></h2>
-<p>Editor kata kunci (keyword) dapat dengan mudah dipanggil dengan <strong>memilih setiap layer</strong> di daftar layer QGIS, dan kemudian menggunakan menu plugin untuk memulai mengedit (<em class="menuselection">Plugins ‣ InaSAFE ‣ Keyword Editor</em>). Atau Anda mungkin menggunakan simbol editor kata kunci (keyword) di dalam toolbar plugin seperti diilustrasikan di bawah.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="_images/keyword-editor-icon.png"><img alt="Keyword editor icon" src="_images/keyword-editor-icon.png" style="width: 353.0px; height: 36.0px;" /></a>
-<p class="caption">Ikon editor kata kunci</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Catatan</p>
-<p class="last">Jika anda belum memilih layer di legenda QGIS, ikon editor kata kunci di toolbar dan menu akan  <strong>dimatikan</strong> dan bewarna abu-abu.</p>
-</div>
-</div>
-<div class="section" id="saving-your-edits">
-<h2>Menyimpan hasil editan Anda<a class="headerlink" href="#saving-your-edits" title="Link permanent untuk headline ini">¶</a></h2>
-<p>Untuk menyimpan perubahan keyword, cukup tekan tombol <em class="guilabel">OK</em> dan berkas <tt class="file docutils literal"><span class="pre">*.keywords</span></tt> akan distulis dalam disk.</p>
-</div>
-<div class="section" id="cancelling-your-edits">
-<h2>Membatalkan hasil editan Anda<a class="headerlink" href="#cancelling-your-edits" title="Link permanent untuk headline ini">¶</a></h2>
-<p>Anda dapat membatalkan perubahan Anda kapan saja dengan menekan tombol <em class="guilabel">Cancel</em> . Tidak ada perubahan yang akan ditulis ke tempat penyimpanan dan file <tt class="file docutils literal"><span class="pre">*.keywords</span></tt> kata kunci Anda akan tetap dalam keadaan semula.</p>
 </div>
 <div class="section" id="keywords-for-remote-and-non-file-based-layers">
 <h2>Kata kunci (keyword) untuk mengontrol dan non-file didasarkan pada layer<a class="headerlink" href="#keywords-for-remote-and-non-file-based-layers" title="Link permanent untuk headline ini">¶</a></h2>
@@ -554,7 +497,7 @@ units: m
 </div>
 <p>Untuk sumber daya tertentu (misalnya cakupan Arcinfo, basis data Spatialite) dimana cache juga digunakan, Anda harus berhati-hati menggunakan titik tingkat umum atau jaringan berbagi untuk mengakses data jika Anda berharap menekan cache dengan layer URI secara sukses. Contohnya Anda dapat memiliki semua pengguna menjaga data pada tempat yang sama. Di bawah Unix sebagai sistem pengoperasian ini dapat terlihat seperti ini:</p>
 <p><tt class="file docutils literal"><span class="pre">/mnt/gisdata/jk.sqlite</span></tt></p>
-<p>Pada windows anda dapat selalu drive surat yang sama dan alur untuk berbagai, contohnya:</p>
+<p>Pada windows anda akan mendapatkan huruf drive dan jalur yang sama untuk berbagi contohnya:</p>
 <p><tt class="file docutils literal"><span class="pre">Z:\gisdata\jk.sqlite</span></tt></p>
 </div>
 <div class="section" id="getting-help">

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>683</width>
-    <height>453</height>
+    <width>547</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,18 +17,8 @@
    <iconset>
     <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -57,8 +47,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>648</width>
-            <height>560</height>
+            <width>525</width>
+            <height>487</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -298,111 +288,48 @@
       <attribute name="title">
        <string>Template Options</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_5">
-       <item row="8" column="0">
-        <widget class="QPlainTextEdit" name="txtDisclaimer"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lblOrganisationLogo">
-         <property name="enabled">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QCheckBox" name="template_warning_checkbox">
+         <property name="text">
+          <string>Prompt me in cases when a template has missing elements</string>
+         </property>
+         <property name="checked">
           <bool>true</bool>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="custom_org_logo_checkbox">
          <property name="text">
-          <string>Organisation logo</string>
+          <string>Use custom organisation logo</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QLineEdit" name="leOrganisationLogoPath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolOrganisationLogoPath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lblNorthArrowPath">
+       <item>
+        <widget class="QSplitter" name="splitter_org_logo">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
-         <property name="text">
-          <string>North arrow image</string>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
+         <widget class="QLineEdit" name="leOrganisationLogoPath">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>100</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+         <widget class="QToolButton" name="toolOrganisationLogoPath">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
         </widget>
        </item>
-       <item row="4" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <widget class="QLineEdit" name="leNorthArrowPath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolNorthArrowPath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lblReportTemplate">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Report templates directory</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_10">
-         <item>
-          <widget class="QLineEdit" name="leReportTemplatePath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolReportTemplatePath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Organisation disclaimer text</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
+       <item>
         <widget class="QCheckBox" name="organisation_on_dock_checkbox">
          <property name="text">
           <string>Show organisation logo on main panel too</string>
@@ -412,13 +339,90 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="custom_north_arrow_checkbox">
+         <property name="text">
+          <string>Use custom north arrow image</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSplitter" name="splitter_north_arrow">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QLineEdit" name="leNorthArrowPath">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>100</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+         <widget class="QToolButton" name="toolNorthArrowPath">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="custom_templates_dir_checkbox">
+         <property name="text">
+          <string>Additional report templates directory</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSplitter" name="splitter_custom_report">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QLineEdit" name="leReportTemplatePath">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>100</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+         <widget class="QToolButton" name="toolReportTemplatePath">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="custom_org_disclaimer_checkbox">
+         <property name="text">
+          <string>Use custom organisation disclaimer text</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="txtDisclaimer">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
-      <zorder>label_2</zorder>
-      <zorder>txtDisclaimer</zorder>
-      <zorder>lblOrganisationLogo</zorder>
-      <zorder>lblNorthArrowPath</zorder>
-      <zorder>lblReportTemplate</zorder>
-      <zorder>organisation_on_dock_checkbox</zorder>
      </widget>
      <widget class="QWidget" name="tab_advanced">
       <attribute name="title">
@@ -475,8 +479,8 @@
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -511,6 +515,16 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>
@@ -525,13 +539,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>cbxShowPostprocessingLayers</tabstop>
   <tabstop>dsbFemaleRatioDefault</tabstop>
   <tabstop>cbxBubbleLayersUp</tabstop>
-  <tabstop>leOrganisationLogoPath</tabstop>
-  <tabstop>toolOrganisationLogoPath</tabstop>
   <tabstop>organisation_on_dock_checkbox</tabstop>
-  <tabstop>leNorthArrowPath</tabstop>
-  <tabstop>toolNorthArrowPath</tabstop>
-  <tabstop>leReportTemplatePath</tabstop>
-  <tabstop>toolReportTemplatePath</tabstop>
   <tabstop>txtDisclaimer</tabstop>
   <tabstop>leKeywordCachePath</tabstop>
   <tabstop>toolKeywordCachePath</tabstop>
@@ -580,6 +588,70 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>462</x>
      <y>519</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>custom_org_disclaimer_checkbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>txtDisclaimer</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>273</x>
+     <y>258</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>273</x>
+     <y>395</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>custom_org_logo_checkbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>splitter_org_logo</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>97</x>
+     <y>117</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>custom_north_arrow_checkbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>splitter_north_arrow</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>128</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>98</x>
+     <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>custom_templates_dir_checkbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>splitter_custom_report</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>98</x>
+     <y>290</y>
     </hint>
    </hints>
   </connection>

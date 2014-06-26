@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.testing import get_qgis_app
-
 __author__ = 'tim@linfiniti.com'
 __date__ = '17/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -26,6 +24,11 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
+from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe_qgis.utilities.styling import (
     set_vector_graduated_style,
     setRasterStyle,
@@ -37,8 +40,6 @@ from safe_qgis.utilities.utilities_for_testing import (
     load_layer)
 from safe_qgis.exceptions import StyleError
 from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class StylingTest(unittest.TestCase):

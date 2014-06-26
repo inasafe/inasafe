@@ -157,17 +157,17 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         """Populate the combo with all polygon layers loaded in QGIS."""
 
         # noinspection PyArgumentList
-        myRegistry = QgsMapLayerRegistry.instance()
-        layers = myRegistry.mapLayers().values()
-        myFoundFlag = False
+        registry = QgsMapLayerRegistry.instance()
+        layers = registry.mapLayers().values()
+        found_flag = False
         for layer in layers:
-            myName = layer.name()
-            mySource = str(layer.id())
+            name = layer.name()
+            source = str(layer.id())
             # check if layer is a vector polygon layer
             if is_polygon_layer(layer) or is_point_layer(layer):
-                myFoundFlag = True
-                add_ordered_combo_item(self.cboPolygonLayers, myName, mySource)
-        if myFoundFlag:
+                found_flag = True
+                add_ordered_combo_item(self.cboPolygonLayers, name, source)
+        if found_flag:
             self.cboPolygonLayers.setCurrentIndex(0)
 
     @pyqtSignature('int')
@@ -177,14 +177,14 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         :param theIndex: Passed by the signal that triggers this slot.
         :type theIndex: int
         """
-        layerId = self.cboPolygonLayers.itemData(
+        layer_id = self.cboPolygonLayers.itemData(
             theIndex, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
-        myFields = layer.dataProvider().fieldNameMap().keys()
+        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+        fields = layer.dataProvider().fieldNameMap().keys()
         self.cboFields.clear()
-        for myField in myFields:
-            add_ordered_combo_item(self.cboFields, myField, myField)
+        for field in fields:
+            add_ordered_combo_item(self.cboFields, field, field)
 
     def accept(self):
         """Process the layer and field and generate a new layer.
@@ -192,34 +192,35 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         .. note:: This is called on OK click.
 
         """
-        myIndex = self.cboFields.currentIndex()
-        myFieldName = self.cboFields.itemData(
-            myIndex, QtCore.Qt.UserRole)
+        index = self.cboFields.currentIndex()
+        field_name = self.cboFields.itemData(
+            index, QtCore.Qt.UserRole)
 
-        myIndex = self.cboPolygonLayers.currentIndex()
-        layerId = self.cboPolygonLayers.itemData(
-            myIndex, QtCore.Qt.UserRole)
+        index = self.cboPolygonLayers.currentIndex()
+        layer_id = self.cboPolygonLayers.itemData(
+            index, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
+        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
 
-        myFileName = str(layer.source())
+        file_name = str(layer.source())
 
-        myInputLayer = safe_read_layer(myFileName)
+        input_layer = safe_read_layer(file_name)
 
         try:
-            myOutputLayer = self.minimum_needs(myInputLayer, str(myFieldName))
+            output_layer = self.minimum_needs(input_layer, str(field_name))
         except ValueError:
             return
 
-        myNewFile = myFileName[:-4] + '_perka7' + '.shp'
+        new_file = file_name[:-4] + '_perka7' + '.shp'
 
-        myOutputLayer.write_to_file(myNewFile)
+        output_layer.write_to_file(new_file)
 
-        myNewLayer = QgsVectorLayer(myNewFile, 'Minimum Needs', 'ogr')
+        new_layer = QgsVectorLayer(new_file, 'Minimum Needs', 'ogr')
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([myNewLayer])
+        QgsMapLayerRegistry.instance().addMapLayers([new_layer])
         self.done(QtGui.QDialog.Accepted)
 
-    def show_help(self):
+    @staticmethod
+    def show_help():
         """Load the help text for the minimum needs dialog."""
         show_context_help('minimum_needs')

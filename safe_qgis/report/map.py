@@ -19,15 +19,21 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
+from safe_qgis.exceptions import (
+    KeywordNotFoundError,
+    ReportCreationError)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.defaults import disclaimer
+from safe_qgis.utilities.defaults import (
+    disclaimer,
+    default_organisation_logo_path,
+    default_north_arrow_path)
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -50,8 +56,8 @@ class Map():
         self.composition = None
         self.extent = iface.mapCanvas().extent()
         self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
-        self.north_arrow = ':/plugins/inasafe/simple_north_arrow.png'
-        self.org_logo = ':/plugins/inasafe/supporters.png'
+        self.north_arrow = default_north_arrow_path()
+        self.org_logo = default_organisation_logo_path()
         self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
         self.disclaimer = disclaimer()
         self.page_width = 0  # width in mm
@@ -138,11 +144,17 @@ class Map():
             saved. If None, a generated file name will be used.
         :type filename: str
 
+        :raises: TemplateElementMissingError - when template elements are
+            missing
+
         :returns: File name of the output file (equivalent to filename if
                 provided).
         :rtype: str
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
+        self.setup_composition()
+        self.load_template()
+
         if filename is None:
             map_pdf_path = unique_filename(
                 prefix='report', suffix='.pdf', dir=temp_dir())
@@ -150,7 +162,6 @@ class Map():
             # We need to cast to python string in case we receive a QString
             map_pdf_path = str(filename)
 
-        self.load_template()
         self.composition.exportAsPDF(map_pdf_path)
         return map_pdf_path
 
@@ -195,9 +206,10 @@ class Map():
 
     def load_template(self):
         """Load a QgsComposer map from a template.
-        """
-        self.setup_composition()
 
+        :raises: TemplateElementMissingError - when template elements are
+            missing
+        """
         template_file = QtCore.QFile(self.template)
         template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
         template_content = template_file.readAll()

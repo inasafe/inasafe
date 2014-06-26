@@ -50,9 +50,8 @@ class TestGenderPostprocessor(unittest.TestCase):
         results = POSTPROCESSOR.results()
         assert results['Female population (affected)']['value'] == '74,694'
         assert results['Weekly hygiene packs']['value'] == '59,284'
-        assert results[(
-            'Additional weekly rice kg for pregnant and '
-            'lactating women')]['value'] == '6,960'
+        key = 'Additional weekly rice kg for pregnant and lactating women'
+        assert results[key]['value'] == '6,960'
 
 
 if __name__ == '__main__':

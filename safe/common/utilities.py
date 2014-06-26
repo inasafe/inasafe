@@ -26,17 +26,15 @@ except ImportError:
     try:
         from third_party.odict import OrderedDict
     except ImportError:
-        raise RuntimeError(("Could not find an"
-                            "available OrderedDict implementation"))
+        raise RuntimeError(
+            'Could not find an available OrderedDict implementation')
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class MEMORYSTATUSEX(ctypes.Structure):
-    """
-    This class is used for getting the free memory on Windows
-    """
+    """This class is used for getting the free memory on Windows."""
     _fields_ = [
         ("dwLength", ctypes.c_ulong),
         ("dwMemoryLoad", ctypes.c_ulong),
@@ -55,7 +53,7 @@ class MEMORYSTATUSEX(ctypes.Structure):
 
 
 def verify(statement, message=None):
-    """Verification of logical statement similar to assertions
+    """Verification of logical statement similar to assertions.
 
     Input:
       statement: expression
@@ -75,16 +73,17 @@ def verify(statement, message=None):
 
 
 def ugettext(s):
-    """Translation support
-    """
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        '..', 'i18n'))
+    """Translation support."""
+    path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '..', 'i18n'))
     if 'LANG' not in os.environ:
+        return s
+    if not s:
         return s
     lang = os.environ['LANG']
     filename_prefix = 'inasafe'
-    t = gettext.translation(filename_prefix,
-                            path, languages=[lang], fallback=True)
+    t = gettext.translation(
+        filename_prefix, path, languages=[lang], fallback=True)
     return t.ugettext(s)
 
 
@@ -109,7 +108,7 @@ def temp_dir(sub_dir='work'):
         subdirectory to be created e.g. /tmp/inasafe/foo/
     :type sub_dir: str
 
-    :return: Path to the output clipped layer (placed in the system temp dir).
+    :return: Path to the temp dir that is created.
     :rtype: str
 
     :raises: Any errors from the underlying system calls.
@@ -207,7 +206,7 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
     """
 
     # go to the directory
-    my_cwd = os.getcwd()
+    current_working_dir = os.getcwd()
     shp_dir, shp_name = os.path.split(shp_path)
     os.chdir(shp_dir)
 
@@ -229,7 +228,7 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
             if os.path.isfile(shp_basename + ext):
                 os.remove(shp_basename + ext)
 
-    os.chdir(my_cwd)
+    os.chdir(current_working_dir)
 
 
 def get_free_memory():
@@ -417,8 +416,7 @@ def format_decimal(interval, my_number):
 
 
 def get_decimal_separator():
-    """Return decimal separator according to the locale
-    """
+    """Return decimal separator according to the locale."""
     lang = os.getenv('LANG')
     if lang == 'id':
         return ','
@@ -427,8 +425,7 @@ def get_decimal_separator():
 
 
 def get_thousand_separator():
-    """Return decimal separator according to the locale
-    """
+    """Return decimal separator according to the locale."""
     lang = os.getenv('LANG')
     if lang == 'id':
         return '.'
@@ -437,8 +434,7 @@ def get_thousand_separator():
 
 
 def get_significant_decimal(my_decimal):
-    """Return a truncated decimal by last three digit after leading zero
-    """
+    """Return a truncated decimal by last three digit after leading zero."""
     if isinstance(my_decimal, Integral):
         return my_decimal
     if my_decimal != my_decimal:
@@ -469,7 +465,7 @@ def get_significant_decimal(my_decimal):
 
 
 def humanize_class(my_classes):
-    """Return humanize interval of an array
+    """Return humanize interval of an array.
 
     For example::
 
@@ -500,8 +496,8 @@ def humanize_class(my_classes):
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
-        humanize_classes.append(humanize_min_max(min_value, max_value,
-                                                 interval))
+        humanize_classes.append(
+            humanize_min_max(min_value, max_value, interval))
         min_value = max_value
         try:
             if humanize_classes[-1][0] == humanize_classes[-1][-1]:
@@ -512,17 +508,15 @@ def humanize_class(my_classes):
 
 
 def unhumanize_class(my_classes):
-    """Return class as interval without formatting
-    @param my_classes:
-    """
-    my_result = []
+    """Return class as interval without formatting."""
+    result = []
     interval = my_classes[-1] - my_classes[-2]
     min_value = 0
     for max_value in my_classes:
-        my_result.append((format_decimal(interval, min_value),
-                          format_decimal(interval, max_value)))
+        result.append((format_decimal(interval, min_value),
+                       format_decimal(interval, max_value)))
         min_value = max_value
-    return my_result
+    return result
 
 
 def unhumanize_number(number):
@@ -544,42 +538,70 @@ def unhumanize_number(number):
     return number
 
 
-def create_classes(my_list, num_classes):
-    """Create classes from my_list. Classes will use linspace from numpy.
-    It will extend from min and max of elements in my_list. If min == 0,
+def create_classes(class_list, num_classes):
+    """Create classes from class_list.
+
+    Classes will use linspace from numpy.
+    It will extend from min and max of elements in class_list. If min == 0,
     it won't be included. The number of classes is equal to num_classes.
     Please see the unit test for this function for more explanation
+
+    :param class_list: All values as a basis to create classes.
+    :type class_list: list
+
+    :param num_classes: The number of class to hold all values in class_list.
+    :type num_classes: int
     """
-    min_value = numpy.nanmin(my_list)
-    max_value = numpy.nanmax(my_list)
-    print 'min_value, max_value: ', min_value, max_value
-    if min_value == 0:
-        num_classes += 1
+    unique_class_list = list(set(class_list))
+    min_value = numpy.nanmin(unique_class_list)
+    max_value = numpy.nanmax(unique_class_list)
+
+    # If min_value == max_value (it only has 1 unique class), or
+    # max_value <= 1.0, then we will populate the classes from 0 - max_value
+    if (min_value == max_value) or (max_value <= 1):
         # noinspection PyTypeChecker,PyUnresolvedReferences
-    # noinspection PyUnresolvedReferences,PyTypeChecker
-    classes = numpy.linspace(min_value, max_value, num_classes).tolist()
-    if min_value == 0:
-        classes = classes[1:]
+        classes = numpy.linspace(0, max_value, num_classes + 1).tolist()
+        return classes[1:]
+
+    # Else from above cases, we will populate the 1st class by these rules:
+    # 1. The 1st class range: 0 - math.ceil(the smallest value that is not 0)
+    # 2. If math.ceil(the smallest value that's not 0) != 1, then subtract by
+    #    1 so that the this smallest value goes into the 2nd class.
+    # 3. (AG) Yes! The idea is to classify the non affected value to the 1st
+    #    class (see #637, #702)
+
+    # Now, Get the smallest value that is not 0
+    non_zero_min_value = max_value
+    for value in unique_class_list:
+        if value < non_zero_min_value and value != 0:
+            non_zero_min_value = value
+
+    lower_bound = math.ceil(non_zero_min_value)
+    if lower_bound != 1:
+        lower_bound -= 1
+
+    # noinspection PyTypeChecker,PyUnresolvedReferences
+    classes = numpy.linspace(lower_bound, max_value, num_classes).tolist()
+
     return classes
 
 
-def create_label(my_tuple, extra_label=None):
+def create_label(label_tuple, extra_label=None):
     """Return a label based on my_tuple (a,b) and extra label.
+
     a and b are string.
 
     The output will be something like:
                 [a - b] extra_label
     """
     if extra_label is not None:
-        return '[' + ' - '.join(my_tuple) + '] ' + str(extra_label)
+        return '[' + ' - '.join(label_tuple) + '] ' + str(extra_label)
     else:
-        return '[' + ' - '.join(my_tuple) + ']'
+        return '[' + ' - '.join(label_tuple) + ']'
 
 
 def get_utm_zone(longitude):
-    """
-    Return utm zone.
-    """
+    """Return utm zone."""
     zone = int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
     if zone == 0:
         zone = 60
@@ -587,8 +609,8 @@ def get_utm_zone(longitude):
 
 
 def get_utm_epsg(longitude, latitude):
-    """
-    Return epsg code of the utm zone.
+    """Return epsg code of the utm zone.
+
     The code is based on the code:
     http://gis.stackexchange.com/questions/34401
     """
@@ -672,3 +694,62 @@ def which(name, flags=os.X_OK):
                 result.append(path_extensions)
 
     return result
+
+
+def get_non_conflicting_attribute_name(default_name, attribute_names):
+    """Get a non conflicting attribute name from a set of attribute names.
+
+    It also complies the shp attribute name restriction that the name length
+    must be less than 10 character.
+
+    :param default_name: The default name for the attribute.
+    :type default_name: str
+
+    :param attribute_names: Set of attribute names that should not be
+        conflicted.
+    :type attribute_names: list
+    """
+    uppercase_attribute_names = [
+        x.upper() for x in attribute_names]
+    # For shp file, the attribute name must be <= 10
+    new_name = default_name[:10]
+    i = 0
+    while new_name.upper() in uppercase_attribute_names:
+        i += 1
+        new_name = '%s_%s' % (new_name[:8], i)
+    return new_name
+
+
+def log_file_path():
+    """Get InaSAFE log file path.
+
+    :return: InaSAFE log file path.
+    :rtype: str
+    """
+    log_temp_dir = temp_dir('logs')
+    path = os.path.join(log_temp_dir, 'inasafe.log')
+    return path
+
+
+def romanise(number):
+    """Return the roman numeral for a number.
+
+    Note that this only works for number in interval range [0, 12] since at
+    the moment we only use it on realtime earthquake to conver MMI value.
+
+    :param number: The number that will be romanised
+    :type number: float
+
+    :return Roman numeral equivalent of the value
+    :rtype: str
+    """
+    if number is None:
+        return ''
+
+    roman_list = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                  'IX', 'X', 'XI', 'XII']
+    try:
+        roman = roman_list[int(number)]
+    except ValueError:
+        return None
+    return roman

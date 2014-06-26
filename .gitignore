@@ -46,9 +46,13 @@ docs/release-approval-docs
 .vagrant
 realtime/fixtures/context/gadm*
 realtime/fixtures/context/TM_WORLD_BORDERS-0.3*
+realtime/fixtures/context/Readme.txt
 libpeerconnection.log
 *.bak
 realtime/fixtures/indonesia.sqlite
 *.aux.xml
 realtime/fixtures/exposure/population.*
 realtime/fixtures/exposure/IDN_mosaic/
+realtime/server_config.py
+nohup.out
+venv

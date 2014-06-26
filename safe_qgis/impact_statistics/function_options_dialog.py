@@ -19,10 +19,19 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import ast
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (QGroupBox, QLineEdit, QDialog, QLabel, QCheckBox,
-                         QFormLayout, QWidget)
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import (
+    QGroupBox,
+    QLineEdit,
+    QDialog,
+    QLabel,
+    QCheckBox,
+    QFormLayout,
+    QWidget)
 from third_party.odict import OrderedDict
 
 from safe_qgis.ui.function_options_dialog_base import (
@@ -37,20 +46,19 @@ except AttributeError:
 
 # FIXME (Tim and Ole): Change to ConfigurationDialog throughout
 # Maybe also change filename and Base name accordingly.
-class FunctionOptionsDialog(QtGui.QDialog,
-                            Ui_FunctionOptionsDialogBase):
+class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
     """ConfigurableImpactFunctions Dialog for InaSAFE.
     """
 
-    def __init__(self, theParent=None):
+    def __init__(self, parent=None):
         """Constructor for the dialog.
 
         This dialog will show the user the form for editing impact functions
         parameters if any.
 
-        :param theParent: Optional widget to use as parent
+        :param parent: Optional widget to use as parent
         """
-        QtGui.QDialog.__init__(self, theParent)
+        QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE impact function configuration'))
         self.tabWidget.tabBar().setVisible(False)
@@ -58,27 +66,32 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self._result = None
         self.values = OrderedDict()
 
-    def bind(self, theObject, theProperty, theType):
-        """Create a function that return the QWidget property of object and
-        convert the value to type.
+    def bind(self, widget, property_name, function):
+        """Return the widget.property converting the value using the function.
 
-        :param theObject: QWidget instance
-        :param theProperty: The name of property inside QWidget instance
-        :param theType: A function to convert the property value
+        :param widget: QWidget instance
+        :type widget: QWidget
 
-        :returns: The property value of theObject
+        :param property_name: The name of property inside QWidget instance
+        :type property_name: str
+
+        :param function: A function to convert the property value
+        :type function: Callable
+
+        :returns: The property value of widget
         """
-        return lambda: theType(theObject.property(theProperty))
 
-    def build_form(self, theParams):
-        """we build a form from impact functions parameter
+        return lambda: function(widget.property(property_name))
+
+    def build_form(self, parameters):
+        """Build a form from impact functions parameter.
 
         .. note:: see http://tinyurl.com/pyqt-differences
 
-        :param theParams: Parameters to be edited
+        :param parameters: Parameters to be edited
         """
 
-        for key, value in theParams.items():
+        for key, value in parameters.items():
             if key == 'postprocessors':
                 self.build_post_processor_form(value)
             elif key == 'minimum needs':
@@ -90,9 +103,10 @@ class FunctionOptionsDialog(QtGui.QDialog,
                     value)
 
     def build_minimum_needs_form(self, parameters):
-        """Build minimum needs tab
+        """Build minimum needs tab.
 
         :param parameters: A Dictionary containing element of form
+        :type parameters: dict
         """
         # create minimum needs tab
         tab = QWidget()
@@ -114,11 +128,11 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.values['minimum needs'] = values
 
     def build_post_processor_form(self, parameters):
-        """Build Post Processor Tab
+        """Build Post Processor Tab.
 
-        :param  parameters: A Dictionary containing element of form
+        :param parameters: A Dictionary containing element of form
+        :type parameters: dict
         """
-
         # create postprocessors tab
         tab = QWidget()
         form_layout = QFormLayout(tab)
@@ -128,16 +142,17 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         # create element for the tab
         values = OrderedDict()
-        for myLabel, options in parameters.items():
+        for label, options in parameters.items():
             input_values = OrderedDict()
 
             # NOTE (gigih) : 'params' is assumed as dictionary
             if 'params' in options:
                 group_box = QGroupBox()
                 group_box.setCheckable(True)
-                group_box.setTitle(get_postprocessor_human_name(myLabel))
+                group_box.setTitle(get_postprocessor_human_name(label))
 
                 # NOTE (gigih): is 'on' always exist??
+                # (MB) should always be there
                 group_box.setChecked(options.get('on'))
                 input_values['on'] = self.bind(group_box, 'checked', bool)
 
@@ -154,7 +169,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
             elif 'on' in options:
                 checkbox = QCheckBox()
-                checkbox.setText(get_postprocessor_human_name(myLabel))
+                checkbox.setText(get_postprocessor_human_name(label))
                 checkbox.setChecked(options['on'])
 
                 input_values['on'] = self.bind(checkbox, 'checked', bool)
@@ -162,24 +177,24 @@ class FunctionOptionsDialog(QtGui.QDialog,
             else:
                 raise NotImplementedError('This case is not handled for now')
 
-            values[myLabel] = input_values
+            values[label] = input_values
 
         self.values['postprocessors'] = values
 
-    def build_widget(self, theFormLayout, theName, theValue):
+    def build_widget(self, form_layout, name, key_value):
         """Create a new form element dynamically based from theValue type.
         The element will be inserted to theFormLayout.
 
-        :param theFormLayout: Mandatory a layout instance
-        :type theFormLayout: QFormLayout
+        :param form_layout: Mandatory a layout instance
+        :type form_layout: QFormLayout
 
-        :param theName: Mandatory string referencing the key in the function
+        :param name: Mandatory string referencing the key in the function
          configurable parameters dictionary.
-        :type theName: str
+        :type name: str
 
-        :param theValue: Mandatory representing the value referenced by the
+        :param key_value: Mandatory representing the value referenced by the
          key.
-        :type theValue: object
+        :type key_value: object
 
         :returns: a function that return the value of widget
 
@@ -187,40 +202,62 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
 
         # create label
-        if isinstance(theName, str):
+        if isinstance(name, str):
             label = QLabel()
-            label.setObjectName(_fromUtf8(theName + "Label"))
-            label_text = theName.replace('_', ' ').capitalize()
+            label.setObjectName(_fromUtf8(name + "Label"))
+            label_text = name.replace('_', ' ').capitalize()
             label.setText(safeTr(label_text))
-            label.setToolTip(str(type(theValue)))
+            label.setToolTip(str(type(key_value)))
         else:
-            label = theName
+            label = name
 
-        # create widget based on the type of theValue variable
-        if isinstance(theValue, list):
+        # create widget based on the type of key_value variable
+        # if widget is a QLineEdit, value needs to be set
+        # if widget is NOT a QLineEdit, property_name needs to be set
+        value = None
+        property_name = None
+
+        # can be used for widgets that have their own text like QCheckBox
+        hide_label = False
+
+        if isinstance(key_value, list):
             widget = QLineEdit()
-            value = ', '.join([str(x) for x in theValue])
+            value = ', '.join([str(x) for x in key_value])
             # NOTE: we assume that all element in list have same type
-            value_type = type(theValue[0])
+            value_type = type(key_value[0])
             function = lambda x: [value_type(y) for y in str(x).split(',')]
-        elif isinstance(theValue, dict):
+        elif isinstance(key_value, dict):
             widget = QLineEdit()
-            value = str(theValue)
+            value = str(key_value)
             function = lambda x: ast.literal_eval(str(x))
+        elif isinstance(key_value, bool):
+            widget = QCheckBox()
+            widget.setChecked(key_value)
+            widget.setText(label.text())
+            property_name = 'checked'
+            function = bool
+            hide_label = True
         else:
             widget = QLineEdit()
-            value = str(theValue)
-            function = type(theValue)
+            value = str(key_value)
+            function = type(key_value)
 
-        widget.setText(value)
-        theFormLayout.addRow(label, widget)
+        if hide_label:
+            form_layout.addRow(widget)
+        else:
+            form_layout.addRow(label, widget)
 
-        return self.bind(widget, 'text', function)
+        # are we dealing with a QLineEdit?
+        if value is not None:
+            widget.setText(value)
+            property_name = 'text'
+
+        return self.bind(widget, property_name, function)
 
     def set_dialog_info(self, function_id):
         """Show help text in dialog.
 
-        :param function_id:
+        :param function_id: The id of a function
         """
         text = self.tr(
             'Parameters for impact function "%s" that can be modified are:'
@@ -266,9 +303,5 @@ class FunctionOptionsDialog(QtGui.QDialog,
             self.lblErrorMessage.setText(text)
 
     def result(self):
-        """Get the result.
-
-        :return:
-        :rtype:
-        """
+        """Get the result."""
         return self._result

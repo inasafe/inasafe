@@ -201,19 +201,16 @@ class HtmlRenderer():
         It gets the summary and impact table from a QgsMapLayer's keywords and
         renders to pdf, returning the resulting PDF file path.
 
-
         :param keywords: Impact layer keywords (required).
         :type keywords: dict
 
         :param filename: Name of the pdf file to create.
         :type filename: str
 
-        Returns:
-            str: Path to generated pdf file.
+        :return: Path to generated pdf file.
+        :rtype: str
 
-        Raises:
-            None
-
+        :raises: None
         """
         file_path = filename
 
@@ -237,24 +234,29 @@ class HtmlRenderer():
         except KeyError:
             aggregation_table = None
 
+        # The order of the report:
+        # 1. Summary table
+        # 2. Aggregation table
+        # 3. Attribution table
+
+        # (AG) We will not use impact_table as most of the IF use that as:
+        # impact_table = impact_summary + some information intended to be
+        # shown on screen (see FloodOsmBuilding)
+        # Unless the impact_summary is None, we will use impact_table as the
+        # alternative
         html = ''
-        if summary_table != full_table and summary_table is not None:
+        if summary_table is None:
+            html += '<h2>%s</h2>' % self.tr('Detailed Table')
+            html += full_table
+        else:
             html = '<h2>%s</h2>' % self.tr('Summary Table')
             html += summary_table
-            if aggregation_table is not None:
-                html += aggregation_table
-            if attribution_table is not None:
-                html += attribution_table.to_html()
-            if full_table is not None:
-                html += '<h2>%s</h2>' % self.tr('Detailed Table')
-                html += full_table
-        else:
-            if aggregation_table is not None:
-                html = aggregation_table
-            if full_table is not None:
-                html += full_table
-            if attribution_table is not None:
-                html += attribution_table.to_html()
+
+        if aggregation_table is not None:
+            html += aggregation_table
+
+        if attribution_table is not None:
+            html += attribution_table.to_html()
 
         # new_file_path should be the same as file_path
         new_file_path = self.to_pdf(html, file_path)

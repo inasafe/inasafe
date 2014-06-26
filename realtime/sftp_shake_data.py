@@ -20,30 +20,35 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 from datetime import datetime
-from rt_exceptions import (FileNotFoundError,
-                           EventIdError,
-                           NetworkError,
-                           EventValidationError,
-                           CopyError
-                           )
-from sftp_client import SFtpClient
-from utils import is_event_id
 import logging
-LOGGER = logging.getLogger('InaSAFE')
-from utils import shakemap_cache_dir, shakemap_extract_dir, mk_dir
 
+from realtime.sftp_client import SFtpClient
+from realtime.utilities import is_event_id
+from realtime.utilities import (
+    shakemap_cache_dir,
+    shakemap_extract_dir,
+    make_directory,
+    realtime_logger_name)
+from realtime.exceptions import (
+    FileNotFoundError,
+    EventIdError,
+    NetworkError,
+    EventValidationError,
+    CopyError)
+from realtime.server_config import (
+    BASE_URL,
+    USERNAME,
+    PASSWORD,
+    BASE_PATH)
 
-default_host = '118.97.83.243'
-def_user_name = 'geospasial'
-def_password = os.environ['QUAKE_SERVER_PASSWORD']
-def_work_dir = 'shakemaps'
+LOGGER = logging.getLogger(realtime_logger_name())
 
 
 class SftpShakeData:
-    """A class for retrieving, reading data from shakefiles.
-    Shake files are provide on server and can be accessed using SSH protocol.
+    """A class for retrieving, reading data from shake files.
+    Shake files are provided on server and can be accessed using SSH protocol.
 
-    The shape files currently located under shakemaps directory in a folder
+    The shake files currently located under BASE_PATH directory in a folder
     named by the event id (which represent the timestamp of the event of the
     shake)
 
@@ -52,7 +57,7 @@ class SftpShakeData:
 
         * grid.xml - which contains all the metadata pertaining to the event
 
-    It's located in under output/grid.xml under each event directory
+    It's located at output/grid.xml under each event directory
 
     The remaining files are fetched for completeness and possibly use in the
     future.
@@ -67,28 +72,34 @@ class SftpShakeData:
 
     def __init__(self,
                  event=None,
-                 host=default_host,
-                 user_name=def_user_name,
-                 password=def_password,
-                 working_dir=def_work_dir,
+                 host=BASE_URL,
+                 user_name=USERNAME,
+                 password=PASSWORD,
+                 working_dir=BASE_PATH,
                  force_flag=False):
-        """Constructor for the SftpShakeData class
-        :param event: (Optional) a string representing the event id
-                  that this raster is associated with. e.g. 20110413170148.
-                  **If no event id is supplied, a query will be made to the
-                  ftp server, and the latest event id assigned.**
-        :param host: (Optional) a string representing the ip address
-                  or host name of the server from which the data should be
-                  retrieved. It assumes that the data is in the root directory.
+        """Constructor for the SftpShakeData class.
+
+        :param event: A string representing the event id that this raster is
+            associated with. e.g. 20110413170148 (Optional).
+            **If no event id is supplied, a query will be made to the ftp
+            server, and the latest event id assigned.**
+        :type event: str
+
+        :param host: A string representing the ip address or host name of the
+            server from which the data should be retrieved. It assumes that
+            the data is in the root directory (Optional).
+        :type host: str
         """
         self.event_id = event
         self.host = host
         self.username = user_name
         self.password = password
-        self.workdir = working_dir
+        self.working_dir = working_dir
         self.force_flag = force_flag
-        self.sftpclient = SFtpClient(
-            self.host, self.username, self.password, self.workdir)
+        self.input_file_name = 'grid.xml'
+
+        self.sftp_client = SFtpClient(
+            self.host, self.username, self.password, self.working_dir)
 
         if self.event_id is None:
             try:
@@ -102,26 +113,24 @@ class SftpShakeData:
                 self.validate_event()
             except EventValidationError:
                 raise
-            # If event_id is still None after all the above, moan....
+        # If event_id is still None after all the above, moan....
         if self.event_id is None:
-            message = ('No id was passed to the constructor and the '
-                       'latest id could not be retrieved from the'
-                       'server.')
+            message = ('No id was passed to the constructor and the  latest '
+                       'id could not be retrieved from the server.')
             LOGGER.exception('ShakeData initialisation failed')
             raise EventIdError(message)
 
     def reconnect_sftp(self):
         """Reconnect to the server."""
-        self.sftpclient = SFtpClient(self.host,
-                                     self.username,
-                                     self.password,
-                                     self.workdir)
+        self.sftp_client = SFtpClient(
+            self.host, self.username, self.password, self.working_dir)
 
     def validate_event(self):
         """Check that the event associated with this instance exists either
-        in the local event cache, or on the remote ftp site.
+        in the local event cache or on the remote ftp site.
 
         :return: True if valid, False if not
+        :rtype: bool
 
         :raises: NetworkError
         """
@@ -134,11 +143,10 @@ class SftpShakeData:
     def is_cached(self):
         """Check the event associated with this instance exists in cache.
 
-        Args: None
+        :return: True if locally cached, otherwise False.
+        :rtype: bool
 
-        Returns: True if locally cached, False if not
-
-        Raises: None
+        :raises: None
         """
         xml_file_path = self.cache_paths()
         if os.path.exists(xml_file_path):
@@ -150,25 +158,14 @@ class SftpShakeData:
     def cache_paths(self):
         """Return the paths to the inp and out files as expected locally.
 
-        :return: grid.xml local cache paths.
+        :return: The grid.xml local cache path.
         :rtype: str
         """
 
-        xml_file_name = self.file_name()
+        xml_file_name = self.input_file_name
         xml_file_path = os.path.join(
             shakemap_cache_dir(), self.event_id, xml_file_name)
         return xml_file_path
-
-    #noinspection PyMethodMayBeStatic
-    def file_name(self):
-        """Return file names for the inp and out files based on the event id.
-
-        For this class, only the grid.xml that is used.
-
-        :return: grid.xml
-        :rtype: str
-        """
-        return 'grid.xml'
 
     def is_on_server(self):
         """Check the event associated with this instance exists on the server.
@@ -178,28 +175,25 @@ class SftpShakeData:
         :raises: NetworkError
         """
         remote_xml_path = os.path.join(
-            self.sftpclient.workdir_path, self.event_id)
-        return self.sftpclient.is_path_exist(remote_xml_path)
+            self.sftp_client.working_dir_path, self.event_id)
+        return self.sftp_client.path_exists(remote_xml_path)
 
     def get_list_event_ids(self):
         """Get all event id indicated by folder in remote_path
         """
-        dirs = self.sftpclient.get_listing(my_func=is_event_id)
+        dirs = self.sftp_client.get_listing(function=is_event_id)
         if len(dirs) == 0:
             raise Exception('List event is empty')
         return dirs
 
     def get_latest_event_id(self):
-        """Return latest event id.
-        """
+        """Return latest event id."""
         event_ids = self.get_list_event_ids()
 
         now = datetime.now()
         now = int(
-            '%04d%02d%02d%02d%02d%02d' % (
-                now.year, now.month, now.day, now.hour, now.minute,
-                now.second
-            ))
+            '%04d%02d%02d%02d%02d%02d' %
+            (now.year, now.month, now.day, now.hour, now.minute, now.second))
 
         if event_ids is not None:
             event_ids.sort()
@@ -216,13 +210,14 @@ class SftpShakeData:
     def fetch_file(self, retries=3):
         """Private helper to fetch a file from the sftp site.
 
-        :param retries: int - number of reattempts that should be made in
-                in case of network error etc.
-          e.g. for event 20110413170148 this file would be fetched::
-                20110413170148 directory
-
         .. note:: If a cached copy of the file exits, the path to the cache
            copy will simply be returned without invoking any network requests.
+
+        :param retries: The number of reattempts that should be made in
+            case of e.g network error.
+            e.g. for event 20110413170148 this file would be fetched::
+            20110413170148 directory
+        :type retries: int
 
         :return: A string for the dataset path on the local storage system.
         :rtype: str
@@ -231,20 +226,23 @@ class SftpShakeData:
         """
         local_path = os.path.join(shakemap_cache_dir(), self.event_id)
         local_parent_path = os.path.join(local_path, 'output')
-        xml_file = os.path.join(local_parent_path, self.file_name())
+        xml_file = os.path.join(local_parent_path, self.input_file_name)
         if os.path.exists(xml_file):
             return local_path
 
         # fetch from sftp
         trials = [i + 1 for i in xrange(retries)]
-        remote_path = os.path.join(self.sftpclient.workdir_path, self.event_id)
-        xml_remote_path = os.path.join(remote_path, 'output', self.file_name())
+        remote_path = os.path.join(
+            self.sftp_client.working_dir_path, self.event_id)
+        xml_remote_path = os.path.join(
+            remote_path, 'output', self.input_file_name)
+
         for counter in trials:
             last_error = None
             try:
-                mk_dir(local_path)
-                mk_dir(os.path.join(local_path, 'output'))
-                self.sftpclient.download_path(
+                make_directory(local_path)
+                make_directory(os.path.join(local_path, 'output'))
+                self.sftp_client.download_path(
                     xml_remote_path, local_parent_path)
             except NetworkError, e:
                 last_error = e
@@ -256,8 +254,8 @@ class SftpShakeData:
                 return local_path
             else:
                 self.reconnect_sftp()
-
             LOGGER.info('Fetching failed, attempt %s' % counter)
+
         LOGGER.exception('Could not fetch shake event from server %s'
                          % remote_path)
         raise Exception('Could not fetch shake event from server %s'
@@ -268,9 +266,10 @@ class SftpShakeData:
 
         :return: A string representing the absolute local filesystem path to
             the unzipped shake event dir. e.g.
-            :file:`/tmp/inasafe/realtime/shakemaps-extracted/20120726022003`
+            :file:`/tmp/inasafe/realtime/shakemaps-extracted/20131105060809`
+        :rtype: str
 
-        :raises: Any exceptions will be propagated
+        :raises: Any exceptions will be propagated.
         """
         return os.path.join(shakemap_extract_dir(), self.event_id)
 
@@ -279,10 +278,16 @@ class SftpShakeData:
         Else, download from the server.
 
         :param force_flag: force flag to extract.
+        :type force_flag: bool
+
+        :return: a string containing the grid.xml paths e.g.::
+            grid_xml = myShakeData.extract()
+            print grid_xml
+            /tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml
         """
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')
         if not os.path.exists(self.extract_dir()):
-            mk_dir(self.extract_dir())
+            make_directory(self.extract_dir())
         if force_flag or self.force_flag:
             self.remove_extracted_files()
         elif os.path.exists(final_grid_xml_file):

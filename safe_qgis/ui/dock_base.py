@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Thu Feb 27 14:50:27 2014
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Sun Apr 27 22:51:17 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -75,6 +75,7 @@ class Ui_DockBase(object):
         self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
         self.gridLayout_3.addWidget(self.cboFunction, 5, 0, 1, 1)
         self.toolFunctionOptions = QtGui.QPushButton(self.grpQuestion)
+        self.toolFunctionOptions.setEnabled(False)
         self.toolFunctionOptions.setObjectName(_fromUtf8("toolFunctionOptions"))
         self.gridLayout_3.addWidget(self.toolFunctionOptions, 5, 1, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 1, 0, 1, 1)

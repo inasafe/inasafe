@@ -256,7 +256,8 @@ class PostprocessorManager(QtCore.QObject):
         try:
             requested_postprocessors = self.function_parameters[
                 'postprocessors']
-            postprocessors = get_postprocessors(requested_postprocessors)
+            postprocessors = get_postprocessors(
+                requested_postprocessors, self.aggregator.aoi_mode)
         except (TypeError, KeyError):
             # TypeError is for when function_parameters is none
             # KeyError is for when ['postprocessors'] is unavailable
@@ -278,14 +279,22 @@ class PostprocessorManager(QtCore.QObject):
         user_defined_female_ratio = False
         female_ratio_field_index = None
         female_ratio = None
+        user_defined_age_ratios = False
+        youth_ratio_field_index = None
+        youth_ratio = None
+        adult_ratio_field_index = None
+        adult_ratio = None
+        elderly_ratio_field_index = None
+        elderly_ratio = None
 
         if 'Gender' in postprocessors:
             # look if we need to look for a variable female ratio in a layer
             try:
-                female_ration_field = self.aggregator.attributes[
-                    self.aggregator.get_default_keyword('FEM_RATIO_ATTR_KEY')]
+                female_ratio_field = self.aggregator.attributes[
+                    self.aggregator.get_default_keyword(
+                        'FEMALE_RATIO_ATTR_KEY')]
                 female_ratio_field_index = \
-                    self.aggregator.layer.fieldNameIndex(female_ration_field)
+                    self.aggregator.layer.fieldNameIndex(female_ratio_field)
 
                 # something went wrong finding the female ratio field,
                 # use defaults from below except block
@@ -298,10 +307,61 @@ class PostprocessorManager(QtCore.QObject):
                 try:
                     female_ratio = self.keyword_io.read_keywords(
                         self.aggregator.layer,
-                        self.aggregator.get_default_keyword('FEM_RATIO_KEY'))
+                        self.aggregator.get_default_keyword(
+                            'FEMALE_RATIO_KEY'))
                 except KeywordNotFoundError:
                     female_ratio = \
-                        self.aggregator.get_default_keyword('FEM_RATIO')
+                        self.aggregator.get_default_keyword('FEMALE_RATIO')
+
+        if 'Age' in postprocessors:
+            # look if we need to look for a variable age ratio in a layer
+            try:
+                youth_ratio_field = self.aggregator.attributes[
+                    self.aggregator.get_default_keyword(
+                        'YOUTH_RATIO_ATTR_KEY')]
+                youth_ratio_field_index = \
+                    self.aggregator.layer.fieldNameIndex(youth_ratio_field)
+                adult_ratio_field = self.aggregator.attributes[
+                    self.aggregator.get_default_keyword(
+                        'ADULT_RATIO_ATTR_KEY')]
+                adult_ratio_field_index = \
+                    self.aggregator.layer.fieldNameIndex(adult_ratio_field)
+                elderly_ratio_field = self.aggregator.attributes[
+                    self.aggregator.get_default_keyword(
+                        'ELDERLY_RATIO_ATTR_KEY')]
+                elderly_ratio_field_index = \
+                    self.aggregator.layer.fieldNameIndex(elderly_ratio_field)
+                # something went wrong finding the youth ratio field,
+                # use defaults from below except block
+                if (youth_ratio_field_index == -1 or
+                            adult_ratio_field_index == -1 or
+                            elderly_ratio_field_index == -1):
+                    raise KeyError
+
+                user_defined_age_ratios = True
+
+            except KeyError:
+                try:
+                    youth_ratio = self.keyword_io.read_keywords(
+                        self.aggregator.layer,
+                        self.aggregator.get_default_keyword(
+                            'YOUTH_RATIO_KEY'))
+                    adult_ratio = self.keyword_io.read_keywords(
+                        self.aggregator.layer,
+                        self.aggregator.get_default_keyword(
+                            'ADULT_RATIO_KEY'))
+                    elderly_ratio = self.keyword_io.read_keywords(
+                        self.aggregator.layer,
+                        self.aggregator.get_default_keyword(
+                            'ELDERLY_RATIO_KEY'))
+
+                except KeywordNotFoundError:
+                    youth_ratio = \
+                        self.aggregator.get_default_keyword('YOUTH_RATIO')
+                    adult_ratio = \
+                        self.aggregator.get_default_keyword('ADULT_RATIO')
+                    elderly_ratio = \
+                        self.aggregator.get_default_keyword('ELDERLY_RATIO')
 
         if 'BuildingType' or 'RoadType' in postprocessors:
             try:
@@ -359,9 +419,36 @@ class PostprocessorManager(QtCore.QObject):
                         female_ratio = feature[female_ratio_field_index]
                         if female_ratio is None:
                             female_ratio = self.aggregator.defaults[
-                                'FEM_RATIO']
-                        LOGGER.debug(female_ratio)
+                                'FEMALE_RATIO']
+                            LOGGER.warning('Data Driven Female ratio '
+                                           'incomplete, using defaults for'
+                                           ' aggregation unit'
+                                           ' %s' % feature.id)
+
                     parameters['female_ratio'] = female_ratio
+
+                if key == 'Age':
+                    if user_defined_age_ratios:
+                        youth_ratio = feature[youth_ratio_field_index]
+                        adult_ratio = feature[adult_ratio_field_index]
+                        elderly_ratio = feature[elderly_ratio_field_index]
+                        if (youth_ratio is None or
+                                    adult_ratio is None or
+                                    elderly_ratio is None):
+                            youth_ratio = self.aggregator.defaults[
+                                'YOUTH_RATIO']
+                            adult_ratio = self.aggregator.defaults[
+                                'ADULT_RATIO']
+                            elderly_ratio = self.aggregator.defaults[
+                                'ELDERLY_RATIO']
+                            LOGGER.warning('Data Driven Age ratios '
+                                           'incomplete, using defaults for'
+                                           ' aggregation unit'
+                                           ' %s' % feature.id)
+
+                    parameters['youth_ratio'] = youth_ratio
+                    parameters['adult_ratio'] = adult_ratio
+                    parameters['elderly_ratio'] = elderly_ratio
 
                 if key == 'BuildingType' or key == 'RoadType':
                     parameters['key_attribute'] = key_attribute

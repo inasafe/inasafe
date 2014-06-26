@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 class InaSAFEError(RuntimeError):
-    """Base class for all user defined execptions"""
+    """Base class for all user defined exceptions"""
     suggestion = 'An unspecified error occurred.'
 
 
@@ -111,3 +111,9 @@ class ZeroImpactException(Exception):
 class WrongDataTypeException(Exception):
     """Raised if expected and received data types are different"""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
+
+
+class RadiiException(Exception):
+    """Raised if radii for volcano buffer is not as we expect."""
+    suggestion = ('Please make sure the radii for volcano buffer are '
+                  'monotonically increasing.')

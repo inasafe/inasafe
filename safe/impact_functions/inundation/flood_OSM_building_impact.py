@@ -1,6 +1,6 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk tool by Australian Aid - Flood Impact on OSM Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Impact on OSM
+Buildings
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -10,22 +10,38 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
 
+from safe.metadata import (
+    hazard_flood,
+    hazard_tsunami,
+    unit_wetdry,
+    unit_feet_depth,
+    unit_metres_depth,
+    layer_vector_polygon,
+    layer_raster_numeric,
+    exposure_structure,
+    unit_building_type_type,
+    hazard_definition,
+    exposure_definition,
+    unit_building_generic)
+from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.common.utilities import (ugettext as tr, format_int, verify)
+from safe.common.utilities import ugettext as tr, format_int, verify
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 import logging
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
-    """Inundation impact on building data
+    # noinspection PyUnresolvedReferences
+    """Inundation impact on building data.
 
     :author Ole Nielsen, Kristy van Putten
     # this rating below is only for testing a function, not the real one
@@ -37,6 +53,64 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     subcategory=='structure' and \
                     layertype=='vector'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Flood Building Impact Function.
+
+        .. versionadded:: 2.1
+
+        We only need to re-implement get_metadata(), all other behaviours
+        are inherited from the abstract base class.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'FloodBuildingImpactFunction',
+                'name': tr('Flood Building Impact Function'),
+                'impact': tr('Be flooded'),
+                'author': ['Ole Nielsen', 'Kristy van Putten'],
+                'date_implemented': 'N/A',
+                'overview': tr(
+                    'To assess the impacts of (flood or tsunami) inundation '
+                    'on building footprints originating from OpenStreetMap '
+                    '(OSM).'),
+                'categories': {
+                    'hazard': {
+                        'definition': hazard_definition,
+                        'subcategory': [
+                            hazard_flood,
+                            hazard_tsunami
+                        ],
+                        'units': [
+                            unit_wetdry,
+                            unit_metres_depth,
+                            unit_feet_depth],
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_raster_numeric,
+                        ]
+                    },
+                    'exposure': {
+                        'definition': exposure_definition,
+                        'subcategory': exposure_structure,
+                        'units': [
+                            unit_building_type_type,
+                            unit_building_generic],
+                        'layer_constraints': [layer_vector_polygon]
+                    }
+                }
+            }
+            return dict_meta
 
     # Function documentation
     target_field = 'INUNDATED'
@@ -92,14 +166,13 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 * my_exposure: Vector layer of structure data on
                 the same grid as my_hazard
         """
-
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]
 
         verify(isinstance(threshold, float),
                'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)    # Depth
+        my_hazard = get_hazard_layer(layers)  # Depth
         my_exposure = get_exposure_layer(layers)  # Building locations
 
         question = get_question(
@@ -165,18 +238,19 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         x = res
                 else:
                     # there is no flood related attribute
-                    msg = ('No flood related attribute found in %s. '
-                           'I was looking for either "affected", "FLOODPRONE" '
-                           'or "inapolygon". The latter should have been '
-                           'automatically set by call to '
-                           'assign_hazard_values_to_exposure_data(). '
-                           'Sorry I can\'t help more.')
-                    raise Exception(msg)
+                    message = (
+                        'No flood related attribute found in %s. I was '
+                        'looking for either "affected", "FLOODPRONE" or '
+                        '"inapolygon". The latter should have been '
+                        'automatically set by call to '
+                        'assign_hazard_values_to_exposure_data(). Sorry I '
+                        'can\'t help more.')
+                    raise Exception(message)
             else:
-                msg = (tr(
+                message = (tr(
                     'Unknown hazard type %s. Must be either "depth" or "grid"')
                     % mode)
-                raise Exception(msg)
+                raise Exception(message)
 
             # Count affected buildings by usage type if available
             if 'type' in attribute_names:
@@ -236,11 +310,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 del affected_buildings[usage]
 
         # Generate simple impact report
-        table_body = [question,
-                      TableRow(
-                          [tr('Building type'), tr('Number flooded'),
-                           tr('Total')], header=True),
-                      TableRow([tr('All'), format_int(count), format_int(N)])]
+        table_body = [
+            question,
+            TableRow([tr('Building type'), tr('Number flooded'),
+                      tr('Total')], header=True),
+            TableRow([tr('All'), format_int(count), format_int(N)])]
 
         school_closed = 0
         hospital_closed = 0
@@ -257,9 +331,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
                 # Lookup internationalised value if available
                 building_type = tr(building_type)
-                building_list.append([building_type.capitalize(),
-                                      format_int(affected_buildings[usage]),
-                                      format_int(buildings[usage])])
+                building_list.append([
+                    building_type.capitalize(),
+                    format_int(affected_buildings[usage]),
+                    format_int(buildings[usage])])
                 if building_type == 'school':
                     school_closed = affected_buildings[usage]
                 if building_type == 'hospital':
@@ -325,17 +400,19 @@ class FloodBuildingImpactFunction(FunctionProvider):
         legend_title = tr('Structure inundated status')
 
         # Create vector layer and return
-        V = Vector(data=attributes,
-                   projection=I.get_projection(),
-                   geometry=I.get_geometry(),
-                   name=tr('Estimated buildings affected'),
-                   keywords={'impact_summary': impact_summary,
-                             'impact_table': impact_table,
-                             'target_field': self.target_field,
-                             'map_title': map_title,
-                             'legend_units': legend_units,
-                             'legend_title': legend_title,
-                             'buildings_total': N,
-                             'buildings_affected': count},
-                   style_info=style_info)
-        return V
+        vector_layer = Vector(
+            data=attributes,
+            projection=I.get_projection(),
+            geometry=I.get_geometry(),
+            name=tr('Estimated buildings affected'),
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'buildings_total': N,
+                'buildings_affected': count},
+            style_info=style_info)
+        return vector_layer

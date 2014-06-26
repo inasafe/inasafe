@@ -21,26 +21,25 @@ __copyright__ += 'Disaster Reduction'
 import os
 import sys
 import logging
-from datetime import date
-import getpass
-from tempfile import mkstemp
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-myDir = os.path.abspath(
+third_party_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../', 'third_party'))
-if myDir not in sys.path:
-    sys.path.append(myDir)
-
+if third_party_dir not in sys.path:
+    sys.path.append(third_party_dir)
 # pylint: disable=F0401
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven.handlers.logging import SentryHandler
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven import Client
 # pylint: enable=F0401
-LOGGER = logging.getLogger('InaSAFE')
 
+from safe.api import add_logging_handler_once
 from safe_qgis.utilities.utilities import tr
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class QgsLogHandler(logging.Handler):
@@ -64,39 +63,15 @@ class QgsLogHandler(logging.Handler):
         except ImportError:
             pass
         except MemoryError:
-            msg = tr('Due to memory limitations on this machine, InaSAFE can '
-                     'not handle the full log')
-            print msg
-            QgsMessageLog.logMessage(msg, 'InaSAFE', 0)
+            message = tr(
+                'Due to memory limitations on this machine, InaSAFE can not '
+                'handle the full log')
+            print message
+            QgsMessageLog.logMessage(message, 'InaSAFE', 0)
 
 
-def add_logging_handler_once(logger, handler):
-    """A helper to add a handler to a logger, ensuring there are no duplicates.
-
-    :param logger: Logger that should have a handler added.
-    :type logger: logging.logger
-
-    :param handler: Handler instance to be added. It will not be added if an
-        instance of that Handler subclass already exists.
-    :type handler: logging.Handler
-
-    :returns: True if the logging handler was added, otherwise False.
-    :rtype: bool
-    """
-    class_name = handler.__class__.__name__
-    for handler in logger.handlers:
-        if handler.__class__.__name__ == class_name:
-            return False
-
-    logger.addHandler(handler)
-    return True
-
-
-def setup_logger(log_file=None, sentry_url=None):
+def setup_logger(sentry_url=None):
     """Run once when the module is loaded and enable logging.
-
-    :param log_file: Optional full path to a file to write logs to.
-    :type log_file: str
 
     :param sentry_url: Optional url to sentry api for remote
         logging. Defaults to http://c64a83978732474ea751d432ab943a6b:
@@ -133,28 +108,13 @@ def setup_logger(log_file=None, sentry_url=None):
 
     """
     logger = logging.getLogger('InaSAFE')
-    logger.setLevel(logging.DEBUG)
-    default_handler_level = logging.DEBUG
     # create formatter that will be added to the handlers
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    # create syslog handler which logs even debug messages
-    # (ariel): Make this log to /var/log/safe.log instead of
-    #               /var/log/syslog
-    # (Tim) Ole and I discussed this - we prefer to log into the
-    # user's temporary working directory.
-    log_temp_dir = temp_dir('logs')
-    path = os.path.join(log_temp_dir, 'inasafe.log')
-    if log_file is None:
-        file_handler = logging.FileHandler(path)
-    else:
-        file_handler = logging.FileHandler(log_file)
-    file_handler.setLevel(default_handler_level)
-    # create console handler with a higher log level
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
 
     qgis_handler = QgsLogHandler()
+    qgis_handler.setFormatter(formatter)
+    add_logging_handler_once(logger, qgis_handler)
 
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
@@ -168,73 +128,17 @@ def setup_logger(log_file=None, sentry_url=None):
     flag = settings.value('inasafe/useSentry', False)
     if 'INASAFE_SENTRY' in os.environ or flag:
         if sentry_url is None:
-            myClient = Client(
+            client = Client(
                 'http://c64a83978732474ea751d432ab943a6b'
                 ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
         else:
-            myClient = Client(sentry_url)
-        sentry_handler = SentryHandler(myClient)
+            client = Client(sentry_url)
+        sentry_handler = SentryHandler(client)
         sentry_handler.setFormatter(formatter)
         sentry_handler.setLevel(logging.ERROR)
         if add_logging_handler_once(logger, sentry_handler):
-            logger.debug('Sentry logging enabled')
+            logger.debug('Sentry logging enabled in safe_qgis')
+        elif 'INASAFE_SENTRY' in os.environ:
+            logger.debug('Sentry logging already enabled in safe')
     else:
-        logger.debug('Sentry logging disabled')
-    # Set formatters
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
-    qgis_handler.setFormatter(formatter)
-
-    # add the handlers to the logger
-    add_logging_handler_once(logger, file_handler)
-    add_logging_handler_once(logger, console_handler)
-    add_logging_handler_once(logger, qgis_handler)
-
-
-def temp_dir(sub_dir='work'):
-    r"""Obtain the temporary working directory for the operating system.
-
-    An inasafe subdirectory will automatically be created under this and
-    if specified, a user subdirectory under that.
-
-    .. note:: You can use this together with unique_filename to create
-       a file in a temporary directory under the inasafe workspace. e.g.::
-
-           tmpdir = temp_dir('testing')
-           tmpfile = unique_filename(dir=tmpdir)
-           print tmpfile
-           /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C
-
-    If you specify INASAFE_WORK_DIR as an environment var, it will be
-    used in preference to the system temp directory.
-
-    :param sub_dir: Optional argument which will cause an additional
-        subdirectory to be created e.g. \/tmp\/inasafe\/foo\/
-    :type sub_dir: str
-
-    :returns: Path to the output clipped layer (placed in the system temp dir).
-    :rtype: str
-    """
-    user = getpass.getuser().replace(' ', '_')
-    current_date = date.today()
-    date_string = current_date.isoformat()
-    if 'INASAFE_WORK_DIR' in os.environ:
-        new_directory = os.environ['INASAFE_WORK_DIR']
-    else:
-        # Following 4 lines are a workaround for tempfile.tempdir()
-        # unreliabilty
-        handle, filename = mkstemp()
-        os.close(handle)
-        new_directory = os.path.dirname(filename)
-        os.remove(filename)
-
-    path = os.path.join(new_directory, 'inasafe', date_string, user, sub_dir)
-
-    if not os.path.exists(path):
-        # Ensure that the dir is world writable
-        # Umask sets the new mask and returns the old
-        old_mask = os.umask(0000)
-        os.makedirs(path, 0777)
-        # Reinstate the old mask for tmp
-        os.umask(old_mask)
-    return path
+        logger.debug('Sentry logging disabled in safe_qgis')

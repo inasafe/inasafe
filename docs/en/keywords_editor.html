@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Keywords Editor &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap-responsive.min.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("_static/img/logo.png");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 30px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = 'keywords_editor.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+        // Make the search button pretty - issue 36
+        $(':submit').addClass('btn btn-warning btn-small');
+    })
+
+    
+    function gotoLang(lang) {
+        var currentPage = 'keywords_editor.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
+
+<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+
+  </head>
+  <body>
+
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <font color="#333">
+                        <li><h1>Ina<b>SAFE</b></h1></li>
+                        </font>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                
+                
+                <li class="right"
+                style="margin-right: 10px" >
+                <a href="genindex.html"
+                   title="General Index"
+                   style="z-index:;"
+                accesskey="I">index</a>
+                </li>
+                
+
+                
+                <li class="first">
+                    <a style="z-index:100;" href="index.html"> InaSAFE Docs </a>
+                </li>
+                
+                
+                <li><a href="#">The Keywords Editor</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="span12">
+                
+  <div class="section" id="the-keywords-editor">
+<span id="keywords-editor"></span><h1>The Keywords Editor<a class="headerlink" href="#the-keywords-editor" title="Permalink to this headline">¶</a></h1>
+<p>The keywords editor provides a free form user interface for creating keywords.
+If you are a new user, you should probably use the</p>
+<blockquote>
+<div><a class="reference internal" href="keywords_wizard.html#keywords-wizard"><em>Keywords Wizard</em></a> in preference to the keywords</div></blockquote>
+<p>editor as it provides more hand holding and you are less likely to specify
+invalid keywords.</p>
+<p>For more general discussion on the keywords system used by InaSAFE, please
+see the <a class="reference internal" href="keywords.html#keywords-system"><em>keywords system</em></a> documentation.</p>
+<div class="section" id="the-keywords-editor-graphical-user-interface">
+<h2>The keywords editor graphical user interface<a class="headerlink" href="#the-keywords-editor-graphical-user-interface" title="Permalink to this headline">¶</a></h2>
+<p>The graphical user interface for keyword editing is divided into two parts:</p>
+<ol class="arabic simple">
+<li><strong>Minimal mode</strong>: In this mode, only following options are provided:<ul>
+<li><strong>Title</strong> - a &#8216;friendly&#8217; name for the dataset which will be displayed in
+reports, the user interface and so on</li>
+<li><strong>Source</strong> - a field to inform from whom/where the dataset is obtained.</li>
+<li><strong>Category</strong> - A mandatory choice between &#8216;hazard&#8217; and &#8216;exposure&#8217;.</li>
+<li><strong>Subcategory</strong> - An amalgamated subcategory/units picklist
+(in the case of hazard) or amalgamated subcategory/datatype (in the case
+of exposure).
+In this case, the secondary characteristic (units or datatype) are
+shown in square brackets after the subcategory name e.g.
+<tt class="samp docutils literal"><span class="pre">flood</span> <span class="pre">[m]</span></tt> is used for subcategory &#8216;flood&#8217;, units &#8216;m&#8217;.</li>
+</ul>
+</li>
+</ol>
+<p>An example of the keywords editor in minimal mode is shown below.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/keyword-editor-simple.png"><img alt="Opened keyword editor window" src="_images/keyword-editor-simple.png" style="width: 330.75px; height: 235.5px;" /></a>
+<p class="caption">Opened keyword editor window</p>
+</div>
+<ol class="arabic simple" start="2">
+<li><strong>Advanced mode</strong>: In this mode several extra options are provided in
+addition to the minimal mode options.
+Unlike minimal mode, in advanced mode only basic validation is performed
+and the user is given more flexibility to manually define and remove
+key/value pairs.
+Three sections are provided for this:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Predefined</strong> - In this section, the user selects from a constrained list
+of keywords, enters a free-form value and then adds the key/value pair to
+the keywords list (see below).</li>
+<li><strong>User defined</strong> - In this section, there is no constraint on the keywords
+entered - any single lower case word will be accepted for both the key and
+the value components.</li>
+<li><strong>Current keywords</strong> - In this area a complete list of all the keywords
+for the dataset are displayed.
+The keywords list here is updated when any changes are made in both the
+simple and advanced mode editors.
+It is also possible in this area to manually remove unwanted keywords
+using the &#8216;remove selected&#8217; button.
+Multiple keywords can be removed in a single operation by
+<tt class="kbd docutils literal"><span class="pre">Control-clicking</span></tt> on multiple keyword entries in the current
+keyword list and then clicking <em class="guilabel">Remove selected</em></li>
+</ul>
+</div></blockquote>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/keyword-editor-advanced.png"><img alt="Advanced mode of keyword editor" src="_images/keyword-editor-advanced.png" style="width: 331.5px; height: 444.75px;" /></a>
+<p class="caption">Advanced mode of keyword editor</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Switching from hazard to exposure will clear parts of the GUI since in
+general most keywords are category dependent.
+In particular, selecting <strong>&#8216;hazard&#8217;</strong> will remove the <strong>&#8216;datatype&#8217;</strong>
+key/value pair, and selecting <strong>&#8216;exposure&#8217;</strong> will remove the <strong>&#8216;units&#8217;</strong>
+key value pair.</p>
+</div>
+</div>
+<div class="section" id="invoking-the-keywords-editor">
+<h2>Invoking the keywords editor<a class="headerlink" href="#invoking-the-keywords-editor" title="Permalink to this headline">¶</a></h2>
+<p>The keyword editor can easily be invoked by <strong>selecting any layer</strong> in the
+QGIS layers list, and then using the plugin menu to start the editor
+(<em class="menuselection">Plugins ‣ InaSAFE ‣ Keyword Editor</em>).
+Alternatively, you may use the keywords editor icon on the plugins toolbar as
+illustrated below.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/keyword-editor-icon.png"><img alt="Keyword editor icon" src="_images/keyword-editor-icon.png" style="width: 353.0px; height: 36.0px;" /></a>
+<p class="caption">Keyword editor icon</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have not selected a layer in the QGIS legend,
+the keyword editor icon in the toolbar and menus will
+<strong>be disabled</strong> and appear greyed out.</p>
+</div>
+</div>
+<div class="section" id="saving-your-edits">
+<h2>Saving your edits<a class="headerlink" href="#saving-your-edits" title="Permalink to this headline">¶</a></h2>
+<p>To save your keyword edits, simply press the <em class="guilabel">OK</em> button and the
+<tt class="file docutils literal"><span class="pre">*.keywords</span></tt> file will be written to disk.</p>
+</div>
+<div class="section" id="cancelling-your-edits">
+<h2>Cancelling your edits<a class="headerlink" href="#cancelling-your-edits" title="Permalink to this headline">¶</a></h2>
+<p>You can cancel your changes at any time by pressing the <em class="guilabel">Cancel</em>
+button.
+No changes will be written to disk and your <tt class="file docutils literal"><span class="pre">*.keywords</span></tt> file will
+remain in its original state.</p>
+</div>
+</div>
+
+
+        </div> 
+        <hr>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact
+            <a href="mailto:info@inasafe.org?subject=[inasafe-info]">
+            <b>info@inasafe.org</b></a> for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.<br>
+            This document is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
+            <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>

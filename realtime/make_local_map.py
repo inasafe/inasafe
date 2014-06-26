@@ -4,35 +4,12 @@
 
 from shake_event import ShakeEvent
 
-# myId = '20120118231542_se'
-# myShakeEvent = ShakeGridConverter(
-#     theEventId=myId,
-#     theLocale='en',
-#     theForceFlag=False,
-#     theDataIsLocalFlag=True)
-# myShakeEvent.render_map(theForceFlag=False)
-#
-# myId = '20120118231552_se'
-# myShakeEvent = ShakeGridConverter(
-#     theEventId=myId,
-#     theLocale='en',
-#     theForceFlag=False,
-#     theDataIsLocalFlag=True)
-# myShakeEvent.render_map(theForceFlag=False)
-#
-#
-# myId = '20120118231562_se'
-# myShakeEvent = ShakeGridConverter(
-#     theEventId=myId,
-#     theLocale='en',
-#     theForceFlag=False,
-#     theDataIsLocalFlag=True)
-# myShakeEvent.render_map(theForceFlag=False)
+if __name__ == '__main__':
+    SHAKE_ID = '20131105060809'
 
-myId = '20130224200633'
-myShakeEvent = ShakeEvent(
-    event_id=myId,
-    locale='en',
-    force_flag=False,
-    data_is_local_flag=True)
-myShakeEvent.render_map(force_flag=False)
+    shake_event = ShakeEvent(
+        event_id=SHAKE_ID,
+        locale='en',
+        force_flag=False,
+        data_is_local_flag=True)
+    shake_event.render_map(force_flag=False)

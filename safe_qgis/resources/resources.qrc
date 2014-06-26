@@ -4,15 +4,30 @@
         <file alias="show-impact-functions.svg">img/icons/show-impact-functions.svg</file>
         <file alias="show-keyword-editor.svg">img/icons/show-keyword-editor.svg</file>
         <file alias="configure-inasafe.svg">img/icons/configure-inasafe.svg</file>
-        <file alias="show-keyword-editor.svg">img/icons/show-keyword-editor.svg</file>
+        <file alias="show-wizard.svg">img/icons/show-wizard.svg</file>
+        <file alias="show-keyword-wizard.svg">img/icons/show-keyword-wizard.svg</file>
         <file alias="show-minimum-needs.svg">img/icons/show-minimum-needs.svg</file>
         <file alias="show-batch-runner.svg">img/icons/show-batch-runner.svg</file>
         <file alias="show-osm-download.svg">img/icons/show-osm-download.svg</file>
         <file alias="save-as-scenario.svg">img/icons/save-as-scenario.svg</file>
         <file alias="show-converter-tool.svg">img/icons/show-converter-tool.svg</file>
         <file alias="show-impact-merge.svg">img/icons/show-impact-merge.svg</file>
+        <file alias="toggle-rubber-bands.svg">img/icons/toggle-rubber-bands.svg</file>
         <!-- North arrows -->
         <file alias="simple_north_arrow.png">img/north_arrows/simple_north_arrow.png</file>
+        <!-- wizard images -->
+        <file alias="keyword-category-hazard.svg">img/wizard/keyword-category-hazard.svg</file>
+        <file alias="keyword-category-exposure.svg">img/wizard/keyword-category-exposure.svg</file>
+        <file alias="keyword-category-aggregation.svg">img/wizard/keyword-category-aggregation.svg</file>
+        <file alias="keyword-subcategory-flood.svg">img/wizard/keyword-subcategory-flood.svg</file>
+        <file alias="keyword-subcategory-tsunami.svg">img/wizard/keyword-subcategory-tsunami.svg</file>
+        <file alias="keyword-subcategory-volcano.svg">img/wizard/keyword-subcategory-volcano.svg</file>
+        <file alias="keyword-subcategory-tephra.svg">img/wizard/keyword-subcategory-tephra.svg</file>
+        <file alias="keyword-subcategory-earthquake.svg">img/wizard/keyword-subcategory-earthquake.svg</file>
+        <file alias="keyword-subcategory-notset.svg">img/wizard/keyword-subcategory-notset.svg</file>
+        <file alias="keyword-subcategory-population.svg">img/wizard/keyword-subcategory-population.svg</file>
+        <file alias="keyword-subcategory-structure.svg">img/wizard/keyword-subcategory-structure.svg</file>
+        <file alias="keyword-subcategory-road.svg">img/wizard/keyword-subcategory-road.svg</file>
         <!-- logos -->
         <file alias="inasafe-logo.svg">img/logos/inasafe-logo.svg</file>
         <file alias="inasafe-logo-url.svg">img/logos/inasafe-logo-url.svg</file>
@@ -25,7 +40,7 @@
         <file alias="gfdrr_wb_logo-small.png">img/logos/gfdrr_wb_logo-small.png</file>
         <file alias="Australian-AID-Identifier_blue-red-small.png">img/logos/Australian-AID-Identifier_blue-red-small.png</file>
         <file alias="logo-flower.png">img/logos/logo-flower.png</file>
-	<!-- web resources -->
+        <!-- web resources -->
         <file alias="ajax-loader.gif">img/ajax-loader.gif</file>
         <file alias="css/bootstrap.css">css/bootstrap.css</file>
         <file alias="css/bootstrap-theme.css">css/bootstrap-theme.css</file>
@@ -38,7 +53,7 @@
         <file alias="js/inasafe.js">js/inasafe.js</file>
         <file alias="header.html">header.html</file>
         <file alias="footer.html">footer.html</file>
-	<!-- composer templates -->
+        <!-- composer templates -->
         <file alias="basic.qpt">qgis-composer-templates/basic.qpt</file>
         <file alias="inasafe-portrait-a4.qpt">qgis-composer-templates/inasafe-portrait-a4.qpt</file>
         <file alias="inasafe-landscape-a3.qpt">qgis-composer-templates/inasafe-landscape-a3.qpt</file>

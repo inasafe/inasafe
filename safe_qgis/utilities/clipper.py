@@ -506,7 +506,7 @@ def _clip_raster_layer(
                 filename))
     else:
         command = (
-            '"%s" -q -t_srs EPSG:4326 -r near -tr %f %f -cutline %s '
+            '"%s" -q -t_srs EPSG:4326 -r near -tr %.14f %.14f -cutline %s '
             '-crop_to_cutline -ot Float64 -of GTiff "%s" "%s"' % (
                 binary,
                 cell_size,

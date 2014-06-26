@@ -21,12 +21,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import qgis  # pylint: disable=W0611
 
 import unittest
+
 from safe.common.testing import get_qgis_app
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 # Needed though not used below
 from safe_qgis.utilities.help import _show_local_help
 from safe_qgis.exceptions import HelpFileMissingError
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class HelpTest(unittest.TestCase):
