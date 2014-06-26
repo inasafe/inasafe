@@ -108,7 +108,7 @@ def temp_dir(sub_dir='work'):
         subdirectory to be created e.g. /tmp/inasafe/foo/
     :type sub_dir: str
 
-    :return: Path to the output clipped layer (placed in the system temp dir).
+    :return: Path to the temp dir that is created.
     :rtype: str
 
     :raises: Any errors from the underlying system calls.
