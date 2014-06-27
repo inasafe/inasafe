@@ -89,7 +89,7 @@ class MapTest(unittest.TestCase):
         report.make_pdf(out_path)
         LOGGER.debug(out_path)
         message = 'Rendered output does not exist: %s' % out_path
-        assert os.path.exists(out_path), message
+        self.assertTrue(os.path.exists(out_path), message)
         # pdf rendering is non deterministic so we can't do a hash check
         # test_renderComposition renders just the image instead of pdf
         # so we hash check there and here we just do a basic minimum file
@@ -103,9 +103,9 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
-            138471,  # Ubuntu 14.04_64 AG
+            138991,  # Ubuntu 14.04_64 AG
             152980,  # Ubuntu 14.04_64 TS - pycharm
-            152849,  # Ubuntu 14.04_64 TS - make - TODO why is this?
+            152862,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             414589,  # Slackware64 14.0
             144542,  # Linux Mint 14_64
             148267,  # Windows 7 32
@@ -133,7 +133,7 @@ class MapTest(unittest.TestCase):
         report.make_pdf(out_path)
         LOGGER.debug(out_path)
         message = 'Rendered output does not exist: %s' % out_path
-        assert os.path.exists(out_path), message
+        self.assertTrue(os.path.exists(out_path), message)
         # pdf rendering is non deterministic so we can't do a hash check
         # test_renderComposition renders just the image instead of pdf
         # so we hash check there and here we just do a basic minimum file
@@ -148,9 +148,9 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
-            76191,  # Ubuntu 14.04_64 AG
+            76711,  # Ubuntu 14.04_64 AG
             90704,  # Ubuntu 14.04_64 TS pycharm
-            90569,  # Ubuntu 14.04_64 TS make - TODO why is this?
+            90582,  # Ubuntu 14.04_64 TS make - TODO why is this?
             367934,  # Slackware64 14.0
             82263,  # Linux Mint 14_64
             85418,  # Windows 7 32bit

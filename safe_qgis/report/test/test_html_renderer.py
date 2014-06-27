@@ -79,7 +79,7 @@ class HtmlRendererTest(unittest.TestCase):
         html += '</table>'
         return html
 
-    def test_printToPdf(self):
+    def test_print_to_pdf(self):
         """Test that we can render some html to a pdf (most common use case).
         """
         LOGGER.debug('InaSAFE HtmlRenderer testing printToPdf')
@@ -94,11 +94,11 @@ class HtmlRendererTest(unittest.TestCase):
         # If it fails new_path will come back as None
         new_path = renderer.to_pdf(html, path)
         message = 'Rendered output does not exist: %s' % new_path
-        assert os.path.exists(new_path), message
+        self.assertTrue(os.path.exists(new_path), message)
         # Also it should use our desired output file name
         message = 'Incorrect path - got: %s\nExpected: %s\n' % (
             new_path, path)
-        assert new_path == path, message
+        self.assertEqual(path, new_path, message)
         # pdf rendering is non deterministic so we can't do a hash check
         # test_renderComposition renders just the image instead of pdf
         # so we hash check there and here we just do a basic minimum file
@@ -110,7 +110,7 @@ class HtmlRendererTest(unittest.TestCase):
             'Please update expected_size if the rendered output '
             'is acceptible on your system.'
             % (expected_size, size))
-        assert size >= expected_size, message
+        self.assertTrue(size >= expected_size, message)
 
     def test_print_impact_table(self):
         """Test that we can render html from impact table keywords."""
@@ -118,7 +118,7 @@ class HtmlRendererTest(unittest.TestCase):
         file_name = 'test_floodimpact.tif'
         layer, _ = load_layer(file_name)
         message = 'Layer is not valid: %s' % file_name
-        assert layer.isValid(), message
+        self.assertTrue(layer.isValid(), message)
         page_dpi = 300
         html_renderer = HtmlRenderer(page_dpi)
         path = unique_filename(
@@ -129,7 +129,7 @@ class HtmlRendererTest(unittest.TestCase):
         keywords = keyword_io.read_keywords(layer)
         path = html_renderer.print_impact_table(keywords, filename=path)
         message = 'Rendered output does not exist: %s' % path
-        assert os.path.exists(path), message
+        self.assertTrue(os.path.exists(path), message)
         # pdf rendering is non deterministic so we can't do a hash check
         # test_renderComposition renders just the image instead of pdf
         # so we hash check there and here we just do a basic minimum file
@@ -141,7 +141,7 @@ class HtmlRendererTest(unittest.TestCase):
             20605,  # as rendered on linux ub 13.04 64
             13965,  # as rendered on linux ub 13.10 64
             14220,  # as rendered on linux ub 13.04 64 MB
-            13842,  # as rendered on linux ub 14.04 64 AG
+            11074,  # as rendered on linux ub 14.04 64 AG
             17295,  # as rendered on linux ub 14.04_64 TS
             18665,  # as rendered on Jenkins per 19 June 2014
             377191,  # as rendered on OSX
@@ -159,14 +159,14 @@ class HtmlRendererTest(unittest.TestCase):
         LOGGER.debug('InaSAFE HtmlRenderer testing renderHtmlToImage')
         html = self.sample_html(20)
         LOGGER.debug(html)
-        page_dpu = 300
-        renderer = HtmlRenderer(page_dpu)
+        page_dpi = 100
+        renderer = HtmlRenderer(page_dpi)
         path = unique_filename(
             prefix='testHtmlToImage',
             suffix='.png',
             dir=temp_dir('test'))
         LOGGER.debug(path)
-        width = 250
+        width = 150
         pixmap = renderer.html_to_image(html, width)
         self.assertFalse(pixmap.isNull())
         LOGGER.debug(pixmap.__class__)
