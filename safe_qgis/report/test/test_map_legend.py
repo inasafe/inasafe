@@ -56,7 +56,7 @@ class MapLegendTest(unittest.TestCase):
 
     def test_get_legend(self):
         """Getting a legend for a generic layer works."""
-        LOGGER.debug('test_getLegend called')
+        LOGGER.debug('test_get_legend called')
         layer, _ = load_layer('test_shakeimpact.shp')
         map_legend = MapLegend(layer)
         self.assertTrue(map_legend.layer is not None)
@@ -134,7 +134,7 @@ class MapLegendTest(unittest.TestCase):
             ' image generated to create a new control image.')
         self.assertTrue(flag, message)
 
-    def test_addSymbolToLegend(self):
+    def test_add_symbol_to_legend(self):
         """Test we can add a symbol to the legend."""
         layer, _ = load_layer('test_floodimpact.tif')
         map_legend = MapLegend(layer)
