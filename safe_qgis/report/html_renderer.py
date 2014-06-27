@@ -20,6 +20,7 @@ __copyright__ += 'Disaster Reduction'
 import time
 import logging
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, QtWebKit
 from safe_qgis.utilities.utilities import (
     html_header,
@@ -29,6 +30,7 @@ from safe_qgis.utilities.utilities import (
     setup_printer,
     impact_attribution)
 from safe_qgis.safe_interface import unique_filename, temp_dir
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -48,6 +50,7 @@ class HtmlRenderer():
         self.html_loaded_flag = False
         self.printer = None
 
+    # noinspection PyMethodMayBeStatic
     def tr(self, string):
         """We implement this since we do not inherit QObject.
 
@@ -102,7 +105,7 @@ class HtmlRenderer():
         painter = QtGui.QPainter(image)
         frame.render(painter)
         painter.end()
-        image.save('/tmp/test.png')
+
         return image
 
     def to_pdf(self, html, filename=None):
@@ -154,9 +157,8 @@ class HtmlRenderer():
             footer = html_footer()
             html = header + html_snippet + footer
         else:
-            handle = file(html_path)
-            html = handle.readlines()
-            handle.close()
+            with open(html_path) as html_file:
+                html = html_file.read()
 
         self.web_view = QtWebKit.QWebView()
         frame = self.web_view.page().mainFrame()
