@@ -20,7 +20,7 @@ import os
 import logging
 
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QLineEdit
+from PyQt4.QtGui import QLineEdit, QCheckBox
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
@@ -108,14 +108,23 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         widget = dialog.findChild(QLineEdit)
 
         # initial value must be same with default
-        assert value() == [2.3]
+        expected_value = [2.3]
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
 
         # change to 5.9
         widget.setText('5.9')
-        assert value() == [5.9]
+        expected_value = [5.9]
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
 
         widget.setText('5.9, 70')
-        assert value() == [5.9, 70]
+        expected_value = [5.9, 70]
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
 
         widget.setText('bar')
         try:
@@ -125,6 +134,24 @@ class FunctionOptionsDialogTest(unittest.TestCase):
             pass
         else:
             raise Exception("Fail: must be raise an exception")
+
+        dialog = FunctionOptionsDialog(None)
+        value = dialog.build_widget(dialog.configLayout, 'foo', True)
+        widget = dialog.findChild(QCheckBox)
+
+        # initial value must be same with default
+        expected_value = True
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        widget.setChecked(False)
+        expected_value = False
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+
 
     def test_parse_input(self):
         function_input = {
