@@ -152,7 +152,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         self.assertEqual(expected_value, real_value, message)
 
 
-
     def test_parse_input(self):
         function_input = {
             'thresholds': lambda: [1.0],
