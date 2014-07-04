@@ -280,6 +280,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         :type input_dict: dict
 
         :returns: Dictionary that can be consumed for impact functions.
+        :rtype: dict
 
         :raises:
             * ValueError - occurs when some input cannot be converted
