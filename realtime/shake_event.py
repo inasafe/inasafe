@@ -1276,6 +1276,23 @@ class ShakeEvent(QObject):
         # noinspection PyArgumentList
         QgsProject.instance().read()
 
+        # Load the contours and cities shapefile into the map
+        layers_to_add = []
+        contours_layer = QgsVectorLayer(
+            contours_shapefile,
+            'mmi-contours', "ogr")
+        layers_to_add.append(contours_layer)
+
+        if cities_shape_file is not None:
+            cities_layer = QgsVectorLayer(
+                cities_shape_file,
+                'mmi-cities', "ogr")
+            if cities_layer.isValid():
+                # noinspection PyArgumentList
+                layers_to_add.append(cities_layer)
+        QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+
+        # Load our template
         if 'INSAFE_REALTIME_TEMPLATE' in os.environ:
             template_path = os.environ['INSAFE_REALTIME_TEMPLATE']
         else:
@@ -1284,12 +1301,11 @@ class ShakeEvent(QObject):
         template_file = file(template_path)
         template_content = template_file.read()
         template_file.close()
-
         document = QDomDocument()
         document.setContent(template_content)
 
         # Set up the map renderer that will be assigned to the composition
-        map_renderer = QgsMapRenderer()
+        map_renderer = CANVAS.mapRenderer()
         # Set the labelling engine for the canvas
         labelling_engine = QgsPalLabeling()
         map_renderer.setLabelingEngine(labelling_engine)
@@ -1309,6 +1325,7 @@ class ShakeEvent(QObject):
         substitution_map.update(self.event_dict())
         LOGGER.debug(substitution_map)
 
+        # Pickle substitution map
         pickle_file = file(pickle_path, 'w')
         pickle.dump(substitution_map, pickle_file)
         pickle_file.close()
@@ -1321,7 +1338,7 @@ class ShakeEvent(QObject):
 
         # Get the main map canvas on the composition and set
         # its extents to the event.
-        map_canvas = composition.getComposerMapById(0)
+        map_canvas = composition.getComposerItemById('main-map')
         if map_canvas is not None:
             map_canvas.setNewExtent(self.extent_with_cities)
             map_canvas.renderModeUpdateCachedImage()
@@ -1364,35 +1381,6 @@ class ShakeEvent(QObject):
             # no nearby cities with a valid mmi value are found - e.g.
             # if the event is way out in the ocean.
             LOGGER.info('No nearby cities found.')
-
-        # Load the contours and cities shapefile into the map
-        contours_layer = QgsVectorLayer(
-            contours_shapefile,
-            'mmi-contours', "ogr")
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([contours_layer])
-
-        cities_layer = None
-        if cities_shape_file is not None:
-            cities_layer = QgsVectorLayer(
-                cities_shape_file,
-                'mmi-cities', "ogr")
-            if cities_layer.isValid():
-                # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayers([cities_layer])
-
-        # Now add our layers to the renderer so they appear in the print out
-        layers = reversed(CANVAS.layers())
-        layer_list = []
-        for layer in layers:
-            layer_list.append(layer.id())
-
-        layer_list.append(contours_layer.id())
-        if cities_layer is not None and cities_layer.isValid():
-            layer_list.append(cities_layer.id())
-
-        map_renderer.setLayerSet(layer_list)
-        LOGGER.info(str(layer_list))
 
         # Save a pdf.
         composition.exportAsPDF(pdf_path)
