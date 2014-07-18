@@ -36,7 +36,8 @@ from realtime.utilities import (
     shakemap_zip_dir,
     shakemap_extract_dir,
     realtime_logger_name)
-from realtime.server_config import BASE_URL
+from realtime.sftp_configuration.base_config import BASE_URL
+
 
 # The logger is initialised in realtime/__init__
 LOGGER = logging.getLogger(realtime_logger_name())

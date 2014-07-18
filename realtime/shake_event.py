@@ -65,7 +65,6 @@ from qgis.core import (
     QgsProject,
     QgsComposition,
     QgsMapLayerRegistry,
-    QgsMapRenderer,
     QgsPalLabeling,
     QgsProviderRegistry,
     QgsFeatureRequest,
@@ -93,7 +92,7 @@ from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
     realtime_logger_name)
-from realtime.server_config import GRID_SOURCE
+from realtime.sftp_configuration.configuration import get_grid_source
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
     InvalidLayerError,
@@ -169,7 +168,7 @@ class ShakeEvent(QObject):
 
         # Convert grid.xml (we'll give the title with event_id)
         self.shake_grid = ShakeGrid(
-            self.event_id, GRID_SOURCE, self.grid_file_path())
+            self.event_id, get_grid_source(), self.grid_file_path())
 
         self.population_raster_path = population_raster_path
         # Path to tif of impact result - probably we wont even use it
