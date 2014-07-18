@@ -31,6 +31,7 @@ from realtime.utilities import (
     realtime_logger_name)
 from realtime.server_config import (
     BASE_URL,
+    PORT,
     USERNAME,
     PASSWORD,
     BASE_PATH)
@@ -43,6 +44,7 @@ class SFtpClient:
     """A class to fetch directory listings and files using SSH protocol"""
     def __init__(self,
                  host=BASE_URL,
+                 port=PORT,
                  username=USERNAME,
                  password=PASSWORD,
                  working_dir=BASE_PATH):
@@ -51,6 +53,9 @@ class SFtpClient:
 
         :param host: The remote host.
         :type host: str
+
+        :param port: The port of the remote host.
+        :type port: int
 
         :param username: The username for the host.
         :type username: str
@@ -62,13 +67,14 @@ class SFtpClient:
         :type working_dir: str
         """
         self.host = host
+        self.port = port
         self.username = username
         self.password = password
         self.working_dir = working_dir
 
         # create transport object
         # noinspection PyTypeChecker
-        self.transport = paramiko.Transport(self.host)
+        self.transport = paramiko.Transport((self.host, self.port))
         self.transport.connect(username=self.username, password=self.password)
 
         # create sftp object
