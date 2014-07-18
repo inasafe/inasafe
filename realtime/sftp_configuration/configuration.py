@@ -59,7 +59,7 @@ def get_sftp_user_name():
     :rtype: str
     """
     if 'EQ_SFTP_USER_NAME' in os.environ:
-        return os.environ['SFTP_USER_NAME']
+        return os.environ['EQ_SFTP_USER_NAME']
     else:
         return USERNAME
 
