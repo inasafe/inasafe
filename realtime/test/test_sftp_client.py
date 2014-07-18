@@ -26,6 +26,7 @@ from safe.api import temp_dir
 from realtime.sftp_client import SFtpClient
 from realtime.server_config import (
     BASE_URL,
+    PORT,
     USERNAME,
     PASSWORD,
     BASE_PATH)
@@ -37,6 +38,7 @@ SHAKE_ID = '20131105060809'
 
 def mock_init(self,
               host=BASE_URL,
+              port=PORT,
               username=USERNAME,
               password=PASSWORD,
               working_dir=BASE_PATH):
@@ -44,6 +46,9 @@ def mock_init(self,
 
     :param host: The remote host.
     :type host: str
+
+    :param port: The port of the remote host.
+    :type port: int
 
     :param username: The username for the host.
     :type username: str
@@ -55,6 +60,7 @@ def mock_init(self,
     :type working_dir: str
     """
     self.host = host
+    self.port = port
     self.username = username
     self.password = password
     self.working_dir = working_dir
