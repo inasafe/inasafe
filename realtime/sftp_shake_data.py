@@ -37,6 +37,7 @@ from realtime.exceptions import (
     CopyError)
 from realtime.server_config import (
     BASE_URL,
+    PORT,
     USERNAME,
     PASSWORD,
     BASE_PATH)
@@ -73,6 +74,7 @@ class SftpShakeData:
     def __init__(self,
                  event=None,
                  host=BASE_URL,
+                 port=PORT,
                  user_name=USERNAME,
                  password=PASSWORD,
                  working_dir=BASE_PATH,
@@ -89,9 +91,13 @@ class SftpShakeData:
             server from which the data should be retrieved. It assumes that
             the data is in the root directory (Optional).
         :type host: str
+
+        :param port: The port of the host.
+        :type port: int
         """
         self.event_id = event
         self.host = host
+        self.port = port
         self.username = user_name
         self.password = password
         self.working_dir = working_dir
@@ -99,7 +105,11 @@ class SftpShakeData:
         self.input_file_name = 'grid.xml'
 
         self.sftp_client = SFtpClient(
-            self.host, self.username, self.password, self.working_dir)
+            self.host,
+            self.port,
+            self.username,
+            self.password,
+            self.working_dir)
 
         if self.event_id is None:
             try:
