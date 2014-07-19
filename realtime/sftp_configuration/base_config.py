@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Server Configuration.**
+- **Base Configuration for the SFTP.**
 
 Contact : ole.moller.nielsen@gmail.com
 
