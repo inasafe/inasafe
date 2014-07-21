@@ -53,9 +53,9 @@ def get_sftp_port():
     :rtype: int
     """
     if 'EQ_SFTP_PORT' in os.environ:
-        return os.environ['EQ_SFTP_PORT']
+        return int(os.environ['EQ_SFTP_PORT'])
     else:
-        return PORT
+        return int(PORT)
 
 
 def get_sftp_user_name():
