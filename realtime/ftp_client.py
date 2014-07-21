@@ -21,8 +21,9 @@ import socket
 import urllib2
 import logging
 
-from realtime.server_config import BASE_URL
+from realtime.sftp_configuration.base_config import BASE_URL
 from realtime.utilities import realtime_logger_name
+
 
 # The logger is initialised in realtime/__init__
 LOGGER = logging.getLogger(realtime_logger_name())

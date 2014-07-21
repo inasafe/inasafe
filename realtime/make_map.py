@@ -45,8 +45,7 @@ def process_event(event_id=None, locale='en'):
     population_path = os.path.join(
         data_dir(),
         'exposure',
-        'IDN_mosaic',
-        'popmap10_all.tif')
+        'population.tif')
 
     # Use cached data where available
     # Whether we should always regenerate the products

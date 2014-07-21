@@ -35,11 +35,13 @@ from realtime.exceptions import (
     NetworkError,
     EventValidationError,
     CopyError)
-from realtime.server_config import (
-    BASE_URL,
-    USERNAME,
-    PASSWORD,
-    BASE_PATH)
+from realtime.sftp_configuration.configuration import (
+    get_sftp_base_url,
+    get_sftp_port,
+    get_sftp_user_name,
+    get_sftp_user_password,
+    get_sftp_base_path)
+
 
 LOGGER = logging.getLogger(realtime_logger_name())
 
@@ -72,10 +74,11 @@ class SftpShakeData:
 
     def __init__(self,
                  event=None,
-                 host=BASE_URL,
-                 user_name=USERNAME,
-                 password=PASSWORD,
-                 working_dir=BASE_PATH,
+                 host=get_sftp_base_url(),
+                 port=get_sftp_port(),
+                 user_name=get_sftp_user_name(),
+                 password=get_sftp_user_password(),
+                 working_dir=get_sftp_base_path(),
                  force_flag=False):
         """Constructor for the SftpShakeData class.
 
@@ -89,9 +92,13 @@ class SftpShakeData:
             server from which the data should be retrieved. It assumes that
             the data is in the root directory (Optional).
         :type host: str
+
+        :param port: The port of the host.
+        :type port: int
         """
         self.event_id = event
         self.host = host
+        self.port = port
         self.username = user_name
         self.password = password
         self.working_dir = working_dir
@@ -99,7 +106,11 @@ class SftpShakeData:
         self.input_file_name = 'grid.xml'
 
         self.sftp_client = SFtpClient(
-            self.host, self.username, self.password, self.working_dir)
+            self.host,
+            self.port,
+            self.username,
+            self.password,
+            self.working_dir)
 
         if self.event_id is None:
             try:

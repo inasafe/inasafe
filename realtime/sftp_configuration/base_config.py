@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Server Configuration.**
+- **Base Configuration for the SFTP.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -17,15 +17,17 @@ __date__ = '13/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# The Server IP where the shake data is being served
+# The Server IP and its port where the shake data is being served
+# The default sftp port is 22
 BASE_URL = ''
+PORT = 22
 
 # Username and password to login to the server
 USERNAME = ''
 PASSWORD = ''
 
 # The base path in the server
-BASE_PATH = 'shakemaps'
+BASE_PATH = '/shakemaps'
 
 # The default source of the grid.xml that will also be used for keywords file
 GRID_SOURCE = 'BMKG (Badan Meteorologi, Klimatologi, dan Geofisika) Indonesia'
