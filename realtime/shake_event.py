@@ -330,10 +330,11 @@ class ShakeEvent(QObject):
             memory_layer=memory_layer,
             force_flag=force_flag)
 
-    def memory_layer_to_shapefile(self,
-                                  file_name,
-                                  memory_layer,
-                                  force_flag=False):
+    def memory_layer_to_shapefile(
+            self,
+            file_name,
+            memory_layer,
+            force_flag=False):
         """Write a memory layer to a shapefile.
 
         :param file_name: Filename excluding path and ext. e.g. 'mmi-cities'
