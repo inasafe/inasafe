@@ -114,6 +114,7 @@ class ShakeEvent(QObject):
                  event_id=None,
                  locale='en',
                  population_raster_path=None,
+                 geonames_sqlite_path=None,
                  force_flag=False,
                  data_is_local_flag=False):
         """Constructor for the shake event class.
@@ -136,6 +137,10 @@ class ShakeEvent(QObject):
             This is optional because there are various ways this can be
             specified before calling :func:`calculate_impacts`.
         :type population_raster_path: str
+
+        :param geonames_sqlite_path: (Optional) Path to the geonames sqlite
+            that will be used.
+        :type geonames_sqlite_path: str
 
         :param force_flag: Whether to force retrieval of the dataset from the
             ftp server.
@@ -171,6 +176,7 @@ class ShakeEvent(QObject):
             self.event_id, get_grid_source(), self.grid_file_path())
 
         self.population_raster_path = population_raster_path
+        self.geonames_sqlite_path = geonames_sqlite_path
         # Path to tif of impact result - probably we wont even use it
         self.impact_file = None
         # Path to impact keywords file - this is GOLD here!
