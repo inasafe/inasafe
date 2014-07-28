@@ -24,6 +24,8 @@ import unittest
 from realtime.pickle_reader import create_index, generate_pages
 
 
+@unittest.skip('Skipping this test. This test is obsolete and we will get '
+               'rid of this for the next version of Realtime.')
 class TestPickleReader(unittest.TestCase):
     """Tests relating to pickle reader"""
 
