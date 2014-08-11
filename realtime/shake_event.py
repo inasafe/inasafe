@@ -1341,7 +1341,7 @@ class ShakeEvent(QObject):
         layers_to_add = []
         contours_layer = QgsVectorLayer(
             contours_shapefile,
-            'mmi-contours', "ogr")
+            'mmi-contours', 'ogr')
         layers_to_add.append(contours_layer)
 
         if cities_shape_file is not None:
