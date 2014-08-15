@@ -27,6 +27,7 @@ from zipfile import BadZipfile
 from realtime.sftp_client import SFtpClient
 from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 from realtime.shake_event import ShakeEvent
+from realtime.exceptions import SFTPEmptyError
 
 # Initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -90,6 +91,9 @@ def process_event(event_id=None, locale='en'):
                     event_id=event_id,
                     locale=locale,
                     force_flag=True)
+        except SFTPEmptyError as ex:
+            LOGGER.info(ex)
+            return
         except:
             LOGGER.exception('An error occurred setting up the shake event.')
             return
