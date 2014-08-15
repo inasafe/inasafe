@@ -1577,7 +1577,7 @@ class ShakeEvent(QObject):
             'counts of less than 50 are disregarded.')
         software_tag = self.tr(
             'This report was created using InaSAFE version %s. Visit '
-            'http://inasafe.org for more information.' % get_version())
+            'http://inasafe.org for more information.') % get_version()
         credits_text = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
