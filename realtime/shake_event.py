@@ -99,7 +99,10 @@ from realtime.exceptions import (
     ShapefileCreationError,
     CityMemoryLayerCreationError,
     FileNotFoundError,
-    MapComposerError)
+    MapComposerError,
+    SFTPEmptyError,
+    NetworkError,
+    EventIdError)
 
 LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -153,7 +156,7 @@ class ShakeEvent(QObject):
 
         :return: Instance
 
-        :raises: EventXmlParseError
+        :raises: SFTPEmptyError, NetworkError, EventIdError, EventXmlParseError
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
@@ -165,9 +168,12 @@ class ShakeEvent(QObject):
         else:
             # fetch the data from (s)ftp
             #self.data = ShakeData(event_id, force_flag)
-            self.data = SftpShakeData(
-                event=event_id,
-                force_flag=force_flag)
+            try:
+                self.data = SftpShakeData(
+                    event=event_id,
+                    force_flag=force_flag)
+            except (SFTPEmptyError, NetworkError, EventIdError):
+                raise
             self.data.extract()
             self.event_id = self.data.event_id
 
