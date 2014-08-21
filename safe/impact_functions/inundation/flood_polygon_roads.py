@@ -190,22 +190,18 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
 
         hazard_features = hazard.getFeatures(request)
         hazard_poly = None
+        hazard_poly_list = []
         for feature in hazard_features:
             attributes = feature.attributes()
             if affected_field_index != -1:
                 if attributes[affected_field_index] != affected_value:
                     continue
+            hazard_poly_list.append(QgsGeometry(feature.geometry()))
             if hazard_poly is None:
                 hazard_poly = QgsGeometry(feature.geometry())
-            else:
-                # Make geometry union of inundated polygons
-                # But some feature.geometry() could be invalid, skip them
-                tmp_geometry = hazard_poly.combine(feature.geometry())
-                try:
-                    if tmp_geometry.isGeosValid():
-                        hazard_poly = tmp_geometry
-                except AttributeError:
-                    pass
+
+        if len(hazard_poly_list) > 1:
+            hazard_poly = QgsGeometry.unaryUnion(hazard_poly_list)
 
         ###############################################
         # END REMARK 1
