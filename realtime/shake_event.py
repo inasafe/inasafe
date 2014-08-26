@@ -409,7 +409,7 @@ class ShakeEvent(QObject):
         skip_attributes_flag = False
         # May differ from output_file
         actual_new_file_name = ''
-        # noinspection PyCallByClass
+        # noinspection PyCallByClass,PyTypeChecker
         result = QgsVectorFileWriter.writeAsVectorFormat(
             memory_layer,
             output_file,
@@ -1362,6 +1362,7 @@ class ShakeEvent(QObject):
             if cities_layer.isValid():
                 # noinspection PyArgumentList
                 layers_to_add.append(cities_layer)
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
 
         # Load our template
