@@ -99,7 +99,10 @@ from realtime.exceptions import (
     ShapefileCreationError,
     CityMemoryLayerCreationError,
     FileNotFoundError,
-    MapComposerError)
+    MapComposerError,
+    SFTPEmptyError,
+    NetworkError,
+    EventIdError)
 
 LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -153,7 +156,7 @@ class ShakeEvent(QObject):
 
         :return: Instance
 
-        :raises: EventXmlParseError
+        :raises: SFTPEmptyError, NetworkError, EventIdError, EventXmlParseError
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
@@ -165,9 +168,12 @@ class ShakeEvent(QObject):
         else:
             # fetch the data from (s)ftp
             #self.data = ShakeData(event_id, force_flag)
-            self.data = SftpShakeData(
-                event=event_id,
-                force_flag=force_flag)
+            try:
+                self.data = SftpShakeData(
+                    event=event_id,
+                    force_flag=force_flag)
+            except (SFTPEmptyError, NetworkError, EventIdError):
+                raise
             self.data.extract()
             self.event_id = self.data.event_id
 
@@ -335,10 +341,11 @@ class ShakeEvent(QObject):
             memory_layer=memory_layer,
             force_flag=force_flag)
 
-    def memory_layer_to_shapefile(self,
-                                  file_name,
-                                  memory_layer,
-                                  force_flag=False):
+    def memory_layer_to_shapefile(
+            self,
+            file_name,
+            memory_layer,
+            force_flag=False):
         """Write a memory layer to a shapefile.
 
         :param file_name: Filename excluding path and ext. e.g. 'mmi-cities'
@@ -402,7 +409,7 @@ class ShakeEvent(QObject):
         skip_attributes_flag = False
         # May differ from output_file
         actual_new_file_name = ''
-        # noinspection PyCallByClass
+        # noinspection PyCallByClass,PyTypeChecker
         result = QgsVectorFileWriter.writeAsVectorFormat(
             memory_layer,
             output_file,
@@ -1345,7 +1352,7 @@ class ShakeEvent(QObject):
         layers_to_add = []
         contours_layer = QgsVectorLayer(
             contours_shapefile,
-            'mmi-contours', "ogr")
+            'mmi-contours', 'ogr')
         layers_to_add.append(contours_layer)
 
         if cities_shape_file is not None:
@@ -1355,6 +1362,7 @@ class ShakeEvent(QObject):
             if cities_layer.isValid():
                 # noinspection PyArgumentList
                 layers_to_add.append(cities_layer)
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
 
         # Load our template
@@ -1575,6 +1583,9 @@ class ShakeEvent(QObject):
             'sources. The fatality calculation assumes that '
             'no fatalities occur for shake levels below MMI 4. Fatality '
             'counts of less than 50 are disregarded.')
+        software_tag = self.tr(
+            'This report was created using InaSAFE version %s. Visit '
+            'http://inasafe.org for more information.') % get_version()
         credits_text = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
@@ -1613,6 +1624,7 @@ class ShakeEvent(QObject):
             'city-table-name': city_table_name,
             'legend-name': legend_name,
             'limitations': limitations,
+            'software-tag': software_tag,
             'credits': credits_text,
             'fatalities-name': fatalities_name,
             'fatalities-range': fatalities_range,
