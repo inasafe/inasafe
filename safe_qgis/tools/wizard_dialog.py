@@ -425,6 +425,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             return None
 
+    def selectedCanvasLayer(self):
+        """Obtain the canvas layer selected by user.
+
+        :returns: id of the selected layer.
+        :rtype: string, None
+        """
+        item = self.lstCanvasLayers.currentItem()
+        try:
+            layer_id = item.data(QtCore.Qt.UserRole)
+        except (AttributeError, NameError):
+            layer_id = None
+
+        return layer_id
+
     def get_aggregation_attributes(self):
         """Obtain the value of aggregation attributes set by user.
 
@@ -688,6 +702,67 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.pbnNext.setEnabled(True)
 
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_lstCanvasLayers_itemSelectionChanged(self):
+        """Update layer description label
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+
+        self.lblDescribeCanvasLayer.setText("")
+
+        layer = None
+        layer_id = self.selectedCanvasLayer()
+        if layer_id:
+            for l in self.iface.mapCanvas().layers():
+                if l.id() == layer_id:
+                    layer = l
+
+        if not layer:
+            return
+
+        self.keyword_io = KeywordIO()
+        try:
+            kwds = self.keyword_io.read_keywords(layer)
+        except (HashNotFoundError,
+                OperationalError,
+                NoKeywordsFoundError,
+                KeywordNotFoundError,
+                InvalidParameterError,
+                UnsupportedProviderError):
+            kwds = None
+
+        if kwds:
+            lblText = """
+                <b>TITLE</b>: %s<br/>
+                <b>CATEGORY</b>: %s<br/>
+                <b>SUBCATEGORY</b>: %s<br/>
+                <b>UNIT</b>: %s<br/>
+                <b>SOURCE</b>: %s<br/><br/>
+                Please note there is no filter here yet, so you can see all hazard, exposure and aggregation layers here!
+            """ % (kwds.get('title'), kwds.get('category'), kwds.get('subcategory'), kwds.get('unit'), kwds.get('source') )
+        else:
+
+            if is_point_layer(layer):
+                geom_type = 'point'
+            elif is_polygon_layer(layer):
+                geom_type = 'polygon'
+            else:
+                geom_type = 'line'
+
+            lblText = """
+                This layer has no keywords assigned<br/><br/>
+                <b>SOURCE</b>: %s<br/>
+                <b>TYPE</b>: %s<br/><br/>
+                In the next step you will be able to register this layer.
+            """ % (layer.source(), is_raster_layer(layer) and 'raster' or 'vector (%s)' % geom_type)
+
+        self.lblDescribeCanvasLayer.setText(lblText)
+        self.pbnNext.setEnabled(True)
+
     def update_category_tab(self):
         """Set widgets on the Category tab."""
         self.lstCategories.clear()
@@ -831,12 +906,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.treeFunctions.clear()
         self.lblDescribeFunction.setText('')
 
-        # collect IF for hazards
+        # collect unique hazards
         hazards = tempapi_get_hazard_subcategories()
 
         # Populate functions tree
         bold_font = QtGui.QFont()
-        #bold_font.setItalic(True)
         bold_font.setBold(True)
         bold_font.setWeight(75)
         for h in hazards:
@@ -846,14 +920,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             tree_branch.setFont(0, bold_font)
             tree_branch.setFlags(QtCore.Qt.ItemIsEnabled)
             tree_branch.setText(0, h['name'])
-            # Assign functions
-            #for value in assigned_values[default_class['name']]:
-
+            # Collect functions for hazard
             for imfunc_id in tempapi_get_functions_for_hazard(h['id']):
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                #tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
-                                   #QtCore.Qt.ItemIsSelectable |
-                                   #QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setText(0, tempapi_get_function_metadata(imfunc_id).get('name',''))
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc_id)
 
@@ -886,7 +955,30 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def update_layer_from_canvas_tab(self):
         """Set widgets on the Layer From TOC tab"""
-        pass
+        self.lstCanvasLayers.clear()
+        self.lblDescribeCanvasLayer.clear()
+        self.keyword_io = KeywordIO()
+
+        italic_font = QtGui.QFont()
+        italic_font.setItalic(True)
+
+        for layer in self.iface.mapCanvas().layers():
+            try:
+                keywords = self.keyword_io.read_keywords(layer)
+            except (HashNotFoundError,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError):
+                keywords = None
+            #TODO: filter hazard (or exposure or aggregation) layers only  + layers without keywords
+            #TODO: filter only layers suitable for given IF
+            item = QListWidgetItem(layer.name(), self.lstCanvasLayers)
+            item.setData(QtCore.Qt.UserRole, layer.id())
+            if not keywords:
+                item.setFont(italic_font)
+            self.lstCanvasLayers.addItem(item)
 
     def update_layer_from_disk_tab(self):
         """Set widgets on the Layer From Disk tab"""
@@ -1073,7 +1165,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if step == step_layer_origin:
             return bool(self.rbLayerFromCanvas.isChecked() or self.rbLayerFromDisk.isChecked() or self.rbNoAggregation.isChecked())
         if step == step_layer_from_canvas:
-            pass #TODO
+            return bool(self.selectedCanvasLayer())
         if step == step_layer_from_disk:
             pass #TODO
         if step == step_disjoint_layers:

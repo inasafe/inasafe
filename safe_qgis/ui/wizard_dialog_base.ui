@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>11</number>
+      <number>10</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1915,19 +1915,22 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
+             <width>16</width>
              <height>20</height>
             </size>
            </property>
           </spacer>
          </item>
          <item row="0" column="3">
-          <widget class="QLabel" name="lblDescribeHazardLayer_2">
+          <widget class="QLabel" name="lblDescribeCanvasLayer">
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1964,7 +1967,7 @@
           </spacer>
          </item>
          <item row="0" column="1">
-          <widget class="QListWidget" name="lstHazardLayers_2">
+          <widget class="QListWidget" name="lstCanvasLayers">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -1986,36 +1989,6 @@
              <height>16777215</height>
             </size>
            </property>
-           <item>
-            <property name="text">
-             <string>Hazard Layer 1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Hazard Layer 2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Layer without keywords 1</string>
-            </property>
-            <property name="font">
-             <font>
-              <italic>true</italic>
-             </font>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Layer without keywords 2</string>
-            </property>
-            <property name="font">
-             <font>
-              <italic>true</italic>
-             </font>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>
@@ -2043,7 +2016,7 @@
        <item>
         <widget class="QLabel" name="label_10">
          <property name="text">
-          <string>Please choose a file from disk. You can use the check box on the bottom to only display already registered files or all recognized datasources.</string>
+          <string>Please choose a file, registered database or service.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2094,7 +2067,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
+             <width>16</width>
              <height>20</height>
             </size>
            </property>
@@ -2103,7 +2076,7 @@
          <item row="0" column="3">
           <widget class="QLabel" name="label_15">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -2133,7 +2106,11 @@
           </spacer>
          </item>
          <item row="0" column="1">
-          <widget class="QTreeView" name="tvBrowser"/>
+          <widget class="QTreeView" name="tvBrowser">
+           <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+          </widget>
          </item>
         </layout>
        </item>
