@@ -26,9 +26,11 @@ from sqlite3 import OperationalError
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, QObject
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
+
+from qgis.core import QgsBrowserModel
 
 from safe.api import ImpactFunctionManager
 from safe.api import metadata  # pylint: disable=W0612
@@ -168,7 +170,15 @@ step_classify = 5
 step_aggregation = 6
 step_source = 7
 step_title = 8
-
+step_function = 9
+step_layer_origin = 10
+step_layer_from_canvas = 11
+step_layer_from_disk = 12
+step_disjoint_layers = 13
+step_if_params = 14
+step_summary = 15
+step_progress = 16
+step_report = 17
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -194,6 +204,54 @@ def get_question_text(constant):
         return eval(constant)
     except NameError:
         return '<b>MISSING CONSTANT: %s</b>' % constant
+
+
+# TEMPORARY API: Following functions are meant to be moved to metadata stuff some day:
+def tempapi_get_hazard_subcategories():
+    """Return a list of available hazards.
+
+    :returns: The list of hazard dictionaries.
+    :rtype: list of dicts
+    """
+    hazards = []
+    for imfunc in ImpactFunctionManager().impact_functions:
+        for hazard in imfunc.Metadata().get_metadata()['categories']['hazard']['subcategory']:
+            if type(hazard)==dict and hazard['id'] not in [h['id'] for h in  hazards]:
+                hazards += [hazard]
+    return hazards
+
+def tempapi_get_functions_for_hazard(hazard_id):
+    """Return a list of impact functions available for given hazard
+
+    :param hazard_id: The id of hazard for function filter.
+    :type hazard_id: string
+
+
+    :returns: The list of impact function identifiers.
+    :rtype: list of strings
+    """
+    functions = []
+    for imfunc in ImpactFunctionManager().impact_functions:
+        m = imfunc.Metadata().get_metadata()
+        for hazard in m['categories']['hazard']['subcategory']:
+            if type(hazard) == dict and hazard['id'] == hazard_id:
+                functions += [m['id']]
+    return functions
+
+def tempapi_get_function_metadata(function_id):
+    """Return metadata for given function
+
+    :param function_id: The id of impact function.
+    :type hazard_id: string
+
+
+    :returns: The function metadata.
+    :rtype: dict or None
+    """
+    for imfunc in ImpactFunctionManager().impact_functions:
+        metadata = imfunc.Metadata().get_metadata()
+        if metadata and metadata['id'] == function_id:
+            return metadata
 
 
 class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
@@ -228,6 +286,28 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.parent = parent
         self.dock = dock
         self.suppress_warning_dialog = False
+        self.set_tool_tip()
+
+        self.pbnBack.setEnabled(False)
+        self.pbnNext.setEnabled(False)
+
+        # noinspection PyUnresolvedReferences
+        self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
+        self.pbnCancel.released.connect(self.reject)
+
+        # string constants
+        self.global_default_string = metadata.global_default_attribute['name']
+        self.global_default_data = metadata.global_default_attribute['id']
+        self.do_not_use_string = metadata.do_not_use_attribute['name']
+        self.do_not_use_data = metadata.do_not_use_attribute['id']
+        self.defaults = breakdown_defaults()
+
+    def set_keywords_creation_mode(self, layer=None):
+        """Set the Wizard to the Keywords Creation mode
+        :param layer: Layer to set the keywords for
+        :type layer: QgsMapLayer
+        """
+        self.lblSubtitle.setText(self.tr('Keywords creation...'))
         self.keyword_io = KeywordIO()
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
@@ -249,23 +329,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 InvalidParameterError,
                 UnsupportedProviderError):
             self.existing_keywords = None
-        self.pbnBack.setEnabled(False)
-        self.pbnNext.setEnabled(False)
+
         self.update_category_tab()
         self.auto_select_one_item(self.lstCategories)
         self.set_existing_options(step_category)
-        # noinspection PyUnresolvedReferences
-        self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
-        self.pbnCancel.released.connect(self.reject)
-        self.go_to_step(1)
-        self.set_tool_tip()
+        self.go_to_step(step_category)
 
-        # string constants
-        self.global_default_string = metadata.global_default_attribute['name']
-        self.global_default_data = metadata.global_default_attribute['id']
-        self.do_not_use_string = metadata.do_not_use_attribute['name']
-        self.do_not_use_data = metadata.do_not_use_attribute['id']
-        self.defaults = get_defaults()
+    def set_function_centric_mode(self):
+        """Set the Wizard to the Function Centric mode"""
+        self.lblSubtitle.setText(self.tr('Function-centric assessment...'))
+        new_step = step_function
+        self.update_impact_functions_tab()
+        self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
+        self.go_to_step(new_step)
 
     def selected_category(self):
         """Obtain the category selected by user.
@@ -331,6 +407,23 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if value_list:
                 value_map[tree_branch.text(0)] = value_list
         return value_map
+
+    def selected_function(self):
+        """Obtain the impact function selected by user.
+
+        :returns: id of the selected function.
+        :rtype: string, None
+        """
+        item = self.treeFunctions.currentItem()
+        if not item:
+            return None
+
+        data = item.data(0, QtCore.Qt.UserRole)
+
+        if data:
+            return data
+        else:
+            return None
 
     def get_aggregation_attributes(self):
         """Obtain the value of aggregation attributes set by user.
@@ -544,6 +637,57 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.pbnNext.setEnabled(bool(self.leTitle.text()))
 
+    # noinspection PyPep8Naming
+    def on_treeFunctions_itemSelectionChanged(self):
+        """Update function description label
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        imfunc_id = self.selected_function()
+        # Exit if no selection
+        if not imfunc_id:
+            self.lblDescribeFunction.clear()
+            self.pbnNext.setEnabled(False)
+            return
+        # Set description label
+        description = ""
+        m = tempapi_get_function_metadata(imfunc_id)
+        if m.has_key("name"):
+            description += "Function name: %s<br/>" % m['name']
+        if m.has_key("description"):
+            description += "Function description: %s<br/>" % m['description']
+        self.lblDescribeFunction.setText(description)
+        # Enable the next button if anything selected
+        self.pbnNext.setEnabled(bool(self.selected_function()))
+
+    # noinspection PyPep8Naming
+    def on_rbLayerFromCanvas_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
+    # noinspection PyPep8Naming
+    def on_rbLayerFromDisk_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
+    # noinspection PyPep8Naming
+    def on_rbNoAggregation_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
     def update_category_tab(self):
         """Set widgets on the Category tab."""
         self.lstCategories.clear()
@@ -682,6 +826,77 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
 
+    def update_impact_functions_tab(self):
+        """Set widgets on the Impact Functions tab."""
+        self.treeFunctions.clear()
+        self.lblDescribeFunction.setText('')
+
+        # collect IF for hazards
+        hazards = tempapi_get_hazard_subcategories()
+
+        # Populate functions tree
+        bold_font = QtGui.QFont()
+        #bold_font.setItalic(True)
+        bold_font.setBold(True)
+        bold_font.setWeight(75)
+        for h in hazards:
+            # Create branch for hazard
+            tree_branch = QtGui.QTreeWidgetItem(self.treeFunctions)
+            tree_branch.setExpanded(True)
+            tree_branch.setFont(0, bold_font)
+            tree_branch.setFlags(QtCore.Qt.ItemIsEnabled)
+            tree_branch.setText(0, h['name'])
+            # Assign functions
+            #for value in assigned_values[default_class['name']]:
+
+            for imfunc_id in tempapi_get_functions_for_hazard(h['id']):
+                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                #tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
+                                   #QtCore.Qt.ItemIsSelectable |
+                                   #QtCore.Qt.ItemIsDragEnabled)
+                tree_leaf.setText(0, tempapi_get_function_metadata(imfunc_id).get('name',''))
+                tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc_id)
+
+    def update_layer_origin_type_tab(self, category):
+        """Set widgets on the Layer Origin Type tab.
+
+        :param category: The category of the layer to be selected.
+        :type step: string
+        """
+        if category == 'hazard':
+            lbl1="Please help us to find your <b>hazard</b> layer.<br/><br/>A hazard layer represents something that will impact the people or infrastructure in an area. For example a flood, earth quake, tsunami inundation are all different kinds of hazards."
+            lbl2="I would like to use a hazard layer already loaded in QGIS\n(launches the hazard data registration wizard if needed)"
+            lbl3="I would like to pick a hazard layer from disk\n(launches the hazard data registration wizard if needed)"
+            self.rbNoAggregation.hide()
+        elif category == 'exposure':
+            lbl1="Please help us to find your <b>exposure</b> layer.<br/><br/>. An exposure layer represents people, property or infrastructure that may be affected in the event of a flood, earthquake, volcano etc."
+            lbl2="I would like to use an exposure layer already loaded in QGIS\n(launches the exposure data registration wizard if needed)"
+            lbl3="I would like to pick an exposure layer from disk\n(launches the exposure data registration wizard if needed)"
+            self.rbNoAggregation.hide()
+        elif category == 'aggregation':
+            lbl1="Would you like to aggregate the results of your analysis by sub-regions?"
+            lbl2="I would like to use an aggregation layer already loaded in QGIS\n(launches the aggregation data registration wizard if needed)"
+            lbl3="I would like to pick an aggregation layer from disk\n(launches the aggregation data registration wizard if needed)"
+            self.rbNoAggregation.show()
+
+        self.lblSelectLayerOriginType.setText(lbl1)
+        self.rbLayerFromCanvas.setText(lbl2)
+        self.rbLayerFromDisk.setText(lbl3)
+        self.pbnNext.setEnabled(False)
+
+    def update_layer_from_canvas_tab(self):
+        """Set widgets on the Layer From TOC tab"""
+        pass
+
+    def update_layer_from_disk_tab(self):
+        """Set widgets on the Layer From Disk tab"""
+        browserModel = QgsBrowserModel()
+        self.tvBrowser.setModel(browserModel)
+
+    def update_disjoint_layers_tab(self):
+        """Set widgets on the Disjoint Layers tab"""
+        pass
+
     def go_to_step(self, step):
         """Set the stacked widget to the given step.
 
@@ -691,6 +906,24 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.stackedWidget.setCurrentIndex(step - 1)
         self.lblStep.setText(self.tr('step %d') % step)
         self.pbnBack.setEnabled(step > 1)
+
+        # TEMPORARY - DISPLAY STEP NUMBER LABEL ACCORDING THE TICKET.
+        if step>8:
+            step_dict = {
+                9: '1',
+                10: '2',
+                11: '3a',
+                12: '3b',
+                13: '8',
+                14: '9',
+                #24: '4'
+
+            }
+            for i in range(15,24):
+                step_dict[i] = '%d' % (i-2)
+            self.lblStep.setText('step %s' % step_dict[step])
+
+
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -737,17 +970,48 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.set_existing_options(step_classify)
         elif new_step in [step_source, step_aggregation]:
             self.set_existing_options(new_step)
+        elif new_step == step_title:
+            self.set_existing_options(step_title)
+        elif new_step == step_function:
+            self.update_impact_functions_tab()
+        elif new_step == step_layer_origin:
+            self.update_layer_origin_type_tab('hazard')
+        elif new_step == step_layer_from_canvas:
+            self.update_layer_from_canvas_tab()
+        elif new_step == step_layer_from_disk:
+            self.update_layer_from_disk_tab()
+        elif new_step == step_disjoint_layers:
+            self.update_disjoint_layers_tab()
         elif new_step is None:
-            # Complete
+            # Wizard complete
+            # TODO: it's for KeywordCreation, what about FunctionCentric?
             self.accept()
             return
+        else:
+            # unknown step
+            pass
+
         # Set Next button label
-        if new_step == self.stackedWidget.count():
-            self.set_existing_options(self.stackedWidget.count())
+        if new_step in [step_title,step_report]:
             self.pbnNext.setText(self.tr('Finish'))
+        elif new_step == step_progress:
+            self.pbnNext.setText(self.tr('Run'))
+        else:
+            self.pbnNext.setText(self.tr('Next'))
+
+
+
         # Disable the Next button unless new data already entered
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
+
+        #TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
+        if current_step==self.stackedWidget.count() and new_step==1:
+            self.lblSelectCategory.setText('You have selected a layer that has no keywords assigned. In the next steps you can assign '
+            'keywords to that layer. First you need to confirm the layer represents a hazard.')
+
+
+
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -777,7 +1041,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         show_context_help('keywords_wizard')
 
     def is_ready_to_next_step(self, step):
-        """Check if the present step is complete.
+        """Check if the step we enter is initially complete. If so, there is no reason to block the Next button.
 
         :param step: The present step number.
         :type step: int
@@ -804,6 +1068,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return True
         if step == step_title:
             return bool(self.leTitle.text())
+        if step == step_function:
+            return bool(self.selected_function())
+        if step == step_layer_origin:
+            return bool(self.rbLayerFromCanvas.isChecked() or self.rbLayerFromDisk.isChecked() or self.rbNoAggregation.isChecked())
+        if step == step_layer_from_canvas:
+            pass #TODO
+        if step == step_layer_from_disk:
+            pass #TODO
+        if step == step_disjoint_layers:
+            pass #TODO
+
+        #TEMPORARY
+        return True
 
     def compute_next_step(self, current_step):
         """Determine the next step to be switched to.
@@ -852,9 +1129,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         elif current_step in (step_aggregation, step_source):
             new_step = current_step + 1
         elif current_step == step_title:
-            new_step = None
+            new_step = None #Wizard complete
+
+        elif current_step == step_layer_origin:
+            if self.rbLayerFromCanvas.isChecked():
+                new_step = step_layer_from_canvas
+            elif self.rbLayerFromDisk.isChecked():
+                new_step = step_layer_from_disk
+            else:
+                new_step = step_if_params
+        elif current_step < self.stackedWidget.count():
+            new_step = current_step + 1
         else:
             raise Exception('Unexpected number of steps')
+
         # Skip the field (and classify) tab if raster layer
         if new_step == step_field and is_raster_layer(self.layer):
             new_step = step_source
@@ -894,6 +1182,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_category
         elif current_step == step_aggregation:
             new_step = step_field
+
+        elif current_step == step_function:
+            new_step = step_function
+        elif current_step == step_layer_from_disk:
+            new_step = step_layer_origin
+        elif current_step == step_disjoint_layers:
+            new_step = step_layer_origin #TODO: go back to either step_layer_from_canvas or step_layer_from_disk
         else:
             new_step = current_step - 1
         return new_step
