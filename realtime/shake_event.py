@@ -65,7 +65,6 @@ from qgis.core import (
     QgsProject,
     QgsComposition,
     QgsMapLayerRegistry,
-    QgsMapRenderer,
     QgsPalLabeling,
     QgsProviderRegistry,
     QgsFeatureRequest,
@@ -93,14 +92,17 @@ from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
     realtime_logger_name)
-from realtime.server_config import GRID_SOURCE
+from realtime.sftp_configuration.configuration import get_grid_source
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
     InvalidLayerError,
     ShapefileCreationError,
     CityMemoryLayerCreationError,
     FileNotFoundError,
-    MapComposerError)
+    MapComposerError,
+    SFTPEmptyError,
+    NetworkError,
+    EventIdError)
 
 LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -115,6 +117,7 @@ class ShakeEvent(QObject):
                  event_id=None,
                  locale='en',
                  population_raster_path=None,
+                 geonames_sqlite_path=None,
                  force_flag=False,
                  data_is_local_flag=False):
         """Constructor for the shake event class.
@@ -138,6 +141,10 @@ class ShakeEvent(QObject):
             specified before calling :func:`calculate_impacts`.
         :type population_raster_path: str
 
+        :param geonames_sqlite_path: (Optional) Path to the geonames sqlite
+            that will be used.
+        :type geonames_sqlite_path: str
+
         :param force_flag: Whether to force retrieval of the dataset from the
             ftp server.
         :type force_flag: bool
@@ -149,7 +156,7 @@ class ShakeEvent(QObject):
 
         :return: Instance
 
-        :raises: EventXmlParseError
+        :raises: SFTPEmptyError, NetworkError, EventIdError, EventXmlParseError
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
@@ -161,17 +168,21 @@ class ShakeEvent(QObject):
         else:
             # fetch the data from (s)ftp
             #self.data = ShakeData(event_id, force_flag)
-            self.data = SftpShakeData(
-                event=event_id,
-                force_flag=force_flag)
+            try:
+                self.data = SftpShakeData(
+                    event=event_id,
+                    force_flag=force_flag)
+            except (SFTPEmptyError, NetworkError, EventIdError):
+                raise
             self.data.extract()
             self.event_id = self.data.event_id
 
         # Convert grid.xml (we'll give the title with event_id)
         self.shake_grid = ShakeGrid(
-            self.event_id, GRID_SOURCE, self.grid_file_path())
+            self.event_id, get_grid_source(), self.grid_file_path())
 
         self.population_raster_path = population_raster_path
+        self.geonames_sqlite_path = geonames_sqlite_path
         # Path to tif of impact result - probably we wont even use it
         self.impact_file = None
         # Path to impact keywords file - this is GOLD here!
@@ -226,9 +237,10 @@ class ShakeEvent(QObject):
         :raise: GridXmlFileNotFoundError
         """
         LOGGER.debug('Event path requested.')
-        grid_xml_path = os.path.join(shakemap_extract_dir(),
-                                     self.event_id,
-                                     'grid.xml')
+        grid_xml_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            'grid.xml')
         #short circuit if the tif is already created.
         if os.path.exists(grid_xml_path):
             return grid_xml_path
@@ -300,9 +312,10 @@ class ShakeEvent(QObject):
         """
         filename = 'mmi-cities'
         memory_layer = self.local_cities_memory_layer()
-        return self.memory_layer_to_shapefile(file_name=filename,
-                                              memory_layer=memory_layer,
-                                              force_flag=force_flag)
+        return self.memory_layer_to_shapefile(
+            file_name=filename,
+            memory_layer=memory_layer,
+            force_flag=force_flag)
 
     def city_search_boxes_to_shapefile(self, force_flag=False):
         """Write a cities memory layer to a shapefile.
@@ -323,14 +336,16 @@ class ShakeEvent(QObject):
         """
         filename = 'city-search-boxes'
         memory_layer = self.city_search_box_memory_layer()
-        return self.memory_layer_to_shapefile(file_name=filename,
-                                              memory_layer=memory_layer,
-                                              force_flag=force_flag)
+        return self.memory_layer_to_shapefile(
+            file_name=filename,
+            memory_layer=memory_layer,
+            force_flag=force_flag)
 
-    def memory_layer_to_shapefile(self,
-                                  file_name,
-                                  memory_layer,
-                                  force_flag=False):
+    def memory_layer_to_shapefile(
+            self,
+            file_name,
+            memory_layer,
+            force_flag=False):
         """Write a memory layer to a shapefile.
 
         :param file_name: Filename excluding path and ext. e.g. 'mmi-cities'
@@ -394,7 +409,7 @@ class ShakeEvent(QObject):
         skip_attributes_flag = False
         # May differ from output_file
         actual_new_file_name = ''
-        # noinspection PyCallByClass
+        # noinspection PyCallByClass,PyTypeChecker
         result = QgsVectorFileWriter.writeAsVectorFormat(
             memory_layer,
             output_file,
@@ -415,9 +430,10 @@ class ShakeEvent(QObject):
                 'Failed with error: %s' % result)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        qml_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                '%s.qml' % file_name)
+        qml_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s.qml' % file_name)
         source_qml = os.path.join(data_dir(), '%s.qml' % file_name)
         shutil.copyfile(source_qml, qml_path)
 
@@ -481,7 +497,7 @@ class ShakeEvent(QObject):
 
         # Setup the cities table, querying on event bbox
         # Path to sqlitedb containing geonames table
-        db_path = os.path.join(data_dir(), 'indonesia.sqlite')
+        db_path = self._get_sqlite_path()
         uri = QgsDataSourceURI()
         uri.setDatabase(db_path)
         table = 'geonames'
@@ -671,9 +687,10 @@ class ShakeEvent(QObject):
         if self.search_boxes is None or force_flag:
             self.local_cities_memory_layer()
         # Now store the selection in a temporary memory layer
-        memory_layer = QgsVectorLayer('Polygon',
-                                      'City Search Boxes',
-                                      'memory')
+        memory_layer = QgsVectorLayer(
+            'Polygon',
+            'City Search Boxes',
+            'memory')
         memory_provider = memory_layer.dataProvider()
         # add field defs
         field = QgsField('cities_found', QVariant.Int)
@@ -690,16 +707,17 @@ class ShakeEvent(QObject):
 
         result = memory_provider.addFeatures(features)
         if not result:
-            LOGGER.exception('Unable to add features to city search boxes'
-                             'memory layer')
+            LOGGER.exception(
+                'Unable to add features to city search boxes memory layer')
             raise CityMemoryLayerCreationError(
                 'Could not add any features to city search boxes memory layer')
 
         memory_layer.commitChanges()
         memory_layer.updateExtents()
 
-        LOGGER.debug('Feature count of search box mem layer:  %s' %
-                     memory_layer.featureCount())
+        LOGGER.debug(
+            'Feature count of search box mem layer:  %s' %
+            memory_layer.featureCount())
 
         return memory_layer
 
@@ -780,15 +798,16 @@ class ShakeEvent(QObject):
                 feature[fields.indexFromName('dir_from')])
             distance_to = float(
                 feature[fields.indexFromName('dist_to')])
-            city = {'id': feature_id,
-                    'name': place_name,
-                    'mmi-int': int(mmi),
-                    'mmi': mmi,
-                    'population': population,
-                    'roman': roman,
-                    'dist_to': distance_to,
-                    'dir_to': direction_to,
-                    'dir_from': direction_from}
+            city = {
+                'id': feature_id,
+                'name': place_name,
+                'mmi-int': int(mmi),
+                'mmi': mmi,
+                'population': population,
+                'roman': roman,
+                'dist_to': distance_to,
+                'dir_to': direction_to,
+                'dir_from': direction_from}
             cities.append(city)
         LOGGER.debug('%s features added to sorted impacted cities list.')
         #LOGGER.exception(cities)
@@ -887,29 +906,33 @@ class ShakeEvent(QObject):
         """
         table_data = self.sorted_impacted_cities(row_count)
         table_body = []
-        header = TableRow(['',
-                           self.tr('Name'),
-                           self.tr('Affected (x 1000)'),
-                           self.tr('Intensity')],
-                          header=True)
+        header = TableRow([
+            '',
+            self.tr('Name'),
+            self.tr('Affected (x 1000)'),
+            self.tr('Intensity')],
+            header=True)
         for row_data in table_data:
             intensity = row_data['roman']
             name = row_data['name']
             population = int(round(row_data['population'] / 1000))
             colour = mmi_colour(row_data['mmi'])
-            colour_box = ('<div style="width: 16px; height: 16px;'
-                          'background-color: %s"></div>' % colour)
-            row = TableRow([colour_box,
-                            name,
-                            population,
-                            intensity])
+            colour_box = (
+                '<div style="width: 16px; height: 16px;'
+                'background-color: %s"></div>' % colour)
+            row = TableRow([
+                colour_box,
+                name,
+                population,
+                intensity])
             table_body.append(row)
 
-        table = Table(table_body, header_row=header,
-                      table_class='table table-striped table-condensed')
+        table = Table(
+            table_body, header_row=header,
+            table_class='table table-striped table-condensed')
         # Also make an html file on disk
-        path = self.write_html_table(file_name='affected-cities.html',
-                                     table=table)
+        path = self.write_html_table(
+            file_name='affected-cities.html', table=table)
 
         return table, path
 
@@ -943,9 +966,10 @@ class ShakeEvent(QObject):
         impact_row = [TableCell(self.tr('Perceived Shaking'), header=True)]
         for mmi in range(2, 10):
             header.append(
-                TableCell(romanise(mmi),
-                          cell_class='mmi-%s' % mmi,
-                          header=True))
+                TableCell(
+                    romanise(mmi),
+                    cell_class='mmi-%s' % mmi,
+                    header=True))
             if mmi in self.affected_counts:
                 # noinspection PyTypeChecker
                 affected_row.append(
@@ -959,17 +983,19 @@ class ShakeEvent(QObject):
         table_body = list()
         table_body.append(affected_row)
         table_body.append(impact_row)
-        table = Table(table_body, header_row=header,
-                      table_class='table table-striped table-condensed')
+        table = Table(
+            table_body, header_row=header,
+            table_class='table table-striped table-condensed')
         # noinspection PyTypeChecker
         path = self.write_html_table(file_name='impacts.html', table=table)
 
         return path
 
-    def calculate_impacts(self,
-                          population_raster_path=None,
-                          force_flag=False,
-                          algorithm='nearest'):
+    def calculate_impacts(
+            self,
+            population_raster_path=None,
+            force_flag=False,
+            algorithm='nearest'):
         """Use the SAFE ITB earthquake function to calculate impacts.
 
         :param population_raster_path: optional. see
@@ -1141,6 +1167,49 @@ class ShakeEvent(QObject):
 
         return clipped_hazard, clipped_exposure
 
+    def _get_sqlite_path(self):
+        """Helper to determine sqlite file with geonames places in it.
+
+        The following priority will be used to determine the path:
+            1) the class attribute self.geonames_sqlite_path
+               will be checked and if not None and the file exists it will be
+               used.
+            2) the environment variable 'GEONAMES_SQLITE_PATH' will be
+               checked and if the file exists if set it will be used.
+            4) A hard coded path of
+               :file:`/fixtures/indonesia.sqlite` will be appended
+               to os.path.abspath(os.path.curdir)
+            5) A hard coded path of
+               :file:`/usr/local/share/inasafe/indonesia.tif`
+               will be used.
+
+        :returns: Path to a geonames sqlite file.
+        :rtype: str
+
+        :raises: FileNotFoundError
+        """
+        # When used via the scripts make_shakemap.sh
+        fixture_path = os.path.join(
+            data_dir(), 'indonesia.sqlite')
+
+        local_path = '/usr/local/share/inasafe/indonesia.sqlite'
+        if self.geonames_sqlite_path is not None:
+            if os.path.exists(self.geonames_sqlite_path):
+                return self.geonames_sqlite_path
+
+        if 'GEONAMES_SQLITE_PATH' in os.environ:
+            population_path = os.environ['GEONAMES_SQLITE_PATH']
+            if os.path.exists(population_path):
+                return population_path
+
+        if os.path.exists(fixture_path):
+            return fixture_path
+
+        if os.path.exists(local_path):
+            return local_path
+
+        raise FileNotFoundError('Geonames sqlite file could not be found')
+
     def _get_population_path(self):
         """Helper to determine population raster's path.
 
@@ -1199,16 +1268,19 @@ class ShakeEvent(QObject):
 
         :raise Propagates any exceptions.
         """
-        pdf_path = os.path.join(shakemap_extract_dir(),
-                                self.event_id,
-                                '%s-%s.pdf' % (self.event_id, self.locale))
-        image_path = os.path.join(shakemap_extract_dir(),
-                                  self.event_id,
-                                  '%s-%s.png' % (self.event_id, self.locale))
-        thumbnail_image_path = os.path.join(shakemap_extract_dir(),
-                                            self.event_id,
-                                            '%s-thumb-%s.png' % (
-                                            self.event_id, self.locale))
+        pdf_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-%s.pdf' % (self.event_id, self.locale))
+        image_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-%s.png' % (self.event_id, self.locale))
+        thumbnail_image_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-thumb-%s.png' % (
+            self.event_id, self.locale))
         pickle_path = os.path.join(
             shakemap_extract_dir(),
             self.event_id,
@@ -1276,6 +1348,24 @@ class ShakeEvent(QObject):
         # noinspection PyArgumentList
         QgsProject.instance().read()
 
+        # Load the contours and cities shapefile into the map
+        layers_to_add = []
+        contours_layer = QgsVectorLayer(
+            contours_shapefile,
+            'mmi-contours', 'ogr')
+        layers_to_add.append(contours_layer)
+
+        if cities_shape_file is not None:
+            cities_layer = QgsVectorLayer(
+                cities_shape_file,
+                'mmi-cities', "ogr")
+            if cities_layer.isValid():
+                # noinspection PyArgumentList
+                layers_to_add.append(cities_layer)
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+
+        # Load our template
         if 'INSAFE_REALTIME_TEMPLATE' in os.environ:
             template_path = os.environ['INSAFE_REALTIME_TEMPLATE']
         else:
@@ -1284,12 +1374,11 @@ class ShakeEvent(QObject):
         template_file = file(template_path)
         template_content = template_file.read()
         template_file.close()
-
         document = QDomDocument()
         document.setContent(template_content)
 
         # Set up the map renderer that will be assigned to the composition
-        map_renderer = QgsMapRenderer()
+        map_renderer = CANVAS.mapRenderer()
         # Set the labelling engine for the canvas
         labelling_engine = QgsPalLabeling()
         map_renderer.setLabelingEngine(labelling_engine)
@@ -1304,24 +1393,27 @@ class ShakeEvent(QObject):
         # [date] pass a map like this {'date': '1 Jan 2012'}
         location_info = self.event_info()
         LOGGER.debug(location_info)
-        substitution_map = {'location-info': location_info,
-                            'version': self.version()}
+        substitution_map = {
+            'location-info': location_info,
+            'version': self.version()}
         substitution_map.update(self.event_dict())
         LOGGER.debug(substitution_map)
 
+        # Pickle substitution map
         pickle_file = file(pickle_path, 'w')
         pickle.dump(substitution_map, pickle_file)
         pickle_file.close()
 
         result = composition.loadFromTemplate(document, substitution_map)
         if not result:
-            LOGGER.exception('Error loading template %s with keywords\n %s',
-                             template_path, substitution_map)
+            LOGGER.exception(
+                'Error loading template %s with keywords\n %s',
+                template_path, substitution_map)
             raise MapComposerError
 
         # Get the main map canvas on the composition and set
         # its extents to the event.
-        map_canvas = composition.getComposerMapById(0)
+        map_canvas = composition.getComposerItemById('main-map')
         if map_canvas is not None:
             map_canvas.setNewExtent(self.extent_with_cities)
             map_canvas.renderModeUpdateCachedImage()
@@ -1364,35 +1456,6 @@ class ShakeEvent(QObject):
             # no nearby cities with a valid mmi value are found - e.g.
             # if the event is way out in the ocean.
             LOGGER.info('No nearby cities found.')
-
-        # Load the contours and cities shapefile into the map
-        contours_layer = QgsVectorLayer(
-            contours_shapefile,
-            'mmi-contours', "ogr")
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([contours_layer])
-
-        cities_layer = None
-        if cities_shape_file is not None:
-            cities_layer = QgsVectorLayer(
-                cities_shape_file,
-                'mmi-cities', "ogr")
-            if cities_layer.isValid():
-                # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayers([cities_layer])
-
-        # Now add our layers to the renderer so they appear in the print out
-        layers = reversed(CANVAS.layers())
-        layer_list = []
-        for layer in layers:
-            layer_list.append(layer.id())
-
-        layer_list.append(contours_layer.id())
-        if cities_layer is not None and cities_layer.isValid():
-            layer_list.append(cities_layer.id())
-
-        map_renderer.setLayerSet(layer_list)
-        LOGGER.info(str(layer_list))
 
         # Save a pdf.
         composition.exportAsPDF(pdf_path)
@@ -1445,9 +1508,10 @@ class ShakeEvent(QObject):
         .. note:: This method is heavily based on http://hoegners.de/Maxi/geo/
            which is licensed under the GPL V3.
         """
-        direction_list = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
-                          'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
-                          'NW', 'NNW']
+        direction_list = [
+            'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
+            'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
+            'NW', 'NNW']
         try:
             bearing = float(bearing)
         except ValueError:
@@ -1470,13 +1534,14 @@ class ShakeEvent(QObject):
         :rtype: str
         """
         event_dict = self.event_dict()
-        event_string = ('M %(mmi)s %(date)s %(time)s '
-                        '%(latitude-name)s: %(latitude-value)s '
-                        '%(longitude-name)s: %(longitude-value)s '
-                        '%(depth-name)s: %(depth-value)s%(depth-unit)s '
-                        '%(located-label)s %(distance)s%(distance-unit)s '
-                        '%(bearing-compass)s '
-                        '%(direction-relation)s %(place-name)s') % event_dict
+        event_string = (
+            'M %(mmi)s %(date)s %(time)s '
+            '%(latitude-name)s: %(latitude-value)s '
+            '%(longitude-name)s: %(longitude-value)s '
+            '%(depth-name)s: %(depth-value)s%(depth-unit)s '
+            '%(located-label)s %(distance)s%(distance-unit)s '
+            '%(bearing-compass)s '
+            '%(direction-relation)s %(place-name)s') % event_dict
         return event_string
 
     def event_dict(self):
@@ -1518,6 +1583,9 @@ class ShakeEvent(QObject):
             'sources. The fatality calculation assumes that '
             'no fatalities occur for shake levels below MMI 4. Fatality '
             'counts of less than 50 are disregarded.')
+        software_tag = self.tr(
+            'This report was created using InaSAFE version %s. Visit '
+            'http://inasafe.org for more information.') % get_version()
         credits_text = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
@@ -1556,6 +1624,7 @@ class ShakeEvent(QObject):
             'city-table-name': city_table_name,
             'legend-name': legend_name,
             'limitations': limitations,
+            'software-tag': software_tag,
             'credits': credits_text,
             'fatalities-name': fatalities_name,
             'fatalities-range': fatalities_range,
@@ -1626,10 +1695,11 @@ class ShakeEvent(QObject):
             if hours == 0:
                 lapse_string = '%i %s' % (minutes, self.tr('minute(s)'))
             else:
-                lapse_string = '%i %s %i %s' % (hours,
-                                                self.tr('hour(s)'),
-                                                minutes,
-                                                self.tr('minute(s)'))
+                lapse_string = '%i %s %i %s' % (
+                    hours,
+                    self.tr('hour(s)'),
+                    minutes,
+                    self.tr('minute(s)'))
         else:
             # This at least one day after the quake
 
@@ -1639,10 +1709,11 @@ class ShakeEvent(QObject):
             if weeks == 0:
                 lapse_string = '%i %s' % (days, self.tr('days'))
             else:
-                lapse_string = '%i %s %i %s' % (weeks,
-                                                self.tr('weeks'),
-                                                days,
-                                                self.tr('days'))
+                lapse_string = '%i %s %i %s' % (
+                    weeks,
+                    self.tr('weeks'),
+                    days,
+                    self.tr('days'))
 
         # Convert date to GMT+7
         # FIXME (Ole) Hack - Remove this as the shakemap data always
@@ -1687,34 +1758,35 @@ class ShakeEvent(QObject):
         else:
             mmi_data = 'Not populated'
 
-        event_dict = {'latitude': self.shake_grid.latitude,
-                      'longitude': self.shake_grid.longitude,
-                      'event_id': self.event_id,
-                      'magnitude': self.shake_grid.magnitude,
-                      'depth': self.shake_grid.depth,
-                      'description': self.shake_grid.description,
-                      'location': self.shake_grid.location,
-                      'day': self.shake_grid.day,
-                      'month': self.shake_grid.month,
-                      'year': self.shake_grid.year,
-                      'time': self.shake_grid.time,
-                      'time_zone': self.shake_grid.time_zone,
-                      'x_minimum': self.shake_grid.x_minimum,
-                      'x_maximum': self.shake_grid.x_maximum,
-                      'y_minimum': self.shake_grid.y_minimum,
-                      'y_maximum': self.shake_grid.y_maximum,
-                      'rows': self.shake_grid.rows,
-                      'columns': self.shake_grid.columns,
-                      'mmi_data': mmi_data,
-                      'population_raster_path': self.population_raster_path,
-                      'impact_file': self.impact_file,
-                      'impact_keywords_file': self.impact_keywords_file,
-                      'fatality_counts': self.fatality_counts,
-                      'displaced_counts': self.displaced_counts,
-                      'affected_counts': self.affected_counts,
-                      'extent_with_cities': extent_with_cities,
-                      'zoom_factor': self.zoom_factor,
-                      'search_boxes': self.search_boxes}
+        event_dict = {
+            'latitude': self.shake_grid.latitude,
+            'longitude': self.shake_grid.longitude,
+            'event_id': self.event_id,
+            'magnitude': self.shake_grid.magnitude,
+            'depth': self.shake_grid.depth,
+            'description': self.shake_grid.description,
+            'location': self.shake_grid.location,
+            'day': self.shake_grid.day,
+            'month': self.shake_grid.month,
+            'year': self.shake_grid.year,
+            'time': self.shake_grid.time,
+            'time_zone': self.shake_grid.time_zone,
+            'x_minimum': self.shake_grid.x_minimum,
+            'x_maximum': self.shake_grid.x_maximum,
+            'y_minimum': self.shake_grid.y_minimum,
+            'y_maximum': self.shake_grid.y_maximum,
+            'rows': self.shake_grid.rows,
+            'columns': self.shake_grid.columns,
+            'mmi_data': mmi_data,
+            'population_raster_path': self.population_raster_path,
+            'impact_file': self.impact_file,
+            'impact_keywords_file': self.impact_keywords_file,
+            'fatality_counts': self.fatality_counts,
+            'displaced_counts': self.displaced_counts,
+            'affected_counts': self.affected_counts,
+            'extent_with_cities': extent_with_cities,
+            'zoom_factor': self.zoom_factor,
+            'search_boxes': self.search_boxes}
 
         event_string = (
             'latitude: %(latitude)s\n'

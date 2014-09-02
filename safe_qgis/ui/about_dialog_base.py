@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'about_dialog_base.ui'
 #
-# Created: Fri Jun  6 15:41:05 2014
+# Created: Tue Aug  5 15:01:00 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -140,7 +140,7 @@ class Ui_AboutDialogBase(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://aifdr.org\"><span style=\" font-family:\'Cantarell\'; font-size:11pt; text-decoration: underline; color:#0000ff;\">Australia-Indonesia Facility for Disaster Reduction</span></a></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://www.aifdr.org\"><span style=\" font-family:\'Cantarell\'; font-size:11pt; text-decoration: underline; color:#0000ff;\">Australia-Indonesia Facility for Disaster Reduction</span></a></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://www.gfdrr.org/\"><span style=\" font-family:\'Cantarell\'; font-size:11pt; text-decoration: underline; color:#0000ff;\">World Bank - Global Facility for Disaster Reductions and Recovery</span></a></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://hot.openstreetmap.org/\"><span style=\" font-family:\'Cantarell\'; font-size:11pt; text-decoration: underline; color:#0000ff;\">Humanitarian OpenStreetMap Team</span></a></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://linfiniti.com\"><span style=\" font-family:\'Cantarell\'; font-size:11pt; text-decoration: underline; color:#0000ff;\">Linfiniti Consulting CC.</span></a></p>\n"

@@ -284,7 +284,7 @@ class Test_plugin_core(unittest.TestCase):
         # won't make a difference to the result
         result = evacuated_population_weekly_needs(20)
         assert (result['rice'] == 56 and result['drinking_water'] == 350
-                and result['water'] == 2100 and result['family_kits'] == 4
+                and result['water'] == 1340 and result['family_kits'] == 4
                 and result['toilets'] == 1)
 
     def test_arbitrary_weekly_needs(self):

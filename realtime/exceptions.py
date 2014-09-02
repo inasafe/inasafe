@@ -103,3 +103,8 @@ class MapComposerError(Exception):
 class CopyError(Exception):
     """Raised if a problem occurs copying a file"""
     pass
+
+
+class SFTPEmptyError(Exception):
+    """Raised if the SFTP remote directory does not contain any shakemaps."""
+    pass

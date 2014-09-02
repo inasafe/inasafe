@@ -34,12 +34,15 @@ from realtime.exceptions import (
     EventIdError,
     NetworkError,
     EventValidationError,
-    CopyError)
-from realtime.server_config import (
-    BASE_URL,
-    USERNAME,
-    PASSWORD,
-    BASE_PATH)
+    CopyError,
+    SFTPEmptyError)
+from realtime.sftp_configuration.configuration import (
+    get_sftp_base_url,
+    get_sftp_port,
+    get_sftp_user_name,
+    get_sftp_user_password,
+    get_sftp_base_path)
+
 
 LOGGER = logging.getLogger(realtime_logger_name())
 
@@ -72,10 +75,11 @@ class SftpShakeData:
 
     def __init__(self,
                  event=None,
-                 host=BASE_URL,
-                 user_name=USERNAME,
-                 password=PASSWORD,
-                 working_dir=BASE_PATH,
+                 host=get_sftp_base_url(),
+                 port=get_sftp_port(),
+                 user_name=get_sftp_user_name(),
+                 password=get_sftp_user_password(),
+                 working_dir=get_sftp_base_path(),
                  force_flag=False):
         """Constructor for the SftpShakeData class.
 
@@ -89,9 +93,13 @@ class SftpShakeData:
             server from which the data should be retrieved. It assumes that
             the data is in the root directory (Optional).
         :type host: str
+
+        :param port: The port of the host.
+        :type port: int
         """
         self.event_id = event
         self.host = host
+        self.port = port
         self.username = user_name
         self.password = password
         self.working_dir = working_dir
@@ -99,12 +107,16 @@ class SftpShakeData:
         self.input_file_name = 'grid.xml'
 
         self.sftp_client = SFtpClient(
-            self.host, self.username, self.password, self.working_dir)
+            self.host,
+            self.port,
+            self.username,
+            self.password,
+            self.working_dir)
 
         if self.event_id is None:
             try:
                 self.get_latest_event_id()
-            except NetworkError:
+            except (SFTPEmptyError, NetworkError, EventIdError):
                 raise
         else:
             # If we fetched it above using get_latest_event_id we assume it is
@@ -126,10 +138,12 @@ class SftpShakeData:
             self.host, self.username, self.password, self.working_dir)
 
     def validate_event(self):
-        """Check that the event associated with this instance exists either
-        in the local event cache or on the remote ftp site.
+        """Check that the event associated with this instance exists.
 
-        :return: True if valid, False if not
+         This will check either in the local event cache or on the remote ftp
+         site.
+
+        :return: True if valid, False if not.
         :rtype: bool
 
         :raises: NetworkError
@@ -170,7 +184,7 @@ class SftpShakeData:
     def is_on_server(self):
         """Check the event associated with this instance exists on the server.
 
-        :return: True if valid, False if not
+        :return: True if valid, False if not.
 
         :raises: NetworkError
         """
@@ -179,16 +193,19 @@ class SftpShakeData:
         return self.sftp_client.path_exists(remote_xml_path)
 
     def get_list_event_ids(self):
-        """Get all event id indicated by folder in remote_path
-        """
+        """Get all event id indicated by folder in remote_path."""
         dirs = self.sftp_client.get_listing(function=is_event_id)
         if len(dirs) == 0:
-            raise Exception('List event is empty')
+            raise SFTPEmptyError(
+                'The SFTP directory does not contain any shakemaps.')
         return dirs
 
     def get_latest_event_id(self):
         """Return latest event id."""
-        event_ids = self.get_list_event_ids()
+        try:
+            event_ids = self.get_list_event_ids()
+        except SFTPEmptyError:
+            raise
 
         now = datetime.now()
         now = int(
