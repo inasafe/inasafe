@@ -20,7 +20,7 @@ import os
 import logging
 
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QLineEdit
+from PyQt4.QtGui import QLineEdit, QCheckBox
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
@@ -66,14 +66,25 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'params': {
                         'youth_ratio': 0.263,
                         'elderly_ratio': 0.078,
-                        'adult_ratio': 0.659}}}}
+                        'adult_ratio': 0.659
+                    }
+                }
+            },
+            'minimum needs': {
+                'Rice': 2.8
+            }
+        }
 
         dialog.build_form(parameter)
 
-        assert dialog.tabWidget.count() == 2
+        message = 'There should be %s tabwidget but got %s' % (
+            3, dialog.tabWidget.count())
+        self.assertEqual(dialog.tabWidget.count(), 3, message)
 
         children = dialog.tabWidget.findChildren(QLineEdit)
-        assert len(children) == 4
+        message = 'There should be %s QLineEdit but got %s' % (
+            5, len(children))
+        self.assertEqual(len(children), 5, message)
 
     def test_build_form_minimum_needs(self):
         """Test that we can build a form by passing it a function and params.
@@ -108,14 +119,23 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         widget = dialog.findChild(QLineEdit)
 
         # initial value must be same with default
-        assert value() == [2.3]
+        expected_value = [2.3]
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
 
         # change to 5.9
         widget.setText('5.9')
-        assert value() == [5.9]
+        expected_value = [5.9]
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
 
         widget.setText('5.9, 70')
-        assert value() == [5.9, 70]
+        expected_value = [5.9, 70]
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
 
         widget.setText('bar')
         try:
@@ -125,6 +145,39 @@ class FunctionOptionsDialogTest(unittest.TestCase):
             pass
         else:
             raise Exception("Fail: must be raise an exception")
+
+        dialog = FunctionOptionsDialog(None)
+        value = dialog.build_widget(dialog.configLayout, 'foo', True)
+        widget = dialog.findChild(QCheckBox)
+
+        # initial value must be same with default
+        expected_value = True
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        widget.setChecked(False)
+        expected_value = False
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        original_value = {'a': 1, 'b': 2}
+        dialog = FunctionOptionsDialog(None)
+        value = dialog.build_widget(dialog.configLayout, 'foo', original_value)
+        widget = dialog.findChild(QLineEdit)
+
+        # initial value must be same with default
+        expected_value = original_value
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        expected_value = {'a': 2, 'b': 1}
+        widget.setText(str(expected_value))
+        real_value = value()
+        message = 'Expected %s but got %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
 
     def test_parse_input(self):
         function_input = {
