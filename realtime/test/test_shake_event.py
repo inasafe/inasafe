@@ -341,6 +341,9 @@ class TestShakeEvent(unittest.TestCase):
             'formatted-date-time': '05-Nov-13 06:08:09 ',
             'distance': '0.00',
             'direction-relation': u'of',
+            'software-tag': u'This report was created using InaSAFE version '
+                            u'2.1.0. Visit http://inasafe.org for more '
+                            u'information.',
             'credits': (
                 u'Supported by the Australia-Indonesia Facility for Disaster '
                 u'Reduction, Geoscience Australia and the World Bank-GFDRR.'),
