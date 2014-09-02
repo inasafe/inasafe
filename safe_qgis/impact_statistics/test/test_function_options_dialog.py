@@ -33,7 +33,7 @@ pardir = os.path.abspath(
 sys.path.append(pardir)
 
 from safe_qgis.safe_interface import get_plugins
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)

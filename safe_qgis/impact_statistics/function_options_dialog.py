@@ -32,7 +32,7 @@ from PyQt4.QtGui import (
     QCheckBox,
     QFormLayout,
     QWidget)
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 
 from safe_qgis.ui.function_options_dialog_base import (
     Ui_FunctionOptionsDialogBase)

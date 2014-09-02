@@ -24,7 +24,7 @@ try:
     #pylint: enable=W0611
 except ImportError:
     try:
-        from third_party.odict import OrderedDict
+        from collections import OrderedDict
     except ImportError:
         raise RuntimeError(
             'Could not find an available OrderedDict implementation')

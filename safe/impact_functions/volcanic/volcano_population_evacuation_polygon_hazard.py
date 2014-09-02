@@ -26,7 +26,7 @@ from safe.metadata import (
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition)
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import (
     FunctionProvider,

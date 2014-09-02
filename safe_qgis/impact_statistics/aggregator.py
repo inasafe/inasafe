@@ -44,7 +44,7 @@ from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe_qgis.exceptions import InsufficientParametersError
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 from third_party.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
