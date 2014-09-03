@@ -66,6 +66,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         self._result = None
         self.values = OrderedDict()
 
+    # noinspection PyCallingNonCallable,PyMethodMayBeStatic
     def bind(self, widget, property_name, function):
         """Return the widget.property converting the value using the function.
 
@@ -81,7 +82,15 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         :returns: The property value of widget
         """
 
-        return lambda: function(widget.property(property_name))
+        # NOTES (Ismail Sunni): I don't know why, but unittest and nosetest
+        # gives different output for widget.property(property_name). So,
+        # it's better to check the type of the widget.
+        if type(widget) == QLineEdit:
+            return lambda: function(widget.text())
+        elif type(widget) == QCheckBox or type(widget) == QGroupBox:
+            return lambda: function(widget.isChecked())
+        else:
+            return lambda: function(widget.property(property_name))
 
     def build_form(self, parameters):
         """Build a form from impact functions parameter.
@@ -120,9 +129,9 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         widget.setLayout(layout)
 
         values = OrderedDict()
-        for myLabel, value in parameters.items():
-            values[myLabel] = self.build_widget(
-                layout, myLabel, value)
+        for label, value in parameters.items():
+            values[label] = self.build_widget(
+                layout, label, value)
 
         form_layout.addRow(widget, None)
         self.values['minimum needs'] = values
@@ -225,11 +234,11 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
             value = ', '.join([str(x) for x in key_value])
             # NOTE: we assume that all element in list have same type
             value_type = type(key_value[0])
-            function = lambda x: [value_type(y) for y in str(x).split(',')]
+            function = lambda z: [value_type(y) for y in str(z).split(',')]
         elif isinstance(key_value, dict):
             widget = QLineEdit()
             value = str(key_value)
-            function = lambda x: ast.literal_eval(str(x))
+            function = lambda z: ast.literal_eval(str(z))
         elif isinstance(key_value, bool):
             widget = QCheckBox()
             widget.setChecked(key_value)
@@ -247,8 +256,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         else:
             form_layout.addRow(label, widget)
 
-        # are we dealing with a QLineEdit?
-        if value is not None:
+        if type(widget) is QLineEdit:
             widget.setText(value)
             property_name = 'text'
 
@@ -272,6 +280,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         :type input_dict: dict
 
         :returns: Dictionary that can be consumed for impact functions.
+        :rtype: dict
 
         :raises:
             * ValueError - occurs when some input cannot be converted
@@ -298,8 +307,8 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         try:
             self._result = self.parse_input(self.values)
             self.done(QDialog.Accepted)
-        except (SyntaxError, ValueError) as myEx:
-            text = self.tr("Unexpected error: %s " % myEx)
+        except (SyntaxError, ValueError) as ex:
+            text = self.tr("Unexpected error: %s " % ex)
             self.lblErrorMessage.setText(text)
 
     def result(self):
