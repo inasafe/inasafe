@@ -69,7 +69,8 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_ui_state,
     setup_scenario,
     load_layers,
-    canvas_list)
+    canvas_list,
+    FakeLayer)
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -1346,17 +1347,9 @@ Click for Diagnostic Information:
     def test_generate_insufficient_overlap_message(self):
         """Test we generate insufficent overlap messages nicely."""
 
-        class FakeLayer(object):
-            layer_source = None
+        exposure_layer = FakeLayer('Fake exposure layer')
 
-            def source(self):
-                return self.layer_source
-
-        exposure_layer = FakeLayer()
-        exposure_layer.layer_source = 'Fake exposure layer'
-
-        hazard_layer = FakeLayer()
-        hazard_layer.layer_source = 'Fake hazard layer'
+        hazard_layer = FakeLayer('Fake hazard layer')
 
         message = DOCK.generate_insufficient_overlap_message(
             Exception('Dummy exception'),
