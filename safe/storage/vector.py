@@ -509,24 +509,6 @@ class Vector(Layer):
                         self.geometry_type = ogr.wkbPolygon
                         polygon = get_polygon_data(G)
                         geometry.append(polygon)
-                elif self.geometry_type == ogr.wkbMultiLineString:
-                    try:
-                        G = ogr.ForceToMultiLineString(G)
-                    except:
-                        msg = ('Got geometry type Multiline (%s) for '
-                               'filename %s and could not convert it to '
-                               'singlepart. However, you can use QGIS '
-                               'functionality to convert multipart vector '
-                               'data to singlepart (Vector -> Geometry Tools '
-                               '-> Multipart to Singleparts and use the '
-                               'resulting dataset.'
-                               % (ogr.wkbMultiLineString, filename))
-                        raise ReadLayerError(msg)
-                    else:
-                        # Read polygon data as single part
-                        self.geometry_type = ogr.wkbLineString
-                        ring = get_ring_data(G)
-                        geometry.append(ring)
                 else:
                     msg = ('Only point, line and polygon geometries are '
                            'supported. '
