@@ -162,9 +162,10 @@ class Raster(Layer):
             return False
 
         # Check data
-        if not nan_allclose(self.get_data(),
-                           other.get_data(),
-                           rtol=rtol, atol=atol):
+        if not nan_allclose(
+                self.get_data(),
+                other.get_data(),
+                rtol=rtol, atol=atol):
             return False
 
         # Check keywords
@@ -246,8 +247,27 @@ class Raster(Layer):
             msg = 'Could not read raster band from %s' % filename
             raise ReadLayerError(msg)
 
-        # FIXME (Ole): I think internal data array should be populated at
-        #              this point - then refactor get_data()
+        # Force garbage collection to free up any memory we can (TS)
+        gc.collect()
+
+        # Read from raster file
+        data = band.ReadAsArray()
+
+        # Convert to double precision (issue #75)
+        data = numpy.array(data, dtype=numpy.float64)
+
+        # Self check
+        M, N = data.shape
+        msg = (
+            'Dimensions of raster array do not match those of '
+            'raster file %s' % self.filename)
+        verify(M == self.rows, msg)
+        verify(N == self.columns, msg)
+        self.data = data
+        nodata = self.band.GetNoDataValue()
+        if nodata is None:
+            nodata = -9999
+        self.nodata_value = nodata
 
     def write_to_file(self, filename):
         """Save raster data to file
@@ -392,38 +412,13 @@ class Raster(Layer):
             See issue #123
         """
 
-        if hasattr(self, 'data') and self.data is not None:
-            # Return internal data grid
-            if copy:
-
-                A = copy_module.deepcopy(self.data)
-            else:
-                A = self.data
+        if copy:
+            A = copy_module.deepcopy(self.data)
+        else:
+            A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
 
-        else:
-            # Force garbage collection to free up any memory we can (TS)
-            gc.collect()
-
-            # Read from raster file
-            # FIXME: This can be slow so should be moved to read_from_file
-            A = self.band.ReadAsArray()
-
-            # Convert to double precision (issue #75)
-            A = numpy.array(A, dtype=numpy.float64)
-
-            # Self check
-            M, N = A.shape
-            msg = ('Dimensions of raster array do not match those of '
-                   'raster file %s' % self.filename)
-            verify(M == self.rows, msg)
-            verify(N == self.columns, msg)
-
         # Handle no data value
-        # FIXME (Ole): This only pertains to data read from file
-        # and should be moved to read_from_file.
-        nodata = self.get_nodata_value()
-
         # Must explicit comparison to False and True as nan can be a number
         # so 0 would evaluate to False and e.g. 1 to True.
         if nan is False:
@@ -445,6 +440,7 @@ class Raster(Layer):
             # Replace NODATA_VALUE with NaN array
             #print 'Replacing', nodata, 'with', NAN
             NaN = numpy.ones(A.shape, A.dtype) * NAN
+            nodata = self.get_nodata_value()
             A = numpy.where(A == nodata, NaN, A)
 
         # Take care of possible scaling
@@ -568,16 +564,7 @@ class Raster(Layer):
             If the internal value is None, the standard -9999 is assumed
         """
 
-        if hasattr(self, 'band'):
-            nodata = self.band.GetNoDataValue()
-
-            # FIXME (Ole): Too hacky, but probably the reality
-            if nodata is None:
-                nodata = -9999
-        else:
-            nodata = self.nodata_value
-
-        return nodata
+        return self.nodata_value
 
     def get_bins(self, N=10, quantiles=False):
         """Get N values between the min and the max occurred in this dataset.
