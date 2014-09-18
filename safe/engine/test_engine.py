@@ -649,6 +649,42 @@ class Test_Engine(unittest.TestCase):
 
     test_volcano_population_evacuation_impact.slow = True
 
+    def test_volcano_building_impact(self):
+        """Building impact from volcanic hazard is computed correctly"""
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = os.path.join(TESTDATA, 'donut.shp')
+        exposure_filename = os.path.join(
+            EXPDATA, 'bangunan.shp')
+
+        # Calculate impact using API
+        hazard = read_layer(hazard_filename)
+        exposure = read_layer(exposure_filename)
+
+        plugin_name = 'Volcano Building Impact'
+        impact_function = get_plugin(plugin_name)
+        print 'Calculating'
+        # Call calculation engine
+        impact_layer = calculate_impact(
+            layers=[hazard, exposure], impact_fcn=impact_function)
+        impact_filename = impact_layer.get_filename()
+
+        impact = read_layer(impact_filename)
+
+        keywords = impact.get_keywords()
+
+        # Check for expected results:
+        for value in ['Merapi', 288]:
+            if isinstance(value, int):
+                x = format_int(value)
+            else:
+                x = value
+            summary = keywords['impact_summary']
+            message = (
+                'Did not find expected value %s in summary %s' % (x, summary))
+            self.assertIn(x, summary, message)
+
+
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
     #
