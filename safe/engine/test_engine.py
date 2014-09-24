@@ -2998,7 +2998,7 @@ class Test_Engine(unittest.TestCase):
         assert total_needs['family_kits'] == 12600
         assert total_needs['drinking_water'] == 1102500
         assert total_needs['toilets'] == 3150
-        assert total_needs['water'] == 6615000
+        assert total_needs['water'] == 4221000
 
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)

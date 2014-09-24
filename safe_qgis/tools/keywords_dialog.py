@@ -25,7 +25,7 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 
 from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase

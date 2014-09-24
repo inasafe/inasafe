@@ -1,7 +1,7 @@
 978,000*
 Rice [kg] 2,738,400
 Drinking Water [l] 17,115,000
-Clean Water [l] 102,690,000
+Clean Water [l] 65,526,000
 Family Kits 195,600
 Toilets 48,900
 Total population: 10,473,000
