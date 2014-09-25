@@ -9,7 +9,7 @@ branches:
 
 install:
   - sudo apt-get -qq -y update
-  - sudo apt-get install -y qgis qgis-python pylint pep8 
+  - sudo apt-get install -y qgis python-qgis pylint pep8 
   - pip install -e . --use-mirrors
   - pip install flake8
 
