@@ -3,21 +3,19 @@ language: python
 python:
   - "2.7"
 
-virtualenv:
-  system_site_packages: true
-
 branches:
   only:
     - develop 
 
 install:
   - sudo apt-get -qq -y update
-  - sudo apt-get install -y qgis python-qgis pylint pep8 
+  - sudo apt-get install -y qgis qgis-python pylint pep8 
   - pip install -e . --use-mirrors
   - pip install flake8
 
 before_script:
-  - echo "Build starting on " `date`
+  - paver setup
+  - paver static
 
 script:
   - make quicktest
