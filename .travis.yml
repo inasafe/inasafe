@@ -12,7 +12,7 @@ branches:
 
 install:
   - sudo apt-get -qq -y update
-  - sudo apt-get install -y qgis python-qgis pylint pep8 
+  - sudo apt-get install -y qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-pytz python-beautifulsoup
   - pip install -e . --use-mirrors
   - pip install flake8
 
@@ -21,6 +21,7 @@ before_script:
 
 script:
   - make quicktest
+  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis
   
 notifications:
   irc:
