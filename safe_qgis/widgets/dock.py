@@ -736,7 +736,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             try:
                 # disconnect all connections
-                layer.layerNameChanged.disconnect()
+                layer.layerNameChanged.disconnect(self.update_layer_name)
             except TypeError:
                 # disconnect() trows a TypeError if no connections are active
                 pass
