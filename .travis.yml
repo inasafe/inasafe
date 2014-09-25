@@ -12,7 +12,7 @@ branches:
 
 install:
   - sudo apt-get -qq -y update
-  - sudo apt-get install -y qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+  - sudo apt-get install -y git qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
   - pip install -e . --use-mirrors
   - pip install flake8
 
@@ -20,7 +20,7 @@ before_script:
   - echo "Build starting on " `date`
 
 script:
-  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis
+  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis
   
 notifications:
   irc:
