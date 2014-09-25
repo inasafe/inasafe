@@ -20,7 +20,6 @@ before_script:
   - echo "Build starting on " `date`
 
 script:
-  - make quicktest
   - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis
   
 notifications:
