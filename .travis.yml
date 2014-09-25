@@ -12,7 +12,7 @@ branches:
 
 install:
   - sudo apt-get -qq -y update
-  - sudo apt-get install -y qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-pytz python-beautifulsoup
+  - sudo apt-get install -y qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
   - pip install -e . --use-mirrors
   - pip install flake8
 
