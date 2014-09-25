@@ -690,7 +690,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     # noinspection PyUnusedLocal
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
-        """Obtain a list of layers currently loaded in QGIS.
+        r"""Obtain a list of layers currently loaded in QGIS.
 
         On invocation, this method will populate cboHazard, cboExposure and
         cboAggregation on the dialog with a list of available layers.
