@@ -69,9 +69,11 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_ui_state,
     setup_scenario,
     load_layers,
-    canvas_list)
+    canvas_list,
+    FakeLayer)
 
 from safe_qgis.widgets.dock import Dock
+from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.styling import setRasterStyle
 from safe_qgis.utilities.utilities import qgis_version, read_impact_layer
 
@@ -1345,17 +1347,9 @@ Click for Diagnostic Information:
     def test_generate_insufficient_overlap_message(self):
         """Test we generate insufficent overlap messages nicely."""
 
-        class FakeLayer(object):
-            layer_source = None
+        exposure_layer = FakeLayer('Fake exposure layer')
 
-            def source(self):
-                return self.layer_source
-
-        exposure_layer = FakeLayer()
-        exposure_layer.layer_source = 'Fake exposure layer'
-
-        hazard_layer = FakeLayer()
-        hazard_layer.layer_source = 'Fake hazard layer'
+        hazard_layer = FakeLayer('Fake hazard layer')
 
         message = DOCK.generate_insufficient_overlap_message(
             Exception('Dummy exception'),
@@ -1421,6 +1415,39 @@ Click for Diagnostic Information:
             expected_vertex_count,
             last_band.numberOfVertices()
         )
+
+    def test_issue1191(self):
+        """Test setting a layer's title in the kw directly from qgis api"""
+        DOCK.set_layer_from_title_flag = True
+        set_canvas_crs(GEOCRS, True)
+        set_yogya_extent()
+
+        result, message = setup_scenario(
+            DOCK,
+            hazard='An earthquake in Yogyakarta like in 2006',
+            exposure='OSM Building Polygons',
+            function='Earthquake Guidelines Function',
+            function_id='Earthquake Guidelines Function')
+        self.assertTrue(result, message)
+
+        layer = DOCK.get_hazard_layer()
+        keyword_io = KeywordIO()
+
+        original_title = 'An earthquake in Yogyakarta like in 2006'
+        title = keyword_io.read_keywords(layer, 'title')
+        self.assertEqual(title, original_title)
+
+        # change layer name as if done in the legend
+        expected_title = 'TEST'
+        layer.setLayerName(expected_title)
+        title = keyword_io.read_keywords(layer, 'title')
+        self.assertEqual(title, expected_title)
+
+        # reset KW file to original state
+        layer.setLayerName(original_title)
+        title = keyword_io.read_keywords(layer, 'title')
+        self.assertEqual(title, original_title)
+        DOCK.set_layer_from_title_flag = False
 
 
 if __name__ == '__main__':
