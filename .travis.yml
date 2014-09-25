@@ -14,8 +14,7 @@ install:
   - pip install flake8
 
 before_script:
-  - paver setup
-  - paver static
+  - echo "Build starting on " `date`
 
 script:
   - make quicktest
