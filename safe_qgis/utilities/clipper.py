@@ -479,7 +479,42 @@ def _clip_raster_layer(
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.
-    clip_kml = extent_to_kml(extent)
+
+    #mak sure that we clip at the pixel edges
+    clip_xmin = extent[0]
+    clip_ymin = extent[1]
+    clip_xmax = extent[2]
+    clip_ymax = extent[3]
+
+    width = ((clip_xmax - clip_xmin) / layer.rasterUnitsPerPixelY())
+    width = int(width)
+    height = ((clip_ymax - clip_ymin) / layer.rasterUnitsPerPixelX())
+    height = int(height)
+    raster_extent = layer.dataProvider().extent()
+    xmin = raster_extent.xMinimum()
+    xmax = raster_extent.xMaximum()
+    ymin = raster_extent.yMinimum()
+    ymax = raster_extent.yMaximum()
+
+    x_delta = (xmax - xmin) / layer.width()
+    x = xmin
+    for i in range(layer.width()):
+        if abs(x - clip_xmin) < x_delta:
+            # We have found the aligned raster boundary
+            break
+        x += x_delta
+        _ = i
+
+    y_delta = (ymax - ymin) / layer.height()
+    y = ymin
+    for i in range(layer.width()):
+        if abs(y - clip_ymin) < y_delta:
+            # We have found the aligned raster boundary
+            break
+        y += y_delta
+    clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
+
+    clip_kml = extent_to_kml(clip_extent)
 
     # Create a filename for the clipped, resampled and reprojected layer
     handle, filename = tempfile.mkstemp('.tif', 'clip_', temp_dir())
