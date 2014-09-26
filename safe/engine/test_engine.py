@@ -2992,12 +2992,34 @@ class Test_Engine(unittest.TestCase):
         total_needs = impact_layer.get_total_needs()
 
         expected_evacuated = 63000
-        assert evacuated == expected_evacuated
-        assert total_needs['rice'] == 176400
-        assert total_needs['family_kits'] == 12600
-        assert total_needs['drinking_water'] == 1102500
-        assert total_needs['toilets'] == 3150
-        assert total_needs['water'] == 4221000
+        message = 'Expected %s got %s' % (expected_evacuated, evacuated)
+        self.assertEqual(expected_evacuated, evacuated, message)
+
+        rice = total_needs['rice']
+        expected_rice = 176400
+        message = 'Expected %s got %s' % (expected_rice, rice)
+        self.assertEqual(expected_rice, rice, message)
+
+        family_kits = total_needs['family_kits']
+        expected_family_kits = 12600
+        message = 'Expected %s got %s' % (expected_family_kits, family_kits)
+        self.assertEqual(expected_family_kits, family_kits, message)
+
+        drinking_water = total_needs['drinking_water']
+        expected_drinking_water = 1102500
+        message = 'Expected %s got %s' % (
+            expected_drinking_water, drinking_water)
+        self.assertEqual(expected_drinking_water, drinking_water, message)
+
+        toilets = total_needs['toilets']
+        expected_toilets = 3150
+        message = 'Expected %s got %s' % (expected_toilets, toilets)
+        self.assertEqual(expected_toilets, toilets, message)
+
+        water = total_needs['water']
+        expected_water = 4221000
+        message = 'Expected %s got %s' % (expected_water, water)
+        self.assertEqual(expected_water, water, message)
 
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)
