@@ -410,6 +410,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,
-                      'legend_title': legend_title},
+                      'legend_title': legend_title,
+                      'total_needs': total_needs},
             style_info=style_info)
         return impact_layer

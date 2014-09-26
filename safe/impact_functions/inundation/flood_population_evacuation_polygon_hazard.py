@@ -304,7 +304,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
+        total_needs = evacuated_population_weekly_needs(
+            evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [
@@ -330,12 +331,12 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'Table below shows the weekly minimum needs for all '
                 'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Rice [kg]'), format_int(total_needs['rice'])],
             [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]]
+             format_int(total_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(total_needs['water'])],
+            [tr('Family Kits'), format_int(total_needs['family_kits'])],
+            [tr('Toilets'), format_int(total_needs['toilets'])]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
@@ -408,6 +409,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             'legend_units': legend_units,
             'legend_title': legend_title,
             'affected_population': affected_population,
-            'total_population': total},
+            'total_population': total,
+            'total_needs': total_needs},
             style_info=style_info)
         return vector_layer

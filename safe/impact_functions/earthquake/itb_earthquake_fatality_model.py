@@ -357,7 +357,8 @@ class ITBFatalityFunction(FunctionProvider):
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         # FIXME: Refactor and share
         minimum_needs = self.parameters['minimum needs']
-        needs = evacuated_population_weekly_needs(displaced, minimum_needs)
+        total_needs = evacuated_population_weekly_needs(
+            displaced, minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [
@@ -369,10 +370,10 @@ class ITBFatalityFunction(FunctionProvider):
                 header=True),
             TableRow(tr('Map shows density estimate of displaced population')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(needs['rice'])],
-            [tr('Drinking Water [l]'), format_int(needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(needs['water'])],
-            [tr('Family Kits'), format_int(needs['family_kits'])],
+            [tr('Rice [kg]'), format_int(total_needs['rice'])],
+            [tr('Drinking Water [l]'), format_int(total_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(total_needs['water'])],
+            [tr('Family Kits'), format_int(total_needs['family_kits'])],
             TableRow(tr('Action Checklist:'), header=True)]
 
         if fatalities > 0:
@@ -465,7 +466,8 @@ class ITBFatalityFunction(FunctionProvider):
                              'map_title': map_title,
                              'legend_notes': legend_notes,
                              'legend_units': legend_units,
-                             'legend_title': legend_title},
+                             'legend_title': legend_title,
+                             'total_needs': total_needs},
                    name=tr('Estimated displaced population per cell'),
                    style_info=style_info)
 
