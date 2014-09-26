@@ -699,8 +699,8 @@ def get_qgis_app():
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
 
-        # For testing purposes, we use our own configuration file instead of
-        # using the QGIS apps conf of the host
+        # AG: For testing purposes, we use our own configuration file instead
+        # of using the QGIS apps conf of the host
         QCoreApplication.setOrganizationName('QGIS')
         QCoreApplication.setOrganizationDomain('qgis.org')
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')

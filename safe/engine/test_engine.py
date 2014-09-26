@@ -2962,8 +2962,7 @@ class Test_Engine(unittest.TestCase):
     test_flood_on_roads.slow = True
 
     def test_flood_population_evacuation(self):
-        """Flood population evacuation
-        """
+        """Flood population evacuation"""
         population = 'people_jakarta_clip.tif'
         flood_data = 'flood_jakarta_clip.tif'
         plugin_name = 'FloodEvacuationFunction'
@@ -2998,7 +2997,7 @@ class Test_Engine(unittest.TestCase):
         assert total_needs['family_kits'] == 12600
         assert total_needs['drinking_water'] == 1102500
         assert total_needs['toilets'] == 3150
-        # assert total_needs['water'] == 6615000
+        assert total_needs['water'] == 4221000
 
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)

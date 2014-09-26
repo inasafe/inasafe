@@ -676,6 +676,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboExposure.blockSignals(True)
         self.cboHazard.blockSignals(True)
 
+    @pyqtSlot()
+    def update_layer_name(self):
+        """Writes the sender's new layer name into the layer's keywords"""
+        layer = self.sender()
+        name = layer.name()
+        try:
+            self.keyword_io.update_keywords(layer, {'title': name})
+        except NoKeywordsFoundError:
+            # the layer has no keyword file. we leave it alone.
+            pass
+
     # noinspection PyUnusedLocal
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
@@ -722,6 +733,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboAggregation.clear()
 
         for layer in layers:
+
+            try:
+                # disconnect all connections
+                layer.layerNameChanged.disconnect(self.update_layer_name)
+            except TypeError:
+                # disconnect() trows a TypeError if no connections are active
+                pass
+            finally:
+                layer.layerNameChanged.connect(self.update_layer_name)
+
             if (self.show_only_visible_layers_flag and
                     (layer not in canvas_layers)):
                 continue
