@@ -97,6 +97,14 @@ class Layer:
         else:
             return ''
 
+    def get_total_needs(self):
+        """Return 'total_needs' keyword if present. Otherwise ''.
+        """
+        if 'total_needs' in self.keywords:
+            return self.keywords['total_needs']
+        else:
+            return ''
+
     def get_style_type(self):
         """Return style type of a layer. If not found, return None
         """
