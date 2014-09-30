@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Thu Jun  5 14:15:19 2014
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Tue Sep 30 16:03:09 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_WizardDialogBase(object):
     def setupUi(self, WizardDialogBase):
@@ -561,42 +570,42 @@ class Ui_WizardDialogBase(object):
         WizardDialogBase.setTabOrder(self.leSource_date, self.leTitle)
 
     def retranslateUi(self, WizardDialogBase):
-        WizardDialogBase.setWindowTitle(QtGui.QApplication.translate("WizardDialogBase", "InaSAFE Keywords Creation Wizard...", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblMainTitle.setText(QtGui.QApplication.translate("WizardDialogBase", "InaSAFE Wizard...", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblStep.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSelectCategory.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>[placeholder]</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblDescribeCategory.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblIconCategory.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSelectSubcategory.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblDescribeSubcategory.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblIconSubcategory.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSelectUnit.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblDescribeUnit.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSelectField.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblDescribeField.setText(QtGui.QApplication.translate("WizardDialogBase", "[placeholder]", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblClassify.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>[placeholder]</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeClasses.headerItem().setText(0, QtGui.QApplication.translate("WizardDialogBase", "Classes", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("WizardDialogBase", "Classified unique values", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("WizardDialogBase", "Unclassified unique values", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAggregation.setText(QtGui.QApplication.translate("WizardDialogBase", "Please input these ratio attribute below for aggregation.", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblYouthRatioAttribute.setText(QtGui.QApplication.translate("WizardDialogBase", "Youth ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAdultRatioAttribute.setText(QtGui.QApplication.translate("WizardDialogBase", "Adult ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblFemaleRatioDefault.setText(QtGui.QApplication.translate("WizardDialogBase", "Female ratio default", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAdultRatioDefault.setText(QtGui.QApplication.translate("WizardDialogBase", "Adult ratio default", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblElderlyRatioAttribute.setText(QtGui.QApplication.translate("WizardDialogBase", "Elderly ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblFemaleRatioAttribute.setText(QtGui.QApplication.translate("WizardDialogBase", "Female ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblElderlyRatioDefault.setText(QtGui.QApplication.translate("WizardDialogBase", "Elderly ratio default", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblYouthRatioDefault.setText(QtGui.QApplication.translate("WizardDialogBase", "Youth ratio default", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSelectSource.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>Where does the data come from? You may want to write more or less short comment about its source.</p><p>This step is optional.</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblScale.setText(QtGui.QApplication.translate("WizardDialogBase", "Scale", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblDate.setText(QtGui.QApplication.translate("WizardDialogBase", "Date", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSource.setText(QtGui.QApplication.translate("WizardDialogBase", "Source", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblURL.setText(QtGui.QApplication.translate("WizardDialogBase", "URL", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSelectTitle.setText(QtGui.QApplication.translate("WizardDialogBase", "<html><head/><body><p>What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be \'A flood in Jakarta\' (for a hazard layer) or \'People living in jakarta\' (for an exposure layer).</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblTitle.setText(QtGui.QApplication.translate("WizardDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnHelp.setText(QtGui.QApplication.translate("WizardDialogBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnCancel.setText(QtGui.QApplication.translate("WizardDialogBase", "Cancel", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnBack.setText(QtGui.QApplication.translate("WizardDialogBase", "Back", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnNext.setText(QtGui.QApplication.translate("WizardDialogBase", "Next", None, QtGui.QApplication.UnicodeUTF8))
+        WizardDialogBase.setWindowTitle(_translate("WizardDialogBase", "InaSAFE Keywords Creation Wizard...", None))
+        self.lblMainTitle.setText(_translate("WizardDialogBase", "InaSAFE Wizard...", None))
+        self.lblStep.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblSelectCategory.setText(_translate("WizardDialogBase", "<html><head/><body><p>[placeholder]</p></body></html>", None))
+        self.lblDescribeCategory.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblIconCategory.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblSelectSubcategory.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblDescribeSubcategory.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblIconSubcategory.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblSelectUnit.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblDescribeUnit.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblSelectField.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblDescribeField.setText(_translate("WizardDialogBase", "[placeholder]", None))
+        self.lblClassify.setText(_translate("WizardDialogBase", "<html><head/><body><p>[placeholder]</p></body></html>", None))
+        self.treeClasses.headerItem().setText(0, _translate("WizardDialogBase", "Classes", None))
+        self.label_8.setText(_translate("WizardDialogBase", "Classified unique values", None))
+        self.label_7.setText(_translate("WizardDialogBase", "Unclassified unique values", None))
+        self.lblAggregation.setText(_translate("WizardDialogBase", "Please input these ratio attribute below for aggregation.", None))
+        self.lblYouthRatioAttribute.setText(_translate("WizardDialogBase", "Youth ratio attribute", None))
+        self.lblAdultRatioAttribute.setText(_translate("WizardDialogBase", "Adult ratio attribute", None))
+        self.lblFemaleRatioDefault.setText(_translate("WizardDialogBase", "Female ratio default", None))
+        self.lblAdultRatioDefault.setText(_translate("WizardDialogBase", "Adult ratio default", None))
+        self.lblElderlyRatioAttribute.setText(_translate("WizardDialogBase", "Elderly ratio attribute", None))
+        self.lblFemaleRatioAttribute.setText(_translate("WizardDialogBase", "Female ratio attribute", None))
+        self.lblElderlyRatioDefault.setText(_translate("WizardDialogBase", "Elderly ratio default", None))
+        self.lblYouthRatioDefault.setText(_translate("WizardDialogBase", "Youth ratio default", None))
+        self.lblSelectSource.setText(_translate("WizardDialogBase", "<html><head/><body><p>Where does the data come from? You may want to write more or less short comment about its source.</p><p>This step is optional.</p></body></html>", None))
+        self.lblScale.setText(_translate("WizardDialogBase", "Scale", None))
+        self.lblDate.setText(_translate("WizardDialogBase", "Date", None))
+        self.lblSource.setText(_translate("WizardDialogBase", "Source", None))
+        self.lblURL.setText(_translate("WizardDialogBase", "URL", None))
+        self.lblSelectTitle.setText(_translate("WizardDialogBase", "<html><head/><body><p>What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be \'A flood in Jakarta\' (for a hazard layer) or \'People living in jakarta\' (for an exposure layer).</p></body></html>", None))
+        self.lblTitle.setText(_translate("WizardDialogBase", "Title", None))
+        self.pbnHelp.setText(_translate("WizardDialogBase", "Help", None))
+        self.pbnCancel.setText(_translate("WizardDialogBase", "Cancel", None))
+        self.pbnBack.setText(_translate("WizardDialogBase", "Back", None))
+        self.pbnNext.setText(_translate("WizardDialogBase", "Next", None))
 
 import resources_rc

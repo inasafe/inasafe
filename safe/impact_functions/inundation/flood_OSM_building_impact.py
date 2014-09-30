@@ -165,9 +165,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
         """Flood impact to buildings (e.g. from Open Street Map).
 
          :param layers: List of layers expected to contain.
-                * my_hazard: Hazard layer of flood
-                * my_exposure: Vector layer of structure data on
-                the same grid as my_hazard
+                * hazard: Hazard layer of flood
+                * exposure: Vector layer of structure data on
+                the same grid as hazard
         """
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]
 
@@ -175,16 +175,13 @@ class FloodBuildingImpactFunction(FunctionProvider):
                'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)  # Depth
-        my_exposure = get_exposure_layer(layers)  # Building locations
+        hazard = get_hazard_layer(layers)  # Depth
+        exposure = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(
-            my_hazard.get_name(),
-            my_exposure.get_name(),
-            self)
+        question = get_question(hazard.get_name(),exposure .get_name(), self)
 
         # Determine attribute name for hazard levels
-        if my_hazard.is_raster:
+        if hazard.is_raster:
             mode = 'grid'
             hazard_attribute = 'depth'
         else:
@@ -192,13 +189,13 @@ class FloodBuildingImpactFunction(FunctionProvider):
             hazard_attribute = None
 
         # Interpolate hazard level to building locations
-        I = assign_hazard_values_to_exposure_data(
-            my_hazard, my_exposure, attribute_name=hazard_attribute)
+        interporlated_result = assign_hazard_values_to_exposure_data(
+            hazard, exposure, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
-        attribute_names = I.get_attribute_names()
-        attributes = I.get_data()
-        N = len(I)
+        attribute_names = interporlated_result.get_attribute_names()
+        attributes = interporlated_result.get_data()
+        N = len(interporlated_result)
         # Calculate building impact
         count = 0
         buildings = {}
@@ -405,8 +402,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Create vector layer and return
         vector_layer = Vector(
             data=attributes,
-            projection=I.get_projection(),
-            geometry=I.get_geometry(),
+            projection=interporlated_result.get_projection(),
+            geometry=interporlated_result.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,
