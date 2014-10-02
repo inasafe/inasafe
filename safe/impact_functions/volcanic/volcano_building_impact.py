@@ -38,7 +38,7 @@ from safe.common.utilities import (
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.common.exceptions import InaSAFEError
 
 
 class VolcanoBuildingImpact(FunctionProvider):
@@ -224,8 +224,9 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=target_field)
+            hazard_layer, exposure_layer, attribute_name=None)
 
+        # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
         attributes = interpolated_layer.get_data()
         interpolate_size = len(interpolated_layer)
@@ -240,6 +241,8 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         for i in range(interpolate_size):
             hazard_value = attributes[i][hazard_zone_attribute]
+
+            attributes[i][target_field] = hazard_value
 
             if hazard_value in building_per_category.keys():
                 building_per_category[hazard_value]['total'] += 1
