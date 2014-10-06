@@ -77,7 +77,7 @@ def default_minimum_needs():
     minimum_needs = OrderedDict([
         (rice, 2.8),
         (drinking_water, 17.5),
-        (water, 105),
+        (water, 67),
         (family_kits, 0.2),
         (toilets, 0.05)])
     return minimum_needs

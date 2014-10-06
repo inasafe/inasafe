@@ -38,7 +38,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry)
 
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
