@@ -131,13 +131,17 @@ class VolcanoBuildingImpact(FunctionProvider):
     parameters = OrderedDict([
         # The list of radii in km for volcano point hazard
         ('distances [km]', [3, 5, 10]),
+
         # Default string value for not affected
         ('Not affected value', 'Not affected'),
+
         # This field of impact layer that will be filled with hazard level
         # zone is chosen because usually they are divided into some zones
         ('target field', 'zone'),
+
         # The attribute for name of the volcano in hazard layer
         ('name attribute', 'NAME'),
+
         # The attribute of hazard zone in hazard layer
         ('hazard zone attribute', 'KRB')])
 
@@ -194,9 +198,12 @@ class VolcanoBuildingImpact(FunctionProvider):
             category_names = radii_meter
         else:
             # FIXME (Ole): Change to English and use translation system
+            # FIXME (Ismail) : Or simply use the values from the hazard layer
             category_names = ['Kawasan Rawan Bencana III',
                               'Kawasan Rawan Bencana II',
                               'Kawasan Rawan Bencana I']
+
+        category_names.append(not_affected_value)
 
         # Get names of volcanoes considered
         if name_attribute in hazard_layer.get_attribute_names():
@@ -231,63 +238,61 @@ class VolcanoBuildingImpact(FunctionProvider):
         attributes = interpolated_layer.get_data()
         interpolate_size = len(interpolated_layer)
 
-        building_types_found = []
         building_per_category = {}
+        building_usages = []
         for category_name in category_names:
             building_per_category[category_name] = {}
             building_per_category[category_name]['total'] = 0
-        building_per_category[not_affected_value] = {}
-        building_per_category[not_affected_value]['total'] = 0
+
+        print attribute_names, 'alpha'
 
         for i in range(interpolate_size):
             hazard_value = attributes[i][hazard_zone_attribute]
-
+            if not hazard_value:
+                hazard_value = not_affected_value
             attributes[i][target_field] = hazard_value
 
             if hazard_value in building_per_category.keys():
                 building_per_category[hazard_value]['total'] += 1
-            elif hazard_value is None:
+            elif not hazard_value:
                 building_per_category[not_affected_value]['total'] += 1
-                hazard_value = not_affected_value
             else:
                 building_per_category[hazard_value] = {}
                 building_per_category[hazard_value]['total'] = 1
 
+
             # Count affected buildings by usage type if available
-            if 'type' in attribute_names:
-                usage = attributes[i]['type']
-            elif 'TYPE' in attribute_names:
-                usage = attributes[i]['TYPE']
-            else:
-                usage = None
-            if 'amenity' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['amenity']
-            if 'building_t' in attribute_names and (usage is None
-                                                    or usage == 0):
-                usage = attributes[i]['building_t']
-            if 'office' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['office']
-            if 'tourism' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['tourism']
-            if 'leisure' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['leisure']
+            usage = None
+            building_type_attributes = [
+                'type',
+                'TYPE',
+                'amenity',
+                'building_t',
+                'office',
+                'tourism',
+                'leisure',
+                'use',
+            ]
+
+            for building_type_attribute in building_type_attributes:
+                if building_type_attribute in attribute_names and (
+                                usage is None or usage == 0):
+                    usage = attributes[i][building_type_attribute]
+
             if 'building' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['building']
                 if usage == 'yes':
                     usage = 'building'
 
-            if usage is not None and usage != 0:
-                key = usage
-            else:
-                key = 'unknown'
+            if usage is None or usage == 0:
+                usage = tr('unknown')
 
-            if key not in building_types_found:
-                building_types_found.append(key)
-                for i in building_per_category.keys():
-                    building_per_category[i][key] = 0
-                building_per_category[hazard_value][key] = 1
-            else:
-                building_per_category[hazard_value][key] += 1
+            if usage not in building_usages:
+                building_usages.append(usage)
+                for building in building_per_category.values():
+                    building[usage] = 0
+
+            building_per_category[hazard_value][usage] += 1
 
         # Generate simple impact report
         blank_cell = ''
@@ -323,31 +328,34 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+        colours = colours[::-1]  # flip
+
+        colours = colours[:len(category_names)]
+
+        style_classes = []
+
+        i = 0
+        for category_name in category_names:
+            style_class = dict()
+            style_class['label'] = tr(category_name)
+            style_class['transparency'] = 0
+            style_class['value'] = category_name
+            style_class['size'] = 1
+
+            if i >= len(category_names):
+                i = len(category_names) - 1
+            style_class['colour'] = colours[i]
+            i += 1
+
+            style_classes.append(style_class)
 
         building_counts = [building_per_category[category_name]['total'] for
                            category_name in category_names]
-        # Create Classes
-        classes = create_classes(building_counts, len(colours))
-        # Create Interval Classes
-        interval_classes = humanize_class(classes)
-
-        style_classes = []
-        for i in xrange(len(colours)):
-            style_class = dict()
-            style_class['label'] = create_label(interval_classes[i])
-            if i == 0:
-                style_class['min'] = 0
-            else:
-                style_class['min'] = classes[i - 1]
-            style_class['transparency'] = 30
-            style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
-            style_classes.append(style_class)
 
         # Override style info with new classes and name
         style_info = dict(target_field=target_field,
                           style_classes=style_classes,
-                          style_type='graduatedSymbol')
+                          style_type='categorizedSymbol')
 
         # For printing map purpose
         map_title = tr('Buildings affected by volcanic hazard zone')
