@@ -684,7 +684,6 @@ class Test_Engine(unittest.TestCase):
                 'Did not find expected value %s in summary %s' % (x, summary))
             self.assertIn(x, summary, message)
 
-
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
     #

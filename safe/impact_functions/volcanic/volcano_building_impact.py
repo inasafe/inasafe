@@ -30,9 +30,6 @@ from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    humanize_class,
-    create_classes,
-    create_label,
     get_thousand_separator,
     get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
@@ -260,7 +257,6 @@ class VolcanoBuildingImpact(FunctionProvider):
                 building_per_category[hazard_value] = {}
                 building_per_category[hazard_value]['total'] = 1
 
-
             # Count affected buildings by usage type if available
             usage = None
             building_type_attributes = [
@@ -299,24 +295,41 @@ class VolcanoBuildingImpact(FunctionProvider):
         table_body = [question,
                       TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
-                               header=True),
-                      TableRow([tr('Distance [km]'), tr('Total'),
-                                tr('Cumulative')],
-                               header=True),
-                      TableRow(tr('Map shows buildings affected in '
-                                  'each of volcano hazard polygons.'))]
+                               header=True)]
 
-        cumulative = 0
-        for category_name in category_names:
-            count = building_per_category[category_name]['total']
-            cumulative += count
-            table_body.append(TableRow([
-                category_name, format_int(count), format_int(cumulative)]))
+        table_headers = [tr('Building type')]
+        table_headers += [tr(x) for x in category_names]
+        table_headers += [tr('Total')]
+
+        table_body += [TableRow(table_headers, header=True)]
+
+        for building_usage in building_usages:
+            building_usage_good = building_usage.replace('_', ' ')
+            building_usage_good = building_usage_good.capitalize()
+            row = [tr(building_usage_good)]
+            building_sum = 0
+            for category_name in category_names:
+                building_sub_sum = building_per_category[category_name][
+                    building_usage]
+                row.append(format_int(building_sub_sum))
+                building_sum += building_sub_sum
+            row.append(format_int(building_sum))
+            table_body.append(row)
+
+        all_row = [tr('Total')]
+        all_row += [format_int(building_per_category[category_name]['total'])
+                    for category_name in category_names]
+        total = sum([building_per_category[category_name]['total'] for
+                     category_name in category_names])
+        all_row += [format_int(total)]
+
+        table_body.append(TableRow(all_row, header=True))
+
+        table_body += [TableRow(tr('Map shows buildings affected in each of '
+                                   'volcano hazard polygons.'))]
 
         impact_table = Table(table_body).toNewlineFreeString()
         impact_summary = impact_table
-
-        total = cumulative
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
@@ -348,9 +361,6 @@ class VolcanoBuildingImpact(FunctionProvider):
             i += 1
 
             style_classes.append(style_class)
-
-        building_counts = [building_per_category[category_name]['total'] for
-                           category_name in category_names]
 
         # Override style info with new classes and name
         style_info = dict(target_field=target_field,
