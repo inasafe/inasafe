@@ -6,8 +6,11 @@ from collections import OrderedDict
 import json
 
 
-# noinspection PyDocstring
 class MinimumNeeds(object):
+    """A abstract class for handling the minimum needs.
+
+    The persistence logic is excluded from this class.
+    """
 
     def get_categories(self):
         """All categories that describe a minimum need.
