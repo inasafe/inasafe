@@ -11,7 +11,7 @@ import logging
 from math import ceil
 
 import numpy
-from safe.common.utilities import OrderedDict
+from collections import OrderedDict
 
 import keyword as python_keywords
 from safe.common.polygon import inside_polygon

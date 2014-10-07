@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Tue Apr 22 09:57:39 2014
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Tue Sep 30 16:37:58 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,12 +12,21 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_OptionsDialogBase(object):
     def setupUi(self, OptionsDialogBase):
         OptionsDialogBase.setObjectName(_fromUtf8("OptionsDialogBase"))
-        OptionsDialogBase.resize(547, 569)
+        OptionsDialogBase.resize(569, 569)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         OptionsDialogBase.setWindowIcon(icon)
@@ -36,7 +45,7 @@ class Ui_OptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 525, 487))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 531, 492))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -211,6 +220,36 @@ class Ui_OptionsDialogBase(object):
         self.txtDisclaimer.setObjectName(_fromUtf8("txtDisclaimer"))
         self.verticalLayout_2.addWidget(self.txtDisclaimer)
         self.tabWidget.addTab(self.tab_templates, _fromUtf8(""))
+        self.tab = QtGui.QWidget()
+        self.tab.setObjectName(_fromUtf8("tab"))
+        self.gridLayout_7 = QtGui.QGridLayout(self.tab)
+        self.gridLayout_7.setObjectName(_fromUtf8("gridLayout_7"))
+        self.gridLayout_5 = QtGui.QGridLayout()
+        self.gridLayout_5.setObjectName(_fromUtf8("gridLayout_5"))
+        self.gridLayout_2 = QtGui.QGridLayout()
+        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+        self.import_button = QtGui.QPushButton(self.tab)
+        self.import_button.setObjectName(_fromUtf8("import_button"))
+        self.gridLayout_2.addWidget(self.import_button, 0, 0, 1, 1)
+        self.export_button = QtGui.QPushButton(self.tab)
+        self.export_button.setObjectName(_fromUtf8("export_button"))
+        self.gridLayout_2.addWidget(self.export_button, 0, 1, 1, 1)
+        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.gridLayout_2.addItem(spacerItem2, 0, 2, 1, 1)
+        self.remove_button = QtGui.QToolButton(self.tab)
+        self.remove_button.setObjectName(_fromUtf8("remove_button"))
+        self.gridLayout_2.addWidget(self.remove_button, 0, 3, 1, 1)
+        self.add_button = QtGui.QToolButton(self.tab)
+        self.add_button.setObjectName(_fromUtf8("add_button"))
+        self.gridLayout_2.addWidget(self.add_button, 0, 4, 1, 1)
+        self.gridLayout_5.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+        self.minimum_needs_table = QtGui.QTableWidget(self.tab)
+        self.minimum_needs_table.setObjectName(_fromUtf8("minimum_needs_table"))
+        self.minimum_needs_table.setColumnCount(0)
+        self.minimum_needs_table.setRowCount(0)
+        self.gridLayout_5.addWidget(self.minimum_needs_table, 1, 0, 1, 1)
+        self.gridLayout_7.addLayout(self.gridLayout_5, 0, 0, 1, 1)
+        self.tabWidget.addTab(self.tab, _fromUtf8(""))
         self.tab_advanced = QtGui.QWidget()
         self.tab_advanced.setObjectName(_fromUtf8("tab_advanced"))
         self.gridLayout_6 = QtGui.QGridLayout(self.tab_advanced)
@@ -247,8 +286,8 @@ class Ui_OptionsDialogBase(object):
         self.cbxNativeZonalStats = QtGui.QCheckBox(self.tab_advanced)
         self.cbxNativeZonalStats.setObjectName(_fromUtf8("cbxNativeZonalStats"))
         self.gridLayout_6.addWidget(self.cbxNativeZonalStats, 5, 0, 1, 1)
-        spacerItem2 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_6.addItem(spacerItem2, 6, 0, 1, 1)
+        spacerItem3 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.gridLayout_6.addItem(spacerItem3, 6, 0, 1, 1)
         self.tabWidget.addTab(self.tab_advanced, _fromUtf8(""))
         self.verticalLayout.addWidget(self.tabWidget)
         self.buttonBox = QtGui.QDialogButtonBox(OptionsDialogBase)
@@ -266,7 +305,6 @@ class Ui_OptionsDialogBase(object):
         QtCore.QObject.connect(self.custom_north_arrow_checkbox, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.splitter_north_arrow.setEnabled)
         QtCore.QObject.connect(self.custom_templates_dir_checkbox, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.splitter_custom_report.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(OptionsDialogBase)
-        OptionsDialogBase.setTabOrder(self.tabWidget, self.lineEdit_4)
         OptionsDialogBase.setTabOrder(self.lineEdit_4, self.cbxVisibleLayersOnly)
         OptionsDialogBase.setTabOrder(self.cbxVisibleLayersOnly, self.cbxSetLayerNameFromTitle)
         OptionsDialogBase.setTabOrder(self.cbxSetLayerNameFromTitle, self.cbxZoomToImpact)
@@ -284,8 +322,7 @@ class Ui_OptionsDialogBase(object):
         OptionsDialogBase.setTabOrder(self.cbxUseSentry, self.textBrowser)
         OptionsDialogBase.setTabOrder(self.textBrowser, self.cbxDevMode)
         OptionsDialogBase.setTabOrder(self.cbxDevMode, self.cbxNativeZonalStats)
-        OptionsDialogBase.setTabOrder(self.cbxNativeZonalStats, self.buttonBox)
-        OptionsDialogBase.setTabOrder(self.buttonBox, self.cbxUseThread)
+        OptionsDialogBase.setTabOrder(self.cbxNativeZonalStats, self.cbxUseThread)
         OptionsDialogBase.setTabOrder(self.cbxUseThread, self.toolButton)
         OptionsDialogBase.setTabOrder(self.toolButton, self.toolButton_4)
         OptionsDialogBase.setTabOrder(self.toolButton_4, self.scrollArea)
@@ -293,46 +330,51 @@ class Ui_OptionsDialogBase(object):
         OptionsDialogBase.setTabOrder(self.spinBox, self.lineEdit)
 
     def retranslateUi(self, OptionsDialogBase):
-        OptionsDialogBase.setWindowTitle(QtGui.QApplication.translate("OptionsDialogBase", "InaSAFE - Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxVisibleLayersOnly.setText(QtGui.QApplication.translate("OptionsDialogBase", "Only show visible layers in InaSAFE dock", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxSetLayerNameFromTitle.setText(QtGui.QApplication.translate("OptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxZoomToImpact.setText(QtGui.QApplication.translate("OptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxHideExposure.setText(QtGui.QApplication.translate("OptionsDialogBase", "Hide exposure layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxClipToViewport.setToolTip(QtGui.QApplication.translate("OptionsDialogBase", "Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxClipToViewport.setText(QtGui.QApplication.translate("OptionsDialogBase", "Clip datasets to visible extent before analysis", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxClipHard.setText(QtGui.QApplication.translate("OptionsDialogBase", "When clipping, also clip features (i.e. will clip polygon smaller)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxShowPostprocessingLayers.setToolTip(QtGui.QApplication.translate("OptionsDialogBase", "Turn on to see the intermediate files generated by the postprocessing steps in the map canvas", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxShowPostprocessingLayers.setText(QtGui.QApplication.translate("OptionsDialogBase", "Show intermediate layers generated by postprocessing", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("OptionsDialogBase", "Female ratio default value", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpNotImplemented.setTitle(QtGui.QApplication.translate("OptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "Organisation name (for maps, reports etc.)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxBubbleLayersUp.setText(QtGui.QApplication.translate("OptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("OptionsDialogBase", "DPI (Maps and reports)", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("OptionsDialogBase", "Location for results", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxUseThread.setText(QtGui.QApplication.translate("OptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_basic), QtGui.QApplication.translate("OptionsDialogBase", "Basic Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.template_warning_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Prompt me in cases when a template has missing elements", None, QtGui.QApplication.UnicodeUTF8))
-        self.custom_org_logo_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom organisation logo", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolOrganisationLogoPath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.organisation_on_dock_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Show organisation logo on main panel too", None, QtGui.QApplication.UnicodeUTF8))
-        self.custom_north_arrow_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom north arrow image", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolNorthArrowPath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.custom_templates_dir_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Additional report templates directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolReportTemplatePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.custom_org_disclaimer_checkbox.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use custom organisation disclaimer text", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_templates), QtGui.QApplication.translate("OptionsDialogBase", "Template Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblKeywordCache.setText(QtGui.QApplication.translate("OptionsDialogBase", "Keyword cache for remote datasources", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolKeywordCachePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxUseSentry.setText(QtGui.QApplication.translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None, QtGui.QApplication.UnicodeUTF8))
-        self.textBrowser.setHtml(QtGui.QApplication.translate("OptionsDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        OptionsDialogBase.setWindowTitle(_translate("OptionsDialogBase", "InaSAFE - Options", None))
+        self.cbxVisibleLayersOnly.setText(_translate("OptionsDialogBase", "Only show visible layers in InaSAFE dock", None))
+        self.cbxSetLayerNameFromTitle.setText(_translate("OptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None))
+        self.cbxZoomToImpact.setText(_translate("OptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None))
+        self.cbxHideExposure.setText(_translate("OptionsDialogBase", "Hide exposure layer on scenario estimate completion", None))
+        self.cbxClipToViewport.setToolTip(_translate("OptionsDialogBase", "Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas", None))
+        self.cbxClipToViewport.setText(_translate("OptionsDialogBase", "Clip datasets to visible extent before analysis", None))
+        self.cbxClipHard.setText(_translate("OptionsDialogBase", "When clipping, also clip features (i.e. will clip polygon smaller)", None))
+        self.cbxShowPostprocessingLayers.setToolTip(_translate("OptionsDialogBase", "Turn on to see the intermediate files generated by the postprocessing steps in the map canvas", None))
+        self.cbxShowPostprocessingLayers.setText(_translate("OptionsDialogBase", "Show intermediate layers generated by postprocessing", None))
+        self.label_6.setText(_translate("OptionsDialogBase", "Female ratio default value", None))
+        self.grpNotImplemented.setTitle(_translate("OptionsDialogBase", "Not yet implemented", None))
+        self.toolButton_4.setText(_translate("OptionsDialogBase", "...", None))
+        self.label_4.setText(_translate("OptionsDialogBase", "Organisation name (for maps, reports etc.)", None))
+        self.cbxBubbleLayersUp.setText(_translate("OptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None))
+        self.label_5.setText(_translate("OptionsDialogBase", "DPI (Maps and reports)", None))
+        self.toolButton.setText(_translate("OptionsDialogBase", "...", None))
+        self.label.setText(_translate("OptionsDialogBase", "Location for results", None))
+        self.cbxUseThread.setText(_translate("OptionsDialogBase", "Run analysis in a separate thread (experimental)", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_basic), _translate("OptionsDialogBase", "Basic Options", None))
+        self.template_warning_checkbox.setText(_translate("OptionsDialogBase", "Prompt me in cases when a template has missing elements", None))
+        self.custom_org_logo_checkbox.setText(_translate("OptionsDialogBase", "Use custom organisation logo", None))
+        self.toolOrganisationLogoPath.setText(_translate("OptionsDialogBase", "...", None))
+        self.organisation_on_dock_checkbox.setText(_translate("OptionsDialogBase", "Show organisation logo on main panel too", None))
+        self.custom_north_arrow_checkbox.setText(_translate("OptionsDialogBase", "Use custom north arrow image", None))
+        self.toolNorthArrowPath.setText(_translate("OptionsDialogBase", "...", None))
+        self.custom_templates_dir_checkbox.setText(_translate("OptionsDialogBase", "Additional report templates directory", None))
+        self.toolReportTemplatePath.setText(_translate("OptionsDialogBase", "...", None))
+        self.custom_org_disclaimer_checkbox.setText(_translate("OptionsDialogBase", "Use custom organisation disclaimer text", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_templates), _translate("OptionsDialogBase", "Template Options", None))
+        self.import_button.setText(_translate("OptionsDialogBase", "Import...", None))
+        self.export_button.setText(_translate("OptionsDialogBase", "Export...", None))
+        self.remove_button.setText(_translate("OptionsDialogBase", "-", None))
+        self.add_button.setText(_translate("OptionsDialogBase", "+", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("OptionsDialogBase", "Mimium Needs", None))
+        self.lblKeywordCache.setText(_translate("OptionsDialogBase", "Keyword cache for remote datasources", None))
+        self.toolKeywordCachePath.setText(_translate("OptionsDialogBase", "...", None))
+        self.cbxUseSentry.setText(_translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None))
+        self.textBrowser.setHtml(_translate("OptionsDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:12pt; font-weight:600; color:#f50000;\">Note:</span><span style=\" font-family:\'Cantarell\'; font-size:12pt;\"> The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxDevMode.setText(QtGui.QApplication.translate("OptionsDialogBase", "Enable developer mode for dock webkit (needs restart)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxNativeZonalStats.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use QGIS zonal statistics (leave unchecked to use InaSAFE\'s zonal statistics)", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_advanced), QtGui.QApplication.translate("OptionsDialogBase", "Advanced", None, QtGui.QApplication.UnicodeUTF8))
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-size:12pt; font-weight:600; color:#f50000;\">Note:</span><span style=\" font-family:\'Cantarell\'; font-size:12pt;\"> The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.</span></p></body></html>", None))
+        self.cbxDevMode.setText(_translate("OptionsDialogBase", "Enable developer mode for dock webkit (needs restart)", None))
+        self.cbxNativeZonalStats.setText(_translate("OptionsDialogBase", "Use QGIS zonal statistics (leave unchecked to use InaSAFE\'s zonal statistics)", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_advanced), _translate("OptionsDialogBase", "Advanced", None))
 
 import resources_rc

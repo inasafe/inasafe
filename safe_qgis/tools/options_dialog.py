@@ -23,6 +23,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QTableWidgetItem
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.defaults import (
@@ -32,6 +34,7 @@ from safe_qgis.utilities.defaults import (
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import DEFAULTS
+from safe_qgis.tools.minimum_needs import QMinimumNeeds
 
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
@@ -78,6 +81,17 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
+        self.minimum_needs = QMinimumNeeds()
+        self.minimum_needs_table.setRowCount(
+            len(self.minimum_needs.get_full_needs()))
+        full_minimum_needs = self.minimum_needs.get_full_needs()
+        self.minimum_needs_table.setColumnCount(len(full_minimum_needs))
+        headings = self.minimum_needs.get_categories()
+        self.minimum_needs_table.setHorizontalHeaderLabels(headings)
+        for i, row in enumerate(full_minimum_needs):
+            for j, col in enumerate(headings):
+                item = QTableWidgetItem(u'%s' % row[col])
+                self.minimum_needs_table.setItem(i, j, item)
 
     def restore_state(self):
         """Reinstate the options based on the user's stored session info.
@@ -244,6 +258,25 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         settings.setValue(
             'inasafe/use_native_zonal_stats',
             self.cbxNativeZonalStats.isChecked())
+        from pydev import pydevd
+        pydevd.settrace(
+           'localhost', port=5678, stdoutToServer=True,
+           stderrToServer=True)
+
+        rows = self.minimum_needs_table.rowCount()
+        columns = self.minimum_needs_table.columnCount()
+        new_minimum_need = []
+        for row in range(rows):
+            minimum_need = {}
+            for col in range(columns):
+                item = self.minimum_needs_table.item(row, col)
+                label_item = self.minimum_needs_table.horizontalHeaderItem(col)
+                key = label_item.text()
+                value = item.text()
+                minimum_need[key] = value
+            new_minimum_need.append(minimum_need)
+        self.minimum_needs.update_minimum_needs(new_minimum_need)
+        self.minimum_needs.save()
 
     @staticmethod
     def show_help():
