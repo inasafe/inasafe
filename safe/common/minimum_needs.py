@@ -1,7 +1,12 @@
 # coding=utf-8
 """This module contains the abstract class of the MinimumNeeds. The storage
 logic is omitted here."""
-__author__ = 'christian'
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
+__date__ = '05/10/2014'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 from collections import OrderedDict
 import json
 
@@ -11,15 +16,96 @@ class MinimumNeeds(object):
 
     The persistence logic is excluded from this class.
     """
+    @staticmethod
+    def _full_category_descriptions():
+        """The minimum needs category descriptions.
 
-    def get_categories(self):
+        This contains all the metadata for the categories.
+
+        :return: The full category description for each of the items.
+        :rtype: list  # of dicts
+        """
+        return [
+            {
+                'key': u'resource',
+                'name': 'Resource Name',
+                'type': 'string',
+                'defaults': [],
+                'editable': True
+            },
+            {
+                'key': u'amount',
+                'name': 'Amount per Person',
+                'type': 'string',
+                'defaults': [],
+                'editable': True
+            },
+            {
+                'key': u'unit',
+                'name': 'Unit',
+                'type': 'list',
+                'defaults': ['l', 'kg', 'unit'],
+                'editable': True
+            },
+            {
+                'key': u'frequency',
+                'name': 'Frequency',
+                'type': 'list',
+                'defaults': ['weekly', 'daily', 'single'],
+                'editable': True
+            },
+            {
+                'key': u'provenance',
+                'name': 'Provenance',
+                'type': 'string',
+                'defaults': [],
+                'editable': True
+            },
+        ]
+
+    @property
+    def categories(self):
         """All categories that describe a minimum need.
 
         :return: List of all the categories by which a minimum need is
         described.
         :rtype: list
         """
-        return [u'resource', u'amount', u'unit', u'frequency', u'provenance']
+        return [item['key'] for item in self._full_category_descriptions()]
+
+    @property
+    def headings(self):
+        """The humanly readable names for the headings.
+
+        :return: The category names i.e. headings.
+        :rtype: list
+        """
+        return [item['name'] for item in self._full_category_descriptions()]
+
+    @property
+    def category_types(self):
+        """The category types for each of the minimum need items.
+
+        :return: A list of all the types with some.
+        :rtype: list
+        """
+        return [item['type'] for item in self._full_category_descriptions()]
+
+    def category(self, key):
+        """The full category metadata for a given key.
+
+        :param key: The key that the category is labeled.
+        :type key: basestring
+
+        :raises: IndexError  # list index out of range
+
+        :return: The detailed metadata of a category
+        :rtype: dict, None
+        """
+        for item in self._full_category_descriptions():
+            if item['key'] == key:
+                return item
+        return None
 
     def get_need(self, resource):
         """Get a resource from the minimum_needs.
@@ -101,7 +187,7 @@ class MinimumNeeds(object):
             return -1
         for need in minimum_needs:
             for key in need:
-                if key not in self.get_categories():
+                if key not in self.categories:
                     # Unknown category
                     return -1
 
