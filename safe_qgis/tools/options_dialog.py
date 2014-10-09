@@ -24,7 +24,7 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QTableWidgetItem, QFileDialog
+from PyQt4.QtGui import QTableWidgetItem, QFileDialog, QComboBox
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.defaults import (
@@ -86,16 +86,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.remove_button.clicked.connect(self.remove_minimum_needs_row)
         self.add_button.clicked.connect(self.add_minimum_needs_row)
         self.minimum_needs = QMinimumNeeds()
-        self.minimum_needs_table.setRowCount(
-            len(self.minimum_needs.get_full_needs()))
-        full_minimum_needs = self.minimum_needs.get_full_needs()
-        self.minimum_needs_table.setColumnCount(len(full_minimum_needs))
-        headings = self.minimum_needs.get_categories()
-        self.minimum_needs_table.setHorizontalHeaderLabels(headings)
-        for i, row in enumerate(full_minimum_needs):
-            for j, col in enumerate(headings):
-                item = QTableWidgetItem(u'%s' % row[col])
-                self.minimum_needs_table.setItem(i, j, item)
+        self.populate_minimum_needs_table()
 
     def restore_state(self):
         """Reinstate the options based on the user's stored session info.
@@ -387,8 +378,39 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         self.txtDisclaimer.setPlainText(org_disclaimer)
 
+    def populate_minimum_needs_table(self):
+        """Populate the minimum needs table with needs and headings.
+        """
+        full_minimum_needs = self.minimum_needs.get_full_needs()
+        self.minimum_needs_table.setRowCount(
+            len(full_minimum_needs))
+        keys = self.minimum_needs.categories
+        headings = self.minimum_needs.headings
+        self.minimum_needs_table.setColumnCount(len(headings))
+        self.minimum_needs_table.setHorizontalHeaderLabels(
+            [self.tr(heading) for heading in headings])
+        for j, key in enumerate(keys):
+            needs_metadata = self.minimum_needs.category(key)
+            for i, row in enumerate(full_minimum_needs):
+                try:
+                    value = u'%s' % row[key]
+                except KeyError:
+                    value = ''
+                if needs_metadata['type'] == 'string':
+                    item = QTableWidgetItem(value)
+                    self.minimum_needs_table.setItem(i, j, item)
+                elif needs_metadata['type'] == 'list':
+                    combo_box = QComboBox()
+                    defaults = needs_metadata['defaults']
+                    if value not in defaults:
+                        defaults.append(value)
+                    combo_box.addItems(defaults)
+                    combo_box.setEditable(needs_metadata['editable'])
+                    combo_box.setCurrentIndex(defaults.index(value))
+                    self.minimum_needs_table.setCellWidget(i, j, combo_box)
+
     def add_minimum_needs_row(self):
-        """ Add a new row to the minimum needs widget.
+        """Add a new row to the minimum needs widget.
         A new row is inserted after the currently selected row.
         """
         row_id = self.minimum_needs_table.currentRow()
@@ -418,14 +440,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         if self.minimum_needs.read_from_file(file_name) == -1:
             return -1
 
-        full_minimum_needs = self.minimum_needs.get_full_needs()
-        self.minimum_needs_table.setColumnCount(len(full_minimum_needs))
-        headings = self.minimum_needs.get_categories()
-        self.minimum_needs_table.setHorizontalHeaderLabels(headings)
-        for i, row in enumerate(full_minimum_needs):
-            for j, col in enumerate(headings):
-                item = QTableWidgetItem(u'%s' % row[col])
-                self.minimum_needs_table.setItem(i, j, item)
+        self.populate_minimum_needs_table()
         return 0
 
     def export_minimum_needs(self):
@@ -451,18 +466,23 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         the appropriate QMinimumNeeds class' method.
         """
         rows = self.minimum_needs_table.rowCount()
-        headings = self.minimum_needs.get_categories()
-        columns = len(headings)
+        keys = self.minimum_needs.categories
+        columns = len(keys)
         new_minimum_need = []
         for row in range(rows):
             minimum_need = {}
             for column in range(columns):
+                key = keys[column]
                 item = self.minimum_needs_table.item(row, column)
-                key = headings[column]
-                if item:
-                    value = item.text()
+                if not item:
+                    item = self.minimum_needs_table.cellWidget(row, column)
+                    if not item:
+                        value = ''
+                    else:
+                        value = item.currentText()
                 else:
-                    value = ''
+                    value = item.text()
+                print value
                 minimum_need[key] = value
             new_minimum_need.append(minimum_need)
         self.minimum_needs.update_minimum_needs(new_minimum_need)

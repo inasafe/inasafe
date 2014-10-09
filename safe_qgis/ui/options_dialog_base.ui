@@ -426,7 +426,7 @@
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Mimium Needs</string>
+       <string>Minimum Needs</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="0" column="0">
@@ -436,14 +436,14 @@
            <item row="0" column="0">
             <widget class="QPushButton" name="import_button">
              <property name="text">
-              <string>Import...</string>
+              <string>Import ...</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
             <widget class="QPushButton" name="export_button">
              <property name="text">
-              <string>Export...</string>
+              <string>Export ...</string>
              </property>
             </widget>
            </item>

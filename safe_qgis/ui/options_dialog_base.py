@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Tue Sep 30 16:37:58 2014
+# Created: Thu Oct  9 14:09:35 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -360,11 +360,11 @@ class Ui_OptionsDialogBase(object):
         self.toolReportTemplatePath.setText(_translate("OptionsDialogBase", "...", None))
         self.custom_org_disclaimer_checkbox.setText(_translate("OptionsDialogBase", "Use custom organisation disclaimer text", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_templates), _translate("OptionsDialogBase", "Template Options", None))
-        self.import_button.setText(_translate("OptionsDialogBase", "Import...", None))
-        self.export_button.setText(_translate("OptionsDialogBase", "Export...", None))
+        self.import_button.setText(_translate("OptionsDialogBase", "Import ...", None))
+        self.export_button.setText(_translate("OptionsDialogBase", "Export ...", None))
         self.remove_button.setText(_translate("OptionsDialogBase", "-", None))
         self.add_button.setText(_translate("OptionsDialogBase", "+", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("OptionsDialogBase", "Mimium Needs", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("OptionsDialogBase", "Minimum Needs", None))
         self.lblKeywordCache.setText(_translate("OptionsDialogBase", "Keyword cache for remote datasources", None))
         self.toolKeywordCachePath.setText(_translate("OptionsDialogBase", "...", None))
         self.cbxUseSentry.setText(_translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None))

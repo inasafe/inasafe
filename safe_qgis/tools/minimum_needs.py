@@ -1,7 +1,11 @@
 # coding=utf-8
 """This is the concrete Minimum Needs class that contains the logic to load
 the minimum needs to and from the QSettings"""
-__author__ = 'christian'
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
+__date__ = '05/10/2014'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 from PyQt4.QtCore import QSettings
 from safe.common.minimum_needs import MinimumNeeds
@@ -14,8 +18,10 @@ class QMinimumNeeds(MinimumNeeds):
     minimum needs.
     """
 
-    def __init__(self):
+    def __init__(self, testing=False):
         self.settings = QSettings()
+        if testing:
+            self.settings = QSettings('Test Settings')
         self.load()
 
     def load(self):
