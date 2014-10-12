@@ -248,7 +248,7 @@ class ITBFatalityFunction(FunctionProvider):
 
                 hazard: Raster layer of MMI ground shaking
 
-                exposure: Raster layer of population density
+                exposure: Raster layer of population count
         """
 
         displacement_rate = self.parameters['displacement_rate']
@@ -449,7 +449,7 @@ class ITBFatalityFunction(FunctionProvider):
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Population Count')
 
         # Create raster object and return
         L = Raster(R,

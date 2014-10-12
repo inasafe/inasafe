@@ -241,7 +241,7 @@ class FloodEvacuationFunction(FunctionProvider):
                           '*' if evacuated >= 1000 else ''))],
                      header=True),
             TableRow(tr('* Number is rounded to the nearest 1000')),
-            TableRow(tr('Map shows population density needing evacuation')),
+            TableRow(tr('Map shows the numbers of people needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
@@ -335,7 +335,7 @@ class FloodEvacuationFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Population Count')
 
         # Create raster object and return
         raster = Raster(

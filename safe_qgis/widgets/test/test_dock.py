@@ -574,7 +574,7 @@ class TestDock(TestCase):
 
     def test_run_volcano_population_impact(self):
         """Volcano function runs in GUI with a donut (merapi hazard map)
-         hazard data uses population density grid."""
+         hazard data uses population count grid."""
 
         result, message = setup_scenario(
             DOCK,
@@ -614,7 +614,7 @@ class TestDock(TestCase):
     def test_run_volcano_circle_population(self):
         """Volcano function runs in GUI with a circular evacuation zone.
 
-        Uses population density grid as exposure."""
+        Uses population count grid as exposure."""
 
         # NOTE: We assume radii in impact function to be 3, 5 and 10 km
 
@@ -874,7 +874,7 @@ class TestDock(TestCase):
         file_list = ['issue71.tif']  # This layer has incorrect keywords
         clear_flag = False
         _, _ = load_layers(file_list, clear_flag)
-        # set exposure to : Population Density Estimate (5kmx5km)
+        # set exposure to : Population Count (5kmx5km)
         # by moving one down
         DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         actual_dict = get_ui_state(DOCK)
@@ -883,7 +883,7 @@ class TestDock(TestCase):
             'Impact Function Id': '',
             'Impact Function Title': '',
             'Hazard': 'A flood in Jakarta like in 2007',
-            'Exposure': 'Population density (5kmx5km)'}
+            'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
             '\nUI State: \n%s\nExpected State:\n%s\n%s') %

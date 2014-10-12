@@ -1567,14 +1567,14 @@ class ShakeEvent(QObject):
         fatalities_range = '%i - %i' % (lower_limit, upper_limit)
 
         city_table_name = self.tr('Places Affected')
-        legend_name = self.tr('Population density')
+        legend_name = self.tr('Population Count')
         limitations = self.tr(
             'This impact estimation is automatically generated and only takes'
             ' into account the population and cities affected by different '
             'levels of ground shaking. The estimate is based on ground '
-            'shaking data from BMKG, population density data from asiapop'
-            '.org, place information from geonames.org and software developed'
-            ' by BNPB. Limitations in the estimates of ground shaking, '
+            'shaking data from BMKG, population count data from asiapop.org, '
+            'place information from geonames.org and software developed '
+            'by BNPB. Limitations in the estimates of ground shaking, '
             'population  data and place names datasets may result in '
             'significant misrepresentation of the on-the-ground situation in '
             'the figures shown here. Consequently decisions should not be '
