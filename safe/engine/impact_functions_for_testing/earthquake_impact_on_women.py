@@ -65,7 +65,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
         H = intensity.get_data()   # Ground Shaking
         P = population.get_data()  # Population Density
 
-        # Calculate population affected by each MMI level
+        # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = range(2, 10)
         number_of_exposed = {}
@@ -79,7 +79,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
             # Identify cells where MMI is in class i
             mask = (H > mmi - 0.5) * (H <= mmi + 0.5)
 
-            # Count population affected by this shake level
+            # Count people affected by this shake level
             I = numpy.where(mask, P, 0)
 
             # Calculate expected number of fatalities per level

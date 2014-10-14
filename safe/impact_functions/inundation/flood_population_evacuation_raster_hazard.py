@@ -138,8 +138,8 @@ class FloodEvacuationFunction(FunctionProvider):
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Raster layer contains population affected and the minimum needs '
-        'based on the population affected.')
+        'Raster layer contains people affected and the minimum needs '
+        'based on the people affected.')
     limitation = tr(
         'The default threshold of 1 meter was selected based on consensus, '
         'not hard evidence.')
