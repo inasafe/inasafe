@@ -9,6 +9,7 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 from collections import OrderedDict
 import json
+from safe.common.utilities import ugettext as tr
 
 
 class MinimumNeeds(object):
@@ -27,35 +28,35 @@ class MinimumNeeds(object):
         """
         return [
             {
-                'key': u'resource',
+                'id': u'resource',
                 'name': 'Resource Name',
                 'type': 'string',
                 'defaults': [],
                 'editable': True
             },
             {
-                'key': u'amount',
+                'id': u'amount',
                 'name': 'Amount per Person',
                 'type': 'string',
                 'defaults': [],
                 'editable': True
             },
             {
-                'key': u'unit',
+                'id': u'unit',
                 'name': 'Unit',
                 'type': 'list',
                 'defaults': ['l', 'kg', 'unit'],
                 'editable': True
             },
             {
-                'key': u'frequency',
+                'id': u'frequency',
                 'name': 'Frequency',
                 'type': 'list',
                 'defaults': ['weekly', 'daily', 'single'],
                 'editable': True
             },
             {
-                'key': u'provenance',
+                'id': u'provenance',
                 'name': 'Provenance',
                 'type': 'string',
                 'defaults': [],
@@ -71,7 +72,7 @@ class MinimumNeeds(object):
         described.
         :rtype: list
         """
-        return [item['key'] for item in self._full_category_descriptions()]
+        return [item['id'] for item in self._full_category_descriptions()]
 
     @property
     def headings(self):
@@ -103,7 +104,7 @@ class MinimumNeeds(object):
         :rtype: dict, None
         """
         for item in self._full_category_descriptions():
-            if item['key'] == key:
+            if item['id'] == key:
                 return item
         return None
 
@@ -129,8 +130,13 @@ class MinimumNeeds(object):
         :return: minimum needs
         :rtype: OrderedDict
         """
-        minimum_needs = [
-            [r['resource'], r['amount']] for r in self.minimum_needs]
+        minimum_needs = OrderedDict()
+        for resource in self.minimum_needs:
+            name = '%s [%s]' % (
+                tr(resource['resource']),
+                resource['unit'])
+            amount = resource['amount']
+            minimum_needs[name] = amount
         return OrderedDict(minimum_needs)
 
     def get_full_needs(self):
