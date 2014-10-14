@@ -20,6 +20,7 @@ from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string, remove_double_spaces
 from safe.metadata import converter_dict
 
+from safe_qgis.tools.minimum_needs import QMinimumNeeds
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -69,18 +70,8 @@ def default_minimum_needs():
 
     .. note:: Key names will be translated.
     """
-    rice = 'Rice'
-    drinking_water = 'Drinking Water'
-    water = 'Water'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
-    minimum_needs = OrderedDict([
-        (rice, 2.8),
-        (drinking_water, 17.5),
-        (water, 67),
-        (family_kits, 0.2),
-        (toilets, 0.05)])
-    return minimum_needs
+    minimum_needs = QMinimumNeeds()
+    return minimum_needs.get_minimum_needs()
 
 
 def evacuated_population_weekly_needs(
@@ -100,52 +91,20 @@ def evacuated_population_weekly_needs(
         Defaults to perka 7 as described in assumptions below.
     :type minimum_needs: dict
 
-    :returns: The weekly needs for the evacuated population.
+    :returns: The needs for the evacuated population.
     :rtype: dict
 
-    Assumptions:
-    * 400g rice per person per day
-    * 2.5L drinking water per person per day
-    * 15L clean water per person per day
-    * assume 5 people per family (not in perka - 0.2 people per family)
-    * 20 people per toilet (0.05 per person)
     """
-    rice = 'Rice'
-    drinking_water = 'Drinking Water'
-    water = 'Water'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
-    min_rice = minimum_needs[rice]
-    min_drinking_water = minimum_needs[drinking_water]
-    min_water = minimum_needs[water]
-    min_family_kits = minimum_needs[family_kits]
-    min_toilets = minimum_needs[toilets]
+    population_needs = OrderedDict()
+    for resource, amount in minimum_needs.items():
+        if human_names:
+            resource = tr(resource)
+        population_needs[resource] = ceil(population * float(amount))
 
-    val_rice = int(ceil(population * min_rice))
-    val_drinking_water = int(ceil(population * min_drinking_water))
-    val_water = int(ceil(population * min_water))
-    val_family_kits = int(ceil(population * min_family_kits))
-    val_toilets = int(ceil(population * min_toilets))
-
-    if human_names:
-        weekly_needs = {
-            rice: val_rice,
-            drinking_water: val_drinking_water,
-            water: val_water,
-            family_kits: val_family_kits,
-            toilets: val_toilets}
-    else:
-        weekly_needs = {
-            'rice': val_rice,
-            'drinking_water': val_drinking_water,
-            'water': val_water,
-            'family_kits': val_family_kits,
-            'toilets': val_toilets}
-
-    return weekly_needs
+    return population_needs
 
 
 def get_function_title(func):
