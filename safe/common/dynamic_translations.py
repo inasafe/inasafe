@@ -105,7 +105,7 @@ def dynamic_translations():
     tr('OSM buildings')
     tr('AIBEP schools')
     # Perkiraan penduduk
-    tr('Population density (5kmx5km)')
+    tr('Population Count (5kmx5km)')
     tr('Office buildings Jakarta')
     # Puskesmas dan rumah sakit
     tr('Hospitals and clinics Jakarta')
