@@ -16,7 +16,6 @@ from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.metadata import (
     hazard_flood,
-    hazard_tsunami,
     unit_feet_depth,
     unit_metres_depth,
     layer_raster_numeric,
@@ -47,7 +46,7 @@ class FloodEvacuationFunction(FunctionProvider):
     :author AIFDR
     :rating 4
     :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
+                    subcategory=='flood' and \
                     layertype=='raster' and \
                     unit=='m'
 
@@ -83,15 +82,12 @@ class FloodEvacuationFunction(FunctionProvider):
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of (flood or tsunami)inundation '
-                    'in raster format on population.'),
+                    'To assess the impacts of flood inundation in raster '
+                    'format on population.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
-                            hazard_flood,
-                            hazard_tsunami
-                        ],
+                        'subcategory': [hazard_flood],
                         'units': [
                             unit_feet_depth,
                             unit_metres_depth
@@ -113,7 +109,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
     # Function documentation
     synopsis = tr(
-        'To assess the impacts of (flood or tsunami) inundation in raster '
+        'To assess the impacts of flood inundation in raster '
         'format on population.')
     actions = tr(
         'Provide details about how many people would likely need to be '
