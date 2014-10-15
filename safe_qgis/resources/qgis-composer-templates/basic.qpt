@@ -1,71 +1,125 @@
-<Composer title="Composer 1" visible="1">
- <ComposerLabel valign="128" labelText="PENDUDUK YANG MUNGKIN DIEVAKUASI" id="" halign="4" margin="1">
-  <LabelFont description="Verdana,20,-1,5,75,0,0,0,0,0"/>
-  <FontColor red="0" blue="0" green="0"/>
-  <ComposerItem width="187.9221129080429" x="6.717526731596706" y="224.1731301205772" rotation="0" height="12.41470771726065" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="2.979865771812081" positionLock="false">
-   <FrameColor alpha="255" red="0" blue="0" green="0"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerLabel>
- <ComposerLabel valign="32" labelText="S.A.F.E - Scenario Assement For Emergencies" id="" halign="2" margin="1">
-  <LabelFont description="Verdana,14,-1,5,75,0,0,0,0,0"/>
-  <FontColor red="0" blue="0" green="0"/>
-  <ComposerItem width="131.4120267260579" x="67.08990950861775" y="15.26575071730974" rotation="0" height="9.29175946547884" frame="false" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.979865771812081" positionLock="false">
-   <FrameColor alpha="255" red="0" blue="0" green="0"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerLabel>
- <ComposerLabel valign="32" labelText="Apabila terjadi &quot;Banjir Jakarta Mungkin&quot; perkiraan dampak terhadap &quot;Penduduk Jakarta&quot; kemungkinan yang terjadi:&#xa;Terdampak (x 1000):&#xa;991&#xa;&#xa;CATATAN:&#xa;Jumlah penduduk Jakarta 247064&#xa;Jumlah dalam ribuan&#xa;Penduduk dianggap terdampak ketika banjir lebih dari 0.1 m." id="" halign="1" margin="1">
-  <LabelFont description="Verdana,10,-1,5,50,0,0,0,0,0"/>
-  <FontColor red="0" blue="0" green="0"/>
-  <ComposerItem width="63.76126126126127" x="38.25675675675675" y="237.259009009009" rotation="0" height="54.36486486486486" frame="false" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.979865771812081" positionLock="false">
-   <FrameColor alpha="255" red="0" blue="0" green="0"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerLabel>
- <ComposerMap keepLayerSet="false" id="0" previewMode="Cache" drawCanvasItems="true">
-  <Extent ymin="-6.354052907703482" xmin="106.692895" ymax="-6.079333907703478" xmax="106.967614"/>
-  <LayerSet/>
-  <Grid gridStyle="1" crossLength="3" penColorRed="170" penColorBlue="170" intervalX="0.025" offsetX="0" intervalY="0.025" offsetY="0" show="1" penWidth="0" penColorGreen="170">
-   <Annotation direction="3" precision="2" position="1" frameDistance="1" show="1" font="Verdana,8,-1,5,50,0,0,0,0,0"/>
-  </Grid>
-  <ComposerItem width="183.611" x="12.18899548964345" y="35.69739407886743" rotation="0" height="183.611" frame="true" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="0.697986577181208" positionLock="false">
-   <FrameColor alpha="255" red="204" blue="204" green="204"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerMap>
- <ComposerScaleBar segmentMillimeters="0" numMapUnitsPerScaleBarUnit="1" numSegments="2" height="5" labelBarSpace="3" outlineWidth="1" numSegmentsLeft="0" style="Numeric" unitLabel="" font="Verdana,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="0">
-  <BrushColor red="0" blue="0" green="0"/>
-  <ComposerItem width="24" x="9.973273942093499" y="212.0601336302896" rotation="0" height="6.3" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="3.013422818791947" positionLock="false">
-   <FrameColor alpha="255" red="0" blue="0" green="0"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerScaleBar>
- <ComposerPicture pictureWidth="15.38089514632327" file="../inasafe/gui/resources/img/bnpb_logo.png" pictureHeight="16.69103140861515" mapId="-1">
-  <ComposerItem width="15.38089514632327" x="9.507746279066481" y="12.17979264483697" rotation="0" height="16.69103140861515" frame="false" outlineWidth="0.3" zValue="2" lastValidViewScaleFactor="3.013422818791947" positionLock="false">
-   <FrameColor alpha="255" red="0" blue="0" green="0"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerPicture>
- <ComposerPicture pictureWidth="48.78173719376392" file="/tmp/legend.png" pictureHeight="58.07349665924269" mapId="-1">
-  <ComposerItem width="48.78173719376392" x="9.623608017817372" y="237.9220489977728" rotation="0" height="58.07349665924269" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="2.979865771812081" positionLock="false">
-   <FrameColor alpha="255" red="0" blue="0" green="0"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerPicture>
- <ComposerAttributeTable contentFont="Verdana,10,-1,5,50,0,0,0,0,0" gridStrokeWidth="0.5" gridColorGreen="0" composerMap="0" showGrid="0" headerFont="Verdana,10,-1,5,50,0,0,0,0,0" gridColorBlue="0" lineTextDist="1" gridColorRed="0" showOnlyVisibleFeatures="1" vectorLayer="TM_WORLD_BORDERS_0_320120224074605860">
-  <displayAttributes>
-   <attributeEntry index="2"/>
-   <attributeEntry index="4"/>
-   <attributeEntry index="6"/>
-   <attributeEntry index="8"/>
-  </displayAttributes>
-  <attributeAliasMap/>
-  <sortColumns/>
-  <ComposerItem width="75.5" x="119.804054054054" y="238.6013513513513" rotation="0" height="12.7" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="0.697986577181208" positionLock="false">
-   <FrameColor alpha="255" red="0" blue="0" green="0"/>
-   <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-  </ComposerItem>
- </ComposerAttributeTable>
- <Composition printResolution="150" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" paperHeight="297" printAsRaster="0"/>
+<Composer title="basic" visible="1">
+ <Composition snapGridTolerance="2" gridVisible="0" printResolution="150" paperWidth="210" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="0" snapGridOffsetY="0" alignmentSnap="1" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="2" smartGuides="1" printAsRaster="1" generateWorldFile="0">
+  <symbol alpha="1" type="fill" name="">
+   <layer pass="0" class="SimpleFill" locked="0">
+    <prop k="border_width_map_unit_scale" v="0,0"/>
+    <prop k="border_width_unit" v="MM"/>
+    <prop k="color" v="255,255,255,255"/>
+    <prop k="color_border" v="0,0,0,255"/>
+    <prop k="joinstyle" v="miter"/>
+    <prop k="offset" v="0,0"/>
+    <prop k="offset_map_unit_scale" v="0,0"/>
+    <prop k="offset_unit" v="MM"/>
+    <prop k="style" v="solid"/>
+    <prop k="style_border" v="no"/>
+    <prop k="width_border" v="0.26"/>
+   </layer>
+  </symbol>
+  <ComposerAttributeTable featureFilter="" contentFont="Verdana,10,-1,5,50,0,0,0,0,0" gridStrokeWidth="0.5" gridColorAlpha="255" gridColorGreen="0" maxFeatures="5" composerMap="0" showGrid="0" filterFeatures="false" headerFont="Verdana,10,-1,5,50,0,0,0,0,0" gridColorBlue="0" lineTextDist="1" headerHAlignment="0" gridColorRed="0" showOnlyVisibleFeatures="1" vectorLayer="DKI_buildings20120604130010038">
+   <displayColumns>
+    <column attribute="type" sortByRank="0" hAlignment="1" heading="type" sortOrder="0">
+     <backgroundColor alpha="0" red="0" blue="0" green="0"/>
+    </column>
+   </displayColumns>
+   <ComposerItem pagey="238.601" page="1" id="" lastValidViewScaleFactor="0.697987" positionMode="0" positionLock="false" x="119.804" y="238.601" zValue="8" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="10.8156" outlineWidth="0.3" uuid="{dd581f2b-8fbb-4fc8-991c-d9e9e75f6b8d}" height="6.3" itemRotation="0" frame="false" pagex="119.804">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerAttributeTable>
+  <ComposerLabel valign="32" labelText="Apabila terjadi &quot;Banjir Jakarta Mungkin&quot; perkiraan dampak terhadap &quot;Penduduk Jakarta&quot; kemungkinan yang terjadi:&#xa;Terdampak (x 1000):&#xa;991&#xa;&#xa;CATATAN:&#xa;Jumlah penduduk Jakarta 247064&#xa;Jumlah dalam ribuan&#xa;Penduduk dianggap terdampak ketika banjir lebih dari 0.1 m." htmlState="0" halign="1" margin="1">
+   <LabelFont description="Verdana,10,-1,5,50,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="237.259" page="1" id="" lastValidViewScaleFactor="2.97987" positionMode="0" positionLock="false" x="38.2568" y="237.259" zValue="7" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="63.7613" outlineWidth="0.3" uuid="{c778bb82-ad2d-4383-a7d7-46bbd5394118}" height="54.3649" itemRotation="0" frame="false" pagex="38.2568">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerPicture useExpression="false" resizeMode="0" pictureRotation="0" pictureWidth="48.7817" sourceExpression="" file="/tmp/legend.png" pictureHeight="49.081" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="237.922" page="1" id="" lastValidViewScaleFactor="2.97987" positionMode="0" positionLock="false" x="9.62361" y="237.922" zValue="6" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="48.7817" outlineWidth="0.3" uuid="{c60d10da-a0ae-4506-ac7a-9a73ddc16fc5}" height="58.0735" itemRotation="0" frame="false" pagex="9.62361">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerPicture>
+  <ComposerLabel valign="32" labelText="S.A.F.E - Scenario Assement For Emergencies" htmlState="0" halign="2" margin="1">
+   <LabelFont description="Verdana,14,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="15.2658" page="1" id="" lastValidViewScaleFactor="2.97987" positionMode="0" positionLock="false" x="67.0899" y="15.2658" zValue="5" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="131.412" outlineWidth="0.3" uuid="{6f8a28fe-df82-47b7-9eea-380c62548f65}" height="9.29176" itemRotation="0" frame="false" pagex="67.0899">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerScaleBar penColor="#000000" lineCapStyle="square" style="Numeric" numMapUnitsPerScaleBarUnit="1" alignment="0" brushColor="#000000" numSegments="2" segmentMillimeters="0" lineJoinStyle="miter" fontColor="#000000" font="Verdana,12,-1,5,50,0,0,0,0,0" numUnitsPerSegment="0" units="0" labelBarSpace="3" outlineWidth="1" numSegmentsLeft="0" height="5" mapId="0" boxContentSpace="1" unitLabel="">
+   <ComposerItem pagey="212.06" page="1" id="" lastValidViewScaleFactor="3.01342" positionMode="0" positionLock="false" x="9.97327" y="212.06" zValue="4" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24" outlineWidth="0.3" uuid="{3e73e794-3aa8-49ad-88d6-660464b75d51}" height="6.3" itemRotation="0" frame="false" pagex="9.97327">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerScaleBar>
+  <ComposerLabel valign="128" labelText="PENDUDUK YANG MUNGKIN DIEVAKUASI" htmlState="0" halign="4" margin="1">
+   <LabelFont description="Verdana,20,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="224.173" page="1" id="" lastValidViewScaleFactor="2.97987" positionMode="0" positionLock="false" x="6.71753" y="224.173" zValue="3" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="187.922" outlineWidth="0.3" uuid="{bb5852b7-a56e-447c-bccd-c11112353a66}" height="12.4147" itemRotation="0" frame="false" pagex="6.71753">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerPicture useExpression="false" resizeMode="0" pictureRotation="0" pictureWidth="15.3809" sourceExpression="" file="/home/akbar/dev/python/inasafe_data/inasafe/gui/resources/img/bnpb_logo.png" pictureHeight="15.4753" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="12.1798" page="1" id="" lastValidViewScaleFactor="3.01342" positionMode="0" positionLock="false" x="9.50775" y="12.1798" zValue="2" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="15.3809" outlineWidth="0.3" uuid="{945f3a58-c490-4885-a211-eab8e6889a16}" height="16.691" itemRotation="0" frame="false" pagex="9.50775">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerPicture>
+  <ComposerMap mapRotation="0" keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Cache" drawCanvasItems="true">
+   <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
+    <symbol alpha="0.3" type="fill" name="">
+     <layer pass="0" class="SimpleFill" locked="0">
+      <prop k="border_width_map_unit_scale" v="0,0"/>
+      <prop k="border_width_unit" v="MM"/>
+      <prop k="color" v="255,0,0,255"/>
+      <prop k="color_border" v="0,0,0,255"/>
+      <prop k="joinstyle" v="bevel"/>
+      <prop k="offset" v="0,0"/>
+      <prop k="offset_map_unit_scale" v="0,0"/>
+      <prop k="offset_unit" v="MM"/>
+      <prop k="style" v="solid"/>
+      <prop k="style_border" v="no"/>
+      <prop k="width_border" v="0.26"/>
+     </layer>
+    </symbol>
+   </overviewFrame>
+   <Extent ymin="-6.35405290770348241" xmin="106.69289499999999293" ymax="-6.07933390770347781" xmax="106.96761399999999753"/>
+   <LayerSet/>
+   <Grid gridStyle="1" crossLength="3" gridFramePenThickness="0.5" intervalX="0.025" offsetX="0" intervalY="0.025" offsetY="0" gridFrameStyle="0" gridFrameWidth="2" gridBlendMode="0" show="1">
+    <framePenColor alpha="255" red="0" blue="0" green="0"/>
+    <frameFillColor1 alpha="255" red="255" blue="255" green="255"/>
+    <frameFillColor2 alpha="255" red="0" blue="0" green="0"/>
+    <symbol alpha="1" type="line" name="">
+     <layer pass="0" class="SimpleLine" locked="0">
+      <prop k="capstyle" v="square"/>
+      <prop k="color" v="170,170,170,255"/>
+      <prop k="customdash" v="5;2"/>
+      <prop k="customdash_map_unit_scale" v="0,0"/>
+      <prop k="customdash_unit" v="MM"/>
+      <prop k="draw_inside_polygon" v="0"/>
+      <prop k="joinstyle" v="bevel"/>
+      <prop k="offset" v="0"/>
+      <prop k="offset_map_unit_scale" v="0,0"/>
+      <prop k="offset_unit" v="MM"/>
+      <prop k="penstyle" v="solid"/>
+      <prop k="use_custom_dash" v="0"/>
+      <prop k="width" v="0"/>
+      <prop k="width_map_unit_scale" v="0,0"/>
+      <prop k="width_unit" v="MM"/>
+     </layer>
+    </symbol>
+    <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="0" precision="2" leftDirection="0" rightPosition="0" bottomPosition="0" frameDistance="1" show="1" font="Verdana,8,-1,5,50,0,0,0,0,0" leftPosition="0" topDirection="0">
+     <fontColor alpha="255" red="0" blue="0" green="0"/>
+    </Annotation>
+   </Grid>
+   <AtlasMap scalingMode="2" atlasDriven="0" margin="0.10000000000000001"/>
+   <ComposerItem pagey="35.6974" page="1" id="" lastValidViewScaleFactor="1.92236" positionMode="0" positionLock="false" x="12.189" y="35.6974" zValue="1" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="183.611" outlineWidth="0.3" uuid="{8f20e96f-0bbd-4b92-b6ea-01f82de0d108}" height="183.611" itemRotation="0" frame="true" pagex="12.189">
+    <FrameColor alpha="255" red="204" blue="204" green="204"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerMap>
+ </Composition>
 </Composer>
