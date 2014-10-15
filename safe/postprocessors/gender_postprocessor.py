@@ -103,7 +103,7 @@ class GenderPostprocessor(AbstractPostprocessor):
     def _calculate_total(self):
         """Total population indicator.
 
-        this indicator reports the total population
+        This indicator reports the total population.
 
         Args:
             None
@@ -112,14 +112,14 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Total')
+        name = tr('Total')
 
         try:
-            myResult = self.impact_total
-            myResult = int(round(myResult))
+            result = self.impact_total
+            result = int(round(result))
         except ValueError:
-            myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult)
+            result = self.NO_DATA_TEXT
+        self._append_result(name, result)
 
     def _calculate_females(self):
         """Female population count indicator.
@@ -134,13 +134,13 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Female population (affected)')
-        myResult = self.impact_total * self.female_ratio
+        name = tr('Female count (affected)')
+        result = self.impact_total * self.female_ratio
         try:
-            myResult = int(round(myResult))
+            result = int(round(result))
         except ValueError:
-            myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult)
+            result = self.NO_DATA_TEXT
+        self._append_result(name, result)
 
     def _calculate_weekly_hygene_packs(self):
         """Weekly requirements of female hygiene packs indicator.
@@ -156,17 +156,17 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Weekly hygiene packs')
-        myMeta = {'description': 'Females hygiene packs for weekly use'}
+        name = tr('Weekly hygiene packs')
+        meta = {'description': 'Females hygiene packs for weekly use'}
 
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        myResult = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
+        result = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
         try:
-            myResult = int(round(myResult))
+            result = int(round(result))
         except ValueError:
-            myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult, myMeta)
+            result = self.NO_DATA_TEXT
+        self._append_result(name, result, meta)
 
     def _calculate_weekly_increased_calories(self):
         """Weekly additional kg of rice for pregnant and lactating women
@@ -184,18 +184,17 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Additional weekly rice kg for pregnant and lactating'
-                    ' women')
-        myMeta = {'description': 'Additional rice kg per week for pregnant and'
-                                 ' lactating women'}
+        name = tr('Additional weekly rice kg for pregnant and lactating women')
+        meta = {'description': 'Additional rice kg per week for pregnant and '
+                               'lactating women'}
 
         #weekly Kg rice =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        myLactKg = self.impact_total * self.female_ratio * 2 * 0.033782
-        myPregKg = self.impact_total * self.female_ratio * 2 * 0.01281
-        myResult = myLactKg + myPregKg
+        lact_kg = self.impact_total * self.female_ratio * 2 * 0.033782
+        preg_kg = self.impact_total * self.female_ratio * 2 * 0.01281
+        result = lact_kg + preg_kg
         try:
-            myResult = int(round(myResult))
+            result = int(round(result))
         except ValueError:
-            myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult, myMeta)
+            result = self.NO_DATA_TEXT
+        self._append_result(name, result, meta)
