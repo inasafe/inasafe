@@ -331,3 +331,41 @@ class ImpactFunctionManager:
                     impact_function.Metadata.get_metadata())
 
         return impact_functions_metadata
+
+    def get_functions_for_exposure(self, exposure):
+        """Return all function metadata that has exposure in their metadata.
+
+        .. versionadded:: 2.2
+
+        :param exposure: Dictionary that represent the exposure
+        :type exposure: dict
+
+        :return: List of impact function metadata.
+        :rtype: list
+        """
+        impact_functions_metadata = []
+        for impact_function in self.impact_functions:
+            if impact_function.Metadata.has_exposure(exposure):
+                impact_functions_metadata.append(
+                    impact_function.Metadata.get_metadata())
+
+        return impact_functions_metadata
+
+    def get_functions_for_exposure_id(self, exposure_id):
+        """Return all function metadata that has exposure_id in their metadata.
+
+        .. versionadded:: 2.2
+
+        :param exposure_id: String that represent the exposure id.
+        :type exposure_id: str
+
+        :return: List of impact function metadata.
+        :rtype: list
+        """
+        impact_functions_metadata = []
+        for impact_function in self.impact_functions:
+            if impact_function.Metadata.has_exposure_id(exposure_id):
+                impact_functions_metadata.append(
+                    impact_function.Metadata.get_metadata())
+
+        return impact_functions_metadata

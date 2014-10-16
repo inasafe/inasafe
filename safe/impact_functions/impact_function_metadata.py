@@ -449,6 +449,20 @@ class ImpactFunctionMetadata():
         return hazards
 
     @classmethod
+    def get_exposures(cls):
+        """Return exposures of the impact function.
+
+        .. versionadded:: 2.2
+
+        :return: List of valid exposures of the impact function.
+        :rtype: list
+        """
+        exposures = cls.get_metadata()['categories']['exposure']['subcategory']
+        if type(exposures) is not list:
+            exposures = [exposures]
+        return exposures
+
+    @classmethod
     def has_hazard(cls, hazard):
         """Check whether an impact function has hazard or not
 
@@ -478,3 +492,34 @@ class ImpactFunctionMetadata():
         hazards = cls.get_hazards()
         hazard_ids = [hazard['id'] for hazard in hazards]
         return hazard_id in hazard_ids
+
+    @classmethod
+    def has_exposure(cls, exposure):
+        """Check whether an impact function has exposure or not
+
+        .. versionadded:: 2.2
+
+        :param exposure: Dictionary that represent the exposure.
+        :type exposure: dict
+
+        :returns: True if it has exposure, else false
+        :rtype: bool
+        """
+        exposures = cls.get_exposures()
+        return exposure in exposures
+
+    @classmethod
+    def has_exposure_id(cls, exposure_id):
+        """Check whether an impact function has exposure_id or not
+
+        .. versionadded:: 2.2
+
+        :param exposure_id: String that represent the hazard id.
+        :type exposure_id: str
+
+        :returns: True if it has exposure_id, else false
+        :rtype: bool
+        """
+        exposures = cls.get_exposures()
+        exposure_ids = [exposure['id'] for exposure in exposures]
+        return exposure_id in exposure_ids
