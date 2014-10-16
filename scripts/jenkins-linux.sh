@@ -56,7 +56,7 @@ in_array () {
 
 
 # Set up needed QGIS environment variables
-export QGIS_PREFIX_PATH=/usr/local/qgis-2.0/
+export QGIS_PREFIX_PATH=/usr/local/qgis-2.4/
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
 echo "PYTHONPATH: $PYTHONPATH" > /tmp/path.txt
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
