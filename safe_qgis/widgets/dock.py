@@ -1778,12 +1778,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         message.add(analysis_inputs)
         return message
 
-    def adjust_geo_extent(self, geo_extent, cell_size, layer_extent):
-        """Adjust extent 
+    def adjust_clip_extent(self, clip_extent, cell_size, layer_extent):
+        """Helper function to adjust the clip extent to th edget of the pixel 
 
+        Args:
+
+        * clip_extent - an array representing the clip 
+           extents in the form [xmin, ymin, xmax, ymax]. This is the optimal extent
+           between the exposure, hazard and view port.
+        * cell_size - the size of a pixel in geo reference unit
+        * layer_extent (optional) - an array representing the full
+           extents of the layer in the form [xmin, ymin, xmax, ymax]. 
+
+        Returns:
+        An array containing an the adjusted clip extent in the form [xmin, ymin, xmax, ymax]
+       
         """
-        if (geo_extent == layer_extent):
-            return geo_extent
+        if (clip_extent == layer_extent):
+            return clip_extent
         
         xmin = layer_extent[0]
         ymin = layer_extent[1]
@@ -1794,7 +1806,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         width = int(width)
         x = xmin
         for i in range(width):
-            if abs(x - geo_extent[0]) < cell_size:
+            if abs(x - clip_extent[0]) < cell_size:
                 # We have found the aligned raster boundary
                 break
             x += cell_size
@@ -1804,15 +1816,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         height = int(height)
         y = ymin
         for i in range(height):
-            if abs(y - geo_extent[1]) < cell_size:
+            if abs(y - clip_extent[1]) < cell_size:
                 # We have found the aligned raster boundary
                 break
             y += cell_size
             _ = i
           
-        geo_width = ((geo_extent[2] - geo_extent[0]) / cell_size)
+        geo_width = ((clip_extent[2] - clip_extent[0]) / cell_size)
         geo_width = int(geo_width)
-        geo_height = ((geo_extent[3] - geo_extent[1]) / cell_size)
+        geo_height = ((clip_extent[3] - clip_extent[1]) / cell_size)
         geo_height = int(geo_height)
         adjusted_extent = [x, y, x + geo_width * cell_size, y + geo_height * cell_size]
         #adjusted_extent = [x, y, x + width * cell_size, y + height * cell_size]
@@ -1917,7 +1929,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     layer_extent =  exposure_geoextent
 
                 #adjust the geo extent to be at the edge of the pixel
-                geo_extent = self.adjust_geo_extent(geo_extent, cell_size, layer_extent)
+                geo_extent = self.adjust_clip_extent(geo_extent, cell_size, layer_extent)
                 buffered_geoextent = geo_extent
                 
                 # Record native resolution to allow rescaling of exposure data
