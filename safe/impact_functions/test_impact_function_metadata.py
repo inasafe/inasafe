@@ -270,13 +270,15 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_has_hazard_id(self):
         """Test for has_hazard_id API."""
         impact_function = EarthquakeBuildingImpactFunction()
-        result = impact_function.Metadata.has_hazard_id(hazard_earthquake['id'])
+        result = impact_function.Metadata.has_hazard_id(
+            hazard_earthquake['id'])
         expected_result = True
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
         impact_function = FloodBuildingImpactFunction()
-        result = impact_function.Metadata.has_hazard_id(hazard_earthquake['id'])
+        result = impact_function.Metadata.has_hazard_id(
+            hazard_earthquake['id'])
         expected_result = False
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
@@ -312,13 +314,15 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_has_exposure_id(self):
         """Test for has_exposure_id API."""
         impact_function = EarthquakeBuildingImpactFunction()
-        result = impact_function.Metadata.has_exposure_id(exposure_structure['id'])
+        result = impact_function.Metadata.has_exposure_id(
+            exposure_structure['id'])
         expected_result = True
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
         impact_function = FloodBuildingImpactFunction()
-        result = impact_function.Metadata.has_exposure_id(hazard_earthquake['id'])
+        result = impact_function.Metadata.has_exposure_id(
+            hazard_earthquake['id'])
         expected_result = False
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
