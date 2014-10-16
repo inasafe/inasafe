@@ -11,7 +11,6 @@ from qgis.core import (
 from safe.metadata import (
     unit_wetdry,
     hazard_flood,
-    hazard_tsunami,
     layer_vector_polygon,
     exposure_structure,
     unit_building_type_type,
@@ -37,7 +36,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
     :author Dmitry Kolesov
     :rating 1
     :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
+                    subcategory=='flood' and \
                     layertype=='vector'
     :param requires category=='exposure' and \
                     subcategory in ['structure'] and \
@@ -72,10 +71,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
-                            hazard_flood,
-                            hazard_tsunami
-                        ],
+                        'subcategory': [hazard_flood],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
