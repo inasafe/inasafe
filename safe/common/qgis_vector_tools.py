@@ -458,7 +458,7 @@ def split_by_polygon2(
             new_attributes[index] = value
         return new_attributes
 
-    # Create layer to store the splitted objects
+    # Create layer to store the split objects
     result_layer = create_layer(vector)
     result_provider = result_layer.dataProvider()
     fields = result_provider.fields()
@@ -497,7 +497,9 @@ def split_by_polygon2(
 
     poly_geoms = []
     for polygon_feature in polygon_layer.getFeatures(request):
-        polygon = polygon_feature.geometry()
+        # Using simplify 1 should remove any pseudonodes on the polygon
+        # and speed up polygon operations. TS
+        polygon = polygon_feature.geometry().simplify(1)
         poly_geoms.append(QgsGeometry(polygon))
 
     result_layer.startEditing()
