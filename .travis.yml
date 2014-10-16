@@ -8,8 +8,8 @@ virtualenv:
 
 branches:
   only:
+    - master
     - develop
-    - travis
 
 -before_install:
   - sudo apt-get -qq -y update
