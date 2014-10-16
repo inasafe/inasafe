@@ -1,6 +1,8 @@
 Changelog for version 2.1.1
 ================================
 
+87ea768 Update changelog.
+f969da5 Bump version 2.1.1 and update changelog.
 87e30c1 Merge branch 'aifdr_develop' into version-2_1_1
 98df3b5 Merge pull request #1266 from timlinux/develop
 380d343 Also build travis on master changes

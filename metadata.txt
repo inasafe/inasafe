@@ -33,6 +33,7 @@ changelog=
         * Change 'density' term to 'count' for population
         * Enable by default **print as raster** in the map composer template
         * Change minimum needs value for water to 67
+        * Improve performance of flood on roads analysis
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
