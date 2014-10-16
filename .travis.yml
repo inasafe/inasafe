@@ -1,11 +1,33 @@
 language: python
+
 python:
   - "2.7"
+
 virtualenv:
   system_site_packages: true
-before_install:
-  - sudo apt-get install -qq -y python-numpy python-gdal python-nose
+
+branches:
+  only:
+    - develop 
+
 install:
-  - pip install . --use-mirrors
+  - sudo apt-get -qq -y update
+  - sudo apt-get install -y git qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+  - pip install -e . --use-mirrors
+  - pip install flake8
+
+before_script:
+  - echo "Build starting on " `date`
+
 script:
-  - nosetests -A 'not slow' -v safe
+  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis
+  
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.org#inasafe"
+    use_notice: true
+    
+  email:
+    - tim@kartoza.com
+    - akbargumbira@gmail.com
