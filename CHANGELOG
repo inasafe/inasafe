@@ -1,6 +1,30 @@
 Changelog for version 2.1.1
 ================================
 
+87e30c1 Merge branch 'aifdr_develop' into version-2_1_1
+98df3b5 Merge pull request #1266 from timlinux/develop
+380d343 Also build travis on master changes
+85437c9 Merge pull request #1264 from timlinux/faster-line-intersect
+daae132 Merge remote-tracking branch 'origin/develop' into faster-line-intersect
+303041d Merge pull request #1262 from timlinux/travis
+8a4427d Fixes for travis building and merge changes from akbargumbira
+634a779 Merge remote-tracking branch 'origin/master' into travis
+02960e2 Simplyfy polgyons with level 1 before intersecting roads for faster performance.
+78381f9 Add changelog.
+605b363 Merge branch 'master' into develop
+cc62c80 Use AIFDR repo for Travis badge in readme.
+5e9978d Merge pull request #1257 from akbargumbira/tsunami_IF
+9b1f860 Fix  for python deps not being installed in travis
+95292e8 Use make testdata in travis rather
+b0dea59 move some travis logic into before install so that we can split testing time
+3574798 Update translations.
+e30edd3 Checkout test data and add processing to python path before trying to run scripts.
+2fdead3 Fix conflict of merging.
+6fb6794 Merge pull request #1263 from ismailsunni/version-2_1_1
+9a0b10e Merge remote-tracking branch 'timlinux/develop' into develop
+6ab88b3 Comment out unused vars in flood on roads gdal IF
+2508c65 Fix failing tests and green dot.
+7be0f1c Code formatting tidy-ups only
 a813f85 Merge pull request #1259 from ismailsunni/fix_jenkins_test
 0236b00 Pylint and update hash for image checking in jenkins.
 98317b4 Merge pull request #1258 from akbargumbira/develop
