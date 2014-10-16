@@ -1,52 +1,55 @@
 <Composer title="merged_report" visible="1">
- <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="297" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="2" paperHeight="210" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="0" generateWorldFile="0">
+ <Composition snapGridTolerance="2" gridVisible="1" printResolution="300" paperWidth="297" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="2" paperHeight="210" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="1" generateWorldFile="0">
   <symbol alpha="1" type="fill" name="">
    <layer pass="0" class="SimpleFill" locked="0">
+    <prop k="border_width_map_unit_scale" v="0,0"/>
     <prop k="border_width_unit" v="MM"/>
     <prop k="color" v="255,255,255,255"/>
     <prop k="color_border" v="0,0,0,255"/>
+    <prop k="joinstyle" v="bevel"/>
     <prop k="offset" v="0,0"/>
+    <prop k="offset_map_unit_scale" v="0,0"/>
     <prop k="offset_unit" v="MM"/>
     <prop k="style" v="solid"/>
     <prop k="style_border" v="no"/>
     <prop k="width_border" v="0.26"/>
    </layer>
   </symbol>
-  <ComposerPicture pictureRotation="0" pictureWidth="nan" file="." pictureHeight="nan" mapId="-1">
-   <ComposerItem width="50" x="235" transparency="0" y="145" height="40" positionMode="0" frame="false" outlineWidth="0.3" zValue="15" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{7cf02255-6fc4-443a-9476-05691662da8e}" id="organisation-logo" background="true" blendMode="0" positionLock="false">
+  <ComposerPicture useExpression="false" resizeMode="0" pictureRotation="0" pictureWidth="39.7561" sourceExpression="" file="." pictureHeight="40" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="145" page="1" id="organisation-logo" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="235" y="145" zValue="10" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="50" outlineWidth="0.3" uuid="{f9199aab-55a9-4d72-8a99-d0fd38848257}" height="40" itemRotation="0" frame="false" pagex="235">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerPicture pictureRotation="0" pictureWidth="nan" file="." pictureHeight="nan" mapId="-1">
-   <ComposerItem width="30" x="15" transparency="0" y="145" height="30" positionMode="0" frame="false" outlineWidth="0.3" zValue="14" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{496e4241-994b-410b-a554-6400fe02b864}" id="safe-logo" background="true" blendMode="0" positionLock="false">
+  <ComposerPicture useExpression="false" resizeMode="0" pictureRotation="0" pictureWidth="29.8171" sourceExpression="" file="." pictureHeight="30" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="145" page="1" id="safe-logo" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="15" y="145" zValue="9" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="30" outlineWidth="0.3" uuid="{7073523b-81f1-4038-9cdd-369784de1707}" height="30" itemRotation="0" frame="false" pagex="15">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerScaleBar penColor="#000000" style="Numeric" numMapUnitsPerScaleBarUnit="1000" alignment="1" brushColor="#000000" numSegments="4" segmentMillimeters="449.705" fontColor="#000000" font="Droid Sans,11,-1,5,75,0,0,0,0,0" numUnitsPerSegment="1" units="2" labelBarSpace="3" outlineWidth="1" numSegmentsLeft="2" height="3" mapId="0" boxContentSpace="1" unitLabel="m">
-   <ComposerItem width="30" x="111" transparency="0" y="160" height="10" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{2b7ed492-c671-4b09-b759-c4c1484962f6}" id="map-scale" background="true" blendMode="0" positionLock="false">
+  <ComposerScaleBar penColor="#000000" lineCapStyle="square" style="Numeric" numMapUnitsPerScaleBarUnit="1000" alignment="1" brushColor="#000000" numSegments="4" segmentMillimeters="449.71" lineJoinStyle="miter" fontColor="#000000" font="Droid Sans,11,-1,5,75,0,0,0,0,0" numUnitsPerSegment="1" units="2" labelBarSpace="3" outlineWidth="1" numSegmentsLeft="2" height="3" mapId="0" boxContentSpace="1" unitLabel="m">
+   <ComposerItem pagey="160" page="1" id="map-scale" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="111" y="160" zValue="8" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="30" outlineWidth="0.3" uuid="{3200bd07-a7cb-400f-bd85-c927b4ebdd4a}" height="10" itemRotation="0" frame="false" pagex="111">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerScaleBar>
-  <ComposerLabel valign="32" labelText="" htmlState="0" halign="4" margin="1">
-   <LabelFont description="Droid Sans,10,-1,5,75,0,0,0,0,0"/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="30" x="111" transparency="0" y="145" height="15" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{0f3edf21-ff46-4384-8370-a5e965cc0f9d}" id="aggregation-area" background="true" blendMode="0" positionLock="false">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-   </ComposerItem>
-  </ComposerLabel>
   <ComposerLabel valign="32" labelText="" htmlState="2" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="60" x="48" transparency="0" y="145" height="40" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{d82f3138-284d-40f1-96f3-34cae5190199}" id="summary-report" background="true" blendMode="0" positionLock="false">
+   <ComposerItem pagey="145" page="1" id="summary-report" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="48" y="145" zValue="7" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="60" outlineWidth="0.3" uuid="{ace3cdb3-33c9-42e1-98b9-9e855deaf479}" height="40" itemRotation="0" frame="false" pagex="48">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLegend symbolWidth="7" title="" boxSpace="0" splitLayer="0" equalColumnWidth="1" map="0" symbolHeight="4" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
+  <ComposerLabel valign="32" labelText="" htmlState="0" halign="4" margin="1">
+   <LabelFont description="Droid Sans,10,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="145" page="1" id="aggregation-area" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="111" y="145" zValue="6" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="30" outlineWidth="0.3" uuid="{54014924-3113-4861-b8dd-eb94579b2b5c}" height="15" itemRotation="0" frame="false" pagex="111">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLegend symbolWidth="7" title="" boxSpace="0" splitLayer="0" equalColumnWidth="1" map="0" titleAlignment="1" symbolHeight="4" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
    <styles>
     <style marginBottom="1" name="title" font="Droid Sans,7,-1,5,75,0,0,0,0,0"/>
     <style marginTop="1" name="group" font="Droid Sans,6,-1,5,75,0,0,0,0,0"/>
@@ -60,10 +63,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="30,252,124,255"/>
          <prop k="color_border" v="30,252,124,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -76,10 +82,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="243,26,28,255"/>
          <prop k="color_border" v="243,26,28,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -94,10 +103,13 @@
       <symbols>
        <symbol alpha="0" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,255,255,255"/>
          <prop k="color_border" v="255,255,255,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -110,10 +122,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="56,168,0,255"/>
          <prop k="color_border" v="56,168,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -126,10 +141,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="121,201,0,255"/>
          <prop k="color_border" v="121,201,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -142,10 +160,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="206,237,0,255"/>
          <prop k="color_border" v="206,237,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -158,10 +179,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,204,0,255"/>
          <prop k="color_border" v="255,204,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -174,10 +198,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,102,0,255"/>
          <prop k="color_border" v="255,102,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -190,10 +217,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,0,0,255"/>
          <prop k="color_border" v="255,0,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -206,10 +236,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="122,0,0,255"/>
          <prop k="color_border" v="122,0,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -224,10 +257,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="183,206,64,255"/>
          <prop k="color_border" v="0,0,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -242,10 +278,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="201,101,151,255"/>
          <prop k="color_border" v="0,0,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="no"/>
          <prop k="style_border" v="solid"/>
@@ -260,10 +299,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="30,252,124,255"/>
          <prop k="color_border" v="30,252,124,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -276,10 +318,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="243,26,28,255"/>
          <prop k="color_border" v="243,26,28,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -294,10 +339,13 @@
       <symbols>
        <symbol alpha="0" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,255,255,255"/>
          <prop k="color_border" v="255,255,255,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -310,10 +358,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="56,168,0,255"/>
          <prop k="color_border" v="56,168,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -326,10 +377,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="121,201,0,255"/>
          <prop k="color_border" v="121,201,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -342,10 +396,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="206,237,0,255"/>
          <prop k="color_border" v="206,237,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -358,10 +415,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,204,0,255"/>
          <prop k="color_border" v="255,204,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -374,10 +434,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,102,0,255"/>
          <prop k="color_border" v="255,102,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -390,10 +453,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="255,0,0,255"/>
          <prop k="color_border" v="255,0,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -406,10 +472,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="122,0,0,255"/>
          <prop k="color_border" v="122,0,0,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -420,7 +489,7 @@
      </VectorClassificationItemNg>
     </LayerItem>
    </Model>
-   <ComposerItem width="99.2594" x="144" transparency="0" y="145" height="65.8" positionMode="0" frame="false" outlineWidth="0" zValue="8" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{2aa01839-90a7-4e70-bab3-8579ce4e4b1e}" id="map-legend" background="false" blendMode="0" positionLock="false">
+   <ComposerItem pagey="145" page="1" id="map-legend" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="144" y="145" zValue="5" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="99.2594" outlineWidth="0" uuid="{17b7a5d3-d8de-4ef9-b38a-e527c1396227}" height="64.8" itemRotation="0" frame="false" pagex="144">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -428,7 +497,7 @@
   <ComposerLabel valign="128" labelText="[disclaimer]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="270" x="15" transparency="0" y="415" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="6" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{eef5e3e9-b6ab-4f99-8eb3-939caea13e27}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem pagey="195" page="1" id="" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="15" y="195" zValue="4" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="270" outlineWidth="0" uuid="{60c340e0-8f1e-4aa1-8694-273737962b89}" height="10" itemRotation="0" frame="false" pagex="15">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -436,7 +505,7 @@
   <ComposerLabel valign="128" labelText="[disclaimer]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="270" x="15" transparency="0" y="195" height="10" positionMode="0" frame="false" outlineWidth="0" zValue="6" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{2ef0944a-d636-4cae-83c7-59496355537b}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem pagey="195" page="2" id="" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="15" y="415" zValue="3" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="270" outlineWidth="0" uuid="{2887f6ca-77f4-4527-8dc4-6a1a7dde8e88}" height="10" itemRotation="0" frame="false" pagex="15">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -444,7 +513,7 @@
   <ComposerLabel valign="128" labelText="[impact-title] in the Event of [hazard-title]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="270" x="15" transparency="0" y="230" height="20" positionMode="0" frame="false" outlineWidth="0" zValue="4" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{e0421d2a-28dd-42a4-ac02-096db6b7a4c0}" id="impact-title" background="false" blendMode="0" positionLock="false">
+   <ComposerItem pagey="10" page="2" id="impact-title" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="15" y="230" zValue="2" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="270" outlineWidth="0" uuid="{bac92bcb-fde1-45d6-a120-6aa184ae5a22}" height="20" itemRotation="0" frame="false" pagex="15">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -453,10 +522,13 @@
    <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
     <symbol alpha="0.3" type="fill" name="">
      <layer pass="0" class="SimpleFill" locked="0">
+      <prop k="border_width_map_unit_scale" v="0,0"/>
       <prop k="border_width_unit" v="MM"/>
       <prop k="color" v="255,0,0,255"/>
       <prop k="color_border" v="0,0,0,255"/>
+      <prop k="joinstyle" v="bevel"/>
       <prop k="offset" v="0,0"/>
+      <prop k="offset_map_unit_scale" v="0,0"/>
       <prop k="offset_unit" v="MM"/>
       <prop k="style" v="solid"/>
       <prop k="style_border" v="no"/>
@@ -475,14 +547,17 @@
       <prop k="capstyle" v="flat"/>
       <prop k="color" v="0,0,0,255"/>
       <prop k="customdash" v="5;2"/>
+      <prop k="customdash_map_unit_scale" v="0,0"/>
       <prop k="customdash_unit" v="MM"/>
       <prop k="draw_inside_polygon" v="0"/>
       <prop k="joinstyle" v="bevel"/>
       <prop k="offset" v="0"/>
+      <prop k="offset_map_unit_scale" v="0,0"/>
       <prop k="offset_unit" v="MM"/>
       <prop k="penstyle" v="solid"/>
       <prop k="use_custom_dash" v="0"/>
       <prop k="width" v="0.3"/>
+      <prop k="width_map_unit_scale" v="0,0"/>
       <prop k="width_unit" v="MM"/>
      </layer>
     </symbol>
@@ -490,15 +565,15 @@
      <fontColor alpha="255" red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <AtlasMap fixedScale="0" atlasDriven="0" margin="0.10000000000000001"/>
-   <ComposerItem width="270" x="15" transparency="0" y="10" height="130" positionMode="0" frame="true" outlineWidth="0" zValue="3" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{9e8c5000-99a7-4c3c-9ec5-2c46b29d6505}" id="impact-map" background="false" blendMode="0" positionLock="false">
+   <AtlasMap scalingMode="2" atlasDriven="0" margin="0.10000000000000001"/>
+   <ComposerItem pagey="10" page="1" id="impact-map" lastValidViewScaleFactor="1.33491" positionMode="0" positionLock="false" x="15" y="10" zValue="1" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="270" outlineWidth="0" uuid="{7d13043e-96bc-466d-b025-cd8d8246a02b}" height="130" itemRotation="0" frame="true" pagex="15">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerHtml resizeMode="0" url="">
+  <ComposerHtml maxBreakDistance="10" resizeMode="0" url="" useSmartBreaks="true">
    <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="240" x="15" transparency="0" y="250" height="165" positionMode="0" frame="false" outlineWidth="0" zValue="9" itemRotation="0" lastValidViewScaleFactor="2.02234" uuid="{c31f5d1e-40b1-45bc-9f3d-8b91dee64119}" id="merged-report-table" background="true" blendMode="0" positionLock="false">
+    <ComposerItem pagey="30" page="2" id="merged-report-table" lastValidViewScaleFactor="2.02234" positionMode="0" positionLock="false" x="15" y="250" zValue="9" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="240" outlineWidth="0" uuid="{40e87236-d296-441e-963d-7781a048bf22}" height="165" itemRotation="0" frame="false" pagex="15">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>

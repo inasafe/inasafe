@@ -2,36 +2,39 @@
  <Composition snapGridTolerance="2" gridVisible="0" printResolution="300" paperWidth="420" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" numPages="1" paperHeight="297" alignmentSnapTolerance="0" smartGuides="1" printAsRaster="1" generateWorldFile="0">
   <symbol alpha="1" type="fill" name="">
    <layer pass="0" class="SimpleFill" locked="0">
+    <prop k="border_width_map_unit_scale" v="0,0"/>
     <prop k="border_width_unit" v="MM"/>
     <prop k="color" v="255,255,255,255"/>
     <prop k="color_border" v="0,0,0,255"/>
+    <prop k="joinstyle" v="bevel"/>
     <prop k="offset" v="0,0"/>
+    <prop k="offset_map_unit_scale" v="0,0"/>
     <prop k="offset_unit" v="MM"/>
     <prop k="style" v="solid"/>
     <prop k="style_border" v="no"/>
     <prop k="width_border" v="0.26"/>
    </layer>
   </symbol>
-  <ComposerPicture pictureRotation="0" pictureWidth="11.5387" file="/usr/local/qgis-2.0/share/qgis/svg/arrows/Arrow_05.svg" pictureHeight="11.5387" mapId="-1">
-   <ComposerItem width="11.5387" x="394.496" transparency="40" y="6.89862" height="11.8732" positionMode="0" frame="false" outlineWidth="0.3" zValue="9" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{51195c4f-4c0b-405b-b2b9-894b3d5d7547}" id="north-arrow" background="true" blendMode="0" positionLock="false">
+  <ComposerPicture useExpression="false" resizeMode="0" pictureRotation="0" pictureWidth="11.5387" sourceExpression="" file="/usr/local/qgis-2.0/share/qgis/svg/arrows/Arrow_05.svg" pictureHeight="11.5387" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="6.89862" page="1" id="north-arrow" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="394.496" y="6.89862" zValue="9" background="true" transparency="40" frameJoinStyle="miter" blendMode="0" width="11.5387" outlineWidth="0.3" uuid="{14644009-36d1-46cc-a72a-b6e64c359ef4}" height="11.8732" itemRotation="0" frame="false" pagex="394.496">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="170" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerPicture pictureRotation="0" pictureWidth="nan" file="." pictureHeight="nan" mapId="-1">
-   <ComposerItem width="74.8288" x="333.639" transparency="0" y="280.918" height="9.31066" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{703ed843-b2ca-4477-a800-240d4ff159f9}" id="organisation-logo" background="true" blendMode="0" positionLock="false">
+  <ComposerPicture useExpression="false" resizeMode="0" pictureRotation="0" pictureWidth="9.25389" sourceExpression="" file="." pictureHeight="9.31066" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="280.918" page="1" id="organisation-logo" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="333.639" y="280.918" zValue="8" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="74.8288" outlineWidth="0.3" uuid="{5b759e8d-2205-403c-afc9-6966d7254bc1}" height="9.31066" itemRotation="0" frame="false" pagex="333.639">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerScaleBar penColor="#000000" style="Line Ticks Up" numMapUnitsPerScaleBarUnit="1000" alignment="2" brushColor="#000000" numSegments="3" segmentMillimeters="1.14669e+07" fontColor="#000000" font="Cantarell,8,-1,5,50,0,0,0,0,0" numUnitsPerSegment="1000" units="1" labelBarSpace="1" outlineWidth="0.26" numSegmentsLeft="0" height="1" mapId="0" boxContentSpace="1" unitLabel="km">
-   <ComposerItem width="3.44007e+07" x="82.6235" transparency="0" y="202.287" height="6.6" positionMode="0" frame="false" outlineWidth="0.3" zValue="8" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{bc75f128-39fe-4c1f-9952-b4e5920d17b9}" id="" background="true" blendMode="0" positionLock="false">
+  <ComposerScaleBar penColor="#000000" lineCapStyle="square" style="Line Ticks Up" numMapUnitsPerScaleBarUnit="1000" alignment="2" brushColor="#000000" numSegments="3" segmentMillimeters="1.14669e+07" lineJoinStyle="miter" fontColor="#000000" font="Cantarell,8,-1,5,50,0,0,0,0,0" numUnitsPerSegment="1000" units="1" labelBarSpace="1" outlineWidth="0.26" numSegmentsLeft="0" height="1" mapId="0" boxContentSpace="1" unitLabel="km">
+   <ComposerItem pagey="202.287" page="1" id="" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="82.6235" y="202.287" zValue="7" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="3.44007e+07" outlineWidth="0.3" uuid="{1da9a678-eb3c-4f80-b305-1fbe2e0fc885}" height="6.6" itemRotation="0" frame="false" pagex="82.6235">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="170" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerScaleBar>
-  <ComposerPicture pictureRotation="0" pictureWidth="nan" file="/data/samples/inasafe/InaSAFEPackages/Jakarta" pictureHeight="nan" mapId="-1">
-   <ComposerItem width="34.8062" x="4.99524" transparency="0" y="4.99524" height="15.0048" positionMode="0" frame="false" outlineWidth="0" zValue="7" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{3c7b91a4-06f4-4bab-b276-f30e45ab89cc}" id="safe-logo" background="true" blendMode="0" positionLock="false">
+  <ComposerPicture useExpression="false" resizeMode="0" pictureRotation="0" pictureWidth="14.9133" sourceExpression="" file="/data/samples/inasafe/InaSAFEPackages/Jakarta" pictureHeight="15.0048" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="4.99524" page="1" id="safe-logo" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="4.99524" y="4.99524" zValue="6" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="34.8062" outlineWidth="0" uuid="{6472d3b1-3103-4934-9c53-e9c84ba0bea3}" height="15.0048" itemRotation="0" frame="false" pagex="4.99524">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -40,10 +43,13 @@
    <overviewFrame overviewBlendMode="0" overviewFrameMap="-1" overviewCentered="false" overviewInverted="false">
     <symbol alpha="0.3" type="fill" name="">
      <layer pass="0" class="SimpleFill" locked="0">
+      <prop k="border_width_map_unit_scale" v="0,0"/>
       <prop k="border_width_unit" v="MM"/>
       <prop k="color" v="255,0,0,255"/>
       <prop k="color_border" v="0,0,0,255"/>
+      <prop k="joinstyle" v="bevel"/>
       <prop k="offset" v="0,0"/>
+      <prop k="offset_map_unit_scale" v="0,0"/>
       <prop k="offset_unit" v="MM"/>
       <prop k="style" v="solid"/>
       <prop k="style_border" v="no"/>
@@ -62,14 +68,17 @@
       <prop k="capstyle" v="flat"/>
       <prop k="color" v="0,0,0,255"/>
       <prop k="customdash" v="5;2"/>
+      <prop k="customdash_map_unit_scale" v="0,0"/>
       <prop k="customdash_unit" v="MM"/>
       <prop k="draw_inside_polygon" v="0"/>
       <prop k="joinstyle" v="bevel"/>
       <prop k="offset" v="0"/>
+      <prop k="offset_map_unit_scale" v="0,0"/>
       <prop k="offset_unit" v="MM"/>
       <prop k="penstyle" v="solid"/>
       <prop k="use_custom_dash" v="0"/>
       <prop k="width" v="0.3"/>
+      <prop k="width_map_unit_scale" v="0,0"/>
       <prop k="width_unit" v="MM"/>
      </layer>
     </symbol>
@@ -77,8 +86,8 @@
      <fontColor alpha="255" red="0" blue="0" green="0"/>
     </Annotation>
    </Grid>
-   <AtlasMap fixedScale="0" atlasDriven="0" margin="0.10000000000000001"/>
-   <ComposerItem width="401.337" x="6.29137" transparency="0" y="25" height="187.469" positionMode="0" frame="true" outlineWidth="0" zValue="6" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{bcadec30-2d8a-474e-9dec-270e594cdaaa}" id="impact-map" background="true" blendMode="0" positionLock="false">
+   <AtlasMap scalingMode="2" atlasDriven="0" margin="0.10000000000000001"/>
+   <ComposerItem pagey="25" page="1" id="impact-map" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="6.29137" y="25" zValue="5" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="401.337" outlineWidth="0" uuid="{b0d0314c-a2ba-4425-9781-3185e1a0b16f}" height="187.469" itemRotation="0" frame="true" pagex="6.29137">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -86,7 +95,7 @@
   <ComposerLabel valign="32" labelText="[impact-title]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,20,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="346.185" x="45.4919" transparency="0" y="5.14867" height="14.8764" positionMode="0" frame="false" outlineWidth="0" zValue="4" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{1dc12cb0-c206-436e-ae10-786b5cc92a54}" id="impact-title" background="true" blendMode="0" positionLock="false">
+   <ComposerItem pagey="5.14867" page="1" id="impact-title" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="45.4919" y="5.14867" zValue="4" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="346.185" outlineWidth="0" uuid="{dae96095-f9d8-4b36-8c02-1ce2d258c6b1}" height="14.8764" itemRotation="0" frame="false" pagex="45.4919">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -94,7 +103,7 @@
   <ComposerLabel valign="128" labelText="[disclaimer]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="333.756" x="3.61558" transparency="0" y="282.777" height="8.43485" positionMode="0" frame="false" outlineWidth="0" zValue="3" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{ef0b6a56-dd57-4fea-a3b5-d55ff7f87cbb}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem pagey="282.777" page="1" id="" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="3.61558" y="282.777" zValue="3" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="333.756" outlineWidth="0" uuid="{7132401a-8e88-4889-bf17-f5e5f329d08a}" height="8.43485" itemRotation="0" frame="false" pagex="3.61558">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -102,12 +111,12 @@
   <ComposerLabel valign="32" labelText="&lt;div style=&quot;font-size: 8pt;&quot;>&#xa;&lt;strong>Time stamp:&lt;/strong> &lt;br/>[date] [time]&lt;br/>&lt;/br/>&#xa;&lt;strong>Note:&lt;/strong> This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.&lt;br/>&lt;br/>&#xa;&lt;i>Assessment carried out using InaSAFE release [safe-version] (QGIS plugin version).&lt;/i>&#xa;&lt;/div>" htmlState="2" halign="1" margin="1">
    <LabelFont description="Droid Sans,6,-1,5,50,2,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="38.4393" x="371.369" transparency="0" y="224.125" height="60.7037" positionMode="0" frame="false" outlineWidth="0" zValue="2" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{23fc6d60-b5d5-4e42-a2e6-33bbf20353f3}" id="" background="true" blendMode="0" positionLock="false">
+   <ComposerItem pagey="224.125" page="1" id="" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="371.369" y="224.125" zValue="2" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="38.4393" outlineWidth="0" uuid="{6f4a54ae-81a0-4d4b-97f8-46c1e02f0727}" height="60.7037" itemRotation="0" frame="false" pagex="371.369">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLegend symbolWidth="5" title="" boxSpace="2" splitLayer="1" equalColumnWidth="0" map="0" symbolHeight="3" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
+  <ComposerLegend symbolWidth="5" title="" boxSpace="2" splitLayer="1" equalColumnWidth="0" map="0" titleAlignment="1" symbolHeight="3" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
    <styles>
     <style marginBottom="1" name="title" font="Droid Sans,9,-1,5,50,0,0,0,0,0"/>
     <style marginTop="1" name="group" font="Droid Sans,8,-1,5,50,0,0,0,0,0"/>
@@ -121,10 +130,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="30,252,124,255"/>
          <prop k="color_border" v="30,252,124,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -137,10 +149,13 @@
       <symbols>
        <symbol alpha="1" type="fill" name="classificationSymbol">
         <layer pass="0" class="SimpleFill" locked="0">
+         <prop k="border_width_map_unit_scale" v="0,0"/>
          <prop k="border_width_unit" v="MM"/>
          <prop k="color" v="243,26,28,255"/>
          <prop k="color_border" v="243,26,28,255"/>
+         <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0,0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="style" v="solid"/>
          <prop k="style_border" v="solid"/>
@@ -162,14 +177,17 @@
          <prop k="capstyle" v="square"/>
          <prop k="color" v="30,252,124,255"/>
          <prop k="customdash" v="5;2"/>
+         <prop k="customdash_map_unit_scale" v="0,0"/>
          <prop k="customdash_unit" v="MM"/>
          <prop k="draw_inside_polygon" v="0"/>
          <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="penstyle" v="solid"/>
          <prop k="use_custom_dash" v="0"/>
          <prop k="width" v="0.26"/>
+         <prop k="width_map_unit_scale" v="0,0"/>
          <prop k="width_unit" v="MM"/>
         </layer>
        </symbol>
@@ -182,14 +200,17 @@
          <prop k="capstyle" v="square"/>
          <prop k="color" v="243,26,28,255"/>
          <prop k="customdash" v="5;2"/>
+         <prop k="customdash_map_unit_scale" v="0,0"/>
          <prop k="customdash_unit" v="MM"/>
          <prop k="draw_inside_polygon" v="0"/>
          <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="penstyle" v="solid"/>
          <prop k="use_custom_dash" v="0"/>
          <prop k="width" v="0.26"/>
+         <prop k="width_map_unit_scale" v="0,0"/>
          <prop k="width_unit" v="MM"/>
         </layer>
        </symbol>
@@ -204,14 +225,17 @@
          <prop k="capstyle" v="square"/>
          <prop k="color" v="30,252,124,255"/>
          <prop k="customdash" v="5;2"/>
+         <prop k="customdash_map_unit_scale" v="0,0"/>
          <prop k="customdash_unit" v="MM"/>
          <prop k="draw_inside_polygon" v="0"/>
          <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="penstyle" v="solid"/>
          <prop k="use_custom_dash" v="0"/>
          <prop k="width" v="0.26"/>
+         <prop k="width_map_unit_scale" v="0,0"/>
          <prop k="width_unit" v="MM"/>
         </layer>
        </symbol>
@@ -224,14 +248,17 @@
          <prop k="capstyle" v="square"/>
          <prop k="color" v="243,26,28,255"/>
          <prop k="customdash" v="5;2"/>
+         <prop k="customdash_map_unit_scale" v="0,0"/>
          <prop k="customdash_unit" v="MM"/>
          <prop k="draw_inside_polygon" v="0"/>
          <prop k="joinstyle" v="bevel"/>
          <prop k="offset" v="0"/>
+         <prop k="offset_map_unit_scale" v="0,0"/>
          <prop k="offset_unit" v="MM"/>
          <prop k="penstyle" v="solid"/>
          <prop k="use_custom_dash" v="0"/>
          <prop k="width" v="0.26"/>
+         <prop k="width_map_unit_scale" v="0,0"/>
          <prop k="width_unit" v="MM"/>
         </layer>
        </symbol>
@@ -239,7 +266,7 @@
      </VectorClassificationItemNg>
     </LayerItem>
    </Model>
-   <ComposerItem width="64.075" x="4.20904" transparency="0" y="223.166" height="35.2" positionMode="0" frame="false" outlineWidth="0" zValue="1" itemRotation="0" lastValidViewScaleFactor="1.99762" uuid="{edfdc142-8f9a-403b-8557-113de82c0add}" id="impact-legend" background="true" blendMode="0" positionLock="false">
+   <ComposerItem pagey="223.166" page="1" id="impact-legend" lastValidViewScaleFactor="1.99762" positionMode="0" positionLock="false" x="4.20904" y="223.166" zValue="1" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="64.075" outlineWidth="0" uuid="{7303b2b7-065e-43c8-b81d-46728193f868}" height="35.2" itemRotation="0" frame="false" pagex="4.20904">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>

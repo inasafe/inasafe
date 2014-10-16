@@ -754,9 +754,6 @@ class Test_IO(unittest.TestCase):
 
         V_tmp = read_layer(tmp_filename)
 
-        #print V_new.get_data()[1]
-        #print V_tmp.get_data()[1]
-
         assert V_tmp.projection == V_new.projection
         assert numpy.allclose(V_tmp.geometry, V_new.geometry)
         assert V_tmp.data == V_new.data
@@ -1317,25 +1314,6 @@ class Test_IO(unittest.TestCase):
                                       'Earthquake_Ground_Shaking.asc')]:
 
             R = read_layer(filename)
-            A = R.get_data(nan=False)
-
-            # Verify nodata value
-            Amin = min(A.flat[:])
-            msg = ('Raster must have -9999 as its minimum for this test. '
-                   'We got %f for file %s' % (Amin, filename))
-            assert Amin == -9999, msg
-
-            # Verify that GDAL knows about this
-            nodata = R.get_nodata_value()
-            msg = ('File %s should have registered nodata '
-                   'value %i but it was %s' % (filename, Amin, nodata))
-            assert nodata == Amin, msg
-
-            if filename.endswith('Earthquake_Ground_Shaking.asc'):
-                # Slow
-                continue
-
-            # Then try using numpy.nan
             A = R.get_data(nan=True)
 
             # Verify nodata value
@@ -1439,7 +1417,7 @@ class Test_IO(unittest.TestCase):
             assert numpy.nanmax(numpy.abs(A - B)) == 0
 
             # Check that extrema are OK
-            assert numpy.allclose(maximum, numpy.max(A[:]))
+            assert numpy.allclose(maximum, numpy.nanmax(A[:]))
             assert numpy.allclose(maximum, numpy.nanmax(B[:]))
             assert numpy.allclose(minimum, numpy.nanmin(B[:]))
 
@@ -1538,7 +1516,6 @@ class Test_IO(unittest.TestCase):
         # Store it for visual inspection e.g. with QGIS
         #out_filename = unique_filename(suffix='.shp')
         #V.write_to_file(out_filename)
-        #print 'Written to ', out_filename
 
         # Check against cells that were verified manually using QGIS
         assert numpy.allclose(geometry[5], [96.97137053, -5.34965715])
@@ -1585,7 +1562,6 @@ class Test_IO(unittest.TestCase):
         # Store it for visual inspection e.g. with QGIS
         #out_filename = unique_filename(suffix='.shp')
         #V.write_to_file(out_filename)
-        #print 'Written to ', out_filename
 
         # Systematic check of all cells
         i = 0

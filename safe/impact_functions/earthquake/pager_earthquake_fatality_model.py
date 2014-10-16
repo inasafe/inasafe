@@ -10,7 +10,7 @@ from safe.metadata import (
     hazard_definition,
     exposure_definition
 )
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 from safe.defaults import get_defaults
 from safe.impact_functions.core import default_minimum_needs
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (

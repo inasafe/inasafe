@@ -32,7 +32,7 @@ import difflib
 from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe.api import unique_filename, temp_dir
+from safe.api import unique_filename, temp_dir, get_version
 from safe.common.testing import get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -297,6 +297,10 @@ class TestShakeEvent(unittest.TestCase):
         """Test we can get a dictionary of location info nicely."""
         shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
         result = shake_event.event_dict()
+        software_tag = ('This report was created using InaSAFE version %s. '
+                        'Visit http://inasafe.org for more information.' %
+                        get_version())
+
         #noinspection PyUnresolvedReferences
         expected_dict = {
             'place-name': u'n/a',
@@ -304,7 +308,7 @@ class TestShakeEvent(unittest.TestCase):
             'fatalities-name': u'Estimated fatalities',
             'fatalities-count': u'0',  # 44 only after render
             'elapsed-time': u'',  # empty as it will change
-            'legend-name': u'Population density',
+            'legend-name': u'Population count per grid cell',
             'fatalities-range': '0 - 100',
             'longitude-name': u'Longitude',
             'located-label': u'Located',
@@ -320,11 +324,11 @@ class TestShakeEvent(unittest.TestCase):
                 u'This impact estimation is automatically generated and only '
                 u'takes into account the population and cities affected by '
                 u'different levels of ground shaking. The estimate is based '
-                u'on ground shaking data from BMKG, population density data '
-                u'from asiapop.org, place information from geonames.org and '
-                u'software developed by BNPB. Limitations in the estimates of '
-                u'ground shaking, population  data and place names datasets '
-                u'may result in significant misrepresentation of the '
+                u'on ground shaking data from BMKG, population count data '
+                u'from worldpop.org.uk, place information from geonames.org '
+                u'and software developed by BNPB. Limitations in the '
+                u'estimates of ground shaking, population and place names '
+                u'datasets may result in significant misrepresentation of the '
                 u'on-the-ground situation in the figures shown here. '
                 u'Consequently decisions should not be made solely on the '
                 u'information presented here and should always be verified by '
@@ -341,6 +345,7 @@ class TestShakeEvent(unittest.TestCase):
             'formatted-date-time': '05-Nov-13 06:08:09 ',
             'distance': '0.00',
             'direction-relation': u'of',
+            'software-tag': software_tag,
             'credits': (
                 u'Supported by the Australia-Indonesia Facility for Disaster '
                 u'Reduction, Geoscience Australia and the World Bank-GFDRR.'),
