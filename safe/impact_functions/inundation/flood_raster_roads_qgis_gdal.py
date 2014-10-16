@@ -190,10 +190,12 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             clip_xmin = viewport_extent[0]
         if viewport_extent[1] > clip_ymin:
             clip_ymin = viewport_extent[1]
-        if viewport_extent[2] < clip_xmax:
-            clip_xmax = viewport_extent[2]
-        if viewport_extent[3] < clip_ymax:
-            clip_ymax = viewport_extent[3]
+        # TODO: Why have these two clauses when they are not used?
+        # Commenting out for now.
+        # if viewport_extent[2] < clip_xmax:
+        #     clip_xmax = viewport_extent[2]
+        # if viewport_extent[3] < clip_ymax:
+        #     clip_ymax = viewport_extent[3]
 
         height = ((viewport_extent[3] - viewport_extent[1]) /
                   H.rasterUnitsPerPixelY())
