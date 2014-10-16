@@ -433,3 +433,48 @@ class ImpactFunctionMetadata():
             return []
         else:
             return cls.allowed_subcategories(category)
+
+    @classmethod
+    def get_hazards(cls):
+        """Return hazards of the impact function.
+
+        .. versionadded:: 2.2
+
+        :return: List of valid hazards of the impact function.
+        :rtype: list
+        """
+        hazards = cls.get_metadata()['categories']['hazard']['subcategory']
+        if type(hazards) is not list:
+            hazards = [hazards]
+        return hazards
+
+    @classmethod
+    def has_hazard(cls, hazard):
+        """Check whether an impact function has hazard or not
+
+        .. versionadded:: 2.2
+
+        :param hazard: Dictionary that represent the hazard.
+        :type hazard: dict
+
+        :returns: True if it has hazard, else false
+        :rtype: bool
+        """
+        hazards = cls.get_hazards()
+        return hazard in hazards
+
+    @classmethod
+    def has_hazard_id(cls, hazard_id):
+        """Check whether an impact function has hazard_id or not
+
+        .. versionadded:: 2.2
+
+        :param hazard_id: String that represent the hazard id.
+        :type hazard_id: str
+
+        :returns: True if it has hazard_id, else false
+        :rtype: bool
+        """
+        hazards = cls.get_hazards()
+        hazard_ids = [hazard['id'] for hazard in hazards]
+        return hazard_id in hazard_ids
