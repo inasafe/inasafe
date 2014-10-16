@@ -8,7 +8,7 @@ virtualenv:
 
 branches:
   only:
-    - develop 
+    - develop
 
 install:
   - sudo apt-get -qq -y update
@@ -17,17 +17,24 @@ install:
   - pip install flake8
 
 before_script:
+  - echo "Checking out test data " `date`
+  - scripts/update-test-data.sh
   - echo "Build starting on " `date`
 
 script:
+  - export QGIS_PREFIX_PATH=/usr
+  - export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
+  - echo "PYTHONPATH: $PYTHONPATH"
+  - export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
+  - export INASAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-QGIS2/exposure/population.tif
   - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis
-  
+
 notifications:
   irc:
     channels:
       - "irc.freenode.org#inasafe"
     use_notice: true
-    
+
   email:
     - tim@kartoza.com
     - akbargumbira@gmail.com
