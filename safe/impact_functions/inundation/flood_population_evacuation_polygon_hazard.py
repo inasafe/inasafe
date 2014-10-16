@@ -23,7 +23,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 from safe.metadata import (
     hazard_flood,
-    hazard_tsunami,
     unit_wetdry,
     layer_vector_polygon,
     exposure_population,
@@ -69,7 +68,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     :rating 4
 
     :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
+                    subcategory=='flood' and \
                     layertype=='vector'
 
     :param requires category=='exposure' and \
@@ -104,15 +103,12 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of (flood or tsunami)inundation '
+                    'To assess the impacts of flood inundation '
                     'in vector format on population.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
-                            hazard_flood,
-                            hazard_tsunami
-                        ],
+                        'subcategory': [hazard_flood],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
@@ -129,7 +125,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     title = tr('Need evacuation')
     # Function documentation
     synopsis = tr(
-        'To assess the impacts of (flood or tsunami) inundation in vector '
+        'To assess the impacts of flood inundation in vector '
         'format on population.')
     actions = tr(
         'Provide details about how many people would likely need to be '
