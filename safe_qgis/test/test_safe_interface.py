@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import unittest
+
 from safe_qgis.safe_interface import (
     get_optimal_extent,
     available_functions,
@@ -47,7 +48,7 @@ class SafeInterfaceTest(unittest.TestCase):
 
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
 
-    def test_getOptimalExtent(self):
+    def test_get_optimal_extent(self):
         """Optimal extent is calculated correctly
         """
 
@@ -133,7 +134,7 @@ class SafeInterfaceTest(unittest.TestCase):
             assert 'did not overlap' in str(e), message
         else:
             message = ('Non ovelapping bounding boxes should have raised '
-                         'an exception')
+                       'an exception')
             raise Exception(message)
 
         # Try with wrong input data
@@ -167,12 +168,12 @@ class SafeInterfaceTest(unittest.TestCase):
             message = 'Wrong input data should have raised an exception'
             raise Exception(message)
 
-    def test_availableFunctions(self):
+    def test_available_functions(self):
         """Check we can get the available functions from the impact calculator.
         """
-        myList = available_functions()
-        message = 'No functions available (len=%ss)' % len(myList)
-        assert len(myList) > 0, message
+        functions = available_functions()
+        message = 'No functions available (len=%ss)' % len(functions)
+        self.assertTrue(len(functions) > 0, message)
 
         # Also test if it works when we give it two layers
         # to see if we can determine which functions will
@@ -183,19 +184,19 @@ class SafeInterfaceTest(unittest.TestCase):
         keywords1['layertype'] = 'raster'
         keywords2['layertype'] = 'vector'
 
-        myList = [keywords1, keywords2]
-        myList = available_functions(myList)
-        message = 'No functions available (len=%ss)' % len(myList)
-        assert len(myList) > 0, message
+        functions = [keywords1, keywords2]
+        functions = available_functions(functions)
+        message = 'No functions available (len=%ss)' % len(functions)
+        self.assertTrue(len(functions) > 0, message)
 
-    def test_getKeywordFromFile(self):
+    def test_get_keyword_from_file(self):
         """Get keyword from a filesystem file's .keyword file."""
 
         keyword = read_file_keywords(self.rasterShakePath, 'category')
         expected_keyword = 'hazard'
         message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-                    keyword, expected_keyword, self.rasterShakePath)
-        assert keyword == 'hazard', message
+            keyword, expected_keyword, self.rasterShakePath)
+        self.assertEqual(keyword, 'hazard', message)
 
         # Test we get an exception if keyword is not found
         try:
@@ -205,58 +206,57 @@ class SafeInterfaceTest(unittest.TestCase):
             pass  # this is good
         except Exception, e:
             message = ('Request for bogus keyword raised incorrect '
-                         'exception type: \n %s') % str(e)
+                       'exception type: \n %s') % str(e)
             assert(), message
 
         keywords = read_file_keywords(self.rasterShakePath)
 
-        expected_keywords = {'category': 'hazard',
-                              'subcategory': 'earthquake',
-                              'source': 'USGS',
-                              'unit': 'MMI',
-                              'title': 'An earthquake in Padang like in 2009'}
-        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
-                                                   keywords)
-        assert keywords == expected_keywords, message
+        expected_keywords = {
+            'category': 'hazard',
+            'subcategory': 'earthquake',
+            'source': 'USGS',
+            'unit': 'MMI',
+            'title': 'An earthquake in Padang like in 2009'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
         keywords = read_file_keywords(self.rasterPopulationPath)
-        expected_keywords = {'category': 'exposure',
-                              'source': ('Center for International Earth '
-                                         'Science Information Network '
-                                         '(CIESIN)'),
-                              'subcategory': 'population',
-                              'datatype': 'density',
-                              'title': 'People'}
-        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
-                                                   keywords)
-        assert keywords == expected_keywords, message
+        expected_keywords = {
+            'category': 'exposure',
+            'source': ('Center for International Earth Science Information '
+                       'Network (CIESIN)'),
+            'subcategory': 'population',
+            'datatype': 'density',
+            'title': 'People'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
         keywords = read_file_keywords(self.vectorPath)
-        expected_keywords = {'category': 'exposure',
-                              'datatype': 'itb',
-                              'subcategory': 'structure',
-                              'title': 'Padang WGS84'}
-        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
-                                                   keywords)
-        assert keywords == expected_keywords, message
+        expected_keywords = {
+            'category': 'exposure',
+            'datatype': 'itb',
+            'subcategory': 'structure',
+            'title': 'Padang WGS84'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
         #  tsunami example (one layer is UTM)
         keywords = read_file_keywords(self.rasterTsunamiPath)
-        expected_keywords = {'title': 'Tsunami Max Inundation',
-                              'category': 'hazard',
-                              'subcategory': 'tsunami',
-                              'unit': 'm'}
-        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
-                                                   keywords)
-        assert keywords == expected_keywords, message
+        expected_keywords = {
+            'title': 'Tsunami Max Inundation',
+            'category': 'hazard',
+            'subcategory': 'tsunami',
+            'unit': 'm'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
         keywords = read_file_keywords(self.rasterExposurePath)
-        expected_keywords = {'category': 'exposure',
-                              'subcategory': 'structure',
-                              'title': 'Tsunami Building Exposure'}
-        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords,
-                                                   keywords)
-        assert keywords == expected_keywords, message
+        expected_keywords = {
+            'category': 'exposure',
+            'subcategory': 'structure',
+            'title': 'Tsunami Building Exposure'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
 
 if __name__ == '__main__':
