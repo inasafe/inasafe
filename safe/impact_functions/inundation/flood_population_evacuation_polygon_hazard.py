@@ -145,7 +145,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Vector layer contains population affected and the minimum needs '
+        'Vector layer contains people affected and the minimum needs '
         'based on evacuation percentage.')
 
     target_field = 'population'
@@ -321,7 +321,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
                 self.parameters['evacuation_percentage'])], header=True),
             TableRow(tr(
-                'Map shows population affected in each flood prone area')),
+                'Map shows the number of people affected in each flood prone '
+                'area')),
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
                 'evacuated people')),
@@ -349,7 +350,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         table_body.extend([
             TableRow(tr('Notes'), header=True),
             tr('Total population: %s') % format_int(total),
-            tr('People need evacuation if in area identified as '
+            tr('People need evacuation if in the area identified as '
                '"Flood Prone"'),
             tr('Minimum needs are defined in BNPB regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -395,7 +396,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             data=new_attributes,
             projection=hazard_layer.get_projection(),
             geometry=hazard_layer.get_geometry(),
-            name=tr('Population affected by flood prone areas'),
+            name=tr('People affected by flood prone areas'),
             keywords={
                 'impact_summary': impact_summary,
                 'impact_table': impact_table,

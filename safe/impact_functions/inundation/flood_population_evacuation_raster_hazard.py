@@ -134,8 +134,8 @@ class FloodEvacuationFunction(FunctionProvider):
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Raster layer contains population affected and the minimum needs '
-        'based on the population affected.')
+        'Raster layer contains people affected and the minimum needs '
+        'based on the people affected.')
     limitation = tr(
         'The default threshold of 1 meter was selected based on consensus, '
         'not hard evidence.')
@@ -237,7 +237,7 @@ class FloodEvacuationFunction(FunctionProvider):
                           '*' if evacuated >= 1000 else ''))],
                      header=True),
             TableRow(tr('* Number is rounded to the nearest 1000')),
-            TableRow(tr('Map shows population density needing evacuation')),
+            TableRow(tr('Map shows the numbers of people needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
@@ -331,7 +331,7 @@ class FloodEvacuationFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Population Count')
 
         # Create raster object and return
         raster = Raster(
