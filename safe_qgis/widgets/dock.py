@@ -1778,6 +1778,48 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         message.add(analysis_inputs)
         return message
 
+    def adjust_geo_extent(self, geo_extent, cell_size, layer_extent):
+        """Adjust extent 
+
+        """
+        if (geo_extent == layer_extent):
+            return geo_extent
+        
+        xmin = layer_extent[0]
+        ymin = layer_extent[1]
+        xmax = layer_extent[2]
+        ymax = layer_extent[3]
+
+        width = ((xmax - xmin) / cell_size)
+        width = int(width)
+        x = xmin
+        for i in range(width):
+            if abs(x - geo_extent[0]) < cell_size:
+                # We have found the aligned raster boundary
+                break
+            x += cell_size
+            _ = i
+
+        height = ((ymax - ymin) / cell_size)
+        height = int(height)
+        y = ymin
+        for i in range(height):
+            if abs(y - geo_extent[1]) < cell_size:
+                # We have found the aligned raster boundary
+                break
+            y += cell_size
+            _ = i
+          
+        geo_width = ((geo_extent[2] - geo_extent[0]) / cell_size)
+        geo_width = int(geo_width)
+        geo_height = ((geo_extent[3] - geo_extent[1]) / cell_size)
+        geo_height = int(geo_height)
+        adjusted_extent = [x, y, x + geo_width * cell_size, y + geo_height * cell_size]
+        #adjusted_extent = [x, y, x + width * cell_size, y + height * cell_size]
+        return adjusted_extent
+
+
+        
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
@@ -1869,9 +1911,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 if hazard_geo_cell_size < exposure_geo_cell_size and \
                         allow_resampling_flag:
                     cell_size = hazard_geo_cell_size
+                    layer_extent =  hazard_geoextent
                 else:
                     cell_size = exposure_geo_cell_size
+                    layer_extent =  exposure_geoextent
 
+                #adjust the geo extent to be at the edge of the pixel
+                geo_extent = self.adjust_geo_extent(geo_extent, cell_size, layer_extent)
+                buffered_geoextent = geo_extent
+                
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(cell_size, exposure_geo_cell_size):
                     extra_exposure_keywords['resolution'] = \
