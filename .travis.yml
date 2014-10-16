@@ -9,27 +9,28 @@ virtualenv:
 branches:
   only:
     - develop
+    - travis
 
 -before_install:
+  - sudo apt-get -qq -y update
 
 install:
-  - sudo apt-get -qq -y update
   - sudo apt-get install -y git qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
   - pip install -e . --use-mirrors
   - pip install flake8
-  - echo "Checking out test data " `date`
+  - echo "Checking out test data at" `date`
   - make testdata
 
 before_script:
   - echo "Build starting on " `date`
-
-script:
   - export QGIS_PREFIX_PATH=/usr
   - export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
-  - echo "PYTHONPATH: $PYTHONPATH"
+  - echo "PYTHONPATH:" $PYTHONPATH
+  - ls ${QGIS_PREFIX_PATH}/share/qgis/python/plugins/
   - export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
-  - export INASAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-QGIS2/exposure/population.tif
-  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis
+
+script:
+  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
 
 notifications:
   irc:
