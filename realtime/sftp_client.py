@@ -29,11 +29,12 @@ from realtime.utilities import (
     make_directory,
     get_path_tail,
     realtime_logger_name)
-from realtime.server_config import (
-    BASE_URL,
-    USERNAME,
-    PASSWORD,
-    BASE_PATH)
+from realtime.sftp_configuration.configuration import (
+    get_sftp_base_url,
+    get_sftp_port,
+    get_sftp_user_name,
+    get_sftp_user_password,
+    get_sftp_base_path)
 
 # The logger is initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -42,15 +43,19 @@ LOGGER = logging.getLogger(realtime_logger_name())
 class SFtpClient:
     """A class to fetch directory listings and files using SSH protocol"""
     def __init__(self,
-                 host=BASE_URL,
-                 username=USERNAME,
-                 password=PASSWORD,
-                 working_dir=BASE_PATH):
+                 host=get_sftp_base_url(),
+                 port=get_sftp_port(),
+                 username=get_sftp_user_name(),
+                 password=get_sftp_user_password(),
+                 working_dir=get_sftp_base_path()):
 
         """Class constructor.
 
         :param host: The remote host.
         :type host: str
+
+        :param port: The port of the remote host.
+        :type port: int
 
         :param username: The username for the host.
         :type username: str
@@ -62,13 +67,14 @@ class SFtpClient:
         :type working_dir: str
         """
         self.host = host
+        self.port = port
         self.username = username
         self.password = password
         self.working_dir = working_dir
 
         # create transport object
         # noinspection PyTypeChecker
-        self.transport = paramiko.Transport(self.host)
+        self.transport = paramiko.Transport((self.host, self.port))
         self.transport.connect(username=self.username, password=self.password)
 
         # create sftp object

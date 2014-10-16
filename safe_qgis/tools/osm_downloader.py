@@ -229,14 +229,11 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         # Validate extent
         valid_flag = self.validate_extent()
         if not valid_flag:
-            message = self.tr('The bounding box is not valid. '
-                              'Please make sure it is valid or check your '
-                              'projection!')
+            message = self.tr(
+                'The bounding box is not valid. Please make sure it is '
+                'valid or check your projection!')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(
-                self,
-                error_dialog_title,
-                message)
+            QMessageBox.warning(self, error_dialog_title, message)
             return
 
         # Get all the feature types
@@ -259,12 +256,9 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             # don't show anything because this exception raised
             # when user canceling the import process directly
             pass
-        except Exception as myEx:
+        except Exception as exception:
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(
-                self,
-                error_dialog_title,
-                str(myEx))
+            QMessageBox.warning(self, error_dialog_title, str(exception))
 
             self.progress_dialog.cancel()
 
@@ -284,12 +278,10 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         title = self.tr("Directory %s not exist") % path
         question = self.tr(
-            "Directory %s not exist. Do you want to create it?"
-        ) % path
+            "Directory %s not exist. Do you want to create it?") % path
         # noinspection PyCallByClass,PyTypeChecker
         answer = QMessageBox.question(
-            self, title,
-            question, QMessageBox.Yes | QMessageBox.No)
+            self, title, question, QMessageBox.Yes | QMessageBox.No)
 
         if answer == QMessageBox.Yes:
             if len(path) != 0:
@@ -422,8 +414,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         if not os.path.exists(path):
             message = self.tr(
-                "%s don't exist. The server doesn't have any data."
-            )
+                "%s don't exist. The server doesn't have any data.")
             raise ImportDialogError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')

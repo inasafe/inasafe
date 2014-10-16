@@ -22,7 +22,7 @@ from PyQt4 import QtCore
 
 from qgis.core import QgsFeatureRequest
 
-from third_party.odict import OrderedDict
+from collections import OrderedDict
 
 from safe.common.utilities import unhumanize_number, format_int
 

@@ -122,11 +122,6 @@ class Raster(Layer):
 
             self.number_of_bands = 1
 
-            # We assume internal numpy layers are using nan correctly
-            # FIXME (Ole): If read from file is refactored to load the data
-            #              this should be taken care of there
-            self.nodata_value = numpy.nan
-
     def __str__(self):
         """Render as name and dimensions
         """
@@ -162,9 +157,10 @@ class Raster(Layer):
             return False
 
         # Check data
-        if not nan_allclose(self.get_data(),
-                           other.get_data(),
-                           rtol=rtol, atol=atol):
+        if not nan_allclose(
+                self.get_data(),
+                other.get_data(),
+                rtol=rtol, atol=atol):
             return False
 
         # Check keywords
@@ -246,8 +242,31 @@ class Raster(Layer):
             msg = 'Could not read raster band from %s' % filename
             raise ReadLayerError(msg)
 
-        # FIXME (Ole): I think internal data array should be populated at
-        #              this point - then refactor get_data()
+        # Force garbage collection to free up any memory we can (TS)
+        gc.collect()
+
+        # Read from raster file
+        data = band.ReadAsArray()
+
+        # Convert to double precision (issue #75)
+        data = numpy.array(data, dtype=numpy.float64)
+
+        # Self check
+        M, N = data.shape
+        msg = (
+            'Dimensions of raster array do not match those of '
+            'raster file %s' % self.filename)
+        verify(M == self.rows, msg)
+        verify(N == self.columns, msg)
+        nodata = self.band.GetNoDataValue()
+        if nodata is None:
+            nodata = -9999
+
+        if nodata is not numpy.nan:
+            NaN = numpy.ones((M, N), numpy.float64) * numpy.nan
+            data = numpy.where(data == nodata, NaN, data)
+
+        self.data = data
 
     def write_to_file(self, filename):
         """Save raster data to file
@@ -312,7 +331,7 @@ class Raster(Layer):
         """
         if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
             msg = ('Used data is QgsRasterLayer instance, '
-                   'but QGIS is not avialable.')
+                   'but QGIS is not available.')
             raise TypeError(msg)
 
         base_name = unique_filename()
@@ -360,12 +379,15 @@ class Raster(Layer):
         Args:
             * nan: Optional flag controlling handling of missing values.
 
-                   If nan is True (default), nodata values will be replaced
-                   with numpy.nan
-
                    If keyword nan has a numeric value, nodata values will
                    be replaced by that value. E.g. to set missing values to 0,
                    do get_data(nan=0.0)
+
+                   NOTE: The following behaviour is depricated,
+                   since we handle this on file load:
+                   [If nan is True (default), nodata values will be replaced
+                   with numpy.nan]
+
 
             * scaling: Optional flag controlling if data is to be scaled
                        if it has been resampled. Admissible values are
@@ -392,60 +414,29 @@ class Raster(Layer):
             See issue #123
         """
 
-        if hasattr(self, 'data') and self.data is not None:
-            # Return internal data grid
-            if copy:
-
-                A = copy_module.deepcopy(self.data)
-            else:
-                A = self.data
+        if copy:
+            A = copy_module.deepcopy(self.data)
+        else:
+            A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
 
-        else:
-            # Force garbage collection to free up any memory we can (TS)
-            gc.collect()
-
-            # Read from raster file
-            # FIXME: This can be slow so should be moved to read_from_file
-            A = self.band.ReadAsArray()
-
-            # Convert to double precision (issue #75)
-            A = numpy.array(A, dtype=numpy.float64)
-
-            # Self check
-            M, N = A.shape
-            msg = ('Dimensions of raster array do not match those of '
-                   'raster file %s' % self.filename)
-            verify(M == self.rows, msg)
-            verify(N == self.columns, msg)
-
         # Handle no data value
-        # FIXME (Ole): This only pertains to data read from file
-        # and should be moved to read_from_file.
-        nodata = self.get_nodata_value()
-
         # Must explicit comparison to False and True as nan can be a number
         # so 0 would evaluate to False and e.g. 1 to True.
-        if nan is False:
-            # No change
-            pass
-        else:
-            # Nan value should be changed
-            if nan is True:
-                NAN = numpy.nan  # Use numpy's nan value
-            else:
-                try:
-                    # Use user specified number
-                    NAN = float(nan)
-                except (ValueError, TypeError):
-                    msg = ('Argument nan must be either True, False or a '
-                           'number. I got "nan=%s"' % str(nan))
-                    raise InaSAFEError(msg)
+        if type(nan) is not bool:
+            # We are handling all non-NaN's in read_from_file and
+            # assuming NaN's in internal numpy arrays [issue #297].
+            try:
+                # Use user specified number
+                new_nodata_value = float(nan)
+            except (ValueError, TypeError):
+                msg = ('Argument nan must be either True, False or a '
+                       'number. I got "nan=%s"' % str(nan))
+                raise InaSAFEError(msg)
 
             # Replace NODATA_VALUE with NaN array
-            #print 'Replacing', nodata, 'with', NAN
-            NaN = numpy.ones(A.shape, A.dtype) * NAN
-            A = numpy.where(A == nodata, NaN, A)
+            NoData = numpy.ones(A.shape, A.dtype) * new_nodata_value
+            A = numpy.where(numpy.isnan(A), NoData, A)
 
         # Take care of possible scaling
         if scaling is None:
@@ -464,11 +455,7 @@ class Raster(Layer):
 
             actual_res = self.get_resolution(isotropic=True)
             native_res = self.get_resolution(isotropic=True, native=True)
-            #print
-            #print 'Actual res', actual_res
-            #print 'Native res', native_res
             sigma = (actual_res / native_res) ** 2
-            #print 'Scaling', sigma
         else:
             # See if scaling can work as a scalar value
             try:
@@ -555,7 +542,7 @@ class Raster(Layer):
           min, max
         """
 
-        A = self.get_data(nan=True)
+        A = self.get_data()
         Amin = numpy.nanmin(A.flat[:])
         Amax = numpy.nanmax(A.flat[:])
 
@@ -565,19 +552,9 @@ class Raster(Layer):
         """Get the internal representation of NODATA
 
         Note:
-            If the internal value is None, the standard -9999 is assumed
+            This is always numpy.NaN [issue #297]
         """
-
-        if hasattr(self, 'band'):
-            nodata = self.band.GetNoDataValue()
-
-            # FIXME (Ole): Too hacky, but probably the reality
-            if nodata is None:
-                nodata = -9999
-        else:
-            nodata = self.nodata_value
-
-        return nodata
+        return numpy.nan
 
     def get_bins(self, N=10, quantiles=False):
         """Get N values between the min and the max occurred in this dataset.
@@ -602,7 +579,7 @@ class Raster(Layer):
             # FIXME (Ole): Not 100% sure about this algorithm,
             # but it is close enough
 
-            A = self.get_data(nan=True).flat[:]
+            A = self.get_data().flat[:]
 
             mask = numpy.logical_not(numpy.isnan(A))  # Omit NaN's
             A = A.compress(mask)

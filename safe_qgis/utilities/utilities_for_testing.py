@@ -986,3 +986,11 @@ def remove_vector_temp_file(file_path):
     for ext in extensions:
         if os.path.exists(file_path + ext):
             os.remove(file_path + ext)
+
+
+class FakeLayer(object):
+    def __init__(self, source=None):
+        self.layer_source = source
+
+    def source(self):
+        return self.layer_source
