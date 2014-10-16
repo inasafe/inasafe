@@ -1,7 +1,7 @@
 InaSAFE
 =======
 
-[![Build Status](https://travis-ci.org/timlinux/inasafe.svg?branch=develop)](https://travis-ci.org/timlinux/inasafe)
+[![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
 
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
