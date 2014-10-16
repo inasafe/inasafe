@@ -27,12 +27,13 @@ changelog=
         2.1.1
         Bug fixes:
         * Change AIFDR url to www.aifdr.org in About Dialog
-        * Fix problem uncaught inundated road in flood on road analysis
-        * Fix problem with multi-line in flood on road analysis
-        * Fix InaSAFE renames layer's name back
+        * Change default threshold of tsunami
+        * Change minimum needs value for water to 67
         * Change 'density' term to 'count' for population
         * Enable by default **print as raster** in the map composer template
-        * Change minimum needs value for water to 67
+        * Fix InaSAFE renames layer's name back
+        * Fix problem uncaught inundated road in flood on road analysis
+        * Fix problem with multi-line in flood on road analysis
         * Improve performance of flood on roads analysis
 
 # tags are comma separated with spaces allowed
