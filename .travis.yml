@@ -18,7 +18,7 @@ branches:
 
 install:
   - echo "Checking out test data " `date`
-  - scripts/update-test-data.sh
+  - make testdata
 
 before_script:
   - echo "Build starting on " `date`
