@@ -10,15 +10,17 @@ branches:
   only:
     - develop
 
-install:
+-before_install:
   - sudo apt-get -qq -y update
   - sudo apt-get install -y git qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
   - pip install -e . --use-mirrors
   - pip install flake8
 
-before_script:
+install:
   - echo "Checking out test data " `date`
   - scripts/update-test-data.sh
+
+before_script:
   - echo "Build starting on " `date`
 
 script:
