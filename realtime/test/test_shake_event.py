@@ -308,7 +308,7 @@ class TestShakeEvent(unittest.TestCase):
             'fatalities-name': u'Estimated fatalities',
             'fatalities-count': u'0',  # 44 only after render
             'elapsed-time': u'',  # empty as it will change
-            'legend-name': u'Population density',
+            'legend-name': u'Population count per grid cell',
             'fatalities-range': '0 - 100',
             'longitude-name': u'Longitude',
             'located-label': u'Located',
@@ -324,11 +324,11 @@ class TestShakeEvent(unittest.TestCase):
                 u'This impact estimation is automatically generated and only '
                 u'takes into account the population and cities affected by '
                 u'different levels of ground shaking. The estimate is based '
-                u'on ground shaking data from BMKG, population density data '
-                u'from asiapop.org, place information from geonames.org and '
-                u'software developed by BNPB. Limitations in the estimates of '
-                u'ground shaking, population  data and place names datasets '
-                u'may result in significant misrepresentation of the '
+                u'on ground shaking data from BMKG, population count data '
+                u'from worldpop.org.uk, place information from geonames.org '
+                u'and software developed by BNPB. Limitations in the '
+                u'estimates of ground shaking, population and place names '
+                u'datasets may result in significant misrepresentation of the '
                 u'on-the-ground situation in the figures shown here. '
                 u'Consequently decisions should not be made solely on the '
                 u'information presented here and should always be verified by '

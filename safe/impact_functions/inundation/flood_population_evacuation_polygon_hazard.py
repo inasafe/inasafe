@@ -23,7 +23,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 from safe.metadata import (
     hazard_flood,
-    hazard_tsunami,
     unit_wetdry,
     layer_vector_polygon,
     exposure_population,
@@ -69,7 +68,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     :rating 4
 
     :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
+                    subcategory=='flood' and \
                     layertype=='vector'
 
     :param requires category=='exposure' and \
@@ -104,15 +103,12 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of (flood or tsunami)inundation '
+                    'To assess the impacts of flood inundation '
                     'in vector format on population.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
-                            hazard_flood,
-                            hazard_tsunami
-                        ],
+                        'subcategory': [hazard_flood],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
@@ -129,7 +125,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     title = tr('Need evacuation')
     # Function documentation
     synopsis = tr(
-        'To assess the impacts of (flood or tsunami) inundation in vector '
+        'To assess the impacts of flood inundation in vector '
         'format on population.')
     actions = tr(
         'Provide details about how many people would likely need to be '
@@ -149,7 +145,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Vector layer contains population affected and the minimum needs '
+        'Vector layer contains people affected and the minimum needs '
         'based on evacuation percentage.')
 
     target_field = 'population'
@@ -325,7 +321,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
                 self.parameters['evacuation_percentage'])], header=True),
             TableRow(tr(
-                'Map shows population affected in each flood prone area')),
+                'Map shows the number of people affected in each flood prone '
+                'area')),
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
                 'evacuated people')),
@@ -353,7 +350,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         table_body.extend([
             TableRow(tr('Notes'), header=True),
             tr('Total population: %s') % format_int(total),
-            tr('People need evacuation if in area identified as '
+            tr('People need evacuation if in the area identified as '
                '"Flood Prone"'),
             tr('Minimum needs are defined in BNPB regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -399,15 +396,16 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             data=new_attributes,
             projection=hazard_layer.get_projection(),
             geometry=hazard_layer.get_geometry(),
-            name=tr('Population affected by flood prone areas'),
-            keywords={'impact_summary': impact_summary,
-            'impact_table': impact_table,
-            'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
-            'affected_population': affected_population,
-            'total_population': total},
+            name=tr('People affected by flood prone areas'),
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'affected_population': affected_population,
+                'total_population': total},
             style_info=style_info)
         return vector_layer

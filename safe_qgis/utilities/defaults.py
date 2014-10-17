@@ -129,7 +129,7 @@ def limitations():
     limitation_list.append(
         tr('Polygon area analysis (such as land use) is not yet supported.'))
     limitation_list.append(
-        tr('Population density data (raster) must be provided in WGS84 '
+        tr('Population count data (raster) must be provided in WGS84 '
            'geographic coordinates.'))
     limitation_list.append(
         tr('Population by administration boundary is not yet supported.'))
