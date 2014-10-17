@@ -136,9 +136,14 @@ class SaveScenarioTest(unittest.TestCase):
             function == (
                 'function = Categorised Hazard Population Impact Function'),
             'Impact function is not same')
+        # For QGIS 2.0
         expected_extent = (
             'extent = 106.313333, -6.380000, 107.346667, -6.070000')
-        self.assertEqual(expected_extent, extent)
+        # for QGIS 2.4
+        expected_extent24 = (
+            'extent = 106.287500, -6.380000, 107.372500, -6.070000')
+        self.assertEqual(expected_extent, extent) or \
+            self.assertEqual(expected_extent24, expected_extent)
 
     def test_relative_path(self):
         """Test we calculate the relative paths correctly when saving scenario.
