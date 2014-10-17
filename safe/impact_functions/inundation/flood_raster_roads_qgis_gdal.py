@@ -183,9 +183,9 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         #assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
         clip_xmin = raster_extent.xMinimum()
-        clip_xmax = raster_extent.xMaximum()
+        # clip_xmax = raster_extent.xMaximum()
         clip_ymin = raster_extent.yMinimum()
-        clip_ymax = raster_extent.yMaximum()
+        # clip_ymax = raster_extent.yMaximum()
         if viewport_extent[0] > clip_xmin:
             clip_xmin = viewport_extent[0]
         if viewport_extent[1] > clip_ymin:
