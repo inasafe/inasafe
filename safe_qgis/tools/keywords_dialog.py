@@ -115,6 +115,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
              ('tsunami [wet/dry]', self.tr('tsunami [wet/dry]')),
              ('tsunami [feet]', self.tr('tsunami [feet]')),
              ('flood [m]', self.tr('flood [m]')),
+             ('flood [categorised]', self.tr('flood [categorised]')),
              ('flood [wet/dry]', self.tr('flood [wet/dry]')),
              ('flood [feet]', self.tr('flood [feet]')),
              ('tephra [kg2/m2]', self.tr('tephra [kg2/m2]')),
