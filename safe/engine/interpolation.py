@@ -22,7 +22,7 @@ from safe.storage.utilities import DEFAULT_ATTRIBUTE
 def assign_hazard_values_to_exposure_data(hazard, exposure,
                                           layer_name=None,
                                           attribute_name=None,
-                                          mode='linear'):
+                                          mode='constant'):
     """Assign hazard values to exposure data
 
         This is the high level wrapper around interpolation functions for
@@ -213,7 +213,7 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
 #-------------------------------------------------------------
 def interpolate_raster_vector(source, target,
                               layer_name=None, attribute_name=None,
-                              mode='linear'):
+                              mode='constant'):
     """Interpolate from raster layer to vector data
 
     Args:
