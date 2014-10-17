@@ -16,8 +16,8 @@ functions for impact modelling.
 
 
 Story queue on Waffle:
-[![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
-[![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
+[![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
+[![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
 
 Current test status for master branch:
 * [![Build Status](http://jenkins.inasafe.org/job/inasafe-qgis2/badge/icon)](http://jenkins.inasafe.org/job/inasafe-qgis2/) - ALL Tests
