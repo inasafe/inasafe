@@ -248,18 +248,19 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
                            tr('Map shows population density in high, medium '
-                              'and low flood areas'),
+                              'and low hazard areas'),
                            tr('Total population: %s') % format_int(total)])
         impact_summary = Table(table_body).toNewlineFreeString()
 
-        # Generate 8 equidistant classes across the range of flooded population
-        # 8 is the number of classes in the predefined flood population style
-        # as imported
+        # Generate 8 equidistant classes across
+        # the range of affected population
+        # 8 is the number of classes in the predefined affected
+        # population style as imported
         # noinspection PyTypeChecker
         classes = numpy.linspace(
             numpy.nanmin(M.flat[:]), numpy.nanmax(M.flat[:]), 8)
 
-        # Modify labels in existing flood style to show quantities
+        # Modify labels in existing hazard style to show quantities
         style_classes = style_info['style_classes']
 
         style_classes[0]['label'] = tr('Not Affected [%i people/cell]')\
@@ -275,7 +276,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         style_info['legend_title'] = tr('Population Count')
 
         # For printing map purpose
-        map_title = tr('Population affected by flooding')
+        map_title = tr('Population affected by each category')
         legend_notes = tr(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
