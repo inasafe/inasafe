@@ -34,7 +34,7 @@ from numpy import round
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class CategorisedHazardBuildingImpactFunction(FunctionProvider):
+class CategoricalHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
     :author ESSC
@@ -69,7 +69,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'CategorisedHazardBuildingImpactFunction',
+                'id': 'CategoricalHazardBuildingImpactFunction',
                 'name': tr('Categorised Hazard Building Impact Function'),
                 'impact': tr('Be impacted'),
                 'author': 'ESSC',
