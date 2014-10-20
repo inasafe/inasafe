@@ -11,7 +11,8 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_weekly_needs,
+    population_rounding
 )
 from safe.metadata import (
     hazard_earthquake,
@@ -319,19 +320,19 @@ class ITBFatalityFunction(FunctionProvider):
         R[R < tolerance] = numpy.nan
 
         # Total statistics
-        total = int(round(numpy.nansum(exposure.flat) / 1000) * 1000)
+        total = population_rounding(numpy.nansum(exposure.flat))
 
         # Compute number of fatalities
-        fatalities = int(round(numpy.nansum(number_of_fatalities.values())
-                               / 1000)) * 1000
+        fatalities = population_rounding(numpy.nansum(
+            number_of_fatalities.values()))
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
         if fatalities < 50:
             fatalities = 0
 
         # Compute number of people displaced due to building collapse
-        displaced = int(round(numpy.nansum(number_of_displaced.values())
-                              / 1000)) * 1000
+        displaced = population_rounding(numpy.nansum(
+            number_of_displaced.values()))
 
         # Generate impact report
         table_body = [question]
