@@ -28,6 +28,7 @@ from safe.common.testing import TESTDATA, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.tools.save_scenario import SaveScenarioDialog
+from safe_qgis.utilities.utilities import qgis_version
 from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     set_canvas_crs,
@@ -136,14 +137,18 @@ class SaveScenarioTest(unittest.TestCase):
             function == (
                 'function = Categorised Hazard Population Impact Function'),
             'Impact function is not same')
-        # For QGIS 2.0
-        expected_extent = (
-            'extent = 106.313333, -6.380000, 107.346667, -6.070000')
-        # for QGIS 2.4
-        expected_extent24 = (
-            'extent = 106.287500, -6.380000, 107.372500, -6.070000')
-        self.assertEqual(expected_extent, extent) or \
-            self.assertEqual(expected_extent24, expected_extent)
+
+        # TODO: figure out why this changed between releases
+        if qgis_version() < 20400:
+            # For QGIS 2.0
+            expected_extent = (
+                'extent = 106.313333, -6.380000, 107.346667, -6.070000')
+            self.assertEqual(expected_extent, extent)
+        else:
+            # for QGIS 2.4
+            expected_extent = (
+                'extent = 106.287500, -6.380000, 107.372500, -6.070000')
+            self.assertEqual(expected_extent, expected_extent)
 
     def test_relative_path(self):
         """Test we calculate the relative paths correctly when saving scenario.
