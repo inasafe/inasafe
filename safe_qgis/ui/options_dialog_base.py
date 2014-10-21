@@ -247,6 +247,7 @@ class Ui_OptionsDialogBase(object):
         self.minimum_needs_table.setObjectName(_fromUtf8("minimum_needs_table"))
         self.minimum_needs_table.setColumnCount(0)
         self.minimum_needs_table.setRowCount(0)
+        self.minimum_needs_table.setSelectionBehavior(self.minimum_needs_table.SelectRows)
         self.gridLayout_5.addWidget(self.minimum_needs_table, 1, 0, 1, 1)
         self.gridLayout_7.addLayout(self.gridLayout_5, 0, 0, 1, 1)
         self.label_2 = QtGui.QLabel(self.tab)
