@@ -315,15 +315,16 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 header=True),
             TableRow(
                 [TableCell(
-                    tr('* Number is rounded to the nearest'), '%s' % rounding,
+                    tr('* Number is rounded up to the nearest %s') % (
+                        rounding),
                     col_span=2)],
                 header=False),
             TableRow([tr('People needing evacuation'), '%s*' % (
                 format_int(int(evacuated)))], header=True),
             TableRow(
                 [TableCell(
-                    tr('* Number is rounded to the nearest'),
-                    '%' % rounding_evacuated,
+                    tr('* Number is rounded up to the nearest %s') % (
+                        rounding_evacuated),
                     col_span=2)],
                 header=False),
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(

@@ -18,7 +18,6 @@ from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.metadata import (
     hazard_flood,
-    hazard_tsunami,
     unit_feet_depth,
     unit_metres_depth,
     layer_raster_numeric,
@@ -32,7 +31,6 @@ from safe.common.utilities import (
     ugettext as tr,
     format_int,
     verify,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
@@ -236,7 +234,8 @@ class FloodEvacuationFunction(FunctionProvider):
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
                       '%s*' % format_int(evacuated)],
                      header=True),
-            TableRow(tr('* Number is rounded to the nearest 1000')),
+            TableRow(tr('* Number is rounded up to the nearest %s') % (
+                rounding_evacuated)),
             TableRow(tr('Map shows population density needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
