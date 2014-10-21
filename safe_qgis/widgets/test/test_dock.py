@@ -69,9 +69,11 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_ui_state,
     setup_scenario,
     load_layers,
-    canvas_list)
+    canvas_list,
+    FakeLayer)
 
 from safe_qgis.widgets.dock import Dock
+from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.styling import setRasterStyle
 from safe_qgis.utilities.utilities import qgis_version, read_impact_layer
 
@@ -572,7 +574,7 @@ class TestDock(TestCase):
 
     def test_run_volcano_population_impact(self):
         """Volcano function runs in GUI with a donut (merapi hazard map)
-         hazard data uses population density grid."""
+         hazard data uses population count grid."""
 
         result, message = setup_scenario(
             DOCK,
@@ -612,7 +614,7 @@ class TestDock(TestCase):
     def test_run_volcano_circle_population(self):
         """Volcano function runs in GUI with a circular evacuation zone.
 
-        Uses population density grid as exposure."""
+        Uses population count grid as exposure."""
 
         # NOTE: We assume radii in impact function to be 3, 5 and 10 km
 
@@ -872,7 +874,7 @@ class TestDock(TestCase):
         file_list = ['issue71.tif']  # This layer has incorrect keywords
         clear_flag = False
         _, _ = load_layers(file_list, clear_flag)
-        # set exposure to : Population Density Estimate (5kmx5km)
+        # set exposure to : Population Count (5kmx5km)
         # by moving one down
         DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         actual_dict = get_ui_state(DOCK)
@@ -881,7 +883,7 @@ class TestDock(TestCase):
             'Impact Function Id': '',
             'Impact Function Title': '',
             'Hazard': 'A flood in Jakarta like in 2007',
-            'Exposure': 'Population density (5kmx5km)'}
+            'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
             '\nUI State: \n%s\nExpected State:\n%s\n%s') %
@@ -1345,17 +1347,9 @@ Click for Diagnostic Information:
     def test_generate_insufficient_overlap_message(self):
         """Test we generate insufficent overlap messages nicely."""
 
-        class FakeLayer(object):
-            layer_source = None
+        exposure_layer = FakeLayer('Fake exposure layer')
 
-            def source(self):
-                return self.layer_source
-
-        exposure_layer = FakeLayer()
-        exposure_layer.layer_source = 'Fake exposure layer'
-
-        hazard_layer = FakeLayer()
-        hazard_layer.layer_source = 'Fake hazard layer'
+        hazard_layer = FakeLayer('Fake hazard layer')
 
         message = DOCK.generate_insufficient_overlap_message(
             Exception('Dummy exception'),
@@ -1421,6 +1415,39 @@ Click for Diagnostic Information:
             expected_vertex_count,
             last_band.numberOfVertices()
         )
+
+    def test_issue1191(self):
+        """Test setting a layer's title in the kw directly from qgis api"""
+        DOCK.set_layer_from_title_flag = True
+        set_canvas_crs(GEOCRS, True)
+        set_yogya_extent()
+
+        result, message = setup_scenario(
+            DOCK,
+            hazard='An earthquake in Yogyakarta like in 2006',
+            exposure='OSM Building Polygons',
+            function='Earthquake Guidelines Function',
+            function_id='Earthquake Guidelines Function')
+        self.assertTrue(result, message)
+
+        layer = DOCK.get_hazard_layer()
+        keyword_io = KeywordIO()
+
+        original_title = 'An earthquake in Yogyakarta like in 2006'
+        title = keyword_io.read_keywords(layer, 'title')
+        self.assertEqual(title, original_title)
+
+        # change layer name as if done in the legend
+        expected_title = 'TEST'
+        layer.setLayerName(expected_title)
+        title = keyword_io.read_keywords(layer, 'title')
+        self.assertEqual(title, expected_title)
+
+        # reset KW file to original state
+        layer.setLayerName(original_title)
+        title = keyword_io.read_keywords(layer, 'title')
+        self.assertEqual(title, original_title)
+        DOCK.set_layer_from_title_flag = False
 
 
 if __name__ == '__main__':

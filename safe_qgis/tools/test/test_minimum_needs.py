@@ -69,7 +69,7 @@ class MinimumNeedsTest(unittest.TestCase):
             'family_kits': 200,
             'rice': 2800,
             'toilets': 50,
-            'water': 105000}
+            'water': 67000}
         self.assertDictEqual(attributes, new_layer.data[0])
 
     # def Xtest_accept(self):

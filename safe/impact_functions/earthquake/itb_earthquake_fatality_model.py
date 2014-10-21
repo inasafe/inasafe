@@ -249,7 +249,7 @@ class ITBFatalityFunction(FunctionProvider):
 
                 hazard: Raster layer of MMI ground shaking
 
-                exposure: Raster layer of population density
+                exposure: Raster layer of population count
         """
 
         displacement_rate = self.parameters['displacement_rate']
@@ -269,7 +269,7 @@ class ITBFatalityFunction(FunctionProvider):
         hazard = intensity.get_data()   # Ground Shaking
         exposure = population.get_data(scaling=True)  # Population Density
 
-        # Calculate population affected by each MMI level
+        # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
 
         mmi_range = self.parameters['mmi_range']
@@ -282,7 +282,7 @@ class ITBFatalityFunction(FunctionProvider):
         R = numpy.zeros(hazard.shape)
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
-            # count population affected by this shake level
+            # count people affected by this shake level
             I = numpy.where(
                 (hazard > mmi - self.parameters['step']) * (
                     hazard <= mmi + self.parameters['step']),
@@ -450,7 +450,7 @@ class ITBFatalityFunction(FunctionProvider):
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Population Count')
 
         # Create raster object and return
         L = Raster(R,

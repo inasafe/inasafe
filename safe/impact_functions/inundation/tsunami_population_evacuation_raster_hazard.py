@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Flood Evacuation Impact Function."""
+"""Tsunami Evacuation Impact Function."""
 import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults
@@ -10,14 +10,11 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     default_minimum_needs,
-    evacuated_population_weekly_needs,
-    population_rounding_full,
-    population_rounding
+    evacuated_population_weekly_needs
 )
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.metadata import (
-    hazard_flood,
     hazard_tsunami,
     unit_feet_depth,
     unit_metres_depth,
@@ -42,14 +39,14 @@ from safe.common.exceptions import ZeroImpactException
 
 
 # noinspection PyClassHasNoInit
-class FloodEvacuationFunction(FunctionProvider):
+class TsunamiEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
-    """Impact function for flood evacuation.
+    """Impact function for tsunami evacuation.
 
     :author AIFDR
     :rating 4
     :param requires category=='hazard' and \
-                    subcategory=='flood' and \
+                    subcategory=='tsunami' and \
                     layertype=='raster' and \
                     unit=='m'
 
@@ -59,7 +56,7 @@ class FloodEvacuationFunction(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for FloodEvacuationFunction.
+        """Metadata for TsunamiEvacuationFunction.
 
         .. versionadded:: 2.1
 
@@ -79,18 +76,18 @@ class FloodEvacuationFunction(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'FloodEvacuationFunction',
-                'name': tr('Flood Evacuation Function'),
+                'id': 'TsunamiEvacuationFunction',
+                'name': tr('Tsunami Evacuation Function'),
                 'impact': tr('Need evacuation'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of flood inundation in raster '
-                    'format on population.'),
+                    'To assess the impacts of tsunami inundation '
+                    'in raster format on population.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [hazard_flood],
+                        'subcategory': [hazard_tsunami],
                         'units': [
                             unit_feet_depth,
                             unit_metres_depth
@@ -112,7 +109,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
     # Function documentation
     synopsis = tr(
-        'To assess the impacts of flood inundation in raster '
+        'To assess the impacts of tsunami inundation in raster '
         'format on population.')
     actions = tr(
         'Provide details about how many people would likely need to be '
@@ -120,7 +117,7 @@ class FloodEvacuationFunction(FunctionProvider):
         'required to support them.')
     detailed_description = tr(
         'The population subject to inundation exceeding a threshold '
-        '(default 1m) is calculated and returned as a raster layer. In '
+        '(default 0.7m) is calculated and returned as a raster layer. In '
         'addition the total number and the required needs in terms of the '
         'BNPB (Perka 7) are reported. The threshold can be changed and even '
         'contain multiple numbers in which case evacuation and needs are '
@@ -132,21 +129,21 @@ class FloodEvacuationFunction(FunctionProvider):
         'resolution and reflects population count per cell which are affected '
         'by inundation.')
     hazard_input = tr(
-        'A hazard raster layer where each cell represents flood depth '
+        'A hazard raster layer where each cell represents tsunami depth '
         '(in meters).')
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Raster layer contains people affected and the minimum needs '
-        'based on the people affected.')
+        'Raster layer contains population affected and the minimum needs '
+        'based on the population affected.')
     limitation = tr(
-        'The default threshold of 1 meter was selected based on consensus, '
+        'The default threshold of 0.7 meter was selected based on consensus, '
         'not hard evidence.')
 
     # Configurable parameters
     # TODO: Share the mimimum needs and make another default value
     parameters = OrderedDict([
-        ('thresholds [m]', [1.0]),
+        ('thresholds [m]', [0.7]),
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -161,24 +158,24 @@ class FloodEvacuationFunction(FunctionProvider):
     ])
 
     def run(self, layers):
-        """Risk plugin for flood population evacuation.
+        """Risk plugin for tsunami population evacuation.
 
         :param layers: List of layers expected to contain
-              hazard_layer: Raster layer of flood depth
+              hazard_layer: Raster layer of tsunami depth
               exposure_layer: Raster layer of population data on the same grid
               as hazard_layer
 
-        Counts number of people exposed to flood levels exceeding
+        Counts number of people exposed to tsunami levels exceeding
         specified threshold.
 
-        :returns: Map of population exposed to flood levels exceeding the
+        :returns: Map of population exposed to tsunami levels exceeding the
             threshold. Table with number of people evacuated and supplies
             required.
         :rtype: tuple
         """
 
         # Identify hazard and exposure layers
-        hazard_layer = get_hazard_layer(layers)  # Flood inundation [m]
+        hazard_layer = get_hazard_layer(layers)  # Tsunami inundation [m]
         exposure_layer = get_exposure_layer(layers)
 
         question = get_question(
@@ -214,13 +211,15 @@ class FloodEvacuationFunction(FunctionProvider):
             # Count
             val = int(numpy.sum(medium))
 
+            # Don't show digits less than a 1000
+            val = round_thousand(val)
             counts.append(val)
 
         # Count totals
-        evacuated, rounding_evacuated = population_rounding_full(counts[-1])
+        evacuated = counts[-1]
         total = int(numpy.sum(population))
         # Don't show digits less than a 1000
-        total = population_rounding(total)
+        total = round_thousand(total)
 
         # Calculate estimated minimum needs
         # The default value of each logistic is based on BNPB Perka 7/2008
@@ -234,7 +233,8 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s*' % format_int(evacuated)],
+                      '%s%s' % (format_int(evacuated), (
+                          '*' if evacuated >= 1000 else ''))],
                      header=True),
             TableRow(tr('* Number is rounded to the nearest 1000')),
             TableRow(tr('Map shows population density needing evacuation')),
@@ -262,7 +262,7 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body.extend([
             TableRow(tr('Notes'), header=True),
             tr('Total population: %s') % format_int(total),
-            tr('People need evacuation if flood levels exceed %(eps).1f m') %
+            tr('People need evacuation if tsunami levels exceed %(eps).1f m') %
             {'eps': thresholds[-1]},
             tr('Minimum needs are defined in BNPB regulation 7/2008'),
             tr('All values are rounded up to the nearest integer in order to '
@@ -331,7 +331,7 @@ class FloodEvacuationFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population Count')
+        legend_title = tr('Population density')
 
         # Create raster object and return
         raster = Raster(
