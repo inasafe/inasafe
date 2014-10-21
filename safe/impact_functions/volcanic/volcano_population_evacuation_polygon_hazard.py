@@ -34,7 +34,9 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs,
+    population_rounding
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -290,16 +292,14 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             # prevent key error
             population = int(categories.get(key, 0))
 
-            population = round_thousand(population)
-
             cumulative += population
-            cumulative = round_thousand(cumulative)
 
-            all_categories_population[name] = population
-            all_categories_cumulative[name] = cumulative
+            # I'm not sure whether this is the best place to apply rounding?
+            all_categories_population[name] = population_rounding(population)
+            all_categories_cumulative[name] = population_rounding(cumulative)
 
         # Use final accumulation as total number needing evacuation
-        evacuated = cumulative
+        evacuated = population_rounding(cumulative)
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
