@@ -78,12 +78,11 @@ TEST_PACKAGE=$1
 echo "Running tests in $PATH"
 
 # Make sure data dir is current and synced it its git clone
-#scripts/update-test-data.sh
-source /var/lib/jenkins/jobs/InaSAFE-QGIS2/env.sh
+#scripts/update-test-data.
 
 #Go on with metrics and tests
 make clean
-if [[ $TEST_PACKAGE == 'safe' ]] || [[ $TEST_PACKAGE == 'realtime' ]]; then
+if [[ ${TEST_PACKAGE} == 'safe' ]] || [[ ${TEST_PACKAGE} == 'realtime' ]]; then
     # special case for safe or realtime package
     TEST_PATH="$DIR/$TEST_PACKAGE"
     xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
