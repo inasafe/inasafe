@@ -13,7 +13,8 @@ A flood in Jakarta like in 2007 - sourced from HKV
 Exposure details
 People - sourced from Center for International Earth Science Information Network (CIESIN)
 Detailed gender report
-Kab_name Total Female population (affected) Weekly hygiene packs Additional weekly rice kg for pregnant and lactating women
+Kab_name Total Female count (affected) Weekly hygiene packs Additional weekly
+rice kg for pregnant and lactating women
 JAKARTA UTARA 344,468 172,234 136,702 16,049
 JAKARTA BARAT 278,763 139,381 110,627 12,988
 JAKARTA TIMUR 253,961 126,981 100,785 11,833

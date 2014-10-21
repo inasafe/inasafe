@@ -1,6 +1,8 @@
 InaSAFE
 =======
 
+[![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
+
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
 response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
@@ -14,8 +16,8 @@ functions for impact modelling.
 
 
 Story queue on Waffle:
-[![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
-[![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.png?label=ready)](http://waffle.io/AIFDR/inasafe)
+[![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
+[![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
 
 Current test status for master branch:
 * [![Build Status](http://jenkins.inasafe.org/job/inasafe-qgis2/badge/icon)](http://jenkins.inasafe.org/job/inasafe-qgis2/) - ALL Tests
