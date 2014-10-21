@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>569</width>
-    <height>569</height>
+    <width>699</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,8 +47,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>531</width>
-            <height>492</height>
+            <width>677</width>
+            <height>517</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -480,6 +480,13 @@
           <widget class="QTableWidget" name="minimum_needs_table"/>
          </item>
         </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Note: Changes only take effect after closing and reopening QGIS.</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

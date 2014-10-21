@@ -416,6 +416,13 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         row_id = self.minimum_needs_table.currentRow()
         row_id += 1  # Insert a row after current row
         self.minimum_needs_table.insertRow(row_id)
+        for j, key in enumerate(self.minimum_needs.categories):
+            needs_metadata = self.minimum_needs.category(key)
+            if needs_metadata['type'] == 'list':
+                combo_box = QComboBox()
+                combo_box.addItems(needs_metadata['defaults'])
+                combo_box.setEditable(needs_metadata['editable'])
+                self.minimum_needs_table.setCellWidget(row_id, j, combo_box)
 
     def remove_minimum_needs_row(self):
         """ Remove the selected row from the minimum needs widget.

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Thu Oct  9 14:09:35 2014
+# Created: Tue Oct 21 11:51:15 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_OptionsDialogBase(object):
     def setupUi(self, OptionsDialogBase):
         OptionsDialogBase.setObjectName(_fromUtf8("OptionsDialogBase"))
-        OptionsDialogBase.resize(569, 569)
+        OptionsDialogBase.resize(699, 601)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         OptionsDialogBase.setWindowIcon(icon)
@@ -45,7 +45,7 @@ class Ui_OptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 531, 492))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 677, 517))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -249,6 +249,9 @@ class Ui_OptionsDialogBase(object):
         self.minimum_needs_table.setRowCount(0)
         self.gridLayout_5.addWidget(self.minimum_needs_table, 1, 0, 1, 1)
         self.gridLayout_7.addLayout(self.gridLayout_5, 0, 0, 1, 1)
+        self.label_2 = QtGui.QLabel(self.tab)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout_7.addWidget(self.label_2, 1, 0, 1, 1)
         self.tabWidget.addTab(self.tab, _fromUtf8(""))
         self.tab_advanced = QtGui.QWidget()
         self.tab_advanced.setObjectName(_fromUtf8("tab_advanced"))
@@ -364,6 +367,7 @@ class Ui_OptionsDialogBase(object):
         self.export_button.setText(_translate("OptionsDialogBase", "Export ...", None))
         self.remove_button.setText(_translate("OptionsDialogBase", "-", None))
         self.add_button.setText(_translate("OptionsDialogBase", "+", None))
+        self.label_2.setText(_translate("OptionsDialogBase", "Note: Changes only take effect after closing and reopening QGIS.", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("OptionsDialogBase", "Minimum Needs", None))
         self.lblKeywordCache.setText(_translate("OptionsDialogBase", "Keyword cache for remote datasources", None))
         self.toolKeywordCachePath.setText(_translate("OptionsDialogBase", "...", None))
