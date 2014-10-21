@@ -307,6 +307,23 @@ indent:
 	@# sudo apt-get install python2.7-examples for reindent script
 	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
 
+
+
+##########################################################
+#
+# Make targets specific to Jenkins go below this point
+#
+##########################################################
+
+docker-test: testdata clean
+	@echo
+	@echo "----------------------------------"
+	@echo "Regression Test Suite for running in docker"
+	@echo " against QGIS 2.x"
+	@echo "----------------------------------"
+        @-export PYTHONPATH=`pwd`:$(PYTHONPATH) xvfb-run --server-args="-screen 0, 1024x768x24" nosetest s-v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
+
+
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point

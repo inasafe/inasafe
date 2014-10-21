@@ -24,16 +24,34 @@ RUN apt-get update -y
 
 #-------------Application Specific Stuff ----------------------------------------------------
 
-RUN sudo apt-get install -y xvfb git qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+RUN sudo apt-get install -y \
+    build-essential \
+    xvfb \
+    git \
+    qgis \
+    python-qgis \
+    pylint \
+    pep8 \
+    xvfb \
+    python-nose \
+    python-coverage \
+    pyflakes \
+    python-nosexcover \
+    python-scientific \
+    python-beautifulsoup
+
 ENV QGIS_PREFIX_PATH /usr
-ENV PYTHONPATH ${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
+ENV PYTHONPATH ${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`:/insafe-tests
 ENV LD_LIBRARY_PATH ${QGIS_PREFIX_PATH}/share/qgis/python/plugins/
 ENV LD_LIBRARY_PATH ${QGIS_PREFIX_PATH}/lib
 
-WORKDIR /inasafe
+# Mount insafe-dev and insafe_data under insafe-tests
+RUN mkdir /inasafe-tests
+WORKDIR /inasafe-tests
 
-ENTRYPOINT ["xvfb-run", "--server-args='-screen 0, 1024x768x24'", "nosetests", "-v", "--with-id", "--with-xcoverage", "--with-xunit", "--verbose", "--cover-package=safe,safe_qgis"]
+#ENTRYPOINT ["make"]
+
 
 # Here we list packages to test by default
-CMD ["safe_qgis"]
-
+#CMD ["safe_qgis"]
+CMD ["make docker-test"]
