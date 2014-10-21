@@ -223,7 +223,7 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        # QGIS  > 2.2 scales teh extents to the 400x400 canvas
+        # QGIS  > 2.2 scales the extents to the 400x400 canvas
         # slightly differently so versions prior to 2.4 will
         # return 116 fatalities
         if qgis_version() < 20400:
@@ -344,9 +344,20 @@ class TestDock(TestCase):
         #Building type	 closed	Total
         #All	        7	                17
 
+        # QGIS  > 2.2 scales the extents to the 400x400 canvas
+        # slightly differently so versions prior to 2.4
+        # Versions >= 2.4 of QGIS
+        #All	7	16
+
+        if qgis_version() < 20400:
+            total_buildings = 17
+        else:
+            total_buildings = 16
         message = 'Result not as expected: %s' % result
-        self.assertTrue(format_int(17) in result, message)
-        self.assertTrue(format_int(7) in result, message)
+        self.assertTrue(format_int(total_buildings) in result, message)
+
+        flooded_buildings = 7
+        self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
         """Test Insufficient overlap errors are caught as per issue #372.
