@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+import os
 import re
 import json
 from sqlite3 import OperationalError
@@ -28,9 +29,9 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature, QObject
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
+from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication, QBrush, QColor
 
-from qgis.core import QgsBrowserModel
+from qgis.core import QgsBrowserModel, QgsDataItem, QgsVectorLayer, QgsRasterLayer
 
 from safe.api import ImpactFunctionManager
 from safe.api import metadata  # pylint: disable=W0612
@@ -143,8 +144,8 @@ field_question_subcategory_unit = QApplication.translate(
     'WizardDialog',
     'You have selected a <b>%s %s</b> layer measured in '
     '<b>%s</b>, and the selected layer is a vector layer. Please '
-    'select the attribute in this layer that represents %s.')
-# (category, subcategory, unit, subcategory-unit relation))
+    'select the attribute in this layer that represents %s.'
+    )   # (category, subcategory, unit, subcategory-unit relation))
 
 field_question_aggregation = QApplication.translate(
     'WizardDialog',
@@ -162,23 +163,30 @@ classify_question = QApplication.translate(
     'categories.')   # (subcategory, category, unit, field)
 
 # Constants: tab numbers for steps
-step_category = 1
-step_subcategory = 2
-step_unit = 3
-step_field = 4
-step_classify = 5
-step_aggregation = 6
-step_source = 7
-step_title = 8
-step_function = 9
-step_layer_origin = 10
-step_layer_from_canvas = 11
-step_layer_from_disk = 12
-step_disjoint_layers = 13
-step_if_params = 14
-step_summary = 15
-step_progress = 16
-step_report = 17
+step_kw_category = 1
+step_kw_subcategory = 2
+step_kw_unit = 3
+step_kw_field = 4
+step_kw_classify = 5
+step_kw_aggregation = 6
+step_kw_source = 7
+step_kw_title = 8
+step_dc_function = 9
+step_dc_hazlayer_origin = 10
+step_dc_hazlayer_from_canvas = 11
+step_dc_hazlayer_from_browser = 12
+step_dc_explayer_origin = 13
+step_dc_explayer_from_canvas = 14
+step_dc_explayer_from_browser = 15
+step_dc_disjoint_layers = 16
+step_dc_agglayer_origin = 17
+step_dc_agglayer_from_canvas = 18
+step_dc_agglayer_from_browser = 19
+step_dc_agglayer_disjoint = 20
+step_dc_params = 21
+step_dc_summary = 22
+step_dc_progress = 23
+step_dc_report = 24
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -204,54 +212,6 @@ def get_question_text(constant):
         return eval(constant)
     except NameError:
         return '<b>MISSING CONSTANT: %s</b>' % constant
-
-
-# TEMPORARY API: Following functions are meant to be moved to metadata stuff some day:
-def tempapi_get_hazard_subcategories():
-    """Return a list of available hazards.
-
-    :returns: The list of hazard dictionaries.
-    :rtype: list of dicts
-    """
-    hazards = []
-    for imfunc in ImpactFunctionManager().impact_functions:
-        for hazard in imfunc.Metadata().get_metadata()['categories']['hazard']['subcategory']:
-            if type(hazard)==dict and hazard['id'] not in [h['id'] for h in  hazards]:
-                hazards += [hazard]
-    return hazards
-
-def tempapi_get_functions_for_hazard(hazard_id):
-    """Return a list of impact functions available for given hazard
-
-    :param hazard_id: The id of hazard for function filter.
-    :type hazard_id: string
-
-
-    :returns: The list of impact function identifiers.
-    :rtype: list of strings
-    """
-    functions = []
-    for imfunc in ImpactFunctionManager().impact_functions:
-        m = imfunc.Metadata().get_metadata()
-        for hazard in m['categories']['hazard']['subcategory']:
-            if type(hazard) == dict and hazard['id'] == hazard_id:
-                functions += [m['id']]
-    return functions
-
-def tempapi_get_function_metadata(function_id):
-    """Return metadata for given function
-
-    :param function_id: The id of impact function.
-    :type hazard_id: string
-
-
-    :returns: The function metadata.
-    :rtype: dict or None
-    """
-    for imfunc in ImpactFunctionManager().impact_functions:
-        metadata = imfunc.Metadata().get_metadata()
-        if metadata and metadata['id'] == function_id:
-            return metadata
 
 
 class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
@@ -287,11 +247,18 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.dock = dock
         self.suppress_warning_dialog = False
         self.set_tool_tip()
+        self.tvBrowserHazard.setModel(QgsBrowserModel())
+        self.tvBrowserExposure.setModel(QgsBrowserModel())
+        self.tvBrowserAggregation.setModel(QgsBrowserModel())
+        self.keyword_io = KeywordIO()
 
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
 
         # noinspection PyUnresolvedReferences
+        self.tvBrowserHazard.selectionModel().selectionChanged.connect(self.tvBrowserHazard_selection_changed)
+        self.tvBrowserExposure.selectionModel().selectionChanged.connect(self.tvBrowserExposure_selection_changed)
+        self.tvBrowserAggregation.selectionModel().selectionChanged.connect(self.tvBrowserAggregation_selection_changed)
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
         self.pbnCancel.released.connect(self.reject)
 
@@ -308,7 +275,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :type layer: QgsMapLayer
         """
         self.lblSubtitle.setText(self.tr('Keywords creation...'))
-        self.keyword_io = KeywordIO()
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
         if self.layer_type == 'vector':
@@ -330,18 +296,42 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 UnsupportedProviderError):
             self.existing_keywords = None
 
-        self.update_category_tab()
-        self.auto_select_one_item(self.lstCategories)
-        self.set_existing_options(step_category)
-        self.go_to_step(step_category)
+        self.set_widgets_step_kw_category()
+        self.go_to_step(step_kw_category)
 
     def set_function_centric_mode(self):
         """Set the Wizard to the Function Centric mode"""
         self.lblSubtitle.setText(self.tr('Function-centric assessment...'))
-        new_step = step_function
-        self.update_impact_functions_tab()
+        new_step = step_dc_function
+        self.set_widgets_step_dc_function()
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
+
+    # ===========================
+    # STEP_KW_CATEGORY
+    # ===========================
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_lstCategories_itemSelectionChanged(self):
+        """Update category description label and subcategory widgets.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        self.lstSubcategories.clear()
+        category = self.selected_category()
+        # Exit if no selection
+        if not category:
+            return
+        # Set description label
+        self.lblDescribeCategory.setText(category["description"])
+        self.lblIconCategory.setPixmap(
+            QPixmap(':/plugins/inasafe/keyword-category-%s.svg'
+                    % (category['id'] or 'notset')))
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
 
     def selected_category(self):
         """Obtain the category selected by user.
@@ -356,6 +346,71 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         except (AttributeError, NameError):
             return None
 
+    def set_widgets_step_kw_category(self):
+        """Set widgets on the Category tab."""
+        self.lstCategories.clear()
+        self.lstSubcategories.clear()
+        self.lstUnits.clear()
+        self.lblDescribeCategory.setText('')
+        self.lblIconCategory.setPixmap(QPixmap())
+        self.lblSelectCategory.setText(
+            category_question % self.layer.name())
+        categories = ImpactFunctionManager().categories_for_layer(
+            self.layer_type, self.data_type)
+        if self.data_type == 'polygon':
+            categories += ['aggregation']
+        if self.data_type == 'point':
+            categories = ['hazard']
+        for category in categories:
+            if type(category) != dict:
+                # pylint: disable=W0612
+                # noinspection PyUnresolvedReferences
+                category = eval('metadata.%s_definition' % category)
+                # pylint: enable=W0612
+            item = QListWidgetItem(category['name'], self.lstCategories)
+            item.setData(QtCore.Qt.UserRole, unicode(category))
+            self.lstCategories.addItem(item)
+
+        # Set values based on existing keywords (if already assigned)
+        category_keyword = self.get_existing_keyword('category')
+        if category_keyword == 'postprocessing':
+            category_keyword = 'aggregation'
+        if category_keyword:
+            categories = []
+            for index in xrange(self.lstCategories.count()):
+                item = self.lstCategories.item(index)
+                category = eval(item.data(QtCore.Qt.UserRole))
+                categories.append(category['id'])
+            if category_keyword in categories:
+                self.lstCategories.setCurrentRow(
+                    categories.index(category_keyword))
+
+        self.auto_select_one_item(self.lstCategories)
+
+    # ===========================
+    # STEP_KW_SUBCATEGORY
+    # ===========================
+
+    # noinspection PyPep8Naming
+    def on_lstSubcategories_itemSelectionChanged(self):
+        """Update subcategory description label and unit widgets.
+
+        .. note:: This is an automatic Qt slot
+           executed when the subcategory selection changes.
+        """
+        self.lstUnits.clear()
+        subcategory = self.selected_subcategory()
+        # Exit if no selection
+        if not subcategory:
+            return
+        # Set description label
+        self.lblDescribeSubcategory.setText(subcategory['description'])
+        self.lblIconSubcategory.setPixmap(QPixmap(
+            ':/plugins/inasafe/keyword-subcategory-%s.svg'
+            % (subcategory['id'] or 'notset')))
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
+
     def selected_subcategory(self):
         """Obtain the subcategory selected by user.
 
@@ -367,6 +422,55 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return eval(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
+
+    def set_widgets_step_kw_subcategory(self):
+        """Set widgets on the Subcategory tab."""
+        category = self.selected_category()
+        self.lstSubcategories.clear()
+        self.lstUnits.clear()
+        self.lblDescribeSubcategory.setText('')
+        self.lblIconSubcategory.setPixmap(QPixmap())
+        self.lblSelectSubcategory.setText(
+            get_question_text('%s_question' % category['id']))
+        for i in ImpactFunctionManager().subcategories_for_layer(
+                category['id'], self.layer_type, self.data_type):
+            item = QListWidgetItem(i['name'], self.lstSubcategories)
+            item.setData(QtCore.Qt.UserRole, unicode(i))
+            self.lstSubcategories.addItem(item)
+
+        # Set values based on existing keywords (if already assigned)
+        subcategory_keyword = self.get_existing_keyword('subcategory')
+        if subcategory_keyword:
+            subcategories = []
+            for index in xrange(self.lstSubcategories.count()):
+                item = self.lstSubcategories.item(index)
+                subcategory = eval(item.data(QtCore.Qt.UserRole))
+                subcategories.append(subcategory['id'])
+            if subcategory_keyword in subcategories:
+                self.lstSubcategories.setCurrentRow(
+                    subcategories.index(subcategory_keyword))
+
+        self.auto_select_one_item(self.lstSubcategories)
+
+    # ===========================
+    # STEP_KW_UNIT
+    # ===========================
+
+    # noinspection PyPep8Naming
+    def on_lstUnits_itemSelectionChanged(self):
+        """Update unit description label and field widgets.
+
+        .. note:: This is an automatic Qt slot
+           executed when the unit selection changes.
+        """
+        self.lstFields.clear()
+        unit = self.selected_unit()
+        # Exit if no selection
+        if not unit:
+            return
+        self.lblDescribeUnit.setText(unit['description'])
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
 
     def selected_unit(self):
         """Obtain the unit selected by user.
@@ -380,6 +484,69 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         except (AttributeError, NameError):
             return None
 
+    def set_widgets_step_kw_unit(self):
+        """Set widgets on the Unit tab."""
+        category = self.selected_category()
+        subcategory = self.selected_subcategory()
+        self.lblSelectUnit.setText(
+            unit_question % (subcategory['name'], category['name']))
+        self.lblDescribeUnit.setText('')
+        self.lstUnits.clear()
+        self.lstFields.clear()
+        for i in ImpactFunctionManager().units_for_layer(
+                subcategory['id'], self.layer_type, self.data_type):
+            if (self.layer_type == 'raster' and
+                    i['constraint'] == 'categorical'):
+                continue
+            else:
+                item = QListWidgetItem(i['name'], self.lstUnits)
+                item.setData(QtCore.Qt.UserRole, unicode(i))
+                self.lstUnits.addItem(item)
+
+        # Set values based on existing keywords (if already assigned)
+        unit_id = self.get_existing_keyword('unit')
+        unit_id = metadata.old_to_new_unit_id(unit_id)
+        if unit_id:
+            units = []
+            for index in xrange(self.lstUnits.count()):
+                item = self.lstUnits.item(index)
+                unit = eval(item.data(QtCore.Qt.UserRole))
+                units.append(unit['id'])
+            if unit_id in units:
+                self.lstUnits.setCurrentRow(units.index(unit_id))
+
+        self.auto_select_one_item(self.lstUnits)
+
+    # ===========================
+    # STEP_KW_FIELD
+    # ===========================
+
+    # noinspection PyPep8Naming
+    def on_lstFields_itemSelectionChanged(self):
+        """Update field description label and unlock the Next button.
+
+        .. note:: This is an automatic Qt slot
+           executed when the field selection changes.
+        """
+        self.treeClasses.clear()
+        field = self.selected_field()
+        # Exit if no selection
+        if not field:
+            return
+
+        fields = self.layer.dataProvider().fields()
+        field_type = fields.field(field).typeName()
+        field_index = fields.indexFromName(self.selected_field())
+        unique_values = self.layer.uniqueValues(field_index)[0:48]
+        unique_values_str = [i and unicode(i) or 'NULL' for i in unique_values]
+        if unique_values != self.layer.uniqueValues(field_index):
+            unique_values_str += ['...']
+        desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
+        desc += self.tr('Unique values: %s') % ', '.join(unique_values_str)
+        self.lblDescribeField.setText(desc)
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
+
     def selected_field(self):
         """Obtain the field selected by user.
 
@@ -392,90 +559,67 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             return None
 
-    def selected_mapping(self):
-        """Obtain the value-to-class mapping set by user.
-
-        :returns: The complete mapping as a dict of lists.
-        :rtype: dict
-        """
-        value_map = {}
-        tree_clone = self.treeClasses.invisibleRootItem().clone()
-        for tree_branch in tree_clone.takeChildren():
-            value_list = []
-            for tree_leaf in tree_branch.takeChildren():
-                value_list += [tree_leaf.text(0)]
-            if value_list:
-                value_map[tree_branch.text(0)] = value_list
-        return value_map
-
-    def selected_function(self):
-        """Obtain the impact function selected by user.
-
-        :returns: id of the selected function.
-        :rtype: string, None
-        """
-        item = self.treeFunctions.currentItem()
-        if not item:
-            return None
-
-        data = item.data(0, QtCore.Qt.UserRole)
-
-        if data:
-            return data
+    def set_widgets_step_kw_field(self):
+        """Set widgets on the Field tab."""
+        category = self.selected_category()
+        subcategory = self.selected_subcategory()
+        unit = self.selected_unit()
+        if subcategory and unit:
+            subcategory_unit_relation = get_question_text(
+                '%s_%s_question' % (subcategory['id'], unit['id']))
         else:
-            return None
+            subcategory_unit_relation = self.tr(
+                '<b><font color="red">ERROR! '
+                'Missing subcategory or unit!</font></b>')
+        if category['id'] == 'aggregation':
+            question_text = field_question_aggregation
+        else:
+            # unique values, continuous or categorical data
+            question_text = field_question_subcategory_unit % (
+                category['name'],
+                subcategory['name'],
+                unit['name'],
+                subcategory_unit_relation)
+        self.lblSelectField.setText(question_text)
+        self.lstFields.clear()
+        default_item = None
+        for field in self.layer.dataProvider().fields():
+            field_name = field.name()
+            item = QListWidgetItem(field_name, self.lstFields)
+            item.setData(QtCore.Qt.UserRole, field_name)
+            # Select the item if it match the unit's default_attribute
+            if unit and unit['id'] == 'building_generic':
+                pass
+            else:
+                if unit and 'default_attribute' in unit \
+                        and field_name == unit['default_attribute']:
+                    default_item = item
+                # For continuous data, gray out id, gid, fid and text fields
+                if unit and unit['constraint'] == 'continuous':
+                    field_type = field.type()
+                    if field_type > 9 or re.match(
+                            '.{0,2}id$', field_name, re.I):
+                        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+        if default_item:
+            self.lstFields.setCurrentItem(default_item)
+        self.lblDescribeField.clear()
 
-    def selectedCanvasLayer(self):
-        """Obtain the canvas layer selected by user.
+        # Set values based on existing keywords (if already assigned)
+        if self.selected_category()['id'] != 'aggregation':
+            field = self.get_existing_keyword('field')
+        else:
+            field = self.get_existing_keyword('aggregation attribute')
+        if field:
+            fields = []
+            for index in xrange(self.lstFields.count()):
+                fields.append(str(self.lstFields.item(index).text()))
+            if field in fields:
+                self.lstFields.setCurrentRow(fields.index(field))
+        self.auto_select_one_item(self.lstFields)
 
-        :returns: id of the selected layer.
-        :rtype: string, None
-        """
-        item = self.lstCanvasLayers.currentItem()
-        try:
-            layer_id = item.data(QtCore.Qt.UserRole)
-        except (AttributeError, NameError):
-            layer_id = None
-
-        return layer_id
-
-    def get_aggregation_attributes(self):
-        """Obtain the value of aggregation attributes set by user.
-
-        :returns: The key and value of aggregation attributes.
-        :rtype: dict
-        """
-        aggregation_attributes = dict()
-
-        current_index = self.cboFemaleRatioAttribute.currentIndex()
-        data = self.cboFemaleRatioAttribute.itemData(current_index)
-        aggregation_attributes[female_ratio_attribute_key] = data
-
-        value = self.dsbFemaleRatioDefault.value()
-        aggregation_attributes[female_ratio_default_key] = value
-
-        current_index = self.cboYouthRatioAttribute.currentIndex()
-        data = self.cboYouthRatioAttribute.itemData(current_index)
-        aggregation_attributes[youth_ratio_attribute_key] = data
-
-        value = self.dsbYouthRatioDefault.value()
-        aggregation_attributes[youth_ratio_default_key] = value
-
-        current_index = self.cboAdultRatioAttribute.currentIndex()
-        data = self.cboAdultRatioAttribute.itemData(current_index)
-        aggregation_attributes[adult_ratio_attribute_key] = data
-
-        value = self.dsbAdultRatioDefault.value()
-        aggregation_attributes[adult_ratio_default_key] = value
-
-        current_index = self.cboElderlyRatioAttribute.currentIndex()
-        data = self.cboElderlyRatioAttribute.itemData(current_index)
-        aggregation_attributes[elderly_ratio_attribute_key] = data
-
-        value = self.dsbElderlyRatioDefault.value()
-        aggregation_attributes[elderly_ratio_default_key] = value
-
-        return aggregation_attributes
+    # ===========================
+    # STEP_KW_CLASSIFY
+    # ===========================
 
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):
@@ -497,6 +641,159 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
                 and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
             item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
+
+    def selected_mapping(self):
+        """Obtain the value-to-class mapping set by user.
+
+        :returns: The complete mapping as a dict of lists.
+        :rtype: dict
+        """
+        value_map = {}
+        tree_clone = self.treeClasses.invisibleRootItem().clone()
+        for tree_branch in tree_clone.takeChildren():
+            value_list = []
+            for tree_leaf in tree_branch.takeChildren():
+                value_list += [tree_leaf.text(0)]
+            if value_list:
+                value_map[tree_branch.text(0)] = value_list
+        return value_map
+
+    def set_widgets_step_kw_classify(self):
+        """Set widgets on the Classify tab."""
+        category = self.selected_category()
+        subcategory = self.selected_subcategory()
+        unit = self.selected_unit()
+        default_classes = unit['classes']
+        field = self.selected_field()
+        field_index = self.layer.dataProvider().fields().indexFromName(
+            self.selected_field())
+        field_type = self.layer.dataProvider().fields()[field_index].type()
+        self.lblClassify.setText(classify_question %
+                                 (subcategory['name'], category['name'],
+                                  unit['name'], field.upper()))
+        # Assign unique values to classes
+        unassigned_values = list()
+        assigned_values = dict()
+        for default_class in default_classes:
+            assigned_values[default_class['name']] = list()
+        for value in self.layer.uniqueValues(field_index):
+            value_as_string = value and unicode(value) or 'NULL'
+            assigned = False
+            for default_class in default_classes:
+                if (field_type > 9
+                    and value_as_string in default_class['string_defaults']) \
+                        or (field_type < 10
+                            and (default_class['numeric_default_min'] <=
+                                 value < default_class[
+                                 'numeric_default_max'])):
+                    assigned_values[default_class['name']] += [value_as_string]
+                    assigned = True
+            if not assigned:
+                # add to unassigned values list otherwise
+                unassigned_values += [value_as_string]
+        self.populate_classified_values(
+            unassigned_values, assigned_values, default_classes)
+
+        # Set values based on existing keywords (if already assigned)
+        unit_id = self.get_existing_keyword('unit')
+        unit_name = metadata.old_to_new_unit_id(unit_id)
+        # Do not continue if user select different unit
+        if unit_name != self.selected_unit()['name']:
+            return
+
+        field = self.get_existing_keyword('field')
+        # Do not continue if user select different field
+        if field != self.selected_field():
+            return
+
+        # Do not continue if there is no value_map in existing keywords
+        value_map = self.get_existing_keyword('value_map')
+
+        if value_map is None:
+            return
+
+        # Assign unique values to classes
+        unit = self.selected_unit()
+        default_classes = unit['classes']
+        unassigned_values = list()
+        assigned_values = dict()
+        for default_class in default_classes:
+            assigned_values[default_class['name']] = list()
+        if type(value_map) == str:
+            try:
+                value_map = json.loads(value_map)
+            except ValueError:
+                return
+        field_index = self.layer.dataProvider().fields().indexFromName(
+            self.selected_field())
+        for unique_value in self.layer.uniqueValues(field_index):
+            value_as_string = (
+                unique_value and unicode(unique_value) or 'NULL')
+            # check in value map
+            assigned = False
+            for key, value in value_map.iteritems():
+                if value_as_string in value:
+                    assigned_values[key] += [value_as_string]
+                    assigned = True
+            if not assigned:
+                unassigned_values += [value_as_string]
+        self.populate_classified_values(
+            unassigned_values, assigned_values, default_classes)
+
+    def populate_classified_values(
+            self, unassigned_values, assigned_values, default_classes):
+        """Populate lstUniqueValues and treeClasses.from the parameters.
+
+        :param unassigned_values: List of values that haven't been assigned
+            to a class. It will be put in self.lstUniqueValues.
+        :type unassigned_values: list
+
+        :param assigned_values: Dictionary with class as the key and list of
+            value as the the value of the dictionary. It will be put in
+            self.treeClasses.
+        :type assigned_values: dict
+
+        :param default_classes: Default classes from unit.
+        :type default_classes: list
+        """
+        # Populate the unique values list
+        self.lstUniqueValues.clear()
+        for value in unassigned_values:
+            list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
+            list_item.setFlags(QtCore.Qt.ItemIsEnabled |
+                               QtCore.Qt.ItemIsSelectable |
+                               QtCore.Qt.ItemIsDragEnabled)
+            list_item.setText(value)
+            self.lstUniqueValues.addItem(list_item)
+        # Populate assigned values tree
+        self.treeClasses.clear()
+        bold_font = QtGui.QFont()
+        bold_font.setItalic(True)
+        bold_font.setBold(True)
+        bold_font.setWeight(75)
+        self.treeClasses.invisibleRootItem().setFlags(
+            QtCore.Qt.ItemIsEnabled)
+        for default_class in default_classes:
+            # Create branch for class
+            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
+            tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
+                                 QtCore.Qt.ItemIsEnabled)
+            tree_branch.setExpanded(True)
+            tree_branch.setFont(0, bold_font)
+            tree_branch.setText(0, default_class['name'])
+            if 'description' in default_class:
+                tree_branch.setToolTip(0, default_class['description'])
+            # Assign known values
+            for value in assigned_values[default_class['name']]:
+                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
+                                   QtCore.Qt.ItemIsSelectable |
+                                   QtCore.Qt.ItemIsDragEnabled)
+                tree_leaf.setText(0, value)
+
+    # ===========================
+    # STEP_KW_AGGREGATION
+    # ===========================
 
     # noinspection PyPep8Naming,PyMethodMayBeStatic
     def on_cboFemaleRatioAttribute_currentIndexChanged(self):
@@ -558,89 +855,182 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             self.dsbElderlyRatioDefault.setEnabled(False)
 
-    # prevents actions being handled twice
-    # noinspection PyPep8Naming
-    @pyqtSignature('')
-    def on_lstCategories_itemSelectionChanged(self):
-        """Update category description label and subcategory widgets.
+    def get_aggregation_attributes(self):
+        """Obtain the value of aggregation attributes set by user.
 
-        .. note:: This is an automatic Qt slot
-           executed when the category selection changes.
+        :returns: The key and value of aggregation attributes.
+        :rtype: dict
         """
-        self.lstSubcategories.clear()
-        category = self.selected_category()
-        # Exit if no selection
-        if not category:
-            return
-        # Set description label
-        self.lblDescribeCategory.setText(category["description"])
-        self.lblIconCategory.setPixmap(
-            QPixmap(':/plugins/inasafe/keyword-category-%s.svg'
-                    % (category['id'] or 'notset')))
-        # Enable the next button
-        self.pbnNext.setEnabled(True)
+        aggregation_attributes = dict()
 
-    # noinspection PyPep8Naming
-    def on_lstSubcategories_itemSelectionChanged(self):
-        """Update subcategory description label and unit widgets.
+        current_index = self.cboFemaleRatioAttribute.currentIndex()
+        data = self.cboFemaleRatioAttribute.itemData(current_index)
+        aggregation_attributes[female_ratio_attribute_key] = data
 
-        .. note:: This is an automatic Qt slot
-           executed when the subcategory selection changes.
+        value = self.dsbFemaleRatioDefault.value()
+        aggregation_attributes[female_ratio_default_key] = value
+
+        current_index = self.cboYouthRatioAttribute.currentIndex()
+        data = self.cboYouthRatioAttribute.itemData(current_index)
+        aggregation_attributes[youth_ratio_attribute_key] = data
+
+        value = self.dsbYouthRatioDefault.value()
+        aggregation_attributes[youth_ratio_default_key] = value
+
+        current_index = self.cboAdultRatioAttribute.currentIndex()
+        data = self.cboAdultRatioAttribute.itemData(current_index)
+        aggregation_attributes[adult_ratio_attribute_key] = data
+
+        value = self.dsbAdultRatioDefault.value()
+        aggregation_attributes[adult_ratio_default_key] = value
+
+        current_index = self.cboElderlyRatioAttribute.currentIndex()
+        data = self.cboElderlyRatioAttribute.itemData(current_index)
+        aggregation_attributes[elderly_ratio_attribute_key] = data
+
+        value = self.dsbElderlyRatioDefault.value()
+        aggregation_attributes[elderly_ratio_default_key] = value
+
+        return aggregation_attributes
+
+    def age_ratios_are_valid(self):
+        """Return true if the sum of age ratios is good, otherwise False.
+
+        Good means their sum does not exceed 1.
+
+        :returns: Tuple of boolean and float. Boolean represent good or not
+            good, while float represent the summation of age ratio. If some
+            ratio do not use global default, the summation is set to 0.
+        :rtype: tuple
+
         """
-        self.lstUnits.clear()
-        subcategory = self.selected_subcategory()
-        # Exit if no selection
-        if not subcategory:
-            return
-        # Set description label
-        self.lblDescribeSubcategory.setText(subcategory['description'])
-        self.lblIconSubcategory.setPixmap(QPixmap(
-            ':/plugins/inasafe/keyword-subcategory-%s.svg'
-            % (subcategory['id'] or 'notset')))
-        # Enable the next button
-        self.pbnNext.setEnabled(True)
+        youth_ratio_index = self.cboYouthRatioAttribute.currentIndex()
+        adult_ratio_index = self.cboAdultRatioAttribute.currentIndex()
+        elderly_ratio_index = self.cboElderlyRatioAttribute.currentIndex()
 
-    # noinspection PyPep8Naming
-    def on_lstUnits_itemSelectionChanged(self):
-        """Update unit description label and field widgets.
+        ratio_indexes = [
+            youth_ratio_index, adult_ratio_index, elderly_ratio_index]
 
-        .. note:: This is an automatic Qt slot
-           executed when the unit selection changes.
+        if ratio_indexes.count(0) == len(ratio_indexes):
+            youth_ratio_default = self.dsbYouthRatioDefault.value()
+            adult_ratio_default = self.dsbAdultRatioDefault.value()
+            elderly_ratio_default = self.dsbElderlyRatioDefault.value()
+
+            sum_ratio_default = youth_ratio_default + adult_ratio_default
+            sum_ratio_default += elderly_ratio_default
+            if sum_ratio_default > 1:
+                return False, sum_ratio_default
+            else:
+                return True, sum_ratio_default
+        return True, 0
+
+    # noinspection PyUnresolvedReferences,PyStatementEffect
+    def populate_cbo_aggregation_attribute(
+            self, ratio_attribute_key, cbo_ratio_attribute):
+        """Populate the combo box cbo_ratio_attribute for ratio_attribute_key.
+
+        :param ratio_attribute_key: A ratio attribute key that saved in
+               keywords.
+        :type ratio_attribute_key: str
+
+        :param cbo_ratio_attribute: A combo box that wants to be populated.
+        :type cbo_ratio_attribute: QComboBox
         """
-        self.lstFields.clear()
-        unit = self.selected_unit()
-        # Exit if no selection
-        if not unit:
-            return
-        self.lblDescribeUnit.setText(unit['description'])
-        # Enable the next button
-        self.pbnNext.setEnabled(True)
+        cbo_ratio_attribute.clear()
+        ratio_attribute = self.get_existing_keyword(ratio_attribute_key)
+        fields, attribute_position = layer_attribute_names(
+            self.layer, [QtCore.QVariant.Double], ratio_attribute)
 
-    # noinspection PyPep8Naming
-    def on_lstFields_itemSelectionChanged(self):
-        """Update field description label and unlock the Next button.
+        cbo_ratio_attribute.addItem(
+            self.global_default_string, self.global_default_data)
+        cbo_ratio_attribute.addItem(
+            self.do_not_use_string, self.do_not_use_data)
+        for field in fields:
+            cbo_ratio_attribute.addItem(field, field)
+        # For backward compatibility, still use Use default
+        if (ratio_attribute == self.global_default_data or
+                ratio_attribute == self.tr('Use default')):
+            cbo_ratio_attribute.setCurrentIndex(0)
+        elif ratio_attribute == self.do_not_use_data:
+            cbo_ratio_attribute.setCurrentIndex(1)
+        elif ratio_attribute is None or attribute_position is None:
+            # current_keyword was not found in the attribute table.
+            # Use default
+            cbo_ratio_attribute.setCurrentIndex(0)
+        else:
+            # + 2 is because we add use defaults and don't use
+            cbo_ratio_attribute.setCurrentIndex(attribute_position + 2)
 
-        .. note:: This is an automatic Qt slot
-           executed when the field selection changes.
-        """
-        self.treeClasses.clear()
-        field = self.selected_field()
-        # Exit if no selection
-        if not field:
-            return
+    def set_widgets_step_kw_aggregation(self):
+        """Set widgets on the aggregation tab."""
+        # Set values based on existing keywords (if already assigned)
+        self.defaults = breakdown_defaults()
 
-        fields = self.layer.dataProvider().fields()
-        field_type = fields.field(field).typeName()
-        field_index = fields.indexFromName(self.selected_field())
-        unique_values = self.layer.uniqueValues(field_index)[0:48]
-        unique_values_str = [i and unicode(i) or 'NULL' for i in unique_values]
-        if unique_values != self.layer.uniqueValues(field_index):
-            unique_values_str += ['...']
-        desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
-        desc += self.tr('Unique values: %s') % ', '.join(unique_values_str)
-        self.lblDescribeField.setText(desc)
-        # Enable the next button
-        self.pbnNext.setEnabled(True)
+        female_ratio_default = self.get_existing_keyword(
+            female_ratio_default_key)
+        if female_ratio_default:
+            self.dsbFemaleRatioDefault.setValue(
+                float(female_ratio_default))
+        else:
+            self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
+
+        youth_ratio_default = self.get_existing_keyword(
+            youth_ratio_default_key)
+        if youth_ratio_default:
+            self.dsbYouthRatioDefault.setValue(float(youth_ratio_default))
+        else:
+            self.dsbYouthRatioDefault.setValue(self.defaults['YOUTH_RATIO'])
+
+        adult_ratio_default = self.get_existing_keyword(
+            adult_ratio_default_key)
+        if adult_ratio_default:
+            self.dsbAdultRatioDefault.setValue(float(adult_ratio_default))
+        else:
+            self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
+
+        elderly_ratio_default = self.get_existing_keyword(
+            elderly_ratio_default_key)
+        if elderly_ratio_default:
+            self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
+        else:
+            self.dsbElderlyRatioDefault.setValue(
+                self.defaults['ELDERLY_RATIO'])
+
+        ratio_attribute_keys = [
+            female_ratio_attribute_key,
+            youth_ratio_attribute_key,
+            adult_ratio_attribute_key,
+            elderly_ratio_attribute_key]
+
+        cbo_ratio_attributes = [
+            self.cboFemaleRatioAttribute,
+            self.cboYouthRatioAttribute,
+            self.cboAdultRatioAttribute,
+            self.cboElderlyRatioAttribute]
+
+        for i in range(len(cbo_ratio_attributes)):
+            self.populate_cbo_aggregation_attribute(
+                ratio_attribute_keys[i], cbo_ratio_attributes[i])
+
+    # ===========================
+    # STEP_KW_SOURCE
+    # ===========================
+
+    def set_widgets_step_kw_source(self):
+        """Set widgets on the Source tab."""
+        # Just set values based on existing keywords
+        source = self.get_existing_keyword('source')
+        self.leSource.setText(source)
+        source_scale = self.get_existing_keyword('source_scale')
+        self.leSource_scale.setText(source_scale)
+        source_date = self.get_existing_keyword('source_date')
+        self.leSource_date.setText(source_date)
+        source_url = self.get_existing_keyword('source_url')
+        self.leSource_url.setText(source_url)
+
+    # ===========================
+    # STEP_KW_TITLE
+    # ===========================
 
     # noinspection PyPep8Naming
     def on_leTitle_textChanged(self):
@@ -651,6 +1041,17 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.pbnNext.setEnabled(bool(self.leTitle.text()))
 
+    def set_widgets_step_kw_title(self):
+        """Set widgets on the Title tab."""
+        # Just set values based on existing keywords
+        if self.layer():
+            title = self.layer.name()
+            self.leTitle.setText(title)
+
+    # ===========================
+    # STEP_DC_FUNCTION
+    # ===========================
+
     # noinspection PyPep8Naming
     def on_treeFunctions_itemSelectionChanged(self):
         """Update function description label
@@ -658,25 +1059,102 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
         """
-        imfunc_id = self.selected_function()
+        imfunc = self.selected_function()
         # Exit if no selection
-        if not imfunc_id:
+        if not imfunc:
             self.lblDescribeFunction.clear()
             self.pbnNext.setEnabled(False)
+            # Set the branch description if selected
+            branch = self.selected_function_group()
+            if branch and "description" in branch.keys():
+                self.lblDescribeFunction.setText(branch['description'])
             return
+
         # Set description label
         description = ""
-        m = tempapi_get_function_metadata(imfunc_id)
-        if m.has_key("name"):
-            description += "Function name: %s<br/>" % m['name']
-        if m.has_key("description"):
-            description += "Function description: %s<br/>" % m['description']
+        if "name" in imfunc.keys():
+            description += "<b>NAME</b>: %s<br/>" % imfunc['name']
+        if "overview" in imfunc.keys():
+            description += "<b>OVERVIEW</b>: %s<br/>" % imfunc['overview']
+        description += "<br/><i>Why the metadata key is called 'overview' instead of 'description'?</i><br/>"
+
         self.lblDescribeFunction.setText(description)
         # Enable the next button if anything selected
         self.pbnNext.setEnabled(bool(self.selected_function()))
 
+    def selected_function(self):
+        """Obtain the impact function selected by user.
+
+        :returns: metadata of the selected function.
+        :rtype: dict, None
+        """
+        item = self.treeFunctions.currentItem()
+        if not item:
+            return None
+
+        if not item.parent():
+            # it's a branch, not a leaf
+            return None
+
+        data = item.data(0, QtCore.Qt.UserRole)
+        if data:
+            return data
+        else:
+            return None
+
+    def selected_function_group(self):
+        """Obtain the hazard (impact functions group) selected by user.
+
+        :returns: metadata of the selected group.
+        :rtype: dict, None
+        """
+        item = self.treeFunctions.currentItem()
+        if not item:
+            return None
+
+        if item.parent():
+            # it's a leaf, not a branch
+            return None
+
+        data = item.data(0, QtCore.Qt.UserRole)
+        if data:
+            return data
+        else:
+            return None
+
+    def set_widgets_step_dc_function(self):
+        """Set widgets on the Impact Functions tab."""
+        self.treeFunctions.clear()
+        self.lblDescribeFunction.setText('')
+
+        # collect unique hazards
+        hazards = ImpactFunctionManager().get_available_hazards()
+
+        # Populate functions tree
+        bold_font = QtGui.QFont()
+        bold_font.setBold(True)
+        bold_font.setWeight(75)
+        for h in hazards:
+            # Create branch for hazard
+            tree_branch = QtGui.QTreeWidgetItem(self.treeFunctions)
+            tree_branch.setExpanded(True)
+            tree_branch.setFont(0, bold_font)
+            tree_branch.setFlags(QtCore.Qt.ItemIsEnabled)
+            tree_branch.setText(0, h['name'])
+            tree_branch.setData(0, QtCore.Qt.UserRole, h)
+            # Collect functions for hazard
+            imfunctions = ImpactFunctionManager().get_functions_for_hazard(h)
+            for imfunc in imfunctions:
+                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                tree_leaf.setText(0, imfunc['name'])
+                tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
+
+    # ===========================
+    # STEP_DC_HAZLAYER_ORIGIN
+    # ===========================
+
     # noinspection PyPep8Naming
-    def on_rbLayerFromCanvas_toggled(self):
+    def on_rbHazLayerFromCanvas_toggled(self):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
@@ -685,7 +1163,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnNext.setEnabled(True)
 
     # noinspection PyPep8Naming
-    def on_rbLayerFromDisk_toggled(self):
+    def on_rbHazLayerFromBrowser_toggled(self):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
@@ -693,38 +1171,34 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.pbnNext.setEnabled(True)
 
-    # noinspection PyPep8Naming
-    def on_rbNoAggregation_toggled(self):
-        """Unlock the Next button
+    def set_widgets_step_dc_hazlayer_origin(self):
+        """Set widgets on the Hazard Layer Origin Type tab."""
+        pass
 
-        .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+    # ===========================
+    # STEP_DC_HAZLAYER_FROM_CANVAS
+    # ===========================
+
+    def get_layer_description_from_canvas(self, layer_id):
+        """Obtain the description of a canvas layer selected by user.
+
+        :param layer_id: The QGIS layer id
+        :type layer_id: string, None
+
+        :returns: description of the selected layer.
+        :rtype: string
         """
-        self.pbnNext.setEnabled(True)
-
-    # prevents actions being handled twice
-    # noinspection PyPep8Naming
-    @pyqtSignature('')
-    def on_lstCanvasLayers_itemSelectionChanged(self):
-        """Update layer description label
-
-        .. note:: This is an automatic Qt slot
-           executed when the category selection changes.
-        """
-
-        self.lblDescribeCanvasLayer.setText("")
 
         layer = None
-        layer_id = self.selectedCanvasLayer()
+
         if layer_id:
             for l in self.iface.mapCanvas().layers():
                 if l.id() == layer_id:
                     layer = l
 
         if not layer:
-            return
+            return ""
 
-        self.keyword_io = KeywordIO()
         try:
             kwds = self.keyword_io.read_keywords(layer)
         except (HashNotFoundError,
@@ -742,10 +1216,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 <b>SUBCATEGORY</b>: %s<br/>
                 <b>UNIT</b>: %s<br/>
                 <b>SOURCE</b>: %s<br/><br/>
-                Please note there is no filter here yet, so you can see all hazard, exposure and aggregation layers here!
-            """ % (kwds.get('title'), kwds.get('category'), kwds.get('subcategory'), kwds.get('unit'), kwds.get('source') )
+                Please note incompatible layers (e.g exposure if we're looking for hazard) are presented in red color for debugging purposes!
+            """ % (kwds.get('title'), kwds.get('category'), kwds.get('subcategory'), kwds.get('unit'), kwds.get('source'))
         else:
-
             if is_point_layer(layer):
                 geom_type = 'point'
             elif is_polygon_layer(layer):
@@ -760,208 +1233,67 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 In the next step you will be able to register this layer.
             """ % (layer.source(), is_raster_layer(layer) and 'raster' or 'vector (%s)' % geom_type)
 
-        self.lblDescribeCanvasLayer.setText(lblText)
+        return lblText
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_lstHazCanvasLayers_itemSelectionChanged(self):
+        """Update layer description label
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        lblText = self.get_layer_description_from_canvas(self.selected_canvas_hazlayer())
+        self.lblDescribeHazCanvasLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
-    def update_category_tab(self):
-        """Set widgets on the Category tab."""
-        self.lstCategories.clear()
-        self.lstSubcategories.clear()
-        self.lstUnits.clear()
-        self.lblDescribeCategory.setText('')
-        self.lblIconCategory.setPixmap(QPixmap())
-        self.lblSelectCategory.setText(
-            category_question % self.layer.name())
-        categories = ImpactFunctionManager().categories_for_layer(
-            self.layer_type, self.data_type)
-        if self.data_type == 'polygon':
-            categories += ['aggregation']
-        for category in categories:
-            if type(category) != dict:
-                # pylint: disable=W0612
-                # noinspection PyUnresolvedReferences
-                category = eval('metadata.%s_definition' % category)
-                # pylint: enable=W0612
-            item = QListWidgetItem(category['name'], self.lstCategories)
-            item.setData(QtCore.Qt.UserRole, unicode(category))
-            self.lstCategories.addItem(item)
+    def selected_canvas_hazlayer(self):
+        """Obtain the canvas layer selected by user.
 
-    def update_subcategory_tab(self):
-        """Set widgets on the Subcategory tab."""
-        category = self.selected_category()
-        self.lstSubcategories.clear()
-        self.lstUnits.clear()
-        self.lblDescribeSubcategory.setText('')
-        self.lblIconSubcategory.setPixmap(QPixmap())
-        self.lblSelectSubcategory.setText(
-            get_question_text('%s_question' % category['id']))
-        for i in ImpactFunctionManager().subcategories_for_layer(
-                category['id'], self.layer_type, self.data_type):
-            item = QListWidgetItem(i['name'], self.lstSubcategories)
-            item.setData(QtCore.Qt.UserRole, unicode(i))
-            self.lstSubcategories.addItem(item)
-
-    def update_unit_tab(self):
-        """Set widgets on the Unit tab."""
-        category = self.selected_category()
-        subcategory = self.selected_subcategory()
-        self.lblSelectUnit.setText(
-            unit_question % (subcategory['name'], category['name']))
-        self.lblDescribeUnit.setText('')
-        self.lstUnits.clear()
-        self.lstFields.clear()
-        for i in ImpactFunctionManager().units_for_layer(
-                subcategory['id'], self.layer_type, self.data_type):
-            if (self.layer_type == 'raster' and
-                    i['constraint'] == 'categorical'):
-                continue
-            else:
-                item = QListWidgetItem(i['name'], self.lstUnits)
-                item.setData(QtCore.Qt.UserRole, unicode(i))
-                self.lstUnits.addItem(item)
-
-    def update_field_tab(self):
-        """Set widgets on the Field tab."""
-        category = self.selected_category()
-        subcategory = self.selected_subcategory()
-        unit = self.selected_unit()
-        if subcategory and unit:
-            subcategory_unit_relation = get_question_text(
-                '%s_%s_question' % (subcategory['id'], unit['id']))
-        else:
-            subcategory_unit_relation = self.tr(
-                '<b><font color="red">ERROR! '
-                'Missing subcategory or unit!</font></b>')
-        if category['id'] == 'aggregation':
-            question_text = field_question_aggregation
-        else:
-            # unique values, continuous or categorical data
-            question_text = field_question_subcategory_unit % (
-                category['name'],
-                subcategory['name'],
-                unit['name'],
-                subcategory_unit_relation)
-        self.lblSelectField.setText(question_text)
-        self.lstFields.clear()
-        default_item = None
-        for field in self.layer.dataProvider().fields():
-            field_name = field.name()
-            item = QListWidgetItem(field_name, self.lstFields)
-            item.setData(QtCore.Qt.UserRole, field_name)
-            # Select the item if it match the unit's default_attribute
-            if unit and unit['id'] == 'building_generic':
-                pass
-            else:
-                if unit and 'default_attribute' in unit \
-                        and field_name == unit['default_attribute']:
-                    default_item = item
-                # For continuous data, gray out id, gid, fid and text fields
-                if unit and unit['constraint'] == 'continuous':
-                    field_type = field.type()
-                    if field_type > 9 or re.match(
-                            '.{0,2}id$', field_name, re.I):
-                        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
-        if default_item:
-            self.lstFields.setCurrentItem(default_item)
-        self.lblDescribeField.clear()
-
-    def update_classify_tab(self):
-        """Set widgets on the Classify tab."""
-        category = self.selected_category()
-        subcategory = self.selected_subcategory()
-        unit = self.selected_unit()
-        default_classes = unit['classes']
-        field = self.selected_field()
-        field_index = self.layer.dataProvider().fields().indexFromName(
-            self.selected_field())
-        field_type = self.layer.dataProvider().fields()[field_index].type()
-        self.lblClassify.setText(classify_question %
-                                (subcategory['name'], category['name'],
-                                 unit['name'], field.upper()))
-        # Assign unique values to classes
-        unassigned_values = list()
-        assigned_values = dict()
-        for default_class in default_classes:
-            assigned_values[default_class['name']] = list()
-        for value in self.layer.uniqueValues(field_index):
-            value_as_string = value and unicode(value) or 'NULL'
-            assigned = False
-            for default_class in default_classes:
-                if (field_type > 9
-                    and value_as_string in default_class['string_defaults']) \
-                        or (field_type < 10
-                            and (default_class['numeric_default_min'] <=
-                                 value < default_class[
-                                 'numeric_default_max'])):
-                    assigned_values[default_class['name']] += [value_as_string]
-                    assigned = True
-            if not assigned:
-                # add to unassigned values list otherwise
-                unassigned_values += [value_as_string]
-        self.populate_classified_values(
-            unassigned_values, assigned_values, default_classes)
-
-    def update_impact_functions_tab(self):
-        """Set widgets on the Impact Functions tab."""
-        self.treeFunctions.clear()
-        self.lblDescribeFunction.setText('')
-
-        # collect unique hazards
-        hazards = tempapi_get_hazard_subcategories()
-
-        # Populate functions tree
-        bold_font = QtGui.QFont()
-        bold_font.setBold(True)
-        bold_font.setWeight(75)
-        for h in hazards:
-            # Create branch for hazard
-            tree_branch = QtGui.QTreeWidgetItem(self.treeFunctions)
-            tree_branch.setExpanded(True)
-            tree_branch.setFont(0, bold_font)
-            tree_branch.setFlags(QtCore.Qt.ItemIsEnabled)
-            tree_branch.setText(0, h['name'])
-            # Collect functions for hazard
-            for imfunc_id in tempapi_get_functions_for_hazard(h['id']):
-                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                tree_leaf.setText(0, tempapi_get_function_metadata(imfunc_id).get('name',''))
-                tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc_id)
-
-    def update_layer_origin_type_tab(self, category):
-        """Set widgets on the Layer Origin Type tab.
-
-        :param category: The category of the layer to be selected.
-        :type step: string
+        :returns: id of the selected layer.
+        :rtype: string, None
         """
-        if category == 'hazard':
-            lbl1="Please help us to find your <b>hazard</b> layer.<br/><br/>A hazard layer represents something that will impact the people or infrastructure in an area. For example a flood, earth quake, tsunami inundation are all different kinds of hazards."
-            lbl2="I would like to use a hazard layer already loaded in QGIS\n(launches the hazard data registration wizard if needed)"
-            lbl3="I would like to pick a hazard layer from disk\n(launches the hazard data registration wizard if needed)"
-            self.rbNoAggregation.hide()
-        elif category == 'exposure':
-            lbl1="Please help us to find your <b>exposure</b> layer.<br/><br/>. An exposure layer represents people, property or infrastructure that may be affected in the event of a flood, earthquake, volcano etc."
-            lbl2="I would like to use an exposure layer already loaded in QGIS\n(launches the exposure data registration wizard if needed)"
-            lbl3="I would like to pick an exposure layer from disk\n(launches the exposure data registration wizard if needed)"
-            self.rbNoAggregation.hide()
-        elif category == 'aggregation':
-            lbl1="Would you like to aggregate the results of your analysis by sub-regions?"
-            lbl2="I would like to use an aggregation layer already loaded in QGIS\n(launches the aggregation data registration wizard if needed)"
-            lbl3="I would like to pick an aggregation layer from disk\n(launches the aggregation data registration wizard if needed)"
-            self.rbNoAggregation.show()
+        item = self.lstHazCanvasLayers.currentItem()
+        try:
+            layer_id = item.data(QtCore.Qt.UserRole)
+        except (AttributeError, NameError):
+            layer_id = None
 
-        self.lblSelectLayerOriginType.setText(lbl1)
-        self.rbLayerFromCanvas.setText(lbl2)
-        self.rbLayerFromDisk.setText(lbl3)
-        self.pbnNext.setEnabled(False)
+        return layer_id
 
-    def update_layer_from_canvas_tab(self):
-        """Set widgets on the Layer From TOC tab"""
-        self.lstCanvasLayers.clear()
-        self.lblDescribeCanvasLayer.clear()
-        self.keyword_io = KeywordIO()
+    def get_compatible_layers_from_canvas(self, category):
+        """Collect compatible layers from map canvas.
 
-        italic_font = QtGui.QFont()
-        italic_font.setItalic(True)
+        .. note:: Returns layers with keywords and datatype matching
+           the category and compatible with the selected impact function.
+           Also returns layers without keywords with datatype
+           compatible with the selected impact function.
 
+        :param category: The category to filter for.
+        :type category: string
+
+        :returns: Metadata of found layers.
+        :rtype: list of dicts
+        """
+
+        imfunc = self.selected_function()
+
+        if not category in imfunc['categories']:
+            imfunc = None
+
+        if imfunc:
+            # TODO: Test how it works for categories other than hazard
+            allowed_subcats = imfunc['categories'][category]['subcategory']
+            if type(allowed_subcats) != list:
+                allowed_subcats = [allowed_subcats]
+            allowed_units = imfunc['categories'][category]['units']
+            if type(allowed_units) != list:
+                allowed_units = [allowed_units]
+            layer_constraints = imfunc['categories'][category]['layer_constraints']
+
+        # Collect compatible layers
+        layers = []
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
@@ -972,22 +1304,377 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     InvalidParameterError,
                     UnsupportedProviderError):
                 keywords = None
-            #TODO: filter hazard (or exposure or aggregation) layers only  + layers without keywords
-            #TODO: filter only layers suitable for given IF
-            item = QListWidgetItem(layer.name(), self.lstCanvasLayers)
-            item.setData(QtCore.Qt.UserRole, layer.id())
-            if not keywords:
+
+            is_layer_compatible = True
+
+            if imfunc:
+                is_layer_compatible = False
+                if is_raster_layer(layer) and 'raster' in [lc['layer_type'] for lc in layer_constraints]:
+                    is_layer_compatible = True
+                elif is_point_layer(layer) and 'point' in [lc['data_type'] for lc in layer_constraints]:
+                    is_layer_compatible = True
+                elif is_polygon_layer(layer)and 'polygon' in [lc['data_type'] for lc in layer_constraints]:
+                    is_layer_compatible = True
+                elif 'line' in [lc['data_type'] for lc in layer_constraints]:
+                    is_layer_compatible = True
+
+            if keywords and keywords['category'] != category:
+                is_layer_compatible = False
+
+            if keywords and imfunc:
+                if 'subcategory' in keywords.keys() and not keywords['subcategory'] in [subcat['id'] for subcat in allowed_subcats]:
+                    is_layer_compatible = False
+                #elif 'unit' in keywords.keys() and not keywords['unit'] in [ifunit['id'] for ifunit in allowed_units]:
+                    #is_layer_compatible = False
+
+            if is_layer_compatible or 2==2:  # TODO - remove the dummy debugging 2==2
+                layers += [{'id': layer.id(), 'name': layer.name(), 'keywords': keywords, 'compatible': is_layer_compatible}]
+
+        # Move layers without keywords to the end
+        l1 = [l for l in layers if l['keywords']]
+        l2 = [l for l in layers if not l['keywords']]
+        layers = l1 + l2
+
+        return layers
+
+    def list_compatible_layers_from_canvas(self, category, list_widget):
+        """Fill given list widget with compatible layers.
+
+        .. note:: Uses get_compatible_layers_from_canvas() to filter layers
+
+        :param category: The category to filter for.
+        :type category: string
+
+        :param list_widget: The list widget to be filled with layers.
+        :type list_widget: QListWidget
+
+
+        :returns: Metadata of found layers.
+        :rtype: list of dicts
+        """
+
+        italic_font = QtGui.QFont()
+        italic_font.setItalic(True)
+
+        # Add compatible layers
+        list_widget.clear()
+        for layer in self.get_compatible_layers_from_canvas(category):
+            item = QListWidgetItem(layer['name'], list_widget)
+            item.setData(QtCore.Qt.UserRole, layer['id'])
+            if not layer['keywords']:
                 item.setFont(italic_font)
-            self.lstCanvasLayers.addItem(item)
+            if not layer['compatible']:
+                item.setText(layer['name'] + " [INCOMPATIBLE]")
+                item.setForeground(QBrush(QColor(145, 0, 0)))
+            list_widget.addItem(item)
 
-    def update_layer_from_disk_tab(self):
-        """Set widgets on the Layer From Disk tab"""
-        browserModel = QgsBrowserModel()
-        self.tvBrowser.setModel(browserModel)
+    def set_widgets_step_dc_hazlayer_from_canvas(self):
+        """Set widgets on the Hazard Layer From TOC tab"""
+        self.list_compatible_layers_from_canvas('hazard', self.lstHazCanvasLayers)
+        self.lblDescribeHazCanvasLayer.clear()
 
-    def update_disjoint_layers_tab(self):
+    # ===========================
+    # STEP_DC_HAZLAYER_FROM_BROWSER
+    # ===========================
+
+    def get_layer_description_from_browser(self, browser):
+        """Obtain the description of the browser layer selected by user.
+
+        :param browser: The browser tree view to get selection from.
+        :type browser: QTreeView
+
+        :returns: description of the selected layer or a short error message.
+        :rtype: string
+        """
+        indx = browser.selectionModel().currentIndex()
+        if not indx:
+            return ""
+
+        item = browser.model().dataItem(indx)
+        if not item:
+            return ""
+
+        itemClassName = item.metaObject().className()
+        #if not itemClassName.endswith('LayerItem'):
+        if not item.type() == QgsDataItem.Layer:
+            return ""
+
+        ##### TODO No way to cast QgsDataItem -> QgsLayerItem and access methods like uri(), mapLayerType(), providerKey() ?
+        ##### I tried with item.metaObject(item, "uri") with following error:
+        ##### Warning: QMetaObject::invokeMethod: No such method QgsLayerItem::uri()
+
+        # Use itemClassName instead: QgsOgrLayerItem, QgsLayerItem, QgsPGLayerItem (pg:/geopanel700/public/aaaa)
+
+        if not itemClassName in ['QgsOgrLayerItem', 'QgsLayerItem']:
+            return ""
+
+        path = item.path()
+
+        if not os.path.exists(path):
+            return ""
+
+        # try to create the layer
+        if itemClassName == 'QgsOgrLayerItem':
+            layer = QgsVectorLayer(path, '', 'ogr')
+        else:
+            layer = QgsRasterLayer(path, '', 'gdal')
+
+        if not layer or not layer.isValid():
+            return "Not a valid layer"
+
+        try:
+            kwds = self.keyword_io.read_keywords(layer)
+        except:
+            kwds = None
+
+        if kwds:
+            desc = """
+                <b>TITLE</b>: %s<br/>
+                <b>CATEGORY</b>: %s<br/>
+                <b>SUBCATEGORY</b>: %s<br/>
+                <b>UNIT</b>: %s<br/>
+                <b>SOURCE</b>: %s<br/><br/>
+                Please note there is no filter yet, so incompatible layers (e.g exposure if we're looking for hazard) are also displayed!
+            """ % (kwds.get('title'), kwds.get('category'), kwds.get('subcategory'), kwds.get('unit'), kwds.get('source'))
+        else:
+            if is_point_layer(layer):
+                geom_type = 'point'
+            elif is_polygon_layer(layer):
+                geom_type = 'polygon'
+            else:
+                geom_type = 'line'
+
+            desc = """
+                This layer has no keywords assigned<br/><br/>
+                <b>SOURCE</b>: %s<br/>
+                <b>TYPE</b>: %s<br/><br/>
+                In the next step you will be able to register this layer.
+            """ % (layer.source(), is_raster_layer(layer) and 'raster' or 'vector (%s)' % geom_type)
+
+        return desc
+
+    def tvBrowserHazard_selection_changed(self):
+        """Update layer description label"""
+        desc = self.get_layer_description_from_browser(self.tvBrowserHazard)
+        self.lblDescribeBrowserHazLayer.setText(desc)
+        self.pbnNext.setEnabled(bool(len(desc) > 32))
+
+    def set_widgets_step_dc_hazlayer_from_browser(self):
+        """Set widgets on the Hazard Layer From Browser tab"""
+        self.tvBrowserHazard_selection_changed()
+
+    # ===========================
+    # STEP_DC_EXPLAYER_ORIGIN
+    # ===========================
+
+    # noinspection PyPep8Naming
+    def on_rbExpLayerFromCanvas_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
+    # noinspection PyPep8Naming
+    def on_rbExpLayerFromBrowser_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
+    def set_widgets_step_dc_explayer_origin(self):
+        """Set widgets on the Exposure Layer Origin Type tab"""
+        pass
+
+    # ===========================
+    # STEP_DC_EXPLAYER_FROM_CANVAS
+    # ===========================
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_lstExpCanvasLayers_itemSelectionChanged(self):
+        """Update layer description label
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        lblText = self.get_layer_description_from_canvas(self.selected_canvas_explayer())
+        self.lblDescribeExpCanvasLayer.setText(lblText)
+        self.pbnNext.setEnabled(True)
+
+    def selected_canvas_explayer(self):
+        """Obtain the canvas exposure layer selected by user.
+
+        :returns: id of the selected layer.
+        :rtype: string, None
+        """
+        item = self.lstExpCanvasLayers.currentItem()
+        try:
+            layer_id = item.data(QtCore.Qt.UserRole)
+        except (AttributeError, NameError):
+            layer_id = None
+
+        return layer_id
+
+    def set_widgets_step_dc_explayer_from_canvas(self):
+        """Set widgets on the Exposure Layer From Canvas tab"""
+        self.list_compatible_layers_from_canvas('exposure', self.lstExpCanvasLayers)
+        self.lblDescribeExpCanvasLayer.clear()
+
+    # ===========================
+    # STEP_DC_EXPLAYER_FROM_BROWSER
+    # ===========================
+
+    def tvBrowserExposure_selection_changed(self):
+        """Update layer description label"""
+        desc = self.get_layer_description_from_browser(self.tvBrowserExposure)
+        self.lblDescribeBrowserExpLayer.setText(desc)
+        self.pbnNext.setEnabled(bool(len(desc) > 32))
+
+    def set_widgets_step_dc_explayer_from_browser(self):
+        """Set widgets on the Exposure Layer From Browser tab"""
+        self.tvBrowserExposure_selection_changed()
+
+    # ===========================
+    # STEP_DC_DISJOINT_LAYERS
+    # ===========================
+
+    def set_widgets_step_dc_disjoint_layers(self):
         """Set widgets on the Disjoint Layers tab"""
         pass
+
+    # ===========================
+    # STEP_DC_AGGLAYER_ORIGIN
+    # ===========================
+
+    # noinspection PyPep8Naming
+    def on_rbAggLayerFromCanvas_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
+    # noinspection PyPep8Naming
+    def on_rbAggLayerFromBrowser_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
+    # noinspection PyPep8Naming
+    def on_rbAggLayerNoAggregation_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the title value changes.
+        """
+        self.pbnNext.setEnabled(True)
+
+    def set_widgets_step_dc_agglayer_origin(self):
+        """Set widgets on the Aggregation Layer Origin Type tab"""
+        pass
+
+    # ===========================
+    # STEP_DC_AGGLAYER_FROM_CANVAS
+    # ===========================
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_lstAggCanvasLayers_itemSelectionChanged(self):
+        """Update layer description label
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        lblText = self.get_layer_description_from_canvas(self.selected_canvas_agglayer())
+        self.lblDescribeHazCanvasLayer.setText(lblText)
+        self.pbnNext.setEnabled(True)
+
+    def selected_canvas_agglayer(self):
+        """Obtain the canvas aggregation layer selected by user.
+
+        :returns: id of the selected layer.
+        :rtype: string, None
+        """
+        item = self.lstAggCanvasLayers.currentItem()
+        try:
+            layer_id = item.data(QtCore.Qt.UserRole)
+        except (AttributeError, NameError):
+            layer_id = None
+
+        return layer_id
+
+    def set_widgets_step_dc_agglayer_from_canvas(self):
+        """Set widgets on the Aggregation Layer from Canvas tab"""
+        self.list_compatible_layers_from_canvas('aggregation', self.lstAggCanvasLayers)
+        self.lblDescribeAggCanvasLayer.clear()
+
+    # ===========================
+    # STEP_DC_AGGLAYER_FROM_BROWSER
+    # ===========================
+
+    def tvBrowserAggregation_selection_changed(self):
+        """Update layer description label"""
+        desc = self.get_layer_description_from_browser(self.tvBrowserAggregation)
+        self.lblDescribeBrowserAggLayer.setText(desc)
+        self.pbnNext.setEnabled(bool(len(desc) > 32))
+
+    def set_widgets_step_dc_agglayer_from_browser(self):
+        """Set widgets on the Aggregation Layer From Browser tab"""
+        self.tvBrowserAggregation_selection_changed()
+
+    # ===========================
+    # STEP_DC_AGGLAYER_DISJOINT
+    # ===========================
+
+    def set_widgets_step_dc_agglayer_disjoint(self):
+        """Set widgets on the Aggregation Layer Disjoint tab"""
+        pass
+
+    # ===========================
+    # STEP_DC_PARAMS
+    # ===========================
+
+    def set_widgets_step_dc_params(self):
+        """Set widgets on the Params tab"""
+        pass
+
+    # ===========================
+    # STEP_DC_SUMMARY
+    # ===========================
+
+    def set_widgets_step_dc_summary(self):
+        """Set widgets on the Summary tab"""
+        pass
+
+    # ===========================
+    # STEP_DC_PROGRESS
+    # ===========================
+
+    def set_widgets_step_dc_progress(self):
+        """Set widgets on the Progress tab"""
+        pass
+
+    # ===========================
+    # STEP_DC_REPORT
+    # ===========================
+
+    def set_widgets_step_dc_report(self):
+        """Set widgets on the Report tab"""
+        pass
+
+    # ===========================
+    # COMMON METHODS
+    # ===========================
 
     def go_to_step(self, step):
         """Set the stacked widget to the given step.
@@ -998,24 +1685,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.stackedWidget.setCurrentIndex(step - 1)
         self.lblStep.setText(self.tr('step %d') % step)
         self.pbnBack.setEnabled(step > 1)
-
-        # TEMPORARY - DISPLAY STEP NUMBER LABEL ACCORDING THE TICKET.
-        if step>8:
-            step_dict = {
-                9: '1',
-                10: '2',
-                11: '3a',
-                12: '3b',
-                13: '8',
-                14: '9',
-                #24: '4'
-
-            }
-            for i in range(15,24):
-                step_dict[i] = '%d' % (i-2)
-            self.lblStep.setText('step %s' % step_dict[step])
-
-
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1028,7 +1697,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         current_step = self.get_current_step()
 
-        if current_step == step_aggregation:
+        if current_step == step_kw_aggregation:
             good_age_ratio, sum_age_ratios = self.age_ratios_are_valid()
             if not good_age_ratio:
                 message = self.tr(
@@ -1045,35 +1714,54 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         new_step = self.compute_next_step(current_step)
 
         # Prepare the next tab
-        if new_step == step_subcategory:
-            self.update_subcategory_tab()
-            self.set_existing_options(step_subcategory)
-            self.auto_select_one_item(self.lstSubcategories)
-        elif new_step == step_unit:
-            self.update_unit_tab()
-            self.set_existing_options(step_unit)
-            self.auto_select_one_item(self.lstUnits)
-        elif new_step == step_field:
-            self.update_field_tab()
-            self.set_existing_options(step_field)
-            self.auto_select_one_item(self.lstFields)
-        elif new_step == step_classify:
-            self.update_classify_tab()
-            self.set_existing_options(step_classify)
-        elif new_step in [step_source, step_aggregation]:
-            self.set_existing_options(new_step)
-        elif new_step == step_title:
-            self.set_existing_options(step_title)
-        elif new_step == step_function:
-            self.update_impact_functions_tab()
-        elif new_step == step_layer_origin:
-            self.update_layer_origin_type_tab('hazard')
-        elif new_step == step_layer_from_canvas:
-            self.update_layer_from_canvas_tab()
-        elif new_step == step_layer_from_disk:
-            self.update_layer_from_disk_tab()
-        elif new_step == step_disjoint_layers:
-            self.update_disjoint_layers_tab()
+        if new_step == step_kw_category:
+            self.set_widgets_step_kw_category()
+        if new_step == step_kw_subcategory:
+            self.set_widgets_step_kw_subcategory()
+        elif new_step == step_kw_unit:
+            self.set_widgets_step_kw_unit()
+        elif new_step == step_kw_field:
+            self.set_widgets_step_kw_field()
+        elif new_step == step_kw_classify:
+            self.set_widgets_step_kw_classify()
+        elif new_step == step_kw_aggregation:
+            self.set_widgets_step_kw_aggregation()
+        elif new_step == step_kw_source:
+            self.set_widgets_step_kw_source()
+        elif new_step == step_kw_title:
+            self.set_widgets_step_kw_title()
+        elif new_step == step_dc_function:
+            self.set_widgets_step_dc_function()
+        elif new_step == step_dc_hazlayer_origin:
+            self.set_widgets_step_dc_hazlayer_origin()
+        elif new_step == step_dc_hazlayer_from_canvas:
+            self.set_widgets_step_dc_hazlayer_from_canvas()
+        elif new_step == step_dc_hazlayer_from_browser:
+            self.set_widgets_step_dc_hazlayer_from_browser()
+        elif new_step == step_dc_explayer_origin:
+            self.set_widgets_step_dc_explayer_origin()
+        elif new_step == step_dc_explayer_from_canvas:
+            self.set_widgets_step_dc_explayer_from_canvas()
+        elif new_step == step_dc_explayer_from_browser:
+            self.set_widgets_step_dc_explayer_from_browser()
+        elif new_step == step_dc_disjoint_layers:
+            self.set_widgets_step_dc_disjoint_layers()
+        elif new_step == step_dc_agglayer_origin:
+            self.set_widgets_step_dc_agglayer_origin()
+        elif new_step == step_dc_agglayer_from_canvas:
+            self.set_widgets_step_dc_agglayer_from_canvas()
+        elif new_step == step_dc_agglayer_from_browser:
+            self.set_widgets_step_dc_agglayer_from_browser()
+        elif new_step == step_dc_agglayer_disjoint:
+            self.set_widgets_step_dc_agglayer_disjoint()
+        elif new_step == step_dc_params:
+            self.set_widgets_step_dc_params()
+        elif new_step == step_dc_summary:
+            self.set_widgets_step_dc_summary()
+        elif new_step == step_dc_progress:
+            self.set_widgets_step_dc_progress()
+        elif new_step == step_dc_report:
+            self.set_widgets_step_dc_report()
         elif new_step is None:
             # Wizard complete
             # TODO: it's for KeywordCreation, what about FunctionCentric?
@@ -1084,26 +1772,21 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             pass
 
         # Set Next button label
-        if new_step in [step_title,step_report]:
+        if new_step in [step_kw_title, step_dc_report]:
             self.pbnNext.setText(self.tr('Finish'))
-        elif new_step == step_progress:
+        elif new_step == step_dc_progress:
             self.pbnNext.setText(self.tr('Run'))
         else:
             self.pbnNext.setText(self.tr('Next'))
-
-
 
         # Disable the Next button unless new data already entered
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
 
-        #TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
-        if current_step==self.stackedWidget.count() and new_step==1:
+        # TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
+        if current_step == self.stackedWidget.count() and new_step == 1:
             self.lblSelectCategory.setText('You have selected a layer that has no keywords assigned. In the next steps you can assign '
-            'keywords to that layer. First you need to confirm the layer represents a hazard.')
-
-
-
+                                           'keywords to that layer. First you need to confirm the layer represents a hazard.')
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1141,37 +1824,60 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        if step == step_category:
+        if step == step_kw_category:
             return bool(self.selected_category())
-        if step == step_subcategory:
+        if step == step_kw_subcategory:
             return bool(self.selected_subcategory())
-        if step == step_unit:
+        if step == step_kw_unit:
             return bool(self.selected_unit())
-        if step == step_field:
+        if step == step_kw_field:
             return bool(self.selected_field() or not self.lstFields.count())
-        if step == step_classify:
+        if step == step_kw_classify:
             # Allow to not classify any values
             return True
-        if step == step_source:
-            # The source_* keywords are not required
-            return True
-        if step == step_aggregation:
+        if step == step_kw_aggregation:
             # Not required
             return True
-        if step == step_title:
+        if step == step_kw_source:
+            # The source_* keywords are not required
+            return True
+        if step == step_kw_title:
             return bool(self.leTitle.text())
-        if step == step_function:
+        if step == step_dc_function:
             return bool(self.selected_function())
-        if step == step_layer_origin:
-            return bool(self.rbLayerFromCanvas.isChecked() or self.rbLayerFromDisk.isChecked() or self.rbNoAggregation.isChecked())
-        if step == step_layer_from_canvas:
-            return bool(self.selectedCanvasLayer())
-        if step == step_layer_from_disk:
-            pass #TODO
-        if step == step_disjoint_layers:
-            pass #TODO
-
-        #TEMPORARY
+        if step == step_dc_hazlayer_origin:
+            return bool(self.rbHazLayerFromCanvas.isChecked() or self.rbHazLayerFromBrowser.isChecked())
+        if step == step_dc_hazlayer_from_canvas:
+            return bool(self.selected_canvas_hazlayer())
+        if step == step_dc_hazlayer_from_browser:
+            return bool(len(self.lblDescribeBrowserHazLayer.text())>32)
+        if step == step_dc_explayer_origin:
+            return bool(self.rbExpLayerFromCanvas.isChecked() or self.rbExpLayerFromBrowser.isChecked())
+        if step == step_dc_explayer_from_canvas:
+            return bool(self.selected_canvas_explayer())
+        if step == step_dc_explayer_from_browser:
+            return bool(len(self.lblDescribeBrowserExpLayer.text())>32)
+        if step == step_dc_disjoint_layers:
+            # Never go further if layers disjoint
+            return False
+        if step == step_dc_agglayer_origin:
+            return bool(self.rbAggLayerFromCanvas.isChecked() or self.rbAggLayerFromBrowser.isChecked() or self.rbAggLayerNoAggregation.isChecked())
+        if step == step_dc_agglayer_from_canvas:
+            return bool(self.selected_canvas_agglayer())
+        if step == step_dc_agglayer_from_browser:
+            return bool(len(self.lblDescribeBrowserAggLayer.text())>32)
+        if step == step_dc_agglayer_disjoint:
+            # Never go further if layers disjoint
+            return False
+        if step == step_dc_params:
+            pass   # TODO
+        if step == step_dc_summary:
+            pass   # TODO
+        if step == step_dc_progress:
+            pass   # TODO
+        if step == step_dc_report:
+            pass   # TODO
+        # TODO: TEMPORARY
         return True
 
     def compute_next_step(self, current_step):
@@ -1183,61 +1889,100 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: The next step number or None if finished.
         :rtype: int
         """
-        if current_step == step_category:
+        if current_step == step_kw_category:
             category = self.selected_category()
             if category['id'] == 'aggregation':
-                new_step = step_field
+                new_step = step_kw_field
             elif ImpactFunctionManager().subcategories_for_layer(
                     category['id'], self.layer_type, self.data_type):
-                new_step = step_subcategory
+                new_step = step_kw_subcategory
             else:
-                new_step = step_field
-        elif current_step == step_subcategory:
+                new_step = step_kw_field
+        elif current_step == step_kw_subcategory:
             subcategory = self.selected_subcategory()
             # skip field and classify step if point layer and it's a volcano
             if self.data_type == 'point' and subcategory['id'] == 'volcano':
-                new_step = step_source
+                new_step = step_kw_source
             elif ImpactFunctionManager().units_for_layer(
                     subcategory['id'], self.layer_type, self.data_type):
-                new_step = step_unit
+                new_step = step_kw_unit
             else:
-                new_step = step_field
-        elif current_step == step_field:
-            unit = self.selected_unit()
-            if unit and unit['constraint'] == 'categorical':
-                new_step = step_classify
-            elif self.selected_category()['id'] == 'aggregation':
-                new_step = step_aggregation
-            else:
-                new_step = step_source
-        elif current_step == step_classify:
-            new_step = step_source
-        elif current_step == step_unit:
+                new_step = step_kw_field
+        elif current_step == step_kw_unit:
             unit = self.selected_unit()
             if unit and unit['id'] == 'building_generic':
-                new_step = step_source
+                new_step = step_kw_source
+                # TODO: why not step_kw_aggregation ?
             else:
-                new_step = current_step + 1
-        elif current_step in (step_aggregation, step_source):
+                new_step = step_kw_field
+        elif current_step == step_kw_field:
+            unit = self.selected_unit()
+            if unit and unit['constraint'] == 'categorical':
+                new_step = step_kw_classify
+            elif self.selected_category()['id'] == 'aggregation':
+                new_step = step_kw_aggregation
+            else:
+                new_step = step_kw_source
+        elif current_step == step_kw_classify:
+            new_step = step_kw_source
+        elif current_step in (step_kw_aggregation, step_kw_source):
             new_step = current_step + 1
-        elif current_step == step_title:
-            new_step = None #Wizard complete
+        elif current_step == step_kw_title:
+            # TODO: come back to the main thread if it's the embedded kw mode inside of the dc mode.
+            new_step = None   # Wizard complete
 
-        elif current_step == step_layer_origin:
-            if self.rbLayerFromCanvas.isChecked():
-                new_step = step_layer_from_canvas
-            elif self.rbLayerFromDisk.isChecked():
-                new_step = step_layer_from_disk
+        elif current_step == step_dc_function:
+            new_step = step_dc_hazlayer_origin
+        elif current_step == step_dc_hazlayer_origin:
+            if self.rbHazLayerFromCanvas.isChecked():
+                new_step = step_dc_hazlayer_from_canvas
             else:
-                new_step = step_if_params
-        elif current_step < self.stackedWidget.count():
+                new_step = step_dc_hazlayer_from_browser
+        elif current_step in [step_dc_hazlayer_from_canvas, step_dc_hazlayer_from_browser]:
+            new_step = step_dc_explayer_origin
+        elif current_step == step_dc_explayer_origin:
+            if self.rbExpLayerFromCanvas.isChecked():
+                new_step = step_dc_explayer_from_canvas
+            else:
+                new_step = step_dc_explayer_from_browser
+        elif current_step in [step_dc_explayer_from_canvas, step_dc_explayer_from_browser]:
+            # TODO test overlapping!!!
+            _layers_disjoint = False
+            if _layers_disjoint:
+                new_step = step_dc_disjoint_layers
+            else:
+                new_step = step_dc_agglayer_origin
+        elif current_step == step_dc_disjoint_layers:
+            new_step = step_dc_agglayer_origin
+        elif current_step == step_dc_agglayer_origin:
+            if self.rbAggLayerFromCanvas.isChecked():
+                new_step = step_dc_agglayer_from_canvas
+            elif self.rbAggLayerFromBrowser.isChecked():
+                new_step = step_dc_agglayer_from_browser
+            else:
+                # no aggregation (so also no disjoint test)
+                new_step = step_dc_params
+        elif current_step in [step_dc_agglayer_from_canvas, step_dc_agglayer_from_browser]:
+            _agg_layers_disjoint = False
+            if _agg_layers_disjoint:
+                new_step = step_dc_agglayer_disjoint
+            else:
+                new_step = step_dc_params
+        elif current_step == step_dc_agglayer_disjoint:
+            new_step = step_dc_params
+        elif current_step in [step_dc_params, step_dc_summary, step_dc_progress]:
             new_step = current_step + 1
+        elif current_step == step_dc_report:
+            new_step = None # Wizard complete
+
+        elif current_step < self.stackedWidget.count():
+            raise Exception('Unhandled step')
         else:
             raise Exception('Unexpected number of steps')
 
         # Skip the field (and classify) tab if raster layer
-        if new_step == step_field and is_raster_layer(self.layer):
-            new_step = step_source
+        if new_step == step_kw_field and is_raster_layer(self.layer):
+            new_step = step_kw_source
 
         return new_step
 
@@ -1250,37 +1995,78 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: The previous step number.
         :rtype: int
         """
-        if current_step == step_source:
-            if self.selected_mapping():
-                new_step = step_classify
-            elif self.selected_category()['id'] == 'aggregation':
-                new_step = step_aggregation
-            elif self.selected_field():
-                new_step = step_field
-            elif self.selected_unit():
-                new_step = step_unit
-            elif self.selected_subcategory():
-                new_step = step_subcategory
-            else:
-                new_step = step_category
-        elif current_step == step_field:
+        if current_step == step_kw_category:
+            # TODO: if embedded KW mode, come back to the parent DC mode
+            new_step = step_kw_category
+        if current_step == step_kw_field:
             if self.selected_unit():
-                new_step = step_unit
+                new_step = step_kw_unit
             elif self.selected_subcategory():
-                new_step = step_subcategory
+                new_step = step_kw_subcategory
             elif self.selected_category()['id'] == 'aggregation':
-                new_step = step_category
+                new_step = step_kw_category
             else:
-                new_step = step_category
-        elif current_step == step_aggregation:
-            new_step = step_field
+                new_step = step_kw_category
+        elif current_step == step_kw_aggregation:
+            new_step = step_kw_field
+        elif current_step == step_kw_source:
+            if self.selected_mapping():
+                new_step = step_kw_classify
+            elif self.selected_category()['id'] == 'aggregation':
+                new_step = step_kw_aggregation
+            elif self.selected_field():
+                new_step = step_kw_field
+            elif self.selected_unit():
+                new_step = step_kw_unit
+            elif self.selected_subcategory():
+                new_step = step_kw_subcategory
+            else:
+                new_step = step_kw_category
 
-        elif current_step == step_function:
-            new_step = step_function
-        elif current_step == step_layer_from_disk:
-            new_step = step_layer_origin
-        elif current_step == step_disjoint_layers:
-            new_step = step_layer_origin #TODO: go back to either step_layer_from_canvas or step_layer_from_disk
+        elif current_step == step_dc_function:
+            #TODO block the Back button
+            new_step = step_dc_function
+        elif current_step == step_dc_hazlayer_from_browser:
+            new_step = step_dc_hazlayer_origin
+        elif current_step == step_dc_explayer_origin:
+            if self.rbHazLayerFromCanvas.isChecked():
+                new_step = step_dc_hazlayer_from_canvas
+            else:
+                new_step = step_dc_hazlayer_from_browser
+        elif current_step == step_dc_explayer_from_browser:
+            new_step = step_dc_explayer_origin
+        elif current_step == step_dc_disjoint_layers:
+            if self.rbExpLayerFromCanvas.isChecked():
+                new_step = step_dc_explayer_from_canvas
+            else:
+                new_step = step_dc_explayer_from_browser
+        elif current_step == step_dc_agglayer_origin:
+            # TODO test disjoint layers!!
+            _layers_disjoint = False
+            if _layers_disjoint:
+                new_step = step_dc_disjoint_layers
+            elif self.rbExpLayerFromCanvas.isChecked():
+                new_step = step_dc_explayer_from_canvas
+            else:
+                new_step = step_dc_explayer_from_browser
+        elif current_step == step_dc_agglayer_from_browser:
+            new_step = step_dc_agglayer_origin
+        elif current_step == step_dc_agglayer_disjoint:
+            if self.rbAggLayerFromCanvas.isChecked():
+                new_step = step_dc_agglayer_from_canvas
+            else:
+                new_step = step_dc_agglayer_from_browser
+        elif current_step == step_dc_params:
+            # TODO test disjoint aggr layers!!
+            _agg_layers_disjoint = False
+            if _agg_layers_disjoint:
+                new_step = step_dc_agglayer_disjoint
+            elif self.rbAggLayerFromCanvas.isChecked():
+                new_step = step_dc_agglayer_from_canvas
+            elif self.rbAggLayerFromBrowser.isChecked():
+                new_step = step_dc_agglayer_from_browser
+            else:
+                new_step = step_dc_agglayer_origin
         else:
             new_step = current_step - 1
         return new_step
@@ -1362,267 +2148,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             return None
 
-    def set_existing_options(self, current_step):
-        """Set options in wizard based on existing keywords.
-
-        :param current_step: The present step number of the wizard.
-        :type current_step: int
-        """
-        if current_step == step_category:
-            category_keyword = self.get_existing_keyword('category')
-            if category_keyword == 'postprocessing':
-                category_keyword = 'aggregation'
-            if category_keyword is None:
-                return
-            categories = []
-            for index in xrange(self.lstCategories.count()):
-                item = self.lstCategories.item(index)
-                category = eval(item.data(QtCore.Qt.UserRole))
-                categories.append(category['id'])
-            if category_keyword in categories:
-                self.lstCategories.setCurrentRow(
-                    categories.index(category_keyword))
-
-        elif current_step == step_subcategory:
-            subcategory_keyword = self.get_existing_keyword('subcategory')
-            if subcategory_keyword is None:
-                return
-            subcategories = []
-            for index in xrange(self.lstSubcategories.count()):
-                item = self.lstSubcategories.item(index)
-                subcategory = eval(item.data(QtCore.Qt.UserRole))
-                subcategories.append(subcategory['id'])
-            if subcategory_keyword in subcategories:
-                self.lstSubcategories.setCurrentRow(
-                    subcategories.index(subcategory_keyword))
-
-        elif current_step == step_unit:
-            unit_id = self.get_existing_keyword('unit')
-            unit_id = metadata.old_to_new_unit_id(unit_id)
-            if unit_id is None:
-                return
-            units = []
-            for index in xrange(self.lstUnits.count()):
-                item = self.lstUnits.item(index)
-                unit = eval(item.data(QtCore.Qt.UserRole))
-                units.append(unit['id'])
-            if unit_id in units:
-                self.lstUnits.setCurrentRow(units.index(unit_id))
-
-        elif current_step == step_field:
-            if self.selected_category()['id'] != 'aggregation':
-                field = self.get_existing_keyword('field')
-            else:
-                field = self.get_existing_keyword('aggregation attribute')
-            if field is None:
-                return
-            fields = []
-            for index in xrange(self.lstFields.count()):
-                fields.append(str(self.lstFields.item(index).text()))
-            if field in fields:
-                self.lstFields.setCurrentRow(fields.index(field))
-
-        elif current_step == step_classify:
-            unit_id = self.get_existing_keyword('unit')
-            unit_name = metadata.old_to_new_unit_id(unit_id)
-            # Do not continue if user select different unit
-            if unit_name != self.selected_unit()['name']:
-                return
-
-            field = self.get_existing_keyword('field')
-            # Do not continue if user select different field
-            if field != self.selected_field():
-                return
-
-            # Do not continue if there is no value_map in existing keywords
-            value_map = self.get_existing_keyword('value_map')
-
-            if value_map is None:
-                return
-
-            # Assign unique values to classes
-            unit = self.selected_unit()
-            default_classes = unit['classes']
-            unassigned_values = list()
-            assigned_values = dict()
-            for default_class in default_classes:
-                assigned_values[default_class['name']] = list()
-            if type(value_map) == str:
-                try:
-                    value_map = json.loads(value_map)
-                except ValueError:
-                    return
-            field_index = self.layer.dataProvider().fields().indexFromName(
-                self.selected_field())
-            for unique_value in self.layer.uniqueValues(field_index):
-                value_as_string = (
-                    unique_value and unicode(unique_value) or 'NULL')
-                # check in value map
-                assigned = False
-                for key, value in value_map.iteritems():
-                    if value_as_string in value:
-                        assigned_values[key] += [value_as_string]
-                        assigned = True
-                if not assigned:
-                    unassigned_values += [value_as_string]
-            self.populate_classified_values(
-                unassigned_values, assigned_values, default_classes)
-
-        elif current_step == step_aggregation:
-            self.set_existing_aggregation_attributes()
-
-        elif current_step == step_source:
-            source = self.get_existing_keyword('source')
-            self.leSource.setText(source)
-            source_scale = self.get_existing_keyword('source_scale')
-            self.leSource_scale.setText(source_scale)
-            source_date = self.get_existing_keyword('source_date')
-            self.leSource_date.setText(source_date)
-            source_url = self.get_existing_keyword('source_url')
-            self.leSource_url.setText(source_url)
-
-        elif current_step == step_title:
-            title = self.layer.name()
-            self.leTitle.setText(title)
-
-    def set_existing_aggregation_attributes(self):
-        """Set values in aggregation step wizard based on existing keywords."""
-        self.defaults = get_defaults()
-
-        female_ratio_default = self.get_existing_keyword(
-            female_ratio_default_key)
-        if female_ratio_default:
-            self.dsbFemaleRatioDefault.setValue(
-                float(female_ratio_default))
-        else:
-            self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
-
-        youth_ratio_default = self.get_existing_keyword(
-            youth_ratio_default_key)
-        if youth_ratio_default:
-            self.dsbYouthRatioDefault.setValue(float(youth_ratio_default))
-        else:
-            self.dsbYouthRatioDefault.setValue(self.defaults['YOUTH_RATIO'])
-
-        adult_ratio_default = self.get_existing_keyword(
-            adult_ratio_default_key)
-        if adult_ratio_default:
-            self.dsbAdultRatioDefault.setValue(float(adult_ratio_default))
-        else:
-            self.dsbAdultRatioDefault.setValue(self.defaults['ADULT_RATIO'])
-
-        elderly_ratio_default = self.get_existing_keyword(
-            elderly_ratio_default_key)
-        if elderly_ratio_default:
-            self.dsbElderlyRatioDefault.setValue(float(elderly_ratio_default))
-        else:
-            self.dsbElderlyRatioDefault.setValue(
-                self.defaults['ELDERLY_RATIO'])
-
-        ratio_attribute_keys = [
-            female_ratio_attribute_key,
-            youth_ratio_attribute_key,
-            adult_ratio_attribute_key,
-            elderly_ratio_attribute_key]
-
-        cbo_ratio_attributes = [
-            self.cboFemaleRatioAttribute,
-            self.cboYouthRatioAttribute,
-            self.cboAdultRatioAttribute,
-            self.cboElderlyRatioAttribute]
-
-        for i in range(len(cbo_ratio_attributes)):
-            self.populate_cbo_aggregation_attribute(
-                ratio_attribute_keys[i], cbo_ratio_attributes[i])
-
-    # noinspection PyUnresolvedReferences,PyStatementEffect
-    def populate_cbo_aggregation_attribute(
-            self, ratio_attribute_key, cbo_ratio_attribute):
-        """Populate the combo box cbo_ratio_attribute for ratio_attribute_key.
-
-        :param ratio_attribute_key: A ratio attribute key that saved in
-               keywords.
-        :type ratio_attribute_key: str
-
-        :param cbo_ratio_attribute: A combo box that wants to be populated.
-        :type cbo_ratio_attribute: QComboBox
-        """
-        cbo_ratio_attribute.clear()
-        ratio_attribute = self.get_existing_keyword(ratio_attribute_key)
-        fields, attribute_position = layer_attribute_names(
-            self.layer, [QtCore.QVariant.Double], ratio_attribute)
-
-        cbo_ratio_attribute.addItem(
-            self.global_default_string, self.global_default_data)
-        cbo_ratio_attribute.addItem(
-            self.do_not_use_string, self.do_not_use_data)
-        for field in fields:
-            cbo_ratio_attribute.addItem(field, field)
-        # For backward compatibility, still use Use default
-        if (ratio_attribute == self.global_default_data or
-                ratio_attribute == self.tr('Use default')):
-            cbo_ratio_attribute.setCurrentIndex(0)
-        elif ratio_attribute == self.do_not_use_data:
-            cbo_ratio_attribute.setCurrentIndex(1)
-        elif ratio_attribute is None or attribute_position is None:
-            # current_keyword was not found in the attribute table.
-            # Use default
-            cbo_ratio_attribute.setCurrentIndex(0)
-        else:
-            # + 2 is because we add use defaults and don't use
-            cbo_ratio_attribute.setCurrentIndex(attribute_position + 2)
-
-    def populate_classified_values(
-            self, unassigned_values, assigned_values, default_classes):
-        """Populate lstUniqueValues and treeClasses.from the parameters.
-
-        :param unassigned_values: List of values that haven't been assigned
-            to a class. It will be put in self.lstUniqueValues.
-        :type unassigned_values: list
-
-        :param assigned_values: Dictionary with class as the key and list of
-            value as the the value of the dictionary. It will be put in
-            self.treeClasses.
-        :type assigned_values: dict
-
-        :param default_classes: Default classes from unit.
-        :type default_classes: list
-        """
-        # Populate the unique values list
-        self.lstUniqueValues.clear()
-        for value in unassigned_values:
-            list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
-            list_item.setFlags(QtCore.Qt.ItemIsEnabled |
-                               QtCore.Qt.ItemIsSelectable |
-                               QtCore.Qt.ItemIsDragEnabled)
-            list_item.setText(value)
-            self.lstUniqueValues.addItem(list_item)
-        # Populate assigned values tree
-        self.treeClasses.clear()
-        bold_font = QtGui.QFont()
-        bold_font.setItalic(True)
-        bold_font.setBold(True)
-        bold_font.setWeight(75)
-        self.treeClasses.invisibleRootItem().setFlags(
-            QtCore.Qt.ItemIsEnabled)
-        for default_class in default_classes:
-            # Create branch for class
-            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
-            tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
-                                 QtCore.Qt.ItemIsEnabled)
-            tree_branch.setExpanded(True)
-            tree_branch.setFont(0, bold_font)
-            tree_branch.setText(0, default_class['name'])
-            if 'description' in default_class:
-                tree_branch.setToolTip(0, default_class['description'])
-            # Assign known values
-            for value in assigned_values[default_class['name']]:
-                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
-                                   QtCore.Qt.ItemIsSelectable |
-                                   QtCore.Qt.ItemIsDragEnabled)
-                tree_leaf.setText(0, value)
-
     def set_tool_tip(self):
         """Set tool tip as helper text for some objects."""
 
@@ -1658,37 +2183,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         if list_widget.count() == 1 and list_widget.currentRow() == -1:
             list_widget.setCurrentRow(0)
-
-    def age_ratios_are_valid(self):
-        """Return true if the sum of age ratios is good, otherwise False.
-
-        Good means their sum does not exceed 1.
-
-        :returns: Tuple of boolean and float. Boolean represent good or not
-            good, while float represent the summation of age ratio. If some
-            ratio do not use global default, the summation is set to 0.
-        :rtype: tuple
-
-        """
-        youth_ratio_index = self.cboYouthRatioAttribute.currentIndex()
-        adult_ratio_index = self.cboAdultRatioAttribute.currentIndex()
-        elderly_ratio_index = self.cboElderlyRatioAttribute.currentIndex()
-
-        ratio_indexes = [
-            youth_ratio_index, adult_ratio_index, elderly_ratio_index]
-
-        if ratio_indexes.count(0) == len(ratio_indexes):
-            youth_ratio_default = self.dsbYouthRatioDefault.value()
-            adult_ratio_default = self.dsbAdultRatioDefault.value()
-            elderly_ratio_default = self.dsbElderlyRatioDefault.value()
-
-            sum_ratio_default = youth_ratio_default + adult_ratio_default
-            sum_ratio_default += elderly_ratio_default
-            if sum_ratio_default > 1:
-                return False, sum_ratio_default
-            else:
-                return True, sum_ratio_default
-        return True, 0
 
     def get_current_step(self):
         """Return current step of the wizard.
