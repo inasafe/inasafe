@@ -329,14 +329,30 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         impact_table = impact_summary
 
         # Create style
-        style_classes = [dict(label=tr('Not Affected'), value=0,
-                              colour='#1EFC7C', transparency=0, size=1),
-                         dict(label=tr('Low'), value=low_t,
-                              colour='#EBF442', transparency=0, size=1),
-                         dict(label=tr('Medium'), value=medium_t,
-                              colour='#F4A442', transparency=0, size=1),
-                         dict(label=tr('High'), value=high_t,
-                              colour='#F31A1C', transparency=0, size=1)]
+        style_classes = [dict(label=tr('Not Affected'),
+                              value=0,
+                              colour='#1EFC7C',
+                              transparency=0,
+                              size=2,
+                              border_color='#252525'),
+                         dict(label=tr('Low'),
+                              value=low_t,
+                              colour='#EBF442',
+                              transparency=0,
+                              size=2,
+                              border_color='#252525'),
+                         dict(label=tr('Medium'),
+                              value=medium_t,
+                              colour='#F4A442',
+                              transparency=0,
+                              size=2,
+                              border_color='#252525'),
+                         dict(label=tr('High'),
+                              value=high_t,
+                              colour='#F31A1C',
+                              transparency=0,
+                              size=2,
+                              border_color='#252525')]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
