@@ -1261,17 +1261,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.show_static_message(message)
 
-        try:
-            # See if we are re-running the same type of analysis, if not
-            # we should prompt the user for new keywords for agg layer.
-            self.check_for_state_change()
-        except (KeywordDbError, Exception), e:   # pylint: disable=W0703
-            context = self.tr(
-                'A problem was encountered when trying to read keywords.'
-            )
-            self.analysis_error(e, context)
-            return
-
         # Find out what the usable extent and cell size are
         try:
             self.clip_parameters = self.get_clip_parameters()
@@ -1328,21 +1317,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.keyword_io.write_keywords(self.aggregator.layer, old_keywords)
         self.hide_busy()
         self.set_ok_button_status()
-
-    def check_for_state_change(self):
-        """Clear aggregation layer category keyword on dock state change.
-        """
-        # check and generate keywords for the aggregation layer
-        try:
-            if ((self.get_aggregation_layer() is not None) and
-                    (self.last_used_function != self.get_function_id())):
-                # Remove category keyword so we force the keyword editor to
-                # popup. See the beginning of checkAttributes to
-                # see how the popup decision is made
-                self.keyword_io.delete_keywords(self.layer, 'category')
-        except AttributeError:
-            #first run, self.last_used_function does not exist yet
-            pass
 
     def show_busy(self):
         """Hide the question group box and enable the busy cursor."""
