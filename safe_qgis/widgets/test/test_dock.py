@@ -384,7 +384,7 @@ class TestDock(TestCase):
         rectangle = QgsRectangle(
             106.635434302702, -6.101567666986,
             106.635434302817, -6.101567666888)
-        CANVAS.setExtent(rectangle)
+        CANVAS.set_extent(rectangle)
 
         # Press RUN
         DOCK.accept()
@@ -971,7 +971,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        IFACE.mapCanvas().setExtent(
+        IFACE.mapCanvas().set_extent(
             QgsRectangle(106.788, -6.193, 106.853, -6.167))
 
         # Press RUN
