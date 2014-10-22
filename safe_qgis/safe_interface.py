@@ -437,7 +437,7 @@ def read_safe_layer(path):
     Returns:
         A safe read_safe_layer object is returned.
     Raises:
-        Any exceptions are propogated
+        Any exceptions are propagated
     """
     try:
         return safe_read_layer(make_ascii(path))
@@ -453,7 +453,7 @@ def convert_to_safe_layer(layer):
     Returns:
         A safe read_safe_layer object is returned.
     Raises:
-        Any exceptions are propogated
+        Any exceptions are propagated
     """
     # FIXME (DK): it is a stub now.
     #   Do not call read_safe_layer, but write function
@@ -476,7 +476,7 @@ def get_safe_impact_function(function=None):
     Returns:
         A safe impact function is returned
     Raises:
-        Any exceptions are propogated
+        Any exceptions are propagated
     """
     try:
         return safe_get_plugins(make_ascii(function))
@@ -494,7 +494,7 @@ def get_safe_impact_function_type(function_id):
             'old-style' is "classic" safe impact function
             'qgis2.0'   is impact function with native qgis layers support
     Raises:
-        Any exceptions are propogated
+        Any exceptions are propagated
     """
     try:
         # Get an instance of the impact function and get the type
@@ -527,7 +527,7 @@ def calculate_safe_impact(
     Returns:
         A safe impact function is returned
     Raises:
-        Any exceptions are propogated
+        Any exceptions are propagated
     """
     try:
         return safe_calculate_impact(

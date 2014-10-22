@@ -28,6 +28,7 @@ import numpy
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
 from qgis.core import (
     QgsCoordinateTransform,
@@ -247,7 +248,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
         # Set up dispatcher for error messages
-        # Static messages clear the message queue and so the display is 'reset'
+        # Error messages clear the message queue and so the display is 'reset'
         # noinspection PyArgumentEqualDefault
         dispatcher.connect(
             self.wvResults.error_message_event,
@@ -263,6 +264,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def about(self):
         """Open the About dialog."""
+        # noinspection PyTypeChecker
         dialog = AboutDialog(self)
         dialog.show()
 
@@ -479,9 +481,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :returns Message: A localised message indicating we are not ready.
         """
         #myHazardFilename = self.getHazardLayer().source()
+        # noinspection PyTypeChecker
         hazard_keywords = str(
             self.keyword_io.read_keywords(self.get_hazard_layer()))
         #myExposureFilename = self.getExposureLayer().source()
+        # noinspection PyTypeChecker
         exposure_keywords = str(
             self.keyword_io.read_keywords(self.get_exposure_layer()))
         heading = m.Heading(
@@ -558,6 +562,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.set_ok_button_status()
         self.show_next_analysis_extent()
 
+    # noinspection PyPep8Naming
     @pyqtSlot(int)
     def on_cboExposure_currentIndexChanged(self, index):
         """Automatic slot executed when the Exposure combo is changed.
@@ -836,6 +841,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         exposure_layer = self.get_exposure_layer()
         if exposure_layer is None:
             return
+        # noinspection PyTypeChecker
         hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
@@ -843,6 +849,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
             hazard_keywords['layertype'] = 'raster'
 
+        # noinspection PyTypeChecker
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
@@ -1135,25 +1142,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.calculator.set_hazard_layer(hazard_layer)
         self.calculator.set_exposure_layer(exposure_layer)
 
-    def get_extent_as_array(self):
-        """Return current extent as array
-
-        :returns: a list in the form [xmin, ymin, xmax, ymax] where all
-                coordinates provided are in Geographic / EPSG:4326.
-        :rtype: list
-        """
-        # TODO: This function is not covered by tests
-
-        rectangle = self.iface.mapCanvas().extent()
-        if self.iface.mapCanvas().hasCrsTransformEnabled():
-            crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-        else:
-            crs = QgsCoordinateReferenceSystem()
-            crs.createFromSrid(4326)
-        geo_extent = extent_to_geo_array(rectangle, crs)
-
-        return geo_extent
-
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
 
@@ -1230,6 +1218,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.get_aggregation_layer() is not None:
             try:
                 aggregation_name = aggregation_layer.name()
+                # noinspection PyTypeChecker
                 text.add(m.Text(
                     self.tr('and bullet_list the results'),
                     m.ImportantText(self.tr('aggregated by')),
@@ -1283,7 +1272,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysis_error(e, context)
             return
 
-        # Find out what the usable extent and cellsize are
+        # Find out what the usable extent and cell size are
         try:
             self.clip_parameters = self.get_clip_parameters()
             buffered_geoextent = self.clip_parameters[1]
@@ -1363,6 +1352,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.repaint()
         QtGui.qApp.processEvents()
         self.busy = True
+
+    def analysis_error(self, exception, message):
+        """A helper to spawn an error and halt processing.
+
+        An exception will be logged, busy status removed and a message
+        displayed.
+
+        :param message: an ErrorMessage to display
+        :type message: ErrorMessage, Message
+
+        :param exception: An exception that was raised
+        :type exception: Exception
+        """
+        QtGui.qApp.restoreOverrideCursor()
+        self.hide_busy()
+        LOGGER.exception(message)
+        message = get_error_message(exception, context=message)
+        self.show_error_message(message)
+        self.analysisDone.emit(False)
 
     def run(self):
         """Execute analysis when run button on dock is clicked."""
@@ -1462,25 +1470,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysis_error(
                 e,
                 self.tr('An exception occurred when starting the model.'))
-
-    def analysis_error(self, exception, message):
-        """A helper to spawn an error and halt processing.
-
-        An exception will be logged, busy status removed and a message
-        displayed.
-
-        :param message: an ErrorMessage to display
-        :type message: ErrorMessage, Message
-
-        :param exception: An exception that was raised
-        :type exception: Exception
-        """
-        QtGui.qApp.restoreOverrideCursor()
-        self.hide_busy()
-        LOGGER.exception(message)
-        message = get_error_message(exception, context=message)
-        self.show_error_message(message)
-        self.analysisDone.emit(False)
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1861,6 +1850,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
+                # noinspection PyTypeChecker
                 keywords = self.keyword_io.read_keywords(exposure_layer)
                 allow_resampling_flag = True
                 if 'allow_resampling' in keywords:
