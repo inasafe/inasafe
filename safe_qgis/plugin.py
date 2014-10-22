@@ -383,6 +383,10 @@ class Plugin:
         # or  view-panels
         #
         self.dock_widget.visibilityChanged.connect(self.toggle_inasafe_action)
+        # Also deal with the fact that on start of QGIS dock may already be
+        # hidden.
+        self.action_dock.setChecked(self.dock_widget.isVisible())
+
         # pylint: disable=W0201
 
         #---------------------------------------
