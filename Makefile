@@ -35,6 +35,13 @@ compile:
 	@echo "-----------------"
 	make -C safe_qgis
 
+compress-images:
+	@echo
+	@echo "-----------------"
+	@echo "Compress images"
+	@echo "-----------------"
+	@scripts/compress-images.sh
+
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
         #update application strings
