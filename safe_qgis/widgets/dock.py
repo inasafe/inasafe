@@ -108,6 +108,8 @@ from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
 
+from safe_qgis.utilities.analysis import Analysis
+
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
@@ -190,6 +192,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.aggregator = None
         self.postprocessor_manager = None
         self.function_parameters = None
+        self.analysis = None
 
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
@@ -1166,7 +1169,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.iface,
             self,
             self.aggregator.layer)
-        self.runtime_keywords_dialog.accepted.connect(self.run)
+        self.runtime_keywords_dialog.accepted.connect(self.run_analysis)
         self.runtime_keywords_dialog.rejected.connect(
             partial(self.accept_cancelled, original_keywords))
 
@@ -1298,7 +1301,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # accepted signal of the keywords dialog
         self.aggregator.validate_keywords()
         if self.aggregator.is_valid:
-            self.run()
+            self.run_analysis()
         else:
             self.runtime_keywords_dialog.set_layer(self.aggregator.layer)
             # disable gui elements that should not be applicable for this
@@ -1346,9 +1349,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.show_error_message(message)
         self.analysisDone.emit(False)
 
-    def run(self):
-        """Execute analysis when run button on dock is clicked."""
-
+    def setup_analysis(self):
+        """Setup analysis to make it ready to work."""
         hazard_layer = self.get_hazard_layer()
         exposure_layer = self.get_exposure_layer()
 
@@ -1364,11 +1366,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_static_message(message)
             return
 
+        self.analysis = Analysis()
+        self.analysis.hazard_layer = self.get_hazard_layer()
+        self.analysis.exposure_layer = self.get_exposure_layer()
+        self.analysis.aggregation_layer = self.get_aggregation_layer()
+
+        self.analysis._clip_parameters = self.clip_parameters
+        self.analysis.aggregator = self.aggregator
+        self.analysis._impact_calculator = self.calculator
+
+        # Variables
+        self.analysis.clip_hard = self.clip_hard
+
+    def run_analysis(self):
+        """Execute analysis when run button on dock is clicked."""
+        self.setup_analysis()
         self.enable_busy_cursor()
 
         # Start the analysis
         try:
-
             self.setup_calculator()
         except CallGDALError, e:
             self.analysis_error(e, self.tr(
