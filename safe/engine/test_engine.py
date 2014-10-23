@@ -41,6 +41,7 @@ from safe.common.utilities import (
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
+from safe.impact_functions.core import population_rounding
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
@@ -243,12 +244,12 @@ class Test_Engine(unittest.TestCase):
         fatalities = float(keywords['total_fatalities'])
 
         # Check aggregated values
-        expected_population = int(round(85424650. / 1000)) * 1000
+        expected_population = population_rounding(85424650.0)
         msg = ('Expected population was %f, I got %f'
                % (expected_population, population))
         assert population == expected_population, msg
 
-        expected_fatalities = int(round(40871.3028 / 1000)) * 1000
+        expected_fatalities = population_rounding(40871.3028)
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
 
@@ -265,7 +266,7 @@ class Test_Engine(unittest.TestCase):
                % all_numbers)
         assert all_numbers == 40871, msg
 
-        x = int(round(float(all_numbers) / 1000)) * 1000
+        x = population_rounding(all_numbers)
         msg = ('Did not find expected fatality value %i in summary %s'
                % (x, keywords['impact_summary']))
         assert format_int(x) in keywords['impact_summary'], msg
@@ -297,16 +298,16 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)
         keywords = I.get_keywords()
-        population = float(keywords['total_population'])
-        fatalities = float(keywords['total_fatalities'])
+        population = keywords['total_population']
+        fatalities = keywords['total_fatalities']
 
         # Check aggregated values
-        expected_population = 85425000.0
+        expected_population = population_rounding(85425000)
         msg = ('Expected population was %f, I got %f'
                % (expected_population, population))
         assert population == expected_population, msg
 
-        expected_fatalities = 409000.0
+        expected_fatalities = population_rounding(409000)
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(fatalities, expected_fatalities,
@@ -345,16 +346,16 @@ class Test_Engine(unittest.TestCase):
 #        print calculated_result.shape
         keywords = I.get_keywords()
 #        print "keywords", keywords
-        population = float(keywords['total_population'])
-        fatalities = float(keywords['total_fatalities'])
+        population = keywords['total_population']
+        fatalities = keywords['total_fatalities']
 
         # Check aggregated values
-        expected_population = int(round(85424650. / 1000)) * 1000
+        expected_population = population_rounding(85424650)
         msg = ('Expected population was %f, I got %f'
                % (expected_population, population))
         assert population == expected_population, msg
 
-        expected_fatalities = int(round(40871.3028 / 1000)) * 1000
+        expected_fatalities = population_rounding(40871.3028)
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(fatalities, expected_fatalities,
@@ -3031,6 +3032,8 @@ class Test_Engine(unittest.TestCase):
         affected_population = float(keywords['affected_population'])
         total_population = keywords['total_population']
 
+        print affected_population
+        print total_population
         assert affected_population == 133000
         assert total_population == 162000
 
