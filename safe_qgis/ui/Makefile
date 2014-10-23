@@ -33,7 +33,7 @@ UI_FILES = \
 	shakemap_importer_base.ui \
     function_browser_base.ui \
     wizard_dialog_base.ui \
-    extent_selector.ui
+    extent_selector_base.ui
 
 ###################### EDITABLE AREA ENDS ###################################
 

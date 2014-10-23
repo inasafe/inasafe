@@ -1,20 +1,42 @@
+# coding=utf-8
+"""Map tool implementation for selecting rectangles.
 
+Based on work by Guisepe Sucameli, 2010. Updated for coding compliance etc.
+by Tim Sutton, Oct 2014.
+
+"""
+
+
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import SIGNAL, pyqtSignal
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
 from qgis.core import QgsPoint, QgsRectangle, QGis
-from qgis.gui import QgsRubberBand, QgsMapTool
+from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
+
 
 class RectangleMapTool(QgsMapToolEmitPoint):
     """
     Map tool that lets the user define the analysis extents.
     """
+    rectangle_created = pyqtSignal()
 
     def __init__(self, canvas):
+        """Constructor for the map tool.
+
+        :param canvas: Canvas that tool will interact with.
+        :type canvas: QgsMapCanvas
+        """
         self.canvas = canvas
+        self.start_point = None
+        self.end_point = None
+        self.is_emitting_point = False
+
         QgsMapToolEmitPoint.__init__(self, self.canvas)
 
-        self.rubberBand = QgsRubberBand(self.canvas, QGis.Polygon)
-        self.rubberBand.setColor(QColor(255, 0, 0, 100))
-        self.rubberBand.setWidth(2)
+        self.rubber_band = QgsRubberBand(self.canvas, QGis.Polygon)
+        self.rubber_band.setColor(QColor(255, 0, 0, 100))
+        self.rubber_band.setWidth(2)
 
         self.reset()
 
@@ -24,12 +46,14 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         self.start_point = self.end_point = None
         self.is_emitting_point = False
-        self.rubberBand.reset(QGis.Polygon)
+        self.rubber_band.reset(QGis.Polygon)
 
     def canvasPressEvent(self, e):
         """
         Handle canvas press events so we know when user is capturing the rect.
-        :param e:
+
+        :param e: A Qt event object.
+        :type: QEvent
         """
         self.start_point = self.toMapCoordinates(e.pos())
         self.end_point = self.start_point
@@ -39,13 +63,13 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
     def canvasReleaseEvent(self, e):
         """
+        Handle canvas release events  has finished capturing e
 
-        :param e:
+        :param e: A Qt event object.
+        :type: QEvent
         """
         self.is_emitting_point = False
-        # if self.rectangle() != None:
-        #  self.emit( SIGNAL("rectangleCreated()") )
-        self.emit(SIGNAL("rectangleCreated()"))
+        self.rectangle_created.emit()
 
     def canvasMoveEvent(self, e):
         """
@@ -63,29 +87,31 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         Show the rectangle on the canvas.
 
-        :param start_point: Tuple containing X, Y of the start point.
-        :type start_point: tuple
+        :param start_point: QGIS Point object representing the origin (
+            top left).
+        :type start_point: QgsPoint
 
-        :param end_point: Tuple containing X, Y of the end point.
-        :type end_point: tuple
+        :param end_point: QGIS Point object representing the contra-origin (
+            bottom right).
+        :type end_point: QgsPoint
 
         :return:
         """
-        self.rubberBand.reset(QGis.Polygon)
+        self.rubber_band.reset(QGis.Polygon)
         if start_point.x() == end_point.x() or start_point.y() == end_point.y():
             return
 
-        point1 = QgsPoint(start_point.x(), start_point.y())
+        point1 = start_point
         point2 = QgsPoint(start_point.x(), end_point.y())
-        point3 = QgsPoint(end_point.x(), end_point.y())
+        point3 = end_point
         point4 = QgsPoint(end_point.x(), start_point.y())
 
-        self.rubberBand.addPoint(point1, False)
-        self.rubberBand.addPoint(point2, False)
-        self.rubberBand.addPoint(point3, False)
+        self.rubber_band.addPoint(point1, False)
+        self.rubber_band.addPoint(point2, False)
+        self.rubber_band.addPoint(point3, False)
         # noinspection PyArgumentEqualDefault
-        self.rubberBand.addPoint(point4, True)  # true to update canvas
-        self.rubberBand.show()
+        self.rubber_band.addPoint(point4, True)  # true to update canvas
+        self.rubber_band.show()
 
     def rectangle(self):
         """
@@ -111,11 +137,13 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         if rectangle == self.rectangle():
             return False
 
-        if rectangle == None:
+        if rectangle is None:
             self.reset()
         else:
-            self.start_point = QgsPoint(rectangle.xMaximum(), rectangle.yMaximum())
-            self.end_point = QgsPoint(rectangle.xMinimum(), rectangle.yMinimum())
+            self.start_point = QgsPoint(
+                rectangle.xMaximum(), rectangle.yMaximum())
+            self.end_point = QgsPoint(
+                rectangle.xMinimum(), rectangle.yMinimum())
             self.show_rectangle(self.start_point, self.end_point)
         return True
 
@@ -125,4 +153,3 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         QgsMapTool.deactivate(self)
         self.emit(SIGNAL("deactivated()"))
-

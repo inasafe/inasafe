@@ -2,11 +2,13 @@
 
 """
 ***************************************************************************
-    extentSelector.py
+    extent_selector.py
     ---------------------
-    Date                 : December 2010
-    Copyright            : (C) 2010 by Giuseppe Sucameli
-    Email                : brush dot tyler at gmail dot com
+    Based on original code from:
+        Date                 : December 2010
+        Copyright            : (C) 2010 by Giuseppe Sucameli
+        Email                : brush dot tyler at gmail dot com
+    Refactored in Oct 2014 by Tim Sutton for InaSAFE.
 ***************************************************************************
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -23,44 +25,72 @@ __copyright__ = '(C) 2010, Giuseppe Sucameli'
 # This will get replaced with a git SHA1 when you do a git archive
 __revision__ = '$Format:%H$'
 
-from PyQt4.QtCore import SIGNAL
-from PyQt4.QtGui import QWidget
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import SIGNAL, pyqtSignal
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QDialog
 from qgis.core import QgsPoint, QgsRectangle
 
-from ui_extent_selector import Ui_ExtentSelector
+from safe_qgis.ui.extent_selector_base import Ui_ExtentSelectorBase
+from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
 
 
-class ExtentSelector(QWidget, Ui_ExtentSelector):
+class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
     """
 
-    :param parent:
+    :param parent: Parent widget claiming ownsership of this.
     """
 
-    def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
-        self.canvas = None
+    extent_defined = pyqtSignal()
+    selection_stopped = pyqtSignal()
+    selection_started = pyqtSignal()
+    selection_paused = pyqtSignal()
+
+    def __init__(self, iface, parent=None):
+        """
+        Constructor for the dialog.
+
+        :param iface: A Quantum GIS QGisAppInterface instance.
+        :type iface: QGisAppInterface
+
+        :param parent: Parent widget of this dialog
+        :type parent: QWidget
+        """
+        QDialog.__init__(self, parent)
+        self.setupUi(self)
+
+        self.iface = iface
+        self.parent = parent
+        self.canvas = iface.mapCanvas()
+
         self.tool = None
         self.previous_map_tool = None
         self.is_started = False
-        self.start_point
-        self.setupUi(self)
 
-        self.x1CoordEdit.textChanged.connect(self.coordinates_changed)
-        self.x2CoordEdit.textChanged.connect(self.coordinates_changed)
-        self.y1CoordEdit.textChanged.connect(self.coordinates_changed)
-        self.y2CoordEdit.textChanged.connect(self.coordinates_changed)
-        self.btnEnable.clicked.connect(self.start)
+        self.set_canvas(self.canvas)
+        self.set_extent(self.canvas.extent())
+        self.populate_coordinates()
+
+        self.x_minimum.textChanged.connect(self.coordinates_changed)
+        self.y_minimum.textChanged.connect(self.coordinates_changed)
+        self.x_maximum.textChanged.connect(self.coordinates_changed)
+        self.y_maximum.textChanged.connect(self.coordinates_changed)
+        self.activate_button.clicked.connect(self.start)
 
     def set_canvas(self, canvas):
         """
+        Set the canvas property.
 
-        :param canvas:
+        :param canvas: Canvas that should be associated with this tool.
+        :type canvas: QgsMapCanvas
+
         """
         self.canvas = canvas
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
-        self.tool.rectangleCreated.connect(self.populate_coordinates)
+        self.tool.rectangle_created.connect(self.populate_coordinates)
         self.tool.deactivated.connect(self.pause)
+        self.start()
 
     def stop(self):
         """
@@ -69,13 +99,12 @@ class ExtentSelector(QWidget, Ui_ExtentSelector):
         if not self.is_started:
             return
         self.is_started = False
-        self.btnEnable.setVisible(False)
+        self.activate_button.setVisible(False)
         self.tool.reset()
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
-        # self.coordsChanged()
-        self.emit(SIGNAL("selectionStopped()"))
+        self.selection_stopped.emit()
 
     def start(self):
         """
@@ -86,50 +115,53 @@ class ExtentSelector(QWidget, Ui_ExtentSelector):
             self.previous_map_tool = previous_map_tool
         self.canvas.setMapTool(self.tool)
         self.is_started = True
-        self.btnEnable.setVisible(False)
+        self.activate_button.setVisible(False)
         self.coordinates_changed()
-        self.emit(SIGNAL("selectionStarted()"))
+        self.selection_started.emit()
 
     def pause(self):
         """
-
-
-        :return:
+        Pause capture.
         """
         if not self.is_started:
             return
 
-        self.btnEnable.setVisible(True)
-        self.emit(SIGNAL("selectionPaused()"))
+        self.activate_button.setVisible(True)
+        self.selection_paused.emit()
 
     def set_extent(self, rect):
         """
+        Set the extents.
 
-        :param rect:
+        :param rect: Rectangle that the extents should be set to.
+        :type rect: QgsRectangle
         """
         if self.tool.set_rectangle(rect):
-            self.emit(SIGNAL("newExtentDefined()"))
+            self.extent_defined.emit()
 
     def get_extent(self):
         """
+        Get the current extents.
 
-
-        :return:
+        :return: Extents of the marquee.
+        :rtype: QgsRectangle
         """
         return self.tool.rectangle()
 
     def are_coordinates_valid(self):
         """
         Check if the coordinates are valid.
-        :return:
+
+        :return: True if coordinates are valid otherwise False.
+        :type: bool
         """
         try:
             QgsPoint(
-                float(self.x1CoordEdit.text()),
-                float(self.y1CoordEdit.text()))
+                float(self.x_minimum.text()),
+                float(self.y_minimum.text()))
             QgsPoint(
-                float(self.x2CoordEdit.text()),
-                float(self.y2CoordEdit.text()))
+                float(self.x_maximum.text()),
+                float(self.y_maximum.text()))
         except ValueError:
             return False
 
@@ -141,31 +173,31 @@ class ExtentSelector(QWidget, Ui_ExtentSelector):
         """
         rect = None
         if self.are_coordinates_valid():
-            point1 = QgsPoint(float(self.x1CoordEdit.text()),
-                              float(self.y1CoordEdit.text()))
-            point2 = QgsPoint(float(self.x2CoordEdit.text()),
-                              float(self.y2CoordEdit.text()))
+            point1 = QgsPoint(
+                float(self.x_minimum.text()),
+                float(self.y_minimum.text()))
+            point2 = QgsPoint(
+                float(self.x_maximum.text()),
+                float(self.y_maximum.text()))
             rect = QgsRectangle(point1, point2)
 
         self.set_extent(rect)
 
     def populate_coordinates(self):
         """
-
-
+        Update the UI with the current active coordinates.
         """
         rect = self.get_extent()
         self.blockSignals(True)
         if rect is not None:
-            self.x1CoordEdit.setText(str(rect.xMinimum()))
-            self.x2CoordEdit.setText(str(rect.xMaximum()))
-            self.y1CoordEdit.setText(str(rect.yMaximum()))
-            self.y2CoordEdit.setText(str(rect.yMinimum()))
+            self.x_minimum.setText(str(rect.xMinimum()))
+            self.y_minimum.setText(str(rect.xMaximum()))
+            self.x_maximum.setText(str(rect.yMaximum()))
+            self.y_maximum.setText(str(rect.yMinimum()))
         else:
-            self.x1CoordEdit.clear()
-            self.x2CoordEdit.clear()
-            self.y1CoordEdit.clear()
-            self.y2CoordEdit.clear()
+            self.x_minimum.clear()
+            self.y_minimum.clear()
+            self.x_maximum.clear()
+            self.y_maximum.clear()
         self.blockSignals(False)
-        self.emit(SIGNAL("newExtentDefined()"))
-
+        self.extent_defined.emit()

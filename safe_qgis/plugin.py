@@ -96,6 +96,7 @@ class Plugin:
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
+        self.action_extent_selector = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
@@ -278,6 +279,20 @@ class Plugin:
         self.key_action = QAction("Test Plugin", self.iface.mainWindow())
         self.iface.registerMainWindowAction(self.key_action, "F7")
         self.key_action.triggered.connect(self.shortcut_f7)
+
+        #---------------------------------------
+        # Create action for analysis extent dialog
+        #---------------------------------------
+        self.action_extent_selector = QAction(
+            QIcon(':/plugins/inasafe/show-extent-selector.svg'),
+            self.tr('InaSAFE Extent Selector'), self.iface.mainWindow())
+        self.action_extent_selector.setStatusTip(self.tr(
+            'Open InaSAFE extent selector tool'))
+        self.action_extent_selector.setWhatsThis(self.tr(
+            'Open InaSAFE extent selector tool'))
+        self.action_extent_selector.triggered.connect(self.show_extent_selector)
+
+        self.add_action(self.action_extent_selector)
 
         #---------------------------------------
         # Create action for minimum needs dialog
@@ -488,6 +503,15 @@ class Plugin:
         else:
             self.dock_widget.setVisible(True)
             self.dock_widget.raise_()
+
+    def show_extent_selector(self):
+        """Show the extent selector dialog for defining analysis extents."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.extent_selector import ExtentSelector
+        dialog = ExtentSelector(
+            self.iface,
+            self.iface.mainWindow())
+        dialog.exec_()  # modal
 
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
