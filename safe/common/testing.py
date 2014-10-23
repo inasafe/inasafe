@@ -736,3 +736,16 @@ def get_qgis_app():
         IFACE = QgisInterface(CANVAS)
 
     return QGIS_APP, CANVAS, IFACE, PARENT
+
+
+def get_shake_test_data_path():
+    """Return shake_data path for testing.
+
+    :return: The path to safe.test.data.hazard.shake_data
+    :rtype: str.
+    """
+    shake_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            '../test/data/hazard/shake_data'))
+    return shake_path
