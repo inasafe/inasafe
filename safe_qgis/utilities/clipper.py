@@ -477,7 +477,7 @@ def _clip_raster_layer(
             raise InvalidProjectionError(message)
 
     # We need to provide gdalwarp with a dataset for the clip
-    # because unline gdal_translate, it does not take projwin.
+    # because unlike gdal_translate, it does not take projwin.
     clip_kml = extent_to_kml(extent)
 
     # Create a filename for the clipped, resampled and reprojected layer
@@ -505,11 +505,11 @@ def _clip_raster_layer(
                 filename))
     else:
         command = (
-            '"%s" -q -t_srs EPSG:4326 -r near -tr %.14f %.14f -cutline %s '
+            '"%s" -q -t_srs EPSG:4326 -r near -tr %s %s -cutline %s '
             '-crop_to_cutline -ot Float64 -of GTiff "%s" "%s"' % (
                 binary,
-                cell_size,
-                cell_size,
+                repr(cell_size),
+                repr(cell_size),
                 clip_kml,
                 working_layer,
                 filename))
@@ -551,10 +551,10 @@ def extent_to_kml(extent):
     :type extent: list(float)
     """
 
-    bottom_left_corner = '%f,%f' % (extent[0], extent[1])
-    top_left_corner = '%f,%f' % (extent[0], extent[3])
-    top_right_corner = '%f,%f' % (extent[2], extent[3])
-    bottom_right_corner = '%f,%f' % (extent[2], extent[1])
+    bottom_left_corner = '%s,%s' % (repr(extent[0]), repr(extent[1]))
+    top_left_corner = '%s,%s' % (repr(extent[0]), repr(extent[3]))
+    top_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[3]))
+    bottom_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[1]))
     kml = ("""<?xml version="1.0" encoding="utf-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
