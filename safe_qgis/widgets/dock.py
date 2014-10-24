@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import logging
 from functools import partial
+from math import ceil
 
 import numpy
 
@@ -1779,59 +1780,64 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return message
 
     def adjust_clip_extent(self, clip_extent, cell_size, layer_extent):
-        """Helper function to adjust the clip extent to th edget of the pixel 
+        """Helper function to adjust the clip extent to the edge of the pixel
 
-        Args:
+        :param clip_extent: An array representing the clip extents in the
+            form [xmin, ymin, xmax, ymax]. This is the optimal extent between
+            the exposure, hazard and view port.
+        :type clip_extent: list
 
-        * clip_extent - an array representing the clip 
-           extents in the form [xmin, ymin, xmax, ymax]. This is the optimal extent
-           between the exposure, hazard and view port.
-        * cell_size - the size of a pixel in geo reference unit
-        * layer_extent (optional) - an array representing the full
-           extents of the layer in the form [xmin, ymin, xmax, ymax]. 
+        :param cell_size: The size of a pixel in geo reference unit
+        :type cell_size: float
 
-        Returns:
-        An array containing an the adjusted clip extent in the form [xmin, ymin, xmax, ymax]
-       
+        :param layer_extent: (optional) An array representing the full
+            extents of the layer in the form [xmin, ymin, xmax, ymax].
+        :type layer_extent: list
+
+        :return: An array containing an the adjusted clip extent in the
+            form [xmin, ymin, xmax, ymax]
+        :rtype: list
+
         """
-        if (clip_extent == layer_extent):
+        if clip_extent == layer_extent:
             return clip_extent
-        
-        xmin = layer_extent[0]
-        ymin = layer_extent[1]
-        xmax = layer_extent[2]
-        ymax = layer_extent[3]
 
-        width = ((xmax - xmin) / cell_size)
-        width = int(width)
-        x = xmin
-        for i in range(width):
-            if abs(x - clip_extent[0]) < cell_size:
-                # We have found the aligned raster boundary
-                break
-            x += cell_size
-            _ = i
+        clip_extent_xmin = clip_extent[0]
+        clip_extent_ymin = clip_extent[1]
+        clip_extent_xmax = clip_extent[2]
+        clip_extent_ymax = clip_extent[3]
 
-        height = ((ymax - ymin) / cell_size)
-        height = int(height)
-        y = ymin
-        for i in range(height):
-            if abs(y - clip_extent[1]) < cell_size:
-                # We have found the aligned raster boundary
-                break
-            y += cell_size
-            _ = i
-          
-        geo_width = ((clip_extent[2] - clip_extent[0]) / cell_size)
-        geo_width = int(geo_width)
-        geo_height = ((clip_extent[3] - clip_extent[1]) / cell_size)
-        geo_height = int(geo_height)
-        adjusted_extent = [x, y, x + geo_width * cell_size, y + geo_height * cell_size]
-        #adjusted_extent = [x, y, x + width * cell_size, y + height * cell_size]
+        # In case layer_extent is within clip_extent, adjust them
+        if clip_extent[0] < layer_extent[0]:
+            clip_extent_xmin = layer_extent[0]
+        if clip_extent[1] < layer_extent[1]:
+            clip_extent_ymin = layer_extent[1]
+        if clip_extent[2] > layer_extent[2]:
+            clip_extent_xmax = layer_extent[2]
+        if clip_extent[3] > layer_extent[3]:
+            clip_extent_ymax = layer_extent[3]
+
+        starting_cell = int(abs(clip_extent_xmin - layer_extent[0]) / cell_size)
+        adjusted_xmin = layer_extent[0] + starting_cell * cell_size
+
+        starting_cell = int(abs(clip_extent_ymin - layer_extent[1]) / cell_size)
+        adjusted_ymin = layer_extent[0] + starting_cell * cell_size
+
+        geo_clip_width = (float(clip_extent_xmax - clip_extent_xmin) /
+                          float(cell_size))
+        geo_clip_width = ceil(geo_clip_width)
+        print geo_clip_width
+        geo_clip_height = (float(clip_extent_ymax - clip_extent_ymin) /
+                           float(cell_size))
+        geo_clip_height = ceil(geo_clip_height)
+        adjusted_extent = [
+            adjusted_xmin,
+            adjusted_ymin,
+            adjusted_xmin + geo_clip_width * cell_size,
+            adjusted_ymin + geo_clip_height * cell_size]
+
         return adjusted_extent
 
-
-        
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
@@ -1913,6 +1919,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
                 exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
+
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
                 keywords = self.keyword_io.read_keywords(exposure_layer)
@@ -1920,18 +1927,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 if 'allow_resampling' in keywords:
                     allow_resampling_flag = keywords[
                         'allow_resampling'].lower() == 'true'
+
                 if hazard_geo_cell_size < exposure_geo_cell_size and \
                         allow_resampling_flag:
                     cell_size = hazard_geo_cell_size
-                    layer_extent =  hazard_geoextent
+                    layer_extent = hazard_geoextent
                 else:
                     cell_size = exposure_geo_cell_size
-                    layer_extent =  exposure_geoextent
+                    layer_extent = exposure_geoextent
 
                 #adjust the geo extent to be at the edge of the pixel
-                geo_extent = self.adjust_clip_extent(geo_extent, cell_size, layer_extent)
+                geo_extent = self.adjust_clip_extent(
+                    geo_extent, cell_size, layer_extent)
                 buffered_geoextent = geo_extent
-                
+
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(cell_size, exposure_geo_cell_size):
                     extra_exposure_keywords['resolution'] = \
