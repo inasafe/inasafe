@@ -128,7 +128,7 @@ def categorical_style(target_field,
             value=category,
             colour=colors['hex'][index],
             border_color=colors['hex'][index],
-            border_width=0.8,
+            border_width=0.1,
             transparency=0,
             size=1)
 
