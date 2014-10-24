@@ -49,7 +49,6 @@ from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label

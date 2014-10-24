@@ -238,7 +238,8 @@ class TsunamiEvacuationFunction(FunctionProvider):
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
                       '%s*' % format_int(evacuated)],
                      header=True),
-            TableRow(tr('* Number is rounded up to the nearest %s') % rounding),
+            TableRow(
+                tr('* Number is rounded up to the nearest %s') % rounding),
             TableRow(tr('Map shows population density needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
