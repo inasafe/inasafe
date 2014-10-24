@@ -330,7 +330,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
 
         # Create style
         style_classes = [dict(label=tr('Not Affected'),
-                              value=0,
+                              value=None,
                               colour='#1EFC7C',
                               transparency=0,
                               size=2,
