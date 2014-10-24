@@ -76,6 +76,7 @@ from safe.api import (
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL,
+    INSUFFICIENT_MEMORY_WARNING_SIGNAL,
     ErrorMessage,
     ZeroImpactException,
     PointsInputError,

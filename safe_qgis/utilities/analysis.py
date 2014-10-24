@@ -32,6 +32,7 @@ from safe_qgis.utilities.utilities import (
     viewport_geo_array,
     get_error_message
 )
+from functools import partial
 from safe_qgis.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe_qgis.impact_statistics.aggregator import Aggregator
@@ -79,8 +80,15 @@ from safe_qgis.safe_interface import (
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL)
+    ANALYSIS_DONE_SIGNAL,
+    INSUFFICIENT_MEMORY_WARNING_SIGNAL)
 from third_party.pydispatch import dispatcher
+from safe_qgis.exceptions import (
+    NoValidLayerError,
+    InsufficientMemoryWarning
+)
+from safe_qgis.utilities.keyword_io import KeywordIO
+
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -120,6 +128,7 @@ class Analysis(object):
         self._clip_parameters = None
         # self._impact_calculator = None
         self._impact_calculator = ImpactCalculator()
+        self.keyword_io = KeywordIO()
         self.runner = None
         self.aggregator = None
         self.postprocessor_manager = None
@@ -131,10 +140,12 @@ class Analysis(object):
         self.send_message = None
         self.call_back_functions = None
 
+        # GUI
+        self.iface = None
+
     def get_impact_layer(self):
         """Obtain impact layer from the runner."""
         return self.runner.impact_layer()
-
 
     @property
     def impact_calculator(self):
@@ -156,6 +167,40 @@ class Analysis(object):
         """
         self._impact_calculator = impact_calculator
 
+    @property
+    def clip_parameters(self):
+        """Property for clip parameters.
+
+        :returns: A tuple consisting of:
+
+            * extra_exposure_keywords: dict - any additional keywords that
+                should be written to the exposure layer. For example if
+                rescaling is required for a raster, the original resolution
+                can be added to the keywords file.
+            * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
+                extent that can be used given the input datasets and the
+                current viewport extents.
+            * cell_size: float - the cell size that is the best of the
+                hazard and exposure rasters.
+            * exposure_layer: QgsMapLayer - layer representing exposure.
+            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
+                intersection of the two input layers extents and the viewport.
+            * hazard_layer: QgsMapLayer - layer representing hazard.
+        :rtype: (dict, QgsRectangle, float,
+                QgsMapLayer, QgsRectangle, QgsMapLayer), None
+        """
+        return self._clip_parameters
+
+    @clip_parameters.setter
+    def clip_parameters(self, clip_parameters):
+        """Setter for the clip_parameters for the analysis.
+
+        :param clip_parameters: See the getter.
+        :type clip_parameters: (dict, QgsRectangle, float,
+                QgsMapLayer, QgsRectangle, QgsMapLayer)
+
+        """
+        self._clip_parameters = clip_parameters
 
     @property
     def hazard_layer(self):
@@ -294,6 +339,13 @@ class Analysis(object):
             signal=ERROR_MESSAGE_SIGNAL,
             sender=self,
             message=error_message)
+
+    def send_insufficient_memory_signal(self, message):
+        """Send an insufficient memory signal to the listeners."""
+        dispatcher.send(
+            signal=INSUFFICIENT_MEMORY_WARNING_SIGNAL,
+            sender=self,
+            message=message)
 
     def send_busy_signal(self):
         """Send an busy signal to the listeners."""
@@ -498,12 +550,158 @@ class Analysis(object):
             geo_extent,
             hazard_layer)
 
+    def setup_aggregator(self):
+        """Create an aggregator for this analysis run."""
+        # Refactor from dock.prepare_aggregator
+        if self.clip_parameters is None:
+            raise Exception(self.tr('Clip parameters are not set!'))
+        buffered_geo_extent = self.clip_parameters[1]
+
+        #setup aggregator to use buffered_geo_extent to deal with #759
+        self.aggregator = Aggregator(
+            buffered_geo_extent, self.aggregation_layer)
+
+        self.aggregator.show_intermediate_layers = \
+            self.show_intermediate_layers
+        # Buffer aggregation keywords in case user presses cancel on kw dialog
+        original_keywords = self.keyword_io.read_keywords(
+            self.aggregator.layer)
+        LOGGER.debug('my pre dialog keywords' + str(original_keywords))
+        LOGGER.debug(
+            'AOImode: %s' % str(self.aggregator.aoi_mode))
+
+        # Commented this out, since we want to get rid of GUI in this
+        # self.runtime_keywords_dialog = KeywordsDialog(
+        #     self.iface.mainWindow(),
+        #     self.iface,
+        #     self,
+        #     self.aggregator.layer)
+        # self.runtime_keywords_dialog.accepted.connect(self.run_analysis)
+        # self.runtime_keywords_dialog.rejected.connect(
+        #     partial(self.accept_cancelled, original_keywords))
+
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
-        self._clip_parameters = self.get_clip_parameters()
+        # Refactor from dock.accept()
+        title = self.tr('Processing started')
+        details = self.tr(
+            'Please wait - processing may take a while depending on your '
+            'hardware configuration and the analysis extents and data.')
 
-        self.setup_impact_calculator()
+        # trap for issue 706
+        try:
+            exposure_name = self.exposure_layer.name()
+            hazard_name = self.hazard_layer.name()
+            #aggregation layer could be set to AOI so no check for that
+        except AttributeError:
+            title = self.tr('No valid layers')
+            details = self.tr(
+                'Please ensure your hazard and exposure layers are set '
+                'in the question area and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                m.Heading(title, **WARNING_STYLE),
+                m.Paragraph(details))
+            raise NoValidLayerError(message)
+
+        text = m.Text(
+            self.tr('This analysis will calculate the impact of'),
+            m.EmphasizedText(hazard_name),
+            self.tr('on'),
+            m.EmphasizedText(exposure_name),
+        )
+
+        if self.aggregation_layer is not None:
+            try:
+                aggregation_name = self.aggregation_layer.name()
+                # noinspection PyTypeChecker
+                text.add(m.Text(
+                    self.tr('and bullet_list the results'),
+                    m.ImportantText(self.tr('aggregated by')),
+                    m.EmphasizedText(aggregation_name))
+                )
+            except AttributeError:
+                pass
+
+        text.add('.')
+
+        message = m.Message(
+            LOGO_ELEMENT,
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(details),
+            m.Paragraph(text))
+
+        try:
+            # add which postprocessors will run when appropriated
+            post_processors_names = self.impact_function_parameters[
+                'postprocessors']
+            # aggregator is not ready yet here so we can't use
+            # self.aggregator.aoi_mode
+            aoi_mode = self.aggregation_layer is None
+            post_processors = get_postprocessors(
+                post_processors_names, aoi_mode)
+            message.add(m.Paragraph(self.tr(
+                'The following postprocessors will be used:')))
+
+            bullet_list = m.BulletedList()
+
+            for name, post_processor in post_processors.iteritems():
+                bullet_list.add('%s: %s' % (
+                    get_postprocessor_human_name(name),
+                    post_processor.description()))
+            message.add(bullet_list)
+
+        except (TypeError, KeyError):
+            # TypeError is for when function_parameters is none
+            # KeyError is for when ['postprocessors'] is unavailable
+            pass
+        # self._clip_parameters = self.get_clip_parameters()
+
+        self.send_static_message(message)
+
+        # Find out what the usable extent and cell size are
+        try:
+            self.clip_parameters = self.get_clip_parameters()
+            buffered_geoextent = self.clip_parameters[1]
+            cell_size = self.clip_parameters[2]
+        except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
+            LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            context = self.tr(
+                'A problem was encountered when trying to determine the '
+                'analysis extents.'
+            )
+            self.analysis_error(e, context)
+            return  # ignore any error
+
+        # Ensure there is enough memory
+        result = check_memory_usage(buffered_geoextent, cell_size)
+        if not result:
+        # noinspection PyCallByClass,PyTypeChecker
+            message = self.tr(
+                'You may not have sufficient free system memory to '
+                'carry out this analysis. See the dock panel '
+                'message for more information. Would you like to '
+                'continue regardless?')
+            self.send_insufficient_memory_signal(message)
+
         self.setup_aggregator()
+
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them. if a prompt is shown run method is called by the
+        # accepted signal of the keywords dialog
+        self.aggregator.validate_keywords()
+        if self.aggregator.is_valid:
+            self.run_analysis()
+        else:
+            message = 'Aggregator Layer has invalid keywords'
+            error_message = get_error_message(KeywordNotFoundError, message)
+            self.send_error_message(error_message)
+            # self.runtime_keywords_dialog.set_layer(self.aggregator.layer)
+            # # disable gui elements that should not be applicable for this
+            # self.runtime_keywords_dialog.radExposure.setEnabled(False)
+            # self.runtime_keywords_dialog.radHazard.setEnabled(False)
+            # self.runtime_keywords_dialog.setModal(True)
+            # self.runtime_keywords_dialog.show()
 
     def analysis_error(self, exception, message):
         """A helper to spawn an error and halt processing.
@@ -541,12 +739,12 @@ class Analysis(object):
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         try:
-            extra_exposure_keywords = self._clip_parameters[0]
-            buffered_geo_extent = self._clip_parameters[1]
-            cell_size = self._clip_parameters[2]
-            exposure_layer = self._clip_parameters[3]
-            geo_extent = self._clip_parameters[4]
-            hazard_layer = self._clip_parameters[5]
+            extra_exposure_keywords = self.clip_parameters[0]
+            buffered_geo_extent = self.clip_parameters[1]
+            cell_size = self.clip_parameters[2]
+            exposure_layer = self.clip_parameters[3]
+            geo_extent = self.clip_parameters[4]
+            hazard_layer = self.clip_parameters[5]
         except:
             raise
         # Make sure that we have EPSG:4326 versions of the input layers
@@ -603,7 +801,7 @@ class Analysis(object):
          cell_size,
          exposure_layer,
          geo_extent,
-         hazard_layer) = self._clip_parameters
+         hazard_layer) = self.clip_parameters
 
         if self._impact_calculator.requires_clipping():
             # The impact function uses SAFE layers,
@@ -634,12 +832,6 @@ class Analysis(object):
         # Identify input layers
         self._impact_calculator.set_hazard_layer(hazard_layer)
         self._impact_calculator.set_exposure_layer(exposure_layer)
-
-    def setup_postprocessor(self):
-        pass
-
-    def run_impact_calculator(self):
-        pass
 
     def run_aggregator(self):
         """Run all post processing steps.

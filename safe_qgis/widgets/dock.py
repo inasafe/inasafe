@@ -122,7 +122,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -147,9 +147,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True,
-        #    stderrToServer=True)
+        pydevd.settrace(
+           'localhost', port=5678, stdoutToServer=True,
+           stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -1113,84 +1113,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         update_display_flag = True
         self.last_analysis_rubberband.addPoint(point, update_display_flag)
 
-    def setup_calculator(self):
-        """Initialise ImpactCalculator based on the current state of the ui."""
-
-        # Use canonical function name to identify selected function
-        function_id = self.get_function_id()
-        self.calculator.set_function(function_id)
-
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-        # pylint: disable=W0633,W0612
-        (extra_exposure_keywords,
-         buffered_geo_extent,
-         cell_size,
-         exposure_layer,
-         geo_extent,
-         hazard_layer) = self.clip_parameters
-
-        self.show_extent(buffered_geo_extent)
-        # pylint: enable=W0633,W0612
-
-        if self.calculator.requires_clipping():
-            # The impact function uses SAFE layers,
-            # clip them
-            hazard_layer, exposure_layer = self.optimal_clip()
-            self.aggregator.set_layers(hazard_layer, exposure_layer)
-            # Extent is calculated in the aggregator:
-            self.calculator.set_extent(None)
-
-            # See if the inputs need further refinement for aggregations
-            try:
-                # This line is a fix for #997
-                self.aggregator.validate_keywords()
-                self.aggregator.deintersect()
-            except (InvalidLayerError,
-                    UnsupportedProviderError,
-                    KeywordDbError):
-                raise
-            # Get clipped layers
-            hazard_layer = self.aggregator.hazard_layer
-            exposure_layer = self.aggregator.exposure_layer
-        else:
-            # It is a 'new-style' impact function,
-            # clipping doesn't needed, but we need to set up extent
-            self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.calculator.set_extent(buffered_geo_extent)
-
-        # Identify input layers
-        self.calculator.set_hazard_layer(hazard_layer)
-        self.calculator.set_exposure_layer(exposure_layer)
-
-    def prepare_aggregator(self):
-        """Create an aggregator for this analysis run."""
-
-        if self.clip_parameters is None:
-            raise Exception(self.tr('Clip parameters are not set!'))
-        buffered_geo_extent = self.clip_parameters[1]
-
-        #setup aggregator to use buffered_geo_extent to deal with #759
-        self.aggregator = Aggregator(
-            buffered_geo_extent,
-            self.get_aggregation_layer())
-        self.aggregator.show_intermediate_layers = \
-            self.show_intermediate_layers
-        # Buffer aggregation keywords in case user presses cancel on kw dialog
-        original_keywords = self.keyword_io.read_keywords(
-            self.aggregator.layer)
-        LOGGER.debug('my pre dialog keywords' + str(original_keywords))
-        LOGGER.debug(
-            'AOImode: %s' % str(self.aggregator.aoi_mode))
-        self.runtime_keywords_dialog = KeywordsDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self,
-            self.aggregator.layer)
-        self.runtime_keywords_dialog.accepted.connect(self.run_analysis)
-        self.runtime_keywords_dialog.rejected.connect(
-            partial(self.accept_cancelled, original_keywords))
-
     def accept(self):
         """Execute analysis when run button is clicked.
 
@@ -1199,134 +1121,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-        self.wvResults.clear_dynamic_messages_log()
-        title = self.tr('Processing started')
-        details = self.tr(
-            'Please wait - processing may take a while depending on your '
-            'hardware configuration and the analysis extents and data.')
-        #TODO style these.
+        self.enable_busy_cursor()
+        self.setup_analysis()
 
-        hazard_layer = self.get_hazard_layer()
-        exposure_layer = self.get_exposure_layer()
-        aggregation_layer = self.get_aggregation_layer()
-
-        # trap for issue 706
-        try:
-            exposure_name = exposure_layer.name()
-            hazard_name = hazard_layer.name()
-            #aggregation layer could be set to AOI so no check for that
-        except AttributeError:
-            title = self.tr('No valid layers')
-            details = self.tr(
-                'Please ensure your hazard and exposure layers are set '
-                'in the question area and then press run again.')
-            message = m.Message(
-                LOGO_ELEMENT,
-                m.Heading(title, **WARNING_STYLE),
-                m.Paragraph(details))
-            self.show_static_message(message)
-            self.grpQuestion.show()
-            self.pbnRunStop.setDisabled(True)
-            return
-
-        text = m.Text(
-            self.tr('This analysis will calculate the impact of'),
-            m.EmphasizedText(hazard_name),
-            self.tr('on'),
-            m.EmphasizedText(exposure_name),
-        )
-
-        if self.get_aggregation_layer() is not None:
-            try:
-                aggregation_name = aggregation_layer.name()
-                # noinspection PyTypeChecker
-                text.add(m.Text(
-                    self.tr('and bullet_list the results'),
-                    m.ImportantText(self.tr('aggregated by')),
-                    m.EmphasizedText(aggregation_name))
-                )
-            except AttributeError:
-                pass
-
-        text.add('.')
-
-        message = m.Message(
-            LOGO_ELEMENT,
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(details),
-            m.Paragraph(text))
-
-        try:
-            # add which postprocessors will run when appropriated
-            post_processors_names = self.function_parameters['postprocessors']
-            # aggregator is not ready yet here so we can't use
-            # self.aggregator.aoi_mode
-            aoi_mode = self.get_aggregation_layer() is None
-            post_processors = get_postprocessors(
-                post_processors_names, aoi_mode)
-            message.add(m.Paragraph(self.tr(
-                'The following postprocessors will be used:')))
-
-            bullet_list = m.BulletedList()
-
-            for name, post_processor in post_processors.iteritems():
-                bullet_list.add('%s: %s' % (
-                    get_postprocessor_human_name(name),
-                    post_processor.description()))
-            message.add(bullet_list)
-
-        except (TypeError, KeyError):
-            # TypeError is for when function_parameters is none
-            # KeyError is for when ['postprocessors'] is unavailable
-            pass
-
-        self.show_static_message(message)
-
-        # Find out what the usable extent and cell size are
-        try:
-            self.clip_parameters = self.get_clip_parameters()
-            buffered_geoextent = self.clip_parameters[1]
-            cell_size = self.clip_parameters[2]
-        except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
-            LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            context = self.tr(
-                'A problem was encountered when trying to determine the '
-                'analysis extents.'
-            )
-            self.analysis_error(e, context)
-            return  # ignore any error
-
-        # Ensure there is enough memory
-        result = check_memory_usage(buffered_geoextent, cell_size)
-        if not result:
-            # noinspection PyCallByClass,PyTypeChecker
-            result = QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                self.tr('You may not have sufficient free system memory to '
-                        'carry out this analysis. See the dock panel '
-                        'message for more information. Would you like to '
-                        'continue regardless?'), QtGui.QMessageBox.Yes |
-                QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-            if result == QtGui.QMessageBox.No:
-                # stop work here and return to QGIS
-                self.hide_busy()
-                return
-
-        self.prepare_aggregator()
-
-        # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them. if a prompt is shown run method is called by the
-        # accepted signal of the keywords dialog
-        self.aggregator.validate_keywords()
-        if self.aggregator.is_valid:
-            self.run_analysis()
-        else:
-            self.runtime_keywords_dialog.set_layer(self.aggregator.layer)
-            # disable gui elements that should not be applicable for this
-            self.runtime_keywords_dialog.radExposure.setEnabled(False)
-            self.runtime_keywords_dialog.radHazard.setEnabled(False)
-            self.runtime_keywords_dialog.setModal(True)
-            self.runtime_keywords_dialog.show()
+        # Start the analysis
+        self.analysis.run_analysis()
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
@@ -1396,14 +1195,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Variables
         self.analysis.clip_hard = self.clip_hard
-
-    def run_analysis(self):
-        """Execute analysis when run button on dock is clicked."""
-        self.setup_analysis()
-        self.enable_busy_cursor()
-
-        # Start the analysis
-        self.analysis.run_analysis()
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1827,71 +1618,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             exposure_layer,
             geo_extent,
             hazard_layer)
-
-    def optimal_clip(self):
-        """ A helper function to perform an optimal clip of the input data.
-        Optimal extent should be considered as the intersection between
-        the three inputs. The InaSAFE library will perform various checks
-        to ensure that the extent is tenable, includes data from both
-        etc.
-
-        The result of this function will be two layers which are
-        clipped and re-sampled if needed, and in the EPSG:4326 geographic
-        coordinate reference system.
-
-        :returns: The clipped hazard and exposure layers.
-        :rtype: (QgsMapLayer, QgsMapLayer)
-        """
-
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-        try:
-            extra_exposure_keywords = self.clip_parameters[0]
-            buffered_geo_extent = self.clip_parameters[1]
-            cell_size = self.clip_parameters[2]
-            exposure_layer = self.clip_parameters[3]
-            geo_extent = self.clip_parameters[4]
-            hazard_layer = self.clip_parameters[5]
-        except:
-            raise
-        # Make sure that we have EPSG:4326 versions of the input layers
-        # that are clipped and (in the case of two raster inputs) resampled to
-        # the best resolution.
-        title = self.tr('Preparing hazard data')
-        detail = self.tr(
-            'We are resampling and clipping the hazard layer to match the '
-            'intersection of the exposure layer and the current view extents.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        self.show_dynamic_message(message)
-        try:
-            clipped_hazard = clip_layer(
-                layer=hazard_layer,
-                extent=buffered_geo_extent,
-                cell_size=cell_size,
-                hard_clip_flag=self.clip_hard)
-        except CallGDALError, e:
-            raise e
-        except IOError, e:
-            raise e
-
-        title = self.tr('Preparing exposure data')
-        detail = self.tr(
-            'We are resampling and clipping the exposure layer to match the '
-            'intersection of the hazard layer and the current view extents.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        self.show_dynamic_message(message)
-
-        clipped_exposure = clip_layer(
-            layer=exposure_layer,
-            extent=geo_extent,
-            cell_size=cell_size,
-            extra_keywords=extra_exposure_keywords,
-            hard_clip_flag=self.clip_hard)
-        return clipped_hazard, clipped_exposure
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.

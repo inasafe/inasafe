@@ -983,6 +983,7 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         self.assertTrue('IndexError' not in result, message)
+        print result
         self.assertTrue(
             'It appears that no People are affected by A flood in '
             'Jakarta like in 2007. You may want to consider:' in result)
