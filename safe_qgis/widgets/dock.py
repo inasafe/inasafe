@@ -1168,33 +1168,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def setup_analysis(self):
         """Setup analysis to make it ready to work."""
-        hazard_layer = self.get_hazard_layer()
-        exposure_layer = self.get_exposure_layer()
-
-        if exposure_layer is None or hazard_layer is None:
-            title = self.tr('No valid layers')
-            details = self.tr(
-                'Please ensure your hazard and exposure layers are set '
-                'in the question area and then press run again.')
-            message = m.Message(
-                LOGO_ELEMENT,
-                m.Heading(title, **WARNING_STYLE),
-                m.Paragraph(details))
-            self.show_static_message(message)
-            return
-
         self.analysis = Analysis()
         self.analysis.hazard_layer = self.get_hazard_layer()
         self.analysis.exposure_layer = self.get_exposure_layer()
         self.analysis.aggregation_layer = self.get_aggregation_layer()
-        self.analysis.impact_function_id = self.get_function_id()
 
-        self.analysis._clip_parameters = self.clip_parameters
-        self.analysis.aggregator = self.aggregator
-        self.analysis._impact_calculator = self.calculator
+        # Impact Functions
+        self.analysis.impact_function_id = self.get_function_id()
+        self.analysis.impact_function_parameters = self.function_parameters
 
         # Variables
         self.analysis.clip_hard = self.clip_hard
+        self.analysis.show_intermediate_layers = self.show_intermediate_layers
+        self.analysis.run_in_thread_flag = self.run_in_thread_flag
+        self.analysis.map_canvas = self.iface.mapCanvas()
+        self.analysis.clip_to_viewport = self.clip_to_viewport
+
+        self.analysis.setup_analysis()
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1245,7 +1235,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # write postprocessing report to keyword
         output = self.analysis.postprocessor_manager.get_output(
-            self.aggregator.aoi_mode)
+            self.analysis.aggregator.aoi_mode)
         keywords['postprocessing_report'] = output.to_html(
             suppress_newlines=True)
         self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -1345,88 +1335,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.disable_busy_cursor()
         self.busy = False
 
-    def aggregate(self):
-        """Run all post processing steps.
-
-        Called on self.runner SIGNAL('done()') starts aggregation steps.
-        """
-        LOGGER.debug('Do aggregation')
-        if self.runner.impact_layer() is None:
-            # Done was emitted, but no impact layer was calculated
-            result = self.runner.result()
-            message = str(self.tr(
-                'No impact layer was calculated. Error message: %s\n'
-            ) % (str(result)))
-            exception = self.runner.last_exception()
-            if isinstance(exception, ZeroImpactException):
-                report = m.Message()
-                report.add(LOGO_ELEMENT)
-                report.add(m.Heading(self.tr(
-                    'Analysis Results'), **INFO_STYLE))
-                report.add(m.Text(exception.message))
-                report.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
-                report.add(m.Text(self.tr(
-                    'It appears that no %s are affected by %s. You may want '
-                    'to consider:') % (
-                        self.cboExposure.currentText(),
-                        self.cboHazard.currentText())))
-                check_list = m.BulletedList()
-                check_list.add(self.tr(
-                    'Check that you are not zoomed in too much and thus '
-                    'excluding %s from your analysis area.') % (
-                        self.cboExposure.currentText()))
-                check_list.add(self.tr(
-                    'Check that the exposure is not no-data or zero for the '
-                    'entire area of your analysis.'))
-                check_list.add(self.tr(
-                    'Check that your impact function thresholds do not '
-                    'exclude all features unintentionally.'))
-                report.add(check_list)
-                self.show_static_message(report)
-                self.hide_busy()
-                return
-            if exception is not None:
-                content = self.tr(
-                    'An exception occurred when calculating the results. %s'
-                ) % (self.runner.result())
-                message = get_error_message(exception, context=content)
-            # noinspection PyTypeChecker
-            self.show_error_message(message)
-            self.analysisDone.emit(False)
-            return
-
-        try:
-            self.aggregator.aggregate(self.runner.impact_layer())
-        except InvalidGeometryError, e:
-            message = get_error_message(e)
-            self.show_error_message(message)
-            self.analysisDone.emit(False)
-            return
-        except Exception, e:  # pylint: disable=W0703
-            # noinspection PyPropertyAccess
-            e.args = (str(e.args[0]) + '\nAggregation error occurred',)
-            raise
-
-        #TODO (MB) do we really want this check?
-        if self.aggregator.error_message is None:
-            self.post_process()
-        else:
-            content = self.aggregator.error_message
-            exception = AggregatioError(self.tr(
-                'Aggregation error occurred.'))
-            self.analysis_error(exception, content)
-
-    def post_process(self):
-        """Carry out any postprocessing required for this impact layer.
-        """
-        LOGGER.debug('Do postprocessing')
-        self.postprocessor_manager = PostprocessorManager(self.aggregator)
-        self.postprocessor_manager.function_parameters = \
-            self.function_parameters
-        self.postprocessor_manager.run()
-        self.completed()
-        self.analysisDone.emit(True)
-
     @staticmethod
     def enable_busy_cursor():
         """Set the hourglass enabled and stop listening for layer changes."""
@@ -1436,188 +1344,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def disable_busy_cursor():
         """Disable the hourglass cursor and listen for layer changes."""
         QtGui.qApp.restoreOverrideCursor()
-
-    def generate_insufficient_overlap_message(
-            self,
-            e,
-            exposure_geoextent,
-            exposure_layer,
-            hazard_geoextent,
-            hazard_layer,
-            viewport_geoextent):
-        """
-
-        :param e: An exception.
-        :param exposure_geoextent: Extent of the exposure layer.
-        :param exposure_layer: Exposure layer.
-        :param hazard_geoextent: Extent of the hazard layer.
-        :param hazard_layer:  Hazard layer instance.
-        :param viewport_geoextent: Viewport extents.
-
-        :return: An InaSAFE message object.
-        """
-        description = self.tr(
-            'There was insufficient overlap between the input layers '
-            'and / or the layers and the viewable area. Please select two '
-            'overlapping layers and zoom or pan to them or disable '
-            'viewable area clipping in the options dialog. Full details '
-            'follow:')
-        message = m.Message(description)
-        text = m.Paragraph(
-            self.tr('Failed to obtain the optimal extent given:'))
-        message.add(text)
-        analysis_inputs = m.BulletedList()
-        # We must use Qt string interpolators for tr to work properly
-        analysis_inputs.add(
-            self.tr('Hazard: %s') % (
-                hazard_layer.source()))
-        analysis_inputs.add(
-            self.tr('Exposure: %s') % (
-                exposure_layer.source()))
-        analysis_inputs.add(
-            self.tr('Viewable area Geo Extent: %s') % (
-                str(viewport_geoextent)))
-        analysis_inputs.add(
-            self.tr('Hazard Geo Extent: %s') % (
-                str(hazard_geoextent)))
-        analysis_inputs.add(
-            self.tr('Exposure Geo Extent: %s') % (
-                str(exposure_geoextent)))
-        analysis_inputs.add(
-            self.tr('Viewable area clipping enabled: %s') % (
-                str(self.clip_to_viewport)))
-        analysis_inputs.add(
-            self.tr('Details: %s') % (
-                str(e)))
-        message.add(analysis_inputs)
-        return message
-
-    def get_clip_parameters(self):
-        """Calculate the best extents to use for the assessment.
-
-        :returns: A tuple consisting of:
-
-            * extra_exposure_keywords: dict - any additional keywords that
-                should be written to the exposure layer. For example if
-                rescaling is required for a raster, the original resolution
-                can be added to the keywords file.
-            * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
-                extent that can be used given the input datasets and the
-                current viewport extents.
-            * cell_size: float - the cell size that is the best of the
-                hazard and exposure rasters.
-            * exposure_layer: QgsMapLayer - layer representing exposure.
-            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
-                intersection of the two input layers extents and the viewport.
-            * hazard_layer: QgsMapLayer - layer representing hazard.
-        :rtype: dict, QgsRectangle, float,
-                QgsMapLayer, QgsRectangle, QgsMapLayer
-        :raises: InsufficientOverlapError
-        """
-        hazard_layer = self.get_hazard_layer()
-        exposure_layer = self.get_exposure_layer()
-        # Get the current viewport extent as an array in EPSG:4326
-        viewport_geoextent = viewport_geo_array(self.iface.mapCanvas())
-        # Get the Hazard extents as an array in EPSG:4326
-        hazard_geoextent = extent_to_geo_array(
-            hazard_layer.extent(),
-            hazard_layer.crs())
-        # Get the Exposure extents as an array in EPSG:4326
-        exposure_geoextent = extent_to_geo_array(
-            exposure_layer.extent(),
-            exposure_layer.crs())
-
-        # Reproject all extents to EPSG:4326 if needed
-        geo_crs = QgsCoordinateReferenceSystem()
-        geo_crs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-        # Now work out the optimal extent between the two layers and
-        # the current view extent. The optimal extent is the intersection
-        # between the two layers and the viewport.
-        try:
-            # Extent is returned as an array [xmin,ymin,xmax,ymax]
-            # We will convert it to a QgsRectangle afterwards.
-            if self.clip_to_viewport:
-                geo_extent = get_optimal_extent(
-                    hazard_geoextent,
-                    exposure_geoextent,
-                    viewport_geoextent)
-            else:
-                geo_extent = get_optimal_extent(
-                    hazard_geoextent,
-                    exposure_geoextent)
-
-        except InsufficientOverlapError, e:
-            message = self.generate_insufficient_overlap_message(
-                e,
-                exposure_geoextent,
-                exposure_layer,
-                hazard_geoextent,
-                hazard_layer,
-                viewport_geoextent)
-            raise InsufficientOverlapError(message)
-
-        # Next work out the ideal spatial resolution for rasters
-        # in the analysis. If layers are not native WGS84, we estimate
-        # this based on the geographic extents
-        # rather than the layers native extents so that we can pass
-        # the ideal WGS84 cell size and extents to the layer prep routines
-        # and do all preprocessing in a single operation.
-        # All this is done in the function getWGS84resolution
-        buffered_geoextent = geo_extent  # Bbox to use for hazard layer
-        cell_size = None
-        extra_exposure_keywords = {}
-        if hazard_layer.type() == QgsMapLayer.RasterLayer:
-            # Hazard layer is raster
-            hazard_geo_cell_size = get_wgs84_resolution(hazard_layer)
-
-            if exposure_layer.type() == QgsMapLayer.RasterLayer:
-                # In case of two raster layers establish common resolution
-                exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
-                # See issue #1008 - the flag below is used to indicate
-                # if the user wishes to prevent resampling of exposure data
-                # noinspection PyTypeChecker
-                keywords = self.keyword_io.read_keywords(exposure_layer)
-                allow_resampling_flag = True
-                if 'allow_resampling' in keywords:
-                    allow_resampling_flag = keywords[
-                        'allow_resampling'].lower() == 'true'
-                if hazard_geo_cell_size < exposure_geo_cell_size and \
-                        allow_resampling_flag:
-                    cell_size = hazard_geo_cell_size
-                else:
-                    cell_size = exposure_geo_cell_size
-
-                # Record native resolution to allow rescaling of exposure data
-                if not numpy.allclose(cell_size, exposure_geo_cell_size):
-                    extra_exposure_keywords['resolution'] = \
-                        exposure_geo_cell_size
-            else:
-                # If exposure is vector data grow hazard raster layer to
-                # ensure there are enough pixels for points at the edge of
-                # the view port to be interpolated correctly. This requires
-                # resolution to be available
-                if exposure_layer.type() != QgsMapLayer.VectorLayer:
-                    raise RuntimeError
-                buffered_geoextent = get_buffered_extent(
-                    geo_extent,
-                    hazard_geo_cell_size)
-        else:
-            # Hazard layer is vector
-
-            # In case hazard data is a point data set, we will not clip the
-            # exposure data to it. The reason being that points may be used
-            # as centers for evacuation circles: See issue #285
-            if hazard_layer.geometryType() == QGis.Point:
-                geo_extent = exposure_geoextent
-                buffered_geoextent = geo_extent
-
-        return (
-            extra_exposure_keywords,
-            buffered_geoextent,
-            cell_size,
-            exposure_layer,
-            geo_extent,
-            hazard_layer)
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.

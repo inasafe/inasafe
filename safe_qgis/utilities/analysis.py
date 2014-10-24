@@ -107,100 +107,29 @@ class Analysis(object):
 
     def __init__(self):
         """Constructor."""
+        # Please set Layers, Impact Functions, and Variables to run Analysis
         # Layers
         self._hazard_layer = None
         self._exposure_layer = None
         self._aggregation_layer = None
 
-        # Keywords
-        self.hazard_keyword = None
-        self.exposure_keyword = None
-        self.aggregation_keyword = None
+        # Impact Functions
+        self.impact_function_id = None
+        self.impact_function_parameters = None
 
+        # Variables
+        self.clip_hard = None
+        self.show_intermediate_layers = None
+        self.run_in_thread_flag = None
         self.map_canvas = None
         self.clip_to_viewport = None
 
-        self._impact_function = None
-        self.impact_function_id = None
-        self.impact_function_parameters = None
-        self.clip_hard = None
-
-        self._clip_parameters = None
-        # self._impact_calculator = None
-        self._impact_calculator = ImpactCalculator()
+        self.clip_parameters = None
+        self.impact_calculator = ImpactCalculator()
         self.keyword_io = KeywordIO()
         self.runner = None
         self.aggregator = None
         self.postprocessor_manager = None
-
-        self.show_intermediate_layers = None
-        self.run_in_thread_flag = None
-
-        # Call back functions
-        self.send_message = None
-        self.call_back_functions = None
-
-        # GUI
-        self.iface = None
-
-    def get_impact_layer(self):
-        """Obtain impact layer from the runner."""
-        return self.runner.impact_layer()
-
-    @property
-    def impact_calculator(self):
-        """Property for impact calculator.
-
-        :returns: Impact calculator of the analysis.
-        :rtype: ImpactCalculator
-
-        """
-        return self._impact_calculator
-
-    @impact_calculator.setter
-    def impact_calculator(self, impact_calculator):
-        """Setter for the impact calculator for the analysis.
-
-        :param impact_calculator: The impact calculator.
-        :type impact_calculator: ImpactCalculator
-
-        """
-        self._impact_calculator = impact_calculator
-
-    @property
-    def clip_parameters(self):
-        """Property for clip parameters.
-
-        :returns: A tuple consisting of:
-
-            * extra_exposure_keywords: dict - any additional keywords that
-                should be written to the exposure layer. For example if
-                rescaling is required for a raster, the original resolution
-                can be added to the keywords file.
-            * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
-                extent that can be used given the input datasets and the
-                current viewport extents.
-            * cell_size: float - the cell size that is the best of the
-                hazard and exposure rasters.
-            * exposure_layer: QgsMapLayer - layer representing exposure.
-            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
-                intersection of the two input layers extents and the viewport.
-            * hazard_layer: QgsMapLayer - layer representing hazard.
-        :rtype: (dict, QgsRectangle, float,
-                QgsMapLayer, QgsRectangle, QgsMapLayer), None
-        """
-        return self._clip_parameters
-
-    @clip_parameters.setter
-    def clip_parameters(self, clip_parameters):
-        """Setter for the clip_parameters for the analysis.
-
-        :param clip_parameters: See the getter.
-        :type clip_parameters: (dict, QgsRectangle, float,
-                QgsMapLayer, QgsRectangle, QgsMapLayer)
-
-        """
-        self._clip_parameters = clip_parameters
 
     @property
     def hazard_layer(self):
@@ -262,26 +191,6 @@ class Analysis(object):
         """
         self._aggregation_layer = aggregation_layer
 
-    @property
-    def impact_function(self):
-        """Property for impact function.
-
-        :returns: Impact function for the analysis.
-        :rtype:
-
-        """
-        return self._aggregation_layer
-
-    @aggregation_layer.setter
-    def aggregation_layer(self, aggregation_layer):
-        """Setter for the aggregation layer for the analysis.
-
-        :param aggregation_layer: The aggregation layer.
-        :type aggregation_layer: QgsMapLayer
-
-        """
-        self._aggregation_layer = aggregation_layer
-
     # noinspection PyMethodMayBeStatic
     def tr(self, string):
         """We implement this since we do not inherit QObject.
@@ -295,6 +204,10 @@ class Analysis(object):
         """
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         return QtCore.QCoreApplication.translate('Analysis', string)
+
+    def get_impact_layer(self):
+        """Obtain impact layer from the runner."""
+        return self.runner.impact_layer()
 
     def send_static_message(self, message):
         """Send a static message to the listeners.
