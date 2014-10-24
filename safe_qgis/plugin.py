@@ -519,7 +519,7 @@ class Plugin:
         from safe_qgis.tools.minimum_needs import MinimumNeeds
 
         dialog = MinimumNeeds(self.iface.mainWindow())
-        dialog.exec_()  # modal
+        dialog.show()  # non modal
 
     def show_impact_merge(self):
         """Show the impact layer merge dialog."""

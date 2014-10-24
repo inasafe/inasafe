@@ -19,7 +19,7 @@
 ***************************************************************************
 """
 
-__author__ = 'Giuseppe Sucameli'
+__author__ = 'Giuseppe Sucameli & Tim Sutton'
 __date__ = 'December 2010'
 __copyright__ = '(C) 2010, Giuseppe Sucameli'
 # This will get replaced with a git SHA1 when you do a git archive
