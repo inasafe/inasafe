@@ -21,7 +21,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import logging
 from functools import partial
-from math import ceil
 
 import numpy
 
@@ -80,7 +79,7 @@ from safe_qgis.safe_interface import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.clipper import clip_layer
+from safe_qgis.utilities.clipper import clip_layer, adjust_clip_extent
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
@@ -1779,64 +1778,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         message.add(analysis_inputs)
         return message
 
-    def adjust_clip_extent(self, clip_extent, cell_size, layer_extent):
-        """Helper function to adjust the clip extent to the edge of the pixel
 
-        :param clip_extent: An array representing the clip extents in the
-            form [xmin, ymin, xmax, ymax]. This is the optimal extent between
-            the exposure, hazard and view port.
-        :type clip_extent: list
-
-        :param cell_size: The size of a pixel in geo reference unit
-        :type cell_size: float
-
-        :param layer_extent: (optional) An array representing the full
-            extents of the layer in the form [xmin, ymin, xmax, ymax].
-        :type layer_extent: list
-
-        :return: An array containing an the adjusted clip extent in the
-            form [xmin, ymin, xmax, ymax]
-        :rtype: list
-
-        """
-        if clip_extent == layer_extent:
-            return clip_extent
-
-        clip_extent_xmin = clip_extent[0]
-        clip_extent_ymin = clip_extent[1]
-        clip_extent_xmax = clip_extent[2]
-        clip_extent_ymax = clip_extent[3]
-
-        # In case layer_extent is within clip_extent, adjust them
-        if clip_extent[0] < layer_extent[0]:
-            clip_extent_xmin = layer_extent[0]
-        if clip_extent[1] < layer_extent[1]:
-            clip_extent_ymin = layer_extent[1]
-        if clip_extent[2] > layer_extent[2]:
-            clip_extent_xmax = layer_extent[2]
-        if clip_extent[3] > layer_extent[3]:
-            clip_extent_ymax = layer_extent[3]
-
-        starting_cell = int(abs(clip_extent_xmin - layer_extent[0]) / cell_size)
-        adjusted_xmin = layer_extent[0] + starting_cell * cell_size
-
-        starting_cell = int(abs(clip_extent_ymin - layer_extent[1]) / cell_size)
-        adjusted_ymin = layer_extent[0] + starting_cell * cell_size
-
-        geo_clip_width = (float(clip_extent_xmax - clip_extent_xmin) /
-                          float(cell_size))
-        geo_clip_width = ceil(geo_clip_width)
-        print geo_clip_width
-        geo_clip_height = (float(clip_extent_ymax - clip_extent_ymin) /
-                           float(cell_size))
-        geo_clip_height = ceil(geo_clip_height)
-        adjusted_extent = [
-            adjusted_xmin,
-            adjusted_ymin,
-            adjusted_xmin + geo_clip_width * cell_size,
-            adjusted_ymin + geo_clip_height * cell_size]
-
-        return adjusted_extent
 
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
@@ -1937,7 +1879,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     layer_extent = exposure_geoextent
 
                 #adjust the geo extent to be at the edge of the pixel
-                geo_extent = self.adjust_clip_extent(
+                geo_extent = adjust_clip_extent(
                     geo_extent, cell_size, layer_extent)
                 buffered_geoextent = geo_extent
 
