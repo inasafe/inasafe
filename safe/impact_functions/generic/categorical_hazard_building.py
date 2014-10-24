@@ -31,6 +31,7 @@ from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 import logging
 from numpy import round
+from osgeo import ogr
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -97,6 +98,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             return dict_meta
 
     # Function documentation
+    target_field = 'DAMAGED'
     title = tr('Be impacted by each category')
     synopsis = tr(
         'To assess the impacts of categorized hazard in raster '
@@ -137,7 +139,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                 * my_exposure: Vector layer of structure data on
                 the same grid as my_hazard
         """
-                # The 3 category
+
+        # The 3 category
         high_t = self.parameters['high_thresholds']
         medium_t = self.parameters['medium_thresholds']
         low_t = self.parameters['low_thresholds']
@@ -153,7 +156,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
 
         # Determine attribute name for hazard levels
         if my_hazard.is_raster:
-            hazard_attribute = 'depth'
+            hazard_attribute = 'level'
         else:
             hazard_attribute = None
 
@@ -177,8 +180,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         affected_buildings = {}
         for i in range(N):
             # Get category value
-            val = float(attributes[i][hazard_attribute])
-
+            val = float(attributes[i]['level'])
             ## FIXME it would be good if the affected were words not numbers
             ## FIXME need to read hazard layer and see category or keyword
             val = float(round(val))
@@ -230,7 +232,17 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                 affected_buildings[key] += 1
 
             # Add calculated impact to existing attributes
-            attributes[i][self.target_field] = float(val)
+            if val == high_t:
+                attributes[i][self.target_field] = 3
+
+            elif val == medium_t:
+                attributes[i][self.target_field] = 2
+
+            elif val == low_t:
+                attributes[i][self.target_field] = 1
+
+            else:
+                attributes[i][self.target_field] = 0
 
         # Lump small entries and 'unknown' into 'other' category
         for usage in buildings.keys():
@@ -329,27 +341,27 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         impact_table = impact_summary
 
         # Create style
-        style_classes = [dict(label=tr('Not Affected'),
-                              value=None,
-                              colour='#1EFC7C',
-                              transparency=0,
-                              size=2,
-                              border_color='#636363'),
-                         dict(label=tr('Low'),
-                              value=low_t,
-                              colour='#EBF442',
+        style_classes = [dict(label=tr('High'),
+                              value=3,
+                              colour='#F31A1C',
                               transparency=0,
                               size=2,
                               border_color='#636363'),
                          dict(label=tr('Medium'),
-                              value=medium_t,
+                              value=2,
                               colour='#F4A442',
                               transparency=0,
                               size=2,
                               border_color='#636363'),
-                         dict(label=tr('High'),
-                              value=high_t,
-                              colour='#F31A1C',
+                         dict(label=tr('Low'),
+                              value=1,
+                              colour='#EBF442',
+                              transparency=0,
+                              size=2,
+                              border_color='#636363'),
+                         dict(label=tr('Not Affected'),
+                              value=None,
+                              colour='#1EFC7C',
                               transparency=0,
                               size=2,
                               border_color='#636363')]
