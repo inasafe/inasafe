@@ -188,7 +188,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                 count2 += 1
             elif val == low_t:
                 count1 += 1
-            elif val == 0:
+            else:
                 count += 1
 
             # Count affected buildings by usage type if available
