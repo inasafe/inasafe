@@ -78,7 +78,8 @@ from safe_qgis.safe_interface import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
-    NOT_BUSY_SIGNAL)
+    NOT_BUSY_SIGNAL,
+    ANALYSIS_DONE_SIGNAL)
 from third_party.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -124,10 +125,36 @@ class Analysis(object):
         self.postprocessor_manager = None
 
         self.show_intermediate_layers = None
+        self.run_in_thread_flag = None
 
         # Call back functions
         self.send_message = None
         self.call_back_functions = None
+
+    def get_impact_layer(self):
+        """Obtain impact layer from the runner."""
+        return self.runner.impact_layer()
+
+
+    @property
+    def impact_calculator(self):
+        """Property for impact calculator.
+
+        :returns: Impact calculator of the analysis.
+        :rtype: ImpactCalculator
+
+        """
+        return self._impact_calculator
+
+    @impact_calculator.setter
+    def impact_calculator(self, impact_calculator):
+        """Setter for the impact calculator for the analysis.
+
+        :param impact_calculator: The impact calculator.
+        :type impact_calculator: ImpactCalculator
+
+        """
+        self._impact_calculator = impact_calculator
 
 
     @property
@@ -279,6 +306,13 @@ class Analysis(object):
         """Send an busy signal to the listeners."""
         dispatcher.send(
             signal=NOT_BUSY_SIGNAL,
+            sender=self,
+            message='')
+
+    def send_analysis_done_signal(self):
+        """Send an analysis done signal to the listeners."""
+        dispatcher.send(
+            signal=ANALYSIS_DONE_SIGNAL,
             sender=self,
             message='')
 
@@ -686,8 +720,9 @@ class Analysis(object):
         self.postprocessor_manager.function_parameters = \
             self.impact_function_parameters
         self.postprocessor_manager.run()
-        self.completed()
-        self.analysis_done.emit(True)
+        # self.completed()
+        self.send_not_busy_signal()
+        self.send_analysis_done_signal()
 
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""
@@ -741,3 +776,29 @@ class Analysis(object):
             return
 
         self.runner.done.connect(self.run_aggregator)
+
+        self.send_busy_signal()
+
+        title = self.tr('Calculating impact')
+        detail = self.tr(
+            'This may take a little while - we are computing the areas that '
+            'will be impacted by the hazard and writing the result to a new '
+            'layer.')
+        message = m.Message(
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(detail))
+        self.send_dynamic_message(message)
+
+        try:
+            if self.run_in_thread_flag:
+                self.runner.start()  # Run in different thread
+            else:
+                self.runner.run()  # Run in same thread
+            # .. todo :: Disconnect done slot/signal
+
+        except Exception, e:  # pylint: disable=W0703
+
+            # FIXME (Ole): This branch is not covered by the tests
+            self.analysis_error(
+                e,
+                self.tr('An exception occurred when starting the model.'))

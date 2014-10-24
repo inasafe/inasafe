@@ -78,7 +78,10 @@ from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL)
+    ERROR_MESSAGE_SIGNAL,
+    BUSY_SIGNAL,
+    NOT_BUSY_SIGNAL,
+    ANALYSIS_DONE_SIGNAL)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.impact_statistics.aggregator import Aggregator
@@ -155,6 +158,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         load_plugins()
         self.pbnShowQuestion.setVisible(False)
         self.enable_messaging()
+        self.enable_signal_receiver()
 
         self.set_dock_title()
 
@@ -232,6 +236,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             version_type = 'final'
             # Allowed version names: ('alpha', 'beta', 'rc', 'final')
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (version, version_type)))
+
+    def enable_signal_receiver(self):
+        """Setup dispatcher for all available signal from Analysis."""
+        dispatcher.connect(
+            self.show_busy,
+            signal=BUSY_SIGNAL)
+
+        dispatcher.connect(
+            self.hide_busy,
+            signal=NOT_BUSY_SIGNAL)
+
+        dispatcher.connect(
+            self.completed,
+            signal=ANALYSIS_DONE_SIGNAL)
 
     def enable_messaging(self):
         """Set up the dispatcher for messaging."""
@@ -1370,6 +1388,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysis.hazard_layer = self.get_hazard_layer()
         self.analysis.exposure_layer = self.get_exposure_layer()
         self.analysis.aggregation_layer = self.get_aggregation_layer()
+        self.analysis.impact_function_id = self.get_function_id()
 
         self.analysis._clip_parameters = self.clip_parameters
         self.analysis.aggregator = self.aggregator
@@ -1384,82 +1403,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.enable_busy_cursor()
 
         # Start the analysis
-        try:
-            self.setup_calculator()
-        except CallGDALError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred when calling a GDAL command'))
-            return
-        except IOError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred when writing clip file'))
-            return
-        except InsufficientOverlapError, e:
-            self.analysis_error(e, self.tr(
-                'An exception occurred when setting up the impact calculator.')
-            )
-            return
-        except NoFeaturesInExtentError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred because there are no features visible in '
-                'the current view. Try zooming out or panning until some '
-                'features become visible.'))
-            return
-        except InvalidProjectionError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred because you are using a layer containing '
-                'count data (e.g. population count) which will not '
-                'scale accurately if we re-project it from its native '
-                'coordinate reference system to WGS84/GeoGraphic.'))
-            return
-        except MemoryError, e:
-            self.analysis_error(
-                e,
-                self.tr(
-                    'An error occurred because it appears that your '
-                    'system does not have sufficient memory. Upgrading '
-                    'your computer so that it has more memory may help. '
-                    'Alternatively, consider using a smaller geographical '
-                    'area for your analysis, or using rasters with a larger '
-                    'cell size.'))
-            return
-
-        try:
-            self.runner = self.calculator.get_runner()
-        except (InsufficientParametersError, ReadLayerError), e:
-            self.analysis_error(
-                e,
-                self.tr(
-                    'An exception occurred when setting up the model runner.'))
-            return
-
-        self.runner.done.connect(self.aggregate)
-
-        self.show_busy()
-
-        title = self.tr('Calculating impact')
-        detail = self.tr(
-            'This may take a little while - we are computing the areas that '
-            'will be impacted by the hazard and writing the result to a new '
-            'layer.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        self.show_dynamic_message(message)
-        try:
-            if self.run_in_thread_flag:
-                self.runner.start()  # Run in different thread
-            else:
-                self.runner.run()  # Run in same thread
-            QtGui.qApp.restoreOverrideCursor()
-            # .. todo :: Disconnect done slot/signal
-
-        except Exception, e:  # pylint: disable=W0703
-
-            # FIXME (Ole): This branch is not covered by the tests
-            self.analysis_error(
-                e,
-                self.tr('An exception occurred when starting the model.'))
+        self.analysis.run_analysis()
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1469,7 +1413,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Try to run completion code
         try:
-            engine_impact_layer = self.runner.impact_layer()
+            engine_impact_layer = self.analysis.get_impact_layer()
 
             # Load impact layer into QGIS
             qgis_impact_layer = read_impact_layer(engine_impact_layer)
@@ -1509,7 +1453,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
 
         # write postprocessing report to keyword
-        output = self.postprocessor_manager.get_output(
+        output = self.analysis.postprocessor_manager.get_output(
             self.aggregator.aoi_mode)
         keywords['postprocessing_report'] = output.to_html(
             suppress_newlines=True)

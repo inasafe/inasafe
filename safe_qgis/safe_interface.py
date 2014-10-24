@@ -75,6 +75,7 @@ from safe.api import (
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
+    ANALYSIS_DONE_SIGNAL,
     ErrorMessage,
     ZeroImpactException,
     PointsInputError,
