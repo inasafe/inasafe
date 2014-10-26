@@ -34,8 +34,8 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
         QgsMapToolEmitPoint.__init__(self, self.canvas)
 
-        self.rubber_band = QgsRubberBand(self.canvas, QGis.Polygon)
-        self.rubber_band.setColor(QColor(255, 0, 0, 100))
+        self.rubber_band = QgsRubberBand(self.canvas, geometryType=QGis.Line)
+        self.rubber_band.setColor(QColor(0, 0, 240, 100))
         self.rubber_band.setWidth(2)
 
         self.reset()
@@ -102,9 +102,9 @@ class RectangleMapTool(QgsMapToolEmitPoint):
             return
 
         point1 = start_point
-        point2 = QgsPoint(start_point.x(), end_point.y())
+        point2 = QgsPoint(end_point.x(), start_point.y())
         point3 = end_point
-        point4 = QgsPoint(end_point.x(), start_point.y())
+        point4 = QgsPoint(start_point.x(), end_point.y())
 
         self.rubber_band.addPoint(point1, False)
         self.rubber_band.addPoint(point2, False)
@@ -141,9 +141,9 @@ class RectangleMapTool(QgsMapToolEmitPoint):
             self.reset()
         else:
             self.start_point = QgsPoint(
-                rectangle.xMaximum(), rectangle.yMaximum())
-            self.end_point = QgsPoint(
                 rectangle.xMinimum(), rectangle.yMinimum())
+            self.end_point = QgsPoint(
+                rectangle.xMaximum(), rectangle.yMaximum())
             self.show_rectangle(self.start_point, self.end_point)
         return True
 

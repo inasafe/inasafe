@@ -37,8 +37,7 @@ from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
 
 class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
     """
-
-    :param parent: Parent widget claiming ownsership of this.
+    Dialog for letting user determine analysis extents.
     """
 
     extent_defined = pyqtSignal()
@@ -67,7 +66,8 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.previous_map_tool = None
         self.is_started = False
 
-        self.set_canvas(self.canvas)
+        self.prepare_tool()
+        # Use the current map canvas extents as a starting point
         self.set_extent(self.canvas.extent())
         self.populate_coordinates()
 
@@ -76,21 +76,16 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.x_maximum.textChanged.connect(self.coordinates_changed)
         self.y_maximum.textChanged.connect(self.coordinates_changed)
         self.activate_button.clicked.connect(self.start)
+        self.start()
 
-    def set_canvas(self, canvas):
+    def prepare_tool(self):
         """
         Set the canvas property.
-
-        :param canvas: Canvas that should be associated with this tool.
-        :type canvas: QgsMapCanvas
-
         """
-        self.canvas = canvas
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
         self.tool.rectangle_created.connect(self.populate_coordinates)
         self.tool.deactivated.connect(self.pause)
-        self.start()
 
     def stop(self):
         """
@@ -191,9 +186,9 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.blockSignals(True)
         if rect is not None:
             self.x_minimum.setText(str(rect.xMinimum()))
-            self.y_minimum.setText(str(rect.xMaximum()))
-            self.x_maximum.setText(str(rect.yMaximum()))
-            self.y_maximum.setText(str(rect.yMinimum()))
+            self.y_minimum.setText(str(rect.yMinimum()))
+            self.x_maximum.setText(str(rect.xMaximum()))
+            self.y_maximum.setText(str(rect.yMaximum()))
         else:
             self.x_minimum.clear()
             self.y_minimum.clear()

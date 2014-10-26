@@ -992,7 +992,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         extent = self._geo_extent_to_canvas_crs(extent)
         self.next_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), True)
+            self.iface.mapCanvas(), geometryType=QGis.Line)
         self.next_analysis_rubberband.setColor(QColor(0, 255, 0, 100))
         self.next_analysis_rubberband.setWidth(1)
         update_display_flag = False
@@ -1069,7 +1069,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = self._geo_extent_to_canvas_crs(extent)
 
         self.last_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), True)
+            self.iface.mapCanvas(), geometryType=QGis.Line)
         self.last_analysis_rubberband.setColor(QColor(255, 0, 0, 100))
         self.last_analysis_rubberband.setWidth(2)
         update_display_flag = False

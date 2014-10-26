@@ -511,7 +511,7 @@ class Plugin:
         dialog = ExtentSelector(
             self.iface,
             self.iface.mainWindow())
-        dialog.exec_()  # modal
+        dialog.show()  # modal
 
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
