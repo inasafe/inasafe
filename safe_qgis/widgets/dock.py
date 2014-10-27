@@ -1000,7 +1000,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.hide_next_analysis_extent()
         try:
-            extent = self.get_clip_parameters()[1]
+            # Temporary only, it will be rewrite if we run an analysis
+            if not self.analysis:
+                self.setup_analysis()
+            extent = self.analysis.clip_parameters[1]
 
         except (AttributeError, InsufficientOverlapError):
             # No layers loaded etc.
@@ -1124,7 +1127,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.enable_busy_cursor()
             self.setup_analysis()
-
+            self.show_next_analysis_extent()
+            extent = self.analysis.clip_parameters[1]
+            self.show_extent(extent)
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError:
