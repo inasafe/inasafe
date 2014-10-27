@@ -255,6 +255,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
 
+        # TODO document it:
+        self.is_selected_layer_keywordless = False
+        self.parent_step = None
+
         # noinspection PyUnresolvedReferences
         self.tvBrowserHazard.selectionModel().selectionChanged.connect(self.tvBrowserHazard_selection_changed)
         self.tvBrowserExposure.selectionModel().selectionChanged.connect(self.tvBrowserExposure_selection_changed)
@@ -1044,7 +1048,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_widgets_step_kw_title(self):
         """Set widgets on the Title tab."""
         # Just set values based on existing keywords
-        if self.layer():
+        if self.layer:
             title = self.layer.name()
             self.leTitle.setText(title)
 
@@ -1196,6 +1200,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 if l.id() == layer_id:
                     layer = l
 
+        # set the current layer (e.g. for the keyword creation sub-thread
+        self.layer = layer
+
         if not layer:
             return ""
 
@@ -1208,6 +1215,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 InvalidParameterError,
                 UnsupportedProviderError):
             kwds = None
+
+        self.is_selected_layer_keywordles = not bool(kwds)
 
         if kwds:
             lblText = """
@@ -1419,6 +1428,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             layer = QgsRasterLayer(path, '', 'gdal')
 
+        # set the current layer (e.g. for the keyword creation sub-thread
+        self.layer = layer
+
         if not layer or not layer.isValid():
             return "Not a valid layer"
 
@@ -1426,6 +1438,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             kwds = self.keyword_io.read_keywords(layer)
         except:
             kwds = None
+
+        self.is_selected_layer_keywordles = not bool(kwds)
 
         if kwds:
             desc = """
@@ -1684,7 +1698,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.stackedWidget.setCurrentIndex(step - 1)
         self.lblStep.setText(self.tr('step %d') % step)
-        self.pbnBack.setEnabled(step > 1)
+        self.pbnBack.setEnabled(True)
+        if step in [step_kw_category, step_dc_function] and self.parent_step is None:
+            self.pbnBack.setEnabled(False)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1764,7 +1780,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.set_widgets_step_dc_report()
         elif new_step is None:
             # Wizard complete
-            # TODO: it's for KeywordCreation, what about FunctionCentric?
             self.accept()
             return
         else:
@@ -1772,7 +1787,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             pass
 
         # Set Next button label
-        if new_step in [step_kw_title, step_dc_report]:
+        if new_step in [step_kw_title, step_dc_report] and self.parent_step is None:
             self.pbnNext.setText(self.tr('Finish'))
         elif new_step == step_dc_progress:
             self.pbnNext.setText(self.tr('Run'))
@@ -1784,9 +1799,17 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.go_to_step(new_step)
 
         # TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
-        if current_step == self.stackedWidget.count() and new_step == 1:
-            self.lblSelectCategory.setText('You have selected a layer that has no keywords assigned. In the next steps you can assign '
-                                           'keywords to that layer. First you need to confirm the layer represents a hazard.')
+        if new_step == step_kw_category and self.parent_step:
+            if self.parent_step in [step_dc_hazlayer_from_canvas, step_dc_hazlayer_from_browser]:
+                lblTxt = 'You have selected a layer that has no keywords assigned. In the next steps you can assign '\
+                         'keywords to that layer. First you need to confirm the layer represents a hazard.'
+            elif self.parent_step in [step_dc_explayer_from_canvas, step_dc_explayer_from_browser]:
+                lblTxt = 'You have selected a layer that has no keywords assigned. In the next steps you can assign '\
+                         'keywords to that layer. First you need to confirm the layer represents an exposure.'
+            else:
+                lblTxt = 'You have selected a layer that has no keywords assigned. In the next steps you can assign '\
+                         'keywords to that layer. First you need to confirm the layer is an aggregation layer.'
+            self.lblSelectCategory.setText(lblTxt)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1928,8 +1951,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         elif current_step in (step_kw_aggregation, step_kw_source):
             new_step = current_step + 1
         elif current_step == step_kw_title:
-            # TODO: come back to the main thread if it's the embedded kw mode inside of the dc mode.
-            new_step = None   # Wizard complete
+            if self.parent_step:
+                # Come back to the parent thread
+                new_step = self.parent_step
+                self.parent_step = None
+                self.is_selected_layer_keywordles = False
+            else:
+                # Wizard complete
+                new_step = None
 
         elif current_step == step_dc_function:
             new_step = step_dc_hazlayer_origin
@@ -1939,19 +1968,34 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 new_step = step_dc_hazlayer_from_browser
         elif current_step in [step_dc_hazlayer_from_canvas, step_dc_hazlayer_from_browser]:
-            new_step = step_dc_explayer_origin
+            if self.is_selected_layer_keywordles:
+                # insert keyword creation thread here
+                self.parent_step = current_step
+                self.set_keywords_creation_mode(self.layer)
+                new_step = step_kw_category
+                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
+            else:
+                new_step = step_dc_explayer_origin
         elif current_step == step_dc_explayer_origin:
             if self.rbExpLayerFromCanvas.isChecked():
                 new_step = step_dc_explayer_from_canvas
             else:
                 new_step = step_dc_explayer_from_browser
         elif current_step in [step_dc_explayer_from_canvas, step_dc_explayer_from_browser]:
-            # TODO test overlapping!!!
-            _layers_disjoint = False
-            if _layers_disjoint:
-                new_step = step_dc_disjoint_layers
+            if self.is_selected_layer_keywordles:
+                # insert keyword creation thread here
+                self.parent_step = current_step
+                self.existing_keywords = None
+                new_step = step_kw_category
+                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
+                # TODO test overlapping after come back!!!
             else:
-                new_step = step_dc_agglayer_origin
+                # TODO test overlapping!!!
+                _layers_disjoint = False
+                if _layers_disjoint:
+                    new_step = step_dc_disjoint_layers
+                else:
+                    new_step = step_dc_agglayer_origin
         elif current_step == step_dc_disjoint_layers:
             new_step = step_dc_agglayer_origin
         elif current_step == step_dc_agglayer_origin:
@@ -1963,11 +2007,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # no aggregation (so also no disjoint test)
                 new_step = step_dc_params
         elif current_step in [step_dc_agglayer_from_canvas, step_dc_agglayer_from_browser]:
-            _agg_layers_disjoint = False
-            if _agg_layers_disjoint:
-                new_step = step_dc_agglayer_disjoint
+            if self.is_selected_layer_keywordles:
+                # insert keyword creation thread here
+                self.parent_step = current_step
+                self.existing_keywords = None
+                new_step = step_kw_category
+                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
+                # TODO test overlapping after come back!!!
             else:
-                new_step = step_dc_params
+                # TODO test overlapping!!!
+                _agg_layers_disjoint = False
+                if _agg_layers_disjoint:
+                    new_step = step_dc_agglayer_disjoint
+                else:
+                    new_step = step_dc_params
         elif current_step == step_dc_agglayer_disjoint:
             new_step = step_dc_params
         elif current_step in [step_dc_params, step_dc_summary, step_dc_progress]:
@@ -1996,9 +2049,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: int
         """
         if current_step == step_kw_category:
-            # TODO: if embedded KW mode, come back to the parent DC mode
-            new_step = step_kw_category
-        if current_step == step_kw_field:
+            if self.parent_step:
+                # Come back to the parent thread
+                new_step = self.parent_step
+                self.parent_step = None
+            else:
+                new_step = step_kw_category
+        elif current_step == step_kw_field:
             if self.selected_unit():
                 new_step = step_kw_unit
             elif self.selected_subcategory():
