@@ -86,6 +86,7 @@ class MapTest(unittest.TestCase):
             prefix='mapDefaultTemplateTest',
             suffix='.pdf',
             dir=temp_dir('test'))
+        out_path = '/home/christian/inasafe.pdf'
         report.make_pdf(out_path)
         LOGGER.debug(out_path)
         message = 'Rendered output does not exist: %s' % out_path
@@ -104,14 +105,14 @@ class MapTest(unittest.TestCase):
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
             458706,  # Ubuntu 14.04_64 AG
-            152980,  # Ubuntu 14.04_64 TS - pycharm
+            449348,  # Ubuntu 14.04_64 TS - pycharm
             425645,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             414589,  # Slackware64 14.0
             144542,  # Linux Mint 14_64
             148267,  # Windows 7 32
             150412,  # Windows 7 64
             448270,  # UB 12.04 Jenkins
-            435941,  # Travis
+            453867,  # Travis
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -150,7 +151,7 @@ class MapTest(unittest.TestCase):
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
             446080,  # Ubuntu 14.04_64 AG
-            90704,  # Ubuntu 14.04_64 TS pycharm
+            430845,  # Ubuntu 14.04_64 TS pycharm
             413015,  # Ubuntu 14.04_64 TS make - TODO why is this?
             367934,  # Slackware64 14.0
             82263,  # Linux Mint 14_64
