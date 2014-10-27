@@ -702,14 +702,9 @@ class TestDock(TestCase):
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent()
 
-        # Run manually so we can get the output layer
-        DOCK.clip_parameters = DOCK.get_clip_parameters()
-        DOCK.prepare_aggregator()
-        DOCK.aggregator.validate_keywords()
-        DOCK.setup_calculator()
-        test_runner = DOCK.calculator.get_runner()
-        test_runner.run()  # Run in same thread
-        safe_layer = test_runner.impact_layer()
+        DOCK.accept()
+        DOCK.analysis.get_impact_layer()
+        safe_layer = DOCK.analysis.get_impact_layer()
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)

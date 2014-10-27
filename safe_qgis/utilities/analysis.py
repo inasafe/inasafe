@@ -585,7 +585,7 @@ class Analysis(object):
                 'analysis extents.'
             )
             self.analysis_error(e, context)
-            return  # ignore any error
+            raise e
 
         # Ensure there is enough memory
         result = check_memory_usage(buffered_geoextent, cell_size)

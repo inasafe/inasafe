@@ -1121,11 +1121,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-        self.enable_busy_cursor()
-        self.setup_analysis()
+        try:
+            self.enable_busy_cursor()
+            self.setup_analysis()
 
-        # Start the analysis
-        self.analysis.run_analysis()
+            # Start the analysis
+            self.analysis.run_analysis()
+        except InsufficientOverlapError:
+            return  # Will abort the analysis if there is exception
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
@@ -1189,7 +1192,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysis.map_canvas = self.iface.mapCanvas()
         self.analysis.clip_to_viewport = self.clip_to_viewport
 
-        self.analysis.setup_analysis()
+        try:
+            self.analysis.setup_analysis()
+        except InsufficientOverlapError as e:
+            raise e
 
     def completed(self):
         """Slot activated when the process is done.
