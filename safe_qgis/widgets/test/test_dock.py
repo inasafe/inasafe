@@ -223,19 +223,30 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
+        # QGIS  > 2.2 scales the extents to the 400x400 canvas
+        # slightly differently so versions prior to 2.4 will
+        # return 116 fatalities
+        if qgis_version() < 20400:
+            expected_mortalities = 116
+        else:
+            expected_mortalities = 117
         # Check against expected output
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: fatality count of '
-            '116 , received: \n %s' % result)
-        self.assertTrue(format_int(116) in result, message)
+            '%s , received: \n %s' % (expected_mortalities, result))
+        self.assertTrue(format_int(expected_mortalities) in result, message)
 
+        if qgis_version() < 20400:
+            expected_affected = 847529
+        else:
+            expected_affected = 863412
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '847596 , received: \n %s' % result)
-        print format_int(847529), 'expect'
-        self.assertTrue(format_int(847596) in result, message)
+            '%s , received: \n %s' % (expected_affected, result))
+
+        self.assertTrue(format_int(expected_affected) in result, message)
 
     def test_run_earthquake_fatality_function_padang_full(self):
         """Padang 2009 fatalities estimated correctly (large extent)"""
@@ -333,9 +344,20 @@ class TestDock(TestCase):
         #Building type	 closed	Total
         #All	        7	                17
 
+        # QGIS  > 2.2 scales the extents to the 400x400 canvas
+        # slightly differently so versions prior to 2.4
+        # Versions >= 2.4 of QGIS
+        #All	7	16
+
+        if qgis_version() < 20400:
+            total_buildings = 17
+        else:
+            total_buildings = 16
         message = 'Result not as expected: %s' % result
-        self.assertTrue(format_int(17) in result, message)
-        self.assertTrue(format_int(7) in result, message)
+        self.assertTrue(format_int(total_buildings) in result, message)
+
+        flooded_buildings = 7
+        self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
         """Test Insufficient overlap errors are caught as per issue #372.
