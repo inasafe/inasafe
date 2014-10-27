@@ -86,7 +86,6 @@ class MapTest(unittest.TestCase):
             prefix='mapDefaultTemplateTest',
             suffix='.pdf',
             dir=temp_dir('test'))
-        out_path = '/home/christian/inasafe.pdf'
         report.make_pdf(out_path)
         LOGGER.debug(out_path)
         message = 'Rendered output does not exist: %s' % out_path
@@ -158,7 +157,7 @@ class MapTest(unittest.TestCase):
             85418,  # Windows 7 32bit
             88779,  # Windows 7 64bit
             436118,   # Jenkins ub 12.04
-            423826,  # Travis
+            435497,  # Travis
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
