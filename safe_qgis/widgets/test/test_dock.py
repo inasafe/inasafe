@@ -1345,22 +1345,6 @@ Click for Diagnostic Information:
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
 
-    def test_generate_insufficient_overlap_message(self):
-        """Test we generate insufficent overlap messages nicely."""
-
-        exposure_layer = FakeLayer('Fake exposure layer')
-
-        hazard_layer = FakeLayer('Fake hazard layer')
-
-        message = DOCK.generate_insufficient_overlap_message(
-            Exception('Dummy exception'),
-            exposure_geoextent=[10.0, 10.0, 20.0, 20.0],
-            exposure_layer=exposure_layer,
-            hazard_geoextent=[15.0, 15.0, 20.0, 20.0],
-            hazard_layer=hazard_layer,
-            viewport_geoextent=[5.0, 5.0, 12.0, 12.0])
-        self.assertIn('insufficient overlap', message.to_text())
-
     def test_rubber_bands(self):
         """Test that the rubber bands get updated."""
 
