@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'extent_selector_base.ui'
 #
-# Created: Mon Oct 27 08:18:35 2014
+# Created: Mon Oct 27 15:08:16 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -30,6 +30,9 @@ class Ui_ExtentSelectorBase(object):
         font = QtGui.QFont()
         font.setPointSize(9)
         ExtentSelectorBase.setFont(font)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        ExtentSelectorBase.setWindowIcon(icon)
         self.horizontalLayout = QtGui.QHBoxLayout(ExtentSelectorBase)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.x_minimum = QtGui.QDoubleSpinBox(ExtentSelectorBase)
@@ -78,19 +81,17 @@ class Ui_ExtentSelectorBase(object):
         self.toolButton_2 = QtGui.QToolButton(ExtentSelectorBase)
         self.toolButton_2.setObjectName(_fromUtf8("toolButton_2"))
         self.horizontalLayout.addWidget(self.toolButton_2)
-        self.toolButton_3 = QtGui.QToolButton(ExtentSelectorBase)
-        self.toolButton_3.setObjectName(_fromUtf8("toolButton_3"))
-        self.horizontalLayout.addWidget(self.toolButton_3)
 
         self.retranslateUi(ExtentSelectorBase)
         QtCore.QMetaObject.connectSlotsByName(ExtentSelectorBase)
 
     def retranslateUi(self, ExtentSelectorBase):
+        ExtentSelectorBase.setWindowTitle(_translate("ExtentSelectorBase", "InaSAFE Analysis Area", None))
         self.x_minimum.setPrefix(_translate("ExtentSelectorBase", "East: ", None))
         self.y_minimum.setPrefix(_translate("ExtentSelectorBase", "North: ", None))
         self.x_maximum.setPrefix(_translate("ExtentSelectorBase", "West: ", None))
         self.y_maximum.setPrefix(_translate("ExtentSelectorBase", "South: ", None))
         self.toolButton.setText(_translate("ExtentSelectorBase", "...", None))
         self.toolButton_2.setText(_translate("ExtentSelectorBase", "...", None))
-        self.toolButton_3.setText(_translate("ExtentSelectorBase", "...", None))
 
+import resources_rc
