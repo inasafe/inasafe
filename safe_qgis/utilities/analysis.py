@@ -604,7 +604,8 @@ class Analysis(object):
         # accepted signal of the keywords dialog
         self.aggregator.validate_keywords()
         if self.aggregator.is_valid:
-            self.run_analysis()
+            # self.run_analysis()
+            pass
         else:
             message = 'Aggregator Layer has invalid keywords'
             error_message = get_error_message(KeywordNotFoundError, message)
@@ -703,8 +704,8 @@ class Analysis(object):
     def setup_impact_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
 
-            # Use canonical function name to identify selected function
-        self._impact_calculator.set_function(self.impact_function_id)
+        # Use canonical function name to identify selected function
+        self.impact_calculator.set_function(self.impact_function_id)
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
@@ -716,13 +717,13 @@ class Analysis(object):
          geo_extent,
          hazard_layer) = self.clip_parameters
 
-        if self._impact_calculator.requires_clipping():
+        if self.impact_calculator.requires_clipping():
             # The impact function uses SAFE layers,
             # clip them
             hazard_layer, exposure_layer = self.optimal_clip()
             self.aggregator.set_layers(hazard_layer, exposure_layer)
             # Extent is calculated in the aggregator:
-            self._impact_calculator.set_extent(None)
+            self.impact_calculator.set_extent(None)
 
             # See if the inputs need further refinement for aggregations
             try:
@@ -740,11 +741,11 @@ class Analysis(object):
             # It is a 'new-style' impact function,
             # clipping doesn't needed, but we need to set up extent
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self._impact_calculator.set_extent(buffered_geo_extent)
+            self.impact_calculator.set_extent(buffered_geo_extent)
 
         # Identify input layers
-        self._impact_calculator.set_hazard_layer(hazard_layer)
-        self._impact_calculator.set_exposure_layer(exposure_layer)
+        self.impact_calculator.set_hazard_layer(hazard_layer)
+        self.impact_calculator.set_exposure_layer(exposure_layer)
 
     def run_aggregator(self):
         """Run all post processing steps.
@@ -872,7 +873,7 @@ class Analysis(object):
             return
 
         try:
-            self.runner = self._impact_calculator.get_runner()
+            self.runner = self.impact_calculator.get_runner()
         except (InsufficientParametersError, ReadLayerError), e:
             self.analysis_error(
                 e,
