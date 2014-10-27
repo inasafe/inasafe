@@ -122,7 +122,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-from pydev import pydevd  # pylint: disable=F0401
+# from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -147,9 +147,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        pydevd.settrace(
-           'localhost', port=5678, stdoutToServer=True,
-           stderrToServer=True)
+        # pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True,
+        #    stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -1169,9 +1169,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def setup_analysis(self):
         """Setup analysis to make it ready to work."""
         self.analysis = Analysis()
+        # Layers
         self.analysis.hazard_layer = self.get_hazard_layer()
         self.analysis.exposure_layer = self.get_exposure_layer()
         self.analysis.aggregation_layer = self.get_aggregation_layer()
+
+        # noinspection PyTypeChecker
+        self.analysis.exposure_keyword = self.keyword_io.read_keywords(
+            self.get_exposure_layer())
 
         # Impact Functions
         self.analysis.impact_function_id = self.get_function_id()

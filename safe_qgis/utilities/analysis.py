@@ -103,7 +103,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class Analysis(object):
     """Class for running full analysis."""
 
-    analysis_done = pyqtSignal(bool)
+    # analysis_done = pyqtSignal(bool)
 
     def __init__(self):
         """Constructor."""
@@ -112,6 +112,7 @@ class Analysis(object):
         self._hazard_layer = None
         self._exposure_layer = None
         self._aggregation_layer = None
+        self.exposure_keyword = None
 
         # Impact Functions
         self.impact_function_id = None
@@ -633,7 +634,7 @@ class Analysis(object):
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
         self.send_error_message(message)
-        self.analysis_done.emit(False)
+        # self.analysis_done.emit(False)
 
     def optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
@@ -794,7 +795,7 @@ class Analysis(object):
                 message = get_error_message(exception, context=content)
             # noinspection PyTypeChecker
             self.send_error_message(message)
-            self.analysis_done.emit(False)
+            # self.analysis_done.emit(False)
             return
 
         try:
@@ -802,7 +803,7 @@ class Analysis(object):
         except InvalidGeometryError, e:
             message = get_error_message(e)
             self.send_error_message(message)
-            self.analysis_done.emit(False)
+            # self.analysis_done.emit(False)
             return
         except Exception, e:  # pylint: disable=W0703
             # noinspection PyPropertyAccess
