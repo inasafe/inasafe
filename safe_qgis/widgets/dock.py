@@ -1001,7 +1001,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hide_next_analysis_extent()
         try:
             # Temporary only, it will be rewrite if we run an analysis
-            if not self.analysis:
+            if not self.analysis.clip_parameters:
                 self.setup_analysis()
             extent = self.analysis.clip_parameters[1]
 
@@ -1183,8 +1183,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysis.aggregation_layer = self.get_aggregation_layer()
 
         # noinspection PyTypeChecker
+        self.analysis.hazard_keyword = self.keyword_io.read_keywords(
+            self.get_hazard_layer())
         self.analysis.exposure_keyword = self.keyword_io.read_keywords(
             self.get_exposure_layer())
+        # Need to check since aggregation layer is not mandatory
+        if self.analysis.aggregation_layer:
+            self.analysis.aggregation_keyword = self.keyword_io.read_keywords(
+                self.get_aggregation_layer())
 
         # Impact Functions
         self.analysis.impact_function_id = self.get_function_id()

@@ -112,7 +112,9 @@ class Analysis(object):
         self._hazard_layer = None
         self._exposure_layer = None
         self._aggregation_layer = None
+        self.hazard_keyword = None
         self.exposure_keyword = None
+        self.aggregation_keyword = None
 
         # Impact Functions
         self.impact_function_id = None
@@ -205,6 +207,22 @@ class Analysis(object):
         """
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         return QtCore.QCoreApplication.translate('Analysis', string)
+
+    @staticmethod
+    def get_layer_title(layer, layer_keyword):
+        """Return layer's title from keywords or layer name if not found.
+
+        :param layer: A valid QgsMapLayer
+        :type layer: QgsMapLayer
+
+        :param layer_keyword: A keyword for the layer
+        :type layer_keyword: dict
+
+        :returns: Layer's title
+        :rtype: str
+        """
+        title = layer_keyword.get('title', str(layer.name()))
+        return title
 
     def get_impact_layer(self):
         """Obtain impact layer from the runner."""
@@ -504,8 +522,10 @@ class Analysis(object):
 
         # trap for issue 706
         try:
-            exposure_name = self.exposure_layer.name()
-            hazard_name = self.hazard_layer.name()
+            exposure_name = self.get_layer_title(
+                self.exposure_layer, self.exposure_keyword)
+            hazard_name = self.get_layer_title(
+                self.hazard_layer, self.hazard_keyword)
             #aggregation layer could be set to AOI so no check for that
         except AttributeError:
             title = self.tr('No valid layers')
@@ -527,7 +547,8 @@ class Analysis(object):
 
         if self.aggregation_layer is not None:
             try:
-                aggregation_name = self.aggregation_layer.name()
+                aggregation_name = self.get_layer_title(
+                    self.aggregation_layer, self.aggregation_keyword)
                 # noinspection PyTypeChecker
                 text.add(m.Text(
                     self.tr('and bullet_list the results'),
@@ -768,16 +789,20 @@ class Analysis(object):
                     'Analysis Results'), **INFO_STYLE))
                 report.add(m.Text(exception.message))
                 report.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
+                exposure_layer_title = self.get_layer_title(
+                    self.exposure_layer, self.exposure_keyword)
+                hazard_layer_title = self.get_layer_title(
+                    self.hazard_layer, self.hazard_keyword)
                 report.add(m.Text(self.tr(
                     'It appears that no %s are affected by %s. You may want '
                     'to consider:') % (
-                                      self.exposure_layer.name(),
-                                      self.hazard_layer.name())))
+                                      exposure_layer_title,
+                                      hazard_layer_title)))
                 check_list = m.BulletedList()
                 check_list.add(self.tr(
                     'Check that you are not zoomed in too much and thus '
                     'excluding %s from your analysis area.') % (
-                                   self.exposure_layer.name()))
+                        exposure_layer_title))
                 check_list.add(self.tr(
                     'Check that the exposure is not no-data or zero for the '
                     'entire area of your analysis.'))
