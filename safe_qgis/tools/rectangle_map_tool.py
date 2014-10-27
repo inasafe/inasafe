@@ -36,7 +36,9 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
         self.rubber_band = QgsRubberBand(self.canvas, geometryType=QGis.Line)
         self.rubber_band.setColor(QColor(0, 0, 240, 100))
-        self.rubber_band.setWidth(2)
+        # Needs QGIS 2.6
+        #self.rubber_band.setFillColor(QColor(0, 0, 240, 0))
+        self.rubber_band.setWidth(1)
 
         self.reset()
 
@@ -106,11 +108,15 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         point3 = end_point
         point4 = QgsPoint(start_point.x(), end_point.y())
 
-        self.rubber_band.addPoint(point1, False)
-        self.rubber_band.addPoint(point2, False)
-        self.rubber_band.addPoint(point3, False)
+        update_canvas = False
+        self.rubber_band.addPoint(point1, update_canvas)
+        self.rubber_band.addPoint(point2, update_canvas)
+        self.rubber_band.addPoint(point3, update_canvas)
+        self.rubber_band.addPoint(point4, update_canvas)
         # noinspection PyArgumentEqualDefault
-        self.rubber_band.addPoint(point4, True)  # true to update canvas
+        # no False so canvas will update
+        # close the polygon otherwise it shows as a filled rect
+        self.rubber_band.addPoint(point1)
         self.rubber_band.show()
 
     def rectangle(self):
