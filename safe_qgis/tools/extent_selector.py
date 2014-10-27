@@ -8,7 +8,7 @@
         Date                 : December 2010
         Copyright            : (C) 2010 by Giuseppe Sucameli
         Email                : brush dot tyler at gmail dot com
-    Refactored in Oct 2014 by Tim Sutton for InaSAFE.
+    Refactored and improved in Oct 2014 by Tim Sutton for InaSAFE.
 ***************************************************************************
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,6 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
     extent_defined = pyqtSignal()
     selection_stopped = pyqtSignal()
     selection_started = pyqtSignal()
-    selection_paused = pyqtSignal()
 
     def __init__(self, iface, parent=None):
         """
@@ -71,11 +70,10 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.set_extent(self.canvas.extent())
         self.populate_coordinates()
 
-        self.x_minimum.textChanged.connect(self.coordinates_changed)
-        self.y_minimum.textChanged.connect(self.coordinates_changed)
-        self.x_maximum.textChanged.connect(self.coordinates_changed)
-        self.y_maximum.textChanged.connect(self.coordinates_changed)
-        self.activate_button.clicked.connect(self.start)
+        self.x_minimum.valueChanged.connect(self.coordinates_changed)
+        self.y_minimum.valueChanged.connect(self.coordinates_changed)
+        self.x_maximum.valueChanged.connect(self.coordinates_changed)
+        self.y_maximum.valueChanged.connect(self.coordinates_changed)
         self.start()
 
     def prepare_tool(self):
@@ -85,16 +83,14 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
         self.tool.rectangle_created.connect(self.populate_coordinates)
-        self.tool.deactivated.connect(self.pause)
 
-    def stop(self):
+    def accept(self):
         """
         Stop capturing the rectangle.
         """
         if not self.is_started:
             return
         self.is_started = False
-        self.activate_button.setVisible(False)
         self.tool.reset()
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
@@ -110,19 +106,8 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
             self.previous_map_tool = previous_map_tool
         self.canvas.setMapTool(self.tool)
         self.is_started = True
-        self.activate_button.setVisible(False)
         self.coordinates_changed()
         self.selection_started.emit()
-
-    def pause(self):
-        """
-        Pause capture.
-        """
-        if not self.is_started:
-            return
-
-        self.activate_button.setVisible(True)
-        self.selection_paused.emit()
 
     def set_extent(self, rect):
         """
@@ -152,11 +137,11 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         """
         try:
             QgsPoint(
-                float(self.x_minimum.text()),
-                float(self.y_minimum.text()))
+                self.x_minimum.value(),
+                self.y_minimum.value())
             QgsPoint(
-                float(self.x_maximum.text()),
-                float(self.y_maximum.text()))
+                self.x_maximum.value(),
+                self.y_maximum.value())
         except ValueError:
             return False
 
@@ -169,11 +154,11 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         rect = None
         if self.are_coordinates_valid():
             point1 = QgsPoint(
-                float(self.x_minimum.text()),
-                float(self.y_minimum.text()))
+                self.x_minimum.value(),
+                self.y_minimum.value())
             point2 = QgsPoint(
-                float(self.x_maximum.text()),
-                float(self.y_maximum.text()))
+                self.x_maximum.value(),
+                self.y_maximum.value())
             rect = QgsRectangle(point1, point2)
 
         self.set_extent(rect)
@@ -185,10 +170,10 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         rect = self.get_extent()
         self.blockSignals(True)
         if rect is not None:
-            self.x_minimum.setText(str(rect.xMinimum()))
-            self.y_minimum.setText(str(rect.yMinimum()))
-            self.x_maximum.setText(str(rect.xMaximum()))
-            self.y_maximum.setText(str(rect.yMaximum()))
+            self.x_minimum.setValue(rect.xMinimum())
+            self.y_minimum.setValue(rect.yMinimum())
+            self.x_maximum.setValue(rect.xMaximum())
+            self.y_maximum.setValue(rect.yMaximum())
         else:
             self.x_minimum.clear()
             self.y_minimum.clear()
