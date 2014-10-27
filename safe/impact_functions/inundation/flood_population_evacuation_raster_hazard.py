@@ -240,13 +240,9 @@ class FloodEvacuationFunction(FunctionProvider):
             TableRow(tr('Map shows the numbers of people needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
-            [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]]
+            TableRow([tr('Needs per week'), tr('Total')], header=True)]
+        for resource, amount in tot_needs.items():
+            table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))

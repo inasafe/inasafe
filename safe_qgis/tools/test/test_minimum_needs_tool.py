@@ -33,7 +33,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import safe_read_layer
-from safe_qgis.tools.minimum_needs import MinimumNeeds
+from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
 from safe_qgis.safe_interface import UNITDATA
 
 shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')

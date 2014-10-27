@@ -23,6 +23,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QTableWidgetItem, QFileDialog, QComboBox
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.defaults import (
@@ -32,6 +34,7 @@ from safe_qgis.utilities.defaults import (
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import DEFAULTS
+from safe_qgis.tools.minimum_needs import QMinimumNeeds
 
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
@@ -78,6 +81,12 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
+        self.export_button.clicked.connect(self.export_minimum_needs)
+        self.import_button.clicked.connect(self.import_minimum_needs)
+        self.remove_button.clicked.connect(self.remove_minimum_needs_row)
+        self.add_button.clicked.connect(self.add_minimum_needs_row)
+        self.minimum_needs = QMinimumNeeds()
+        self.populate_minimum_needs_table()
 
     def restore_state(self):
         """Reinstate the options based on the user's stored session info.
@@ -244,6 +253,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         settings.setValue(
             'inasafe/use_native_zonal_stats',
             self.cbxNativeZonalStats.isChecked())
+        self.save_minimum_needs()
 
     @staticmethod
     def show_help():
@@ -367,3 +377,120 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             org_disclaimer = disclaimer()
 
         self.txtDisclaimer.setPlainText(org_disclaimer)
+
+    def populate_minimum_needs_table(self):
+        """Populate the minimum needs table with needs and headings.
+        """
+        full_minimum_needs = self.minimum_needs.get_full_needs()
+        self.minimum_needs_table.setRowCount(
+            len(full_minimum_needs))
+        keys = self.minimum_needs.categories
+        headings = self.minimum_needs.headings
+        self.minimum_needs_table.setColumnCount(len(headings))
+        self.minimum_needs_table.setHorizontalHeaderLabels(
+            [self.tr(heading) for heading in headings])
+        for j, key in enumerate(keys):
+            needs_metadata = self.minimum_needs.category(key)
+            for i, row in enumerate(full_minimum_needs):
+                try:
+                    value = u'%s' % row[key]
+                except KeyError:
+                    value = ''
+                if needs_metadata['type'] == 'string':
+                    item = QTableWidgetItem(value)
+                    self.minimum_needs_table.setItem(i, j, item)
+                elif needs_metadata['type'] == 'list':
+                    combo_box = QComboBox()
+                    defaults = needs_metadata['defaults']
+                    if value not in defaults:
+                        defaults.append(value)
+                    combo_box.addItems(defaults)
+                    combo_box.setEditable(needs_metadata['editable'])
+                    combo_box.setCurrentIndex(defaults.index(value))
+                    self.minimum_needs_table.setCellWidget(i, j, combo_box)
+
+    def add_minimum_needs_row(self):
+        """Add a new row to the minimum needs widget.
+        A new row is inserted after the currently selected row.
+        """
+        row_id = self.minimum_needs_table.currentRow()
+        row_id += 1  # Insert a row after current row
+        self.minimum_needs_table.insertRow(row_id)
+        for j, key in enumerate(self.minimum_needs.categories):
+            needs_metadata = self.minimum_needs.category(key)
+            if needs_metadata['type'] == 'list':
+                combo_box = QComboBox()
+                combo_box.addItems(needs_metadata['defaults'])
+                combo_box.setEditable(needs_metadata['editable'])
+                self.minimum_needs_table.setCellWidget(row_id, j, combo_box)
+
+    def remove_minimum_needs_row(self):
+        """ Remove the selected row from the minimum needs widget.
+        The currently selected row is removed from the widget.
+        """
+        row_id = self.minimum_needs_table.currentRow()
+        self.minimum_needs_table.removeRow(row_id)
+
+    def import_minimum_needs(self):
+        """ Import minimum needs from an existing json file.
+        The minimum needs are loaded from a file into the table. This state
+        is only saved if the form is accepted.
+        """
+        file_name = QtGui.QFileDialog.getOpenFileName(
+            self,
+            self.tr('Import minimum needs'),
+            '',
+            self.tr('JSON files (*.json *.JSON)'))
+        if file_name == '' or file_name is None:
+            return -1
+
+        if self.minimum_needs.read_from_file(file_name) == -1:
+            return -1
+
+        self.populate_minimum_needs_table()
+        return 0
+
+    def export_minimum_needs(self):
+        """ Export minimum needs to a json file.
+        This method will save the current state of the minimum needs setup.
+        Then open a dialog allowing the user to browse to the desired
+        destination loction and allow the user to save the needs as a json
+        file.
+        """
+        self.save_minimum_needs()  # save current state before continuing
+
+        file_name = QFileDialog.getSaveFileName(
+            self,
+            self.tr('Export minimum needs'),
+            '',
+            self.tr('JSON files (*.json *.JSON)'))
+        if file_name != '' and file_name is not None:
+            self.minimum_needs.write_to_file(file_name)
+
+    def save_minimum_needs(self):
+        """ Save the current state of the minimum needs widget.
+        The minimum needs widget current state is saved to the QSettings via
+        the appropriate QMinimumNeeds class' method.
+        """
+        rows = self.minimum_needs_table.rowCount()
+        keys = self.minimum_needs.categories
+        columns = len(keys)
+        new_minimum_need = []
+        for row in range(rows):
+            minimum_need = {}
+            for column in range(columns):
+                key = keys[column]
+                item = self.minimum_needs_table.item(row, column)
+                if not item:
+                    item = self.minimum_needs_table.cellWidget(row, column)
+                    if not item:
+                        value = ''
+                    else:
+                        value = item.currentText()
+                else:
+                    value = item.text()
+                print value
+                minimum_need[key] = value
+            new_minimum_need.append(minimum_need)
+        self.minimum_needs.update_minimum_needs(new_minimum_need)
+        self.minimum_needs.save()

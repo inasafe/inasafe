@@ -368,12 +368,10 @@ class ITBFatalityFunction(FunctionProvider):
                 [tr('People displaced'), '%s' % format_int(displaced)],
                 header=True),
             TableRow(tr('Map shows density estimate of displaced population')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(needs['rice'])],
-            [tr('Drinking Water [l]'), format_int(needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(needs['water'])],
-            [tr('Family Kits'), format_int(needs['family_kits'])],
-            TableRow(tr('Action Checklist:'), header=True)]
+            TableRow([tr('Needs per week'), tr('Total')], header=True)]
+        for resource, amount in needs.items():
+            table_body.append(TableRow([tr(resource), format_int(amount)]))
+        table_body.append(TableRow(tr('Action Checklist:'), header=True))
 
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '

@@ -23,9 +23,7 @@ import logging
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import is_raster_layer
 
-
 LOGGER = logging.getLogger('InaSAFE')
-
 
 # Import the PyQt and QGIS libraries
 # noinspection PyPackageRequirements
@@ -492,7 +490,7 @@ class Plugin:
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.minimum_needs import MinimumNeeds
+        from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
 
         dialog = MinimumNeeds(self.iface.mainWindow())
         dialog.exec_()  # modal

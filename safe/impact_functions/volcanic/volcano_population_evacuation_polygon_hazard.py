@@ -331,16 +331,13 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 'Map shows the number of people affected in each of volcano '
                 'hazard polygons.')),
             TableRow(
-                [tr('Needs per week'), tr('Total'), blank_cell], header=True),
-            [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell], [
-                tr('Drinking Water [l]'),
-                format_int(total_needs['drinking_water']),
-                blank_cell],
-            [tr('Clean Water [l]'), format_int(total_needs['water']),
-                blank_cell],
-            [tr('Family Kits'), format_int(total_needs['family_kits']),
-                blank_cell],
-            [tr('Toilets'), format_int(total_needs['toilets']), blank_cell]])
+                [tr('Needs per week'), tr('Total'), blank_cell], header=True)])
+        for resource, amount in total_needs.items():
+            table_body.append(TableRow([
+                tr(resource),
+                format_int(amount),
+                blank_cell]))
+
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
