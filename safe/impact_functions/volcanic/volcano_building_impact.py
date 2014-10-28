@@ -241,8 +241,6 @@ class VolcanoBuildingImpact(FunctionProvider):
             building_per_category[category_name] = {}
             building_per_category[category_name]['total'] = 0
 
-        print attribute_names, 'alpha'
-
         for i in range(interpolate_size):
             hazard_value = attributes[i][hazard_zone_attribute]
             if not hazard_value:
@@ -373,9 +371,6 @@ class VolcanoBuildingImpact(FunctionProvider):
                           get_thousand_separator())
         legend_units = tr('(building)')
         legend_title = tr('Building count')
-
-        import pprint
-        pprint.pprint(building_per_category)
 
         # Create vector layer and return
         impact_layer = Vector(

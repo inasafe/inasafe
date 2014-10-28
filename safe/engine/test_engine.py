@@ -654,8 +654,7 @@ class Test_Engine(unittest.TestCase):
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = os.path.join(TESTDATA, 'donut.shp')
-        exposure_filename = os.path.join(
-            EXPDATA, 'bangunan.shp')
+        exposure_filename = os.path.join(EXPDATA, 'bangunan.shp')
 
         # Calculate impact using API
         hazard = read_layer(hazard_filename)
@@ -663,6 +662,7 @@ class Test_Engine(unittest.TestCase):
 
         plugin_name = 'Volcano Building Impact'
         impact_function = get_plugin(plugin_name)
+        impact_function.parameters['name attribute'] = 'GUNUNG'
         print 'Calculating'
         # Call calculation engine
         impact_layer = calculate_impact(
@@ -674,7 +674,7 @@ class Test_Engine(unittest.TestCase):
         keywords = impact.get_keywords()
 
         # Check for expected results:
-        for value in ['Merapi', 288]:
+        for value in ['Merapi', 3276, 5895, 1273, 29887, 40331]:
             if isinstance(value, int):
                 x = format_int(value)
             else:
