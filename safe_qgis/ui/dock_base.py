@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Sun Apr 27 22:51:17 2014
-#      by: PyQt4 UI code generator 4.10.4
+# Created: Mon Oct 27 09:40:27 2014
+#      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,16 +12,7 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+    _fromUtf8 = lambda s: s
 
 class Ui_DockBase(object):
     def setupUi(self, DockBase):
@@ -149,17 +140,17 @@ class Ui_DockBase(object):
         DockBase.setTabOrder(self.pbnPrint, self.pbnRunStop)
 
     def retranslateUi(self, DockBase):
-        DockBase.setWindowTitle(_translate("DockBase", "InaSAFE", None))
-        self.pbnShowQuestion.setText(_translate("DockBase", "Show question form", None))
-        self.grpQuestion.setTitle(_translate("DockBase", "Question: In the event of", None))
-        self.label_8.setText(_translate("DockBase", "&Might", None))
-        self.label_2.setText(_translate("DockBase", "Aggregate results by", None))
-        self.label_7.setText(_translate("DockBase", "How many", None))
-        self.toolFunctionOptions.setText(_translate("DockBase", "Options ...", None))
-        self.pbnHelp.setText(_translate("DockBase", "Help", None))
-        self.about_button.setText(_translate("DockBase", "About", None))
-        self.pbnPrint.setText(_translate("DockBase", "Print ...", None))
-        self.pbnRunStop.setText(_translate("DockBase", "Run", None))
+        DockBase.setWindowTitle(QtGui.QApplication.translate("DockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnShowQuestion.setText(QtGui.QApplication.translate("DockBase", "Show question form", None, QtGui.QApplication.UnicodeUTF8))
+        self.grpQuestion.setTitle(QtGui.QApplication.translate("DockBase", "Question: In the event of", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate results by", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolFunctionOptions.setText(QtGui.QApplication.translate("DockBase", "Options ...", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.about_button.setText(QtGui.QApplication.translate("DockBase", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnPrint.setText(QtGui.QApplication.translate("DockBase", "Print ...", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnRunStop.setText(QtGui.QApplication.translate("DockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
 
 from ..widgets.message_viewer import MessageViewer
 import resources_rc
