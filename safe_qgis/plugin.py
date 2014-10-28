@@ -88,6 +88,7 @@ class Plugin:
         self.action_batch_runner = None
         self.action_shake_converter = None
         self.action_minimum_needs = None
+        self.action_global_minimum_needs = None
         self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_function_browser = None
@@ -291,6 +292,23 @@ class Plugin:
 
         self.add_action(self.action_minimum_needs)
 
+        #----------------------------------------------
+        # Create action for global minimum needs dialog
+        #----------------------------------------------
+
+        self.action_global_minimum_needs = QAction(
+            QIcon(':/plugins/inasafe/show-global-minimum-needs.svg'),
+            self.tr('InaSAFE Global Minimum Needs Configuration'),
+            self.iface.mainWindow())
+        self.action_global_minimum_needs.setStatusTip(self.tr(
+            'Open InaSAFE global minimum needs configuration'))
+        self.action_global_minimum_needs.setWhatsThis(self.tr(
+            'Open InaSAFE global minimum needs configuration'))
+        self.action_global_minimum_needs.triggered.connect(
+            self.show_global_minimum_needs_configuration)
+
+        self.add_action(self.action_global_minimum_needs)
+
         #---------------------------------------
         # Create action for converter dialog
         #---------------------------------------
@@ -489,6 +507,15 @@ class Plugin:
         from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
 
         dialog = MinimumNeeds(self.iface.mainWindow())
+        dialog.exec_()  # modal
+
+    def show_global_minimum_needs_configuration(self):
+        """Show the minimum needs dialog."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.global_minimum_needs_configuraiton import (
+            GlobalMinimumNdeedsDialog)
+
+        dialog = GlobalMinimumNdeedsDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_impact_merge(self):

@@ -7,6 +7,7 @@
         <file alias="show-wizard.svg">img/icons/show-wizard.svg</file>
         <file alias="show-keyword-wizard.svg">img/icons/show-keyword-wizard.svg</file>
         <file alias="show-minimum-needs.svg">img/icons/show-minimum-needs.svg</file>
+        <file alias="show-global-minimum-needs.svg">img/icons/show-global-minimum-needs.svg</file>
         <file alias="show-batch-runner.svg">img/icons/show-batch-runner.svg</file>
         <file alias="show-osm-download.svg">img/icons/show-osm-download.svg</file>
         <file alias="save-as-scenario.svg">img/icons/save-as-scenario.svg</file>
