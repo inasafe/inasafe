@@ -273,7 +273,11 @@ class Analysis(object):
             message=error_message)
 
     def send_insufficient_memory_signal(self, message):
-        """Send an insufficient memory signal to the listeners."""
+        """Send an insufficient memory signal to the listeners.
+
+        :param message: An instance of our rich error message class.
+        :type message: Message
+        """
         dispatcher.send(
             signal=INSUFFICIENT_MEMORY_WARNING_SIGNAL,
             sender=self,
