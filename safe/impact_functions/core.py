@@ -155,7 +155,7 @@ def population_rounding_full(number):
     :param number: The amount of people as calculated.
     :type number: int, float
 
-    :return: result and rounding bracket.
+    :returns: result and rounding bracket.
     :rtype: (int, int)
     """
     if number < 1000:
@@ -174,7 +174,7 @@ def population_rounding(number):
     :param number: The amount of people as calculated.
     :type number: int, float
 
-    :return: result and rounding bracket.
+    :returns: result and rounding bracket.
     :rtype: int
     """
     return population_rounding_full(number)[0]
@@ -935,7 +935,7 @@ def get_doc_string(func):
 def is_function_enabled(func):
     """Check whether a function is enabled or not
     :param func:
-    :return: False is disabled param is True
+    :returns: False is disabled param is True
     """
     for requirement in requirements_collect(func):
         dict_req = parse_single_requirement(str(requirement))

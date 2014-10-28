@@ -1,4 +1,23 @@
-__author__ = 'user'
+# coding=utf-8
+"""Tests for core.py
+
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**Test Impact Function Metadata**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
+__revision__ = '$Format:%H$'
+__date__ = '24/10/14'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 
 import unittest
 import random
