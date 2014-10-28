@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>531</height>
+    <height>643</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,6 +32,19 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout_12">
+     <item row="0" column="2">
+      <widget class="QLabel" name="lblStep">
+       <property name="styleSheet">
+        <string notr="true">font: 14pt;</string>
+       </property>
+       <property name="text">
+        <string>[placeholder]</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QLabel" name="lblMainTitle">
        <property name="sizePolicy">
@@ -80,19 +93,6 @@
        </property>
        <property name="scaledContents">
         <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="lblStep">
-       <property name="styleSheet">
-        <string notr="true">font: 14pt;</string>
-       </property>
-       <property name="text">
-        <string>[placeholder]</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>15</number>
+      <number>20</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -3018,7 +3018,7 @@ Please step back and select another layer.</string>
       </layout>
      </widget>
      <widget class="QWidget" name="pgF21ParamsIF">
-      <layout class="QVBoxLayout" name="verticalLayout_19">
+      <layout class="QVBoxLayout" name="pgF21ParamsIF_layout">
        <item>
         <spacer name="verticalSpacer_32">
          <property name="orientation">
@@ -3036,9 +3036,9 @@ Please step back and select another layer.</string>
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_11">
+        <widget class="QLabel" name="lblSelectIFParameters">
          <property name="text">
-          <string>Please set impact functions parameters. (Please note the form below is a mockup)</string>
+          <string>Please set impact functions parameters.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -3051,121 +3051,12 @@ Please step back and select another layer.</string>
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <spacer name="horizontalSpacer_33">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Preferred</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QFormLayout" name="formLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="targetFieldLabel">
-             <property name="text">
-              <string>Target field</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="targetFieldLineEdit">
-             <property name="text">
-              <string>flooded</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="roadTypeFieldLabel">
-             <property name="text">
-              <string>Road Type Field</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="roadTypeFieldLineEdit">
-             <property name="text">
-              <string>TYPE</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="affectedFieldLabel">
-             <property name="text">
-              <string>Affected Field</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="affectedFieldLineEdit">
-             <property name="text">
-              <string>affected</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="affectedValueLabel">
-             <property name="text">
-              <string>Affected Value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLineEdit" name="affectedValueLineEdit">
-             <property name="text">
-              <string>1</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_34">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_35">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>284</height>
           </size>
          </property>
         </spacer>
