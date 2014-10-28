@@ -171,22 +171,22 @@ step_kw_classify = 5
 step_kw_aggregation = 6
 step_kw_source = 7
 step_kw_title = 8
-step_dc_function = 9
-step_dc_hazlayer_origin = 10
-step_dc_hazlayer_from_canvas = 11
-step_dc_hazlayer_from_browser = 12
-step_dc_explayer_origin = 13
-step_dc_explayer_from_canvas = 14
-step_dc_explayer_from_browser = 15
-step_dc_disjoint_layers = 16
-step_dc_agglayer_origin = 17
-step_dc_agglayer_from_canvas = 18
-step_dc_agglayer_from_browser = 19
-step_dc_agglayer_disjoint = 20
-step_dc_params = 21
-step_dc_summary = 22
-step_dc_progress = 23
-step_dc_report = 24
+step_fc_function = 9
+step_fc_hazlayer_origin = 10
+step_fc_hazlayer_from_canvas = 11
+step_fc_hazlayer_from_browser = 12
+step_fc_explayer_origin = 13
+step_fc_explayer_from_canvas = 14
+step_fc_explayer_from_browser = 15
+step_fc_disjoint_layers = 16
+step_fc_agglayer_origin = 17
+step_fc_agglayer_from_canvas = 18
+step_fc_agglayer_from_browser = 19
+step_fc_agglayer_disjoint = 20
+step_fc_params = 21
+step_fc_summary = 22
+step_fc_progress = 23
+step_fc_report = 24
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -306,8 +306,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_function_centric_mode(self):
         """Set the Wizard to the Function Centric mode"""
         self.lblSubtitle.setText(self.tr('Function-centric assessment...'))
-        new_step = step_dc_function
-        self.set_widgets_step_dc_function()
+        new_step = step_fc_function
+        self.set_widgets_step_fc_function()
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
 
@@ -1053,7 +1053,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.leTitle.setText(title)
 
     # ===========================
-    # STEP_DC_FUNCTION
+    # STEP_FC_FUNCTION
     # ===========================
 
     # noinspection PyPep8Naming
@@ -1126,7 +1126,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             return None
 
-    def set_widgets_step_dc_function(self):
+    def set_widgets_step_fc_function(self):
         """Set widgets on the Impact Functions tab."""
         self.treeFunctions.clear()
         self.lblDescribeFunction.setText('')
@@ -1154,7 +1154,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
 
     # ===========================
-    # STEP_DC_HAZLAYER_ORIGIN
+    # STEP_FC_HAZLAYER_ORIGIN
     # ===========================
 
     # noinspection PyPep8Naming
@@ -1175,12 +1175,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.pbnNext.setEnabled(True)
 
-    def set_widgets_step_dc_hazlayer_origin(self):
+    def set_widgets_step_fc_hazlayer_origin(self):
         """Set widgets on the Hazard Layer Origin Type tab."""
         pass
 
     # ===========================
-    # STEP_DC_HAZLAYER_FROM_CANVAS
+    # STEP_FC_HAZLAYER_FROM_CANVAS
     # ===========================
 
     def get_layer_description_from_canvas(self, layer_id):
@@ -1377,13 +1377,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 item.setForeground(QBrush(QColor(145, 0, 0)))
             list_widget.addItem(item)
 
-    def set_widgets_step_dc_hazlayer_from_canvas(self):
+    def set_widgets_step_fc_hazlayer_from_canvas(self):
         """Set widgets on the Hazard Layer From TOC tab"""
         self.list_compatible_layers_from_canvas('hazard', self.lstHazCanvasLayers)
         self.lblDescribeHazCanvasLayer.clear()
 
     # ===========================
-    # STEP_DC_HAZLAYER_FROM_BROWSER
+    # STEP_FC_HAZLAYER_FROM_BROWSER
     # ===========================
 
     def get_layer_description_from_browser(self, browser):
@@ -1473,12 +1473,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeBrowserHazLayer.setText(desc)
         self.pbnNext.setEnabled(bool(len(desc) > 32))
 
-    def set_widgets_step_dc_hazlayer_from_browser(self):
+    def set_widgets_step_fc_hazlayer_from_browser(self):
         """Set widgets on the Hazard Layer From Browser tab"""
         self.tvBrowserHazard_selection_changed()
 
     # ===========================
-    # STEP_DC_EXPLAYER_ORIGIN
+    # STEP_FC_EXPLAYER_ORIGIN
     # ===========================
 
     # noinspection PyPep8Naming
@@ -1499,12 +1499,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.pbnNext.setEnabled(True)
 
-    def set_widgets_step_dc_explayer_origin(self):
+    def set_widgets_step_fc_explayer_origin(self):
         """Set widgets on the Exposure Layer Origin Type tab"""
         pass
 
     # ===========================
-    # STEP_DC_EXPLAYER_FROM_CANVAS
+    # STEP_FC_EXPLAYER_FROM_CANVAS
     # ===========================
 
     # prevents actions being handled twice
@@ -1534,13 +1534,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         return layer_id
 
-    def set_widgets_step_dc_explayer_from_canvas(self):
+    def set_widgets_step_fc_explayer_from_canvas(self):
         """Set widgets on the Exposure Layer From Canvas tab"""
         self.list_compatible_layers_from_canvas('exposure', self.lstExpCanvasLayers)
         self.lblDescribeExpCanvasLayer.clear()
 
     # ===========================
-    # STEP_DC_EXPLAYER_FROM_BROWSER
+    # STEP_FC_EXPLAYER_FROM_BROWSER
     # ===========================
 
     def tvBrowserExposure_selection_changed(self):
@@ -1549,20 +1549,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeBrowserExpLayer.setText(desc)
         self.pbnNext.setEnabled(bool(len(desc) > 32))
 
-    def set_widgets_step_dc_explayer_from_browser(self):
+    def set_widgets_step_fc_explayer_from_browser(self):
         """Set widgets on the Exposure Layer From Browser tab"""
         self.tvBrowserExposure_selection_changed()
 
     # ===========================
-    # STEP_DC_DISJOINT_LAYERS
+    # STEP_FC_DISJOINT_LAYERS
     # ===========================
 
-    def set_widgets_step_dc_disjoint_layers(self):
+    def set_widgets_step_fc_disjoint_layers(self):
         """Set widgets on the Disjoint Layers tab"""
         pass
 
     # ===========================
-    # STEP_DC_AGGLAYER_ORIGIN
+    # STEP_FC_AGGLAYER_ORIGIN
     # ===========================
 
     # noinspection PyPep8Naming
@@ -1592,12 +1592,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.pbnNext.setEnabled(True)
 
-    def set_widgets_step_dc_agglayer_origin(self):
+    def set_widgets_step_fc_agglayer_origin(self):
         """Set widgets on the Aggregation Layer Origin Type tab"""
         pass
 
     # ===========================
-    # STEP_DC_AGGLAYER_FROM_CANVAS
+    # STEP_FC_AGGLAYER_FROM_CANVAS
     # ===========================
 
     # prevents actions being handled twice
@@ -1627,13 +1627,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         return layer_id
 
-    def set_widgets_step_dc_agglayer_from_canvas(self):
+    def set_widgets_step_fc_agglayer_from_canvas(self):
         """Set widgets on the Aggregation Layer from Canvas tab"""
         self.list_compatible_layers_from_canvas('aggregation', self.lstAggCanvasLayers)
         self.lblDescribeAggCanvasLayer.clear()
 
     # ===========================
-    # STEP_DC_AGGLAYER_FROM_BROWSER
+    # STEP_FC_AGGLAYER_FROM_BROWSER
     # ===========================
 
     def tvBrowserAggregation_selection_changed(self):
@@ -1642,47 +1642,47 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeBrowserAggLayer.setText(desc)
         self.pbnNext.setEnabled(bool(len(desc) > 32))
 
-    def set_widgets_step_dc_agglayer_from_browser(self):
+    def set_widgets_step_fc_agglayer_from_browser(self):
         """Set widgets on the Aggregation Layer From Browser tab"""
         self.tvBrowserAggregation_selection_changed()
 
     # ===========================
-    # STEP_DC_AGGLAYER_DISJOINT
+    # STEP_FC_AGGLAYER_DISJOINT
     # ===========================
 
-    def set_widgets_step_dc_agglayer_disjoint(self):
+    def set_widgets_step_fc_agglayer_disjoint(self):
         """Set widgets on the Aggregation Layer Disjoint tab"""
         pass
 
     # ===========================
-    # STEP_DC_PARAMS
+    # STEP_FC_PARAMS
     # ===========================
 
-    def set_widgets_step_dc_params(self):
+    def set_widgets_step_fc_params(self):
         """Set widgets on the Params tab"""
         pass
 
     # ===========================
-    # STEP_DC_SUMMARY
+    # STEP_FC_SUMMARY
     # ===========================
 
-    def set_widgets_step_dc_summary(self):
+    def set_widgets_step_fc_summary(self):
         """Set widgets on the Summary tab"""
         pass
 
     # ===========================
-    # STEP_DC_PROGRESS
+    # STEP_FC_PROGRESS
     # ===========================
 
-    def set_widgets_step_dc_progress(self):
+    def set_widgets_step_fc_progress(self):
         """Set widgets on the Progress tab"""
         pass
 
     # ===========================
-    # STEP_DC_REPORT
+    # STEP_FC_REPORT
     # ===========================
 
-    def set_widgets_step_dc_report(self):
+    def set_widgets_step_fc_report(self):
         """Set widgets on the Report tab"""
         pass
 
@@ -1699,7 +1699,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.stackedWidget.setCurrentIndex(step - 1)
         self.lblStep.setText(self.tr('step %d') % step)
         self.pbnBack.setEnabled(True)
-        if step in [step_kw_category, step_dc_function] and self.parent_step is None:
+        if step in [step_kw_category, step_fc_function] and self.parent_step is None:
             self.pbnBack.setEnabled(False)
 
     # prevents actions being handled twice
@@ -1746,38 +1746,38 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.set_widgets_step_kw_source()
         elif new_step == step_kw_title:
             self.set_widgets_step_kw_title()
-        elif new_step == step_dc_function:
-            self.set_widgets_step_dc_function()
-        elif new_step == step_dc_hazlayer_origin:
-            self.set_widgets_step_dc_hazlayer_origin()
-        elif new_step == step_dc_hazlayer_from_canvas:
-            self.set_widgets_step_dc_hazlayer_from_canvas()
-        elif new_step == step_dc_hazlayer_from_browser:
-            self.set_widgets_step_dc_hazlayer_from_browser()
-        elif new_step == step_dc_explayer_origin:
-            self.set_widgets_step_dc_explayer_origin()
-        elif new_step == step_dc_explayer_from_canvas:
-            self.set_widgets_step_dc_explayer_from_canvas()
-        elif new_step == step_dc_explayer_from_browser:
-            self.set_widgets_step_dc_explayer_from_browser()
-        elif new_step == step_dc_disjoint_layers:
-            self.set_widgets_step_dc_disjoint_layers()
-        elif new_step == step_dc_agglayer_origin:
-            self.set_widgets_step_dc_agglayer_origin()
-        elif new_step == step_dc_agglayer_from_canvas:
-            self.set_widgets_step_dc_agglayer_from_canvas()
-        elif new_step == step_dc_agglayer_from_browser:
-            self.set_widgets_step_dc_agglayer_from_browser()
-        elif new_step == step_dc_agglayer_disjoint:
-            self.set_widgets_step_dc_agglayer_disjoint()
-        elif new_step == step_dc_params:
-            self.set_widgets_step_dc_params()
-        elif new_step == step_dc_summary:
-            self.set_widgets_step_dc_summary()
-        elif new_step == step_dc_progress:
-            self.set_widgets_step_dc_progress()
-        elif new_step == step_dc_report:
-            self.set_widgets_step_dc_report()
+        elif new_step == step_fc_function:
+            self.set_widgets_step_fc_function()
+        elif new_step == step_fc_hazlayer_origin:
+            self.set_widgets_step_fc_hazlayer_origin()
+        elif new_step == step_fc_hazlayer_from_canvas:
+            self.set_widgets_step_fc_hazlayer_from_canvas()
+        elif new_step == step_fc_hazlayer_from_browser:
+            self.set_widgets_step_fc_hazlayer_from_browser()
+        elif new_step == step_fc_explayer_origin:
+            self.set_widgets_step_fc_explayer_origin()
+        elif new_step == step_fc_explayer_from_canvas:
+            self.set_widgets_step_fc_explayer_from_canvas()
+        elif new_step == step_fc_explayer_from_browser:
+            self.set_widgets_step_fc_explayer_from_browser()
+        elif new_step == step_fc_disjoint_layers:
+            self.set_widgets_step_fc_disjoint_layers()
+        elif new_step == step_fc_agglayer_origin:
+            self.set_widgets_step_fc_agglayer_origin()
+        elif new_step == step_fc_agglayer_from_canvas:
+            self.set_widgets_step_fc_agglayer_from_canvas()
+        elif new_step == step_fc_agglayer_from_browser:
+            self.set_widgets_step_fc_agglayer_from_browser()
+        elif new_step == step_fc_agglayer_disjoint:
+            self.set_widgets_step_fc_agglayer_disjoint()
+        elif new_step == step_fc_params:
+            self.set_widgets_step_fc_params()
+        elif new_step == step_fc_summary:
+            self.set_widgets_step_fc_summary()
+        elif new_step == step_fc_progress:
+            self.set_widgets_step_fc_progress()
+        elif new_step == step_fc_report:
+            self.set_widgets_step_fc_report()
         elif new_step is None:
             # Wizard complete
             self.accept()
@@ -1787,9 +1787,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             pass
 
         # Set Next button label
-        if new_step in [step_kw_title, step_dc_report] and self.parent_step is None:
+        if new_step in [step_kw_title, step_fc_report] and self.parent_step is None:
             self.pbnNext.setText(self.tr('Finish'))
-        elif new_step == step_dc_progress:
+        elif new_step == step_fc_progress:
             self.pbnNext.setText(self.tr('Run'))
         else:
             self.pbnNext.setText(self.tr('Next'))
@@ -1800,10 +1800,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         # TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
         if new_step == step_kw_category and self.parent_step:
-            if self.parent_step in [step_dc_hazlayer_from_canvas, step_dc_hazlayer_from_browser]:
+            if self.parent_step in [step_fc_hazlayer_from_canvas, step_fc_hazlayer_from_browser]:
                 lblTxt = 'You have selected a layer that has no keywords assigned. In the next steps you can assign '\
                          'keywords to that layer. First you need to confirm the layer represents a hazard.'
-            elif self.parent_step in [step_dc_explayer_from_canvas, step_dc_explayer_from_browser]:
+            elif self.parent_step in [step_fc_explayer_from_canvas, step_fc_explayer_from_browser]:
                 lblTxt = 'You have selected a layer that has no keywords assigned. In the next steps you can assign '\
                          'keywords to that layer. First you need to confirm the layer represents an exposure.'
             else:
@@ -1866,39 +1866,39 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return True
         if step == step_kw_title:
             return bool(self.leTitle.text())
-        if step == step_dc_function:
+        if step == step_fc_function:
             return bool(self.selected_function())
-        if step == step_dc_hazlayer_origin:
+        if step == step_fc_hazlayer_origin:
             return bool(self.rbHazLayerFromCanvas.isChecked() or self.rbHazLayerFromBrowser.isChecked())
-        if step == step_dc_hazlayer_from_canvas:
+        if step == step_fc_hazlayer_from_canvas:
             return bool(self.selected_canvas_hazlayer())
-        if step == step_dc_hazlayer_from_browser:
+        if step == step_fc_hazlayer_from_browser:
             return bool(len(self.lblDescribeBrowserHazLayer.text())>32)
-        if step == step_dc_explayer_origin:
+        if step == step_fc_explayer_origin:
             return bool(self.rbExpLayerFromCanvas.isChecked() or self.rbExpLayerFromBrowser.isChecked())
-        if step == step_dc_explayer_from_canvas:
+        if step == step_fc_explayer_from_canvas:
             return bool(self.selected_canvas_explayer())
-        if step == step_dc_explayer_from_browser:
+        if step == step_fc_explayer_from_browser:
             return bool(len(self.lblDescribeBrowserExpLayer.text())>32)
-        if step == step_dc_disjoint_layers:
+        if step == step_fc_disjoint_layers:
             # Never go further if layers disjoint
             return False
-        if step == step_dc_agglayer_origin:
+        if step == step_fc_agglayer_origin:
             return bool(self.rbAggLayerFromCanvas.isChecked() or self.rbAggLayerFromBrowser.isChecked() or self.rbAggLayerNoAggregation.isChecked())
-        if step == step_dc_agglayer_from_canvas:
+        if step == step_fc_agglayer_from_canvas:
             return bool(self.selected_canvas_agglayer())
-        if step == step_dc_agglayer_from_browser:
+        if step == step_fc_agglayer_from_browser:
             return bool(len(self.lblDescribeBrowserAggLayer.text())>32)
-        if step == step_dc_agglayer_disjoint:
+        if step == step_fc_agglayer_disjoint:
             # Never go further if layers disjoint
             return False
-        if step == step_dc_params:
+        if step == step_fc_params:
             pass   # TODO
-        if step == step_dc_summary:
+        if step == step_fc_summary:
             pass   # TODO
-        if step == step_dc_progress:
+        if step == step_fc_progress:
             pass   # TODO
-        if step == step_dc_report:
+        if step == step_fc_report:
             pass   # TODO
         # TODO: TEMPORARY
         return True
@@ -1960,14 +1960,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # Wizard complete
                 new_step = None
 
-        elif current_step == step_dc_function:
-            new_step = step_dc_hazlayer_origin
-        elif current_step == step_dc_hazlayer_origin:
+        elif current_step == step_fc_function:
+            new_step = step_fc_hazlayer_origin
+        elif current_step == step_fc_hazlayer_origin:
             if self.rbHazLayerFromCanvas.isChecked():
-                new_step = step_dc_hazlayer_from_canvas
+                new_step = step_fc_hazlayer_from_canvas
             else:
-                new_step = step_dc_hazlayer_from_browser
-        elif current_step in [step_dc_hazlayer_from_canvas, step_dc_hazlayer_from_browser]:
+                new_step = step_fc_hazlayer_from_browser
+        elif current_step in [step_fc_hazlayer_from_canvas, step_fc_hazlayer_from_browser]:
             if self.is_selected_layer_keywordles:
                 # insert keyword creation thread here
                 self.parent_step = current_step
@@ -1975,13 +1975,13 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_kw_category
                 # TODO COME BACK TO THIS POINT OR ONE BEFORE?
             else:
-                new_step = step_dc_explayer_origin
-        elif current_step == step_dc_explayer_origin:
+                new_step = step_fc_explayer_origin
+        elif current_step == step_fc_explayer_origin:
             if self.rbExpLayerFromCanvas.isChecked():
-                new_step = step_dc_explayer_from_canvas
+                new_step = step_fc_explayer_from_canvas
             else:
-                new_step = step_dc_explayer_from_browser
-        elif current_step in [step_dc_explayer_from_canvas, step_dc_explayer_from_browser]:
+                new_step = step_fc_explayer_from_browser
+        elif current_step in [step_fc_explayer_from_canvas, step_fc_explayer_from_browser]:
             if self.is_selected_layer_keywordles:
                 # insert keyword creation thread here
                 self.parent_step = current_step
@@ -1993,20 +1993,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # TODO test overlapping!!!
                 _layers_disjoint = False
                 if _layers_disjoint:
-                    new_step = step_dc_disjoint_layers
+                    new_step = step_fc_disjoint_layers
                 else:
-                    new_step = step_dc_agglayer_origin
-        elif current_step == step_dc_disjoint_layers:
-            new_step = step_dc_agglayer_origin
-        elif current_step == step_dc_agglayer_origin:
+                    new_step = step_fc_agglayer_origin
+        elif current_step == step_fc_disjoint_layers:
+            new_step = step_fc_agglayer_origin
+        elif current_step == step_fc_agglayer_origin:
             if self.rbAggLayerFromCanvas.isChecked():
-                new_step = step_dc_agglayer_from_canvas
+                new_step = step_fc_agglayer_from_canvas
             elif self.rbAggLayerFromBrowser.isChecked():
-                new_step = step_dc_agglayer_from_browser
+                new_step = step_fc_agglayer_from_browser
             else:
                 # no aggregation (so also no disjoint test)
-                new_step = step_dc_params
-        elif current_step in [step_dc_agglayer_from_canvas, step_dc_agglayer_from_browser]:
+                new_step = step_fc_params
+        elif current_step in [step_fc_agglayer_from_canvas, step_fc_agglayer_from_browser]:
             if self.is_selected_layer_keywordles:
                 # insert keyword creation thread here
                 self.parent_step = current_step
@@ -2018,14 +2018,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # TODO test overlapping!!!
                 _agg_layers_disjoint = False
                 if _agg_layers_disjoint:
-                    new_step = step_dc_agglayer_disjoint
+                    new_step = step_fc_agglayer_disjoint
                 else:
-                    new_step = step_dc_params
-        elif current_step == step_dc_agglayer_disjoint:
-            new_step = step_dc_params
-        elif current_step in [step_dc_params, step_dc_summary, step_dc_progress]:
+                    new_step = step_fc_params
+        elif current_step == step_fc_agglayer_disjoint:
+            new_step = step_fc_params
+        elif current_step in [step_fc_params, step_fc_summary, step_fc_progress]:
             new_step = current_step + 1
-        elif current_step == step_dc_report:
+        elif current_step == step_fc_report:
             new_step = None # Wizard complete
 
         elif current_step < self.stackedWidget.count():
@@ -2080,50 +2080,50 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 new_step = step_kw_category
 
-        elif current_step == step_dc_function:
+        elif current_step == step_fc_function:
             #TODO block the Back button
-            new_step = step_dc_function
-        elif current_step == step_dc_hazlayer_from_browser:
-            new_step = step_dc_hazlayer_origin
-        elif current_step == step_dc_explayer_origin:
+            new_step = step_fc_function
+        elif current_step == step_fc_hazlayer_from_browser:
+            new_step = step_fc_hazlayer_origin
+        elif current_step == step_fc_explayer_origin:
             if self.rbHazLayerFromCanvas.isChecked():
-                new_step = step_dc_hazlayer_from_canvas
+                new_step = step_fc_hazlayer_from_canvas
             else:
-                new_step = step_dc_hazlayer_from_browser
-        elif current_step == step_dc_explayer_from_browser:
-            new_step = step_dc_explayer_origin
-        elif current_step == step_dc_disjoint_layers:
+                new_step = step_fc_hazlayer_from_browser
+        elif current_step == step_fc_explayer_from_browser:
+            new_step = step_fc_explayer_origin
+        elif current_step == step_fc_disjoint_layers:
             if self.rbExpLayerFromCanvas.isChecked():
-                new_step = step_dc_explayer_from_canvas
+                new_step = step_fc_explayer_from_canvas
             else:
-                new_step = step_dc_explayer_from_browser
-        elif current_step == step_dc_agglayer_origin:
+                new_step = step_fc_explayer_from_browser
+        elif current_step == step_fc_agglayer_origin:
             # TODO test disjoint layers!!
             _layers_disjoint = False
             if _layers_disjoint:
-                new_step = step_dc_disjoint_layers
+                new_step = step_fc_disjoint_layers
             elif self.rbExpLayerFromCanvas.isChecked():
-                new_step = step_dc_explayer_from_canvas
+                new_step = step_fc_explayer_from_canvas
             else:
-                new_step = step_dc_explayer_from_browser
-        elif current_step == step_dc_agglayer_from_browser:
-            new_step = step_dc_agglayer_origin
-        elif current_step == step_dc_agglayer_disjoint:
+                new_step = step_fc_explayer_from_browser
+        elif current_step == step_fc_agglayer_from_browser:
+            new_step = step_fc_agglayer_origin
+        elif current_step == step_fc_agglayer_disjoint:
             if self.rbAggLayerFromCanvas.isChecked():
-                new_step = step_dc_agglayer_from_canvas
+                new_step = step_fc_agglayer_from_canvas
             else:
-                new_step = step_dc_agglayer_from_browser
-        elif current_step == step_dc_params:
+                new_step = step_fc_agglayer_from_browser
+        elif current_step == step_fc_params:
             # TODO test disjoint aggr layers!!
             _agg_layers_disjoint = False
             if _agg_layers_disjoint:
-                new_step = step_dc_agglayer_disjoint
+                new_step = step_fc_agglayer_disjoint
             elif self.rbAggLayerFromCanvas.isChecked():
-                new_step = step_dc_agglayer_from_canvas
+                new_step = step_fc_agglayer_from_canvas
             elif self.rbAggLayerFromBrowser.isChecked():
-                new_step = step_dc_agglayer_from_browser
+                new_step = step_fc_agglayer_from_browser
             else:
-                new_step = step_dc_agglayer_origin
+                new_step = step_fc_agglayer_origin
         else:
             new_step = current_step - 1
         return new_step
