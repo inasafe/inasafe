@@ -54,6 +54,13 @@ from safe_qgis.exceptions import (
     UnsupportedProviderError)
 from safe_qgis.utilities.help import show_context_help
 
+#TODO: Temporary:
+from safe_qgis.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
+from safe_qgis.safe_interface import (
+    get_safe_impact_function)
+
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -1660,6 +1667,34 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_widgets_step_fc_params(self):
         """Set widgets on the Params tab"""
+
+
+
+        # TODO Put the params to metadata! Now we need to import the IF class.
+        imfunc_id = self.selected_function()['id']
+        imfunctions = get_safe_impact_function(imfunc_id)
+        if not imfunctions:
+            return
+        imfunc = imfunctions[0][imfunc_id]
+        params = None
+        if hasattr(imfunc, 'parameters'):
+            params = imfunc.parameters
+
+        self.lblSelectIFParameters.setText('Please set impact functions parameters.<br/>Parameters for impact function "%s" that can be modified are:' % imfunc_id)
+
+        dialog = FunctionOptionsDialog(self)
+        dialog.set_dialog_info(imfunc_id)
+        dialog.build_form(params)
+
+        twParams = dialog.tabWidget
+
+        self.pgF21ParamsIF_layout.addWidget(twParams)
+
+
+
+        #if dialog.exec_():
+        #    print dialog.result()
+
         pass
 
     # ===========================
