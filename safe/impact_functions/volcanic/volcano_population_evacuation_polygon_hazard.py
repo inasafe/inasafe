@@ -132,8 +132,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Vector layer contains population affected and the minimum needs '
-        'based on the population affected.')
+        'Vector layer contains people affected and the minimum needs '
+        'based on the number of people affected.')
 
     parameters = OrderedDict([
         ('distance [km]', [3, 5, 10]),
@@ -328,8 +328,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         table_body.extend([
             TableRow(tr(
-                'Map shows population affected in each of volcano hazard '
-                'polygons.')),
+                'Map shows the number of people affected in each of volcano '
+                'hazard polygons.')),
             TableRow(
                 [tr('Needs per week'), tr('Total'), blank_cell], header=True),
             [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell], [
@@ -403,7 +403,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             data=new_data_table,
             projection=hazard_layer.get_projection(),
             geometry=hazard_layer.get_geometry(as_geometry_objects=True),
-            name=tr('Population affected by volcanic hazard zone'),
+            name=tr('People affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
                       'target_field': self.target_field,

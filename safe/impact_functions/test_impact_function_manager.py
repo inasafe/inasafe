@@ -53,7 +53,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
         impact_function_manager = ImpactFunctionManager()
-        expected_result = 12
+        expected_result = 13
         result = len(impact_function_manager.impact_functions)
         message = (
             'I expect %s but I got %s, please check the number of current '

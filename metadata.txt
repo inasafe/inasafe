@@ -13,7 +13,7 @@ name=InaSAFE
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
-version=2.1.0
+version=2.1.1
 # alpha, beta, rc or final
 status=final
 
@@ -24,16 +24,17 @@ status=final
 
 # Uncomment the following line and add your changelog entries:
 changelog=
-        2.1.0
-        Feature Release:
-        * New wizard tool for defining keywords
-        * Updated user interface for keywords editor
-        * New optimised implementation for raster flood on roads
-        * Added preview and postview tool for analysis extent
-        * Added data driven age postprocessing support
-        * Revision of realtime implementation
-        * Improvements to coding standards support
-        * Many bugfixes and small enhancements
+        2.1.1
+        Bug fixes:
+        * Change AIFDR url to www.aifdr.org in About Dialog
+        * Change default threshold of tsunami
+        * Change minimum needs value for water to 67
+        * Change 'density' term to 'count' for population
+        * Enable by default **print as raster** in the map composer template
+        * Fix InaSAFE renames layer's name back
+        * Fix problem uncaught inundated road in flood on road analysis
+        * Fix problem with multi-line in flood on road analysis
+        * Improve performance of flood on roads analysis
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
