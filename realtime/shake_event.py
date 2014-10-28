@@ -909,7 +909,7 @@ class ShakeEvent(QObject):
         header = TableRow([
             '',
             self.tr('Name'),
-            self.tr('Affected (x 1000)'),
+            self.tr('People Affected (x 1000)'),
             self.tr('Intensity')],
             header=True)
         for row_data in table_data:
@@ -1567,20 +1567,20 @@ class ShakeEvent(QObject):
         fatalities_range = '%i - %i' % (lower_limit, upper_limit)
 
         city_table_name = self.tr('Places Affected')
-        legend_name = self.tr('Population density')
+        legend_name = self.tr('Population count per grid cell')
         limitations = self.tr(
             'This impact estimation is automatically generated and only takes'
             ' into account the population and cities affected by different '
             'levels of ground shaking. The estimate is based on ground '
-            'shaking data from BMKG, population density data from asiapop'
-            '.org, place information from geonames.org and software developed'
-            ' by BNPB. Limitations in the estimates of ground shaking, '
-            'population  data and place names datasets may result in '
-            'significant misrepresentation of the on-the-ground situation in '
-            'the figures shown here. Consequently decisions should not be '
-            'made solely on the information presented here and should always '
-            'be verified by ground truthing and other reliable information '
-            'sources. The fatality calculation assumes that '
+            'shaking data from BMKG, population count data from '
+            'worldpop.org.uk, place information from geonames.org and '
+            'software developed by BNPB. Limitations in the estimates of '
+            'ground shaking, population and place names datasets may '
+            'result in significant misrepresentation of the on-the-ground '
+            'situation in the figures shown here. Consequently decisions '
+            'should not be made solely on the information presented here and '
+            'should always be verified by ground truthing and other reliable '
+            'information sources. The fatality calculation assumes that '
             'no fatalities occur for shake levels below MMI 4. Fatality '
             'counts of less than 50 are disregarded.')
         software_tag = self.tr(

@@ -52,6 +52,13 @@ rm -rf ${WORKDIR}/${DIR}/*.bat
 pushd .
 cd ${WORKDIR}
 find . -name test -exec /bin/rm -rf {} \;
+# Compress all images shipped
+for FILE in `find . -type f -name "*.png"`
+do 
+    echo "Compressing $FILE"
+    convert -dither FloydSteinberg -colors 128 $FILE $FILE
+done
+
 # The \* tells zip to ignore recursively
 rm ${OUT}
 zip -r ${OUT} ${DIR} --exclude \*.pyc \

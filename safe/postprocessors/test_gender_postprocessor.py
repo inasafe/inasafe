@@ -48,7 +48,7 @@ class TestGenderPostprocessor(unittest.TestCase):
     def test_process(self):
         POSTPROCESSOR.process()
         results = POSTPROCESSOR.results()
-        assert results['Female population (affected)']['value'] == '74,694'
+        assert results['Female count (affected)']['value'] == '74,694'
         assert results['Weekly hygiene packs']['value'] == '59,284'
         key = 'Additional weekly rice kg for pregnant and lactating women'
         assert results[key]['value'] == '6,960'

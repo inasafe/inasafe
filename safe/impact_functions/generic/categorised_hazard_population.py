@@ -205,7 +205,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         # Extend impact report for on-screen display
         table_body.extend([
             TableRow(tr('Notes'), header=True),
-            tr('Map shows population density in high or medium hazard area'),
+            tr('Map shows population count in high or medium hazard area'),
             tr('Total population: %s') % format_int(total),
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
@@ -235,7 +235,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
         style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
 
-        style_info['legend_title'] = tr('Population Density')
+        style_info['legend_title'] = tr('Population Count')
 
         # Create raster object and return
         raster_layer = Raster(

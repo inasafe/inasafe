@@ -16,7 +16,6 @@ from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.metadata import (
     hazard_flood,
-    hazard_tsunami,
     unit_feet_depth,
     unit_metres_depth,
     layer_raster_numeric,
@@ -47,7 +46,7 @@ class FloodEvacuationFunction(FunctionProvider):
     :author AIFDR
     :rating 4
     :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
+                    subcategory=='flood' and \
                     layertype=='raster' and \
                     unit=='m'
 
@@ -83,15 +82,12 @@ class FloodEvacuationFunction(FunctionProvider):
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of (flood or tsunami)inundation '
-                    'in raster format on population.'),
+                    'To assess the impacts of flood inundation in raster '
+                    'format on population.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
-                            hazard_flood,
-                            hazard_tsunami
-                        ],
+                        'subcategory': [hazard_flood],
                         'units': [
                             unit_feet_depth,
                             unit_metres_depth
@@ -113,7 +109,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
     # Function documentation
     synopsis = tr(
-        'To assess the impacts of (flood or tsunami) inundation in raster '
+        'To assess the impacts of flood inundation in raster '
         'format on population.')
     actions = tr(
         'Provide details about how many people would likely need to be '
@@ -138,8 +134,8 @@ class FloodEvacuationFunction(FunctionProvider):
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Raster layer contains population affected and the minimum needs '
-        'based on the population affected.')
+        'Raster layer contains people affected and the minimum needs '
+        'based on the people affected.')
     limitation = tr(
         'The default threshold of 1 meter was selected based on consensus, '
         'not hard evidence.')
@@ -241,7 +237,7 @@ class FloodEvacuationFunction(FunctionProvider):
                           '*' if evacuated >= 1000 else ''))],
                      header=True),
             TableRow(tr('* Number is rounded to the nearest 1000')),
-            TableRow(tr('Map shows population density needing evacuation')),
+            TableRow(tr('Map shows the numbers of people needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
@@ -335,7 +331,7 @@ class FloodEvacuationFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Population Count')
 
         # Create raster object and return
         raster = Raster(

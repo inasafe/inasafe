@@ -1410,7 +1410,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except InvalidProjectionError, e:
             self.analysis_error(e, self.tr(
                 'An error occurred because you are using a layer containing '
-                'density data (e.g. population density) which will not '
+                'count data (e.g. population count) which will not '
                 'scale accurately if we re-project it from its native '
                 'coordinate reference system to WGS84/GeoGraphic.'))
             return
