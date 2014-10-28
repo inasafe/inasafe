@@ -209,3 +209,13 @@ class EmptyDirectoryError(Exception):
 class DownloadError(Exception):
     """Raised when downloading file is error."""
     pass
+
+
+class NoValidLayerError(Exception):
+    """Raised when there no valid layer in inasafe."""
+    pass
+
+
+class InsufficientMemoryWarning(Exception):
+    """Raised when there is a possible insufficient memory."""
+    pass

@@ -224,7 +224,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_subcategories_for_layer(self):
         """Test for subcategories_for_layer API."""
         impact_function = EarthquakeBuildingImpactFunction()
-        result = impact_function.Metadata. subcategories_for_layer(
+        result = impact_function.Metadata.subcategories_for_layer(
             category='hazard', layer_type='raster', data_type='numeric')
         expected_result = [hazard_earthquake]
         message = ('I expect %s but I got %s.' % (expected_result, result))
