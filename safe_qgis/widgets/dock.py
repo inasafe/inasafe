@@ -1306,7 +1306,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Add layers to QGIS
         layers_to_add = []
         if self.show_intermediate_layers:
-            layers_to_add.append(self.aggregator.layer)
+            layers_to_add.append(self.analysis.aggregator.layer)
         layers_to_add.append(qgis_impact_layer)
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
         # make sure it is active in the legend - needed since QGIS 2.4
