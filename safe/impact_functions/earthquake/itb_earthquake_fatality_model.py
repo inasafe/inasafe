@@ -371,7 +371,8 @@ class ITBFatalityFunction(FunctionProvider):
             TableRow(tr('Map shows density estimate of displaced population')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
             [tr('Rice [kg]'), format_int(total_needs['rice'])],
-            [tr('Drinking Water [l]'), format_int(total_needs['drinking_water'])],
+            [tr('Drinking Water [l]'), format_int(
+                total_needs['drinking_water'])],
             [tr('Clean Water [l]'), format_int(total_needs['water'])],
             [tr('Family Kits'), format_int(total_needs['family_kits'])],
             TableRow(tr('Action Checklist:'), header=True)]

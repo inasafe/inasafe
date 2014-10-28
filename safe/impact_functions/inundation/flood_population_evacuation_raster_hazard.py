@@ -226,7 +226,8 @@ class FloodEvacuationFunction(FunctionProvider):
         # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
 
-        total_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
+        total_needs = evacuated_population_weekly_needs(
+            evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         # noinspection PyListCreation

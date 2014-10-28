@@ -178,7 +178,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         hazard = get_hazard_layer(layers)  # Depth
         exposure = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(hazard.get_name(),exposure .get_name(), self)
+        question = get_question(hazard.get_name(), exposure .get_name(), self)
 
         # Determine attribute name for hazard levels
         if hazard.is_raster:
