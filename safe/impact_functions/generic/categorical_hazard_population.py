@@ -10,7 +10,6 @@ from safe.impact_functions.core import (
     get_function_title,
     default_minimum_needs,
     evacuated_population_weekly_needs)
-from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
     hazard_all,
     layer_raster_numeric,
@@ -24,6 +23,9 @@ from safe.common.utilities import (
     ugettext as tr,
     format_int,
     round_thousand,
+    humanize_class,
+    create_classes,
+    create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
@@ -68,7 +70,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                 'id': 'CategoricalHazardPopulationImpactFunction',
                 'name': tr('Categorised Hazard Population Impact Function'),
                 'impact': tr('Be impacted by each category'),
-                'author': 'ESSC',
+                'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of categorized hazards in raster '
@@ -174,6 +176,15 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             L = numpy.where(0, P, 0)
         else:
             L = numpy.where(C == low_t, P, 0)
+        if high_t == 0:
+            T = numpy.where((C == low_t) + (C == medium_t), P, 0)
+        elif medium_t == 0:
+            T = numpy.where((C == low_t) + (C == high_t), P, 0)
+        elif low_t == 0:
+            T = numpy.where((C == medium_t) + (C == high_t), P, 0)
+        else:
+            T = numpy.where((C == low_t) + (C == medium_t) + (C == high_t),
+                            P, 0)
         Z = numpy.where(C == 0, P, 0)
 
         # Count totals
@@ -182,7 +193,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         medium = int(numpy.sum(M))
         low = int(numpy.sum(L))
         zero = int(numpy.sum(Z))
-        total_impact = high + medium + low
+        total_impact = int(numpy.sum(T))
 
         # Don't show digits less than a 1000
         total = round_thousand(total)
@@ -201,7 +212,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('Total Population affected '),
-                                '%s' % format_int(total_impact)],
+                                '%s' % format_int(low + medium + high)],
                                header=True),
                       TableRow([tr('Population affected within'
                                    ' high susceptibility areas '),
@@ -252,28 +263,38 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                            tr('Total population: %s') % format_int(total)])
         impact_summary = Table(table_body).toNewlineFreeString()
 
-        # Generate 8 equidistant classes across
-        # the range of affected population
-        # 8 is the number of classes in the predefined affected
-        # population style as imported
-        # noinspection PyTypeChecker
-        classes = numpy.linspace(
-            numpy.nanmin(M.flat[:]), numpy.nanmax(M.flat[:]), 8)
+        # Create style
+        colours = [
+            '#FFFFFF', '#38A800', '#79C900', '#CEED00',
+            '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+        classes = create_classes(T.flat[:], len(colours))
+        interval_classes = humanize_class(classes)
+        style_classes = []
 
-        # Modify labels in existing hazard style to show quantities
-        style_classes = style_info['style_classes']
+        for i in xrange(len(colours)):
+            style_class = dict()
+            if i == 1:
+                label = create_label(interval_classes[i], 'Low')
+            elif i == 4:
+                label = create_label(interval_classes[i], 'Medium')
+            elif i == 7:
+                label = create_label(interval_classes[i], 'High')
+            else:
+                label = create_label(interval_classes[i])
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
+            if i == 0:
+                transparency = 30
+            else:
+                transparency = 30
+            style_class['transparency'] = transparency
+            style_class['colour'] = colours[i]
+            style_classes.append(style_class)
 
-        style_classes[0]['label'] = tr('Not Affected [%i people/cell]')\
-                                    % classes[0]
-        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
-        style_classes[2]['label'] = tr(' ') % classes[2]
-        style_classes[3]['label'] = tr(' ') % classes[3]
-        style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
-        style_classes[5]['label'] = tr(' ') % classes[5]
-        style_classes[6]['label'] = tr(' ') % classes[6]
-        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
-
-        style_info['legend_title'] = tr('Population Count')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('Population affected by each category')
@@ -285,7 +306,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
         # Create raster object and return
         raster_layer = Raster(
-            M,
+            T,
             projection=hazard_layer.get_projection(),
             geotransform=hazard_layer.get_geotransform(),
             name=tr('Population which %s') % (

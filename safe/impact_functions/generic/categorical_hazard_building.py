@@ -73,7 +73,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                 'id': 'CategoricalHazardBuildingImpactFunction',
                 'name': tr('Categorised Hazard Building Impact Function'),
                 'impact': tr('Be impacted'),
-                'author': 'ESSC',
+                'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of categorized hazards in raster '
