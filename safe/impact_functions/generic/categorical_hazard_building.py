@@ -31,7 +31,6 @@ from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 import logging
 from numpy import round
-from osgeo import ogr
 LOGGER = logging.getLogger('InaSAFE')
 
 
