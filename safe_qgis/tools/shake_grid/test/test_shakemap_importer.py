@@ -27,7 +27,7 @@ import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 
-from safe.common.testing import get_qgis_app
+from safe.common.testing import get_qgis_app, get_shake_test_data_path
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -63,11 +63,11 @@ class ShakemapImporterTest(unittest.TestCase):
         self.assertEqual(output_path, expected_output_path, msg)
 
     def test_converting(self):
-        """Test converting a file.
-        """
+        """Test converting grif file to tiff."""
         dialog = ShakemapImporter(PARENT)
         dialog.use_output_default.setEnabled(False)
-        grid_path = os.path.join(TESTDATA, 'grid.xml')
+        grid_path = os.path.join(get_shake_test_data_path(),
+                                 '20131105060809/output/grid.xml')
         output_raster = unique_filename(
             prefix='result_grid',
             suffix='.tif',

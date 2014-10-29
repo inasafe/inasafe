@@ -41,6 +41,7 @@ from safe.common.utilities import (
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
+from safe.impact_functions.core import population_rounding
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
@@ -243,12 +244,12 @@ class Test_Engine(unittest.TestCase):
         fatalities = float(keywords['total_fatalities'])
 
         # Check aggregated values
-        expected_population = int(round(85424650. / 1000)) * 1000
+        expected_population = population_rounding(85424650.0)
         msg = ('Expected population was %f, I got %f'
                % (expected_population, population))
         assert population == expected_population, msg
 
-        expected_fatalities = int(round(40871.3028 / 1000)) * 1000
+        expected_fatalities = population_rounding(40871.3028)
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
 
@@ -265,7 +266,7 @@ class Test_Engine(unittest.TestCase):
                % all_numbers)
         assert all_numbers == 40871, msg
 
-        x = int(round(float(all_numbers) / 1000)) * 1000
+        x = population_rounding(all_numbers)
         msg = ('Did not find expected fatality value %i in summary %s'
                % (x, keywords['impact_summary']))
         assert format_int(x) in keywords['impact_summary'], msg
@@ -297,8 +298,8 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)
         keywords = I.get_keywords()
-        population = float(keywords['total_population'])
-        fatalities = float(keywords['total_fatalities'])
+        population = keywords['total_population']
+        fatalities = keywords['total_fatalities']
 
         # Check aggregated values
         expected_population = 85425000.0
@@ -306,7 +307,7 @@ class Test_Engine(unittest.TestCase):
                % (expected_population, population))
         assert population == expected_population, msg
 
-        expected_fatalities = 409000.0
+        expected_fatalities = 410000.0
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(fatalities, expected_fatalities,
@@ -345,11 +346,12 @@ class Test_Engine(unittest.TestCase):
 #        print calculated_result.shape
         keywords = I.get_keywords()
 #        print "keywords", keywords
-        population = float(keywords['total_population'])
-        fatalities = float(keywords['total_fatalities'])
+        population = keywords['total_population']
+        fatalities = keywords['total_fatalities']
 
         # Check aggregated values
-        expected_population = int(round(85424650. / 1000)) * 1000
+        # The original implementation still uses the old computation
+        expected_population = int(round(85424650 / 1000.0, 0)) * 1000
         msg = ('Expected population was %f, I got %f'
                % (expected_population, population))
         assert population == expected_population, msg
@@ -357,8 +359,8 @@ class Test_Engine(unittest.TestCase):
         expected_fatalities = int(round(40871.3028 / 1000)) * 1000
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
-        assert numpy.allclose(fatalities, expected_fatalities,
-                              rtol=1.0e-5), msg
+        assert numpy.allclose(
+            fatalities, expected_fatalities, rtol=1.0e-5), msg
 
         # Compare with reference data
         F = read_layer(fatality_filename)
@@ -633,10 +635,9 @@ class Test_Engine(unittest.TestCase):
         keywords = I.get_keywords()
 
         # Check for expected results:
-        #for value in ['Merapi', 192055, 56514, 68568, 66971]:
-        for value in ['Merapi', 190000, 56000, 66000, 68000]:
+        for value in ['Merapi', 192055, 56514, 68568, 66971]:
             if isinstance(value, int):
-                x = format_int(value)
+                x = format_int(population_rounding(value))
             else:
                 x = value
             summary = keywords['impact_summary']
@@ -2990,36 +2991,13 @@ class Test_Engine(unittest.TestCase):
         # print "keywords", keywords
         evacuated = float(keywords['evacuated'])
         total_needs = impact_layer.get_total_needs()
-
-        expected_evacuated = 63000
-        message = 'Expected %s got %s' % (expected_evacuated, evacuated)
-        self.assertEqual(expected_evacuated, evacuated, message)
-
-        rice = total_needs['rice']
-        expected_rice = 176400
-        message = 'Expected %s got %s' % (expected_rice, rice)
-        self.assertEqual(expected_rice, rice, message)
-
-        family_kits = total_needs['family_kits']
-        expected_family_kits = 12600
-        message = 'Expected %s got %s' % (expected_family_kits, family_kits)
-        self.assertEqual(expected_family_kits, family_kits, message)
-
-        drinking_water = total_needs['drinking_water']
-        expected_drinking_water = 1102500
-        message = 'Expected %s got %s' % (
-            expected_drinking_water, drinking_water)
-        self.assertEqual(expected_drinking_water, drinking_water, message)
-
-        toilets = total_needs['toilets']
-        expected_toilets = 3150
-        message = 'Expected %s got %s' % (expected_toilets, toilets)
-        self.assertEqual(expected_toilets, toilets, message)
-
-        water = total_needs['water']
-        expected_water = 4221000
-        message = 'Expected %s got %s' % (expected_water, water)
-        self.assertEqual(expected_water, water, message)
+        expected_evacuated = 63400
+        assert evacuated == expected_evacuated
+        assert total_needs['rice'] == 177520
+        assert total_needs['family_kits'] == 12680
+        assert total_needs['drinking_water'] == 1109500
+        assert total_needs['toilets'] == 3170
+        assert total_needs['water'] == 4247800
 
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)
@@ -3052,8 +3030,8 @@ class Test_Engine(unittest.TestCase):
         affected_population = float(keywords['affected_population'])
         total_population = keywords['total_population']
 
-        assert affected_population == 133000
-        assert total_population == 162000
+        assert affected_population == 134000
+        assert total_population == 163000
 
     def test_erf(self):
         """Test ERF approximation
