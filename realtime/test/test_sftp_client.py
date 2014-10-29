@@ -22,7 +22,7 @@ import unittest
 import os
 import shutil
 
-from safe.api import temp_dir
+from safe.api import temp_dir, get_shake_test_data_path
 from realtime.sftp_client import SFtpClient
 from realtime.sftp_configuration.configuration import (
     get_sftp_base_url,
@@ -31,7 +31,6 @@ from realtime.sftp_configuration.configuration import (
     get_sftp_user_password,
     get_sftp_base_path)
 from realtime.utilities import is_event_id
-
 
 # Shake ID for this test
 SHAKE_ID = '20131105060809'
@@ -133,11 +132,9 @@ class SFtpClientTest(unittest.TestCase):
         self.assertIsNotNone(sftp_client)
 
         # Download directories
+        shake_path = get_shake_test_data_path()
         remote_path = os.path.abspath(
-            os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/shake_data',
-                SHAKE_ID))
+            os.path.join(shake_path, SHAKE_ID))
         local_path = temp_dir('realtime-test')
         sftp_client.download_path(remote_path, local_path)
 
@@ -168,11 +165,9 @@ class SFtpClientTest(unittest.TestCase):
         self.assertIsNotNone(sftp_client)
 
         # Download directories
+        shake_path = get_shake_test_data_path()
         remote_path = os.path.abspath(
-            os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/shake_data',
-                SHAKE_ID))
+            os.path.join(shake_path, SHAKE_ID))
         local_path = temp_dir('realtime-test')
         sftp_client.download_path(remote_path, local_path)
 

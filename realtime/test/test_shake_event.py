@@ -32,7 +32,7 @@ import difflib
 from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe.api import unique_filename, temp_dir, get_version
+from safe.api import unique_filename, temp_dir, get_version, get_shake_test_data_path
 from safe.common.testing import get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -59,8 +59,7 @@ class TestShakeEvent(unittest.TestCase):
         # shakemap_cache_dir/20131105060809/grid.xml
         input_path = os.path.abspath(
             os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/shake_data',
+                get_shake_test_data_path(),
                 SHAKE_ID,
                 'output/grid.xml'))
         target_folder = os.path.join(

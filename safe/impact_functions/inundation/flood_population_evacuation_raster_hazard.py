@@ -10,7 +10,9 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_weekly_needs,
+    population_rounding_full,
+    population_rounding
 )
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
@@ -29,7 +31,6 @@ from safe.common.utilities import (
     ugettext as tr,
     format_int,
     verify,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
@@ -211,15 +212,13 @@ class FloodEvacuationFunction(FunctionProvider):
             # Count
             val = int(numpy.sum(medium))
 
-            # Don't show digits less than a 1000
-            val = round_thousand(val)
             counts.append(val)
 
         # Count totals
-        evacuated = counts[-1]
+        evacuated, rounding_evacuated = population_rounding_full(counts[-1])
         total = int(numpy.sum(population))
         # Don't show digits less than a 1000
-        total = round_thousand(total)
+        total = population_rounding(total)
 
         # Calculate estimated minimum needs
         # The default value of each logistic is based on BNPB Perka 7/2008
@@ -233,11 +232,11 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s%s' % (format_int(evacuated), (
-                          '*' if evacuated >= 1000 else ''))],
+                      '%s*' % format_int(evacuated)],
                      header=True),
-            TableRow(tr('* Number is rounded to the nearest 1000')),
-            TableRow(tr('Map shows the numbers of people needing evacuation')),
+            TableRow(tr('* Number is rounded up to the nearest %s') % (
+                rounding_evacuated)),
+            TableRow(tr('Map shows population density needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),

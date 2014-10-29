@@ -1,3 +1,4 @@
+# coding=utf-8
 """Function to manage self-registering plugins
 
 The design is based on http://effbot.org/zone/metaclass-plugins.htm
@@ -146,6 +147,37 @@ def evacuated_population_weekly_needs(
             'toilets': val_toilets}
 
     return weekly_needs
+
+
+def population_rounding_full(number):
+    """This function performs a rigorous population rounding.
+
+    :param number: The amount of people as calculated.
+    :type number: int, float
+
+    :returns: result and rounding bracket.
+    :rtype: (int, int)
+    """
+    if number < 1000:
+        rounding = 10
+    elif number < 100000:
+        rounding = 100
+    else:
+        rounding = 1000
+    number = int(rounding * ceil(1.0 * number / rounding))
+    return number, rounding
+
+
+def population_rounding(number):
+    """A shorthand for population_rounding_full[0].
+
+    :param number: The amount of people as calculated.
+    :type number: int, float
+
+    :returns: result and rounding bracket.
+    :rtype: int
+    """
+    return population_rounding_full(number)[0]
 
 
 def get_function_title(func):
@@ -903,7 +935,7 @@ def get_doc_string(func):
 def is_function_enabled(func):
     """Check whether a function is enabled or not
     :param func:
-    :return: False is disabled param is True
+    :returns: False is disabled param is True
     """
     for requirement in requirements_collect(func):
         dict_req = parse_single_requirement(str(requirement))
