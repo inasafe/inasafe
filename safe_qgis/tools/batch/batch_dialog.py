@@ -46,7 +46,8 @@ from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import FileNotFoundError
 from safe_qgis.safe_interface import temp_dir
-from safe_qgis.utilities.utilities import read_impact_layer
+from safe_qgis.utilities.utilities import (
+    read_impact_layer, extent_string_to_array)
 from safe_qgis.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -304,21 +305,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         # set extent if exist
         if 'extent' in items:
             # split extent string
-            coordinates = items['extent'].replace(' ', '').split(',')
-            count = len(coordinates)
-            if count != 4:
-                message = (
-                    'Extent need exactly 4 value but got %s instead' % count)
-                LOGGER.error(message)
-                return False
-
-            # parse the value to float type
-            try:
-                coordinates = [float(i) for i in coordinates]
-            except ValueError as e:
-                message = e.message
-                LOGGER.error(message)
-                return False
+            coordinates = items['extent']
+            coordinates = extent_string_to_array(coordinates)
 
             # set the extent according the value
             self.iface.mapCanvas().mapRenderer().setProjectionsEnabled(True)

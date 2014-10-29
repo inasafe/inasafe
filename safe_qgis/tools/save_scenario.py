@@ -28,7 +28,7 @@ from PyQt4.QtCore import QSettings
 from PyQt4.QtGui import QDialog, QFileDialog
 
 from safe_qgis.utilities.utilities import (
-    viewport_geo_array, extent_to_geo_array)
+    viewport_geo_array, extent_to_array)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import safeTr
 
@@ -126,7 +126,7 @@ class SaveScenarioDialog(QDialog):
         # Added in 2.2 to support user defined analysis extents
         if self.dock.user_extent is not None \
                 and self.dock.user_extent_crs is not None:
-            extent = extent_to_geo_array(
+            extent = extent_to_array(
                 self.user_extent,
                 self.user_extent_crs)
         else:

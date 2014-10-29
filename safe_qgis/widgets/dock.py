@@ -46,7 +46,7 @@ from safe_qgis.utilities.utilities import (
     get_wgs84_resolution,
     impact_attribution,
     add_ordered_combo_item,
-    extent_to_geo_array,
+    extent_to_array,
     viewport_geo_array,
     read_impact_layer)
 from safe_qgis.utilities.defaults import (
@@ -336,6 +336,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         settings = QtCore.QSettings()
+
+        extent = settings.value('inasafe/analysis_extent', type=str)
+        crs = settings.value('inasafe/analysis_extent_crs', type=int)
+
+        if extent is not None and crs is not None:
+            extent = extent_string_to_array(extent)
+            self.user_extent =
+
+
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
         self.run_in_thread_flag = flag
@@ -1080,6 +1089,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #keep existing user extent without updating it
             return
 
+        # Persist this extent for the next session
+        settings = QSettings()
+        user_extent = [
+            self.user_extent.xMinimum(),
+            self.user_extent.yMinimum(),
+            self.user_extent.xMaximum(),
+            self.user_extent.yMaximum()]
+        extent_string = ', '.join(('%f' % x) for x in user_extent)
+        settings.setValue('inasafe/analysis_extent', extent_string)
+        settings.setValue('inasafe/analysis_extent_crs', crs.authid())
+
         self.show_user_analysis_extent()
         # Next extent might have changed as a result of the new user
         # analysis extent, so update it too.
@@ -1266,7 +1286,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             crs = QgsCoordinateReferenceSystem()
             crs.createFromSrid(4326)
-        geo_extent = extent_to_geo_array(rectangle, crs)
+        geo_extent = extent_to_array(rectangle, crs)
 
         return geo_extent
 
@@ -1922,18 +1942,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.user_extent is not None \
                 and self.user_extent_crs is not None:
             # User has defined preferred extent, so use that
-            analysis_geoextent = extent_to_geo_array(
+            analysis_geoextent = extent_to_array(
                 self.user_extent,
                 self.user_extent_crs)
         else:
             # Get the current viewport extent as an array in EPSG:4326
             analysis_geoextent = viewport_geo_array(self.iface.mapCanvas())
         # Get the Hazard extents as an array in EPSG:4326
-        hazard_geoextent = extent_to_geo_array(
+        hazard_geoextent = extent_to_array(
             hazard_layer.extent(),
             hazard_layer.crs())
         # Get the Exposure extents as an array in EPSG:4326
-        exposure_geoextent = extent_to_geo_array(
+        exposure_geoextent = extent_to_array(
             exposure_layer.extent(),
             exposure_layer.crs())
 

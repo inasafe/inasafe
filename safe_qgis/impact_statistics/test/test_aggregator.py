@@ -56,7 +56,7 @@ from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    extent_to_geo_array)
+    extent_to_array)
 
 from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
@@ -98,7 +98,7 @@ class AggregatorTest(unittest.TestCase):
         # Set extent as Jakarta extent
         geo_crs = QgsCoordinateReferenceSystem()
         geo_crs.createFromSrid(4326)
-        self.extent = extent_to_geo_array(CANVAS.extent(), geo_crs)
+        self.extent = extent_to_array(CANVAS.extent(), geo_crs)
 
     def tearDown(self):
         """Run after each test."""
