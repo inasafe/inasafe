@@ -7,8 +7,6 @@ import re
 import copy
 import numpy
 import math
-from xml.etree import ElementTree
-from shutil import copy2
 from ast import literal_eval
 from osgeo import ogr
 
@@ -16,12 +14,12 @@ from geometry import Polygon
 
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
-from safe.common.exceptions import BoundingBoxError, InaSAFEError, \
-    ReadMetadataError
+from safe.common.exceptions import BoundingBoxError, InaSAFEError
 
 
 # Default attribute to assign to vector layers
 from safe.common.utilities import ugettext as tr
+from safe.storage.metadata_utilities import write_iso_metadata
 
 DEFAULT_ATTRIBUTE = 'inapolygon'
 
@@ -50,21 +48,6 @@ TYPE_MAP = {type(None): ogr.OFTString,  # What else should this be?
 INVERSE_GEOMETRY_TYPE_MAP = {'point': ogr.wkbPoint,
                              'line': ogr.wkbLineString,
                              'polygon': ogr.wkbPolygon}
-
-currentPath = os.path.abspath(os.path.dirname(__file__))
-ISO_METADATA_XML_TEMPLATE = os.path.join(currentPath,
-                                         'iso_19115-2_template.xml')
-
-# list of tags to get to the inasafe keywords.
-# this is stored in a list so it can be easily used in a for loop
-ISO_METADATA_KW_NESTING = [
-    '{http://www.isotc211.org/2005/gmd}identificationInfo',
-    '{http://www.isotc211.org/2005/gmd}MD_DataIdentification',
-    '{http://www.isotc211.org/2005/gmd}supplementalInformation',
-    'inasafe_keywords']
-
-# flat xpath for the keyword container tag
-ISO_METADATA_KW_TAG = '/'.join(ISO_METADATA_KW_NESTING)
 
 
 # Miscellaneous auxiliary functions
@@ -358,52 +341,6 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
             return blocks[sublayer]
     else:
         return first_keywords
-
-
-def write_iso_metadata(keyword_filename):
-    basename, _ = os.path.splitext(keyword_filename)
-    xml_filename = basename + '.xml'
-    with open(keyword_filename) as keyword_file:
-        keyword_str = keyword_file.read()
-
-    tree = valid_iso_xml(xml_filename)
-    root = tree.getroot()
-
-    keyword_element = root.find(ISO_METADATA_KW_TAG)
-    # by now we should have a valid container
-    if keyword_element is None:
-        raise ReadMetadataError
-    keyword_element.text = keyword_str
-
-    ElementTree.register_namespace('gmi', 'http://www.isotc211.org/2005/gmi')
-    ElementTree.register_namespace('gco', 'http://www.isotc211.org/2005/gco')
-    ElementTree.register_namespace('gmd', 'http://www.isotc211.org/2005/gmd')
-    ElementTree.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
-    tree.write(xml_filename + '.new.xml', encoding="UTF-8")
-
-
-def valid_iso_xml(xml_filename):
-    if os.path.isfile(xml_filename):
-        #the file already has an xml file, we need to check it's structure
-        tree = ElementTree.parse(xml_filename)
-        root = tree.getroot()
-        tag_str = '.'
-        parent = root
-
-        # Look for the correct nesting
-        for tag in ISO_METADATA_KW_NESTING:
-            tag_str += '/' + tag
-            element = root.find(tag_str)
-            if element is None:
-                element = ElementTree.SubElement(parent, tag)
-            parent = element
-    else:
-        # We create the XML from our template.
-        # No more checks are needed since the template must be correct ;)
-        copy2(ISO_METADATA_XML_TEMPLATE, xml_filename)
-        tree = ElementTree.parse(xml_filename)
-
-    return tree
 
 
 # noinspection PyExceptionInherit
