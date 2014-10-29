@@ -1128,16 +1128,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         self.finished = False
         try:
-            original_keywords = self.keyword_io.read_keywords(
-                self.get_aggregation_layer())
-            self.runtime_keywords_dialog = KeywordsDialog(
-                self.iface.mainWindow(),
-                self.iface,
-                self,
-                self.get_aggregation_layer())
-            self.runtime_keywords_dialog.accepted.connect(self.accept)
-            self.runtime_keywords_dialog.rejected.connect(
-                partial(self.accept_cancelled, original_keywords))
+            if self.get_aggregation_layer():
+                original_keywords = self.keyword_io.read_keywords(
+                    self.get_aggregation_layer())
+                self.runtime_keywords_dialog = KeywordsDialog(
+                    self.iface.mainWindow(),
+                    self.iface,
+                    self,
+                    self.get_aggregation_layer())
+                self.runtime_keywords_dialog.accepted.connect(self.accept)
+                self.runtime_keywords_dialog.rejected.connect(
+                    partial(self.accept_cancelled, original_keywords))
 
             LOGGER.debug('enable busy cursor')
             self.enable_busy_cursor()
