@@ -145,7 +145,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         'recognised (in order): "affected" (True or False) or "FLOODPRONE" '
         '(Yes or No). (True may be represented as 1, False as 0')
     exposure_input = tr(
-        'Vector polygon layer extracted from OSM where each polygon '
+        'Vector polygon or point layer extracted from OSM where each feature '
         'represents the footprint of a building.')
     output = tr(
         'Vector layer contains building is estimated to be flooded and the '
