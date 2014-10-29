@@ -291,10 +291,14 @@ def get_free_memory_osx():
     platform_version = platform.mac_ver()[0]
     # Might get '10.9.1' so strop off the last no
     parts = platform_version.split('.')
-    platform_version = parts[0] + '.' + parts[1]
-    platform_version = float(platform_version)
+    platform_version = parts[0] + parts[1]
+    # We make version a int by concatenating the two parts
+    # so that we can successfully determine that 10.10 (release version)
+    # is greater than e.g. 10.8 (release version)
+    # 1010 vs 108
+    platform_version = int(platform_version)
 
-    if platform_version > 10.8:
+    if platform_version > 108:
         stdout_list = stdout_string.split(',')
         unused = stdout_list[1].replace('M unused', '').replace(' ', '')
         unused = unused.replace('.', '')
