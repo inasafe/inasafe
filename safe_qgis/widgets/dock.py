@@ -205,12 +205,30 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
-        # Rubber band for showing analysis extent etc.
+
+        # Rubber bands and extents for showing analysis extent etc.
+        # Note that rubber bands are transient but their associated
+        # extents are persistent for the session.
+
+        # Last analysis extents
         # Added by Tim in version 2.1.0
         self.last_analysis_rubberband = None
+        # Added by Tim in version 2.2.0
+        self.last_analysis_extent = None
         # This is a rubber band to show what the AOI of the
         # next analysis will be. Also added in 2.1.0
         self.next_analysis_rubberband = None
+        # Added by Tim in version 2.2.0
+        self.next_analysis_extent = None
+        # Rubber band to show the user defined analysis using extent
+        # Added in 2.2.0
+        self.user_analysis_rubberband = None
+        # Rectangle defining the user's preferred extent for the analysis
+        # Added in 2.2.0
+        self.user_extent = None
+        # CRS for user defined preferred extent
+        self.user_extent_crs
+
         # Whether to show rubber band of last and next scenario
         self.show_rubber_bands = False
 
@@ -945,41 +963,60 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         settings = QSettings()
         settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
-            self.hide_extent()
+            self.hide_last_analysis_extent()
             self.hide_next_analysis_extent()
+            self.hide_user_analysis_extent()
         else:
             self.show_next_analysis_extent()
+            self.show_user_analysis_extent()
 
-    def hide_next_analysis_extent(self):
-        """Hide the rubber band showing extent of the next analysis."""
-        if self.next_analysis_rubberband is not None:
-            self.next_analysis_rubberband.reset(QGis.Polygon)
-            self.next_analysis_rubberband = None
-
-    def show_next_analysis_extent(self):
-        """Update the rubber band showing where the next analysis extent is.
-
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers.
-
-        This slot is called on pan, zoom, layer visibility changes and
-
-        .. versionadded:: 2.1.0
+    def _draw_extent_rubberband(self, extent, colour):
         """
-        if not self.show_rubber_bands:
-            return
+        Draw a rubber band on the canvas.
 
-        self.hide_next_analysis_extent()
-        try:
-            extent = self.get_clip_parameters()[1]
+        .. versionadded: 2.2.0
 
-        except (AttributeError, InsufficientOverlapError):
-            # No layers loaded etc.
-            return
+        :param extent: Extent that the rubberband should be drawn for.
+        :type extent: QgsRectangle
+
+        :param colour: Colour for the rubber band.
+        :type colour: QColor
+
+        :returns: Rubber band that should be set to the extent.
+        :rtype: QgsRubberBand
+        """
+        rubberband = QgsRubberBand(
+            self.iface.mapCanvas(), geometryType=QGis.Line)
+        rubberband.setColor(colour)
+        rubberband.setWidth(1)
+        update_display_flag = False
+        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
+        update_display_flag = True
+        rubberband.addPoint(point, update_display_flag)
+        return rubberband
+
+    @staticmethod
+    def validate_rectangle(extent):
+        """
+
+        .. versionadded: 2.2.0
+
+        :param extent:
+        :return:
+
+        :raises: InvalidGeometryError
+        """
 
         if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
-            return
+            raise InvalidGeometryError
         if isinstance(extent, list):
             try:
                 extent = QgsRectangle(
@@ -988,36 +1025,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     extent[2],
                     extent[3])
             except:  # yes we want to catch all exception types here
-                return
-
-        extent = self._geo_extent_to_canvas_crs(extent)
-        self.next_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), geometryType=QGis.Line)
-        self.next_analysis_rubberband.setColor(QColor(0, 255, 0, 100))
-        self.next_analysis_rubberband.setWidth(1)
-        update_display_flag = False
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        update_display_flag = True
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-
-    def hide_extent(self):
-        """Clear extent rubber band if any.
-
-        This method can safely be called even if there is no rubber band set.
-
-        .. versionadded:: 2.1.0
-        """
-        if self.last_analysis_rubberband is not None:
-            self.last_analysis_rubberband.reset(QGis.Polygon)
-            self.last_analysis_rubberband = None
+                raise InvalidGeometryError
+        return extent
 
     def _geo_extent_to_canvas_crs(self, extent):
         """Transform a bounding box into the CRS of the canvas.
@@ -1037,8 +1046,87 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = transform.transformBoundingBox(extent)
         return extent
 
-    def show_extent(self, extent):
-        """Show an extent as a rubber band on the canvas.
+    def hide_user_analysis_extent(self):
+        """Hide the rubber band showing extent of the next analysis.
+
+        .. versionadded: 2.2.0
+        """
+        if self.user_analysis_rubberband is not None:
+            self.user_analysis_rubberband.reset(QGis.Polygon)
+            self.user_analysis_rubberband = None
+
+    @pyqtSlot('QgsRectangle')
+    def user_extent_defined(self, extent):
+        """Slot called when user has defined a custom analysis extent.
+
+        .. versionadded: 2.2.0
+
+        :param extent: Extent of the user's preferred analysis area.
+        :type extent: QgsRectangle
+        """
+        self.hide_user_analysis_extent()
+
+        extent = self.validate_rectangle(extent)
+
+        if self.show_rubber_bands:
+            self.user_analysis_rubberband = self._draw_extent_rubberband(
+                extent, QColor(0, 0, 255, 100))
+
+    def hide_next_analysis_extent(self):
+        """Hide the rubber band showing extent of the next analysis.
+
+        .. versionadded:: 2.1.0
+        """
+        if self.next_analysis_rubberband is not None:
+            self.next_analysis_rubberband.reset(QGis.Polygon)
+            self.next_analysis_rubberband = None
+
+    def show_next_analysis_extent(self):
+        """Update the rubber band showing where the next analysis extent is.
+
+        Primary purpose of this slot is to draw a rubber band of where the
+        analysis will be carried out based on valid intersection between
+        layers.
+
+        This slot is called on pan, zoom, layer visibility changes and
+
+        .. versionadded:: 2.1.0
+        """
+        self.hide_next_analysis_extent()
+
+        try:
+            extent = self.get_clip_parameters()[1]
+        except (AttributeError, InsufficientOverlapError):
+            # No layers loaded etc.
+            return
+
+        try:
+            extent = self.validate_rectangle(extent)
+        except InvalidGeometryError:
+            return
+
+        # store the extent to the instance property before reprojecting it
+        self.next_analysis_extent = extent
+
+        extent = self._geo_extent_to_canvas_crs(extent)
+
+        if self.show_rubber_bands:
+            self.next_analysis_rubberband = self._draw_extent_rubberband(
+                extent, QColor(0, 255, 0, 100))
+
+    def hide_last_analysis_extent(self):
+        """Clear extent rubber band if any.
+
+        This method can safely be called even if there is no rubber band set.
+
+        .. versionadded:: 2.1.0
+        """
+        if self.last_analysis_rubberband is not None:
+            self.last_analysis_rubberband.reset(QGis.Polygon)
+            self.last_analysis_rubberband = None
+
+    def show_last_analysis_extent(self, extent):
+        """Show last analysis extent as a rubber band on the canvas.
 
         .. seealso:: hide_extent()
 
@@ -1050,40 +1138,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             do nothing.
         :type extent: QgsRectangle, list
         """
-        if not self.show_rubber_bands:
+        self.hide_last_analysis_extent()
+        try:
+            # Massage it into a QgsRectangle
+            extent = self.validate_rectangle(extent)
+        except InvalidGeometryError:
             return
 
-        if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
-            return
-        if isinstance(extent, list):
-            try:
-                extent = QgsRectangle(
-                    extent[0],
-                    extent[1],
-                    extent[2],
-                    extent[3])
-            except:  # yes we want to catch all exception types here
-                return
+        # store the extent to the instance property before reprojecting it
+        self.last_analysis_extent = extent
 
-        self.hide_extent()
         extent = self._geo_extent_to_canvas_crs(extent)
 
-        self.last_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), geometryType=QGis.Line)
-        self.last_analysis_rubberband.setColor(QColor(255, 0, 0, 100))
-        self.last_analysis_rubberband.setWidth(2)
-        update_display_flag = False
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        update_display_flag = True
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
+        if not self.show_rubber_bands:
+            self.last_analysis_rubberband = self._draw_extent_rubberband(
+                extent, QColor(255, 0, 0, 100))
 
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
@@ -1102,7 +1171,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
          geo_extent,
          hazard_layer) = self.clip_parameters
 
-        self.show_extent(buffered_geo_extent)
+        self.show_last_analysis_extent(buffered_geo_extent)
         # pylint: enable=W0633,W0612
 
         if self.calculator.requires_clipping():
