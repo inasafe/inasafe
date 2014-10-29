@@ -225,7 +225,8 @@ class FloodEvacuationFunction(FunctionProvider):
         # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
 
-        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
+        total_needs = evacuated_population_weekly_needs(
+            evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         # noinspection PyListCreation
@@ -240,12 +241,12 @@ class FloodEvacuationFunction(FunctionProvider):
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Rice [kg]'), format_int(total_needs['rice'])],
             [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]]
+             format_int(total_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(total_needs['water'])],
+            [tr('Family Kits'), format_int(total_needs['family_kits'])],
+            [tr('Toilets'), format_int(total_needs['toilets'])]]
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
@@ -347,6 +348,6 @@ class FloodEvacuationFunction(FunctionProvider):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'evacuated': evacuated,
-                'total_needs': tot_needs},
+                'total_needs': total_needs},
             style_info=style_info)
         return raster
