@@ -43,6 +43,12 @@ ISO_METADATA_KW_NESTING = [
 # flat xpath for the keyword container tag
 ISO_METADATA_KW_TAG = '/'.join(ISO_METADATA_KW_NESTING)
 
+ElementTree.register_namespace('gmi', 'http://www.isotc211.org/2005/gmi')
+ElementTree.register_namespace('gco', 'http://www.isotc211.org/2005/gco')
+ElementTree.register_namespace('gmd', 'http://www.isotc211.org/2005/gmd')
+ElementTree.register_namespace('xsi',
+                               'http://www.w3.org/2001/XMLSchema-instance')
+
 
 # MONKEYPATCH CDATA support into Element tree
 # inspired by http://stackoverflow.com/questions/174890/#answer-8915039
@@ -54,7 +60,7 @@ ElementTree._original_serialize_xml = ElementTree._serialize_xml
 
 
 def _serialize_xml(write, elem, encoding, qnames, namespaces):
-    print "MONKEYPATCHED CDATA support into Element tree called"
+    # print "MONKEYPATCHED CDATA support into Element tree called"
     if elem.tag == '![CDATA[':
         write("\n<%s%s]]>%s\n" % (elem.tag, elem.text, elem.tail))
         return
@@ -79,12 +85,8 @@ def write_iso_metadata(keyword_filename):
         raise ReadMetadataError
     keyword_element.append(CDATA(keyword_str))
 
-    ElementTree.register_namespace('gmi', 'http://www.isotc211.org/2005/gmi')
-    ElementTree.register_namespace('gco', 'http://www.isotc211.org/2005/gco')
-    ElementTree.register_namespace('gmd', 'http://www.isotc211.org/2005/gmd')
-    ElementTree.register_namespace('xsi',
-                                   'http://www.w3.org/2001/XMLSchema-instance')
-    tree.write(xml_filename + '.new.xml', encoding="UTF-8")
+    tree.write(xml_filename, encoding="UTF-8")
+    return xml_filename
 
 
 def valid_iso_xml(xml_filename):
