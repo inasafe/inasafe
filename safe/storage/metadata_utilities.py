@@ -22,6 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 import os
+
 from shutil import copy2
 from xml.etree import ElementTree
 
@@ -44,6 +45,7 @@ ISO_METADATA_KW_TAG = '/'.join(ISO_METADATA_KW_NESTING)
 
 
 # MONKEYPATCH CDATA support into Element tree
+# inspired by http://stackoverflow.com/questions/174890/#answer-8915039
 def CDATA(text=None):
     element = ElementTree.Element('![CDATA[')
     element.text = text
@@ -52,8 +54,9 @@ ElementTree._original_serialize_xml = ElementTree._serialize_xml
 
 
 def _serialize_xml(write, elem, encoding, qnames, namespaces):
+    print "MONKEYPATCHED CDATA support into Element tree called"
     if elem.tag == '![CDATA[':
-        write("<%s%s]]>%s" % (elem.tag, elem.text, elem.tail))
+        write("\n<%s%s]]>%s\n" % (elem.tag, elem.text, elem.tail))
         return
     return ElementTree._original_serialize_xml(
         write, elem, encoding, qnames, namespaces)
@@ -79,7 +82,8 @@ def write_iso_metadata(keyword_filename):
     ElementTree.register_namespace('gmi', 'http://www.isotc211.org/2005/gmi')
     ElementTree.register_namespace('gco', 'http://www.isotc211.org/2005/gco')
     ElementTree.register_namespace('gmd', 'http://www.isotc211.org/2005/gmd')
-    ElementTree.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+    ElementTree.register_namespace('xsi',
+                                   'http://www.w3.org/2001/XMLSchema-instance')
     tree.write(xml_filename + '.new.xml', encoding="UTF-8")
 
 
