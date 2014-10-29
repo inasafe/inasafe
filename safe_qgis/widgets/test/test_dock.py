@@ -1397,14 +1397,14 @@ Click for Diagnostic Information:
         DOCK.show_rubber_bands = True
         expected_vertex_count = 5
 
-        # 4326 with disabled on-the-fly reprojection - check next
+        # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
         set_small_jakarta_extent()
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
-        # 4326 with enabled on-the-fly reprojection - check next
+        # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
         set_small_jakarta_extent()
         DOCK.show_next_analysis_extent()

@@ -1778,8 +1778,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         message.add(analysis_inputs)
         return message
 
-
-
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
@@ -1878,7 +1876,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     cell_size = exposure_geo_cell_size
                     layer_extent = exposure_geoextent
 
-                #adjust the geo extent to be at the edge of the pixel
+                # Adjust the geo extent to be at the edge of the pixel in
+                # order gdalwarp can do clipping properly
                 geo_extent = adjust_clip_extent(
                     geo_extent, cell_size, layer_extent)
                 buffered_geoextent = geo_extent
@@ -1894,6 +1893,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # resolution to be available
                 if exposure_layer.type() != QgsMapLayer.VectorLayer:
                     raise RuntimeError
+
+                # Adjust the geo extent to be at the edge of the pixel in
+                # order gdalwarp can do clipping properly
+                geo_extent = adjust_clip_extent(
+                    geo_extent, hazard_geo_cell_size, hazard_geoextent)
                 buffered_geoextent = get_buffered_extent(
                     geo_extent,
                     hazard_geo_cell_size)
