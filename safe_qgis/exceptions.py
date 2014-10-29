@@ -219,3 +219,8 @@ class NoValidLayerError(Exception):
 class InsufficientMemoryWarning(Exception):
     """Raised when there is a possible insufficient memory."""
     pass
+
+
+class InvalidAggregationKeywords(Exception):
+    """Raised when the aggregation keywords is invalid."""
+    pass

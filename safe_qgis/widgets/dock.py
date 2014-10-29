@@ -101,7 +101,8 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregatioError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    InvalidAggregationKeywords)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -223,6 +224,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.show_rubber_bands = False
 
         self.read_settings()  # get_project_layers called by this
+        self.finished = None
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -1124,16 +1126,41 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        self.finished = False
         try:
+            original_keywords = self.keyword_io.read_keywords(
+                self.get_aggregation_layer())
+            self.runtime_keywords_dialog = KeywordsDialog(
+                self.iface.mainWindow(),
+                self.iface,
+                self,
+                self.get_aggregation_layer())
+            self.runtime_keywords_dialog.accepted.connect(self.accept)
+            self.runtime_keywords_dialog.rejected.connect(
+                partial(self.accept_cancelled, original_keywords))
+
+            LOGGER.debug('enable busy cursor')
             self.enable_busy_cursor()
+            LOGGER.debug('setup analysis')
             self.setup_analysis()
+            LOGGER.debug('show next analysis extent')
             self.show_next_analysis_extent()
             extent = self.analysis.clip_parameters[1]
+            LOGGER.debug('show extent')
             self.show_extent(extent)
             # Start the analysis
+            LOGGER.debug('run analysis')
             self.analysis.run_analysis()
         except InsufficientOverlapError:
             return  # Will abort the analysis if there is exception
+        except InvalidAggregationKeywords:
+            self.runtime_keywords_dialog.set_layer(
+                self.get_aggregation_layer())
+            # disable gui elements that should not be applicable for this
+            self.runtime_keywords_dialog.radExposure.setEnabled(False)
+            self.runtime_keywords_dialog.radHazard.setEnabled(False)
+            self.runtime_keywords_dialog.setModal(True)
+            self.runtime_keywords_dialog.show()
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
@@ -1216,6 +1243,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Try to run completion code
         try:
+            from datetime import datetime
+            LOGGER.debug(datetime.now())
+            LOGGER.debug('get engine impact layer')
+            LOGGER.debug(self.analysis is None)
             engine_impact_layer = self.analysis.get_impact_layer()
 
             # Load impact layer into QGIS
@@ -1240,6 +1271,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
+        self.finished = True
 
     def show_results(self, qgis_impact_layer, engine_impact_layer):
         """Helper function for slot activated when the process is done.

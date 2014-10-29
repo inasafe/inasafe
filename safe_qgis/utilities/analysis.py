@@ -69,7 +69,8 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregatioError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    InvalidAggregationKeywords)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.clipper import clip_layer
 
@@ -500,11 +501,11 @@ class Analysis(object):
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
-        original_keywords = self.keyword_io.read_keywords(
-            self.aggregator.layer)
-        LOGGER.debug('my pre dialog keywords' + str(original_keywords))
-        LOGGER.debug(
-            'AOImode: %s' % str(self.aggregator.aoi_mode))
+        # original_keywords = self.keyword_io.read_keywords(
+        #     self.aggregator.layer)
+        # LOGGER.debug('my pre dialog keywords' + str(original_keywords))
+        # LOGGER.debug(
+        #     'AOImode: %s' % str(self.aggregator.aoi_mode))
 
         # Commented this out, since we want to get rid of GUI in this
         # self.runtime_keywords_dialog = KeywordsDialog(
@@ -633,9 +634,10 @@ class Analysis(object):
             # self.run_analysis()
             pass
         else:
-            message = 'Aggregator Layer has invalid keywords'
-            error_message = get_error_message(KeywordNotFoundError, message)
-            self.send_error_message(error_message)
+            raise InvalidAggregationKeywords
+            # message = 'Aggregator Layer has invalid keywords'
+            # error_message = get_error_message(KeywordNotFoundError, message)
+            # self.send_error_message(error_message)
             # self.runtime_keywords_dialog.set_layer(self.aggregator.layer)
             # # disable gui elements that should not be applicable for this
             # self.runtime_keywords_dialog.radExposure.setEnabled(False)

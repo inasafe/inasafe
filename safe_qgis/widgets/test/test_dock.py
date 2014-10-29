@@ -725,7 +725,7 @@ class TestDock(TestCase):
         set_jakarta_extent()
 
         DOCK.accept()
-        DOCK.analysis.get_impact_layer()
+        # DOCK.analysis.get_impact_layer()
         safe_layer = DOCK.analysis.get_impact_layer()
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
