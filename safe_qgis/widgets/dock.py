@@ -116,7 +116,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-from pydev import pydevd  # pylint: disable=F0401
+# from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -141,9 +141,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        pydevd.settrace(
-           'localhost', port=5678, stdoutToServer=True,
-           stderrToServer=True)
+        # pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True,
+        #    stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -970,17 +970,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_next_analysis_extent()
             self.show_user_analysis_extent()
 
-    def _draw_rubberband(self, extent, colour):
+    def _draw_rubberband(self, extent, colour, width=2):
         """
         Draw a rubber band on the canvas.
 
         .. versionadded: 2.2.0
 
-        :param extent: Extent that the rubberband should be drawn for.
+        :param extent: Extent that the rubber band should be drawn for.
         :type extent: QgsRectangle
 
         :param colour: Colour for the rubber band.
         :type colour: QColor
+
+        :param width: The width for the rubber band pen stroke.
+        :type width: int
 
         :returns: Rubber band that should be set to the extent.
         :rtype: QgsRubberBand
@@ -988,7 +991,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         rubberband = QgsRubberBand(
             self.iface.mapCanvas(), geometryType=QGis.Line)
         rubberband.setColor(colour)
-        rubberband.setWidth(1)
+        rubberband.setWidth(width)
         update_display_flag = False
         point = QgsPoint(extent.xMinimum(), extent.yMinimum())
         rubberband.addPoint(point, update_display_flag)
@@ -1078,6 +1081,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         self.show_user_analysis_extent()
+        # Next extent might have changed as a result of the new user
+        # analysis extent, so update it too.
+        self.show_next_analysis_extent()
 
     def show_user_analysis_extent(self):
         """Update the rubber band showing the user defined analysis extent.
@@ -1107,8 +1113,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = transform.transformBoundingBox(extent)
 
         if self.show_rubber_bands:
+            # Draw in blue
             self.user_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 0, 255, 100))
+                extent, QColor(0, 0, 255, 100), width=2)
 
     def hide_next_analysis_extent(self):
         """Hide the rubber band showing extent of the next analysis.
@@ -1149,8 +1156,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = self._geo_extent_to_canvas_crs(extent)
 
         if self.show_rubber_bands:
+            # draw in green
             self.next_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 255, 0, 100))
+                extent, QColor(0, 255, 0, 100), width=3)
 
     def hide_last_analysis_extent(self):
         """Clear extent rubber band if any.
@@ -1188,9 +1196,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         extent = self._geo_extent_to_canvas_crs(extent)
 
-        if not self.show_rubber_bands:
+        if self.show_rubber_bands:
+            # Draw in red
             self.last_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(255, 0, 0, 100))
+                extent, QColor(255, 0, 0, 100), width=5)
 
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""

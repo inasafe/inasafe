@@ -4,6 +4,8 @@
 Based on work by Guisepe Sucameli, 2010. Updated for coding compliance etc.
 by Tim Sutton, Oct 2014.
 
+.. versionadded:: 2.2.0
+
 """
 
 

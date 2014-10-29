@@ -17,6 +17,8 @@
 *   (at your option) any later version.                                   *
 *                                                                         *
 ***************************************************************************
+
+.. versionadded:: 2.2.0
 """
 
 __author__ = 'Giuseppe Sucameli & Tim Sutton'
@@ -87,6 +89,14 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
 
         self.ok_button.clicked.connect(self.accept)
         self.cancel_button.clicked.connect(self.reject)
+
+    def reject(self):
+        """User rejected the rectangle."""
+        self.canvas.unsetMapTool(self.tool)
+        if self.previous_map_tool != self.tool:
+            self.canvas.setMapTool(self.previous_map_tool)
+        self.tool.reset()
+        super(ExtentSelector, self).reject()
 
     def accept(self):
         """
