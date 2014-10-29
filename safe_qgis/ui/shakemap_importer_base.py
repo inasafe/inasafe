@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'shakemap_importer_base.ui'
 #
-# Created: Thu May  8 17:08:53 2014
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Mon Oct 20 08:47:44 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_ShakemapImporterBase(object):
     def setupUi(self, ShakemapImporterBase):
@@ -109,19 +118,19 @@ class Ui_ShakemapImporterBase(object):
         QtCore.QMetaObject.connectSlotsByName(ShakemapImporterBase)
 
     def retranslateUi(self, ShakemapImporterBase):
-        ShakemapImporterBase.setWindowTitle(QtGui.QApplication.translate("ShakemapImporterBase", "InaSAFE - Shakemap Importer", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("ShakemapImporterBase", "Input", None, QtGui.QApplication.UnicodeUTF8))
-        self.open_input_tool.setText(QtGui.QApplication.translate("ShakemapImporterBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_title.setText(QtGui.QApplication.translate("ShakemapImporterBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("ShakemapImporterBase", "Input File (grid.xml)", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_source.setText(QtGui.QApplication.translate("ShakemapImporterBase", "Source", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_3.setTitle(QtGui.QApplication.translate("ShakemapImporterBase", "Output", None, QtGui.QApplication.UnicodeUTF8))
-        self.open_output_tool.setText(QtGui.QApplication.translate("ShakemapImporterBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("ShakemapImporterBase", "The output will be a .tif raster file", None, QtGui.QApplication.UnicodeUTF8))
-        self.use_output_default.setText(QtGui.QApplication.translate("ShakemapImporterBase", "Same directory as input file", None, QtGui.QApplication.UnicodeUTF8))
-        self.load_result.setText(QtGui.QApplication.translate("ShakemapImporterBase", "Add output layer to QGIS project", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("ShakemapImporterBase", "Algorithm", None, QtGui.QApplication.UnicodeUTF8))
-        self.nearest_mode.setText(QtGui.QApplication.translate("ShakemapImporterBase", "Nearest neighbour", None, QtGui.QApplication.UnicodeUTF8))
-        self.inverse_distance_mode.setText(QtGui.QApplication.translate("ShakemapImporterBase", "Inverse Distance", None, QtGui.QApplication.UnicodeUTF8))
+        ShakemapImporterBase.setWindowTitle(_translate("ShakemapImporterBase", "InaSAFE - Shakemap Importer", None))
+        self.groupBox_2.setTitle(_translate("ShakemapImporterBase", "Input", None))
+        self.open_input_tool.setText(_translate("ShakemapImporterBase", "...", None))
+        self.label_title.setText(_translate("ShakemapImporterBase", "Title", None))
+        self.label.setText(_translate("ShakemapImporterBase", "Input File (grid.xml)", None))
+        self.label_source.setText(_translate("ShakemapImporterBase", "Source", None))
+        self.groupBox_3.setTitle(_translate("ShakemapImporterBase", "Output", None))
+        self.open_output_tool.setText(_translate("ShakemapImporterBase", "...", None))
+        self.label_2.setText(_translate("ShakemapImporterBase", "The output will be a .tif raster file", None))
+        self.use_output_default.setText(_translate("ShakemapImporterBase", "Same directory as input file", None))
+        self.load_result.setText(_translate("ShakemapImporterBase", "Add output layer to QGIS project", None))
+        self.groupBox.setTitle(_translate("ShakemapImporterBase", "Algorithm", None))
+        self.nearest_mode.setText(_translate("ShakemapImporterBase", "Nearest neighbour", None))
+        self.inverse_distance_mode.setText(_translate("ShakemapImporterBase", "Inverse Distance", None))
 
 from PyQt4 import QtWebKit

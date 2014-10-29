@@ -9,7 +9,8 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_weekly_needs,
+    population_rounding
 )
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
@@ -21,7 +22,7 @@ from safe.metadata import (
     exposure_definition,
     unit_normalised)
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as tr, format_int, round_thousand
+from safe.common.utilities import ugettext as tr, format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
@@ -173,11 +174,11 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         total_impact = high + medium + low
 
         # Don't show digits less than a 1000
-        total = round_thousand(total)
-        total_impact = round_thousand(total_impact)
-        high = round_thousand(high)
-        medium = round_thousand(medium)
-        low = round_thousand(low)
+        total = population_rounding(total)
+        total_impact = population_rounding(total_impact)
+        high = population_rounding(high)
+        medium = population_rounding(medium)
+        low = population_rounding(low)
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
@@ -205,7 +206,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         # Extend impact report for on-screen display
         table_body.extend([
             TableRow(tr('Notes'), header=True),
-            tr('Map shows population density in high or medium hazard area'),
+            tr('Map shows population count in high or medium hazard area'),
             tr('Total population: %s') % format_int(total),
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
@@ -235,7 +236,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
         style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
 
-        style_info['legend_title'] = tr('Population Density')
+        style_info['legend_title'] = tr('Population Count')
 
         # Create raster object and return
         raster_layer = Raster(

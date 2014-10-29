@@ -34,7 +34,9 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs,
+    population_rounding
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -132,8 +134,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Vector layer contains population affected and the minimum needs '
-        'based on the population affected.')
+        'Vector layer contains people affected and the minimum needs '
+        'based on the number of people affected.')
 
     parameters = OrderedDict([
         ('distance [km]', [3, 5, 10]),
@@ -290,16 +292,14 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             # prevent key error
             population = int(categories.get(key, 0))
 
-            population = round_thousand(population)
-
             cumulative += population
-            cumulative = round_thousand(cumulative)
 
-            all_categories_population[name] = population
-            all_categories_cumulative[name] = cumulative
+            # I'm not sure whether this is the best place to apply rounding?
+            all_categories_population[name] = population_rounding(population)
+            all_categories_cumulative[name] = population_rounding(cumulative)
 
         # Use final accumulation as total number needing evacuation
-        evacuated = cumulative
+        evacuated = population_rounding(cumulative)
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
@@ -328,8 +328,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         table_body.extend([
             TableRow(tr(
-                'Map shows population affected in each of volcano hazard '
-                'polygons.')),
+                'Map shows the number of people affected in each of volcano '
+                'hazard polygons.')),
             TableRow(
                 [tr('Needs per week'), tr('Total'), blank_cell], header=True),
             [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell], [
@@ -403,13 +403,14 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             data=new_data_table,
             projection=hazard_layer.get_projection(),
             geometry=hazard_layer.get_geometry(as_geometry_objects=True),
-            name=tr('Population affected by volcanic hazard zone'),
+            name=tr('People affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
                       'target_field': self.target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,
-                      'legend_title': legend_title},
+                      'legend_title': legend_title,
+                      'total_needs': total_needs},
             style_info=style_info)
         return impact_layer

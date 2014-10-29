@@ -53,7 +53,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
         impact_function_manager = ImpactFunctionManager()
-        expected_result = 12
+        expected_result = 13
         result = len(impact_function_manager.impact_functions)
         message = (
             'I expect %s but I got %s, please check the number of current '
@@ -176,18 +176,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.categories_for_layer(
             layer_type='vector', data_type='polygon')
         expected_result = [exposure_definition, hazard_definition]
-        message = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertItemsEqual(result, expected_result, message)
-
-        result = impact_function_manager.categories_for_layer(
-            layer_type='vector', data_type='point')
-        expected_result = [hazard_definition, exposure_definition]
-        message = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertItemsEqual(result, expected_result, message)
-
-        result = impact_function_manager.categories_for_layer(
-            layer_type='raster', data_type='line')
-        expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 

@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inasafe-develop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 10:40+0700\n"
-"PO-Revision-Date: 2014-08-15 03:43+0000\n"
+"POT-Creation-Date: 2014-10-16 14:30+0700\n"
+"PO-Revision-Date: 2014-10-16 07:42+0000\n"
 "Last-Translator: Akbar Gumbira <akbargumbira@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe-develop/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -41,10 +41,11 @@ msgstr "Gedung-gedung/bangunan"
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:186
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:371
 #: safe/impact_functions/generic/categorised_hazard_population.py:213
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:254
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:250
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:316
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:332
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:247
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:329
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:243
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:243
 #: safe/impact_functions/volcanic/volcano_building_impact.py:253
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:320
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:334
@@ -59,9 +60,9 @@ msgstr "Jumlah"
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:129
 #: safe/engine/impact_functions_for_testing/padang_building_impact_model.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:186
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:257
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:253
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:317
-#: safe/impact_functions/inundation/flood_polygon_roads.py:263
+#: safe/impact_functions/inundation/flood_polygon_roads.py:262
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:307
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:271
 msgid "All"
@@ -167,11 +168,11 @@ msgstr "Tinggi"
 msgid "OK"
 msgstr "OK"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:254
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:250
 msgid "Flooded"
 msgstr "Kebanjiran"
 
-#: safe/storage/test_io.py:2475 safe/storage/test_io.py:2485
+#: safe/storage/test_io.py:2451 safe/storage/test_io.py:2461
 msgid "Hello!"
 msgstr "Halo!"
 
@@ -276,10 +277,12 @@ msgid "Buildings will need to close if flood levels exceed %.1f m"
 msgstr "Bangunan yang akan ditutup ketika banjir dengan ketinggian lebih dari %.1f m"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:27
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:103
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:82
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:111
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:102
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:125
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:81
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:107
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:81
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:107
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:92
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:117
 msgid "Need evacuation"
@@ -362,7 +365,7 @@ msgid "In case of \"%s\" the estimated impact to \"%s\" is:"
 msgstr "Dalam kasus \"%s\" estimasi pengaruhnya terhadap \"%s\" adalah:"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:317
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:313
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:315
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:362
 msgid "People needing evacuation"
@@ -371,8 +374,9 @@ msgstr "Penduduk yang perlu dievakuasi"
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:236
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:372
 #: safe/impact_functions/generic/categorised_hazard_population.py:214
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:333
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:248
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:330
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:244
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:244
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:335
 msgid "Rice [kg]"
 msgstr "Beras [kg]"
@@ -380,8 +384,9 @@ msgstr "Beras [kg]"
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:237
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:373
 #: safe/impact_functions/generic/categorised_hazard_population.py:215
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:334
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:249
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:331
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:245
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:245
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:336
 msgid "Drinking Water [l]"
 msgstr "Air Minum [l]"
@@ -389,8 +394,9 @@ msgstr "Air Minum [l]"
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:238
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:374
 #: safe/impact_functions/generic/categorised_hazard_population.py:217
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:336
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:251
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:333
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:247
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:247
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:339
 msgid "Clean Water [l]"
 msgstr "Air Bersih [l]"
@@ -398,16 +404,18 @@ msgstr "Air Bersih [l]"
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:239
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:375
 #: safe/impact_functions/generic/categorised_hazard_population.py:218
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:337
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:252
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:334
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:248
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:248
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:341
 msgid "Family Kits"
 msgstr "Perlengkapan Rumah Tangga"
 
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:240
 #: safe/impact_functions/generic/categorised_hazard_population.py:219
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:338
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:253
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:335
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:249
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:249
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:343
 msgid "Toilets"
 msgstr "Jamban"
@@ -429,25 +437,27 @@ msgstr "Penduduk perlu dievakuasi kalau banjir lebih dari %i m"
 
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:263
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:398
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:358
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:271
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:355
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:267
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:267
 msgid "Minimum needs are defined in BNPB regulation 7/2008"
 msgstr "Minimum bantuan per minggu dari perka 7 BNPB/2008"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:121
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:267
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:333
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:329
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:329
 msgid "People in need of evacuation"
 msgstr "Penduduk yang perlu dievakuasi"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:122
-#: safe/impact_functions/generic/categorised_hazard_population.py:238
 msgid "Population Density"
 msgstr "Kepadatan Penduduk"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:128
 #: safe/impact_functions/generic/categorised_hazard_population.py:245
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:345
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:341
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:341
 #, python-format
 msgid "Population which %s"
 msgstr "Penduduk yang %s"
@@ -463,8 +473,9 @@ msgstr "Penduduk yang perlu evakuasi jika ketinggian banjir lebih dari %(eps)i m
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:234
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:371
 #: safe/impact_functions/generic/categorised_hazard_population.py:213
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:332
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:247
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:329
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:243
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:243
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:334
 msgid "Needs per week"
 msgstr "Bantuan per minggu"
@@ -472,7 +483,7 @@ msgstr "Bantuan per minggu"
 msgid "Total (*)"
 msgstr "Jumlah keseluruhan (*)"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:265
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:261
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:398
 msgid "Buildings inundated"
 msgstr "Bangunan terendam"
@@ -615,7 +626,6 @@ msgstr "Bangunan OSM"
 msgid "AIBEP schools"
 msgstr "Sekolah AIBEP"
 
-#: safe/common/dynamic_translations.py:108
 msgid "Population density (5kmx5km)"
 msgstr "Kepadatan penduduk (5kmx5km)"
 
@@ -775,8 +785,9 @@ msgstr "Jumlah pengungsi"
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:188
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:376
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:352
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:341
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:255
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:338
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:251
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:251
 msgid "Action Checklist:"
 msgstr "Daftar tindakan:"
 
@@ -813,7 +824,7 @@ msgstr "Ditutup sementara"
 msgid "Are the critical facilities still open?"
 msgstr "Apakah fasilitas publik penting masih dibuka?"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:259
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:255
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:346
 msgid "Breakdown by building type"
 msgstr "Perincian menurut jenis bangunan"
@@ -892,7 +903,7 @@ msgid "%.2f people/cell"
 msgstr "%.2f orang/sel"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:93
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:244
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:240
 msgid "Map shows population density needing evacuation"
 msgstr "Peta menunjukkan kepadatan penduduk yang memerlukan evakuasi"
 
@@ -1011,7 +1022,6 @@ msgstr "Penduduk yang berada di area cukup rawan bencana"
 msgid "People in low hazard area"
 msgstr "Penduduk yang berada di area agak rawan bencana"
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:208
 msgid "Map shows population density in high or medium hazard area"
 msgstr "Peta berikut menunjukkan kepadatan penduduk di area rawan bencana skala tinggi atau sedang"
 
@@ -1022,22 +1032,24 @@ msgstr "Penduduk yang berada di area sangat rawan bencana"
 msgid "Map shows population affected in each flood prone area "
 msgstr "Peta berikut menunjukkan populasi yang terkena dampak banjir di setiap area rawan banjir"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:356
 msgid "People need evacuation if in area identified as \"Flood Prone\""
 msgstr "Penduduk perlu dievakuasi bila di area mereka tinggal telah diidentifikas sebagai \"rawan banjir\""
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:392
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:389
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:399
 msgid "People affected by flood prone areas"
 msgstr "Penduduk yang terkena dampak dari area rawan banjir"
 
 msgid "Nil"
 msgstr "Nol"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:395
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:452
+#: safe/impact_functions/generic/categorised_hazard_population.py:238
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:392
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:334
 msgid "Population Count"
 msgstr "Jumlah penduduk"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:402
 msgid "Population affected by flood prone areas"
 msgstr "Penduduk yang terkena dampak dari area rawan banjir"
 
@@ -1067,14 +1079,16 @@ msgstr "Fungsi Dampak yang Tersedia"
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:408
 #: safe/impact_functions/generic/categorised_hazard_population.py:207
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:376
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:354
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:267
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:351
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:263
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:263
 #: safe/impact_functions/volcanic/volcano_building_impact.py:272
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:348
 msgid "Notes"
 msgstr "Catatan"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:276
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:272
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:272
 msgid "Detailed breakdown"
 msgstr "Perincian lebih detil"
 
@@ -1082,12 +1096,13 @@ msgstr "Perincian lebih detil"
 msgid "People in %.1f m to %.1f m of water: %i"
 msgstr "Orang di %.1f m to %.1f m air: %i"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:269
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:265
 #, python-format
 msgid "People need evacuation if flood levels exceed %(eps).1f m"
 msgstr "Penduduk yang perlu dievakuasi bila terjadi banjir dengan ketinggian lebih dari %(eps).1f m"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:279
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:275
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:275
 #, python-format
 msgid "People in %(lo).1f m to %(hi).1f m of water: %(val)i"
 msgstr "Orang-orang di %(lo).1f m ke %(hi).1f m air: %(val)i"
@@ -1122,7 +1137,6 @@ msgstr "Dampak ancaman bencana terkategorikan pada bangunan"
 msgid "be affected"
 msgstr "Terkena dampak"
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:331
 msgid "Map shows population affected in each of volcano hazard polygons."
 msgstr "Peta berikut menunjukkan populasi yang terkena dampak di setiap wilayah rawan ancaman letusan gunung berapi."
 
@@ -1135,10 +1149,10 @@ msgid "People need evacuation if they are within the volcanic hazard zones."
 msgstr "Penduduk yang perlu dievakuasi bila telah diidentifikas daerahnya sebagai rawan bencana letusan gunung berapi."
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:395
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:406
 msgid "People affected by volcanic hazard zone"
 msgstr "Penduduk yang terkena dampak dari daerah rawan bahaya letusan gunung berapi"
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:406
 msgid "Population affected by volcanic hazard zone"
 msgstr "Penduduk yang terkena dampak di daerah rawan ancaman bencana letusan gunung berapi"
 
@@ -1168,30 +1182,35 @@ msgid ""
 "how will we transport them?"
 msgstr "Dimanakah pasien dari %d rumah sakit yang ditutup akan mendapatkan perawatan dan bagaimana cara memindahkan mereka?"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:342
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:256
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:339
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:252
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:252
 msgid "How will warnings be disseminated?"
 msgstr "Bagimana peringatan tanggap bencana akan disebarluaskan?"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:343
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:257
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:340
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:253
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:253
 msgid "How will we reach stranded people?"
 msgstr "Bagaimana kita akan menjangkau orang-orang yang terdampar/terlantar?"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:344
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:258
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:341
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:254
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:254
 msgid "Do we have enough relief items?"
 msgstr "Apakah kita memiliki barang-barang bantuan yang cukup?"
 
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:251
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:386
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:346
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:259
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:343
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:255
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:255
 msgid "If yes, where are they located and how will we distribute them?"
 msgstr "Jika iya, dimana kita akan meletakannya dan bagaimana pendistribusiannya?"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:349
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:262
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:346
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:258
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:258
 msgid ""
 "If no, where can we obtain additional relief items from and how will we "
 "transport them to here?"
@@ -1228,8 +1247,8 @@ msgstr "Terdampak"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:80
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:117
-#: safe/impact_functions/inundation/flood_polygon_roads.py:74
-#: safe/impact_functions/inundation/flood_polygon_roads.py:95
+#: safe/impact_functions/inundation/flood_polygon_roads.py:73
+#: safe/impact_functions/inundation/flood_polygon_roads.py:94
 msgid "Be flooded"
 msgstr "Terkena banjir"
 
@@ -1381,7 +1400,7 @@ msgstr "Nilai dalam satuan 1 juta Dolar Australia"
 msgid "Buildings affected"
 msgstr "Bangunan terdampak"
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:272
+#: safe/impact_functions/inundation/flood_polygon_roads.py:271
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:317
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:282
 msgid "Roads inundated"
@@ -1508,8 +1527,10 @@ msgstr "Jumlah orang dewasa"
 msgid "Elderly count"
 msgstr "Jumlah manula"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:239
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:293
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:235
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:289
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:235
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:289
 #, python-format
 msgid "People in %.1f m of water"
 msgstr "Orang-orang yang terendam air %.1f"
@@ -1548,8 +1569,9 @@ msgstr "Apakah tempat penampungan dan barang-barang bantuan yang tersedia cukup 
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:394
 #: safe/impact_functions/generic/categorised_hazard_population.py:209
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:355
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:268
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:352
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:264
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:264
 #, python-format
 msgid "Total population: %s"
 msgstr "Jumlah Penduduk: %s"
@@ -1698,8 +1720,9 @@ msgstr "Fungsi ini hanya memberi tanda bangunan sebagai terdampak atau tidak ber
 msgid "To assess the impacts of (flood or tsunami) inundation on population."
 msgstr "Untuk memperkirakan dampak dari genangan (banjir atau tsunami) pada penduduk."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:135
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:119
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:115
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:115
 msgid ""
 "Provide details about how many people would likely need to be evacuated, "
 "where they are located and what resources would be required to support them."
@@ -1718,19 +1741,20 @@ msgid ""
 "reflects population count per cell which are affected by inundation."
 msgstr "Subjek populasi genangan melebihi ambang batas (default 1m) dihitung dan dikembalikan sebagai layer data  raster. Selain itu, jumlah dan kebutuhan yang diperlukan sesuai aturan BNPB (Perka 7) dilaporkan. Ambang batas dapat diubah dan bahkan mengandung beberapa nilai dalam hal evakuasi dan kebutuhan dihitung menggunakan jumlah terbesar dengan populasi diperinci untuk jumlah yang lebih kecil. Layer data raster populasi diresampling dengan resolusi raster ancaman bencana dan direscaling sehingga jumlah populasi hasil resampling mencerminkan perkiraan jumlah populasi per sel terresampling. Layer dampak yang dihasilkan memiliki resolusi yang sama dan mencerminkan jumlah penduduk per sel yang dipengaruhi oleh genangan."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:136
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:132
 msgid ""
 "A hazard raster layer where each cell represents flood depth (in meters)."
 msgstr "Sebuah layer data ancaman bencana berjenis raster dimana setiap sel merepresentasikan kedalaman banjir (dalam meter)."
 
 #: safe/impact_functions/generic/categorised_hazard_population.py:103
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:150
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:139
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:146
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:135
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:135
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:133
 msgid "An exposure raster layer where each cell represent population count."
 msgstr "Sebuah layer keterpaparan dimana setiap sel merepresentasikan jumlah populasi."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:144
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:140
 msgid ""
 "The default threshold of 1 meter was selected based on consensus, not hard "
 "evidence."
@@ -1825,14 +1849,14 @@ msgstr "Agregasi"
 msgid "Aggregation Categorical"
 msgstr "Kategori agregasi"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:313
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:309
 msgid "People affected"
 msgstr "Penduduk yang terkena dampak"
 
 msgid "* Evacuation count rounded to nearest 1000"
 msgstr "* Perhitungan evakuasi dibulatkan mendekati ribuan yang terdekat"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:325
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:321
 msgid "Evacuation threshold"
 msgstr "Ambang batas evakuasi"
 
@@ -1860,8 +1884,9 @@ msgstr "kategori agregasi"
 msgid "Evacuation percentage"
 msgstr "Persentase evakuasi"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:322
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:243
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:318
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:239
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:239
 msgid "* Number is rounded to the nearest 1000"
 msgstr "* Angka dibulatkan mendekati ribuan yang terdekat"
 
@@ -1979,19 +2004,20 @@ msgid ""
 msgstr "Semua nilai dibulatkan ke integer terdekat untuk menghindari nilai manusia yang diwakili sebagai pecahan."
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:449
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:335
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:331
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:331
 #: safe/impact_functions/volcanic/volcano_building_impact.py:319
 #, python-format
 msgid "Thousand separator is represented by %s"
 msgstr "Ribuan pemisah diwaliki oleh %s"
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:451
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:337
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:333
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:333
 msgid "(people per cell)"
 msgstr "(penduduk per sel)"
 
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:452
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:338
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:334
 msgid "Population density"
 msgstr "Kepadatan penduduk"
 
@@ -2044,17 +2070,17 @@ msgid ""
 "of the building by type."
 msgstr "Layer data vektor berisi bangunan yang diperkirakan banjir dan kerusakan berdasarkan jenis bangunannya."
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:268
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:264
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:389
-#: safe/impact_functions/inundation/flood_polygon_roads.py:274
+#: safe/impact_functions/inundation/flood_polygon_roads.py:273
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:319
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:284
 msgid "Not Inundated"
 msgstr "Tidak tergenang"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:270
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:266
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:391
-#: safe/impact_functions/inundation/flood_polygon_roads.py:276
+#: safe/impact_functions/inundation/flood_polygon_roads.py:275
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:321
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:286
 msgid "Inundated"
@@ -2068,13 +2094,12 @@ msgstr "(tergenang atau tidak tergenang)"
 msgid "Structure inundated status"
 msgstr "Status struktur yang tergenang"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:132
 msgid ""
 "To assess the impacts of (flood or tsunami) inundation in vector format on "
 "population."
 msgstr "Untuk menghitung dampak genangan (banjir atau tsunami) dalam format vektor pada data penduduk."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:140
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:136
 msgid ""
 "The population subject to inundation is determined whether in an area which "
 "affected or not. You can also set an evacuation percentage to calculate how "
@@ -2082,33 +2107,31 @@ msgid ""
 "will be used to estimate needs based on BNPB Perka 7/2008 minimum bantuan."
 msgstr "Subyek populasi yang terkena genangan ditentukan berdasarkan apakah daerah tersebut terkena dampak atau tidak. Anda juga dapat mengatur persentase evakuasi untuk menghitung berapa persen total populasi yang terdampak untuk dievakuasi. Jumlah ini akan digunakan untuk estimasi berdasarkan pada |BNPB| Perka 7/2008 bantuan minimum."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:147
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:143
 msgid ""
 "A hazard vector layer which has attribute affected the value is either 1 or "
 "0"
 msgstr "Layer data vektor ancaman yang memilki atribut terdampak bernilai antara 1 atau 0"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:152
 msgid ""
 "Vector layer contains population affected and the minimum needs based on "
 "evacuation percentage."
 msgstr "Layer data vektor berisi penduduk yang terdampak dan kebutuhan minimum berdasarkan pada persentase evakuasi."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:393
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:390
 msgid "Thousand separator is represented by '.'"
 msgstr "Ribuan pemisah diwakili oleh '.'"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:394
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:391
 msgid "(people per polygon)"
 msgstr "(penduduk per poligon)"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:116
 msgid ""
 "To assess the impacts of (flood or tsunami) inundation in raster format on "
 "population."
 msgstr "Untuk menghitung dampak genangan (banjir atau tsunami) dalam format raster pada data penduduk."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:123
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:119
 msgid ""
 "The population subject to inundation exceeding a threshold (default 1m) is "
 "calculated and returned as a raster layer. In addition the total number and "
@@ -2122,7 +2145,7 @@ msgid ""
 "reflects population count per cell which are affected by inundation."
 msgstr "Subyek populasi yang terkena genangan yang melebihi ambang batas (default 1m) dihitung dan dikembalikan sebagai layer data raster. Selain itu, jumlah dan kebutuhan yang diperlukan sesuai aturan BNPB (Perka 7) dilaporkan. Ambang batas dapat diubah dan bahkan mengandung beberapa nilai dalam hal evakuasi dan kebutuhan dihitung menggunakan jumlah terbesar dengan populasi diperinci untuk jumlah yang lebih kecil. Layer data raster populasi diresampling dengan resolusi raster data ancaman dan direscaling sehingga jumlah populasi hasil resampling mencerminkan perkiraan jumlah populasi per sel dapat diresampling. Layer data dampak yang dihasilkan memiliki resolusi yang sama dan mencerminkan jumlah penduduk per sel yang dipengaruhi oleh adanya genangan."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:141
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:137
 msgid ""
 "Raster layer contains population affected and the minimum needs based on the"
 " population affected."
@@ -2186,7 +2209,6 @@ msgid ""
 "attribute for point data or \"GUNUNG\" attribute for polygon data."
 msgstr "Layer data vektor ancaman dapat berupa poligon atau titik. Jika poligon, maka harus memiliki attribut \"KRB\" dan nilai untuk itu adalah  \"Kawasan Rawan Bencana I\", \"Kawasan Rawan Bencana II\", atau \"Kawasan Rawan Bencana III\". Jika Anda ingin melihat nama gunung berapi pada hasilnya, Anda perlu menambahkan attribute \"NAME\" untuk jenis data titik atau attribut \"GUNUNG\" untuk jenis data poligon."
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:135
 msgid ""
 "Vector layer contains population affected and the minimum needs based on the"
 " population affected."
@@ -2268,7 +2290,6 @@ msgstr "Air Minum"
 msgid "Water"
 msgstr "Air"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:328
 msgid "Map shows population affected in each flood prone area"
 msgstr "Peta yang menunjukan jumlah penduduk yang terdampak di setiap wilayah rawan banjir"
 
@@ -2287,7 +2308,6 @@ msgstr "Jumlah usia dewasa (yang terdampak)"
 msgid "Elderly count (affected)"
 msgstr "Jumlah usia lanjut (yang terdampak)"
 
-#: safe/postprocessors/gender_postprocessor.py:137
 msgid "Female population (affected)"
 msgstr "Penduduk wanita (yang terdampak)"
 
@@ -2295,14 +2315,14 @@ msgstr "Penduduk wanita (yang terdampak)"
 msgid "Area"
 msgstr "Area"
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:259
+#: safe/impact_functions/inundation/flood_polygon_roads.py:258
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:303
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:266
 #: safe/metadata.py:213
 msgid "Road Type"
 msgstr "Jenis Jalan"
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:285
+#: safe/impact_functions/inundation/flood_polygon_roads.py:284
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:330
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:294
 msgid "Flooded roads"
@@ -2412,7 +2432,8 @@ msgid ""
 msgstr "Untuk menjalankan dampak gempa bumi pada populasi berdasarkan model gempa bumi yang dikembangkan oleh ITB"
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:404
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:272
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:268
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:268
 msgid ""
 "All values are rounded up to the nearest integer in order to avoid "
 "representing human lives as fractions."
@@ -2425,8 +2446,9 @@ msgid ""
 "Vulnerability Model Pager"
 msgstr "Untuk menghitung dampak gempa bumi pada populasi berdasarkan Model Pager Kerentanan Populasi"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:330
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:245
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:327
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:241
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:241
 msgid "Table below shows the weekly minimum needs for all evacuated people"
 msgstr "Tabel di bawah ini menunjukkan kebutuhan minimum mingguan untuk semua orang yang dievakuasi"
 
@@ -2435,7 +2457,7 @@ msgstr "Tabel di bawah ini menunjukkan kebutuhan minimum mingguan untuk semua or
 msgid "Volcanoes considered"
 msgstr "Nama gunung api yang dipilih"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:68
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:67
 msgid "Be-flooded"
 msgstr "mengalami banjir"
 
@@ -2455,11 +2477,11 @@ msgid ""
 "                extent."
 msgstr "Tidak ada objek\ndi layer ancaman dengan\n\"Affected value\"='%s'.\nSilahkan cek nilai tersebut atau gunakan \nextent lain."
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:254
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:250
 msgid "Building Type"
 msgstr "Tipe Bangunan"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:280
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:276
 msgid "Flooded buildings"
 msgstr "Bangunan yang mengalami banjir"
 
@@ -2477,23 +2499,23 @@ msgid ""
 "                different extent."
 msgstr "Tidak ada objek di layer ancaman dengan\n\"Affected value\"='%s'. Silahkan cek nilai tersebut atau gunakan \nextent lain."
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:243
+#: safe/impact_functions/inundation/flood_polygon_roads.py:242
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:287
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:250
 msgid "Other"
 msgstr "Lain-lain"
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:260
+#: safe/impact_functions/inundation/flood_polygon_roads.py:259
 msgid "Temporarily closed (m)"
 msgstr "Ditutup untuk sementara (m)"
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:261
+#: safe/impact_functions/inundation/flood_polygon_roads.py:260
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:305
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:268
 msgid "Total (m)"
 msgstr "Total (m)"
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:264
+#: safe/impact_functions/inundation/flood_polygon_roads.py:263
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:310
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:275
 msgid "Breakdown by road type"
@@ -2532,7 +2554,7 @@ msgstr "Mengalami banjir pada ambang batas (m)"
 msgid "Calculates road types related statistics."
 msgstr "Menghitung tipe jalan berdasarkan statistik."
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:148
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:144
 #, python-format
 msgid ""
 "Parameter \"Affected Field\"(='%s')\n"
@@ -2566,12 +2588,12 @@ msgstr "Fungsi Korban PAG"
 msgid "Categorised Hazard Population Impact Function"
 msgstr "Kategorisasi Fungsi Dampak Bencana Terhadap Penduduk"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:67
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:66
 msgid "Flood Native Polygon Experimental Function"
 msgstr "Fungsi Eksperimental Poligon Asli Banjir"
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:71
-#: safe/impact_functions/inundation/flood_polygon_roads.py:77
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:70
+#: safe/impact_functions/inundation/flood_polygon_roads.py:76
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:84
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:84
 msgid "N/A"
@@ -2581,25 +2603,23 @@ msgstr "Tidak Tersedia"
 msgid "Flood Building Impact Function"
 msgstr "Fungsi Bangunan Terdampak Banjir"
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:73
+#: safe/impact_functions/inundation/flood_polygon_roads.py:72
 msgid "Flood Vector Roads Experimental Function"
 msgstr "Fungsi percobaan jalan yang terdampak banjir dalam format vektor"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:102
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:101
 msgid "Flood Evacuation Function Vector Hazard"
 msgstr "Vektor Ancaman Fungsi Evakuasi Banjir"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:107
 msgid ""
 "To assess the impacts of (flood or tsunami)inundation in vector format on "
 "population."
 msgstr "Untuk menilai dampak dari genangan (banjir atau tsunami) dalam format vektor terhadap penduduk."
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:81
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:80
 msgid "Flood Evacuation Function"
 msgstr "Fungsi Evakuasi Banjir"
 
-#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:86
 msgid ""
 "To assess the impacts of (flood or tsunami)inundation in raster format on "
 "population."
@@ -2881,7 +2901,7 @@ msgid ""
 "in the exposure data."
 msgstr "<b>Bangunan umum</b> berarti bahwa tidak ada atribut jenis bangunan pada data keterpaparan."
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:92
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:88
 msgid "Be flooded (experimental)"
 msgstr "Kebanjiran (uji coba)"
 
@@ -2898,14 +2918,14 @@ msgid ""
 "value or use other extent."
 msgstr "Tidak ada objek pada layer ancaman dengan \"value\">'%s'. Silahkan cek kembali nilai tersebut atau gunakan extent lain."
 
-#: safe/impact_functions/inundation/flood_building_impact_qgis.py:209
+#: safe/impact_functions/inundation/flood_building_impact_qgis.py:205
 #, python-format
 msgid ""
 "There are no objects in the hazard layer with \"Affected\n"
 "                value\"='%s'. Please check the value or use other extent."
 msgstr "Tidak ada objek pada layer ancaman dengan \"value\">'%s'. Silahkan cek kembali nilai tersebut atau gunakan extent lain."
 
-#: safe/impact_functions/inundation/flood_polygon_roads.py:216
+#: safe/impact_functions/inundation/flood_polygon_roads.py:215
 #, python-format
 msgid ""
 "There are no objects in the hazard layer with \"Affected\n"
@@ -2924,3 +2944,102 @@ msgstr "Jangan digunakan"
 #: safe/impact_functions/generic/categorised_hazard_population.py:211
 msgid "Table below shows the weekly minimum needs for all affected people"
 msgstr "Tabel di bawah ini menunjukkan kebutuhan minimum mingguan untuk semua orang yang terkena dampak."
+
+#: safe/common/dynamic_translations.py:108
+msgid "Population Count (5kmx5km)"
+msgstr "Jumlah Penduduk (5kmx5km)"
+
+#: safe/impact_functions/generic/categorised_hazard_population.py:208
+msgid "Map shows population count in high or medium hazard area"
+msgstr "Peta menunjukkan jumlah penduduk di daerah bahaya tinggi atau sedang"
+
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:148
+msgid ""
+"Vector layer contains people affected and the minimum needs based on "
+"evacuation percentage."
+msgstr "Layer vector berisi penduduk yang terdampak dan kebutuhan minimum berdasarkan pada persentase evakuasi."
+
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:324
+msgid "Map shows the number of people affected in each flood prone area"
+msgstr "Peta menunjukan jumlah penduduk terdampak di setiap wilayah rawan banjir"
+
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:353
+msgid "People need evacuation if in the area identified as \"Flood Prone\""
+msgstr "Penduduk perlu dievakuasi jika berada di daerah yang teridentifikasi sebagai \"rawan banjir\""
+
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:137
+msgid ""
+"Raster layer contains people affected and the minimum needs based on the "
+"people affected."
+msgstr "Layer raster berisi penduduk terdampak dan kebutuhan minimum berdasarkan pada penduduk terdampak."
+
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:240
+msgid "Map shows the numbers of people needing evacuation"
+msgstr "Peta menunjukkan jumlah penduduk yang memerlukan evakuasi"
+
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:135
+msgid ""
+"Vector layer contains people affected and the minimum needs based on the "
+"number of people affected."
+msgstr "Layer data vektor berisi penduduk yang terdampak dan kebutuhan minimum berdasarkan pada jumlah penduduk terdampak."
+
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:331
+msgid ""
+"Map shows the number of people affected in each of volcano hazard polygons."
+msgstr "Peta menunjukkan jumlah penduduk yang terkena dampak di setiap wilayah rawan ancaman letusan gunung berapi."
+
+#: safe/postprocessors/gender_postprocessor.py:137
+msgid "Female count (affected)"
+msgstr "Jumlah penduduk wanita (terdampak)"
+
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:106
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:128
+msgid ""
+"To assess the impacts of flood inundation in vector format on population."
+msgstr "Untuk menilai dampak dari genangan banjir dalam format vektor terhadap penduduk."
+
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:85
+#: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:112
+msgid ""
+"To assess the impacts of flood inundation in raster format on population."
+msgstr "Untuk menilai dampak dari genangan banjir dalam format raster terhadap penduduk."
+
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:80
+msgid "Tsunami Evacuation Function"
+msgstr "Fungsi Evakuasi Tsunami"
+
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:85
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:112
+msgid ""
+"To assess the impacts of tsunami inundation in raster format on population."
+msgstr "Untuk menghitung dampak genanangan tsunami dalam format raster pada penduduk."
+
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:119
+msgid ""
+"The population subject to inundation exceeding a threshold (default 0.7m) is"
+" calculated and returned as a raster layer. In addition the total number and"
+" the required needs in terms of the BNPB (Perka 7) are reported. The "
+"threshold can be changed and even contain multiple numbers in which case "
+"evacuation and needs are calculated using the largest number with population"
+" breakdowns provided for the smaller numbers. The population raster is "
+"resampled to the resolution of the hazard raster and is rescaled so that the"
+" resampled population counts reflect estimates of population count per "
+"resampled cell. The resulting impact layer has the same resolution and "
+"reflects population count per cell which are affected by inundation."
+msgstr "Subjek populasi genangan melebihi ambang batas (default 0.7m) dihitung dan dikembalikan sebagai layer aster. Selain itu, jumlah dan kebutuhan yang diperlukan sesuai aturan BNPB (Perka 7) dilaporkan. Ambang batas dapat diubah dan bahkan mengandung beberapa nilai dalam hal evakuasi dan kebutuhan dihitung menggunakan jumlah terbesar dengan populasi diperinci untuk jumlah yang lebih kecil. Lapisan raster populasi diresampling dengan resolusi raster ancaman dan direscaling sehingga jumlah populasi hasil resampling mencerminkan perkiraan jumlah populasi per sel terresampling. Lapisan dampak yang dihasilkan memiliki resolusi yang sama dan mencerminkan jumlah penduduk per sel yang dipengaruhi oleh genangan."
+
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:132
+msgid ""
+"A hazard raster layer where each cell represents tsunami depth (in meters)."
+msgstr "Sebuah lapisan raster ancaman dimana setiap sel merepresentasikan kedalaman tsunami (dalam meter)."
+
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:140
+msgid ""
+"The default threshold of 0.7 meter was selected based on consensus, not hard"
+" evidence."
+msgstr "Ambang batas default 0.7 meter dipilih berdasarkan konsensus, bukan dari bukti yang kuat."
+
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:265
+#, python-format
+msgid "People need evacuation if tsunami levels exceed %(eps).1f m"
+msgstr "Penduduk perlu evakuasi kalau level tsunami lebih dari %(eps).1f m"

@@ -223,19 +223,30 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
+        # QGIS  > 2.2 scales the extents to the 400x400 canvas
+        # slightly differently so versions prior to 2.4 will
+        # return 116 fatalities
+        if qgis_version() < 20400:
+            expected_mortalities = 116
+        else:
+            expected_mortalities = 117
         # Check against expected output
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: fatality count of '
-            '116 , received: \n %s' % result)
-        self.assertTrue(format_int(116) in result, message)
+            '%s , received: \n %s' % (expected_mortalities, result))
+        self.assertTrue(format_int(expected_mortalities) in result, message)
 
+        if qgis_version() < 20400:
+            expected_affected = 847596
+        else:
+            expected_affected = 863412
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '847596 , received: \n %s' % result)
-        print format_int(847529), 'expect'
-        self.assertTrue(format_int(847596) in result, message)
+            '%s , received: \n %s' % (expected_affected, result))
+
+        self.assertTrue(format_int(expected_affected) in result, message)
 
     def test_run_earthquake_fatality_function_padang_full(self):
         """Padang 2009 fatalities estimated correctly (large extent)"""
@@ -333,9 +344,20 @@ class TestDock(TestCase):
         #Building type	 closed	Total
         #All	        7	                17
 
+        # QGIS  > 2.2 scales the extents to the 400x400 canvas
+        # slightly differently so versions prior to 2.4
+        # Versions >= 2.4 of QGIS
+        #All	7	16
+
+        if qgis_version() < 20400:
+            total_buildings = 17
+        else:
+            total_buildings = 16
         message = 'Result not as expected: %s' % result
-        self.assertTrue(format_int(17) in result, message)
-        self.assertTrue(format_int(7) in result, message)
+        self.assertTrue(format_int(total_buildings) in result, message)
+
+        flooded_buildings = 7
+        self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
         """Test Insufficient overlap errors are caught as per issue #372.
@@ -432,8 +454,8 @@ class TestDock(TestCase):
 
         # Check numbers are OK (within expected errors from resampling)
         # These are expected impact number
-        self.assertTrue(format_int(10473000) in result, message)
-        self.assertTrue(format_int(978000) in result, message)
+        self.assertTrue(format_int(10474000) in result, message)
+        self.assertTrue(format_int(979000) in result, message)
 
     def test_run_flood_population_polygon_hazard_impact_function(self):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
@@ -457,7 +479,7 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         # This is the expected number of people needing evacuation
-        self.assertTrue(format_int(1349000) in result, message)
+        self.assertTrue(format_int(1350000) in result, message)
 
     def test_run_categorized_hazard_building_impact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -507,7 +529,7 @@ class TestDock(TestCase):
 
         message = ('Result not as expected: %s' % result)
         # This is the expected number of population might be affected
-        self.assertTrue(format_int(30938000) in result, message)  # high
+        self.assertTrue(format_int(30939000) in result, message)  # high
         #self.assertTrue(format_int(68280000) in result, message)
         #self.assertTrue(format_int(157551000) in result, message)
         # The 2 asserts above are not valid anymore after the fix we made to
@@ -517,7 +539,7 @@ class TestDock(TestCase):
         # 8228915c248d#diff-378093670f4ebd60b4487af9b7c2e164)
         # New Asserts
         self.assertTrue(format_int(0) in result, message)  # medium
-        self.assertTrue(format_int(256769000) in result, message)  # low
+        self.assertTrue(format_int(256770000) in result, message)  # low
 
     #noinspection PyArgumentList
     def test_run_earthquake_building_impact_function(self):
@@ -574,7 +596,7 @@ class TestDock(TestCase):
 
     def test_run_volcano_population_impact(self):
         """Volcano function runs in GUI with a donut (merapi hazard map)
-         hazard data uses population density grid."""
+         hazard data uses population count grid."""
 
         result, message = setup_scenario(
             DOCK,
@@ -614,7 +636,7 @@ class TestDock(TestCase):
     def test_run_volcano_circle_population(self):
         """Volcano function runs in GUI with a circular evacuation zone.
 
-        Uses population density grid as exposure."""
+        Uses population count grid as exposure."""
 
         # NOTE: We assume radii in impact function to be 3, 5 and 10 km
 
@@ -646,9 +668,9 @@ class TestDock(TestCase):
         # 3	     15.000	15.000
         # 5	     17.000	32.000
         # 10	124.000	156.000
-        self.assertTrue(format_int(15000) in result, message)
-        self.assertTrue(format_int(17000) in result, message)
-        self.assertTrue(format_int(124000) in result, message)
+        self.assertTrue(format_int(15800) in result, message)
+        self.assertTrue(format_int(17300) in result, message)
+        self.assertTrue(format_int(125000) in result, message)
 
     # disabled this test until further coding
     def xtest_print_map(self):
@@ -874,7 +896,7 @@ class TestDock(TestCase):
         file_list = ['issue71.tif']  # This layer has incorrect keywords
         clear_flag = False
         _, _ = load_layers(file_list, clear_flag)
-        # set exposure to : Population Density Estimate (5kmx5km)
+        # set exposure to : Population Count (5kmx5km)
         # by moving one down
         DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         actual_dict = get_ui_state(DOCK)
@@ -883,7 +905,7 @@ class TestDock(TestCase):
             'Impact Function Id': '',
             'Impact Function Title': '',
             'Hazard': 'A flood in Jakarta like in 2007',
-            'Exposure': 'Population density (5kmx5km)'}
+            'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
             '\nUI State: \n%s\nExpected State:\n%s\n%s') %

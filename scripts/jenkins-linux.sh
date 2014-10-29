@@ -56,7 +56,7 @@ in_array () {
 
 
 # Set up needed QGIS environment variables
-export QGIS_PREFIX_PATH=/usr/local/qgis-2.0/
+export QGIS_PREFIX_PATH=/usr/local/qgis-2.4/
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
 echo "PYTHONPATH: $PYTHONPATH" > /tmp/path.txt
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
@@ -78,12 +78,11 @@ TEST_PACKAGE=$1
 echo "Running tests in $PATH"
 
 # Make sure data dir is current and synced it its git clone
-#scripts/update-test-data.sh
-source /var/lib/jenkins/jobs/InaSAFE-QGIS2/env.sh
+#scripts/update-test-data.
 
 #Go on with metrics and tests
 make clean
-if [[ $TEST_PACKAGE == 'safe' ]] || [[ $TEST_PACKAGE == 'realtime' ]]; then
+if [[ ${TEST_PACKAGE} == 'safe' ]] || [[ ${TEST_PACKAGE} == 'realtime' ]]; then
     # special case for safe or realtime package
     TEST_PATH="$DIR/$TEST_PACKAGE"
     xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \

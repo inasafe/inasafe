@@ -207,17 +207,40 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
-        impact_function = EarthquakeBuildingImpactFunction()
         result = impact_function.Metadata.categories_for_layer(
             layer_type='vector', data_type='line')
         expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
-        impact_function = FloodBuildingImpactFunction()
         result = impact_function.Metadata.categories_for_layer(
             layer_type='vector', data_type='polygon')
         expected_result = ['hazard', 'exposure']
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+        impact_function = CategorisedHazardPopulationImpactFunction()
+        result = impact_function.Metadata.categories_for_layer(
+            layer_type='raster', data_type='numeric')
+        expected_result = ['exposure', 'hazard']
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertListEqual(result, expected_result, message)
+
+        result = impact_function.Metadata.categories_for_layer(
+            layer_type='vector', data_type='line')
+        expected_result = []
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertEqual(result, expected_result, message)
+
+        result = impact_function.Metadata.categories_for_layer(
+            layer_type='vector', data_type='polygon')
+        expected_result = []
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+        result = impact_function.Metadata.categories_for_layer(
+            layer_type='vector', data_type='point')
+        expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 

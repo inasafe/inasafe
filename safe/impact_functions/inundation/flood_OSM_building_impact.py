@@ -23,7 +23,8 @@ from safe.metadata import (
     unit_building_type_type,
     hazard_definition,
     exposure_definition,
-    unit_building_generic)
+    unit_building_generic,
+    layer_vector_point)
 from safe.common.utilities import OrderedDict, get_osm_building_usage
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -106,7 +107,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],
-                        'layer_constraints': [layer_vector_polygon]
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point]
                     }
                 }
             }

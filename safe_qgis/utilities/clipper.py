@@ -462,16 +462,15 @@ def _clip_raster_layer(
     # the layer at this point and setting the native resolution accordingly
     # in its keywords.
     keywords = read_file_keywords(keywords_path)
-    if 'datatype' in keywords and keywords['datatype'] == 'density':
+    if 'datatype' in keywords and keywords['datatype'] == 'count':
         if str(layer.crs().authid()) != 'EPSG:4326':
 
             # This layer is not WGS84 geographic
             message = (
-                'Layer %s represents density but has spatial reference "%s". '
-                'Density layers must be given in WGS84 geographic '
-                'coordinates, so please reproject and try again. For more '
-                'information, see issue '
-                'https://github.com/AIFDR/inasafe/issues/123' % (
+                'Layer %s represents count but has spatial reference "%s". '
+                'Count layers must be given in WGS84 geographic coordinates, '
+                'so please reproject and try again. For more information, see '
+                'issue https://github.com/AIFDR/inasafe/issues/123' % (
                     working_layer,
                     layer.crs().toProj4()
                 ))
