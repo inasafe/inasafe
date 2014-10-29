@@ -227,7 +227,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Added in 2.2.0
         self.user_extent = None
         # CRS for user defined preferred extent
-        self.user_extent_crs
+        self.user_extent_crs = None
 
         # Whether to show rubber band of last and next scenario
         self.show_rubber_bands = False
@@ -970,7 +970,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.show_next_analysis_extent()
             self.show_user_analysis_extent()
 
-    def _draw_extent_rubberband(self, extent, colour):
+    def _draw_rubberband(self, extent, colour):
         """
         Draw a rubber band on the canvas.
 
@@ -1056,7 +1056,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.user_analysis_rubberband = None
 
     @pyqtSlot('QgsRectangle')
-    def user_extent_defined(self, extent):
+    def define_user_analysis_extent(self, extent):
         """Slot called when user has defined a custom analysis extent.
 
         .. versionadded: 2.2.0
@@ -1066,10 +1066,44 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         self.hide_user_analysis_extent()
 
-        extent = self.validate_rectangle(extent)
+        try:
+            extent = self.validate_rectangle(extent)
+            self.user_extent = extent
+        except InvalidGeometryError:
+            #keep existing user extent without updating it
+            return
+
+        self.show_user_analysis_extent()
+
+    def show_user_analysis_extent(self):
+        """Update the rubber band showing the user defined analysis extent.
+
+        Primary purpose of this slot is to draw a rubber band of where the
+        analysis will be carried out based on valid intersection between
+        layers and the user's preferred analysis area.
+
+        This slot is called on pan, zoom, layer visibility changes and
+        when the user updates the defined extent.
+
+        .. versionadded:: 2.2.0
+        """
+
+        extent = self.user_extent
+        source_crs = self.user_extent_crs
+
+        try:
+            extent = self.validate_rectangle(extent)
+        except InvalidGeometryError:
+            #keep existing user extent without updating it
+            return
+
+        # make sure the extent is in the same crs as the canvas
+        dest_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        transform = QgsCoordinateTransform(source_crs, dest_crs)
+        extent = transform.transformBoundingBox(extent)
 
         if self.show_rubber_bands:
-            self.user_analysis_rubberband = self._draw_extent_rubberband(
+            self.user_analysis_rubberband = self._draw_rubberband(
                 extent, QColor(0, 0, 255, 100))
 
     def hide_next_analysis_extent(self):
@@ -1111,7 +1145,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = self._geo_extent_to_canvas_crs(extent)
 
         if self.show_rubber_bands:
-            self.next_analysis_rubberband = self._draw_extent_rubberband(
+            self.next_analysis_rubberband = self._draw_rubberband(
                 extent, QColor(0, 255, 0, 100))
 
     def hide_last_analysis_extent(self):
@@ -1151,7 +1185,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = self._geo_extent_to_canvas_crs(extent)
 
         if not self.show_rubber_bands:
-            self.last_analysis_rubberband = self._draw_extent_rubberband(
+            self.last_analysis_rubberband = self._draw_rubberband(
                 extent, QColor(255, 0, 0, 100))
 
     def setup_calculator(self):

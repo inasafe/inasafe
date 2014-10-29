@@ -515,6 +515,8 @@ class Plugin:
         widget = ExtentSelector(
             self.iface,
             self.iface.mainWindow())
+        widget.extent_defined.connect(
+            self.dock_widget.define_user_analysis_extent)
         widget.show()  # non modal
 
     def show_minimum_needs(self):
