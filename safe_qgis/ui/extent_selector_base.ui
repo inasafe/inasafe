@@ -126,16 +126,16 @@
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="toolButton">
+    <widget class="QToolButton" name="cancel_button">
      <property name="text">
-      <string>...</string>
+      <string>Cancel</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="toolButton_2">
+    <widget class="QToolButton" name="ok_button">
      <property name="text">
-      <string>...</string>
+      <string>OK</string>
      </property>
     </widget>
    </item>

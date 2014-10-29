@@ -25,14 +25,17 @@ __copyright__ = '(C) 2010, Giuseppe Sucameli'
 # This will get replaced with a git SHA1 when you do a git archive
 __revision__ = '$Format:%H$'
 
+import logging
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import SIGNAL, pyqtSignal
+from PyQt4.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog
-from qgis.core import QgsPoint, QgsRectangle
+from qgis.core import QgsPoint, QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe_qgis.ui.extent_selector_base import Ui_ExtentSelectorBase
 from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
@@ -40,9 +43,7 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
     Dialog for letting user determine analysis extents.
     """
 
-    extent_defined = pyqtSignal()
-    selection_stopped = pyqtSignal()
-    selection_started = pyqtSignal()
+    extent_defined = pyqtSignal(QgsRectangle, QgsCoordinateReferenceSystem)
 
     def __init__(self, iface, parent=None):
         """
@@ -61,74 +62,53 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.parent = parent
         self.canvas = iface.mapCanvas()
 
-        self.tool = None
         self.previous_map_tool = None
-        self.is_started = False
-
-        self.prepare_tool()
-        # Use the current map canvas extents as a starting point
-        self.set_extent(self.canvas.extent())
-        self.populate_coordinates()
-
-        self.x_minimum.valueChanged.connect(self.coordinates_changed)
-        self.y_minimum.valueChanged.connect(self.coordinates_changed)
-        self.x_maximum.valueChanged.connect(self.coordinates_changed)
-        self.y_maximum.valueChanged.connect(self.coordinates_changed)
-        self.start()
-
-    def prepare_tool(self):
-        """
-        Set the canvas property.
-        """
+        # Prepare the map tool
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
-        self.tool.rectangle_created.connect(self.populate_coordinates)
+        self.tool.rectangle_created.connect(self._populate_coordinates)
 
-    def accept(self):
-        """
-        Stop capturing the rectangle.
-        """
-        if not self.is_started:
-            return
-        self.is_started = False
-        self.tool.reset()
-        self.canvas.unsetMapTool(self.tool)
-        if self.previous_map_tool != self.tool:
-            self.canvas.setMapTool(self.previous_map_tool)
-        self.selection_stopped.emit()
+        # Use the current map canvas extents as a starting point
+        self.tool.set_rectangle(self.canvas.extent())
+        self._populate_coordinates()
 
-    def start(self):
-        """
-        Start capturing the rectangle.
-        """
+        # Observe inputs for changes
+        self.x_minimum.valueChanged.connect(self._coordinates_changed)
+        self.y_minimum.valueChanged.connect(self._coordinates_changed)
+        self.x_maximum.valueChanged.connect(self._coordinates_changed)
+        self.y_maximum.valueChanged.connect(self._coordinates_changed)
+
+        # Start capturing the rectangle.
         previous_map_tool = self.canvas.mapTool()
         if previous_map_tool != self.tool:
             self.previous_map_tool = previous_map_tool
         self.canvas.setMapTool(self.tool)
-        self.is_started = True
-        self.coordinates_changed()
-        self.selection_started.emit()
+        self._coordinates_changed()
 
-    def set_extent(self, rect):
+        self.ok_button.clicked.connect(self.accept)
+        self.cancel_button.clicked.connect(self.reject)
+
+    def accept(self):
         """
-        Set the extents.
-
-        :param rect: Rectangle that the extents should be set to.
-        :type rect: QgsRectangle
+        User accepted the rectangle.
         """
-        if self.tool.set_rectangle(rect):
-            self.extent_defined.emit()
+        self.canvas.unsetMapTool(self.tool)
+        if self.previous_map_tool != self.tool:
+            self.canvas.setMapTool(self.previous_map_tool)
 
-    def get_extent(self):
-        """
-        Get the current extents.
+        LOGGER.info(
+            'Extent selector setting user extents to %s' %
+            self.tool.rectangle().toString())
 
-        :return: Extents of the marquee.
-        :rtype: QgsRectangle
-        """
-        return self.tool.rectangle()
+        if self.tool.rectangle() is not None:
+            self.extent_defined.emit(
+                self.tool.rectangle(),
+                self.iface.mapCanvas().mapRenderer().destinationCrs()
+            )
+        self.tool.reset()
+        super(ExtentSelector, self).accept()
 
-    def are_coordinates_valid(self):
+    def _are_coordinates_valid(self):
         """
         Check if the coordinates are valid.
 
@@ -147,12 +127,11 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
 
         return True
 
-    def coordinates_changed(self):
+    def _coordinates_changed(self):
         """
         Handle a change in the coordinates.
         """
-        rect = None
-        if self.are_coordinates_valid():
+        if self._are_coordinates_valid():
             point1 = QgsPoint(
                 self.x_minimum.value(),
                 self.y_minimum.value())
@@ -161,13 +140,13 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
                 self.y_maximum.value())
             rect = QgsRectangle(point1, point2)
 
-        self.set_extent(rect)
+            self.tool.set_rectangle(rect)
 
-    def populate_coordinates(self):
+    def _populate_coordinates(self):
         """
         Update the UI with the current active coordinates.
         """
-        rect = self.get_extent()
+        rect = self.tool.rectangle()
         self.blockSignals(True)
         if rect is not None:
             self.x_minimum.setValue(rect.xMinimum())
@@ -180,4 +159,3 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
             self.x_maximum.clear()
             self.y_maximum.clear()
         self.blockSignals(False)
-        self.extent_defined.emit()

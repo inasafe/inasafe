@@ -124,7 +124,7 @@ from pydev import pydevd  # pylint: disable=F0401
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
 
-    analysisDone = pyqtSignal(bool)
+    analysis_done = pyqtSignal(bool)
 
     def __init__(self, iface):
         """Constructor for the dialog.
@@ -1055,20 +1055,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.user_analysis_rubberband.reset(QGis.Polygon)
             self.user_analysis_rubberband = None
 
-    @pyqtSlot('QgsRectangle')
-    def define_user_analysis_extent(self, extent):
+    def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
 
         .. versionadded: 2.2.0
 
         :param extent: Extent of the user's preferred analysis area.
         :type extent: QgsRectangle
+
+        :param crs: Coordinate reference system for user defined analysis
+            extent.
+        :type crs: QgsCoordinateReferenceSystem
         """
         self.hide_user_analysis_extent()
 
         try:
             extent = self.validate_rectangle(extent)
             self.user_extent = extent
+            self.user_extent_crs = crs
         except InvalidGeometryError:
             #keep existing user extent without updating it
             return
@@ -1583,7 +1587,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
         self.show_error_message(message)
-        self.analysisDone.emit(False)
+        self.analysis_done.emit(False)
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1616,7 +1620,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.save_state()
         self.hide_busy()
-        self.analysisDone.emit(True)
+        self.analysis_done.emit(True)
 
     def show_results(self, qgis_impact_layer, engine_impact_layer):
         """Helper function for slot activated when the process is done.
@@ -1781,7 +1785,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 message = get_error_message(exception, context=content)
             # noinspection PyTypeChecker
             self.show_error_message(message)
-            self.analysisDone.emit(False)
+            self.analysis_done.emit(False)
             return
 
         try:
@@ -1789,7 +1793,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except InvalidGeometryError, e:
             message = get_error_message(e)
             self.show_error_message(message)
-            self.analysisDone.emit(False)
+            self.analysis_done.emit(False)
             return
         except Exception, e:  # pylint: disable=W0703
             # noinspection PyPropertyAccess
@@ -1814,7 +1818,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.function_parameters
         self.postprocessor_manager.run()
         self.completed()
-        self.analysisDone.emit(True)
+        self.analysis_done.emit(True)
 
     @staticmethod
     def enable_busy_cursor():

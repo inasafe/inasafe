@@ -8,7 +8,7 @@ by Tim Sutton, Oct 2014.
 
 
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import SIGNAL, pyqtSignal
+from PyQt4.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
 from qgis.core import QgsPoint, QgsRectangle, QGis
@@ -20,6 +20,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
     Map tool that lets the user define the analysis extents.
     """
     rectangle_created = pyqtSignal()
+    deactivated = pyqtSignal()
 
     def __init__(self, canvas):
         """Constructor for the map tool.
@@ -158,4 +159,4 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         Disable the tool.
         """
         QgsMapTool.deactivate(self)
-        self.emit(SIGNAL("deactivated()"))
+        self.deactivated.emit()
