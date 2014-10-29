@@ -10,7 +10,9 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_weekly_needs,
+    population_rounding_full,
+    population_rounding
 )
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
@@ -29,7 +31,6 @@ from safe.common.utilities import (
     ugettext as tr,
     format_int,
     verify,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
@@ -211,42 +212,41 @@ class FloodEvacuationFunction(FunctionProvider):
             # Count
             val = int(numpy.sum(medium))
 
-            # Don't show digits less than a 1000
-            val = round_thousand(val)
             counts.append(val)
 
         # Count totals
-        evacuated = counts[-1]
+        evacuated, rounding_evacuated = population_rounding_full(counts[-1])
         total = int(numpy.sum(population))
         # Don't show digits less than a 1000
-        total = round_thousand(total)
+        total = population_rounding(total)
 
         # Calculate estimated minimum needs
         # The default value of each logistic is based on BNPB Perka 7/2008
         # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
 
-        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
+        total_needs = evacuated_population_weekly_needs(
+            evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         # noinspection PyListCreation
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s%s' % (format_int(evacuated), (
-                          '*' if evacuated >= 1000 else ''))],
+                      '%s*' % format_int(evacuated)],
                      header=True),
-            TableRow(tr('* Number is rounded to the nearest 1000')),
-            TableRow(tr('Map shows the numbers of people needing evacuation')),
+            TableRow(tr('* Number is rounded up to the nearest %s') % (
+                rounding_evacuated)),
+            TableRow(tr('Map shows population density needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Rice [kg]'), format_int(total_needs['rice'])],
             [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]]
+             format_int(total_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(total_needs['water'])],
+            [tr('Family Kits'), format_int(total_needs['family_kits'])],
+            [tr('Toilets'), format_int(total_needs['toilets'])]]
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
@@ -348,6 +348,6 @@ class FloodEvacuationFunction(FunctionProvider):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'evacuated': evacuated,
-                'total_needs': tot_needs},
+                'total_needs': total_needs},
             style_info=style_info)
         return raster

@@ -11,7 +11,9 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_weekly_needs,
+    population_rounding_full,
+    population_rounding
 )
 from safe.metadata import (
     hazard_earthquake,
@@ -319,19 +321,19 @@ class ITBFatalityFunction(FunctionProvider):
         R[R < tolerance] = numpy.nan
 
         # Total statistics
-        total = int(round(numpy.nansum(exposure.flat) / 1000) * 1000)
+        total, rounding = population_rounding_full(numpy.nansum(exposure.flat))
 
         # Compute number of fatalities
-        fatalities = int(round(numpy.nansum(number_of_fatalities.values())
-                               / 1000)) * 1000
+        fatalities = population_rounding(numpy.nansum(
+            number_of_fatalities.values()))
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
         if fatalities < 50:
             fatalities = 0
 
         # Compute number of people displaced due to building collapse
-        displaced = int(round(numpy.nansum(number_of_displaced.values())
-                              / 1000)) * 1000
+        displaced = population_rounding(numpy.nansum(
+            number_of_displaced.values()))
 
         # Generate impact report
         table_body = [question]
@@ -357,7 +359,8 @@ class ITBFatalityFunction(FunctionProvider):
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         # FIXME: Refactor and share
         minimum_needs = self.parameters['minimum needs']
-        needs = evacuated_population_weekly_needs(displaced, minimum_needs)
+        total_needs = evacuated_population_weekly_needs(
+            displaced, minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [
@@ -369,10 +372,11 @@ class ITBFatalityFunction(FunctionProvider):
                 header=True),
             TableRow(tr('Map shows density estimate of displaced population')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(needs['rice'])],
-            [tr('Drinking Water [l]'), format_int(needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(needs['water'])],
-            [tr('Family Kits'), format_int(needs['family_kits'])],
+            [tr('Rice [kg]'), format_int(total_needs['rice'])],
+            [tr('Drinking Water [l]'), format_int(
+                total_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(total_needs['water'])],
+            [tr('Family Kits'), format_int(total_needs['family_kits'])],
             TableRow(tr('Action Checklist:'), header=True)]
 
         if fatalities > 0:
@@ -408,7 +412,8 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '
                              'Institute of Teknologi Bandung 2012.'))
-        table_body.append(tr('Population numbers rounded to nearest 1000.'))
+        table_body.append(
+            tr('Population numbers rounded up to the nearest %s.') % rounding)
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -465,7 +470,8 @@ class ITBFatalityFunction(FunctionProvider):
                              'map_title': map_title,
                              'legend_notes': legend_notes,
                              'legend_units': legend_units,
-                             'legend_title': legend_title},
+                             'legend_title': legend_title,
+                             'total_needs': total_needs},
                    name=tr('Estimated displaced population per cell'),
                    style_info=style_info)
 

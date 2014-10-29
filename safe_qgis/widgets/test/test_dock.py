@@ -238,7 +238,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(expected_mortalities) in result, message)
 
         if qgis_version() < 20400:
-            expected_affected = 847529
+            expected_affected = 847596
         else:
             expected_affected = 863412
         message = (
@@ -454,8 +454,8 @@ class TestDock(TestCase):
 
         # Check numbers are OK (within expected errors from resampling)
         # These are expected impact number
-        self.assertTrue(format_int(10473000) in result, message)
-        self.assertTrue(format_int(978000) in result, message)
+        self.assertTrue(format_int(10474000) in result, message)
+        self.assertTrue(format_int(979000) in result, message)
 
     def test_run_flood_population_polygon_hazard_impact_function(self):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
@@ -479,7 +479,7 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         # This is the expected number of people needing evacuation
-        self.assertTrue(format_int(1349000) in result, message)
+        self.assertTrue(format_int(1350000) in result, message)
 
     def test_run_categorized_hazard_building_impact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -529,7 +529,7 @@ class TestDock(TestCase):
 
         message = ('Result not as expected: %s' % result)
         # This is the expected number of population might be affected
-        self.assertTrue(format_int(30938000) in result, message)  # high
+        self.assertTrue(format_int(30939000) in result, message)  # high
         #self.assertTrue(format_int(68280000) in result, message)
         #self.assertTrue(format_int(157551000) in result, message)
         # The 2 asserts above are not valid anymore after the fix we made to
@@ -539,7 +539,7 @@ class TestDock(TestCase):
         # 8228915c248d#diff-378093670f4ebd60b4487af9b7c2e164)
         # New Asserts
         self.assertTrue(format_int(0) in result, message)  # medium
-        self.assertTrue(format_int(256769000) in result, message)  # low
+        self.assertTrue(format_int(256770000) in result, message)  # low
 
     #noinspection PyArgumentList
     def test_run_earthquake_building_impact_function(self):
@@ -668,9 +668,9 @@ class TestDock(TestCase):
         # 3	     15.000	15.000
         # 5	     17.000	32.000
         # 10	124.000	156.000
-        self.assertTrue(format_int(15000) in result, message)
-        self.assertTrue(format_int(17000) in result, message)
-        self.assertTrue(format_int(124000) in result, message)
+        self.assertTrue(format_int(15800) in result, message)
+        self.assertTrue(format_int(17300) in result, message)
+        self.assertTrue(format_int(125000) in result, message)
 
     # disabled this test until further coding
     def xtest_print_map(self):

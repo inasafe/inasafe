@@ -351,7 +351,12 @@ def dpi_to_meters(dpi):
     return dots_per_m
 
 
-def setup_printer(filename, resolution=300, page_height=297, page_width=210):
+def setup_printer(
+        filename,
+        resolution=300,
+        page_height=297,
+        page_width=210,
+        page_margin=[10, 10, 10, 10]):
     """Create a QPrinter instance defaulted to print to an A4 portrait pdf.
 
     :param filename: Filename for the pdf print device.
@@ -365,6 +370,9 @@ def setup_printer(filename, resolution=300, page_height=297, page_width=210):
 
     :param page_width: Width of the page in mm.
     :type page_width: int
+
+    :param page_margin: Page margin in mm in form [left, top, right, bottom].
+    :type page_margin: list
     """
     #
     # Create a printer device (we are 'printing' to a pdf
@@ -376,9 +384,14 @@ def setup_printer(filename, resolution=300, page_height=297, page_width=210):
     printer.setPaperSize(
         QtCore.QSizeF(page_width, page_height),
         QtGui.QPrinter.Millimeter)
-    printer.setFullPage(True)
     printer.setColorMode(QtGui.QPrinter.Color)
     printer.setResolution(resolution)
+    printer.setPageMargins(
+        page_margin[0],
+        page_margin[1],
+        page_margin[2],
+        page_margin[3],
+        QtGui.QPrinter.Millimeter)
     return printer
 
 
