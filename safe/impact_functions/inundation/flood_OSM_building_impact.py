@@ -435,6 +435,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 s = TableRow(row)
                 table_body.append(s)
 
+        # Action Checklist Section
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(
             tr('Are the critical facilities still open?')))
@@ -459,13 +460,22 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    'for treatment and how will we transport them?') %
                 format_int(hospital_closed)))
 
+        # Notes Section
         table_body.append(TableRow(tr('Notes'), header=True))
-        assumption = tr('Buildings are said to be flooded when ')
         if mode == 'grid':
-            assumption += tr('flood levels exceed %.1f m') % threshold
+            table_body.append(TableRow(
+                tr('Buildings are said to be inundated when flood levels '
+                   'exceed %.1f m') % threshold))
+            table_body.append(TableRow(
+                tr('Buildings are said to be wet when flood levels '
+                   'are greater than 0 m but less than %.1f m') % threshold))
+            table_body.append(TableRow(
+                tr('Buildings are said to be dry when flood levels '
+                   'are less than 0 m')))
         else:
-            assumption += tr('in regions marked as affected')
-        table_body.append(assumption)
+            table_body.append(TableRow(
+                tr('Buildings are said to be flooded when in regions marked '
+                   'as affected')))
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -478,12 +488,14 @@ class FloodBuildingImpactFunction(FunctionProvider):
         style_classes = []
 
         if mode == 'grid':
-            style_classes = [dict(label=tr('Dry'), value=0,
+            style_classes = [dict(label=tr('Dry (<= 0 m)'), value=0,
                                   colour='#1EFC7C', transparency=0, size=1),
-                             dict(label=tr('Wet'), value=2,
-                                  colour='#FF9900', transparency=0, size=1),
-                             dict(label=tr('Inundated'), value=1,
-                                  colour='#F31A1C', transparency=0, size=1)]
+                             dict(label=tr('Wet (0m - %.1f m)') % threshold,
+                                  value=2, colour='#FF9900', transparency=0,
+                                  size=1),
+                             dict(label=tr('Inundated (>= %.1f m)') % threshold,
+                                  value=1, colour='#F31A1C', transparency=0,
+                                  size=1)]
             legend_units = tr('(inundated, wet, or dry)')
         elif mode == 'regions':
             style_classes = [dict(label=tr('Not Inundated'), value=0,
