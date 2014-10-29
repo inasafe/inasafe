@@ -1896,7 +1896,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 can be added to the keywords file.
             * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
                 extent that can be used given the input datasets and the
-                current viewport extents.
+                current viewport extents or user defined analysis extents.
             * cell_size: float - the cell size that is the best of the
                 hazard and exposure rasters.
             * exposure_layer: QgsMapLayer - layer representing exposure.
@@ -1909,8 +1909,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         hazard_layer = self.get_hazard_layer()
         exposure_layer = self.get_exposure_layer()
-        # Get the current viewport extent as an array in EPSG:4326
-        viewport_geoextent = viewport_geo_array(self.iface.mapCanvas())
+
+        if self.user_extent is not None \
+                and self.user_extent_crs is not None:
+            # User has defined preferred extent, so use that
+            analysis_geoextent = extent_to_geo_array(
+                self.user_extent,
+                self.user_extent_crs)
+        else:
+            # Get the current viewport extent as an array in EPSG:4326
+            analysis_geoextent = viewport_geo_array(self.iface.mapCanvas())
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_geo_array(
             hazard_layer.extent(),
@@ -1929,11 +1937,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
-            if self.clip_to_viewport:
+            # If the user has defined a preferred analysis extent it will
+            # always be used, otherwise the data will be clipped to
+            # the viewport unless the user has deselected clip to viewport in
+            # options.
+            if self.clip_to_viewport and not self.user_extent is None:
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
-                    viewport_geoextent)
+                    analysis_geoextent)
             else:
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
@@ -1946,7 +1958,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 exposure_layer,
                 hazard_geoextent,
                 hazard_layer,
-                viewport_geoextent)
+                analysis_geoextent)
             raise InsufficientOverlapError(message)
 
         # Next work out the ideal spatial resolution for rasters
