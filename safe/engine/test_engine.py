@@ -2990,7 +2990,8 @@ class Test_Engine(unittest.TestCase):
         keywords = impact_layer.get_keywords()
         # print "keywords", keywords
         evacuated = float(keywords['evacuated'])
-        total_needs = impact_layer.get_total_needs()
+        total_needs = keywords['total_needs']
+
         expected_evacuated = 63400
         assert evacuated == expected_evacuated
         assert total_needs['rice'] == 177520
