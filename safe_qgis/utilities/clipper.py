@@ -620,15 +620,16 @@ def extent_to_geoarray(extent, source_crs):
 def adjust_clip_extent(clip_extent, cell_size, layer_extent):
     """Helper function to adjust the clip extent to the edge of the pixel.
 
-    This will make all the edges of the clip extent coincide with pixel from
-    the layer_extent.
+    This function will shift all edges of the extent to the outmost edge of
+    the raster's pixel row or column on which the edge coincides.
 
     :param clip_extent: An array representing the clip extents in the
         form [xmin, ymin, xmax, ymax]. This is the optimal extent between
         the exposure, hazard and view port.
     :type clip_extent: list
 
-    :param cell_size: The size of a pixel in geo reference unit in the form
+    :param cell_size: The size of a pixel in
+     geo reference unit in the form
         (res_x, res_y)
     :type cell_size: tuple
 
@@ -668,18 +669,15 @@ def adjust_clip_extent(clip_extent, cell_size, layer_extent):
         abs(clip_extent_ymin - layer_extent[1]) / cell_size_y)
     adjusted_ymin = layer_extent[1] + starting_cell_y * cell_size_y
 
-    geo_clip_width = (float(clip_extent_xmax - clip_extent_xmin) /
-                      float(cell_size_x))
-    geo_clip_width = ceil(geo_clip_width)
+    ending_cell_x = int(
+        abs(clip_extent_xmax - layer_extent[2]) / cell_size_x)
+    adjusted_xmax = layer_extent[2] - ending_cell_x * cell_size_x
 
-    geo_clip_height = (float(clip_extent_ymax - clip_extent_ymin) /
-                       float(cell_size_y))
-    geo_clip_height = ceil(geo_clip_height)
+    ending_cell_y = int(
+        abs(clip_extent_ymax - layer_extent[3]) / cell_size_y)
+    adjusted_ymax = layer_extent[3] - ending_cell_y * cell_size_y
 
     adjusted_extent = [
-        adjusted_xmin,
-        adjusted_ymin,
-        adjusted_xmin + geo_clip_width * cell_size_x,
-        adjusted_ymin + geo_clip_height * cell_size_y]
+        adjusted_xmin, adjusted_ymin, adjusted_xmax, adjusted_ymax]
 
     return adjusted_extent

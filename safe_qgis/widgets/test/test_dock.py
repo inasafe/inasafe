@@ -298,7 +298,7 @@ class TestDock(TestCase):
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
             '31555576 , received: \n %s' % result)
-        self.assertTrue(format_int(31555576) in result, message)
+        self.assertTrue(format_int(31374747) in result, message)
 
     def test_run_tsunami_building_impact_function(self):
         """Tsunami function runs in GUI as expected."""

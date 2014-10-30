@@ -1823,7 +1823,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
             if self.clip_to_viewport:
-                geo_extent = get_optimal_extent(
+                geo_extent = get_optimgial_extent(
                     hazard_geoextent,
                     exposure_geoextent,
                     viewport_geoextent)
