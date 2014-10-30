@@ -197,7 +197,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.show_rubber_bands = False
 
         self.read_settings()  # get_project_layers called by this
-        self.finished = None
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -1116,7 +1115,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             threading mode is enabled especially)
         """
         self.enable_signal_receiver()
-        self.finished = False
         try:
             if self.get_aggregation_layer():
                 original_keywords = self.keyword_io.read_keywords(
@@ -1265,7 +1263,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
-        self.finished = True
 
     def show_results(self, qgis_impact_layer, engine_impact_layer):
         """Helper function for slot activated when the process is done.
