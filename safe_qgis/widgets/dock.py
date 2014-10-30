@@ -48,7 +48,8 @@ from safe_qgis.utilities.utilities import (
     add_ordered_combo_item,
     extent_to_array,
     viewport_geo_array,
-    read_impact_layer)
+    read_impact_layer,
+    extent_string_to_array)
 from safe_qgis.utilities.defaults import (
     limitations,
     disclaimer,
@@ -335,15 +336,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Do this on init and after changing options in the options dialog.
         """
 
-        settings = QtCore.QSettings()
+        settings = QSettings()
 
-        extent = settings.value('inasafe/analysis_extent', type=str)
-        crs = settings.value('inasafe/analysis_extent_crs', type=int)
+        flag = bool(settings.value(
+            'inasafe/showRubberBands', False, type=bool))
+        self.show_rubber_bands = flag
 
-        if extent is not None and crs is not None:
+        extent = settings.value('inasafe/analysis_extent', '', type=str)
+        crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+
+        if extent is not '' and crs is not '':
             extent = extent_string_to_array(extent)
-            self.user_extent =
-
+            self.user_extent = QgsRectangle(*extent)
+            self.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+            self.show_user_analysis_extent()
 
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
@@ -398,10 +404,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.organisation_logo.show()
         else:
             self.organisation_logo.hide()
-
-        flag = bool(settings.value(
-            'inasafe/showRubberBands', False, type=bool))
-        self.show_rubber_bands = flag
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -1128,8 +1130,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         # make sure the extent is in the same crs as the canvas
-        dest_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-        transform = QgsCoordinateTransform(source_crs, dest_crs)
+        destination_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        transform = QgsCoordinateTransform(source_crs, destination_crs)
         extent = transform.transformBoundingBox(extent)
 
         if self.show_rubber_bands:
