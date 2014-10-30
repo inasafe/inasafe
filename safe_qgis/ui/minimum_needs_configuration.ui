@@ -254,6 +254,20 @@
          </item>
         </layout>
        </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="provenanceLable">
+           <property name="text">
+            <string>Provenance</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit"/>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">

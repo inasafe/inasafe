@@ -87,7 +87,6 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE Global Minimum Needs Configuration'))
-        self.parameter_container = None
         self.resourceListWidget.setDragDropMode(
             self.resourceListWidget.InternalMove)
         self.removeButton.clicked.connect(self.remove_resource)
@@ -99,7 +98,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.populate_resource_list()
         self.load_profiles()
         # self.add_resource()
-        self.setting_up_resource_parameters()
+        self.set_up_resource_parameters()
+        self.add_edit = None
         # self.mark_current_profile_as_saved()
 
     def populate_resource_list(self):
@@ -141,22 +141,59 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         item.setForeground(QtGui.QColor('black'))
 
     def add_new_resource(self):
-        self.setting_up_resource_parameters()
+        self.add_edit = 'add'
+        parameters_widget = [
+            self.resourceGroupBox.layout().itemAt(i) for i in
+            range(self.resourceGroupBox.layout().count())][0].widget()
+        parameter_widgets = [
+            parameters_widget.vertical_layout.itemAt(i).widget() for i in
+            range(parameters_widget.vertical_layout.count())]
+        parameter_widgets[0]._line_edit_input.setText('')
+        parameter_widgets[1]._line_edit_input.setText('')
+        parameter_widgets[2]._line_edit_input.setText('')
+        parameter_widgets[3]._line_edit_input.setText('')
+        parameter_widgets[4]._line_edit_input.setText('')
+        parameter_widgets[5]._input.setValue(10)
+        parameter_widgets[6]._input.setValue(0)
+        parameter_widgets[7]._input.setValue(100)
+        parameter_widgets[8]._line_edit_input.setText('weekly')
+        parameter_widgets[9]._line_edit_input.setText(
+            "A displaced person should be provided with {{ Default }} "
+            "{{ Unit }}\{{ Units }}{{ Unit  }} of {{ Resource name }}. Though "
+            "no less than {{ Minimum allowed }} and no more than "
+            "{{ Maximum allowed }}. This should be provided {{ Frequency }}.")
         self.stackedWidget.setCurrentIndex(1)
 
     def edit_resource(self):
-        self.setting_up_resource_parameters()
-        # self.populate resource
+        self.add_edit = 'edit'
+        self.mark_current_profile_as_pending()
+        resource = None
+        for item in self.resourceListWidget.selectedItems()[:1]:
+            resource = item.resource_full
+        if not resource:
+            return
+        parameters_widget = [
+            self.resourceGroupBox.layout().itemAt(i) for i in
+            range(self.resourceGroupBox.layout().count())][0].widget()
+        parameter_widgets = [
+            parameters_widget.vertical_layout.itemAt(i).widget() for i in
+            range(parameters_widget.vertical_layout.count())]
+        parameter_widgets[0]._line_edit_input.setText(resource['Resource name'])
+        parameter_widgets[1]._line_edit_input.setText(
+            resource['Resource description'])
+        parameter_widgets[2]._line_edit_input.setText(resource['Unit'])
+        parameter_widgets[3]._line_edit_input.setText(resource['Units'])
+        parameter_widgets[4]._line_edit_input.setText(
+            resource['Unit abbreviation'])
+        parameter_widgets[5]._input.setValue(resource['Default'])
+        parameter_widgets[6]._input.setValue(resource['Minimum allowed'])
+        parameter_widgets[7]._input.setValue(resource['Maximum allowed'])
+        parameter_widgets[8]._line_edit_input.setText(resource['Frequency'])
+        parameter_widgets[9]._line_edit_input.setText(
+            resource['Readable sentence'])
         self.stackedWidget.setCurrentIndex(1)
 
-    def resource_dismiss(self):
-        self.stackedWidget.setCurrentIndex(0)
-
-    def resource_accept(self):
-
-        self.stackedWidget.setCurrentIndex(0)
-
-    def setting_up_resource_parameters(self):
+    def set_up_resource_parameters(self):
         name_parameter = StringParameter('UUID-1')
         name_parameter.name = 'Resource name'
         name_parameter.help_text = (
@@ -303,10 +340,10 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             frequency_parameter,
             sentence_parameter
         ]
-        self.parameter_container = ParameterContainer(parameters)
+        parameter_container = ParameterContainer(parameters)
 
         layout = QGridLayout()
-        layout.addWidget(self.parameter_container)
+        layout.addWidget(parameter_container)
         self.resourceGroupBox.setLayout(layout)
 
     def remove_resource(self):
@@ -318,18 +355,16 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.stackedWidget.setCurrentIndex(0)
 
     def accept_changes(self):
-        from pydev import pydevd  # pylint: disable=F0401
-
-        pydevd.settrace(
-            'localhost', port=5678, stdoutToServer=True,
-            stderrToServer=True)
+        # --
+        # Hackorama to get this working outside the method that the
+        # parameters where defined in.
+        parameters_widget = [
+            self.resourceGroupBox.layout().itemAt(i) for i in
+            range(self.resourceGroupBox.layout().count())][0]
+        parameters = parameters_widget.widget().get_parameters()
+        # --
         resource = {}
-        layout = self.resourceGroupBox.layout()
-        print layout
-        print dir(layout.widget)
-        new_parameters = layout.widget().get_parameters()
-        for parameter in new_parameters:
-            print parameter.name, parameter.value, parameter._value
+        for parameter in parameters:
             resource[parameter.name] = parameter.value
         self.add_resource(resource)
         self.stackedWidget.setCurrentIndex(0)
