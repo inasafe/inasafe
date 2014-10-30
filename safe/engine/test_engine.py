@@ -2963,8 +2963,7 @@ class Test_Engine(unittest.TestCase):
     test_flood_on_roads.slow = True
 
     def test_flood_population_evacuation(self):
-        """Flood population evacuation
-        """
+        """Flood population evacuation"""
         population = 'people_jakarta_clip.tif'
         flood_data = 'flood_jakarta_clip.tif'
         plugin_name = 'FloodEvacuationFunction'
@@ -2973,22 +2972,22 @@ class Test_Engine(unittest.TestCase):
         exposure_filename = join(TESTDATA, population)
 
         # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
+        hazard_layer = read_layer(hazard_filename)
+        exposure_layer = read_layer(exposure_filename)
 
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
 
-        IF = plugin_list[0][plugin_name]
+        impact_functions = plugin_list[0][plugin_name]
 
         # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
+        impact_layer = calculate_impact(
+            layers=[hazard_layer, exposure_layer], impact_fcn=impact_functions)
         impact_filename = impact_layer.get_filename()
-        I = read_layer(impact_filename)
+        impact_layer = read_layer(impact_filename)
 
-        keywords = I.get_keywords()
+        keywords = impact_layer.get_keywords()
         # print "keywords", keywords
         evacuated = float(keywords['evacuated'])
         total_needs = keywords['total_needs']
