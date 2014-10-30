@@ -637,13 +637,13 @@ class ClipperTest(unittest.TestCase):
 
     def test_adjust_clip_extent(self):
         """Test adjust_clip_extent works as expected."""
-        cell_size = 2
-        layer_extent = [-2, -2, 14, 14]
+        cell_size = (2, 3)
+        layer_extent = [-2, -2, 14, 13]
 
         # 1. clip_extent < layer_extent
         # 1.1 clip_extent covers less than a cell. It will rounded up to a cell
         clip_extent = [-1, -1, 0, 0]  # this gets a cell
-        expected_adjusted_extent = [-2, -2, 0, 0]
+        expected_adjusted_extent = [-2, -2, 0, 1]
         adjusted_extent = adjust_clip_extent(
             clip_extent, cell_size, layer_extent)
         message = 'The adjusted extent should be %s, instead it gives %s' % (
@@ -652,7 +652,7 @@ class ClipperTest(unittest.TestCase):
 
         # 1.2 clip_extent covers more than a cell. Will be rounded up.
         clip_extent = [-1, -1, 2, 2]  # this gets 2 cells
-        expected_adjusted_extent = [-2, -2, 2, 2]
+        expected_adjusted_extent = [-2, -2, 2, 1]
         adjusted_extent = adjust_clip_extent(
             clip_extent, cell_size, layer_extent)
         message = 'The adjusted extent should be %s, instead it gives %s' % (
@@ -661,7 +661,7 @@ class ClipperTest(unittest.TestCase):
 
         # 2. clip_extent = layer_extent. Will just return layer_extent
         clip_extent = [-2, -2, 14, 14]
-        expected_adjusted_extent = [-2, -2, 14, 14]
+        expected_adjusted_extent = [-2, -2, 14, 13]
         adjusted_extent = adjust_clip_extent(
             clip_extent, cell_size, layer_extent)
         message = 'The adjusted extent should be %s, instead it gives %s' % (
@@ -672,7 +672,7 @@ class ClipperTest(unittest.TestCase):
         # get_optimal_extent should never produce this, but in case, it would
         # return adjusted_extent = layer_extent
         clip_extent = [-5, -5, 15, 15]
-        expected_adjusted_extent = [-2, -2, 14, 14]
+        expected_adjusted_extent = [-2, -2, 14, 13]
         adjusted_extent = adjust_clip_extent(
             clip_extent, cell_size, layer_extent)
         message = 'The adjusted extent should be %s, instead it gives %s' % (

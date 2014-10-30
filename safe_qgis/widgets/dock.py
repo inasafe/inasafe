@@ -1871,15 +1871,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 if hazard_geo_cell_size < exposure_geo_cell_size and \
                         allow_resampling_flag:
                     cell_size = hazard_geo_cell_size
-                    layer_extent = hazard_geoextent
+
+                    # Adjust the geo extent to coincide with hazard grids
+                    # order gdalwarp can do clipping properly
+                    geo_extent = adjust_clip_extent(
+                        geo_extent,
+                        get_wgs84_resolution(hazard_layer),
+                        hazard_geoextent)
                 else:
                     cell_size = exposure_geo_cell_size
-                    layer_extent = exposure_geoextent
 
-                # Adjust the geo extent to be at the edge of the pixel in
-                # order gdalwarp can do clipping properly
-                geo_extent = adjust_clip_extent(
-                    geo_extent, cell_size, layer_extent)
+                    # Adjust extent to coincide with exposure grids
+                    # order gdalwarp can do clipping properly
+                    geo_extent = adjust_clip_extent(
+                        geo_extent,
+                        get_wgs84_resolution(exposure_geo_cell_size),
+                        exposure_geoextent)
+
                 adjusted_geo_extent = geo_extent
 
                 # Record native resolution to allow rescaling of exposure data
@@ -1898,7 +1906,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # Adjust the geo extent to be at the edge of the pixel in
                 # order gdalwarp can do clipping properly
                 geo_extent = adjust_clip_extent(
-                    geo_extent, hazard_geo_cell_size, hazard_geoextent)
+                    geo_extent,
+                    get_wgs84_resolution(hazard_layer),
+                    hazard_geoextent)
 
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of

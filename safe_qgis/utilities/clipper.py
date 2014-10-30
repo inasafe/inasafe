@@ -628,8 +628,9 @@ def adjust_clip_extent(clip_extent, cell_size, layer_extent):
         the exposure, hazard and view port.
     :type clip_extent: list
 
-    :param cell_size: The size of a pixel in geo reference unit
-    :type cell_size: float
+    :param cell_size: The size of a pixel in geo reference unit in the form
+        (res_x, res_y)
+    :type cell_size: tuple
 
     :param layer_extent: An array representing the full extents of the layer
         in the form [xmin, ymin, xmax, ymax].
@@ -658,24 +659,27 @@ def adjust_clip_extent(clip_extent, cell_size, layer_extent):
     if clip_extent[3] > layer_extent[3]:
         clip_extent_ymax = layer_extent[3]
 
-    starting_cell = int(abs(clip_extent_xmin - layer_extent[0]) / cell_size)
-    adjusted_xmin = layer_extent[0] + starting_cell * cell_size
+    cell_size_x, cell_size_y = cell_size
+    starting_cell_x = int(
+        abs(clip_extent_xmin - layer_extent[0]) / cell_size_x)
+    adjusted_xmin = layer_extent[0] + starting_cell_x * cell_size_x
 
-    starting_cell = int(abs(clip_extent_ymin - layer_extent[1]) / cell_size)
-    adjusted_ymin = layer_extent[1] + starting_cell * cell_size
+    starting_cell_y = int(
+        abs(clip_extent_ymin - layer_extent[1]) / cell_size_y)
+    adjusted_ymin = layer_extent[1] + starting_cell_y * cell_size_y
 
     geo_clip_width = (float(clip_extent_xmax - clip_extent_xmin) /
-                      float(cell_size))
+                      float(cell_size_x))
     geo_clip_width = ceil(geo_clip_width)
 
     geo_clip_height = (float(clip_extent_ymax - clip_extent_ymin) /
-                       float(cell_size))
+                       float(cell_size_y))
     geo_clip_height = ceil(geo_clip_height)
 
     adjusted_extent = [
         adjusted_xmin,
         adjusted_ymin,
-        adjusted_xmin + geo_clip_width * cell_size,
-        adjusted_ymin + geo_clip_height * cell_size]
+        adjusted_xmin + geo_clip_width * cell_size_x,
+        adjusted_ymin + geo_clip_height * cell_size_y]
 
     return adjusted_extent
