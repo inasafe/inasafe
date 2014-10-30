@@ -30,7 +30,7 @@ from safe.common.exceptions import ReadMetadataError
 
 currentPath = os.path.abspath(os.path.dirname(__file__))
 ISO_METADATA_XML_TEMPLATE = os.path.join(currentPath,
-                                         'iso_19115-2_template.xml')
+                                         'iso_19115_template.xml')
 
 # list of tags to get to the inasafe keywords.
 # this is stored in a list so it can be easily used in a for loop
