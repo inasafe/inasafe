@@ -222,7 +222,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('Total Population affected '),
-                                '%s' % format_int(low + medium + high)],
+                                '%s' % format_int(total_impact)],
                                header=True),
                       TableRow([tr('Population affected within'
                                    ' high susceptibility areas '),
