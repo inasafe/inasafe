@@ -20,9 +20,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 import numpy
 import logging
 from safe_qgis.utilities.impact_calculator import ImpactCalculator
@@ -32,21 +31,13 @@ from safe_qgis.utilities.utilities import (
     viewport_geo_array,
     get_error_message
 )
-from functools import partial
 from safe_qgis.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.memory_checker import check_memory_usage
 from safe_qgis.safe_interface import (
-    load_plugins,
-    available_functions,
-    get_function_title,
     get_optimal_extent,
     get_buffered_extent,
-    get_safe_impact_function,
-    safeTr,
-    get_version,
-    temp_dir,
     ReadLayerError,
     get_postprocessors,
     get_postprocessor_human_name,
@@ -56,14 +47,10 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QGis)
 from safe_qgis.exceptions import (
-    KeywordNotFoundError,
     KeywordDbError,
-    NoKeywordsFoundError,
     InsufficientOverlapError,
-    InvalidParameterError,
     InvalidLayerError,
     InsufficientParametersError,
-    HashNotFoundError,
     CallGDALError,
     NoFeaturesInExtentError,
     InvalidProjectionError,
@@ -84,10 +71,7 @@ from safe_qgis.safe_interface import (
     ANALYSIS_DONE_SIGNAL,
     INSUFFICIENT_MEMORY_WARNING_SIGNAL)
 from third_party.pydispatch import dispatcher
-from safe_qgis.exceptions import (
-    NoValidLayerError,
-    InsufficientMemoryWarning
-)
+from safe_qgis.exceptions import NoValidLayerError
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 
@@ -622,7 +606,8 @@ class Analysis(object):
                 'carry out this analysis. See the dock panel '
                 'message for more information. Would you like to '
                 'continue regardless?')
-            self.send_insufficient_memory_signal(message)
+        # noinspection PyTypeChecker
+        self.send_insufficient_memory_signal(message)
 
         self.setup_aggregator()
 
@@ -802,8 +787,7 @@ class Analysis(object):
                 report.add(m.Text(self.tr(
                     'It appears that no %s are affected by %s. You may want '
                     'to consider:') % (
-                                      exposure_layer_title,
-                                      hazard_layer_title)))
+                        exposure_layer_title, hazard_layer_title)))
                 check_list = m.BulletedList()
                 check_list.add(self.tr(
                     'Check that you are not zoomed in too much and thus '

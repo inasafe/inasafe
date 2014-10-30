@@ -22,8 +22,6 @@ import os
 import logging
 from functools import partial
 
-import numpy
-
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -44,11 +42,8 @@ from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
     get_error_message,
-    get_wgs84_resolution,
     impact_attribution,
     add_ordered_combo_item,
-    extent_to_geo_array,
-    viewport_geo_array,
     read_impact_layer)
 from safe_qgis.utilities.defaults import (
     limitations,
@@ -58,22 +53,16 @@ from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe_qgis.utilities.memory_checker import check_memory_usage
 from safe_qgis.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
     load_plugins,
     available_functions,
     get_function_title,
-    get_optimal_extent,
-    get_buffered_extent,
     get_safe_impact_function,
     safeTr,
     get_version,
     temp_dir,
-    ReadLayerError,
-    get_postprocessors,
-    get_postprocessor_human_name,
-    ZeroImpactException)
+    ReadLayerError)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -83,24 +72,12 @@ from safe_qgis.safe_interface import (
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.clipper import clip_layer
-from safe_qgis.impact_statistics.aggregator import Aggregator
-from safe_qgis.impact_statistics.postprocessor_manager import (
-    PostprocessorManager)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
-    KeywordDbError,
     NoKeywordsFoundError,
     InsufficientOverlapError,
     InvalidParameterError,
-    InvalidLayerError,
-    InsufficientParametersError,
     HashNotFoundError,
-    CallGDALError,
-    NoFeaturesInExtentError,
-    InvalidProjectionError,
-    InvalidGeometryError,
-    AggregatioError,
     UnsupportedProviderError,
     InvalidAggregationKeywords)
 from safe_qgis.report.map import Map
@@ -192,9 +169,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.developer_mode = None
         self.organisation_logo_path = None
 
-        self.clip_parameters = None
-        self.aggregator = None
-        self.postprocessor_manager = None
         self.function_parameters = None
         self.analysis = None
 
@@ -1027,6 +1001,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
             return
         if isinstance(extent, list):
+            # noinspection PyBroadException
             try:
                 extent = QgsRectangle(
                     extent[0],
@@ -1102,6 +1077,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
             return
         if isinstance(extent, list):
+            # noinspection PyBroadException
             try:
                 extent = QgsRectangle(
                     extent[0],
@@ -1185,7 +1161,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :type old_keywords: dict
         """
         LOGGER.debug('Setting old dictionary: ' + str(old_keywords))
-        self.keyword_io.write_keywords(self.aggregator.layer, old_keywords)
+        self.keyword_io.write_keywords(
+            self.analysis.aggregator.layer, old_keywords)
         self.hide_busy()
         self.set_ok_button_status()
 
@@ -1228,6 +1205,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # noinspection PyTypeChecker
         self.analysis.hazard_keyword = self.keyword_io.read_keywords(
             self.get_hazard_layer())
+        # noinspection PyTypeChecker
         self.analysis.exposure_keyword = self.keyword_io.read_keywords(
             self.get_exposure_layer())
         # Need to check since aggregation layer is not mandatory
