@@ -345,11 +345,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = settings.value('inasafe/analysis_extent', '', type=str)
         crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
 
-        if extent is not '' and crs is not '':
+        if extent != '' and crs != '':
             extent = extent_string_to_array(extent)
-            self.user_extent = QgsRectangle(*extent)
-            self.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-            self.show_user_analysis_extent()
+            try:
+                self.user_extent = QgsRectangle(*extent)
+                self.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+                self.show_user_analysis_extent()
+            except TypeError:
+                self.user_extent = None
+                self.user_extent_crs = None
 
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)

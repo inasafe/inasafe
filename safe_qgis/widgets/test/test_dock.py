@@ -99,8 +99,9 @@ DOCK = Dock(IFACE)
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
-TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
-                              '../../test/test_data/test_files')
+TEST_FILES_DIR = os.path.join(
+    os.path.dirname(__file__),
+    '../../test/test_data/test_files')
 
 
 #noinspection PyArgumentList
@@ -121,6 +122,8 @@ class TestDock(TestCase):
         DOCK.zoom_to_impact_flag = False
         DOCK.hide_exposure_flag = False
         DOCK.show_intermediate_layers = False
+        DOCK.user_extent = None
+        DOCK.user_extent_crs = None
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -384,7 +387,7 @@ class TestDock(TestCase):
         rectangle = QgsRectangle(
             106.635434302702, -6.101567666986,
             106.635434302817, -6.101567666888)
-        CANVAS.set_extent(rectangle)
+        CANVAS.setExtent(rectangle)
 
         # Press RUN
         DOCK.accept()
@@ -971,7 +974,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        IFACE.mapCanvas().set_extent(
+        IFACE.mapCanvas().setExtent(
             QgsRectangle(106.788, -6.193, 106.853, -6.167))
 
         # Press RUN
@@ -1437,6 +1440,40 @@ Click for Diagnostic Information:
             expected_vertex_count,
             last_band.numberOfVertices()
         )
+
+    def test_user_defined_extent(self):
+        """Test that analysis honours user defined extents.
+
+        Note that when testing on a desktop system this will overwrite your
+        user defined analysis extent.
+
+        """
+
+        settings = QtCore.QSettings()
+        extents = '106.772279, -6.237576, 106.885165, -6.165415'
+        settings.setValue('inasafe/analysis_extent', extents)
+        settings.setValue('inasafe/analysis_extent_crs', 'EPSG:4326')
+        DOCK.read_settings()
+
+        setup_scenario(
+            DOCK,
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_enabled_flag=True)
+
+        DOCK.show_rubber_bands = True
+        expected_vertex_count = 5
+
+        # 4326 with disabled on-the-fly reprojection
+        set_canvas_crs(GEOCRS, True)
+        # User extent should override this
+        set_small_jakarta_extent()
+        DOCK.show_user_analysis_extent()
+        user_band = DOCK.user_analysis_rubberband
+        self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
 
     def test_issue1191(self):
         """Test setting a layer's title in the kw directly from qgis api"""
