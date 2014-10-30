@@ -328,7 +328,7 @@ class TestDock(TestCase):
         self.assertTrue(result, message)
 
         set_canvas_crs(GEOCRS, True)
-        set_batemans_bay_extent()
+        set_batemans_bay_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -446,7 +446,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         button = DOCK.pbnRunStop
@@ -474,7 +474,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -498,7 +498,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -524,7 +524,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -689,7 +689,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         button = DOCK.pbnRunStop
@@ -725,7 +725,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Run manually so we can get the output layer
         DOCK.clip_parameters = DOCK.get_clip_parameters()
@@ -770,7 +770,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -795,7 +795,7 @@ class TestDock(TestCase):
         LOGGER.info("Canvas list before:\n%s" % canvas_list())
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
         before_count = len(CANVAS.layers())
         #print 'Before count %s' % before_count
 
@@ -815,7 +815,7 @@ class TestDock(TestCase):
 
         button = DOCK.pbnRunStop
         set_canvas_crs(GEOCRS, True)
-        set_yogya_extent()
+        set_yogya_extent(DOCK)
 
         message = 'Run button was not enabled'
         self.assertTrue(button.isEnabled(), message)
@@ -1001,7 +1001,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_small_jakarta_extent()
+        set_small_jakarta_extent(DOCK)
         # Press RUN
         DOCK.accept()
         result = DOCK.wvResults.page().currentFrame().toPlainText()
@@ -1082,7 +1082,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -1126,7 +1126,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
 
@@ -1189,7 +1189,7 @@ class TestDock(TestCase):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1213,7 +1213,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -1243,7 +1243,7 @@ Click for Diagnostic Information:
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -1287,7 +1287,7 @@ Click for Diagnostic Information:
         """Function configuration button is enabled when layers are compatible.
         """
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1306,7 +1306,7 @@ Click for Diagnostic Information:
         """Memory requirements are calculated correctly when extents change.
         """
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1402,27 +1402,27 @@ Click for Diagnostic Information:
 
         # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
-        set_small_jakarta_extent()
+        set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
-        set_small_jakarta_extent()
+        set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check last
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -1470,7 +1470,7 @@ Click for Diagnostic Information:
         # 4326 with disabled on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         # User extent should override this
-        set_small_jakarta_extent()
+        set_small_jakarta_extent(DOCK)
         DOCK.show_user_analysis_extent()
         user_band = DOCK.user_analysis_rubberband
         self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
@@ -1479,7 +1479,7 @@ Click for Diagnostic Information:
         """Test setting a layer's title in the kw directly from qgis api"""
         DOCK.set_layer_from_title_flag = True
         set_canvas_crs(GEOCRS, True)
-        set_yogya_extent()
+        set_yogya_extent(DOCK)
 
         result, message = setup_scenario(
             DOCK,
