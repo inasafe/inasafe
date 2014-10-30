@@ -160,40 +160,50 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Extract data as numeric arrays
-        C = hazard_layer.get_data(nan=0.0)  # Category
+        data = hazard_layer.get_data(nan=0.0)  # Category
 
         # Calculate impact as population exposed to each category
-        P = exposure_layer.get_data(nan=0.0, scaling=True)
+        population = exposure_layer.get_data(nan=0.0, scaling=True)
         if high_t == 0:
-            H = numpy.where(0, P, 0)
+            hi = numpy.where(0, population, 0)
         else:
-            H = numpy.where(C == high_t, P, 0)
+            hi = numpy.where(data == high_t, population, 0)
         if medium_t == 0:
-            M = numpy.where(0, P, 0)
+            med = numpy.where(0, population, 0)
         else:
-            M = numpy.where(C == medium_t, P, 0)
+            med = numpy.where(data == medium_t, population, 0)
         if low_t == 0:
-            L = numpy.where(0, P, 0)
+            lo = numpy.where(0, population, 0)
         else:
-            L = numpy.where(C == low_t, P, 0)
+            lo = numpy.where(data == low_t, population, 0)
         if high_t == 0:
-            T = numpy.where((C == low_t) + (C == medium_t), P, 0)
+            impact = numpy.where(
+                (data == low_t) +
+                (data == medium_t),
+                population, 0)
         elif medium_t == 0:
-            T = numpy.where((C == low_t) + (C == high_t), P, 0)
+            impact = numpy.where(
+                (data == low_t) +
+                (data == high_t),
+                population, 0)
         elif low_t == 0:
-            T = numpy.where((C == medium_t) + (C == high_t), P, 0)
+            impact = numpy.where(
+                (data == medium_t) +
+                (data == high_t),
+                population, 0)
         else:
-            T = numpy.where((C == low_t) + (C == medium_t) + (C == high_t),
-                            P, 0)
-        Z = numpy.where(C == 0, P, 0)
+            impact = numpy.where(
+                (data == low_t) +
+                (data == medium_t) +
+                (data == high_t),
+                population, 0)
 
         # Count totals
-        total = int(numpy.sum(P))
-        high = int(numpy.sum(H))
-        medium = int(numpy.sum(M))
-        low = int(numpy.sum(L))
-        zero = int(numpy.sum(Z))
-        total_impact = int(numpy.sum(T))
+        total = int(numpy.sum(population))
+        high = int(numpy.sum(hi))
+        medium = int(numpy.sum(med))
+        low = int(numpy.sum(lo))
+        total_impact = int(numpy.sum(impact))
 
         # Don't show digits less than a 1000
         total = round_thousand(total)
@@ -201,7 +211,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         high = round_thousand(high)
         medium = round_thousand(medium)
         low = round_thousand(low)
-        zero = round_thousand(zero)
+        no_impact = round_thousand(total - total_impact)
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
@@ -227,7 +237,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                                 '%s' % format_int(low)],
                                header=True),
                       TableRow([tr('Population not affected'),
-                                '%s' % format_int(zero)],
+                                '%s' % format_int(no_impact)],
                                header=True),
                       TableRow(tr('Table below shows the weekly minimum '
                                   'needs for all evacuated people')),
@@ -267,7 +277,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         colours = [
             '#FFFFFF', '#38A800', '#79C900', '#CEED00',
             '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(T.flat[:], len(colours))
+        classes = create_classes(impact.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
 
@@ -306,7 +316,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
         # Create raster object and return
         raster_layer = Raster(
-            T,
+            impact,
             projection=hazard_layer.get_projection(),
             geotransform=hazard_layer.get_geotransform(),
             name=tr('Population which %s') % (
