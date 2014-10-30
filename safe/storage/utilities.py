@@ -14,12 +14,14 @@ from geometry import Polygon
 
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
-from safe.common.exceptions import BoundingBoxError, InaSAFEError
+from safe.common.exceptions import (
+    BoundingBoxError, InaSAFEError, ReadMetadataError)
 
 
 # Default attribute to assign to vector layers
 from safe.common.utilities import ugettext as tr
-from safe.storage.metadata_utilities import write_iso_metadata
+from safe.storage.metadata_utilities import (
+    write_iso_metadata, read_iso_metadata)
 
 DEFAULT_ATTRIBUTE = 'inapolygon'
 
@@ -206,13 +208,13 @@ def write_keywords(keywords, filename, sublayer=None):
     write_iso_metadata(filename)
 
 
-def read_keywords(filename, sublayer=None, all_blocks=False):
+def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
-    :param filename: Name of keywords file. Extension expected to be .keywords
+    :param keyword_filename: Name of keywords file. Extension expected to be .keywords
         The format of one line is expected to be either
         string: string or string
-    :type filename: str
+    :type keyword_filename: str
 
     :param sublayer: Optional sublayer applicable only to multilayer formats
         such as sqlite or netcdf which can potentially hold more than
@@ -258,23 +260,39 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
     If there are no ':', then the keyword is treated as a key with no value
     """
 
+    metadata = False
+
     # Input checks
-    basename, ext = os.path.splitext(filename)
+    basename, ext = os.path.splitext(keyword_filename)
 
     msg = ('Unknown extension for file %s. '
-           'Expected %s.keywords' % (filename, basename))
+           'Expected %s.keywords' % (keyword_filename, basename))
     verify(ext == '.keywords', msg)
 
-    if not os.path.isfile(filename):
+    try:
+        metadata = read_iso_metadata(keyword_filename)
+    except IOError:
+        pass
+    except ReadMetadataError:
+        pass
+
+    # we have no valid xml metadata nor a keyword file
+    if not metadata and not os.path.isfile(keyword_filename):
         return {}
 
-    # Read all entries
+    if metadata:
+        lines = metadata['keywords']
+    else:
+        # Read all entries
+        with open(keyword_filename, 'r') as fid:
+            lines = fid.readlines()
+
     blocks = {}
     keywords = {}
-    fid = open(filename, 'r')
     current_block = None
     first_keywords = None
-    for line in fid.readlines():
+
+    for line in lines:
         # Remove trailing (but not preceeding!) whitespace
         # FIXME: Can be removed altogether
         text = line.rstrip()
@@ -321,8 +339,6 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
 
         # Add entry to dictionary
         keywords[key] = val
-
-    fid.close()
 
     # Write our any unfinalised block data
     if len(keywords) > 0 and current_block is not None:

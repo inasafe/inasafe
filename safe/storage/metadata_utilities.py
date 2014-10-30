@@ -62,7 +62,7 @@ ElementTree._original_serialize_xml = ElementTree._serialize_xml
 def _serialize_xml(write, elem, encoding, qnames, namespaces):
     # print "MONKEYPATCHED CDATA support into Element tree called"
     if elem.tag == '![CDATA[':
-        write("\n<%s%s]]>%s\n" % (elem.tag, elem.text, elem.tail))
+        write("\n<%s%s]]>\n" % (elem.tag, elem.text))
         return
     return ElementTree._original_serialize_xml(
         write, elem, encoding, qnames, namespaces)
@@ -71,6 +71,16 @@ ElementTree._serialize_xml = ElementTree._serialize['xml'] = _serialize_xml
 
 
 def write_iso_metadata(keyword_filename):
+    """Write metadata to an xml file at the same location as the keyword file
+
+    :param keyword_filename: Name of keywords file.
+    :type keyword_filename: str
+
+    :returns: xml_filename: the path of the xml file
+
+    :raises: ReadMetadataError
+    """
+
     basename, _ = os.path.splitext(keyword_filename)
     xml_filename = basename + '.xml'
     with open(keyword_filename) as keyword_file:
@@ -90,6 +100,12 @@ def write_iso_metadata(keyword_filename):
 
 
 def valid_iso_xml(xml_filename):
+    """add the necessary tags into an existing xml file or create a new one
+
+    :param xml_filename: name of the xml file
+    :return: tree the parsed ElementTree
+    """
+
     if os.path.isfile(xml_filename):
         #the file already has an xml file, we need to check it's structure
         tree = ElementTree.parse(xml_filename)
@@ -111,3 +127,35 @@ def valid_iso_xml(xml_filename):
         tree = ElementTree.parse(xml_filename)
 
     return tree
+
+
+def read_iso_metadata(keyword_filename):
+    """Try to extract keywords from an xml file
+
+    :param keyword_filename: Name of keywords file.
+    :type keyword_filename: str
+
+    :returns: metadata: a dictionary containing the metadata.
+        the keywords element contains the content of the ISO_METADATA_KW_TAG
+        as list so that it can be read line per line as if it was a file.
+
+    :raises: ReadMetadataError, IOError
+    """
+
+    basename, _ = os.path.splitext(keyword_filename)
+    xml_filename = basename + '.xml'
+
+    # this raises a IOError if the file doesn't exist
+    tree = ElementTree.parse(xml_filename)
+    root = tree.getroot()
+
+    keyword_element = root.find(ISO_METADATA_KW_TAG)
+    # we have an iml file but it has no valid container
+    if keyword_element is None:
+        raise ReadMetadataError
+
+    print keyword_element.text
+    print xml_filename
+    metadata = {'keywords': keyword_element.text.split('\n')}
+
+    return metadata
