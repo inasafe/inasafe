@@ -57,7 +57,8 @@ from safe_qgis.exceptions import (
     InvalidGeometryError,
     AggregatioError,
     UnsupportedProviderError,
-    InvalidAggregationKeywords)
+    InvalidAggregationKeywords,
+    InsufficientMemoryWarning)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.clipper import clip_layer
 
@@ -68,8 +69,7 @@ from safe_qgis.safe_interface import (
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL,
-    INSUFFICIENT_MEMORY_WARNING_SIGNAL)
+    ANALYSIS_DONE_SIGNAL)
 from third_party.pydispatch import dispatcher
 from safe_qgis.exceptions import NoValidLayerError
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -111,6 +111,8 @@ class Analysis(object):
         self.run_in_thread_flag = None
         self.map_canvas = None
         self.clip_to_viewport = None
+
+        self.force_memory = False
 
         self.clip_parameters = None
         self.impact_calculator = ImpactCalculator()
@@ -256,17 +258,6 @@ class Analysis(object):
             signal=ERROR_MESSAGE_SIGNAL,
             sender=self,
             message=error_message)
-
-    def send_insufficient_memory_signal(self, message):
-        """Send an insufficient memory signal to the listeners.
-
-        :param message: An instance of our rich error message class.
-        :type message: Message
-        """
-        dispatcher.send(
-            signal=INSUFFICIENT_MEMORY_WARNING_SIGNAL,
-            sender=self,
-            message=message)
 
     def send_busy_signal(self):
         """Send an busy signal to the listeners."""
@@ -597,17 +588,11 @@ class Analysis(object):
             self.analysis_error(e, context)
             raise e
 
-        # Ensure there is enough memory
-        result = check_memory_usage(buffered_geoextent, cell_size)
-        if not result:
-        # noinspection PyCallByClass,PyTypeChecker
-            message = self.tr(
-                'You may not have sufficient free system memory to '
-                'carry out this analysis. See the dock panel '
-                'message for more information. Would you like to '
-                'continue regardless?')
-        # noinspection PyTypeChecker
-        self.send_insufficient_memory_signal(message)
+        if not self.force_memory:
+            # Ensure there is enough memory
+            result = check_memory_usage(buffered_geoextent, cell_size)
+            if not result:
+                raise InsufficientMemoryWarning
 
         self.setup_aggregator()
 
@@ -616,19 +601,9 @@ class Analysis(object):
         # accepted signal of the keywords dialog
         self.aggregator.validate_keywords()
         if self.aggregator.is_valid:
-            # self.run_analysis()
             pass
         else:
             raise InvalidAggregationKeywords
-            # message = 'Aggregator Layer has invalid keywords'
-            # error_message = get_error_message(KeywordNotFoundError, message)
-            # self.send_error_message(error_message)
-            # self.runtime_keywords_dialog.set_layer(self.aggregator.layer)
-            # # disable gui elements that should not be applicable for this
-            # self.runtime_keywords_dialog.radExposure.setEnabled(False)
-            # self.runtime_keywords_dialog.radHazard.setEnabled(False)
-            # self.runtime_keywords_dialog.setModal(True)
-            # self.runtime_keywords_dialog.show()
 
     def analysis_error(self, exception, message):
         """A helper to spawn an error and halt processing.

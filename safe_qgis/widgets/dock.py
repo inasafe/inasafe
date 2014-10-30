@@ -79,7 +79,8 @@ from safe_qgis.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     UnsupportedProviderError,
-    InvalidAggregationKeywords)
+    InvalidAggregationKeywords,
+    InsufficientMemoryWarning)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -1128,17 +1129,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.runtime_keywords_dialog.rejected.connect(
                     partial(self.accept_cancelled, original_keywords))
 
-            LOGGER.debug('enable busy cursor')
             self.enable_busy_cursor()
-            LOGGER.debug('setup analysis')
             self.setup_analysis()
-            LOGGER.debug('show next analysis extent')
             self.show_next_analysis_extent()
             extent = self.analysis.clip_parameters[1]
-            LOGGER.debug('show extent')
             self.show_extent(extent)
             # Start the analysis
-            LOGGER.debug('run analysis')
             self.analysis.run_analysis()
         except InsufficientOverlapError:
             return  # Will abort the analysis if there is exception
@@ -1150,6 +1146,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.runtime_keywords_dialog.radHazard.setEnabled(False)
             self.runtime_keywords_dialog.setModal(True)
             self.runtime_keywords_dialog.show()
+        except InsufficientMemoryWarning:
+            # noinspection PyCallByClass,PyTypeChecker
+            result = QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE'),
+                self.tr('You may not have sufficient free system memory to '
+                        'carry out this analysis. See the dock panel '
+                        'message for more information. Would you like to '
+                        'continue regardless?'), QtGui.QMessageBox.Yes |
+                QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+            if result == QtGui.QMessageBox.No:
+                # stop work here and return to QGIS
+                self.hide_busy()
+                return
+            elif result == QtGui.QMessageBox.Yes:
+                # Set analysis to ignore memory warning
+                self.analysis.force_memory = True
+                self.accept()
+
+        # Set back analysis to not ignore memory warning
+        self.analysis.force_memory = False
         self.disable_signal_receiver()
 
     def accept_cancelled(self, old_keywords):
