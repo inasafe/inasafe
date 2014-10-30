@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Disaster risk assessment tool developed by AusAid -
-  *SClipper implementation.**
+  *Clipper implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -40,7 +40,6 @@ from safe_qgis.safe_interface import (
     read_file_keywords,
     temp_dir,
     which)
-
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
     InvalidParameterError,
@@ -619,7 +618,10 @@ def extent_to_geoarray(extent, source_crs):
 
 
 def adjust_clip_extent(clip_extent, cell_size, layer_extent):
-    """Helper function to adjust the clip extent to the edge of the pixel
+    """Helper function to adjust the clip extent to the edge of the pixel.
+
+    This will make all the edges of the clip extent coincide with pixel from
+    the layer_extent.
 
     :param clip_extent: An array representing the clip extents in the
         form [xmin, ymin, xmax, ymax]. This is the optimal extent between
@@ -629,8 +631,8 @@ def adjust_clip_extent(clip_extent, cell_size, layer_extent):
     :param cell_size: The size of a pixel in geo reference unit
     :type cell_size: float
 
-    :param layer_extent: (optional) An array representing the full
-        extents of the layer in the form [xmin, ymin, xmax, ymax].
+    :param layer_extent: An array representing the full extents of the layer
+        in the form [xmin, ymin, xmax, ymax].
     :type layer_extent: list
 
     :return: An array containing an the adjusted clip extent in the
