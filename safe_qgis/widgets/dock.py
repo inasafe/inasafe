@@ -1885,7 +1885,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     # order gdalwarp can do clipping properly
                     geo_extent = adjust_clip_extent(
                         geo_extent,
-                        get_wgs84_resolution(exposure_geo_cell_size),
+                        get_wgs84_resolution(exposure_layer),
                         exposure_geoextent)
 
                 adjusted_geo_extent = geo_extent

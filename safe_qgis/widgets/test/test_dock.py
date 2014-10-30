@@ -344,16 +344,16 @@ class TestDock(TestCase):
         #All	7	16
 
         if qgis_version() < 20400:
-            total_buildings = 17
+            total_buildings = 18
         else:
-            total_buildings = 16
+            total_buildings = 17
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(total_buildings) in result, message)
 
         if qgis_version() < 20400:
-            flooded_buildings = 7
+            flooded_buildings = 8
         else:
-            flooded_buildings = 6
+            flooded_buildings = 7
         self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
