@@ -140,6 +140,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         """
 
         # The 3 category
+        global table_body
         high_t = self.parameters['high_thresholds']
         medium_t = self.parameters['medium_thresholds']
         low_t = self.parameters['low_thresholds']
@@ -159,17 +160,17 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         else:
             hazard_attribute = None
 
-        O = assign_hazard_values_to_exposure_data(
+        interpolated_result = assign_hazard_values_to_exposure_data(
             my_hazard,
             my_exposure,
             attribute_name=hazard_attribute,
             mode='constant')
 
         # Extract relevant exposure data
-        attribute_names = O.get_attribute_names()
-        attributes = O.get_data()
+        attribute_names = interpolated_result.get_attribute_names()
+        attributes = interpolated_result.get_data()
 
-        N = len(O)
+        N = len(interpolated_result)
         # Calculate building impact
         count = 0
         count1 = 0
@@ -259,20 +260,21 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         # Generate impact summary
             table_body = [question,
                           TableRow([tr('Hazard Level'),
-                                    tr('Number of Buildings')],
-                          header=True),
-                          TableRow([tr('Buildings in High risk area'),
+                                    tr('Number of Buildings')], header=True),
+                          TableRow([tr('Buildings in High risk areas'),
                                     format_int(count3)]),
-                          TableRow([tr('Buildings in Medium risk area'),
+                          TableRow([tr('Buildings in Medium risk areas'),
                                     format_int(count2)]),
-                          TableRow([tr('Buildings in Low risk area'),
+                          TableRow([tr('Buildings in Low risk areas'),
                                     format_int(count1)]),
-                          TableRow([tr('Buildings in No risk area'),
-                                    format_int(count)]),
-                          TableRow([tr(' '), tr(' ')]),
-                          TableRow([tr('Total of Affected Buildings'),
-                                    format_int(count1 + count2 + count3)]),
-                          TableRow([tr('All Buildings'), format_int(N)])]
+                          TableRow([tr('Total Buildings Affected'),
+                                    format_int(count1 + count2 + count3)],
+                                   header=True),
+                          TableRow([tr('Buildings Not Affected'),
+                                    format_int(count)],
+                                   header=True),
+                          TableRow([tr('All Buildings'), format_int(N)],
+                                   header=True)]
 
         school_closed = 0
         hospital_closed = 0
