@@ -223,13 +223,7 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        # QGIS  > 2.2 scales the extents to the 400x400 canvas
-        # slightly differently so versions prior to 2.4 will
-        # return 116 fatalities
-        if qgis_version() < 20400:
-            expected_mortalities = 116
-        else:
-            expected_mortalities = 117
+        expected_mortalities = 124
         # Check against expected output
         message = (
             'Unexpected result returned for Earthquake Fatality '
@@ -238,9 +232,9 @@ class TestDock(TestCase):
         self.assertTrue(format_int(expected_mortalities) in result, message)
 
         if qgis_version() < 20400:
-            expected_affected = 847596
+            expected_affected = 873637
         else:
-            expected_affected = 863412
+            expected_affected = 881634
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
@@ -303,8 +297,8 @@ class TestDock(TestCase):
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '31374747 , received: \n %s' % result)
-        self.assertTrue(format_int(31374747) in result, message)
+            '31555576 , received: \n %s' % result)
+        self.assertTrue(format_int(31555576) in result, message)
 
     def test_run_tsunami_building_impact_function(self):
         """Tsunami function runs in GUI as expected."""
@@ -356,7 +350,10 @@ class TestDock(TestCase):
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(total_buildings) in result, message)
 
-        flooded_buildings = 7
+        if qgis_version() < 20400:
+            flooded_buildings = 7
+        else:
+            flooded_buildings = 6
         self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
@@ -503,9 +500,9 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         # This is the expected number of building might be affected
-        self.assertTrue(format_int(535) in result, message)
-        self.assertTrue(format_int(453) in result, message)
-        self.assertTrue(format_int(436) in result, message)
+        self.assertTrue(format_int(724) in result, message)
+        self.assertTrue(format_int(771) in result, message)
+        self.assertTrue(format_int(850) in result, message)
 
     def test_run_categorised_hazard_population_impact_function(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -565,9 +562,9 @@ class TestDock(TestCase):
 
         message = ('Result not as expected: %s' % result)
         # This is the expected number of building might be affected
-        self.assertTrue(format_int(786) in result, message)
-        self.assertTrue(format_int(15528) in result, message)
-        self.assertTrue(format_int(177) in result, message)
+        self.assertTrue(format_int(845) in result, message)
+        self.assertTrue(format_int(15524) in result, message)
+        self.assertTrue(format_int(122) in result, message)
 
     def test_run_volcano_building_impact(self):
         """Volcano function runs in GUI with An donut (merapi hazard map)
@@ -1427,11 +1424,11 @@ Click for Diagnostic Information:
         last_band = DOCK.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected_wkt = (
-            'LINESTRING(11876228.33329810947179794 -695798.00000000046566129, '
-            '11908350.67106631398200989 -695798.00000000046566129, '
-            '11908350.67106631398200989 -678083.54461829818319529, '
-            '11876228.33329810947179794 -678083.54461829818319529, '
-            '11876228.33329810947179794 -695798.00000000046566129)')
+            'LINESTRING(11876228.33329810947179794 -695807.82839082507416606, '
+            '11908350.67106631398200989 -695807.82839082507416606, '
+            '11908350.67106631398200989 -678083.54461829655338079, '
+            '11876228.33329810947179794 -678083.54461829655338079, '
+            '11876228.33329810947179794 -695807.82839082507416606)')
         self.assertEqual(geometry, expected_wkt)
         self.assertEqual(
             expected_vertex_count,

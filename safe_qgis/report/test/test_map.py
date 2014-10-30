@@ -103,7 +103,7 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
-            458706,  # Ubuntu 14.04_64 AG
+            468836,  # Ubuntu 14.04_64 AG
             449348,  # Ubuntu 14.04_64 TS - pycharm
             425645,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             414589,  # Slackware64 14.0
@@ -149,7 +149,7 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
-            446080,  # Ubuntu 14.04_64 AG
+            450385,  # Ubuntu 14.04_64 AG
             430845,  # Ubuntu 14.04_64 TS pycharm
             413015,  # Ubuntu 14.04_64 TS make - TODO why is this?
             367934,  # Slackware64 14.0
