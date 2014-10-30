@@ -250,7 +250,8 @@ def interpolate_raster_vector(source, target,
         P = convert_polygons_to_centroids(target)
         R = interpolate_raster_vector_points(source, P,
                                              layer_name=layer_name,
-                                             attribute_name=attribute_name)
+                                             attribute_name=attribute_name,
+                                             mode=mode)
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
         # that of the original polygon

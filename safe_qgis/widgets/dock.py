@@ -80,7 +80,7 @@ from safe_qgis.safe_interface import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.clipper import clip_layer
+from safe_qgis.utilities.clipper import clip_layer, adjust_clip_extent
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
@@ -1929,7 +1929,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 should be written to the exposure layer. For example if
                 rescaling is required for a raster, the original resolution
                 can be added to the keywords file.
-            * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
+            * adjusted_geo_extent: list - [xmin, ymin, xmax, ymax] - the best
                 extent that can be used given the input datasets and the
                 current viewport extents or user defined analysis extents.
             * cell_size: float - the cell size that is the best of the
@@ -2003,16 +2003,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # the ideal WGS84 cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
         # All this is done in the function getWGS84resolution
-        buffered_geoextent = geo_extent  # Bbox to use for hazard layer
+        adjusted_geo_extent = geo_extent  # Bbox to use for hazard layer
         cell_size = None
         extra_exposure_keywords = {}
         if hazard_layer.type() == QgsMapLayer.RasterLayer:
             # Hazard layer is raster
-            hazard_geo_cell_size = get_wgs84_resolution(hazard_layer)
+            hazard_geo_cell_size, _ = get_wgs84_resolution(hazard_layer)
 
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
-                exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
+                exposure_geo_cell_size, _ = get_wgs84_resolution(exposure_layer)
+
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
                 keywords = self.keyword_io.read_keywords(exposure_layer)
@@ -2020,26 +2021,56 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 if 'allow_resampling' in keywords:
                     allow_resampling_flag = keywords[
                         'allow_resampling'].lower() == 'true'
+
                 if hazard_geo_cell_size < exposure_geo_cell_size and \
                         allow_resampling_flag:
                     cell_size = hazard_geo_cell_size
+
+                    # Adjust the geo extent to coincide with hazard grids
+                    # order gdalwarp can do clipping properly
+                    geo_extent = adjust_clip_extent(
+                        geo_extent,
+                        get_wgs84_resolution(hazard_layer),
+                        hazard_geoextent)
                 else:
                     cell_size = exposure_geo_cell_size
+
+                    # Adjust extent to coincide with exposure grids
+                    # order gdalwarp can do clipping properly
+                    geo_extent = adjust_clip_extent(
+                        geo_extent,
+                        get_wgs84_resolution(exposure_layer),
+                        exposure_geoextent)
+
+                adjusted_geo_extent = geo_extent
 
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(cell_size, exposure_geo_cell_size):
                     extra_exposure_keywords['resolution'] = \
                         exposure_geo_cell_size
             else:
+                if exposure_layer.type() != QgsMapLayer.VectorLayer:
+                    raise RuntimeError
+
+                # In here we do not set cell_size so that in
+                # _clip_raster_layer we can perform gdalwarp without
+                # specifying cell size as we still want to have the origin
+                # pixel size.
+
+                # Adjust the geo extent to be at the edge of the pixel in
+                # order gdalwarp can do clipping properly
+                geo_extent = adjust_clip_extent(
+                    geo_extent,
+                    get_wgs84_resolution(hazard_layer),
+                    hazard_geoextent)
+
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
                 # the view port to be interpolated correctly. This requires
                 # resolution to be available
-                if exposure_layer.type() != QgsMapLayer.VectorLayer:
-                    raise RuntimeError
-                buffered_geoextent = get_buffered_extent(
+                adjusted_geo_extent = get_buffered_extent(
                     geo_extent,
-                    hazard_geo_cell_size)
+                    get_wgs84_resolution(hazard_layer))
         else:
             # Hazard layer is vector
 
@@ -2048,11 +2079,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # as centers for evacuation circles: See issue #285
             if hazard_layer.geometryType() == QGis.Point:
                 geo_extent = exposure_geoextent
-                buffered_geoextent = geo_extent
+                adjusted_geo_extent = geo_extent
 
         return (
             extra_exposure_keywords,
-            buffered_geoextent,
+            adjusted_geo_extent,
             cell_size,
             exposure_layer,
             geo_extent,
