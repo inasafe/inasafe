@@ -154,17 +154,17 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             is_nexis = False
 
         # Interpolate hazard level to building locations.
-        my_interpolate_result = assign_hazard_values_to_exposure_data(
+        interpolate_result = assign_hazard_values_to_exposure_data(
             hazard_layer,
             exposure_layer,
             attribute_name=hazard_attribute
         )
 
         # Extract relevant exposure data
-        #attribute_names = my_interpolate_result.get_attribute_names()
-        attributes = my_interpolate_result.get_data()
+        #attribute_names = interpolate_result.get_attribute_names()
+        attributes = interpolate_result.get_data()
 
-        interpolate_size = len(my_interpolate_result)
+        interpolate_size = len(interpolate_result)
 
         # Calculate building impact
         lo = 0
@@ -293,8 +293,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         # Create vector layer and return
         result_layer = Vector(
             data=attributes,
-            projection=my_interpolate_result.get_projection(),
-            geometry=my_interpolate_result.get_geometry(),
+            projection=interpolate_result.get_projection(),
+            geometry=interpolate_result.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,
