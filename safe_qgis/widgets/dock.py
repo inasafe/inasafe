@@ -159,7 +159,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         load_plugins()
         self.pbnShowQuestion.setVisible(False)
         self.enable_messaging()
-        self.enable_signal_receiver()
 
         self.set_dock_title()
 
@@ -250,6 +249,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             signal=NOT_BUSY_SIGNAL)
 
         dispatcher.connect(
+            self.completed,
+            signal=ANALYSIS_DONE_SIGNAL)
+
+    def disable_signal_receiver(self):
+        """Remove dispatcher for all available signal from Analysis."""
+        dispatcher.disconnect(
+            self.show_busy,
+            signal=BUSY_SIGNAL)
+
+        dispatcher.disconnect(
+            self.hide_busy,
+            signal=NOT_BUSY_SIGNAL)
+
+        dispatcher.disconnect(
             self.completed,
             signal=ANALYSIS_DONE_SIGNAL)
 
@@ -1126,6 +1139,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        self.enable_signal_receiver()
         self.finished = False
         try:
             if self.get_aggregation_layer():
@@ -1162,6 +1176,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.runtime_keywords_dialog.radHazard.setEnabled(False)
             self.runtime_keywords_dialog.setModal(True)
             self.runtime_keywords_dialog.show()
+        self.disable_signal_receiver()
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
