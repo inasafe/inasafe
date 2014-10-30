@@ -260,7 +260,6 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     If there are no ':', then the keyword is treated as a key with no value
     """
 
-    metadata = False
 
     # Input checks
     basename, ext = os.path.splitext(keyword_filename)
@@ -269,15 +268,18 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
            'Expected %s.keywords' % (keyword_filename, basename))
     verify(ext == '.keywords', msg)
 
+    metadata = False
+    keywords_file = os.path.isfile(keyword_filename)
+
     try:
         metadata = read_iso_metadata(keyword_filename)
-    except IOError:
-        pass
-    except ReadMetadataError:
-        pass
+    except (IOError, ReadMetadataError):
+        if keywords_file:
+            write_iso_metadata(keyword_filename)
+            metadata = read_iso_metadata(keyword_filename)
 
     # we have no valid xml metadata nor a keyword file
-    if not metadata and not os.path.isfile(keyword_filename):
+    if not metadata and not keywords_file:
         return {}
 
     if metadata:

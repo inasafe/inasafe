@@ -150,7 +150,7 @@ def read_iso_metadata(keyword_filename):
     root = tree.getroot()
 
     keyword_element = root.find(ISO_METADATA_KW_TAG)
-    # we have an iml file but it has no valid container
+    # we have an xml file but it has no valid container
     if keyword_element is None:
         raise ReadMetadataError
 
