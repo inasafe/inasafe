@@ -224,16 +224,13 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                       TableRow([tr('Total Population affected '),
                                 '%s' % format_int(total_impact)],
                                header=True),
-                      TableRow([tr('Population affected within'
-                                   ' high susceptibility areas '),
+                      TableRow([tr('Population in High risk areas '),
                                 '%s' % format_int(high)],
                                header=True),
-                      TableRow([tr('Population affected within'
-                                   ' medium susceptibility areas '),
+                      TableRow([tr('Population in Medium risk areas '),
                                 '%s' % format_int(medium)],
                                header=True),
-                      TableRow([tr('Population affected within'
-                                   ' low susceptibility areas '),
+                      TableRow([tr('Population in Low risk areas '),
                                 '%s' % format_int(low)],
                                header=True),
                       TableRow([tr('Population not affected'),
