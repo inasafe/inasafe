@@ -131,19 +131,20 @@ def get_wgs84_resolution(layer):
     :param layer: Raster layer
     :type layer: QgsRasterLayer or QgsMapLayer
 
-    :returns: The resolution of the given layer.
-    :rtype: float
-
+    :returns: The resolution of the given layer in the form of (res_x, res_y)
+    :rtype: tuple
     """
 
     msg = tr(
-        'Input layer to getWGS84resolution must be a raster layer. '
+        'Input layer to get_wgs84_resolution must be a raster layer. '
         'I got: %s' % str(layer.type())[1:-1])
+
     if not layer.type() == QgsMapLayer.RasterLayer:
         raise RuntimeError(msg)
 
     if layer.crs().authid() == 'EPSG:4326':
-        cell_size = layer.rasterUnitsPerPixelX()
+        cell_size = (
+            layer.rasterUnitsPerPixelX(), layer.rasterUnitsPerPixelY())
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
@@ -155,12 +156,21 @@ def get_wgs84_resolution(layer):
         extent = layer.extent()
         projected_extent = transform.transformBoundingBox(extent)
 
-        # Estimate cell size
+        # Estimate resolution x
         columns = layer.width()
-        geo_width = abs(
+        width = abs(
             projected_extent.xMaximum() -
             projected_extent.xMinimum())
-        cell_size = geo_width / columns
+        cell_size_x = width / columns
+
+        # Estimate resolution y
+        rows = layer.height()
+        height = abs(
+            projected_extent.yMaximum() -
+            projected_extent.yMinimum())
+        cell_size_y = height / rows
+
+        cell_size = (cell_size_x, cell_size_y)
 
     return cell_size
 
