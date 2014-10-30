@@ -10,7 +10,9 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_weekly_needs,
+    population_rounding_full,
+    population_rounding
 )
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
@@ -211,15 +213,16 @@ class TsunamiEvacuationFunction(FunctionProvider):
             # Count
             val = int(numpy.sum(medium))
 
-            # Don't show digits less than a 1000
-            val = round_thousand(val)
-            counts.append(val)
+            # Sensible rounding
+            val, rounding = population_rounding_full(val)
+            counts.append([val, rounding])
 
         # Count totals
-        evacuated = counts[-1]
+        evacuated = counts[-1][0]
+        rounding = counts[-1][0]
         total = int(numpy.sum(population))
         # Don't show digits less than a 1000
-        total = round_thousand(total)
+        total = population_rounding(total)
 
         # Calculate estimated minimum needs
         # The default value of each logistic is based on BNPB Perka 7/2008
@@ -233,10 +236,10 @@ class TsunamiEvacuationFunction(FunctionProvider):
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s%s' % (format_int(evacuated), (
-                          '*' if evacuated >= 1000 else ''))],
+                      '%s*' % format_int(evacuated)],
                      header=True),
-            TableRow(tr('* Number is rounded to the nearest 1000')),
+            TableRow(
+                tr('* Number is rounded up to the nearest %s') % rounding),
             TableRow(tr('Map shows population density needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
@@ -275,7 +278,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
                 s = (tr('People in %(lo).1f m to %(hi).1f m of water: %(val)i')
                      % {'lo': thresholds[i],
                         'hi': thresholds[i + 1],
-                        'val': format_int(val)})
+                        'val': format_int(val[0])})
                 table_body.append(TableRow(s))
 
         # Result
