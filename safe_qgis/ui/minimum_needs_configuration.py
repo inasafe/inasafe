@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'minimum_needs_configuration.ui'
 #
-# Created: Thu Oct 30 10:29:39 2014
+# Created: Fri Oct 31 07:57:22 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -131,6 +131,15 @@ class Ui_minimumNeeds(object):
         self.resourceListWidget.setObjectName(_fromUtf8("resourceListWidget"))
         self.gridLayout.addWidget(self.resourceListWidget, 1, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.horizontalLayout_5 = QtGui.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
+        self.provenanceLable = QtGui.QLabel(self.page)
+        self.provenanceLable.setObjectName(_fromUtf8("provenanceLable"))
+        self.horizontalLayout_5.addWidget(self.provenanceLable)
+        self.provenanceLineEdit = QtGui.QLineEdit(self.page)
+        self.provenanceLineEdit.setObjectName(_fromUtf8("provenanceLineEdit"))
+        self.horizontalLayout_5.addWidget(self.provenanceLineEdit)
+        self.gridLayout_2.addLayout(self.horizontalLayout_5, 1, 0, 1, 1)
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QtGui.QWidget()
         self.page_2.setObjectName(_fromUtf8("page_2"))
@@ -202,6 +211,7 @@ class Ui_minimumNeeds(object):
         self.removeButton.setText(_translate("minimumNeeds", "-", None))
         self.editButton.setToolTip(_translate("minimumNeeds", "Edit selected resource", None))
         self.editButton.setText(_translate("minimumNeeds", "E", None))
+        self.provenanceLable.setText(_translate("minimumNeeds", "Provenance", None))
         self.discardButton.setToolTip(_translate("minimumNeeds", "Discard and return", None))
         self.discardButton.setText(_translate("minimumNeeds", "X", None))
         self.acceptButton.setToolTip(_translate("minimumNeeds", "Accept and return", None))

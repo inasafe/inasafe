@@ -14,57 +14,19 @@ __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
-import sys
-
-from PyQt4.QtGui import QApplication, QWidget, QGridLayout
+from PyQt4.QtGui import QWidget, QGridLayout
 from third_party.parameters.float_parameter import FloatParameter
-from third_party.parameters.integer_parameter import IntegerParameter
 from third_party.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from third_party.parameters.string_parameter import StringParameter
 
-import os
-from collections import OrderedDict
-from xml.dom import minidom
-
-#noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore, QtXml
-#noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
-#noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog, QDesktopServices
-from qgis.core import (
-    QgsMapLayerRegistry,
-    QgsMapRenderer,
-    QgsComposition,
-    QgsRectangle,
-    QgsAtlasComposition)
+from PyQt4.QtGui import QDialog, QFileDialog
 
 from safe_qgis.ui.minimum_needs_configuration import Ui_minimumNeeds
-from safe_qgis.exceptions import (
-    InvalidLayerError,
-    EmptyDirectoryError,
-    FileNotFoundError,
-    CanceledImportDialogError,
-    NoKeywordsFoundError,
-    KeywordNotFoundError,
-    InvalidParameterError,
-    ReportCreationError,
-    UnsupportedProviderError)
 from safe_qgis.safe_interface import (
-    messaging as m,
-    styles,
-    temp_dir)
-from safe_qgis.utilities.defaults import disclaimer
-from safe_qgis.utilities.utilities import (
-    html_header,
-    html_footer,
-    html_to_file,
-    add_ordered_combo_item)
-from safe_qgis.utilities.help import show_context_help
-from safe_qgis.utilities.keyword_io import KeywordIO
-from PyQt4 import QtCore, QtGui
+    styles)
+from PyQt4 import QtGui
+from safe_qgis.tools.minimum_needs import QMinimumNeeds
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -95,17 +57,22 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.discardButton.clicked.connect(self.discard_changes)
         self.acceptButton.clicked.connect(self.accept_changes)
 
-        self.populate_resource_list()
+        self.minimum_needs = QMinimumNeeds()
+
         self.load_profiles()
+        self.populate_resource_list()
         # self.add_resource()
         self.set_up_resource_parameters()
         self.add_edit = None
         # self.mark_current_profile_as_saved()
 
     def populate_resource_list(self):
-        self.add_resource({
-            'Readable sentence': 'We need water measured in {{ Unit }}!',
-            'Unit': 'liter'})
+        minimum_needs = self.minimum_needs.get_full_needs()
+        for full_resource in minimum_needs['resources']:
+            self.add_resource(full_resource)
+        self.provenanceLineEdit.setText(minimum_needs['provenance'])
+        self.profileComboBox.setCurrentIndex(
+            self.profileComboBox.findText(minimum_needs['profile']))
 
     def add_resource(self, resource):
         sentence = resource['Readable sentence'].split('{{')
@@ -123,8 +90,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.resourceListWidget.addItem(item)
 
     def load_profiles(self):
-        self.profileComboBox.addItem('This is the default profile')
-        self.profileComboBox.addItem('A way out wacky profile')
+        for profile in self.minimum_needs.get_profiles():
+            self.profileComboBox.addItem(profile)
 
     def change_profile(self):
         self.resourceListWidget.clear()
@@ -185,9 +152,9 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         parameter_widgets[3]._line_edit_input.setText(resource['Units'])
         parameter_widgets[4]._line_edit_input.setText(
             resource['Unit abbreviation'])
-        parameter_widgets[5]._input.setValue(resource['Default'])
-        parameter_widgets[6]._input.setValue(resource['Minimum allowed'])
-        parameter_widgets[7]._input.setValue(resource['Maximum allowed'])
+        parameter_widgets[5]._input.setValue(float(resource['Default']))
+        parameter_widgets[6]._input.setValue(float(resource['Minimum allowed']))
+        parameter_widgets[7]._input.setValue(float(resource['Maximum allowed']))
         parameter_widgets[8]._line_edit_input.setText(resource['Frequency'])
         parameter_widgets[9]._line_edit_input.setText(
             resource['Readable sentence'])
@@ -368,3 +335,67 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             resource[parameter.name] = parameter.value
         self.add_resource(resource)
         self.stackedWidget.setCurrentIndex(0)
+
+    def import_minimum_needs(self):
+        """ Import minimum needs from an existing json file.
+        The minimum needs are loaded from a file into the table. This state
+        is only saved if the form is accepted.
+        """
+        file_name = QtGui.QFileDialog.getOpenFileName(
+            self,
+            self.tr('Import minimum needs'),
+            '',
+            self.tr('JSON files (*.json *.JSON)'))
+        if file_name == '' or file_name is None:
+            return -1
+
+        if self.minimum_needs.read_from_file(file_name) == -1:
+            return -1
+
+        self.populate_minimum_needs_table()
+        return 0
+
+    def export_minimum_needs(self):
+        """ Export minimum needs to a json file.
+        This method will save the current state of the minimum needs setup.
+        Then open a dialog allowing the user to browse to the desired
+        destination loction and allow the user to save the needs as a json
+        file.
+        """
+        # self.save_minimum_needs()  # save current state before continuing
+
+        file_name = QFileDialog.getSaveFileName(
+            self,
+            self.tr('Export minimum needs'),
+            '',
+            self.tr('JSON files (*.json *.JSON)'))
+        if file_name != '' and file_name is not None:
+            self.minimum_needs.write_to_file(file_name)
+
+    def save_minimum_needs(self):
+        """ Save the current state of the minimum needs widget.
+        The minimum needs widget current state is saved to the QSettings via
+        the appropriate QMinimumNeeds class' method.
+        """
+        rows = self.minimum_needs_table.rowCount()
+        keys = self.minimum_needs.categories
+        columns = len(keys)
+        new_minimum_need = []
+        for row in range(rows):
+            minimum_need = {}
+            for column in range(columns):
+                key = keys[column]
+                item = self.minimum_needs_table.item(row, column)
+                if not item:
+                    item = self.minimum_needs_table.cellWidget(row, column)
+                    if not item:
+                        value = ''
+                    else:
+                        value = item.currentText()
+                else:
+                    value = item.text()
+                print value
+                minimum_need[key] = value
+            new_minimum_need.append(minimum_need)
+        self.minimum_needs.update_minimum_needs(new_minimum_need)
+        self.minimum_needs.save()

@@ -9,6 +9,9 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 from PyQt4.QtCore import QSettings
 from safe.common.minimum_needs import MinimumNeeds
+import os
+from os.path import expanduser, exists
+import shutil
 
 
 class QMinimumNeeds(MinimumNeeds):
@@ -29,11 +32,25 @@ class QMinimumNeeds(MinimumNeeds):
         """
         minimum_needs = self.settings.value('minimum_needs')
         if minimum_needs is None:
-            minimum_needs = self._defaults()
+            profiles = self.get_profiles()
+            minimum_needs = self.read_from_file(
+                expanduser('~/.qgis2/minimum_needs/%s.json' % profiles))
         self.minimum_needs = minimum_needs
 
     def save(self):
         """Save teh minimum needs to the QSettings object.
         """
         self.settings.setValue('minimum_needs', self.minimum_needs)
+
+    def get_profiles(self):
+        if not exists(expanduser('~/.qgis2/minimum_needs/')):
+            # os.mkdir(expanduser('~/.qgis2/minimum_needs/'))
+            shutil.copytree(
+                expanduser(
+                    '~/.qgis2/python/plugins/inasafe/files/minimum_needs/'),
+                expanduser('~/.qgis2/minimum_needs'))
+        profiles = [
+            profile.rstrip('.json') for profile in
+            os.listdir(expanduser('~/.qgis2/minimum_needs/'))]
+        return profiles
 

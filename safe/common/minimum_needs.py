@@ -131,11 +131,11 @@ class MinimumNeeds(object):
         :rtype: OrderedDict
         """
         minimum_needs = OrderedDict()
-        for resource in self.minimum_needs:
+        for resource in self.minimum_needs['resources']:
             name = '%s [%s]' % (
-                tr(resource['resource']),
-                resource['unit'])
-            amount = resource['amount']
+                tr(resource['Resource name']),
+                resource['Unit abbreviation'])
+            amount = resource['Default']
             minimum_needs[name] = amount
         return OrderedDict(minimum_needs)
 
@@ -189,13 +189,13 @@ class MinimumNeeds(object):
         :return: Returns success code, -1 for failure, 0 for success.
         :rtype: int
         """
-        if type(minimum_needs) != list:
+        if type(minimum_needs) != dict:
             return -1
-        for need in minimum_needs:
-            for key in need:
-                if key not in self.categories:
-                    # Unknown category
-                    return -1
+        # for need in minimum_needs:
+        #     for key in need:
+        #         if key not in self.categories:
+        #             # Unknown category
+        #             return -1
 
         self.minimum_needs = minimum_needs
         return 0
@@ -211,18 +211,24 @@ class MinimumNeeds(object):
         water = 'Water'
         family_kits = 'Family Kits'
         toilets = 'Toilets'
-        minimum_needs = [
-            {'resource': rice, 'amount': 2.8, 'unit': 'kg',
-                'frequency': 'weekly', 'provenance': 'BNPB'},
-            {'resource': drinking_water, 'amount': 17.5, 'unit': 'l',
-                'frequency': 'weekly', 'provenance': 'BNPB'},
-            {'resource': water, 'amount': 67, 'unit': 'l',
-                'frequency': 'weekly', 'provenance': 'BNPB'},
-            {'resource': family_kits, 'amount': 0.2, 'unit': 'unit',
-                'frequency': 'weekly', 'provenance': 'BNPB'},
-            {'resource': toilets, 'amount': 0.05, 'unit': 'unit',
-                'frequency': 'single', 'provenance': 'BNPB'},
-        ]
+        minimum_needs = {
+            'resources': [
+                {'resource': rice, 'amount': 2.8, 'unit': 'kg',
+                    'frequency': 'weekly'},
+                {'resource': drinking_water, 'amount': 17.5, 'unit': 'l',
+                    'frequency': 'weekly'},
+                {'resource': water, 'amount': 67, 'unit': 'l',
+                    'frequency': 'weekly'},
+                {'resource': family_kits, 'amount': 0.2, 'unit': 'unit',
+                    'frequency': 'weekly'},
+                {'resource': toilets, 'amount': 0.05, 'unit': 'unit',
+                    'frequency': 'single'},
+            ],
+            'Provenance': 'Perka',
+            'profile': [
+                'BNPB'
+            ]
+        }
         return minimum_needs
 
     def read_from_file(self, filename):
