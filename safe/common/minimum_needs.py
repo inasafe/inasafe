@@ -184,7 +184,7 @@ class MinimumNeeds(object):
          minimum needs.
 
         :param minimum_needs: The new minimum
-        :type minimum_needs: list
+        :type minimum_needs: dict
 
         :return: Returns success code, -1 for failure, 0 for success.
         :rtype: int

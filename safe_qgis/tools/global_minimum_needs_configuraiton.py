@@ -27,6 +27,7 @@ from safe_qgis.safe_interface import (
     styles)
 from PyQt4 import QtGui
 from safe_qgis.tools.minimum_needs import QMinimumNeeds
+from os.path import expanduser, basename
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -57,6 +58,9 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.discardButton.clicked.connect(self.discard_changes)
         self.acceptButton.clicked.connect(self.accept_changes)
         self.minimum_needs = QMinimumNeeds()
+
+        self.saveButton.clicked.connect(self.save_minimum_needs)
+        self.saveAsButton.clicked.connect(self.save_minimum_needs_as)
 
         self.load_profiles()
         self.clear_resource_list()
@@ -103,7 +107,6 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
     def select_profile(self, index):
         new_profile = self.profileComboBox.itemText(index)
         self.resourceListWidget.clear()
-        print new_profile
         self.minimum_needs.load_profile(new_profile)
         self.clear_resource_list()
         self.populate_resource_list()
@@ -389,25 +392,51 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         The minimum needs widget current state is saved to the QSettings via
         the appropriate QMinimumNeeds class' method.
         """
-        rows = self.minimum_needs_table.rowCount()
-        keys = self.minimum_needs.categories
-        columns = len(keys)
-        new_minimum_need = []
-        for row in range(rows):
-            minimum_need = {}
-            for column in range(columns):
-                key = keys[column]
-                item = self.minimum_needs_table.item(row, column)
-                if not item:
-                    item = self.minimum_needs_table.cellWidget(row, column)
-                    if not item:
-                        value = ''
-                    else:
-                        value = item.currentText()
-                else:
-                    value = item.text()
-                print value
-                minimum_need[key] = value
-            new_minimum_need.append(minimum_need)
-        self.minimum_needs.update_minimum_needs(new_minimum_need)
+        minimum_needs = {'resources': []}
+        for index in xrange(self.resourceListWidget.count()):
+            item = self.resourceListWidget.item(index)
+            minimum_needs['resources'].append(item.resource_full)
+        minimum_needs['provenance'] = self.provenanceLineEdit.text()
+        minimum_needs['profile'] = self.profileComboBox.itemText(
+            self.profileComboBox.currentIndex()
+        )
+        self.minimum_needs.update_minimum_needs(minimum_needs)
         self.minimum_needs.save()
+        self.minimum_needs.save_profile(minimum_needs['profile'])
+        self.mark_current_profile_as_saved()
+
+    def save_minimum_needs_as(self):
+        file_name = QFileDialog.getSaveFileName(
+            self,
+            self.tr('Export minimum needs'),
+            expanduser('~/.qgis2/minimum_needs'),
+            self.tr('JSON files (*.json *.JSON)'),
+            options=QtGui.QFileDialog.DontUseNativeDialog)
+        if not file_name:
+            return
+        file_name = basename(file_name)
+        minimum_needs = {'resources': []}
+        self.mark_current_profile_as_saved()
+        for index in xrange(self.resourceListWidget.count()):
+            item = self.resourceListWidget.item(index)
+            minimum_needs['resources'].append(item.resource_full)
+        minimum_needs['provenance'] = self.provenanceLineEdit.text()
+        minimum_needs['profile'] = file_name
+        self.minimum_needs.update_minimum_needs(minimum_needs)
+        self.minimum_needs.save()
+        self.minimum_needs.save_profile(file_name)
+        if self.profileComboBox.findText(file_name) == -1:
+            self.profileComboBox.addItem(file_name)
+        self.profileComboBox.setCurrentIndex(
+            self.profileComboBox.findText(file_name))
+
+
+    # def new_profile(selfs):
+    #     file_name = QFileDialog.getSaveFileName(
+    #         self,
+    #         self.tr('Export minimum needs'),
+    #         expanduser('~/.qgis2/minimum_needs'),
+    #         self.tr('JSON files (*.json *.JSON)'),
+    #         options=QtGui.QFileDialog.DontUseNativeDialog)
+    #     if not file_name:
+    #         return

@@ -38,8 +38,11 @@ class QMinimumNeeds(MinimumNeeds):
         self.minimum_needs = minimum_needs
 
     def load_profile(self, profile):
-        print expanduser('~/.qgis2/minimum_needs/%s.json' % profile)
         self.read_from_file(
+            expanduser('~/.qgis2/minimum_needs/%s.json' % profile))
+
+    def save_profile(self, profile):
+        self.write_to_file(
             expanduser('~/.qgis2/minimum_needs/%s.json' % profile))
 
     def save(self):
