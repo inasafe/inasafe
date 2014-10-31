@@ -109,13 +109,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [hazard_flood],
+                        'subcategories': [hazard_flood],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_population,
+                        'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]
                     }

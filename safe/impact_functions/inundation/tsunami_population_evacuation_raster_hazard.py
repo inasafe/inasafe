@@ -89,7 +89,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [hazard_tsunami],
+                        'subcategories': [hazard_tsunami],
                         'units': [
                             unit_feet_depth,
                             unit_metres_depth
@@ -98,7 +98,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_population,
+                        'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]
                     }

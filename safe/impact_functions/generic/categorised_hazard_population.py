@@ -75,13 +75,13 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': hazard_all,
+                        'subcategories': hazard_all,  # already a list
                         'units': [unit_normalised],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_population,
+                        'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
                         'layer_constraints': [layer_raster_numeric]
                     }
