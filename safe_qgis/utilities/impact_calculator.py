@@ -19,6 +19,7 @@ __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject
 
 #Do not import any QGIS or SAFE modules in this module!
@@ -228,7 +229,7 @@ class ImpactCalculator(QObject):
 
         :param extent:  Bounding box [xmin, ymin, xmax, ymax]
             of the working region.
-        :type extent: list
+        :type extent: list, None
 
         """
         self._extent = extent

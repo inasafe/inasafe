@@ -731,8 +731,10 @@ class WizardDialogTest(unittest.TestCase):
             source_directory=HAZDATA)
         dialog = WizardDialog(layer=layer)
 
-        expected_categories = ['hazard']
+        expected_categories = ['hazard', 'exposure']
         self.check_list(expected_categories, dialog.lstCategories)
+
+        self.select_from_list_widget('hazard', dialog.lstCategories)
 
         self.check_current_text('hazard', dialog.lstCategories)
 

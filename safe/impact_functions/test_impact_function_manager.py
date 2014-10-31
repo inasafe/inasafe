@@ -194,18 +194,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        result = impact_function_manager.categories_for_layer(
-            layer_type='vector', data_type='point')
-        expected_result = [hazard_definition, exposure_definition]
-        message = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertItemsEqual(result, expected_result, message)
-
-        result = impact_function_manager.categories_for_layer(
-            layer_type='raster', data_type='line')
-        expected_result = []
-        message = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertItemsEqual(result, expected_result, message)
-
     def test_subcategories_for_layer(self):
         """Test subcategories_for_layer API."""
         impact_function_manager = ImpactFunctionManager()
