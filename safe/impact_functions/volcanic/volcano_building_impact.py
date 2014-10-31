@@ -301,18 +301,47 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         table_body += [TableRow(table_headers, header=True)]
 
+        other_sum = {}
         for building_usage in building_usages:
             building_usage_good = building_usage.replace('_', ' ')
             building_usage_good = building_usage_good.capitalize()
-            row = [tr(building_usage_good)]
-            building_sum = 0
-            for category_name in category_names:
-                building_sub_sum = building_per_category[category_name][
-                    building_usage]
-                row.append(format_int(building_sub_sum))
-                building_sum += building_sub_sum
-            row.append(format_int(building_sum))
-            table_body.append(row)
+
+            building_sum = sum([building_per_category[category_name][
+                                    building_usage] for category_name in
+                               category_names])
+
+            # Filter building type that has no less than 25 items
+            if building_sum >= 25:
+                row = [tr(building_usage_good)]
+                building_sum = 0
+                for category_name in category_names:
+                    building_sub_sum = building_per_category[category_name][
+                        building_usage]
+                    row.append(format_int(building_sub_sum))
+                    building_sum += building_sub_sum
+
+                row.append(format_int(building_sum))
+                table_body.append(row)
+
+            else:
+                for category_name in category_names:
+                    if category_name in other_sum.keys():
+                        other_sum[category_name] += building_per_category[
+                            category_name][building_usage]
+                    else:
+                        other_sum[category_name] = building_per_category[
+                            category_name][building_usage]
+
+        # Adding others building type to the report.
+        other_row = [tr('Other')]
+        other_building_total = 0
+        for category_name in category_names:
+            other_building_sum = other_sum[category_name]
+            other_row.append(format_int(other_building_sum))
+            other_building_total += other_building_sum
+
+        other_row.append(format_int(other_building_total))
+        table_body.append(other_row)
 
         all_row = [tr('Total')]
         all_row += [format_int(building_per_category[category_name]['total'])
