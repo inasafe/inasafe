@@ -96,7 +96,12 @@ from safe import metadata
 # hack for excluding test-related import in built package
 try:
     from safe.common.testing import (
-        HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
+        HAZDATA,
+        EXPDATA,
+        TESTDATA,
+        UNITDATA,
+        BOUNDDATA,
+        get_shake_test_data_path)
 except ImportError:
     pass
 # pylint: enable=W0611

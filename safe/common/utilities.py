@@ -291,10 +291,14 @@ def get_free_memory_osx():
     platform_version = platform.mac_ver()[0]
     # Might get '10.9.1' so strop off the last no
     parts = platform_version.split('.')
-    platform_version = parts[0] + '.' + parts[1]
-    platform_version = float(platform_version)
+    platform_version = parts[0] + parts[1]
+    # We make version a int by concatenating the two parts
+    # so that we can successfully determine that 10.10 (release version)
+    # is greater than e.g. 10.8 (release version)
+    # 1010 vs 108
+    platform_version = int(platform_version)
 
-    if platform_version > 10.8:
+    if platform_version > 108:
         stdout_list = stdout_string.split(',')
         unused = stdout_list[1].replace('M unused', '').replace(' ', '')
         unused = unused.replace('.', '')
@@ -718,6 +722,40 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
         i += 1
         new_name = '%s_%s' % (new_name[:8], i)
     return new_name
+
+
+def get_osm_building_usage(attribute_names, feature):
+    """Get the usage of a row of OSM building data.
+
+    :param attribute_names: The list of attribute of the OSM building data.
+    :type attribute_names: list
+
+    :param feature: A row of data representing an OSM building.
+    :type feature: dict
+    """
+    if 'type' in attribute_names:
+        usage = feature['type']
+    elif 'TYPE' in attribute_names:
+        usage = feature['TYPE']
+    else:
+        usage = None
+
+    if 'amenity' in attribute_names and (usage is None or usage == 0):
+        usage = feature['amenity']
+    if 'building_t' in attribute_names and (usage is None or usage == 0):
+        usage = feature['building_t']
+    if 'office' in attribute_names and (usage is None or usage == 0):
+        usage = feature['office']
+    if 'tourism' in attribute_names and (usage is None or usage == 0):
+        usage = feature['tourism']
+    if 'leisure' in attribute_names and (usage is None or usage == 0):
+        usage = feature['leisure']
+    if 'building' in attribute_names and (usage is None or usage == 0):
+        usage = feature['building']
+        if usage == 'yes':
+            usage = 'building'
+
+    return usage
 
 
 def log_file_path():

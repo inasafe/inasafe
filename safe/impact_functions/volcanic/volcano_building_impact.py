@@ -97,7 +97,9 @@ class VolcanoBuildingImpact(FunctionProvider):
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],
-                        'layer_constraints': [layer_vector_polygon]
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point]
                     }
                 }
             }

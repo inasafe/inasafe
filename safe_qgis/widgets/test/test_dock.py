@@ -223,13 +223,7 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        # QGIS  > 2.2 scales the extents to the 400x400 canvas
-        # slightly differently so versions prior to 2.4 will
-        # return 116 fatalities
-        if qgis_version() < 20400:
-            expected_mortalities = 116
-        else:
-            expected_mortalities = 117
+        expected_mortalities = 124
         # Check against expected output
         message = (
             'Unexpected result returned for Earthquake Fatality '
@@ -238,9 +232,9 @@ class TestDock(TestCase):
         self.assertTrue(format_int(expected_mortalities) in result, message)
 
         if qgis_version() < 20400:
-            expected_affected = 847529
+            expected_affected = 873637
         else:
-            expected_affected = 863412
+            expected_affected = 881634
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
@@ -303,7 +297,7 @@ class TestDock(TestCase):
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '31374747 , received: \n %s' % result)
+            '31555576 , received: \n %s' % result)
         self.assertTrue(format_int(31374747) in result, message)
 
     def test_run_tsunami_building_impact_function(self):
@@ -350,13 +344,16 @@ class TestDock(TestCase):
         #All	7	16
 
         if qgis_version() < 20400:
-            total_buildings = 17
+            total_buildings = 18
         else:
-            total_buildings = 16
+            total_buildings = 17
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(total_buildings) in result, message)
 
-        flooded_buildings = 7
+        if qgis_version() < 20400:
+            flooded_buildings = 8
+        else:
+            flooded_buildings = 7
         self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
@@ -454,8 +451,8 @@ class TestDock(TestCase):
 
         # Check numbers are OK (within expected errors from resampling)
         # These are expected impact number
-        self.assertTrue(format_int(10473000) in result, message)
-        self.assertTrue(format_int(978000) in result, message)
+        self.assertTrue(format_int(10474000) in result, message)
+        self.assertTrue(format_int(979000) in result, message)
 
     def test_run_flood_population_polygon_hazard_impact_function(self):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
@@ -479,7 +476,7 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         # This is the expected number of people needing evacuation
-        self.assertTrue(format_int(1349000) in result, message)
+        self.assertTrue(format_int(1350000) in result, message)
 
     def test_run_categorized_hazard_building_impact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -503,9 +500,9 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         # This is the expected number of building might be affected
-        self.assertTrue(format_int(535) in result, message)
-        self.assertTrue(format_int(453) in result, message)
-        self.assertTrue(format_int(436) in result, message)
+        self.assertTrue(format_int(724) in result, message)
+        self.assertTrue(format_int(771) in result, message)
+        self.assertTrue(format_int(850) in result, message)
 
     def test_run_categorised_hazard_population_impact_function(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -529,7 +526,7 @@ class TestDock(TestCase):
 
         message = ('Result not as expected: %s' % result)
         # This is the expected number of population might be affected
-        self.assertTrue(format_int(30938000) in result, message)  # high
+        self.assertTrue(format_int(30939000) in result, message)  # high
         #self.assertTrue(format_int(68280000) in result, message)
         #self.assertTrue(format_int(157551000) in result, message)
         # The 2 asserts above are not valid anymore after the fix we made to
@@ -539,7 +536,7 @@ class TestDock(TestCase):
         # 8228915c248d#diff-378093670f4ebd60b4487af9b7c2e164)
         # New Asserts
         self.assertTrue(format_int(0) in result, message)  # medium
-        self.assertTrue(format_int(256769000) in result, message)  # low
+        self.assertTrue(format_int(256770000) in result, message)  # low
 
     #noinspection PyArgumentList
     def test_run_earthquake_building_impact_function(self):
@@ -565,9 +562,9 @@ class TestDock(TestCase):
 
         message = ('Result not as expected: %s' % result)
         # This is the expected number of building might be affected
-        self.assertTrue(format_int(786) in result, message)
-        self.assertTrue(format_int(15528) in result, message)
-        self.assertTrue(format_int(177) in result, message)
+        self.assertTrue(format_int(845) in result, message)
+        self.assertTrue(format_int(15524) in result, message)
+        self.assertTrue(format_int(122) in result, message)
 
     def test_run_volcano_building_impact(self):
         """Volcano function runs in GUI with An donut (merapi hazard map)
@@ -668,9 +665,9 @@ class TestDock(TestCase):
         # 3	     15.000	15.000
         # 5	     17.000	32.000
         # 10	124.000	156.000
-        self.assertTrue(format_int(15000) in result, message)
-        self.assertTrue(format_int(17000) in result, message)
-        self.assertTrue(format_int(124000) in result, message)
+        self.assertTrue(format_int(15800) in result, message)
+        self.assertTrue(format_int(17300) in result, message)
+        self.assertTrue(format_int(125000) in result, message)
 
     # disabled this test until further coding
     def xtest_print_map(self):
@@ -1397,14 +1394,14 @@ Click for Diagnostic Information:
         DOCK.show_rubber_bands = True
         expected_vertex_count = 5
 
-        # 4326 with disabled on-the-fly reprojection - check next
+        # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
         set_small_jakarta_extent()
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
-        # 4326 with enabled on-the-fly reprojection - check next
+        # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
         set_small_jakarta_extent()
         DOCK.show_next_analysis_extent()
@@ -1427,11 +1424,11 @@ Click for Diagnostic Information:
         last_band = DOCK.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected_wkt = (
-            'LINESTRING(11876228.33329810947179794 -695798.00000000046566129, '
-            '11908350.67106631398200989 -695798.00000000046566129, '
-            '11908350.67106631398200989 -678083.54461829818319529, '
-            '11876228.33329810947179794 -678083.54461829818319529, '
-            '11876228.33329810947179794 -695798.00000000046566129)')
+            'LINESTRING(11876228.33329810947179794 -695807.82839082507416606, '
+            '11908350.67106631398200989 -695807.82839082507416606, '
+            '11908350.67106631398200989 -678083.54461829655338079, '
+            '11876228.33329810947179794 -678083.54461829655338079, '
+            '11876228.33329810947179794 -695807.82839082507416606)')
         self.assertEqual(geometry, expected_wkt)
         self.assertEqual(
             expected_vertex_count,
