@@ -59,6 +59,7 @@
             "Units": "",
             "Unit abbreviation": "",
             "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+        },
         {
             "Default": "0.25",
             "Minimum allowed": "0",

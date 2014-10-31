@@ -37,6 +37,11 @@ class QMinimumNeeds(MinimumNeeds):
                 expanduser('~/.qgis2/minimum_needs/%s.json' % profiles))
         self.minimum_needs = minimum_needs
 
+    def load_profile(self, profile):
+        print expanduser('~/.qgis2/minimum_needs/%s.json' % profile)
+        self.read_from_file(
+            expanduser('~/.qgis2/minimum_needs/%s.json' % profile))
+
     def save(self):
         """Save teh minimum needs to the QSettings object.
         """
@@ -51,6 +56,7 @@ class QMinimumNeeds(MinimumNeeds):
                 expanduser('~/.qgis2/minimum_needs'))
         profiles = [
             profile.rstrip('.json') for profile in
-            os.listdir(expanduser('~/.qgis2/minimum_needs/'))]
+            os.listdir(expanduser('~/.qgis2/minimum_needs/')) if
+            profile[-5:] == '.json']
         return profiles
 

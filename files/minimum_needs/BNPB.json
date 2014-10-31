@@ -10,7 +10,7 @@
             "Unit": "kilogram",
             "Units": "kilograms",
             "Unit abbreviation": "kg",
-            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
         },
         {
             "Default": "17.5",
@@ -22,7 +22,7 @@
             "Unit": "litre",
             "Units": "litres",
             "Unit abbreviation": "l",
-            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
         },
         {
             "Default": "64",
@@ -34,7 +34,7 @@
             "Unit": "litre",
             "Units": "litres",
             "Unit abbreviation": "l",
-            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
         },
         {
             "Default": "0.2",
@@ -46,7 +46,7 @@
             "Unit": "",
             "Units": "",
             "Unit abbreviation": "",
-            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
         },
         {
             "Default": "0.05",
@@ -58,7 +58,7 @@
             "Unit": "",
             "Units": "",
             "Unit abbreviation": "",
-            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+            "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
         }
     ],
     "provenance": "BNPB",

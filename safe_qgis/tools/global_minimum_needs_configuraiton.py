@@ -56,23 +56,27 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.editButton.clicked.connect(self.edit_resource)
         self.discardButton.clicked.connect(self.discard_changes)
         self.acceptButton.clicked.connect(self.accept_changes)
-
         self.minimum_needs = QMinimumNeeds()
 
         self.load_profiles()
+        self.clear_resource_list()
         self.populate_resource_list()
         # self.add_resource()
         self.set_up_resource_parameters()
         self.add_edit = None
         # self.mark_current_profile_as_saved()
 
+        self.profileComboBox.activated.connect(
+            self.select_profile)
+
     def populate_resource_list(self):
         minimum_needs = self.minimum_needs.get_full_needs()
         for full_resource in minimum_needs['resources']:
             self.add_resource(full_resource)
         self.provenanceLineEdit.setText(minimum_needs['provenance'])
-        self.profileComboBox.setCurrentIndex(
-            self.profileComboBox.findText(minimum_needs['profile']))
+
+    def clear_resource_list(self):
+        self.resourceListWidget.clear()
 
     def add_resource(self, resource):
         sentence = resource['Readable sentence'].split('{{')
@@ -92,10 +96,18 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
     def load_profiles(self):
         for profile in self.minimum_needs.get_profiles():
             self.profileComboBox.addItem(profile)
+        minimum_needs = self.minimum_needs.get_full_needs()
+        self.profileComboBox.setCurrentIndex(
+            self.profileComboBox.findText(minimum_needs['profile']))
 
-    def change_profile(self):
+    def select_profile(self, index):
+        new_profile = self.profileComboBox.itemText(index)
         self.resourceListWidget.clear()
+        print new_profile
+        self.minimum_needs.load_profile(new_profile)
+        self.clear_resource_list()
         self.populate_resource_list()
+        self.minimum_needs.save()
 
     def mark_current_profile_as_pending(self):
         index = self.profileComboBox.currentIndex()
@@ -126,7 +138,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         parameter_widgets[8]._line_edit_input.setText('weekly')
         parameter_widgets[9]._line_edit_input.setText(
             "A displaced person should be provided with {{ Default }} "
-            "{{ Unit }}\{{ Units }}{{ Unit  }} of {{ Resource name }}. Though "
+            "{{ Unit }}\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though "
             "no less than {{ Minimum allowed }} and no more than "
             "{{ Maximum allowed }}. This should be provided {{ Frequency }}.")
         self.stackedWidget.setCurrentIndex(1)
