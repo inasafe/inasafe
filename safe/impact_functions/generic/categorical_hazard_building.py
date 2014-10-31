@@ -97,7 +97,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             return dict_meta
 
     # Function documentation
-    target_field = 'DAMAGED'
+    affected_field = 'AFFECTED'
     title = tr('Be impacted by each category')
     synopsis = tr(
         'To assess the impacts of categorized hazard in raster '
@@ -233,16 +233,16 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
 
             # Add calculated impact to existing attributes
             if val == high_t:
-                attributes[i][self.target_field] = 3
+                attributes[i][self.affected_field] = 3
 
             elif val == medium_t:
-                attributes[i][self.target_field] = 2
+                attributes[i][self.affected_field] = 2
 
             elif val == low_t:
-                attributes[i][self.target_field] = 1
+                attributes[i][self.affected_field] = 1
 
             else:
-                attributes[i][self.target_field] = 0
+                attributes[i][self.affected_field] = 0
 
         # Lump small entries and 'unknown' into 'other' category
         for usage in buildings.keys():
@@ -370,7 +370,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                               size=2,
                               border_color='#969696',
                               border_width=0.2)]
-        style_info = dict(target_field=self.target_field,
+        style_info = dict(target_field=self.affected_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
@@ -388,7 +388,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             keywords={
                 'impact_summary': impact_summary,
                 'impact_table': impact_table,
-                'target_field': self.target_field,
+                'target_field': self.affected_field,
                 'map_title': map_title,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
