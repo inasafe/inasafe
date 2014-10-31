@@ -89,7 +89,10 @@ from safe.messaging import styles
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL)
+    ERROR_MESSAGE_SIGNAL,
+    BUSY_SIGNAL,
+    NOT_BUSY_SIGNAL,
+    ANALYSIS_DONE_SIGNAL)
 from safe.messaging import ErrorMessage
 from safe import metadata
 

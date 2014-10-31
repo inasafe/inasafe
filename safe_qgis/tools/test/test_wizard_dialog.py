@@ -342,7 +342,8 @@ class WizardDialogTest(unittest.TestCase):
 
         # Initialize dialog
         # noinspection PyTypeChecker
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer=layer)
 
         # step 1 of 7 - select category
         self.check_current_text('hazard', dialog.lstCategories)
