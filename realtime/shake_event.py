@@ -1138,10 +1138,10 @@ class ShakeEvent(QObject):
         extra_exposure_keywords = {}
 
         # Hazard layer is raster
-        hazard_geo_cell_size = get_wgs84_resolution(hazard_layer)
+        hazard_geo_cell_size, _ = get_wgs84_resolution(hazard_layer)
 
         # In case of two raster layers establish common resolution
-        exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
+        exposure_geo_cell_size, _ = get_wgs84_resolution(exposure_layer)
 
         if hazard_geo_cell_size < exposure_geo_cell_size:
             cell_size = hazard_geo_cell_size
