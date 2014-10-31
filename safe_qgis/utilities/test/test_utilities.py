@@ -20,7 +20,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.utilities.defaults import breakdown_defaults
+from safe_qgis.utilities.defaults import get_defaults
 from safe_qgis.utilities.utilities import (
     get_error_message,
     qgis_version,
@@ -163,8 +163,11 @@ class UtilitiesTest(unittest.TestCase):
 
             'NO_DATA': u'No data',
 
-            'AGGR_ATTR_KEY': 'aggregation attribute'}
-        defaults = breakdown_defaults()
+            'AGGR_ATTR_KEY': 'aggregation attribute',
+
+            'ISO19115_ORGANIZATION': 'InaSAFE.org'}
+
+        defaults = get_defaults()
         self.assertDictEqual(defaults, expected)
 
     def test_mm_to_points(self):

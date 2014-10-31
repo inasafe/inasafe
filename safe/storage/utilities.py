@@ -275,6 +275,7 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
         metadata = read_iso_metadata(keyword_filename)
     except (IOError, ReadMetadataError):
         if keywords_file:
+            # if there is a keyword file generate an xml file also
             write_iso_metadata(keyword_filename)
             metadata = read_iso_metadata(keyword_filename)
 

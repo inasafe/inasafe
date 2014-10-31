@@ -6,7 +6,7 @@ import unittest
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFile
 from safe_qgis.utilities.defaults import (
-    breakdown_defaults,
+    get_defaults,
     disclaimer,
     default_organisation_logo_path,
     default_north_arrow_path)
@@ -48,7 +48,7 @@ class TestDefaults(unittest.TestCase):
 
             'AGGR_ATTR_KEY': 'aggregation attribute'}
 
-        actual = breakdown_defaults()
+        actual = get_defaults()
         self.maxDiff = None
         self.assertDictEqual(expected, actual)
 

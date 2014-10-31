@@ -42,7 +42,7 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     is_raster_layer,
     layer_attribute_names)
-from safe_qgis.utilities.defaults import breakdown_defaults
+from safe_qgis.utilities.defaults import get_defaults
 from safe_qgis.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -265,7 +265,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.global_default_data = metadata.global_default_attribute['id']
         self.do_not_use_string = metadata.do_not_use_attribute['name']
         self.do_not_use_data = metadata.do_not_use_attribute['id']
-        self.defaults = breakdown_defaults()
+        self.defaults = get_defaults()
 
     def selected_category(self):
         """Obtain the category selected by user.
@@ -1102,7 +1102,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_existing_aggregation_attributes(self):
         """Set values in aggregation step wizard based on existing keywords."""
-        self.defaults = breakdown_defaults()
+        self.defaults = get_defaults()
 
         female_ratio_default = self.get_existing_keyword(
             female_ratio_default_key)

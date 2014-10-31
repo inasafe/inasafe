@@ -29,7 +29,7 @@ from collections import OrderedDict
 
 from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
-from safe_qgis.utilities.defaults import breakdown_defaults
+from safe_qgis.utilities.defaults import get_defaults
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
@@ -130,7 +130,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         if self.layer is not None and is_polygon_layer(self.layer):
             # set some initial ui state:
-            self.defaults = breakdown_defaults()
+            self.defaults = get_defaults()
             self.radPredefined.setChecked(True)
             self.dsbFemaleRatioDefault.blockSignals(True)
             self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])

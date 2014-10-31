@@ -54,6 +54,9 @@ DEFAULTS['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
 DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'
 DEFAULTS['NO_DATA'] = tr('No data')
 
+# ISO 19115 Defaults
+DEFAULTS['ISO19115_ORGANIZATION'] = tr('InaSAFE.org')
+
 
 # noinspection PyUnresolvedReferences
 # this is used when we are in safe without access to qgis (e.g. web ) and is

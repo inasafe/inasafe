@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 from safe.storage.utilities import safe_to_qgis_layer
-from safe_qgis.utilities.defaults import breakdown_defaults
+from safe_qgis.utilities.defaults import get_defaults
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -124,7 +124,7 @@ class Aggregator(QtCore.QObject):
 
         self.extent = extent
         self._keyword_io = KeywordIO()
-        self._defaults = breakdown_defaults()
+        self._defaults = get_defaults()
         self.error_message = None
         self.target_field = None
 
