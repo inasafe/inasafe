@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.storage.utilities import write_iso_metadata
+from safe.storage.utilities import write_kw_in_iso_metadata
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'

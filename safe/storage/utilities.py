@@ -21,7 +21,7 @@ from safe.common.exceptions import (
 # Default attribute to assign to vector layers
 from safe.common.utilities import ugettext as tr
 from safe.storage.metadata_utilities import (
-    write_iso_metadata, read_iso_metadata)
+    write_kw_in_iso_metadata, read_iso_metadata)
 
 DEFAULT_ATTRIBUTE = 'inapolygon'
 
@@ -205,7 +205,7 @@ def write_keywords(keywords, filename, sublayer=None):
 
     handle.close()
 
-    write_iso_metadata(filename)
+    write_kw_in_iso_metadata(filename)
 
 
 def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
@@ -276,7 +276,7 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     except (IOError, ReadMetadataError):
         if keywords_file:
             # if there is a keyword file generate an xml file also
-            write_iso_metadata(keyword_filename)
+            write_kw_in_iso_metadata(keyword_filename)
             metadata = read_iso_metadata(keyword_filename)
 
     # we have no valid xml metadata nor a keyword file

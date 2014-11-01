@@ -23,14 +23,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 
-from shutil import copy2
 from xml.etree import ElementTree
 
 from safe.common.exceptions import ReadMetadataError
+from safe.defaults import get_defaults
+from safe.storage.iso_19115_template import ISO_METADATA_XML_TEMPLATE
 
-currentPath = os.path.abspath(os.path.dirname(__file__))
-ISO_METADATA_XML_TEMPLATE = os.path.join(currentPath,
-                                         'iso_19115_template.xml')
 
 # list of tags to get to the inasafe keywords.
 # this is stored in a list so it can be easily used in a for loop
@@ -70,8 +68,8 @@ ElementTree._serialize_xml = ElementTree._serialize['xml'] = _serialize_xml
 # END MONKEYPATCH CDATA
 
 
-def write_iso_metadata(keyword_filename):
-    """Write metadata to an xml file at the same location as the keyword file
+def write_kw_in_iso_metadata(keyword_filename):
+    """Write keywords in an xml file at the same location as the keyword  file
 
     :param keyword_filename: Name of keywords file.
     :type keyword_filename: str
@@ -99,6 +97,22 @@ def write_iso_metadata(keyword_filename):
     return xml_filename
 
 
+def generate_iso_metadata_file(xml_filename):
+    """Make a valid ISO 19115 XML file using the values of safe.get_defaults
+
+    This method will create a file based on the iso_19115_template.py template
+    The $placeholders there will be replaced by the values returned from
+    safe.defaults.get_defaults. Note that get_defaults takes care of using the
+    values set in QGIS settings if available.
+
+    :param xml_filename: full path to the file to be generated
+    :return:
+    """
+    xml = ISO_METADATA_XML_TEMPLATE.safe_substitute(get_defaults())
+    with open(xml_filename, 'w') as f:
+        f.write(xml)
+
+
 def valid_iso_xml(xml_filename):
     """add the necessary tags into an existing xml file or create a new one
 
@@ -123,7 +137,7 @@ def valid_iso_xml(xml_filename):
     else:
         # We create the XML from our template.
         # No more checks are needed since the template must be correct ;)
-        copy2(ISO_METADATA_XML_TEMPLATE, xml_filename)
+        generate_iso_metadata_file(xml_filename)
         tree = ElementTree.parse(xml_filename)
 
     return tree
@@ -154,8 +168,6 @@ def read_iso_metadata(keyword_filename):
     if keyword_element is None:
         raise ReadMetadataError
 
-    print keyword_element.text
-    print xml_filename
     metadata = {'keywords': keyword_element.text.split('\n')}
 
     return metadata
