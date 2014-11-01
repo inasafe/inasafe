@@ -58,16 +58,17 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.discardButton.clicked.connect(self.discard_changes)
         self.acceptButton.clicked.connect(self.accept_changes)
         self.minimum_needs = QMinimumNeeds()
+        self.edit_item = None
 
         self.saveButton.clicked.connect(self.save_minimum_needs)
         self.saveAsButton.clicked.connect(self.save_minimum_needs_as)
+        self.newButton.clicked.connect(self.new_profile)
 
         self.load_profiles()
         self.clear_resource_list()
         self.populate_resource_list()
         # self.add_resource()
         self.set_up_resource_parameters()
-        self.add_edit = None
         # self.mark_current_profile_as_saved()
 
         self.profileComboBox.activated.connect(
@@ -82,8 +83,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
     def clear_resource_list(self):
         self.resourceListWidget.clear()
 
-    def add_resource(self, resource):
-        sentence = resource['Readable sentence'].split('{{')
+    def _format_sentence(self, sentence, resource):
+        sentence = sentence.split('{{')
         updated_sentence = sentence[0].rstrip()
         for part in sentence[1:]:
             replace, keep = part.split('}}')
@@ -93,7 +94,17 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
                 resource[replace],
                 keep
             )
-        item = QtGui.QListWidgetItem(updated_sentence)
+        return updated_sentence
+
+    def add_resource(self, resource):
+        updated_sentence = self._format_sentence(
+            resource['Readable sentence'], resource)
+        if self.edit_item:
+            item = self.edit_item
+            item.setText(updated_sentence)
+            self.edit_item = None
+        else:
+            item = QtGui.QListWidgetItem(updated_sentence)
         item.resource_full = resource
         self.resourceListWidget.addItem(item)
 
@@ -123,7 +134,6 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         item.setForeground(QtGui.QColor('black'))
 
     def add_new_resource(self):
-        self.add_edit = 'add'
         parameters_widget = [
             self.resourceGroupBox.layout().itemAt(i) for i in
             range(self.resourceGroupBox.layout().count())][0].widget()
@@ -147,11 +157,11 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.stackedWidget.setCurrentIndex(1)
 
     def edit_resource(self):
-        self.add_edit = 'edit'
         self.mark_current_profile_as_pending()
         resource = None
         for item in self.resourceListWidget.selectedItems()[:1]:
             resource = item.resource_full
+            self.edit_item = item
         if not resource:
             return
         parameters_widget = [
@@ -334,6 +344,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             self.resourceListWidget.takeItem(self.resourceListWidget.row(item))
 
     def discard_changes(self):
+        self.edit_item = None
         self.stackedWidget.setCurrentIndex(0)
 
     def accept_changes(self):
@@ -411,7 +422,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             self.tr('Export minimum needs'),
             expanduser('~/.qgis2/minimum_needs'),
             self.tr('JSON files (*.json *.JSON)'),
-            options=QtGui.QFileDialog.DontUseNativeDialog)
+            options=QtGui.QFileDialog.DirectoryOnly)
         if not file_name:
             return
         file_name = basename(file_name)
@@ -430,13 +441,23 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.profileComboBox.setCurrentIndex(
             self.profileComboBox.findText(file_name))
 
+    def new_profile(self):
+        file_name = QFileDialog.getSaveFileName(
+            self,
+            self.tr('Export minimum needs'),
+            expanduser('~/.qgis2/minimum_needs'),
+            self.tr('JSON files (*.json *.JSON)'),
+            options=QtGui.QFileDialog.DontUseNativeDialog)
+        if not file_name:
+            return
+        file_name = basename(file_name)
+        minimum_needs = {
+            'resources': [], 'provenance': '', 'profile': file_name}
+        self.minimum_needs.update_minimum_needs(minimum_needs)
+        self.minimum_needs.save_profile(file_name)
+        if self.profileComboBox.findText(file_name) == -1:
+            self.profileComboBox.addItem(file_name)
+        self.profileComboBox.setCurrentIndex(
+            self.profileComboBox.findText(file_name))
 
-    # def new_profile(selfs):
-    #     file_name = QFileDialog.getSaveFileName(
-    #         self,
-    #         self.tr('Export minimum needs'),
-    #         expanduser('~/.qgis2/minimum_needs'),
-    #         self.tr('JSON files (*.json *.JSON)'),
-    #         options=QtGui.QFileDialog.DontUseNativeDialog)
-    #     if not file_name:
-    #         return
+
