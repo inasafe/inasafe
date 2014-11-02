@@ -1163,10 +1163,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf.setText(0, imfunc['name'])
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
                 #TODO TEMP DEBUG temporary:
-                if imfunc['name'] == "Tsunami Evacuation Function":
-                    self.twi_if_tsunami = tree_leaf
+                #if imfunc['name'] == "Tsunami Evacuation Function":
+                    #self.twi_if_tsunami = tree_leaf
         #TODO TEMP DEBUG temporary
-        self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
+        #self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1712,9 +1712,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             print type(self.if_params[p])
 
             if type(self.if_params[p]) == bool:
-                subparams = 'FOOFOOF'
+                pass
+                subparams = ''
             elif type(self.if_params[p]) == OrderedDict:
-                print '>>>>> o je!'
                 subparams = [u'%s: %s' % (unicode(pp), unicode(self.if_params[p][pp])) for pp in self.if_params[p]]
                 subparams = u', '.join(subparams)
             elif type(self.if_params[p]) == list:
