@@ -151,7 +151,7 @@ _template = '''<?xml version="1.0" encoding="UTF-8"?>
                 </gmd:EX_Extent>
             </gmd:extent>
             <gmd:supplementalInformation>
-                <inasafe_keywords>
+                <inasafe_keywords>$INASAFE_KEYWORDS
                 </inasafe_keywords>
             </gmd:supplementalInformation>
         </gmd:MD_DataIdentification>

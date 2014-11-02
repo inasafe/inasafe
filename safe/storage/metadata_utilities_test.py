@@ -48,14 +48,16 @@ class TestCase(unittest.TestCase):
         xml_file = basename + '.xml'
 
         # there should be no xml file now
-        self.assertFalse(os.path.isfile(xml_file))
+        self.assertFalse(
+            os.path.isfile(xml_file), 'File %s should not exist' % xml_file)
         xml_file = write_kw_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)
         keyword_tag = tree.getroot().find(ISO_METADATA_KW_TAG)
         self.assertIn(keywords, keyword_tag.text)
 
         # there should be an xml file now
-        self.assertTrue(os.path.isfile(xml_file))
+        self.assertTrue(
+            os.path.isfile(xml_file), 'File %s should exist' % xml_file)
         # lets update the file
         xml_file = write_kw_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)

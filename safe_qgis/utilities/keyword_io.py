@@ -14,8 +14,13 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+
+import json
 import os
 from os.path import expanduser
+from xml.etree import ElementTree
+from safe.storage.metadata_utilities import generate_iso_metadata, \
+    ISO_METADATA_KW_TAG
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
@@ -486,7 +491,8 @@ class KeywordIO(QObject):
                 'select dict from keyword where hash = \'%s\';' % hash_value)
             cursor.execute(sql)
             data = cursor.fetchone()
-            pickle_dump = pickle.dumps(keywords, pickle.HIGHEST_PROTOCOL)
+            metadata_xml = generate_iso_metadata(keywords)
+            pickle_dump = pickle.dumps(metadata_xml, pickle.HIGHEST_PROTOCOL)
             if data is None:
                 # insert a new rec
                 #cursor.execute('insert into keyword(hash) values(:hash);',
@@ -555,7 +561,13 @@ class KeywordIO(QObject):
             if data is None:
                 raise HashNotFoundError('No hash found for %s' % hash_value)
             data = data[0]  # first field
-            picked_dict = pickle.loads(str(data))
+            metadata_xml = pickle.loads(str(data))
+            root = ElementTree.fromstring(metadata_xml)
+            keyword_element = root.find(ISO_METADATA_KW_TAG)
+            print  metadata_xml
+            #TODO make more solid
+            dict_str = keyword_element.text
+            picked_dict = json.loads(dict_str)
             if keyword is None:
                 return picked_dict
             if keyword in picked_dict:

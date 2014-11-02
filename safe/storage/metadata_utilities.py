@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+import json
 import os
 
 from xml.etree import ElementTree
@@ -97,6 +98,26 @@ def write_kw_in_iso_metadata(keyword_filename):
     return xml_filename
 
 
+def generate_iso_metadata(keywords=None):
+    """Make a valid ISO 19115 XML using the values of safe.get_defaults
+
+    This method will create XML based on the iso_19115_template.py template
+    The $placeholders there will be replaced by the values returned from
+    safe.defaults.get_defaults. Note that get_defaults takes care of using the
+    values set in QGIS settings if available.
+
+    :param keywords: The metadata keywords to write (which should be
+            provided as a dict of key value pairs).
+    :type keywords: dict
+
+    :return: str valid XML
+    """
+    defaults = get_defaults()
+    if keywords is not None:
+        defaults['INASAFE_KEYWORDS'] = '<![CDATA[%s]]>' % json.dumps(keywords)
+    return ISO_METADATA_XML_TEMPLATE.safe_substitute(get_defaults())
+
+
 def generate_iso_metadata_file(xml_filename):
     """Make a valid ISO 19115 XML file using the values of safe.get_defaults
 
@@ -108,7 +129,7 @@ def generate_iso_metadata_file(xml_filename):
     :param xml_filename: full path to the file to be generated
     :return:
     """
-    xml = ISO_METADATA_XML_TEMPLATE.safe_substitute(get_defaults())
+    xml = generate_iso_metadata()
     with open(xml_filename, 'w') as f:
         f.write(xml)
 
