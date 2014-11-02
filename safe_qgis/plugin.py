@@ -512,7 +512,7 @@ class Plugin:
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.global_minimum_needs_configuraiton import (
+        from safe_qgis.tools.global_minimum_needs_configuration import (
             GlobalMinimumNdeedsDialog)
 
         dialog = GlobalMinimumNdeedsDialog(self.iface.mainWindow())

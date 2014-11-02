@@ -207,7 +207,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
-        parameter_widgets[0]._line_edit_input.setText(resource['Resource name'])
+        parameter_widgets[0]._line_edit_input.setText(
+            resource['Resource name'])
         parameter_widgets[1]._line_edit_input.setText(
             resource['Resource description'])
         parameter_widgets[2]._line_edit_input.setText(resource['Unit'])
@@ -215,8 +216,10 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         parameter_widgets[4]._line_edit_input.setText(
             resource['Unit abbreviation'])
         parameter_widgets[5]._input.setValue(float(resource['Default']))
-        parameter_widgets[6]._input.setValue(float(resource['Minimum allowed']))
-        parameter_widgets[7]._input.setValue(float(resource['Maximum allowed']))
+        parameter_widgets[6]._input.setValue(float(
+            resource['Minimum allowed']))
+        parameter_widgets[7]._input.setValue(float(
+            resource['Maximum allowed']))
         parameter_widgets[8]._line_edit_input.setText(resource['Frequency'])
         parameter_widgets[9]._line_edit_input.setText(
             resource['Readable sentence'])
@@ -268,8 +271,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             'kilogram etc.')
         units_parameter.description = (
             '<b>Units</b> are the basic measurement used for computing the '
-            'allowance per individual. For example when planning water rations '
-            'the units would be litres.')
+            'allowance per individual. For example when planning water '
+            'rations the units would be litres.')
         units_parameter.is_required = True
         units_parameter.value = ''
 
@@ -295,9 +298,9 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         minimum_parameter.description = (
             'The <b>minimum</b> is the minimum allowed quantity of the '
             'resource per person. For example you may dictate that the water '
-            'ration per person per day should never be allowed to be less than '
-            '0.5l. This is enforced when tweaking a minimum needs set before '
-            'an impact evaluation')
+            'ration per person per day should never be allowed to be less '
+            'than 0.5l. This is enforced when tweaking a minimum needs set '
+            'before an impact evaluation')
         minimum_parameter.value = 0.00
 
         maximum_parameter = FloatParameter('UUID-7')
@@ -311,9 +314,9 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         maximum_parameter.description = (
             'The <b>maximum</b> is the maximum allowed quantity of the '
             'resource per person. For example you may dictate that the water '
-            'ration per person per day should never be allowed to be more than '
-            '50l. This is enforced when tweaking a minimum needs set before '
-            'an impact evaluation.')
+            'ration per person per day should never be allowed to be more '
+            'than 50l. This is enforced when tweaking a minimum needs set '
+            'before an impact evaluation.')
         maximum_parameter.value = 100.0
 
         default_parameter = FloatParameter('UUID-8')

@@ -24,7 +24,7 @@ class MinimumNeeds(object):
         :param resource: The resource name
         :type resource: basestring
 
-        :return: resource needed.
+        :returns: resource needed.
         :rtype: dict, None
         """
         for need in self.minimum_needs:
@@ -37,7 +37,7 @@ class MinimumNeeds(object):
 
         That is the resource and the amount.
 
-        :return: minimum needs
+        :returns: minimum needs
         :rtype: OrderedDict
         """
         minimum_needs = OrderedDict()
@@ -57,7 +57,7 @@ class MinimumNeeds(object):
         """The full list of minimum needs with all fields.
 
 
-        :return: minimum needs
+        :returns: minimum needs
         :rtype: dict
         """
         return self.minimum_needs
@@ -147,7 +147,7 @@ class MinimumNeeds(object):
         :param filename: The file to be written to.
         :type filename: basestring, str
 
-        :return: Success status. -1 for unsuccessful 0 for success
+        :returns: Success status. -1 for unsuccessful 0 for success
         :rtype: int
         """
         with open(filename) as fd:
