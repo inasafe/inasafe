@@ -251,10 +251,8 @@ class Plugin:
         # Create action for IF-centric wizard
         #--------------------------------------
         self.action_function_centric_wizard = QAction(
-            #QIcon(':/plugins/inasafe/show-function-centric-wizard.svg'),
-            QIcon(),
-            #self.tr('InaSAFE Impact Function Centric wizard'),
-            self.tr('IFCW'),
+            QIcon(':/plugins/inasafe/show-wizard.svg'),
+            self.tr('InaSAFE Impact Function Centric Wizard'),
             self.iface.mainWindow())
         self.action_function_centric_wizard.setStatusTip(self.tr(
             'Open InaSAFE impact function centric wizard'))
