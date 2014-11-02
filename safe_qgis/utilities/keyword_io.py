@@ -76,7 +76,8 @@ class KeywordIO(QObject):
 
         :param layer:  A QGIS QgsMapLayer instance that you want to obtain
             the keywords for.
-        :type layer: QgsMapLayer
+        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer,
+            QgsPluginLayer
 
         :param keyword: If set, will extract only the specified keyword
               from the keywords dict.

@@ -23,8 +23,9 @@ from safe.metadata import (
     unit_building_type_type,
     hazard_definition,
     exposure_definition,
-    unit_building_generic)
-from safe.common.utilities import OrderedDict
+    unit_building_generic,
+    layer_vector_point)
+from safe.common.utilities import OrderedDict, get_osm_building_usage
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
@@ -106,7 +107,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],
-                        'layer_constraints': [layer_vector_polygon]
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point]
                     }
                 }
             }
@@ -142,7 +145,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         'recognised (in order): "affected" (True or False) or "FLOODPRONE" '
         '(Yes or No). (True may be represented as 1, False as 0')
     exposure_input = tr(
-        'Vector polygon layer extracted from OSM where each polygon '
+        'Vector polygon or point layer extracted from OSM where each feature '
         'represents the footprint of a building.')
     output = tr(
         'Vector layer contains building is estimated to be flooded and the '
@@ -162,9 +165,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
         """Flood impact to buildings (e.g. from Open Street Map).
 
          :param layers: List of layers expected to contain.
-                * my_hazard: Hazard layer of flood
-                * my_exposure: Vector layer of structure data on
-                the same grid as my_hazard
+                * hazard_layer: Hazard layer of flood
+                * exposure_layer: Vector layer of structure data on
+                the same grid as hazard_layer
         """
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]
 
@@ -172,16 +175,16 @@ class FloodBuildingImpactFunction(FunctionProvider):
                'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)  # Depth
-        my_exposure = get_exposure_layer(layers)  # Building locations
+        hazard_layer = get_hazard_layer(layers)  # Depth
+        exposure_layer = get_exposure_layer(layers)  # Building locations
 
         question = get_question(
-            my_hazard.get_name(),
-            my_exposure.get_name(),
+            hazard_layer.get_name(),
+            exposure_layer.get_name(),
             self)
 
         # Determine attribute name for hazard levels
-        if my_hazard.is_raster:
+        if hazard_layer.is_raster:
             mode = 'grid'
             hazard_attribute = 'depth'
         else:
@@ -189,25 +192,76 @@ class FloodBuildingImpactFunction(FunctionProvider):
             hazard_attribute = None
 
         # Interpolate hazard level to building locations
-        I = assign_hazard_values_to_exposure_data(
-            my_hazard, my_exposure, attribute_name=hazard_attribute)
+        interpolated_layer = assign_hazard_values_to_exposure_data(
+            hazard_layer, exposure_layer, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
-        attribute_names = I.get_attribute_names()
-        attributes = I.get_data()
-        N = len(I)
-        # Calculate building impact
-        count = 0
+        attribute_names = interpolated_layer.get_attribute_names()
+        features = interpolated_layer.get_data()
+        total_features = len(interpolated_layer)
         buildings = {}
+
+        # The number of affected buildings
+        affected_count = 0
+
+        # The variable for grid mode
+        inundated_count = 0
+        wet_count = 0
+        dry_count = 0
+        inundated_buildings = {}
+        wet_buildings = {}
+        dry_buildings = {}
+
+        # The variable for regions mode
         affected_buildings = {}
-        for i in range(N):
-            if mode == 'grid':
+
+        if mode == 'grid':
+            for i in range(total_features):
                 # Get the interpolated depth
-                x = float(attributes[i]['depth'])
-                x = x >= threshold
-            elif mode == 'regions':
+                water_depth = float(features[i]['depth'])
+                if water_depth <= 0:
+                    inundated_status = 0  # dry
+                elif water_depth >= threshold:
+                    inundated_status = 1  # inundated
+                else:
+                    inundated_status = 2  # wet
+
+                # Count affected buildings by usage type if available
+                usage = get_osm_building_usage(attribute_names, features[i])
+                if usage is not None and usage != 0:
+                    key = usage
+                else:
+                    key = 'unknown'
+
+                if key not in buildings:
+                    buildings[key] = 0
+                    inundated_buildings[key] = 0
+                    wet_buildings[key] = 0
+                    dry_buildings[key] = 0
+
+                # Count all buildings by type
+                buildings[key] += 1
+                if inundated_status is 0:
+                    # Count dry buildings by type
+                    dry_buildings[key] += 1
+                    # Count total dry buildings
+                    dry_count += 1
+                if inundated_status is 1:
+                    # Count inundated buildings by type
+                    inundated_buildings[key] += 1
+                    # Count total dry buildings
+                    inundated_count += 1
+                if inundated_status is 2:
+                    # Count wet buildings by type
+                    wet_buildings[key] += 1
+                    # Count total wet buildings
+                    wet_count += 1
+                # Add calculated impact to existing attributes
+                features[i][self.target_field] = inundated_status
+        elif mode == 'regions':
+            for i in range(total_features):
                 # Use interpolated polygon attribute
-                atts = attributes[i]
+                atts = features[i]
 
                 # FIXME (Ole): Need to agree whether to use one or the
                 # other as this can be very confusing!
@@ -218,24 +272,23 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     # as flagged by attribute Flooded
                     res = atts['affected']
                     if res is None:
-                        x = False
+                        inundated_status = False
                     else:
-                        x = bool(res)
-
+                        inundated_status = bool(res)
                 elif 'FLOODPRONE' in atts:
                     res = atts['FLOODPRONE']
                     if res is None:
-                        x = False
+                        inundated_status = False
                     else:
-                        x = res.lower() == 'yes'
+                        inundated_status = res.lower() == 'yes'
                 elif DEFAULT_ATTRIBUTE in atts:
                     # Check the default attribute assigned for points
                     # covered by a polygon
                     res = atts[DEFAULT_ATTRIBUTE]
                     if res is None:
-                        x = False
+                        inundated_status = False
                     else:
-                        x = res
+                        inundated_status = res
                 else:
                     # there is no flood related attribute
                     message = (
@@ -246,55 +299,35 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         'assign_hazard_values_to_exposure_data(). Sorry I '
                         'can\'t help more.')
                     raise Exception(message)
-            else:
-                message = (tr(
-                    'Unknown hazard type %s. Must be either "depth" or "grid"')
-                    % mode)
-                raise Exception(message)
 
-            # Count affected buildings by usage type if available
-            if 'type' in attribute_names:
-                usage = attributes[i]['type']
-            elif 'TYPE' in attribute_names:
-                usage = attributes[i]['TYPE']
-            else:
-                usage = None
-            if 'amenity' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['amenity']
-            if 'building_t' in attribute_names and (usage is None
-                                                    or usage == 0):
-                usage = attributes[i]['building_t']
-            if 'office' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['office']
-            if 'tourism' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['tourism']
-            if 'leisure' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['leisure']
-            if 'building' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['building']
-                if usage == 'yes':
-                    usage = 'building'
+                # Count affected buildings by usage type if available
+                usage = get_osm_building_usage(attribute_names, features[i])
+                if usage is not None and usage != 0:
+                    key = usage
+                else:
+                    key = 'unknown'
 
-            if usage is not None and usage != 0:
-                key = usage
-            else:
-                key = 'unknown'
+                if key not in buildings:
+                    buildings[key] = 0
+                    affected_buildings[key] = 0
 
-            if key not in buildings:
-                buildings[key] = 0
-                affected_buildings[key] = 0
+                # Count all buildings by type
+                buildings[key] += 1
+                if inundated_status is True:
+                    # Count affected buildings by type
+                    affected_buildings[key] += 1
+                    # Count total affected buildings
+                    affected_count += 1
 
-            # Count all buildings by type
-            buildings[key] += 1
-            if x is True:
-                # Count affected buildings by type
-                affected_buildings[key] += 1
+                # Add calculated impact to existing attributes
+                features[i][self.target_field] = int(inundated_status)
+        else:
+            message = (tr('Unknown hazard type %s. Must be either "depth" or '
+                          '"grid"') % mode)
+            raise Exception(message)
 
-                # Count total affected buildings
-                count += 1
-
-            # Add calculated impact to existing attributes
-            attributes[i][self.target_field] = int(x)
+        if mode == 'grid':
+            affected_count = inundated_count + wet_count
 
         # Lump small entries and 'unknown' into 'other' category
         for usage in buildings.keys():
@@ -302,23 +335,56 @@ class FloodBuildingImpactFunction(FunctionProvider):
             if x < 25 or usage == 'unknown':
                 if 'other' not in buildings:
                     buildings['other'] = 0
-                    affected_buildings['other'] = 0
+                    if mode == 'grid':
+                        inundated_buildings['other'] = 0
+                        wet_buildings['other'] = 0
+                        dry_buildings['other'] = 0
+                    elif mode == 'regions':
+                        affected_buildings['other'] = 0
 
                 buildings['other'] += x
-                affected_buildings['other'] += affected_buildings[usage]
-                del buildings[usage]
-                del affected_buildings[usage]
+                if mode == 'grid':
+                    inundated_buildings['other'] += inundated_buildings[usage]
+                    wet_buildings['other'] += wet_buildings[usage]
+                    dry_buildings['other'] += dry_buildings[usage]
+                    del buildings[usage]
+                    del inundated_buildings[usage]
+                    del wet_buildings[usage]
+                    del dry_buildings[usage]
+                elif mode == 'regions':
+                    affected_buildings['other'] += affected_buildings[usage]
+                    del buildings[usage]
+                    del affected_buildings[usage]
 
         # Generate simple impact report
-        table_body = [
-            question,
-            TableRow([tr('Building type'), tr('Number flooded'),
-                      tr('Total')], header=True),
-            TableRow([tr('All'), format_int(count), format_int(N)])]
+        table_body = []
+        if mode == 'grid':
+            table_body = [
+                question,
+                TableRow([tr('Building type'),
+                          tr('Number Inundated'),
+                          tr('Number of Wet Buildings'),
+                          tr('Number of Dry Buildings'),
+                          tr('Total')], header=True),
+                TableRow(
+                    [tr('All'),
+                     format_int(inundated_count),
+                     format_int(wet_count),
+                     format_int(dry_count),
+                     format_int(total_features)])]
+        elif mode == 'regions':
+            table_body = [
+                question,
+                TableRow([tr('Building type'),
+                          tr('Number flooded'),
+                          tr('Total')], header=True),
+                TableRow([tr('All'),
+                          format_int(affected_count),
+                          format_int(total_features)])]
 
         school_closed = 0
         hospital_closed = 0
-        # Generate break down by building usage type is available
+        # Generate break down by building usage type if available
         list_type_attribute = [
             'TYPE', 'type', 'amenity', 'building_t', 'office',
             'tourism', 'leisure', 'building']
@@ -331,14 +397,33 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
                 # Lookup internationalised value if available
                 building_type = tr(building_type)
-                building_list.append([
-                    building_type.capitalize(),
-                    format_int(affected_buildings[usage]),
-                    format_int(buildings[usage])])
-                if building_type == 'school':
-                    school_closed = affected_buildings[usage]
-                if building_type == 'hospital':
-                    hospital_closed = affected_buildings[usage]
+                if mode == 'grid':
+                    building_list.append([
+                        building_type.capitalize(),
+                        format_int(inundated_buildings[usage]),
+                        format_int(wet_buildings[usage]),
+                        format_int(dry_buildings[usage]),
+                        format_int(buildings[usage])])
+                elif mode == 'regions':
+                    building_list.append([
+                        building_type.capitalize(),
+                        format_int(affected_buildings[usage]),
+                        format_int(buildings[usage])])
+
+                if usage.lower() == 'school':
+                    school_closed = 0
+                    if mode == 'grid':
+                        school_closed += inundated_buildings[usage]
+                        school_closed += wet_buildings[usage]
+                    elif mode == 'regions':
+                        school_closed = affected_buildings[usage]
+                if usage.lower() == 'hospital':
+                    hospital_closed = 0
+                    if mode == 'grid':
+                        hospital_closed += inundated_buildings[usage]
+                        hospital_closed += wet_buildings[usage]
+                    elif mode == 'regions':
+                        hospital_closed = affected_buildings[usage]
 
             # Sort alphabetically
             building_list.sort()
@@ -349,6 +434,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 s = TableRow(row)
                 table_body.append(s)
 
+        # Action Checklist Section
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(
             tr('Are the critical facilities still open?')))
@@ -373,37 +459,86 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    'for treatment and how will we transport them?') %
                 format_int(hospital_closed)))
 
+        # Notes Section
         table_body.append(TableRow(tr('Notes'), header=True))
-        assumption = tr('Buildings are said to be flooded when ')
         if mode == 'grid':
-            assumption += tr('flood levels exceed %.1f m') % threshold
+            table_body.append(TableRow(
+                tr('Buildings are said to be inundated when flood levels '
+                   'exceed %.1f m') % threshold))
+            table_body.append(TableRow(
+                tr('Buildings are said to be wet when flood levels '
+                   'are greater than 0 m but less than %.1f m') % threshold))
+            table_body.append(TableRow(
+                tr('Buildings are said to be dry when flood levels '
+                   'are less than 0 m')))
+            table_body.append(TableRow(
+                tr('Buildings are said to be closed if they are inundated or '
+                   'wet')))
+            table_body.append(TableRow(
+                tr('Buildings are said to be open if they are dry')))
         else:
-            assumption += tr('in regions marked as affected')
-        table_body.append(assumption)
+            table_body.append(TableRow(
+                tr('Buildings are said to be flooded when in regions marked '
+                   'as affected')))
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
 
-        # Create style
-        style_classes = [dict(label=tr('Not Inundated'), value=0,
-                              colour='#1EFC7C', transparency=0, size=1),
-                         dict(label=tr('Inundated'), value=1,
-                              colour='#F31A1C', transparency=0, size=1)]
+        # Prepare impact layer
+        map_title = tr('Buildings inundated')
+        legend_title = tr('Structure inundated status')
+        legend_units = ''
+        style_classes = []
+
+        if mode == 'grid':
+            style_classes = [
+                dict(
+                    label=tr('Dry (<= 0 m)'),
+                    value=0,
+                    colour='#1EFC7C',
+                    transparency=0,
+                    size=1
+                ),
+                dict(
+                    label=tr('Wet (0 m - %.1f m)') % threshold,
+                    value=2,
+                    colour='#FF9900',
+                    transparency=0,
+                    size=1
+                ),
+                dict(
+                    label=tr('Inundated (>= %.1f m)') % threshold,
+                    value=1,
+                    colour='#F31A1C',
+                    transparency=0,
+                    size=1
+                )]
+            legend_units = tr('(inundated, wet, or dry)')
+        elif mode == 'regions':
+            style_classes = [
+                dict(
+                    label=tr('Not Inundated'),
+                    value=0,
+                    colour='#1EFC7C',
+                    transparency=0,
+                    size=1),
+                dict(
+                    label=tr('Inundated'),
+                    value=1,
+                    colour='#F31A1C',
+                    ztransparency=0, size=1)]
+            legend_units = tr('(inundated or not inundated)')
+
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # For printing map purpose
-        map_title = tr('Buildings inundated')
-        legend_units = tr('(inundated or not inundated)')
-        legend_title = tr('Structure inundated status')
-
         # Create vector layer and return
         vector_layer = Vector(
-            data=attributes,
-            projection=I.get_projection(),
-            geometry=I.get_geometry(),
+            data=features,
+            projection=interpolated_layer.get_projection(),
+            geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,
@@ -412,7 +547,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 'map_title': map_title,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
-                'buildings_total': N,
-                'buildings_affected': count},
+                'buildings_total': total_features,
+                'buildings_affected': affected_count},
             style_info=style_info)
         return vector_layer

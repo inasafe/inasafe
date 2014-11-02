@@ -100,7 +100,6 @@ class PAGFatalityFunction(ITBFatalityFunction):
 
     # see https://github.com/AIFDR/inasafe/issues/628
     default_needs = default_minimum_needs()
-    default_needs[tr('Water')] = 67
 
     parameters = OrderedDict([
         ('Theta', 11.067),
