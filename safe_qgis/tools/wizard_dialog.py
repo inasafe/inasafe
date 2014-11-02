@@ -1708,13 +1708,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Set widgets on the Summary tab"""
         params = ""
         for p in self.if_params:
-            print '-------', p, self.if_params[p]
-            print type(self.if_params[p])
-
-            if type(self.if_params[p]) == bool:
-                subparams = 'FOOFOOF'
-            elif type(self.if_params[p]) == OrderedDict:
-                print '>>>>> o je!'
+            if type(self.if_params[p]) == OrderedDict:
                 subparams = [u'%s: %s' % (unicode(pp), unicode(self.if_params[p][pp])) for pp in self.if_params[p]]
                 subparams = u', '.join(subparams)
             elif type(self.if_params[p]) == list:
