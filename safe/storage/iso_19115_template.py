@@ -189,7 +189,7 @@ _template = '''<?xml version="1.0" encoding="UTF-8"?>
 
 # This template uses python strings.Template module to allow replacing values
 # in the XML. Do not use it directly, instead use
-# safe.storage.metadata_utilities.generate_iso_metadata_file which will replace
+# safe.storage.metadata_utilities.write_iso_metadata_file which will replace
 # the $placeholders with the safe.defaults.get_defaults values.
 # The $placeholders need to have the same name ass the keys in the DEFAULTS
 # dictionary. For example $ISO19115_ORGANIZATION will be replaced by

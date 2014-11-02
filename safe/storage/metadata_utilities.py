@@ -115,10 +115,12 @@ def generate_iso_metadata(keywords=None):
     defaults = get_defaults()
     if keywords is not None:
         defaults['INASAFE_KEYWORDS'] = '<![CDATA[%s]]>' % json.dumps(keywords)
-    return ISO_METADATA_XML_TEMPLATE.safe_substitute(get_defaults())
+    else:
+        defaults['INASAFE_KEYWORDS'] = ''
+    return ISO_METADATA_XML_TEMPLATE.safe_substitute(defaults)
 
 
-def generate_iso_metadata_file(xml_filename):
+def write_iso_metadata_file(xml_filename):
     """Make a valid ISO 19115 XML file using the values of safe.get_defaults
 
     This method will create a file based on the iso_19115_template.py template
@@ -158,7 +160,7 @@ def valid_iso_xml(xml_filename):
     else:
         # We create the XML from our template.
         # No more checks are needed since the template must be correct ;)
-        generate_iso_metadata_file(xml_filename)
+        write_iso_metadata_file(xml_filename)
         tree = ElementTree.parse(xml_filename)
 
     return tree
