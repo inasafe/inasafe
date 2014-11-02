@@ -424,72 +424,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Minimum Needs</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="0" column="0">
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QPushButton" name="import_button">
-             <property name="text">
-              <string>Import ...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="export_button">
-             <property name="text">
-              <string>Export ...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="3">
-            <widget class="QToolButton" name="remove_button">
-             <property name="text">
-              <string>-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QToolButton" name="add_button">
-             <property name="text">
-              <string>+</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="1" column="0">
-          <widget class="QTableWidget" name="minimum_needs_table"/>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Note: Changes only take effect after closing and reopening QGIS.</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tab_advanced">
       <attribute name="title">
        <string>Advanced</string>
@@ -656,6 +590,22 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
+   <sender>custom_templates_dir_checkbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>splitter_custom_report</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>98</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>custom_org_disclaimer_checkbox</sender>
    <signal>toggled(bool)</signal>
    <receiver>txtDisclaimer</receiver>
@@ -700,22 +650,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>98</x>
      <y>230</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>custom_templates_dir_checkbox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>splitter_custom_report</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>98</x>
-     <y>290</y>
     </hint>
    </hints>
   </connection>
