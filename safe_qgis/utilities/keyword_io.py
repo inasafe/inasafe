@@ -561,13 +561,14 @@ class KeywordIO(QObject):
             if data is None:
                 raise HashNotFoundError('No hash found for %s' % hash_value)
             data = data[0]  # first field
+
+            # get the ISO XML out of the DB
             metadata_xml = pickle.loads(str(data))
             root = ElementTree.fromstring(metadata_xml)
             keyword_element = root.find(ISO_METADATA_KW_TAG)
-            print  metadata_xml
-            #TODO make more solid
             dict_str = keyword_element.text
             picked_dict = json.loads(dict_str)
+
             if keyword is None:
                 return picked_dict
             if keyword in picked_dict:
