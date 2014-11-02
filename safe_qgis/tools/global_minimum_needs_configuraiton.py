@@ -33,6 +33,7 @@ INFO_STYLE = styles.INFO_STYLE
 
 
 #noinspection PyArgumentList
+# noinspection PyProtectedMember
 class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
     """Tools for merging 2 impact layer based on different exposure."""
 
@@ -69,23 +70,37 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.load_profiles()
         self.clear_resource_list()
         self.populate_resource_list()
-        # self.add_resource()
         self.set_up_resource_parameters()
-        # self.mark_current_profile_as_saved()
 
         self.profileComboBox.activated.connect(
             self.select_profile)
 
     def populate_resource_list(self):
+        """Populate the list resource list.
+        """
         minimum_needs = self.minimum_needs.get_full_needs()
-        for full_resource in minimum_needs['resources']:
+        for full_resource in minimum_needs["resources"]:
             self.add_resource(full_resource)
-        self.provenanceLineEdit.setText(minimum_needs['provenance'])
+        self.provenanceLineEdit.setText(minimum_needs["provenance"])
 
     def clear_resource_list(self):
+        """Clear the resource list.
+        """
         self.resourceListWidget.clear()
 
-    def _format_sentence(self, sentence, resource):
+    @staticmethod
+    def _format_sentence(sentence, resource):
+        """Populate the placeholders in the sentence.
+
+        :param sentence: The sentence with placeholder keywords.
+        :type sentence: basestring, str
+
+        :param resource: The resource to be placed into the sentence.
+        :type resource: dict
+
+        :returns: The formatted sentence.
+        :rtype: basestring
+        """
         sentence = sentence.split('{{')
         updated_sentence = sentence[0].rstrip()
         for part in sentence[1:]:
@@ -99,6 +114,11 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         return updated_sentence
 
     def add_resource(self, resource):
+        """Add a resource to the minimum needs table.
+
+        :param resource: The resource to be added
+        :type resource: dict
+        """
         updated_sentence = self._format_sentence(
             resource['Readable sentence'], resource)
         if self.edit_item:
@@ -111,6 +131,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.resourceListWidget.addItem(item)
 
     def load_profiles(self):
+        """Load the profiles into the dropdown list.
+        """
         for profile in self.minimum_needs.get_profiles():
             self.profileComboBox.addItem(profile)
         minimum_needs = self.minimum_needs.get_full_needs()
@@ -118,6 +140,10 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             self.profileComboBox.findText(minimum_needs['profile']))
 
     def select_profile(self, index):
+        """Select a given profile by index. (handler)
+        :param index: The selected item's index
+        :type index: int
+        """
         new_profile = self.profileComboBox.itemText(index)
         self.resourceListWidget.clear()
         self.minimum_needs.load_profile(new_profile)
@@ -126,16 +152,22 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.minimum_needs.save()
 
     def mark_current_profile_as_pending(self):
+        """Mark the current profile as pending by colouring the text red.
+        """
         index = self.profileComboBox.currentIndex()
         item = self.profileComboBox.model().item(index)
         item.setForeground(QtGui.QColor('red'))
 
     def mark_current_profile_as_saved(self):
+        """Mark the current profile as saved by colouring the text black.
+        """
         index = self.profileComboBox.currentIndex()
         item = self.profileComboBox.model().item(index)
         item.setForeground(QtGui.QColor('black'))
 
     def add_new_resource(self):
+        """Handle add new resource requests.
+        """
         parameters_widget = [
             self.resourceGroupBox.layout().itemAt(i) for i in
             range(self.resourceGroupBox.layout().count())][0].widget()
@@ -153,12 +185,15 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         parameter_widgets[8]._line_edit_input.setText('weekly')
         parameter_widgets[9]._line_edit_input.setText(
             "A displaced person should be provided with {{ Default }} "
-            "{{ Unit }}\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though "
-            "no less than {{ Minimum allowed }} and no more than "
-            "{{ Maximum allowed }}. This should be provided {{ Frequency }}.")
+            "{{ Unit }}\{{ Units }}{{ Unit abbreviation }} of "
+            "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
+            "and no more than {{ Maximum allowed }}. This should be provided "
+            "{{ Frequency }}.")
         self.stackedWidget.setCurrentIndex(1)
 
     def edit_resource(self):
+        """Handle edit resource requests.
+        """
         self.mark_current_profile_as_pending()
         resource = None
         for item in self.resourceListWidget.selectedItems()[:1]:
@@ -188,6 +223,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.stackedWidget.setCurrentIndex(1)
 
     def set_up_resource_parameters(self):
+        """Set up the resource parameter for the add/edit view.
+        """
         name_parameter = StringParameter('UUID-1')
         name_parameter.name = 'Resource name'
         name_parameter.help_text = (
@@ -341,15 +378,21 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.resourceGroupBox.setLayout(layout)
 
     def remove_resource(self):
+        """Remove the currently selected resource.
+        """
         self.mark_current_profile_as_pending()
         for item in self.resourceListWidget.selectedItems():
             self.resourceListWidget.takeItem(self.resourceListWidget.row(item))
 
     def discard_changes(self):
+        """Discard the changes to the resource add/edit.
+        """
         self.edit_item = None
         self.stackedWidget.setCurrentIndex(0)
 
     def accept_changes(self):
+        """Accept the add/edit of the current resource.
+        """
         # --
         # Hackorama to get this working outside the method that the
         # parameters where defined in.
@@ -369,6 +412,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         The minimum needs are loaded from a file into the table. This state
         is only saved if the form is accepted.
         """
+        # noinspection PyCallByClass,PyTypeChecker
         file_name = QtGui.QFileDialog.getOpenFileName(
             self,
             self.tr('Import minimum needs'),
@@ -420,6 +464,9 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.mark_current_profile_as_saved()
 
     def save_minimum_needs_as(self):
+        """Save the minimum needs under a new profile name.
+        """
+        # noinspection PyCallByClass,PyTypeChecker
         file_name = QFileDialog.getSaveFileName(
             self,
             self.tr('Export minimum needs'),
@@ -445,6 +492,9 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             self.profileComboBox.findText(file_name))
 
     def new_profile(self):
+        """Create a new profile by name.
+        """
+        # noinspection PyCallByClass,PyTypeChecker
         file_name = QFileDialog.getSaveFileName(
             self,
             self.tr('Export minimum needs'),
@@ -462,4 +512,3 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             self.profileComboBox.addItem(file_name)
         self.profileComboBox.setCurrentIndex(
             self.profileComboBox.findText(file_name))
-

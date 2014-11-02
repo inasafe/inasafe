@@ -17,96 +17,6 @@ class MinimumNeeds(object):
 
     The persistence logic is excluded from this class.
     """
-    @staticmethod
-    def _full_category_descriptions():
-        """The minimum needs category descriptions.
-
-        This contains all the metadata for the categories.
-
-        :return: The full category description for each of the items.
-        :rtype: list  # of dicts
-        """
-        return [
-            {
-                'id': u'resource',
-                'name': 'Resource Name',
-                'type': 'string',
-                'defaults': [],
-                'editable': True
-            },
-            {
-                'id': u'amount',
-                'name': 'Amount per Person',
-                'type': 'string',
-                'defaults': [],
-                'editable': True
-            },
-            {
-                'id': u'unit',
-                'name': 'Unit',
-                'type': 'list',
-                'defaults': ['l', 'kg', 'unit'],
-                'editable': True
-            },
-            {
-                'id': u'frequency',
-                'name': 'Frequency',
-                'type': 'list',
-                'defaults': ['weekly', 'daily', 'single'],
-                'editable': True
-            },
-            {
-                'id': u'provenance',
-                'name': 'Provenance',
-                'type': 'string',
-                'defaults': [],
-                'editable': True
-            },
-        ]
-
-    @property
-    def categories(self):
-        """All categories that describe a minimum need.
-
-        :return: List of all the categories by which a minimum need is
-        described.
-        :rtype: list
-        """
-        return [item['id'] for item in self._full_category_descriptions()]
-
-    @property
-    def headings(self):
-        """The humanly readable names for the headings.
-
-        :return: The category names i.e. headings.
-        :rtype: list
-        """
-        return [item['name'] for item in self._full_category_descriptions()]
-
-    @property
-    def category_types(self):
-        """The category types for each of the minimum need items.
-
-        :return: A list of all the types with some.
-        :rtype: list
-        """
-        return [item['type'] for item in self._full_category_descriptions()]
-
-    def category(self, key):
-        """The full category metadata for a given key.
-
-        :param key: The key that the category is labeled.
-        :type key: basestring
-
-        :raises: IndexError  # list index out of range
-
-        :return: The detailed metadata of a category
-        :rtype: dict, None
-        """
-        for item in self._full_category_descriptions():
-            if item['id'] == key:
-                return item
-        return None
 
     def get_need(self, resource):
         """Get a resource from the minimum_needs.
@@ -148,7 +58,7 @@ class MinimumNeeds(object):
 
 
         :return: minimum needs
-        :rtype: list
+        :rtype: dict
         """
         return self.minimum_needs
 
@@ -173,7 +83,7 @@ class MinimumNeeds(object):
         information is obtained and what it relates to.
         :type: basestring
         """
-        self.minimum_needs.append({
+        self.minimum_needs['resources'].append({
             'resource': resource,
             'amount': amount,
             'unit': units,
@@ -195,12 +105,8 @@ class MinimumNeeds(object):
         """
         if type(minimum_needs) != dict:
             return -1
-        # for need in minimum_needs:
-        #     for key in need:
-        #         if key not in self.categories:
-        #             # Unknown category
-        #             return -1
 
+        # noinspection PyAttributeOutsideInit
         self.minimum_needs = minimum_needs
         return 0
 
@@ -228,7 +134,7 @@ class MinimumNeeds(object):
                 {'resource': toilets, 'amount': 0.05, 'unit': 'unit',
                     'frequency': 'single'},
             ],
-            'Provenance': 'Perka',
+            'provenance': 'Perka',
             'profile': [
                 'BNPB'
             ]
@@ -239,7 +145,7 @@ class MinimumNeeds(object):
         """Read from an existing json file.
 
         :param filename: The file to be written to.
-        :type filename: basestring
+        :type filename: basestring, str
 
         :return: Success status. -1 for unsuccessful 0 for success
         :rtype: int
@@ -248,7 +154,7 @@ class MinimumNeeds(object):
             needs_json = fd.read()
             try:
                 minimum_needs = json.loads(needs_json)
-            except (TypeError, ValueError) as e:
+            except (TypeError, ValueError):
                 minimum_needs = None
 
         if not minimum_needs:
@@ -260,7 +166,7 @@ class MinimumNeeds(object):
         """Write minimum needs as json to a file.
 
         :param filename: The file to be written to.
-        :type filename: basestring
+        :type filename: basestring, str
         """
         with open(filename, 'w') as fd:
             needs_json = json.dumps(self.minimum_needs)

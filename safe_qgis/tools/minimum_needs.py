@@ -35,13 +35,24 @@ class QMinimumNeeds(MinimumNeeds):
             profiles = self.get_profiles()
             minimum_needs = self.read_from_file(
                 expanduser('~/.qgis2/minimum_needs/%s.json' % profiles))
+        # noinspection PyAttributeOutsideInit
         self.minimum_needs = minimum_needs
 
     def load_profile(self, profile):
+        """Load a specific profile into the current minimum needs.
+
+        :param profile: The profile's name
+        :type profile: basestring, str
+        """
         self.read_from_file(
             expanduser('~/.qgis2/minimum_needs/%s.json' % profile))
 
     def save_profile(self, profile):
+        """Save the current minimum needs into a new profile.
+
+        :param profile: The profile's name
+        :type profile: basestring, str
+        """
         self.write_to_file(
             expanduser('~/.qgis2/minimum_needs/%s.json' % profile))
 
@@ -50,6 +61,8 @@ class QMinimumNeeds(MinimumNeeds):
         """
         # This needs to be imported here to avoid an inappropriate loading
         # sequence
+        if not self.minimum_needs['resources']:
+            return
         from safe.impact_functions.core import get_plugins
         self.settings.setValue('minimum_needs', self.minimum_needs)
         ## Monkey patch all the impact functions
@@ -60,6 +73,11 @@ class QMinimumNeeds(MinimumNeeds):
                 plugin.parameters['minimum needs'] = self.get_minimum_needs()
 
     def get_profiles(self):
+        """Get all the minimum needs profiles.
+
+        :returns: The minimum needs by name.
+        :rtype: list
+        """
         if not exists(expanduser('~/.qgis2/minimum_needs/')):
             shutil.copytree(
                 expanduser(
@@ -70,4 +88,3 @@ class QMinimumNeeds(MinimumNeeds):
             os.listdir(expanduser('~/.qgis2/minimum_needs/')) if
             profile[-5:] == '.json']
         return profiles
-
