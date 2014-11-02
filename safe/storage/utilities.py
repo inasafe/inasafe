@@ -519,7 +519,7 @@ def raster_geometry_to_geotransform(longitudes, latitudes):
 
 # noinspection PyExceptionInherit
 def bbox_intersection(*args):
-    """Compute intersection between two or more bounding boxes
+    """Compute intersection between two or more bounding boxes.
 
     :param args: two or more bounding boxes.
         Each is assumed to be a list or a tuple with

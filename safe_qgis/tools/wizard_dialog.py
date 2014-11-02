@@ -557,8 +557,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.layer_type, self.data_type)
         if self.data_type == 'polygon':
             categories += ['aggregation']
-        if self.data_type == 'point':
-            categories = ['hazard']
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=W0612

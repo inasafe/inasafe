@@ -213,14 +213,14 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            my_categories = impact_function.Metadata \
+            categories = impact_function.Metadata \
                 .categories_for_layer(layer_type, data_type)
-            result = add_to_list(result, my_categories)
+            result = add_to_list(result, categories)
         categories_definitions = []
-        for my_category in result:
-            if my_category == 'hazard':
+        for category in result:
+            if category == 'hazard':
                 categories_definitions.append(hazard_definition)
-            elif my_category == 'exposure':
+            elif category == 'exposure':
                 categories_definitions.append(exposure_definition)
             else:
                 raise Exception('Unsupported categories')
@@ -264,7 +264,7 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            my_subcategories = impact_function.Metadata \
+            subcategories = impact_function.Metadata \
                 .subcategories_for_layer(category, layer_type, data_type)
-            result = add_to_list(result, my_subcategories)
+            result = add_to_list(result, subcategories)
         return result

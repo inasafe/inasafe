@@ -41,13 +41,14 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_weekly_needs,
+    population_rounding_full,
+    population_rounding
 )
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label
@@ -285,37 +286,45 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 # Update total
                 affected_population += pop
 
-        affected_population = round_thousand(affected_population)
         # Estimate number of people in need of evacuation
         evacuated = (
             affected_population
             * self.parameters['evacuation_percentage']
             / 100.0)
 
+        affected_population, rounding = population_rounding_full(
+            affected_population)
+
         total = int(numpy.sum(exposure_layer.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
-        total = round_thousand(total)
-        evacuated = round_thousand(evacuated)
+        total = population_rounding(total)
+        evacuated, rounding_evacuated = population_rounding_full(evacuated)
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
+        total_needs = evacuated_population_weekly_needs(
+            evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [
             question,
             TableRow(
-                [tr('People affected'), '%s%s' % (
-                    format_int(int(affected_population)),
-                    ('*' if affected_population >= 1000 else ''))],
+                [tr('People affected'), '%s*' % (
+                    format_int(int(affected_population)))],
                 header=True),
-            TableRow([tr('People needing evacuation'), '%s%s' % (
-                format_int(int(evacuated)),
-                ('*' if evacuated >= 1000 else ''))], header=True),
             TableRow(
                 [TableCell(
-                    tr('* Number is rounded to the nearest 1000'),
+                    tr('* Number is rounded up to the nearest %s') % (
+                        rounding),
+                    col_span=2)],
+                header=False),
+            TableRow([tr('People needing evacuation'), '%s*' % (
+                format_int(int(evacuated)))], header=True),
+            TableRow(
+                [TableCell(
+                    tr('* Number is rounded up to the nearest %s') % (
+                        rounding_evacuated),
                     col_span=2)],
                 header=False),
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
@@ -327,12 +336,12 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'Table below shows the weekly minimum needs for all '
                 'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Rice [kg]'), format_int(total_needs['rice'])],
             [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]]
+             format_int(total_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(total_needs['water'])],
+            [tr('Family Kits'), format_int(total_needs['family_kits'])],
+            [tr('Toilets'), format_int(total_needs['toilets'])]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
@@ -406,6 +415,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'affected_population': affected_population,
-                'total_population': total},
+                'total_population': total,
+                'total_needs': total_needs},
             style_info=style_info)
         return vector_layer
