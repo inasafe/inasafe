@@ -721,14 +721,9 @@ class TestDock(TestCase):
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent()
 
-        # Run manually so we can get the output layer
-        DOCK.clip_parameters = DOCK.get_clip_parameters()
-        DOCK.prepare_aggregator()
-        DOCK.aggregator.validate_keywords()
-        DOCK.setup_calculator()
-        test_runner = DOCK.calculator.get_runner()
-        test_runner.run()  # Run in same thread
-        safe_layer = test_runner.impact_layer()
+        DOCK.accept()
+        # DOCK.analysis.get_impact_layer()
+        safe_layer = DOCK.analysis.get_impact_layer()
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
@@ -1362,22 +1357,6 @@ Click for Diagnostic Information:
         """Test the dock title gets set properly."""
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
-
-    def test_generate_insufficient_overlap_message(self):
-        """Test we generate insufficent overlap messages nicely."""
-
-        exposure_layer = FakeLayer('Fake exposure layer')
-
-        hazard_layer = FakeLayer('Fake hazard layer')
-
-        message = DOCK.generate_insufficient_overlap_message(
-            Exception('Dummy exception'),
-            exposure_geoextent=[10.0, 10.0, 20.0, 20.0],
-            exposure_layer=exposure_layer,
-            hazard_geoextent=[15.0, 15.0, 20.0, 20.0],
-            hazard_layer=hazard_layer,
-            viewport_geoextent=[5.0, 5.0, 12.0, 12.0])
-        self.assertIn('insufficient overlap', message.to_text())
 
     def test_rubber_bands(self):
         """Test that the rubber bands get updated."""
