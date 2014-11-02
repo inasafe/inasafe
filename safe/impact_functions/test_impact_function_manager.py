@@ -19,6 +19,20 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.earthquake.earthquake_building_impact import (
+    EarthquakeBuildingImpactFunction)
+from safe.impact_functions.inundation.flood_OSM_building_impact import (
+    FloodBuildingImpactFunction)
+from safe.impact_functions.inundation.flood_building_impact_qgis import (
+    FloodNativePolygonExperimentalFunction)
+from safe.impact_functions.volcanic.volcano_building_impact import (
+    VolcanoBuildingImpact)
+from safe.impact_functions.volcanic.\
+    volcano_population_evacuation_polygon_hazard import (
+    VolcanoPolygonHazardPopulation)
+from safe.impact_functions.generic.categorised_hazard_population import (
+    CategorisedHazardPopulationImpactFunction)
+
 from safe.metadata import (
     unit_wetdry,
     unit_metres_depth,
@@ -38,7 +52,8 @@ from safe.metadata import (
     hazard_tephra,
     unit_normalised,
     hazard_generic,
-    unit_building_generic)
+    unit_building_generic,
+    hazard_all)
 
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -223,6 +238,71 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.subcategories_for_layer(
             category='exposure', layer_type='vector', data_type='polygon')
         expected_result = [exposure_structure]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+    def test_get_available_hazards(self):
+        """Test get_available_hazards API."""
+        impact_function_manager = ImpactFunctionManager()
+
+        result = impact_function_manager.get_available_hazards()
+        expected_result = hazard_all
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+        impact_function = EarthquakeBuildingImpactFunction()
+        result = impact_function_manager.get_available_hazards(impact_function)
+        expected_result = [hazard_earthquake]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+    def test_get_functions_for_hazard(self):
+        """Test get_functions_for_hazard API."""
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.get_functions_for_hazard(
+            hazard_volcano)
+        expected_result = [
+            VolcanoBuildingImpact.Metadata.get_metadata(),
+            VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
+            CategorisedHazardPopulationImpactFunction.Metadata.get_metadata()]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+    def test_get_functions_for_hazard_id(self):
+        """Test get_functions_for_hazard_id API."""
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.get_functions_for_hazard_id(
+            hazard_volcano['id'])
+        expected_result = [
+            VolcanoBuildingImpact.Metadata.get_metadata(),
+            VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
+            CategorisedHazardPopulationImpactFunction.Metadata.get_metadata()]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+    def test_get_functions_for_exposure(self):
+        """Test get_functions_for_exposure API."""
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.get_functions_for_exposure(
+            exposure_structure)
+        expected_result = [
+            VolcanoBuildingImpact.Metadata.get_metadata(),
+            EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
+            FloodBuildingImpactFunction.Metadata.get_metadata(),
+            FloodNativePolygonExperimentalFunction.Metadata.get_metadata()]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+    def test_get_functions_for_exposure_id(self):
+        """Test get_functions_for_exposure_id API."""
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.get_functions_for_exposure_id(
+            exposure_structure['id'])
+        expected_result = [
+            VolcanoBuildingImpact.Metadata.get_metadata(),
+            EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
+            FloodBuildingImpactFunction.Metadata.get_metadata(),
+            FloodNativePolygonExperimentalFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 

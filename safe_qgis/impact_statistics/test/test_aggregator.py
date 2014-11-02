@@ -138,7 +138,7 @@ class AggregatorTest(unittest.TestCase):
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
-        attribute = DOCK.aggregator.attributes[attribute_key]
+        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
@@ -164,8 +164,8 @@ class AggregatorTest(unittest.TestCase):
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
         print attribute_key
-        print DOCK.aggregator.attributes
-        attribute = DOCK.aggregator.attributes[attribute_key]
+        print DOCK.analysis.aggregator.attributes
+        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
@@ -190,7 +190,7 @@ class AggregatorTest(unittest.TestCase):
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
-        attribute = DOCK.aggregator.attributes[attribute_key]
+        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
@@ -215,7 +215,7 @@ class AggregatorTest(unittest.TestCase):
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
-        attribute = DOCK.aggregator.attributes[attribute_key]
+        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
 
@@ -270,10 +270,10 @@ class AggregatorTest(unittest.TestCase):
             'The preprocessing should have generated %s features, '
             'found %s' % (
                 expected_feature_count,
-                DOCK.aggregator.preprocessed_feature_count))
+                DOCK.analysis.aggregator.preprocessed_feature_count))
         self.assertEqual(
             expected_feature_count,
-            DOCK.aggregator.preprocessed_feature_count,
+            DOCK.analysis.aggregator.preprocessed_feature_count,
             message)
 
     def _create_aggregator(self,
