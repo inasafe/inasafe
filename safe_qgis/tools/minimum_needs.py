@@ -46,13 +46,21 @@ class QMinimumNeeds(MinimumNeeds):
             expanduser('~/.qgis2/minimum_needs/%s.json' % profile))
 
     def save(self):
-        """Save teh minimum needs to the QSettings object.
+        """Save the minimum needs to the QSettings object.
         """
+        # This needs to be imported here to avoid an inappropriate loading
+        # sequence
+        from safe.impact_functions.core import get_plugins
         self.settings.setValue('minimum_needs', self.minimum_needs)
+        ## Monkey patch all the impact functions
+        for (name, plugin) in get_plugins().items():
+            if not hasattr(plugin, 'parameters'):
+                continue
+            if 'minimum needs' in plugin.parameters:
+                plugin.parameters['minimum needs'] = self.get_minimum_needs()
 
     def get_profiles(self):
         if not exists(expanduser('~/.qgis2/minimum_needs/')):
-            # os.mkdir(expanduser('~/.qgis2/minimum_needs/'))
             shutil.copytree(
                 expanduser(
                     '~/.qgis2/python/plugins/inasafe/files/minimum_needs/'),

@@ -132,9 +132,13 @@ class MinimumNeeds(object):
         """
         minimum_needs = OrderedDict()
         for resource in self.minimum_needs['resources']:
-            name = '%s [%s]' % (
-                tr(resource['Resource name']),
-                resource['Unit abbreviation'])
+            if resource['Unit abbreviation']:
+                name = '%s [%s]' % (
+                    tr(resource['Resource name']),
+                    resource['Unit abbreviation']
+                )
+            else:
+                name = tr(resource['Resource name'])
             amount = resource['Default']
             minimum_needs[name] = amount
         return OrderedDict(minimum_needs)
