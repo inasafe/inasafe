@@ -19,7 +19,8 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from string import Template
+
+from string import Template  # pylint: disable=W0611
 
 # see below for documentation
 _template = '''<?xml version="1.0" encoding="UTF-8"?>
