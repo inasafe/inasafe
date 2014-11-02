@@ -57,6 +57,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.editButton.clicked.connect(self.edit_resource)
         self.discardButton.clicked.connect(self.discard_changes)
         self.acceptButton.clicked.connect(self.accept_changes)
+        self.exportButton.clicked.connect(self.export_minimum_needs)
+        self.importButton.clicked.connect(self.import_minimum_needs)
         self.minimum_needs = QMinimumNeeds()
         self.edit_item = None
 
@@ -389,12 +391,13 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         file.
         """
         # self.save_minimum_needs()  # save current state before continuing
-
-        file_name = QFileDialog.getSaveFileName(
-            self,
-            self.tr('Export minimum needs'),
-            '',
-            self.tr('JSON files (*.json *.JSON)'))
+        file_name_dialog = QFileDialog(self)
+        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
+        file_name_dialog.setDefaultSuffix('json')
+        file_name = None
+        if file_name_dialog.exec_():
+            file_name = file_name_dialog.selectedFiles()[0]
         if file_name != '' and file_name is not None:
             self.minimum_needs.write_to_file(file_name)
 
@@ -459,5 +462,4 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             self.profileComboBox.addItem(file_name)
         self.profileComboBox.setCurrentIndex(
             self.profileComboBox.findText(file_name))
-
 
