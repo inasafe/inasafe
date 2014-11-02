@@ -34,7 +34,11 @@ from safe.storage.utilities import (
     verify,
     write_keywords,
     read_keywords,
-    calculate_polygon_centroid)
+    calculate_polygon_centroid,
+    safe_to_qgis_layer)
+from safe.storage.metadata_utilities import (
+    generate_iso_metadata,
+    ISO_METADATA_KW_TAG)
 
 from safe.storage.core import read_layer
 

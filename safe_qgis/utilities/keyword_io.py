@@ -19,8 +19,7 @@ import json
 import os
 from os.path import expanduser
 from xml.etree import ElementTree
-from safe.storage.metadata_utilities import generate_iso_metadata, \
-    ISO_METADATA_KW_TAG
+
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
@@ -39,7 +38,9 @@ from safe_qgis.exceptions import (
 from safe_qgis.safe_interface import (
     verify,
     read_file_keywords,
-    write_keywords_to_file)
+    write_keywords_to_file,
+    generate_iso_metadata,
+    ISO_METADATA_KW_TAG)
 
 LOGGER = logging.getLogger('InaSAFE')
 
