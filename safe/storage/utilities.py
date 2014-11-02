@@ -211,8 +211,8 @@ def write_keywords(keywords, filename, sublayer=None):
 def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
-    :param keyword_filename: Name of keywords file. Extension expected to be .keywords
-        The format of one line is expected to be either
+    :param keyword_filename: Name of keywords file. Extension expected to be
+        .keywords. The format of one line is expected to be either
         string: string or string
     :type keyword_filename: str
 
@@ -259,7 +259,6 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     Surrounding whitespace is removed from values, but keys are unmodified
     If there are no ':', then the keyword is treated as a key with no value
     """
-
 
     # Input checks
     basename, ext = os.path.splitext(keyword_filename)
