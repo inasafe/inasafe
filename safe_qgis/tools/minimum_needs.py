@@ -24,15 +24,15 @@ class QMinimumNeeds(MinimumNeeds):
     def __init__(self, testing=False):
         self.settings = QSettings()
         if testing:
-            self.settings = QSettings('Test Settings')
+            self.settings = QSettings('Test Minimum Needs Settings')
         self.load()
 
     def load(self):
         """Load the minimum needs from the QSettings object.
         """
-        minimum_needs = self.settings.value('minimum_needs')
+        minimum_needs = self.settings.value('Minimum Needs')
         if minimum_needs is None:
-            profiles = self.get_profiles()
+            profiles = self.get_profiles()[0]
             minimum_needs = self.read_from_file(
                 expanduser('~/.qgis2/minimum_needs/%s.json' % profiles))
         # noinspection PyAttributeOutsideInit
@@ -64,7 +64,7 @@ class QMinimumNeeds(MinimumNeeds):
         if not self.minimum_needs['resources']:
             return
         from safe.impact_functions.core import get_plugins
-        self.settings.setValue('minimum_needs', self.minimum_needs)
+        self.settings.setValue('Minimum Needs', self.minimum_needs)
         ## Monkey patch all the impact functions
         for (name, plugin) in get_plugins().items():
             if not hasattr(plugin, 'parameters'):

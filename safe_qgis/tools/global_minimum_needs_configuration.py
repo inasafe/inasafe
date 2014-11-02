@@ -184,8 +184,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         parameter_widgets[7]._input.setValue(100)
         parameter_widgets[8]._line_edit_input.setText('weekly')
         parameter_widgets[9]._line_edit_input.setText(
-            "A displaced person should be provided with {{ Default }} "
-            "{{ Unit }}\{{ Units }}{{ Unit abbreviation }} of "
+            "A displaced person should be provided with "
+            "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
             "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
             "and no more than {{ Maximum allowed }}. This should be provided "
             "{{ Frequency }}.")
@@ -357,7 +357,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         sentence_parameter.is_required = True
         sentence_parameter.value = (
             "A displaced person should be provided with "
-            "{{ Default }} {{ Unit }}\{{ Units }}{{ Unit  }} of "
+            "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
             "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
             "and no more than {{ Maximum allowed }}. This should be provided "
             "{{ Frequency }}.")

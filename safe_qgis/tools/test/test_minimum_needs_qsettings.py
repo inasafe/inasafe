@@ -44,13 +44,22 @@ class MinimumNeedsTest(unittest.TestCase):
     def test_02_update_minimum_needs(self):
         """Change minimum needs and verify that the saved result are updated."""
         original_old = self.minimum_needs.get_full_needs()
-        new_minimum_needs = [{
-            'resource': 'TEST',
-            'amount': 100,
-            'unit': 'square Angstrom',
-            'frequency': 'always',
-            'provenance': 'Test Database'
-        }]
+        new_minimum_needs = {
+            'resources': [{
+                "Default": "5",
+                "Minimum allowed": "1",
+                "Maximum allowed": "10",
+                "Frequency": "weekly",
+                "Resource name": "Test resource",
+                "Resource description": "Basic food",
+                "Unit": "kilogram",
+                "Units": "kilograms",
+                "Unit abbreviation": "kg",
+                "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+            }],
+            'provenance': "Test",
+            'profile': "Test"
+        }
         self.minimum_needs.update_minimum_needs(new_minimum_needs)
         other_minimum_needs = QMinimumNeeds(testing=True)
         other_old = other_minimum_needs.get_full_needs()
