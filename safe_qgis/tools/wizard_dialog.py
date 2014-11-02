@@ -1396,15 +1396,23 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # STEP_FC_HAZLAYER_FROM_BROWSER
     # ===========================
 
-    def get_layer_description_from_browser(self, browser):
+    def get_layer_description_from_browser(self, category):
         """Obtain the description of the browser layer selected by user.
 
-        :param browser: The browser tree view to get selection from.
-        :type browser: QTreeView
+        :param category: The category of the layer to get the description.
+        :type category: string
 
         :returns: description of the selected layer or a short error message.
         :rtype: string
         """
+
+        if category == 'hazard':
+            browser = self.tvBrowserHazard
+        elif category == 'exposure':
+            browser = self.tvBrowserExposure
+        elif category == 'aggregation':
+            browser = self.tvBrowserAggregation
+
         indx = browser.selectionModel().currentIndex()
         if not indx:
             return ""
@@ -1439,8 +1447,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             layer = QgsRasterLayer(path, '', 'gdal')
 
         # set the current layer (e.g. for the keyword creation sub-thread
-        self.hazard_layer = layer
         self.layer = layer
+
+        if category == 'hazard':
+            self.hazard_layer = layer
+        elif category == 'exposure':
+            self.exposure_layer = layer
+        else:
+            self.aggregation_layer = layer
 
         if not layer or not layer.isValid():
             return "Not a valid layer"
@@ -1480,7 +1494,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def tvBrowserHazard_selection_changed(self):
         """Update layer description label"""
-        desc = self.get_layer_description_from_browser(self.tvBrowserHazard)
+        desc = self.get_layer_description_from_browser('hazard')
         self.lblDescribeBrowserHazLayer.setText(desc)
         self.pbnNext.setEnabled(bool(len(desc) > 32))
 
@@ -1558,7 +1572,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def tvBrowserExposure_selection_changed(self):
         """Update layer description label"""
-        desc = self.get_layer_description_from_browser(self.tvBrowserExposure)
+        desc = self.get_layer_description_from_browser('exposure')
         self.lblDescribeBrowserExpLayer.setText(desc)
         self.pbnNext.setEnabled(bool(len(desc) > 32))
 
@@ -1653,7 +1667,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def tvBrowserAggregation_selection_changed(self):
         """Update layer description label"""
-        desc = self.get_layer_description_from_browser(self.tvBrowserAggregation)
+        desc = self.get_layer_description_from_browser('aggregation')
         self.lblDescribeBrowserAggLayer.setText(desc)
         self.pbnNext.setEnabled(bool(len(desc) > 32))
 
@@ -1718,6 +1732,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
             params += "<b>%s</b>: %s<br/>" % (p, subparams)
 
+        if self.aggregation_layer:
+            aggr = self.aggregation_layer.name()
+        else:
+            aggr = self.tr('no aggregation')
+
         summary = self.tr("Please ensure the following informations are correct and press Run") + "<br/><br/>"
         summary += """<b>IMPACT FUNCTION</b>: %s<br/>
                     <b>HAZARD LAYER</b>: %s<br/>
@@ -1726,7 +1745,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     %s""" % (self.selected_function()['name'],
                              self.hazard_layer.name(),
                              self.exposure_layer.name(),
-                             self.exposure_layer.name(),
+                             aggr,
                              params)
         self.lblSummary.setText(summary)
 
