@@ -25,8 +25,8 @@
             "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}\\{{ Units }}{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
         },
         {
-            "Default": "64",
-            "Minimum allowed": "0",
+            "Default": "67",
+            "Minimum allowed": "10",
             "Maximum allowed": "100",
             "Frequency": "weekly",
             "Resource name": "Water",
@@ -38,8 +38,8 @@
         },
         {
             "Default": "0.2",
-            "Minimum allowed": "0",
-            "Maximum allowed": "100",
+            "Minimum allowed": "0.1",
+            "Maximum allowed": "1",
             "Frequency": "weekly",
             "Resource name": "Family Kits",
             "Resource description": "Hygiene kits",
@@ -50,8 +50,8 @@
         },
         {
             "Default": "0.05",
-            "Minimum allowed": "0",
-            "Maximum allowed": "100",
+            "Minimum allowed": "0.02",
+            "Maximum allowed": "1",
             "Frequency": "single",
             "Resource name": "Toilets",
             "Resource description": "",
