@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>20</number>
+      <number>22</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1730,22 +1730,6 @@
      <widget class="QWidget" name="pgF10HazLayerOrigin">
       <layout class="QVBoxLayout" name="verticalLayout_11">
        <item>
-        <spacer name="verticalSpacer_23">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLabel" name="lblSelectHazLayerOriginType">
          <property name="styleSheet">
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
@@ -2125,22 +2109,6 @@
      <widget class="QWidget" name="pgF13ExpLayerOrigin">
       <layout class="QVBoxLayout" name="verticalLayout_20">
        <item>
-        <spacer name="verticalSpacer_28">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLabel" name="lblSelectExpLayerOriginType">
          <property name="styleSheet">
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
@@ -2241,22 +2209,6 @@
      </widget>
      <widget class="QWidget" name="pgF14ExpLayerTOC">
       <layout class="QVBoxLayout" name="verticalLayout_23">
-       <item>
-        <spacer name="verticalSpacer_42">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>17</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item>
         <widget class="QLabel" name="lblSelectExposureLayer">
          <property name="styleSheet">
@@ -2560,22 +2512,6 @@ Please step back and select another layer.</string>
      </widget>
      <widget class="QWidget" name="pgF17AggLayerOrigin">
       <layout class="QVBoxLayout" name="verticalLayout_21">
-       <item>
-        <spacer name="verticalSpacer_40">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item>
         <widget class="QLabel" name="lblSelectAggLayerOriginType">
          <property name="styleSheet">
@@ -3020,22 +2956,6 @@ Please step back and select another layer.</string>
      <widget class="QWidget" name="pgF21ParamsIF">
       <layout class="QVBoxLayout" name="pgF21ParamsIF_layout">
        <item>
-        <spacer name="verticalSpacer_32">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLabel" name="lblSelectIFParameters">
          <property name="text">
           <string>Please set impact functions parameters.</string>
@@ -3066,39 +2986,7 @@ Please step back and select another layer.</string>
      <widget class="QWidget" name="pgF22Summary">
       <layout class="QVBoxLayout" name="verticalLayout_18">
        <item>
-        <spacer name="verticalSpacer_54">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_56">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_18">
+        <widget class="QLabel" name="lblSummary">
          <property name="text">
           <string>It's all, now you can run your analysis.
 
@@ -3132,30 +3020,25 @@ Please step back and select another layer.</string>
      <widget class="QWidget" name="pgF23Progress">
       <layout class="QVBoxLayout" name="verticalLayout_16">
        <item>
-        <spacer name="verticalSpacer_60">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_20">
-         <property name="text">
-          <string>Running analysys...</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="lblAnalysisStatus">
+           <property name="text">
+            <string>Running analysis...</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="pbProgress">
+           <property name="value">
+            <number>24</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_62">
@@ -3174,45 +3057,28 @@ Please step back and select another layer.</string>
         </spacer>
        </item>
        <item>
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>24</number>
+        <widget class="MessageViewer" name="wvResults" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextBrowser" name="textBrowser">
-         <property name="html">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Here goes the existing progress report: &lt;br /&gt;&lt;br /&gt;Processing started...&lt;br /&gt;Checking available memory...&lt;br /&gt;Preparing hazard data...&lt;br /&gt;Preparing exposure data...&lt;br /&gt;Preparing aggregation layer...&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_61">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
+         <property name="minimumSize">
           <size>
-           <width>20</width>
-           <height>20</height>
+           <width>100</width>
+           <height>100</height>
           </size>
          </property>
-        </spacer>
+         <property name="url" stdset="0">
+          <url>
+           <string>about:blank</string>
+          </url>
+         </property>
+        </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="pgF24Report">
-      <layout class="QVBoxLayout" name="verticalLayout_17">
        <item>
-        <spacer name="verticalSpacer_57">
+        <spacer name="verticalSpacer_64">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -3228,62 +3094,9 @@ p, li { white-space: pre-wrap; }
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_19">
-         <property name="text">
-          <string>Analysis done.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_58">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QTextBrowser" name="textBrowser_2">
-         <property name="html">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Here goes the existing report...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_63">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QHBoxLayout" name="hltGenerateRaports">
          <item>
-          <spacer name="horizontalSpacer_23">
+          <spacer name="horizontalSpacer_31">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -3296,28 +3109,28 @@ p, li { white-space: pre-wrap; }
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="pbnReportWeb">
            <property name="text">
             <string>Open in web browser</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pbnReportPDF">
            <property name="text">
             <string>Generate PDF</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="pbnReportComposer">
            <property name="text">
             <string>Open in composer</string>
            </property>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_12">
+          <spacer name="horizontalSpacer_33">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -3332,7 +3145,7 @@ p, li { white-space: pre-wrap; }
         </layout>
        </item>
        <item>
-        <spacer name="verticalSpacer_59">
+        <spacer name="verticalSpacer_61">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -3342,7 +3155,7 @@ p, li { white-space: pre-wrap; }
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>
@@ -3419,6 +3232,14 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MessageViewer</class>
+   <extends>QWidget</extends>
+   <header>..widgets.message_viewer</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>pbnCancel</tabstop>
   <tabstop>pbnBack</tabstop>
