@@ -19,25 +19,35 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
 import os
 import re
 import json
+from collections import OrderedDict
 from sqlite3 import OperationalError
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, QObject
+from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication, QBrush, QColor
 
-from qgis.core import QgsBrowserModel, QgsDataItem, QgsVectorLayer, QgsRasterLayer
+from qgis.core import (
+    QgsBrowserModel,
+    QgsDataItem,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsMapLayerRegistry)
+
+from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
+from safe_qgis.tools.wizard_analysis_handler import WizardAnalysisHandler
 
 from safe.api import ImpactFunctionManager
 from safe.api import metadata  # pylint: disable=W0612
 
-from safe_qgis.safe_interface import InaSAFEError, DEFAULTS
-from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
+from safe_qgis.safe_interface import messaging as m
+from safe_qgis.safe_interface import (
+    DEFAULTS)
+
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     get_error_message,
@@ -51,6 +61,9 @@ from safe_qgis.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
     InvalidParameterError,
+    #InsufficientOverlapError,
+    #InvalidAggregationKeywords,
+    #InsufficientMemoryWarning,
     UnsupportedProviderError)
 from safe_qgis.utilities.help import show_context_help
 
@@ -59,11 +72,6 @@ from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe_qgis.safe_interface import (
     get_safe_impact_function)
-
-
-
-LOGGER = logging.getLogger('InaSAFE')
-
 
 # Constants for categories
 category_question = QApplication.translate(
@@ -192,8 +200,7 @@ step_fc_agglayer_from_browser = 19
 step_fc_agglayer_disjoint = 20
 step_fc_params = 21
 step_fc_summary = 22
-step_fc_progress = 23
-step_fc_report = 24
+step_fc_analysis = 23
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -222,8 +229,7 @@ def get_question_text(constant):
 
 
 class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
-
-    """Dialog implementation class for the InaSAFE keywords wizard."""
+    """Dialog implementation class for the InaSAFE wizard."""
 
     def __init__(self, parent=None, iface=None, dock=None, layer=None):
         """Constructor for the dialog.
@@ -258,13 +264,14 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.tvBrowserExposure.setModel(QgsBrowserModel())
         self.tvBrowserAggregation.setModel(QgsBrowserModel())
         self.keyword_io = KeywordIO()
-
-        self.pbnBack.setEnabled(False)
-        self.pbnNext.setEnabled(False)
+        self.twParams = None
 
         # TODO document it:
         self.is_selected_layer_keywordless = False
         self.parent_step = None
+
+        self.pbnBack.setEnabled(False)
+        self.pbnNext.setEnabled(False)
 
         # noinspection PyUnresolvedReferences
         self.tvBrowserHazard.selectionModel().selectionChanged.connect(self.tvBrowserHazard_selection_changed)
@@ -287,16 +294,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.lblSubtitle.setText(self.tr('Keywords creation...'))
         self.layer = layer or self.iface.mapCanvas().currentLayer()
-        self.layer_type = is_raster_layer(self.layer) and 'raster' or 'vector'
-        if self.layer_type == 'vector':
-            if is_point_layer(self.layer):
-                self.data_type = 'point'
-            elif is_polygon_layer(self.layer):
-                self.data_type = 'polygon'
-            else:
-                self.data_type = 'line'
-        else:
-            self.data_type = 'numeric'
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
         except (HashNotFoundError,
@@ -312,6 +309,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_function_centric_mode(self):
         """Set the Wizard to the Function Centric mode"""
+        self.layer = None
+        self.hazard_layer = None
+        self.exposure_layer = None
+        self.aggregation_layer = None
+        self.if_params = None
+
         self.lblSubtitle.setText(self.tr('Function-centric assessment...'))
         new_step = step_fc_function
         self.set_widgets_step_fc_function()
@@ -367,10 +370,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblSelectCategory.setText(
             category_question % self.layer.name())
         categories = ImpactFunctionManager().categories_for_layer(
-            self.layer_type, self.data_type)
-        if self.data_type == 'polygon':
+            self.get_layer_type(), self.get_data_type())
+        if self.get_data_type() == 'polygon':
             categories += ['aggregation']
-        if self.data_type == 'point':
+        if self.get_data_type() == 'point':
             categories = ['hazard']
         for category in categories:
             if type(category) != dict:
@@ -444,7 +447,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblSelectSubcategory.setText(
             get_question_text('%s_question' % category['id']))
         for i in ImpactFunctionManager().subcategories_for_layer(
-                category['id'], self.layer_type, self.data_type):
+                category['id'], self.get_layer_type(), self.get_data_type()):
             item = QListWidgetItem(i['name'], self.lstSubcategories)
             item.setData(QtCore.Qt.UserRole, unicode(i))
             self.lstSubcategories.addItem(item)
@@ -505,8 +508,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lstUnits.clear()
         self.lstFields.clear()
         for i in ImpactFunctionManager().units_for_layer(
-                subcategory['id'], self.layer_type, self.data_type):
-            if (self.layer_type == 'raster' and
+                subcategory['id'], self.get_layer_type(), self.get_data_type()):
+            if (self.get_layer_type() == 'raster' and
                     i['constraint'] == 'categorical'):
                 continue
             else:
@@ -1159,6 +1162,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setText(0, imfunc['name'])
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
+                #TODO TEMP DEBUG temporary:
+                #if imfunc['name'] == "Tsunami Evacuation Function":
+                    #self.twi_if_tsunami = tree_leaf
+        #TODO TEMP DEBUG temporary
+        #self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1190,7 +1198,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # STEP_FC_HAZLAYER_FROM_CANVAS
     # ===========================
 
-    def get_layer_description_from_canvas(self, layer_id):
+    def get_layer_description_from_canvas(self, layer):
         """Obtain the description of a canvas layer selected by user.
 
         :param layer_id: The QGIS layer id
@@ -1199,13 +1207,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: description of the selected layer.
         :rtype: string
         """
-
-        layer = None
-
-        if layer_id:
-            for l in self.iface.mapCanvas().layers():
-                if l.id() == layer_id:
-                    layer = l
 
         # set the current layer (e.g. for the keyword creation sub-thread
         self.layer = layer
@@ -1223,7 +1224,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 UnsupportedProviderError):
             kwds = None
 
-        self.is_selected_layer_keywordles = not bool(kwds)
+        self.is_selected_layer_keywordless = not bool(kwds)
 
         if kwds:
             lblText = """
@@ -1260,15 +1261,17 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
         """
-        lblText = self.get_layer_description_from_canvas(self.selected_canvas_hazlayer())
+
+        self.hazard_layer = self.selected_canvas_hazlayer()
+        lblText = self.get_layer_description_from_canvas(self.hazard_layer)
         self.lblDescribeHazCanvasLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
     def selected_canvas_hazlayer(self):
         """Obtain the canvas layer selected by user.
 
-        :returns: id of the selected layer.
-        :rtype: string, None
+        :returns: The currently selected map layer in the list.
+        :rtype: QgsMapLayer
         """
         item = self.lstHazCanvasLayers.currentItem()
         try:
@@ -1276,7 +1279,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         except (AttributeError, NameError):
             layer_id = None
 
-        return layer_id
+        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+        return layer
 
     def get_compatible_layers_from_canvas(self, category):
         """Collect compatible layers from map canvas.
@@ -1299,7 +1303,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             imfunc = None
 
         if imfunc:
-            # TODO: Test how it works for categories other than hazard
             allowed_subcats = imfunc['categories'][category]['subcategory']
             if type(allowed_subcats) != list:
                 allowed_subcats = [allowed_subcats]
@@ -1334,7 +1337,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 elif 'line' in [lc['data_type'] for lc in layer_constraints]:
                     is_layer_compatible = True
 
-            if keywords and keywords['category'] != category:
+            if keywords and (not 'category' in keywords or keywords['category'] != category):
                 is_layer_compatible = False
 
             if keywords and imfunc:
@@ -1343,7 +1346,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 #elif 'unit' in keywords.keys() and not keywords['unit'] in [ifunit['id'] for ifunit in allowed_units]:
                     #is_layer_compatible = False
 
-            if is_layer_compatible or 2==2:  # TODO - remove the dummy debugging 2==2
+            if is_layer_compatible:
                 layers += [{'id': layer.id(), 'name': layer.name(), 'keywords': keywords, 'compatible': is_layer_compatible}]
 
         # Move layers without keywords to the end
@@ -1436,6 +1439,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             layer = QgsRasterLayer(path, '', 'gdal')
 
         # set the current layer (e.g. for the keyword creation sub-thread
+        self.hazard_layer = layer
         self.layer = layer
 
         if not layer or not layer.isValid():
@@ -1446,7 +1450,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         except:
             kwds = None
 
-        self.is_selected_layer_keywordles = not bool(kwds)
+        self.is_selected_layer_keywordless = not bool(kwds)
 
         if kwds:
             desc = """
@@ -1523,15 +1527,16 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
         """
-        lblText = self.get_layer_description_from_canvas(self.selected_canvas_explayer())
+        self.exposure_layer = self.selected_canvas_explayer()
+        lblText = self.get_layer_description_from_canvas(self.exposure_layer)
         self.lblDescribeExpCanvasLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
     def selected_canvas_explayer(self):
         """Obtain the canvas exposure layer selected by user.
 
-        :returns: id of the selected layer.
-        :rtype: string, None
+        :returns: The currently selected map layer in the list.
+        :rtype: QgsMapLayer
         """
         item = self.lstExpCanvasLayers.currentItem()
         try:
@@ -1539,7 +1544,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         except (AttributeError, NameError):
             layer_id = None
 
-        return layer_id
+        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+        return layer
 
     def set_widgets_step_fc_explayer_from_canvas(self):
         """Set widgets on the Exposure Layer From Canvas tab"""
@@ -1616,15 +1622,16 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
         """
-        lblText = self.get_layer_description_from_canvas(self.selected_canvas_agglayer())
-        self.lblDescribeHazCanvasLayer.setText(lblText)
+        self.aggregation_layer = self.selected_canvas_agglayer()
+        lblText = self.get_layer_description_from_canvas(self.aggregation_layer)
+        self.lblDescribeAggCanvasLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
     def selected_canvas_agglayer(self):
         """Obtain the canvas aggregation layer selected by user.
 
-        :returns: id of the selected layer.
-        :rtype: string, None
+        :returns: The currently selected map layer in the list.
+        :rtype: QgsMapLayer
         """
         item = self.lstAggCanvasLayers.currentItem()
         try:
@@ -1632,7 +1639,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         except (AttributeError, NameError):
             layer_id = None
 
-        return layer_id
+        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+        return layer
 
     def set_widgets_step_fc_agglayer_from_canvas(self):
         """Set widgets on the Aggregation Layer from Canvas tab"""
@@ -1668,34 +1676,29 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_widgets_step_fc_params(self):
         """Set widgets on the Params tab"""
 
-
-
         # TODO Put the params to metadata! Now we need to import the IF class.
         imfunc_id = self.selected_function()['id']
         imfunctions = get_safe_impact_function(imfunc_id)
         if not imfunctions:
             return
         imfunc = imfunctions[0][imfunc_id]
-        params = None
+        self.if_params = None
         if hasattr(imfunc, 'parameters'):
-            params = imfunc.parameters
+            self.if_params = imfunc.parameters
 
         self.lblSelectIFParameters.setText('Please set impact functions parameters.<br/>Parameters for impact function "%s" that can be modified are:' % imfunc_id)
 
         dialog = FunctionOptionsDialog(self)
         dialog.set_dialog_info(imfunc_id)
-        dialog.build_form(params)
+        dialog.build_form(self.if_params)
 
-        twParams = dialog.tabWidget
-
-        self.pgF21ParamsIF_layout.addWidget(twParams)
-
-
-
-        #if dialog.exec_():
-        #    print dialog.result()
-
-        pass
+        if self.twParams:
+            # remove the existing tab widget
+            #TODO: ensure it's really removed (strange overlapping children noticed)
+            self.pgF21ParamsIF_layout.removeWidget(self.twParams)
+        self.twParams = dialog.tabWidget
+        self.pgF21ParamsIF_layout.addWidget(self.twParams)
+        self.if_params = dialog.parse_input(dialog.values)
 
     # ===========================
     # STEP_FC_SUMMARY
@@ -1703,26 +1706,89 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_widgets_step_fc_summary(self):
         """Set widgets on the Summary tab"""
-        pass
+        params = ""
+        for p in self.if_params:
+            print '-------', p, self.if_params[p]
+            print type(self.if_params[p])
+
+            if type(self.if_params[p]) == bool:
+                subparams = 'FOOFOOF'
+            elif type(self.if_params[p]) == OrderedDict:
+                print '>>>>> o je!'
+                subparams = [u'%s: %s' % (unicode(pp), unicode(self.if_params[p][pp])) for pp in self.if_params[p]]
+                subparams = u', '.join(subparams)
+            elif type(self.if_params[p]) == list:
+                subparams = ', '.join([unicode(i) for i in self.if_params[p]])
+            else:
+                subparams = unicode(self.if_params[p])
+
+            params += "<b>%s</b>: %s<br/>" % (p, subparams)
+
+        summary = self.tr("Please ensure the following informations are correct and press Run") + "<br/><br/>"
+        summary += """<b>IMPACT FUNCTION</b>: %s<br/>
+                    <b>HAZARD LAYER</b>: %s<br/>
+                    <b>EXPOSURE LAYER</b>: %s<br/>
+                    <b>AGGREGATION LAYER</b>: %s<br/>
+                    %s""" % (self.selected_function()['name'],
+                             self.hazard_layer.name(),
+                             self.exposure_layer.name(),
+                             self.exposure_layer.name(),
+                             params)
+        self.lblSummary.setText(summary)
 
     # ===========================
-    # STEP_FC_PROGRESS
+    # STEP_FC_ANALYSIS
     # ===========================
 
-    def set_widgets_step_fc_progress(self):
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_pbnReportWeb_released(self):
+        """Handle the Open Report in Web Browser button release.
+
+        .. note:: This is an automatic Qt slot
+           executed when the Next button is released.
+        """
+        self.wvResults.open_current_in_browser()
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_pbnReportPDF_released(self):
+        """Handle the Generate PDF button release.
+
+        .. note:: This is an automatic Qt slot
+           executed when the Next button is released.
+        """
+        self.analysis_handler.print_map('pdf')
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_pbnReportComposer_released(self):
+        """Handle the Open Report in Web Broseer button release.
+
+        .. note:: This is an automatic Qt slot
+           executed when the Next button is released.
+        """
+        self.analysis_handler.print_map('composer')
+
+    def setup_and_run_analysis(self):
+        """Execute analysis after the tab is displayed"""
+        self.analysis_handler = WizardAnalysisHandler(self)
+        self.analysis_handler.setup_and_run_analysis()
+
+    def set_widgets_step_fc_analysis(self):
         """Set widgets on the Progress tab"""
-        pass
+        self.pbProgress.setValue(0)
+        self.wvResults.setHtml('')
+        self.pbnReportWeb.hide()
+        self.pbnReportPDF.hide()
+        self.pbnReportComposer.hide()
+        self.lblAnalysisStatus.setText('Running analysis...')
 
     # ===========================
-    # STEP_FC_REPORT
-    # ===========================
-
-    def set_widgets_step_fc_report(self):
-        """Set widgets on the Report tab"""
-        pass
-
-    # ===========================
-    # COMMON METHODS
+    # STEPS NAVIGATION
     # ===========================
 
     def go_to_step(self, step):
@@ -1732,7 +1798,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :type step: int
         """
         self.stackedWidget.setCurrentIndex(step - 1)
-        self.lblStep.setText(self.tr('step %d') % step)
+        #self.lblStep.setText(self.tr('step %d') % step)
+        self.lblStep.clear()
         self.pbnBack.setEnabled(True)
         if step in [step_kw_category, step_fc_function] and self.parent_step is None:
             self.pbnBack.setEnabled(False)
@@ -1747,6 +1814,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
+
+        # Save keywords if it's the end of the keyword creation mode
+        if current_step == step_kw_title:
+            self.save_current_keywords()
 
         if current_step == step_kw_aggregation:
             good_age_ratio, sum_age_ratios = self.age_ratios_are_valid()
@@ -1809,10 +1880,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.set_widgets_step_fc_params()
         elif new_step == step_fc_summary:
             self.set_widgets_step_fc_summary()
-        elif new_step == step_fc_progress:
-            self.set_widgets_step_fc_progress()
-        elif new_step == step_fc_report:
-            self.set_widgets_step_fc_report()
+        elif new_step == step_fc_analysis:
+            self.set_widgets_step_fc_analysis()
         elif new_step is None:
             # Wizard complete
             self.accept()
@@ -1822,9 +1891,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             pass
 
         # Set Next button label
-        if new_step in [step_kw_title, step_fc_report] and self.parent_step is None:
+        if new_step in [step_kw_title, step_fc_analysis] and self.parent_step is None:
             self.pbnNext.setText(self.tr('Finish'))
-        elif new_step == step_fc_progress:
+        elif new_step == step_fc_summary:
             self.pbnNext.setText(self.tr('Run'))
         else:
             self.pbnNext.setText(self.tr('Next'))
@@ -1832,6 +1901,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         # Disable the Next button unless new data already entered
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
+
+        # Run analysis after switching to the new step
+        if new_step == step_fc_analysis:
+            self.setup_and_run_analysis()
 
         # TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
         if new_step == step_kw_category and self.parent_step:
@@ -1928,14 +2001,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # Never go further if layers disjoint
             return False
         if step == step_fc_params:
-            pass   # TODO
+            return True
         if step == step_fc_summary:
-            pass   # TODO
-        if step == step_fc_progress:
-            pass   # TODO
-        if step == step_fc_report:
-            pass   # TODO
-        # TODO: TEMPORARY
+            return True
+        if step == step_fc_analysis:
+            return True
         return True
 
     def compute_next_step(self, current_step):
@@ -1952,17 +2022,17 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if category['id'] == 'aggregation':
                 new_step = step_kw_field
             elif ImpactFunctionManager().subcategories_for_layer(
-                    category['id'], self.layer_type, self.data_type):
+                    category['id'], self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_subcategory
             else:
                 new_step = step_kw_field
         elif current_step == step_kw_subcategory:
             subcategory = self.selected_subcategory()
             # skip field and classify step if point layer and it's a volcano
-            if self.data_type == 'point' and subcategory['id'] == 'volcano':
+            if self.get_data_type() == 'point' and subcategory['id'] == 'volcano':
                 new_step = step_kw_source
             elif ImpactFunctionManager().units_for_layer(
-                    subcategory['id'], self.layer_type, self.data_type):
+                    subcategory['id'], self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_unit
             else:
                 new_step = step_kw_field
@@ -1990,7 +2060,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # Come back to the parent thread
                 new_step = self.parent_step
                 self.parent_step = None
-                self.is_selected_layer_keywordles = False
+                self.is_selected_layer_keywordless = False
             else:
                 # Wizard complete
                 new_step = None
@@ -2003,7 +2073,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 new_step = step_fc_hazlayer_from_browser
         elif current_step in [step_fc_hazlayer_from_canvas, step_fc_hazlayer_from_browser]:
-            if self.is_selected_layer_keywordles:
+            if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
                 self.set_keywords_creation_mode(self.layer)
@@ -2017,7 +2087,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 new_step = step_fc_explayer_from_browser
         elif current_step in [step_fc_explayer_from_canvas, step_fc_explayer_from_browser]:
-            if self.is_selected_layer_keywordles:
+            if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
                 self.existing_keywords = None
@@ -2042,7 +2112,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # no aggregation (so also no disjoint test)
                 new_step = step_fc_params
         elif current_step in [step_fc_agglayer_from_canvas, step_fc_agglayer_from_browser]:
-            if self.is_selected_layer_keywordles:
+            if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
                 self.existing_keywords = None
@@ -2058,9 +2128,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     new_step = step_fc_params
         elif current_step == step_fc_agglayer_disjoint:
             new_step = step_fc_params
-        elif current_step in [step_fc_params, step_fc_summary, step_fc_progress]:
+        elif current_step in [step_fc_params, step_fc_summary]:
             new_step = current_step + 1
-        elif current_step == step_fc_report:
+        elif current_step == step_fc_analysis:
             new_step = None # Wizard complete
 
         elif current_step < self.stackedWidget.count():
@@ -2163,6 +2233,72 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             new_step = current_step - 1
         return new_step
 
+    # ===========================
+    # COMMON METHODS
+    # ===========================
+
+    def get_current_step(self):
+        """Return current step of the wizard.
+
+        :returns: Current step of the wizard.
+        :rtype: int
+        """
+        return self.stackedWidget.currentIndex() + 1
+
+    def get_layer_type(self, layer=None):
+        """Obtain the type of a given layer.
+
+        If no layer specified, the current layer is used
+
+        :param layer : layer to examine
+        :type layer: QgsMapLayer or None
+
+        :returns: The layer type.
+        :rtype: str
+        """
+        if not layer:
+            layer = self.layer
+        return is_raster_layer(layer) and 'raster' or 'vector'
+
+    def get_data_type(self, layer=None):
+        """Obtain data type of a given layer.
+
+        If no layer specified, the current layer is used
+
+        :param layer : layer to examine
+        :type layer: QgsMapLayer or None
+
+        :returns: The data type.
+        :rtype: str
+        """
+        if not layer:
+            layer = self.layer
+        if self.get_layer_type() == 'vector':
+            if is_point_layer(layer):
+                return 'point'
+            elif is_polygon_layer(layer):
+                return 'polygon'
+            else:
+                return 'line'
+        else:
+            return 'numeric'
+
+    def get_existing_keyword(self, keyword):
+        """Obtain an existing keyword's value.
+
+        :param keyword: A keyword from keywords.
+        :type keyword: str
+
+        :returns: The value of the keyword.
+        :rtype: str
+        """
+        if self.existing_keywords is None:
+            return None
+        if keyword is not None:
+            return self.existing_keywords.get(keyword, None)
+        else:
+            return None
+
     def get_keywords(self):
         """Obtain the state of the dialog as a keywords dict.
 
@@ -2201,10 +2337,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             keywords['value_map'] = json.dumps(value_map)
         return keywords
 
-    def accept(self):
-        """Automatic slot executed when the Finish button is pressed.
+    def save_current_keywords(self):
+        """Save keywords to the layer.
 
-        It will write out the keywords for the layer that is active.
+        It will write out the keywords for the current layer.
         This method is based on the KeywordsDialog class.
         """
         current_keywords = self.get_keywords()
@@ -2222,23 +2358,16 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if self.dock is not None:
             # noinspection PyUnresolvedReferences
             self.dock.get_layers()
-        self.done(QtGui.QDialog.Accepted)
 
-    def get_existing_keyword(self, keyword):
-        """Obtain an existing keyword's value.
+    # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
+    def auto_select_one_item(self, list_widget):
+        """Select item in the list in list_widget if it's the only item.
 
-        :param keyword: A keyword from keywords.
-        :type keyword: str
-
-        :returns: The value of the keyword.
-        :rtype: str
+        :param list_widget: The list widget that want to be checked.
+        :type list_widget: QListWidget
         """
-        if self.existing_keywords is None:
-            return None
-        if keyword is not None:
-            return self.existing_keywords.get(keyword, None)
-        else:
-            return None
+        if list_widget.count() == 1 and list_widget.currentRow() == -1:
+            list_widget.setCurrentRow(0)
 
     def set_tool_tip(self):
         """Set tool tip as helper text for some objects."""
@@ -2265,21 +2394,3 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.leSource_date.setToolTip(date_tooltip)
         self.leSource_scale.setToolTip(scale_tooltip)
         self.leSource_url.setToolTip(url_tooltip)
-
-    # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
-    def auto_select_one_item(self, list_widget):
-        """Select item in the list in list_widget if it's the only item.
-
-        :param list_widget: The list widget that want to be checked.
-        :type list_widget: QListWidget
-        """
-        if list_widget.count() == 1 and list_widget.currentRow() == -1:
-            list_widget.setCurrentRow(0)
-
-    def get_current_step(self):
-        """Return current step of the wizard.
-
-        :returns: Current step of the wizard.
-        :rtype: int
-        """
-        return self.stackedWidget.currentIndex() + 1
