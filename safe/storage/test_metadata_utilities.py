@@ -23,6 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import unittest
+import time
 
 from xml.etree import ElementTree
 
@@ -38,6 +39,7 @@ from safe.common.utilities import unique_filename
 
 class TestCase(unittest.TestCase):
     def test_write_keyword_in_iso_metadata(self):
+        today = time.strftime("%Y-%m-%d")
         keyword_file = os.path.abspath(
             os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
 
@@ -55,12 +57,20 @@ class TestCase(unittest.TestCase):
             os.path.isfile(xml_file), 'File %s should not exist' % xml_file)
         xml_file = write_keyword_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)
-        keyword_tag = tree.getroot().find(ISO_METADATA_KEYWORD_TAG)
+        root = tree.getroot()
+        keyword_tag = root.find(ISO_METADATA_KEYWORD_TAG)
         self.assertIn(keywords, keyword_tag.text)
 
         # there should be an xml file now
         self.assertTrue(
             os.path.isfile(xml_file), 'File %s should exist' % xml_file)
+
+        # lets check if the date generation worked
+        self.assertIn(
+            today,
+            ElementTree.tostring(root, encoding='utf8', method='xml'),
+            'File %s should include today\'s date (%s)' % (xml_file, today))
+
         # lets update the file
         xml_file = write_keyword_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)

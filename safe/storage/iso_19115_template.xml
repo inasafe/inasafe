@@ -50,7 +50,7 @@
         </gmd:CI_ResponsibleParty>
     </gmd:contact>
     <gmd:dateStamp>
-        <gco:Date>$ISO19115_TODAYS_DATE</gco:Date>
+        <gco:Date>$ISO19115_TODAY_DATE</gco:Date>
     </gmd:dateStamp>
     <gmd:metadataStandardName>
         <gco:CharacterString>ISO19115</gco:CharacterString>
@@ -69,7 +69,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>$ISO19115_TODAYS_DATE</gco:Date>
+                                <gco:Date>$ISO19115_TODAY_DATE</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode
@@ -82,7 +82,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>$ISO19115_TODAYS_DATE</gco:Date>
+                                <gco:Date>$ISO19115_TODAY_DATE</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode
@@ -95,7 +95,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>$ISO19115_TODAYS_DATE</gco:Date>
+                                <gco:Date>$ISO19115_TODAY_DATE</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode
@@ -240,7 +240,7 @@
                                     <gmd:date>
                                         <gmd:CI_Date>
                                             <gmd:date>
-                                                <gco:Date>$ISO19115_TODAYS_DATE</gco:Date>
+                                                <gco:Date>$ISO19115_TODAY_DATE</gco:Date>
                                             </gmd:date>
                                             <gmd:dateType>
                                                 <gmd:CI_DateTypeCode
