@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+import copy
 import json
 import os
 import time
@@ -115,7 +116,7 @@ def generate_iso_metadata(keywords=None):
     """
 
     # get defaults from settings
-    template_replacements = get_defaults()
+    template_replacements = copy.copy(get_defaults())
 
     # create runtime based replacement values
     template_replacements['ISO19115_TODAY_DATE'] = time.strftime("%Y-%m-%d")
