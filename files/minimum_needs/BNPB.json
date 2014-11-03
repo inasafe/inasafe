@@ -29,7 +29,7 @@
             "Minimum allowed": "10",
             "Maximum allowed": "100",
             "Frequency": "weekly",
-            "Resource name": "Water",
+            "Resource name": "Clean Water",
             "Resource description": "For washing",
             "Unit": "litre",
             "Units": "litres",

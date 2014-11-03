@@ -128,7 +128,7 @@ def population_rounding_full(number):
 
 
 def population_rounding(number):
-    """A shorthand for population_rounding_full[0].
+    """A shorthand for population_rounding_full(number)[0].
 
     :param number: The amount of people as calculated.
     :type number: int, float

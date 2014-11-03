@@ -119,7 +119,7 @@ class MinimumNeeds(object):
         """
         rice = tr('Rice')
         drinking_water = tr('Drinking Water')
-        water = tr('Water')
+        water = tr('Clean Water')
         family_kits = tr('Family Kits')
         toilets = tr('Toilets')
         minimum_needs = {

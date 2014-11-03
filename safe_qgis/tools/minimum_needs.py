@@ -84,17 +84,12 @@ class QMinimumNeeds(MinimumNeeds):
         plugins_minimum_needs_dir = QDir(
             '%s/python/plugins/inasafe/files/minimum_needs/' %
             QgsApplication.qgisSettingsDirPath())
-        print "Does the local dear exist?"
-        print local_minimum_needs_dir.exists()
         if not local_minimum_needs_dir.exists():
             if not plugins_minimum_needs_dir.exists():
-                print "Does the plugin dir exist?"
-                print plugins_minimum_needs_dir.exists()
                 """This is specifically to get Travis working."""
                 return [self._defaults()['profile']]
             QDir(QgsApplication.qgisSettingsDirPath()).mkdir('minimum_needs')
             for file_name in plugins_minimum_needs_dir.entryList():
-                print "Trying to copy this file: ", file_name
                 source_file = QFile(
                     '%s/python/plugins/inasafe/files/minimum_needs/%s' %
                     (QgsApplication.qgisSettingsDirPath(), file_name))

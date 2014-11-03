@@ -286,7 +286,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 # Update total
                 affected_population += pop
 
-        affected_population = round_thousand(affected_population)
         # Estimate number of people in need of evacuation
         evacuated = (
             affected_population
