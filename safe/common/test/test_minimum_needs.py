@@ -32,36 +32,36 @@ class MinimumNeedsTest(unittest.TestCase):
     def setUp(self):
         """Fixture run before all tests"""
         self.minimum_needs = MinimumNeeds()
-        self.minimum_needs .update_minimum_needs([
-            {'resource': 'Test Resource 1', 'amount': 100, 'unit': 'kg',
-                'frequency': 'weekly', 'provenance': 'TEST'},
-            {'resource': 'Test Resource 2', 'amount': 0.1, 'unit': 'l',
-                'frequency': 'weekly', 'provenance': 'TEST'},
-        ])
+        self.minimum_needs.update_minimum_needs({
+            'resources': [
+                {
+                    'Resource name': 'Test Resource 1',
+                    'Default': 100,
+                    'Unit abbreviation': 'kg',
+                    'Frequency': 'weekly'
+                },
+                {
+                    'Resource name': 'Test Resource 2',
+                    'Default': 0.1,
+                    'Unit abbreviation': 'l',
+                    'Frequency': 'weekly'
+                },
+            ],
+            'provenance': 'Test',
+            'profile': 'Test'
+        })
 
     def tearDown(self):
         """Fixture run after each test"""
         pass
-
-    def test_01_metadata(self):
-        """Test the metadata."""
-        self.assertEqual(
-            len(self.minimum_needs._full_category_descriptions()),
-            len(self.minimum_needs.categories))
-        self.assertEqual(
-            len(self.minimum_needs._full_category_descriptions()),
-            len(self.minimum_needs.headings))
-        self.assertEqual(
-            len(self.minimum_needs._full_category_descriptions()),
-            len(self.minimum_needs.category_types))
 
     def test_02_needs(self):
         """Test the interaction with needs."""
         self.assertEqual(
             self.minimum_needs.get_minimum_needs(),
             OrderedDict([
-                ['Test Resource 1', 100],
-                ['Test Resource 2', 0.1]
+                ['Test Resource 1 [kg]', 100],
+                ['Test Resource 2 [l]', 0.1]
             ])
         )
         # Adding new
@@ -73,21 +73,20 @@ class MinimumNeedsTest(unittest.TestCase):
         self.assertEqual(
             self.minimum_needs.get_minimum_needs(),
             OrderedDict([
-                ['Test Resource 1', 100],
-                ['Test Resource 2', 0.1],
-                ['Test Resource 3', 10]
+                ['Test Resource 1 [kg]', 100],
+                ['Test Resource 2 [l]', 0.1],
+                ['Test Resource 3 [kg]', 10]
             ])
         )
-        last_added = self.minimum_needs.get_full_needs()[-1]
+        last_added = self.minimum_needs.get_full_needs()['resources'][-1]
         self.assertEqual(
             cmp(
                 last_added,
                 {
-                    'resource': 'Test Resource 3',
-                    'amount': 10,
-                    'unit': 'kg',
-                    'frequency': 'weekly',
-                    'provenance': ''
+                    'Resource name': 'Test Resource 3',
+                    'Default': 10,
+                    'Unit abbreviation': 'kg',
+                    'Frequency': 'weekly'
                 }
             ),
             0
@@ -112,9 +111,10 @@ class MinimumNeedsTest(unittest.TestCase):
     def test_04_file_read(self):
         """Test reading from a file."""
         json_needs = (
-            '[{"provenance": "TEST FILE WRITE", "amount": 1,'
-            '"frequency": "weekly", "resource": "Test Resource File",'
-            '"unit": "tonne"}]')
+            '{"provenance": "TEST FILE WRITE", "profile": "Test Read",'
+            '"resources": [{"Default": 1, "Frequency": "weekly", '
+            '"Resource name": "Test Resource File", '
+            '"Unit abbreviation": "T"}]}')
         (fd, file_name) = tempfile.mkstemp()
         os.write(fd, json_needs)
         os.close(fd)
