@@ -54,6 +54,13 @@ DEFAULTS['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
 DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'
 DEFAULTS['NO_DATA'] = tr('No data')
 
+#Defaults for iso_19115_template.xml
+DEFAULTS['ISO19115_ORGANIZATION'] = 'InaSAFE.org'
+DEFAULTS['ISO19115_URL'] = 'http://inasafe.org'
+DEFAULTS['ISO19115_EMAIL'] = 'info@inasafe.org'
+DEFAULTS['ISO19115_TITLE'] = 'InaSAFE analysis result'
+DEFAULTS['ISO19115_LICENSE'] = 'Free use with accreditation'
+
 
 # noinspection PyUnresolvedReferences
 # this is used when we are in safe without access to qgis (e.g. web ) and is

@@ -56,7 +56,7 @@ from safe_qgis.safe_interface import (
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.utilities.utilities import qgis_version
-from safe_qgis.utilities.defaults import breakdown_defaults
+from safe_qgis.utilities.defaults import get_defaults
 
 
 def make_padang_layer():
@@ -201,7 +201,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_rad_postprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
         layer = make_polygon_layer()
-        defaults = breakdown_defaults()
+        defaults = get_defaults()
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         button = dialog.radPostprocessing
         button.setChecked(False)
@@ -235,7 +235,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_dsb_female_ratio_default_value_changed(self):
         """Test hazard radio button toggle behaviour works"""
         layer = make_polygon_layer()
-        defaults = breakdown_defaults()
+        defaults = get_defaults()
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         button = dialog.radPostprocessing
         button.setChecked(False)

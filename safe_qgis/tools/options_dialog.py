@@ -28,10 +28,9 @@ from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.defaults import (
     disclaimer,
     default_organisation_logo_path,
-    default_north_arrow_path)
+    default_north_arrow_path, get_defaults)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
-from safe_qgis.safe_interface import DEFAULTS
 
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
@@ -59,6 +58,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.parent = parent
         self.dock = dock
         self.keyword_io = KeywordIO()
+        self.defaults = get_defaults()
 
         # Set up things for context help
         button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
@@ -121,9 +121,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/show_intermediate_layers', False, type=bool))
         self.cbxShowPostprocessingLayers.setChecked(flag)
 
-        ratio = float(settings.value(
-            'inasafe/defaultFemaleRatio',
-            DEFAULTS['FEMALE_RATIO'], type=float))
+        ratio = self.defaults['FEMALE_RATIO']
         self.dsbFemaleRatioDefault.setValue(ratio)
 
         path = settings.value(
@@ -183,6 +181,18 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         flag = bool(
             settings.value('inasafe/use_native_zonal_stats', False, type=bool))
         self.cbxNativeZonalStats.setChecked(flag)
+
+        # Restore ISO19115 metadata tab
+        value = self.defaults['ISO19115_ORGANIZATION']
+        self.iso19115_organization_le.setText(value)
+        value = self.defaults['ISO19115_URL']
+        self.iso19115_url_le.setText(value)
+        value = self.defaults['ISO19115_EMAIL']
+        self.iso19115_email_le.setText(value)
+        value = self.defaults['ISO19115_TITLE']
+        self.iso19115_title_le.setText(value)
+        value = self.defaults['ISO19115_LICENSE']
+        self.iso19115_license_le.setText(value)
 
     def save_state(self):
         """Store the options into the user's stored session info.
@@ -244,6 +254,23 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         settings.setValue(
             'inasafe/use_native_zonal_stats',
             self.cbxNativeZonalStats.isChecked())
+
+        # save metadata values
+        settings.setValue(
+            'inasafe/ISO19115_ORGANIZATION',
+            self.iso19115_organization_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_URL',
+            self.iso19115_url_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_EMAIL',
+            self.iso19115_email_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_TITLE',
+            self.iso19115_title_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_LICENSE',
+            self.iso19115_license_le.text())
 
     @staticmethod
     def show_help():

@@ -81,7 +81,10 @@ from safe.api import (
     styles,
     feature_attributes_as_dict,
     get_utm_epsg,
-    which)
+    which,
+    safe_to_qgis_layer,
+    generate_iso_metadata,
+    ISO_METADATA_KEYWORD_TAG)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 

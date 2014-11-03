@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>699</width>
-    <height>601</height>
+    <width>569</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_basic">
       <attribute name="title">
@@ -47,8 +47,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>677</width>
-            <height>517</height>
+            <width>531</width>
+            <height>492</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -424,6 +424,96 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_iso19115">
+      <attribute name="title">
+       <string>ISO 19155 Metadata</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Organisation</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="iso19115_organization_le">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Contact Email</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="iso19115_email_le">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Website</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="iso19115_url_le">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Analysis Title</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="iso19115_title_le">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Analysis License</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="iso19115_license_le">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tab_advanced">
       <attribute name="title">
        <string>Advanced</string>
@@ -528,6 +618,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
   <tabstop>lineEdit_4</tabstop>
   <tabstop>cbxVisibleLayersOnly</tabstop>
   <tabstop>cbxSetLayerNameFromTitle</tabstop>
@@ -546,6 +637,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>textBrowser</tabstop>
   <tabstop>cbxDevMode</tabstop>
   <tabstop>cbxNativeZonalStats</tabstop>
+  <tabstop>buttonBox</tabstop>
   <tabstop>cbxUseThread</tabstop>
   <tabstop>toolButton</tabstop>
   <tabstop>toolButton_4</tabstop>
@@ -586,22 +678,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>462</x>
      <y>519</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>custom_templates_dir_checkbox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>splitter_custom_report</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>98</x>
-     <y>290</y>
     </hint>
    </hints>
   </connection>
@@ -650,6 +726,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>98</x>
      <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>custom_templates_dir_checkbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>splitter_custom_report</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>98</x>
+     <y>290</y>
     </hint>
    </hints>
   </connection>
