@@ -239,11 +239,7 @@ class TestDock(TestCase):
             '%s , received: \n %s' % (expected_mortalities, result))
         self.assertTrue(format_int(expected_mortalities) in result, message)
 
-        if qgis_version() < 20400:
-            expected_affected = 873637
-        else:
-            # Changed from 881634 on merge of user_extents support
-            expected_affected = 763397
+        expected_affected = 763397
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
