@@ -104,7 +104,7 @@ class MapTest(unittest.TestCase):
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
             468836,  # Ubuntu 14.04_64 AG
-            449348,  # Ubuntu 14.04_64 TS - pycharm
+            431844,  # Ubuntu 14.04_64 TS - pycharm
             425645,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             437994,  # Ubuntu 14.04_64 MB - pycharm
             431844,  # Ubuntu 14.04_64 MB - make - TODO why is this?
@@ -113,9 +113,7 @@ class MapTest(unittest.TestCase):
             148267,  # Windows 7 32
             150412,  # Windows 7 64
             448270,  # UB 12.04 Jenkins
-            453867,  # Travis
-            446071,  # No idea why Travis expects a different value maybe the
-                     # Maybe some underlying infrastructure changed??
+            451920,  # Travis
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -154,7 +152,7 @@ class MapTest(unittest.TestCase):
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
             450385,  # Ubuntu 14.04_64 AG
-            430845,  # Ubuntu 14.04_64 TS pycharm
+            413193,  # Ubuntu 14.04_64 TS pycharm
             413015,  # Ubuntu 14.04_64 TS make - TODO why is this?
             419483,  # Ubuntu 14.04_64 MB pycharm
             413193,  # Ubuntu 14.04_64 MB make - TODO why is this?
@@ -163,9 +161,7 @@ class MapTest(unittest.TestCase):
             85418,  # Windows 7 32bit
             88779,  # Windows 7 64bit
             436118,   # Jenkins ub 12.04
-            435497,  # Travis
-            427701,  # No idea why Travis expects a different value maybe the
-                     # Maybe some underlying infrastructure changed??
+            433389,  # Travis
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)

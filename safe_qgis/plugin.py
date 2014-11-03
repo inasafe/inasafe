@@ -36,6 +36,7 @@ from PyQt4.QtCore import (
 )
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
+
 try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
@@ -95,11 +96,13 @@ class Plugin:
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
+        self.action_extent_selector = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
         self.action_dock = None
         self.action_toggle_rubberbands = None
+        self.message_bar_item = None
         #print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
@@ -426,6 +429,22 @@ class Plugin:
             self.dock_widget.toggle_rubber_bands)
         self.add_action(self.action_toggle_rubberbands)
 
+        #---------------------------------------
+        # Create action for analysis extent dialog
+        #---------------------------------------
+        self.action_extent_selector = QAction(
+            QIcon(':/plugins/inasafe/set-extents-tool.svg'),
+            self.tr('Set the analysis area for InaSAFE'),
+            self.iface.mainWindow())
+        self.action_extent_selector.setStatusTip(self.tr(
+            'Set the analysis area for InaSAFE'))
+        self.action_extent_selector.setWhatsThis(self.tr(
+            'Set the analysis area for InaSAFE'))
+        self.action_extent_selector.triggered.connect(
+            self.show_extent_selector)
+
+        self.add_action(self.action_extent_selector)
+
     # noinspection PyMethodMayBeStatic
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
@@ -505,13 +524,24 @@ class Plugin:
             self.dock_widget.setVisible(True)
             self.dock_widget.raise_()
 
+    def show_extent_selector(self):
+        """Show the extent selector widget for defining analysis extents."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.extent_selector import ExtentSelector
+        widget = ExtentSelector(
+            self.iface,
+            self.iface.mainWindow())
+        widget.extent_defined.connect(
+            self.dock_widget.define_user_analysis_extent)
+        widget.show()  # non modal
+
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
 
         dialog = MinimumNeeds(self.iface.mainWindow())
-        dialog.exec_()  # modal
+        dialog.show()  # non modal
 
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""

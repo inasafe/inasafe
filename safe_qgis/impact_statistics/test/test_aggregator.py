@@ -56,7 +56,7 @@ from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    extent_to_geo_array)
+    extent_to_array)
 
 from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
@@ -134,6 +134,7 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -158,6 +159,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -186,6 +188,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -211,6 +214,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -260,7 +264,7 @@ class AggregatorTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(dock=DOCK)
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
