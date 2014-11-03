@@ -231,7 +231,7 @@ def get_question_text(constant):
 class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     """Dialog implementation class for the InaSAFE wizard."""
 
-    def __init__(self, parent=None, iface=None, dock=None, layer=None):
+    def __init__(self, parent=None, iface=None, dock=None):
         """Constructor for the dialog.
 
         .. note:: In QtDesigner the advanced editor's predefined keywords
@@ -373,8 +373,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.get_layer_type(), self.get_data_type())
         if self.get_data_type() == 'polygon':
             categories += ['aggregation']
-        if self.get_data_type() == 'point':
-            categories = ['hazard']
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=W0612
@@ -507,14 +505,18 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         self.lstFields.clear()
-        for i in ImpactFunctionManager().units_for_layer(
-                subcategory['id'], self.get_layer_type(), self.get_data_type()):
+        units_for_layer = ImpactFunctionManager().units_for_layer(
+            subcategory['id'], self.get_layer_type(), self.get_data_type())
+        print 'jaran'
+        print units_for_layer
+        print [i['name'] for i in units_for_layer]
+        for unit_for_layer in units_for_layer:
             if (self.get_layer_type() == 'raster' and
-                    i['constraint'] == 'categorical'):
+                    unit_for_layer['constraint'] == 'categorical'):
                 continue
             else:
-                item = QListWidgetItem(i['name'], self.lstUnits)
-                item.setData(QtCore.Qt.UserRole, unicode(i))
+                item = QListWidgetItem(unit_for_layer['name'], self.lstUnits)
+                item.setData(QtCore.Qt.UserRole, unicode(unit_for_layer))
                 self.lstUnits.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
