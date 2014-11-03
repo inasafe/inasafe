@@ -85,7 +85,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
+                        'subcategories': [
                             hazard_flood,
                             hazard_tsunami
                         ],
@@ -97,7 +97,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_road,
+                        'subcategories': [exposure_road],
                         'units': [unit_road_type_type],
                         'layer_constraints': [layer_vector_line]
                     }
