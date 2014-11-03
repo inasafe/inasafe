@@ -443,7 +443,7 @@ class ImpactFunctionMetadata():
         :return: List of valid hazards of the impact function.
         :rtype: list
         """
-        hazards = cls.get_metadata()['categories']['hazard']['subcategory']
+        hazards = cls.get_metadata()['categories']['hazard']['subcategories']
         if type(hazards) is not list:
             hazards = [hazards]
         return hazards
@@ -457,7 +457,8 @@ class ImpactFunctionMetadata():
         :return: List of valid exposures of the impact function.
         :rtype: list
         """
-        exposures = cls.get_metadata()['categories']['exposure']['subcategory']
+        exposures = cls.get_metadata()['categories']['exposure'][
+            'subcategories']
         if type(exposures) is not list:
             exposures = [exposures]
         return exposures
