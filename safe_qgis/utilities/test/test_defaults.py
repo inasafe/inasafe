@@ -47,7 +47,11 @@ class TestDefaults(unittest.TestCase):
             'NO_DATA': u'No data',
 
             'AGGR_ATTR_KEY': 'aggregation attribute',
-            'ISO19115_ORGANIZATION': 'InaSAFE.org'}
+            'ISO19115_EMAIL': 'info@inasafe.org',
+            'ISO19115_LICENSE': 'Free use with accreditation',
+            'ISO19115_ORGANIZATION': 'InaSAFE.org',
+            'ISO19115_TITLE': 'InaSAFE analysis result',
+            'ISO19115_URL': 'http://inasafe.org'}
 
         actual = get_defaults()
         self.maxDiff = None

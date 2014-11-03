@@ -4,7 +4,7 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd">
     <gmd:fileIdentifier>
-        <gco:CharacterString>InaSAFE.org</gco:CharacterString>
+        <gco:CharacterString>None</gco:CharacterString>
     </gmd:fileIdentifier>
     <gmd:language>
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/"
@@ -34,7 +34,7 @@
                     <gmd:address>
                         <gmd:CI_Address>
                             <gmd:electronicMailAddress>
-                                <gco:CharacterString>info@inasafe.org
+                                <gco:CharacterString>$ISO19115_EMAIL
                                 </gco:CharacterString>
                             </gmd:electronicMailAddress>
                         </gmd:CI_Address>
@@ -50,7 +50,7 @@
         </gmd:CI_ResponsibleParty>
     </gmd:contact>
     <gmd:dateStamp>
-        <gco:Date>2014-10-30</gco:Date>
+        <gco:Date>2014-11-02</gco:Date>
     </gmd:dateStamp>
     <gmd:metadataStandardName>
         <gco:CharacterString>ISO19115</gco:CharacterString>
@@ -63,13 +63,39 @@
             <gmd:citation>
                 <gmd:CI_Citation>
                     <gmd:title>
-                        <gco:CharacterString>InaSAFE analysis result
+                        <gco:CharacterString>$ISO19115_TITLE
                         </gco:CharacterString>
                     </gmd:title>
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2014-10-30</gco:Date>
+                                <gco:Date>2014-11-02</gco:Date>
+                            </gmd:date>
+                            <gmd:dateType>
+                                <gmd:CI_DateTypeCode
+                                        codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+                                        codeListValue="publication">publication
+                                </gmd:CI_DateTypeCode>
+                            </gmd:dateType>
+                        </gmd:CI_Date>
+                    </gmd:date>
+                    <gmd:date>
+                        <gmd:CI_Date>
+                            <gmd:date>
+                                <gco:Date>2014-11-02</gco:Date>
+                            </gmd:date>
+                            <gmd:dateType>
+                                <gmd:CI_DateTypeCode
+                                        codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+                                        codeListValue="revision">revision
+                                </gmd:CI_DateTypeCode>
+                            </gmd:dateType>
+                        </gmd:CI_Date>
+                    </gmd:date>
+                    <gmd:date>
+                        <gmd:CI_Date>
+                            <gmd:date>
+                                <gco:Date>2014-11-02</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode
@@ -82,28 +108,23 @@
                     <gmd:identifier>
                         <gmd:RS_Identifier>
                             <gmd:code>
-                                <gco:CharacterString>InaSAFE.org
-                                </gco:CharacterString>
+                                <gco:CharacterString>None</gco:CharacterString>
                             </gmd:code>
                         </gmd:RS_Identifier>
                     </gmd:identifier>
                 </gmd:CI_Citation>
             </gmd:citation>
-            <gmd:abstract>
-                <gco:CharacterString>Here the description of the data
-                </gco:CharacterString>
-            </gmd:abstract>
             <gmd:pointOfContact>
                 <gmd:CI_ResponsibleParty>
                     <gmd:organisationName>
-                        <gco:CharacterString>InaSAFE.org</gco:CharacterString>
+                        <gco:CharacterString>$ISO19115_ORGANIZATION</gco:CharacterString>
                     </gmd:organisationName>
                     <gmd:contactInfo>
                         <gmd:CI_Contact>
                             <gmd:address>
                                 <gmd:CI_Address>
                                     <gmd:electronicMailAddress>
-                                        <gco:CharacterString>info@inasafe.org
+                                        <gco:CharacterString>$ISO19115_EMAIL
                                         </gco:CharacterString>
                                     </gmd:electronicMailAddress>
                                 </gmd:CI_Address>
@@ -112,6 +133,45 @@
                     </gmd:contactInfo>
                 </gmd:CI_ResponsibleParty>
             </gmd:pointOfContact>
+            <gmd:descriptiveKeywords>
+                <gmd:MD_Keywords>
+                    <gmd:keyword>
+                        <gco:CharacterString>Human health and safety
+                        </gco:CharacterString>
+                    </gmd:keyword>
+                    <gmd:thesaurusName>
+                        <gmd:CI_Citation>
+                            <gmd:title>
+                                <gco:CharacterString>GEMET - INSPIRE themes,
+                                    version 1.0
+                                </gco:CharacterString>
+                            </gmd:title>
+                            <gmd:date>
+                                <gmd:CI_Date>
+                                    <gmd:date>
+                                        <gco:Date>2008-06-01</gco:Date>
+                                    </gmd:date>
+                                    <gmd:dateType>
+                                        <gmd:CI_DateTypeCode
+                                                codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+                                                codeListValue="publication">
+                                            publication
+                                        </gmd:CI_DateTypeCode>
+                                    </gmd:dateType>
+                                </gmd:CI_Date>
+                            </gmd:date>
+                        </gmd:CI_Citation>
+                    </gmd:thesaurusName>
+                </gmd:MD_Keywords>
+            </gmd:descriptiveKeywords>
+            <gmd:resourceConstraints>
+                <gmd:MD_Constraints>
+                    <gmd:useLimitation>
+                        <gco:CharacterString>$ISO19115_LICENSE
+                        </gco:CharacterString>
+                    </gmd:useLimitation>
+                </gmd:MD_Constraints>
+            </gmd:resourceConstraints>
             <gmd:language>
                 <gmd:LanguageCode
                         codeList="http://www.loc.gov/standards/iso639-2/"
@@ -144,6 +204,17 @@
                     </gmd:version>
                 </gmd:MD_Format>
             </gmd:distributionFormat>
+            <gmd:transferOptions>
+                <gmd:MD_DigitalTransferOptions>
+                    <gmd:onLine>
+                        <gmd:CI_OnlineResource>
+                            <gmd:linkage>
+                                <gmd:URL>$ISO19115_URL</gmd:URL>
+                            </gmd:linkage>
+                        </gmd:CI_OnlineResource>
+                    </gmd:onLine>
+                </gmd:MD_DigitalTransferOptions>
+            </gmd:transferOptions>
         </gmd:MD_Distribution>
     </gmd:distributionInfo>
     <gmd:dataQualityInfo>
@@ -158,6 +229,42 @@
                     </gmd:level>
                 </gmd:DQ_Scope>
             </gmd:scope>
+            <gmd:report>
+                <gmd:DQ_DomainConsistency
+                        xsi:type="gmd:DQ_DomainConsistency_Type">
+                    <gmd:result>
+                        <gmd:DQ_ConformanceResult
+                                xsi:type="gmd:DQ_ConformanceResult_Type">
+                            <gmd:specification>
+                                <gmd:CI_Citation>
+                                    <gmd:date>
+                                        <gmd:CI_Date>
+                                            <gmd:date>
+                                                <gco:Date>2014-11-03</gco:Date>
+                                            </gmd:date>
+                                            <gmd:dateType>
+                                                <gmd:CI_DateTypeCode
+                                                        codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+                                                        codeListValue="creation">
+                                                    creation
+                                                </gmd:CI_DateTypeCode>
+                                            </gmd:dateType>
+                                        </gmd:CI_Date>
+                                    </gmd:date>
+                                </gmd:CI_Citation>
+                            </gmd:specification>
+                            <gmd:explanation>
+                                <gco:CharacterString>See the referenced
+                                    specification
+                                </gco:CharacterString>
+                            </gmd:explanation>
+                            <gmd:pass>
+                                <gco:Boolean>true</gco:Boolean>
+                            </gmd:pass>
+                        </gmd:DQ_ConformanceResult>
+                    </gmd:result>
+                </gmd:DQ_DomainConsistency>
+            </gmd:report>
         </gmd:DQ_DataQuality>
     </gmd:dataQualityInfo>
 </gmd:MD_Metadata>
