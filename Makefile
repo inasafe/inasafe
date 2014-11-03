@@ -328,7 +328,7 @@ docker-test: testdata clean
 	@echo "Regression Test Suite for running in docker"
 	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
-        @-export PYTHONPATH=`pwd`:$(PYTHONPATH) xvfb-run --server-args="-screen 0, 1024x768x24" nosetest s-v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" nosetest s-v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
 
 
 ##########################################################
