@@ -32,11 +32,10 @@ class TestCore(unittest.TestCase):
         """Test for add_to_list function
         """
         #rounding up
-        for count in range(100):
-            """After choosing some random numbers the sum of the randomly
-            selected and one greater than that should be less than the
-            population rounded versions of these.
-            """
+        for _ in range(100):
+            # After choosing some random numbers the sum of the randomly
+            # selected and one greater than that should be less than the
+            # population rounded versions of these.
             n = random.randint(1, 1000000)
             n_pop, dummy = population_rounding_full(n)
             n1 = n + 1

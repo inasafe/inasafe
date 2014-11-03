@@ -96,6 +96,7 @@ class Plugin:
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
+        self.action_function_centric_wizard = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
@@ -243,6 +244,24 @@ class Plugin:
             self.show_keywords_wizard)
 
         self.add_action(self.action_keywords_wizard)
+
+        #--------------------------------------
+        # Create action for IF-centric wizard
+        #--------------------------------------
+        self.action_function_centric_wizard = QAction(
+            QIcon(':/plugins/inasafe/show-wizard.svg'),
+            self.tr('InaSAFE Impact Function Centric Wizard'),
+            self.iface.mainWindow())
+        self.action_function_centric_wizard.setStatusTip(self.tr(
+            'Open InaSAFE impact function centric wizard'))
+        self.action_function_centric_wizard.setWhatsThis(self.tr(
+            'Open InaSAFE impact function centric wizard'))
+        self.action_function_centric_wizard.setEnabled(True)
+
+        self.action_function_centric_wizard.triggered.connect(
+            self.show_function_centric_wizard)
+
+        self.add_action(self.action_function_centric_wizard)
 
         #--------------------------------------
         # Create action for options dialog
@@ -546,11 +565,8 @@ class Plugin:
         # End of fix for #793
         # Fix for filtered-layer
         except InvalidParameterError, e:
-            # noinspection PyTypeChecker,PyTypeChecker
-            QMessageBox.warning(
-                None,
-                self.tr('Invalid Layer'),
-                e.message)
+            # noinspection PyTypeChecker,PyTypeChecker,PyArgumentList
+            QMessageBox.warning(None, self.tr('Invalid Layer'), e.message)
             return
 
         dialog = KeywordsDialog(
@@ -570,6 +586,19 @@ class Plugin:
             self.iface.mainWindow(),
             self.iface,
             self.dock_widget)
+        dialog.set_keywords_creation_mode()
+        dialog.exec_()  # modal
+
+    def show_function_centric_wizard(self):
+        """Show the keywords creation wizard."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.wizard_dialog import WizardDialog
+
+        dialog = WizardDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
+        dialog.set_function_centric_mode()
         dialog.exec_()  # modal
 
     def show_function_browser(self):

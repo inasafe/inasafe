@@ -71,13 +71,13 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [hazard_flood],
+                        'subcategories': [hazard_flood],
                         'units': unit_wetdry,
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_structure,
+                        'subcategories': [exposure_structure],
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]
                     }

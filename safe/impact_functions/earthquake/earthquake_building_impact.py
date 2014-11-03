@@ -70,7 +70,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': hazard_earthquake,
+                        'subcategories': [hazard_earthquake],
                         'units': [unit_mmi],
                         'layer_constraints': [
                             layer_vector_polygon,
@@ -79,7 +79,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_structure,
+                        'subcategories': [exposure_structure],
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],

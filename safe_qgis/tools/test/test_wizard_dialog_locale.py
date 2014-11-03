@@ -120,7 +120,8 @@ class TestWizardDialogLocale(unittest.TestCase):
             include_keywords=True,
             source_directory=BOUNDDATA)
         # noinspection PyTypeChecker
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(PARENT, IFACE)
+        dialog.set_keywords_creation_mode(layer)
         expected_categories = ['keterpaparan', 'ancaman', 'agregasi']
         # noinspection PyTypeChecker
         self.check_list(expected_categories, dialog.lstCategories)
@@ -136,14 +137,15 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe_qgis.tools.wizard_dialog import WizardDialog
         from safe_qgis.utilities.utilities_for_testing import (
             clone_shp_layer, remove_vector_temp_file)
-        layer = clone_shp_layer(include_keywords=True)
+        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
 
         from safe.common.testing import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app()
         # noinspection PyTypeChecker
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(PARENT, IFACE)
+        dialog.set_keywords_creation_mode(layer)
 
         # select hazard
         self.select_from_list_widget('ancaman', dialog.lstCategories)
@@ -186,7 +188,8 @@ class TestWizardDialogLocale(unittest.TestCase):
         dialog.pbnNext.click()  # finish
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog(PARENT, IFACE, None, layer)
+        dialog = WizardDialog(PARENT, IFACE)
+        dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 7 - select category
         self.check_current_text('ancaman', dialog.lstCategories)
