@@ -21,8 +21,6 @@ from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string, remove_double_spaces
 from safe.metadata import converter_dict
 
-from safe_qgis.tools.minimum_needs import QMinimumNeeds
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -71,8 +69,19 @@ def default_minimum_needs():
 
     .. note:: Key names will be translated.
     """
-    minimum_needs = QMinimumNeeds()
-    return minimum_needs.get_minimum_needs()
+    rice = 'Rice [kg]'
+    drinking_water = 'Drinking Water [l]'
+    water = 'Clean Water [l]'
+    family_kits = 'Family Kits'
+    toilets = 'Toilets'
+    minimum_needs = OrderedDict([
+        (rice, 2.8),
+        (drinking_water, 17.5),
+        (water, 67),
+        (family_kits, 0.2),
+        (toilets, 0.05)])
+    return minimum_needs
+
 
 
 def evacuated_population_weekly_needs(
