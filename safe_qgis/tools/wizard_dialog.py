@@ -1329,16 +1329,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
             if imfunc:
                 is_layer_compatible = False
-                if is_raster_layer(layer) and 'raster' in [lc['layer_type'] for lc in layer_constraints]:
+                if is_raster_layer(layer) and 'raster' in [
+                    lc['layer_type'] for lc in layer_constraints]:
                     is_layer_compatible = True
-                elif is_point_layer(layer) and 'point' in [lc['data_type'] for lc in layer_constraints]:
+                elif is_point_layer(layer) and 'point' in [
+                    lc['data_type'] for lc in layer_constraints]:
                     is_layer_compatible = True
-                elif is_polygon_layer(layer)and 'polygon' in [lc['data_type'] for lc in layer_constraints]:
+                elif is_polygon_layer(layer)and 'polygon' in [
+                    lc['data_type'] for lc in layer_constraints]:
                     is_layer_compatible = True
                 elif 'line' in [lc['data_type'] for lc in layer_constraints]:
                     is_layer_compatible = True
 
-            if keywords and (not 'category' in keywords or keywords['category'] != category):
+            if keywords and (not 'category' in keywords or
+                                     keywords['category'] != category):
                 is_layer_compatible = False
 
             if keywords and imfunc:
@@ -1397,7 +1401,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def set_widgets_step_fc_hazlayer_from_canvas(self):
         """Set widgets on the Hazard Layer From TOC tab"""
-        self.list_compatible_layers_from_canvas('hazard', self.lstHazCanvasLayers)
+        self.list_compatible_layers_from_canvas(
+            'hazard', self.lstHazCanvasLayers)
         self.lblDescribeHazCanvasLayer.clear()
 
     # ===========================
@@ -1485,14 +1490,18 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.is_selected_layer_keyword_less = not bool(keywords)
 
         if keywords:
-            desc = """
-                <b>TITLE</b>: %s<br/>
-                <b>CATEGORY</b>: %s<br/>
-                <b>SUBCATEGORY</b>: %s<br/>
-                <b>UNIT</b>: %s<br/>
-                <b>SOURCE</b>: %s<br/><br/>
-                Please note there is no filter yet, so incompatible layers (e.g exposure if we're looking for hazard) are also displayed!
-            """ % (keywords.get('title'), keywords.get('category'), keywords.get('subcategory'), keywords.get('unit'), keywords.get('source'))
+            desc = (
+                '<b>TITLE</b>: %s<br/>'
+                '<b>CATEGORY</b>: %s<br/>'
+                '<b>SUBCATEGORY</b>: %s<br/>'
+                '<b>UNIT</b>: %s<br/>'
+                '<b>SOURCE</b>: %s<br/><br/>'
+                'Please note there is no filter yet, so incompatible layers '
+                '(e.g exposure if we\'re looking for hazard) are also'
+                'displayed!') % (
+                keywords.get('title'), keywords.get('category'),
+                keywords.get('subcategory'), keywords.get('unit'),
+                keywords.get('source'))
         else:
             if is_point_layer(layer):
                 geom_type = 'point'
@@ -1935,7 +1944,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             pass
 
         # Set Next button label
-        if new_step in [step_kw_title, step_fc_analysis] and self.parent_step is None:
+        if (new_step in [step_kw_title, step_fc_analysis] and
+                    self.parent_step is None):
             self.pbnNext.setText(self.tr('Finish'))
         elif new_step == step_fc_summary:
             self.pbnNext.setText(self.tr('Run'))
