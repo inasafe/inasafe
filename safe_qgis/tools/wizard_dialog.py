@@ -1303,7 +1303,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             imfunc = None
 
         if imfunc:
-            allowed_subcats = imfunc['categories'][category]['subcategory']
+            allowed_subcats = imfunc['categories'][category]['subcategories']
             if type(allowed_subcats) != list:
                 allowed_subcats = [allowed_subcats]
             allowed_units = imfunc['categories'][category]['units']
