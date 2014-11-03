@@ -117,15 +117,15 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: clean test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite 
 
 # Run the test suite for gui only
-guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
+guitest: pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck gui_test_suite 
 
 # Run the test suite followed by style checking includes realtime and requires QGIS 2.0
-qgis2test: clean qgis2_test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+qgis2test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations qgis2_test_suite 
 
-quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
+quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-translations test_suite_quick 
 
 test_suite_quick:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --stop
@@ -328,7 +328,7 @@ docker-test: testdata clean
 	@echo "Regression Test Suite for running in docker"
 	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
-        @-export PYTHONPATH=`pwd`:$(PYTHONPATH) xvfb-run --server-args="-screen 0, 1024x768x24" nosetest s-v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" nosetest s-v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
 
 
 ##########################################################
