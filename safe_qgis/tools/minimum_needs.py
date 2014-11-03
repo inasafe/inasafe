@@ -21,10 +21,9 @@ class QMinimumNeeds(MinimumNeeds):
     minimum needs.
     """
 
-    def __init__(self, testing=False):
+    def __init__(self):
         self.settings = QSettings()
-        if testing:
-            self.settings = QSettings('Test Minimum Needs Settings')
+        self.minimum_needs = None
         self.load()
 
     def load(self):
@@ -33,10 +32,10 @@ class QMinimumNeeds(MinimumNeeds):
         minimum_needs = self.settings.value('Minimum Needs')
         if minimum_needs is None:
             profiles = self.get_profiles()[0]
-            minimum_needs = self.read_from_file(
+            self.read_from_file(
                 expanduser('~/.qgis2/minimum_needs/%s.json' % profiles))
-        # noinspection PyAttributeOutsideInit
-        self.minimum_needs = minimum_needs
+        if self.minimum_needs is None:
+            self.minimum_needs = self._defaults()
 
     def load_profile(self, profile):
         """Load a specific profile into the current minimum needs.
@@ -72,7 +71,8 @@ class QMinimumNeeds(MinimumNeeds):
             if 'minimum needs' in plugin.parameters:
                 plugin.parameters['minimum needs'] = self.get_minimum_needs()
 
-    def get_profiles(self):
+    @staticmethod
+    def get_profiles():
         """Get all the minimum needs profiles.
 
         :returns: The minimum needs by name.

@@ -20,8 +20,22 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
+from PyQt4.QtCore import QSettings
+
 from safe_qgis.tools.minimum_needs import QMinimumNeeds
 from safe.common.minimum_needs import MinimumNeeds
+
+
+class TestQMinimumNeeds(QMinimumNeeds):
+    # noinspection PyMissingConstructor
+    def __init__(self, test_profile='Test Minimum Needs Settings'):
+        self.settings = QSettings(test_profile)
+        self.settings.clear()
+        self.settings = QSettings(test_profile)
+        minimum_needs = self._defaults()
+        minimum_needs['provenance'] = 'Test'
+        minimum_needs['profile'] = 'Test'
+        self.minimum_needs = minimum_needs
 
 
 class MinimumNeedsTest(unittest.TestCase):
@@ -29,7 +43,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
     def setUp(self):
         """Test initialisation run before each test."""
-        self.minimum_needs = QMinimumNeeds(testing=True)
+        self.minimum_needs = TestQMinimumNeeds()
 
     def tearDown(self):
         """Run after each test."""
@@ -61,7 +75,7 @@ class MinimumNeedsTest(unittest.TestCase):
             'profile': "Test"
         }
         self.minimum_needs.update_minimum_needs(new_minimum_needs)
-        other_minimum_needs = QMinimumNeeds(testing=True)
+        other_minimum_needs = TestQMinimumNeeds(test_profile='Other Test')
         other_old = other_minimum_needs.get_full_needs()
 
         self.minimum_needs.save()

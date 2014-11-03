@@ -116,28 +116,106 @@ class MinimumNeeds(object):
 
         .. note:: Key names will be translated.
         """
-        rice = 'Rice'
-        drinking_water = 'Drinking Water'
-        water = 'Water'
-        family_kits = 'Family Kits'
-        toilets = 'Toilets'
+        rice = tr('Rice')
+        drinking_water = tr('Drinking Water')
+        water = tr('Water')
+        family_kits = tr('Family Kits')
+        toilets = tr('Toilets')
         minimum_needs = {
-            'resources': [
-                {'resource': rice, 'amount': 2.8, 'unit': 'kg',
-                    'frequency': 'weekly'},
-                {'resource': drinking_water, 'amount': 17.5, 'unit': 'l',
-                    'frequency': 'weekly'},
-                {'resource': water, 'amount': 67, 'unit': 'l',
-                    'frequency': 'weekly'},
-                {'resource': family_kits, 'amount': 0.2, 'unit': 'unit',
-                    'frequency': 'weekly'},
-                {'resource': toilets, 'amount': 0.05, 'unit': 'unit',
-                    'frequency': 'single'},
+            "resources": [
+                {
+                    "Default": "2.8",
+                    "Minimum allowed": "0",
+                    "Maximum allowed": "100",
+                    "Frequency": "weekly",
+                    "Resource name": rice,
+                    "Resource description": "Basic food",
+                    "Unit": "kilogram",
+                    "Units": "kilograms",
+                    "Unit abbreviation": "kg",
+                    "Readable sentence": (
+                        "A displaced person should be provided with "
+                        "{{ Default }} {{ Unit }}/{{ Units }}/"
+                        "{{ Unit abbreviation }} of {{ Resource name }}. "
+                        "Though no less than {{ Minimum allowed }} and no "
+                        "more than {{ Maximum allowed }}. This should be "
+                        "provided {{ Frequency }}.")
+                },
+                {
+                    "Default": "17.5",
+                    "Minimum allowed": "0",
+                    "Maximum allowed": "100",
+                    "Frequency": "weekly",
+                    "Resource name": drinking_water,
+                    "Resource description": "For drinking",
+                    "Unit": "litre",
+                    "Units": "litres",
+                    "Unit abbreviation": "l",
+                    "Readable sentence": (
+                        "A displaced person should be provided with "
+                        "{{ Default }} {{ Unit }}/{{ Units }}/"
+                        "{{ Unit abbreviation }} of {{ Resource name }}. "
+                        "Though no less than {{ Minimum allowed }} and no "
+                        "more than {{ Maximum allowed }}. This should be "
+                        "provided {{ Frequency }}.")
+                },
+                {
+                    "Default": "67",
+                    "Minimum allowed": "10",
+                    "Maximum allowed": "100",
+                    "Frequency": "weekly",
+                    "Resource name": water,
+                    "Resource description": "For washing",
+                    "Unit": "litre",
+                    "Units": "litres",
+                    "Unit abbreviation": "l",
+                    "Readable sentence": (
+                        "A displaced person should be provided with "
+                        "{{ Default }} {{ Unit }}/{{ Units }}/"
+                        "{{ Unit abbreviation }} of {{ Resource name }}. "
+                        "Though no less than {{ Minimum allowed }} and no "
+                        "more than {{ Maximum allowed }}. This should be "
+                        "provided {{ Frequency }}.")
+                },
+                {
+                    "Default": "0.2",
+                    "Minimum allowed": "0.1",
+                    "Maximum allowed": "1",
+                    "Frequency": "weekly",
+                    "Resource name": family_kits,
+                    "Resource description": "Hygiene kits",
+                    "Unit": "",
+                    "Units": "",
+                    "Unit abbreviation": "",
+                    "Readable sentence": (
+                        "A displaced person should be provided with "
+                        "{{ Default }} {{ Unit }}/{{ Units }}/"
+                        "{{ Unit abbreviation }} of {{ Resource name }}. "
+                        "Though no less than {{ Minimum allowed }} and no "
+                        "more than {{ Maximum allowed }}. This should be "
+                        "provided {{ Frequency }}.")
+                },
+                {
+                    "Default": "0.05",
+                    "Minimum allowed": "0.02",
+                    "Maximum allowed": "1",
+                    "Frequency": "single",
+                    "Resource name": toilets,
+                    "Resource description": "",
+                    "Unit": "",
+                    "Units": "",
+                    "Unit abbreviation": "",
+                    "Readable sentence": (
+                        "A displaced person should be provided with "
+                        "{{ Default }} {{ Unit }}/{{ Units }}/"
+                        "{{ Unit abbreviation }} of {{ Resource name }}. "
+                        "Though no less than {{ Minimum allowed }} and no "
+                        "more than {{ Maximum allowed }}. This should be "
+                        "provided {{ Frequency }}.")
+                }
             ],
-            'provenance': 'Perka',
-            'profile': [
-                'BNPB'
-            ]
+            "provenance": "Perka",
+            "profile": "BNPB"
         }
         return minimum_needs
 
