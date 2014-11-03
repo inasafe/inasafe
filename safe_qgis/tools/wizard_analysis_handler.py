@@ -31,7 +31,6 @@ from PyQt4.QtGui import QColor
 
 from qgis.core import (
     QgsMapLayerRegistry,
-    QgsMapLayer,
     QgsPoint,
     QgsRectangle,
     QgsCoordinateTransform,
@@ -41,14 +40,12 @@ from qgis.gui import QgsRubberBand
 
 from third_party.pydispatch import dispatcher
 
-from safe.api import ImpactFunctionManager
 from safe.api import metadata  # pylint: disable=W0612
 
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     temp_dir,
     styles,
-    DEFAULTS,
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
@@ -67,15 +64,7 @@ from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe_qgis.exceptions import (
-    HashNotFoundError,
-    NoKeywordsFoundError,
-    KeywordNotFoundError,
-    InvalidParameterError,
-    InsufficientOverlapError,
-    #InvalidAggregationKeywords,
-    #InsufficientMemoryWarning,
-    UnsupportedProviderError)
+from safe_qgis.exceptions import InsufficientOverlapError
 
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
@@ -87,6 +76,7 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
+
 
 class WizardAnalysisHandler(QObject):
     """Analysis handler for the InaSAFE wizard."""
@@ -102,7 +92,6 @@ class WizardAnalysisHandler(QObject):
 
         QtCore.QObject.__init__(self)
         self.parent = parent
-        self.iface = parent.iface
         self.keyword_io = KeywordIO()
 
         # Values for settings these get set in read_settings.
@@ -154,7 +143,7 @@ class WizardAnalysisHandler(QObject):
         self.show_intermediate_layers = settings.value(
             'inasafe/show_intermediate_layers', False, type=bool)
 
-        # 2hether to show rubber band of last and next scenario
+        # Whether to show rubber band of last and next scenario
         flag = bool(settings.value(
             'inasafe/showRubberBands', False, type=bool))
         self.show_rubber_bands = flag
