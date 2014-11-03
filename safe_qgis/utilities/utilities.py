@@ -366,7 +366,7 @@ def setup_printer(
         resolution=300,
         page_height=297,
         page_width=210,
-        page_margin=[10, 10, 10, 10]):
+        page_margin=None):
     """Create a QPrinter instance defaulted to print to an A4 portrait pdf.
 
     :param filename: Filename for the pdf print device.
@@ -387,6 +387,9 @@ def setup_printer(
     #
     # Create a printer device (we are 'printing' to a pdf
     #
+    # To remove dangerous mutable default values.
+    if page_margin is None:
+        page_margin = [10, 10, 10, 10]
     LOGGER.debug('InaSAFE Map setupPrinter called')
     printer = QtGui.QPrinter()
     printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
