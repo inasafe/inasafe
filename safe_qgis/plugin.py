@@ -96,6 +96,7 @@ class Plugin:
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
+        self.action_function_centric_wizard = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
@@ -564,11 +565,8 @@ class Plugin:
         # End of fix for #793
         # Fix for filtered-layer
         except InvalidParameterError, e:
-            # noinspection PyTypeChecker,PyTypeChecker
-            QMessageBox.warning(
-                None,
-                self.tr('Invalid Layer'),
-                e.message)
+            # noinspection PyTypeChecker,PyTypeChecker,PyArgumentList
+            QMessageBox.warning(None, self.tr('Invalid Layer'), e.message)
             return
 
         dialog = KeywordsDialog(
