@@ -26,6 +26,12 @@ class InaSAFEError(RuntimeError):
     suggestion = 'An unspecified error occurred.'
 
 
+class ReadMetadataError(InaSAFEError):
+    """When a metadata xml is not correctly formatted can't be read"""
+    suggestion = (
+        'Check that the file is correct')
+
+
 class ReadLayerError(InaSAFEError):
     """When a layer can't be read"""
     suggestion = (

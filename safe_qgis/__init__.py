@@ -84,11 +84,11 @@ if os.path.exists(translation_path):
 #     translation_path,
 #     os.path.exists(translation_path)))
 
-# MONKEYPATCHING safe.defaults.get_defaults to use breakdown_defaults
+# MONKEYPATCHING safe.defaults.get_defaults to use get_defaults
 # see safe_qgis.utilities.defaults for more details
 import safe.defaults
-from safe_qgis.utilities.defaults import breakdown_defaults
-safe.defaults.get_defaults = lambda the_default=None: breakdown_defaults(
+from safe_qgis.utilities.defaults import get_defaults
+safe.defaults.get_defaults = lambda the_default=None: get_defaults(
     the_default)
 
 try:

@@ -50,7 +50,7 @@ class RasterTest(unittest.TestCase):
                 layer_exent, qgis_extent,
                 'Expected %s extent, got %s' % (qgis_extent, layer_exent))
 
-    def test_convert_to_qgis_rastet_layer(self):
+    def test_convert_to_qgis_raster_layer(self):
         """Test that converting to QgsVectorLayer works."""
         if qgis_imported:
             # Create vector layer
