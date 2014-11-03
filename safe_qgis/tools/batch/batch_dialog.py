@@ -316,7 +316,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             message = 'set layer extent to %s ' % extent.asWktCoordinates()
             LOGGER.info(message)
 
-            self.iface.mapCanvas().set_extent(extent)
+            self.iface.mapCanvas().setExtent(extent)
 
         result = scenario_runner.run_scenario(self.dock)
 
