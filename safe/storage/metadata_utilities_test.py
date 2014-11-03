@@ -28,7 +28,7 @@ from xml.etree import ElementTree
 
 from safe.storage.metadata_utilities import (
     valid_iso_xml,
-    write_kw_in_iso_metadata,
+    write_keyword_in_iso_metadata,
     ISO_METADATA_KEYWORD_TAG,
     ISO_METADATA_KEYWORD_NESTING)
 
@@ -46,12 +46,14 @@ class TestCase(unittest.TestCase):
 
         basename, _ = os.path.splitext(keyword_file)
         xml_file = basename + '.xml'
-        os.remove(xml_file)
+
+        if os.path.isfile(xml_file):
+            os.remove(xml_file)
 
         # there should be no xml file now
         self.assertFalse(
             os.path.isfile(xml_file), 'File %s should not exist' % xml_file)
-        xml_file = write_kw_in_iso_metadata(keyword_file)
+        xml_file = write_keyword_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)
         keyword_tag = tree.getroot().find(ISO_METADATA_KEYWORD_TAG)
         self.assertIn(keywords, keyword_tag.text)
@@ -60,7 +62,7 @@ class TestCase(unittest.TestCase):
         self.assertTrue(
             os.path.isfile(xml_file), 'File %s should exist' % xml_file)
         # lets update the file
-        xml_file = write_kw_in_iso_metadata(keyword_file)
+        xml_file = write_keyword_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)
         keyword_tag = tree.getroot().find(ISO_METADATA_KEYWORD_TAG)
         self.assertIn(keywords, keyword_tag.text)

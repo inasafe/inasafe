@@ -70,7 +70,7 @@ ElementTree._serialize_xml = ElementTree._serialize['xml'] = _serialize_xml
 # END MONKEYPATCH CDATA
 
 
-def write_kw_in_iso_metadata(keyword_filename):
+def write_keyword_in_iso_metadata(keyword_filename):
     """Write keywords in an xml file at the same location as the keyword  file
 
     :param keyword_filename: Name of keywords file.
@@ -129,7 +129,7 @@ def generate_iso_metadata(keywords=None):
     return ISO_METADATA_XML_TEMPLATE.safe_substitute(template_replacements)
 
 
-def write_iso_metadata_file(xml_filename):
+def write_iso_metadata_file(xml_filename, keywords=None):
     """Make a valid ISO 19115 XML file using the values of safe.get_defaults
 
     This method will create a file based on the iso_19115_template.py template
@@ -140,9 +140,10 @@ def write_iso_metadata_file(xml_filename):
     :param xml_filename: full path to the file to be generated
     :return:
     """
-    xml = generate_iso_metadata()
+    xml = generate_iso_metadata(keywords)
     with open(xml_filename, 'w') as f:
         f.write(xml)
+    return xml
 
 
 def valid_iso_xml(xml_filename):
