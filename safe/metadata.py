@@ -198,6 +198,16 @@ unit_normalised = {
     ),
     'constraint': 'continuous'
 }
+unit_categorised = {
+    'id': 'categorised',
+    'name': tr('categorised'),
+    'description': tr(
+        '<b>Categorised</b> data can be hazard data where the '
+        'values '
+        'have been classified or coded (i.e. low, medium, high).'
+    ),
+    'constraint': 'continuous'
+}
 unit_people_per_pixel = {
     'id': 'people_per_pixel',
     'name': tr('people per pixel'),

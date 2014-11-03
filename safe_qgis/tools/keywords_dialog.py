@@ -119,6 +119,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
              ('flood [feet]', self.tr('flood [feet]')),
              ('tephra [kg2/m2]', self.tr('tephra [kg2/m2]')),
              ('volcano', self.tr('volcano')),
+             ('generic [categorised]', self.tr('generic [categorised]')),
              ('Not Set', self.tr('Not Set'))])
 
         # noinspection PyUnresolvedReferences
