@@ -1,4 +1,4 @@
-# coding=utf-8
+    # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid **GUI InaSAFE Wizard Dialog.**
 
@@ -51,7 +51,8 @@ from safe_qgis.safe_interface import (
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL)
+    ANALYSIS_DONE_SIGNAL,
+    ReadLayerError)
 
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.analysis import Analysis
@@ -83,6 +84,7 @@ class WizardAnalysisHandler(QObject):
 
     analysisDone = pyqtSignal(bool)
 
+    # noinspection PyUnresolvedReferences
     def __init__(self, parent):
         """Constructor for the class.
 
@@ -92,6 +94,8 @@ class WizardAnalysisHandler(QObject):
 
         QtCore.QObject.__init__(self)
         self.parent = parent
+        # Do not delete this
+        self.iface = parent.iface
         self.keyword_io = KeywordIO()
 
         # Values for settings these get set in read_settings.
