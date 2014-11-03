@@ -10,6 +10,7 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 from collections import OrderedDict
 import json
 from safe.common.utilities import ugettext as tr
+from os.path import exists, dirname
 
 
 class MinimumNeeds(object):
@@ -228,6 +229,8 @@ class MinimumNeeds(object):
         :returns: Success status. -1 for unsuccessful 0 for success
         :rtype: int
         """
+        if not exists(filename):
+            return -1
         with open(filename) as fd:
             needs_json = fd.read()
             try:
@@ -246,6 +249,8 @@ class MinimumNeeds(object):
         :param filename: The file to be written to.
         :type filename: basestring, str
         """
+        if not exists(dirname(filename)):
+            return -1
         with open(filename, 'w') as fd:
             needs_json = json.dumps(self.minimum_needs)
             fd.write(needs_json)
