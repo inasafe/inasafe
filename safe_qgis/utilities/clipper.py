@@ -628,8 +628,8 @@ def adjust_clip_extent(clip_extent, cell_size, layer_extent):
         the exposure, hazard and view port.
     :type clip_extent: list
 
-    :param cell_size: The size of a pixel in
-     geo reference unit in the form
+    :param cell_size: The size of a pixel in geo reference unit in the form
+
         (res_x, res_y)
     :type cell_size: tuple
 
