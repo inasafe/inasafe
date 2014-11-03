@@ -128,7 +128,7 @@ class ImpactFunctionMetadata():
         else:
             metadata_dict = cls.get_metadata()
             categories = metadata_dict['categories']
-            result = add_to_list(result, categories[category]['subcategory'])
+            result = add_to_list(result, categories[category]['subcategories'])
             return result
 
     @classmethod

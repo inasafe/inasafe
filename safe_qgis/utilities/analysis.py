@@ -72,7 +72,6 @@ from safe_qgis.safe_interface import (
     ANALYSIS_DONE_SIGNAL)
 from third_party.pydispatch import dispatcher
 from safe_qgis.exceptions import NoValidLayerError
-from safe_qgis.utilities.keyword_io import KeywordIO
 
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -87,9 +86,6 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class Analysis(object):
     """Class for running full analysis."""
-
-    # analysis_done = pyqtSignal(bool)
-
     def __init__(self):
         """Constructor."""
         # Please set Layers, Impact Functions, and Variables to run Analysis
@@ -116,10 +112,11 @@ class Analysis(object):
 
         self.clip_parameters = None
         self.impact_calculator = ImpactCalculator()
-        self.keyword_io = KeywordIO()
         self.runner = None
         self.aggregator = None
         self.postprocessor_manager = None
+
+        self.num_dynamic_signals = 3
 
     @property
     def hazard_layer(self):
@@ -420,7 +417,7 @@ class Analysis(object):
 
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
-                keywords = self.keyword_io.read_keywords(exposure_layer)
+                keywords = self.exposure_keyword
                 allow_resampling_flag = True
                 if 'allow_resampling' in keywords:
                     resampling_lower = keywords['allow_resampling'].lower()
@@ -506,22 +503,6 @@ class Analysis(object):
 
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
-        # Buffer aggregation keywords in case user presses cancel on kw dialog
-        # original_keywords = self.keyword_io.read_keywords(
-        #     self.aggregator.layer)
-        # LOGGER.debug('my pre dialog keywords' + str(original_keywords))
-        # LOGGER.debug(
-        #     'AOImode: %s' % str(self.aggregator.aoi_mode))
-
-        # Commented this out, since we want to get rid of GUI in this
-        # self.runtime_keywords_dialog = KeywordsDialog(
-        #     self.iface.mainWindow(),
-        #     self.iface,
-        #     self,
-        #     self.aggregator.layer)
-        # self.runtime_keywords_dialog.accepted.connect(self.run_analysis)
-        # self.runtime_keywords_dialog.rejected.connect(
-        #     partial(self.accept_cancelled, original_keywords))
 
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
@@ -601,7 +582,6 @@ class Analysis(object):
             # TypeError is for when function_parameters is none
             # KeyError is for when ['postprocessors'] is unavailable
             pass
-        # self._clip_parameters = self.get_clip_parameters()
 
         self.send_static_message(message)
 
@@ -652,7 +632,6 @@ class Analysis(object):
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
         self.send_error_message(message)
-        # self.analysis_done.emit(False)
 
     def optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
@@ -847,7 +826,6 @@ class Analysis(object):
         self.postprocessor_manager.function_parameters = \
             self.impact_function_parameters
         self.postprocessor_manager.run()
-        # self.completed()
         self.send_not_busy_signal()
         self.send_analysis_done_signal()
 
@@ -929,3 +907,33 @@ class Analysis(object):
             self.analysis_error(
                 e,
                 self.tr('An exception occurred when starting the model.'))
+
+    def print_analysis(self):
+        """Print the variables in the analysis."""
+        print 'The properties of the analysis: '
+        # Layers
+        print self.hazard_layer
+        print self.exposure_layer
+        print self.aggregation_layer
+        print self.hazard_keyword
+        print self.exposure_keyword
+        print self.aggregation_keyword
+
+        # Impact Functions
+        print self.impact_function_id
+        print self.impact_function_parameters
+
+        # Variables
+        print self.clip_hard
+        print self.show_intermediate_layers
+        print self.run_in_thread_flag
+        print self.map_canvas
+        print self.clip_to_viewport
+
+        print self.force_memory
+
+        print self.clip_parameters
+        print self.impact_calculator
+        print self.runner
+        print self.aggregator
+        print self.postprocessor_manager
