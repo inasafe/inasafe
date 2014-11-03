@@ -24,8 +24,8 @@ class TestDefaults(unittest.TestCase):
         """Test tear down."""
         pass
 
-    def test_breakdown_defaults(self):
-        """Test we can get breakdown defaults.
+    def test_get_defaults(self):
+        """Test we can get the defaults.
         """
         expected = {
             'ADULT_RATIO_KEY': 'adult ratio default',
