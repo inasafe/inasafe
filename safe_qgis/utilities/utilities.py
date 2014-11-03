@@ -387,6 +387,9 @@ def setup_printer(
     #
     # Create a printer device (we are 'printing' to a pdf
     #
+    # To remove dangerous mutable default values.
+    if page_margin is None:
+        page_margin = [10, 10, 10, 10]
     LOGGER.debug('InaSAFE Map setupPrinter called')
     printer = QtGui.QPrinter()
     printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
