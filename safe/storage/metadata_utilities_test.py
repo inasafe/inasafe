@@ -29,8 +29,8 @@ from xml.etree import ElementTree
 from safe.storage.metadata_utilities import (
     valid_iso_xml,
     write_kw_in_iso_metadata,
-    ISO_METADATA_KW_TAG,
-    ISO_METADATA_KW_NESTING)
+    ISO_METADATA_KEYWORD_TAG,
+    ISO_METADATA_KEYWORD_NESTING)
 
 from safe.common.testing import UNITDATA
 from safe.common.utilities import unique_filename
@@ -52,7 +52,7 @@ class TestCase(unittest.TestCase):
             os.path.isfile(xml_file), 'File %s should not exist' % xml_file)
         xml_file = write_kw_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)
-        keyword_tag = tree.getroot().find(ISO_METADATA_KW_TAG)
+        keyword_tag = tree.getroot().find(ISO_METADATA_KEYWORD_TAG)
         self.assertIn(keywords, keyword_tag.text)
 
         # there should be an xml file now
@@ -61,7 +61,7 @@ class TestCase(unittest.TestCase):
         # lets update the file
         xml_file = write_kw_in_iso_metadata(keyword_file)
         tree = ElementTree.parse(xml_file)
-        keyword_tag = tree.getroot().find(ISO_METADATA_KW_TAG)
+        keyword_tag = tree.getroot().find(ISO_METADATA_KEYWORD_TAG)
         self.assertIn(keywords, keyword_tag.text)
 
         os.remove(xml_file)
@@ -71,21 +71,21 @@ class TestCase(unittest.TestCase):
         filename = unique_filename(suffix='.xml')
         tree = valid_iso_xml(filename)
         root = tree.getroot()
-        self.assertIsNotNone(root.find(ISO_METADATA_KW_TAG))
+        self.assertIsNotNone(root.find(ISO_METADATA_KEYWORD_TAG))
 
-        data_identification = root.find(ISO_METADATA_KW_NESTING[0] + '/'
-                                        + ISO_METADATA_KW_NESTING[1])
-        supplemental_info = root.find(ISO_METADATA_KW_NESTING[0] + '/'
-                                      + ISO_METADATA_KW_NESTING[1] + '/'
-                                      + ISO_METADATA_KW_NESTING[2])
+        data_identification = root.find(ISO_METADATA_KEYWORD_NESTING[0] + '/'
+                                        + ISO_METADATA_KEYWORD_NESTING[1])
+        supplemental_info = root.find(ISO_METADATA_KEYWORD_NESTING[0] + '/'
+                                      + ISO_METADATA_KEYWORD_NESTING[1] + '/'
+                                      + ISO_METADATA_KEYWORD_NESTING[2])
 
         data_identification.remove(supplemental_info)
         # the xml should now miss the supplementalInformation tag
-        self.assertIsNone(root.find(ISO_METADATA_KW_TAG))
+        self.assertIsNone(root.find(ISO_METADATA_KEYWORD_TAG))
 
         # lets fix the xml
         tree = valid_iso_xml(filename)
-        self.assertIsNotNone(tree.getroot().find(ISO_METADATA_KW_TAG))
+        self.assertIsNotNone(tree.getroot().find(ISO_METADATA_KEYWORD_TAG))
         os.remove(filename)
 
 

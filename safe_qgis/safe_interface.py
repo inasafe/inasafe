@@ -84,7 +84,7 @@ from safe.api import (
     which,
     safe_to_qgis_layer,
     generate_iso_metadata,
-    ISO_METADATA_KW_TAG)
+    ISO_METADATA_KEYWORD_TAG)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 
@@ -174,7 +174,7 @@ def get_optimal_extent(
         ..note:: We do minimal checking as the inasafe library takes care of
         it for us.
 
-    :returns: An array containing an extent in the form [xmin, ymin, xmax, ymax]
+    :returns: Array containing an extent in the form [xmin, ymin, xmax, ymax]
         e.g.::
         [100.03, -1.14, 100.81, -0.73]
     :rtype: list

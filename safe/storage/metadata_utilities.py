@@ -33,14 +33,14 @@ from safe.storage.iso_19115_template import ISO_METADATA_XML_TEMPLATE
 
 # list of tags to get to the inasafe keywords.
 # this is stored in a list so it can be easily used in a for loop
-ISO_METADATA_KW_NESTING = [
+ISO_METADATA_KEYWORD_NESTING = [
     '{http://www.isotc211.org/2005/gmd}identificationInfo',
     '{http://www.isotc211.org/2005/gmd}MD_DataIdentification',
     '{http://www.isotc211.org/2005/gmd}supplementalInformation',
     'inasafe_keywords']
 
 # flat xpath for the keyword container tag
-ISO_METADATA_KW_TAG = '/'.join(ISO_METADATA_KW_NESTING)
+ISO_METADATA_KEYWORD_TAG = '/'.join(ISO_METADATA_KEYWORD_NESTING)
 
 ElementTree.register_namespace('gmi', 'http://www.isotc211.org/2005/gmi')
 ElementTree.register_namespace('gco', 'http://www.isotc211.org/2005/gco')
@@ -88,7 +88,7 @@ def write_kw_in_iso_metadata(keyword_filename):
     tree = valid_iso_xml(xml_filename)
     root = tree.getroot()
 
-    keyword_element = root.find(ISO_METADATA_KW_TAG)
+    keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
     # by now we should have a valid container
     if keyword_element is None:
         raise ReadMetadataError
@@ -151,7 +151,7 @@ def valid_iso_xml(xml_filename):
         parent = root
 
         # Look for the correct nesting
-        for tag in ISO_METADATA_KW_NESTING:
+        for tag in ISO_METADATA_KEYWORD_NESTING:
             tag_str += '/' + tag
             element = root.find(tag_str)
             if element is None:
@@ -186,7 +186,7 @@ def read_iso_metadata(keyword_filename):
     tree = ElementTree.parse(xml_filename)
     root = tree.getroot()
 
-    keyword_element = root.find(ISO_METADATA_KW_TAG)
+    keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
     # we have an xml file but it has no valid container
     if keyword_element is None:
         raise ReadMetadataError

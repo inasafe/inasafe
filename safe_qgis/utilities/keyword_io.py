@@ -40,7 +40,7 @@ from safe_qgis.safe_interface import (
     read_file_keywords,
     write_keywords_to_file,
     generate_iso_metadata,
-    ISO_METADATA_KW_TAG)
+    ISO_METADATA_KEYWORD_TAG)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -567,7 +567,7 @@ class KeywordIO(QObject):
             # get the ISO XML out of the DB
             metadata_xml = pickle.loads(str(data))
             root = ElementTree.fromstring(metadata_xml)
-            keyword_element = root.find(ISO_METADATA_KW_TAG)
+            keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
             dict_str = keyword_element.text
             picked_dict = json.loads(dict_str)
 

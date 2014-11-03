@@ -38,7 +38,7 @@ from safe.storage.utilities import (
     safe_to_qgis_layer)
 from safe.storage.metadata_utilities import (
     generate_iso_metadata,
-    ISO_METADATA_KW_TAG)
+    ISO_METADATA_KEYWORD_TAG)
 
 from safe.storage.core import read_layer
 
