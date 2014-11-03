@@ -584,8 +584,7 @@ class WizardDialogTest(unittest.TestCase):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
             name='building_Maumere',
-            include_keywords=True,
-            source_directory=TESTDATA)
+            include_keywords=True)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -917,8 +916,7 @@ class WizardDialogTest(unittest.TestCase):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
             name='Jakarta_RW_2007flood',
-            source_directory=HAZDATA,
-            include_keywords=False)
+            source_directory=HAZDATA)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -1180,6 +1178,6 @@ class WizardDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(WizardDialogTest, 'test')
+    suite = unittest.makeSuite(WizardDialogTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
