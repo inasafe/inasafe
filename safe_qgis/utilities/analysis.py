@@ -55,7 +55,7 @@ from safe_qgis.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
-    AggregatioError,
+    AggregationError,
     UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
@@ -814,7 +814,7 @@ class Analysis(object):
             self.run_post_processor()
         else:
             content = self.aggregator.error_message
-            exception = AggregatioError(self.tr(
+            exception = AggregationError(self.tr(
                 'Aggregation error occurred.'))
             self.analysis_error(exception, content)
 
