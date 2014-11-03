@@ -335,13 +335,10 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
                 'evacuated people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(total_needs['rice'])],
-            [tr('Drinking Water [l]'),
-             format_int(total_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(total_needs['water'])],
-            [tr('Family Kits'), format_int(total_needs['family_kits'])],
-            [tr('Toilets'), format_int(total_needs['toilets'])]]
+            TableRow([tr('Needs per week'), tr('Total')], header=True)]
+        for resource, amount in total_needs.items():
+            table_body.append(TableRow([tr(resource), format_int(amount)]))
+
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))

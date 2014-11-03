@@ -134,9 +134,9 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         """Plugin for impact of population as derived by categorised hazard.
 
         Input
-          layers: List of layers expected to contain
-              hazard_layer: Raster layer of categorised hazard
-              exposure_layer: Raster layer of population data
+        :param layers: List of layers expected to contain
+            hazard_layer: Raster layer of categorised hazard
+            exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each category of the hazard
 
@@ -211,14 +211,10 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
                 'affected people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
-            [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]
-        ])
+            TableRow([tr('Needs per week'), tr('Total')], header=True)])
+        for resource, amount in tot_needs.items():
+            table_body.append(TableRow([tr(resource), format_int(amount)]))
+
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in high hazard areas')
 

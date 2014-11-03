@@ -220,6 +220,8 @@ class KeywordIOTest(unittest.TestCase):
         assert sqlite_layer.source() == expected_source, message
         keywords = self.keyword_io.read_keywords(sqlite_layer)
         expected_keywords = self.expected_sqlite_keywords
+        message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+            keywords, expected_keywords, self.sqlite_layer.source())
         assert keywords == expected_keywords, message
         source = self.sqlite_layer.source()
         # delete sqlite_layer so that we can delete the file

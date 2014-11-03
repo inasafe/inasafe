@@ -31,7 +31,6 @@ from safe.common.utilities import (
     ugettext as tr,
     format_int,
     verify,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
