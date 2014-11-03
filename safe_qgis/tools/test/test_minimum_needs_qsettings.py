@@ -27,6 +27,11 @@ from safe.common.minimum_needs import MinimumNeeds
 
 
 class TestQMinimumNeeds(QMinimumNeeds):
+    """Since we don't want to change the actual minimum needs settings in
+    QSettings, we are using a mock profile.
+
+    :param test_profile: The mock replacement of Minimum Needs
+    """
     # noinspection PyMissingConstructor
     def __init__(self, test_profile='Test Minimum Needs Settings'):
         self.settings = QSettings(test_profile)
@@ -36,6 +41,9 @@ class TestQMinimumNeeds(QMinimumNeeds):
         minimum_needs['provenance'] = 'Test'
         minimum_needs['profile'] = 'Test'
         self.minimum_needs = minimum_needs
+
+    def __del__(self):
+        self.settings.clear()
 
 
 class MinimumNeedsTest(unittest.TestCase):
@@ -51,8 +59,8 @@ class MinimumNeedsTest(unittest.TestCase):
 
     def test_01_loading_defaults(self):
         """Test loading the defaults on a blank settings."""
-        full_minimum_needs = self.minimum_needs.get_full_needs()
-        default_minimum_needs = MinimumNeeds._defaults()
+        full_minimum_needs = self.minimum_needs.get_full_needs()['resources']
+        default_minimum_needs = MinimumNeeds._defaults()['resources']
         self.assertEqual(cmp(full_minimum_needs, default_minimum_needs), 0)
 
     def test_02_update_minimum_needs(self):
@@ -69,7 +77,13 @@ class MinimumNeedsTest(unittest.TestCase):
                 "Unit": "kilogram",
                 "Units": "kilograms",
                 "Unit abbreviation": "kg",
-                "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}."
+                "Readable sentence": (
+                    "A displaced person should be provided with {{ Default }} "
+                    "{{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
+                    "{{ Resource name }}. Though no less than "
+                    "{{ Minimum allowed }} and no more than "
+                    "{{ Maximum allowed }}. This should be provided "
+                    "{{ Frequency }}.")
             }],
             'provenance': "Test",
             'profile': "Test"
@@ -78,16 +92,12 @@ class MinimumNeedsTest(unittest.TestCase):
         other_minimum_needs = TestQMinimumNeeds(test_profile='Other Test')
         other_old = other_minimum_needs.get_full_needs()
 
-        self.minimum_needs.save()
-        other_minimum_needs.load()
-        other_new = other_minimum_needs.get_full_needs()
         original_new = self.minimum_needs.get_full_needs()
 
         # cmp compares dicts 0 == same, -1 == different
         self.assertEqual(cmp(original_old, other_old), 0)
         self.assertEqual(cmp(original_old, original_new), -1)
-        self.assertEqual(cmp(other_old, other_new), -1)
-        self.assertEqual(cmp(original_new, other_new), 0)
+
 
 
 

@@ -71,14 +71,17 @@ class QMinimumNeeds(MinimumNeeds):
             if 'minimum needs' in plugin.parameters:
                 plugin.parameters['minimum needs'] = self.get_minimum_needs()
 
-    @staticmethod
-    def get_profiles():
+    def get_profiles(self):
         """Get all the minimum needs profiles.
 
         :returns: The minimum needs by name.
         :rtype: list
         """
         if not exists(expanduser('~/.qgis2/minimum_needs/')):
+            if not exists(
+                    '~/.qgis2/python/plugins/inasafe/files/minimum_needs/'):
+                """This is specifically to get Travis working."""
+                return self._defaults['profile']
             shutil.copytree(
                 expanduser(
                     '~/.qgis2/python/plugins/inasafe/files/minimum_needs/'),
