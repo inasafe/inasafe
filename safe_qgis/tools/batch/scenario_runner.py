@@ -53,9 +53,9 @@ def run_scenario(dock=None):
         global global_status_flag
         global_status_flag = flag
         LOGGER.debug("scenario done")
-        dock.analysisDone.disconnect(completed)
+        dock.analysis_done.disconnect(completed)
 
-    dock.analysisDone.connect(completed)
+    dock.analysis_done.connect(completed)
     # Start the analysis
     dock.accept()
     return global_status_flag

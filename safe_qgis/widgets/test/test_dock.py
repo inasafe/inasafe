@@ -47,7 +47,8 @@ sys.path.append(pardir)
 from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
-    QgsRectangle)
+    QgsRectangle,
+    QgsCoordinateReferenceSystem)
 from safe_qgis.safe_interface import (
     format_int, HAZDATA, UNITDATA)
 
@@ -180,7 +181,7 @@ class TestDock(TestCase):
 
         # Push OK with the left mouse button
         set_canvas_crs(GEOCRS, True)
-        set_padang_extent()
+        set_padang_extent(dock=DOCK)
 
         result, message = setup_scenario(
             DOCK,
@@ -201,18 +202,21 @@ class TestDock(TestCase):
         #High damage (50-100%):    3160
         # Post merge of clip on steoids branch:
         #High damage (50-100%):    2993
+        #
+        # Changed from 2993 followin merge of user defined extents
+        expected_all = 2943
         message = (
             'Unexpected result returned for Earthquake guidelines'
-            'function. Expected:\n "All" count of 2993, '
-            'received: \n %s' % result)
-        self.assertTrue(format_int(2993) in result, message)
+            'function. Expected:\n "All" count of %s, '
+            'received: \n %s' % (expected_all,result))
+        self.assertTrue(format_int(expected_all) in result, message)
 
     def test_run_earthquake_fatality_function_small(self):
         """Padang 2009 fatalities estimated correctly (small extent)."""
 
         # Push OK with the left mouse button
         set_canvas_crs(GEOCRS, True)
-        set_padang_extent()
+        set_padang_extent(dock=DOCK)
 
         result, message = setup_scenario(
             DOCK,
@@ -226,7 +230,8 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        expected_mortalities = 124
+        # Changed with merge of user_extent support from 124
+        expected_mortalities = 117
         # Check against expected output
         message = (
             'Unexpected result returned for Earthquake Fatality '
@@ -237,7 +242,8 @@ class TestDock(TestCase):
         if qgis_version() < 20400:
             expected_affected = 873637
         else:
-            expected_affected = 881634
+            # Changed from 881634 on merge of user_extents support
+            expected_affected = 763397
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
@@ -252,7 +258,8 @@ class TestDock(TestCase):
 
         button = DOCK.pbnRunStop
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([96, -5, 105, 2])  # This covers all of the 2009 shaking
+        # This covers all of the 2009 shaking
+        set_geo_extent([96, -5, 105, 2], dock=DOCK)
         message = 'Run button was not enabled'
         self.assertTrue(button.isEnabled(), message)
 
@@ -291,16 +298,19 @@ class TestDock(TestCase):
         result = DOCK.wvResults.page_to_text()
 
         # Check against expected output
+        expected_fatalities = 500
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: fatality count of '
-            '500 , received: \n %s' % result)
-        self.assertTrue(format_int(500) in result, message)
+            '%s , received: \n %s' % (expected_fatalities, result))
 
+        self.assertTrue(format_int(expected_fatalities) in result, message)
+
+        expected_total = 31374747
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '31555576 , received: \n %s' % result)
+            '%s , received: \n %s' % (expected_total, result))
         self.assertTrue(format_int(31374747) in result, message)
 
     def test_run_tsunami_building_impact_function(self):
@@ -322,7 +332,7 @@ class TestDock(TestCase):
         self.assertTrue(result, message)
 
         set_canvas_crs(GEOCRS, True)
-        set_batemans_bay_extent(DOCK)
+        set_batemans_bay_extent(dock=DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -349,14 +359,16 @@ class TestDock(TestCase):
         if qgis_version() < 20400:
             total_buildings = 18
         else:
-            total_buildings = 17
+            # Changed from 17 to 16 with merge of user_extents branch
+            total_buildings = 16
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(total_buildings) in result, message)
 
         if qgis_version() < 20400:
             flooded_buildings = 8
         else:
-            flooded_buildings = 7
+            # Changed from 7 to 6 with merge of user_extents branch
+            flooded_buildings = 6
         self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
@@ -385,6 +397,8 @@ class TestDock(TestCase):
             106.635434302702, -6.101567666986,
             106.635434302817, -6.101567666888)
         CANVAS.setExtent(rectangle)
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        DOCK.define_user_analysis_extent(rectangle, crs)
 
         # Press RUN
         DOCK.accept()

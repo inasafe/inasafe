@@ -127,8 +127,8 @@ class SaveScenarioDialog(QDialog):
         if self.dock.user_extent is not None \
                 and self.dock.user_extent_crs is not None:
             extent = extent_to_array(
-                self.user_extent,
-                self.user_extent_crs)
+                self.dock.user_extent,
+                self.dock.user_extent_crs)
         else:
             extent = viewport_geo_array(self.iface.mapCanvas())
         extent_string = ', '.join(('%f' % x) for x in extent)
@@ -169,6 +169,7 @@ class SaveScenarioDialog(QDialog):
         parser.set(title, 'hazard', relative_hazard_path)
         parser.set(title, 'function', self.function_id)
         parser.set(title, 'extent', extent_string)
+        parser.set(title, 'extent_crs', self.dock.user_extent_crs.authid())
         if self.aggregation_layer is not None:
             aggregation_path = str(self.aggregation_layer.publicSource())
             relative_aggregation_path = self.relative_path(

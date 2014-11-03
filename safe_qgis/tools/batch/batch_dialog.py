@@ -38,7 +38,7 @@ from PyQt4.QtGui import (
     QPushButton,
     QDialogButtonBox)
 
-from qgis.core import QgsRectangle
+from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
 from safe_qgis.tools.batch import scenario_runner
@@ -302,6 +302,12 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             if not result:
                 return False
 
+        # Set extent CRS if it exists
+        if 'extent_crs' in items:
+            crs = QgsCoordinateReferenceSystem(items['extent_crs'])
+        else:
+            # assume crs is Geo/WGS84
+            crs = QgsCoordinateReferenceSystem('EPSG:4326')
         # set extent if exist
         if 'extent' in items:
             # split extent string
@@ -312,6 +318,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             self.iface.mapCanvas().mapRenderer().setProjectionsEnabled(True)
 
             extent = QgsRectangle(*coordinates)
+
+            self.dock.define_user_analysis_extent(extent, crs)
 
             message = 'set layer extent to %s ' % extent.asWktCoordinates()
             LOGGER.info(message)

@@ -260,7 +260,7 @@ class AggregatorTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(dock=DOCK)
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
