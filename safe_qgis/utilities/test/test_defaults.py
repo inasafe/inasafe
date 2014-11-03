@@ -6,7 +6,7 @@ import unittest
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFile
 from safe_qgis.utilities.defaults import (
-    breakdown_defaults,
+    get_defaults,
     disclaimer,
     default_organisation_logo_path,
     default_north_arrow_path)
@@ -24,8 +24,8 @@ class TestDefaults(unittest.TestCase):
         """Test tear down."""
         pass
 
-    def test_breakdown_defaults(self):
-        """Test we can get breakdown defaults.
+    def test_get_defaults(self):
+        """Test we can get the defaults.
         """
         expected = {
             'ADULT_RATIO_KEY': 'adult ratio default',
@@ -46,9 +46,14 @@ class TestDefaults(unittest.TestCase):
 
             'NO_DATA': u'No data',
 
-            'AGGR_ATTR_KEY': 'aggregation attribute'}
+            'AGGR_ATTR_KEY': 'aggregation attribute',
+            'ISO19115_EMAIL': 'info@inasafe.org',
+            'ISO19115_LICENSE': 'Free use with accreditation',
+            'ISO19115_ORGANIZATION': 'InaSAFE.org',
+            'ISO19115_TITLE': 'InaSAFE analysis result',
+            'ISO19115_URL': 'http://inasafe.org'}
 
-        actual = breakdown_defaults()
+        actual = get_defaults()
         self.maxDiff = None
         self.assertDictEqual(expected, actual)
 

@@ -39,7 +39,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis import breakdown_defaults
+from safe_qgis import get_defaults
 from safe_qgis.safe_interface import (
     UNITDATA,
     TESTDATA,
@@ -93,12 +93,12 @@ class AggregatorTest(unittest.TestCase):
         set_jakarta_extent()
 
         self._keywordIO = KeywordIO()
-        self._defaults = breakdown_defaults()
+        self._defaults = get_defaults()
 
         # Set extent as Jakarta extent
         geo_crs = QgsCoordinateReferenceSystem()
         geo_crs.createFromSrid(4326)
-        self.extent = extent_to_array(CANVAS.extent(), geo_crs)
+        self.extent = extent_to_geo_array(CANVAS.extent(), geo_crs)
 
     def tearDown(self):
         """Run after each test."""
@@ -123,7 +123,8 @@ class AggregatorTest(unittest.TestCase):
     def test_aggregation_attribute_in_keywords(self):
         """Aggregation attribute is chosen correctly when present in keywords.
         """
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
+
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
@@ -148,7 +149,7 @@ class AggregatorTest(unittest.TestCase):
         file_list = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
         #add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
@@ -178,7 +179,7 @@ class AggregatorTest(unittest.TestCase):
         file_list = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
         #add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         result, message = setup_scenario(
@@ -204,7 +205,7 @@ class AggregatorTest(unittest.TestCase):
         file_list = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
         result, message = setup_scenario(
