@@ -141,39 +141,6 @@ class UtilitiesTest(unittest.TestCase):
         message = ('%s raster layer should not be polygonal' % layer)
         assert not is_polygon_layer(layer), message
 
-    def test_get_defaults(self):
-        """Test defaults for post processing can be obtained properly."""
-        # Warning this code is duplicated from test_defaults...TS
-        expected = {
-            'ADULT_RATIO_KEY': 'adult ratio default',
-            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
-            'ADULT_RATIO': 0.659,
-
-            'FEMALE_RATIO_KEY': 'female ratio default',
-            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
-            'FEMALE_RATIO': 0.5,
-
-            'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
-            'ELDERLY_RATIO_KEY': 'elderly ratio default',
-            'ELDERLY_RATIO': 0.078,
-
-            'YOUTH_RATIO': 0.263,
-            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
-            'YOUTH_RATIO_KEY': 'youth ratio default',
-
-            'NO_DATA': u'No data',
-
-            'AGGR_ATTR_KEY': 'aggregation attribute',
-
-            'ISO19115_EMAIL': 'info@inasafe.org',
-            'ISO19115_LICENSE': 'Free use with accreditation',
-            'ISO19115_ORGANIZATION': 'InaSAFE.org',
-            'ISO19115_TITLE': 'InaSAFE analysis result',
-            'ISO19115_URL': 'http://inasafe.org'}
-
-        defaults = get_defaults()
-        self.assertDictEqual(defaults, expected)
-
     def test_mm_to_points(self):
         """Test that conversions between pixel and page dimensions work."""
 
