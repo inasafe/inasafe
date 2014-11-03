@@ -96,7 +96,7 @@ from safe_qgis.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
-    AggregatioError,
+    AggregationError,
     UnsupportedProviderError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
@@ -1698,7 +1698,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.post_process()
         else:
             content = self.aggregator.error_message
-            exception = AggregatioError(self.tr(
+            exception = AggregationError(self.tr(
                 'Aggregation error occurred.'))
             self.analysis_error(exception, content)
 
@@ -1858,7 +1858,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
-                exposure_geo_cell_size, _ = get_wgs84_resolution(exposure_layer)
+                exposure_geo_cell_size, _ = get_wgs84_resolution(
+                    exposure_layer)
 
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
