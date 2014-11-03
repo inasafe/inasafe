@@ -194,7 +194,8 @@ class WizardAnalysisHandler(QObject):
                 self.parent.aggregation_layer)
 
         # Impact Function
-        self.analysis.impact_function_id = self.parent.selected_function()['id']
+        self.analysis.impact_function_id = self.parent.selected_function()[
+            'id']
         self.analysis.impact_function_parameters = self.parent.if_params
 
         # Variables
@@ -314,7 +315,7 @@ class WizardAnalysisHandler(QObject):
 
         """
         #TODO Hardcoded step - may overflow, if the number of messages increase
-        self.parent.pbProgress.setValue( self.parent.pbProgress.value() + 15 )
+        self.parent.pbProgress.setValue(self.parent.pbProgress.value() + 15)
         self.parent.wvResults.dynamic_message_event(sender, message)
 
     def show_error_message(self, error_message):
@@ -624,7 +625,6 @@ class WizardAnalysisHandler(QObject):
         self.hide_busy()
         self.analysisDone.emit(True)
 
-
     def print_map(self, mode="pdf"):
         """Slot to open impact report dialog that used to tune report
         when print map button pressed."""
@@ -799,7 +799,7 @@ class WizardAnalysisHandler(QObject):
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl('file:///' + map_pdf_path,
                             QtCore.QUrl.TolerantMode))
-            self.show_dynamic_message(self,status)
+            self.show_dynamic_message(self, status)
         else:
             # AG:
             # See https://github.com/AIFDR/inasafe/issues/911
