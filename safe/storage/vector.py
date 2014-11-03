@@ -201,8 +201,8 @@ class Vector(Layer):
                 msg = 'Data must be a sequence'
                 verify(is_sequence(data), msg)
 
-                msg = ('The number of entries in geometry and data '
-                       'must be the same')
+                msg = ('The number of entries in geometry (%s) and data (%s)'
+                       'must be the same' % (len(geometry), len(data)))
                 verify(len(geometry) == len(data), msg)
 
             # Establish extent

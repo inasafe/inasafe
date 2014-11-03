@@ -167,7 +167,7 @@ class InvalidAggregatorError(Exception):
     pass
 
 
-class AggregatioError(Exception):
+class AggregationError(Exception):
     """Raised if aggregator state is not valid when trying to run it."""
     pass
 
