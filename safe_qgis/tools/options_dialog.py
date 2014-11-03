@@ -184,7 +184,15 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         # Restore ISO19115 metadata tab
         value = self.defaults['ISO19115_ORGANIZATION']
-        self.metadata_organization_le.setText(value)
+        self.iso19115_organization_le.setText(value)
+        value = self.defaults['ISO19115_URL']
+        self.iso19115_url_le.setText(value)
+        value = self.defaults['ISO19115_EMAIL']
+        self.iso19115_email_le.setText(value)
+        value = self.defaults['ISO19115_TITLE']
+        self.iso19115_title_le.setText(value)
+        value = self.defaults['ISO19115_LICENSE']
+        self.iso19115_license_le.setText(value)
 
     def save_state(self):
         """Store the options into the user's stored session info.
@@ -246,9 +254,23 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         settings.setValue(
             'inasafe/use_native_zonal_stats',
             self.cbxNativeZonalStats.isChecked())
+
+        # save metadata values
         settings.setValue(
-            'inasafe/DEFAULT_ISO19115_ORGANIZATION',
-            self.metadata_organization_le.text())
+            'inasafe/ISO19115_ORGANIZATION',
+            self.iso19115_organization_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_URL',
+            self.iso19115_url_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_EMAIL',
+            self.iso19115_email_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_TITLE',
+            self.iso19115_title_le.text())
+        settings.setValue(
+            'inasafe/ISO19115_LICENSE',
+            self.iso19115_license_le.text())
 
     @staticmethod
     def show_help():

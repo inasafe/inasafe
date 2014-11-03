@@ -74,6 +74,14 @@ def get_defaults(default=None):
 
     defaults['ISO19115_ORGANIZATION'] = _get_updated_default(
         'ISO19115_ORGANIZATION', str)
+    defaults['ISO19115_URL'] = _get_updated_default(
+        'ISO19115_URL', str)
+    defaults['ISO19115_EMAIL'] = _get_updated_default(
+        'ISO19115_EMAIL', str)
+    defaults['ISO19115_TITLE'] = _get_updated_default(
+        'ISO19115_TITLE', str)
+    defaults['ISO19115_LICENSE'] = _get_updated_default(
+        'ISO19115_LICENSE', str)
 
     if default is None:
         return defaults
@@ -91,7 +99,7 @@ def _get_updated_default(default, default_type):
     :return: typed default value
     """
     value = QtCore.QSettings().value(
-        'inasafe/DEFAULT_%s' % default,
+        'inasafe/%s' % default,
         DEFAULTS[default], type=default_type)
     return default_type(value)
 
