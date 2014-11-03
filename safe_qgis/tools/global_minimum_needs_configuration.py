@@ -35,9 +35,9 @@ INFO_STYLE = styles.INFO_STYLE
 #noinspection PyArgumentList
 # noinspection PyProtectedMember
 class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
-    """Tools for merging 2 impact layer based on different exposure."""
-
     """Dialog class for the InaSAFE global minimum needs configuration.
+
+    .. versionadded:: 2.2.
     """
 
     def __init__(self, parent=None):

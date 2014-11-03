@@ -17,6 +17,8 @@ class MinimumNeeds(object):
     """A abstract class for handling the minimum needs.
 
     The persistence logic is excluded from this class.
+
+    .. versionadded:: 2.2.
     """
 
     def get_need(self, resource):
@@ -101,7 +103,7 @@ class MinimumNeeds(object):
         :param minimum_needs: The new minimum
         :type minimum_needs: dict
 
-        :return: Returns success code, -1 for failure, 0 for success.
+        :returns: Returns success code, -1 for failure, 0 for success.
         :rtype: int
         """
         if type(minimum_needs) != dict:

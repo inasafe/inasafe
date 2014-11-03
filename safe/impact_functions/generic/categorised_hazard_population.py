@@ -210,8 +210,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
             tr('Total population: %s') % format_int(total),
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
-                'affected people'))],
-            TableRow([tr('Needs per week'), tr('Total')], header=True))
+                'affected people')),
+            TableRow([tr('Needs per week'), tr('Total')], header=True)])
         for resource, amount in tot_needs.items():
             table_body.append(TableRow([tr(resource), format_int(amount)]))
 

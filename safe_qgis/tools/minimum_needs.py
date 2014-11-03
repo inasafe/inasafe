@@ -18,6 +18,8 @@ class QMinimumNeeds(MinimumNeeds):
 
     In the case where we assume QGis we use the QSettings object to store the
     minimum needs.
+
+    .. versionadded:: 2.2.
     """
 
     def __init__(self):
