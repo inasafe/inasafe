@@ -120,10 +120,14 @@ def generate_iso_metadata(keywords=None):
 
     # create runtime based replacement values
     template_replacements['ISO19115_TODAY_DATE'] = time.strftime("%Y-%m-%d")
-
     if keywords is not None:
         template_replacements['INASAFE_KEYWORDS'] = '<![CDATA[%s]]>' % \
                                                     json.dumps(keywords)
+        try:
+            template_replacements['ISO19115_TITLE'] = keywords['title']
+        except KeyError:
+            pass
+
     else:
         template_replacements['INASAFE_KEYWORDS'] = ''
 

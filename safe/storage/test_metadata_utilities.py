@@ -31,7 +31,7 @@ from safe.storage.metadata_utilities import (
     valid_iso_xml,
     write_keyword_in_iso_metadata,
     ISO_METADATA_KEYWORD_TAG,
-    ISO_METADATA_KEYWORD_NESTING)
+    ISO_METADATA_KEYWORD_NESTING, generate_iso_metadata)
 
 from safe.common.testing import UNITDATA
 from safe.common.utilities import unique_filename
@@ -39,7 +39,6 @@ from safe.common.utilities import unique_filename
 
 class TestCase(unittest.TestCase):
     def test_write_keyword_in_iso_metadata(self):
-        today = time.strftime("%Y-%m-%d")
         keyword_file = os.path.abspath(
             os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
 
@@ -64,12 +63,6 @@ class TestCase(unittest.TestCase):
         # there should be an xml file now
         self.assertTrue(
             os.path.isfile(xml_file), 'File %s should exist' % xml_file)
-
-        # lets check if the date generation worked
-        self.assertIn(
-            today,
-            ElementTree.tostring(root, encoding='utf8', method='xml'),
-            'File %s should include today\'s date (%s)' % (xml_file, today))
 
         # lets update the file
         xml_file = write_keyword_in_iso_metadata(keyword_file)
@@ -100,6 +93,27 @@ class TestCase(unittest.TestCase):
         tree = valid_iso_xml(filename)
         self.assertIsNotNone(tree.getroot().find(ISO_METADATA_KEYWORD_TAG))
         os.remove(filename)
+
+    def test_generate_iso_metadata(self):
+        today = time.strftime("%Y-%m-%d")
+        keywords = {
+            'category': 'exposure',
+            'datatype': 'itb',
+            'subcategory': 'building',
+            'title': 'Test TITLE'}
+
+        metadata_xml = generate_iso_metadata(keywords)
+        # lets see if the title substitution went well
+        self.assertIn(
+            '<gco:CharacterString>Test TITLE',
+            metadata_xml,
+            'XML should include %s' % today)
+
+        # lets check if the date generation worked
+        self.assertIn(
+            today,
+            metadata_xml,
+            'XML should include today\'s date (%s)' % today)
 
 
 if __name__ == '__main__':
