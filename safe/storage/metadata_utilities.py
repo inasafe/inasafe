@@ -23,6 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import json
 import os
+import time
 
 from xml.etree import ElementTree
 
@@ -112,12 +113,20 @@ def generate_iso_metadata(keywords=None):
 
     :return: str valid XML
     """
-    defaults = get_defaults()
+
+    # get defaults from settings
+    template_replacements = get_defaults()
+
+    # create runtime based replacement values
+    template_replacements['ISO19115_TODAY_DATE'] = time.strftime("%Y-%m-%d")
+
     if keywords is not None:
-        defaults['INASAFE_KEYWORDS'] = '<![CDATA[%s]]>' % json.dumps(keywords)
+        template_replacements['INASAFE_KEYWORDS'] = '<![CDATA[%s]]>' % \
+                                                    json.dumps(keywords)
     else:
-        defaults['INASAFE_KEYWORDS'] = ''
-    return ISO_METADATA_XML_TEMPLATE.safe_substitute(defaults)
+        template_replacements['INASAFE_KEYWORDS'] = ''
+
+    return ISO_METADATA_XML_TEMPLATE.safe_substitute(template_replacements)
 
 
 def write_iso_metadata_file(xml_filename):

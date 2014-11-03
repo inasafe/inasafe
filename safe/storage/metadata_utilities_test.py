@@ -47,7 +47,7 @@ class TestCase(unittest.TestCase):
         basename, _ = os.path.splitext(keyword_file)
         xml_file = basename + '.xml'
         os.remove(xml_file)
-        
+
         # there should be no xml file now
         self.assertFalse(
             os.path.isfile(xml_file), 'File %s should not exist' % xml_file)

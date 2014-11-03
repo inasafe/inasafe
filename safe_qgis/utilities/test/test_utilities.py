@@ -165,7 +165,11 @@ class UtilitiesTest(unittest.TestCase):
 
             'AGGR_ATTR_KEY': 'aggregation attribute',
 
-            'ISO19115_ORGANIZATION': 'InaSAFE.org'}
+            'ISO19115_EMAIL': 'info@inasafe.org',
+            'ISO19115_LICENSE': 'Free use with accreditation',
+            'ISO19115_ORGANIZATION': 'InaSAFE.org',
+            'ISO19115_TITLE': 'InaSAFE analysis result',
+            'ISO19115_URL': 'http://inasafe.org'}
 
         defaults = get_defaults()
         self.assertDictEqual(defaults, expected)
