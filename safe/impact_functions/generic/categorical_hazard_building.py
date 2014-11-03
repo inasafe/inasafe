@@ -97,7 +97,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             return dict_meta
 
     # Function documentation
-    affected_field = 'AFFECTED'
+    target_field = 'DAMAGED'
+    affected_field = 'affected'
     title = tr('Be impacted by each category')
     synopsis = tr(
         'To assess the impacts of categorized hazard in raster '
@@ -233,15 +234,19 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
 
             # Add calculated impact to existing attributes
             if val == high_t:
-                attributes[i][self.affected_field] = 3
+                attributes[i][self.target_field] = 3
+                attributes[i][self.affected_field] = 1
 
             elif val == medium_t:
-                attributes[i][self.affected_field] = 2
+                attributes[i][self.target_field] = 2
+                attributes[i][self.affected_field] = 1
 
             elif val == low_t:
+                attributes[i][self.target_field] = 1
                 attributes[i][self.affected_field] = 1
 
             else:
+                attributes[i][self.target_field] = 0
                 attributes[i][self.affected_field] = 0
 
         # Lump small entries and 'unknown' into 'other' category
