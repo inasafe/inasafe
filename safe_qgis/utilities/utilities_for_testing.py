@@ -507,7 +507,6 @@ def get_ui_state(dock):
          'Run Button Enabled': False}
 
     """
-
     hazard = str(dock.cboHazard.currentText())
     exposure = str(dock.cboExposure.currentText())
     impact_function_title = str(dock.cboFunction.currentText())
@@ -897,7 +896,7 @@ def compare_wkt(a, b, tol=0.000001):
 
 
 def clone_shp_layer(
-        name='tsunami_polygon',
+        name,
         include_keywords=False,
         source_directory=TESTDATA,
         target_directory='testing'):
