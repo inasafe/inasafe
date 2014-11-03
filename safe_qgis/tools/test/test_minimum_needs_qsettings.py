@@ -64,7 +64,7 @@ class MinimumNeedsTest(unittest.TestCase):
         self.assertEqual(cmp(full_minimum_needs, default_minimum_needs), 0)
 
     def test_02_update_minimum_needs(self):
-        """Change minimum needs and verify that the saved result are updated."""
+        """Change minimum needs and verify that the result are updated."""
         original_old = self.minimum_needs.get_full_needs()
         new_minimum_needs = {
             'resources': [{
@@ -97,10 +97,3 @@ class MinimumNeedsTest(unittest.TestCase):
         # cmp compares dicts 0 == same, -1 == different
         self.assertEqual(cmp(original_old, other_old), 0)
         self.assertEqual(cmp(original_old, original_new), -1)
-
-
-
-
-
-
-

@@ -10,10 +10,11 @@ import unittest
 
 from PyQt4.QtGui import QApplication
 
-from float_parameter import FloatParameter
-from qt_widgets.float_parameter_widget import FloatParameterWidget
-from metadata import unit_metres_depth, unit_feet_depth
-from unit import Unit
+from third_party.parameters.float_parameter import FloatParameter
+from third_party.parameters.qt_widgets.float_parameter_widget import (
+    FloatParameterWidget)
+from third_party.parameters.metadata import unit_metres_depth, unit_feet_depth
+from third_party.parameters.unit import Unit
 
 
 application = QApplication([])

@@ -3,8 +3,8 @@
 
 from unittest import TestCase
 
-from list_parameter import ListParameter
-from parameter_exceptions import (
+from third_party.parameters.list_parameter import ListParameter
+from third_party.parameters.parameter_exceptions import (
     CollectionLengthError,  InvalidMinimumError, InvalidMaximumError)
 
 

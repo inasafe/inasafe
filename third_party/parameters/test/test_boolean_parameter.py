@@ -1,8 +1,7 @@
 # coding=utf-8
 """Tests for boolean parameter."""
 from unittest import TestCase
-
-from boolean_parameter import BooleanParameter
+from third_party.parameters.boolean_parameter import BooleanParameter
 
 
 class TestBooleanParameter(TestCase):

@@ -3,13 +3,13 @@
 
 from unittest import TestCase
 
-from dict_parameter import DictParameter
-from parameter_exceptions import (
+from third_party.parameters.dict_parameter import DictParameter
+from third_party.parameters.parameter_exceptions import (
     CollectionLengthError,  InvalidMinimumError, InvalidMaximumError)
 
 
 good_dict = {'foo': True, 'bar': False, 'woo': False}
-bad_dict = {'foo': True, 'bar': 'wawa', ''}
+bad_dict = {'foo': True, 'bar': 'wawa', '': ''}
 
 
 class TestListParameter(TestCase):

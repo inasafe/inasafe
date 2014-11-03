@@ -3,8 +3,8 @@
 
 from unittest import TestCase
 
-from integer_parameter import IntegerParameter
-from parameter_exceptions import (
+from third_party.parameters.integer_parameter import IntegerParameter
+from third_party.parameters.parameter_exceptions import (
     InvalidMaximumError, InvalidMinimumError, ValueOutOfBounds)
 
 

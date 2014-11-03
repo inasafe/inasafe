@@ -3,8 +3,8 @@
 
 from unittest import TestCase
 
-from float_parameter import FloatParameter
-from parameter_exceptions import (
+from third_party.parameters.float_parameter import FloatParameter
+from third_party.parameters.parameter_exceptions import (
     InvalidMaximumError, InvalidMinimumError, ValueOutOfBounds)
 
 
