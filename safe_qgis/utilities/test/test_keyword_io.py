@@ -204,7 +204,7 @@ class KeywordIOTest(unittest.TestCase):
         expected_source = (
             'dbname=\'../jk.sqlite\' table="osm_buildings" (Geometry) sql=')
         message = 'Got source: %s\n\nExpected %s\n' % (
-            sqlite_layer.source, expected_source)
+            sqlite_layer.source(), expected_source)
         assert sqlite_layer.source() == expected_source, message
         keywords = self.keyword_io.read_keywords(sqlite_layer)
         expected_keywords = self.expected_sqlite_keywords
