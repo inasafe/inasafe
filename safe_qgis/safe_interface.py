@@ -171,7 +171,8 @@ def get_optimal_extent(
         ..note:: We do minimal checking as the inasafe library takes care of
         it for us.
 
-    :returns: An array containing an extent in the form [xmin, ymin, xmax, ymax]
+    :returns: An array containing an extent in the form
+        [xmin, ymin, xmax, ymax]
         e.g.::
         [100.03, -1.14, 100.81, -0.73]
     :rtype: list

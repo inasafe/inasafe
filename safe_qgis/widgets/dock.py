@@ -97,7 +97,7 @@ from safe_qgis.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
-    AggregatioError,
+    AggregationError,
     UnsupportedProviderError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
@@ -1840,7 +1840,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.post_process()
         else:
             content = self.aggregator.error_message
-            exception = AggregatioError(self.tr(
+            exception = AggregationError(self.tr(
                 'Aggregation error occurred.'))
             self.analysis_error(exception, content)
 
@@ -2012,7 +2012,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
-                exposure_geo_cell_size, _ = get_wgs84_resolution(exposure_layer)
+                exposure_geo_cell_size, _ = get_wgs84_resolution(
+                    exposure_layer)
 
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
@@ -2027,7 +2028,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     cell_size = hazard_geo_cell_size
 
                     # Adjust the geo extent to coincide with hazard grids
-                    # order gdalwarp can do clipping properly
+                    # so gdalwarp can do clipping properly
                     geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(hazard_layer),
@@ -2036,7 +2037,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     cell_size = exposure_geo_cell_size
 
                     # Adjust extent to coincide with exposure grids
-                    # order gdalwarp can do clipping properly
+                    # so gdalwarp can do clipping properly
                     geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(exposure_layer),
@@ -2054,11 +2055,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 # In here we do not set cell_size so that in
                 # _clip_raster_layer we can perform gdalwarp without
-                # specifying cell size as we still want to have the origin
+                # specifying cell size as we still want to have the original
                 # pixel size.
 
                 # Adjust the geo extent to be at the edge of the pixel in
-                # order gdalwarp can do clipping properly
+                # so gdalwarp can do clipping properly
                 geo_extent = adjust_clip_extent(
                     geo_extent,
                     get_wgs84_resolution(hazard_layer),

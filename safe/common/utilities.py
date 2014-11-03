@@ -724,6 +724,40 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     return new_name
 
 
+def get_osm_building_usage(attribute_names, feature):
+    """Get the usage of a row of OSM building data.
+
+    :param attribute_names: The list of attribute of the OSM building data.
+    :type attribute_names: list
+
+    :param feature: A row of data representing an OSM building.
+    :type feature: dict
+    """
+    if 'type' in attribute_names:
+        usage = feature['type']
+    elif 'TYPE' in attribute_names:
+        usage = feature['TYPE']
+    else:
+        usage = None
+
+    if 'amenity' in attribute_names and (usage is None or usage == 0):
+        usage = feature['amenity']
+    if 'building_t' in attribute_names and (usage is None or usage == 0):
+        usage = feature['building_t']
+    if 'office' in attribute_names and (usage is None or usage == 0):
+        usage = feature['office']
+    if 'tourism' in attribute_names and (usage is None or usage == 0):
+        usage = feature['tourism']
+    if 'leisure' in attribute_names and (usage is None or usage == 0):
+        usage = feature['leisure']
+    if 'building' in attribute_names and (usage is None or usage == 0):
+        usage = feature['building']
+        if usage == 'yes':
+            usage = 'building'
+
+    return usage
+
+
 def log_file_path():
     """Get InaSAFE log file path.
 
