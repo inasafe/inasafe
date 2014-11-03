@@ -479,9 +479,7 @@ class KeywordIO(QObject):
             provided as a dict of key value pairs).
         :type keywords: dict
 
-        :returns: The retrieved value for the keyword if the keyword argument
-            is specified, otherwise the complete keywords dictionary is
-            returned.
+        :returns: The XML written to the DB
 
         :raises: KeywordNotFoundError if the keyword is not recognised.
         """
@@ -519,6 +517,8 @@ class KeywordIO(QObject):
         finally:
             self.close_connection()
 
+        return metadata_xml
+
     def read_keyword_from_uri(self, uri, keyword=None):
         """Get metadata from the keywords file associated with a URI.
 
@@ -529,6 +529,10 @@ class KeywordIO(QObject):
         A hash will be constructed from the supplied uri and a lookup made
         in a local SQLITE database for the keywords. If there is an existing
         record it will be returned, if not and error will be thrown.
+
+        If the record is a dictionary, it means that it was inserted into the
+        DB in a pre 2.2 version which had no ISO metadata. In this case, we use
+        that dictionary to update the entry to the new ISO based metadata
 
         .. seealso:: write_keywords_for_uri, delete_keywords_for_uri
 
@@ -565,8 +569,15 @@ class KeywordIO(QObject):
             data = data[0]  # first field
 
             # get the ISO XML out of the DB
-            metadata_xml = pickle.loads(str(data))
-            root = ElementTree.fromstring(metadata_xml)
+            metadata = pickle.loads(str(data))
+
+            # the uri already had a KW entry in the DB using the old KW system
+            # we use that dictionary to update the entry to the new ISO based
+            # metadata system
+            if type(metadata) is dict:
+                metadata = self.write_keywords_for_uri(uri, metadata)
+
+            root = ElementTree.fromstring(metadata)
             keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
             dict_str = keyword_element.text
             picked_dict = json.loads(dict_str)
