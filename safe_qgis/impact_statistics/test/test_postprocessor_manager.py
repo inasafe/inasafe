@@ -89,6 +89,7 @@ class PostprocessorManagerTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
 
         #LOGGER.info("Registry list before:\n%s" %

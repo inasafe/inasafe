@@ -124,7 +124,6 @@ class AggregatorTest(unittest.TestCase):
         """Aggregation attribute is chosen correctly when present in keywords.
         """
         attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
-
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
@@ -134,6 +133,7 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -158,6 +158,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -186,6 +187,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -211,6 +213,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
