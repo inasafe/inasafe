@@ -27,13 +27,12 @@ from safe.metadata import (
     hazard_definition,
     exposure_definition)
 from collections import OrderedDict
-from safe.defaults import get_defaults
+from safe.defaults import get_defaults, default_minimum_needs
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    default_minimum_needs,
     evacuated_population_weekly_needs,
     population_rounding
 )

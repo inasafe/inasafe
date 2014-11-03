@@ -7,19 +7,19 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-
 import logging
 from math import ceil
-
 import numpy
 from collections import OrderedDict
-
 import keyword as python_keywords
+
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
+from safe.defaults import default_minimum_needs
 from utilities import pretty_string, remove_double_spaces
 from safe.metadata import converter_dict
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -62,26 +62,6 @@ class FunctionProvider(object):
 
     target_field = 'DAMAGE'
     symbol_field = 'USE_MAJOR'
-
-
-def default_minimum_needs():
-    """Helper to get the default minimum needs.
-
-    .. note:: Key names will be translated.
-    """
-    rice = 'Rice [kg]'
-    drinking_water = 'Drinking Water [l]'
-    water = 'Clean Water [l]'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
-    minimum_needs = OrderedDict([
-        (rice, 2.8),
-        (drinking_water, 17.5),
-        (water, 67),
-        (family_kits, 0.2),
-        (toilets, 0.05)])
-    return minimum_needs
-
 
 
 def evacuated_population_weekly_needs(
