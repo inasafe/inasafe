@@ -81,7 +81,7 @@ class QMinimumNeeds(MinimumNeeds):
             if not exists(
                     '~/.qgis2/python/plugins/inasafe/files/minimum_needs/'):
                 """This is specifically to get Travis working."""
-                return self._defaults['profile']
+                return self._defaults()['profile']
             shutil.copytree(
                 expanduser(
                     '~/.qgis2/python/plugins/inasafe/files/minimum_needs/'),
