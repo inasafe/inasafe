@@ -192,7 +192,10 @@ class VolcanoBuildingImpact(FunctionProvider):
             attributes = hazard_layer.get_data()
             radii_meter = [x * 1000 for x in radii]  # Convert to meters
             hazard_layer = buffer_points(
-                centers, radii_meter, data_table=attributes)
+                centers,
+                radii_meter,
+                hazard_zone_attribute,
+                data_table=attributes)
             # To check
             category_names = radii_meter
         else:
