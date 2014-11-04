@@ -3027,13 +3027,16 @@ class Test_Engine(unittest.TestCase):
         evacuated = float(keywords['evacuated'])
         total_needs = keywords['total_needs']
 
+        #FIXME this is an HACK
+        total_needs = dict(eval(total_needs[12:-1]))
+
         expected_evacuated = 63400
         assert evacuated == expected_evacuated
-        assert total_needs['rice'] == 177520
-        assert total_needs['family_kits'] == 12680
-        assert total_needs['drinking_water'] == 1109500
-        assert total_needs['toilets'] == 3170
-        assert total_needs['water'] == 4247800
+        assert total_needs['Rice [kg]'] == 177520
+        assert total_needs['Family Kits'] == 12680
+        assert total_needs['Drinking Water [l]'] == 1109500
+        assert total_needs['Toilets'] == 3170
+        assert total_needs['Clean Water [l]'] == 4247800
 
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)
