@@ -215,8 +215,8 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
 
-        tot_needs = evacuated_population_weekly_needs(total_impact,
-                                                      minimum_needs)
+        total_needs = evacuated_population_weekly_needs(total_impact,
+                                                        minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [question,
@@ -234,17 +234,10 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                       TableRow(tr('Table below shows the weekly minimum '
                                   'needs for all evacuated people')),
                       TableRow([tr('Needs per week'), tr('Total')],
-                               header=True),
-                      [tr('Rice [kg]'),
-                       format_int(tot_needs['rice'])],
-                      [tr('Drinking Water [l]'),
-                       format_int(tot_needs['drinking_water'])],
-                      [tr('Clean Water [l]'),
-                       format_int(tot_needs['water'])],
-                      [tr('Family Kits'),
-                       format_int(tot_needs['family_kits'])],
-                      [tr('Toilets'),
-                       format_int(tot_needs['toilets'])]]
+                               header=True)]
+
+        for resource, amount in total_needs.items():
+            table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         impact_table = Table(table_body).toNewlineFreeString()
 
