@@ -9,8 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.storage.utilities import safe_to_qgis_layer
-from safe_qgis.utilities.defaults import breakdown_defaults
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -21,9 +19,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import sys
 import logging
 import time
-
 import numpy
+
+from collections import OrderedDict
 from PyQt4 import QtGui, QtCore
+
 from qgis.core import (
     QgsMapLayer,
     QgsGeometry,
@@ -44,9 +44,9 @@ from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe_qgis.exceptions import InsufficientParametersError
-from collections import OrderedDict
 from third_party.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
+from safe_qgis.utilities.defaults import get_defaults
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     is_polygon_layer,
@@ -62,7 +62,8 @@ from safe_qgis.safe_interface import (
     unique_filename,
     messaging as m,
     feature_attributes_as_dict,
-    get_utm_epsg)
+    get_utm_epsg,
+    safe_to_qgis_layer)
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -124,7 +125,7 @@ class Aggregator(QtCore.QObject):
 
         self.extent = extent
         self._keyword_io = KeywordIO()
-        self._defaults = breakdown_defaults()
+        self._defaults = get_defaults()
         self.error_message = None
         self.target_field = None
 

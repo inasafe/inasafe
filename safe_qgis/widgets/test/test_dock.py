@@ -47,7 +47,8 @@ sys.path.append(pardir)
 from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
-    QgsRectangle)
+    QgsRectangle,
+    QgsCoordinateReferenceSystem)
 from safe_qgis.safe_interface import (
     format_int, HAZDATA, UNITDATA)
 
@@ -99,8 +100,9 @@ DOCK = Dock(IFACE)
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
-TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
-                              '../../test/test_data/test_files')
+TEST_FILES_DIR = os.path.join(
+    os.path.dirname(__file__),
+    '../../test/test_data/test_files')
 
 
 #noinspection PyArgumentList
@@ -121,6 +123,8 @@ class TestDock(TestCase):
         DOCK.zoom_to_impact_flag = False
         DOCK.hide_exposure_flag = False
         DOCK.show_intermediate_layers = False
+        DOCK.user_extent = None
+        DOCK.user_extent_crs = None
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -177,7 +181,7 @@ class TestDock(TestCase):
 
         # Push OK with the left mouse button
         set_canvas_crs(GEOCRS, True)
-        set_padang_extent()
+        set_padang_extent(dock=DOCK)
 
         result, message = setup_scenario(
             DOCK,
@@ -198,18 +202,21 @@ class TestDock(TestCase):
         #High damage (50-100%):    3160
         # Post merge of clip on steoids branch:
         #High damage (50-100%):    2993
+        #
+        # Changed from 2993 followin merge of user defined extents
+        expected_all = 2943
         message = (
             'Unexpected result returned for Earthquake guidelines'
-            'function. Expected:\n "All" count of 2993, '
-            'received: \n %s' % result)
-        self.assertTrue(format_int(2993) in result, message)
+            'function. Expected:\n "All" count of %s, '
+            'received: \n %s' % (expected_all,result))
+        self.assertTrue(format_int(expected_all) in result, message)
 
     def test_run_earthquake_fatality_function_small(self):
         """Padang 2009 fatalities estimated correctly (small extent)."""
 
         # Push OK with the left mouse button
         set_canvas_crs(GEOCRS, True)
-        set_padang_extent()
+        set_padang_extent(dock=DOCK)
 
         result, message = setup_scenario(
             DOCK,
@@ -223,13 +230,8 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        # QGIS  > 2.2 scales the extents to the 400x400 canvas
-        # slightly differently so versions prior to 2.4 will
-        # return 116 fatalities
-        if qgis_version() < 20400:
-            expected_mortalities = 116
-        else:
-            expected_mortalities = 117
+        # Changed with merge of user_extent support from 124
+        expected_mortalities = 117
         # Check against expected output
         message = (
             'Unexpected result returned for Earthquake Fatality '
@@ -237,10 +239,7 @@ class TestDock(TestCase):
             '%s , received: \n %s' % (expected_mortalities, result))
         self.assertTrue(format_int(expected_mortalities) in result, message)
 
-        if qgis_version() < 20400:
-            expected_affected = 847596
-        else:
-            expected_affected = 863412
+        expected_affected = 763397
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
@@ -255,7 +254,8 @@ class TestDock(TestCase):
 
         button = DOCK.pbnRunStop
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([96, -5, 105, 2])  # This covers all of the 2009 shaking
+        # This covers all of the 2009 shaking
+        set_geo_extent([96, -5, 105, 2], dock=DOCK)
         message = 'Run button was not enabled'
         self.assertTrue(button.isEnabled(), message)
 
@@ -294,16 +294,19 @@ class TestDock(TestCase):
         result = DOCK.wvResults.page_to_text()
 
         # Check against expected output
+        expected_fatalities = 500
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: fatality count of '
-            '500 , received: \n %s' % result)
-        self.assertTrue(format_int(500) in result, message)
+            '%s , received: \n %s' % (expected_fatalities, result))
 
+        self.assertTrue(format_int(expected_fatalities) in result, message)
+
+        expected_total = 31374747
         message = (
             'Unexpected result returned for Earthquake Fatality '
             'Function Expected: total population count of '
-            '31374747 , received: \n %s' % result)
+            '%s , received: \n %s' % (expected_total, result))
         self.assertTrue(format_int(31374747) in result, message)
 
     def test_run_tsunami_building_impact_function(self):
@@ -325,7 +328,7 @@ class TestDock(TestCase):
         self.assertTrue(result, message)
 
         set_canvas_crs(GEOCRS, True)
-        set_batemans_bay_extent()
+        set_batemans_bay_extent(dock=DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -350,13 +353,18 @@ class TestDock(TestCase):
         #All	7	16
 
         if qgis_version() < 20400:
-            total_buildings = 17
+            total_buildings = 18
         else:
+            # Changed from 17 to 16 with merge of user_extents branch
             total_buildings = 16
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(total_buildings) in result, message)
 
-        flooded_buildings = 7
+        if qgis_version() < 20400:
+            flooded_buildings = 8
+        else:
+            # Changed from 7 to 6 with merge of user_extents branch
+            flooded_buildings = 6
         self.assertTrue(format_int(flooded_buildings) in result, message)
 
     def test_insufficient_overlap_issue_372(self):
@@ -385,6 +393,8 @@ class TestDock(TestCase):
             106.635434302702, -6.101567666986,
             106.635434302817, -6.101567666888)
         CANVAS.setExtent(rectangle)
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        DOCK.define_user_analysis_extent(rectangle, crs)
 
         # Press RUN
         DOCK.accept()
@@ -443,7 +453,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         button = DOCK.pbnRunStop
@@ -471,7 +481,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -495,7 +505,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -503,9 +513,9 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         # This is the expected number of building might be affected
-        self.assertTrue(format_int(535) in result, message)
-        self.assertTrue(format_int(453) in result, message)
-        self.assertTrue(format_int(436) in result, message)
+        self.assertTrue(format_int(724) in result, message)
+        self.assertTrue(format_int(771) in result, message)
+        self.assertTrue(format_int(850) in result, message)
 
     def test_run_categorised_hazard_population_impact_function(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -521,7 +531,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -565,9 +575,9 @@ class TestDock(TestCase):
 
         message = ('Result not as expected: %s' % result)
         # This is the expected number of building might be affected
-        self.assertTrue(format_int(786) in result, message)
-        self.assertTrue(format_int(15528) in result, message)
-        self.assertTrue(format_int(177) in result, message)
+        self.assertTrue(format_int(845) in result, message)
+        self.assertTrue(format_int(15524) in result, message)
+        self.assertTrue(format_int(122) in result, message)
 
     def test_run_volcano_building_impact(self):
         """Volcano function runs in GUI with An donut (merapi hazard map)
@@ -686,7 +696,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         button = DOCK.pbnRunStop
@@ -722,7 +732,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Run manually so we can get the output layer
         DOCK.clip_parameters = DOCK.get_clip_parameters()
@@ -767,7 +777,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -792,7 +802,7 @@ class TestDock(TestCase):
         LOGGER.info("Canvas list before:\n%s" % canvas_list())
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
         before_count = len(CANVAS.layers())
         #print 'Before count %s' % before_count
 
@@ -812,7 +822,7 @@ class TestDock(TestCase):
 
         button = DOCK.pbnRunStop
         set_canvas_crs(GEOCRS, True)
-        set_yogya_extent()
+        set_yogya_extent(DOCK)
 
         message = 'Run button was not enabled'
         self.assertTrue(button.isEnabled(), message)
@@ -998,7 +1008,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_small_jakarta_extent()
+        set_small_jakarta_extent(DOCK)
         # Press RUN
         DOCK.accept()
         result = DOCK.wvResults.page().currentFrame().toPlainText()
@@ -1079,7 +1089,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -1123,7 +1133,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
 
@@ -1186,7 +1196,7 @@ class TestDock(TestCase):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1210,7 +1220,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -1240,7 +1250,7 @@ Click for Diagnostic Information:
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -1284,7 +1294,7 @@ Click for Diagnostic Information:
         """Function configuration button is enabled when layers are compatible.
         """
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1303,7 +1313,7 @@ Click for Diagnostic Information:
         """Memory requirements are calculated correctly when extents change.
         """
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
         setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1397,29 +1407,29 @@ Click for Diagnostic Information:
         DOCK.show_rubber_bands = True
         expected_vertex_count = 5
 
-        # 4326 with disabled on-the-fly reprojection - check next
+        # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
-        set_small_jakarta_extent()
+        set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
-        # 4326 with enabled on-the-fly reprojection - check next
+        # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
-        set_small_jakarta_extent()
+        set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
         next_band = DOCK.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check last
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent()
+        set_jakarta_google_extent(DOCK)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -1427,22 +1437,56 @@ Click for Diagnostic Information:
         last_band = DOCK.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected_wkt = (
-            'LINESTRING(11876228.33329810947179794 -695798.00000000046566129, '
-            '11908350.67106631398200989 -695798.00000000046566129, '
-            '11908350.67106631398200989 -678083.54461829818319529, '
-            '11876228.33329810947179794 -678083.54461829818319529, '
-            '11876228.33329810947179794 -695798.00000000046566129)')
+            'LINESTRING(11876228.33329810947179794 -695807.82839082507416606, '
+            '11908350.67106631398200989 -695807.82839082507416606, '
+            '11908350.67106631398200989 -678083.54461829655338079, '
+            '11876228.33329810947179794 -678083.54461829655338079, '
+            '11876228.33329810947179794 -695807.82839082507416606)')
         self.assertEqual(geometry, expected_wkt)
         self.assertEqual(
             expected_vertex_count,
             last_band.numberOfVertices()
         )
 
+    def test_user_defined_extent(self):
+        """Test that analysis honours user defined extents.
+
+        Note that when testing on a desktop system this will overwrite your
+        user defined analysis extent.
+
+        """
+
+        settings = QtCore.QSettings()
+        extents = '106.772279, -6.237576, 106.885165, -6.165415'
+        settings.setValue('inasafe/analysis_extent', extents)
+        settings.setValue('inasafe/analysis_extent_crs', 'EPSG:4326')
+        DOCK.read_settings()
+
+        setup_scenario(
+            DOCK,
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_enabled_flag=True)
+
+        DOCK.show_rubber_bands = True
+        expected_vertex_count = 5
+
+        # 4326 with disabled on-the-fly reprojection
+        set_canvas_crs(GEOCRS, True)
+        # User extent should override this
+        set_small_jakarta_extent(DOCK)
+        DOCK.show_user_analysis_extent()
+        user_band = DOCK.user_analysis_rubberband
+        self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
+
     def test_issue1191(self):
         """Test setting a layer's title in the kw directly from qgis api"""
         DOCK.set_layer_from_title_flag = True
         set_canvas_crs(GEOCRS, True)
-        set_yogya_extent()
+        set_yogya_extent(DOCK)
 
         result, message = setup_scenario(
             DOCK,

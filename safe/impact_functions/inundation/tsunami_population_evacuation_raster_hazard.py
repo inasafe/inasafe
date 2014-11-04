@@ -2,14 +2,13 @@
 """Tsunami Evacuation Impact Function."""
 import numpy
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults
+from safe.defaults import get_defaults, default_minimum_needs
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
     get_function_title,
-    default_minimum_needs,
     evacuated_population_weekly_needs,
     population_rounding_full,
     population_rounding
@@ -31,7 +30,6 @@ from safe.common.utilities import (
     ugettext as tr,
     format_int,
     verify,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,

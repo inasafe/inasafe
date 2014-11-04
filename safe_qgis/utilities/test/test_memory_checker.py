@@ -18,8 +18,8 @@ class TestMemoryChecker(unittest.TestCase):
         """Test tear down."""
         pass
 
-    def test_breakdown_defaults(self):
-        """Test we can get breakdown defaults.
+    def test_check_memory_usage(self):
+        """Test check_memory_usage.
         """
         # Really big area with small cell size
         # should be too much mem

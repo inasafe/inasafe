@@ -39,7 +39,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis import breakdown_defaults
+from safe_qgis import get_defaults
 from safe_qgis.safe_interface import (
     UNITDATA,
     TESTDATA,
@@ -56,7 +56,7 @@ from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    extent_to_geo_array)
+    extent_to_array)
 
 from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
@@ -93,7 +93,7 @@ class AggregatorTest(unittest.TestCase):
         set_jakarta_extent()
 
         self._keywordIO = KeywordIO()
-        self._defaults = breakdown_defaults()
+        self._defaults = get_defaults()
 
         # Set extent as Jakarta extent
         geo_crs = QgsCoordinateReferenceSystem()
@@ -123,7 +123,7 @@ class AggregatorTest(unittest.TestCase):
     def test_aggregation_attribute_in_keywords(self):
         """Aggregation attribute is chosen correctly when present in keywords.
         """
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
@@ -134,6 +134,7 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -148,7 +149,7 @@ class AggregatorTest(unittest.TestCase):
         file_list = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
         #add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
@@ -158,6 +159,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -177,7 +179,7 @@ class AggregatorTest(unittest.TestCase):
         file_list = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
         #add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         result, message = setup_scenario(
@@ -186,6 +188,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -202,7 +205,7 @@ class AggregatorTest(unittest.TestCase):
         file_list = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
         result, message = setup_scenario(
@@ -211,6 +214,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -260,7 +264,7 @@ class AggregatorTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(dock=DOCK)
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()

@@ -131,20 +131,20 @@ def get_wgs84_resolution(layer):
     :param layer: Raster layer
     :type layer: QgsRasterLayer or QgsMapLayer
 
-    :returns: The resolution of the given layer.
-    :rtype: float
-
+    :returns: The resolution of the given layer in the form of (res_x, res_y)
+    :rtype: tuple
     """
 
     msg = tr(
-        'Input layer to getWGS84resolution must be a raster layer. '
+        'Input layer to get_wgs84_resolution must be a raster layer. '
         'I got: %s' % str(layer.type())[1:-1])
+
     if not layer.type() == QgsMapLayer.RasterLayer:
         raise RuntimeError(msg)
 
     if layer.crs().authid() == 'EPSG:4326':
-        cell_size = layer.rasterUnitsPerPixelX()
-
+        cell_size = (
+            layer.rasterUnitsPerPixelX(), layer.rasterUnitsPerPixelY())
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
@@ -156,12 +156,21 @@ def get_wgs84_resolution(layer):
         extent = layer.extent()
         projected_extent = transform.transformBoundingBox(extent)
 
-        # Estimate cell size
+        # Estimate resolution x
         columns = layer.width()
-        geo_width = abs(
+        width = abs(
             projected_extent.xMaximum() -
             projected_extent.xMinimum())
-        cell_size = geo_width / columns
+        cell_size_x = width / columns
+
+        # Estimate resolution y
+        rows = layer.height()
+        height = abs(
+            projected_extent.yMaximum() -
+            projected_extent.yMinimum())
+        cell_size_y = height / rows
+
+        cell_size = (cell_size_x, cell_size_y)
 
     return cell_size
 
@@ -581,14 +590,48 @@ def is_raster_layer(layer):
         return False
 
 
-def extent_to_geo_array(extent, source_crs, dest_crs=None):
+def extent_string_to_array(extent_text):
+    """Convert an extent string to an array.
+
+    .. versionadded: 2.2.0
+
+    :param extent_text: String representing an extent e.g.
+        109.829170982, -8.13333290561, 111.005344795, -7.49226294379
+    :type extent_text: str
+
+    :returns: A list of floats, or None
+    :rtype: list, None
+    """
+    coordinates = extent_text.replace(' ', '').split(',')
+    count = len(coordinates)
+    if count != 4:
+        message = (
+            'Extent need exactly 4 value but got %s instead' % count)
+        LOGGER.error(message)
+        return None
+
+    # parse the value to float type
+    try:
+        coordinates = [float(i) for i in coordinates]
+    except ValueError as e:
+        message = e.message
+        LOGGER.error(message)
+        return None
+    return coordinates
+
+
+def extent_to_array(extent, source_crs, dest_crs=None):
     """Convert the supplied extent to geographic and return as an array.
 
     :param extent: Rectangle defining a spatial extent in any CRS.
     :type extent: QgsRectangle
 
-    :param source_crs: Coordinate system used for extent.
+    :param source_crs: Coordinate system used for input extent.
     :type source_crs: QgsCoordinateReferenceSystem
+
+    :param dest_crs: Coordinate system used for output extent. Defaults to
+        EPSG:4326 if not specified.
+    :type dest_crs: QgsCoordinateReferenceSystem
 
     :returns: a list in the form [xmin, ymin, xmax, ymax] where all
             coordinates provided are in Geographic / EPSG:4326.
@@ -625,21 +668,21 @@ def viewport_geo_array(map_canvas):
         coordinates provided are in Geographic / EPSG:4326.
     :rtype: list
 
-    .. note:: Delegates to extent_to_geo_array()
+    .. note:: Delegates to extent_to_array()
     """
 
     # get the current viewport extent
     rectangle = map_canvas.extent()
 
-    if map_canvas.hasCrsTransformEnabled():
-        crs = map_canvas.mapRenderer().destinationCrs()
-    else:
-        # some code duplication from extentToGeoArray here
-        # in favour of clarity of logic...
-        crs = QgsCoordinateReferenceSystem()
-        crs.createFromSrid(4326)
+    destination_crs = QgsCoordinateReferenceSystem()
+    destination_crs.createFromSrid(4326)
 
-    return extent_to_geo_array(rectangle, crs)
+    if map_canvas.hasCrsTransformEnabled():
+        source_crs = map_canvas.mapRenderer().destinationCrs()
+    else:
+        source_crs = destination_crs
+
+    return extent_to_array(rectangle, source_crs, destination_crs)
 
 
 def read_impact_layer(impact_layer):

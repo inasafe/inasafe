@@ -27,7 +27,8 @@ from PyQt4.QtCore import QSettings
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QFileDialog
 
-from safe_qgis.utilities.utilities import viewport_geo_array
+from safe_qgis.utilities.utilities import (
+    viewport_geo_array, extent_to_array)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import safeTr
 
@@ -121,7 +122,15 @@ class SaveScenarioDialog(QDialog):
 
         # Make extent to look like:
         # 109.829170982, -8.13333290561, 111.005344795, -7.49226294379
-        extent = viewport_geo_array(self.iface.mapCanvas())
+
+        # Added in 2.2 to support user defined analysis extents
+        if self.dock.user_extent is not None \
+                and self.dock.user_extent_crs is not None:
+            extent = extent_to_array(
+                self.dock.user_extent,
+                self.dock.user_extent_crs)
+        else:
+            extent = viewport_geo_array(self.iface.mapCanvas())
         extent_string = ', '.join(('%f' % x) for x in extent)
 
         exposure_path = str(self.exposure_layer.publicSource())
@@ -160,6 +169,7 @@ class SaveScenarioDialog(QDialog):
         parser.set(title, 'hazard', relative_hazard_path)
         parser.set(title, 'function', self.function_id)
         parser.set(title, 'extent', extent_string)
+        parser.set(title, 'extent_crs', self.dock.user_extent_crs.authid())
         if self.aggregation_layer is not None:
             aggregation_path = str(self.aggregation_layer.publicSource())
             relative_aggregation_path = self.relative_path(

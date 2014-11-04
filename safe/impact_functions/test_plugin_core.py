@@ -283,9 +283,12 @@ class Test_plugin_core(unittest.TestCase):
         # 20 Happens to be the smallest number at which integer rounding
         # won't make a difference to the result
         result = evacuated_population_weekly_needs(20)
-        assert (result['rice'] == 56 and result['drinking_water'] == 350
-                and result['water'] == 1340 and result['family_kits'] == 4
-                and result['toilets'] == 1)
+
+        assert (result['Rice [kg]'] == 56
+                and result['Drinking Water [l]'] == 350
+                and result['Clean Water [l]'] == 1340
+                and result['Family Kits'] == 4
+                and result['Toilets'] == 1)
 
     def test_arbitrary_weekly_needs(self):
         """custom need ratios calculated are as expected
@@ -294,9 +297,12 @@ class Test_plugin_core(unittest.TestCase):
         minimum_needs = {'Rice': 4, 'Drinking Water': 3,
                          'Water': 2, 'Family Kits': 1, 'Toilets': 0.2}
         result = evacuated_population_weekly_needs(10, minimum_needs)
-        assert (result['rice'] == 40 and result['drinking_water'] == 30
-                and result['water'] == 20 and result['family_kits'] == 10
-                and result['toilets'] == 2)
+        
+        assert (result['Rice'] == 40
+                and result['Drinking Water'] == 30
+                and result['Water'] == 20
+                and result['Family Kits'] == 10
+                and result['Toilets'] == 2)
 
     def test_aggregate(self):
         """Test aggregate function behaves as expected."""

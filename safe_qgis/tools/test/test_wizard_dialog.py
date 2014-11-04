@@ -808,7 +808,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_unit, dialog)
 
         # check the values of units options
-        expected_units = ['normalised', 'metres', 'feet']
+        expected_units = ['categorised', 'normalised', 'metres', 'feet']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing metres
@@ -842,7 +842,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_unit, dialog)
 
         # check the values of units options
-        expected_units = ['normalised', 'MMI']
+        expected_units = ['categorised', 'normalised', 'MMI']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing MMI
