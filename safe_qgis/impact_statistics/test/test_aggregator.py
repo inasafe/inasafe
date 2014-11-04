@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -35,6 +36,7 @@ from qgis.core import (
     QgsMapLayerRegistry)
 
 from safe.common.testing import get_qgis_app
+from safe.common.qgis_vector_tools import extent_to_geo_array
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -55,8 +57,6 @@ from safe_qgis.utilities.utilities_for_testing import (
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities import (
-    extent_to_array)
 
 from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
