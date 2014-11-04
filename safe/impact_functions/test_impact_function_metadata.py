@@ -26,6 +26,8 @@ from safe.impact_functions.inundation.flood_OSM_building_impact import (
     FloodBuildingImpactFunction)
 from safe.impact_functions.generic.categorised_hazard_population import (
     CategorisedHazardPopulationImpactFunction)
+from safe.impact_functions.generic.categorised_hazard_building_impact import (
+    CategorisedHazardBuildingImpactFunction)
 from safe.metadata import (
     unit_wetdry,
     unit_metres_depth,
@@ -97,6 +99,13 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
         impact_function = CategorisedHazardPopulationImpactFunction()
+        result = impact_function.Metadata.allowed_subcategories(
+            category='hazard')
+        expected_result = hazard_all
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertEqual(result, expected_result, message)
+
+        impact_function = CategorisedHazardBuildingImpactFunction()
         result = impact_function.Metadata.allowed_subcategories(
             category='hazard')
         expected_result = hazard_all
@@ -192,6 +201,13 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
         impact_function = CategorisedHazardPopulationImpactFunction()
+        result = impact_function.Metadata.units_for_layer(
+            subcategory='flood', layer_type='raster', data_type='numeric')
+        expected_result = [unit_normalised]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertEqual(result, expected_result, message)
+
+        impact_function = CategorisedHazardBuildingImpactFunction()
         result = impact_function.Metadata.units_for_layer(
             subcategory='flood', layer_type='raster', data_type='numeric')
         expected_result = [unit_normalised]
