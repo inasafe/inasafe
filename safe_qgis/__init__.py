@@ -91,6 +91,15 @@ from safe_qgis.utilities.defaults import get_defaults
 safe.defaults.get_defaults = lambda the_default=None: get_defaults(
     the_default)
 
+from safe.impact_functions.core import get_plugins
+from safe_qgis.tools.minimum_needs import QMinimumNeeds
+## Monkey patch all the impact functions
+for (name, plugin) in get_plugins().items():
+    if not hasattr(plugin, 'parameters'):
+        continue
+    if 'minimum needs' in plugin.parameters:
+        plugin.parameters['minimum needs'] = QMinimumNeeds().get_minimum_needs()
+
 try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except

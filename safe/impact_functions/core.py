@@ -7,21 +7,19 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-
 import logging
 from math import ceil
-
 import numpy
 from collections import OrderedDict
-
 import keyword as python_keywords
+
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
+from safe.defaults import default_minimum_needs
 from utilities import pretty_string, remove_double_spaces
 from safe.metadata import converter_dict
 
-from safe_qgis.tools.minimum_needs import QMinimumNeeds
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -64,15 +62,6 @@ class FunctionProvider(object):
 
     target_field = 'DAMAGE'
     symbol_field = 'USE_MAJOR'
-
-
-def default_minimum_needs():
-    """Helper to get the default minimum needs.
-
-    .. note:: Key names will be translated.
-    """
-    minimum_needs = QMinimumNeeds()
-    return minimum_needs.get_minimum_needs()
 
 
 def evacuated_population_weekly_needs(

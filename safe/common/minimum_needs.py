@@ -65,9 +65,7 @@ class MinimumNeeds(object):
         """
         return self.minimum_needs
 
-    def set_need(
-            self, resource, amount, units,
-            frequency='weekly', provenance=''):
+    def set_need(self, resource, amount, units, frequency='weekly'):
         """Append a single new minimum need entry to the list.
 
         :param resource: Minimum need resource name.
@@ -87,11 +85,10 @@ class MinimumNeeds(object):
         :type: basestring
         """
         self.minimum_needs['resources'].append({
-            'resource': resource,
-            'amount': amount,
-            'unit': units,
-            'frequency': frequency,
-            'provenance': provenance,
+            'Resource name': resource,
+            'Default': amount,
+            'Unit abbreviation': units,
+            'Frequency': frequency
         })
 
     def update_minimum_needs(self, minimum_needs):
