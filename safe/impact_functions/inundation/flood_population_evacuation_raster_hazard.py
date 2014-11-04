@@ -2,14 +2,13 @@
 """Flood Evacuation Impact Function."""
 import numpy
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults
+from safe.defaults import get_defaults, default_minimum_needs
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
     get_function_title,
-    default_minimum_needs,
     evacuated_population_weekly_needs,
     population_rounding_full,
     population_rounding
@@ -240,13 +239,9 @@ class FloodEvacuationFunction(FunctionProvider):
             TableRow(tr('Map shows population density needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(total_needs['rice'])],
-            [tr('Drinking Water [l]'),
-             format_int(total_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(total_needs['water'])],
-            [tr('Family Kits'), format_int(total_needs['family_kits'])],
-            [tr('Toilets'), format_int(total_needs['toilets'])]]
+            TableRow([tr('Needs per week'), tr('Total')], header=True)]
+        for resource, amount in total_needs.items():
+            table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))

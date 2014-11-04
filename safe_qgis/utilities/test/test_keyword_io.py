@@ -216,10 +216,12 @@ class KeywordIOTest(unittest.TestCase):
         expected_source = (
             'dbname=\'../jk.sqlite\' table="osm_buildings" (Geometry) sql=')
         message = 'Got source: %s\n\nExpected %s\n' % (
-            sqlite_layer.source, expected_source)
+            sqlite_layer.source(), expected_source)
         assert sqlite_layer.source() == expected_source, message
         keywords = self.keyword_io.read_keywords(sqlite_layer)
         expected_keywords = self.expected_sqlite_keywords
+        message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+            keywords, expected_keywords, self.sqlite_layer.source())
         assert keywords == expected_keywords, message
         source = self.sqlite_layer.source()
         # delete sqlite_layer so that we can delete the file

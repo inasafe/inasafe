@@ -33,7 +33,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import safe_read_layer
-from safe_qgis.tools.minimum_needs import MinimumNeeds
+from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
 from safe_qgis.safe_interface import UNITDATA
 
 shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')
@@ -65,12 +65,12 @@ class MinimumNeedsTest(unittest.TestCase):
         new_layer = dialog.minimum_needs(layer, attribute)
         assert new_layer is not None
         attributes = {
-            'drinking_water': 17500,
-            'family_kits': 200,
-            'rice': 2800,
-            'toilets': 50,
-            'water': 67000}
-        self.assertDictEqual(attributes, new_layer.data[0])
+            'Drinking Water [l]': 17500.0,
+            'Family Kits': 200.0,
+            'Rice [kg]': 2800.0,
+            'Toilets': 50.0,
+            'Clean Water [l]': 67000.0}
+        self.assertDictEqual(attributes, dict(new_layer.data[0]))
 
     # def Xtest_accept(self):
     #     """Test behaviour of the ok button.

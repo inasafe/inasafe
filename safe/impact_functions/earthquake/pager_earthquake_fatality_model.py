@@ -11,8 +11,7 @@ from safe.metadata import (
     exposure_definition
 )
 from collections import OrderedDict
-from safe.defaults import get_defaults
-from safe.impact_functions.core import default_minimum_needs
+from safe.defaults import get_defaults, default_minimum_needs
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
     ITBFatalityFunction)
 from safe.common.utilities import ugettext as tr

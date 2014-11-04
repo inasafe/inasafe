@@ -20,7 +20,6 @@ __copyright__ += 'Disaster Reduction'
 import os
 import tempfile
 import logging
-from math import ceil
 
 from PyQt4.QtCore import QProcess
 from qgis.core import (

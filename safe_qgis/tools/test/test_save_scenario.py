@@ -106,7 +106,7 @@ class SaveScenarioTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(dock=DOCK)
 
         # create unique file
         scenario_file = unique_filename(
