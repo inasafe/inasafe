@@ -282,7 +282,7 @@ class Test_plugin_core(unittest.TestCase):
         """
         # 20 Happens to be the smallest number at which integer rounding
         # won't make a difference to the result
-        result = evacuated_population_weekly_needs(20, human_names=False)
+        result = evacuated_population_weekly_needs(20)
 
         assert (result['Rice [kg]'] == 56
                 and result['Drinking Water [l]'] == 350
@@ -297,6 +297,7 @@ class Test_plugin_core(unittest.TestCase):
         minimum_needs = {'Rice': 4, 'Drinking Water': 3,
                          'Water': 2, 'Family Kits': 1, 'Toilets': 0.2}
         result = evacuated_population_weekly_needs(10, minimum_needs)
+        
         assert (result['Rice'] == 40
                 and result['Drinking Water'] == 30
                 and result['Water'] == 20
