@@ -127,6 +127,10 @@ def generate_iso_metadata(keywords=None):
             template_replacements['ISO19115_TITLE'] = keywords['title']
         except KeyError:
             pass
+        try:
+            template_replacements['ISO19115_LINEAGE'] = keywords['source']
+        except KeyError:
+            pass
 
     else:
         template_replacements['INASAFE_KEYWORDS'] = ''
