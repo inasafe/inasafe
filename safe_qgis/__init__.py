@@ -98,7 +98,8 @@ for (name, plugin) in get_plugins().items():
     if not hasattr(plugin, 'parameters'):
         continue
     if 'minimum needs' in plugin.parameters:
-        plugin.parameters['minimum needs'] = QMinimumNeeds().get_minimum_needs()
+        plugin.parameters['minimum needs'] = (
+            QMinimumNeeds().get_minimum_needs())
 
 try:
     # When upgrading, using the plugin manager, you may get an error when

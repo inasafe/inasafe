@@ -69,7 +69,7 @@ class QMinimumNeeds(MinimumNeeds):
         from safe.impact_functions.core import get_plugins
         self.settings.setValue('Minimum Needs', self.minimum_needs)
         ## Monkey patch all the impact functions
-        for (name, plugin) in get_plugins().items():
+        for (_, plugin) in get_plugins().items():
             if not hasattr(plugin, 'parameters'):
                 continue
             if 'minimum needs' in plugin.parameters:
@@ -88,7 +88,7 @@ class QMinimumNeeds(MinimumNeeds):
             QgsApplication.qgisSettingsDirPath())
         if not local_minimum_needs_dir.exists():
             if not plugins_minimum_needs_dir.exists():
-                """This is specifically to get Travis working."""
+                # This is specifically to get Travis working.
                 return [self._defaults()['profile']]
             QDir(QgsApplication.qgisSettingsDirPath()).mkdir('minimum_needs')
             for file_name in plugins_minimum_needs_dir.entryList():

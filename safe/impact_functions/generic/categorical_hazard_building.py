@@ -30,7 +30,7 @@ from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 import logging
-from numpy import round
+from numpy import round as numpy_round
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -184,7 +184,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             val = float(attributes[i]['level'])
             ## FIXME it would be good if the affected were words not numbers
             ## FIXME need to read hazard layer and see category or keyword
-            val = float(round(val))
+            val = float(numpy_round(val))
             if val == high_t:
                 count3 += 1
             elif val == medium_t:

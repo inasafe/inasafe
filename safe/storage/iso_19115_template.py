@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-from string import Template  # pylint: disable=W0611
+from string import Template  # pylint: disable=W0402
 
 _xml_file = os.path.join(os.path.dirname(__file__), 'iso_19115_template.xml')
 with open(_xml_file, 'r') as f:
