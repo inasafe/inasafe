@@ -141,7 +141,6 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         """
 
         # The 3 category
-        global table_body
         high_t = self.parameters['high_thresholds']
         medium_t = self.parameters['medium_thresholds']
         low_t = self.parameters['low_thresholds']
