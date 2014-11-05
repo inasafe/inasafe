@@ -38,6 +38,7 @@ class QMinimumNeeds(MinimumNeeds):
                     QgsApplication.qgisSettingsDirPath(), profiles)))
         if self.minimum_needs is None:
             self.minimum_needs = self._defaults()
+        self.minimum_needs = minimum_needs
 
     def load_profile(self, profile):
         """Load a specific profile into the current minimum needs.
@@ -118,7 +119,7 @@ class QMinimumNeeds(MinimumNeeds):
         qfile.open(QFile.ReadOnly)
         needs_json = qfile.readAll()
         try:
-            minimum_needs = json.loads(needs_json)
+            minimum_needs = json.loads('%s' % needs_json)
         except (TypeError, ValueError):
             minimum_needs = None
 
@@ -133,8 +134,6 @@ class QMinimumNeeds(MinimumNeeds):
         :param qfile: The file to be written to.
         :type qfile: QFile
         """
-        if not qfile.exists():
-            return -1
         qfile.open(QFile.WriteOnly)
         needs_json = json.dumps(self.minimum_needs)
         qfile.write(needs_json)

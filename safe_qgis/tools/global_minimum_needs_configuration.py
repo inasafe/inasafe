@@ -14,13 +14,13 @@ __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtGui import QGridLayout
 from third_party.parameters.float_parameter import FloatParameter
 from third_party.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from third_party.parameters.string_parameter import StringParameter
 
-from PyQt4.QtGui import QDialog, QFileDialog
+from PyQt4.QtGui import QDialog, QFileDialog, QGridLayout
+from PyQt4.QtCore import QFile
 
 from safe_qgis.ui.minimum_needs_configuration import Ui_minimumNeeds
 from safe_qgis.safe_interface import (
@@ -73,6 +73,8 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         self.populate_resource_list()
         self.set_up_resource_parameters()
 
+        # Only do this afterward load_profiles to avoid the resource list
+        # being updated
         self.profileComboBox.activated.connect(
             self.select_profile)
 
@@ -425,7 +427,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         if file_name == '' or file_name is None:
             return -1
 
-        if self.minimum_needs.read_from_file(file_name) == -1:
+        if self.minimum_needs.read_from_file(QFile(file_name)) == -1:
             return -1
 
         self.populate_minimum_needs_table()
@@ -438,7 +440,6 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         destination loction and allow the user to save the needs as a json
         file.
         """
-        # self.save_minimum_needs()  # save current state before continuing
         file_name_dialog = QFileDialog(self)
         file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
@@ -447,7 +448,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]
         if file_name != '' and file_name is not None:
-            self.minimum_needs.write_to_file(file_name)
+            self.minimum_needs.write_to_file(QFile(file_name))
 
     def save_minimum_needs(self):
         """ Save the current state of the minimum needs widget.
@@ -471,15 +472,17 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
         """Save the minimum needs under a new profile name.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QFileDialog.getSaveFileName(
-            self,
-            self.tr('Export minimum needs'),
-            expanduser('~/.qgis2/minimum_needs'),
-            self.tr('JSON files (*.json *.JSON)'),
-            options=QtGui.QFileDialog.DirectoryOnly)
-        if not file_name:
+        file_name_dialog = QFileDialog(self)
+        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
+        file_name_dialog.setDefaultSuffix('json')
+        file_name_dialog.setDirectory(expanduser('~/.qgis2/minimum_needs'))
+        if file_name_dialog.exec_():
+            file_name = file_name_dialog.selectedFiles()[0]
+        else:
             return
         file_name = basename(file_name)
+        file_name.replace('.json', '')
         minimum_needs = {'resources': []}
         self.mark_current_profile_as_saved()
         for index in xrange(self.resourceListWidget.count()):
