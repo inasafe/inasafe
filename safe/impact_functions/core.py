@@ -92,7 +92,7 @@ def evacuated_population_weekly_needs(
     for resource, amount in minimum_needs.items():
         if human_names:
             resource = tr(resource)
-        population_needs[resource] = ceil(population * float(amount))
+        population_needs[resource] = int(ceil(population * float(amount)))
 
     return population_needs
 
