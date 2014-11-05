@@ -297,7 +297,7 @@ class Test_plugin_core(unittest.TestCase):
         minimum_needs = {'Rice': 4, 'Drinking Water': 3,
                          'Water': 2, 'Family Kits': 1, 'Toilets': 0.2}
         result = evacuated_population_weekly_needs(10, minimum_needs)
-        
+
         assert (result['Rice'] == 40
                 and result['Drinking Water'] == 30
                 and result['Water'] == 20

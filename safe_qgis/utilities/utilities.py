@@ -366,7 +366,7 @@ def setup_printer(
         resolution=300,
         page_height=297,
         page_width=210,
-        page_margin=[10, 10, 10, 10]):
+        page_margin=None):
     """Create a QPrinter instance defaulted to print to an A4 portrait pdf.
 
     :param filename: Filename for the pdf print device.
@@ -396,6 +396,9 @@ def setup_printer(
         QtGui.QPrinter.Millimeter)
     printer.setColorMode(QtGui.QPrinter.Color)
     printer.setResolution(resolution)
+
+    if page_margin is None:
+        page_margin = [10, 10, 10, 10]
     printer.setPageMargins(
         page_margin[0],
         page_margin[1],

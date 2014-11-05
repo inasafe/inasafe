@@ -35,7 +35,7 @@ profile=no
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
-ignore=odict.py,help_base.py,keywords_dialog_base.py,wizard_dialog_base.py,options_dialog_base.py,dock_base.py,resources.py,resources_rc.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,osm_downloader_base.py,shakemap_importer_base.py,osm_downloader_base.py,batch_dialog_base.py,impact_merge_dialog_base.py,impact_report_dialog_base.py,about_dialog_base.py
+ignore=odict.py,help_base.py,keywords_dialog_base.py,wizard_dialog_base.py,options_dialog_base.py,dock_base.py,resources.py,resources_rc.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,osm_downloader_base.py,shakemap_importer_base.py,osm_downloader_base.py,batch_dialog_base.py,impact_merge_dialog_base.py,impact_report_dialog_base.py,about_dialog_base.py,extent_selector_base.py
 
 # Pickle collected data for later comparisons.
 persistent=yes

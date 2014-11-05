@@ -208,7 +208,7 @@ class TestDock(TestCase):
         message = (
             'Unexpected result returned for Earthquake guidelines'
             'function. Expected:\n "All" count of %s, '
-            'received: \n %s' % (expected_all,result))
+            'received: \n %s' % (expected_all, result))
         self.assertTrue(format_int(expected_all) in result, message)
 
     def test_run_earthquake_fatality_function_small(self):

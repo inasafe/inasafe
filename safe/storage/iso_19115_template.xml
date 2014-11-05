@@ -60,6 +60,9 @@
     </gmd:metadataStandardVersion>
     <gmd:identificationInfo>
         <gmd:MD_DataIdentification>
+            <gmd:abstract>
+                <gco:CharacterString>$ISO19115_TITLE</gco:CharacterString>
+            </gmd:abstract>
             <gmd:citation>
                 <gmd:CI_Citation>
                     <gmd:title>
@@ -265,6 +268,13 @@
                     </gmd:result>
                 </gmd:DQ_DomainConsistency>
             </gmd:report>
+            <gmd:lineage>
+                <gmd:LI_Lineage>
+                    <gmd:statement>
+                        <gco:CharacterString>$ISO19115_LINEAGE</gco:CharacterString>
+                    </gmd:statement>
+                </gmd:LI_Lineage>
+            </gmd:lineage>
         </gmd:DQ_DataQuality>
     </gmd:dataQualityInfo>
 </gmd:MD_Metadata>

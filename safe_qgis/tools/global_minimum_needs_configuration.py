@@ -14,7 +14,7 @@ __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtGui import QWidget, QGridLayout
+from PyQt4.QtGui import QGridLayout
 from third_party.parameters.float_parameter import FloatParameter
 from third_party.parameters.qt_widgets.parameter_container import (
     ParameterContainer)

@@ -20,7 +20,6 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.utilities.defaults import get_defaults
 from safe_qgis.utilities.utilities import (
     get_error_message,
     qgis_version,

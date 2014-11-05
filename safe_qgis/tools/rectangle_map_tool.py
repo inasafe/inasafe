@@ -73,6 +73,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         :param e: A Qt event object.
         :type: QEvent
         """
+        _ = e
         self.is_emitting_point = False
         self.rectangle_created.emit()
 
@@ -103,7 +104,8 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         :return:
         """
         self.rubber_band.reset(QGis.Polygon)
-        if start_point.x() == end_point.x() or start_point.y() == end_point.y():
+        if (start_point.x() == end_point.x()
+            or start_point.y() == end_point.y()):
             return
 
         point1 = start_point
