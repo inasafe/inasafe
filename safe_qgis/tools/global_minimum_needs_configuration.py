@@ -53,6 +53,7 @@ class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
             'InaSAFE Global Minimum Needs Configuration'))
         self.resourceListWidget.setDragDropMode(
             self.resourceListWidget.InternalMove)
+        self.resourceListWidget.setAlternatingRowColors(True)
         self.resourceListWidget.setWordWrap(True)
         self.removeButton.clicked.connect(self.remove_resource)
         self.addButton.clicked.connect(self.add_new_resource)

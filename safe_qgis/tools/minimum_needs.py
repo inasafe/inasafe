@@ -100,7 +100,7 @@ class QMinimumNeeds(MinimumNeeds):
                     '%s/minimum_needs/%s' %
                     (QgsApplication.qgisSettingsDirPath(), file_name))
         profiles = [
-            profile.rstrip('.json') for profile in
+            profile[:-5] for profile in
             local_minimum_needs_dir.entryList() if
             profile[-5:] == '.json']
         return profiles
