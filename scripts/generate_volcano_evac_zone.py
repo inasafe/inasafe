@@ -7,5 +7,5 @@ print H.get_geometry()
 # Generate evacuation circle (as a polygon):
 radius = 3000
 center = H.get_geometry()[0]
-Z = buffer_points(center, radius)
+Z = buffer_points(center, radius, 'Radius')
 Z.write_to_file('Marapi_evac_zone_%im.shp' % radius)

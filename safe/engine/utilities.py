@@ -11,7 +11,7 @@ from safe.storage.vector import Vector
 REQUIRED_KEYWORDS = ['category', 'subcategory']
 
 
-def buffer_points(centers, radii, data_table=None):
+def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
     """Buffer points for each center with defined radii.
 
     If the data_table is defined, then the data will also be copied to the
@@ -23,6 +23,10 @@ def buffer_points(centers, radii, data_table=None):
     :param radii: Desired approximate radii in meters (must be
         monotonically ascending). Can be either one number or list of numbers
     :type radii: int, list
+
+    :param hazard_zone_attribute: The name of the attributes representing
+        hazard zone.
+    :type hazard_zone_attribute: str
 
     :param data_table: Data for each center (optional)
     :type data_table: list
@@ -59,7 +63,7 @@ def buffer_points(centers, radii, data_table=None):
                     row[key] = data_table[i][key]
 
             # Add radius to this ring
-            row['Radius'] = radius
+            row[hazard_zone_attribute] = radius
 
             new_data_table.append(row)
 

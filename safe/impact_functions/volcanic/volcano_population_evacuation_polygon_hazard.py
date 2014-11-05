@@ -198,16 +198,16 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         if hazard_layer.is_point_data:
             # Use concentric circles
             radii = self.parameters['distance [km]']
-
-            centers = hazard_layer.get_geometry()
-            rad_m = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = buffer_points(centers, rad_m, data_table=data_table)
-
             category_title = 'Radius'
             category_header = tr('Distance [km]')
             category_names = radii
 
             name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
+
+            centers = hazard_layer.get_geometry()
+            rad_m = [x * 1000 for x in radii]  # Convert to meters
+            hazard_layer = buffer_points(
+                centers, rad_m, category_title, data_table=data_table)
         else:
             # Use hazard map
             category_title = 'KRB'
