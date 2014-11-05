@@ -374,7 +374,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                               size=2,
                               border_color='#969696',
                               border_width=0.2)]
-        style_info = dict(target_field=self.affected_field,
+        style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
