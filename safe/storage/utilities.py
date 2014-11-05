@@ -9,6 +9,7 @@ import numpy
 import math
 from ast import literal_eval
 from osgeo import ogr
+from collections import OrderedDict
 
 from geometry import Polygon
 
@@ -337,7 +338,14 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
                 # booleans, None, lists, dicts etc
                 val = literal_eval(textval)
             except (ValueError, SyntaxError):
-                val = textval
+                if 'OrderedDict(' == textval[:12]:
+                    try:
+                        val = OrderedDict(
+                            literal_eval(textval[12:-1]))
+                    except (ValueError, SyntaxError, TypeError):
+                        val = textval
+                else:
+                    val = textval
 
         # Add entry to dictionary
         keywords[key] = val

@@ -3027,9 +3027,6 @@ class Test_Engine(unittest.TestCase):
         evacuated = float(keywords['evacuated'])
         total_needs = keywords['total_needs']
 
-        #FIXME this is an HACK
-        total_needs = dict(eval(total_needs[12:-1]))
-
         expected_evacuated = 63400
         assert evacuated == expected_evacuated
         assert total_needs['Rice [kg]'] == 177520
