@@ -1073,6 +1073,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.user_analysis_rubberband.reset(QGis.Polygon)
             self.user_analysis_rubberband = None
 
+    def clear_user_analysis_extent(self):
+        """Slot called when the users clears the analysis extents."""
+        self.hide_user_analysis_extent()
+        self.user_extent = None
+        self.user_extent_crs = None
+
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'extent_selector_base.ui'
 #
-# Created: Mon Nov  3 12:04:53 2014
+# Created: Wed Nov  5 10:06:11 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -80,6 +80,9 @@ class Ui_ExtentSelectorBase(object):
         self.cancel_button = QtGui.QToolButton(ExtentSelectorBase)
         self.cancel_button.setObjectName(_fromUtf8("cancel_button"))
         self.horizontalLayout.addWidget(self.cancel_button)
+        self.clear_button = QtGui.QToolButton(ExtentSelectorBase)
+        self.clear_button.setObjectName(_fromUtf8("clear_button"))
+        self.horizontalLayout.addWidget(self.clear_button)
         self.ok_button = QtGui.QToolButton(ExtentSelectorBase)
         self.ok_button.setObjectName(_fromUtf8("ok_button"))
         self.horizontalLayout.addWidget(self.ok_button)
@@ -94,6 +97,7 @@ class Ui_ExtentSelectorBase(object):
         self.x_maximum.setPrefix(_translate("ExtentSelectorBase", "West: ", None))
         self.y_maximum.setPrefix(_translate("ExtentSelectorBase", "South: ", None))
         self.cancel_button.setText(_translate("ExtentSelectorBase", "Cancel", None))
+        self.clear_button.setText(_translate("ExtentSelectorBase", "Clear", None))
         self.ok_button.setText(_translate("ExtentSelectorBase", "OK", None))
 
 import resources_rc
