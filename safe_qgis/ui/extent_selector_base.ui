@@ -133,6 +133,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QToolButton" name="clear_button">
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="ok_button">
      <property name="text">
       <string>OK</string>

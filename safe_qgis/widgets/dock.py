@@ -1073,6 +1073,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.user_analysis_rubberband.reset(QGis.Polygon)
             self.user_analysis_rubberband = None
 
+    def clear_user_analysis_extent(self):
+        """Slot called when the users clears the analysis extents."""
+        self.hide_user_analysis_extent()
+        self.user_extent = None
+        self.user_extent_crs = None
+
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
 
@@ -1951,9 +1957,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             analysis_geoextent = extent_to_array(
                 self.user_extent,
                 self.user_extent_crs)
-        else:
+        elif self.clip_to_viewport:
             # Get the current viewport extent as an array in EPSG:4326
             analysis_geoextent = viewport_geo_array(self.iface.mapCanvas())
+
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
             hazard_layer.extent(),
@@ -1976,7 +1983,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # always be used, otherwise the data will be clipped to
             # the viewport unless the user has deselected clip to viewport in
             # options.
-            if self.clip_to_viewport and not self.user_extent is None:
+            if self.clip_to_viewport or (
+                    self.user_extent is not None and
+                    self.user_extent_crs is not None):
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,

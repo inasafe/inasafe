@@ -499,7 +499,9 @@ def split_by_polygon2(
     for polygon_feature in polygon_layer.getFeatures(request):
         # Using simplify 1 should remove any pseudonodes on the polygon
         # and speed up polygon operations. TS
-        polygon = polygon_feature.geometry().simplify(1)
+        # polygon = polygon_feature.geometry().simplify(1)
+        # disabled for now (see #1300 Y.A.)
+        polygon = polygon_feature.geometry()
         poly_geoms.append(QgsGeometry(polygon))
 
     result_layer.startEditing()

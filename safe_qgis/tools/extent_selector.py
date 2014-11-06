@@ -46,6 +46,7 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
     """
 
     extent_defined = pyqtSignal(QgsRectangle, QgsCoordinateReferenceSystem)
+    clear_extent = pyqtSignal()
 
     def __init__(self, iface, parent=None):
         """
@@ -87,8 +88,14 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.canvas.setMapTool(self.tool)
         self._coordinates_changed()
 
+        self.clear_button.clicked.connect(self.clear)
         self.ok_button.clicked.connect(self.accept)
         self.cancel_button.clicked.connect(self.reject)
+
+    def clear(self):
+        """Clear the currently set extent."""
+        self.tool.reset()
+        self._populate_coordinates()
 
     def reject(self):
         """User rejected the rectangle."""
@@ -106,15 +113,19 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
 
-        LOGGER.info(
-            'Extent selector setting user extents to %s' %
-            self.tool.rectangle().toString())
-
         if self.tool.rectangle() is not None:
+            LOGGER.info(
+                'Extent selector setting user extents to %s' %
+                self.tool.rectangle().toString())
             self.extent_defined.emit(
                 self.tool.rectangle(),
                 self.iface.mapCanvas().mapRenderer().destinationCrs()
             )
+        else:
+            LOGGER.info(
+                'Extent selector setting user extents to nothing')
+            self.clear_extent.emit()
+
         self.tool.reset()
         super(ExtentSelector, self).accept()
 
