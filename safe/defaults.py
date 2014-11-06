@@ -13,13 +13,13 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from collections import OrderedDict
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+from collections import OrderedDict
 
 from safe.common.utilities import ugettext as tr
 
