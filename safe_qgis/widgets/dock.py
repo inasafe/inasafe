@@ -2443,8 +2443,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
-            # print_map.setup_composition()
-            # print_map.load_template()
             if print_map.map_title() is not None:
                 default_file_name = print_map.map_title() + '.pdf'
             else:
