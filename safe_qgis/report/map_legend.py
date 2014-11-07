@@ -123,38 +123,36 @@ class MapLegend():
         :raises: InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        LOGGER.debug('InaSAFE Map getVectorLegend called')
+        LOGGER.debug('InaSAFE Map vector_legend called')
         # new symbology - subclass of QgsFeatureRendererV2 class
+
         self.legend_image = None
         renderer = self.layer.rendererV2()
         renderer_type = renderer.type()
         LOGGER.debug('renderer_type' + str(renderer_type))
         if renderer_type == "singleSymbol":
             LOGGER.debug('singleSymbol')
-            symbol = renderer.symbol()
             self.add_symbol(
                 label=self.layer.name(),
-                symbol=symbol,
+                symbol=renderer.symbol(),
                 symbol_type=renderer_type)
         elif renderer_type == "categorizedSymbol":
             LOGGER.debug('categorizedSymbol')
-            for myCategory in renderer.categories():
-                symbol = myCategory.symbol()
-                LOGGER.debug('theCategory' + myCategory.value())
+            for category in renderer.categories():
+                LOGGER.debug('category: ' + category.value())
                 self.add_symbol(
-                    category=myCategory.value(),
-                    label=myCategory.label(),
-                    symbol=symbol,
+                    category=category.value(),
+                    label=category.label(),
+                    symbol=category.symbol(),
                     symbol_type=renderer_type)
         elif renderer_type == "graduatedSymbol":
             LOGGER.debug('graduatedSymbol')
-            for myRange in renderer.ranges():
-                symbol = myRange.symbol()
+            for range in renderer.ranges():
                 self.add_symbol(
-                    minimum=myRange.lowerValue(),
-                    maximum=myRange.upperValue(),
-                    label=myRange.label(),
-                    symbol=symbol,
+                    minimum=range.lowerValue(),
+                    maximum=range.upperValue(),
+                    label=range.label(),
+                    symbol=range.symbol(),
                     symbol_type=renderer_type)
         else:
             LOGGER.debug('else')
@@ -232,7 +230,7 @@ class MapLegend():
         .. note:: This method just extracts the colour from the symbol and then
            delegates to the addClassToLegend function.
         """
-        LOGGER.debug('InaSAFE Map Legend addSymbolToLegend called')
+        LOGGER.debug('InaSAFE Map Legend add_symbol called')
         color = symbol.color()
         self.add_class(
             color,
@@ -275,7 +273,7 @@ class MapLegend():
         :type class_type: str
 
         """
-        LOGGER.debug('InaSAFE Map Legend addClassToLegend called')
+        LOGGER.debug('InaSAFE Map Legend add_class called')
         self.grow_legend()
         offset = self.legend_image.height() - self.legend_increment
         painter = QtGui.QPainter(self.legend_image)

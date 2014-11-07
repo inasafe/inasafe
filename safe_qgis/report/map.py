@@ -24,7 +24,8 @@ from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
-    QgsMapLayer)
+    QgsMapLayer,
+    QgsLayerTreeGroup)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
@@ -34,6 +35,7 @@ from safe_qgis.utilities.defaults import (
     disclaimer,
     default_organisation_logo_path,
     default_north_arrow_path)
+from safe_qgis.utilities.utilities import qgis_version
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -333,13 +335,19 @@ class Map():
             if legend_title is None:
                 legend_title = ""
             legend.setTitle(legend_title)
-            legend.updateLegend()
 
-            # remove from legend all layers, except impact one
-            model = legend.model()
-            if model.rowCount() > 0 and model.columnCount() > 0:
-                impact_item = model.findItems(self.layer.name())[0]
-                row = impact_item.index().row()
-                model.removeRows(row + 1, model.rowCount() - row)
-                if row > 0:
-                    model.removeRows(0, row)
+            # Set Legend
+            if qgis_version() < 20600:
+                legend.model().setLayerSet([self.layer.id()])
+                legend.synchronizeWithModel()
+            else:
+                # Somehow the codes below will crash qgis running it from
+                # inasafe. But fine from qgis python console.
+                model = legend.modelV2()
+                group = QgsLayerTreeGroup()
+                group.insertLayer(0, self.layer)
+                model.setRootGroup(group)
+                legend.synchronizeWithModel()
+                # Why below is not working for 2.6?????
+                # legend.model().setLayerSet([self.layer.id()])
+                # legend.synchronizeWithModel()
