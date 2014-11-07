@@ -530,7 +530,9 @@ class Plugin:
         from safe_qgis.tools.extent_selector import ExtentSelector
         widget = ExtentSelector(
             self.iface,
-            self.iface.mainWindow())
+            self.iface.mainWindow(),
+            extent=self.dock_widget.user_extent,
+            crs=self.dock_widget.user_extent_crs)
         widget.clear_extent.connect(
             self.dock_widget.clear_user_analysis_extent)
         widget.extent_defined.connect(

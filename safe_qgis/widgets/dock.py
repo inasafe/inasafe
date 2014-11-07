@@ -1190,7 +1190,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.show_rubber_bands:
             # draw in green
             self.next_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 255, 0, 100), width=3)
+                extent, QColor(0, 255, 0, 100), width=10)
 
     def hide_last_analysis_extent(self):
         """Clear extent rubber band if any.

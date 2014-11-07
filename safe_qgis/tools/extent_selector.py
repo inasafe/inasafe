@@ -32,7 +32,11 @@ import logging
 from PyQt4.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog
-from qgis.core import QgsPoint, QgsRectangle, QgsCoordinateReferenceSystem
+from qgis.core import (
+    QgsPoint,
+    QgsRectangle,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform)
 
 from safe_qgis.ui.extent_selector_base import Ui_ExtentSelectorBase
 from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
@@ -48,7 +52,7 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
     extent_defined = pyqtSignal(QgsRectangle, QgsCoordinateReferenceSystem)
     clear_extent = pyqtSignal()
 
-    def __init__(self, iface, parent=None):
+    def __init__(self, iface, parent=None, extent=None, crs=None):
         """
         Constructor for the dialog.
 
@@ -57,6 +61,13 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
 
         :param parent: Parent widget of this dialog
         :type parent: QWidget
+
+        :param extent: Extent of the user's preferred analysis area.
+        :type extent: QgsRectangle
+
+        :param crs: Coordinate reference system for user defined analysis
+            extent.
+        :type crs: QgsCoordinateReferenceSystem
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
@@ -71,8 +82,17 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.previous_map_tool = self.canvas.mapTool()
         self.tool.rectangle_created.connect(self._populate_coordinates)
 
-        # Use the current map canvas extents as a starting point
-        self.tool.set_rectangle(self.canvas.extent())
+        if extent is None and crs is None:
+            # Use the current map canvas extents as a starting point
+            self.tool.set_rectangle(self.canvas.extent())
+        else:
+            # Ensure supplied extent is in current canvas crs
+            transform = QgsCoordinateTransform(
+                crs,
+                self.canvas.mapRenderer().destinationCrs())
+            transformed_extent = transform.transformBoundingBox(extent)
+            self.tool.set_rectangle(transformed_extent)
+
         self._populate_coordinates()
 
         # Observe inputs for changes
@@ -119,7 +139,7 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
                 self.tool.rectangle().toString())
             self.extent_defined.emit(
                 self.tool.rectangle(),
-                self.iface.mapCanvas().mapRenderer().destinationCrs()
+                self.canvas.mapRenderer().destinationCrs()
             )
         else:
             LOGGER.info(
