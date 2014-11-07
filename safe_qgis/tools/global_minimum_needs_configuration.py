@@ -381,6 +381,7 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         parameter_container = ParameterContainer(parameters)
 
         layout = QGridLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(parameter_container)
         self.resourceGroupBox.setLayout(layout)
 
