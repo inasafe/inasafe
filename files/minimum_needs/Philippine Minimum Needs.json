@@ -154,7 +154,7 @@
             "Default": "0",
             "Minimum allowed": "0",
             "Maximum allowed": "0",
-            "Frequency": ""
+            "Frequency": "single"
         },
         {
             "Resource name": "Couple room",
@@ -166,7 +166,7 @@
             "Default": "0",
             "Minimum allowed": "0",
             "Maximum allowed": "0",
-            "Frequency": ""
+            "Frequency": "single"
         }
     ],
     "provenance": "Philippine Minimum Needs for InaSAFE * , * Guidelines on Evacuation Center Coordination and Management Joint Memorandom Circular No. __ Series of 2013, ** A family is composed of 5-6 members",

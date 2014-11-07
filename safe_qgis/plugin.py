@@ -549,9 +549,9 @@ class Plugin:
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.global_minimum_needs_configuration import (
-            GlobalMinimumNdeedsDialog)
+            GlobalMinimumNeedsDialog)
 
-        dialog = GlobalMinimumNdeedsDialog(self.iface.mainWindow())
+        dialog = GlobalMinimumNeedsDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_impact_merge(self):

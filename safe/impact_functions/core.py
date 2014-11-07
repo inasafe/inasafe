@@ -97,6 +97,48 @@ def evacuated_population_weekly_needs(
     return population_needs
 
 
+def evacuated_population_needs(population, minimum_needs, full_minimum_needs):
+    """Calculate estimated needs using minimum needs configuration provided
+    in full_minimum_needs.
+
+    :param population: The number of evacuated population.
+    :type: int, float
+
+    :param minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: dict
+
+    :param full_minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: dict
+
+    :returns: The needs for the evacuated population.
+    :rtype: dict
+    """
+    frequencies = []
+    for resource in full_minimum_needs['resources']:
+        if resource['Frequency'] not in frequencies:
+            frequencies.append(resource['Frequency'])
+
+    population_needs_by_frequency = OrderedDict([
+        [frequency, []] for frequency in frequencies])
+
+    for resource in full_minimum_needs['resources']:
+        this_resource = resource.copy()
+        if this_resource['Unit abbreviation']:
+            resource_name = '%s [%s]' % (
+                this_resource['Resource name'],
+                this_resource['Unit abbreviation'])
+        else:
+            resource_name = this_resource['Resource name']
+        amount_pp = minimum_needs[resource_name]
+        this_resource['Amount'] = int(ceil(population * float(amount_pp)))
+        population_needs_by_frequency[this_resource['Frequency']].append(
+            this_resource)
+
+    return population_needs_by_frequency
+
+
 def population_rounding_full(number):
     """This function performs a rigorous population rounding.
 

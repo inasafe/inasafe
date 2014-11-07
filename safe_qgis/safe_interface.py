@@ -64,6 +64,7 @@ from safe.api import (
     get_unique_values,
     get_plugins_as_table,
     evacuated_population_weekly_needs,
+    evacuated_population_needs,
     Layer,
     Vector,
     Raster,

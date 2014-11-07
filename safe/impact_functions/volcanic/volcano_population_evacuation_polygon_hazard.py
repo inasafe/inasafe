@@ -33,6 +33,7 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
+    evacuated_population_needs,
     evacuated_population_weekly_needs,
     population_rounding
 )
@@ -149,7 +150,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('rich minimum needs', None)
     ])
 
     def run(self, layers):
@@ -300,10 +302,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evacuation
         evacuated = population_rounding(cumulative)
 
-        # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        total_needs = evacuated_population_weekly_needs(
-            evacuated, minimum_needs)
+        minimum_needs_full = self.parameters['rich minimum needs']
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -328,14 +328,31 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         table_body.extend([
             TableRow(tr(
                 'Map shows the number of people affected in each of volcano '
-                'hazard polygons.')),
-            TableRow(
-                [tr('Needs per week'), tr('Total'), blank_cell], header=True)])
-        for resource, amount in total_needs.items():
-            table_body.append(TableRow([
-                tr(resource),
-                format_int(amount),
-                blank_cell]))
+                'hazard polygons.'))])
+
+        if minimum_needs_full:
+            total_needs = evacuated_population_needs(
+                evacuated, minimum_needs, minimum_needs_full)
+            for frequency, needs in total_needs.items():
+                table_body.append(TableRow(
+                    [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')
+                    ],
+                    header=True))
+                for resource in needs:
+                    table_body.append(TableRow([
+                        tr(resource['Resource name']),
+                        format_int(resource['Amount'])]))
+            table_body.append(TableRow(tr('Provenance'), header=True))
+            table_body.append(TableRow(minimum_needs_full['provenance']))
+        else:
+            total_needs = evacuated_population_weekly_needs(
+                evacuated, minimum_needs)
+            table_body.append(
+                TableRow([tr('Needs per week'), tr('Total')], header=True))
+            for resource, amount in total_needs.items():
+                table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         impact_table = Table(table_body).toNewlineFreeString()
 

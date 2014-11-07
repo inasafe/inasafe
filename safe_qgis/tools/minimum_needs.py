@@ -25,6 +25,7 @@ class QMinimumNeeds(MinimumNeeds):
     def __init__(self):
         self.settings = QSettings()
         self.minimum_needs = None
+        self._root_directory = None
         self.load()
 
     def load(self):
@@ -35,7 +36,7 @@ class QMinimumNeeds(MinimumNeeds):
             profiles = self.get_profiles()[0]
             self.read_from_file(
                 QFile('%s/minimum_needs/%s.json' % (
-                    QgsApplication.qgisSettingsDirPath(), profiles)))
+                    self.root_directory, profiles)))
         if self.minimum_needs is None:
             self.minimum_needs = self._defaults()
         self.minimum_needs = minimum_needs
@@ -48,7 +49,7 @@ class QMinimumNeeds(MinimumNeeds):
         """
         self.read_from_file(
             QFile('%s/minimum_needs/%s.json' % (
-                QgsApplication.qgisSettingsDirPath(), profile)))
+                self.root_directory, profile)))
 
     def save_profile(self, profile):
         """Save the current minimum needs into a new profile.
@@ -58,7 +59,7 @@ class QMinimumNeeds(MinimumNeeds):
         """
         self.write_to_file(
             QFile('%s/minimum_needs/%s.json' % (
-                QgsApplication.qgisSettingsDirPath(), profile)))
+                self.root_directory, profile)))
 
     def save(self):
         """Save the minimum needs to the QSettings object.
@@ -75,6 +76,7 @@ class QMinimumNeeds(MinimumNeeds):
                 continue
             if 'minimum needs' in plugin.parameters:
                 plugin.parameters['minimum needs'] = self.get_minimum_needs()
+                plugin.parameters['rich minimum needs'] = self.get_full_needs()
 
     def get_profiles(self):
         """Get all the minimum needs profiles.
@@ -83,22 +85,22 @@ class QMinimumNeeds(MinimumNeeds):
         :rtype: list
         """
         local_minimum_needs_dir = QDir(
-            '%s/minimum_needs/' % QgsApplication.qgisSettingsDirPath())
+            '%s/minimum_needs/' % self.root_directory)
         plugins_minimum_needs_dir = QDir(
             '%s/python/plugins/inasafe/files/minimum_needs/' %
-            QgsApplication.qgisSettingsDirPath())
+            self.root_directory)
         if not local_minimum_needs_dir.exists():
             if not plugins_minimum_needs_dir.exists():
                 # This is specifically to get Travis working.
                 return [self._defaults()['profile']]
-            QDir(QgsApplication.qgisSettingsDirPath()).mkdir('minimum_needs')
+            QDir(self.root_directory).mkdir('minimum_needs')
             for file_name in plugins_minimum_needs_dir.entryList():
                 source_file = QFile(
                     '%s/python/plugins/inasafe/files/minimum_needs/%s' %
-                    (QgsApplication.qgisSettingsDirPath(), file_name))
+                    (self.root_directory, file_name))
                 source_file.copy(
                     '%s/minimum_needs/%s' %
-                    (QgsApplication.qgisSettingsDirPath(), file_name))
+                    (self.root_directory, file_name))
         profiles = [
             profile[:-5] for profile in
             local_minimum_needs_dir.entryList() if
@@ -137,3 +139,15 @@ class QMinimumNeeds(MinimumNeeds):
         qfile.open(QFile.WriteOnly)
         needs_json = json.dumps(self.minimum_needs)
         qfile.write(needs_json)
+
+    @property
+    def root_directory(self):
+        """Get the home root directory
+
+        :returns: root directory
+        :rtype: QString
+        """
+        if not self._root_directory:
+            # noinspection PyArgumentList
+            self._root_directory = QgsApplication.qgisSettingsDirPath()
+        return self._root_directory

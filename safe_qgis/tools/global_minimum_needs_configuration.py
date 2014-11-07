@@ -34,7 +34,7 @@ INFO_STYLE = styles.INFO_STYLE
 
 #noinspection PyArgumentList
 # noinspection PyProtectedMember
-class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
+class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
     """Dialog class for the InaSAFE global minimum needs configuration.
 
     .. versionadded:: 2.2.

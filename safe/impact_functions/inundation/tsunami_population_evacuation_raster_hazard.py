@@ -9,10 +9,10 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     get_function_title,
+    evacuated_population_needs,
     evacuated_population_weekly_needs,
     population_rounding_full,
-    population_rounding
-)
+    population_rounding)
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.metadata import (
@@ -23,8 +23,7 @@ from safe.metadata import (
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition
-)
+    exposure_definition)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -154,7 +153,8 @@ class TsunamiEvacuationFunction(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True}),
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('rich minimum needs', None)
     ])
 
     def run(self, layers):
@@ -222,12 +222,8 @@ class TsunamiEvacuationFunction(FunctionProvider):
         # Don't show digits less than a 1000
         total = population_rounding(total)
 
-        # Calculate estimated minimum needs
-        # The default value of each logistic is based on BNPB Perka 7/2008
-        # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
-
-        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
+        minimum_needs_full = self.parameters['rich minimum needs']
 
         # Generate impact report for the pdf map
         # noinspection PyListCreation
@@ -238,16 +234,30 @@ class TsunamiEvacuationFunction(FunctionProvider):
                      header=True),
             TableRow(
                 tr('* Number is rounded up to the nearest %s') % rounding),
-            TableRow(tr('Map shows population density needing evacuation')),
-            TableRow(tr('Table below shows the weekly minimum needs for all '
-                        'evacuated people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
-            [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]]
+            TableRow(tr('Map shows population density needing evacuation'))]
+        if minimum_needs_full:
+            total_needs = evacuated_population_needs(
+                evacuated, minimum_needs, minimum_needs_full)
+            for frequency, needs in total_needs.items():
+                table_body.append(TableRow(
+                    [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')
+                    ],
+                    header=True))
+                for resource in needs:
+                    table_body.append(TableRow([
+                        tr(resource['Resource name']),
+                        format_int(resource['Amount'])]))
+            table_body.append(TableRow(tr('Provenance'), header=True))
+            table_body.append(TableRow(minimum_needs_full['provenance']))
+        else:
+            total_needs = evacuated_population_weekly_needs(
+                evacuated, minimum_needs)
+            table_body.append(
+                TableRow([tr('Needs per week'), tr('Total')], header=True))
+            for resource, amount in total_needs.items():
+                table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
@@ -349,6 +359,6 @@ class TsunamiEvacuationFunction(FunctionProvider):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'evacuated': evacuated,
-                'total_needs': tot_needs},
+                'total_needs': total_needs},
             style_info=style_info)
         return raster
