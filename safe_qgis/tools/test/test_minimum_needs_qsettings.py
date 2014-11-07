@@ -97,3 +97,15 @@ class MinimumNeedsTest(unittest.TestCase):
         # cmp compares dicts 0 == same, -1 == different
         self.assertEqual(cmp(original_old, other_old), 0)
         self.assertEqual(cmp(original_old, original_new), -1)
+
+    def test_03_root_directory(self):
+
+        minimum_needs2 = TestQMinimumNeeds()
+        self.assertIsNone(minimum_needs2._root_directory)
+        # noinspection PyStatementEffect
+        minimum_needs2.root_directory
+        self.assertIsNotNone(minimum_needs2._root_directory)
+        self.assertNotEqual(
+            minimum_needs2.root_directory,
+            minimum_needs2._root_directory
+        )

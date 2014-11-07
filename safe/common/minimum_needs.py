@@ -210,7 +210,7 @@ class MinimumNeeds(object):
                         "provided {{ Frequency }}.")
                 }
             ],
-            "provenance": "Perka",
+            "provenance": "BNPB",
             "profile": "BNPB"
         }
         return minimum_needs

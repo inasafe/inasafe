@@ -11,6 +11,7 @@ from PyQt4.QtCore import QSettings, QFile, QDir
 from qgis.core import QgsApplication
 from safe.common.minimum_needs import MinimumNeeds
 import json
+import os
 
 
 class QMinimumNeeds(MinimumNeeds):
@@ -32,13 +33,15 @@ class QMinimumNeeds(MinimumNeeds):
         """Load the minimum needs from the QSettings object.
         """
         minimum_needs = self.settings.value('Minimum Needs')
+        if hasattr(minimum_needs, 'toPyObject'):
+            minimum_needs = minimum_needs.toPyObject()
         if minimum_needs is None:
-            profiles = self.get_profiles()[0]
+            profiles = self.get_profiles()
             self.read_from_file(
                 QFile('%s/minimum_needs/%s.json' % (
                     self.root_directory, profiles)))
-        if self.minimum_needs is None:
-            self.minimum_needs = self._defaults()
+        if minimum_needs is None:
+            minimum_needs = self._defaults()
         self.minimum_needs = minimum_needs
 
     def load_profile(self, profile):
@@ -147,7 +150,12 @@ class QMinimumNeeds(MinimumNeeds):
         :returns: root directory
         :rtype: QString
         """
-        if not self._root_directory:
-            # noinspection PyArgumentList
-            self._root_directory = QgsApplication.qgisSettingsDirPath()
+        if self._root_directory is None or self._root_directory == '':
+            try:
+                self._root_directory = QgsApplication.qgisSettingsDirPath()
+            except NameError:
+                # This only happens when running only one test on its own
+                self._root_directory = None
+            if self._root_directory is None or self._root_directory == '':
+                self._root_directory = "%s/.qgis2" % (os.environ['HOME'])
         return self._root_directory
