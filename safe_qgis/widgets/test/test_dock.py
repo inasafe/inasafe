@@ -93,6 +93,7 @@ from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
 #from safe.engine.impact_functions_for_testing import error_raising_functions
 # pylint: enable=W0611
+from safe.impact_functions.core import get_plugin
 
 LOGGER = logging.getLogger('InaSAFE')
 DOCK = Dock(IFACE)

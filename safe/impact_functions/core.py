@@ -133,6 +133,7 @@ def evacuated_population_needs(population, minimum_needs, full_minimum_needs):
             resource_name = this_resource['Resource name']
         amount_pp = minimum_needs[resource_name]
         this_resource['Amount'] = int(ceil(population * float(amount_pp)))
+        this_resource['Resource table name'] = resource_name
         population_needs_by_frequency[this_resource['Frequency']].append(
             this_resource)
 

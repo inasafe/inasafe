@@ -381,7 +381,7 @@ class ITBFatalityFunction(FunctionProvider):
                     header=True))
                 for resource in needs:
                     table_body.append(TableRow([
-                        tr(resource['Resource name']),
+                        tr(resource['Resource table name']),
                         format_int(resource['Amount'])]))
             table_body.append(TableRow(tr('Provenance'), header=True))
             table_body.append(TableRow(minimum_needs_full['provenance']))
