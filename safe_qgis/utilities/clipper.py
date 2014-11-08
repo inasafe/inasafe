@@ -128,7 +128,7 @@ def clip_layer(
             raise e
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 def _clip_vector_layer(
         layer,
         extent,
@@ -213,7 +213,7 @@ def _clip_vector_layer(
             extent[0], extent[1],
             extent[2], extent[3])
         # noinspection PyCallByClass
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         polygon = QgsGeometry.fromRect(rectangle)
     elif (type(extent) is QgsGeometry and
           extent.wkbType in allowed_clip_values):

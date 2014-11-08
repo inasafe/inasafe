@@ -26,9 +26,9 @@ import logging
 import uuid
 import webbrowser
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, Qt
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
 
 from qgis.core import (
@@ -773,7 +773,7 @@ def map_qrc_to_file(match, destination_directory):
             #copy somehow failed
             resource_path = None
 
-    #noinspection PyArgumentList
+    # noinspection PyArgumentList
     return QUrl.fromLocalFile(resource_path).toString()
 
 

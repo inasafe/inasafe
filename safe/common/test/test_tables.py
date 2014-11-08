@@ -418,28 +418,28 @@ class TablesTest(unittest.TestCase):
         #row = TableRow(['12', '3000', '5'],
         #               col_align=['right', 'right', 'right'])
         #actual_result = Table(row)
-        #print actual_result
+        # print actual_result
 
         # This breaks too - what's going on?
         #row = TableRow(['12', '3000', '5'])
         #actual_result = Table(row)
-        #print actual_result
+        # print actual_result
 
         # Try at the cell level
         cell_1 = TableCell('12')
         cell_2 = TableCell('3000')
         cell_3 = TableCell('5')
         row = TableRow([cell_1, cell_2, cell_3])
-        #print row  # OK
+        # print row  # OK
         table = Table(row)
-        #print table  # Broken
+        # print table  # Broken
 
         # Try at the cell level
         cell_1 = TableCell('12', align='right')
         cell_2 = TableCell('3000', align='right')
         cell_3 = TableCell('5', align='right')
         row = TableRow([cell_1, cell_2, cell_3])
-        #print row  # OK
+        # print row  # OK
 
         # This is OK
         for cell in [cell_1, cell_2, cell_3]:

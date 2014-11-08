@@ -29,7 +29,7 @@ DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 class SafeError(Exception):
     """Base class for all SAFE messages that propogates ErrorMessages."""
     def __init__(self, message, error_message=None):
-        #print traceback.format_exc()
+        # print traceback.format_exc()
         Exception.__init__(self, message)
 
         if error_message is not None:
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     #try:
     #    error_creator2()
     #except IOError, e:
-    #    #print e
+    #    # print e
     #    tb = traceback.format_exc()
     #    print tb
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     try:
         error_creator5()
     except SafeError, e:
-        #print e
+        # print e
         #tb = traceback.format_exc()
-        #print tb
+        # print tb
         print e.error_message.to_text()

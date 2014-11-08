@@ -41,7 +41,7 @@ class QGISTest(unittest.TestCase):
         #for item in r.providerList():
         #    print str(item)
 
-        #print 'Provider count: %s' % len(r.providerList())
+        # print 'Provider count: %s' % len(r.providerList())
         assert 'gdal' in r.providerList()
         assert 'ogr' in r.providerList()
         assert 'postgres' in r.providerList()

@@ -111,7 +111,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     # Get first band.
     band = feature_id.GetRasterBand(1)
     no_data = band.GetNoDataValue()
-    #print 'No data %s' % no_data
+    # print 'No data %s' % no_data
     cell_size_x = geo_transform[1]
     if cell_size_x < 0:
         cell_size_x = -cell_size_x
@@ -124,7 +124,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         geo_transform[0] + (cell_size_x * columns),
         geo_transform[3])
 
-    #noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     raster_geometry = QgsGeometry.fromRect(raster_box)
 
     # Get vector layer
@@ -152,8 +152,8 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         feature_box = geometry.boundingBox().intersect(raster_box)
         print 'NEW AGGR: %s' % myFeature.id()
 
-        #print 'Raster Box: %s' % raster_box.asWktCoordinates()
-        #print 'Feature Box: %s' % feature_box.asWktCoordinates()
+        # print 'Raster Box: %s' % raster_box.asWktCoordinates()
+        # print 'Feature Box: %s' % feature_box.asWktCoordinates()
 
         offset_x, offset_y, cells_x, cells_y = intersection_box(
             raster_box, feature_box, cell_size_x, cell_size_y)
@@ -192,7 +192,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
                 cell_size_y,
                 raster_box,
                 no_data)
-            #print geometry_sum, count
+            # print geometry_sum, count
 
         if count == 0:
             mean = 0
@@ -235,7 +235,7 @@ def intersection_box(
 
     #get intersecting bbox
     intersected_box = feature_box.intersect(raster_box)
-    #print 'Intersected Box: %s' % intersected_box.asWktCoordinates()
+    # print 'Intersected Box: %s' % intersected_box.asWktCoordinates()
     if intersected_box.isEmpty():
         return None, None, None, None
 
@@ -346,7 +346,7 @@ def centroid_intersection_stats(
         # converted to Python values using the struct module from the standard
         # library:
         values = struct.unpack('f' * cells_to_read_x, scanline)
-        #print values
+        # print values
         if values is None:
             continue
 

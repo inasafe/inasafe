@@ -67,11 +67,11 @@ class Test_Numerics(unittest.TestCase):
         assert P.shape[1] == 2
         assert len(V) == L
 
-        #print
-        #print longitudes
-        #print latitudes
-        #print A
-        #print P
+        # print
+        # print longitudes
+        # print latitudes
+        # print A
+        # print P
         assert numpy.allclose(P[:N, 0], longitudes)
         assert numpy.allclose(P[:L:N, 1], latitudes[::-1])
         assert numpy.allclose(V, A.flat[:])

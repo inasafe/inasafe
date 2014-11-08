@@ -92,20 +92,20 @@ class WBFloodEvacuationFunction(FunctionProvider):
                                header=True),
                       TableRow(tr('Map shows population density needing '
                                  'evacuation'))]
-                      #,
-##                      TableRow([tr('People in 50cm to 1m of water '),
-##                                '%i' % medium],
-##                               header=True),
-##                      TableRow([tr('People in 30cm to 50cm of water'),
-##                                '%i' % low],
-##                               header=True)]
-##                      TableRow([tr('Needs per week'), tr('Total')],
-##                               header=True),
-##                      [tr('Rice [kg]'), int(rice)],
-##                      [tr('Drinking Water [l]'), int(drinking_water)],
-##                      [tr('Clean Water [l]'), int(water)],
-##                      [tr('Family Kits'), int(family_kits)],
-##                      [tr('Toilets'), int(toilets)]]
+# ,
+#                      TableRow([tr('People in 50cm to 1m of water '),
+#                                '%i' % medium],
+#                               header=True),
+#                      TableRow([tr('People in 30cm to 50cm of water'),
+#                                '%i' % low],
+#                               header=True)]
+#                      TableRow([tr('Needs per week'), tr('Total')],
+#                               header=True),
+#                      [tr('Rice [kg]'), int(rice)],
+#                      [tr('Drinking Water [l]'), int(drinking_water)],
+#                      [tr('Clean Water [l]'), int(water)],
+#                      [tr('Family Kits'), int(family_kits)],
+#                      [tr('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
@@ -115,8 +115,8 @@ class WBFloodEvacuationFunction(FunctionProvider):
                              'exceed %(eps)i m') % {'eps': threshold},
                            tr('People in 50cm to 1m of water: %i') % medium,
                            tr('People in 30cm to 50cm of water: %i') % low])
-##                           tr('Minimum needs are defined in BNPB '
-##                             'regulation 7/2008')])
+#                           tr('Minimum needs are defined in BNPB '
+#                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in need of evacuation')
         style_info['legend_title'] = tr('Population Density')

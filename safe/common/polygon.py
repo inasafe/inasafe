@@ -1310,7 +1310,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     remaining_values = values
 
     for polygon in polygons:
-        #print 'Remaining points', len(remaining_points)
+        # print 'Remaining points', len(remaining_points)
 
         if hasattr(polygon, 'outer_ring'):
             outer_ring = polygon.outer_ring
@@ -1388,14 +1388,14 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
     # Clip lines to polygons
     for polygon in polygons:
     #for i, polygon in enumerate(polygons):
-        #print ('Doing polygon %i (%i vertices) of %i with '
+        # print ('Doing polygon %i (%i vertices) of %i with '
         #       '%i lines' % (i, len(polygon),
         #                     len(polygons),
         #                     len(remaining_lines)))
         inside_lines, _ = clip_lines_by_polygon(remaining_lines,
                                                 polygon,
                                                 check_input=False)
-        #print ('- %i segments were inside'
+        # print ('- %i segments were inside'
         #       % len(line_dictionary_to_geometry(inside_lines)))
 
         # Record lines inside this polygon

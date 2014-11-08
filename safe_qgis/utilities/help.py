@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import logging
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4 import (QtGui, QtCore)
 
 from safe_qgis.exceptions import HelpFileMissingError
@@ -77,7 +77,7 @@ def _show_local_help(context=None):
     if not os.path.exists(base_url):
         raise HelpFileMissingError('Help file not found: %s' % base_url)
 
-    #noinspection PyTypeChecker,PyArgumentList
+    # noinspection PyTypeChecker,PyArgumentList
     url = QtCore.QUrl.fromLocalFile(base_url)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     QtGui.QDesktopServices.openUrl(url)

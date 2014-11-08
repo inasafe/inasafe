@@ -237,7 +237,7 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)
         #calculated_result = I.get_data()
-        #print calculated_result.shape
+        # print calculated_result.shape
         keywords = I.get_keywords()
         # print "keywords", keywords
         population = float(keywords['total_population'])
@@ -558,8 +558,8 @@ class Test_Engine(unittest.TestCase):
             # Verify correctness against results from HKV
             res = sum(I.flat)
             ref = expected_values[i]
-            #print filename, 'Result=%f' % res, ' Expected=%f' % ref
-            #print 'Pct relative error=%f' % (abs(res-ref)*100./ref)
+            # print filename, 'Result=%f' % res, ' Expected=%f' % ref
+            # print 'Pct relative error=%f' % (abs(res-ref)*100./ref)
 
             msg = 'Got result %f but expected %f' % (res, ref)
             assert numpy.allclose(res, ref, rtol=1.0e-2), msg
@@ -724,8 +724,8 @@ class Test_Engine(unittest.TestCase):
                                          E_clip.get_geotransform(),
                                          polygons)
 
-        #print res_clip
-        #print len(res_clip)
+        # print res_clip
+        # print len(res_clip)
 
         res_full = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
@@ -734,12 +734,12 @@ class Test_Engine(unittest.TestCase):
         assert len(res_clip) == len(res_full)
 
         for i in range(len(res_clip)):
-            #print
+            # print
             x = res_clip[i][0]
             y = res_full[i][0]
 
-            #print x
-            #print y
+            # print x
+            # print y
             msg = ('Got len(x) == %i, len(y) == %i. Should be the same'
                    % (len(x), len(y)))
             assert len(x) == len(y), msg
@@ -749,7 +749,7 @@ class Test_Engine(unittest.TestCase):
             idx = inside_polygon(x,  # pylint: disable=W0612
                                  P.outer_ring,
                                  holes=P.inner_rings)
-            #print idx
+            # print idx
 
             msg = ('Expected point locations to be the same in clipped '
                    'and full grids, Got %s and %s' % (x, y))
@@ -789,7 +789,7 @@ class Test_Engine(unittest.TestCase):
         res = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry(as_geometry_objects=True))
-        #print 'Engine took %i seconds' % (time.time() - t0)
+        # print 'Engine took %i seconds' % (time.time() - t0)
 
         assert len(res) == N
 
@@ -810,7 +810,7 @@ class Test_Engine(unittest.TestCase):
         P = interpolate_polygon_raster(H, E,
                                        layer_name='poly2raster_test',
                                        attribute_name='grid_value')
-        #print 'High level function took %i seconds' % (time.time() - t0)
+        # print 'High level function took %i seconds' % (time.time() - t0)
         #P.write_to_file('polygon_raster_interpolation_example_big.shp')
 
         # Characterisation tests (values verified using QGIS)
@@ -1267,8 +1267,8 @@ class Test_Engine(unittest.TestCase):
 
             assert min_damage >= 0
             assert max_damage <= 100
-            #print 'Extrema', mmi_filename, min_damage, max_damage
-            #print len(MMI)
+            # print 'Extrema', mmi_filename, min_damage, max_damage
+            # print len(MMI)
 
     test_earthquake_damage_schools.slow = True
 
@@ -1716,7 +1716,7 @@ class Test_Engine(unittest.TestCase):
         for i, (xi, eta) in enumerate(Icoordinates):
 
             z = Iattributes[i]['value']
-            #print xi, eta, z, linear_function(xi, eta)
+            # print xi, eta, z, linear_function(xi, eta)
             assert numpy.allclose(z, linear_function(xi, eta),
                                   rtol=1e-12)
 
@@ -1879,8 +1879,8 @@ class Test_Engine(unittest.TestCase):
 
             if pointid == 263:
 
-                #print i, pointid, attributes[i],
-                #print interpolated_depth, coordinates[i]
+                # print i, pointid, attributes[i],
+                # print interpolated_depth, coordinates[i]
 
                 # Check that location is correct
                 assert numpy.allclose(coordinates[i],
@@ -2259,14 +2259,14 @@ class Test_Engine(unittest.TestCase):
             L.write_to_file('outside_centroids.shp')
 
         # Characterisation test based on against visual inspection with QGIS
-        #print inside_line_geometry[6]
+        # print inside_line_geometry[6]
         assert numpy.allclose(inside_line_geometry[6],
                               [[122.23438722, -8.6277337],
                                [122.23316953, -8.62733247],
                                [122.23162128, -8.62683715],
                                [122.23156661, -8.62681168]])
 
-        #print outside_line_geometry[5]
+        # print outside_line_geometry[5]
         assert numpy.allclose(outside_line_geometry[5],
                               [[122.18321143, -8.58901526],
                                [122.18353015, -8.58890024],
@@ -2423,7 +2423,7 @@ class Test_Engine(unittest.TestCase):
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth')
-        #print 'This took', time.time() - t0
+        # print 'This took', time.time() - t0
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2564,7 +2564,7 @@ class Test_Engine(unittest.TestCase):
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth')
-        #print 'That took %f seconds' % (time.time() - t0)
+        # print 'That took %f seconds' % (time.time() - t0)
 
         # TODO:
         # Keep only those roads that are marked FLOODPRONE == 'YES'
@@ -2681,7 +2681,7 @@ class Test_Engine(unittest.TestCase):
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth')
-        #print ('Using 2704 individual polygons took %f seconds'
+        # print ('Using 2704 individual polygons took %f seconds'
         #       % (time.time() - t0))
         #I.write_to_file('flood_prone_roads_jakarta_individual.shp')
 
@@ -2888,10 +2888,10 @@ class Test_Engine(unittest.TestCase):
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
-                #print calculated_mmi
+                # print calculated_mmi
                 verified_dam = padang_check_results(calculated_mmi,
                                                     building_class)
-                #print calculated_mmi, building_class, calculated_dam
+                # print calculated_mmi, building_class, calculated_dam
                 if verified_dam:
                     msg = ('Calculated damage was not as expected '
                              'for hazard layer %s. I got %f '

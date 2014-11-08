@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -105,7 +105,7 @@ TEST_FILES_DIR = os.path.join(
     '../../test/test_data/test_files')
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 class TestDock(TestCase):
     """Test the InaSAFE GUI."""
 
@@ -334,7 +334,7 @@ class TestDock(TestCase):
         DOCK.accept()
         result = DOCK.wvResults.page_to_text()
 
-        #print result
+        # print result
         # Post clip on steroids refactor
         # < 1 m:    1923
         # 1 - 3 m:    89
@@ -551,7 +551,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(0) in result, message)  # medium
         self.assertTrue(format_int(256770000) in result, message)  # low
 
-    #noinspection PyArgumentList
+    # noinspection PyArgumentList
     def test_run_earthquake_building_impact_function(self):
         """Earthquake function runs in GUI with An earthquake in Yogyakarta
         like in 2006 hazard data uses OSM Building Polygons exposure data."""
@@ -760,7 +760,7 @@ class TestDock(TestCase):
         #             'classes as expected.')
         #myTransparencyList = (qgis_layer.rasterTransparency().
         #        transparentSingleValuePixelList())
-        #print "Transparency list:" + str(myTransparencyList)
+        # print "Transparency list:" + str(myTransparencyList)
         #assert (len(myTransparencyList) > 0)
 
     def test_issue47(self):
@@ -804,7 +804,7 @@ class TestDock(TestCase):
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent(DOCK)
         before_count = len(CANVAS.layers())
-        #print 'Before count %s' % before_count
+        # print 'Before count %s' % before_count
 
         # Press RUN
         DOCK.accept()
@@ -814,7 +814,7 @@ class TestDock(TestCase):
         LOGGER.info("Canvas list after:\n%s" % canvas_list())
         message = ('Layer was not added to canvas (%s before, %s after)' % (
             before_count, after_count))
-        #print 'After count %s' % after_count
+        # print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
 
     def test_issue45(self):
@@ -945,7 +945,7 @@ class TestDock(TestCase):
             UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
-        #print 'Using QGIS: %s' % qgis_version()
+        # print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run

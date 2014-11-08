@@ -90,8 +90,8 @@ class Test_mappings(unittest.TestCase):
             try:
                 vclass = Emap.get_data('VCLASS', i)
             except KeyError:
-                #print
-                #print i, Emap.get_data()[i]
+                # print
+                # print i, Emap.get_data()[i]
                 #import sys; sys.exit()
                 pass
 

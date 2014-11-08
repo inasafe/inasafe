@@ -174,7 +174,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.layer = layer
         self.load_state_from_keywords()
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def show_help(self):
         """Load the help text for the keywords dialog."""
         show_context_help(context='keywords_editor')

@@ -120,7 +120,7 @@ LOGGER = logging.getLogger('InaSAFE')
 # from pydev import pydevd  # pylint: disable=F0401
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
@@ -893,10 +893,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 function_title = get_function_title(function)
 
                 # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
-                #print
-                #print 'function (ID)', myFunctionID
-                #print 'function', function
-                #print 'Function title:', function_title
+                # print
+                # print 'function (ID)', myFunctionID
+                # print 'function', function
+                # print 'Function title:', function_title
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo

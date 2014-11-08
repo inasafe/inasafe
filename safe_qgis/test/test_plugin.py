@@ -108,7 +108,7 @@ class PluginTest(unittest.TestCase):
         assert myLang == 'af'
         from safe_qgis.safe_interface import get_safe_impact_function
         #myFunctions = get_safe_impact_function()
-        #print myFunctions
+        # print myFunctions
         myFunctions = get_safe_impact_function('Tydelik gesluit')
         assert len(myFunctions) > 0
 

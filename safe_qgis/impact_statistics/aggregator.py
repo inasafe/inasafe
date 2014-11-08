@@ -311,7 +311,7 @@ class Aggregator(QtCore.QObject):
                 m.Paragraph(self.tr(
                     'Please select which attribute you want to use as ID for '
                     'the aggregated results')))
-            #noinspection PyTypeChecker
+            # noinspection PyTypeChecker
             self._send_message(message)
 
             #keywords are already complete
@@ -347,7 +347,7 @@ class Aggregator(QtCore.QObject):
                 #set the default values by writing to the keywords
                 keywords['category'] = 'postprocessing'
 
-                #noinspection PyTypeChecker
+                # noinspection PyTypeChecker
                 my_attributes, _ = layer_attribute_names(
                     self.layer,
                     [QtCore.QVariant.Int, QtCore.QVariant.String])
@@ -477,7 +477,7 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
                 ' by %s' % self.layer.name())))
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         self._send_message(message)
 
         qgis_impact_layer = safe_to_qgis_layer(safe_impact_layer)
@@ -1056,7 +1056,7 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'We are clipping the aggregation layer to match the '
                 'intersection of the hazard and exposure layer extents.')))
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         self._send_message(message)
 
         # This is used to hold an *in memory copy* of the aggregation layer
@@ -1073,7 +1073,7 @@ class Aggregator(QtCore.QObject):
             aggregation_attribute = self.read_keywords(
                 self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
 
-            #noinspection PyArgumentEqualDefault
+            # noinspection PyArgumentEqualDefault
             clipped_layer = clip_layer(
                 layer=self.layer,
                 extent=self.extent,
@@ -1085,7 +1085,7 @@ class Aggregator(QtCore.QObject):
             self.layer.setLayerName(name)
             if self.show_intermediate_layers:
                 self.update_keywords(self.layer, {'title': name})
-                #noinspection PyArgumentList
+                # noinspection PyArgumentList
                 QgsMapLayerRegistry.instance().addMapLayers([self.layer])
 
     def _count_field_name(self):
@@ -1231,7 +1231,7 @@ class Aggregator(QtCore.QObject):
                 'Modifying %s to avoid intersections with the aggregation '
                 'layer'
             ) % (layer.name())))
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         self._send_message(message)
 
         layer_filename = str(layer.source())
@@ -1505,7 +1505,7 @@ class Aggregator(QtCore.QObject):
 
         if self.show_intermediate_layers:
             self.update_keywords(output_layer, {'title': name})
-            #noinspection PyArgumentList
+            # noinspection PyArgumentList
             QgsMapLayerRegistry.instance().addMapLayers([output_layer])
 
         return output_layer

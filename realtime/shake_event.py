@@ -19,14 +19,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import shutil
-#noinspection PyPep8Naming
+# noinspection PyPep8Naming
 import cPickle as pickle
 import math
 import logging
 from datetime import datetime
 
 import numpy
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
 
 # This import is required to enable PyQt API v2
@@ -35,7 +35,7 @@ import pytz  # sudo apt-get install python-tz
 import qgis
 # pylint: enable=W0611
 # TODO: I think QCoreApplication is needed for tr() check before removing
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QCoreApplication,
     QObject,
@@ -45,7 +45,7 @@ from PyQt4.QtCore import (
     QSize,
     Qt,
     QTranslator)
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtXml import QDomDocument
 # We should remove the following pylint suppressions when we support only QGIS2
 # pylint: disable=E0611
@@ -218,7 +218,7 @@ class ShakeEvent(QObject):
         self.locale = locale
         self.setup_i18n()
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def check_environment(self):
         """A helper class to check that QGIS is correctly initialised.
 
@@ -1090,7 +1090,7 @@ class ShakeEvent(QObject):
         impact_table_path = self.impact_table()
         return self.impact_file, impact_table_path
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def clip_layers(self, shake_raster_path, population_raster_path):
         """Clip population (exposure) layer to dimensions of shake data.
 
@@ -1322,7 +1322,7 @@ class ShakeEvent(QObject):
         except:
             raise
         logging.info('Created: %s', contours_shapefile)
-        #noinspection PyBroadException
+        # noinspection PyBroadException
         try:
             cities_shape_file = self.cities_to_shapefile(
                 force_flag=force_flag)
@@ -1495,7 +1495,7 @@ class ShakeEvent(QObject):
             'project.qgs')
         project.write(QFileInfo(project_path))
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def bearing_to_cardinal(self, bearing):
         """Given a bearing in degrees return it as compass units e.g. SSE.
 

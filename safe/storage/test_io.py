@@ -324,7 +324,7 @@ class Test_IO(unittest.TestCase):
                     msg = ('Got projection %s, expected %s' %
                            (L.projection, layer.projection))
                     assert L.projection == layer.projection, msg
-                    #print [a['FLOOR_AREA'] for a in L.attributes]
+                    # print [a['FLOOR_AREA'] for a in L.attributes]
                 elif vectorname == 'tsunami_building_exposure.shp':
                     L = layer.get_topN(attribute='STR_VALUE', N=N)
                     assert len(L) == N
@@ -690,7 +690,7 @@ class Test_IO(unittest.TestCase):
 
         # Write to file and read again
         v_ref.write_to_file(tmp_filename)
-        #print 'With inner rings, written to ', tmp_filename
+        # print 'With inner rings, written to ', tmp_filename
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_file.is_polygon_data
@@ -919,7 +919,7 @@ class Test_IO(unittest.TestCase):
 
             # Write to file (for e.g. visual inspection)
             out_filename = unique_filename(prefix='centroid', suffix='.shp')
-            #print 'writing to', out_filename
+            # print 'writing to', out_filename
             c_layer.write_to_file(out_filename)
 
     test_centroids_from_polygon_data.slow = True

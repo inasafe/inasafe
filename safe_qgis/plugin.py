@@ -103,11 +103,11 @@ class Plugin:
         self.action_dock = None
         self.action_toggle_rubberbands = None
         self.message_bar_item = None
-        #print self.tr('InaSAFE')
+        # print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
 
-    #noinspection PyArgumentList
+    # noinspection PyArgumentList
     def change_i18n(self, new_locale):
         """Change internationalisation for the plugin.
 

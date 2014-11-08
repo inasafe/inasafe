@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import os
@@ -56,7 +56,7 @@ SHAKE_ID = '20131105060809'
 
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir."""
         # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
@@ -75,7 +75,7 @@ class TestShakeEvent(unittest.TestCase):
         target_path = os.path.abspath(os.path.join(target_folder, 'grid.xml'))
         shutil.copyfile(input_path, target_path)
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def tearDown(self):
         """Delete the cached data."""
         target_path = os.path.join(shakemap_extract_dir(), SHAKE_ID)
@@ -305,7 +305,7 @@ class TestShakeEvent(unittest.TestCase):
                         'Visit http://inasafe.org for more information.' %
                         get_version())
 
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         expected_dict = {
             'place-name': u'n/a',
             'depth-name': u'Depth',

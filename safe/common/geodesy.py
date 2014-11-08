@@ -234,8 +234,8 @@ class Point(object):
             else:
                 stepmin = step
 
-        #print
-        #print ('Found geographical distance %f degrees yielding radius %f m'
+        # print
+        # print ('Found geographical distance %f degrees yielding radius %f m'
         #       % (step, d))
         r = step
 
@@ -245,7 +245,7 @@ class Point(object):
         angle = 0
         while angle < 360:
             theta = angle * self.degrees2radians
-            #print angle, theta, self.bearing_to(p), self.distance_to(p)
+            # print angle, theta, self.bearing_to(p), self.distance_to(p)
 
             # Generate new point on circle
             lat = self.latitude + r * cos(theta)

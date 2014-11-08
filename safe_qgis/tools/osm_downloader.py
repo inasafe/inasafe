@@ -21,17 +21,17 @@ import os
 import tempfile
 import logging
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkAccessManager
 
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 #pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
 #pylint: enable=W0611
