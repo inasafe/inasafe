@@ -40,6 +40,7 @@ class TestQMinimumNeeds(QMinimumNeeds):
         minimum_needs = self._defaults()
         minimum_needs['provenance'] = 'Test'
         minimum_needs['profile'] = 'Test'
+        self._root_directory = None
         self.minimum_needs = minimum_needs
 
     def __del__(self):
@@ -105,7 +106,7 @@ class MinimumNeedsTest(unittest.TestCase):
         # noinspection PyStatementEffect
         minimum_needs2.root_directory
         self.assertIsNotNone(minimum_needs2._root_directory)
-        self.assertNotEqual(
+        self.assertEqual(
             minimum_needs2.root_directory,
             minimum_needs2._root_directory
         )

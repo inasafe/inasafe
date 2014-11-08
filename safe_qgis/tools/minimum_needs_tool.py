@@ -29,7 +29,7 @@ from safe_qgis.utilities.utilities import (
     html_footer,
     html_header)
 from safe_qgis.utilities.help import show_context_help
-from safe_qgis.safe_interface import evacuated_population_needs
+from safe_qgis.safe_interface import evacuated_population_weekly_needs
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
 
@@ -142,7 +142,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             #     'toilets': int(ceil(population * min_toilets))}
 
             # Add to attributes
-            weekly_needs = evacuated_population_needs(displaced)
+            weekly_needs = evacuated_population_weekly_needs(displaced)
 
             # Record attributes for this feature
             all_attributes.append(weekly_needs)
