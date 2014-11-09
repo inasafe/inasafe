@@ -51,9 +51,9 @@ from safe_qgis.safe_interface import (
 
 INFO_STYLE = styles.INFO_STYLE
 
-#do not remove this even if it is marked as unused by your IDE
-#resources are used by html footer and header the comment will mark it unused
-#for pylint
+# do not remove this even if it is marked as unused by your IDE
+# resources are used by html footer and header the comment will mark it unused
+# for pylint
 # noinspection PyUnresolvedReferences
 from safe_qgis.ui import resources_rc  # pylint: disable=W0611
 
@@ -770,7 +770,7 @@ def map_qrc_to_file(match, destination_directory):
         # noinspection PyTypeChecker
         copy_successful = QFile.copy(source_file, resource_path)
         if not copy_successful:
-            #copy somehow failed
+            # copy somehow failed
             resource_path = None
 
     # noinspection PyArgumentList

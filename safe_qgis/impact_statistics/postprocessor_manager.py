@@ -37,7 +37,6 @@ from safe_qgis.safe_interface import (
     styles)
 
 LOGGER = logging.getLogger('InaSAFE')
-# from pydev import pydevd
 
 
 class PostprocessorManager(QtCore.QObject):
@@ -458,7 +457,7 @@ class PostprocessorManager(QtCore.QObject):
                     value.process()
                     results = value.results()
                     value.clear()
-    #                LOGGER.debug(results)
+                    # LOGGER.debug(results)
 
                     # this can raise a KeyError
                     self.output[key].append(

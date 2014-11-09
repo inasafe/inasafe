@@ -83,8 +83,6 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
-# from pydev import pydevd
-
 
 # If inasafe is running as qgis plugin,
 # it can import processing (from QGIS / sextante),
@@ -980,7 +978,7 @@ class Aggregator(QtCore.QObject):
             # Total impacted length in the aggregation polygons:
             total = {
                 feature_id: 0 for feature_id, __ in enumerate(
-                    self.layer.getFeatures(request))
+                self.layer.getFeatures(request))
             }
 
             # Create slots for dicts
@@ -1352,8 +1350,8 @@ class Aggregator(QtCore.QObject):
                         polygons_request).next()
                     shape_writer.addFeature(qgis_feature)
                     self.preprocessed_feature_count += 1
-#                    LOGGER.debug('Polygon %s is fully inside' %mapped_index)
-#                    tmpWriter.addFeature(qgis_feature)
+                    # LOGGER.debug('Polygon %s is fully inside' %mapped_index)
+                    # tmpWriter.addFeature(qgis_feature)
 
                 elif polygon_location == 0:
                     # all vertices are outside
@@ -1401,7 +1399,7 @@ class Aggregator(QtCore.QObject):
                         qgis_feature.geometry())
                     attribute_map = qgis_feature.attributes()
                     # for (k, attr) in attribute_map.iteritems():
-                    #     LOGGER.debug( "%d: %s" % (k, attr.toString()))
+                    # LOGGER.debug( "%d: %s" % (k, attr.toString()))
 
                     # make intersection of the qgis_feature and the
                     # post processing polygon
@@ -1442,7 +1440,7 @@ class Aggregator(QtCore.QObject):
                         # processing polygon
                         outside = qgis_polygon_geometry.difference(
                             intersection_geometry)
-                        # if outside is not None:
+#                        if outside is not None:
                         outside_geometry = QgsGeometry(outside)
 
                         if outside_geometry.wkbType() in polygon_types:

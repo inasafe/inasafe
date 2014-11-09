@@ -161,7 +161,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
           calculator.setExposureLayer(self.vector_path)
           calculator.setFunction('Flood Building Impact Function')
           myRunner = calculator.getRunner()
-          #wait till completion
+          # wait till completion
           myRunner.join()
           myResult = myRunner.result()
           filename = myRunner.filename()
@@ -199,7 +199,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         # pylint: disable=W0703
         except Exception, e:
             message = self.tr('Calculation error encountered:\n')
-            #store the exception so that controller class can get it later
+            # store the exception so that controller class can get it later
             self._exception = e
             self._traceback = traceback.format_tb(sys.exc_info()[2])
             self._result = message

@@ -187,7 +187,7 @@ class ImportDialogTest(unittest.TestCase):
         """Runs before each test."""
         self.dialog = OsmDownloader(PARENT, IFACE)
 
-        ## provide Fake QNetworkAccessManager for self.network_manager
+        # provide Fake QNetworkAccessManager for self.network_manager
         self.dialog.network_manager = FakeQNetworkAccessManager()
 
     def test_validate_extent(self):

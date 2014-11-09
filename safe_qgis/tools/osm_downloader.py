@@ -32,9 +32,9 @@ from PyQt4.QtGui import (
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 # noinspection PyUnresolvedReferences
-#pylint: disable=W0611
+# pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
-#pylint: enable=W0611
+# pylint: enable=W0611
 from safe_qgis.ui.osm_downloader_base import Ui_OsmDownloaderBase
 
 from safe_qgis.exceptions import (
@@ -93,7 +93,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         # Set Proxy in webpage
         proxy = get_proxy()
         self.network_manager = QNetworkAccessManager(self)
-        if not proxy is None:
+        if proxy is not None:
             self.network_manager.setProxy(proxy)
         self.restore_state()
         self.update_extent()
@@ -287,7 +287,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             if len(path) != 0:
                 os.makedirs(path)
             else:
-            # noinspection PyCallByClass,PyTypeChecker, PyArgumentList
+                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                 QMessageBox.warning(
                     self,
                     self.tr('InaSAFE error'),
@@ -306,7 +306,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         :raises: ImportDialogError, CanceledImportDialogError
         """
 
-        ## preparing necessary data
+        # preparing necessary data
         min_longitude = str(self.min_longitude.text())
         min_latitude = str(self.min_latitude.text())
         max_longitude = str(self.max_longitude.text())

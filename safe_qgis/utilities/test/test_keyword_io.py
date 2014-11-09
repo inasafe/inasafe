@@ -125,11 +125,11 @@ class KeywordIOTest(unittest.TestCase):
         self.keyword_io.delete_keywords_for_uri(PG_URI)
         try:
             _ = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
-            #if the above didnt cause an exception then bad
+            # if the above didnt cause an exception then bad
             message = 'Expected a HashNotFoundError to be raised'
             assert message
         except HashNotFoundError:
-            #we expect this outcome so good!
+            # we expect this outcome so good!
             pass
 
     def test_are_keywords_file_based(self):

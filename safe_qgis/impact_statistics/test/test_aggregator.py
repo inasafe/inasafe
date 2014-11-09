@@ -224,7 +224,7 @@ class AggregatorTest(unittest.TestCase):
         assert attribute is None, message
 
     def test_setup_target_field(self):
-        """Test setup up target field is correct
+        """Test setup up target field is correct.
         """
         layer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),

@@ -42,8 +42,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
-# for p in sys.path:
-#    print p + '\n'
+
 from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,

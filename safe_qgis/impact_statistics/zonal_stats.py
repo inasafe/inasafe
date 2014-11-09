@@ -247,8 +247,6 @@ def intersection_box(
     offset_y /= cell_size_y
     offset_y = int(offset_y)
 
-    # Checked to here....offsets calculate correctly ##########
-
     max_column = intersected_box.xMaximum() - raster_box.xMinimum()
     max_column /= cell_size_x
     # Round up to the next cell if the bbox is not on an exact pixel boundary

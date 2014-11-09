@@ -504,8 +504,8 @@ def set_raster_style(raster_layer, style):
     transparency.setTransparentSingleValuePixelList(transparency_list)
     renderer.setRasterTransparency(transparency)
     # For interest you can also view the list like this:
-    #pix = t.transparentSingleValuePixelList()
-    #for px in pix:
+    # pix = t.transparentSingleValuePixelList()
+    # for px in pix:
     #    print 'Min: %s Max %s Percent %s' % (
     #       px.min, px.max, px.percentTransparent)
 

@@ -26,8 +26,6 @@ from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
-# for p in sys.path:
-#    print p + '\n'
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
@@ -98,7 +96,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         # one layer (the impact) should have been added
         expected_count = len(CANVAS.layers()) + 1
         #
-        # # Press RUN
+        # Press RUN
         DOCK.accept()
         # no KW dialog will popuo due to complete keywords
         after_count = len(CANVAS.layers())

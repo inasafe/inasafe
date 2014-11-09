@@ -760,7 +760,7 @@ def append_row(table, label, data):
     # Make the value immutable.
     variant = (data,)
     # To retrieve it again you would need to do:
-    #value = myVariant.toPyObject()[0]
+    # value = myVariant.toPyObject()[0]
     items.setData(Qt.UserRole, variant)
 
     # noinspection PyUnresolvedReferences

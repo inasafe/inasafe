@@ -620,7 +620,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         # The type of this composition must be QgsComposition
         self.assertEqual(type(composition), QgsComposition)
 
-        #FALL CASE: It cannot find the template
+        # FAIL CASE: It cannot find the template
         self.impact_merge_dialog.template_path = '/it/will/fail/tmp.qpt'
         expected_message = 'Error loading template %s' % \
                            self.impact_merge_dialog.template_path

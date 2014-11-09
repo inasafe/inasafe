@@ -60,7 +60,7 @@ class MessageViewer(QtWebKit.QWebView):
         # then cleared
         self.dynamic_messages = []
         self.dynamic_messages_log = []
-        #self.show()
+        # self.show()
 
         self.action_show_log = QtGui.QAction(self.tr('Show log'), None)
         self.action_show_log.setEnabled(False)
@@ -74,8 +74,8 @@ class MessageViewer(QtWebKit.QWebView):
         self.report_path = None
         self._impact_path = None
 
-        #base_dir = os.path.dirname(__file__)
-        #self.header = header.replace('PATH', base_dir)
+        # base_dir = os.path.dirname(__file__)
+        # self.header = header.replace('PATH', base_dir)
 
     @property
     def impact_path(self):
@@ -253,7 +253,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         string += html_footer()
         self.setHtml(string)
-        #self.scroll_to_div()
+        # self.scroll_to_div()
 
     def to_message(self):
         """Collate all message elements to a single message."""
