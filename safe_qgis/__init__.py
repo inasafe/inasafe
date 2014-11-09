@@ -93,7 +93,7 @@ safe.defaults.get_defaults = lambda the_default=None: get_defaults(
 
 from safe.impact_functions.core import get_plugins
 from safe_qgis.tools.minimum_needs import QMinimumNeeds
-## Monkey patch all the impact functions
+# Monkey patch all the impact functions
 for (name, plugin) in get_plugins().items():
     if not hasattr(plugin, 'parameters'):
         continue
@@ -124,5 +124,5 @@ except ImportError:
                   'to the InaSAFE team.')
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
-        #None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
+    #   None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
     raise

@@ -20,11 +20,11 @@ import os
 from collections import OrderedDict
 from xml.dom import minidom
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore, QtXml
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog, QDesktopServices
 from qgis.core import (
     QgsMapLayerRegistry,
@@ -60,7 +60,7 @@ from safe_qgis.utilities.keyword_io import KeywordIO
 INFO_STYLE = styles.INFO_STYLE
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     """Tools for merging 2 impact layer based on different exposure."""
 
@@ -264,7 +264,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # The input is valid, do the merging
         # Set cursor to wait cursor
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-        #pylint: disable=W0703
+        # pylint: disable=W0703
         try:
             self.merge()
         except Exception as ex:
@@ -276,7 +276,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                 self.tr("InaSAFE Merge Impact Tools Error"),
                 str(ex))
             return
-            #pylint: enable=W0703
+            # pylint: enable=W0703
 
         # Finish doing it. End wait cursor
         QtGui.qApp.restoreOverrideCursor()
@@ -292,7 +292,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         # Open output directory on file explorer
         output_directory_url = QUrl.fromLocalFile(self.out_dir)
-        #noinspection PyTypeChecker,PyCallByClass
+        # noinspection PyTypeChecker,PyCallByClass
         QDesktopServices.openUrl(output_directory_url)
 
     def read_settings(self):
@@ -314,7 +314,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
-        #noinspection PyArgumentList
+        # noinspection PyArgumentList
         registry = QgsMapLayerRegistry.instance()
 
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
@@ -473,7 +473,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Fetch for first impact layer
         for attribute in required_attribute:
             try:
-                #noinspection PyTypeChecker
+                # noinspection PyTypeChecker
                 self.first_impact[attribute] = self.keyword_io.read_keywords(
                     self.first_impact['layer'], attribute)
             except NoKeywordsFoundError:
@@ -487,7 +487,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Fetch for second impact layer
         for attribute in required_attribute:
             try:
-                #noinspection PyTypeChecker
+                # noinspection PyTypeChecker
                 self.second_impact[attribute] = self.keyword_io.read_keywords(
                     self.second_impact['layer'], attribute)
             except NoKeywordsFoundError:
@@ -512,7 +512,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # aggregation attribute keywords
         if not self.entire_area_mode:
             try:
-                #noinspection PyTypeChecker
+                # noinspection PyTypeChecker
                 self.aggregation['aggregation_attribute'] = \
                     self.keyword_io.read_keywords(
                         self.aggregation['layer'], 'aggregation attribute')
@@ -532,9 +532,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self.first_impact['postprocessing_report']
         second_postprocessing_report = \
             self.second_impact['postprocessing_report']
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         first_report = '<body>' + first_postprocessing_report + '</body>'
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         second_report = '<body>' + second_postprocessing_report + '</body>'
 
         # Now create a dom document for each
@@ -596,9 +596,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         """
         merged_report_dict = OrderedDict()
         for table in html_dom:
-            #noinspection PyUnresolvedReferences
+            # noinspection PyUnresolvedReferences
             caption = table.getElementsByTagName('caption')[0].firstChild.data
-            #noinspection PyUnresolvedReferences
+            # noinspection PyUnresolvedReferences
             rows = table.getElementsByTagName('tr')
             header = rows[0]
             contains = rows[1:]
@@ -885,7 +885,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
             # Set merged-report-table
             html_report_path = self.html_reports[area_title]
-            #noinspection PyArgumentList
+            # noinspection PyArgumentList
             html_frame_url = QUrl.fromLocalFile(html_report_path)
             html_report_frame.setUrl(html_frame_url)
 
@@ -945,7 +945,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
                     # Set merged-report-table
                     html_report_path = self.html_reports[area_title]
-                    #noinspection PyArgumentList
+                    # noinspection PyArgumentList
                     html_frame_url = QUrl.fromLocalFile(html_report_path)
                     html_report_frame.setUrl(html_frame_url)
 
@@ -955,7 +955,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             # End of rendering
             atlas.endRender()
 
-    #noinspection PyArgumentList
+    # noinspection PyArgumentList
     def load_template(self, renderer):
         """Load composer template for merged report.
 

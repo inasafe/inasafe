@@ -32,7 +32,7 @@ from os.path import expanduser, basename
 INFO_STYLE = styles.INFO_STYLE
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 # noinspection PyProtectedMember
 class GlobalMinimumNdeedsDialog(QDialog, Ui_minimumNeeds):
     """Dialog class for the InaSAFE global minimum needs configuration.

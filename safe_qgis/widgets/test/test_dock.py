@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -42,8 +42,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
-#for p in sys.path:
-#    print p + '\n'
+
 from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
@@ -91,7 +90,7 @@ from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # noinspection PyUnresolvedReferences
 from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
-#from safe.engine.impact_functions_for_testing import error_raising_functions
+# from safe.engine.impact_functions_for_testing import error_raising_functions
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -105,7 +104,7 @@ TEST_FILES_DIR = os.path.join(
     '../../test/test_data/test_files')
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 class TestDock(TestCase):
     """Test the InaSAFE GUI."""
 
@@ -131,7 +130,7 @@ class TestDock(TestCase):
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         DOCK.cboHazard.clear()
         DOCK.cboExposure.clear()
-        #DOCK.cboAggregation.clear() #dont do this because the cboAggregation
+        # DOCK.cboAggregation.clear() #dont do this because the cboAggregation
         # need to be able to react to the status changes of the other combos
 
     def test_defaults(self):
@@ -194,14 +193,14 @@ class TestDock(TestCase):
         DOCK.accept()
         result = DOCK.wvResults.page_to_text()
         # Expected output:
-        #Buildings    Total
-        #All:    3160
-        #Low damage (10-25%):    0
-        #Medium damage (25-50%):    0
-        #Pre merge of clip on steroids branch:
-        #High damage (50-100%):    3160
+        # Buildings    Total
+        # All:    3160
+        # Low damage (10-25%):    0
+        # Medium damage (25-50%):    0
+        # Pre merge of clip on steroids branch:
+        # High damage (50-100%):    3160
         # Post merge of clip on steoids branch:
-        #High damage (50-100%):    2993
+        # High damage (50-100%):    2993
         #
         # Changed from 2993 followin merge of user defined extents
         expected_all = 2943
@@ -334,23 +333,23 @@ class TestDock(TestCase):
         DOCK.accept()
         result = DOCK.wvResults.page_to_text()
 
-        #print result
+        # print result
         # Post clip on steroids refactor
         # < 1 m:    1923
         # 1 - 3 m:    89
         # > 3 m:    0
         # Post replacement of Batemans Bay dataset
-        #< 1 m:  10
-        #1 - 3 m:    7
-        #> 3 m:  0
+        # < 1 m:  10
+        # 1 - 3 m:    7
+        # > 3 m:  0
         # Post rewrite of impact function
-        #Building type	 closed	Total
-        #All	        7	                17
+        # Building type	 closed	Total
+        # All	        7	                17
 
         # QGIS  > 2.2 scales the extents to the 400x400 canvas
         # slightly differently so versions prior to 2.4
         # Versions >= 2.4 of QGIS
-        #All	7	16
+        # All	7	16
 
         if qgis_version() < 20400:
             total_buildings = 18
@@ -540,8 +539,8 @@ class TestDock(TestCase):
         message = ('Result not as expected: %s' % result)
         # This is the expected number of population might be affected
         self.assertTrue(format_int(30939000) in result, message)  # high
-        #self.assertTrue(format_int(68280000) in result, message)
-        #self.assertTrue(format_int(157551000) in result, message)
+        # self.assertTrue(format_int(68280000) in result, message)
+        # self.assertTrue(format_int(157551000) in result, message)
         # The 2 asserts above are not valid anymore after the fix we made to
         # CategorisedHazardPopulationImpactFunction
         # Look at the fix here:
@@ -551,7 +550,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(0) in result, message)  # medium
         self.assertTrue(format_int(256770000) in result, message)  # low
 
-    #noinspection PyArgumentList
+    # noinspection PyArgumentList
     def test_run_earthquake_building_impact_function(self):
         """Earthquake function runs in GUI with An earthquake in Yogyakarta
         like in 2006 hazard data uses OSM Building Polygons exposure data."""
@@ -756,12 +755,12 @@ class TestDock(TestCase):
         # Commenting out because we changed impact function to use floating
         # point quantities. Revisit in QGIS 2.0 where range based transparency
         # will have been implemented
-        #message = ('Raster layer was not assigned transparency'
+        # message = ('Raster layer was not assigned transparency'
         #             'classes as expected.')
-        #myTransparencyList = (qgis_layer.rasterTransparency().
+        # myTransparencyList = (qgis_layer.rasterTransparency().
         #        transparentSingleValuePixelList())
-        #print "Transparency list:" + str(myTransparencyList)
-        #assert (len(myTransparencyList) > 0)
+        # print "Transparency list:" + str(myTransparencyList)
+        # assert (len(myTransparencyList) > 0)
 
     def test_issue47(self):
         """Issue47: Hazard & exposure data are in different proj to viewport.
@@ -804,7 +803,7 @@ class TestDock(TestCase):
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent(DOCK)
         before_count = len(CANVAS.layers())
-        #print 'Before count %s' % before_count
+        # print 'Before count %s' % before_count
 
         # Press RUN
         DOCK.accept()
@@ -814,7 +813,7 @@ class TestDock(TestCase):
         LOGGER.info("Canvas list after:\n%s" % canvas_list())
         message = ('Layer was not added to canvas (%s before, %s after)' % (
             before_count, after_count))
-        #print 'After count %s' % after_count
+        # print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
 
     def test_issue45(self):
@@ -856,7 +855,7 @@ class TestDock(TestCase):
         #              have values.
         #              Tim, how do we get the output filename?
         # ANSWER
-        #DOCK.calculator.impactLayer()
+        # DOCK.calculator.impactLayer()
 
     def test_load_layers(self):
         """Layers can be loaded and list widget was updated appropriately
@@ -945,7 +944,7 @@ class TestDock(TestCase):
             UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
-        #print 'Using QGIS: %s' % qgis_version()
+        # print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
@@ -1026,7 +1025,7 @@ class TestDock(TestCase):
         DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         DOCK.save_state()
         expected_dict = get_ui_state(DOCK)
-        #myState = DOCK.state
+        # myState = DOCK.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
@@ -1272,8 +1271,8 @@ Click for Diagnostic Information:
         """Function configuration button is disabled
         when layers not compatible."""
         set_canvas_crs(GEOCRS, True)
-        #add additional layers
-        #result, message = setupScenario(
+        # add additional layers
+        # result, message = setupScenario(
         #    heHazard='An earthquake in Yogyakarta like in 2006',
         #    theExposure = 'Essential Buildings',
         #    theFunction = 'Be damaged depending on building type',
@@ -1433,7 +1432,7 @@ Click for Diagnostic Information:
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        #DOCK.show_extent()
+        # DOCK.show_extent()
         last_band = DOCK.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected_wkt = (

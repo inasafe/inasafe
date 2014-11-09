@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import os
@@ -760,7 +760,7 @@ def append_row(table, label, data):
     # Make the value immutable.
     variant = (data,)
     # To retrieve it again you would need to do:
-    #value = myVariant.toPyObject()[0]
+    # value = myVariant.toPyObject()[0]
     items.setData(Qt.UserRole, variant)
 
     # noinspection PyUnresolvedReferences

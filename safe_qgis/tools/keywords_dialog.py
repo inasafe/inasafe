@@ -174,7 +174,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.layer = layer
         self.load_state_from_keywords()
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def show_help(self):
         """Load the help text for the keywords dialog."""
         show_context_help(context='keywords_editor')
@@ -727,7 +727,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.set_subcategory_list(self.standard_exposure_list)
             self.radExposure.blockSignals(False)
         elif current_key == 'category':
-            #.. todo:: notify the user their category is invalid
+            # .. todo:: notify the user their category is invalid
             pass
         self.add_list_entry(current_key, current_value)
         self.leKey.setText('')
@@ -807,7 +807,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # convert from QString if needed
         category = str(category)
         if self.get_value_for_key('category') == category:
-            #nothing to do, go home
+            # nothing to do, go home
             return True
         if category not in ['hazard', 'exposure', 'postprocessing']:
             # .. todo:: report an error to the user
@@ -1076,7 +1076,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :returns: Keywords reflecting the state of the dialog.
         :rtype: dict
         """
-        #make sure title is listed
+        # make sure title is listed
         if str(self.leTitle.text()) != '':
             self.add_list_entry('title', str(self.leTitle.text()))
 

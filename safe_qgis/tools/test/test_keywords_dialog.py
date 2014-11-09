@@ -17,7 +17,7 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -174,8 +174,8 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_show_help(self):
         """Test that help button works"""
         # ... and this is how you skip it using nosetests
-        #prevent unreachable code errors in pylint
-        #pylint: disable=W0101
+        # prevent unreachable code errors in pylint
+        # pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
         # noinspection PyUnreachableCode
         dialog = KeywordsDialog(PARENT, IFACE)
@@ -183,7 +183,7 @@ class KeywordsDialogTest(unittest.TestCase):
         button.click()
         message = 'Help dialog was not created when help button pressed'
         self.assertTrue(dialog.helpDialog is not None, message)
-        #pylint: enable=W0101
+        # pylint: enable=W0101
 
     def test_on_rad_hazard_toggled(self):
         """Test hazard radio button toggle behaviour works"""
@@ -242,7 +242,7 @@ class KeywordsDialogTest(unittest.TestCase):
         button.click()
         female_ratio_box = dialog.cboFemaleRatioAttribute
 
-        #set to Don't use
+        # set to Don't use
         index = female_ratio_box.findText(dialog.do_not_use_string)
         message = (dialog.do_not_use_string + ' not found')
         self.assertNotEqual(index, -1, message)
@@ -267,7 +267,7 @@ class KeywordsDialogTest(unittest.TestCase):
         assert (dialog.get_value_for_key(defaults['FEMALE_RATIO']) is None), \
             message
 
-        #set to TEST_REAL
+        # set to TEST_REAL
         index = female_ratio_box.findText('TEST_REAL')
         message = 'TEST_REAL not found'
         assert (index != -1), message
@@ -496,7 +496,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_add_keyword_when_press_ok_button(self):
         """Test add keyword when ok button is pressed."""
-        #_, path = makePadangLayerClone()
+        # _, path = makePadangLayerClone()
         clone_padang_layer()
         dialog = KeywordsDialog(PARENT, IFACE)
 

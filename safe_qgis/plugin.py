@@ -103,11 +103,11 @@ class Plugin:
         self.action_dock = None
         self.action_toggle_rubberbands = None
         self.message_bar_item = None
-        #print self.tr('InaSAFE')
+        # print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
 
-    #noinspection PyArgumentList
+    # noinspection PyArgumentList
     def change_i18n(self, new_locale):
         """Change internationalisation for the plugin.
 
@@ -193,9 +193,9 @@ class Plugin:
         # Import dock here as it needs to be imported AFTER i18n is set up
         from safe_qgis.widgets.dock import Dock
         self.dock_widget = None
-        #--------------------------------------
+        # --------------------------------------
         # Create action for plugin dockable window (show/hide)
-        #--------------------------------------
+        # --------------------------------------
         # pylint: disable=W0201
         self.action_dock = QAction(
             QIcon(':/plugins/inasafe/icon.svg'),
@@ -210,9 +210,9 @@ class Plugin:
         self.action_dock.triggered.connect(self.toggle_dock_visibility)
         self.add_action(self.action_dock)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for keywords editor
-        #--------------------------------------
+        # --------------------------------------
         self.action_keywords_dialog = QAction(
             QIcon(':/plugins/inasafe/show-keyword-editor.svg'),
             self.tr('InaSAFE Keyword Editor'),
@@ -228,9 +228,9 @@ class Plugin:
 
         self.add_action(self.action_keywords_dialog)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for keywords creation wizard
-        #--------------------------------------
+        # --------------------------------------
         self.action_keywords_wizard = QAction(
             QIcon(':/plugins/inasafe/show-keyword-wizard.svg'),
             self.tr('InaSAFE Keywords Creation Wizard'),
@@ -246,9 +246,9 @@ class Plugin:
 
         self.add_action(self.action_keywords_wizard)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for options dialog
-        #--------------------------------------
+        # --------------------------------------
         self.action_options = QAction(
             QIcon(':/plugins/inasafe/configure-inasafe.svg'),
             self.tr('InaSAFE Options'), self.iface.mainWindow())
@@ -260,9 +260,9 @@ class Plugin:
 
         self.add_action(self.action_options)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for impact functions doc dialog
-        #--------------------------------------
+        # --------------------------------------
         self.action_function_browser = QAction(
             QIcon(':/plugins/inasafe/show-impact-functions.svg'),
             self.tr('InaSAFE Impact Functions Browser'),
@@ -281,9 +281,9 @@ class Plugin:
         self.iface.registerMainWindowAction(self.key_action, "F7")
         self.key_action.triggered.connect(self.shortcut_f7)
 
-        #---------------------------------------
+        # ---------------------------------------
         # Create action for minimum needs dialog
-        #---------------------------------------
+        # ---------------------------------------
         self.action_minimum_needs = QAction(
             QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
             self.tr('InaSAFE Minimum Needs Tool'), self.iface.mainWindow())
@@ -295,9 +295,9 @@ class Plugin:
 
         self.add_action(self.action_minimum_needs)
 
-        #----------------------------------------------
+        # ----------------------------------------------
         # Create action for global minimum needs dialog
-        #----------------------------------------------
+        # ----------------------------------------------
 
         self.action_global_minimum_needs = QAction(
             QIcon(':/plugins/inasafe/show-global-minimum-needs.svg'),
@@ -312,9 +312,9 @@ class Plugin:
 
         self.add_action(self.action_global_minimum_needs)
 
-        #---------------------------------------
+        # ---------------------------------------
         # Create action for converter dialog
-        #---------------------------------------
+        # ---------------------------------------
         self.action_shake_converter = QAction(
             QIcon(':/plugins/inasafe/show-converter-tool.svg'),
             self.tr('InaSAFE Converter'), self.iface.mainWindow())
@@ -327,9 +327,9 @@ class Plugin:
 
         self.add_action(self.action_shake_converter)
 
-        #---------------------------------------
+        # ---------------------------------------
         # Create action for batch runner dialog
-        #---------------------------------------
+        # ---------------------------------------
         self.action_batch_runner = QAction(
             QIcon(':/plugins/inasafe/show-batch-runner.svg'),
             self.tr('InaSAFE Batch Runner'), self.iface.mainWindow())
@@ -341,9 +341,9 @@ class Plugin:
 
         self.add_action(self.action_batch_runner)
 
-        #---------------------------------------
+        # ---------------------------------------
         # Create action for batch runner dialog
-        #---------------------------------------
+        # ---------------------------------------
         self.action_save_scenario = QAction(
             QIcon(':/plugins/inasafe/save-as-scenario.svg'),
             self.tr('Save current scenario'), self.iface.mainWindow())
@@ -355,9 +355,9 @@ class Plugin:
         self.action_save_scenario.triggered.connect(self.save_scenario)
         self.add_action(self.action_save_scenario)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for import OSM Dialog
-        #--------------------------------------
+        # --------------------------------------
         self.action_import_dialog = QAction(
             QIcon(':/plugins/inasafe/show-osm-download.svg'),
             self.tr('InaSAFE OpenStreetMap Downloader'),
@@ -370,9 +370,9 @@ class Plugin:
 
         self.add_action(self.action_import_dialog)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for impact layer merge Dialog
-        #--------------------------------------
+        # --------------------------------------
         self.action_impact_merge_dlg = QAction(
             QIcon(':/plugins/inasafe/show-impact-merge.svg'),
             self.tr('InaSAFE Impact Layer Merge'),
@@ -385,9 +385,9 @@ class Plugin:
 
         self.add_action(self.action_impact_merge_dlg)
 
-        #--------------------------------------
+        # --------------------------------------
         # create dockwidget and tabify it with the legend
-        #--------------------------------------
+        # --------------------------------------
         self.dock_widget = Dock(self.iface)
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
@@ -408,9 +408,9 @@ class Plugin:
 
         # pylint: disable=W0201
 
-        #---------------------------------------
+        # ---------------------------------------
         # Create action for toggling rubber bands
-        #---------------------------------------
+        # ---------------------------------------
         self.action_toggle_rubberbands = QAction(
             QIcon(':/plugins/inasafe/toggle-rubber-bands.svg'),
             self.tr('Toggle scenario outlines'), self.iface.mainWindow())
@@ -429,9 +429,9 @@ class Plugin:
             self.dock_widget.toggle_rubber_bands)
         self.add_action(self.action_toggle_rubberbands)
 
-        #---------------------------------------
+        # ---------------------------------------
         # Create action for analysis extent dialog
-        #---------------------------------------
+        # ---------------------------------------
         self.action_extent_selector = QAction(
             QIcon(':/plugins/inasafe/set-extents-tool.svg'),
             self.tr('Set the analysis area for InaSAFE'),

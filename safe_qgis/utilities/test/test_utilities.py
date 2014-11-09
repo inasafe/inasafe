@@ -64,7 +64,7 @@ class UtilitiesTest(unittest.TestCase):
             # Display message and traceback
 
             message = get_error_message(e)
-            #print message
+            # print message
             message = message.to_text()
             self.assertIn(str(e), message)
             self.assertIn('line', message)
@@ -92,7 +92,7 @@ class UtilitiesTest(unittest.TestCase):
         """Test we can get the correct attributes back"""
         layer = make_polygon_layer()
 
-        #with good attribute name
+        # with good attribute name
         attributes, position = layer_attribute_names(layer, [
             QVariant.Int, QVariant.String],
             'TEST_STRIN')  # Not a typo...
@@ -105,7 +105,7 @@ class UtilitiesTest(unittest.TestCase):
             position, expected_position)
         assert (position == expected_position), message
 
-        #with non existing attribute name
+        # with non existing attribute name
         attributes, position = layer_attribute_names(
             layer,
             [QVariant.Int, QVariant.String],
@@ -119,7 +119,7 @@ class UtilitiesTest(unittest.TestCase):
             position, expected_position)
         assert (position == expected_position), message
 
-        #with raster layer
+        # with raster layer
         layer = make_padang_layer()
         attributes, position = layer_attribute_names(layer, [], '')
         message = 'Should return None, None for raster layer, got %s, %s' % (

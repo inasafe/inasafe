@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -28,7 +28,7 @@ from xml.dom import minidom
 from glob import glob
 import shutil
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 from qgis.core import (
@@ -41,7 +41,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
 from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.exceptions import (
@@ -83,10 +83,10 @@ TEST_DATA_DIR = os.path.abspath(
 class ImpactMergeDialogTest(unittest.TestCase):
     """Test Impact Merge Dialog widget."""
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
-        #noinspection PyArgumentList
+        # noinspection PyArgumentList
         self.map_layer_registry = QgsMapLayerRegistry.instance()
         self.register_layers()
 
@@ -94,14 +94,14 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog = ImpactMergeDialog(PARENT, IFACE)
 
         # Create test dir
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         test_impact_merge_dir = os.path.join(
             TEST_DATA_DIR, 'test-impact-merge')
         if not os.path.exists(test_impact_merge_dir):
             os.makedirs(test_impact_merge_dir)
 
         # Create test dir for aggregated
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         test_aggregated_dir = os.path.join(
             test_impact_merge_dir, 'aggregated')
         if not os.path.exists(test_aggregated_dir):
@@ -113,7 +113,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         if not os.path.exists(test_entire_dir):
             os.makedirs(test_entire_dir)
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def tearDown(self):
         """Runs after each test."""
         # Remove Map Layers
@@ -121,7 +121,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
             self.map_layer_registry.removeAllMapLayers()
 
         # Delete test dir
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         test_impact_merge_dir = os.path.join(
             TEST_DATA_DIR, 'test-impact-merge')
         shutil.rmtree(test_impact_merge_dir)
@@ -188,7 +188,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
                         setCurrentIndex(index)
 
             # Set Output Directory
-            #noinspection PyUnresolvedReferences
+            # noinspection PyUnresolvedReferences
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
                     TEST_DATA_DIR, 'test-impact-merge', 'entire'))
@@ -219,7 +219,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
                         setCurrentIndex(index)
 
             # Set output directory
-            #noinspection PyUnresolvedReferences
+            # noinspection PyUnresolvedReferences
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
                     TEST_DATA_DIR, 'test-impact-merge', 'aggregated'))
@@ -620,7 +620,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         # The type of this composition must be QgsComposition
         self.assertEqual(type(composition), QgsComposition)
 
-        #FALL CASE: It cannot find the template
+        # FAIL CASE: It cannot find the template
         self.impact_merge_dialog.template_path = '/it/will/fail/tmp.qpt'
         expected_message = 'Error loading template %s' % \
                            self.impact_merge_dialog.template_path

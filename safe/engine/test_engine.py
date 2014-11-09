@@ -2761,12 +2761,12 @@ class Test_Engine(unittest.TestCase):
         I.write_to_file('flood_prone_roads_jakarta_merged.shp')
 
         # Check against correctness verified in QGIS
-        #I_attributes = I.get_data()
-        #assert I_attributes[198]['TYPE'] == 'secondary'
-        #assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
-        #assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
-        #assert I_attributes[198]['polygon_id'] == 235
-        #assert I_attributes[198]['parent_line_id'] == 333
+        # I_attributes = I.get_data()
+        # assert I_attributes[198]['TYPE'] == 'secondary'
+        # assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
+        # assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
+        # assert I_attributes[198]['polygon_id'] == 235
+        # assert I_attributes[198]['parent_line_id'] == 333
 
     Xtest_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
