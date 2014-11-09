@@ -58,7 +58,7 @@ def error_creator3():
     try:
         error_creator2()
     except IOError, e2:
-        #e2.args = (e2.args[0] + '\nCreator 3 error',)  # Tuple dont remove ,
+        # e2.args = (e2.args[0] + '\nCreator 3 error',)  # Tuple dont remove ,
         raise SafeError(e2)
 
 
@@ -87,9 +87,9 @@ def error_creator5():
 
 if __name__ == '__main__':
     # best practice non safe style errors
-    #try:
+    # try:
     #    error_creator2()
-    #except IOError, e:
+    # except IOError, e:
     #    # print e
     #    tb = traceback.format_exc()
     #    print tb
@@ -99,6 +99,6 @@ if __name__ == '__main__':
         error_creator5()
     except SafeError, e:
         # print e
-        #tb = traceback.format_exc()
+        # tb = traceback.format_exc()
         # print tb
         print e.error_message.to_text()

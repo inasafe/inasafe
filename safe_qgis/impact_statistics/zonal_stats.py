@@ -233,13 +233,13 @@ def intersection_box(
     :rtype: (int, int, int, int)
     """
 
-    #get intersecting bbox
+    # get intersecting bbox
     intersected_box = feature_box.intersect(raster_box)
     # print 'Intersected Box: %s' % intersected_box.asWktCoordinates()
     if intersected_box.isEmpty():
         return None, None, None, None
 
-    #get offset in pixels in x- and y- direction
+    # get offset in pixels in x- and y- direction
     offset_x = intersected_box.xMinimum() - raster_box.xMinimum()
     offset_x /= cell_size_x
     offset_x = int(offset_x)
@@ -247,7 +247,7 @@ def intersection_box(
     offset_y /= cell_size_y
     offset_y = int(offset_y)
 
-    ##### Checked to here....offsets calculate correctly ##########
+    # Checked to here....offsets calculate correctly ##########
 
     max_column = intersected_box.xMaximum() - raster_box.xMinimum()
     max_column /= cell_size_x

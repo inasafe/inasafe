@@ -151,7 +151,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
             building_damage.append(result_dict)
 
             # Debugging
-            #if percent_damage > 0.01:
+            # if percent_damage > 0.01:
             #    print mmi, percent_damage
 
             # Calculate statistics
@@ -190,10 +190,10 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + tr('Assumption') + '&#58;</b><br>'
         # This is the proper text:
-        #tr('Levels of impact are defined by post 2009 '
+        # tr('Levels of impact are defined by post 2009 '
         #  'Padang earthquake survey conducted by Geoscience '
         #  'Australia and Institute of Teknologi Bandung.'))
-        #tr('Unreinforced masonry is assumed where no '
+        # tr('Unreinforced masonry is assumed where no '
         #  'structural information is available.'))
         impact_summary += tr(
             'Levels of impact are defined by post 2009 Padang earthquake '

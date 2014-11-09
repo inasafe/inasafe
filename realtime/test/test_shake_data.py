@@ -66,7 +66,7 @@ class TestShakeMap(unittest.TestCase):
             os.path.join(shakemap_zip_dir(),
                          input_file))
 
-        #TODO Downloaded data should be removed before each test
+        # TODO Downloaded data should be removed before each test
 
     def test_get_shake_map_input(self):
         """Check that we can retrieve a shakemap 'inp' input file."""

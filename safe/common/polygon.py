@@ -977,8 +977,8 @@ def _clip_line_by_polygon(line,
 
             # FIXME (Ole): Next candidate for vectorisation (11/9/2012) below
             # Loop through intersections for this line segment
-            #distances = {}
-            #for i in range(len(intersections)):
+            # distances = {}
+            # for i in range(len(intersections)):
             #    v = p0 - intersections[i]
             #    d = numpy.dot(v, v)
             #    if d in distances:
@@ -987,9 +987,9 @@ def _clip_line_by_polygon(line,
             #    distances[d] = intersections[i]  # Don't record duplicates
 
             # Sort intersections by distance using Schwarzian transform
-            #A = zip(distances.keys(), distances.values())
-            #A.sort()
-            #_, intersections = zip(*A)
+            # A = zip(distances.keys(), distances.values())
+            # A.sort()
+            # _, intersections = zip(*A)
 
             # Separate segment midpoints according to polygon
             # Deliberately ignore boundary as midpoints by definition
@@ -1070,8 +1070,8 @@ def line_dictionary_to_geometry(D):
     lines = []
 
     # Ensure reproducibility (FIXME: is this needed?)
-    #keys = D.keys()
-    #keys.sort()
+    # keys = D.keys()
+    # keys.sort()
 
     # Add line geometries up
     for key in D:
@@ -1144,7 +1144,7 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
         if is_inside_polygon([x, y], polygon):
             append = True
 
-            #Check exclusions
+            # Check exclusions
             if exclude is not None:
                 for ex_poly in exclude:
                     if is_inside_polygon([x, y], ex_poly):
@@ -1387,7 +1387,7 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
 
     # Clip lines to polygons
     for polygon in polygons:
-    #for i, polygon in enumerate(polygons):
+    # for i, polygon in enumerate(polygons):
         # print ('Doing polygon %i (%i vertices) of %i with '
         #       '%i lines' % (i, len(polygon),
         #                     len(polygons),
@@ -1406,7 +1406,7 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
         # as lines are often partially clipped. We also need to keep
         # track of the parent line to get its attributes if we want
         # to go down this road
-        #remaining_lines = outside_lines
+        # remaining_lines = outside_lines
 
     return lines_covered
 

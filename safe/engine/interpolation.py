@@ -554,8 +554,8 @@ def interpolate_polygon_lines(source, target,
     verify(len(polygons) == len(polygon_attributes))
 
     # Data structure for resulting line segments
-    #clipped_geometry = []
-    #clipped_attributes = []
+    # clipped_geometry = []
+    # clipped_attributes = []
 
     # Clip line lines to polygons
     lines_covered = clip_lines_by_polygons(lines, polygons)

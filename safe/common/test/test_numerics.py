@@ -4,14 +4,14 @@ import numpy
 # Import functions tested by this module.
 # NOTE (Ole): Those missing here are in fact tested elsewhere
 
-#from safe.common.numerics import ensure_numeric
-#from safe.common.numerics import nan_allclose
-#from safe.common.numerics import normal_cdf
-#from safe.common.numerics import log_normal_cdf
-#from safe.common.numerics import erf
+# from safe.common.numerics import ensure_numeric
+# from safe.common.numerics import nan_allclose
+# from safe.common.numerics import normal_cdf
+# from safe.common.numerics import log_normal_cdf
+# from safe.common.numerics import erf
 from safe.common.numerics import axes_to_points
 from safe.common.numerics import grid_to_points
-#from safe.common.numerics import geotransform_to_axes
+# from safe.common.numerics import geotransform_to_axes
 
 
 class Test_Numerics(unittest.TestCase):

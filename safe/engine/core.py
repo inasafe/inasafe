@@ -298,7 +298,7 @@ def check_data_integrity(layer_objects):
 #                 msg = ('Linked layer %s could not be found: %s'
 #                        % (basename, str(e)))
 #                 LOGGER.info(msg)
-#                 #raise Exception(msg)
+#                 # raise Exception(msg)
 #             else:
 #                 new_layers.append((server, new_layer, bbox, new_metadata))
 

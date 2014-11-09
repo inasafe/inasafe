@@ -70,7 +70,7 @@ __author__ = 'Philippe Lagadec'
 #                        Ismail Sunni
 
 #------------------------------------------------------------------------------
-#TODO:
+# TODO:
 # - method to return a generator (yield each row) instead of a single string
 # - unicode support (input and output)
 # - escape text in cells (optional)

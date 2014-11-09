@@ -307,7 +307,7 @@ class MapLegend():
         if label is not None and label != '':
             pass
         else:
-        # branches for each style type
+            # branches for each style type
             if class_type == 'singleSymbol':
                 LOGGER.debug('singleSymbol is not impelemented yet')
             elif class_type == 'categorizedSymbol':
@@ -369,7 +369,7 @@ class MapLegend():
             self.legend_image.setDotsPerMeterY(dpi_to_meters(self.dpi))
 
             # Only works in Qt4.8
-            #self.legendImage.fill(QtGui.QColor(255, 255, 255))
+            # self.legendImage.fill(QtGui.QColor(255, 255, 255))
             # Works in older Qt4 versions
             self.legend_image.fill(255 + 255 * 256 + 255 * 256 * 256)
             painter = QtGui.QPainter(self.legend_image)
@@ -401,7 +401,7 @@ class MapLegend():
             image.setDotsPerMeterX(dpi_to_meters(self.dpi))
             image.setDotsPerMeterY(dpi_to_meters(self.dpi))
             # Only works in Qt4.8
-            #myImage.fill(QtGui.qRgb(255, 255, 255))
+            # myImage.fill(QtGui.qRgb(255, 255, 255))
             # Works in older Qt4 versions
             image.fill(255 + 255 * 256 + 255 * 256 * 256)
             painter = QtGui.QPainter(image)

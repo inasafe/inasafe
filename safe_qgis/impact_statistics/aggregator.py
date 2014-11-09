@@ -83,7 +83,7 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
+# from pydev import pydevd
 
 
 # If inasafe is running as qgis plugin,
@@ -118,7 +118,7 @@ class Aggregator(QtCore.QObject):
         self._sum_field_name = None
         self.set_sum_field_name()
 
-        #use qgis or inasafe zonal stats
+        # use qgis or inasafe zonal stats
         flag = bool(QtCore.QSettings().value(
             'inasafe/use_native_zonal_stats', False, type=bool))
         self.use_native_zonal_stats = flag
@@ -288,7 +288,7 @@ class Aggregator(QtCore.QObject):
         # noinspection PyBroadException
         try:
             keywords = self.read_keywords(self.layer)
-        #discussed with Tim,in this case its ok to be generic
+        # discussed with Tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             keywords = {}
 
@@ -314,7 +314,7 @@ class Aggregator(QtCore.QObject):
             # noinspection PyTypeChecker
             self._send_message(message)
 
-            #keywords are already complete
+            # keywords are already complete
             category = keywords['category']
             aggregation_attribute = self.get_default_keyword('AGGR_ATTR_KEY')
             female_ratio = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
@@ -342,9 +342,9 @@ class Aggregator(QtCore.QObject):
                          (elderly_ratio != self.tr('Use default') or
                           elderly_ratio_key in keywords))):
                 self.is_valid = True
-            #some keywords are needed
+            # some keywords are needed
             else:
-                #set the default values by writing to the keywords
+                # set the default values by writing to the keywords
                 keywords['category'] = 'postprocessing'
 
                 # noinspection PyTypeChecker
@@ -493,11 +493,11 @@ class Aggregator(QtCore.QObject):
         layer_name = str(self.tr('%s aggregated to %s') % (
             qgis_impact_layer.name(), aggregation_layer_name))
 
-        #delete unwanted fields
+        # delete unwanted fields
         provider = self.layer.dataProvider()
         fields = provider.fields()
 
-        #mark important attributes as needed
+        # mark important attributes as needed
         self._set_persistant_attributes()
         unneeded_attributes = []
 
@@ -523,7 +523,7 @@ class Aggregator(QtCore.QObject):
         self.statistics_type, self.statistics_classes = (
             self.get_statistics(qgis_impact_layer))
 
-        #call the correct aggregator
+        # call the correct aggregator
         if qgis_impact_layer.type() == QgsMapLayer.VectorLayer:
             self._aggregrate_vector_impact(
                 qgis_impact_layer, safe_impact_layer)
@@ -539,7 +539,7 @@ class Aggregator(QtCore.QObject):
         # show a styled aggregation layer
         if self.show_intermediate_layers:
             if self.statistics_type == 'sum':
-                #style layer if we are summing
+                # style layer if we are summing
                 provider = self.layer.dataProvider()
                 attribute = self.sum_field_name()
                 attribute_index = provider.fieldNameIndex(attribute)
@@ -576,7 +576,7 @@ class Aggregator(QtCore.QObject):
                     'style_classes': classes}
                 set_vector_graduated_style(self.layer, style)
             else:
-                #make style of layer pretty much invisible
+                # make style of layer pretty much invisible
                 properties = {
                     'style': 'no',
                     'color_border': '0,0,0,127',
@@ -610,7 +610,7 @@ class Aggregator(QtCore.QObject):
         # Add fields for store aggregation atributes
         aggregation_provider = self.layer.dataProvider()
         if self.statistics_type == 'class_count':
-            #add the class count fields to the layer
+            # add the class count fields to the layer
             fields = []
             for statistics_class in self.statistics_classes:
                 field_name = self._aggregation_field_name(statistics_class)
@@ -619,7 +619,7 @@ class Aggregator(QtCore.QObject):
             aggregation_provider.addAttributes(fields)
             self.layer.updateFields()
         elif self.statistics_type == 'sum':
-            #add the total field to the layer
+            # add the total field to the layer
             aggregation_field = self.sum_field_name()
             aggregation_provider.addAttributes([QgsField(
                 aggregation_field, QtCore.QVariant.Int)])
@@ -792,7 +792,7 @@ class Aggregator(QtCore.QObject):
             impact_geometries = safe_impact_layer.get_geometry()
             aggregation_points = impact_geometries
 
-        #iterate over the aggregation units
+        # iterate over the aggregation units
         attributes = None
         for polygon_index, polygon in enumerate(aggregation_units):
             if hasattr(polygon, 'outer_ring'):
@@ -814,11 +814,11 @@ class Aggregator(QtCore.QObject):
             except PointsInputError:  # too few points provided
                 inside = []
                 outside = []
-            #self.impact_layer_attributes is a list of list of dict
-            #[
+            # self.impact_layer_attributes is a list of list of dict
+            # [
             #   [{...},{...},{...}],
             #   [{...},{...},{...}]
-            #]
+            # ]
             self.impact_layer_attributes.append([])
             if self.statistics_type == 'class_count':
                 results = OrderedDict()
@@ -859,7 +859,7 @@ class Aggregator(QtCore.QObject):
                     attributes[field_index] = v
 
             elif self.statistics_type == 'sum':
-                #by default sum attributes
+                # by default sum attributes
                 aggregation_field = self.sum_field_name()
                 field_index = field_map[aggregation_field]
                 total = 0
@@ -870,7 +870,7 @@ class Aggregator(QtCore.QObject):
                     except TypeError:
                         pass
 
-                    #add all attributes to the impact_layer_attributes
+                    # add all attributes to the impact_layer_attributes
                     self.impact_layer_attributes[polygon_index].append(
                         aggreg_remaining_values[i])
                 attributes = {field_index: total}
@@ -980,7 +980,7 @@ class Aggregator(QtCore.QObject):
             # Total impacted length in the aggregation polygons:
             total = {
                 feature_id: 0 for feature_id, __ in enumerate(
-                self.layer.getFeatures(request))
+                    self.layer.getFeatures(request))
             }
 
             # Create slots for dicts
@@ -1033,7 +1033,7 @@ class Aggregator(QtCore.QObject):
                 self.impact_layer_attributes[polygon_index].\
                     append(line_attribute_dict)
 
-                ###################################################
+                # ##################################################
                 # total in aggregation polygon
                 total[polygon_index] +=  \
                     line_attribute_dict[self.target_field]
@@ -1134,8 +1134,8 @@ class Aggregator(QtCore.QObject):
         """
 
         name = '%s_%s' % (statistic_class, self.target_field)
-        #FIXME (MB) remove next line when we get rid of
-        #shape files as internal format
+        # FIXME (MB) remove next line when we get rid of
+        # shape files as internal format
         name = name[:10]
         return name
 
@@ -1220,8 +1220,8 @@ class Aggregator(QtCore.QObject):
         :returns: A processed layer.
         :rtype: QgsMapLayer
         """
-#        import time
-#        startTime = time.clock()
+        # import time
+        # startTime = time.clock()
 
         message = m.Message(
             m.Heading(
@@ -1239,10 +1239,10 @@ class Aggregator(QtCore.QObject):
         polygons_layer = safe_read_layer(layer_filename)
         remaining_polygons = numpy.array(
             polygons_layer.get_geometry(), dtype=list)
-#        myRemainingAttributes = numpy.array(polygons_layer.get_data())
+        # myRemainingAttributes = numpy.array(polygons_layer.get_data())
         remaining_indexes = numpy.array(range(len(remaining_polygons)))
 
-        #used for unit tests only
+        # used for unit tests only
         self.preprocessed_feature_count = 0
 
         # TODO (MB) the intersecting array is used only for debugging and
@@ -1251,7 +1251,7 @@ class Aggregator(QtCore.QObject):
         inside_polygons = []
 
         # TODO (MB) maybe do raw geos without qgis
-        #select all post processing polygons with no attributes
+        # select all post processing polygons with no attributes
         aggregation_provider = self.layer.dataProvider()
         aggregation_request = QgsFeatureRequest()
         aggregation_request.setSubsetOfAttributes([])
@@ -1384,7 +1384,7 @@ class Aggregator(QtCore.QObject):
 
                 # intersect using qgis
                 if do_intersection:
-#                    LOGGER.debug('Intersecting polygon %s' % mapped_index)
+                    # LOGGER.debug('Intersecting polygon %s' % mapped_index)
                     intersecting_polygons.append(mapped_index)
 
                     polygons_request.setFilterFid(feature_id)
@@ -1400,8 +1400,8 @@ class Aggregator(QtCore.QObject):
                     qgis_polygon_geometry = QgsGeometry(
                         qgis_feature.geometry())
                     attribute_map = qgis_feature.attributes()
-#                    for (k, attr) in attribute_map.iteritems():
-#                        LOGGER.debug( "%d: %s" % (k, attr.toString()))
+                    # for (k, attr) in attribute_map.iteritems():
+                    #     LOGGER.debug( "%d: %s" % (k, attr.toString()))
 
                     # make intersection of the qgis_feature and the
                     # post processing polygon
@@ -1410,10 +1410,10 @@ class Aggregator(QtCore.QObject):
                     try:
                         intersection = geometry.intersection(
                             qgis_polygon_geometry)
-#                        if intersection is not None:
+                        # if intersection is not None:
                         intersection_geometry = QgsGeometry(intersection)
 
-                        #from ftools
+                        # from ftools
                         unknown_geometry_type = 0
                         geometry_type = intersection_geometry.wkbType()
                         if geometry_type == unknown_geometry_type:
@@ -1423,7 +1423,7 @@ class Aggregator(QtCore.QObject):
                                 qgis_polygon_geometry)
                             intersection_geometry = QgsGeometry(
                                 int_com.difference(int_sym))
-                        #LOGGER.debug('wkbType type of intersection: %s' %
+                        # LOGGER.debug('wkbType type of intersection: %s' %
                         #   intersection_geometry.wkbType())
                         polygon_types = [QGis.WKBPolygon, QGis.WKBMultiPolygon]
                         if intersection_geometry.wkbType() in polygon_types:
@@ -1432,7 +1432,7 @@ class Aggregator(QtCore.QObject):
                             shape_writer.addFeature(inside_feature)
                             self.preprocessed_feature_count += 1
                         else:
-                            #LOGGER.debug(
+                            # LOGGER.debug(
                             #    'Intersection not a polygon so the two '
                             #    'polygons either touch only or do not '
                             #    'intersect. Not adding this to the inside '
@@ -1442,7 +1442,7 @@ class Aggregator(QtCore.QObject):
                         # processing polygon
                         outside = qgis_polygon_geometry.difference(
                             intersection_geometry)
-#                        if outside is not None:
+                        # if outside is not None:
                         outside_geometry = QgsGeometry(outside)
 
                         if outside_geometry.wkbType() in polygon_types:
@@ -1457,9 +1457,9 @@ class Aggregator(QtCore.QObject):
                     except TypeError:
                         LOGGER.debug('ERROR with FID %s', mapped_index)
 
-            #LOGGER.debug('Inside %s' % inside_polygons)
-            #LOGGER.debug('Outside %s' % outside_polygons)
-            #LOGGER.debug('Intersection %s' % intersecting_polygons)
+            # LOGGER.debug('Inside %s' % inside_polygons)
+            # LOGGER.debug('Outside %s' % outside_polygons)
+            # LOGGER.debug('Intersection %s' % intersecting_polygons)
             if len(next_iteration_polygons) > 0:
                 # some polygons are still completely outside of the
                 # post processing polygon so go on and reiterate using only
@@ -1468,14 +1468,14 @@ class Aggregator(QtCore.QObject):
 
                 remaining_polygons = remaining_polygons[
                     next_iteration_index]
-                #myRemainingAttributes = myRemainingAttributes[
+                # myRemainingAttributes = myRemainingAttributes[
                 #                        next_iteration_index]
                 remaining_indexes = remaining_indexes[next_iteration_index]
                 LOGGER.debug('Remaining: %s' % len(remaining_polygons))
             else:
                 print 'no more polygons to be checked'
                 break
-            #del tmpWriter
+            # del tmpWriter
 
         # here the full polygon set is represented by:
         # inside_polygons + intersecting_polygons + next_iteration_polygons
@@ -1495,12 +1495,12 @@ class Aggregator(QtCore.QObject):
             self.preprocessed_feature_count += 1
 
         del shape_writer
-#        LOGGER.debug('Created: %s' % self.preprocessed_feature_count)
+        # LOGGER.debug('Created: %s' % self.preprocessed_feature_count)
 
         name = '%s %s' % (layer.name(), self.tr('preprocessed'))
         output_layer = QgsVectorLayer(out_filename, name, 'ogr')
         if not output_layer.isValid():
-            #TODO (MB) use a better exception
+            # TODO (MB) use a better exception
             raise Exception('Invalid qgis Layer')
 
         if self.show_intermediate_layers:
@@ -1641,7 +1641,7 @@ class Aggregator(QtCore.QObject):
             return False
         target_field_index = impact_layer.fieldNameIndex(
             self.target_field)
-        #if a feature has no field called
+        # if a feature has no field called
         if target_field_index == -1:
             message = m.Paragraph(
                 self.tr('No attribute "%s" was found in the attribute table '

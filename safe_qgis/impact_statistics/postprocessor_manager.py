@@ -37,7 +37,7 @@ from safe_qgis.safe_interface import (
     styles)
 
 LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
+# from pydev import pydevd
 
 
 class PostprocessorManager(QtCore.QObject):
@@ -81,9 +81,9 @@ class PostprocessorManager(QtCore.QObject):
         """
 
         post_processor = self.output[self.current_output_postprocessor]
-        #get the key position of the value field
+        # get the key position of the value field
         key = post_processor[0][1].keys()[0]
-        #get the value
+        # get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
         if (data[1][key]['value'] == self.aggregator.get_default_keyword(
@@ -121,15 +121,15 @@ class PostprocessorManager(QtCore.QObject):
             #        (u'Weekly hygiene packs', {'value': 403453, 'metadata': {
             #         'description': 'Females hygiene packs for weekly use'}})
             #    ]))
-            #]
+            # ]
 
-            #sorting using the first indicator of a postprocessor
+            # sorting using the first indicator of a postprocessor
             sorted_results = sorted(
                 results_list,
                 key=self._sort_no_data,
                 reverse=True)
 
-            #init table
+            # init table
             has_no_data = False
             table = m.Table(
                 style_class='table table-condensed table-striped')
@@ -196,7 +196,7 @@ class PostprocessorManager(QtCore.QObject):
 
         # iterate postprocessors
         for postprocessor, results_list in output.iteritems():
-            #see self._generateTables to see details about results_list
+            # see self._generateTables to see details about results_list
             checked_polygon_names = {}
             parts_to_delete = []
             polygon_index = 0
@@ -368,7 +368,7 @@ class PostprocessorManager(QtCore.QObject):
                 key_attribute = self.keyword_io.read_keywords(
                     self.aggregator.exposure_layer, 'key_attribute')
             except KeywordNotFoundError:
-                #use 'type' as default
+                # use 'type' as default
                 key_attribute = 'type'
 
         # iterate zone features
@@ -460,7 +460,7 @@ class PostprocessorManager(QtCore.QObject):
                     value.clear()
     #                LOGGER.debug(results)
 
-                    #this can raise a KeyError
+                    # this can raise a KeyError
                     self.output[key].append(
                         (zone_name, results))
 

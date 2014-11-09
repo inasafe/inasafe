@@ -19,9 +19,9 @@ from safe.common.exceptions import VerificationError
 
 # Prefer python's own OrderedDict if it exists
 try:
-    #pylint: disable=W0611
+    # pylint: disable=W0611
     from collections import OrderedDict
-    #pylint: enable=W0611
+    # pylint: enable=W0611
 except ImportError:
     try:
         from collections import OrderedDict
@@ -670,9 +670,9 @@ def which(name, flags=os.X_OK):
     :rtype: C{list}
     """
     result = []
-    #pylint: disable=W0141
+    # pylint: disable=W0141
     extensions = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
-    #pylint: enable=W0141
+    # pylint: enable=W0141
     path = os.environ.get('PATH', None)
     # In c6c9b26 we removed this hard coding for issue #529 but I am
     # adding it back here in case the user's path does not include the

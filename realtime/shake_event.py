@@ -560,7 +560,7 @@ class ShakeEvent(QObject):
             if not feature.isValid():
                 LOGGER.debug('Skipping feature')
                 continue
-                #LOGGER.debug('Writing feature to mem layer')
+                # LOGGER.debug('Writing feature to mem layer')
             # calculate the distance and direction from this point
             # to and from the epicenter
             feature_id = str(feature.id())
@@ -810,7 +810,7 @@ class ShakeEvent(QObject):
                 'dir_from': direction_from}
             cities.append(city)
         LOGGER.debug('%s features added to sorted impacted cities list.')
-        #LOGGER.exception(cities)
+        # LOGGER.exception(cities)
         sorted_cities = sorted(cities,
                                key=lambda d: (
                                # we want to use whole no's for sort

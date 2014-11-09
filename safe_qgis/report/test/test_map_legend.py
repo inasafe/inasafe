@@ -25,8 +25,8 @@ import unittest
 import logging
 
 # Add PARENT directory to path to make test aware of other modules
-#pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-#sys.path.append(pardir)
+# pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# sys.path.append(pardir)
 
 from PyQt4 import QtGui
 from qgis.core import QgsMapLayerRegistry, QgsFillSymbolV2

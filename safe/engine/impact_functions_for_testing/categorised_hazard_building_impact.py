@@ -10,7 +10,7 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.common.utilities import OrderedDict
 
 
-#FIXME: need to normalise all raster data Ole/Kristy
+# FIXME: need to normalise all raster data Ole/Kristy
 class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
@@ -136,7 +136,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         impact_table = impact_summary
         map_title = tr('Categorised hazard impact on buildings')
 
-        #FIXME it would be great to do categorized rather than grduated
+        # FIXME it would be great to do categorized rather than grduated
         # Create style
         style_classes = [dict(label=tr('Low'), min=1, max=1,
                               colour='#1EFC7C', transparency=0, size=1),

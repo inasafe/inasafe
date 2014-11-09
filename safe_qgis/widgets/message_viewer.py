@@ -166,7 +166,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         if message == self.static_message:
             return
-        #LOGGER.debug('Static message event %i' % self.static_message_count)
+        # LOGGER.debug('Static message event %i' % self.static_message_count)
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
@@ -231,7 +231,7 @@ class MessageViewer(QtWebKit.QWebView):
         """
         if self.last_id > 0:
             js = '$(\'#%s\').goTo();' % str(self.last_id)
-            #LOGGER.debug(js)
+            # LOGGER.debug(js)
             self.page().mainFrame().evaluateJavaScript(js)
 
     def show_messages(self):
