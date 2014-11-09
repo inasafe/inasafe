@@ -37,6 +37,7 @@ class TestQMinimumNeeds(QMinimumNeeds):
         self.settings = QSettings(test_profile)
         self.settings.clear()
         self.settings = QSettings(test_profile)
+        self.local = 'en'
         minimum_needs = self._defaults()
         minimum_needs['provenance'] = 'Test'
         minimum_needs['profile'] = 'Test'

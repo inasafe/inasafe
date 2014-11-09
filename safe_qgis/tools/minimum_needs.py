@@ -27,6 +27,7 @@ class QMinimumNeeds(MinimumNeeds):
         self.settings = QSettings()
         self.minimum_needs = None
         self._root_directory = None
+        self.local = os.environ['LANG']
         self.load()
 
     def load(self):
@@ -87,6 +88,29 @@ class QMinimumNeeds(MinimumNeeds):
         :returns: The minimum needs by name.
         :rtype: list
         """
+        def sort_by_local(unsorted_profiles, local):
+            """Sort the profiles by language settings
+
+            :param unsorted_profiles: The user profiles profiles
+            :type unsorted_profiles: list
+
+            :param local: The language settings string
+            :type local: str
+
+            :returns: Ordered profiles
+            :rtype: list
+            """
+            local = '_%s' % local[:2]
+            profiles_our_local = []
+            profiles_remaining = []
+            for profile_name in unsorted_profiles:
+                if local in profile_name:
+                    profiles_our_local.append(profile_name)
+                else:
+                    profiles_remaining.append(profile_name)
+
+            return profiles_our_local + profiles_remaining
+
         local_minimum_needs_dir = QDir(
             '%s/minimum_needs/' % self.root_directory)
         plugins_minimum_needs_dir = QDir(
@@ -108,6 +132,7 @@ class QMinimumNeeds(MinimumNeeds):
             profile[:-5] for profile in
             local_minimum_needs_dir.entryList() if
             profile[-5:] == '.json']
+        profiles = sort_by_local(profiles, self.local)
         return profiles
 
     def read_from_file(self, qfile):
