@@ -132,14 +132,14 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard.
 
-        Input
         :param layers: List of layers expected to contain
-            hazard_layer: Raster layer of categorised hazard
-            exposure_layer: Raster layer of population data
+
+            * hazard_layer: Raster layer of categorised hazard
+            * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each category of the hazard
 
-        Return
+        :returns:
           Map of population exposed to high category
           Table with number of people in each category
         """
