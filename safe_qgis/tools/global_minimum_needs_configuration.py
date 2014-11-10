@@ -334,7 +334,7 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         default_parameter.description = (
             "The <b>default</b> is the default allowed quantity of the "
             "resource per person. For example you may indicate that the water "
-            "ration per person per day should be 25l.")
+            "ration per person weekly should be 67l.")
         default_parameter.value = 10.0
 
         frequency_parameter = StringParameter('UUID-9')
