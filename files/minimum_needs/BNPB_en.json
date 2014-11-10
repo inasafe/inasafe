@@ -38,8 +38,8 @@
         },
         {
             "Default": "0.2",
-            "Minimum allowed": "0.1",
-            "Maximum allowed": "1",
+            "Minimum allowed": "0.2",
+            "Maximum allowed": "0.2",
             "Frequency": "weekly",
             "Resource name": "Family Kits",
             "Resource description": "Hygiene kits",
@@ -51,7 +51,7 @@
         {
             "Default": "0.05",
             "Minimum allowed": "0.02",
-            "Maximum allowed": "1",
+            "Maximum allowed": "0.05",
             "Frequency": "single",
             "Resource name": "Toilets",
             "Resource description": "",
@@ -61,6 +61,6 @@
             "Readable sentence": "A Toilet should be provided for every 20 persons."
         }
     ],
-    "provenance": "BNPB English",
+    "provenance": "The minimum needs are based on Perka 7/2008.",
     "profile": "BNPB_en"
 }
