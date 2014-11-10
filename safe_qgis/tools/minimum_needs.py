@@ -61,6 +61,7 @@ class QMinimumNeeds(MinimumNeeds):
         :param profile: The profile's name
         :type profile: basestring, str
         """
+        profile = profile.replace('.json', '')
         self.write_to_file(
             QFile('%s/minimum_needs/%s.json' % (
                 self.root_directory, profile)))

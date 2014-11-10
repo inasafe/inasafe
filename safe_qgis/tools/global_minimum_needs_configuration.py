@@ -484,7 +484,7 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         else:
             return
         file_name = basename(file_name)
-        file_name.replace('.json', '')
+        file_name = file_name.replace('.json', '')
         minimum_needs = {'resources': []}
         self.mark_current_profile_as_saved()
         for index in xrange(self.resourceListWidget.count()):
