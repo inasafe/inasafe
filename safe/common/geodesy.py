@@ -90,9 +90,9 @@ class Point(object):
         self.sinlat = sin(lat)
         self.sinlon = sin(lon)
 
-    #---------------
+    # ---------------
     # Public methods
-    #---------------
+    # ---------------
     def bearing_to(self, P):
         """Bearing (in degrees) to point P.
 
@@ -130,9 +130,9 @@ class Point(object):
         return max(abs(self.latitude - P.latitude),
                    abs(self.longitude - P.longitude))
 
-    #-----------------
+    # -----------------
     # Internal methods
-    #-----------------
+    # -----------------
     def __repr__(self):
         """Readable representation of point with two decimal places.
 

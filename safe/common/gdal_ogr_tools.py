@@ -105,7 +105,8 @@ def polygonize_thresholds(
     dst_layer.CreateField(fd)
     dst_field = 0
 
-    # gdal.Polygonize(outband, outband, dst_layer, dst_field, [], callback=None)
+    # gdal.Polygonize(
+    #     outband, outband, dst_layer, dst_field, [], callback=None)
     gdal.Polygonize(outband, None, dst_layer, dst_field, [], callback=None)
 
     # produce in and out polygon layers

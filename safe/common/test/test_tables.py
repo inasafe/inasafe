@@ -179,7 +179,7 @@ class TablesTest(unittest.TestCase):
         assert expected_result.strip() == str(actual_result).strip(), message
         self.html += str(actual_result)
 
-        #also test bottom caption
+        # also test bottom caption
         self.html += '  <h2>Caption Bottom</h2>\n'
         expected_result = ('%s%s%s%s' % (self.html_table_start,
                                        self.html_bottom_caption,
@@ -415,14 +415,14 @@ class TablesTest(unittest.TestCase):
 
         # Now try at the TableRow level
         # FIXME (Ole): Breaks tables!
-        #row = TableRow(['12', '3000', '5'],
+        # row = TableRow(['12', '3000', '5'],
         #               col_align=['right', 'right', 'right'])
-        #actual_result = Table(row)
+        # actual_result = Table(row)
         # print actual_result
 
         # This breaks too - what's going on?
-        #row = TableRow(['12', '3000', '5'])
-        #actual_result = Table(row)
+        # row = TableRow(['12', '3000', '5'])
+        # actual_result = Table(row)
         # print actual_result
 
         # Try at the cell level

@@ -336,13 +336,13 @@ def format_int(x):
     """
 
     # This is broken
-    #import locale
-    #locale.setlocale(locale.LC_ALL, '')  # Broken, why?
-    #s = locale.format('%d', x, 1)
+    # import locale
+    # locale.setlocale(locale.LC_ALL, '')  # Broken, why?
+    # s = locale.format('%d', x, 1)
     lang = os.getenv('LANG')
     try:
         s = '{0:,}'.format(x)
-        #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+        # s = '{0:n}'.format(x)  # n means locale aware (read up on this)
     # see issue #526
     except ValueError:
         return x
