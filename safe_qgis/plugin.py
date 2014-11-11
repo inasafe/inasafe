@@ -537,6 +537,7 @@ class Plugin:
             self.dock_widget.clear_user_analysis_extent)
         widget.extent_defined.connect(
             self.dock_widget.define_user_analysis_extent)
+        # Needs to be non modal to support hide -> interact with map -> show
         widget.show()  # non modal
 
     def show_minimum_needs(self):
