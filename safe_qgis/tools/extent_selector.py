@@ -1,22 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """
-***************************************************************************
-    extent_selector.py
-    ---------------------
-    Based on original code from:
-        Date                 : December 2010
-        Copyright            : (C) 2010 by Giuseppe Sucameli
-        Email                : brush dot tyler at gmail dot com
-    Refactored and improved in Oct 2014 by Tim Sutton for InaSAFE.
-***************************************************************************
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-***************************************************************************
+extent_selector.py
+---------------------
+Based on original code from:
+Date                 : December 2010
+Copyright            : (C) 2010 by Giuseppe Sucameli
+Email                : brush dot tyler at gmail dot com
+Refactored and improved in Oct 2014 by Tim Sutton for InaSAFE.
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
 
 .. versionadded:: 2.2.0
 """
@@ -58,16 +54,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
-    """
-    Dialog for letting user determine analysis extents.
+    """Dialog for letting user determine analysis extents.
     """
 
     extent_defined = pyqtSignal(QgsRectangle, QgsCoordinateReferenceSystem)
     clear_extent = pyqtSignal()
 
     def __init__(self, iface, parent=None, extent=None, crs=None):
-        """
-        Constructor for the dialog.
+        """Constructor for the dialog.
 
         :param iface: A Quantum GIS QGisAppInterface instance.
         :type iface: QGisAppInterface
@@ -190,12 +184,14 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         self.show()
 
     def clear(self):
-        """Clear the currently set extent."""
+        """Clear the currently set extent.
+        """
         self.tool.reset()
         self._populate_coordinates()
 
     def reject(self):
-        """User rejected the rectangle."""
+        """User rejected the rectangle.
+        """
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
@@ -203,8 +199,7 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         super(ExtentSelector, self).reject()
 
     def accept(self):
-        """
-        User accepted the rectangle.
+        """User accepted the rectangle.
         """
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
