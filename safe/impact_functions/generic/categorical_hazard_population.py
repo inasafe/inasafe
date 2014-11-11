@@ -157,8 +157,9 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
         Input
         :param layers: List of layers expected to contain
-              hazard_layer: Raster layer of categorised hazard
-              exposure_layer: Raster layer of population data
+
+              * hazard_layer: Raster layer of categorised hazard
+              * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each category of the hazard
 

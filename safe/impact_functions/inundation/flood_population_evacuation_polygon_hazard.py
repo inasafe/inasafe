@@ -172,14 +172,15 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         """Risk plugin for flood population evacuation.
 
         :param layers: List of layers expected to contain
-            hazard_layer : Vector polygon layer of flood depth
-            exposure_layer : Raster layer of population data on the same grid
+
+            * hazard_layer : Vector polygon layer of flood depth
+            * exposure_layer : Raster layer of population data on the same grid
                 as hazard_layer
 
         Counts number of people exposed to areas identified as flood prone
 
         :returns: Map of population exposed to flooding Table with number of
-        people evacuated and supplies required.
+            people evacuated and supplies required.
         :rtype: tuple
         """
         # Identify hazard and exposure layers
