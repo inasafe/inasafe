@@ -87,7 +87,7 @@ class CommonUtilitiesTest(unittest.TestCase):
 
         filename = self.make_temp_file()
         write_keywords(OSM_KEYWORDS, filename=filename, sublayer='osm')
-        #read back contents and check against control dataset
+        # read back contents and check against control dataset
         control_path = os.path.abspath(
             os.path.join(UNITDATA, 'other', 'expected_singlelayer.keywords'))
         control_keywords = read_keywords(control_path, all_blocks=True)

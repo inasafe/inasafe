@@ -311,8 +311,8 @@ class Map():
         if legend is not None:
             legend_attributes = self.map_legend_attributes()
             LOGGER.debug(legend_attributes)
-            #legend_notes = mapLegendAttributes.get('legend_notes', None)
-            #legend_units = mapLegendAttributes.get('legend_units', None)
+            # legend_notes = mapLegendAttributes.get('legend_notes', None)
+            # legend_units = mapLegendAttributes.get('legend_units', None)
             legend_title = legend_attributes.get('legend_title', None)
 
             symbol_count = 1

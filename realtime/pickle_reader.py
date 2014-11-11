@@ -4,7 +4,7 @@
 import os
 import sys
 from glob import glob
-#noinspection PyPep8Naming
+# noinspection PyPep8Naming
 import cPickle as pickle
 
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 """Simple helper for when you already have the grid.xml and just want a map."""
-#Tim Sutton, April 2013.
+# Tim Sutton, April 2013.
 
 from shake_event import ShakeEvent
 

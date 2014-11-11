@@ -29,7 +29,7 @@ COMPILED_RESOURCES = $(RESOURCE_FILES:%.qrc=%_rc.py)
 default : resources
 
 clean:
-	#rm $(COMPILED_RESOURCES)
+	# rm $(COMPILED_RESOURCES)
 	rm ../ui/resources_rc.py
 	rm ../ui/resources_rc.pyc
 	rm *.pyc

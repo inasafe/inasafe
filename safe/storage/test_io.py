@@ -324,7 +324,7 @@ class Test_IO(unittest.TestCase):
                     msg = ('Got projection %s, expected %s' %
                            (L.projection, layer.projection))
                     assert L.projection == layer.projection, msg
-                    #print [a['FLOOR_AREA'] for a in L.attributes]
+                    # print [a['FLOOR_AREA'] for a in L.attributes]
                 elif vectorname == 'tsunami_building_exposure.shp':
                     L = layer.get_topN(attribute='STR_VALUE', N=N)
                     assert len(L) == N
@@ -690,7 +690,7 @@ class Test_IO(unittest.TestCase):
 
         # Write to file and read again
         v_ref.write_to_file(tmp_filename)
-        #print 'With inner rings, written to ', tmp_filename
+        # print 'With inner rings, written to ', tmp_filename
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_file.is_polygon_data
@@ -722,7 +722,7 @@ class Test_IO(unittest.TestCase):
         V_ref = V.get_topN('FLOOR_AREA', 5)
 
         geometry = V_ref.get_geometry()
-        #data = V_ref.get_data()
+        # data = V_ref.get_data()
         projection = V_ref.get_projection()
 
         # Create new attributes with a range of types
@@ -919,7 +919,7 @@ class Test_IO(unittest.TestCase):
 
             # Write to file (for e.g. visual inspection)
             out_filename = unique_filename(prefix='centroid', suffix='.shp')
-            #print 'writing to', out_filename
+            # print 'writing to', out_filename
             c_layer.write_to_file(out_filename)
 
     test_centroids_from_polygon_data.slow = True
@@ -1514,8 +1514,8 @@ class Test_IO(unittest.TestCase):
         attributes = V.get_data()
 
         # Store it for visual inspection e.g. with QGIS
-        #out_filename = unique_filename(suffix='.shp')
-        #V.write_to_file(out_filename)
+        # out_filename = unique_filename(suffix='.shp')
+        # V.write_to_file(out_filename)
 
         # Check against cells that were verified manually using QGIS
         assert numpy.allclose(geometry[5], [96.97137053, -5.34965715])
@@ -1560,8 +1560,8 @@ class Test_IO(unittest.TestCase):
         attributes = V.get_data()
 
         # Store it for visual inspection e.g. with QGIS
-        #out_filename = unique_filename(suffix='.shp')
-        #V.write_to_file(out_filename)
+        # out_filename = unique_filename(suffix='.shp')
+        # V.write_to_file(out_filename)
 
         # Systematic check of all cells
         i = 0
@@ -1843,10 +1843,10 @@ class Test_IO(unittest.TestCase):
                    'got "%s"' % (key, keywords[key], val))
 
             assert keywords[key] == val, msg
-            #if key in [' preceding_ws', 'with spaces']:
+            # if key in [' preceding_ws', 'with spaces']:
             #    # Accept that surrounding whitespace may be stripped
             #    assert keywords[key].strip() == val, msg
-            #else:
+            # else:
             #    assert keywords[key] == val, msg
 
     def test_empty_keywords_file(self):
@@ -2447,7 +2447,7 @@ class Test_IO(unittest.TestCase):
         os.environ['LANG'] = 'C'
         os.environ['LC_ALL'] = 'C.UTF-8'
 
-        #must be after above
+        # must be after above
         out1 = tr('Hello!')
         expected1 = 'Hello!'
         msg = 'Expected %s, got %s' % (expected1, out1)
@@ -2457,7 +2457,7 @@ class Test_IO(unittest.TestCase):
         os.environ['LANG'] = 'id'
         os.environ['LC_ALL'] = 'id_ID.UTF-8'
 
-        #must be after above
+        # must be after above
         indoout1 = tr('Hello!')  # translate as 'Hi'
         indoexpected1 = 'Halo!'
         msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
@@ -2521,11 +2521,11 @@ class Test_IO(unittest.TestCase):
         # The reason was that comparison was done with get_projection()
         # rather than the projection objects themselves.
 
-        #Projections must be the same: I got
-        #GEOGCS["GCS_WGS_1984",DATUM["WGS_1984",
+        # Projections must be the same: I got
+        # GEOGCS["GCS_WGS_1984",DATUM["WGS_1984",
         #       SPHEROID["WGS_1984",6378137,298.257223563]],
         #       PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]] and
-        #GEOGCS["WGS 84",DATUM["WGS_1984",
+        # GEOGCS["WGS 84",DATUM["WGS_1984",
         #       SPHEROID["WGS 84",6378137,298.257223563,
         #       AUTHORITY["EPSG","7030"]],TOWGS84[0,0,0,0,0,0,0],
         #       AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,

@@ -150,7 +150,7 @@ class StylingTest(unittest.TestCase):
             e.args = (e.args[0] + message,)
             raise
 
-        #message = ('Should get a single transparency class for first style '
+        # message = ('Should get a single transparency class for first style '
         #             'class')
         myTransparencyList = (
             layer.renderer().rasterTransparency().

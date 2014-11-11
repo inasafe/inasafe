@@ -10,7 +10,7 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.common.utilities import OrderedDict
 
 
-#FIXME: need to normalise all raster data Ole/Kristy
+# FIXME: need to normalise all raster data Ole/Kristy
 class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
@@ -76,7 +76,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         N = len(category)
 
         # List attributes to carry forward to result layer
-        #attributes = E.get_attribute_names()
+        # attributes = E.get_attribute_names()
 
         # Calculate building impact according to guidelines
         count2 = 0
@@ -88,17 +88,17 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
             val = float(category[i]['hazard_lev'])
 
             # Classify buildings according to value
-##            if val >= 2.0 / 3:
-##                affected = 2
-##                count2 += 1
-##            elif 1.0 / 3 <= val < 2.0 / 3:
-##                affected = 1
-##                count1 += 1
-##            else:
-##                affected = 0
-##                count0 += 1
-            ## FIXME it would be good if the affected were words not numbers
-            ## FIXME need to read hazard layer and see category or keyword
+            # if val >= 2.0 / 3:
+            #     affected = 2
+            #     count2 += 1
+            # elif 1.0 / 3 <= val < 2.0 / 3:
+            #     affected = 1
+            #     count1 += 1
+            # else:
+            #     affected = 0
+            #     count0 += 1
+            # FIXME it would be good if the affected were words not numbers
+            # FIXME need to read hazard layer and see category or keyword
             if val == 3:
                 affected = 3
                 count2 += 1
@@ -136,7 +136,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         impact_table = impact_summary
         map_title = tr('Categorised hazard impact on buildings')
 
-        #FIXME it would be great to do categorized rather than grduated
+        # FIXME it would be great to do categorized rather than grduated
         # Create style
         style_classes = [dict(label=tr('Low'), min=1, max=1,
                               colour='#1EFC7C', transparency=0, size=1),

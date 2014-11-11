@@ -87,9 +87,9 @@ class HtmlRenderer():
         # Using 150dpi as the baseline, work out a standard text size
         # multiplier so that page renders equally well at different print
         # resolutions.
-        #myBaselineDpi = 150
-        #myFactor = float(self.page_dpi) / myBaselineDpi
-        #myFrame.setTextSizeMultiplier(myFactor)
+        # myBaselineDpi = 150
+        # myFactor = float(self.page_dpi) / myBaselineDpi
+        # myFrame.setTextSizeMultiplier(myFactor)
 
         size = frame.contentsSize()
         size.setWidth(width_px)
@@ -99,7 +99,7 @@ class HtmlRenderer():
         image.setDotsPerMeterX(dpi_to_meters(self.page_dpi))
         image.setDotsPerMeterY(dpi_to_meters(self.page_dpi))
         # Only works in Qt4.8
-        #image.fill(QtGui.qRgb(255, 255, 255))
+        # image.fill(QtGui.qRgb(255, 255, 255))
         # Works in older Qt4 versions
         image.fill(255 + 255 * 256 + 255 * 256 * 256)
         painter = QtGui.QPainter(image)

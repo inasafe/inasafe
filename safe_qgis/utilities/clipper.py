@@ -128,7 +128,7 @@ def clip_layer(
             raise e
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 def _clip_vector_layer(
         layer,
         extent,
@@ -190,7 +190,7 @@ def _clip_vector_layer(
             str(layer.type()))
         raise InvalidParameterError(message)
 
-    #handle, file_name = tempfile.mkstemp('.sqlite', 'clip_',
+    # handle, file_name = tempfile.mkstemp('.sqlite', 'clip_',
     #    temp_dir())
     handle, file_name = tempfile.mkstemp(
         '.shp', 'clip_', temp_dir())
@@ -213,7 +213,7 @@ def _clip_vector_layer(
             extent[0], extent[1],
             extent[2], extent[3])
         # noinspection PyCallByClass
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         polygon = QgsGeometry.fromRect(rectangle)
     elif (type(extent) is QgsGeometry and
           extent.wkbType in allowed_clip_values):
@@ -252,7 +252,7 @@ def _clip_vector_layer(
         field_list,
         layer.wkbType(),
         geo_crs,
-        #'SQLite')  # FIXME (Ole): This works but is far too slow
+        # 'SQLite')  # FIXME (Ole): This works but is far too slow
         'ESRI Shapefile')
     if writer.hasError() != QgsVectorFileWriter.NoError:
         message = tr(

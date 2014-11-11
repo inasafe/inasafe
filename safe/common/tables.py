@@ -16,7 +16,7 @@ __version__ = '0.04'
 __date__ = '2009-07-28'
 __author__ = 'Philippe Lagadec'
 
-#--- LICENSE ------------------------------------------------------------------
+# -- LICENSE ------------------------------------------------------------------
 
 # Copyright Philippe Lagadec - see http://www.decalage.info/contact for contact
 #  info
@@ -53,7 +53,7 @@ __author__ = 'Philippe Lagadec'
 # knowledge of the CeCILL license and that you accept its terms.
 
 
-#--- CHANGES ------------------------------------------------------------------
+# -- CHANGES ------------------------------------------------------------------
 
 # 2008-10-06 v0.01 PL: - First version
 # 2008-10-13 v0.02 PL: - added cellspacing and cellpadding to table
@@ -69,8 +69,8 @@ __author__ = 'Philippe Lagadec'
 #                        in the specific column
 #                        Ismail Sunni
 
-#------------------------------------------------------------------------------
-#TODO:
+# -----------------------------------------------------------------------------
+# TODO:
 # - method to return a generator (yield each row) instead of a single string
 # - unicode support (input and output)
 # - escape text in cells (optional)
@@ -79,11 +79,11 @@ __author__ = 'Philippe Lagadec'
 # - add classes/functions to generate a HTML page, paragraphs, headings, etc...
 
 
-#--- thANKS -------------------------------------------------------------------
+# --- thANKS ------------------------------------------------------------------
 
 # - Michal Cernoevic, for the idea of column styles.
 
-#--- REFERENCES ---------------------------------------------------------------
+# --- REFERENCES --------------------------------------------------------------
 
 # HTML 4.01 specs: http://www.w3.org/tr/html4/struct/tables.html
 
@@ -93,7 +93,7 @@ __author__ = 'Philippe Lagadec'
 # Mozilla: https://bugzilla.mozilla.org/show_bug.cgi?id=915
 
 
-#--- CONSTANTS ----------------------------------------------------------------
+# --- CONSTANTS ---------------------------------------------------------------
 
 TABLE_STYLE_THINBORDER = ''
 DEFAULT_TABLE_CLASS = 'table table-striped condensed'
@@ -235,7 +235,7 @@ class TableRow(object):
     def column_count(self):
         """Return the number of columns in this row"""
         if isinstance(self.cells, basestring):
-            #user instantiated the row with only a string for content\
+            # user instantiated the row with only a string for content\
             return 1
         else:
             return len(self.cells)
@@ -249,7 +249,7 @@ class TableRow(object):
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         result = '  <tr%s>\n' % attribs_str
         if isinstance(self.cells, basestring):
-            #user instantiated the row with only a string for content\
+            # user instantiated the row with only a string for content\
             col = 1
             # setting colspan to 100% will force rows that were
             # created by passing str for the ctor to span the full
@@ -337,8 +337,12 @@ class Table(object):
         self.col_styles = col_styles
 
     def mozilla_row_fix(self, row):
-    # apply column alignments  and styles to each row if specified:
-    # (Mozilla bug workaround)
+        """Mozilla bug fix workaround.
+
+        :param row: Row to be fixed.
+        :type row: row
+        """
+        # apply column alignments  and styles to each row if specified:
         if self.col_align and not row.col_align:
             row.col_align = self.col_align
         if self.col_char and not row.col_char:
@@ -373,10 +377,10 @@ class Table(object):
             caption_class = ''
             if self.caption_at_bottom:
                 # Note you can use css to place the caption at the bottom
-                #caption.caption-bottom
-                #{
+                # caption.caption-bottom
+                # {
                 #  caption-side:bottom;
-                #}
+                # }
                 caption_class = CAPTION_BOTTOM_CLASS
             result += ' <caption%s>%s</caption>\n' % (
                                     caption_class,
@@ -397,7 +401,7 @@ class Table(object):
         # then all data rows:
         result += ' <tbody>\n'
         if isinstance(self.rows, basestring):
-            #user instantiated the table with only a string for content
+            # user instantiated the table with only a string for content
             row = TableRow(self.rows)
             self.mozilla_row_fix(row)
             result += str(row)
@@ -557,9 +561,9 @@ if __name__ == '__main__':
         """
         Generator to create table rows for integers from 1 to n
         """
-    ##        # First, header row:
-    ##        yield TableRow(('x', 'square(x)'), header=True, bgcolor='blue')
-    ##        # then all rows:
+        # First, header row:
+        # yield TableRow(('x', 'square(x)'), header=True, bgcolor='blue')
+        # then all rows:
         for x in range(1, n + 1):
             yield (x, x * x)
 

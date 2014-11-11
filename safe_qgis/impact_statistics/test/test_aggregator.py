@@ -68,11 +68,11 @@ DOCK = Dock(IFACE)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 class AggregatorTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
 
@@ -147,7 +147,7 @@ class AggregatorTest(unittest.TestCase):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
         file_list = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
-        #add additional layers
+        # add additional layers
         load_layers(file_list, clear_flag=False)
         attribute_key = get_defaults('AGGR_ATTR_KEY')
 
@@ -172,12 +172,12 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_check_aggregation_no_attributes(self):
         """Aggregation attribute chosen correctly when no attr available."""
 
         file_list = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
-        #add additional layers
+        # add additional layers
         load_layers(file_list, clear_flag=False)
         attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
@@ -198,12 +198,12 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_check_aggregation_none_in_keywords(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
 
         file_list = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
-        #add additional layers
+        # add additional layers
         load_layers(file_list, clear_flag=False)
         attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
@@ -224,7 +224,7 @@ class AggregatorTest(unittest.TestCase):
         assert attribute is None, message
 
     def test_setup_target_field(self):
-        """Test setup up target field is correct
+        """Test setup up target field is correct.
         """
         layer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
@@ -247,7 +247,7 @@ class AggregatorTest(unittest.TestCase):
         """
 
         # See qgis project in test data: vector_preprocessing_test.qgs
-        #add additional layers
+        # add additional layers
         file_list = ['jakarta_crosskabupaten_polygons.shp']
         load_layers(file_list, clear_flag=False)
         file_list = ['kabupaten_jakarta.shp']

@@ -59,7 +59,7 @@ class QgsLogHandler(logging.Handler):
             # Check logging.LogRecord properties for lots of other goodies
             # like line number etc. you can get from the log message.
             QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
-        #Make sure it doesn't crash if using Safe without QGIS
+        # Make sure it doesn't crash if using Safe without QGIS
         except ImportError:
             pass
         except MemoryError:
