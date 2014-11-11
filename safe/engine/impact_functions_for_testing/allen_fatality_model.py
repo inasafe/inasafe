@@ -46,7 +46,7 @@ class EarthquakeFatalityFunction(FunctionProvider):
             else:
                 datatype = keywords['datatype']
 
-                if not 'ratio' in datatype:
+                if 'ratio' not in datatype:
                     population = layer
                 else:
                     # 'female' in datatype and 'ratio' in datatype:

@@ -45,8 +45,8 @@ class Projection:
         """
 
         if p is None:
-            #msg = 'Requested projection is None'
-            #raise TypeError(msg)
+            # msg = 'Requested projection is None'
+            # raise TypeError(msg)
             p = DEFAULT_PROJECTION
 
         # Clean input string. This will also work when p is of class
@@ -65,7 +65,7 @@ class Projection:
                             # FIXME (Ole): This one emits the warning:
                             # Warning 5: Failed parsing CoordSys:
                             # 'Indonesia TM-3 zone 48.2'
-                            #srs.ImportFromMICoordSys,
+                            # srs.ImportFromMICoordSys,
                             srs.ImportFromPCI,
                             srs.ImportFromXML,
                             srs.ImportFromUSGS,

@@ -343,9 +343,9 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)
         calculated_result = I.get_data()
-#        print calculated_result.shape
+        # print calculated_result.shape
         keywords = I.get_keywords()
-#        print "keywords", keywords
+        # print "keywords", keywords
         population = keywords['total_population']
         fatalities = keywords['total_fatalities']
 
@@ -1284,7 +1284,7 @@ class Test_Engine(unittest.TestCase):
         # FIXME: Still needs some reference data to compare to
         for mmi_filename in ['Shakemap_Padang_2009.asc',
                              # Time consuming
-                             #'Earthquake_Ground_Shaking.asc',
+                             # 'Earthquake_Ground_Shaking.asc',
                              'Lembang_Earthquake_Scenario.asc']:
 
             # Name file names for hazard level and exposure
@@ -1339,8 +1339,9 @@ class Test_Engine(unittest.TestCase):
         # no reference data. It does check the sanity of values as
         # far as possible.
 
-        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
-                            % TESTDATA)
+        hazard_filename = (
+            '%s/tsunami_max_inundation_depth_4326.tif'
+            % TESTDATA)
         exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
         exposure_with_depth_filename = ('%s/tsunami_building_exposure'
                                         '.shp' % TESTDATA)
@@ -1366,7 +1367,7 @@ class Test_Engine(unittest.TestCase):
                    % (key, str(feature.keys())))
             assert key in feature.keys(), msg
             if (feature['LONGITUDE'] == 150.1787 and
-                feature['LATITUDE'] == -35.70413):
+                    feature['LATITUDE'] == -35.70413):
                 msg = ''
                 assert numpy.isnan(feature[key])
             elif (feature['LONGITUDE'] == 150.1793 and
@@ -2837,7 +2838,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test for a range of hazard layers
         for mmi_filename in ['Shakemap_Padang_2009.asc']:
-                             #'Lembang_Earthquake_Scenario.asc']:
+            # 'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
             hazard_filename = join(HAZDATA, mmi_filename)

@@ -539,7 +539,7 @@ class Vector(Layer):
                 # for more information
                 if fields[name] == _pseudo_inf:
                     fields[name] = float('nan')
-                #print 'Field', name, feature_type, j, fields[name]
+                # print 'Field', name, feature_type, j, fields[name]
 
             data.append(fields)
         # Store geometry coordinates as a compact numeric array
@@ -1072,9 +1072,9 @@ class Vector(Layer):
         return self.is_vector and self.geometry_type == ogr.wkbMultiPolygon
 
 
-#----------------------------------
+# ----------------------------------
 # Helper functions for class Vector
-#----------------------------------
+# ----------------------------------
 def convert_line_to_points(V, delta):
     """Convert line vector data to point vector data
 

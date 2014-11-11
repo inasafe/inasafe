@@ -81,7 +81,7 @@ class SFtpClient:
         self.sftp = paramiko.SFTPClient.from_transport(self.transport)
 
         # go to working directory, this is the default folder
-        if not self.working_dir is None:
+        if self.working_dir is not None:
             self.sftp.chdir(self.working_dir)
         self.working_dir_path = self.sftp.getcwd()
 
@@ -136,7 +136,7 @@ class SFtpClient:
         try:
             return S_ISDIR(self.sftp.stat(path).st_mode)
         except IOError:
-            #Path does not exist, so by definition not a directory
+            # Path does not exist, so by definition not a directory
             return False
 
     def path_exists(self, path):

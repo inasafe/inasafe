@@ -239,7 +239,7 @@ class ShakeData:
         if os.path.exists(local_path):
             return local_path
 
-        #Otherwise try to fetch it using ftp
+        # Otherwise try to fetch it using ftp
         for counter in range(retries):
             last_error = None
             try:

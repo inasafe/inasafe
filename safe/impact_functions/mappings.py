@@ -6,7 +6,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import verify
 
 
-#def padang2itb(E):
+# def padang2itb(E):
 #    """
 #    To be updated
 #    """
@@ -162,9 +162,9 @@ def sigab2padang(E):
     for i in range(N):
         levels = E.get_data('Tingkat', i).lower()
         structure = E.get_data('Struktur_B', i).lower()
-        #roof_type = E.get_data('Atap', i).lower()
-        #wall_type = E.get_data('Dinding', i).lower()
-        #floor_type = E.get_data('Lantai', i).lower()
+        # roof_type = E.get_data('Atap', i).lower()
+        # wall_type = E.get_data('Dinding', i).lower()
+        # floor_type = E.get_data('Lantai', i).lower()
         if levels == 'none' or structure == 'none':
             vulnerability_class = 2
         else:
@@ -359,9 +359,9 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
     for i in range(N):
         levels = E.get_data('Tingkat', i).lower()
         structure = E.get_data('Struktur_B', i).lower()
-        #roof_type = E.get_data('Atap', i).lower()
-        #wall_type = E.get_data('Dinding', i).lower()
-        #floor_type = E.get_data('Lantai', i).lower()
+        # roof_type = E.get_data('Atap', i).lower()
+        # wall_type = E.get_data('Dinding', i).lower()
+        # floor_type = E.get_data('Lantai', i).lower()
         if levels == 'none' or structure == 'none':
             vulnerability_class = 'URM'
         elif structure.startswith('beton') or structure.startswith('kayu'):

@@ -235,7 +235,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             volcano_names = tr('Not specified in data')
 
         # Check if category_title exists in hazard_layer
-        if not category_title in hazard_layer.get_attribute_names():
+        if category_title not in hazard_layer.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (hazard_layer.get_name(), category_title))
             # noinspection PyExceptionInherit

@@ -88,7 +88,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.target_field = params['target_field']
         self.valid_type_fields = params['key_attribute']
 
-        #find which attribute field has to be used
+        # find which attribute field has to be used
         self.type_fields = []
         try:
             for key in self.impact_attrs[0].iterkeys():
@@ -101,7 +101,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             self.type_fields = None
 
         self.no_features = False
-        #there are no features in this postprocessing polygon
+        # there are no features in this postprocessing polygon
         if self.impact_attrs == []:
             self.no_features = True
 

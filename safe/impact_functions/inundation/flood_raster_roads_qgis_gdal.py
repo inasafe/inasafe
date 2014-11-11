@@ -292,7 +292,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             length = geom.length()
             road_len += length
 
-            if not road_type in roads_by_type:
+            if road_type not in roads_by_type:
                 roads_by_type[road_type] = {'flooded': 0, 'total': 0}
             roads_by_type[road_type]['total'] += length
 

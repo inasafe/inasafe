@@ -76,7 +76,7 @@ class Test_mappings(unittest.TestCase):
         """OSM structure types maps to BNPB vulnerability curves
         """
 
-        #hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
+        # hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
         exposure_filename = ('%s/jakarta_OSM_building.shp'
                              % EXPDATA)
 
@@ -92,7 +92,7 @@ class Test_mappings(unittest.TestCase):
             except KeyError:
                 # print
                 # print i, Emap.get_data()[i]
-                #import sys; sys.exit()
+                # import sys; sys.exit()
                 pass
 
             levels = feature['building_l']
