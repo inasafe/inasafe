@@ -53,7 +53,8 @@ from safe.impact_functions.core import (
     get_doc_string,
     get_unique_values,
     get_plugins_as_table,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs,
+    evacuated_population_needs)
 
 from safe.engine.core import calculate_impact
 

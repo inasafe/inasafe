@@ -79,10 +79,6 @@ class MinimumNeeds(object):
 
         :param frequency: How regularly the unit needs to be dispatched
         :type: basestring  # maybe at some point fix this to a selection.
-
-        :param provenance: Additional information about where this
-        information is obtained and what it relates to.
-        :type: basestring
         """
         self.minimum_needs['resources'].append({
             'Resource name': resource,
@@ -214,7 +210,7 @@ class MinimumNeeds(object):
                         "provided {{ Frequency }}.")
                 }
             ],
-            "provenance": "Perka",
+            "provenance": "BNPB",
             "profile": "BNPB"
         }
         return minimum_needs
