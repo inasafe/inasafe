@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Mon Nov  3 23:02:12 2014
+# Created: Wed Nov 12 17:24:42 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -309,7 +309,7 @@ class Ui_OptionsDialogBase(object):
         self.verticalLayout.addWidget(self.buttonBox)
 
         self.retranslateUi(OptionsDialogBase)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), OptionsDialogBase.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), OptionsDialogBase.reject)
         QtCore.QObject.connect(self.custom_org_disclaimer_checkbox, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.txtDisclaimer.setEnabled)
