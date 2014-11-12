@@ -57,8 +57,6 @@ class NumericParameterWidget(GenericParameterWidget):
         :returns: A BooleanParameter from the current state of widget
 
         """
-        print self._input
-        print self._input.value()
         self._parameter.value = self._input.value()
         if len(self._parameter.allowed_units) > 1:
             current_index = self._unit_widget.currentIndex()
