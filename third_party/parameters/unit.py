@@ -11,13 +11,13 @@ import uuid
 
 class Unit(object):
     """Class for representing unit."""
-    def __init__(self, guid):
+    def __init__(self, guid=None):
         """Constructor
 
         :param guid: Optional unique identifier for this unit. If none
             is specified one will be generated using python hash. This guid
             will be used when storing unit in the registry.
-        :type guid: str
+        :type guid: str, None
 
         """
 

@@ -97,7 +97,7 @@ def evacuated_population_weekly_needs(
     return population_needs
 
 
-def evacuated_population_needs(population, minimum_needs, full_minimum_needs):
+def evacuated_population_needs(population, minimum_needs):
     """Calculate estimated needs using minimum needs configuration provided
     in full_minimum_needs.
 
@@ -106,25 +106,21 @@ def evacuated_population_needs(population, minimum_needs, full_minimum_needs):
 
     :param minimum_needs: Ratios to use when calculating minimum needs.
         Defaults to perka 7 as described in assumptions below.
-    :type minimum_needs: dict
-
-    :param full_minimum_needs: Ratios to use when calculating minimum needs.
-        Defaults to perka 7 as described in assumptions below.
-    :type minimum_needs: dict
+    :type minimum_needs: list
 
     :returns: The needs for the evacuated population.
     :rtype: dict
     """
     frequencies = []
-    for resource in full_minimum_needs['resources']:
-        if resource['Frequency'] not in frequencies:
-            frequencies.append(resource['Frequency'])
+    for resource in minimum_needs:
+        if resource.frequency not in frequencies:
+            frequencies.append(resource.frequency)
 
     population_needs_by_frequency = OrderedDict([
         [frequency, []] for frequency in frequencies])
 
-    for resource in full_minimum_needs['resources']:
-        this_resource = resource.copy()
+    for resource_parameter in minimum_needs:
+        resource = {}
         if this_resource['Unit abbreviation']:
             resource_name = '%s [%s]' % (
                 this_resource['Resource name'],

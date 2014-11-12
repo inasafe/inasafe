@@ -50,7 +50,7 @@ class NumericParameter(GenericParameter):
             self._minimum_allowed_value = value
             return
         # Otherwise it must be less than maximum
-        if value < self._maximum_allowed_value:
+        if value <= self._maximum_allowed_value:
             self._minimum_allowed_value = value
             return
 
@@ -80,7 +80,7 @@ class NumericParameter(GenericParameter):
             self._maximum_allowed_value = value
             return
         # Otherwise it must be more than the minimum
-        if value > self._minimum_allowed_value:
+        if value >= self._minimum_allowed_value:
             self._maximum_allowed_value = value
             return
 
@@ -142,6 +142,7 @@ class NumericParameter(GenericParameter):
             self._value = value
         else:
             raise ValueOutOfBounds(
-                'Value must be greater than %s and less than %s' % (
+                'Value (%s) must be greater than %s and less than %s' % (
+                    value,
                     self._minimum_allowed_value,
                     self._maximum_allowed_value))

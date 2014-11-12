@@ -92,38 +92,13 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         """
         self.resourceListWidget.clear()
 
-    @staticmethod
-    def _format_sentence(sentence, resource):
-        """Populate the placeholders in the sentence.
-
-        :param sentence: The sentence with placeholder keywords.
-        :type sentence: basestring, str
-
-        :param resource: The resource to be placed into the sentence.
-        :type resource: dict
-
-        :returns: The formatted sentence.
-        :rtype: basestring
-        """
-        sentence = sentence.split('{{')
-        updated_sentence = sentence[0].rstrip()
-        for part in sentence[1:]:
-            replace, keep = part.split('}}')
-            replace = replace.strip()
-            updated_sentence = "%s %s%s" % (
-                updated_sentence,
-                resource[replace],
-                keep
-            )
-        return updated_sentence
-
     def add_resource(self, resource):
         """Add a resource to the minimum needs table.
 
         :param resource: The resource to be added
         :type resource: dict
         """
-        updated_sentence = self._format_sentence(
+        updated_sentence = QMinimumNeeds.format_sentence(
             resource['Readable sentence'], resource)
         if self.edit_item:
             item = self.edit_item

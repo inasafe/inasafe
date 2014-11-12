@@ -100,9 +100,7 @@ for (name, plugin) in get_plugins().items():
         continue
     if 'minimum needs' in plugin.parameters:
         plugin.parameters['minimum needs'] = (
-            minimum_needs.get_minimum_needs())
-        plugin.parameters['rich minimum needs'] = (
-            minimum_needs.get_full_needs())
+            minimum_needs.get_needs_parameters())
 
 try:
     # When upgrading, using the plugin manager, you may get an error when

@@ -31,13 +31,15 @@ from PyQt4.QtGui import (
     QLabel,
     QCheckBox,
     QFormLayout,
-    QScrollArea,
+    QGridLayout,
     QWidget)
 from collections import OrderedDict
 
 from safe_qgis.ui.function_options_dialog_base import (
     Ui_FunctionOptionsDialogBase)
 from safe_qgis.safe_interface import safeTr, get_postprocessor_human_name
+from third_party.parameters.qt_widgets.parameter_container import (
+    ParameterContainer)
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -86,6 +88,10 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         # NOTES (Ismail Sunni): I don't know why, but unittest and nosetest
         # gives different output for widget.property(property_name). So,
         # it's better to check the type of the widget.
+        # for new_parameter in new_parameters:
+        #     values[new_parameter.name] = new_parameter.value
+        print widget
+        print type(widget)
         if type(widget) == QLineEdit:
             return lambda: function(widget.text())
         elif type(widget) == QCheckBox or type(widget) == QGroupBox:
@@ -115,31 +121,18 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
 
-        :param parameters: A Dictionary containing element of form
-        :type parameters: dict
+        :param parameters: A list containing element of form
+        :type parameters: list
         """
         # create minimum needs tab
         tab = QWidget()
-        form_widget = QWidget()
-        form_layout = QFormLayout(form_widget)
-        form_layout.setLabelAlignment(Qt.AlignLeft)
-        scroll_area = QtGui.QScrollArea(tab)
-        scroll_area.setWidget(form_widget)
-        scroll_area.setWidgetResizable(True)
-        self.tabWidget.addTab(scroll_area, self.tr('Minimum Needs'))
+        form_layout = QGridLayout(tab)
+        parameter_container = ParameterContainer(parameters)
+        form_layout.addWidget(parameter_container)
+        self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
 
-        widget = QWidget()
-        layout = QFormLayout(widget)
-        widget.setLayout(layout)
-
-        values = OrderedDict()
-        for label, value in parameters.items():
-            values[label] = self.build_widget(
-                layout, label, value)
-
-        form_layout.addRow(widget, None)
-        self.values['minimum needs'] = values
+        self.values['minimum needs'] = parameter_container.get_parameters
 
     def build_post_processor_form(self, parameters):
         """Build Post Processor Tab.
@@ -306,7 +299,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
     def accept(self):
         """Override the default accept function
 
-        .. note:: see http://tinyurl.com/pyqt-differences
+        .. note:: see http://tinyurl.com/pyqt-differences # Broken url
         """
 
         try:

@@ -61,7 +61,8 @@ class NumericParameterWidget(GenericParameterWidget):
         if len(self._parameter.allowed_units) > 1:
             current_index = self._unit_widget.currentIndex()
             unit = self._unit_widget.itemData(current_index, Qt.UserRole)
-            unit = unit.toPyObject()
+            if hasattr(unit, 'toPyObject'):
+                unit = unit.toPyObject()
             self._parameter.unit = unit
         return self._parameter
 

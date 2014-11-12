@@ -7,6 +7,8 @@ __date__ = '05/10/2014'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from third_party.parameters.float_parameter import FloatParameter
+from third_party.parameters.unit import Unit
 from PyQt4.QtCore import QSettings, QFile, QDir
 from qgis.core import QgsApplication
 from safe.common.minimum_needs import MinimumNeeds
@@ -169,6 +171,37 @@ class QMinimumNeeds(MinimumNeeds):
         needs_json = json.dumps(self.minimum_needs)
         qfile.write(needs_json)
 
+    def get_needs_parameters(self):
+        parameters = []
+        for resource in self.minimum_needs['resources']:
+            parameter = FloatParameter()
+            parameter.name = resource['Resource name']
+            parameter.help_text = resource['Resource description']
+            # Adding in the frequency property. This is not in the
+            # FloatParameter by default, so maybe we should subclass.
+            parameter.frequency = resource['Frequency']
+            parameter.description = self.format_sentence(
+                resource['Readable sentence'],
+                resource)
+            parameter.minimum_allowed_value = float(
+                resource['Minimum allowed'])
+            parameter.maximum_allowed_value = float(
+                resource['Maximum allowed'])
+            parameter_units = []
+            for unit in [
+                    resource['Unit abbreviation'],
+                    resource['Unit'],
+                    resource['Units']]:
+                parameter_unit = Unit()
+                parameter_unit.name = unit
+                parameter_unit.description = ''
+                parameter_units.append(parameter_unit)
+            parameter.unit = parameter_units[0]
+            parameter.allowed_units = parameter_units
+            parameter.value = float(resource['Default'])
+            parameters.append(parameter)
+        return parameters
+
     @property
     def root_directory(self):
         """Get the home root directory
@@ -185,3 +218,28 @@ class QMinimumNeeds(MinimumNeeds):
             if self._root_directory is None or self._root_directory == '':
                 self._root_directory = "%s/.qgis2" % (os.environ['HOME'])
         return self._root_directory
+
+    @staticmethod
+    def format_sentence(sentence, resource):
+        """Populate the placeholders in the sentence.
+
+        :param sentence: The sentence with placeholder keywords.
+        :type sentence: basestring, str
+
+        :param resource: The resource to be placed into the sentence.
+        :type resource: dict
+
+        :returns: The formatted sentence.
+        :rtype: basestring
+        """
+        sentence = sentence.split('{{')
+        updated_sentence = sentence[0].rstrip()
+        for part in sentence[1:]:
+            replace, keep = part.split('}}')
+            replace = replace.strip()
+            updated_sentence = "%s %s%s" % (
+                updated_sentence,
+                resource[replace],
+                keep
+            )
+        return updated_sentence
