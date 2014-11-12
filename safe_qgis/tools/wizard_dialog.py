@@ -142,7 +142,7 @@ field_question_subcategory_unit = QApplication.translate(
     'You have selected a <b>%s %s</b> layer measured in '
     '<b>%s</b>, and the selected layer is a vector layer. Please '
     'select the attribute in this layer that represents %s.')
-    # (category, subcategory, unit, subcategory-unit relation))
+# (category, subcategory, unit, subcategory-unit relation))
 
 field_question_aggregation = QApplication.translate(
     'WizardDialog',

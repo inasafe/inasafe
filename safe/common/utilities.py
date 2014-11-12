@@ -19,9 +19,9 @@ from safe.common.exceptions import VerificationError
 
 # Prefer python's own OrderedDict if it exists
 try:
-    #pylint: disable=W0611
+    # pylint: disable=W0611
     from collections import OrderedDict
-    #pylint: enable=W0611
+    # pylint: enable=W0611
 except ImportError:
     try:
         from collections import OrderedDict
@@ -336,13 +336,13 @@ def format_int(x):
     """
 
     # This is broken
-    #import locale
-    #locale.setlocale(locale.LC_ALL, '')  # Broken, why?
-    #s = locale.format('%d', x, 1)
+    # import locale
+    # locale.setlocale(locale.LC_ALL, '')  # Broken, why?
+    # s = locale.format('%d', x, 1)
     lang = os.getenv('LANG')
     try:
         s = '{0:,}'.format(x)
-        #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+        # s = '{0:n}'.format(x)  # n means locale aware (read up on this)
     # see issue #526
     except ValueError:
         return x
@@ -670,9 +670,9 @@ def which(name, flags=os.X_OK):
     :rtype: C{list}
     """
     result = []
-    #pylint: disable=W0141
+    # pylint: disable=W0141
     extensions = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
-    #pylint: enable=W0141
+    # pylint: enable=W0141
     path = os.environ.get('PATH', None)
     # In c6c9b26 we removed this hard coding for issue #529 but I am
     # adding it back here in case the user's path does not include the

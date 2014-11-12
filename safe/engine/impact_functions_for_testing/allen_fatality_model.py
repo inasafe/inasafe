@@ -46,7 +46,7 @@ class EarthquakeFatalityFunction(FunctionProvider):
             else:
                 datatype = keywords['datatype']
 
-                if not 'ratio' in datatype:
+                if 'ratio' not in datatype:
                     population = layer
                 else:
                     # 'female' in datatype and 'ratio' in datatype:
@@ -66,8 +66,8 @@ class EarthquakeFatalityFunction(FunctionProvider):
         # Extract data
         H = intensity.get_data(nan=0)
         P = population.get_data(nan=0)
-        #print
-        #print 'Population', population.get_name()
+        # print
+        # print 'Population', population.get_name()
 
         # Calculate impact
         F = 10 ** (a * H - b) * P

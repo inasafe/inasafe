@@ -251,16 +251,16 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     x = res
                 affected = x
             else:
-                #assume that every polygon is affected (see #816)
+                # assume that every polygon is affected (see #816)
                 affected = True
                 # there is no flood related attribute
-                #message = ('No flood related attribute found in %s. '
+                # message = ('No flood related attribute found in %s. '
                 #       'I was looking for either "Flooded", "FLOODPRONE" '
                 #       'or "Affected". The latter should have been '
                 #       'automatically set by call to '
                 #       'assign_hazard_values_to_exposure_data(). '
                 #       'Sorry I can\'t help more.')
-                #raise Exception(message)
+                # raise Exception(message)
 
             if affected:
                 # Get population at this location

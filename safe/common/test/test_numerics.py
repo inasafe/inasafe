@@ -4,14 +4,14 @@ import numpy
 # Import functions tested by this module.
 # NOTE (Ole): Those missing here are in fact tested elsewhere
 
-#from safe.common.numerics import ensure_numeric
-#from safe.common.numerics import nan_allclose
-#from safe.common.numerics import normal_cdf
-#from safe.common.numerics import log_normal_cdf
-#from safe.common.numerics import erf
+# from safe.common.numerics import ensure_numeric
+# from safe.common.numerics import nan_allclose
+# from safe.common.numerics import normal_cdf
+# from safe.common.numerics import log_normal_cdf
+# from safe.common.numerics import erf
 from safe.common.numerics import axes_to_points
 from safe.common.numerics import grid_to_points
-#from safe.common.numerics import geotransform_to_axes
+# from safe.common.numerics import geotransform_to_axes
 
 
 class Test_Numerics(unittest.TestCase):
@@ -67,11 +67,11 @@ class Test_Numerics(unittest.TestCase):
         assert P.shape[1] == 2
         assert len(V) == L
 
-        #print
-        #print longitudes
-        #print latitudes
-        #print A
-        #print P
+        # print
+        # print longitudes
+        # print latitudes
+        # print A
+        # print P
         assert numpy.allclose(P[:N, 0], longitudes)
         assert numpy.allclose(P[:L:N, 1], latitudes[::-1])
         assert numpy.allclose(V, A.flat[:])

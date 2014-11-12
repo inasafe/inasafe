@@ -127,5 +127,5 @@ except ImportError:
                   'to the InaSAFE team.')
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
-        #None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
+    #   None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
     raise

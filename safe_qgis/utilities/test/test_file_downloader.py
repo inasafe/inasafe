@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import tempfile
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.common.testing import get_qgis_app
@@ -34,7 +34,7 @@ from safe_qgis.exceptions import DownloadError
 
 class FileDownloaderTest(unittest.TestCase):
     """Test FileDownloader class."""
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_download(self):
         """Test download."""
         manager = QNetworkAccessManager(PARENT)

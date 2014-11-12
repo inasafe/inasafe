@@ -19,14 +19,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import shutil
-#noinspection PyPep8Naming
+# noinspection PyPep8Naming
 import cPickle as pickle
 import math
 import logging
 from datetime import datetime
 
 import numpy
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
 
 # This import is required to enable PyQt API v2
@@ -35,7 +35,7 @@ import pytz  # sudo apt-get install python-tz
 import qgis
 # pylint: enable=W0611
 # TODO: I think QCoreApplication is needed for tr() check before removing
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QCoreApplication,
     QObject,
@@ -45,7 +45,7 @@ from PyQt4.QtCore import (
     QSize,
     Qt,
     QTranslator)
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtXml import QDomDocument
 # We should remove the following pylint suppressions when we support only QGIS2
 # pylint: disable=E0611
@@ -167,7 +167,7 @@ class ShakeEvent(QObject):
             self.event_id = event_id
         else:
             # fetch the data from (s)ftp
-            #self.data = ShakeData(event_id, force_flag)
+            # self.data = ShakeData(event_id, force_flag)
             try:
                 self.data = SftpShakeData(
                     event=event_id,
@@ -204,21 +204,21 @@ class ShakeEvent(QObject):
         # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
         self.search_boxes = None
         # Stored as a dict with dir_to, dist_to,  dist_from etc e.g.
-        #{'dir_from': 16.94407844543457,
-        #'dir_to': -163.05592346191406,
-        #'roman': 'II',
-        #'dist_to': 2.504295825958252,
-        #'mmi': 1.909999966621399,
-        #'name': 'Tondano',
-        #'id': 57,
-        #'population': 33317}
+        # {'dir_from': 16.94407844543457,
+        # 'dir_to': -163.05592346191406,
+        # 'roman': 'II',
+        # 'dist_to': 2.504295825958252,
+        # 'mmi': 1.909999966621399,
+        # 'name': 'Tondano',
+        # 'id': 57,
+        # 'population': 33317}
         self.most_affected_city = None
         # for localization
         self.translator = None
         self.locale = locale
         self.setup_i18n()
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def check_environment(self):
         """A helper class to check that QGIS is correctly initialised.
 
@@ -241,7 +241,7 @@ class ShakeEvent(QObject):
             shakemap_extract_dir(),
             self.event_id,
             'grid.xml')
-        #short circuit if the tif is already created.
+        # short circuit if the tif is already created.
         if os.path.exists(grid_xml_path):
             return grid_xml_path
         else:
@@ -560,7 +560,7 @@ class ShakeEvent(QObject):
             if not feature.isValid():
                 LOGGER.debug('Skipping feature')
                 continue
-                #LOGGER.debug('Writing feature to mem layer')
+                # LOGGER.debug('Writing feature to mem layer')
             # calculate the distance and direction from this point
             # to and from the epicenter
             feature_id = str(feature.id())
@@ -810,7 +810,7 @@ class ShakeEvent(QObject):
                 'dir_from': direction_from}
             cities.append(city)
         LOGGER.debug('%s features added to sorted impacted cities list.')
-        #LOGGER.exception(cities)
+        # LOGGER.exception(cities)
         sorted_cities = sorted(cities,
                                key=lambda d: (
                                # we want to use whole no's for sort
@@ -1090,7 +1090,7 @@ class ShakeEvent(QObject):
         impact_table_path = self.impact_table()
         return self.impact_file, impact_table_path
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def clip_layers(self, shake_raster_path, population_raster_path):
         """Clip population (exposure) layer to dimensions of shake data.
 
@@ -1322,7 +1322,7 @@ class ShakeEvent(QObject):
         except:
             raise
         logging.info('Created: %s', contours_shapefile)
-        #noinspection PyBroadException
+        # noinspection PyBroadException
         try:
             cities_shape_file = self.cities_to_shapefile(
                 force_flag=force_flag)
@@ -1495,7 +1495,7 @@ class ShakeEvent(QObject):
             'project.qgs')
         project.write(QFileInfo(project_path))
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def bearing_to_cardinal(self, bearing):
         """Given a bearing in degrees return it as compass units e.g. SSE.
 
@@ -1589,7 +1589,7 @@ class ShakeEvent(QObject):
         credits_text = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the World Bank-GFDRR.')
-        #Format the lat lon from decimal degrees to dms
+        # Format the lat lon from decimal degrees to dms
         point = QgsPoint(
             self.shake_grid.longitude,
             self.shake_grid.latitude)
@@ -1719,13 +1719,13 @@ class ShakeEvent(QObject):
         # FIXME (Ole) Hack - Remove this as the shakemap data always
         # reports the time in GMT+7 but the timezone as GMT.
         # This is the topic of ticket:10
-        #tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
-        #eq_date_jakarta = eq_date.replace(tzinfo=pytz.utc).astimezone(tz)
+        # tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
+        # eq_date_jakarta = eq_date.replace(tzinfo=pytz.utc).astimezone(tz)
         eq_date_jakarta = eq_date
 
         # The character %b will use the local word for month
         # However, setting the locale explicitly to test, does not work.
-        #locale.setlocale(locale.LC_TIME, 'id_ID')
+        # locale.setlocale(locale.LC_TIME, 'id_ID')
 
         date_str = eq_date_jakarta.strftime('%d-%b-%y %H:%M:%S %Z')
         return date_str, lapse_string

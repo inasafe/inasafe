@@ -68,7 +68,7 @@ class ShakeGridTest(unittest.TestCase):
         base_name = os.path.splitext(os.path.basename(path))[0]
         # do a little query to make sure we got some results...
         sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
-        #print sql_statement
+        # print sql_statement
         layer = data_source.ExecuteSQL(sql_statement)
         feature_count = layer.GetFeatureCount()
         flag = feature_count == count

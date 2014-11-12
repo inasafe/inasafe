@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # pylint: disable=W0611
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.vector import Layer
 from safe.storage.vector import Vector

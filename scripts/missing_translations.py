@@ -57,7 +57,7 @@ if __name__ == '__main__':
                     i = fields.index('unfinished)')
                     missing += int(fields[i - 1])
 
-            #print 'untranslated', untranslated
+            # print 'untranslated', untranslated
             if missing == 0:
                 status = 'OK'
             else:

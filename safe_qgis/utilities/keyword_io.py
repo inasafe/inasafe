@@ -366,7 +366,7 @@ class KeywordIO(QObject):
                     'dict text);')
                 LOGGER.debug(sql)
                 cursor.execute(sql)
-                #data = cursor.fetchone()
+                # data = cursor.fetchone()
                 cursor.fetchone()
             else:
                 LOGGER.debug('Keywords table already exists')
@@ -495,7 +495,7 @@ class KeywordIO(QObject):
             pickle_dump = pickle.dumps(metadata_xml, pickle.HIGHEST_PROTOCOL)
             if data is None:
                 # insert a new rec
-                #cursor.execute('insert into keyword(hash) values(:hash);',
+                # cursor.execute('insert into keyword(hash) values(:hash);',
                 #             {'hash': hash_value})
                 cursor.execute(
                     'insert into keyword(hash, dict) values(:hash, :dict);',
