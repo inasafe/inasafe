@@ -146,3 +146,16 @@ class NumericParameter(GenericParameter):
                     value,
                     self._minimum_allowed_value,
                     self._maximum_allowed_value))
+
+    def serialize(self):
+        """Convert the parameter into a dictionary.
+
+        :return: The parameter dictionary.
+        :rtype: dict
+        """
+        pickle = super(NumericParameter, self).serialize()
+        pickle['minimum_allowed_value'] = self.minimum_allowed_value
+        pickle['maximum_allowed_value'] = self.maximum_allowed_value
+        pickle['unit'] = self.unit.name
+        pickle['allowed_units'] = [unit.name for unit in self.allowed_units]
+        return pickle

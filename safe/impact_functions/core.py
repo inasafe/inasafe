@@ -113,25 +113,24 @@ def evacuated_population_needs(population, minimum_needs):
     """
     frequencies = []
     for resource in minimum_needs:
-        if resource.frequency not in frequencies:
-            frequencies.append(resource.frequency)
+        print resource
+        if resource['frequency'] not in frequencies:
+            frequencies.append(resource['frequency'])
 
     population_needs_by_frequency = OrderedDict([
         [frequency, []] for frequency in frequencies])
 
-    for resource_parameter in minimum_needs:
-        resource = {}
-        if this_resource['Unit abbreviation']:
+    for resource in minimum_needs:
+        if resource['unit']:
             resource_name = '%s [%s]' % (
-                this_resource['Resource name'],
-                this_resource['Unit abbreviation'])
+                resource['name'],
+                resource['unit'])
         else:
-            resource_name = this_resource['Resource name']
-        amount_pp = minimum_needs[resource_name]
-        this_resource['Amount'] = int(ceil(population * float(amount_pp)))
-        this_resource['Resource table name'] = resource_name
-        population_needs_by_frequency[this_resource['Frequency']].append(
-            this_resource)
+            resource_name = resource['name']
+        amount_pp = resource['value']
+        resource['amount'] = int(ceil(population * float(amount_pp)))
+        resource['table name'] = resource_name
+        population_needs_by_frequency[resource['frequency']].append(resource)
 
     return population_needs_by_frequency
 

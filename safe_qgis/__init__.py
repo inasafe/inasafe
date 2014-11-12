@@ -101,6 +101,7 @@ for (name, plugin) in get_plugins().items():
     if 'minimum needs' in plugin.parameters:
         plugin.parameters['minimum needs'] = (
             minimum_needs.get_needs_parameters())
+        plugin.parameters['provenance'] = minimum_needs.provenance
 
 try:
     # When upgrading, using the plugin manager, you may get an error when

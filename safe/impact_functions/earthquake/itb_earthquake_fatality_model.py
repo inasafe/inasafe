@@ -4,7 +4,10 @@
 import numpy
 import logging
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults, default_minimum_needs
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
@@ -223,7 +226,8 @@ class ITBFatalityFunction(FunctionProvider):
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('provenance', default_provenance())
     ])
 
     def fatality_rate(self, mmi):
@@ -356,7 +360,10 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
-        minimum_needs = self.parameters['minimum needs']
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         table_body = [
@@ -379,10 +386,10 @@ class ITBFatalityFunction(FunctionProvider):
                 header=True))
             for resource in needs:
                 table_body.append(TableRow([
-                    tr(resource['Resource table name']),
-                    format_int(resource['Amount'])]))
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
         table_body.append(TableRow(tr('Provenance'), header=True))
-        table_body.append(TableRow(minimum_needs_full['provenance']))
+        table_body.append(TableRow(self.parameters['provenance']))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
 

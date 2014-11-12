@@ -7,7 +7,7 @@ __date__ = '05/10/2014'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from third_party.parameters.float_parameter import FloatParameter
+from third_party.parameters.resource_parameter import ResourceParameter
 from third_party.parameters.unit import Unit
 from PyQt4.QtCore import QSettings, QFile, QDir
 from qgis.core import QgsApplication
@@ -82,8 +82,9 @@ class QMinimumNeeds(MinimumNeeds):
             if not hasattr(plugin, 'parameters'):
                 continue
             if 'minimum needs' in plugin.parameters:
-                plugin.parameters['minimum needs'] = self.get_minimum_needs()
-                plugin.parameters['rich minimum needs'] = self.get_full_needs()
+                plugin.parameters['minimum needs'] = (
+                    self.get_needs_parameters())
+                plugin.parameters['provenance'] = self.provenance
 
     def get_profiles(self):
         """Get all the minimum needs profiles.
@@ -174,7 +175,7 @@ class QMinimumNeeds(MinimumNeeds):
     def get_needs_parameters(self):
         parameters = []
         for resource in self.minimum_needs['resources']:
-            parameter = FloatParameter()
+            parameter = ResourceParameter()
             parameter.name = resource['Resource name']
             parameter.help_text = resource['Resource description']
             # Adding in the frequency property. This is not in the
@@ -201,6 +202,10 @@ class QMinimumNeeds(MinimumNeeds):
             parameter.value = float(resource['Default'])
             parameters.append(parameter)
         return parameters
+
+    @property
+    def provenance(self):
+        return self.minimum_needs['provenance']
 
     @property
     def root_directory(self):

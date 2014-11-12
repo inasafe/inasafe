@@ -101,3 +101,12 @@ def default_minimum_needs():
         (family_kits, 0.2),
         (toilets, 0.05)])
     return minimum_needs
+
+
+def default_provenance():
+    """The provenance for the default values.
+
+    :return: default provenance.
+    :rtype: str
+    """
+    return 'The minimum needs are based on Perka 7/2008.'

@@ -210,8 +210,8 @@ class MinimumNeeds(object):
                         "provided {{ Frequency }}.")
                 }
             ],
-            "provenance": "BNPB",
-            "profile": "BNPB"
+            "provenance": "The minimum needs are based on Perka 7/2008.",
+            "profile": "BNPB_en"
         }
         return minimum_needs
 
