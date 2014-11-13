@@ -51,15 +51,25 @@ class ExtentSelectorTest(unittest.TestCase):
         """Runs before each test."""
         self.extent = QgsRectangle(10.0, 10.0, 20.0, 20.0)
         self.crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        CANVAS.setExtent(self.extent)
         self.dialog = ExtentSelector(
             IFACE,
             PARENT,
             self.extent,
             self.crs)
         self.signal_received = False
+
+        self.dialog.extent_defined.connect(self.extent_defined)
+
+        self.widget = QtGui.QWidget()
+        self.widget.setGeometry(0, 0, 500, 500)
+        layout = QtGui.QVBoxLayout(self.widget)
+        layout.addWidget(CANVAS)
+        self.widget.show()
+        QTest.qWaitForWindowShown(self.widget)
+
         self.dialog.show()
         QTest.qWaitForWindowShown(self.dialog)
-        QTest.qWaitForWindowShown(CANVAS)
 
     def tearDown(self):
         """Runs after each test."""
@@ -81,6 +91,10 @@ class ExtentSelectorTest(unittest.TestCase):
         self.crs = crs
         self.signal_received = True
 
+    def canvas_mouse_moved(self, point):
+        """Slot for when the mouse moves on the canvas."""
+        print point.toString()
+
     def test_spinboxes(self):
         """Test validate extent method."""
         self.dialog.x_maximum.clear()
@@ -96,14 +110,24 @@ class ExtentSelectorTest(unittest.TestCase):
 
     def test_mouse_drag(self):
         """Test setting extents by dragging works."""
-        self.dialog.extent_defined.connect(self.extent_defined)
+
+        # Click the capture button
         QTest.mouseClick(self.dialog.capture_button, Qt.LeftButton)
-        QTest.mouseClick(CANVAS, Qt.LeftButton, pos=QPoint(20, 20))
-        QTest.mouseMove(CANVAS, pos=QPoint(100, 100))
-        QTest.mouseRelease(CANVAS, Qt.LeftButton, pos=QPoint(100, 100))
+
+        # drag a rect on the canvas
+        QTest.mousePress(CANVAS, Qt.LeftButton, pos=QPoint(0, 0), delay=500)
+        QTest.mouseRelease(
+            CANVAS, Qt.LeftButton,
+            pos=QPoint(300, 300),
+            delay=-1)
+
+        # on drag the extents selector windows should appear again
+        QTest.qWaitForWindowShown(self.dialog)
+        # Click ok to dispose of the window again
         ok = self.dialog.button_box.button(QtGui.QDialogButtonBox.Ok)
         QTest.mouseClick(ok, Qt.LeftButton)
 
+        # Check the extent emitted on closing teh dialog is correct
         expected_extent = QgsRectangle(10.0, 10.0, 30.0, 20.0)
         self.assertEqual(self.extent.toString(), expected_extent.toString())
 
