@@ -231,10 +231,10 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         try:
             QgsPoint(
                 self.x_minimum.value(),
-                self.y_minimum.value())
+                self.y_maximum.value())
             QgsPoint(
                 self.x_maximum.value(),
-                self.y_maximum.value())
+                self.y_minimum.value())
         except ValueError:
             return False
 
@@ -247,10 +247,10 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         if self._are_coordinates_valid():
             point1 = QgsPoint(
                 self.x_minimum.value(),
-                self.y_minimum.value())
+                self.y_maximum.value())
             point2 = QgsPoint(
                 self.x_maximum.value(),
-                self.y_maximum.value())
+                self.y_minimum.value())
             rect = QgsRectangle(point1, point2)
 
             self.tool.set_rectangle(rect)
