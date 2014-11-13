@@ -30,11 +30,26 @@ class TestVersion(unittest.TestCase):
             changeset = get_git_changeset()
             self.assertEqual(len(changeset), 14)
 
+        if 'win32' in sys.platform or 'darwin' in sys.platform:
+            changeset = get_git_changeset()
+            self.assertIsNone(changeset)
+
     def test_get_version(self):
         """Test for get_version."""
         version_tuple = ('2', '2', '0', 'alpha', '0')
         version = get_version(version_tuple)
-        self.assertIn('dev', version, 'There should be dev in version.')
+        if 'win32' in sys.platform or 'darwin' in sys.platform:
+            expected_version = '2.2.0.dev-master'
+            message = 'It should be %s but got %s' % (expected_version, version)
+            self.assertEqual(expected_version, version, message)
+        else:
+            expected_version = '2.2.0.dev-YYYYMMDDhhmmss'
+            message = 'It should be %s but got %s' % (
+                expected_version[:10], version[:10])
+            self.assertEqual(expected_version[:10], version[:10], message)
+            message = 'Expected version that has length %d, got %d' % (
+                len(expected_version), len(version))
+            self.assertEqual(len(expected_version), len(version), message)
 
         # Version tuple doesn't have length == 5
         version_tuple = ('2', '2', '0', 'alpha')

@@ -43,10 +43,7 @@ def get_version(version=None):
             if line.startswith('status'):
                 status = line.strip().split('=')[1]
         fid.close()
-        print version_list
-        print status
         version = tuple(version_list + [status] + ['0'])
-        print version
 
     if len(version) != 5:
         msg = ('Version must be a tuple of length 5. '
