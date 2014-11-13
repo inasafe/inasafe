@@ -44,7 +44,8 @@ from safe_qgis.utilities.utilities import (
     get_error_message,
     impact_attribution,
     add_ordered_combo_item,
-    read_impact_layer)
+    read_impact_layer,
+    extent_string_to_array)
 from safe_qgis.utilities.defaults import (
     limitations,
     disclaimer,
@@ -1279,7 +1280,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.setup_analysis()
             self.show_next_analysis_extent()
             extent = self.analysis.clip_parameters[1]
-            self.show_extent(extent)
+            self.show_last_analysis_extent(extent)
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError:

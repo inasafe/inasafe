@@ -27,7 +27,7 @@ import logging
 from safe_qgis.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.utilities.utilities import (
     get_wgs84_resolution,
-    extent_to_geo_array,
+    extent_to_array,
     viewport_geo_array,
     get_error_message
 )
@@ -359,11 +359,11 @@ class Analysis(object):
         # Get the current viewport extent as an array in EPSG:4326
         viewport_geoextent = viewport_geo_array(self.map_canvas)
         # Get the Hazard extents as an array in EPSG:4326
-        hazard_geoextent = extent_to_geo_array(
+        hazard_geoextent = extent_to_array(
             hazard_layer.extent(),
             hazard_layer.crs())
         # Get the Exposure extents as an array in EPSG:4326
-        exposure_geoextent = extent_to_geo_array(
+        exposure_geoextent = extent_to_array(
             exposure_layer.extent(),
             exposure_layer.crs())
 
