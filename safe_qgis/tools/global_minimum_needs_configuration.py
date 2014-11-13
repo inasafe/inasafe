@@ -407,6 +407,7 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         if self.minimum_needs.read_from_file(QFile(file_name)) == -1:
             return -1
 
+        self.clear_resource_list()
         self.populate_resource_list()
         return 0
 

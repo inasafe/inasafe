@@ -14,7 +14,6 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     evacuated_population_needs,
-    evacuated_population_weekly_needs,
     population_rounding_full,
     population_rounding)
 from safe.metadata import (
