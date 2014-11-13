@@ -13,12 +13,13 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+from collections import OrderedDict
 
 from safe.common.utilities import ugettext as tr
 
@@ -42,7 +43,7 @@ DEFAULTS['YOUTH_RATIO'] = 0.263
 DEFAULTS['ADULT_RATIO'] = 0.659
 DEFAULTS['ELDERLY_RATIO'] = 0.078
 
-#Keywords key names
+# Keywords key names
 DEFAULTS['FEMALE_RATIO_ATTR_KEY'] = 'female ratio attribute'
 DEFAULTS['FEMALE_RATIO_KEY'] = 'female ratio default'
 DEFAULTS['YOUTH_RATIO_ATTR_KEY'] = 'youth ratio attribute'
@@ -53,6 +54,13 @@ DEFAULTS['ELDERLY_RATIO_ATTR_KEY'] = 'elderly ratio attribute'
 DEFAULTS['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
 DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'
 DEFAULTS['NO_DATA'] = tr('No data')
+
+# Defaults for iso_19115_template.xml
+DEFAULTS['ISO19115_ORGANIZATION'] = 'InaSAFE.org'
+DEFAULTS['ISO19115_URL'] = 'http://inasafe.org'
+DEFAULTS['ISO19115_EMAIL'] = 'info@inasafe.org'
+DEFAULTS['ISO19115_TITLE'] = 'InaSAFE analysis result'
+DEFAULTS['ISO19115_LICENSE'] = 'Free use with accreditation'
 
 
 # noinspection PyUnresolvedReferences
@@ -74,3 +82,22 @@ def get_defaults(default=None):
         return DEFAULTS[default]
     else:
         return None
+
+
+def default_minimum_needs():
+    """Helper to get the default minimum needs.
+
+    .. note:: Key names will be translated.
+    """
+    rice = 'Rice [kg]'
+    drinking_water = 'Drinking Water [l]'
+    water = 'Clean Water [l]'
+    family_kits = 'Family Kits'
+    toilets = 'Toilets'
+    minimum_needs = OrderedDict([
+        (rice, 2.8),
+        (drinking_water, 17.5),
+        (water, 67),
+        (family_kits, 0.2),
+        (toilets, 0.05)])
+    return minimum_needs

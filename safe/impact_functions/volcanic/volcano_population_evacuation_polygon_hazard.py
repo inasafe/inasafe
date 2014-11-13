@@ -27,13 +27,13 @@ from safe.metadata import (
     hazard_definition,
     exposure_definition)
 from collections import OrderedDict
-from safe.defaults import get_defaults
+from safe.defaults import get_defaults, default_minimum_needs
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    default_minimum_needs,
+    evacuated_population_needs,
     evacuated_population_weekly_needs,
     population_rounding
 )
@@ -150,7 +150,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('rich minimum needs', None)
     ])
 
     def run(self, layers):
@@ -199,16 +200,16 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         if hazard_layer.is_point_data:
             # Use concentric circles
             radii = self.parameters['distance [km]']
-
-            centers = hazard_layer.get_geometry()
-            rad_m = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = buffer_points(centers, rad_m, data_table=data_table)
-
             category_title = 'Radius'
             category_header = tr('Distance [km]')
             category_names = radii
 
             name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
+
+            centers = hazard_layer.get_geometry()
+            rad_m = [x * 1000 for x in radii]  # Convert to meters
+            hazard_layer = buffer_points(
+                centers, rad_m, category_title, data_table=data_table)
         else:
             # Use hazard map
             category_title = 'KRB'
@@ -236,7 +237,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             volcano_names = tr('Not specified in data')
 
         # Check if category_title exists in hazard_layer
-        if not category_title in hazard_layer.get_attribute_names():
+        if category_title not in hazard_layer.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (hazard_layer.get_name(), category_title))
             # noinspection PyExceptionInherit
@@ -301,10 +302,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evacuation
         evacuated = population_rounding(cumulative)
 
-        # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        total_needs = evacuated_population_weekly_needs(
-            evacuated, minimum_needs)
+        minimum_needs_full = self.parameters['rich minimum needs']
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -329,18 +328,32 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         table_body.extend([
             TableRow(tr(
                 'Map shows the number of people affected in each of volcano '
-                'hazard polygons.')),
-            TableRow(
-                [tr('Needs per week'), tr('Total'), blank_cell], header=True),
-            [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell], [
-                tr('Drinking Water [l]'),
-                format_int(total_needs['drinking_water']),
-                blank_cell],
-            [tr('Clean Water [l]'), format_int(total_needs['water']),
-                blank_cell],
-            [tr('Family Kits'), format_int(total_needs['family_kits']),
-                blank_cell],
-            [tr('Toilets'), format_int(total_needs['toilets']), blank_cell]])
+                'hazard polygons.'))])
+
+        if minimum_needs_full:
+            total_needs = evacuated_population_needs(
+                evacuated, minimum_needs, minimum_needs_full)
+            for frequency, needs in total_needs.items():
+                table_body.append(TableRow(
+                    [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')
+                    ],
+                    header=True))
+                for resource in needs:
+                    table_body.append(TableRow([
+                        tr(resource['Resource table name']),
+                        format_int(resource['Amount'])]))
+            table_body.append(TableRow(tr('Provenance'), header=True))
+            table_body.append(TableRow(minimum_needs_full['provenance']))
+        else:
+            total_needs = evacuated_population_weekly_needs(
+                evacuated, minimum_needs)
+            table_body.append(
+                TableRow([tr('Needs per week'), tr('Total')], header=True))
+            for resource, amount in total_needs.items():
+                table_body.append(TableRow([tr(resource), format_int(amount)]))
+
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display

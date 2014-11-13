@@ -213,7 +213,7 @@ class ImpactFunctionMetadata():
         """
         # pass  # must implement here
         result = []
-        if not data_type in cls.allowed_data_types(subcategory):
+        if data_type not in cls.allowed_data_types(subcategory):
             return result
         metadata_dict = cls.get_metadata()
         categories = metadata_dict['categories']
@@ -429,7 +429,7 @@ class ImpactFunctionMetadata():
             'layer_type': layer_type,
             'data_type': data_type
         }
-        if not layer_constraints in cls.allowed_layer_constraints(category):
+        if layer_constraints not in cls.allowed_layer_constraints(category):
             return []
         else:
             return cls.allowed_subcategories(category)

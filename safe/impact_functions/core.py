@@ -7,17 +7,16 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-
 import logging
 from math import ceil
-
 import numpy
-from safe.common.utilities import OrderedDict
-
+from collections import OrderedDict
 import keyword as python_keywords
+
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
+from safe.defaults import default_minimum_needs
 from utilities import pretty_string, remove_double_spaces
 from safe.metadata import converter_dict
 
@@ -65,25 +64,6 @@ class FunctionProvider(object):
     symbol_field = 'USE_MAJOR'
 
 
-def default_minimum_needs():
-    """Helper to get the default minimum needs.
-
-    .. note:: Key names will be translated.
-    """
-    rice = 'Rice'
-    drinking_water = 'Drinking Water'
-    water = 'Water'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
-    minimum_needs = OrderedDict([
-        (rice, 2.8),
-        (drinking_water, 17.5),
-        (water, 67),
-        (family_kits, 0.2),
-        (toilets, 0.05)])
-    return minimum_needs
-
-
 def evacuated_population_weekly_needs(
         population,
         minimum_needs=False,
@@ -101,52 +81,63 @@ def evacuated_population_weekly_needs(
         Defaults to perka 7 as described in assumptions below.
     :type minimum_needs: dict
 
-    :returns: The weekly needs for the evacuated population.
+    :returns: The needs for the evacuated population.
     :rtype: dict
 
-    Assumptions:
-    * 400g rice per person per day
-    * 2.5L drinking water per person per day
-    * 15L clean water per person per day
-    * assume 5 people per family (not in perka - 0.2 people per family)
-    * 20 people per toilet (0.05 per person)
     """
-    rice = 'Rice'
-    drinking_water = 'Drinking Water'
-    water = 'Water'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
-    min_rice = minimum_needs[rice]
-    min_drinking_water = minimum_needs[drinking_water]
-    min_water = minimum_needs[water]
-    min_family_kits = minimum_needs[family_kits]
-    min_toilets = minimum_needs[toilets]
+    population_needs = OrderedDict()
+    for resource, amount in minimum_needs.items():
+        if human_names:
+            resource = tr(resource)
+        population_needs[resource] = int(ceil(population * float(amount)))
 
-    val_rice = int(ceil(population * min_rice))
-    val_drinking_water = int(ceil(population * min_drinking_water))
-    val_water = int(ceil(population * min_water))
-    val_family_kits = int(ceil(population * min_family_kits))
-    val_toilets = int(ceil(population * min_toilets))
+    return population_needs
 
-    if human_names:
-        weekly_needs = {
-            rice: val_rice,
-            drinking_water: val_drinking_water,
-            water: val_water,
-            family_kits: val_family_kits,
-            toilets: val_toilets}
-    else:
-        weekly_needs = {
-            'rice': val_rice,
-            'drinking_water': val_drinking_water,
-            'water': val_water,
-            'family_kits': val_family_kits,
-            'toilets': val_toilets}
 
-    return weekly_needs
+def evacuated_population_needs(population, minimum_needs, full_minimum_needs):
+    """Calculate estimated needs using minimum needs configuration provided
+    in full_minimum_needs.
+
+    :param population: The number of evacuated population.
+    :type: int, float
+
+    :param minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: dict
+
+    :param full_minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: dict
+
+    :returns: The needs for the evacuated population.
+    :rtype: dict
+    """
+    frequencies = []
+    for resource in full_minimum_needs['resources']:
+        if resource['Frequency'] not in frequencies:
+            frequencies.append(resource['Frequency'])
+
+    population_needs_by_frequency = OrderedDict([
+        [frequency, []] for frequency in frequencies])
+
+    for resource in full_minimum_needs['resources']:
+        this_resource = resource.copy()
+        if this_resource['Unit abbreviation']:
+            resource_name = '%s [%s]' % (
+                this_resource['Resource name'],
+                this_resource['Unit abbreviation'])
+        else:
+            resource_name = this_resource['Resource name']
+        amount_pp = minimum_needs[resource_name]
+        this_resource['Amount'] = int(ceil(population * float(amount_pp)))
+        this_resource['Resource table name'] = resource_name
+        population_needs_by_frequency[this_resource['Frequency']].append(
+            this_resource)
+
+    return population_needs_by_frequency
 
 
 def population_rounding_full(number):
@@ -169,7 +160,7 @@ def population_rounding_full(number):
 
 
 def population_rounding(number):
-    """A shorthand for population_rounding_full[0].
+    """A shorthand for population_rounding_full(number)[0].
 
     :param number: The amount of people as calculated.
     :type number: int, float
@@ -342,8 +333,8 @@ def requirement_check(params, require_str, verbose=False):
         if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % key)
-            #print msg
-            #logger.error(msg)
+            # print msg
+            # LOGGER.error(msg)
             return False
 
         if key in excluded_keywords:
@@ -374,8 +365,8 @@ def requirement_check(params, require_str, verbose=False):
     except Exception, e:
         msg = ('Requirements header could not compiled: %s. '
                'Original message: %s' % (execstr, e))
-        #print msg
-        #logger.error(msg)
+        # print msg
+        # LOGGER.error(msg)
 
     return False
 
@@ -422,9 +413,9 @@ def compatible_layers(func, layer_descriptors):
     return layers
 
 
-#-------------------------------
+# -------------------------------
 # Helpers for individual plugins
-#-------------------------------
+# -------------------------------
 def get_hazard_layers(layers):
     """Get list of layers that have category=='hazard'
     """
@@ -549,17 +540,17 @@ def aggregate_point_data(data=None, boundaries=None,
         raise Exception(msg)
 
     polygon_geoms = boundaries.get_geometry()
-    #polygon_attrs = boundaries.get_data()
+    # polygon_attrs = boundaries.get_data()
 
     points = data.get_geometry()
     attributes = data.get_data()
 
     result = []
-    #for i, polygon in enumerate(polygon_geoms):
+    # for i, polygon in enumerate(polygon_geoms):
     for polygon in polygon_geoms:
         indices = inside_polygon(points, polygon)
 
-        #print 'Found %i points in polygon %i' % (len(indices), i)
+        # print 'Found %i points in polygon %i' % (len(indices), i)
 
         # Aggregate numbers
         if aggregation_function == 'count':
@@ -607,7 +598,7 @@ def aggregate(data=None, boundaries=None,
     elif data.is_raster_data:
         # Convert to point data
         # Call point aggregation function
-        #aggregate_point_data(data, boundaries,
+        # aggregate_point_data(data, boundaries,
         #                     attribute_name, aggregation_function)
         pass
     else:

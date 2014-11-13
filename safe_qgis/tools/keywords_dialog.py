@@ -29,7 +29,7 @@ from collections import OrderedDict
 
 from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
-from safe_qgis.utilities.defaults import breakdown_defaults
+from safe_qgis.utilities.defaults import get_defaults
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
@@ -119,6 +119,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
              ('flood [feet]', self.tr('flood [feet]')),
              ('tephra [kg2/m2]', self.tr('tephra [kg2/m2]')),
              ('volcano', self.tr('volcano')),
+             ('generic [categorised]', self.tr('generic [categorised]')),
              ('Not Set', self.tr('Not Set'))])
 
         # noinspection PyUnresolvedReferences
@@ -130,7 +131,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         if self.layer is not None and is_polygon_layer(self.layer):
             # set some initial ui state:
-            self.defaults = breakdown_defaults()
+            self.defaults = get_defaults()
             self.radPredefined.setChecked(True)
             self.dsbFemaleRatioDefault.blockSignals(True)
             self.dsbFemaleRatioDefault.setValue(self.defaults['FEMALE_RATIO'])
@@ -173,7 +174,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.layer = layer
         self.load_state_from_keywords()
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def show_help(self):
         """Load the help text for the keywords dialog."""
         show_context_help(context='keywords_editor')
@@ -726,7 +727,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.set_subcategory_list(self.standard_exposure_list)
             self.radExposure.blockSignals(False)
         elif current_key == 'category':
-            #.. todo:: notify the user their category is invalid
+            # .. todo:: notify the user their category is invalid
             pass
         self.add_list_entry(current_key, current_value)
         self.leKey.setText('')
@@ -806,7 +807,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # convert from QString if needed
         category = str(category)
         if self.get_value_for_key('category') == category:
-            #nothing to do, go home
+            # nothing to do, go home
             return True
         if category not in ['hazard', 'exposure', 'postprocessing']:
             # .. todo:: report an error to the user
@@ -1075,7 +1076,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :returns: Keywords reflecting the state of the dialog.
         :rtype: dict
         """
-        #make sure title is listed
+        # make sure title is listed
         if str(self.leTitle.text()) != '':
             self.add_list_entry('title', str(self.leTitle.text()))
 

@@ -85,7 +85,7 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
 
         for need, value in self.minimum_needs.iteritems():
             try:
-                result = int(round(value * self.impact_total))
+                result = int(round(float(value) * self.impact_total))
             except (ValueError, TypeError):
                 result = self.NO_DATA_TEXT
 

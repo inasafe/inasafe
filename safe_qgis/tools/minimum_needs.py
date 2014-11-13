@@ -1,226 +1,187 @@
 # coding=utf-8
-"""**Minimum Needs Implementation.**
+"""This is the concrete Minimum Needs class that contains the logic to load
+the minimum needs to and from the QSettings"""
 
-.. tip:: Provides minimum needs assessment for a polygon layer containing
-    counts of people affected per polygon.
+__author__ = 'Christian Christelis <christian@kartoza.com>'
+__date__ = '05/10/2014'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
-"""
-
-__author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
-__revision__ = '$Format:%H$'
-__date__ = '20/1/2013'
-__license__ = "GPL"
-__copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
-
-import logging
-
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature
-
-from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
-
-from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
-from safe_qgis.ui.minimum_needs_base import Ui_MinimumNeedsBase
-from safe_qgis.utilities.utilities import (
-    add_ordered_combo_item,
-    is_polygon_layer,
-    is_point_layer,
-    html_footer,
-    html_header)
-from safe_qgis.utilities.help import show_context_help
-from safe_qgis.safe_interface import evacuated_population_weekly_needs
-from safe_qgis.safe_interface import messaging as m
-from safe_qgis.safe_interface import styles
-
-INFO_STYLE = styles.INFO_STYLE
-LOGGER = logging.getLogger('InaSAFE')
+from PyQt4.QtCore import QSettings, QFile, QDir
+from qgis.core import QgsApplication
+from safe.common.minimum_needs import MinimumNeeds
+import json
+import os
 
 
-class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
-    """Dialog implementation class for the InaSAFE minimum needs dialog.
+class QMinimumNeeds(MinimumNeeds):
+    """The concrete MinimumNeeds class to be used in a QGis environment.
+
+    In the case where we assume QGis we use the QSettings object to store the
+    minimum needs.
+
+    .. versionadded:: 2.2.
     """
 
-    def __init__(self, parent=None):
-        """Constructor for the minimum needs dialog.
+    def __init__(self):
+        self.settings = QSettings()
+        self.minimum_needs = None
+        self._root_directory = None
+        self.local = os.environ['LANG']
+        self.load()
 
-        :param parent: Parent widget of this dialog.
-        :type parent: QWidget
+    def load(self):
+        """Load the minimum needs from the QSettings object.
         """
+        minimum_needs = self.settings.value('Minimum Needs')
+        if hasattr(minimum_needs, 'toPyObject'):
+            minimum_needs = minimum_needs.toPyObject()
+        if minimum_needs is None:
+            profiles = self.get_profiles()
+            self.read_from_file(
+                QFile('%s/minimum_needs/%s.json' % (
+                    self.root_directory, profiles)))
+        if minimum_needs is None:
+            minimum_needs = self._defaults()
+        self.minimum_needs = minimum_needs
 
-        QtGui.QDialog.__init__(self, parent)
-        self.setupUi(self)
-        self.setWindowTitle(self.tr(
-            'InaSAFE %s Minimum Needs Tool' % get_version()))
-        self.polygon_layers_to_combo()
-        self.show_info()
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+    def load_profile(self, profile):
+        """Load a specific profile into the current minimum needs.
 
-    def show_info(self):
-        """Show basic usage instructions."""
-        header = html_header()
-        footer = html_footer()
-        string = header
-
-        heading = m.Heading(self.tr('Minimum Needs Calculator'), **INFO_STYLE)
-        body = self.tr(
-            'This tool will calculated minimum needs for evacuated people. To '
-            'use this tool effectively:'
-        )
-        tips = m.BulletedList()
-        tips.add(self.tr(
-            'Load a polygon layer in QGIS. Typically the layer will '
-            'represent administrative districts where people have gone to an '
-            'evacuation center.'))
-        tips.add(self.tr(
-            'Ensure that the layer has an INTEGER attribute for the number of '
-            'displaced people associated with each feature.'
-        ))
-        tips.add(self.tr(
-            'Use the pick lists below to select the layer and the population '
-            'field and then press \'OK\'.'
-        ))
-        tips.add(self.tr(
-            'A new layer will be added to QGIS after the calculation is '
-            'complete. The layer will contain the minimum needs per district '
-            '/ administrative boundary.'))
-        message = m.Message()
-        message.add(heading)
-        message.add(body)
-        message.add(tips)
-        string += message.to_html()
-        string += footer
-
-        self.webView.setHtml(string)
-
-    def minimum_needs(self, input_layer, population_name):
-        """Compute minimum needs given a layer and a column containing pop.
-
-        :param input_layer: InaSAFE layer object assumed to contain
-            population counts
-        :type input_layer: read_layer
-
-        :param population_name: Attribute name that holds population count
-        :type population_name: str
-
-        :returns: Layer with attributes for minimum needs as per Perka 7
-        :rtype: read_layer
+        :param profile: The profile's name
+        :type profile: basestring, str
         """
+        self.read_from_file(
+            QFile('%s/minimum_needs/%s.json' % (
+                self.root_directory, profile)))
 
-        all_attributes = []
-        for attributes in input_layer.get_data():
-            # Get population count
-            population = attributes[population_name]
-            # Clean up and turn into integer
-            if population in ['-', None]:
-                displaced = 0
-            else:
-                if type(population) is basestring:
-                    population = str(population).replace(',', '')
+    def save_profile(self, profile):
+        """Save the current minimum needs into a new profile.
 
-                try:
-                    displaced = int(population)
-                except ValueError:
-                    # noinspection PyTypeChecker,PyArgumentList
-                    QtGui.QMessageBox.information(
-                        None,
-                        self.tr('Format error'),
-                        self.tr(
-                            'Please change the value of %1 in attribute '
-                            '%1 to integer format').arg(population).arg(
-                                population_name))
-                    raise ValueError
-
-            # Calculate estimated needs based on BNPB Perka 7/2008
-            # minimum needs
-            # weekly_needs = {
-            #     'rice': int(ceil(population * min_rice)),
-            #     'drinking_water': int(ceil(population * min_drinking_water)),
-            #     'water': int(ceil(population * min_water)),
-            #     'family_kits': int(ceil(population * min_family_kits)),
-            #     'toilets': int(ceil(population * min_toilets))}
-
-            # Add to attributes
-            weekly_needs = evacuated_population_weekly_needs(displaced)
-
-            # Record attributes for this feature
-            all_attributes.append(weekly_needs)
-
-        output_layer = Vector(
-            geometry=input_layer.get_geometry(),
-            data=all_attributes,
-            projection=input_layer.get_projection())
-        return output_layer
-
-    def polygon_layers_to_combo(self):
-        """Populate the combo with all polygon layers loaded in QGIS."""
-
-        # noinspection PyArgumentList
-        registry = QgsMapLayerRegistry.instance()
-        layers = registry.mapLayers().values()
-        found_flag = False
-        for layer in layers:
-            name = layer.name()
-            source = str(layer.id())
-            # check if layer is a vector polygon layer
-            if is_polygon_layer(layer) or is_point_layer(layer):
-                found_flag = True
-                add_ordered_combo_item(self.cboPolygonLayers, name, source)
-        if found_flag:
-            self.cboPolygonLayers.setCurrentIndex(0)
-
-    @pyqtSignature('int')
-    def on_cboPolygonLayers_currentIndexChanged(self, theIndex=None):
-        """Automatic slot executed when the layer is changed to update fields.
-
-        :param theIndex: Passed by the signal that triggers this slot.
-        :type theIndex: int
+        :param profile: The profile's name
+        :type profile: basestring, str
         """
-        layer_id = self.cboPolygonLayers.itemData(
-            theIndex, QtCore.Qt.UserRole)
-        # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        fields = layer.dataProvider().fieldNameMap().keys()
-        self.cboFields.clear()
-        for field in fields:
-            add_ordered_combo_item(self.cboFields, field, field)
+        profile = profile.replace('.json', '')
+        self.write_to_file(
+            QFile('%s/minimum_needs/%s.json' % (
+                self.root_directory, profile)))
 
-    def accept(self):
-        """Process the layer and field and generate a new layer.
-
-        .. note:: This is called on OK click.
-
+    def save(self):
+        """Save the minimum needs to the QSettings object.
         """
-        index = self.cboFields.currentIndex()
-        field_name = self.cboFields.itemData(
-            index, QtCore.Qt.UserRole)
-
-        index = self.cboPolygonLayers.currentIndex()
-        layer_id = self.cboPolygonLayers.itemData(
-            index, QtCore.Qt.UserRole)
-        # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-
-        file_name = str(layer.source())
-
-        input_layer = safe_read_layer(file_name)
-
-        try:
-            output_layer = self.minimum_needs(input_layer, str(field_name))
-        except ValueError:
+        # This needs to be imported here to avoid an inappropriate loading
+        # sequence
+        if not self.minimum_needs['resources']:
             return
+        from safe.impact_functions.core import get_plugins
+        self.settings.setValue('Minimum Needs', self.minimum_needs)
+        # Monkey patch all the impact functions
+        for (_, plugin) in get_plugins().items():
+            if not hasattr(plugin, 'parameters'):
+                continue
+            if 'minimum needs' in plugin.parameters:
+                plugin.parameters['minimum needs'] = self.get_minimum_needs()
+                plugin.parameters['rich minimum needs'] = self.get_full_needs()
 
-        new_file = file_name[:-4] + '_perka7' + '.shp'
+    def get_profiles(self):
+        """Get all the minimum needs profiles.
 
-        output_layer.write_to_file(new_file)
+        :returns: The minimum needs by name.
+        :rtype: list
+        """
+        def sort_by_local(unsorted_profiles, local):
+            """Sort the profiles by language settings
 
-        new_layer = QgsVectorLayer(new_file, 'Minimum Needs', 'ogr')
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([new_layer])
-        self.done(QtGui.QDialog.Accepted)
+            :param unsorted_profiles: The user profiles profiles
+            :type unsorted_profiles: list
 
-    @staticmethod
-    def show_help():
-        """Load the help text for the minimum needs dialog."""
-        show_context_help('minimum_needs')
+            :param local: The language settings string
+            :type local: str
+
+            :returns: Ordered profiles
+            :rtype: list
+            """
+            local = '_%s' % local[:2]
+            profiles_our_local = []
+            profiles_remaining = []
+            for profile_name in unsorted_profiles:
+                if local in profile_name:
+                    profiles_our_local.append(profile_name)
+                else:
+                    profiles_remaining.append(profile_name)
+
+            return profiles_our_local + profiles_remaining
+
+        local_minimum_needs_dir = QDir(
+            '%s/minimum_needs/' % self.root_directory)
+        plugins_minimum_needs_dir = QDir(
+            '%s/python/plugins/inasafe/files/minimum_needs/' %
+            self.root_directory)
+        if not local_minimum_needs_dir.exists():
+            if not plugins_minimum_needs_dir.exists():
+                # This is specifically to get Travis working.
+                return [self._defaults()['profile']]
+            QDir(self.root_directory).mkdir('minimum_needs')
+            for file_name in plugins_minimum_needs_dir.entryList():
+                source_file = QFile(
+                    '%s/python/plugins/inasafe/files/minimum_needs/%s' %
+                    (self.root_directory, file_name))
+                source_file.copy(
+                    '%s/minimum_needs/%s' %
+                    (self.root_directory, file_name))
+        profiles = [
+            profile[:-5] for profile in
+            local_minimum_needs_dir.entryList() if
+            profile[-5:] == '.json']
+        profiles = sort_by_local(profiles, self.local)
+        return profiles
+
+    def read_from_file(self, qfile):
+        """Read from an existing json file.
+
+        :param qfile: The object to be read from.
+        :type qfile: QFile
+
+        :returns: Success status. -1 for unsuccessful 0 for success
+        :rtype: int
+        """
+        if not qfile.exists():
+            return -1
+        qfile.open(QFile.ReadOnly)
+        needs_json = qfile.readAll()
+        try:
+            minimum_needs = json.loads('%s' % needs_json)
+        except (TypeError, ValueError):
+            minimum_needs = None
+
+        if not minimum_needs:
+            return -1
+
+        return self.update_minimum_needs(minimum_needs)
+
+    def write_to_file(self, qfile):
+        """Write minimum needs as json to a file.
+
+        :param qfile: The file to be written to.
+        :type qfile: QFile
+        """
+        qfile.open(QFile.WriteOnly)
+        needs_json = json.dumps(self.minimum_needs)
+        qfile.write(needs_json)
+
+    @property
+    def root_directory(self):
+        """Get the home root directory
+
+        :returns: root directory
+        :rtype: QString
+        """
+        if self._root_directory is None or self._root_directory == '':
+            try:
+                self._root_directory = QgsApplication.qgisSettingsDirPath()
+            except NameError:
+                # This only happens when running only one test on its own
+                self._root_directory = None
+            if self._root_directory is None or self._root_directory == '':
+                self._root_directory = "%s/.qgis2" % (os.environ['HOME'])
+        return self._root_directory

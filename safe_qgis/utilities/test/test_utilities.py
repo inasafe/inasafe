@@ -20,7 +20,6 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.utilities.defaults import breakdown_defaults
 from safe_qgis.utilities.utilities import (
     get_error_message,
     qgis_version,
@@ -65,7 +64,7 @@ class UtilitiesTest(unittest.TestCase):
             # Display message and traceback
 
             message = get_error_message(e)
-            #print message
+            # print message
             message = message.to_text()
             self.assertIn(str(e), message)
             self.assertIn('line', message)
@@ -93,7 +92,7 @@ class UtilitiesTest(unittest.TestCase):
         """Test we can get the correct attributes back"""
         layer = make_polygon_layer()
 
-        #with good attribute name
+        # with good attribute name
         attributes, position = layer_attribute_names(layer, [
             QVariant.Int, QVariant.String],
             'TEST_STRIN')  # Not a typo...
@@ -106,7 +105,7 @@ class UtilitiesTest(unittest.TestCase):
             position, expected_position)
         assert (position == expected_position), message
 
-        #with non existing attribute name
+        # with non existing attribute name
         attributes, position = layer_attribute_names(
             layer,
             [QVariant.Int, QVariant.String],
@@ -120,7 +119,7 @@ class UtilitiesTest(unittest.TestCase):
             position, expected_position)
         assert (position == expected_position), message
 
-        #with raster layer
+        # with raster layer
         layer = make_padang_layer()
         attributes, position = layer_attribute_names(layer, [], '')
         message = 'Should return None, None for raster layer, got %s, %s' % (
@@ -140,32 +139,6 @@ class UtilitiesTest(unittest.TestCase):
         layer = make_padang_layer()
         message = ('%s raster layer should not be polygonal' % layer)
         assert not is_polygon_layer(layer), message
-
-    def test_get_defaults(self):
-        """Test defaults for post processing can be obtained properly."""
-        # Warning this code is duplicated from test_defaults...TS
-        expected = {
-            'ADULT_RATIO_KEY': 'adult ratio default',
-            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
-            'ADULT_RATIO': 0.659,
-
-            'FEMALE_RATIO_KEY': 'female ratio default',
-            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
-            'FEMALE_RATIO': 0.5,
-
-            'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
-            'ELDERLY_RATIO_KEY': 'elderly ratio default',
-            'ELDERLY_RATIO': 0.078,
-
-            'YOUTH_RATIO': 0.263,
-            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
-            'YOUTH_RATIO_KEY': 'youth ratio default',
-
-            'NO_DATA': u'No data',
-
-            'AGGR_ATTR_KEY': 'aggregation attribute'}
-        defaults = breakdown_defaults()
-        self.assertDictEqual(defaults, expected)
 
     def test_mm_to_points(self):
         """Test that conversions between pixel and page dimensions work."""

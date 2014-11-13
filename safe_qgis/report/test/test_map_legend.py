@@ -18,15 +18,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
 import logging
 
 # Add PARENT directory to path to make test aware of other modules
-#pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-#sys.path.append(pardir)
+# pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# sys.path.append(pardir)
 
 from PyQt4 import QtGui
 from qgis.core import QgsMapLayerRegistry, QgsFillSymbolV2

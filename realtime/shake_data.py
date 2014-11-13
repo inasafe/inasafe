@@ -207,7 +207,7 @@ class ShakeData:
         else:
             return self.is_on_server()
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def _fetch_file(self, event_file, retries=3):
         """Private helper to fetch a file from the ftp site.
 
@@ -239,7 +239,7 @@ class ShakeData:
         if os.path.exists(local_path):
             return local_path
 
-        #Otherwise try to fetch it using ftp
+        # Otherwise try to fetch it using ftp
         for counter in range(retries):
             last_error = None
             try:

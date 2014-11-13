@@ -64,6 +64,7 @@ from safe.api import (
     get_unique_values,
     get_plugins_as_table,
     evacuated_population_weekly_needs,
+    evacuated_population_needs,
     Layer,
     Vector,
     Raster,
@@ -84,7 +85,10 @@ from safe.api import (
     styles,
     feature_attributes_as_dict,
     get_utm_epsg,
-    which)
+    which,
+    safe_to_qgis_layer,
+    generate_iso_metadata,
+    ISO_METADATA_KEYWORD_TAG)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 
@@ -260,7 +264,7 @@ def available_functions(keyword_list=None):
     """
     try:
         dictionary = get_admissible_plugins(keyword_list)
-        #if len(dictionary) < 1:
+        # if len(dictionary) < 1:
         #    message = 'No InaSAFE impact functions could be found'
         #    raise NoFunctionsFoundError(message)
         return dictionary
@@ -354,7 +358,7 @@ def read_file_keywords(layer_path, keyword=None):
     # if no keyword was supplied, just return the dict
     if keyword is None:
         return dictionary
-    if not keyword in dictionary:
+    if keyword not in dictionary:
         message = tr('No value was found in file %s for keyword %s' % (
             keyword_file_path, keyword))
         raise KeywordNotFoundError(message)

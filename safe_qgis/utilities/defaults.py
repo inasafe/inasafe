@@ -29,7 +29,7 @@ from PyQt4 import QtCore
 from safe.defaults import DEFAULTS
 
 
-def breakdown_defaults(default=None):
+def get_defaults(default=None):
     """Get a dictionary of default values to be used for post processing.
 
     .. note: This method takes the DEFAULTS from safe and modifies them
@@ -48,6 +48,9 @@ def breakdown_defaults(default=None):
     settings = QtCore.QSettings()
     defaults = DEFAULTS
 
+    # TODO (MB) this could be changed to _get_updated_default but it would
+    # force users to reset their settings since the config file entry
+    # defaultFemaleRatio would change to DEFAULT_FEMALE_RATIO
     value = settings.value(
         'inasafe/defaultFemaleRatio',
         DEFAULTS['FEMALE_RATIO'], type=float)
@@ -67,6 +70,18 @@ def breakdown_defaults(default=None):
         'inasafe/defaultElderlyRatio',
         DEFAULTS['ELDERLY_RATIO'], type=float)
     defaults['ELDERLY_RATIO'] = float(value)
+    # end TODO
+
+    defaults['ISO19115_ORGANIZATION'] = _get_updated_default(
+        'ISO19115_ORGANIZATION', str)
+    defaults['ISO19115_URL'] = _get_updated_default(
+        'ISO19115_URL', str)
+    defaults['ISO19115_EMAIL'] = _get_updated_default(
+        'ISO19115_EMAIL', str)
+    defaults['ISO19115_TITLE'] = _get_updated_default(
+        'ISO19115_TITLE', str)
+    defaults['ISO19115_LICENSE'] = _get_updated_default(
+        'ISO19115_LICENSE', str)
 
     if default is None:
         return defaults
@@ -76,14 +91,27 @@ def breakdown_defaults(default=None):
         return None
 
 
+def _get_updated_default(default, default_type):
+    """get a default from qsettings falling back to the default value in safe
+
+    :param default: the key of the default in safe/defaults.py DEFAULTS
+    :param default_type: the type of the the default
+    :return: typed default value
+    """
+    value = QtCore.QSettings().value(
+        'inasafe/%s' % default,
+        DEFAULTS[default], type=default_type)
+    return default_type(value)
+
+
 def disclaimer():
     """Get a standard disclaimer.
 
     :returns: Standard disclaimer string for InaSAFE.
     :rtype: str
     """
-    #import tr here to avoid side effects with safe (see notes above in import
-    #section.
+    # import tr here to avoid side effects with safe (see notes above in import
+    # section.
     from safe_qgis.utilities.utilities import tr
     text = tr(
         'InaSAFE has been jointly developed by Indonesian '
@@ -121,8 +149,8 @@ def limitations():
     :return: All limitations on current InaSAFE.
     :rtype: list
     """
-    #import tr here to avoid side effects with safe (see notes above in import
-    #section.
+    # import tr here to avoid side effects with safe (see notes above in import
+    # section.
     from safe_qgis.utilities.utilities import tr
     limitation_list = list()
     limitation_list.append(tr('InaSAFE is not a hazard modelling tool.'))

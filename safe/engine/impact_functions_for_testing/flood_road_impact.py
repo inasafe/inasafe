@@ -45,8 +45,8 @@ class FloodRoadImpactFunction(FunctionProvider):
         # List attributes to carry forward to result layer
         attributes = E.get_attribute_names()
 
-        #print attributes
-        #print 'Number of population points', N
+        # print attributes
+        # print 'Number of population points', N
 
         # Calculate population impact
         road_impact = []

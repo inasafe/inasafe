@@ -90,9 +90,9 @@ def check_memory_usage(buffered_geo_extent, cell_size):
     width = buffered_geo_extent[2] - buffered_geo_extent[0]
     height = buffered_geo_extent[3] - buffered_geo_extent[1]
     try:
-        #noinspection PyAugmentAssignment
+        # noinspection PyAugmentAssignment
         width = width / cell_size
-        #noinspection PyAugmentAssignment
+        # noinspection PyAugmentAssignment
         height = height / cell_size
     except TypeError:
         # Could have been a vector layer for example

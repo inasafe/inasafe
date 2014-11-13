@@ -189,56 +189,119 @@ def set_canvas_crs(epsg_id, enable_projection=False):
     CANVAS.mapRenderer().setDestinationCrs(crs)
 
 
-def set_padang_extent():
-    """Zoom to an area occupied by both both Padang layers."""
+def set_padang_extent(dock=None):
+    """Zoom to an area occupied by both both Padang layers.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
     rect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
 
 
-def set_jakarta_extent():
-    """Zoom to an area occupied by both Jakarta layers in Geo."""
+def set_jakarta_extent(dock=None):
+    """Zoom to an area occupied by both Jakarta layers in Geo.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
     rect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
 
 
-def set_jakarta_google_extent():
-    """Zoom to an area occupied by both Jakarta layers in 900913 crs."""
+def set_jakarta_google_extent(dock=None):
+    """Zoom to an area occupied by both Jakarta layers in 900913 crs.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
     rect = QgsRectangle(11873524, -695798, 11913804, -675295)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:3857')
+        dock.define_user_analysis_extent(rect, crs)
 
 
-def set_batemans_bay_extent():
-    """Zoom to an area occupied by both Batemans Bay layers in geo crs."""
+def set_batemans_bay_extent(dock=None):
+    """Zoom to an area occupied by both Batemans Bay layers in geo crs.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
     rect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
 
 
-def set_yogya_extent():
-    """Zoom to an area occupied by both Jakarta layers in Geo."""
+def set_yogya_extent(dock=None):
+    """Zoom to an area occupied by both Jakarta layers in Geo.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
     rect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
 
 
-def set_small_jakarta_extent():
-    """Zoom to an area occupied by both Jakarta layers in Geo."""
+def set_small_jakarta_extent(dock=None):
+    """Zoom to an area occupied by both Jakarta layers in Geo.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
     rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
 
 
-def set_manila_extent():
-    """Zoom to an area occupied by both Manila layers in Geo."""
+def set_manila_extent(dock=None):
+    """Zoom to an area occupied by both Manila layers in Geo.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
     rect = QgsRectangle(120.866995, 14.403305, 121.193824, 14.784944)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
 
 
-def set_geo_extent(bounding_box):
+def set_geo_extent(bounding_box, dock=None):
     """Zoom to an area specified given bounding box.
 
     :param bounding_box: List containing [xmin, ymin, xmax, ymax]
     :type bounding_box: list
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
     """
     rect = QgsRectangle(*bounding_box)
     CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
 
 
 def check_images(control_image, test_image_path, tolerance=1000):
@@ -796,7 +859,7 @@ def load_standard_layers(dock=None):
         join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, data_directory=None, dock=dock)
-    #FIXME (MB) -1 is until we add the aggregation category because of
+    # FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
     assert hazard_layer_count + exposure_layer_count == len(file_list) - 1

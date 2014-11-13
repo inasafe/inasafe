@@ -278,7 +278,7 @@ class Test_interpolate(unittest.TestCase):
                         msg = 'Unknown mode: %s' % mode
                         raise Exception(msg)
 
-                    #print i, j, xi, eta, alpha, beta, vals[k], ref
+                    # print i, j, xi, eta, alpha, beta, vals[k], ref
                     assert nan_allclose(vals[k], ref, rtol=1e-12, atol=1e-12)
 
     test_interpolation_random_array_and_nan.slow = True
@@ -449,9 +449,9 @@ class Test_interpolate(unittest.TestCase):
 
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
-    #-----------------------
+    # -----------------------
     # 1D interpolation tests
-    #-----------------------
+    # -----------------------
 
     def test_1d_linear_interpolation_basic(self):
         """Interpolation library works for a 1D linear function - basic test

@@ -84,12 +84,25 @@ if os.path.exists(translation_path):
 #     translation_path,
 #     os.path.exists(translation_path)))
 
-# MONKEYPATCHING safe.defaults.get_defaults to use breakdown_defaults
+# MONKEYPATCHING safe.defaults.get_defaults to use get_defaults
 # see safe_qgis.utilities.defaults for more details
 import safe.defaults
-from safe_qgis.utilities.defaults import breakdown_defaults
-safe.defaults.get_defaults = lambda the_default=None: breakdown_defaults(
+from safe_qgis.utilities.defaults import get_defaults
+safe.defaults.get_defaults = lambda the_default=None: get_defaults(
     the_default)
+
+from safe.impact_functions.core import get_plugins
+from safe_qgis.tools.minimum_needs import QMinimumNeeds
+## Monkey patch all the impact functions
+minimum_needs = QMinimumNeeds()
+for (name, plugin) in get_plugins().items():
+    if not hasattr(plugin, 'parameters'):
+        continue
+    if 'minimum needs' in plugin.parameters:
+        plugin.parameters['minimum needs'] = (
+            minimum_needs.get_minimum_needs())
+        plugin.parameters['rich minimum needs'] = (
+            minimum_needs.get_full_needs())
 
 try:
     # When upgrading, using the plugin manager, you may get an error when
@@ -114,5 +127,5 @@ except ImportError:
                   'to the InaSAFE team.')
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
-        #None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
+    #   None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
     raise

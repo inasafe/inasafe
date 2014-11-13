@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import sys
@@ -117,7 +117,7 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_start_with_no_parameters(self):
         """Test that run raises an error properly when no parameters defined.
         """
-        #noinspection PyBroadException
+        # noinspection PyBroadException
         try:
             self.calculator.set_exposure_layer(None)
             self.calculator.set_hazard_layer(None)
@@ -196,7 +196,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         style_info = get_style_info(impact_layer)
         message = 'Style info request returned an empty string'
         assert style_info is not '', message
-        #print style_info
+        # print style_info
 
         # Test we get an exception if style info is not found
         try:

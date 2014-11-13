@@ -113,7 +113,7 @@ def osm2padang(E):
                 verify(numpy.allclose(attributes[i]['TestBLDGCl'],
                                       vulnerability_class), msg)
 
-    #print 'Got %i without levels or structure (out of %i total)' % (count, N)
+    # print 'Got %i without levels or structure (out of %i total)' % (count, N)
 
     # Create new vector instance and return
     V = Vector(data=attributes,
@@ -268,7 +268,7 @@ def osm2bnpb(E, target_attribute='VCLASS'):
         # Store new attribute value
         attributes[i][target_attribute] = vulnerability_class
 
-    #print 'Got %i without levels or structure (out of %i total)' % (count, N)
+    # print 'Got %i without levels or structure (out of %i total)' % (count, N)
 
     # Create new vector instance and return
     V = Vector(data=attributes,
@@ -385,7 +385,7 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
 #     #required = ['Bangunan', 'Halaman', 'Struktur_B', 'Level',
 #     #            'Lantai', 'Atap', 'Dinding', 'Tingkat']
 #     actual = E.get_attribute_names()
-#     #print actual
+#     # print actual
 
 #     #msg = ('Input data to osm2bnpb must have attributes %s. '
 #     #       'It has %s' % (str(required), str(actual)))

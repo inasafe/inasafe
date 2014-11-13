@@ -2,7 +2,7 @@
 """
 
 from safe.common.polygon import clip_grid_by_polygons
-#from safe.common.polygon import clip_lines_by_polygon
+# from safe.common.polygon import clip_lines_by_polygon
 
 
 # FIXME (Ole): Order should be reversed and this should move into

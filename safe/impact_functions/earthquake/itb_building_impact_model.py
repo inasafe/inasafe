@@ -98,17 +98,17 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         vclass_tag = 'ITB_Class'
         if datatype.lower() == 'osm':
             # Map from OSM attributes to the ITB building classes
-#            Emap = osm2itb(E)
+            # Emap = osm2itb(E)
             print 'osm2itb has not been implemented'
         elif datatype.lower() == 'sigab':
-#            Emap = sigabitb(E)
+            # Emap = sigabitb(E)
             print 'sigab2itb has not been implemented'
         elif datatype.lower() == 'itb':
             Emap = E
 
         # Interpolate hazard level to building locations
-        Hi = assign_hazard_values_to_exposure_data(H, Emap,
-                                                   attribute_name='MMI')
+        Hi = assign_hazard_values_to_exposure_data(
+            H, Emap, attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = Emap.get_geometry()
@@ -135,9 +135,10 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
             msg = 'Invalid parameter value for ' + building_type
             verify(beta + median > 0.0, msg)
-            percent_damage = log_normal_cdf(mmi,
-                                           median=median,
-                                           sigma=beta) * 100
+            percent_damage = log_normal_cdf(
+                mmi,
+                median=median,
+                sigma=beta) * 100
 
             # Collect shake level and calculated damage
             result_dict = {self.target_field: percent_damage,
@@ -151,7 +152,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
             building_damage.append(result_dict)
 
             # Debugging
-            #if percent_damage > 0.01:
+            # if percent_damage > 0.01:
             #    print mmi, percent_damage
 
             # Calculate statistics
@@ -190,10 +191,10 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + tr('Assumption') + '&#58;</b><br>'
         # This is the proper text:
-        #tr('Levels of impact are defined by post 2009 '
+        # tr('Levels of impact are defined by post 2009 '
         #  'Padang earthquake survey conducted by Geoscience '
         #  'Australia and Institute of Teknologi Bandung.'))
-        #tr('Unreinforced masonry is assumed where no '
+        # tr('Unreinforced masonry is assumed where no '
         #  'structural information is available.'))
         impact_summary += tr(
             'Levels of impact are defined by post 2009 Padang earthquake '

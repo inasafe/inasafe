@@ -16,7 +16,7 @@ __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
@@ -808,7 +808,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_unit, dialog)
 
         # check the values of units options
-        expected_units = ['normalised', 'metres', 'feet']
+        expected_units = ['categorised', 'normalised', 'metres', 'feet']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing metres
@@ -842,7 +842,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_unit, dialog)
 
         # check the values of units options
-        expected_units = ['normalised', 'MMI']
+        expected_units = ['categorised', 'normalised', 'MMI']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing MMI

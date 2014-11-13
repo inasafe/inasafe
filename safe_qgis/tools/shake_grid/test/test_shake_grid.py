@@ -26,7 +26,6 @@ import ogr
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.testing import (
     get_qgis_app,
-    TESTDATA,
     get_shake_test_data_path)
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
@@ -69,7 +68,7 @@ class ShakeGridTest(unittest.TestCase):
         base_name = os.path.splitext(os.path.basename(path))[0]
         # do a little query to make sure we got some results...
         sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
-        #print sql_statement
+        # print sql_statement
         layer = data_source.ExecuteSQL(sql_statement)
         feature_count = layer.GetFeatureCount()
         flag = feature_count == count

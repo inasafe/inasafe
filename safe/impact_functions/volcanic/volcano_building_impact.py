@@ -192,7 +192,10 @@ class VolcanoBuildingImpact(FunctionProvider):
             attributes = hazard_layer.get_data()
             radii_meter = [x * 1000 for x in radii]  # Convert to meters
             hazard_layer = buffer_points(
-                centers, radii_meter, data_table=attributes)
+                centers,
+                radii_meter,
+                hazard_zone_attribute,
+                data_table=attributes)
             # To check
             category_names = radii_meter
         else:
@@ -215,7 +218,7 @@ class VolcanoBuildingImpact(FunctionProvider):
             volcano_names = tr('Not specified in data')
 
         # Check if category_title exists in hazard_layer
-        if not hazard_zone_attribute in hazard_layer.get_attribute_names():
+        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
             message = (
                 'Hazard data %s did not contain expected attribute %s ' %
                 (hazard_layer.get_name(), hazard_zone_attribute))

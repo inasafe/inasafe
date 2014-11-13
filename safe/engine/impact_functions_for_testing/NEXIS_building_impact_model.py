@@ -10,9 +10,9 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 # A maximum floating point number for this package
 MAXFLOAT = float(sys.maxint)
 
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # Define damage curves for tsunami structural building damage
-#------------------------------------------------------------
+# ------------------------------------------------------------
 struct_damage_curve = {'Double brick': Damage_curve([[-MAXFLOAT, 0.0],
                                                      [0.0, 0.016],
                                                      [0.1, 0.150],
@@ -90,11 +90,11 @@ class TsunamiBuildingLossFunction(FunctionProvider):
         impact = []
         for i in range(N):
 
-            #-------------------
+            # -------------------
             # Extract parameters
-            #-------------------
+            # -------------------
             depth = float(inundation[i]['depth'])
-            #shore_distance = E.get_data('SHORE_DIST', i)
+            # shore_distance = E.get_data('SHORE_DIST', i)
 
             # FIXME: Get rid of the type casting when
             #        issue #66 is done
@@ -103,9 +103,9 @@ class TsunamiBuildingLossFunction(FunctionProvider):
             contents_value = E.get_data('CONT_VALUE', i)
             structure_value = E.get_data('STR_VALUE', i)
 
-            #------------------------
+            # ------------------------
             # Compute people affected
-            #------------------------
+            # ------------------------
             if 0.01 < depth < 1.0:
                 people_affected = number_of_people_in_building
             else:
@@ -116,9 +116,9 @@ class TsunamiBuildingLossFunction(FunctionProvider):
             else:
                 people_severely_affected = 0
 
-            #----------------------------------------
+            # ----------------------------------------
             # Compute impact on buldings and contents
-            #----------------------------------------
+            # ----------------------------------------
             depth_floor = depth - 0.3  # Adjust for floor height
 
             if depth_floor >= 0.0:
@@ -139,15 +139,15 @@ class TsunamiBuildingLossFunction(FunctionProvider):
                 structural_damage = curve(depth_floor)
                 contents_damage = contents_damage_curve(depth_floor)
 
-            #---------------
+            # ---------------
             # Compute losses
-            #---------------
+            # ---------------
             structural_loss = structural_damage * structure_value
             contents_loss = contents_damage * contents_value
 
-            #-------
+            # -------
             # Return
-            #-------
+            # -------
             impact.append({'NEXIS_PEOP': number_of_people_in_building,
                            'PEOPLE_AFFECTED': people_affected,
                            'PEOPLE_SEV_AFFECTED': people_severely_affected,

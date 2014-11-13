@@ -47,11 +47,11 @@ class ZonalStatsTest(unittest.TestCase):
         # running the test again will randomly succeed in fetching geometries
         # properly.
     """
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         os.environ['LANG'] = 'en'
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def tearDown(self):
         pass
 
@@ -70,7 +70,7 @@ class ZonalStatsTest(unittest.TestCase):
             2L: {'count': 4, 'sum': 2.0, 'mean': 0.5},  # TL polygon
             3L: {'count': 4, 'sum': 2.0, 'mean': 0.5},  # BL Polygon
             4L: {'count': 4, 'sum': 34.0, 'mean': 8.5}}  # TR polygon
-        #noinspection PyPep8Naming
+        # noinspection PyPep8Naming
         self.maxDiff = None
         self.assertDictEqual(expected_result, result)
 
@@ -99,7 +99,7 @@ class ZonalStatsTest(unittest.TestCase):
             25L: result[25L],
             88L: result[88L],
             108L: result[108L]}
-        #noinspection PyPep8Naming
+        # noinspection PyPep8Naming
         self.maxDiff = None
         self.assertDictEqual(expected_result, result)
 
