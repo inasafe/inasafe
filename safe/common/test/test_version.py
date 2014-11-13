@@ -40,7 +40,8 @@ class TestVersion(unittest.TestCase):
         version = get_version(version_tuple)
         if 'win32' in sys.platform or 'darwin' in sys.platform:
             expected_version = '2.2.0.dev-master'
-            message = 'It should be %s but got %s' % (expected_version, version)
+            message = 'It should be %s but got %s' % (
+                expected_version, version)
             self.assertEqual(expected_version, version, message)
         else:
             expected_version = '2.2.0.devYYYYMMDDhhmmss'
