@@ -43,10 +43,10 @@ class TestVersion(unittest.TestCase):
             message = 'It should be %s but got %s' % (expected_version, version)
             self.assertEqual(expected_version, version, message)
         else:
-            expected_version = '2.2.0.dev-YYYYMMDDhhmmss'
+            expected_version = '2.2.0.devYYYYMMDDhhmmss'
             message = 'It should be %s but got %s' % (
-                expected_version[:10], version[:10])
-            self.assertEqual(expected_version[:10], version[:10], message)
+                expected_version[:9], version[:9])
+            self.assertEqual(expected_version[:9], version[:9], message)
             message = 'Expected version that has length %d, got %d' % (
                 len(expected_version), len(version))
             self.assertEqual(len(expected_version), len(version), message)
