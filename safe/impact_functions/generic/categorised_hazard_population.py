@@ -1,4 +1,22 @@
 # coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid - **Flood polygon evacuation.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+.. todo:: Check raster is single band
+
+"""
+
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import get_defaults, default_minimum_needs
@@ -8,9 +26,9 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     get_function_title,
+    evacuated_population_needs,
     evacuated_population_weekly_needs,
-    population_rounding
-)
+    population_rounding)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
     hazard_all,
@@ -126,7 +144,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True}),
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('rich minimum needs', None)
     ])
 
     def run(self, layers):
@@ -179,10 +198,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         medium = population_rounding(medium)
         low = population_rounding(low)
 
-        # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        tot_needs = evacuated_population_weekly_needs(
-            total_impact, minimum_needs)
+        minimum_needs_full = self.parameters['rich minimum needs']
 
         # Generate impact report for the pdf map
         table_body = [
@@ -208,11 +225,32 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
             tr('Map shows population count in high or medium hazard area'),
             tr('Total population: %s') % format_int(total),
             TableRow(tr(
-                'Table below shows the weekly minimum needs for all '
-                'affected people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True)])
-        for resource, amount in tot_needs.items():
-            table_body.append(TableRow([tr(resource), format_int(amount)]))
+                'Table below shows the minimum needs for all '
+                'affected people'))])
+
+        if minimum_needs_full:
+            total_needs = evacuated_population_needs(
+                total_impact, minimum_needs, minimum_needs_full)
+            for frequency, needs in total_needs.items():
+                table_body.append(TableRow(
+                    [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')
+                    ],
+                    header=True))
+                for resource in needs:
+                    table_body.append(TableRow([
+                        tr(resource['Resource table name']),
+                        format_int(resource['Amount'])]))
+            table_body.append(TableRow(tr('Provenance'), header=True))
+            table_body.append(TableRow(minimum_needs_full['provenance']))
+        else:
+            total_needs = evacuated_population_weekly_needs(
+                total_impact, minimum_needs)
+            table_body.append(
+                TableRow([tr('Needs per week'), tr('Total')], header=True))
+            for resource, amount in total_needs.items():
+                table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in high hazard areas')

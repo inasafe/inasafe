@@ -167,7 +167,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         H = H.get_layer()
         E = E.get_layer()
 
-        #reproject self.extent to the hazard projection
+        # reproject self.extent to the hazard projection
         hazard_crs = H.crs()
         hazard_authid = hazard_crs.authid()
 
@@ -179,8 +179,8 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             viewport_extent = extent_to_geo_array(
                 QgsRectangle(*self.extent), geo_crs, hazard_crs)
 
-        #Align raster extent and viewport
-        #assuming they are both in the same projection
+        # Align raster extent and viewport
+        # assuming they are both in the same projection
         raster_extent = H.dataProvider().extent()
         clip_xmin = raster_extent.xMinimum()
         # clip_xmax = raster_extent.xMaximum()
@@ -246,7 +246,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                     threshold_min, ))
             raise GetDataError(message)
 
-        #reproject the flood polygons to exposure projection
+        # reproject the flood polygons to exposure projection
         exposure_crs = E.crs()
         exposure_authid = exposure_crs.authid()
 
@@ -257,12 +257,12 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                 flooded_polygon_outside, E.crs())
 
         # Clip exposure by the extent
-        #extent_as_polygon = QgsGeometry().fromRect(extent)
-        #no need to clip since It is using a bbox request
-        #line_layer = clip_by_polygon(
+        # extent_as_polygon = QgsGeometry().fromRect(extent)
+        # no need to clip since It is using a bbox request
+        # line_layer = clip_by_polygon(
         #    E,
         #    extent_as_polygon
-        #)
+        # )
         # Find inundated roads, mark them
         line_layer = split_by_polygon_in_out(
             E,
@@ -292,7 +292,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             length = geom.length()
             road_len += length
 
-            if not road_type in roads_by_type:
+            if road_type not in roads_by_type:
                 roads_by_type[road_type] = {'flooded': 0, 'total': 0}
             roads_by_type[road_type]['total'] += length
 

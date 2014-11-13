@@ -50,7 +50,7 @@ do
   tx set -r $RESOURCE -l $LOCALE  "$LOCALEFILE"
 done
 
-#Print out a listing of all registered resources
+# print out a listing of all registered resources
 tx status
 
 # Push all the resources to the tx server

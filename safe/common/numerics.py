@@ -290,7 +290,7 @@ def grid_to_points(A, x, y):
 
     # Create flat 1D row-major view of A cast as
     # one column vector of length MxN where M, N = A.shape
-    #values = A.reshape((-1, 1))
+    # values = A.reshape((-1, 1))
     values = A.reshape(-1)
 
     # Return Nx3 array with rows: x, y, value

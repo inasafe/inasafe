@@ -92,9 +92,52 @@ def evacuated_population_weekly_needs(
     for resource, amount in minimum_needs.items():
         if human_names:
             resource = tr(resource)
-        population_needs[resource] = ceil(population * float(amount))
+        population_needs[resource] = int(ceil(population * float(amount)))
 
     return population_needs
+
+
+def evacuated_population_needs(population, minimum_needs, full_minimum_needs):
+    """Calculate estimated needs using minimum needs configuration provided
+    in full_minimum_needs.
+
+    :param population: The number of evacuated population.
+    :type: int, float
+
+    :param minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: dict
+
+    :param full_minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: dict
+
+    :returns: The needs for the evacuated population.
+    :rtype: dict
+    """
+    frequencies = []
+    for resource in full_minimum_needs['resources']:
+        if resource['Frequency'] not in frequencies:
+            frequencies.append(resource['Frequency'])
+
+    population_needs_by_frequency = OrderedDict([
+        [frequency, []] for frequency in frequencies])
+
+    for resource in full_minimum_needs['resources']:
+        this_resource = resource.copy()
+        if this_resource['Unit abbreviation']:
+            resource_name = '%s [%s]' % (
+                this_resource['Resource name'],
+                this_resource['Unit abbreviation'])
+        else:
+            resource_name = this_resource['Resource name']
+        amount_pp = minimum_needs[resource_name]
+        this_resource['Amount'] = int(ceil(population * float(amount_pp)))
+        this_resource['Resource table name'] = resource_name
+        population_needs_by_frequency[this_resource['Frequency']].append(
+            this_resource)
+
+    return population_needs_by_frequency
 
 
 def population_rounding_full(number):
@@ -290,8 +333,8 @@ def requirement_check(params, require_str, verbose=False):
         if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % key)
-            #print msg
-            #logger.error(msg)
+            # print msg
+            # LOGGER.error(msg)
             return False
 
         if key in excluded_keywords:
@@ -322,8 +365,8 @@ def requirement_check(params, require_str, verbose=False):
     except Exception, e:
         msg = ('Requirements header could not compiled: %s. '
                'Original message: %s' % (execstr, e))
-        #print msg
-        #logger.error(msg)
+        # print msg
+        # LOGGER.error(msg)
 
     return False
 
@@ -370,9 +413,9 @@ def compatible_layers(func, layer_descriptors):
     return layers
 
 
-#-------------------------------
+# -------------------------------
 # Helpers for individual plugins
-#-------------------------------
+# -------------------------------
 def get_hazard_layers(layers):
     """Get list of layers that have category=='hazard'
     """
@@ -497,17 +540,17 @@ def aggregate_point_data(data=None, boundaries=None,
         raise Exception(msg)
 
     polygon_geoms = boundaries.get_geometry()
-    #polygon_attrs = boundaries.get_data()
+    # polygon_attrs = boundaries.get_data()
 
     points = data.get_geometry()
     attributes = data.get_data()
 
     result = []
-    #for i, polygon in enumerate(polygon_geoms):
+    # for i, polygon in enumerate(polygon_geoms):
     for polygon in polygon_geoms:
         indices = inside_polygon(points, polygon)
 
-        #print 'Found %i points in polygon %i' % (len(indices), i)
+        # print 'Found %i points in polygon %i' % (len(indices), i)
 
         # Aggregate numbers
         if aggregation_function == 'count':
@@ -555,7 +598,7 @@ def aggregate(data=None, boundaries=None,
     elif data.is_raster_data:
         # Convert to point data
         # Call point aggregation function
-        #aggregate_point_data(data, boundaries,
+        # aggregate_point_data(data, boundaries,
         #                     attribute_name, aggregation_function)
         pass
     else:

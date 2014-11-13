@@ -27,7 +27,7 @@ KEYWORD_PATH = os.path.abspath(
     os.path.join(UNITDATA, 'exposure', 'exposure.keywords'))
 SQLITE_PATH = os.path.abspath(
     os.path.join(UNITDATA, 'exposure', 'exposure.sqlite'))
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 SHP_BASE = os.path.abspath(
     os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326'))
 EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'

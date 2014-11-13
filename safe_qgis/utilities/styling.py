@@ -477,7 +477,7 @@ def set_raster_style(raster_layer, style):
             # We want it just a little bit smaller than max
             # so that ranges are discrete
             pixel.max = class_max
-            #noinspection PyPep8Naming
+            # noinspection PyPep8Naming
             pixel.percentTransparent = transparency_percent
             transparency_list.append(pixel)
 
@@ -504,8 +504,8 @@ def set_raster_style(raster_layer, style):
     transparency.setTransparentSingleValuePixelList(transparency_list)
     renderer.setRasterTransparency(transparency)
     # For interest you can also view the list like this:
-    #pix = t.transparentSingleValuePixelList()
-    #for px in pix:
+    # pix = t.transparentSingleValuePixelList()
+    # for px in pix:
     #    print 'Min: %s Max %s Percent %s' % (
     #       px.min, px.max, px.percentTransparent)
 

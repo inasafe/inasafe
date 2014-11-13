@@ -40,7 +40,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         self.rubber_band = QgsRubberBand(self.canvas, geometryType=QGis.Line)
         self.rubber_band.setColor(QColor(0, 0, 240, 100))
         # Needs QGIS 2.6
-        #self.rubber_band.setFillColor(QColor(0, 0, 240, 0))
+        # self.rubber_band.setFillColor(QColor(0, 0, 240, 0))
         self.rubber_band.setWidth(1)
 
         self.reset()
@@ -105,7 +105,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         self.rubber_band.reset(QGis.Polygon)
         if (start_point.x() == end_point.x()
-            or start_point.y() == end_point.y()):
+                or start_point.y() == end_point.y()):
             return
 
         point1 = start_point

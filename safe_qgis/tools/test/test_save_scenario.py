@@ -70,7 +70,7 @@ class SaveScenarioTest(unittest.TestCase):
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         DOCK.cboHazard.clear()
         DOCK.cboExposure.clear()
-        #DOCK.cboAggregation.clear() #dont do this because the cboAggregation
+        # DOCK.cboAggregation.clear() #dont do this because the cboAggregation
         # need to be able to react to the status changes of the other combos
         self.save_scenario_dialog = None
 

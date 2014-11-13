@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -77,7 +77,7 @@ class MinimumNeedsTest(unittest.TestCase):
     #
     #     TODO: Make this test useful - Tim
     #     """
-    #     #print shapefile_path
+    #     # print shapefile_path
     #     layer = QgsVectorLayer(
     #         os.path.basename(shapefile_path),
     #         os.path.dirname(shapefile_path),

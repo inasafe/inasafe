@@ -93,7 +93,7 @@ class FtpClientTest(unittest.TestCase):
         """Check if we can get a nice directory listing"""
         client = FtpClient()
         file_list = client.get_listing()
-        #Make it a single string
+        # Make it a single string
         file_list = '\n'.join(file_list)
         expected_output = ['20120726022003.inp.zip', '20120726022003.out.zip']
         message = (

@@ -10,10 +10,10 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
+    evacuated_population_needs,
     evacuated_population_weekly_needs,
     population_rounding_full,
-    population_rounding
-)
+    population_rounding)
 from safe.metadata import (
     hazard_earthquake,
     unit_mmi,
@@ -21,8 +21,7 @@ from safe.metadata import (
     exposure_population,
     unit_people_per_pixel,
     exposure_definition,
-    hazard_definition
-)
+    hazard_definition)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -224,7 +223,9 @@ class ITBFatalityFunction(FunctionProvider):
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})])),
-        ('minimum needs', default_minimum_needs())])
+        ('minimum needs', default_minimum_needs()),
+        ('rich minimum needs', None)
+    ])
 
     def fatality_rate(self, mmi):
         """ITB method to compute fatality rate.
@@ -238,6 +239,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         x = self.parameters['x']
         y = self.parameters['y']
+        # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
@@ -355,11 +357,8 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
-        # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        # FIXME: Refactor and share
         minimum_needs = self.parameters['minimum needs']
-        total_needs = evacuated_population_weekly_needs(
-            displaced, minimum_needs)
+        minimum_needs_full = self.parameters['rich minimum needs']
 
         # Generate impact report for the pdf map
         table_body = [
@@ -369,10 +368,30 @@ class ITBFatalityFunction(FunctionProvider):
             TableRow(
                 [tr('People displaced'), '%s' % format_int(displaced)],
                 header=True),
-            TableRow(tr('Map shows density estimate of displaced population')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True)]
-        for resource, amount in total_needs.items():
-            table_body.append(TableRow([tr(resource), format_int(amount)]))
+            TableRow(tr('Map shows density estimate of displaced population'))]
+        if minimum_needs_full:
+            total_needs = evacuated_population_needs(
+                displaced, minimum_needs, minimum_needs_full)
+            for frequency, needs in total_needs.items():
+                table_body.append(TableRow(
+                    [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')
+                    ],
+                    header=True))
+                for resource in needs:
+                    table_body.append(TableRow([
+                        tr(resource['Resource table name']),
+                        format_int(resource['Amount'])]))
+            table_body.append(TableRow(tr('Provenance'), header=True))
+            table_body.append(TableRow(minimum_needs_full['provenance']))
+        else:
+            total_needs = evacuated_population_weekly_needs(
+                displaced, minimum_needs)
+            table_body.append(
+                TableRow([tr('Needs per week'), tr('Total')], header=True))
+            for resource, amount in total_needs.items():
+                table_body.append(TableRow([tr(resource), format_int(amount)]))
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
 
         if fatalities > 0:
@@ -453,22 +472,24 @@ class ITBFatalityFunction(FunctionProvider):
         legend_title = tr('Population Count')
 
         # Create raster object and return
-        L = Raster(R,
-                   projection=population.get_projection(),
-                   geotransform=population.get_geotransform(),
-                   keywords={'impact_summary': impact_summary,
-                             'total_population': total,
-                             'total_fatalities': fatalities,
-                             'fatalities_per_mmi': number_of_fatalities,
-                             'exposed_per_mmi': number_of_exposed,
-                             'displaced_per_mmi': number_of_displaced,
-                             'impact_table': impact_table,
-                             'map_title': map_title,
-                             'legend_notes': legend_notes,
-                             'legend_units': legend_units,
-                             'legend_title': legend_title,
-                             'total_needs': total_needs},
-                   name=tr('Estimated displaced population per cell'),
-                   style_info=style_info)
+        raster = Raster(
+            R,
+            projection=population.get_projection(),
+            geotransform=population.get_geotransform(),
+            keywords={
+                'impact_summary': impact_summary,
+                'total_population': total,
+                'total_fatalities': fatalities,
+                'fatalities_per_mmi': number_of_fatalities,
+                'exposed_per_mmi': number_of_exposed,
+                'displaced_per_mmi': number_of_displaced,
+                'impact_table': impact_table,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'total_needs': total_needs},
+            name=tr('Estimated displaced population per cell'),
+            style_info=style_info)
 
-        return L
+        return raster

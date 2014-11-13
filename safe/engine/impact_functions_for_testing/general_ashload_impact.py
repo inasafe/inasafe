@@ -43,14 +43,14 @@ class TephraBuildingImpactFunction(FunctionProvider):
         result = []
         for i in range(len(E)):
 
-            #-------------------
+            # -------------------
             # Extract parameters
-            #-------------------
+            # -------------------
             load = H.get_data('load', i)
 
-            #------------------------
+            # ------------------------
             # Compute damage level
-            #------------------------
+            # ------------------------
 
             # FIXME: The thresholds have been greatly reduced
             # for the purpose of demonstration. Any real analyis
@@ -78,24 +78,26 @@ class TephraBuildingImpactFunction(FunctionProvider):
             result.append({'DAMAGE': impact, 'ASHLOAD': load})
 
         # Create report
-        impact_summary = ('<font size="3"> <table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                    '   <tr></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '</table></font>' % ('Beban abu', 'Gedung dampak',
-                                         '< 0.5 kg/m2', count0,
-                                         '0.5 - 2 kg/m2', count1,
-                                         '2 - 10 kg/m2', count2,
-                                         '> 10 kg/m2', count3))
-                    #'</table>' %
-                    # ('Beban abu', 'Gedung dampak',
-                    # 'Gangguan (< 90 kg/m2)', count0,
-                    # 'Kerusakan kosmetik (90 - 150 kg/m2', count1,
-                    # 'parsial runtuhnya (150 - 300 kg/m2', count2,
-                    # 'runtuhnya lengkap (> 300 kg/m2', count3))
+        impact_summary = (
+            '<font size="3"> <table border="0" width="320px">'
+            '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+            '   <tr></tr>'
+            '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+            '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+            '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+            '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+            '</table></font>' % (
+                'Beban abu', 'Gedung dampak',
+                '< 0.5 kg/m2', count0,
+                '0.5 - 2 kg/m2', count1,
+                '2 - 10 kg/m2', count2,
+                '> 10 kg/m2', count3))
+        # '</table>' %
+        # ('Beban abu', 'Gedung dampak',
+        # 'Gangguan (< 90 kg/m2)', count0,
+        # 'Kerusakan kosmetik (90 - 150 kg/m2', count1,
+        # 'parsial runtuhnya (150 - 300 kg/m2', count2,
+        # 'runtuhnya lengkap (> 300 kg/m2', count3))
 
         V = Vector(data=result,
                    projection=E.get_projection(),

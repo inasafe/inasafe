@@ -859,7 +859,7 @@ def load_standard_layers(dock=None):
         join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, data_directory=None, dock=dock)
-    #FIXME (MB) -1 is until we add the aggregation category because of
+    # FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
     assert hazard_layer_count + exposure_layer_count == len(file_list) - 1

@@ -217,7 +217,7 @@ class Test_Engine(unittest.TestCase):
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
         exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
-        #fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
+        # fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -236,8 +236,8 @@ class Test_Engine(unittest.TestCase):
         impact_filename = impact_layer.get_filename()
 
         I = read_layer(impact_filename)
-        #calculated_result = I.get_data()
-        #print calculated_result.shape
+        # calculated_result = I.get_data()
+        # print calculated_result.shape
         keywords = I.get_keywords()
         # print "keywords", keywords
         population = float(keywords['total_population'])
@@ -343,9 +343,9 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)
         calculated_result = I.get_data()
-#        print calculated_result.shape
+        # print calculated_result.shape
         keywords = I.get_keywords()
-#        print "keywords", keywords
+        # print "keywords", keywords
         population = keywords['total_population']
         fatalities = keywords['total_fatalities']
 
@@ -558,8 +558,8 @@ class Test_Engine(unittest.TestCase):
             # Verify correctness against results from HKV
             res = sum(I.flat)
             ref = expected_values[i]
-            #print filename, 'Result=%f' % res, ' Expected=%f' % ref
-            #print 'Pct relative error=%f' % (abs(res-ref)*100./ref)
+            # print filename, 'Result=%f' % res, ' Expected=%f' % ref
+            # print 'Pct relative error=%f' % (abs(res-ref)*100./ref)
 
             msg = 'Got result %f but expected %f' % (res, ref)
             assert numpy.allclose(res, ref, rtol=1.0e-2), msg
@@ -615,7 +615,7 @@ class Test_Engine(unittest.TestCase):
         exposure_filename = ('%s/pop_merapi_clip.tif' % TESTDATA)
         # Slow
         # FIXME (Ole): Results are different - check!
-        #exposure_filename = ('%s/population_indonesia_2010_BNPB_BPS.asc'
+        # exposure_filename = ('%s/population_indonesia_2010_BNPB_BPS.asc'
         #                     % EXPDATA)
 
         # Calculate impact using API
@@ -724,8 +724,8 @@ class Test_Engine(unittest.TestCase):
                                          E_clip.get_geotransform(),
                                          polygons)
 
-        #print res_clip
-        #print len(res_clip)
+        # print res_clip
+        # print len(res_clip)
 
         res_full = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
@@ -734,12 +734,12 @@ class Test_Engine(unittest.TestCase):
         assert len(res_clip) == len(res_full)
 
         for i in range(len(res_clip)):
-            #print
+            # print
             x = res_clip[i][0]
             y = res_full[i][0]
 
-            #print x
-            #print y
+            # print x
+            # print y
             msg = ('Got len(x) == %i, len(y) == %i. Should be the same'
                    % (len(x), len(y)))
             assert len(x) == len(y), msg
@@ -749,7 +749,7 @@ class Test_Engine(unittest.TestCase):
             idx = inside_polygon(x,  # pylint: disable=W0612
                                  P.outer_ring,
                                  holes=P.inner_rings)
-            #print idx
+            # print idx
 
             msg = ('Expected point locations to be the same in clipped '
                    'and full grids, Got %s and %s' % (x, y))
@@ -784,12 +784,12 @@ class Test_Engine(unittest.TestCase):
         assert N == 2704
 
         # Run and test the fundamental clipping routine
-        #import time
-        #t0 = time.time()
+        # import time
+        # t0 = time.time()
         res = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry(as_geometry_objects=True))
-        #print 'Engine took %i seconds' % (time.time() - t0)
+        # print 'Engine took %i seconds' % (time.time() - t0)
 
         assert len(res) == N
 
@@ -806,12 +806,12 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(geom[17][1], -6.11493812)  # LAT
 
         # Then run and test the high level interpolation function
-        #t0 = time.time()
+        # t0 = time.time()
         P = interpolate_polygon_raster(H, E,
                                        layer_name='poly2raster_test',
                                        attribute_name='grid_value')
-        #print 'High level function took %i seconds' % (time.time() - t0)
-        #P.write_to_file('polygon_raster_interpolation_example_big.shp')
+        # print 'High level function took %i seconds' % (time.time() - t0)
+        # P.write_to_file('polygon_raster_interpolation_example_big.shp')
 
         # Characterisation tests (values verified using QGIS)
         attributes = P.get_data()[17]
@@ -886,7 +886,7 @@ class Test_Engine(unittest.TestCase):
                                        attribute_name='grid_value')
 
         # Verify result (numbers obtained from using QGIS)
-        #P.write_to_file('poly2raster_test.shp')
+        # P.write_to_file('poly2raster_test.shp')
         attributes = P.get_data()
         geometry = P.get_geometry()
 
@@ -1009,24 +1009,24 @@ class Test_Engine(unittest.TestCase):
                                        attribute_name='grid_value')
 
         # Possibly write result to file for visual inspection, e.g. with QGIS
-        #P.write_to_file('polygon_raster_interpolation_example_holes.shp')
+        # P.write_to_file('polygon_raster_interpolation_example_holes.shp')
 
         # Characterisation tests (values verified using QGIS)
         # In internal polygon
         attributes = P.get_data()[43]
-        #geometry = P.get_geometry()[43]
+        # geometry = P.get_geometry()[43]
         assert attributes['KRB'] == 'Kawasan Rawan Bencana III'
         assert attributes['polygon_id'] == 8
 
         # In polygon ring
         attributes = P.get_data()[222]
-        #geometry = P.get_geometry()[222]
+        # geometry = P.get_geometry()[222]
         assert attributes['KRB'] == 'Kawasan Rawan Bencana II'
         assert attributes['polygon_id'] == 9
 
         # In one of the outer polygons
         attributes = P.get_data()[26]
-        #geometry = P.get_geometry()[26]
+        # geometry = P.get_geometry()[26]
         assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
         assert attributes['polygon_id'] == 4
 
@@ -1246,13 +1246,13 @@ class Test_Engine(unittest.TestCase):
                 # Test that test data is correct by calculating damage based
                 # on reference MMI.
                 # FIXME (Ole): UNCOMMENT WHEN WE GET THE CORRECT DATASET
-                #expected_test_damage = lembang_damage_function(MMI[i])
-                #msg = ('Test data is inconsistent: i = %i, MMI = %f,'
+                # expected_test_damage = lembang_damage_function(MMI[i])
+                # msg = ('Test data is inconsistent: i = %i, MMI = %f,'
                 #       'expected_test_damage = %f, '
                 #       'actual_test_damage = %f' % (i, MMI[i],
                 #                                    expected_test_damage,
                 #                                    DAM[i]))
-                #if not numpy.allclose(expected_test_damage,
+                # if not numpy.allclose(expected_test_damage,
                 #                      DAM[i], rtol=1.0e-12):
                 #    print msg
 
@@ -1261,14 +1261,14 @@ class Test_Engine(unittest.TestCase):
                 # Also small fluctuations in MMI can cause very large changes
                 # in computed damage for this example.
                 # print mmi, MMI[i], calculated_damage, DAM[i]
-                #msg = ('Calculated damage was not as expected for point %i:'
+                # msg = ('Calculated damage was not as expected for point %i:'
                 #       'Got %f, expected %f' % (i, calculated_dam, DAM[i]))
-                #assert numpy.allclose(calculated_dam, DAM[i], rtol=0.8), msg
+                # assert numpy.allclose(calculated_dam, DAM[i], rtol=0.8), msg
 
             assert min_damage >= 0
             assert max_damage <= 100
-            #print 'Extrema', mmi_filename, min_damage, max_damage
-            #print len(MMI)
+            # print 'Extrema', mmi_filename, min_damage, max_damage
+            # print len(MMI)
 
     test_earthquake_damage_schools.slow = True
 
@@ -1284,7 +1284,7 @@ class Test_Engine(unittest.TestCase):
         # FIXME: Still needs some reference data to compare to
         for mmi_filename in ['Shakemap_Padang_2009.asc',
                              # Time consuming
-                             #'Earthquake_Ground_Shaking.asc',
+                             # 'Earthquake_Ground_Shaking.asc',
                              'Lembang_Earthquake_Scenario.asc']:
 
             # Name file names for hazard level and exposure
@@ -1339,8 +1339,9 @@ class Test_Engine(unittest.TestCase):
         # no reference data. It does check the sanity of values as
         # far as possible.
 
-        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
-                            % TESTDATA)
+        hazard_filename = (
+            '%s/tsunami_max_inundation_depth_4326.tif'
+            % TESTDATA)
         exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
         exposure_with_depth_filename = ('%s/tsunami_building_exposure'
                                         '.shp' % TESTDATA)
@@ -1366,7 +1367,7 @@ class Test_Engine(unittest.TestCase):
                    % (key, str(feature.keys())))
             assert key in feature.keys(), msg
             if (feature['LONGITUDE'] == 150.1787 and
-                feature['LATITUDE'] == -35.70413):
+                    feature['LATITUDE'] == -35.70413):
                 msg = ''
                 assert numpy.isnan(feature[key])
             elif (feature['LONGITUDE'] == 150.1793 and
@@ -1415,19 +1416,19 @@ class Test_Engine(unittest.TestCase):
         # original exposure point (with depth) locations
         ref_depth = read_layer(exposure_with_depth_filename)
         refdepth_coordinates = ref_depth.get_geometry()
-        #refdepth_attributes = ref_depth.get_data()
+        # refdepth_attributes = ref_depth.get_data()
         assert N == len(refdepth_coordinates)
         msg = ('Coordinates of impact results do not match those of '
                'exposure data (with depth)')
         assert numpy.allclose(icoordinates, refdepth_coordinates), msg
 
         # Read reference results
-        #hazard_raster = read_layer(hazard_filename)
-        #A = hazard_raster.get_data()
-        #depth_min, depth_max = hazard_raster.get_extrema()
+        # hazard_raster = read_layer(hazard_filename)
+        # A = hazard_raster.get_data()
+        # depth_min, depth_max = hazard_raster.get_extrema()
 
         ref_impact = read_layer(reference_impact_filename)
-        #refimpact_coordinates = ref_impact.get_geometry()
+        # refimpact_coordinates = ref_impact.get_geometry()
         refimpact_attributes = ref_impact.get_data()
 
         # Check for None
@@ -1438,7 +1439,7 @@ class Test_Engine(unittest.TestCase):
 
         # Check sanity of calculated attributes
         for i in range(N):
-            #lon, lat = icoordinates[i]
+            # lon, lat = icoordinates[i]
 
             depth = iattributes[i]['DEPTH']
 
@@ -1554,15 +1555,15 @@ class Test_Engine(unittest.TestCase):
                 assert load_min <= load <= load_max, msg
 
             # Test calcalated values
-            #if 0.01 <= load < 90.0:
+            # if 0.01 <= load < 90.0:
             #    assert impact == 1
-            #elif 90.0 <= load < 150.0:
+            # elif 90.0 <= load < 150.0:
             #    assert impact == 2
-            #elif 150.0 <= load < 300.0:
+            # elif 150.0 <= load < 300.0:
             #    assert impact == 3
-            #elif load >= 300.0:
+            # elif load >= 300.0:
             #    assert impact == 4
-            #else:
+            # else:
             #    assert impact == 0
 
             if 0.01 <= load < 0.5:
@@ -1705,8 +1706,8 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function with default layer_name
         I = assign_hazard_values_to_exposure_data(R, V, attribute_name='value')
-        #msg = 'Got name %s, expected %s' % (I.get_name(), V.get_name())
-        #assert V.get_name() == I.get_name(), msg
+        # msg = 'Got name %s, expected %s' % (I.get_name(), V.get_name())
+        # assert V.get_name() == I.get_name(), msg
 
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
@@ -1716,7 +1717,7 @@ class Test_Engine(unittest.TestCase):
         for i, (xi, eta) in enumerate(Icoordinates):
 
             z = Iattributes[i]['value']
-            #print xi, eta, z, linear_function(xi, eta)
+            # print xi, eta, z, linear_function(xi, eta)
             assert numpy.allclose(z, linear_function(xi, eta),
                                   rtol=1e-12)
 
@@ -1879,8 +1880,8 @@ class Test_Engine(unittest.TestCase):
 
             if pointid == 263:
 
-                #print i, pointid, attributes[i],
-                #print interpolated_depth, coordinates[i]
+                # print i, pointid, attributes[i],
+                # print interpolated_depth, coordinates[i]
 
                 # Check that location is correct
                 assert numpy.allclose(coordinates[i],
@@ -1992,7 +1993,7 @@ class Test_Engine(unittest.TestCase):
         H = Vector(data=H_attributes[799:800],
                    geometry=H_geometry[799:800],
                    projection=H.get_projection())
-        #H.write_to_file('MM_799.shp')  # E.g. to view with QGis
+        # H.write_to_file('MM_799.shp')  # E.g. to view with QGis
 
         E = read_layer(exposure_filename)
         E_attributes = E.get_data()
@@ -2151,7 +2152,7 @@ class Test_Engine(unittest.TestCase):
             assert (counts[DEFAULT_ATTRIBUTE] +
                     counts['Not ' + DEFAULT_ATTRIBUTE]) == len(E), msg
 
-        #for key in counts:
+        # for key in counts:
         #    print key, counts[key]
 
     test_interpolation_from_polygons_multiple.slow = True
@@ -2259,14 +2260,14 @@ class Test_Engine(unittest.TestCase):
             L.write_to_file('outside_centroids.shp')
 
         # Characterisation test based on against visual inspection with QGIS
-        #print inside_line_geometry[6]
+        # print inside_line_geometry[6]
         assert numpy.allclose(inside_line_geometry[6],
                               [[122.23438722, -8.6277337],
                                [122.23316953, -8.62733247],
                                [122.23162128, -8.62683715],
                                [122.23156661, -8.62681168]])
 
-        #print outside_line_geometry[5]
+        # print outside_line_geometry[5]
         assert numpy.allclose(outside_line_geometry[5],
                               [[122.18321143, -8.58901526],
                                [122.18353015, -8.58890024],
@@ -2419,11 +2420,11 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        #import time
-        #t0 = time.time()
+        # import time
+        # t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth')
-        #print 'This took', time.time() - t0
+        # print 'This took', time.time() - t0
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2560,11 +2561,11 @@ class Test_Engine(unittest.TestCase):
                    geometry_type=E.geometry_type)
 
         # Test interpolation function
-        #import time
-        #t0 = time.time()
+        # import time
+        # t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth')
-        #print 'That took %f seconds' % (time.time() - t0)
+        # print 'That took %f seconds' % (time.time() - t0)
 
         # TODO:
         # Keep only those roads that are marked FLOODPRONE == 'YES'
@@ -2596,14 +2597,14 @@ class Test_Engine(unittest.TestCase):
 
         # FIXME (Ole): Finish this test
         # Check that attributes have been carried through
-        #for i, attr in enumerate(I_attributes):
+        # for i, attr in enumerate(I_attributes):
         #    pass
         #    # TODO
         # Check against correctness verified in QGIS
-        #assert I_attributes[]['highway'] ==
-        #assert I_attributes[]['osm_id'] ==
-        #assert I_attributes[]['polygon_id'] ==
-        #assert I_attributes[]['parent_line_id'] ==
+        # assert I_attributes[]['highway'] ==
+        # assert I_attributes[]['osm_id'] ==
+        # assert I_attributes[]['polygon_id'] ==
+        # assert I_attributes[]['parent_line_id'] ==
 
     test_polygon_to_roads_interpolation_flood_example.slow = True
 
@@ -2656,7 +2657,7 @@ class Test_Engine(unittest.TestCase):
             else:
                 road_types[roadtype] = 0
 
-        #for att in road_types:
+        # for att in road_types:
         #    print att, road_types[att]
         assert road_types['residential'] == 14853
 
@@ -2677,13 +2678,13 @@ class Test_Engine(unittest.TestCase):
         assert len(E) == 744
 
         # Test interpolation function
-        #import time
-        #t0 = time.time()
+        # import time
+        # t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth')
-        #print ('Using 2704 individual polygons took %f seconds'
+        # print ('Using 2704 individual polygons took %f seconds'
         #       % (time.time() - t0))
-        #I.write_to_file('flood_prone_roads_jakarta_individual.shp')
+        # I.write_to_file('flood_prone_roads_jakarta_individual.shp')
 
         # Check against correctness verified in QGIS
         I_attributes = I.get_data()
@@ -2710,14 +2711,14 @@ class Test_Engine(unittest.TestCase):
 
         # Read all input data
         H = read_layer(hazard_filename)  # Polygons
-        #H_attributes = H.get_data()
-        #H_geometries = H.get_geometry()
+        # H_attributes = H.get_data()
+        # H_geometries = H.get_geometry()
         print len(H)
         assert len(H) == 35
 
         E = read_layer(exposure_filename)
         E_geometries = E.get_geometry()
-        #E_attributes = E.get_data()
+        # E_attributes = E.get_data()
         assert len(E) == 18574
 
         # Get statistics of road types
@@ -2730,7 +2731,7 @@ class Test_Engine(unittest.TestCase):
             else:
                 road_types[roadtype] = 0
 
-        #for att in road_types:
+        # for att in road_types:
         #    print att, road_types[att]
         assert road_types['residential'] == 14853
 
@@ -2761,12 +2762,12 @@ class Test_Engine(unittest.TestCase):
         I.write_to_file('flood_prone_roads_jakarta_merged.shp')
 
         # Check against correctness verified in QGIS
-        #I_attributes = I.get_data()
-        #assert I_attributes[198]['TYPE'] == 'secondary'
-        #assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
-        #assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
-        #assert I_attributes[198]['polygon_id'] == 235
-        #assert I_attributes[198]['parent_line_id'] == 333
+        # I_attributes = I.get_data()
+        # assert I_attributes[198]['TYPE'] == 'secondary'
+        # assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
+        # assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
+        # assert I_attributes[198]['polygon_id'] == 235
+        # assert I_attributes[198]['parent_line_id'] == 333
 
     Xtest_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
@@ -2837,7 +2838,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test for a range of hazard layers
         for mmi_filename in ['Shakemap_Padang_2009.asc']:
-                             #'Lembang_Earthquake_Scenario.asc']:
+            # 'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
             hazard_filename = join(HAZDATA, mmi_filename)
@@ -2888,10 +2889,10 @@ class Test_Engine(unittest.TestCase):
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
-                #print calculated_mmi
+                # print calculated_mmi
                 verified_dam = padang_check_results(calculated_mmi,
                                                     building_class)
-                #print calculated_mmi, building_class, calculated_dam
+                # print calculated_mmi, building_class, calculated_dam
                 if verified_dam:
                     msg = ('Calculated damage was not as expected '
                              'for hazard layer %s. I got %f '

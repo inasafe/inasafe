@@ -50,12 +50,12 @@ if __name__ == '__main__':
         # Keep only those that are affected (speeds things up a lot,
         # but will reduce overall bounding box for buildings under
         # consideration)
-        #geom = res.get_geometry()
-        #data = res.get_data()
-        #new_geom = []
-        #new_data = []
+        # geom = res.get_geometry()
+        # data = res.get_data()
+        # new_geom = []
+        # new_data = []
         #
-        #for i, d in enumerate(data):
+        # for i, d in enumerate(data):
         #    if d['affected']:
         #        g = geom[i]
         #        new_geom.append(g)

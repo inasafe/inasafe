@@ -110,8 +110,8 @@ def disclaimer():
     :returns: Standard disclaimer string for InaSAFE.
     :rtype: str
     """
-    #import tr here to avoid side effects with safe (see notes above in import
-    #section.
+    # import tr here to avoid side effects with safe (see notes above in import
+    # section.
     from safe_qgis.utilities.utilities import tr
     text = tr(
         'InaSAFE has been jointly developed by Indonesian '
@@ -149,8 +149,8 @@ def limitations():
     :return: All limitations on current InaSAFE.
     :rtype: list
     """
-    #import tr here to avoid side effects with safe (see notes above in import
-    #section.
+    # import tr here to avoid side effects with safe (see notes above in import
+    # section.
     from safe_qgis.utilities.utilities import tr
     limitation_list = list()
     limitation_list.append(tr('InaSAFE is not a hazard modelling tool.'))

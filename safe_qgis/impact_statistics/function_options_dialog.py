@@ -31,6 +31,7 @@ from PyQt4.QtGui import (
     QLabel,
     QCheckBox,
     QFormLayout,
+    QScrollArea,
     QWidget)
 from collections import OrderedDict
 
@@ -119,9 +120,13 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         """
         # create minimum needs tab
         tab = QWidget()
-        form_layout = QFormLayout(tab)
+        form_widget = QWidget()
+        form_layout = QFormLayout(form_widget)
         form_layout.setLabelAlignment(Qt.AlignLeft)
-        self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
+        scroll_area = QtGui.QScrollArea(tab)
+        scroll_area.setWidget(form_widget)
+        scroll_area.setWidgetResizable(True)
+        self.tabWidget.addTab(scroll_area, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
 
         widget = QWidget()
