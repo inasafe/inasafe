@@ -341,13 +341,21 @@ class Map():
                 legend.model().setLayerSet([self.layer.id()])
                 legend.synchronizeWithModel()
             else:
-                # Somehow the codes below will crash qgis running it from
+                # 1 Somehow the codes below will crash qgis running it from
                 # inasafe. But fine from qgis python console.
-                model = legend.modelV2()
                 group = QgsLayerTreeGroup()
-                group.insertLayer(0, self.layer)
-                model.setRootGroup(group)
+                group.addLayer(self.layer)
+                legend.modelV2().setRootGroup(group)
                 legend.synchronizeWithModel()
-                # Why below is not working for 2.6?????
+                # 2 Why below is not working for 2.6?????
                 # legend.model().setLayerSet([self.layer.id()])
+                # legend.model().synchronizeWithModel()
+                # 3
+                # legend.updateLegend()
+                # model = legend.modelV2()
+                # for r in range(0, model.rowCount()):
+                #     for c in range(0, model.columnCount()):
+                #         if model.index(r, c).data() != self.layer.name():
+                #             model.removeRows(r, 1)
                 # legend.synchronizeWithModel()
+
