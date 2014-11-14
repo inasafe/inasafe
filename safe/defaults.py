@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from collections import OrderedDict
+from third_party.parameters.resource_parameter import ResourceParameter
 
 from safe.common.utilities import ugettext as tr
 
@@ -89,17 +90,58 @@ def default_minimum_needs():
 
     .. note:: Key names will be translated.
     """
-    rice = 'Rice [kg]'
-    drinking_water = 'Drinking Water [l]'
-    water = 'Clean Water [l]'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
-    minimum_needs = OrderedDict([
-        (rice, 2.8),
-        (drinking_water, 17.5),
-        (water, 67),
-        (family_kits, 0.2),
-        (toilets, 0.05)])
+    # TODO: update this to use parameters
+    rice = ResourceParameter()
+    rice.value = 2.8
+    rice.frequency = 'weekly'
+    rice.minimum_allowed_value = 1.4
+    rice.maximum_allowed_value = 5.6
+    rice.name = 'Rice'
+    rice.unit.abbreviation = 'kg'
+    rice.unit.name = 'kilogram'
+    rice.unit.plural = 'kilograms'
+
+    drinking_water = ResourceParameter()
+    drinking_water.value = 17.5
+    drinking_water.frequency = 'weekly'
+    drinking_water.minimum_allowed_value = 10
+    drinking_water.maximum_allowed_value = 30
+    drinking_water.name = 'Drinking Water'
+    drinking_water.unit.abbreviation = 'l'
+    drinking_water.unit.name = 'litre'
+    drinking_water.unit.plural = 'litres'
+
+    water = ResourceParameter()
+    water.value = 67
+    water.frequency = 'weekly'
+    water.minimum_allowed_value = 30
+    water.maximum_allowed_value = 100
+    water.name = 'Clean Water'
+    water.unit.abbreviation = 'l'
+    water.unit.name = 'litre'
+    water.unit.plural = 'litres'
+
+    family_kits = ResourceParameter()
+    family_kits.value = 0.2
+    family_kits.frequency = 'weekly'
+    family_kits.minimum_allowed_value = 0.2
+    family_kits.maximum_allowed_value = 0.2
+    family_kits.name = 'Family Kits'
+
+    toilets = ResourceParameter()
+    toilets.value = 0.05
+    toilets.frequency = 'weekly'
+    toilets.minimum_allowed_value = 0.02
+    toilets.maximum_allowed_value = 0.05
+    toilets.name = 'Toilets'
+
+    minimum_needs = [
+        rice,
+        drinking_water,
+        water,
+        family_kits,
+        toilets,
+    ]
     return minimum_needs
 
 

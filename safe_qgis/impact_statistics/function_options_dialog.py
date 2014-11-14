@@ -90,8 +90,6 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         # it's better to check the type of the widget.
         # for new_parameter in new_parameters:
         #     values[new_parameter.name] = new_parameter.value
-        print widget
-        print type(widget)
         if type(widget) == QLineEdit:
             return lambda: function(widget.text())
         elif type(widget) == QCheckBox or type(widget) == QGroupBox:

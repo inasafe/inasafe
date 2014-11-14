@@ -28,6 +28,7 @@ import logging
 from os.path import join
 
 # this import required to enable PyQt API v2
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 from unittest import TestCase, skipIf
@@ -93,6 +94,7 @@ from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
 #from safe.engine.impact_functions_for_testing import error_raising_functions
 # pylint: enable=W0611
+# noinspection PyUnresolvedReferences
 from safe.impact_functions.core import get_plugin
 
 LOGGER = logging.getLogger('InaSAFE')
