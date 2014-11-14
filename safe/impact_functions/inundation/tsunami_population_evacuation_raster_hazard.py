@@ -216,8 +216,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
             counts.append([val, rounding])
 
         # Count totals
-        evacuated = counts[-1][0]
-        rounding = counts[-1][0]
+        evacuated, rounding = counts[-1]
         total = int(numpy.sum(population))
         # Don't show digits less than a 1000
         total = population_rounding(total)
