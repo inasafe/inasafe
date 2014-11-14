@@ -234,7 +234,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
                      header=True),
             TableRow(
                 tr('* Number is rounded up to the nearest %s') % rounding),
-            TableRow(tr('Map shows population density needing evacuation'))]
+            TableRow(tr('Map shows the numbers of people needing evacuation'))]
         if minimum_needs_full:
             total_needs = evacuated_population_needs(
                 evacuated, minimum_needs, minimum_needs_full)
@@ -342,7 +342,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Population Count')
 
         # Create raster object and return
         raster = Raster(

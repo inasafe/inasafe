@@ -231,7 +231,7 @@ class FloodEvacuationFunction(FunctionProvider):
                      header=True),
             TableRow(tr('* Number is rounded up to the nearest %s') % (
                 rounding_evacuated)),
-            TableRow(tr('Map shows population density needing evacuation')),
+            TableRow(tr('Map shows the numbers of people needing evacuation')),
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people'))]
 
