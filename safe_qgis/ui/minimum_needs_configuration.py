@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'minimum_needs_configuration.ui'
 #
-# Created: Wed Nov  5 10:06:10 2014
+# Created: Fri Nov 14 17:33:31 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -81,6 +81,8 @@ class Ui_minimumNeeds(object):
         self.page = QtGui.QWidget()
         self.page.setObjectName(_fromUtf8("page"))
         self.gridLayout_2 = QtGui.QGridLayout(self.page)
+        self.gridLayout_2.setMargin(0)
+        self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.gridLayout = QtGui.QGridLayout()
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -144,20 +146,24 @@ class Ui_minimumNeeds(object):
         self.page_2 = QtGui.QWidget()
         self.page_2.setObjectName(_fromUtf8("page_2"))
         self.gridLayout_4 = QtGui.QGridLayout(self.page_2)
+        self.gridLayout_4.setMargin(0)
+        self.gridLayout_4.setSpacing(0)
         self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
         self.verticalLayout = QtGui.QVBoxLayout()
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.resourceGroupBox = QtGui.QGroupBox(self.page_2)
+        self.resourceWidget = QtGui.QWidget(self.page_2)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.resourceGroupBox.sizePolicy().hasHeightForWidth())
-        self.resourceGroupBox.setSizePolicy(sizePolicy)
-        self.resourceGroupBox.setTitle(_fromUtf8(""))
-        self.resourceGroupBox.setObjectName(_fromUtf8("resourceGroupBox"))
-        self.verticalLayout.addWidget(self.resourceGroupBox)
+        sizePolicy.setHeightForWidth(self.resourceWidget.sizePolicy().hasHeightForWidth())
+        self.resourceWidget.setSizePolicy(sizePolicy)
+        self.resourceWidget.setObjectName(_fromUtf8("resourceWidget"))
+        self.verticalLayout.addWidget(self.resourceWidget)
         self.gridLayout_4.addLayout(self.verticalLayout, 1, 0, 1, 1)
         self.horizontalLayout_4 = QtGui.QHBoxLayout()
+        self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem2)

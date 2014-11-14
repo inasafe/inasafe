@@ -148,8 +148,8 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         """Handle add new resource requests.
         """
         parameters_widget = [
-            self.resourceGroupBox.layout().itemAt(i) for i in
-            range(self.resourceGroupBox.layout().count())][0].widget()
+            self.resourceWidget.layout().itemAt(i) for i in
+            range(self.resourceWidget.layout().count())][0].widget()
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
@@ -181,8 +181,8 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         if not resource:
             return
         parameters_widget = [
-            self.resourceGroupBox.layout().itemAt(i) for i in
-            range(self.resourceGroupBox.layout().count())][0].widget()
+            self.resourceWidget.layout().itemAt(i) for i in
+            range(self.resourceWidget.layout().count())][0].widget()
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
@@ -357,8 +357,9 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
 
         layout = QGridLayout()
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         layout.addWidget(parameter_container)
-        self.resourceGroupBox.setLayout(layout)
+        self.resourceWidget.setLayout(layout)
 
     def remove_resource(self):
         """Remove the currently selected resource.
@@ -380,8 +381,8 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         # Hackorama to get this working outside the method that the
         # parameters where defined in.
         parameters_widget = [
-            self.resourceGroupBox.layout().itemAt(i) for i in
-            range(self.resourceGroupBox.layout().count())][0]
+            self.resourceWidget.layout().itemAt(i) for i in
+            range(self.resourceWidget.layout().count())][0]
         parameters = parameters_widget.widget().get_parameters()
         # --
         resource = {}

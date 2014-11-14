@@ -125,11 +125,11 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         # create minimum needs tab
         tab = QWidget()
         form_layout = QGridLayout(tab)
+        form_layout.setContentsMargins(0, 0, 0, 0)
         parameter_container = ParameterContainer(parameters)
         form_layout.addWidget(parameter_container)
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
-
         self.values['minimum needs'] = parameter_container.get_parameters
 
     def build_post_processor_form(self, parameters):

@@ -113,7 +113,6 @@ def evacuated_population_needs(population, minimum_needs):
     """
     frequencies = []
     for resource in minimum_needs:
-        print resource
         if resource['frequency'] not in frequencies:
             frequencies.append(resource['frequency'])
 
