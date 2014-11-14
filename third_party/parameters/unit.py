@@ -9,6 +9,7 @@ __doc__ = ''
 
 import uuid
 
+
 class Unit(object):
     """Class for representing unit."""
     def __init__(self, guid=None):
@@ -20,7 +21,6 @@ class Unit(object):
         :type guid: str, None
 
         """
-
         self.guid = None
         if guid is None:
             self._guid = uuid.uuid4()
@@ -29,6 +29,8 @@ class Unit(object):
         self._name = None
         self._help_text = None
         self._description = None
+        self._plural = None
+        self._abbreviation = None
 
     @property
     def guid(self):
@@ -68,6 +70,42 @@ class Unit(object):
         :type name: str
         """
         self._name = name
+
+    @property
+    def plural(self):
+        """The plural name property of the unit.
+
+        :returns: The plural name for this unit.
+        :rtype: str
+        """
+        return self._plural
+
+    @plural.setter
+    def plural(self, plural):
+        """Set the plural name for the unit.
+
+        :param plural: The plural name for this unit.
+        :type plural: str
+        """
+        self._plural = plural
+
+    @property
+    def abbreviation(self):
+        """The abbreviated name property of the unit.
+
+        :returns: The abbreviated name for this unit.
+        :rtype: str
+        """
+        return self._abbreviation
+
+    @abbreviation.setter
+    def abbreviation(self, abbreviation):
+        """Set the abbreviated name for the unit.
+
+        :param abbreviation: The abbreviated name for this unit.
+        :type abbreviation: str
+        """
+        self._abbreviation = abbreviation
 
     @property
     def help_text(self):
@@ -124,3 +162,18 @@ class Unit(object):
             self.help_text = help_text
         if description:
             self.description = description
+
+    def serialize(self):
+        """Serialize the unit.
+
+        :returns: The unit content in a dict format
+        :rtype: dict
+        """
+        return {
+            'name': self.name,
+            'plural': self.plural,
+            'abbreviation': self.abbreviation
+        }
+
+    def __str__(self):
+        return self.name

@@ -173,6 +173,11 @@ class QMinimumNeeds(MinimumNeeds):
         qfile.write(needs_json)
 
     def get_needs_parameters(self):
+        """Get the minimum needs resources in parameter format
+
+        :returns: The minimum needs resources wrapped in parameters.
+        :rtype: list
+        """
         parameters = []
         for resource in self.minimum_needs['resources']:
             parameter = ResourceParameter()
@@ -188,23 +193,21 @@ class QMinimumNeeds(MinimumNeeds):
                 resource['Minimum allowed'])
             parameter.maximum_allowed_value = float(
                 resource['Maximum allowed'])
-            parameter_units = []
-            for unit in [
-                    resource['Unit abbreviation'],
-                    resource['Unit'],
-                    resource['Units']]:
-                parameter_unit = Unit()
-                parameter_unit.name = unit
-                parameter_unit.description = ''
-                parameter_units.append(parameter_unit)
-            parameter.unit = parameter_units[0]
-            parameter.allowed_units = parameter_units
+            parameter.unit.name = resource['Unit']
+            parameter.unit.plural = resource['Units']
+            parameter.unit.abbreviation = resource['Unit abbreviation']
             parameter.value = float(resource['Default'])
             parameters.append(parameter)
         return parameters
 
     @property
     def provenance(self):
+        """The provenance that is provided with the loaded profile.
+
+
+        :returns: The provenance.
+        :rtype: str
+        """
         return self.minimum_needs['provenance']
 
     @property
@@ -216,6 +219,7 @@ class QMinimumNeeds(MinimumNeeds):
         """
         if self._root_directory is None or self._root_directory == '':
             try:
+                # noinspection PyArgumentList
                 self._root_directory = QgsApplication.qgisSettingsDirPath()
             except NameError:
                 # This only happens when running only one test on its own

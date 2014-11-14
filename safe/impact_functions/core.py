@@ -121,10 +121,10 @@ def evacuated_population_needs(population, minimum_needs):
         [frequency, []] for frequency in frequencies])
 
     for resource in minimum_needs:
-        if resource['unit']:
+        if resource['unit']['abbreviation']:
             resource_name = '%s [%s]' % (
                 resource['name'],
-                resource['unit'])
+                resource['unit']['abbreviation'])
         else:
             resource_name = resource['name']
         amount_pp = resource['value']

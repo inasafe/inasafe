@@ -156,6 +156,6 @@ class NumericParameter(GenericParameter):
         pickle = super(NumericParameter, self).serialize()
         pickle['minimum_allowed_value'] = self.minimum_allowed_value
         pickle['maximum_allowed_value'] = self.maximum_allowed_value
-        pickle['unit'] = self.unit.name
+        pickle['unit'] = self.unit
         pickle['allowed_units'] = [unit.name for unit in self.allowed_units]
         return pickle
