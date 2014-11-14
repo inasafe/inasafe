@@ -328,8 +328,8 @@ def requirement_check(params, require_str, verbose=False):
         if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % key)
-            #print msg
-            #logger.error(msg)
+            # print msg
+            # LOGGER.error(msg)
             return False
 
         if key in excluded_keywords:
@@ -360,8 +360,8 @@ def requirement_check(params, require_str, verbose=False):
     except Exception, e:
         msg = ('Requirements header could not compiled: %s. '
                'Original message: %s' % (execstr, e))
-        #print msg
-        #logger.error(msg)
+        # print msg
+        # LOGGER.error(msg)
 
     return False
 
@@ -408,9 +408,9 @@ def compatible_layers(func, layer_descriptors):
     return layers
 
 
-#-------------------------------
+# -------------------------------
 # Helpers for individual plugins
-#-------------------------------
+# -------------------------------
 def get_hazard_layers(layers):
     """Get list of layers that have category=='hazard'
     """
@@ -535,17 +535,17 @@ def aggregate_point_data(data=None, boundaries=None,
         raise Exception(msg)
 
     polygon_geoms = boundaries.get_geometry()
-    #polygon_attrs = boundaries.get_data()
+    # polygon_attrs = boundaries.get_data()
 
     points = data.get_geometry()
     attributes = data.get_data()
 
     result = []
-    #for i, polygon in enumerate(polygon_geoms):
+    # for i, polygon in enumerate(polygon_geoms):
     for polygon in polygon_geoms:
         indices = inside_polygon(points, polygon)
 
-        #print 'Found %i points in polygon %i' % (len(indices), i)
+        # print 'Found %i points in polygon %i' % (len(indices), i)
 
         # Aggregate numbers
         if aggregation_function == 'count':
@@ -593,7 +593,7 @@ def aggregate(data=None, boundaries=None,
     elif data.is_raster_data:
         # Convert to point data
         # Call point aggregation function
-        #aggregate_point_data(data, boundaries,
+        # aggregate_point_data(data, boundaries,
         #                     attribute_name, aggregation_function)
         pass
     else:

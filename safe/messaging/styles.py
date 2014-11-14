@@ -73,5 +73,5 @@ TRACEBACK_ITEMS_STYLE = {
 # This is typically a text element or its derivatives
 KEYWORD_STYLE = {
     # not working unless you turn css on and off again using inspector
-    #'style_class': 'label label-success'
+    # 'style_class': 'label label-success'
 }

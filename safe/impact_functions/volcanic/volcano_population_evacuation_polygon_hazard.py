@@ -45,7 +45,6 @@ from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
@@ -243,7 +242,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             volcano_names = tr('Not specified in data')
 
         # Check if category_title exists in hazard_layer
-        if not category_title in hazard_layer.get_attribute_names():
+        if category_title not in hazard_layer.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (hazard_layer.get_name(), category_title))
             # noinspection PyExceptionInherit
@@ -282,10 +281,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             categories[category] += population
 
         # Count totals
-        total = int(numpy.sum(exposure_layer.get_data(nan=0)))
-
-        # Don't show digits less than a 1000
-        total = round_thousand(total)
+        total_population = population_rounding(
+            int(numpy.sum(exposure_layer.get_data(nan=0))))
 
         # Count number and cumulative for each zone
         cumulative = 0
@@ -357,7 +354,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
              tr('Total population %s in the exposure layer') % format_int(
-                 total),
+                 total_population),
              tr('People need evacuation if they are within the '
                 'volcanic hazard zones.')])
 

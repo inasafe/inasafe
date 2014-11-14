@@ -158,7 +158,7 @@ class Test_plugin_core(unittest.TestCase):
         params = {'category': 'test_cat2'}
         msg = 'Malformed statement (logged)'
         assert not requirement_check(params, line), msg
-        #self.assertRaises(SyntaxError, requirement_check, params, line)
+        # self.assertRaises(SyntaxError, requirement_check, params, line)
 
     def test_keywords_error(self):
         """Handling of reserved python keywords """

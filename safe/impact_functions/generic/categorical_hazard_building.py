@@ -181,8 +181,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         for i in range(N):
             # Get category value
             val = float(attributes[i]['level'])
-            ## FIXME it would be good if the affected were words not numbers
-            ## FIXME need to read hazard layer and see category or keyword
+            # FIXME it would be good if the affected were words not numbers
+            # FIXME need to read hazard layer and see category or keyword
             val = float(numpy_round(val))
             if val == high_t:
                 count3 += 1

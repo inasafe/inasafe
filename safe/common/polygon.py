@@ -82,7 +82,7 @@ def separate_points_by_polygon(
     """
 
     # FIXME (Ole): Make sure bounding box here follows same format as
-    #              those returned by layers. Methinks they don't at the moment
+    # those returned by layers. Methinks they don't at the moment
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean or None'
@@ -353,7 +353,7 @@ def _separate_points_by_polygon_python(points, polygon,
                 else:
                     # Check if truly inside polygon
                     if (((py_i < y) and (py_j >= y)) or
-                        ((py_j < y) and (py_i >= y))):
+                            ((py_j < y) and (py_i >= y))):
                         sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
                         if (px_i + sigma < x):
                             inside = 1 - inside
@@ -719,7 +719,7 @@ def _clip_lines_by_polygon(lines,
         if (max(line[:, 0]) < minpx or  # Everything is to the west
             min(line[:, 0]) > maxpx or  # Everything is to the east
             max(line[:, 1]) < minpy or  # Everything is to the south
-            min(line[:, 1]) > maxpy):   # Everything is to the north
+                min(line[:, 1]) > maxpy):   # Everything is to the north
 
             inside_line_segments[k] = []
             outside_line_segments[k] = [line]
@@ -894,9 +894,9 @@ def _clip_line_by_polygon(line,
         p1 = line[k + 1, :]
         segment = [p0, p1]
 
-        #-------------
+        # -------------
         # Optimisation
-        #-------------
+        # -------------
         # Skip segments that are outside polygon bounding box
 
         # In test_engine.py
@@ -937,9 +937,9 @@ def _clip_line_by_polygon(line,
                         # Segment intersects polygon bounding box
                         segment_is_outside_bbox = False
                         break
-        #-----------------
+        # -----------------
         # End optimisation
-        #-----------------
+        # -----------------
 
         # Separate segments that are inside from those outside
         if segment_is_outside_bbox:
@@ -977,8 +977,8 @@ def _clip_line_by_polygon(line,
 
             # FIXME (Ole): Next candidate for vectorisation (11/9/2012) below
             # Loop through intersections for this line segment
-            #distances = {}
-            #for i in range(len(intersections)):
+            # distances = {}
+            # for i in range(len(intersections)):
             #    v = p0 - intersections[i]
             #    d = numpy.dot(v, v)
             #    if d in distances:
@@ -987,9 +987,9 @@ def _clip_line_by_polygon(line,
             #    distances[d] = intersections[i]  # Don't record duplicates
 
             # Sort intersections by distance using Schwarzian transform
-            #A = zip(distances.keys(), distances.values())
-            #A.sort()
-            #_, intersections = zip(*A)
+            # A = zip(distances.keys(), distances.values())
+            # A.sort()
+            # _, intersections = zip(*A)
 
             # Separate segment midpoints according to polygon
             # Deliberately ignore boundary as midpoints by definition
@@ -1070,8 +1070,8 @@ def line_dictionary_to_geometry(D):
     lines = []
 
     # Ensure reproducibility (FIXME: is this needed?)
-    #keys = D.keys()
-    #keys.sort()
+    # keys = D.keys()
+    # keys.sort()
 
     # Add line geometries up
     for key in D:
@@ -1080,9 +1080,9 @@ def line_dictionary_to_geometry(D):
     return lines
 
 
-#--------------------------------------------------
+# --------------------------------------------------
 # Helper functions to generate points inside polygon
-#--------------------------------------------------
+# --------------------------------------------------
 def generate_random_points_in_bbox(polygon, N, seed=None):
     """Generate random points in polygon bounding box
     """
@@ -1144,7 +1144,7 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
         if is_inside_polygon([x, y], polygon):
             append = True
 
-            #Check exclusions
+            # Check exclusions
             if exclude is not None:
                 for ex_poly in exclude:
                     if is_inside_polygon([x, y], ex_poly):
@@ -1156,9 +1156,9 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
     return points
 
 
-#------------------------------------
+# ------------------------------------
 # Functionality for line intersection
-#------------------------------------
+# ------------------------------------
 
 def intersection(line0, line1):
     """Returns intersecting point between two line segments.
@@ -1246,7 +1246,7 @@ def intersection(line0, line1):
     # Restore numpy warnings
     numpy.seterr(**original_numpy_settings)
 
-     # Only points that lie within given line segments are true intersections
+    # Only points that lie within given line segments are true intersections
     mask = (0.0 <= u0) * (u0 <= 1.0) * (0.0 <= u1) * (u1 <= 1.0)
 
     # Calculate intersection points
@@ -1310,7 +1310,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     remaining_values = values
 
     for polygon in polygons:
-        #print 'Remaining points', len(remaining_points)
+        # print 'Remaining points', len(remaining_points)
 
         if hasattr(polygon, 'outer_ring'):
             outer_ring = polygon.outer_ring
@@ -1387,15 +1387,15 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
 
     # Clip lines to polygons
     for polygon in polygons:
-    #for i, polygon in enumerate(polygons):
-        #print ('Doing polygon %i (%i vertices) of %i with '
+        # for i, polygon in enumerate(polygons):
+        # print ('Doing polygon %i (%i vertices) of %i with '
         #       '%i lines' % (i, len(polygon),
         #                     len(polygons),
         #                     len(remaining_lines)))
         inside_lines, _ = clip_lines_by_polygon(remaining_lines,
                                                 polygon,
                                                 check_input=False)
-        #print ('- %i segments were inside'
+        # print ('- %i segments were inside'
         #       % len(line_dictionary_to_geometry(inside_lines)))
 
         # Record lines inside this polygon
@@ -1406,7 +1406,7 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
         # as lines are often partially clipped. We also need to keep
         # track of the parent line to get its attributes if we want
         # to go down this road
-        #remaining_lines = outside_lines
+        # remaining_lines = outside_lines
 
     return lines_covered
 

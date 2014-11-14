@@ -19,9 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl, QByteArray
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 

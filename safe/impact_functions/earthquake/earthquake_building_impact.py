@@ -161,7 +161,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         )
 
         # Extract relevant exposure data
-        #attribute_names = interpolate_result.get_attribute_names()
+        # attribute_names = interpolate_result.get_attribute_names()
         attributes = interpolate_result.get_data()
 
         interpolate_size = len(interpolate_result)
@@ -183,19 +183,19 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 try:
                     area = float(attributes[i]['FLOOR_AREA'])
                 except (ValueError, KeyError):
-                    #print 'Got area', attributes[i]['FLOOR_AREA']
+                    # print 'Got area', attributes[i]['FLOOR_AREA']
                     area = 0.0
 
                 try:
                     building_value_density = float(attributes[i]['BUILDING_C'])
                 except (ValueError, KeyError):
-                    #print 'Got bld value', attributes[i]['BUILDING_C']
+                    # print 'Got bld value', attributes[i]['BUILDING_C']
                     building_value_density = 0.0
 
                 try:
                     contents_value_density = float(attributes[i]['CONTENTS_C'])
                 except (ValueError, KeyError):
-                    #print 'Got cont value', attributes[i]['CONTENTS_C']
+                    # print 'Got cont value', attributes[i]['CONTENTS_C']
                     contents_value_density = 0.0
 
                 building_value = building_value_density * area

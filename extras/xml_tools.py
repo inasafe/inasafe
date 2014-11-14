@@ -7,7 +7,7 @@ from safe.common.utilities import verify
 
 def print_tree(n, indent=0):
     while n:
-        #print 'nodeType', n.nodeType, Node.ELEMENT_NODE
+        # print 'nodeType', n.nodeType, Node.ELEMENT_NODE
         #if n.nodeType != Node.ELEMENT_NODE:
         #    break
 
@@ -167,7 +167,7 @@ class XML_element(dict):
         result = []
         for node in self.value:
             if node.tag == key:
-                #print 'node tag = %s, node value = %s' %(node.tag, node.value)
+                # print 'node tag = %s, node value = %s' %(node.tag, node.value)
 
                 if isinstance(node.value, basestring):
                     result.append(str(node.value))
@@ -176,7 +176,7 @@ class XML_element(dict):
                     result.append(node)
                     #return node
 
-        #print 'result', result
+        # print 'result', result
         if len(result) == 0:
             return None
         if len(result) == 1:

@@ -287,7 +287,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Map shows population density in high, medium '
+                           tr('Map shows the numbers of people in high, medium '
                               'and low hazard areas'),
                            tr('Total population: %s') % format_int(total)])
         impact_summary = Table(table_body).toNewlineFreeString()

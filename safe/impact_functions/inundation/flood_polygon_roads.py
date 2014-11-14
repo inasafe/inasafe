@@ -149,13 +149,13 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         hazard = hazard.get_layer()
         hazard_provider = hazard.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(affected_field)
-        #see #818: should still work if there is no valid attribute
+        # see #818: should still work if there is no valid attribute
         if affected_field_index == -1:
             pass
             # message = tr('''Parameter "Affected Field"(='%s')
             #     is not present in the attribute table of the hazard layer.
             #     ''' % (affected_field, ))
-            #raise GetDataError(message)
+            # raise GetDataError(message)
 
         LOGGER.info('Affected field: %s' % affected_field)
         LOGGER.info('Affected field index: %s' % affected_field_index)
@@ -245,7 +245,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             length = geom.length()
             road_len += length
 
-            if not road_type in roads_by_type:
+            if road_type not in roads_by_type:
                 roads_by_type[road_type] = {'flooded': 0, 'total': 0}
             roads_by_type[road_type]['total'] += length
 

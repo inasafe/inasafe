@@ -34,7 +34,7 @@ class TestCore(unittest.TestCase):
     def test_01_test_rounding(self):
         """Test for add_to_list function
         """
-        #rounding up
+        # rounding up
         for _ in range(100):
             # After choosing some random numbers the sum of the randomly
             # selected and one greater than that should be less than the

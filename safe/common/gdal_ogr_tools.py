@@ -45,7 +45,7 @@ def polygonize_thresholds(
 
     """
 
-    #all values that are in the threshold are set to 1, others are set to 0
+    # all values that are in the threshold are set to 1, others are set to 0
     base_name = unique_filename()
     outfile = base_name + '.tif'
 
@@ -88,7 +88,7 @@ def polygonize_thresholds(
                                     (scanline, outNoData))
             outband.WriteArray(scanline, 0, i)
 
-    #polygonize
+    # polygonize
     spat_ref = osr.SpatialReference()
     proj = indataset.GetProjectionRef()
     spat_ref.ImportFromWkt(proj)
@@ -97,18 +97,19 @@ def polygonize_thresholds(
     out_shape_file = base_name + ".shp"
 
     dst_ds = drv.CreateDataSource(out_shape_file)
-    #ogr_layer_name = 'polygonized'
+    # ogr_layer_name = 'polygonized'
     ogr_layer_name = os.path.splitext(os.path.split(out_shape_file)[1])[0]
     dst_layer = dst_ds.CreateLayer(ogr_layer_name, spat_ref)
-    #fd = ogr.FieldDefn("DN", ogr.OFTInteger )
+    # fd = ogr.FieldDefn("DN", ogr.OFTInteger )
     fd = ogr.FieldDefn("DN", ogr.OFTReal)
     dst_layer.CreateField(fd)
     dst_field = 0
 
-    #gdal.Polygonize(outband, outband, dst_layer, dst_field, [], callback=None)
+    # gdal.Polygonize(
+    #     outband, outband, dst_layer, dst_field, [], callback=None)
     gdal.Polygonize(outband, None, dst_layer, dst_field, [], callback=None)
 
-    #produce in and out polygon layers
+    # produce in and out polygon layers
     base_name = unique_filename()
     inside_shape_file = base_name + "_inside.shp"
     inside_layer_name = \

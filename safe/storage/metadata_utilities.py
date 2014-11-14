@@ -163,7 +163,7 @@ def valid_iso_xml(xml_filename):
     """
 
     if os.path.isfile(xml_filename):
-        #the file already has an xml file, we need to check it's structure
+        # the file already has an xml file, we need to check it's structure
         tree = ElementTree.parse(xml_filename)
         root = tree.getroot()
         tag_str = '.'

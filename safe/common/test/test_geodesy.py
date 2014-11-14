@@ -182,12 +182,12 @@ class TestCase(unittest.TestCase):
             assert numpy.allclose(d, radius, rtol=2.0e-1), msg
 
         # Store and view
-        #from safe.storage.vector import Vector
-        #Vector(geometry=[C],
+        # from safe.storage.vector import Vector
+        # Vector(geometry=[C],
         #       geometry_type='polygon').write_to_file('circle.shp')
-        #Vector(geometry=C,
+        # Vector(geometry=C,
         #       geometry_type='point').write_to_file('circle_as_points.shp')
-        #Vector(geometry=[[self.Syd.longitude, self.Syd.latitude]],
+        # Vector(geometry=[[self.Syd.longitude, self.Syd.latitude]],
         #       geometry_type='point',
         #       data=None).write_to_file('center.shp')
 

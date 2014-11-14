@@ -39,7 +39,7 @@ flood_population_style = dict(target_field=None,
 
 # Earthquake fatality raster style
 # FIXME (Ole): The styler cannot handle floats yet. Issue #126
-#style_classes = [dict(colour='#FFFFFF', quantity=0.0, transparency=100),
+# style_classes = [dict(colour='#FFFFFF', quantity=0.0, transparency=100),
 #                 dict(colour='#0000FF', quantity=4, transparency=0),
 #                 dict(colour='#0000EE', quantity=6, transparency=0),
 #                 dict(colour='#79C900', quantity=8, transparency=0),
@@ -53,17 +53,17 @@ flood_population_style = dict(target_field=None,
 #                 dict(colour='#7A0000', quantity=78, transparency=0),
 #                 dict(label=tr('High'), colour='#500000', quantity=100,
 #                      transparency=0)]
-#earthquake_fatality_style = dict(target_field=None,
+# earthquake_fatality_style = dict(target_field=None,
 #                                 style_classes=style_classes)
 
 # Earthquake fatality raster style
 # Obtain the min and max fatalities and scale accordingly
-    #style_classes = [dict(colour='#FFFFFF', quantity=0.0, transparency=100),
-    #            dict(colour='#F713FF', quantity=, transparency=20),
-    #            dict(colour='#D50DC3', quantity=, transparency=20),
-    #            dict(colour='#79C900', quantity=, transparency=20),
-    #            dict(colour='#79C900', quantity=, transparency=20),
-    #            dict(colour='#79C900', quantity=, transparency=20),
+# style_classes = [dict(colour='#FFFFFF', quantity=0.0, transparency=100),
+#            dict(colour='#F713FF', quantity=, transparency=20),
+#            dict(colour='#D50DC3', quantity=, transparency=20),
+#            dict(colour='#79C900', quantity=, transparency=20),
+#            dict(colour='#79C900', quantity=, transparency=20),
+#            dict(colour='#79C900', quantity=, transparency=20),
 #            dict(colour='#CEED00', quantity=, transparency=20),
 
 

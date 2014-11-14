@@ -66,12 +66,12 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.update_warning()
 
         # Event register
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         self.use_output_default.toggled.connect(
             self.get_output_from_input)
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         self.input_path.textChanged.connect(self.on_input_path_textChanged)
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
         # Set up things for context help
         help_button = self.button_box.button(QDialogButtonBox.Help)
@@ -132,7 +132,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             self.warning_text.remove(output_not_xml_msg)
         self.update_warning()
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def on_input_path_textChanged(self):
         """Action when input file name is changed.
         """

@@ -38,13 +38,13 @@ from .styles import (
 
 
 LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
+# from pydev import pydevd
 
 # We defined these styles locally because we use different icons
 
 
-#FIXME (MB) remove when all to_* methods are implemented
-#pylint: disable=W0223
+# FIXME (MB) remove when all to_* methods are implemented
+# pylint: disable=W0223
 
 
 class ErrorMessage(MessageElement):
@@ -162,7 +162,7 @@ class ErrorMessage(MessageElement):
             'analysis.')))
         items = BulletedList()
         for p in reversed(self.problems):
-            #p is _always_ not None
+            # p is _always_ not None
             items.add(p)
         message.add(items)
 

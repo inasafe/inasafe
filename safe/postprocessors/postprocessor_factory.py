@@ -29,27 +29,25 @@ from minimum_needs_postprocessor import MinimumNeedsPostprocessor
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
-#this _must_reflect the imported classes above
+# this _must_reflect the imported classes above
 # please put the value of this dictionary in
 # safe/common/dynamic_translations.py for the run time translation
-AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
-                            'Age': 'Age',
-                            'Aggregation': 'Aggregation',
-                            'BuildingType': 'Building type',
-                            'RoadType': 'Road type',
-                            'AggregationCategorical':
-                            'Aggregation categorical',
-                            'MinimumNeeds': 'Minimum needs'
-                            }
+AVAILABLE_POSTPTOCESSORS = {
+    'Gender': 'Gender',
+    'Age': 'Age',
+    'Aggregation': 'Aggregation',
+    'BuildingType': 'Building type',
+    'RoadType': 'Road type',
+    'AggregationCategorical':
+    'Aggregation categorical',
+    'MinimumNeeds': 'Minimum needs'}
 
 
 def get_postprocessors(requested_postprocessors, aoi_mode):
     """
     Creates a dictionary of applicable postprocessor instances
 
-    Args:
-        * requested_postprocessors: dictionary of requested
-            postprocessors such as::
+    :param requested_postprocessors: The postprocessors to return e.g. ::
 
                 {
                 'Gender': {'on': True},
@@ -67,10 +65,17 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
 
             If asked for unimplemented postprocessors, the factory will just
             skip it returning the valid ones
+    :type requested_postprocessors: dict
 
-    Returns:
-        dict of postprocessors instances e.g.
-            {'Gender':GenderPostprocessors instance}
+    :param aoi_mode: Whether postprocessing is being done on current analysis
+        extents or on an aggregation layer.
+    :type aoi_mode: bool
+
+    :returns: Dict of postprocessors instances e.g.::
+
+            {'Gender': GenderPostprocessors instance}
+    :rtype: dict
+
     """
 
     postprocessor_instances = {}
@@ -97,7 +102,7 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
         try:
             if values['on'] and requires_aggregation:
                 if name in AVAILABLE_POSTPTOCESSORS.keys():
-                    #http://stackoverflow.com/a/554462
+                    # http://stackoverflow.com/a/554462
                     constr = globals()[constr_id]
                     instance = constr()
                     postprocessor_instances[name] = instance
@@ -113,16 +118,16 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
     return postprocessor_instances
 
 
-def get_postprocessor_human_name(postprocesor):
+def get_postprocessor_human_name(postprocessor):
     """
     Returns the human readable name of  post processor
 
-    Args:
-        * postprocessor: Machine name of the postprocessor
+    :param postprocessor: Machine name of the postprocessor
+    :type postprocessor:
 
-    Returns:
-        str with the human readable name
+    :returns: The human readable name
+    :rtype: str
     """
     # Sunni : translete it first
-    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocesor])
+    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocessor])
     return human_name_translated

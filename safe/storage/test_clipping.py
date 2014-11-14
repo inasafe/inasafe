@@ -314,13 +314,13 @@ class Test_Clipping(unittest.TestCase):
         pol = Vector(geometry=[P])
         tmp_filename = unique_filename(suffix='.shp')
         pol.write_to_file(tmp_filename)
-        #print 'Polygon with holes written to %s' % tmp_filename
+        # print 'Polygon with holes written to %s' % tmp_filename
         os.remove(tmp_filename)
 
         pts = Vector(geometry=points[indices, :])
         tmp_filename = unique_filename(suffix='.shp')
         pts.write_to_file(tmp_filename)
-        #print 'Clipped points written to %s' % tmp_filename
+        # print 'Clipped points written to %s' % tmp_filename
         os.remove(tmp_filename)
 
     test_clip_points_by_polygons_with_holes_real.slow = True

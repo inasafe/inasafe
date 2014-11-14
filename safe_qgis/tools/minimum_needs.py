@@ -77,7 +77,7 @@ class QMinimumNeeds(MinimumNeeds):
             return
         from safe.impact_functions.core import get_plugins
         self.settings.setValue('Minimum Needs', self.minimum_needs)
-        ## Monkey patch all the impact functions
+        # Monkey patch all the impact functions
         for (_, plugin) in get_plugins().items():
             if not hasattr(plugin, 'parameters'):
                 continue

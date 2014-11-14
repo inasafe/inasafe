@@ -49,13 +49,13 @@ class TestGDALOGRTools(unittest.TestCase):
         data_source = driver.Open(inside_file_name, 0)
         layer = data_source.GetLayer()
         feature_count = layer.GetFeatureCount()
-        #print 'inside %s' % (inside_file_name)
+        # print 'inside %s' % (inside_file_name)
         self.assertEquals(feature_count, 3)
 
         data_source2 = driver.Open(outside_file_name, 0)
         layer2 = data_source2.GetLayer()
         feature_count2 = layer2.GetFeatureCount()
-        #print 'outside %s' % (outside_file_name)
+        # print 'outside %s' % (outside_file_name)
         self.assertEquals(feature_count2, 1)
 
 

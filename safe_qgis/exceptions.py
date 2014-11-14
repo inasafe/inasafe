@@ -130,9 +130,9 @@ class StyleError(Exception):
     pass
 
 
-#class ShapefileCreationError(Exception):
-#    """Raised if an error occurs creating the cities file"""
-#    pass
+# class ShapefileCreationError(Exception):
+#     """Raised if an error occurs creating the cities file"""
+#     pass
 #
 #
 class MemoryLayerCreationError(Exception):
