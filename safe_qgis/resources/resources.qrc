@@ -15,6 +15,10 @@
         <file alias="show-impact-merge.svg">img/icons/show-impact-merge.svg</file>
         <file alias="toggle-rubber-bands.svg">img/icons/toggle-rubber-bands.svg</file>
         <file alias="set-extents-tool.svg">img/icons/set-extents-tool.svg</file>
+        <!-- Button icons -->
+        <file alias="edit_icon.svg">img/icons/edit_icon/icon_8070.svg</file>
+        <file alias="add_icon.svg">img/icons/add_icon/icon_21829.svg</file>
+        <file alias="remove_icon.svg">img/icons/remove_icon/icon_78560.svg</file>
         <!-- North arrows -->
         <file alias="simple_north_arrow.png">img/north_arrows/simple_north_arrow.png</file>
         <!-- wizard images -->

@@ -181,7 +181,11 @@
               <bool>false</bool>
              </property>
              <property name="text">
-              <string notr="true">+</string>
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resources/resources.qrc">
+               <normaloff>:/plugins/inasafe/add_icon.svg</normaloff>:/plugins/inasafe/add_icon.svg</iconset>
              </property>
              <property name="checkable">
               <bool>false</bool>
@@ -221,7 +225,11 @@
               <string>Remove selected resource</string>
              </property>
              <property name="text">
-              <string>-</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resources/resources.qrc">
+               <normaloff>:/plugins/inasafe/remove_icon.svg</normaloff>:/plugins/inasafe/remove_icon.svg</iconset>
              </property>
             </widget>
            </item>
@@ -249,7 +257,11 @@
               <string>Edit selected resource</string>
              </property>
              <property name="text">
-              <string>E</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resources/resources.qrc">
+               <normaloff>:/plugins/inasafe/edit_icon.svg</normaloff>:/plugins/inasafe/edit_icon.svg</iconset>
              </property>
             </widget>
            </item>
@@ -386,7 +398,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>closeButton</sender>
