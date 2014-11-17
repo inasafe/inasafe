@@ -124,14 +124,13 @@ class NeedsProfile(MinimumNeeds):
             os.path.dirname(__file__))
         plugins_minimum_needs_dir = QDir(path_name)
         if not locale_minimum_needs_dir.exists():
-            if not plugins_minimum_needs_dir.exists():
-                # This is specifically to get Travis working.
-                return [self._defaults()['profile']]
+            # if not plugins_minimum_needs_dir.exists():
+            #     # This is specifically to get Travis working.
+            #     return [self._defaults()['profile']]
             QDir(self.root_directory).mkdir('minimum_needs')
             for file_name in plugins_minimum_needs_dir.entryList():
                 source_file = QFile(
-                    '%s/python/plugins/inasafe/files/minimum_needs/%s' %
-                    (self.root_directory, file_name))
+                    '%s/%s' % (path_name, file_name))
                 source_file.copy(
                     '%s/minimum_needs/%s' %
                     (self.root_directory, file_name))
