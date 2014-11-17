@@ -1,3 +1,16 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**Version getter.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 import datetime
 import os
 import sys
@@ -6,22 +19,31 @@ from exceptions import WindowsError
 
 
 def get_version(version=None):
-    """Returns a PEP 386-compliant version number from VERSION."""
+    """Returns a PEP 386-compliant version number from VERSION.
 
+    :param version: A tuple that represent a version.
+    :type version: tuple
+
+    :returns: a PEP 386-compliant version number.
+    :rtype: str
+
+    """
     if version is None:
         # Get location of application wide version info
-        rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                               '..', '..'))
-        fid = open(os.path.join(rootdir, 'metadata.txt'))
+        root_dir = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', '..'))
+        fid = open(os.path.join(root_dir, 'metadata.txt'))
+        version_list = []
+        status = ''
         for line in fid.readlines():
             if line.startswith('version'):
-                verstring = line.strip().split('=')[1]
-                verlist = verstring.split('.')
+                version_string = line.strip().split('=')[1]
+                version_list = version_string.split('.')
 
             if line.startswith('status'):
                 status = line.strip().split('=')[1]
         fid.close()
-        version = tuple(verlist + [status] + [0])
+        version = tuple(version_list + [status] + ['0'])
 
     if len(version) != 5:
         msg = ('Version must be a tuple of length 5. '
@@ -42,7 +64,7 @@ def get_version(version=None):
 
     sub = ''
     # This crashes on windows
-    if version[3] == 'alpha' and version[4] == 0:
+    if version[3] == 'alpha' and version[4] == '0':
         # Currently failed on windows and mac
         if 'win32' in sys.platform or 'darwin' in sys.platform:
             sub = '.dev-master'
@@ -69,9 +91,14 @@ def get_git_changeset():
     so it's sufficient for generating the development version numbers.
     """
     repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    git_show = subprocess.Popen('git show --pretty=format:%ct --quiet HEAD',
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            shell=True, cwd=repo_dir, universal_newlines=True)
+    git_show = subprocess.Popen(
+        'git show --pretty=format:%ct --quiet HEAD',
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
+        cwd=repo_dir,
+        universal_newlines=True
+    )
     timestamp = git_show.communicate()[0].partition('\n')[0]
     try:
         timestamp = datetime.datetime.utcfromtimestamp(int(timestamp))
