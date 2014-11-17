@@ -12,8 +12,9 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 from qgis.core import QGis  # force sip2 api
 
 from third_party.parameters.resource_parameter import ResourceParameter
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, QFile, QDir
-from qgis.core import QgsApplication
+from qgis.core import QgsApplication  # force sip2 api
 from safe.common.minimum_needs import MinimumNeeds
 import json
 import os
@@ -124,13 +125,13 @@ class NeedsProfile(MinimumNeeds):
             os.path.dirname(__file__))
         plugins_minimum_needs_dir = QDir(path_name)
         if not locale_minimum_needs_dir.exists():
-            # if not plugins_minimum_needs_dir.exists():
-            #     # This is specifically to get Travis working.
-            #     return [self._defaults()['profile']]
             QDir(self.root_directory).mkdir('minimum_needs')
-            for file_name in plugins_minimum_needs_dir.entryList():
-                source_file = QFile(
-                    '%s/%s' % (path_name, file_name))
+        for file_name in plugins_minimum_needs_dir.entryList():
+            source_file = QFile(
+                '%s/%s' % (path_name, file_name))
+            destination_file = QFile(
+                '%s/minimum_needs/%s' % (self.root_directory, file_name))
+            if not destination_file.exists():
                 source_file.copy(
                     '%s/minimum_needs/%s' %
                     (self.root_directory, file_name))
