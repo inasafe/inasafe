@@ -27,8 +27,7 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     evacuated_population_needs,
-    evacuated_population_weekly_needs,
-    population_rounding)
+    evacuated_population_weekly_needs)
 from safe.metadata import (
     hazard_all,
     layer_raster_numeric,
@@ -41,6 +40,7 @@ from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
+    round_thousand,
     humanize_class,
     create_classes,
     create_label,
@@ -227,12 +227,12 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         total_impact = int(numpy.sum(impact))
 
         # Don't show digits less than a 1000
-        total = population_rounding(total)
-        total_impact = population_rounding(total_impact)
-        high = population_rounding(high)
-        medium = population_rounding(medium)
-        low = population_rounding(low)
-        no_impact = population_rounding(total - total_impact)
+        total = round_thousand(total)
+        total_impact = round_thousand(total_impact)
+        high = round_thousand(high)
+        medium = round_thousand(medium)
+        low = round_thousand(low)
+        no_impact = round_thousand(total - total_impact)
 
         minimum_needs = self.parameters['minimum needs']
         minimum_needs_full = self.parameters['rich minimum needs']
@@ -252,17 +252,6 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                                 '%s' % format_int(no_impact)]),
                       TableRow(tr('Table below shows the minimum '
                                   'needs for all evacuated people'))]
-
-        # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Map shows population density in high, medium '
-                              'and low hazard areas'),
-                           tr('Total population: %s') % format_int(total),
-                           tr('All values are rounded up to the nearest '
-                              'integer in order to avoid representing'
-                              ' human lives as fractions.')])
-
-        impact_summary = Table(table_body).toNewlineFreeString()
 
         if minimum_needs_full:
             total_needs = evacuated_population_needs(
@@ -299,6 +288,13 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         table_body.append(TableRow(tr(
             'If no, where can we obtain additional relief items from and how '
             'will we transport them to here?')))
+
+        # Extend impact report for on-screen display
+        table_body.extend([TableRow(tr('Notes'), header=True),
+                           tr('Map shows the numbers of people in high, medium '
+                              'and low hazard areas'),
+                           tr('Total population: %s') % format_int(total)])
+        impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style
         colours = [
