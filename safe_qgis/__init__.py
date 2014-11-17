@@ -92,9 +92,9 @@ safe.defaults.get_defaults = lambda the_default=None: get_defaults(
     the_default)
 
 from safe.impact_functions.core import get_plugins
-from safe_qgis.tools.minimum_needs import QMinimumNeeds
+from safe_qgis.tools.minimum_needs_profile import MinimumNeedsProfile
 ## Monkey patch all the impact functions
-minimum_needs = QMinimumNeeds()
+minimum_needs = MinimumNeedsProfile()
 for (name, plugin) in get_plugins().items():
     if not hasattr(plugin, 'parameters'):
         continue

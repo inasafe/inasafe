@@ -7,8 +7,11 @@ __date__ = '05/10/2014'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0611
+from qgis.core import QGis  # force sip2 api
+
 from third_party.parameters.resource_parameter import ResourceParameter
-from third_party.parameters.unit import Unit
 from PyQt4.QtCore import QSettings, QFile, QDir
 from qgis.core import QgsApplication
 from safe.common.minimum_needs import MinimumNeeds
@@ -16,10 +19,10 @@ import json
 import os
 
 
-class QMinimumNeeds(MinimumNeeds):
-    """The concrete MinimumNeeds class to be used in a QGis environment.
+class MinimumNeedsProfile(MinimumNeeds):
+    """The concrete MinimumNeeds class to be used in a QGIS environment.
 
-    In the case where we assume QGis we use the QSettings object to store the
+    In the case where we assume QGIS we use the QSettings object to store the
     minimum needs.
 
     .. versionadded:: 2.2.
@@ -29,13 +32,13 @@ class QMinimumNeeds(MinimumNeeds):
         self.settings = QSettings()
         self.minimum_needs = None
         self._root_directory = None
-        self.local = os.environ['LANG']
+        self.locale = os.environ['LANG']
         self.load()
 
     def load(self):
         """Load the minimum needs from the QSettings object.
         """
-        minimum_needs = self.settings.value('Minimum Needs')
+        minimum_needs = self.settings.value('MinimumNeeds', )
         if hasattr(minimum_needs, 'toPyObject'):
             minimum_needs = minimum_needs.toPyObject()
         if minimum_needs is None:
@@ -76,7 +79,7 @@ class QMinimumNeeds(MinimumNeeds):
         if not self.minimum_needs['resources']:
             return
         from safe.impact_functions.core import get_plugins
-        self.settings.setValue('Minimum Needs', self.minimum_needs)
+        self.settings.setValue('MinimumNeeds', self.minimum_needs)
         # Monkey patch all the impact functions
         for (_, plugin) in get_plugins().items():
             if not hasattr(plugin, 'parameters'):
@@ -92,35 +95,35 @@ class QMinimumNeeds(MinimumNeeds):
         :returns: The minimum needs by name.
         :rtype: list
         """
-        def sort_by_local(unsorted_profiles, local):
+        def sort_by_locale(unsorted_profiles, locale):
             """Sort the profiles by language settings
 
             :param unsorted_profiles: The user profiles profiles
             :type unsorted_profiles: list
 
-            :param local: The language settings string
-            :type local: str
+            :param locale: The language settings string
+            :type locale: str
 
             :returns: Ordered profiles
             :rtype: list
             """
-            local = '_%s' % local[:2]
-            profiles_our_local = []
+            locale = '_%s' % locale[:2]
+            profiles_our_locale = []
             profiles_remaining = []
             for profile_name in unsorted_profiles:
-                if local in profile_name:
-                    profiles_our_local.append(profile_name)
+                if locale in profile_name:
+                    profiles_our_locale.append(profile_name)
                 else:
                     profiles_remaining.append(profile_name)
 
-            return profiles_our_local + profiles_remaining
+            return profiles_our_locale + profiles_remaining
 
-        local_minimum_needs_dir = QDir(
+        locale_minimum_needs_dir = QDir(
             '%s/minimum_needs/' % self.root_directory)
         plugins_minimum_needs_dir = QDir(
             '%s/python/plugins/inasafe/files/minimum_needs/' %
             self.root_directory)
-        if not local_minimum_needs_dir.exists():
+        if not locale_minimum_needs_dir.exists():
             if not plugins_minimum_needs_dir.exists():
                 # This is specifically to get Travis working.
                 return [self._defaults()['profile']]
@@ -134,9 +137,9 @@ class QMinimumNeeds(MinimumNeeds):
                     (self.root_directory, file_name))
         profiles = [
             profile[:-5] for profile in
-            local_minimum_needs_dir.entryList() if
+            locale_minimum_needs_dir.entryList() if
             profile[-5:] == '.json']
-        profiles = sort_by_local(profiles, self.local)
+        profiles = sort_by_locale(profiles, self.locale)
         return profiles
 
     def read_from_file(self, qfile):

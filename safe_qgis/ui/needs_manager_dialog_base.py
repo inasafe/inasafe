@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'minimum_needs_configuration.ui'
+# Form implementation generated from reading ui file 'needs_manager_dialog_base.ui'
 #
-# Created: Fri Nov 14 17:33:31 2014
+# Created: Mon Nov 17 10:32:57 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -23,16 +23,16 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_minimumNeeds(object):
-    def setupUi(self, minimumNeeds):
-        minimumNeeds.setObjectName(_fromUtf8("minimumNeeds"))
-        minimumNeeds.resize(742, 666)
-        minimumNeeds.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
-        self.gridLayout_3 = QtGui.QGridLayout(minimumNeeds)
+class Ui_NeedsManagerDialogBase(object):
+    def setupUi(self, NeedsManagerDialogBase):
+        NeedsManagerDialogBase.setObjectName(_fromUtf8("NeedsManagerDialogBase"))
+        NeedsManagerDialogBase.resize(742, 666)
+        NeedsManagerDialogBase.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
+        self.gridLayout_3 = QtGui.QGridLayout(NeedsManagerDialogBase)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        self.profileLabel = QtGui.QLabel(minimumNeeds)
+        self.profileLabel = QtGui.QLabel(NeedsManagerDialogBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -40,7 +40,7 @@ class Ui_minimumNeeds(object):
         self.profileLabel.setSizePolicy(sizePolicy)
         self.profileLabel.setObjectName(_fromUtf8("profileLabel"))
         self.horizontalLayout_2.addWidget(self.profileLabel)
-        self.profileComboBox = QtGui.QComboBox(minimumNeeds)
+        self.profileComboBox = QtGui.QComboBox(NeedsManagerDialogBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -51,28 +51,28 @@ class Ui_minimumNeeds(object):
         self.gridLayout_3.addLayout(self.horizontalLayout_2, 0, 0, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.saveButton = QtGui.QPushButton(minimumNeeds)
+        self.saveButton = QtGui.QPushButton(NeedsManagerDialogBase)
         self.saveButton.setObjectName(_fromUtf8("saveButton"))
         self.horizontalLayout.addWidget(self.saveButton)
-        self.saveAsButton = QtGui.QPushButton(minimumNeeds)
+        self.saveAsButton = QtGui.QPushButton(NeedsManagerDialogBase)
         self.saveAsButton.setObjectName(_fromUtf8("saveAsButton"))
         self.horizontalLayout.addWidget(self.saveAsButton)
-        self.newButton = QtGui.QPushButton(minimumNeeds)
+        self.newButton = QtGui.QPushButton(NeedsManagerDialogBase)
         self.newButton.setObjectName(_fromUtf8("newButton"))
         self.horizontalLayout.addWidget(self.newButton)
-        self.importButton = QtGui.QPushButton(minimumNeeds)
+        self.importButton = QtGui.QPushButton(NeedsManagerDialogBase)
         self.importButton.setObjectName(_fromUtf8("importButton"))
         self.horizontalLayout.addWidget(self.importButton)
-        self.exportButton = QtGui.QPushButton(minimumNeeds)
+        self.exportButton = QtGui.QPushButton(NeedsManagerDialogBase)
         self.exportButton.setObjectName(_fromUtf8("exportButton"))
         self.horizontalLayout.addWidget(self.exportButton)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
-        self.closeButton = QtGui.QPushButton(minimumNeeds)
+        self.closeButton = QtGui.QPushButton(NeedsManagerDialogBase)
         self.closeButton.setObjectName(_fromUtf8("closeButton"))
         self.horizontalLayout.addWidget(self.closeButton)
         self.gridLayout_3.addLayout(self.horizontalLayout, 2, 0, 1, 1)
-        self.stackedWidget = QtGui.QStackedWidget(minimumNeeds)
+        self.stackedWidget = QtGui.QStackedWidget(NeedsManagerDialogBase)
         self.stackedWidget.setEnabled(True)
         self.stackedWidget.setMouseTracking(False)
         self.stackedWidget.setFrameShape(QtGui.QFrame.Panel)
@@ -197,29 +197,29 @@ class Ui_minimumNeeds(object):
         self.stackedWidget.addWidget(self.page_2)
         self.gridLayout_3.addWidget(self.stackedWidget, 1, 0, 1, 1)
 
-        self.retranslateUi(minimumNeeds)
+        self.retranslateUi(NeedsManagerDialogBase)
         self.stackedWidget.setCurrentIndex(0)
-        QtCore.QObject.connect(self.closeButton, QtCore.SIGNAL(_fromUtf8("clicked()")), minimumNeeds.close)
-        QtCore.QMetaObject.connectSlotsByName(minimumNeeds)
+        QtCore.QObject.connect(self.closeButton, QtCore.SIGNAL(_fromUtf8("clicked()")), NeedsManagerDialogBase.close)
+        QtCore.QMetaObject.connectSlotsByName(NeedsManagerDialogBase)
 
-    def retranslateUi(self, minimumNeeds):
-        minimumNeeds.setWindowTitle(_translate("minimumNeeds", "Minimum Needs", None))
-        self.profileLabel.setText(_translate("minimumNeeds", "Profile:", None))
-        self.profileComboBox.setToolTip(_translate("minimumNeeds", "Select a profile", None))
-        self.saveButton.setText(_translate("minimumNeeds", "Save", None))
-        self.saveAsButton.setText(_translate("minimumNeeds", "Save As ...", None))
-        self.newButton.setText(_translate("minimumNeeds", "New...", None))
-        self.importButton.setText(_translate("minimumNeeds", "Import ...", None))
-        self.exportButton.setText(_translate("minimumNeeds", "Export ...", None))
-        self.closeButton.setText(_translate("minimumNeeds", "Close", None))
-        self.addButton.setToolTip(_translate("minimumNeeds", "Add new resource", None))
-        self.removeButton.setToolTip(_translate("minimumNeeds", "Remove selected resource", None))
-        self.removeButton.setText(_translate("minimumNeeds", "-", None))
-        self.editButton.setToolTip(_translate("minimumNeeds", "Edit selected resource", None))
-        self.editButton.setText(_translate("minimumNeeds", "E", None))
-        self.provenanceLable.setText(_translate("minimumNeeds", "Provenance", None))
-        self.discardButton.setToolTip(_translate("minimumNeeds", "Discard and return", None))
-        self.discardButton.setText(_translate("minimumNeeds", "X", None))
-        self.acceptButton.setToolTip(_translate("minimumNeeds", "Accept and return", None))
-        self.acceptButton.setText(_translate("minimumNeeds", "✓", None))
+    def retranslateUi(self, NeedsManagerDialogBase):
+        NeedsManagerDialogBase.setWindowTitle(_translate("NeedsManagerDialogBase", "Minimum Needs Manager", None))
+        self.profileLabel.setText(_translate("NeedsManagerDialogBase", "Profile:", None))
+        self.profileComboBox.setToolTip(_translate("NeedsManagerDialogBase", "Select a profile", None))
+        self.saveButton.setText(_translate("NeedsManagerDialogBase", "Save", None))
+        self.saveAsButton.setText(_translate("NeedsManagerDialogBase", "Save As ...", None))
+        self.newButton.setText(_translate("NeedsManagerDialogBase", "New...", None))
+        self.importButton.setText(_translate("NeedsManagerDialogBase", "Import ...", None))
+        self.exportButton.setText(_translate("NeedsManagerDialogBase", "Export ...", None))
+        self.closeButton.setText(_translate("NeedsManagerDialogBase", "Close", None))
+        self.addButton.setToolTip(_translate("NeedsManagerDialogBase", "Add new resource", None))
+        self.removeButton.setToolTip(_translate("NeedsManagerDialogBase", "Remove selected resource", None))
+        self.removeButton.setText(_translate("NeedsManagerDialogBase", "-", None))
+        self.editButton.setToolTip(_translate("NeedsManagerDialogBase", "Edit selected resource", None))
+        self.editButton.setText(_translate("NeedsManagerDialogBase", "E", None))
+        self.provenanceLable.setText(_translate("NeedsManagerDialogBase", "Provenance", None))
+        self.discardButton.setToolTip(_translate("NeedsManagerDialogBase", "Discard and return", None))
+        self.discardButton.setText(_translate("NeedsManagerDialogBase", "X", None))
+        self.acceptButton.setToolTip(_translate("NeedsManagerDialogBase", "Accept and return", None))
+        self.acceptButton.setText(_translate("NeedsManagerDialogBase", "✓", None))
 

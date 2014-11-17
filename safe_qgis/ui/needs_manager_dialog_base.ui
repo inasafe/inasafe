@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>minimumNeeds</class>
- <widget class="QDialog" name="minimumNeeds">
+ <class>NeedsManagerDialogBase</class>
+ <widget class="QDialog" name="NeedsManagerDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +14,7 @@
    <enum>Qt::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>Minimum Needs</string>
+   <string>Minimum Needs Manager</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
@@ -391,7 +391,7 @@
   <connection>
    <sender>closeButton</sender>
    <signal>clicked()</signal>
-   <receiver>minimumNeeds</receiver>
+   <receiver>NeedsManagerDialogBase</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

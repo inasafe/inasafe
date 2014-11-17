@@ -30,7 +30,8 @@ from PyQt4.QtCore import QFileInfo, pyqtSignature
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
-from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
+from safe_qgis.ui.shakemap_importer_dialog_base import (
+    Ui_ShakemapImporterDialogBase)
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
@@ -44,7 +45,7 @@ INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
+class ShakemapImporterDialog(QDialog, Ui_ShakemapImporterDialogBase):
     """Importer for shakemap grid.xml files."""
     def __init__(self, parent=None):
         """Constructor for the dialog.
@@ -75,7 +76,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
         # Set up things for context help
         help_button = self.button_box.button(QDialogButtonBox.Help)
-        help_button.clicked.connect(ShakemapImporter.show_help)
+        help_button.clicked.connect(ShakemapImporterDialog.show_help)
 
         self.show_info()
 

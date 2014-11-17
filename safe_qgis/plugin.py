@@ -527,8 +527,8 @@ class Plugin:
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.extent_selector import ExtentSelector
-        widget = ExtentSelector(
+        from safe_qgis.tools.extent_selector_dialog import ExtentSelectorDialog
+        widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
             extent=self.dock_widget.user_extent,
@@ -543,18 +543,18 @@ class Plugin:
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
+        from safe_qgis.tools.needs_calculator_dialog import NeedsCalculatorDialog
 
-        dialog = MinimumNeeds(self.iface.mainWindow())
+        dialog = NeedsCalculatorDialog(self.iface.mainWindow())
         dialog.show()  # non modal
 
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.global_minimum_needs_configuration import (
-            GlobalMinimumNeedsDialog)
+        from safe_qgis.tools.needs_manager_dialog import (
+            NeedsManagerDialog)
 
-        dialog = GlobalMinimumNeedsDialog(self.iface.mainWindow())
+        dialog = NeedsManagerDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_impact_merge(self):
@@ -635,7 +635,7 @@ class Plugin:
     def show_function_browser(self):
         """Show the impact function browser tool."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.function_browser import FunctionBrowser
+        from safe_qgis.tools.function_browser_dialog import FunctionBrowser
 
         dialog = FunctionBrowser(self.iface.mainWindow())
         dialog.exec_()  # modal
@@ -644,14 +644,14 @@ class Plugin:
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.shake_grid.shakemap_importer import (
-            ShakemapImporter)
+            ShakemapImporterDialog)
 
-        dialog = ShakemapImporter(self.iface.mainWindow())
+        dialog = ShakemapImporterDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
-        from safe_qgis.tools.osm_downloader import OsmDownloader
+        from safe_qgis.tools.osm_downloader_dialog import OsmDownloader
 
         dialog = OsmDownloader(self.iface.mainWindow(), self.iface)
         dialog.exec_()  # modal

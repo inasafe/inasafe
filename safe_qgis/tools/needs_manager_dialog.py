@@ -22,11 +22,11 @@ from third_party.parameters.string_parameter import StringParameter
 from PyQt4.QtGui import QDialog, QFileDialog, QGridLayout
 from PyQt4.QtCore import QFile
 
-from safe_qgis.ui.minimum_needs_configuration import Ui_minimumNeeds
+from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (
     styles)
 from PyQt4 import QtGui
-from safe_qgis.tools.minimum_needs import QMinimumNeeds
+from safe_qgis.tools.minimum_needs_profile import MinimumNeedsProfile
 from os.path import expanduser, basename
 
 INFO_STYLE = styles.INFO_STYLE
@@ -34,7 +34,7 @@ INFO_STYLE = styles.INFO_STYLE
 
 # noinspection PyArgumentList
 # noinspection PyProtectedMember
-class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
+class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
     """Dialog class for the InaSAFE global minimum needs configuration.
 
     .. versionadded:: 2.2.
@@ -62,7 +62,7 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         self.acceptButton.clicked.connect(self.accept_changes)
         self.exportButton.clicked.connect(self.export_minimum_needs)
         self.importButton.clicked.connect(self.import_minimum_needs)
-        self.minimum_needs = QMinimumNeeds()
+        self.minimum_needs = MinimumNeedsProfile()
         self.edit_item = None
 
         self.saveButton.clicked.connect(self.save_minimum_needs)
@@ -98,7 +98,7 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         :param resource: The resource to be added
         :type resource: dict
         """
-        updated_sentence = QMinimumNeeds.format_sentence(
+        updated_sentence = MinimumNeedsProfile.format_sentence(
             resource['Readable sentence'], resource)
         if self.edit_item:
             item = self.edit_item

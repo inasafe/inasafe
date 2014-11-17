@@ -33,7 +33,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import safe_read_layer
-from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
+from safe_qgis.tools.needs_calculator_dialog import NeedsCalculatorDialog
 from safe_qgis.safe_interface import UNITDATA
 
 shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')
@@ -59,7 +59,7 @@ class MinimumNeedsTest(unittest.TestCase):
     def test_minimum_needs(self):
         """Test behaviour of the minimum needs function.
         """
-        dialog = MinimumNeeds(PARENT)
+        dialog = NeedsCalculatorDialog(PARENT)
         layer = safe_read_layer(shapefile_path)
         attribute = 'displaced'
         new_layer = dialog.minimum_needs(layer, attribute)
