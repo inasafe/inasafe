@@ -4,63 +4,63 @@
             "Default": "2.8",
             "Minimum allowed": "0",
             "Maximum allowed": "100",
-            "Frequency": "weekly",
-            "Resource name": "Rice",
-            "Resource description": "Basic food",
+            "Frequency": "mingguan",
+            "Resource name": "beras",
+            "Resource description": "makanan pokok",
             "Unit": "kilogram",
-            "Units": "kilograms",
+            "Units": "kilogram",
             "Unit abbreviation": "kg",
-            "Readable sentence": "Each person should be provided with {{ Default }} {{ Units }} of {{ Resource name }} {{ Frequency }}."
+            "Readable sentence": "Setiap individu harus disediakan {{ Default }} {{ Units }} dari {{ Resource name }} {{ Frequency }}."
         },
         {
             "Default": "17.5",
             "Minimum allowed": "0",
             "Maximum allowed": "100",
-            "Frequency": "weekly",
-            "Resource name": "Drinking Water",
-            "Resource description": "For drinking",
-            "Unit": "litre",
-            "Units": "litres",
+            "Frequency": "mingguan",
+            "Resource name": "Air Minum",
+            "Resource description": "Untuk minum",
+            "Unit": "liter",
+            "Units": "liter",
             "Unit abbreviation": "l",
-            "Readable sentence": "Each person should be provided with {{ Default }} {{ Units }} of {{ Resource name }} {{ Frequency }} for drinking."
+            "Readable sentence": "Setiap individu harus disediakan {{ Default }} {{ Units }} dari {{ Resource name }} {{ Frequency }} untuk minum."
         },
         {
             "Default": "67",
             "Minimum allowed": "10",
             "Maximum allowed": "100",
-            "Frequency": "weekly",
-            "Resource name": "Clean Water",
-            "Resource description": "For washing",
-            "Unit": "litre",
-            "Units": "litres",
+            "Frequency": "mingguan",
+            "Resource name": "Air Bersih",
+            "Resource description": "Untuk sanitasi",
+            "Unit": "liter",
+            "Units": "liter",
             "Unit abbreviation": "l",
-            "Readable sentence": "Each person should be provided with {{ Default }} {{ Units }} of {{ Resource name }} {{ Frequency }} for washing."
+            "Readable sentence": "Setiap individu harus disediakan {{ Default }} {{ Units }} dari {{ Resource name }} {{ Frequency }} untuk sanitasi."
         },
         {
             "Default": "0.2",
             "Minimum allowed": "0.2",
             "Maximum allowed": "0.2",
-            "Frequency": "weekly",
-            "Resource name": "Family Kits",
-            "Resource description": "Hygiene kits",
+            "Frequency": "mingguan",
+            "Resource name": "Piranti pokok Keluarga",
+            "Resource description": "Piranti kebersihan",
             "Unit": "",
             "Units": "",
             "Unit abbreviation": "",
-            "Readable sentence": "Each family of 5 persons should be provided with 1 Family Kit per week."
+            "Readable sentence": "Setiap individu harus disediakan sepaket piranti pokok keluarga per minggu."
         },
         {
             "Default": "0.05",
             "Minimum allowed": "0.02",
             "Maximum allowed": "0.05",
-            "Frequency": "single",
-            "Resource name": "Toilets",
+            "Frequency": "tunggal",
+            "Resource name": "Toilet",
             "Resource description": "",
             "Unit": "",
             "Units": "",
             "Unit abbreviation": "",
-            "Readable sentence": "A Toilet should be provided for every 20 persons."
+            "Readable sentence": "Satu toilet harus disediakan untuk setiap 20 orang."
         }
     ],
-    "provenance": "The minimum needs are based on Perka 7/2008.",
-    "profile": "BNPB_en"
+    "provenance": "Standar kebutuhan dasar ini berdasarkan pada Perka BNPB no.7 tahun 2008.",
+    "profile": "BNPB_id"
 }
