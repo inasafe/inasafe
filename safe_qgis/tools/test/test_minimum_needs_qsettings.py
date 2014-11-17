@@ -22,11 +22,11 @@ import unittest
 
 from PyQt4.QtCore import QSettings
 
-from safe_qgis.tools.minimum_needs import QMinimumNeeds
+from safe_qgis.tools.minimum_needs_profile import MinimumNeedsProfile
 from safe.common.minimum_needs import MinimumNeeds
 
 
-class TestQMinimumNeeds(QMinimumNeeds):
+class TestMinimumNeedsProfile(MinimumNeedsProfile):
     """Since we don't want to change the actual minimum needs settings in
     QSettings, we are using a mock profile.
 
@@ -53,7 +53,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
     def setUp(self):
         """Test initialisation run before each test."""
-        self.minimum_needs = TestQMinimumNeeds()
+        self.minimum_needs = TestMinimumNeedsProfile()
 
     def tearDown(self):
         """Run after each test."""
@@ -91,7 +91,7 @@ class MinimumNeedsTest(unittest.TestCase):
             'profile': "Test"
         }
         self.minimum_needs.update_minimum_needs(new_minimum_needs)
-        other_minimum_needs = TestQMinimumNeeds(test_profile='Other Test')
+        other_minimum_needs = TestMinimumNeedsProfile(test_profile='Other Test')
         other_old = other_minimum_needs.get_full_needs()
 
         original_new = self.minimum_needs.get_full_needs()
@@ -102,7 +102,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
     def test_03_root_directory(self):
 
-        minimum_needs2 = TestQMinimumNeeds()
+        minimum_needs2 = TestMinimumNeedsProfile()
         self.assertIsNone(minimum_needs2._root_directory)
         # noinspection PyStatementEffect
         minimum_needs2.root_directory

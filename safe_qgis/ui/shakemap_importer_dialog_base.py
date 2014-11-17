@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'shakemap_importer_base.ui'
+# Form implementation generated from reading ui file 'shakemap_importer_dialog_base.ui'
 #
-# Created: Mon Oct 20 08:47:44 2014
+# Created: Mon Nov 17 10:44:09 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -23,17 +23,17 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_ShakemapImporterBase(object):
-    def setupUi(self, ShakemapImporterBase):
-        ShakemapImporterBase.setObjectName(_fromUtf8("ShakemapImporterBase"))
-        ShakemapImporterBase.resize(526, 637)
-        self.gridLayout_2 = QtGui.QGridLayout(ShakemapImporterBase)
+class Ui_ShakemapImporterDialogBase(object):
+    def setupUi(self, ShakemapImporterDialogBase):
+        ShakemapImporterDialogBase.setObjectName(_fromUtf8("ShakemapImporterDialogBase"))
+        ShakemapImporterDialogBase.resize(526, 637)
+        self.gridLayout_2 = QtGui.QGridLayout(ShakemapImporterDialogBase)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.webView = QtWebKit.QWebView(ShakemapImporterBase)
-        self.webView.setUrl(QtCore.QUrl(_fromUtf8("about:blank")))
+        self.webView = QtWebKit.QWebView(ShakemapImporterDialogBase)
+        self.webView.setProperty("url", QtCore.QUrl(_fromUtf8("about:blank")))
         self.webView.setObjectName(_fromUtf8("webView"))
         self.gridLayout_2.addWidget(self.webView, 0, 0, 1, 1)
-        self.groupBox_2 = QtGui.QGroupBox(ShakemapImporterBase)
+        self.groupBox_2 = QtGui.QGroupBox(ShakemapImporterDialogBase)
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
         self.gridLayout_4 = QtGui.QGridLayout(self.groupBox_2)
         self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
@@ -64,7 +64,7 @@ class Ui_ShakemapImporterBase(object):
         self.line_edit_source.setObjectName(_fromUtf8("line_edit_source"))
         self.gridLayout_4.addWidget(self.line_edit_source, 5, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_2, 1, 0, 1, 1)
-        self.groupBox_3 = QtGui.QGroupBox(ShakemapImporterBase)
+        self.groupBox_3 = QtGui.QGroupBox(ShakemapImporterDialogBase)
         self.groupBox_3.setObjectName(_fromUtf8("groupBox_3"))
         self.gridLayout_3 = QtGui.QGridLayout(self.groupBox_3)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
@@ -92,7 +92,7 @@ class Ui_ShakemapImporterBase(object):
         self.load_result.setObjectName(_fromUtf8("load_result"))
         self.gridLayout_3.addWidget(self.load_result, 3, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_3, 2, 0, 1, 1)
-        self.groupBox = QtGui.QGroupBox(ShakemapImporterBase)
+        self.groupBox = QtGui.QGroupBox(ShakemapImporterDialogBase)
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.gridLayout = QtGui.QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -104,33 +104,33 @@ class Ui_ShakemapImporterBase(object):
         self.inverse_distance_mode.setObjectName(_fromUtf8("inverse_distance_mode"))
         self.gridLayout.addWidget(self.inverse_distance_mode, 0, 1, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox, 3, 0, 1, 1)
-        self.button_box = QtGui.QDialogButtonBox(ShakemapImporterBase)
+        self.button_box = QtGui.QDialogButtonBox(ShakemapImporterDialogBase)
         self.button_box.setOrientation(QtCore.Qt.Horizontal)
         self.button_box.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok)
         self.button_box.setObjectName(_fromUtf8("button_box"))
         self.gridLayout_2.addWidget(self.button_box, 4, 0, 1, 1)
 
-        self.retranslateUi(ShakemapImporterBase)
-        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("accepted()")), ShakemapImporterBase.accept)
-        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("rejected()")), ShakemapImporterBase.reject)
+        self.retranslateUi(ShakemapImporterDialogBase)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("accepted()")), ShakemapImporterDialogBase.accept)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("rejected()")), ShakemapImporterDialogBase.reject)
         QtCore.QObject.connect(self.use_output_default, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.output_path.setDisabled)
         QtCore.QObject.connect(self.use_output_default, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.open_output_tool.setDisabled)
-        QtCore.QMetaObject.connectSlotsByName(ShakemapImporterBase)
+        QtCore.QMetaObject.connectSlotsByName(ShakemapImporterDialogBase)
 
-    def retranslateUi(self, ShakemapImporterBase):
-        ShakemapImporterBase.setWindowTitle(_translate("ShakemapImporterBase", "InaSAFE - Shakemap Importer", None))
-        self.groupBox_2.setTitle(_translate("ShakemapImporterBase", "Input", None))
-        self.open_input_tool.setText(_translate("ShakemapImporterBase", "...", None))
-        self.label_title.setText(_translate("ShakemapImporterBase", "Title", None))
-        self.label.setText(_translate("ShakemapImporterBase", "Input File (grid.xml)", None))
-        self.label_source.setText(_translate("ShakemapImporterBase", "Source", None))
-        self.groupBox_3.setTitle(_translate("ShakemapImporterBase", "Output", None))
-        self.open_output_tool.setText(_translate("ShakemapImporterBase", "...", None))
-        self.label_2.setText(_translate("ShakemapImporterBase", "The output will be a .tif raster file", None))
-        self.use_output_default.setText(_translate("ShakemapImporterBase", "Same directory as input file", None))
-        self.load_result.setText(_translate("ShakemapImporterBase", "Add output layer to QGIS project", None))
-        self.groupBox.setTitle(_translate("ShakemapImporterBase", "Algorithm", None))
-        self.nearest_mode.setText(_translate("ShakemapImporterBase", "Nearest neighbour", None))
-        self.inverse_distance_mode.setText(_translate("ShakemapImporterBase", "Inverse Distance", None))
+    def retranslateUi(self, ShakemapImporterDialogBase):
+        ShakemapImporterDialogBase.setWindowTitle(_translate("ShakemapImporterDialogBase", "InaSAFE - Shakemap Importer", None))
+        self.groupBox_2.setTitle(_translate("ShakemapImporterDialogBase", "Input", None))
+        self.open_input_tool.setText(_translate("ShakemapImporterDialogBase", "...", None))
+        self.label_title.setText(_translate("ShakemapImporterDialogBase", "Title", None))
+        self.label.setText(_translate("ShakemapImporterDialogBase", "Input File (grid.xml)", None))
+        self.label_source.setText(_translate("ShakemapImporterDialogBase", "Source", None))
+        self.groupBox_3.setTitle(_translate("ShakemapImporterDialogBase", "Output", None))
+        self.open_output_tool.setText(_translate("ShakemapImporterDialogBase", "...", None))
+        self.label_2.setText(_translate("ShakemapImporterDialogBase", "The output will be a .tif raster file", None))
+        self.use_output_default.setText(_translate("ShakemapImporterDialogBase", "Same directory as input file", None))
+        self.load_result.setText(_translate("ShakemapImporterDialogBase", "Add output layer to QGIS project", None))
+        self.groupBox.setTitle(_translate("ShakemapImporterDialogBase", "Algorithm", None))
+        self.nearest_mode.setText(_translate("ShakemapImporterDialogBase", "Nearest neighbour", None))
+        self.inverse_distance_mode.setText(_translate("ShakemapImporterDialogBase", "Inverse Distance", None))
 
 from PyQt4 import QtWebKit
