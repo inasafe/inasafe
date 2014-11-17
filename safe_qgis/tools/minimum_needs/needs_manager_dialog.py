@@ -14,20 +14,21 @@ __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from third_party.parameters.float_parameter import FloatParameter
-from third_party.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
-from third_party.parameters.string_parameter import StringParameter
+from PyQt4 import QtGui
+from os.path import expanduser, basename
 
 from PyQt4.QtGui import QDialog, QFileDialog, QGridLayout
 from PyQt4.QtCore import QFile
 
+from third_party.parameters.float_parameter import FloatParameter
+from third_party.parameters.qt_widgets.parameter_container import (
+    ParameterContainer)
+from third_party.parameters.string_parameter import StringParameter
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (
     styles)
-from PyQt4 import QtGui
-from safe_qgis.tools.minimum_needs_profile import MinimumNeedsProfile
-from os.path import expanduser, basename
+from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -62,7 +63,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.acceptButton.clicked.connect(self.accept_changes)
         self.exportButton.clicked.connect(self.export_minimum_needs)
         self.importButton.clicked.connect(self.import_minimum_needs)
-        self.minimum_needs = MinimumNeedsProfile()
+        self.minimum_needs = NeedsProfile()
         self.edit_item = None
 
         self.saveButton.clicked.connect(self.save_minimum_needs)
@@ -98,7 +99,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         :param resource: The resource to be added
         :type resource: dict
         """
-        updated_sentence = MinimumNeedsProfile.format_sentence(
+        updated_sentence = NeedsProfile.format_sentence(
             resource['Readable sentence'], resource)
         if self.edit_item:
             item = self.edit_item

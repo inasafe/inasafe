@@ -21,10 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-
 import unittest
 import os
-
 from qgis.core import QgsMapLayerRegistry
 
 from safe.common.testing import get_qgis_app
@@ -33,7 +31,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import safe_read_layer
-from safe_qgis.tools.needs_calculator_dialog import NeedsCalculatorDialog
+from safe_qgis.tools.minimum_needs.needs_calculator_dialog import NeedsCalculatorDialog
 from safe_qgis.safe_interface import UNITDATA
 
 shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')

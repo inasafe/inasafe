@@ -6,7 +6,6 @@ import sys
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
 
 from PyQt4.QtCore import (
     QLocale,
@@ -92,9 +91,9 @@ safe.defaults.get_defaults = lambda the_default=None: get_defaults(
     the_default)
 
 from safe.impact_functions.core import get_plugins
-from safe_qgis.tools.minimum_needs_profile import MinimumNeedsProfile
+from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
 ## Monkey patch all the impact functions
-minimum_needs = MinimumNeedsProfile()
+minimum_needs = NeedsProfile()
 for (name, plugin) in get_plugins().items():
     if not hasattr(plugin, 'parameters'):
         continue
