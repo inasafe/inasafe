@@ -39,10 +39,17 @@ class StringParameterWidget(GenericParameterWidget):
         """Obtain string parameter object from the current widget state.
 
         :returns: A StringParameter from the current state of widget
-
         """
         value = self._line_edit_input.text()
         if value.__class__.__name__ == 'QString':
             value = str(value)
         self._parameter.value = value
         return self._parameter
+
+    def set_text(self, text):
+        """Update the text of the widget
+
+        :param text: The new text
+        :type text: str
+        """
+        self._line_edit_input.setText(text)

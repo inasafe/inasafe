@@ -89,3 +89,11 @@ class NumericParameterWidget(GenericParameterWidget):
             self._unit_widget.setCurrentIndex(current_index)
             self._unit_widget.setToolTip('Select your preferred unit')
             self._unit_widget.currentIndex()
+
+    def set_value(self, value):
+        """Set the value of the input
+
+        :param value: The new value
+        :type value: int, float
+        """
+        self._input.setValue(value)
