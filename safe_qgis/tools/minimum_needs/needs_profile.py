@@ -120,9 +120,9 @@ class NeedsProfile(MinimumNeeds):
 
         locale_minimum_needs_dir = QDir(
             '%s/minimum_needs/' % self.root_directory)
-        plugins_minimum_needs_dir = QDir(
-            '%s/python/plugins/inasafe/files/minimum_needs/' %
-            self.root_directory)
+        path_name = "%s/../../../files/minimum_needs" % (
+            os.path.dirname(__file__))
+        plugins_minimum_needs_dir = QDir(path_name)
         if not locale_minimum_needs_dir.exists():
             if not plugins_minimum_needs_dir.exists():
                 # This is specifically to get Travis working.
