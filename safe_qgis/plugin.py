@@ -643,7 +643,7 @@ class Plugin:
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.shake_grid.shakemap_importer import (
+        from safe_qgis.tools.shake_grid.shakemap_importer_dialog import (
             ShakemapImporterDialog)
 
         dialog = ShakemapImporterDialog(self.iface.mainWindow())
