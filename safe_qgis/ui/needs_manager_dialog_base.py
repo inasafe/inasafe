@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'needs_manager_dialog_base.ui'
 #
-# Created: Mon Nov 17 10:32:57 2014
+# Created: Mon Nov 17 12:22:22 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -103,7 +103,10 @@ class Ui_NeedsManagerDialogBase(object):
         font.setWeight(50)
         self.addButton.setFont(font)
         self.addButton.setAutoFillBackground(False)
-        self.addButton.setText(_fromUtf8("+"))
+        self.addButton.setText(_fromUtf8(""))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/add_icon.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.addButton.setIcon(icon)
         self.addButton.setCheckable(False)
         self.addButton.setAutoDefault(True)
         self.addButton.setDefault(False)
@@ -117,6 +120,10 @@ class Ui_NeedsManagerDialogBase(object):
         font.setBold(False)
         font.setWeight(50)
         self.removeButton.setFont(font)
+        self.removeButton.setText(_fromUtf8(""))
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/remove_icon.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.removeButton.setIcon(icon1)
         self.removeButton.setObjectName(_fromUtf8("removeButton"))
         self.horizontalLayout_3.addWidget(self.removeButton)
         self.editButton = QtGui.QPushButton(self.page)
@@ -126,6 +133,10 @@ class Ui_NeedsManagerDialogBase(object):
         font.setBold(False)
         font.setWeight(50)
         self.editButton.setFont(font)
+        self.editButton.setText(_fromUtf8(""))
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/edit_icon.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.editButton.setIcon(icon2)
         self.editButton.setObjectName(_fromUtf8("editButton"))
         self.horizontalLayout_3.addWidget(self.editButton)
         self.gridLayout.addLayout(self.horizontalLayout_3, 0, 0, 1, 1)
@@ -214,12 +225,11 @@ class Ui_NeedsManagerDialogBase(object):
         self.closeButton.setText(_translate("NeedsManagerDialogBase", "Close", None))
         self.addButton.setToolTip(_translate("NeedsManagerDialogBase", "Add new resource", None))
         self.removeButton.setToolTip(_translate("NeedsManagerDialogBase", "Remove selected resource", None))
-        self.removeButton.setText(_translate("NeedsManagerDialogBase", "-", None))
         self.editButton.setToolTip(_translate("NeedsManagerDialogBase", "Edit selected resource", None))
-        self.editButton.setText(_translate("NeedsManagerDialogBase", "E", None))
         self.provenanceLable.setText(_translate("NeedsManagerDialogBase", "Provenance", None))
         self.discardButton.setToolTip(_translate("NeedsManagerDialogBase", "Discard and return", None))
         self.discardButton.setText(_translate("NeedsManagerDialogBase", "X", None))
         self.acceptButton.setToolTip(_translate("NeedsManagerDialogBase", "Accept and return", None))
         self.acceptButton.setText(_translate("NeedsManagerDialogBase", "✓", None))
 
+import resources_rc

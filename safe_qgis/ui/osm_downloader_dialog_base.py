@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'osm_downloader_dialog_base.ui'
 #
-# Created: Mon Nov 17 10:42:34 2014
+# Created: Mon Nov 17 12:22:22 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
