@@ -31,6 +31,7 @@ from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignal
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog
@@ -47,9 +48,6 @@ from safe_qgis.ui.extent_selector_base import Ui_ExtentSelectorBase
 from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
 from safe_qgis.safe_interface import styles
 INFO_STYLE = styles.INFO_STYLE
-LOGGER = logging.getLogger('InaSAFE')
-
-
 LOGGER = logging.getLogger('InaSAFE')
 
 

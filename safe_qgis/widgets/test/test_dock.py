@@ -1383,27 +1383,27 @@ Click for Diagnostic Information:
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
 
-        DOCK.show_rubber_bands = True
+        DOCK.extent.show_rubber_bands = True
         expected_vertex_count = 5
 
         # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
         set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
-        next_band = DOCK.next_analysis_rubberband
+        next_band = DOCK.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
         set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
-        next_band = DOCK.next_analysis_rubberband
+        next_band = DOCK.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent(DOCK)
-        next_band = DOCK.next_analysis_rubberband
+        next_band = DOCK.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check last
@@ -1413,7 +1413,7 @@ Click for Diagnostic Information:
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
         # DOCK.show_extent()
-        last_band = DOCK.last_analysis_rubberband
+        last_band = DOCK.extent.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected_wkt = (
             'LINESTRING(11876228.33329810947179794 -695807.82839082507416606, '
@@ -1421,6 +1421,8 @@ Click for Diagnostic Information:
             '11908350.67106631398200989 -678083.54461829655338079, '
             '11876228.33329810947179794 -678083.54461829655338079, '
             '11876228.33329810947179794 -695807.82839082507416606)')
+        print expected_wkt
+        print geometry
         self.assertEqual(geometry, expected_wkt)
         self.assertEqual(
             expected_vertex_count,
@@ -1450,15 +1452,15 @@ Click for Diagnostic Information:
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
 
-        DOCK.show_rubber_bands = True
+        DOCK.extent.show_rubber_bands = True
         expected_vertex_count = 5
 
         # 4326 with disabled on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         # User extent should override this
         set_small_jakarta_extent(DOCK)
-        DOCK.show_user_analysis_extent()
-        user_band = DOCK.user_analysis_rubberband
+        DOCK.extent.show_user_analysis_extent()
+        user_band = DOCK.extent.user_analysis_rubberband
         self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
 
     def test_issue1191(self):

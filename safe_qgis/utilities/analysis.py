@@ -107,6 +107,8 @@ class Analysis(object):
         self.run_in_thread_flag = None
         self.map_canvas = None
         self.clip_to_viewport = None
+        self.user_extent = None
+        self.user_extent_crs = None
 
         self.force_memory = False
 
@@ -356,8 +358,17 @@ class Analysis(object):
         """
         hazard_layer = self.hazard_layer
         exposure_layer = self.exposure_layer
-        # Get the current viewport extent as an array in EPSG:4326
-        viewport_geoextent = viewport_geo_array(self.map_canvas)
+
+        if self.user_extent is not None \
+                and self.user_extent_crs is not None:
+            # User has defined preferred extent, so use that
+            analysis_geoextent = extent_to_array(
+                self.user_extent,
+                self.user_extent_crs)
+        elif self.clip_to_viewport:
+            # Get the current viewport extent as an array in EPSG:4326
+            analysis_geoextent = viewport_geo_array(self.map_canvas)
+
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
             hazard_layer.extent(),
@@ -376,11 +387,17 @@ class Analysis(object):
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
-            if self.clip_to_viewport:
+            # If the user has defined a preferred analysis extent it will
+            # always be used, otherwise the data will be clipped to
+            # the viewport unless the user has deselected clip to viewport in
+            # options.
+            if (self.clip_to_viewport or (
+                    self.user_extent is not None and
+                    self.user_extent_crs is not None)):
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
-                    viewport_geoextent)
+                    analysis_geoextent)
             else:
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
@@ -393,7 +410,7 @@ class Analysis(object):
                 exposure_layer,
                 hazard_geoextent,
                 hazard_layer,
-                viewport_geoextent)
+                analysis_geoextent)
             raise InsufficientOverlapError(message)
 
         # Next work out the ideal spatial resolution for rasters
@@ -590,13 +607,15 @@ class Analysis(object):
             self.clip_parameters = self.get_clip_parameters()
             buffered_geoextent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
-        except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
+        except (RuntimeError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
                 'A problem was encountered when trying to determine the '
                 'analysis extents.'
             )
             self.analysis_error(e, context)
+            raise e
+        except InsufficientOverlapError as e:
             raise e
 
         if not self.force_memory:

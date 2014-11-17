@@ -27,11 +27,9 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QColor
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
-    QgsPoint,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
@@ -75,13 +73,19 @@ from safe_qgis.safe_interface import (
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
+    KeywordDbError,
     NoKeywordsFoundError,
     InsufficientOverlapError,
     InvalidParameterError,
+    InvalidLayerError,
+    InsufficientParametersError,
     HashNotFoundError,
-    UnsupportedProviderError,
-    InvalidAggregationKeywords,
-    InsufficientMemoryWarning)
+    CallGDALError,
+    NoFeaturesInExtentError,
+    InvalidProjectionError,
+    InvalidGeometryError,
+    AggregationError,
+    UnsupportedProviderError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -92,6 +96,7 @@ from safe_qgis.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
 
 from safe_qgis.utilities.analysis import Analysis
+from safe_qgis.utilities.extent import Extent
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -102,7 +107,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 # noinspection PyArgumentList
@@ -127,9 +132,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True,
-        #    stderrToServer=True)
+        pydevd.settrace(
+           'localhost', port=5678, stdoutToServer=True,
+           stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -149,6 +154,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.runner = None
         self.state = None
         self.last_used_function = ''
+        self.extent = Extent(self.iface)
 
         self.composer = None
         self.composition = None
@@ -189,32 +195,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
-
-        # Rubber bands and extents for showing analysis extent etc.
-        # Note that rubber bands are transient but their associated
-        # extents are persistent for the session.
-
-        # Last analysis extents
-        # Added by Tim in version 2.1.0
-        self.last_analysis_rubberband = None
-        # Added by Tim in version 2.2.0
-        self.last_analysis_extent = None
-        # This is a rubber band to show what the AOI of the
-        # next analysis will be. Also added in 2.1.0
-        self.next_analysis_rubberband = None
-        # Added by Tim in version 2.2.0
-        self.next_analysis_extent = None
-        # Rubber band to show the user defined analysis using extent
-        # Added in 2.2.0
-        self.user_analysis_rubberband = None
-        # Rectangle defining the user's preferred extent for the analysis
-        # Added in 2.2.0
-        self.user_extent = None
-        # CRS for user defined preferred extent
-        self.user_extent_crs = None
-
-        # Whether to show rubber band of last and next scenario
-        self.show_rubber_bands = False
 
         self.read_settings()  # get_project_layers called by this
 
@@ -352,7 +332,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         flag = bool(settings.value(
             'inasafe/showRubberBands', False, type=bool))
-        self.show_rubber_bands = flag
+        self.extent.show_rubber_bands = flag
 
         extent = settings.value('inasafe/analysis_extent', '', type=str)
         crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
@@ -360,12 +340,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if extent != '' and crs != '':
             extent = extent_string_to_array(extent)
             try:
-                self.user_extent = QgsRectangle(*extent)
-                self.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-                self.show_user_analysis_extent()
+                self.extent.user_extent = QgsRectangle(*extent)
+                self.extent.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+                self.extent.show_user_analysis_extent()
             except TypeError:
-                self.user_extent = None
-                self.user_extent_crs = None
+                self.extent.user_extent = None
+                self.extent.user_extent_crs = None
 
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
@@ -991,268 +971,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :param flag: Flag to indicate if drawing of bands is active.
         :type flag: bool
         """
-        self.show_rubber_bands = flag
+        self.extent.show_rubber_bands = flag
         settings = QSettings()
         settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
-            self.hide_last_analysis_extent()
-            self.hide_next_analysis_extent()
-            self.hide_user_analysis_extent()
+            self.extent.hide_last_analysis_extent()
+            self.extent.hide_next_analysis_extent()
+            self.extent.hide_user_analysis_extent()
         else:
             self.show_next_analysis_extent()
-            self.show_user_analysis_extent()
-
-    def _draw_rubberband(self, extent, colour, width=2):
-        """
-        Draw a rubber band on the canvas.
-
-        .. versionadded: 2.2.0
-
-        :param extent: Extent that the rubber band should be drawn for.
-        :type extent: QgsRectangle
-
-        :param colour: Colour for the rubber band.
-        :type colour: QColor
-
-        :param width: The width for the rubber band pen stroke.
-        :type width: int
-
-        :returns: Rubber band that should be set to the extent.
-        :rtype: QgsRubberBand
-        """
-        rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), geometryType=QGis.Line)
-        rubberband.setColor(colour)
-        rubberband.setWidth(width)
-        update_display_flag = False
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
-        rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
-        rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
-        rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        update_display_flag = True
-        rubberband.addPoint(point, update_display_flag)
-        return rubberband
-
-    @staticmethod
-    def validate_rectangle(extent):
-        """
-
-        .. versionadded: 2.2.0
-
-        :param extent:
-        :return:
-
-        :raises: InvalidGeometryError
-        """
-
-        if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
-            raise InvalidGeometryError
-        if isinstance(extent, list):
-            try:
-                extent = QgsRectangle(
-                    extent[0],
-                    extent[1],
-                    extent[2],
-                    extent[3])
-            except:  # yes we want to catch all exception types here
-                raise InvalidGeometryError
-        return extent
-
-    def _geo_extent_to_canvas_crs(self, extent):
-        """Transform a bounding box into the CRS of the canvas.
-
-        :param extent: An extent in geographic coordinates.
-        :type extent: QgsRectangle
-
-        :returns: The extent in CRS of the canvas.
-        :rtype: QgsRectangle
-        """
-
-        # make sure the extent is in the same crs as the canvas
-        dest_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-        source_crs = QgsCoordinateReferenceSystem()
-        source_crs.createFromSrid(4326)
-        transform = QgsCoordinateTransform(source_crs, dest_crs)
-        extent = transform.transformBoundingBox(extent)
-        return extent
-
-    def hide_user_analysis_extent(self):
-        """Hide the rubber band showing extent of the next analysis.
-
-        .. versionadded: 2.2.0
-        """
-        if self.user_analysis_rubberband is not None:
-            self.user_analysis_rubberband.reset(QGis.Polygon)
-            self.user_analysis_rubberband = None
-
-    def clear_user_analysis_extent(self):
-        """Slot called when the users clears the analysis extents."""
-        self.hide_user_analysis_extent()
-        self.user_extent = None
-        self.user_extent_crs = None
-
-    def define_user_analysis_extent(self, extent, crs):
-        """Slot called when user has defined a custom analysis extent.
-
-        .. versionadded: 2.2.0
-
-        :param extent: Extent of the user's preferred analysis area.
-        :type extent: QgsRectangle
-
-        :param crs: Coordinate reference system for user defined analysis
-            extent.
-        :type crs: QgsCoordinateReferenceSystem
-        """
-        self.hide_user_analysis_extent()
-
-        try:
-            extent = self.validate_rectangle(extent)
-            self.user_extent = extent
-            self.user_extent_crs = crs
-        except InvalidGeometryError:
-            # keep existing user extent without updating it
-            return
-
-        # Persist this extent for the next session
-        settings = QSettings()
-        user_extent = [
-            self.user_extent.xMinimum(),
-            self.user_extent.yMinimum(),
-            self.user_extent.xMaximum(),
-            self.user_extent.yMaximum()]
-        extent_string = ', '.join(('%f' % x) for x in user_extent)
-        settings.setValue('inasafe/analysis_extent', extent_string)
-        settings.setValue('inasafe/analysis_extent_crs', crs.authid())
-
-        self.show_user_analysis_extent()
-        # Next extent might have changed as a result of the new user
-        # analysis extent, so update it too.
-        self.show_next_analysis_extent()
-
-    def show_user_analysis_extent(self):
-        """Update the rubber band showing the user defined analysis extent.
-
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers and the user's preferred analysis area.
-
-        This slot is called on pan, zoom, layer visibility changes and
-        when the user updates the defined extent.
-
-        .. versionadded:: 2.2.0
-        """
-
-        extent = self.user_extent
-        source_crs = self.user_extent_crs
-
-        try:
-            extent = self.validate_rectangle(extent)
-        except InvalidGeometryError:
-            # keep existing user extent without updating it
-            return
-
-        # make sure the extent is in the same crs as the canvas
-        destination_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-        transform = QgsCoordinateTransform(source_crs, destination_crs)
-        extent = transform.transformBoundingBox(extent)
-
-        if self.show_rubber_bands:
-            # Draw in blue
-            self.user_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 0, 255, 100), width=2)
-
-    def hide_next_analysis_extent(self):
-        """Hide the rubber band showing extent of the next analysis.
-
-        .. versionadded:: 2.1.0
-        """
-        if self.next_analysis_rubberband is not None:
-            self.next_analysis_rubberband.reset(QGis.Polygon)
-            self.next_analysis_rubberband = None
-
-    def show_next_analysis_extent(self):
-        """Update the rubber band showing where the next analysis extent is.
-
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers.
-
-        This slot is called on pan, zoom, layer visibility changes and
-
-        .. versionadded:: 2.1.0
-        """
-        self.hide_next_analysis_extent()
-
-        try:
-            # Temporary only, it will be rewrite if we run an analysis
-            if not self.analysis.clip_parameters:
-                self.setup_analysis()
-            extent = self.analysis.clip_parameters[1]
-
-        except (AttributeError, InsufficientOverlapError):
-            # No layers loaded etc.
-            return
-
-        try:
-            extent = self.validate_rectangle(extent)
-        except InvalidGeometryError:
-            return
-
-        # store the extent to the instance property before reprojecting it
-        self.next_analysis_extent = extent
-
-        extent = self._geo_extent_to_canvas_crs(extent)
-
-        if self.show_rubber_bands:
-            # draw in green
-            self.next_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 255, 0, 100), width=10)
-
-    def hide_last_analysis_extent(self):
-        """Clear extent rubber band if any.
-
-        This method can safely be called even if there is no rubber band set.
-
-        .. versionadded:: 2.1.0
-        """
-        if self.last_analysis_rubberband is not None:
-            self.last_analysis_rubberband.reset(QGis.Polygon)
-            self.last_analysis_rubberband = None
-
-    def show_last_analysis_extent(self, extent):
-        """Show last analysis extent as a rubber band on the canvas.
-
-        .. seealso:: hide_extent()
-
-        .. versionadded:: 2.1.0
-
-        :param extent: A rectangle to display on the canvas. If parameter is
-            a list it should be in the form of [xmin, ymin, xmax, ymax]
-            otherwise it will be silently ignored and this method will
-            do nothing.
-        :type extent: QgsRectangle, list
-        """
-        self.hide_last_analysis_extent()
-        try:
-            # Massage it into a QgsRectangle
-            extent = self.validate_rectangle(extent)
-        except InvalidGeometryError:
-            return
-
-        # store the extent to the instance property before reprojecting it
-        self.last_analysis_extent = extent
-
-        extent = self._geo_extent_to_canvas_crs(extent)
-
-        if self.show_rubber_bands:
-            # Draw in red
-            self.last_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(255, 0, 0, 100), width=5)
+            self.extent.show_user_analysis_extent()
 
     def accept(self):
         """Execute analysis when run button is clicked.
@@ -1280,7 +1008,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.setup_analysis()
             self.show_next_analysis_extent()
             extent = self.analysis.clip_parameters[1]
-            self.show_last_analysis_extent(extent)
+            self.extent.show_last_analysis_extent(extent)
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError:
@@ -1384,6 +1112,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysis.run_in_thread_flag = self.run_in_thread_flag
         self.analysis.map_canvas = self.iface.mapCanvas()
         self.analysis.clip_to_viewport = self.clip_to_viewport
+        self.analysis.user_extent = self.extent.user_extent
+        self.analysis.user_extent_crs = self.extent.user_extent_crs
 
         try:
             self.analysis.setup_analysis()
@@ -1933,3 +1663,45 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         item_data = self.cboFunction.itemData(index, QtCore.Qt.UserRole)
         function_id = '' if item_data is None else str(item_data)
         return function_id
+
+    def define_user_analysis_extent(self, extent, crs):
+        """Slot called when user has defined a custom analysis extent.
+
+        .. versionadded: 2.2.0
+
+        :param extent: Extent of the user's preferred analysis area.
+        :type extent: QgsRectangle
+
+        :param crs: Coordinate reference system for user defined analysis
+            extent.
+        :type crs: QgsCoordinateReferenceSystem
+        """
+        self.extent.define_user_analysis_extent(extent, crs)
+        self.show_next_analysis_extent()
+
+    def show_next_analysis_extent(self):
+        """Update the rubber band showing where the next analysis extent is.
+
+        Primary purpose of this slot is to draw a rubber band of where the
+        analysis will be carried out based on valid intersection between
+        layers.
+
+        This slot is called on pan, zoom, layer visibility changes and
+
+        .. versionadded:: 2.1.0
+        """
+        self.extent.hide_next_analysis_extent()
+        try:
+            # Temporary only, it will be rewrite if we run an analysis
+            # if not self.analysis:
+            #     self.setup_analysis()
+            self.setup_analysis()
+            if not self.analysis.clip_parameters:
+                self.analysis.get_clip_parameters()
+            next_analysis_extent = self.analysis.clip_parameters[1]
+
+        except (AttributeError, InsufficientOverlapError):
+            # No layers loaded etc.
+            return
+
+        self.extent.show_next_analysis_extent(next_analysis_extent)
