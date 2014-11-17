@@ -110,7 +110,12 @@ class ExtentSelectorTest(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_mouse_drag(self):
-        """Test setting extents by dragging works."""
+        """Test setting extents by dragging works.
+
+        This currently fails as QTest does not properly do the mouse
+        interactions with the canvas.
+
+        """
 
         # Click the capture button
         QTest.mouseClick(self.dialog.capture_button, Qt.LeftButton)
