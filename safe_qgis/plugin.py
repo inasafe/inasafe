@@ -23,6 +23,7 @@ import logging
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import is_raster_layer
 
+
 LOGGER = logging.getLogger('InaSAFE')
 
 # Import the PyQt and QGIS libraries
@@ -543,7 +544,7 @@ class Plugin:
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.needs_calculator_dialog import NeedsCalculatorDialog
+        from safe_qgis.tools.minimum_needs.needs_calculator_dialog import NeedsCalculatorDialog
 
         dialog = NeedsCalculatorDialog(self.iface.mainWindow())
         dialog.show()  # non modal
@@ -551,7 +552,7 @@ class Plugin:
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.needs_manager_dialog import (
+        from safe_qgis.tools.minimum_needs.needs_manager_dialog import (
             NeedsManagerDialog)
 
         dialog = NeedsManagerDialog(self.iface.mainWindow())
@@ -643,7 +644,7 @@ class Plugin:
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.shake_grid.shakemap_importer import (
+        from safe_qgis.tools.shake_grid.shakemap_importer_dialog import (
             ShakemapImporterDialog)
 
         dialog = ShakemapImporterDialog(self.iface.mainWindow())

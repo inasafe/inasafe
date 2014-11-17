@@ -19,7 +19,7 @@ import json
 import os
 
 
-class MinimumNeedsProfile(MinimumNeeds):
+class NeedsProfile(MinimumNeeds):
     """The concrete MinimumNeeds class to be used in a QGIS environment.
 
     In the case where we assume QGIS we use the QSettings object to store the
