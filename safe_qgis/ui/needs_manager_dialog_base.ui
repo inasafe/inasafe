@@ -45,10 +45,17 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="remove_profile_button">
+       <property name="text">
+        <string>Remove</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QStackedWidget" name="stackedWidget">
+    <widget class="QStackedWidget" name="stacked_widget">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -287,5 +294,38 @@
  <resources>
   <include location="../resources/resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>button_box</sender>
+   <signal>rejected()</signal>
+   <receiver>NeedsManagerDialogBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>684</x>
+     <y>643</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>752</x>
+     <y>613</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_box</sender>
+   <signal>accepted()</signal>
+   <receiver>NeedsManagerDialogBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>729</x>
+     <y>646</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>654</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

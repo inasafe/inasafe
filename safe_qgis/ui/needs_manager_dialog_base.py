@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'needs_manager_dialog_base.ui'
 #
-# Created: Mon Nov 17 16:44:06 2014
+# Created: Tue Nov 18 16:40:54 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -48,14 +48,17 @@ class Ui_NeedsManagerDialogBase(object):
         self.profile_combo.setSizePolicy(sizePolicy)
         self.profile_combo.setObjectName(_fromUtf8("profile_combo"))
         self.horizontal_layout.addWidget(self.profile_combo)
+        self.remove_profile_button = QtGui.QPushButton(NeedsManagerDialogBase)
+        self.remove_profile_button.setObjectName(_fromUtf8("remove_profile_button"))
+        self.horizontal_layout.addWidget(self.remove_profile_button)
         self.gridLayout_2.addLayout(self.horizontal_layout, 0, 0, 1, 1)
-        self.stackedWidget = QtGui.QStackedWidget(NeedsManagerDialogBase)
-        self.stackedWidget.setEnabled(True)
-        self.stackedWidget.setMouseTracking(False)
-        self.stackedWidget.setFrameShape(QtGui.QFrame.NoFrame)
-        self.stackedWidget.setFrameShadow(QtGui.QFrame.Plain)
-        self.stackedWidget.setLineWidth(0)
-        self.stackedWidget.setObjectName(_fromUtf8("stackedWidget"))
+        self.stacked_widget = QtGui.QStackedWidget(NeedsManagerDialogBase)
+        self.stacked_widget.setEnabled(True)
+        self.stacked_widget.setMouseTracking(False)
+        self.stacked_widget.setFrameShape(QtGui.QFrame.NoFrame)
+        self.stacked_widget.setFrameShadow(QtGui.QFrame.Plain)
+        self.stacked_widget.setLineWidth(0)
+        self.stacked_widget.setObjectName(_fromUtf8("stacked_widget"))
         self.profile_edit_page = QtGui.QWidget()
         self.profile_edit_page.setObjectName(_fromUtf8("profile_edit_page"))
         self.gridLayout_3 = QtGui.QGridLayout(self.profile_edit_page)
@@ -132,7 +135,7 @@ class Ui_NeedsManagerDialogBase(object):
         self.provenance = QtGui.QLineEdit(self.profile_edit_page)
         self.provenance.setObjectName(_fromUtf8("provenance"))
         self.gridLayout_3.addWidget(self.provenance, 2, 1, 1, 5)
-        self.stackedWidget.addWidget(self.profile_edit_page)
+        self.stacked_widget.addWidget(self.profile_edit_page)
         self.resource_edit_page = QtGui.QWidget()
         self.resource_edit_page.setObjectName(_fromUtf8("resource_edit_page"))
         self.gridLayout = QtGui.QGridLayout(self.resource_edit_page)
@@ -153,21 +156,24 @@ class Ui_NeedsManagerDialogBase(object):
         self.resource_editor_label.setFont(font)
         self.resource_editor_label.setObjectName(_fromUtf8("resource_editor_label"))
         self.gridLayout.addWidget(self.resource_editor_label, 0, 0, 1, 1)
-        self.stackedWidget.addWidget(self.resource_edit_page)
-        self.gridLayout_2.addWidget(self.stackedWidget, 1, 0, 1, 1)
+        self.stacked_widget.addWidget(self.resource_edit_page)
+        self.gridLayout_2.addWidget(self.stacked_widget, 1, 0, 1, 1)
         self.button_box = QtGui.QDialogButtonBox(NeedsManagerDialogBase)
         self.button_box.setStandardButtons(QtGui.QDialogButtonBox.Close|QtGui.QDialogButtonBox.Help)
         self.button_box.setObjectName(_fromUtf8("button_box"))
         self.gridLayout_2.addWidget(self.button_box, 2, 0, 1, 1)
 
         self.retranslateUi(NeedsManagerDialogBase)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stacked_widget.setCurrentIndex(0)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("rejected()")), NeedsManagerDialogBase.reject)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("accepted()")), NeedsManagerDialogBase.accept)
         QtCore.QMetaObject.connectSlotsByName(NeedsManagerDialogBase)
 
     def retranslateUi(self, NeedsManagerDialogBase):
         NeedsManagerDialogBase.setWindowTitle(_translate("NeedsManagerDialogBase", "Minimum Needs Manager", None))
         self.profileLabel.setText(_translate("NeedsManagerDialogBase", "Profile", None))
         self.profile_combo.setToolTip(_translate("NeedsManagerDialogBase", "Select a profile", None))
+        self.remove_profile_button.setText(_translate("NeedsManagerDialogBase", "Remove", None))
         self.label.setText(_translate("NeedsManagerDialogBase", "Resources for this profile", None))
         self.add_resource_button.setToolTip(_translate("NeedsManagerDialogBase", "Add new resource", None))
         self.remove_resource_button.setToolTip(_translate("NeedsManagerDialogBase", "Remove selected resource", None))
