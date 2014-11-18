@@ -335,7 +335,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Number of People')
 
         # Create raster object and return
         raster_layer = Raster(
