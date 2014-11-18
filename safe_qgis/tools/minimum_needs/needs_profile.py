@@ -9,15 +9,15 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=W0611
-from qgis.core import QGis  # force sip2 api
+from qgis.core import QGis, QgsApplication  # force sip2 api
 
 from third_party.parameters.resource_parameter import ResourceParameter
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, QFile, QDir
-from qgis.core import QgsApplication  # force sip2 api
+from PyQt4.QtCore import QSettings
 from safe.common.minimum_needs import MinimumNeeds
-import json
-import os
+from shutil import copy
+from os.path import exists, dirname
+from os import mkdir, listdir, environ
 
 
 class NeedsProfile(MinimumNeeds):
@@ -33,20 +33,19 @@ class NeedsProfile(MinimumNeeds):
         self.settings = QSettings()
         self.minimum_needs = None
         self._root_directory = None
-        self.locale = os.environ['LANG']
+        self.locale = environ['LANG']
         self.load()
 
     def load(self):
         """Load the minimum needs from the QSettings object.
         """
-        minimum_needs = self.settings.value('MinimumNeeds', )
-        if hasattr(minimum_needs, 'toPyObject'):
-            minimum_needs = minimum_needs.toPyObject()
+        minimum_needs = self.settings.value('MinimumNeeds', '')
+        # if hasattr(minimum_needs, 'toPyObject'):
+        #     minimum_needs = minimum_needs.toPyObject()
         if minimum_needs is None:
             profiles = self.get_profiles()
             self.read_from_file(
-                QFile('%s/minimum_needs/%s.json' % (
-                    self.root_directory, profiles)))
+                '%s/minimum_needs/%s.json' % (self.root_directory, profiles))
         if minimum_needs is None:
             minimum_needs = self._defaults()
         self.minimum_needs = minimum_needs
@@ -58,8 +57,7 @@ class NeedsProfile(MinimumNeeds):
         :type profile: basestring, str
         """
         self.read_from_file(
-            QFile('%s/minimum_needs/%s.json' % (
-                self.root_directory, profile)))
+            '%s/minimum_needs/%s.json' % (self.root_directory, profile))
 
     def save_profile(self, profile):
         """Save the current minimum needs into a new profile.
@@ -69,8 +67,7 @@ class NeedsProfile(MinimumNeeds):
         """
         profile = profile.replace('.json', '')
         self.write_to_file(
-            QFile('%s/minimum_needs/%s.json' % (
-                self.root_directory, profile)))
+            '%s/minimum_needs/%s.json' % (self.root_directory, profile))
 
     def save(self):
         """Save the minimum needs to the QSettings object.
@@ -119,61 +116,24 @@ class NeedsProfile(MinimumNeeds):
 
             return profiles_our_locale + profiles_remaining
 
-        locale_minimum_needs_dir = QDir(
-            '%s/minimum_needs/' % self.root_directory)
-        path_name = "%s/../../../files/minimum_needs" % (
-            os.path.dirname(__file__))
-        plugins_minimum_needs_dir = QDir(path_name)
-        if not locale_minimum_needs_dir.exists():
-            QDir(self.root_directory).mkdir('minimum_needs')
-        for file_name in plugins_minimum_needs_dir.entryList():
-            source_file = QFile(
-                '%s/%s' % (path_name, file_name))
-            destination_file = QFile(
-                '%s/minimum_needs/%s' % (self.root_directory, file_name))
-            if not destination_file.exists():
-                source_file.copy(
-                    '%s/minimum_needs/%s' %
-                    (self.root_directory, file_name))
+        locale_minimum_needs_dir = '%s/minimum_needs/' % self.root_directory
+        path_name = "%s/../../../files/minimum_needs" % dirname(__file__)
+        if not exists(locale_minimum_needs_dir):
+            mkdir(locale_minimum_needs_dir)
+        for file_name in listdir(path_name):
+            source_file = '%s/%s' % (path_name, file_name)
+            destination_file = (
+                '%s/%s' % (locale_minimum_needs_dir, file_name))
+            if not exists(destination_file):
+                copy(
+                    source_file,
+                    destination_file)
         profiles = [
             profile[:-5] for profile in
-            locale_minimum_needs_dir.entryList() if
+            listdir(locale_minimum_needs_dir) if
             profile[-5:] == '.json']
         profiles = sort_by_locale(profiles, self.locale)
         return profiles
-
-    def read_from_file(self, qfile):
-        """Read from an existing json file.
-
-        :param qfile: The object to be read from.
-        :type qfile: QFile
-
-        :returns: Success status. -1 for unsuccessful 0 for success
-        :rtype: int
-        """
-        if not qfile.exists():
-            return -1
-        qfile.open(QFile.ReadOnly)
-        needs_json = qfile.readAll()
-        try:
-            minimum_needs = json.loads('%s' % needs_json)
-        except (TypeError, ValueError):
-            minimum_needs = None
-
-        if not minimum_needs:
-            return -1
-
-        return self.update_minimum_needs(minimum_needs)
-
-    def write_to_file(self, qfile):
-        """Write minimum needs as json to a file.
-
-        :param qfile: The file to be written to.
-        :type qfile: QFile
-        """
-        qfile.open(QFile.WriteOnly)
-        needs_json = json.dumps(self.minimum_needs)
-        qfile.write(needs_json)
 
     def get_needs_parameters(self):
         """Get the minimum needs resources in parameter format
@@ -228,7 +188,7 @@ class NeedsProfile(MinimumNeeds):
                 # This only happens when running only one test on its own
                 self._root_directory = None
             if self._root_directory is None or self._root_directory == '':
-                self._root_directory = "%s/.qgis2" % (os.environ['HOME'])
+                self._root_directory = "%s/.qgis2" % (environ['HOME'])
         return self._root_directory
 
     @staticmethod

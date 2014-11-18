@@ -55,82 +55,25 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
 
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
-
-        # Remove resource button
-        self.remove_resource_button = QPushButton(self.tr('Remove resource'))
-        self.button_box.addButton(
-            self.remove_resource_button, QDialogButtonBox.ActionRole)
-        self.remove_resource_button.clicked.connect(self.remove_resource)
-
-        # Add resource
-        self.add_resource_button.clicked.connect(self.add_new_resource)
-
-        # Edit resource
-        self.edit_resource_button.clicked.connect(self.edit_resource)
-
-        # Discard changes to a resource
-        self.discard_button = QPushButton(self.tr('Discard resource'))
-        self.button_box.addButton(
-            self.discard_button, QDialogButtonBox.ActionRole)
-        self.discard_button.clicked.connect(self.discard_changes)
-
-        # Save changes to a resource
-        self.save_resource_button = QPushButton(self.tr('Save resource'))
-        self.button_box.addButton(
-            self.edit_resource_button, QDialogButtonBox.ActionRole)
-        self.save_resource_button.clicked.connect(self.save_resource_changes)
-
-        # Export profile button
-        self.export_profile_button = QPushButton(self.tr('Export ...'))
-        self.button_box.addButton(
-            self.export_profile_button, QDialogButtonBox.ActionRole)
-        self.export_profile_button.clicked.connect(self.export_minimum_needs)
-
-        # Import profile button
-        self.import_profile_button = QPushButton(self.tr('Import ...'))
-        self.button_box.addButton(
-            self.import_profile_button, QDialogButtonBox.ActionRole)
-        self.import_profile_button.clicked.connect(self.import_minimum_needs)
-
-        # New profile button
-        self.new_profile_button = QPushButton(self.tr('New'))
-        self.button_box.addButton(
-            self.new_profile_button, QDialogButtonBox.ActionRole)
-        self.new_profile_button.clicked.connect(self.new_profile)
-
-        # Save profile button
-        self.save_profile_button = QPushButton(self.tr('Save'))
-        self.button_box.addButton(
-            self.save_profile_button, QDialogButtonBox.ActionRole)
-        self.save_profile_button.clicked.connect(self.save_minimum_needs)
-
-        # 'Save as' profile button
-        self.save_profile_as_button = QPushButton(self.tr('Save as'))
-        self.button_box.addButton(
-            self.save_profile_as_button, QDialogButtonBox.ActionRole)
-        self.save_profile_as_button.clicked.connect(
-            self.save_minimum_needs_as)
-
+        self.setWindowTitle(self.tr(
+            'InaSAFE Global Minimum Needs Configuration'))
+        self.resourceListWidget.setDragDropMode(
+            self.resourceListWidget.InternalMove)
+        self.resourceListWidget.setAlternatingRowColors(True)
+        self.resourceListWidget.setWordWrap(True)
+        self.removeButton.clicked.connect(self.remove_resource)
+        self.addButton.clicked.connect(self.add_new_resource)
+        self.editButton.clicked.connect(self.edit_resource)
+        self.discardButton.clicked.connect(self.discard_changes)
+        self.acceptButton.clicked.connect(self.accept_changes)
+        self.exportButton.clicked.connect(self.export_minimum_needs)
+        self.importButton.clicked.connect(self.import_minimum_needs)
         self.minimum_needs = NeedsProfile()
         self.edit_item = None
 
-        self.resource_editing_buttons = list()
-        self.resource_editing_buttons.append(self.discard_button)
-        self.resource_editing_buttons.append(self.save_resource_button)
-
-        self.profile_editing_buttons = list()
-        self.profile_editing_buttons.append(self.remove_resource_button)
-        self.profile_editing_buttons.append(self.add_resource_button)
-        self.profile_editing_buttons.append(self.edit_resource_button)
-        self.profile_editing_buttons.append(self.export_profile_button)
-        self.profile_editing_buttons.append(self.import_profile_button)
-        self.profile_editing_buttons.append(self.new_profile_button)
-        self.profile_editing_buttons.append(self.save_profile_button)
-        self.profile_editing_buttons.append(self.save_profile_as_button)
-        # We also keep a list of all widgets to disable in context of resource
-        # editing
-        self.profile_editing_widgets = self.profile_editing_buttons
-        self.profile_editing_widgets.append(self.profile_combo)
+        self.saveButton.clicked.connect(self.save_minimum_needs)
+        self.saveAsButton.clicked.connect(self.save_minimum_needs_as)
+        self.newButton.clicked.connect(self.new_profile)
 
         self.load_profiles()
         self.clear_resource_list()
@@ -196,6 +139,14 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.populate_resource_list()
         self.minimum_needs.save()
 
+    def select_profile_by_name(self, profile_name):
+        """Select a given profile by profile name
+
+        :param profile_name: The profile name
+        :type profile_name: str
+        """
+        self.select_profile(self.profileComboBox.findText(profile_name))
+
     def mark_current_profile_as_pending(self):
         """Mark the current profile as pending by colouring the text red.
         """
@@ -219,22 +170,22 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
-        parameter_widgets[0]._line_edit_input.setText('')
-        parameter_widgets[1]._line_edit_input.setText('')
-        parameter_widgets[2]._line_edit_input.setText('')
-        parameter_widgets[3]._line_edit_input.setText('')
-        parameter_widgets[4]._line_edit_input.setText('')
-        parameter_widgets[5]._input.setValue(10)
-        parameter_widgets[6]._input.setValue(0)
-        parameter_widgets[7]._input.setValue(100)
-        parameter_widgets[8]._line_edit_input.setText('weekly')
-        parameter_widgets[9]._line_edit_input.setText(
+        parameter_widgets[0].set_text('')
+        parameter_widgets[1].set_text('')
+        parameter_widgets[2].set_text('')
+        parameter_widgets[3].set_text('')
+        parameter_widgets[4].set_text('')
+        parameter_widgets[5].set_value(10)
+        parameter_widgets[6].set_value(0)
+        parameter_widgets[7].set_value(100)
+        parameter_widgets[8].set_text('weekly')
+        parameter_widgets[9].set_text(
             "A displaced person should be provided with "
             "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
             "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
             "and no more than {{ Maximum allowed }}. This should be provided "
             "{{ Frequency }}.")
-        self.stackedWidget.setCurrentIndex(1)
+        self.switch_context(1)
 
     def edit_resource(self):
         """Handle edit resource requests.
@@ -252,23 +203,17 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
-        parameter_widgets[0]._line_edit_input.setText(
-            resource['Resource name'])
-        parameter_widgets[1]._line_edit_input.setText(
-            resource['Resource description'])
-        parameter_widgets[2]._line_edit_input.setText(resource['Unit'])
-        parameter_widgets[3]._line_edit_input.setText(resource['Units'])
-        parameter_widgets[4]._line_edit_input.setText(
-            resource['Unit abbreviation'])
-        parameter_widgets[5]._input.setValue(float(resource['Default']))
-        parameter_widgets[6]._input.setValue(float(
-            resource['Minimum allowed']))
-        parameter_widgets[7]._input.setValue(float(
-            resource['Maximum allowed']))
-        parameter_widgets[8]._line_edit_input.setText(resource['Frequency'])
-        parameter_widgets[9]._line_edit_input.setText(
-            resource['Readable sentence'])
-        self.stackedWidget.setCurrentIndex(1)
+        parameter_widgets[0].set_text(resource['Resource name'])
+        parameter_widgets[1].set_text(resource['Resource description'])
+        parameter_widgets[2].set_text(resource['Unit'])
+        parameter_widgets[3].set_text(resource['Units'])
+        parameter_widgets[4].set_text(resource['Unit abbreviation'])
+        parameter_widgets[5].set_value(float(resource['Default']))
+        parameter_widgets[6].set_value(float(resource['Minimum allowed']))
+        parameter_widgets[7].set_value(float(resource['Maximum allowed']))
+        parameter_widgets[8].set_text(resource['Frequency'])
+        parameter_widgets[9].set_text(resource['Readable sentence'])
+        self.switch_context(1)
 
     def set_up_resource_parameters(self):
         """Set up the resource parameter for the add/edit view.
@@ -438,7 +383,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         """Discard the changes to the resource add/edit.
         """
         self.edit_item = None
-        self.stackedWidget.setCurrentIndex(0)
+        self.switch_context(0)
 
     def save_resource_changes(self):
         """Accept the add/edit of the current resource.
@@ -455,7 +400,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         for parameter in parameters:
             resource[parameter.name] = parameter.value
         self.add_resource(resource)
-        self.stackedWidget.setCurrentIndex(0)
+        self.switch_context(0)
 
     def import_minimum_needs(self):
         """ Import minimum needs from an existing json file.
@@ -472,7 +417,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         if file_name == '' or file_name is None:
             return -1
 
-        if self.minimum_needs.read_from_file(QFile(file_name)) == -1:
+        if self.minimum_needs.read_from_file(file_name) == -1:
             return -1
 
         self.clear_resource_list()
@@ -495,7 +440,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]
         if file_name != '' and file_name is not None:
-            self.minimum_needs.write_to_file(QFile(file_name))
+            self.minimum_needs.write_to_file(file_name)
 
     def save_minimum_needs(self):
         """ Save the current state of the minimum needs widget.
@@ -559,11 +504,36 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         if not file_name:
             return
         file_name = basename(file_name)
-        minimum_needs = {
-            'resources': [], 'provenance': '', 'profile': file_name}
-        self.minimum_needs.update_minimum_needs(minimum_needs)
-        self.minimum_needs.save_profile(file_name)
         if self.profile_combo.findText(file_name) == -1:
+            minimum_needs = {
+                'resources': [], 'provenance': '', 'profile': file_name}
+            self.minimum_needs.update_minimum_needs(minimum_needs)
+            self.minimum_needs.save_profile(file_name)
             self.profile_combo.addItem(file_name)
-        self.profile_combo.setCurrentIndex(
-            self.profile_combo.findText(file_name))
+            self.clear_resource_list()
+            self.profile_combo.setCurrentIndex(
+                self.profile_combo.findText(file_name))
+        else:
+            self.profile_combo.setCurrentIndex(
+                self.profile_combo.findText(file_name))
+            self.select_profile_by_name(file_name)
+
+    def switch_context(self, page):
+        """Switch context based on our current
+
+        :param page: The page that the stacked widget is on.
+        :type page: int
+        """
+        if page == 1:
+            self.profileComboBox.setDisabled(True)
+            self.stackedWidget.setCurrentIndex(1)
+
+        else:
+            self.profileComboBox.setDisabled(False)
+            self.stackedWidget.setCurrentIndex(0)
+
+    def remove_profile(self):
+        """Remove the current profile. Make sure the user is sure.
+        """
+        pass
+        # Use QMessageBox warning
