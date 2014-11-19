@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>666</height>
+    <width>751</width>
+    <height>669</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -18,7 +18,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontal_layout">
      <item>
       <widget class="QLabel" name="profileLabel">
        <property name="sizePolicy">
@@ -33,7 +33,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="profileComboBox">
+      <widget class="QComboBox" name="profile_combo">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -45,10 +45,17 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="remove_profile_button">
+       <property name="text">
+        <string>Remove</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QStackedWidget" name="stackedWidget">
+    <widget class="QStackedWidget" name="stacked_widget">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -67,8 +74,14 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="profile_edit_page">
       <layout class="QGridLayout" name="gridLayout_3">
+       <property name="verticalSpacing">
+        <number>5</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="label">
          <property name="font">
@@ -83,20 +96,20 @@
         </widget>
        </item>
        <item row="0" column="2">
-        <spacer name="horizontalSpacer">
+        <spacer name="horizontal_spacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>418</width>
+           <width>437</width>
            <height>20</height>
           </size>
          </property>
         </spacer>
        </item>
        <item row="0" column="3">
-        <widget class="QPushButton" name="addButton">
+        <widget class="QPushButton" name="add_resource_button">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -149,7 +162,7 @@
         </widget>
        </item>
        <item row="0" column="4">
-        <widget class="QPushButton" name="removeButton">
+        <widget class="QPushButton" name="remove_resource_button">
          <property name="maximumSize">
           <size>
            <width>32</width>
@@ -181,7 +194,7 @@
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="QPushButton" name="editButton">
+        <widget class="QPushButton" name="edit_resource_button">
          <property name="maximumSize">
           <size>
            <width>32</width>
@@ -213,24 +226,47 @@
         </widget>
        </item>
        <item row="1" column="0" colspan="6">
-        <widget class="QListWidget" name="resourceListWidget"/>
+        <widget class="QListWidget" name="resources_list">
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::InternalMove</enum>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="provenanceLable">
+        <widget class="QLabel" name="provenance_label">
          <property name="text">
           <string>Provenance</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1" colspan="5">
-        <widget class="QLineEdit" name="provenanceLineEdit"/>
+        <widget class="QLineEdit" name="provenance"/>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="resource_edit_page">
       <layout class="QGridLayout" name="gridLayout">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item row="1" column="0" colspan="2">
+        <widget class="QWidget" name="resource_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="resource_editor_label">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -242,147 +278,16 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>521</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="discardButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>32</horstretch>
-           <verstretch>32</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>Discard and return</string>
-         </property>
-         <property name="text">
-          <string>X</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="acceptButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>32</horstretch>
-           <verstretch>32</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>Accept and return</string>
-         </property>
-         <property name="text">
-          <string>✓</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="4">
-        <widget class="QWidget" name="resourceWidget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </widget>
    </item>
    <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="saveButton">
-       <property name="text">
-        <string>Save</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="saveAsButton">
-       <property name="text">
-        <string>Save As ...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="newButton">
-       <property name="text">
-        <string>New...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="importButton">
-       <property name="text">
-        <string>Import ...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="exportButton">
-       <property name="text">
-        <string>Export ...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="closeButton">
-       <property name="text">
-        <string>Close</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close|QDialogButtonBox::Help</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -391,18 +296,34 @@
  </resources>
  <connections>
   <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
+   <sender>button_box</sender>
+   <signal>rejected()</signal>
    <receiver>NeedsManagerDialogBase</receiver>
-   <slot>close()</slot>
+   <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>695</x>
-     <y>644</y>
+     <x>684</x>
+     <y>643</y>
     </hint>
     <hint type="destinationlabel">
-     <x>563</x>
-     <y>642</y>
+     <x>752</x>
+     <y>613</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_box</sender>
+   <signal>accepted()</signal>
+   <receiver>NeedsManagerDialogBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>729</x>
+     <y>646</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>654</y>
     </hint>
    </hints>
   </connection>
