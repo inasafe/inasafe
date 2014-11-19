@@ -22,8 +22,13 @@ from PyQt4 import QtGui
 from os.path import expanduser, basename
 
 from PyQt4.QtGui import (
-    QDialog, QFileDialog, QGridLayout, QPushButton, QDialogButtonBox)
-from PyQt4.QtCore import QFile
+    QDialog,
+    QFileDialog,
+    QGridLayout,
+    QPushButton,
+    QDialogButtonBox,
+    QMessageBox
+)
 
 from third_party.parameters.float_parameter import FloatParameter
 from third_party.parameters.qt_widgets.parameter_container import (
@@ -111,6 +116,9 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
 
         self.minimum_needs = NeedsProfile()
         self.edit_item = None
+
+        # Remove profile button
+        self.remove_profile_button.clicked.connect(self.remove_profile)
 
         # These are all buttons that will get hidden on context change
         # to the profile editing view
@@ -615,5 +623,17 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
 
         Make sure the user is sure.
         """
-        pass
-        # Use QMessageBox warning
+        profile_name = self.profile_combo.currentText()
+        button_selected = QMessageBox.warning(
+            None,
+            'Remove Profile',
+            self.tr('Remove %s.') % profile_name,
+            QMessageBox.Ok,
+            QMessageBox.Cancel
+        )
+        if button_selected == QMessageBox.Ok:
+            self.profile_combo.removeItem(
+                self.profile_combo.currentIndex()
+            )
+            self.minimum_needs.remove_profile(profile_name)
+            self.select_profile(self.profile_combo.currentIndex())

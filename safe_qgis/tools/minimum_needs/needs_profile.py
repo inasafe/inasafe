@@ -215,3 +215,13 @@ class NeedsProfile(MinimumNeeds):
                 keep
             )
         return updated_sentence
+
+    def remove_profile(self, profile):
+        """Remove a profile.
+
+        :param profile: The profile to be removed.
+        :type profile: basestring, str
+        """
+        self.remove_file(
+            '%s/minimum_needs/%s.json' % (self.root_directory, profile)
+        )

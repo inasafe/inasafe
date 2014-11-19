@@ -11,6 +11,7 @@ from collections import OrderedDict
 import json
 from safe.common.utilities import ugettext as tr
 from os.path import exists, dirname
+from os import remove
 
 
 class MinimumNeeds(object):
@@ -230,3 +231,19 @@ class MinimumNeeds(object):
         with open(filename, 'w') as fd:
             needs_json = json.dumps(self.minimum_needs)
             fd.write(needs_json)
+        return 0
+
+    @staticmethod
+    def remove_file(filename):
+        """Remove a minimum needs file.
+
+        :param filename: The file to be removed.
+        :type filename: basestring, str
+        """
+        if not exists(dirname(filename)):
+            return -1
+        try:
+            remove(filename)
+        except OSError:
+            return -1
+        return 0
