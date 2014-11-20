@@ -19,13 +19,13 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer,
     QgsLayerTreeGroup)
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore, QtXml
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
@@ -66,6 +66,7 @@ class Map():
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0
         self.show_frames = False  # intended for debugging use only
+        self.legend_layers = None  # The layers in legend (QgsLayerTreeGroup)
 
     @staticmethod
     def tr(string):
@@ -87,6 +88,17 @@ class Map():
         :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
         """
         self.layer = layer
+
+    def set_legend_layers(self, legend_layers):
+        """Set the layers that will be shown in the legend.
+
+        .. note: Added in 2.2 to cater the obsolescence of legend.model() in
+                QGIS 2.6. The layers must be an instance of QgsLayerTreeGroup.
+
+        :param legend_layers: The layers to be shown in the legend.
+        :type legend_layers: QgsLayerTreeGroup
+        """
+        self.legend_layers = legend_layers
 
     def set_north_arrow_image(self, north_arrow_path):
         """Set image that will be used as organisation logo in reports.
@@ -337,25 +349,10 @@ class Map():
             legend.setTitle(legend_title)
 
             # Set Legend
+            # From QGIS 2.6, legend.model() is obsolete
             if qgis_version() < 20600:
                 legend.model().setLayerSet([self.layer.id()])
                 legend.synchronizeWithModel()
             else:
-                # 1 Somehow the codes below will crash qgis running it from
-                # inasafe. But fine from qgis python console.
-                group = QgsLayerTreeGroup()
-                group.addLayer(self.layer)
-                legend.modelV2().setRootGroup(group)
+                legend.modelV2().setRootGroup(self.legend_layers)
                 legend.synchronizeWithModel()
-                # 2 Why below is not working for 2.6?????
-                # legend.model().setLayerSet([self.layer.id()])
-                # legend.model().synchronizeWithModel()
-                # 3
-                # legend.updateLegend()
-                # model = legend.modelV2()
-                # for r in range(0, model.rowCount()):
-                #     for c in range(0, model.columnCount()):
-                #         if model.index(r, c).data() != self.layer.name():
-                #             model.removeRows(r, 1)
-                # legend.synchronizeWithModel()
-

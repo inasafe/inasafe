@@ -31,7 +31,8 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QGis)
+    QGis,
+    QgsLayerTreeGroup)
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
@@ -167,7 +168,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.last_used_function = ''
 
         self.composer = None
-        self.composition = None
 
         # Flag used to prevent recursion and allow bulk loads of layers to
         # trigger a single event only
@@ -2379,6 +2379,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Set all the map components
         print_map.set_impact_layer(self.iface.activeLayer())
+        # Set the layers in the legend (Added for QGIS 2.6)
+        legend_layers = QgsLayerTreeGroup()
+        legend_layers.addLayer(self.iface.activeLayer())
+        print_map.set_legend_layers(legend_layers)
+
         if use_full_extent:
             map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
             layer_crs = self.iface.activeLayer().crs()
