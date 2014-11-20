@@ -609,8 +609,8 @@ class Test_Polygon(unittest.TestCase):
         maxy = max(outer_ring[:, 1])
         dy = -(maxy - miny) / N
 
-        #top left x, w-e pixel res, rot, top left y, rot, n-s pixel res
-        #(lon_ul, dlon, 0, lat_ul, 0, dlat)
+        # top left x, w-e pixel res, rot, top left y, rot, n-s pixel res
+        # (lon_ul, dlon, 0, lat_ul, 0, dlat)
         geotransform = (minx, dx, 0, maxy, 0, dy)
 
         # Create suitable instance on the fly
@@ -1472,8 +1472,8 @@ class Test_Polygon(unittest.TestCase):
                        [[0.3, 0.2], [0.7, 3], [1.0, 1.9]],
                        [[30, 10], [30, 20]]]
 
-        #Vector(geometry=polygons).write_to_file('multiple_polygons.shp')
-        #Vector(geometry=input_lines,
+        # Vector(geometry=polygons).write_to_file('multiple_polygons.shp')
+        # Vector(geometry=input_lines,
         #       geometry_type='line').write_to_file('input_lines.shp')
         lines_covered = clip_lines_by_polygons(input_lines, polygons)
 
@@ -1482,8 +1482,8 @@ class Test_Polygon(unittest.TestCase):
 
         i = 0
         for lines in lines_covered:
-            #filename = 'clipped_lines_%i.shp' % i
-            #Vector(geometry=line_dictionary_to_geometry(lines),
+            # filename = 'clipped_lines_%i.shp' % i
+            # Vector(geometry=line_dictionary_to_geometry(lines),
             #       geometry_type='line').write_to_file(filename)
             i += 1
 
@@ -1589,8 +1589,8 @@ class Test_Polygon(unittest.TestCase):
                                [122.24739, -8.63622]])
 
         # Not joined are (but that's OK)
-        #[[122.231108, -8.626598], [122.231021, -8.626557]]
-        #[[122.231021, -8.626557], [122.230284, -8.625983]]
+        # [[122.231108, -8.626598], [122.231021, -8.626557]]
+        # [[122.231021, -8.626557], [122.230284, -8.625983]]
 
         # Check dictionaries directly (same data):
         assert len(inside_lines) == 6

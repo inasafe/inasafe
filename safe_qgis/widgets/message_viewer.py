@@ -60,7 +60,7 @@ class MessageViewer(QtWebKit.QWebView):
         # then cleared
         self.dynamic_messages = []
         self.dynamic_messages_log = []
-        #self.show()
+        # self.show()
 
         self.action_show_log = QtGui.QAction(self.tr('Show log'), None)
         self.action_show_log.setEnabled(False)
@@ -74,8 +74,8 @@ class MessageViewer(QtWebKit.QWebView):
         self.report_path = None
         self._impact_path = None
 
-        #base_dir = os.path.dirname(__file__)
-        #self.header = header.replace('PATH', base_dir)
+        # base_dir = os.path.dirname(__file__)
+        # self.header = header.replace('PATH', base_dir)
 
     @property
     def impact_path(self):
@@ -166,7 +166,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         if message == self.static_message:
             return
-        #LOGGER.debug('Static message event %i' % self.static_message_count)
+        # LOGGER.debug('Static message event %i' % self.static_message_count)
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
@@ -231,7 +231,7 @@ class MessageViewer(QtWebKit.QWebView):
         """
         if self.last_id > 0:
             js = '$(\'#%s\').goTo();' % str(self.last_id)
-            #LOGGER.debug(js)
+            # LOGGER.debug(js)
             self.page().mainFrame().evaluateJavaScript(js)
 
     def show_messages(self):
@@ -253,7 +253,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         string += html_footer()
         self.setHtml(string)
-        #self.scroll_to_div()
+        # self.scroll_to_div()
 
     def to_message(self):
         """Collate all message elements to a single message."""

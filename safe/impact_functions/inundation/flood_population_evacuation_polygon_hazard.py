@@ -40,18 +40,17 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
+    evacuated_population_needs,
     evacuated_population_weekly_needs,
     population_rounding_full,
-    population_rounding
-)
+    population_rounding)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
     humanize_class,
     create_classes,
-    create_label
-)
+    create_label)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -165,26 +164,24 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True}),
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('rich minimum needs', None)
     ])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation.
 
-        Input:
-          layers: List of layers expected to contain
+        :param layers: List of layers expected to contain
 
-              hazard_layer : Vector polygon layer of flood depth
-
-              exposure_layer : Raster layer of population data on the same
-                grid as hazard_layer
+            * hazard_layer : Vector polygon layer of flood depth
+            * exposure_layer : Raster layer of population data on the same grid
+                as hazard_layer
 
         Counts number of people exposed to areas identified as flood prone
 
-        Return
-          Map of population exposed to flooding
-
-          Table with number of people evacuated and supplies required
+        :returns: Map of population exposed to flooding Table with number of
+            people evacuated and supplies required.
+        :rtype: tuple
         """
         # Identify hazard and exposure layers
         hazard_layer = get_hazard_layer(layers)  # Flood inundation
@@ -254,16 +251,16 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     x = res
                 affected = x
             else:
-                #assume that every polygon is affected (see #816)
+                # assume that every polygon is affected (see #816)
                 affected = True
                 # there is no flood related attribute
-                #message = ('No flood related attribute found in %s. '
+                # message = ('No flood related attribute found in %s. '
                 #       'I was looking for either "Flooded", "FLOODPRONE" '
                 #       'or "Affected". The latter should have been '
                 #       'automatically set by call to '
                 #       'assign_hazard_values_to_exposure_data(). '
                 #       'Sorry I can\'t help more.')
-                #raise Exception(message)
+                # raise Exception(message)
 
             if affected:
                 # Get population at this location
@@ -300,10 +297,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         total = population_rounding(total)
         evacuated, rounding_evacuated = population_rounding_full(evacuated)
 
-        # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        total_needs = evacuated_population_weekly_needs(
-            evacuated, minimum_needs)
+        minimum_needs_full = self.parameters['rich minimum needs']
 
         # Generate impact report for the pdf map
         table_body = [
@@ -316,16 +311,14 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 [TableCell(
                     tr('* Number is rounded up to the nearest %s') % (
                         rounding),
-                    col_span=2)],
-                header=False),
+                    col_span=2)]),
             TableRow([tr('People needing evacuation'), '%s*' % (
                 format_int(int(evacuated)))], header=True),
             TableRow(
                 [TableCell(
                     tr('* Number is rounded up to the nearest %s') % (
                         rounding_evacuated),
-                    col_span=2)],
-                header=False),
+                    col_span=2)]),
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
                 self.parameters['evacuation_percentage'])], header=True),
             TableRow(tr(
@@ -333,10 +326,30 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'area')),
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
-                'evacuated people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True)]
-        for resource, amount in total_needs.items():
-            table_body.append(TableRow([tr(resource), format_int(amount)]))
+                'evacuated people'))]
+        if minimum_needs_full:
+            total_needs = evacuated_population_needs(
+                evacuated, minimum_needs, minimum_needs_full)
+            for frequency, needs in total_needs.items():
+                table_body.append(TableRow(
+                    [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')
+                    ],
+                    header=True))
+                for resource in needs:
+                    table_body.append(TableRow([
+                        tr(resource['Resource table name']),
+                        format_int(resource['Amount'])]))
+            table_body.append(TableRow(tr('Provenance'), header=True))
+            table_body.append(TableRow(minimum_needs_full['provenance']))
+        else:
+            total_needs = evacuated_population_weekly_needs(
+                evacuated, minimum_needs)
+            table_body.append(
+                TableRow([tr('Needs per week'), tr('Total')], header=True))
+            for resource, amount in total_needs.items():
+                table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         impact_table = Table(table_body).toNewlineFreeString()
 

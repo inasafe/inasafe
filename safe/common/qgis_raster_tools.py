@@ -213,7 +213,7 @@ def polygonize_gdal(
     :rtype: QgsGeometry
     """
 
-    #save qgis raster to disk
+    # save qgis raster to disk
     base_name = unique_filename()
     file_name = base_name + '.tif'
     file_writer = QgsRasterFileWriter(file_name)

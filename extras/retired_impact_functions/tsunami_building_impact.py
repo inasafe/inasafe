@@ -80,7 +80,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
             # Carry all original attributes forward
             # FIXME: This should be done in interpolation. Check.
-            #for key in attributes:
+            # for key in attributes:
             #    result_dict[key] = E.get_data(key, i)
 
             # Record result for this feature

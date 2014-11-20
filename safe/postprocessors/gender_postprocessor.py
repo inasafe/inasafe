@@ -159,7 +159,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         name = tr('Weekly hygiene packs')
         meta = {'description': 'Females hygiene packs for weekly use'}
 
-        #weekly hygene packs =
+        # weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         result = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
         try:
@@ -188,7 +188,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         meta = {'description': 'Additional rice kg per week for pregnant and '
                                'lactating women'}
 
-        #weekly Kg rice =
+        # weekly Kg rice =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         lact_kg = self.impact_total * self.female_ratio * 2 * 0.033782
         preg_kg = self.impact_total * self.female_ratio * 2 * 0.01281

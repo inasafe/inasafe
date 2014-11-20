@@ -30,7 +30,7 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
         """
 
         thresholds = [0.2, 0.3, 0.5, 0.8, 1.0]
-        #threshold = 1  # Depth above which people are regarded affected [m]
+        # threshold = 1  # Depth above which people are regarded affected [m]
 
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)    # Tsunami inundation [m]

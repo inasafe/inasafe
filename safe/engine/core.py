@@ -58,7 +58,7 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
     # Get an instance of the passed impact_fcn
     impact_function = impact_fcn()
     # Set extent if it is provided
-    if not extent is None:
+    if extent is not None:
         impact_function.set_extent(extent)
 
     # Start time
@@ -298,7 +298,7 @@ def check_data_integrity(layer_objects):
 #                 msg = ('Linked layer %s could not be found: %s'
 #                        % (basename, str(e)))
 #                 LOGGER.info(msg)
-#                 #raise Exception(msg)
+#                 # raise Exception(msg)
 #             else:
 #                 new_layers.append((server, new_layer, bbox, new_metadata))
 

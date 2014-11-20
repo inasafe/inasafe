@@ -13,13 +13,13 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from collections import OrderedDict
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+from collections import OrderedDict
 
 from safe.common.utilities import ugettext as tr
 
@@ -43,7 +43,7 @@ DEFAULTS['YOUTH_RATIO'] = 0.263
 DEFAULTS['ADULT_RATIO'] = 0.659
 DEFAULTS['ELDERLY_RATIO'] = 0.078
 
-#Keywords key names
+# Keywords key names
 DEFAULTS['FEMALE_RATIO_ATTR_KEY'] = 'female ratio attribute'
 DEFAULTS['FEMALE_RATIO_KEY'] = 'female ratio default'
 DEFAULTS['YOUTH_RATIO_ATTR_KEY'] = 'youth ratio attribute'
@@ -55,7 +55,7 @@ DEFAULTS['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
 DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'
 DEFAULTS['NO_DATA'] = tr('No data')
 
-#Defaults for iso_19115_template.xml
+# Defaults for iso_19115_template.xml
 DEFAULTS['ISO19115_ORGANIZATION'] = 'InaSAFE.org'
 DEFAULTS['ISO19115_URL'] = 'http://inasafe.org'
 DEFAULTS['ISO19115_EMAIL'] = 'info@inasafe.org'

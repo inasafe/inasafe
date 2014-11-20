@@ -30,6 +30,7 @@ class ParameterContainer(QWidget, object):
 
         # Vertical layout to place the parameter widgets
         self.vertical_layout = QVBoxLayout()
+        self.vertical_layout.setContentsMargins(0, 0, 0, 0)
         self.vertical_layout.setSpacing(0)
 
         # Widget to hold the vertical layout
@@ -45,6 +46,7 @@ class ParameterContainer(QWidget, object):
         # Main layout of the container
         self.main_layout = QGridLayout()
         self.main_layout.addWidget(self.scroll_area)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
         #self.main_layout.addStretch(1)
         self.setLayout(self.main_layout)
 

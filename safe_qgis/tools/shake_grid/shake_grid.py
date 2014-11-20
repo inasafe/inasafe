@@ -331,7 +331,7 @@ class ShakeGrid(object):
 
         csv_path = os.path.join(
             self.output_dir, 'mmi.csv')
-        #short circuit if the csv is already created.
+        # short circuit if the csv is already created.
         if os.path.exists(csv_path) and force_flag is not True:
             return csv_path
         csv_file = file(csv_path, 'w')
@@ -366,7 +366,7 @@ class ShakeGrid(object):
             self.output_dir,
             self.output_basename + '.vrt')
 
-        #short circuit if the vrt is already created.
+        # short circuit if the vrt is already created.
         if os.path.exists(vrt_path) and force_flag is not True:
             return vrt_path
 
@@ -494,7 +494,7 @@ class ShakeGrid(object):
         else:
             tif_path = os.path.join(
                 self.output_dir, '%s.tif' % self.output_basename)
-        #short circuit if the tif is already created.
+        # short circuit if the tif is already created.
         if os.path.exists(tif_path) and force_flag is not True:
             return tif_path
 
@@ -581,7 +581,7 @@ class ShakeGrid(object):
         # Ensure the vrt mmi file exists (it will generate csv too if needed)
         vrt_path = self.mmi_to_vrt(force_flag)
 
-        #now generate the tif using default interpolation options
+        # now generate the tif using default interpolation options
 
         command = (
             ('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '

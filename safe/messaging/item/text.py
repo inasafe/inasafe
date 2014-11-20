@@ -19,8 +19,8 @@ import os
 from message_element import MessageElement
 from exceptions import InvalidMessageItemError
 
-#FIXME (MB) remove when all to_* methods are implemented
-#pylint: disable=W0223
+# FIXME (MB) remove when all to_* methods are implemented
+# pylint: disable=W0223
 
 
 class Text(MessageElement):

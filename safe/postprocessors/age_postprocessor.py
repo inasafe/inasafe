@@ -63,7 +63,7 @@ class AgePostprocessor(AbstractPostprocessor):
 
         self.impact_total = params['impact_total']
         try:
-            #either all 3 ratio are custom set or we use defaults
+            # either all 3 ratio are custom set or we use defaults
             self.youth_ratio = params['youth_ratio']
             self.adult_ratio = params['adult_ratio']
             self.elderly_ratio = params['elderly_ratio']
@@ -200,7 +200,7 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         myName = tr('Elderly count (affected)')
 
-        #FIXME (MB) Shameless hack to deal with issue #368
+        # FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
             self._append_result(myName, self.NO_DATA_TEXT)
             return

@@ -154,7 +154,7 @@ class FtpClient:
         file_list = self.get_listing()
         for input_file in checked_files:
             url = self.ftp_url_for_file(input_file)
-            if not url in file_list:
+            if url not in file_list:
                 LOGGER.debug('** %s NOT found on server**' % url)
                 return False
             LOGGER.debug('%s found on server' % url)

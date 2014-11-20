@@ -122,7 +122,7 @@ LOGGER = logging.getLogger('InaSAFE')
 # from pydev import pydevd  # pylint: disable=F0401
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
@@ -512,10 +512,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         :returns Message: A localised message indicating we are not ready.
         """
-        #myHazardFilename = self.getHazardLayer().source()
+        # myHazardFilename = self.getHazardLayer().source()
         hazard_keywords = str(
             self.keyword_io.read_keywords(self.get_hazard_layer()))
-        #myExposureFilename = self.getExposureLayer().source()
+        # myExposureFilename = self.getExposureLayer().source()
         exposure_keywords = str(
             self.keyword_io.read_keywords(self.get_exposure_layer()))
         heading = m.Heading(
@@ -743,7 +743,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.get_layers_lock:
             return
 
-        #for arg in args:
+        # for arg in args:
         #    LOGGER.debug('get_layer argument: %s' % arg)
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
@@ -850,8 +850,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
         self.get_layers_lock = False
-        #ensure the dock keywords info panel is updated
-        #make sure to do this after the lock is released!
+        # ensure the dock keywords info panel is updated
+        # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
         # Make sure to update the analysis area preview
         self.show_next_analysis_extent()
@@ -894,10 +894,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 function_title = get_function_title(function)
 
                 # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
-                #print
-                #print 'function (ID)', myFunctionID
-                #print 'function', function
-                #print 'Function title:', function_title
+                # print
+                # print 'function (ID)', myFunctionID
+                # print 'function', function
+                # print 'Function title:', function_title
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo
@@ -1099,7 +1099,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.user_extent = extent
             self.user_extent_crs = crs
         except InvalidGeometryError:
-            #keep existing user extent without updating it
+            # keep existing user extent without updating it
             return
 
         # Persist this extent for the next session
@@ -1137,7 +1137,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             extent = self.validate_rectangle(extent)
         except InvalidGeometryError:
-            #keep existing user extent without updating it
+            # keep existing user extent without updating it
             return
 
         # make sure the extent is in the same crs as the canvas
@@ -1191,7 +1191,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.show_rubber_bands:
             # draw in green
             self.next_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 255, 0, 100), width=3)
+                extent, QColor(0, 255, 0, 100), width=10)
 
     def hide_last_analysis_extent(self):
         """Clear extent rubber band if any.
@@ -1310,7 +1310,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise Exception(self.tr('Clip parameters are not set!'))
         buffered_geo_extent = self.clip_parameters[1]
 
-        #setup aggregator to use buffered_geo_extent to deal with #759
+        # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
             buffered_geo_extent,
             self.get_aggregation_layer())
@@ -1344,7 +1344,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         details = self.tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
-        #TODO style these.
+        # TODO style these.
 
         hazard_layer = self.get_hazard_layer()
         exposure_layer = self.get_exposure_layer()
@@ -1354,7 +1354,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             exposure_name = exposure_layer.name()
             hazard_name = hazard_layer.name()
-            #aggregation layer could be set to AOI so no check for that
+            # aggregation layer could be set to AOI so no check for that
         except AttributeError:
             title = self.tr('No valid layers')
             details = self.tr(
@@ -1501,7 +1501,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # see how the popup decision is made
                 self.keyword_io.delete_keywords(self.layer, 'category')
         except AttributeError:
-            #first run, self.last_used_function does not exist yet
+            # first run, self.last_used_function does not exist yet
             pass
 
     def show_busy(self):
@@ -1654,9 +1654,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # On success, display generated report
             impact_path = qgis_impact_layer.source()
             message = m.Message(report)
-            #message.add(m.Heading(self.tr('View processing log as HTML'),
+            # message.add(m.Heading(self.tr('View processing log as HTML'),
             #                      **INFO_STYLE))
-            #message.add(m.Link('file://%s' % self.wvResults.log_path))
+            # message.add(m.Link('file://%s' % self.wvResults.log_path))
             self.show_static_message(message)
             self.wvResults.impact_path = impact_path
 
@@ -1714,7 +1714,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not style:
                 qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
-                #qgis_impact_layer.setColorShadingAlgorithm(
+                # qgis_impact_layer.setColorShadingAlgorithm(
                 #    QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
@@ -1758,7 +1758,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
-        #self.pbnRunStop.setText('Run')
+        # self.pbnRunStop.setText('Run')
         if self.runner:
             try:
                 self.runner.done.disconnect(self.aggregate)
@@ -1842,7 +1842,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
             raise
 
-        #TODO (MB) do we really want this check?
+        # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
             self.post_process()
         else:

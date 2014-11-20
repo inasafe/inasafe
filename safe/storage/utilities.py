@@ -9,6 +9,7 @@ import numpy
 import math
 from ast import literal_eval
 from osgeo import ogr
+from collections import OrderedDict
 
 from geometry import Polygon
 
@@ -190,7 +191,7 @@ def write_keywords(keywords, filename, sublayer=None):
 
     if multilayer_flag:
         if sublayer is not None and sublayer != '':
-            #replace existing keywords / add new for this layer
+            # replace existing keywords / add new for this layer
             existing_keywords[sublayer] = keywords
             for key, value in existing_keywords.iteritems():
                 handle.write(_keywords_to_string(value, sublayer=key))
@@ -200,7 +201,7 @@ def write_keywords(keywords, filename, sublayer=None):
             # a single keyword block since the user passed no sublayer
             handle.write(_keywords_to_string(keywords))
     else:
-        #currently a simple layer so replace it with our content
+        # currently a simple layer so replace it with our content
         handle.write(_keywords_to_string(keywords, sublayer=sublayer))
 
     handle.close()
@@ -337,7 +338,14 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
                 # booleans, None, lists, dicts etc
                 val = literal_eval(textval)
             except (ValueError, SyntaxError):
-                val = textval
+                if 'OrderedDict(' == textval[:12]:
+                    try:
+                        val = OrderedDict(
+                            literal_eval(textval[12:-1]))
+                    except (ValueError, SyntaxError, TypeError):
+                        val = textval
+                else:
+                    val = textval
 
         # Add entry to dictionary
         keywords[key] = val
@@ -903,7 +911,7 @@ geometry_type_map = {ogr.wkbPoint: 'Point',
                      ogr.wkbPoint25D: 'Point25D',
                      ogr.wkbPolygon: 'Polygon',
                      ogr.wkbPolygon25D: 'Polygon25D',
-                     #ogr.wkbLinePoint: 'LinePoint',  # ??
+                     # ogr.wkbLinePoint: 'LinePoint',  # ??
                      ogr.wkbGeometryCollection: 'GeometryCollection',
                      ogr.wkbGeometryCollection25D: 'GeometryCollection25D',
                      ogr.wkbLineString: 'LineString',

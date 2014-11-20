@@ -84,7 +84,7 @@ class TestRealImpactFunctions(unittest.TestCase):
         admissible_plugins = get_admissible_plugins([dict1, dict2])
         # Depending on other tests there could be more
         assert len(admissible_plugins) >= 1
-        #assert 'W B Flood Evacuation Function' in admissible_plugins
+        # assert 'W B Flood Evacuation Function' in admissible_plugins
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
@@ -94,16 +94,16 @@ class TestRealImpactFunctions(unittest.TestCase):
 
         admissible_plugins = get_admissible_plugins(dict1)
         assert len(admissible_plugins) >= 2
-        #assert 'W B Flood Evacuation Function' in admissible_plugins
+        # assert 'W B Flood Evacuation Function' in admissible_plugins
         assert f_name in admissible_plugins
-        #assert 'Flood Road Impact Function' in admissible_plugins
+        # assert 'Flood Road Impact Function' in admissible_plugins
 
         dict1 = {'category': 'hazard', 'subcategory': 'tsunami'}
         dict2 = dict(category='exposure', subcategory='structure')
 
         # Add layertype
         # Not required for flood building impact
-        #dict1['layertype'] = 'raster'
+        # dict1['layertype'] = 'raster'
         dict2['layertype'] = 'vector'
         admissible_plugins = get_admissible_plugins([dict1, dict2])
 

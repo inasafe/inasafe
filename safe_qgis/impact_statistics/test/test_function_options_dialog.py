@@ -141,7 +141,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         try:
             value()
         except ValueError:
-            ## expected to raises this exception
+            # expected to raises this exception
             pass
         else:
             raise Exception("Fail: must be raise an exception")

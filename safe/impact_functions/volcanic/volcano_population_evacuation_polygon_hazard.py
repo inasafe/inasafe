@@ -33,6 +33,7 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
+    evacuated_population_needs,
     evacuated_population_weekly_needs,
     population_rounding
 )
@@ -40,7 +41,6 @@ from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
@@ -149,7 +149,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('rich minimum needs', None)
     ])
 
     def run(self, layers):
@@ -235,7 +236,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             volcano_names = tr('Not specified in data')
 
         # Check if category_title exists in hazard_layer
-        if not category_title in hazard_layer.get_attribute_names():
+        if category_title not in hazard_layer.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (hazard_layer.get_name(), category_title))
             # noinspection PyExceptionInherit
@@ -274,10 +275,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             categories[category] += population
 
         # Count totals
-        total = int(numpy.sum(exposure_layer.get_data(nan=0)))
-
-        # Don't show digits less than a 1000
-        total = round_thousand(total)
+        total_population = population_rounding(
+            int(numpy.sum(exposure_layer.get_data(nan=0))))
 
         # Count number and cumulative for each zone
         cumulative = 0
@@ -300,10 +299,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evacuation
         evacuated = population_rounding(cumulative)
 
-        # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        total_needs = evacuated_population_weekly_needs(
-            evacuated, minimum_needs)
+        minimum_needs_full = self.parameters['rich minimum needs']
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -328,14 +325,31 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         table_body.extend([
             TableRow(tr(
                 'Map shows the number of people affected in each of volcano '
-                'hazard polygons.')),
-            TableRow(
-                [tr('Needs per week'), tr('Total'), blank_cell], header=True)])
-        for resource, amount in total_needs.items():
-            table_body.append(TableRow([
-                tr(resource),
-                format_int(amount),
-                blank_cell]))
+                'hazard polygons.'))])
+
+        if minimum_needs_full:
+            total_needs = evacuated_population_needs(
+                evacuated, minimum_needs, minimum_needs_full)
+            for frequency, needs in total_needs.items():
+                table_body.append(TableRow(
+                    [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')
+                    ],
+                    header=True))
+                for resource in needs:
+                    table_body.append(TableRow([
+                        tr(resource['Resource table name']),
+                        format_int(resource['Amount'])]))
+            table_body.append(TableRow(tr('Provenance'), header=True))
+            table_body.append(TableRow(minimum_needs_full['provenance']))
+        else:
+            total_needs = evacuated_population_weekly_needs(
+                evacuated, minimum_needs)
+            table_body.append(
+                TableRow([tr('Needs per week'), tr('Total')], header=True))
+            for resource, amount in total_needs.items():
+                table_body.append(TableRow([tr(resource), format_int(amount)]))
 
         impact_table = Table(table_body).toNewlineFreeString()
 
@@ -343,7 +357,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
              tr('Total population %s in the exposure layer') % format_int(
-                 total),
+                 total_population),
              tr('People need evacuation if they are within the '
                 'volcanic hazard zones.')])
 
