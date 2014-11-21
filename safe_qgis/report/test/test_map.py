@@ -24,7 +24,8 @@ import logging
 
 from qgis.core import (
     QgsMapLayerRegistry,
-    QgsRectangle)
+    QgsRectangle,
+    QgsLayerTreeGroup)
 from qgis.gui import QgsMapCanvasLayer
 
 from safe.common.testing import get_qgis_app
@@ -35,6 +36,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.report.map import Map
+from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -130,6 +132,12 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
+
+        if qgis_version() >= 20600:
+            legend_layers = QgsLayerTreeGroup()
+            legend_layers.addLayer(legend_layers)
+            report.set_legend_layers(legend_layers)
+
         report.set_organisation_logo(":/plugins/inasafe/logo-flower.png")
         out_path = unique_filename(
             prefix='mapCustomLogoTest', suffix='.pdf', dir=temp_dir('test'))
