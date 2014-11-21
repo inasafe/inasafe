@@ -27,7 +27,7 @@ from sqlite3 import OperationalError
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, QSettings
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication, QBrush, QColor
 
@@ -36,7 +36,10 @@ from qgis.core import (
     QgsDataItem,
     QgsVectorLayer,
     QgsRasterLayer,
+    QgsDataSourceURI,
     QgsMapLayerRegistry)
+
+from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
 from safe_qgis.tools.wizard_analysis_handler import WizardAnalysisHandler
@@ -1135,7 +1138,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         # collect unique hazards
         hazards = ImpactFunctionManager().get_available_hazards()
-
         # Populate functions tree
         bold_font = QtGui.QFont()
         bold_font.setBold(True)
@@ -1156,9 +1158,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
                 #TODO TEMP DEBUG temporary:
                 #if imfunc['name'] == "Tsunami Evacuation Function":
-                    #self.twi_if_tsunami = tree_leaf
+                if h['name'] == 'flood' and imfunc['name'] == "Flood Building Impact Function":
+                    self.twi_if_tsunami = tree_leaf
         #TODO TEMP DEBUG temporary
-        #self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
+        self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1409,6 +1412,67 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # STEP_FC_HAZLAYER_FROM_BROWSER
     # ===========================
 
+    def path_to_uri(self, path):
+        """Convert layer path from QgsBrowserModel to full QgsDataSourceURI
+
+        :param path: The layer path from QgsBrowserModel
+        :type path: string
+
+        :returns: layer uri
+        :rtype: QgsDataSourceURI
+        """
+
+        conn_name = path.split('/')[1]
+        schema = path.split('/')[2]
+        table = path.split('/')[3]
+
+        settings = QSettings()
+        key = "/PostgreSQL/connections/" + conn_name;
+        service = settings.value( key + "/service" )
+        host = settings.value( key + "/host" )
+        port = settings.value( key + "/port" )
+        if not port:
+            port = "5432";
+        database = settings.value( key + "/database" )
+        useEstimatedMetadata = settings.value( key + "/estimatedMetadata", False, type=bool )
+        sslmode = settings.value( key + "/sslmode", QgsDataSourceURI.SSLprefer, type=int )
+        username = ""
+        password = ""
+        if settings.value( key + "/saveUsername" ) == "true":
+            username = settings.value( key + "/username" )
+
+        if settings.value( key + "/savePassword" ) == "true":
+            password = settings.value( key + "/password" )
+
+        # Old save setting
+        if settings.contains( key + "/save" ):
+            username = settings.value( key + "/username" )
+            if settings.value( key + "/save" ) == "true":
+                password = settings.value( key + "/password" )
+
+        uri = QgsDataSourceURI()
+        if service:
+            uri.setConnection( service, database, username, password, sslmode)
+        else:
+            uri.setConnection( host, port, database, username, password, sslmode)
+
+        uri.setUseEstimatedMetadata( useEstimatedMetadata )
+
+        # Obtain geommetryu column name
+        connector = PostGisDBConnector(uri)
+        tbls = connector.getVectorTables(schema)
+        tbls = [tbl for tbl in tbls if tbl[1]==table]
+        if len(tbls) != 1:
+            #TODO Also create QgsRasterLayer
+            tbls = connector.getRasterTables(schema)
+            tbls = [tbl for tbl in tbls if tbl[1]==table]
+        tbl = tbls[0]
+        geom_col = tbl[8]
+
+        uri.setDataSource(schema, table, geom_col)
+        return uri
+
+
     def get_layer_description_from_browser(self, category):
         """Obtain the description of the browser layer selected by user.
 
@@ -1423,7 +1487,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             browser = self.tvBrowserHazard
         elif category == 'exposure':
             browser = self.tvBrowserExposure
-        elif category == 'aggregation':
+        elif category == 'postprocessing':
             browser = self.tvBrowserAggregation
         else:
             raise InaSAFEError
@@ -1441,26 +1505,20 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if not item.type() == QgsDataItem.Layer:
             return ""
 
-        ##### TODO No way to cast QgsDataItem -> QgsLayerItem and access
-        # methods like uri(), mapLayerType(), providerKey() ?
-        ##### I tried with item.metaObject(item, "uri") with following error:
-        ##### Warning: QMetaObject::invokeMethod: No such method
-        # QgsLayerItem::uri()
-
-        # Use itemClassName instead: QgsOgrLayerItem, QgsLayerItem,
-        # QgsPGLayerItem (pg:/geopanel700/public/aaaa)
-
-        if not item_class_name in ['QgsOgrLayerItem', 'QgsLayerItem']:
+        if not item_class_name in ['QgsOgrLayerItem', 'QgsLayerItem', 'QgsPGLayerItem']:
             return ""
 
         path = item.path()
 
-        if not os.path.exists(path):
+        if item_class_name in ['QgsOgrLayerItem', 'QgsLayerItem'] and not os.path.exists(path):
             return ""
 
         # try to create the layer
         if item_class_name == 'QgsOgrLayerItem':
             layer = QgsVectorLayer(path, '', 'ogr')
+        elif item_class_name == 'QgsPGLayerItem':
+            uri = self.path_to_uri(path)
+            layer = QgsVectorLayer(uri.uri(), table, 'postgres')
         else:
             layer = QgsRasterLayer(path, '', 'gdal')
 
@@ -1475,6 +1533,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.aggregation_layer = layer
 
         if not layer or not layer.isValid():
+            #TODO - debug
+            if item_class_name == 'QgsPGLayerItem':
+                return 'PG layers aren\'t yet supported'
             return "Not a valid layer"
 
         try:
@@ -1613,6 +1674,22 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # STEP_FC_DISJOINT_LAYERS
     # ===========================
 
+    def layers_intersect(self, layer_a, layer_b):
+        """Check if extents of two layers intersect.
+
+        :param layer_a: One of the two layers to test overlapping
+        :type layer_a: QgsMapLayer
+
+        :param layer_b: The second of the two layers to test overlapping
+        :type layer_b: QgsMapLayer
+
+        :returns: true if the layers intersect, false if they are disjoint
+        :rtype: boolean
+        """
+
+        return layer_a.extent().intersects(layer_b.extent())
+
+
     def set_widgets_step_fc_disjoint_layers(self):
         """Set widgets on the Disjoint Layers tab"""
         pass
@@ -1689,7 +1766,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_widgets_step_fc_agglayer_from_canvas(self):
         """Set widgets on the Aggregation Layer from Canvas tab"""
         self.list_compatible_layers_from_canvas(
-            'aggregation', self.lstAggCanvasLayers)
+            'postprocessing', self.lstAggCanvasLayers)
         self.lblDescribeAggCanvasLayer.clear()
 
     # ===========================
@@ -1699,7 +1776,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # noinspection PyPep8Naming
     def tvBrowserAggregation_selection_changed(self):
         """Update layer description label"""
-        desc = self.get_layer_description_from_browser('aggregation')
+        desc = self.get_layer_description_from_browser('postprocessing')
         self.lblDescribeBrowserAggLayer.setText(desc)
         self.pbnNext.setEnabled(bool(len(desc) > 32))
 
@@ -2171,9 +2248,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # TODO COME BACK TO THIS POINT OR ONE BEFORE?
                 # TODO test overlapping after come back!!!
             else:
-                # TODO test overlapping!!!
-                _layers_disjoint = False
-                if _layers_disjoint:
+                if not self.layers_intersect(self.hazard_layer,
+                                             self.exposure_layer):
                     new_step = step_fc_disjoint_layers
                 else:
                     new_step = step_fc_agglayer_origin
@@ -2197,9 +2273,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # TODO COME BACK TO THIS POINT OR ONE BEFORE?
                 # TODO test overlapping after come back!!!
             else:
-                # TODO test overlapping!!!
-                _agg_layers_disjoint = False
-                if _agg_layers_disjoint:
+                if not self.layers_intersect(self.exposure_layer,
+                                             self.aggregation_layer):
                     new_step = step_fc_agglayer_disjoint
                 else:
                     new_step = step_fc_params

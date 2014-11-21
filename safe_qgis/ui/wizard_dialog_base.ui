@@ -3258,7 +3258,6 @@ Please step back and select another layer.</string>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>
-  <include location="../../../AA_INASAFE_OLD_Z_MOIMI_BRANCZAMI/safe_qgis/resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>
