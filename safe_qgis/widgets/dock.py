@@ -85,7 +85,9 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregationError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    InvalidAggregationKeywords,
+    InsufficientMemoryWarning)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -1005,10 +1007,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     partial(self.accept_cancelled, original_keywords))
 
             self.enable_busy_cursor()
-            self.setup_analysis()
             self.show_next_analysis_extent()
             extent = self.analysis.clip_parameters[1]
-            self.extent.show_last_analysis_extent(extent)
+            self.extent.show_next_analysis_extent(extent)
+            self.prepare_analysis()
+            self.analysis.setup_analysis()
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError:
@@ -1038,10 +1041,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # Set analysis to ignore memory warning
                 self.analysis.force_memory = True
                 self.accept()
-
-        # Set back analysis to not ignore memory warning
-        self.analysis.force_memory = False
-        self.disable_signal_receiver()
+        finally:
+            # Set back analysis to not ignore memory warning
+            self.analysis.force_memory = False
+            self.disable_signal_receiver()
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
@@ -1083,7 +1086,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.show_error_message(message)
         self.analysis_done.emit(False)
 
-    def setup_analysis(self):
+    def prepare_analysis(self):
         """Setup analysis to make it ready to work."""
         self.analysis = Analysis()
         # Layers
@@ -1114,11 +1117,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysis.clip_to_viewport = self.clip_to_viewport
         self.analysis.user_extent = self.extent.user_extent
         self.analysis.user_extent_crs = self.extent.user_extent_crs
-
-        try:
-            self.analysis.setup_analysis()
-        except InsufficientOverlapError as e:
-            raise e
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1676,8 +1674,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             extent.
         :type crs: QgsCoordinateReferenceSystem
         """
-        self.extent.define_user_analysis_extent(extent, crs)
-        self.show_next_analysis_extent()
+        try:
+            self.extent.define_user_analysis_extent(extent, crs)
+            self.show_next_analysis_extent()
+        except InvalidGeometryError:
+            return
 
     def show_next_analysis_extent(self):
         """Update the rubber band showing where the next analysis extent is.
@@ -1692,16 +1693,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         self.extent.hide_next_analysis_extent()
         try:
-            # Temporary only, it will be rewrite if we run an analysis
-            # if not self.analysis:
-            #     self.setup_analysis()
-            self.setup_analysis()
-            if not self.analysis.clip_parameters:
-                self.analysis.get_clip_parameters()
+            # Temporary only, for checking the user extent
+            self.prepare_analysis()
+
+            self.analysis.clip_parameters = self.analysis.get_clip_parameters()
             next_analysis_extent = self.analysis.clip_parameters[1]
+
+            self.extent.show_next_analysis_extent(next_analysis_extent)
 
         except (AttributeError, InsufficientOverlapError):
             # No layers loaded etc.
             return
-
-        self.extent.show_next_analysis_extent(next_analysis_extent)

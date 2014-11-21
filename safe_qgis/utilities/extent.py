@@ -197,7 +197,7 @@ class Extent(object):
             self.user_extent_crs = crs
         except InvalidGeometryError:
             # keep existing user extent without updating it
-            return
+            raise InvalidGeometryError
 
         # Persist this extent for the next session
         settings = QSettings()
