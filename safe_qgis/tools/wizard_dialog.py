@@ -29,7 +29,13 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature, QSettings
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication, QBrush, QColor
+from PyQt4.QtGui import (
+    QListWidgetItem,
+    QPixmap,
+    QApplication,
+    QBrush,
+    QColor,
+    QSortFilterProxyModel)
 
 from qgis.core import (
     QgsBrowserModel,
@@ -208,6 +214,46 @@ def get_question_text(constant):
         return '<b>MISSING CONSTANT: %s</b>' % constant
 
 
+class LayerBrowserProxyModel(QSortFilterProxyModel):
+    """Filter proxy model for hiding unsupported branches in the layer browser."""
+
+    def __init__(self, parent):
+        """Constructor for the model.
+
+        :param parent: Parent widget of this model.
+        :type parent: QWidget
+        """
+        QSortFilterProxyModel.__init__(self, parent)
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        """The filter method
+
+        .. note:: This filter hides top-level items of unsupported branches.
+        Enabled root items: QgsDirectoryItem, QgsFavouritesItem, QgsPGRootItem.
+        Disabled root items: QgsMssqlRootItem, QgsSLRootItem, QgsOWSRootItem,
+        QgsWCSRootItem, QgsWFSRootItem, QgsWMSRootItem.
+
+        :param source_row: Parent widget of the model
+        :type source_row: int
+
+        :param source_parent: Parent item index
+        :type source_parent: QModelIndex
+
+        :returns: Item validation result
+        :rtype: bool
+        """
+        source_index = self.sourceModel().index( source_row, 0, source_parent )
+        item = self.sourceModel().dataItem(source_index)
+        if item.metaObject().className() in ['QgsMssqlRootItem',
+                                             'QgsSLRootItem',
+                                             'QgsOWSRootItem',
+                                             'QgsWCSRootItem',
+                                             'QgsWFSRootItem',
+                                             'QgsWMSRootItem']:
+            return False
+        return True
+
+
 class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     """Dialog implementation class for the InaSAFE wizard."""
 
@@ -240,9 +286,23 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.dock = dock
         self.suppress_warning_dialog = False
         self.set_tool_tip()
-        self.tvBrowserHazard.setModel(QgsBrowserModel())
-        self.tvBrowserExposure.setModel(QgsBrowserModel())
-        self.tvBrowserAggregation.setModel(QgsBrowserModel())
+
+        # Set models for browsers
+        browserModel = QgsBrowserModel()
+        proxyModel = LayerBrowserProxyModel(self)
+        proxyModel.setSourceModel(browserModel)
+        self.tvBrowserHazard.setModel(proxyModel)
+
+        browserModel = QgsBrowserModel()
+        proxyModel = LayerBrowserProxyModel(self)
+        proxyModel.setSourceModel(browserModel)
+        self.tvBrowserExposure.setModel(proxyModel)
+
+        browserModel = QgsBrowserModel()
+        proxyModel = LayerBrowserProxyModel(self)
+        proxyModel.setSourceModel(browserModel)
+        self.tvBrowserAggregation.setModel(proxyModel)
+
         self.keyword_io = KeywordIO()
         self.twParams = None
 
@@ -1157,11 +1217,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf.setText(0, imfunc['name'])
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
                 #TODO TEMP DEBUG temporary:
-                #if imfunc['name'] == "Tsunami Evacuation Function":
-                if h['name'] == 'flood' and imfunc['name'] == "Flood Building Impact Function":
-                    self.twi_if_tsunami = tree_leaf
+                #if h['name'] == 'flood' and imfunc['name'] == "Flood Building Impact Function":
+                    #self.twi_if_tsunami = tree_leaf
         #TODO TEMP DEBUG temporary
-        self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
+        #self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1518,7 +1577,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if not index:
             return (False, '')
 
-        item = browser.model().dataItem(index)
+        # Map the proxy model index to the source model index
+        index = browser.model().mapToSource(index)
+        item = browser.model().sourceModel().dataItem(index)
         if not item:
             return (False, '')
 

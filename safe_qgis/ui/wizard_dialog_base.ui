@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>22</number>
+      <number>8</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1857,7 +1857,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>17</height>
+           <height>16</height>
           </size>
          </property>
         </spacer>
@@ -1973,9 +1973,9 @@
      <widget class="QWidget" name="pgF12HazLayerBrowser">
       <layout class="QVBoxLayout" name="verticalLayout_12">
        <item>
-        <widget class="QLabel" name="label_10">
+        <widget class="QLabel" name="lblSelectBrowserHazLayer">
          <property name="text">
-          <string>Please choose a file (not any registered database or service)</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1993,7 +1993,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>16</height>
           </size>
          </property>
         </spacer>
@@ -2220,6 +2220,22 @@
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer_17">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout_19">
          <item row="0" column="0">
           <spacer name="horizontalSpacer_41">
@@ -2330,9 +2346,9 @@
      <widget class="QWidget" name="pgF15ExpLayerBrowser">
       <layout class="QVBoxLayout" name="verticalLayout_25">
        <item>
-        <widget class="QLabel" name="label_12">
+        <widget class="QLabel" name="lblSelectBrowserExpLayer">
          <property name="text">
-          <string>Please choose a file (not any registered database or service)</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2350,7 +2366,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>16</height>
           </size>
          </property>
         </spacer>
@@ -2651,7 +2667,7 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>17</height>
+           <height>16</height>
           </size>
          </property>
         </spacer>
@@ -2767,9 +2783,9 @@ Please step back and select another layer.</string>
      <widget class="QWidget" name="pgF19AggLayerBrowser">
       <layout class="QVBoxLayout" name="verticalLayout_24">
        <item>
-        <widget class="QLabel" name="label_13">
+        <widget class="QLabel" name="lblSelectBrowserAggLayer">
          <property name="text">
-          <string>Please choose a file (not any registered database or service)</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;aggregation&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2787,7 +2803,7 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>16</height>
           </size>
          </property>
         </spacer>
@@ -2953,7 +2969,7 @@ Please step back and select another layer.</string>
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Preferred</enum>
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -2970,11 +2986,7 @@ Please step back and select another layer.</string>
        <item>
         <widget class="QLabel" name="lblSummary">
          <property name="text">
-          <string>It's all, now you can run your analysis.
-
-... There will be a summary here...
-
- Please click &quot;Run&quot;.</string>
+          <string>Here goes the summary...</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
