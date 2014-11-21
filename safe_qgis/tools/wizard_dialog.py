@@ -1229,9 +1229,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 <b>SUBCATEGORY</b>: %s<br/>
                 <b>UNIT</b>: %s<br/>
                 <b>SOURCE</b>: %s<br/><br/>
-                Please note incompatible layers (e.g exposure if we're \
-                looking for hazard) are presented in red color for debugging \
-                purposes!
             """ % (keywords.get('title'),
                    keywords.get('category'),
                    keywords.get('subcategory'),
@@ -1245,12 +1242,17 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 geom_type = 'line'
 
+            # hide password in the layer source
+            source = re.sub(r'password=\'.*\'',
+                            r'password=*****',
+                            layer.source())
+
             label_text = """
                 This layer has no keywords assigned<br/><br/>
                 <b>SOURCE</b>: %s<br/>
                 <b>TYPE</b>: %s<br/><br/>
                 In the next step you will be able to register this layer.
-            """ % (layer.source(), is_raster_layer(layer)
+            """ % (source, is_raster_layer(layer)
                    and 'raster' or 'vector (%s)' % geom_type)
 
         return label_text
@@ -1258,7 +1260,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # prevents actions being handled twice
     # noinspection PyPep8Naming
     @pyqtSignature('')
-    def on_lstHazCanvasLayers_itemSelectionChanged(self):
+    def on_lstCanvasHazLayers_itemSelectionChanged(self):
         """Update layer description label
 
         .. note:: This is an automatic Qt slot
@@ -1267,7 +1269,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         self.hazard_layer = self.selected_canvas_hazlayer()
         lblText = self.get_layer_description_from_canvas(self.hazard_layer)
-        self.lblDescribeHazCanvasLayer.setText(lblText)
+        self.lblDescribeCanvasHazLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
     def selected_canvas_hazlayer(self):
@@ -1276,7 +1278,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: The currently selected map layer in the list.
         :rtype: QgsMapLayer
         """
-        item = self.lstHazCanvasLayers.currentItem()
+        item = self.lstCanvasHazLayers.currentItem()
         try:
             layer_id = item.data(QtCore.Qt.UserRole)
         except (AttributeError, NameError):
@@ -1284,6 +1286,71 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
+
+
+    def is_layer_compatible(self, layer, category, keywords=None):
+        """Validate if a given layer is compatible for selected IF
+           as a given category
+
+        :param layer: The layer to be validated
+        :type layer: QgsVectorLayer | QgsRasterLayer
+
+        :param category: The category the layer is validated for
+        :type category: string
+
+        :param keywords: The layer keywords
+        :type keywords: KeywordIO | None
+
+        :returns: True if layer is appropriate for the selected role
+        :rtype: boolean
+        """
+
+        imfunc = self.selected_function()
+
+        # For aggregation layers, don't use the impact function
+        if not category in imfunc['categories']:
+            imfunc = None
+
+        if imfunc:
+            allowed_subcats = imfunc['categories'][category]['subcategories']
+            if type(allowed_subcats) != list:
+                allowed_subcats = [allowed_subcats]
+            allowed_units = imfunc['categories'][category]['units']
+            if type(allowed_units) != list:
+                allowed_units = [allowed_units]
+            layer_constraints = imfunc['categories'][category][
+                'layer_constraints']
+
+        if imfunc:
+            is_compatible = False
+            if is_raster_layer(layer) and 'raster' in [
+                lc['layer_type'] for lc in layer_constraints]:
+                is_compatible = True
+            elif is_point_layer(layer) and 'point' in [
+                lc['data_type'] for lc in layer_constraints]:
+                is_compatible = True
+            elif is_polygon_layer(layer)and 'polygon' in [
+                lc['data_type'] for lc in layer_constraints]:
+                is_compatible = True
+            elif 'line' in [lc['data_type'] for lc in layer_constraints]:
+                is_compatible = True
+        else:
+            is_compatible = True
+
+        if keywords and (not 'category' in keywords or
+                                    keywords['category'] != category):
+            is_compatible = False
+
+        if keywords and imfunc:
+            subcat_ids = [subcat['id'] for subcat in allowed_subcats]
+            if 'subcategory' in keywords.keys() and not keywords[
+                    'subcategory'] in subcat_ids:
+                is_compatible = False
+            #elif 'unit' in keywords.keys() and not keywords['unit'] in [
+            # ifunit['id'] for ifunit in allowed_units]:
+                #is_compatible = False
+
+        return is_compatible
 
     def get_compatible_layers_from_canvas(self, category):
         """Collect compatible layers from map canvas.
@@ -1300,21 +1367,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :rtype: list of dicts
         """
 
-        imfunc = self.selected_function()
-
-        if not category in imfunc['categories']:
-            imfunc = None
-
-        if imfunc:
-            allowed_subcats = imfunc['categories'][category]['subcategories']
-            if type(allowed_subcats) != list:
-                allowed_subcats = [allowed_subcats]
-            allowed_units = imfunc['categories'][category]['units']
-            if type(allowed_units) != list:
-                allowed_units = [allowed_units]
-            layer_constraints = imfunc['categories'][category][
-                'layer_constraints']
-
         # Collect compatible layers
         layers = []
         for layer in self.iface.mapCanvas().layers():
@@ -1328,41 +1380,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                     UnsupportedProviderError):
                 keywords = None
 
-            is_layer_compatible = True
-
-            if imfunc:
-                is_layer_compatible = False
-                if is_raster_layer(layer) and 'raster' in [
-                    lc['layer_type'] for lc in layer_constraints]:
-                    is_layer_compatible = True
-                elif is_point_layer(layer) and 'point' in [
-                    lc['data_type'] for lc in layer_constraints]:
-                    is_layer_compatible = True
-                elif is_polygon_layer(layer)and 'polygon' in [
-                    lc['data_type'] for lc in layer_constraints]:
-                    is_layer_compatible = True
-                elif 'line' in [lc['data_type'] for lc in layer_constraints]:
-                    is_layer_compatible = True
-
-            if keywords and (not 'category' in keywords or
-                                     keywords['category'] != category):
-                is_layer_compatible = False
-
-            if keywords and imfunc:
-                subcat_ids = [subcat['id'] for subcat in allowed_subcats]
-                if 'subcategory' in keywords.keys() and not keywords[
-                        'subcategory'] in subcat_ids:
-                    is_layer_compatible = False
-                #elif 'unit' in keywords.keys() and not keywords['unit'] in [
-                # ifunit['id'] for ifunit in allowed_units]:
-                    #is_layer_compatible = False
-
-            if is_layer_compatible:
+            if self.is_layer_compatible(layer, category, keywords):
                 layers += [
                     {'id': layer.id(),
                      'name': layer.name(),
-                     'keywords': keywords,
-                     'compatible': is_layer_compatible}]
+                     'keywords': keywords}]
 
         # Move layers without keywords to the end
         l1 = [l for l in layers if l['keywords']]
@@ -1397,22 +1419,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             item.setData(QtCore.Qt.UserRole, layer['id'])
             if not layer['keywords']:
                 item.setFont(italic_font)
-            if not layer['compatible']:
-                item.setText(layer['name'] + " [INCOMPATIBLE]")
-                item.setForeground(QBrush(QColor(145, 0, 0)))
             list_widget.addItem(item)
 
     def set_widgets_step_fc_hazlayer_from_canvas(self):
         """Set widgets on the Hazard Layer From TOC tab"""
         self.list_compatible_layers_from_canvas(
-            'hazard', self.lstHazCanvasLayers)
-        self.lblDescribeHazCanvasLayer.clear()
+            'hazard', self.lstCanvasHazLayers)
+        self.lblDescribeCanvasHazLayer.clear()
 
     # ===========================
     # STEP_FC_HAZLAYER_FROM_BROWSER
     # ===========================
 
-    def path_to_uri(self, path):
+    def pg_path_to_uri(self, path):
         """Convert layer path from QgsBrowserModel to full QgsDataSourceURI
 
         :param path: The layer path from QgsBrowserModel
@@ -1462,10 +1481,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         connector = PostGisDBConnector(uri)
         tbls = connector.getVectorTables(schema)
         tbls = [tbl for tbl in tbls if tbl[1]==table]
-        if len(tbls) != 1:
-            #TODO Also create QgsRasterLayer
-            tbls = connector.getRasterTables(schema)
-            tbls = [tbl for tbl in tbls if tbl[1]==table]
+        #if len(tbls) != 1:
+            #In the future, also look for raster layers?
+            #tbls = connector.getRasterTables(schema)
+            #tbls = [tbl for tbl in tbls if tbl[1]==table]
         tbl = tbls[0]
         geom_col = tbl[8]
 
@@ -1479,8 +1498,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :param category: The category of the layer to get the description.
         :type category: string
 
-        :returns: description of the selected layer or a short error message.
-        :rtype: string
+        :returns: Tuple of boolean and string. Boolean is true if layer is
+            validated as compatible for current role (impact function and
+            category) and false otherwise. String contains a description
+            of the selected layer or an error message.
+        :rtype: tuple
         """
 
         if category == 'hazard':
@@ -1494,49 +1516,36 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         index = browser.selectionModel().currentIndex()
         if not index:
-            return ""
+            return (False, '')
 
         item = browser.model().dataItem(index)
         if not item:
-            return ""
+            return (False, '')
 
         item_class_name = item.metaObject().className()
         #if not itemClassName.endswith('LayerItem'):
         if not item.type() == QgsDataItem.Layer:
-            return ""
+            return (False, '')
 
         if not item_class_name in ['QgsOgrLayerItem', 'QgsLayerItem', 'QgsPGLayerItem']:
-            return ""
+            return (False, '')
 
         path = item.path()
 
         if item_class_name in ['QgsOgrLayerItem', 'QgsLayerItem'] and not os.path.exists(path):
-            return ""
+            return (False, '')
 
         # try to create the layer
         if item_class_name == 'QgsOgrLayerItem':
             layer = QgsVectorLayer(path, '', 'ogr')
         elif item_class_name == 'QgsPGLayerItem':
-            uri = self.path_to_uri(path)
-            layer = QgsVectorLayer(uri.uri(), table, 'postgres')
+            uri = self.pg_path_to_uri(path)
+            layer = QgsVectorLayer(uri.uri(), uri.table(), 'postgres')
         else:
             layer = QgsRasterLayer(path, '', 'gdal')
 
-        # set the current layer (e.g. for the keyword creation sub-thread
-        self.layer = layer
-
-        if category == 'hazard':
-            self.hazard_layer = layer
-        elif category == 'exposure':
-            self.exposure_layer = layer
-        else:
-            self.aggregation_layer = layer
-
         if not layer or not layer.isValid():
-            #TODO - debug
-            if item_class_name == 'QgsPGLayerItem':
-                return 'PG layers aren\'t yet supported'
-            return "Not a valid layer"
+            return (False, "Not a valid layer")
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
@@ -1548,6 +1557,19 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 UnsupportedProviderError):
             keywords = None
 
+        if not self.is_layer_compatible(layer, category, keywords):
+            return (False, "This layer's keywords and/or type are not suitable.")
+
+        # set the current layer (e.g. for the keyword creation sub-thread)
+        self.layer = layer
+
+        if category == 'hazard':
+            self.hazard_layer = layer
+        elif category == 'exposure':
+            self.exposure_layer = layer
+        else:
+            self.aggregation_layer = layer
+
         self.is_selected_layer_keyword_less = not bool(keywords)
 
         if keywords:
@@ -1556,10 +1578,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 '<b>CATEGORY</b>: %s<br/>'
                 '<b>SUBCATEGORY</b>: %s<br/>'
                 '<b>UNIT</b>: %s<br/>'
-                '<b>SOURCE</b>: %s<br/><br/>'
-                'Please note there is no filter yet, so incompatible layers '
-                '(e.g exposure if we\'re looking for hazard) are also'
-                'displayed!') % (
+                '<b>SOURCE</b>: %s<br/><br/>') % (
                 keywords.get('title'), keywords.get('category'),
                 keywords.get('subcategory'), keywords.get('unit'),
                 keywords.get('source'))
@@ -1571,21 +1590,26 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             else:
                 geom_type = 'line'
 
+            # hide password in the layer source
+            source = re.sub(r'password=\'.*\'',
+                            r'password=*****',
+                            layer.source())
+
             desc = """
                 This layer has no keywords assigned<br/><br/>
                 <b>SOURCE</b>: %s<br/>
                 <b>TYPE</b>: %s<br/><br/>
                 In the next step you will be able to register this layer.
-            """ % (layer.source(), is_raster_layer(layer) and 'raster' or
+            """ % (source, is_raster_layer(layer) and 'raster' or
                    'vector (%s)' % geom_type)
 
-        return desc
+        return (True, desc)
 
     def tvBrowserHazard_selection_changed(self):
         """Update layer description label"""
-        desc = self.get_layer_description_from_browser('hazard')
+        (is_compatible, desc) = self.get_layer_description_from_browser('hazard')
         self.lblDescribeBrowserHazLayer.setText(desc)
-        self.pbnNext.setEnabled(bool(len(desc) > 32))
+        self.pbnNext.setEnabled(is_compatible)
 
     def set_widgets_step_fc_hazlayer_from_browser(self):
         """Set widgets on the Hazard Layer From Browser tab"""
@@ -1624,7 +1648,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # prevents actions being handled twice
     # noinspection PyPep8Naming
     @pyqtSignature('')
-    def on_lstExpCanvasLayers_itemSelectionChanged(self):
+    def on_lstCanvasExpLayers_itemSelectionChanged(self):
         """Update layer description label
 
         .. note:: This is an automatic Qt slot
@@ -1632,7 +1656,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """
         self.exposure_layer = self.selected_canvas_explayer()
         lblText = self.get_layer_description_from_canvas(self.exposure_layer)
-        self.lblDescribeExpCanvasLayer.setText(lblText)
+        self.lblDescribeCanvasExpLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
     def selected_canvas_explayer(self):
@@ -1641,7 +1665,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: The currently selected map layer in the list.
         :rtype: QgsMapLayer
         """
-        item = self.lstExpCanvasLayers.currentItem()
+        item = self.lstCanvasExpLayers.currentItem()
         try:
             layer_id = item.data(QtCore.Qt.UserRole)
         except (AttributeError, NameError):
@@ -1653,8 +1677,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_widgets_step_fc_explayer_from_canvas(self):
         """Set widgets on the Exposure Layer From Canvas tab"""
         self.list_compatible_layers_from_canvas(
-            'exposure', self.lstExpCanvasLayers)
-        self.lblDescribeExpCanvasLayer.clear()
+            'exposure', self.lstCanvasExpLayers)
+        self.lblDescribeCanvasExpLayer.clear()
 
     # ===========================
     # STEP_FC_EXPLAYER_FROM_BROWSER
@@ -1662,9 +1686,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def tvBrowserExposure_selection_changed(self):
         """Update layer description label"""
-        desc = self.get_layer_description_from_browser('exposure')
+        (is_compatible, desc) = self.get_layer_description_from_browser('exposure')
         self.lblDescribeBrowserExpLayer.setText(desc)
-        self.pbnNext.setEnabled(bool(len(desc) > 32))
+        self.pbnNext.setEnabled(is_compatible)
 
     def set_widgets_step_fc_explayer_from_browser(self):
         """Set widgets on the Exposure Layer From Browser tab"""
@@ -1736,7 +1760,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # prevents actions being handled twice
     # noinspection PyPep8Naming
     @pyqtSignature('')
-    def on_lstAggCanvasLayers_itemSelectionChanged(self):
+    def on_lstCanvasAggLayers_itemSelectionChanged(self):
         """Update layer description label
 
         .. note:: This is an automatic Qt slot
@@ -1745,7 +1769,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.aggregation_layer = self.selected_canvas_agglayer()
         lblText = self.get_layer_description_from_canvas(
             self.aggregation_layer)
-        self.lblDescribeAggCanvasLayer.setText(lblText)
+        self.lblDescribeCanvasAggLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
     def selected_canvas_agglayer(self):
@@ -1754,7 +1778,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: The currently selected map layer in the list.
         :rtype: QgsMapLayer
         """
-        item = self.lstAggCanvasLayers.currentItem()
+        item = self.lstCanvasAggLayers.currentItem()
         try:
             layer_id = item.data(QtCore.Qt.UserRole)
         except (AttributeError, NameError):
@@ -1766,8 +1790,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_widgets_step_fc_agglayer_from_canvas(self):
         """Set widgets on the Aggregation Layer from Canvas tab"""
         self.list_compatible_layers_from_canvas(
-            'postprocessing', self.lstAggCanvasLayers)
-        self.lblDescribeAggCanvasLayer.clear()
+            'postprocessing', self.lstCanvasAggLayers)
+        self.lblDescribeCanvasAggLayer.clear()
 
     # ===========================
     # STEP_FC_AGGLAYER_FROM_BROWSER
@@ -1776,9 +1800,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # noinspection PyPep8Naming
     def tvBrowserAggregation_selection_changed(self):
         """Update layer description label"""
-        desc = self.get_layer_description_from_browser('postprocessing')
+        (is_compatible, desc) = self.get_layer_description_from_browser('postprocessing')
         self.lblDescribeBrowserAggLayer.setText(desc)
-        self.pbnNext.setEnabled(bool(len(desc) > 32))
+        self.pbnNext.setEnabled(is_compatible)
 
     def set_widgets_step_fc_agglayer_from_browser(self):
         """Set widgets on the Aggregation Layer From Browser tab"""

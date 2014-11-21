@@ -1881,7 +1881,7 @@
           </spacer>
          </item>
          <item row="0" column="1">
-          <widget class="QListWidget" name="lstHazCanvasLayers">
+          <widget class="QListWidget" name="lstCanvasHazLayers">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -1893,13 +1893,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>16777215</height>
             </size>
            </property>
@@ -1922,7 +1922,7 @@
           </spacer>
          </item>
          <item row="0" column="3">
-          <widget class="QLabel" name="lblDescribeHazCanvasLayer">
+          <widget class="QLabel" name="lblDescribeCanvasHazLayer">
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -2034,17 +2034,11 @@
          </item>
          <item row="0" column="3">
           <widget class="QLabel" name="lblDescribeBrowserHazLayer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font-size:9pt;</string>
-           </property>
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -2071,13 +2065,13 @@
           <widget class="QTreeView" name="tvBrowserHazard">
            <property name="minimumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2244,7 +2238,7 @@
           </spacer>
          </item>
          <item row="0" column="1">
-          <widget class="QListWidget" name="lstExpCanvasLayers">
+          <widget class="QListWidget" name="lstCanvasExpLayers">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2256,13 +2250,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2285,7 +2279,7 @@
           </spacer>
          </item>
          <item row="0" column="3">
-          <widget class="QLabel" name="lblDescribeExpCanvasLayer">
+          <widget class="QLabel" name="lblDescribeCanvasExpLayer">
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -2397,17 +2391,11 @@
          </item>
          <item row="0" column="3">
           <widget class="QLabel" name="lblDescribeBrowserExpLayer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font-size:9pt;</string>
-           </property>
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -2434,13 +2422,13 @@
           <widget class="QTreeView" name="tvBrowserExposure">
            <property name="minimumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2687,7 +2675,7 @@ Please step back and select another layer.</string>
           </spacer>
          </item>
          <item row="0" column="1">
-          <widget class="QListWidget" name="lstAggCanvasLayers">
+          <widget class="QListWidget" name="lstCanvasAggLayers">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2699,13 +2687,13 @@ Please step back and select another layer.</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2728,7 +2716,7 @@ Please step back and select another layer.</string>
           </spacer>
          </item>
          <item row="0" column="3">
-          <widget class="QLabel" name="lblDescribeAggCanvasLayer">
+          <widget class="QLabel" name="lblDescribeCanvasAggLayer">
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -2840,17 +2828,11 @@ Please step back and select another layer.</string>
          </item>
          <item row="0" column="3">
           <widget class="QLabel" name="lblDescribeBrowserAggLayer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font-size:9pt;</string>
-           </property>
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -2877,13 +2859,13 @@ Please step back and select another layer.</string>
           <widget class="QTreeView" name="tvBrowserAggregation">
            <property name="minimumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>280</width>
+             <width>350</width>
              <height>16777215</height>
             </size>
            </property>
