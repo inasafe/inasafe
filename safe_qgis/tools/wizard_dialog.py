@@ -33,8 +33,6 @@ from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap,
     QApplication,
-    QBrush,
-    QColor,
     QSortFilterProxyModel)
 
 from qgis.core import (
@@ -71,7 +69,7 @@ from safe_qgis.exceptions import (
     UnsupportedProviderError)
 from safe_qgis.utilities.help import show_context_help
 
-#TODO: Temporary:
+# TODO: Temporary:
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe_qgis.safe_interface import (
@@ -148,7 +146,7 @@ field_question_subcategory_unit = wizard_tr(
     'You have selected a <b>%s %s</b> layer measured in '
     '<b>%s</b>, and the selected layer is a vector layer. Please '
     'select the attribute in this layer that represents %s.')
-    # (category, subcategory, unit, subcategory-unit relation))
+# (category, subcategory, unit, subcategory-unit relation))
 
 field_question_aggregation = wizard_tr(
     'You have selected an aggregation layer, and it is a vector '
@@ -215,7 +213,7 @@ def get_question_text(constant):
 
 
 class LayerBrowserProxyModel(QSortFilterProxyModel):
-    """Filter proxy model for hiding unsupported branches in the layer browser."""
+    """Proxy model for hiding unsupported branches in the layer browser."""
 
     def __init__(self, parent):
         """Constructor for the model.
@@ -242,7 +240,7 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         :returns: Item validation result
         :rtype: bool
         """
-        source_index = self.sourceModel().index( source_row, 0, source_parent )
+        source_index = self.sourceModel().index(source_row, 0, source_parent)
         item = self.sourceModel().dataItem(source_index)
         if item.metaObject().className() in ['QgsMssqlRootItem',
                                              'QgsSLRootItem',
@@ -1216,11 +1214,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setText(0, imfunc['name'])
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
-                #TODO TEMP DEBUG temporary:
-                #if h['name'] == 'flood' and imfunc['name'] == "Flood Building Impact Function":
-                    #self.twi_if_tsunami = tree_leaf
-        #TODO TEMP DEBUG temporary
-        #self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
+                # TODO TEMP DEBUG temporary:
+                # if h['name'] == 'flood' and
+                #    imfunc['name'] == "Flood Building Impact Function":
+                #    self.twi_if_tsunami = tree_leaf
+        # TODO TEMP DEBUG temporary
+        # self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1346,7 +1345,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
-
     def is_layer_compatible(self, layer, category, keywords=None):
         """Validate if a given layer is compatible for selected IF
            as a given category
@@ -1367,7 +1365,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         imfunc = self.selected_function()
 
         # For aggregation layers, don't use the impact function
-        if not category in imfunc['categories']:
+        if category not in imfunc['categories']:
             imfunc = None
 
         if imfunc:
@@ -1383,21 +1381,21 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if imfunc:
             is_compatible = False
             if is_raster_layer(layer) and 'raster' in [
-                lc['layer_type'] for lc in layer_constraints]:
+                    lc['layer_type'] for lc in layer_constraints]:
                 is_compatible = True
             elif is_point_layer(layer) and 'point' in [
-                lc['data_type'] for lc in layer_constraints]:
+                    lc['data_type'] for lc in layer_constraints]:
                 is_compatible = True
             elif is_polygon_layer(layer)and 'polygon' in [
-                lc['data_type'] for lc in layer_constraints]:
+                    lc['data_type'] for lc in layer_constraints]:
                 is_compatible = True
             elif 'line' in [lc['data_type'] for lc in layer_constraints]:
                 is_compatible = True
         else:
             is_compatible = True
 
-        if keywords and (not 'category' in keywords or
-                                    keywords['category'] != category):
+        if keywords and ('category' not in keywords or
+                         keywords['category'] != category):
             is_compatible = False
 
         if keywords and imfunc:
@@ -1405,9 +1403,6 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             if 'subcategory' in keywords.keys() and not keywords[
                     'subcategory'] in subcat_ids:
                 is_compatible = False
-            #elif 'unit' in keywords.keys() and not keywords['unit'] in [
-            # ifunit['id'] for ifunit in allowed_units]:
-                #is_compatible = False
 
         return is_compatible
 
@@ -1505,51 +1500,52 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         table = path.split('/')[3]
 
         settings = QSettings()
-        key = "/PostgreSQL/connections/" + conn_name;
-        service = settings.value( key + "/service" )
-        host = settings.value( key + "/host" )
-        port = settings.value( key + "/port" )
+        key = "/PostgreSQL/connections/" + conn_name
+        service = settings.value(key + "/service")
+        host = settings.value(key + "/host")
+        port = settings.value(key + "/port")
         if not port:
-            port = "5432";
-        database = settings.value( key + "/database" )
-        useEstimatedMetadata = settings.value( key + "/estimatedMetadata", False, type=bool )
-        sslmode = settings.value( key + "/sslmode", QgsDataSourceURI.SSLprefer, type=int )
+            port = "5432"
+        db = settings.value(key + "/database")
+        useEstimatedMetadata = settings.value(key + "/estimatedMetadata",
+                                              False, type=bool)
+        sslmode = settings.value(key + "/sslmode",
+                                 QgsDataSourceURI.SSLprefer, type=int)
         username = ""
         password = ""
-        if settings.value( key + "/saveUsername" ) == "true":
-            username = settings.value( key + "/username" )
+        if settings.value(key + "/saveUsername") == "true":
+            username = settings.value(key + "/username")
 
-        if settings.value( key + "/savePassword" ) == "true":
-            password = settings.value( key + "/password" )
+        if settings.value(key + "/savePassword") == "true":
+            password = settings.value(key + "/password")
 
         # Old save setting
-        if settings.contains( key + "/save" ):
-            username = settings.value( key + "/username" )
-            if settings.value( key + "/save" ) == "true":
-                password = settings.value( key + "/password" )
+        if settings.contains(key + "/save"):
+            username = settings.value(key + "/username")
+            if settings.value(key + "/save") == "true":
+                password = settings.value(key + "/password")
 
         uri = QgsDataSourceURI()
         if service:
-            uri.setConnection( service, database, username, password, sslmode)
+            uri.setConnection(service, db, username, password, sslmode)
         else:
-            uri.setConnection( host, port, database, username, password, sslmode)
+            uri.setConnection(host, port, db, username, password, sslmode)
 
-        uri.setUseEstimatedMetadata( useEstimatedMetadata )
+        uri.setUseEstimatedMetadata(useEstimatedMetadata)
 
         # Obtain geommetryu column name
         connector = PostGisDBConnector(uri)
         tbls = connector.getVectorTables(schema)
-        tbls = [tbl for tbl in tbls if tbl[1]==table]
-        #if len(tbls) != 1:
-            #In the future, also look for raster layers?
-            #tbls = connector.getRasterTables(schema)
-            #tbls = [tbl for tbl in tbls if tbl[1]==table]
+        tbls = [tbl for tbl in tbls if tbl[1] == table]
+        # if len(tbls) != 1:
+        #    In the future, also look for raster layers?
+        #    tbls = connector.getRasterTables(schema)
+        #    tbls = [tbl for tbl in tbls if tbl[1]==table]
         tbl = tbls[0]
         geom_col = tbl[8]
 
         uri.setDataSource(schema, table, geom_col)
         return uri
-
 
     def get_layer_description_from_browser(self, category):
         """Obtain the description of the browser layer selected by user.
@@ -1584,16 +1580,18 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             return (False, '')
 
         item_class_name = item.metaObject().className()
-        #if not itemClassName.endswith('LayerItem'):
+        # if not itemClassName.endswith('LayerItem'):
         if not item.type() == QgsDataItem.Layer:
             return (False, '')
 
-        if not item_class_name in ['QgsOgrLayerItem', 'QgsLayerItem', 'QgsPGLayerItem']:
+        if item_class_name not in ['QgsOgrLayerItem', 'QgsLayerItem',
+                                   'QgsPGLayerItem']:
             return (False, '')
 
         path = item.path()
 
-        if item_class_name in ['QgsOgrLayerItem', 'QgsLayerItem'] and not os.path.exists(path):
+        if item_class_name in ['QgsOgrLayerItem',
+                               'QgsLayerItem'] and not os.path.exists(path):
             return (False, '')
 
         # try to create the layer
@@ -1619,7 +1617,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             keywords = None
 
         if not self.is_layer_compatible(layer, category, keywords):
-            return (False, "This layer's keywords and/or type are not suitable.")
+            return (False, "This layer's keywords or type are not suitable.")
 
         # set the current layer (e.g. for the keyword creation sub-thread)
         self.layer = layer
@@ -1668,7 +1666,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def tvBrowserHazard_selection_changed(self):
         """Update layer description label"""
-        (is_compatible, desc) = self.get_layer_description_from_browser('hazard')
+        (is_compatible, desc) = self.get_layer_description_from_browser(
+            'hazard')
         self.lblDescribeBrowserHazLayer.setText(desc)
         self.pbnNext.setEnabled(is_compatible)
 
@@ -1747,7 +1746,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
     def tvBrowserExposure_selection_changed(self):
         """Update layer description label"""
-        (is_compatible, desc) = self.get_layer_description_from_browser('exposure')
+        (is_compatible, desc) = self.get_layer_description_from_browser(
+            'exposure')
         self.lblDescribeBrowserExpLayer.setText(desc)
         self.pbnNext.setEnabled(is_compatible)
 
@@ -1771,9 +1771,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :returns: true if the layers intersect, false if they are disjoint
         :rtype: boolean
         """
-
         return layer_a.extent().intersects(layer_b.extent())
-
 
     def set_widgets_step_fc_disjoint_layers(self):
         """Set widgets on the Disjoint Layers tab"""
@@ -1861,7 +1859,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     # noinspection PyPep8Naming
     def tvBrowserAggregation_selection_changed(self):
         """Update layer description label"""
-        (is_compatible, desc) = self.get_layer_description_from_browser('postprocessing')
+        (is_compatible, desc) = self.get_layer_description_from_browser(
+            'postprocessing')
         self.lblDescribeBrowserAggLayer.setText(desc)
         self.pbnNext.setEnabled(is_compatible)
 
@@ -1904,8 +1903,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         if self.twParams:
             # remove the existing tab widget
-            #TODO: ensure it's really removed (strange overlapping children
-            # noticed)
+            # TODO: ensure it's really removed (strange overlapping children
+            # was observed)
             self.pgF21ParamsIF_layout.removeWidget(self.twParams)
         self.twParams = dialog.tabWidget
         self.pgF21ParamsIF_layout.addWidget(self.twParams)
@@ -2012,7 +2011,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         :type step: int
         """
         self.stackedWidget.setCurrentIndex(step - 1)
-        #self.lblStep.setText(self.tr('step %d') % step)
+        # self.lblStep.setText(self.tr('step %d') % step)
         self.lblStep.clear()
         self.pbnBack.setEnabled(True)
         if (step in [step_kw_category, step_fc_function] and self.parent_step
@@ -2107,7 +2106,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
 
         # Set Next button label
         if (new_step in [step_kw_title, step_fc_analysis] and
-                    self.parent_step is None):
+                self.parent_step is None):
             self.pbnNext.setText(self.tr('Finish'))
         elif new_step == step_fc_summary:
             self.pbnNext.setText(self.tr('Run'))
@@ -2423,7 +2422,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_kw_category
 
         elif current_step == step_fc_function:
-            #TODO block the Back button
+            # TODO block the Back button
             new_step = step_fc_function
         elif current_step == step_fc_hazlayer_from_browser:
             new_step = step_fc_hazlayer_origin
