@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Fri Nov 21 20:46:42 2014
+# Created: Fri Nov 21 21:12:51 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -920,7 +920,7 @@ class Ui_WizardDialogBase(object):
         self.lblSelectIFParameters.setWordWrap(True)
         self.lblSelectIFParameters.setObjectName(_fromUtf8("lblSelectIFParameters"))
         self.pgF21ParamsIF_layout.addWidget(self.lblSelectIFParameters)
-        spacerItem93 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        spacerItem93 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
         self.pgF21ParamsIF_layout.addItem(spacerItem93)
         self.stackedWidget.addWidget(self.pgF21ParamsIF)
         self.pgF22Summary = QtGui.QWidget()
