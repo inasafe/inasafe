@@ -86,10 +86,11 @@ class TestCore(unittest.TestCase):
         self.assertEqual(total_needs['daily'][0]['amount'], 5)
         self.assertEqual(total_needs['daily'][0]['table name'], 'Rice [kg]')
 
-    def test_03_evacuated_population_weekly_needs(self):
-        total_needs = evacuated_population_weekly_needs(
+    def test_03_evacuated_population_needs(self):
+        total_needs = evacuated_population_needs(
             10,
-            {'Water': 5, 'Rice': 0.5})
+            {'Water': 5, 'Rice': 0.5}
+        )
         self.assertEqual(total_needs['Water'], 50)
         self.assertEqual(total_needs['Rice'], 5)
 

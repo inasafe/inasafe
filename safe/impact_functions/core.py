@@ -66,33 +66,29 @@ class FunctionProvider(object):
 
 def evacuated_population_weekly_needs(
         population,
-        minimum_needs=False,
-        human_names=False):
-    """Calculate estimated needs using BNPB Perka 7/2008 minimum bantuan.
+        minimum_needs=None):
+    """Calculate estimated needs using minimum needs as specified or the
+    default.
 
     :param population: The number of evacuated population.
     :type: int, float
 
-    :param human_names: A flag whether to use human names for minimum needs
-        items or not
-    :type human_names: bool
-
-    :param minimum_needs: Ratios to use when calculating minimum needs.
-        Defaults to perka 7 as described in assumptions below.
-    :type minimum_needs: dict
+    :param minimum_needs: Ratios used to calculate weekly needs in parameter
+    form.
+    :type minimum_needs: list,
 
     :returns: The needs for the evacuated population.
     :rtype: dict
-
     """
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
     population_needs = OrderedDict()
-    for resource, amount in minimum_needs.items():
-        if human_names:
-            resource = tr(resource)
-        population_needs[resource] = int(ceil(population * float(amount)))
+    for resource in minimum_needs:
+        resource = resource.serialize()
+        amount = resource['value']
+        name = resource['name']
+        population_needs[name] = int(ceil(population * float(amount)))
 
     return population_needs
 

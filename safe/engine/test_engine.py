@@ -6,6 +6,7 @@ import numpy
 import sys
 import os
 from os.path import join
+from collections import OrderedDict
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
@@ -3036,7 +3037,9 @@ class Test_Engine(unittest.TestCase):
         keywords = impact_layer.get_keywords()
         # print "keywords", keywords
         evacuated = float(keywords['evacuated'])
-        total_needs = keywords['total_needs']
+        total_needs_full = keywords['total_needs']
+        total_needs = OrderedDict([
+            [x['table name'], x['amount']] for x in total_needs_full['weekly']])
 
         expected_evacuated = 63400
         assert evacuated == expected_evacuated
