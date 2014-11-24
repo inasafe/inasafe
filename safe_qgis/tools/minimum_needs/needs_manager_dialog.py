@@ -20,7 +20,7 @@ from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
-from os.path import expanduser, basename
+from os.path import expanduser, basename, dirname
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
@@ -477,12 +477,15 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         is only saved if the form is accepted.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QtGui.QFileDialog.getOpenFileName(
-            self,
-            self.tr('Import minimum needs'),
-            '',
-            self.tr('JSON files (*.json *.JSON)'))
-        if file_name == '' or file_name is None:
+        file_name_dialog = QFileDialog(self)
+        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
+        file_name_dialog.setDefaultSuffix('json')
+        path_name = "%s/../../../files/minimum_needs" % dirname(__file__)
+        file_name_dialog.setDirectory(path_name)
+        if file_name_dialog.exec_():
+            file_name = file_name_dialog.selectedFiles()[0]
+        else:
             return -1
 
         if self.minimum_needs.read_from_file(file_name) == -1:
