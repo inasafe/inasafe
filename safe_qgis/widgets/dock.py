@@ -32,9 +32,7 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
-    QgsCoordinateReferenceSystem,
-    QGis)
-from qgis.gui import QgsRubberBand
+    QgsCoordinateReferenceSystem)
 from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
@@ -73,18 +71,11 @@ from safe_qgis.safe_interface import (
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
-    KeywordDbError,
     NoKeywordsFoundError,
     InsufficientOverlapError,
     InvalidParameterError,
-    InvalidLayerError,
-    InsufficientParametersError,
     HashNotFoundError,
-    CallGDALError,
-    NoFeaturesInExtentError,
-    InvalidProjectionError,
     InvalidGeometryError,
-    AggregationError,
     UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
@@ -1016,7 +1007,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             pass
 
         except InsufficientOverlapError as e:
-            # LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
                 'A problem was encountered when trying to determine the '
                 'analysis extents.'
@@ -1095,7 +1086,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysis_done.emit(False)
 
     def prepare_analysis(self):
-        """Setup analysis to make it ready to work."""
+        """Create analysis as a representation of current situation of dock."""
         analysis = Analysis()
         # Layers
         analysis.hazard_layer = self.get_hazard_layer()

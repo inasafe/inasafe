@@ -69,8 +69,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_ui_state,
     setup_scenario,
     load_layers,
-    canvas_list,
-    FakeLayer)
+    canvas_list)
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -90,7 +89,6 @@ from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # noinspection PyUnresolvedReferences
 from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
-# from safe.engine.impact_functions_for_testing import error_raising_functions
 # pylint: enable=W0611
 from safe.impact_functions.core import get_plugin
 
@@ -662,8 +660,6 @@ class TestDock(TestCase):
         set_canvas_crs(GEOCRS, True)
         set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
 
-        print DOCK.extent.user_extent, 'user extent'
-        # DOCK.extent.user_extent = None
         # Press RUN
         DOCK.accept()
         result = DOCK.wvResults.page_to_text()
@@ -1203,6 +1199,7 @@ class TestDock(TestCase):
         DOCK.get_functions()
         self.assertTrue(result, message)
 
+    # noinspection PyPep8Naming
     def Xtest_runner_exceptions(self):
         """Test runner exceptions"""
 
@@ -1423,8 +1420,6 @@ Click for Diagnostic Information:
             '11908350.67106631398200989 -678083.54461829655338079, '
             '11876228.33329810947179794 -678083.54461829655338079, '
             '11876228.33329810947179794 -695807.82839082507416606)')
-        print expected_wkt
-        print geometry
         self.assertEqual(geometry, expected_wkt)
         self.assertEqual(
             expected_vertex_count,

@@ -21,34 +21,17 @@ __date__ = '11/17/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+from PyQt4.QtCore import QSettings
 
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
     QgsPoint,
-    QgsMapLayer,
-    QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis)
 
-from safe_qgis.exceptions import (
-    KeywordNotFoundError,
-    KeywordDbError,
-    NoKeywordsFoundError,
-    InsufficientOverlapError,
-    InvalidParameterError,
-    InvalidLayerError,
-    InsufficientParametersError,
-    HashNotFoundError,
-    CallGDALError,
-    NoFeaturesInExtentError,
-    InvalidProjectionError,
-    InvalidGeometryError,
-    AggregationError,
-    UnsupportedProviderError)
+from safe_qgis.exceptions import InvalidGeometryError
 
 from qgis.gui import QgsRubberBand
 # noinspection PyPackageRequirements
