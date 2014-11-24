@@ -427,7 +427,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -566,7 +566,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([101, -12, 119, -4])
+        set_geo_extent([101, -12, 119, -4], DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -593,7 +593,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50])
+        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -618,7 +618,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50])
+        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -660,8 +660,10 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50])
+        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
 
+        print DOCK.extent.user_extent, 'user extent'
+        # DOCK.extent.user_extent = None
         # Press RUN
         DOCK.accept()
         result = DOCK.wvResults.page_to_text()
