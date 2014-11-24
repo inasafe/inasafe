@@ -109,7 +109,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-from pydev import pydevd  # pylint: disable=F0401
+# from pydev import pydevd  # pylint: disable=F0401
 
 
 # noinspection PyArgumentList
@@ -134,9 +134,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        pydevd.settrace(
-           'localhost', port=5678, stdoutToServer=True,
-           stderrToServer=True)
+        # pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True,
+        #    stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -153,7 +153,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.calculator = ImpactCalculator()
         self.keyword_io = KeywordIO()
-        self.runner = None
         self.state = None
         self.last_used_function = ''
         self.extent = Extent(self.iface)
@@ -1008,13 +1007,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             self.enable_busy_cursor()
             self.show_next_analysis_extent()
-            extent = self.analysis.clip_parameters[1]
-            self.extent.show_next_analysis_extent(extent)
-            self.prepare_analysis()
+            self.analysis = self.prepare_analysis()
             self.analysis.setup_analysis()
+            self.extent.show_last_analysis_extent(
+                self.analysis.clip_parameters[1])
             # Start the analysis
             self.analysis.run_analysis()
-        except InsufficientOverlapError:
+            pass
+
+        except InsufficientOverlapError as e:
+            # LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            context = self.tr(
+                'A problem was encountered when trying to determine the '
+                'analysis extents.'
+            )
+            self.analysis_error(e, context)
             return  # Will abort the analysis if there is exception
         except InvalidAggregationKeywords:
             self.runtime_keywords_dialog.set_layer(
@@ -1045,6 +1052,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Set back analysis to not ignore memory warning
             self.analysis.force_memory = False
             self.disable_signal_receiver()
+        pass
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
@@ -1088,35 +1096,37 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def prepare_analysis(self):
         """Setup analysis to make it ready to work."""
-        self.analysis = Analysis()
+        analysis = Analysis()
         # Layers
-        self.analysis.hazard_layer = self.get_hazard_layer()
-        self.analysis.exposure_layer = self.get_exposure_layer()
-        self.analysis.aggregation_layer = self.get_aggregation_layer()
+        analysis.hazard_layer = self.get_hazard_layer()
+        analysis.exposure_layer = self.get_exposure_layer()
+        analysis.aggregation_layer = self.get_aggregation_layer()
 
         # noinspection PyTypeChecker
-        self.analysis.hazard_keyword = self.keyword_io.read_keywords(
+        analysis.hazard_keyword = self.keyword_io.read_keywords(
             self.get_hazard_layer())
         # noinspection PyTypeChecker
-        self.analysis.exposure_keyword = self.keyword_io.read_keywords(
+        analysis.exposure_keyword = self.keyword_io.read_keywords(
             self.get_exposure_layer())
         # Need to check since aggregation layer is not mandatory
-        if self.analysis.aggregation_layer:
-            self.analysis.aggregation_keyword = self.keyword_io.read_keywords(
+        if analysis.aggregation_layer:
+            analysis.aggregation_keyword = self.keyword_io.read_keywords(
                 self.get_aggregation_layer())
 
         # Impact Functions
-        self.analysis.impact_function_id = self.get_function_id()
-        self.analysis.impact_function_parameters = self.function_parameters
+        analysis.impact_function_id = self.get_function_id()
+        analysis.impact_function_parameters = self.function_parameters
 
         # Variables
-        self.analysis.clip_hard = self.clip_hard
-        self.analysis.show_intermediate_layers = self.show_intermediate_layers
-        self.analysis.run_in_thread_flag = self.run_in_thread_flag
-        self.analysis.map_canvas = self.iface.mapCanvas()
-        self.analysis.clip_to_viewport = self.clip_to_viewport
-        self.analysis.user_extent = self.extent.user_extent
-        self.analysis.user_extent_crs = self.extent.user_extent_crs
+        analysis.clip_hard = self.clip_hard
+        analysis.show_intermediate_layers = self.show_intermediate_layers
+        analysis.run_in_thread_flag = self.run_in_thread_flag
+        analysis.map_canvas = self.iface.mapCanvas()
+        analysis.clip_to_viewport = self.clip_to_viewport
+        analysis.user_extent = self.extent.user_extent
+        analysis.user_extent_crs = self.extent.user_extent_crs
+
+        return analysis
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1250,9 +1260,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def hide_busy(self):
         """A helper function to indicate processing is done."""
         # self.pbnRunStop.setText('Run')
-        if self.runner:
+        if self.analysis.runner:
             try:
-                self.runner.done.disconnect(self.aggregate)
+                self.analysis.runner.done.disconnect(
+                    self.analysis.run_aggregator)
             except TypeError:
                 # happens when object is not connected - see #621
                 pass
@@ -1694,10 +1705,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.extent.hide_next_analysis_extent()
         try:
             # Temporary only, for checking the user extent
-            self.prepare_analysis()
+            analysis = self.prepare_analysis()
 
-            self.analysis.clip_parameters = self.analysis.get_clip_parameters()
-            next_analysis_extent = self.analysis.clip_parameters[1]
+            analysis.clip_parameters = analysis.get_clip_parameters()
+            next_analysis_extent = analysis.clip_parameters[1]
 
             self.extent.show_next_analysis_extent(next_analysis_extent)
 
