@@ -18,9 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtGui
 from os.path import expanduser, basename
 
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog,
     QFileDialog,
@@ -43,8 +45,6 @@ from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
 INFO_STYLE = styles.INFO_STYLE
 
 
-# noinspection PyArgumentList
-# noinspection PyProtectedMember
 class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
     """Dialog class for the InaSAFE global minimum needs configuration.
 
@@ -613,6 +613,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         :param page: The page should be focussed.
         :type page: QWidget
         """
+        # noinspection PyUnresolvedReferences
         if page.objectName() == 'profile_edit_page':
             self.stacked_widget.setCurrentIndex(0)
         else:  # resource_edit_page
@@ -624,6 +625,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         Make sure the user is sure.
         """
         profile_name = self.profile_combo.currentText()
+        # noinspection PyTypeChecker
         button_selected = QMessageBox.warning(
             None,
             'Remove Profile',

@@ -32,7 +32,9 @@ from safe.common.testing import get_qgis_app, get_shake_test_data_path
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.shake_grid.shakemap_importer_dialog import ShakemapImporterDialog
+from safe_qgis.tools.shake_grid.shakemap_importer_dialog import (
+    ShakemapImporterDialog
+)
 from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
 
 
@@ -83,6 +85,7 @@ class ShakemapImporterTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    # noinspection PyArgumentEqualDefault
     suite = unittest.makeSuite(ShakemapImporterTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

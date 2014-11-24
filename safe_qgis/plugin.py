@@ -544,7 +544,9 @@ class Plugin:
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.minimum_needs.needs_calculator_dialog import NeedsCalculatorDialog
+        from safe_qgis.tools.minimum_needs.needs_calculator_dialog import (
+            NeedsCalculatorDialog
+        )
 
         dialog = NeedsCalculatorDialog(self.iface.mainWindow())
         dialog.show()  # non modal
@@ -607,11 +609,12 @@ class Plugin:
         # End of fix for #793
         # Fix for filtered-layer
         except InvalidParameterError, e:
-            # noinspection PyTypeChecker,PyTypeChecker
+            # noinspection PyTypeChecker,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 None,
                 self.tr('Invalid Layer'),
-                e.message)
+                e.message
+            )
             return
 
         dialog = KeywordsDialog(

@@ -31,7 +31,9 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import safe_read_layer
-from safe_qgis.tools.minimum_needs.needs_calculator_dialog import NeedsCalculatorDialog
+from safe_qgis.tools.minimum_needs.needs_calculator_dialog import (
+    NeedsCalculatorDialog
+)
 from safe_qgis.safe_interface import UNITDATA
 
 shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')
@@ -86,6 +88,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    # noinspection PyArgumentEqualDefault
     suite = unittest.makeSuite(MinimumNeedsTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

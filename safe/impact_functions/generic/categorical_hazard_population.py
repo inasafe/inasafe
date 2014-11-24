@@ -286,10 +286,12 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             'will we transport them to here?')))
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Map shows the numbers of people in high, medium '
-                              'and low hazard areas'),
-                           tr('Total population: %s') % format_int(total)])
+        table_body.extend([
+            TableRow(tr('Notes'), header=True),
+            tr('Map shows the numbers of people in high, medium and low '
+               'hazard areas'),
+            tr('Total population: %s') % format_int(total)
+        ])
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style
