@@ -326,17 +326,17 @@ class Test_plugin_core(unittest.TestCase):
         """
         minimum_needs = [
             parameter.serialize() for parameter in default_minimum_needs()]
-        minimum_needs[1]['value'] = 4
-        minimum_needs[2]['value'] = 3
-        minimum_needs[3]['value'] = 2
-        minimum_needs[4]['value'] = 1
-        minimum_needs[5]['value'] = 0.2
+        minimum_needs[0]['value'] = 4
+        minimum_needs[1]['value'] = 3
+        minimum_needs[2]['value'] = 2
+        minimum_needs[3]['value'] = 1
+        minimum_needs[4]['value'] = 0.2
         result = evacuated_population_needs(10, minimum_needs)['weekly']
         result = OrderedDict([[r['table name'], r['amount']] for r in result])
 
         assert (result['Rice [kg]'] == 40
                 and result['Drinking Water [l]'] == 30
-                and result['Water [l]'] == 20
+                and result['Clean Water [l]'] == 20
                 and result['Family Kits'] == 10
                 and result['Toilets'] == 2)
 
