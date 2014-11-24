@@ -27,7 +27,8 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     evacuated_population_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs,
+    population_rounding)
 from safe.metadata import (
     hazard_all,
     layer_raster_numeric,
@@ -40,7 +41,6 @@ from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
@@ -227,12 +227,12 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         total_impact = int(numpy.sum(impact))
 
         # Don't show digits less than a 1000
-        total = round_thousand(total)
-        total_impact = round_thousand(total_impact)
-        high = round_thousand(high)
-        medium = round_thousand(medium)
-        low = round_thousand(low)
-        no_impact = round_thousand(total - total_impact)
+        total = population_rounding(total)
+        total_impact = population_rounding(total_impact)
+        high = population_rounding(high)
+        medium = population_rounding(medium)
+        low = population_rounding(low)
+        no_impact = population_rounding(total - total_impact)
 
         minimum_needs = self.parameters['minimum needs']
         minimum_needs_full = self.parameters['rich minimum needs']
@@ -291,7 +291,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Map shows population density in high, medium '
+                           tr('Map shows the numbers of people in high, medium '
                               'and low hazard areas'),
                            tr('Total population: %s') % format_int(total)])
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -335,7 +335,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Number of People')
 
         # Create raster object and return
         raster_layer = Raster(
