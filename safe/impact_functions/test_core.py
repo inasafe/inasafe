@@ -24,8 +24,7 @@ import random
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_needs
 )
 from third_party.parameters.resource_parameter import ResourceParameter
 
@@ -85,14 +84,6 @@ class TestCore(unittest.TestCase):
         self.assertEqual(total_needs['daily'][0]['name'], 'Rice')
         self.assertEqual(total_needs['daily'][0]['amount'], 5)
         self.assertEqual(total_needs['daily'][0]['table name'], 'Rice [kg]')
-
-    def test_03_evacuated_population_needs(self):
-        total_needs = evacuated_population_needs(
-            10,
-            {'Water': 5, 'Rice': 0.5}
-        )
-        self.assertEqual(total_needs['Water'], 50)
-        self.assertEqual(total_needs['Rice'], 5)
 
 if __name__ == '__main__':
     unittest.main()

@@ -50,7 +50,8 @@ from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem)
 from safe_qgis.safe_interface import (
-    format_int, HAZDATA, UNITDATA)
+    format_int, HAZDATA, UNITDATA
+)
 
 from safe_qgis.utilities.utilities_for_testing import (
     set_canvas_crs,
@@ -71,7 +72,8 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     load_layers,
     canvas_list,
-    FakeLayer)
+    FakeLayer
+)
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.keyword_io import KeywordIO

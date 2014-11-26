@@ -19,7 +19,6 @@ __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from collections import OrderedDict
 from third_party.parameters.resource_parameter import ResourceParameter
 
 from safe.common.utilities import ugettext as tr

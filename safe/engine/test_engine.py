@@ -3039,7 +3039,9 @@ class Test_Engine(unittest.TestCase):
         evacuated = float(keywords['evacuated'])
         total_needs_full = keywords['total_needs']
         total_needs = OrderedDict([
-            [x['table name'], x['amount']] for x in total_needs_full['weekly']])
+            [x['table name'], x['amount']] for x in
+            total_needs_full['weekly']
+        ])
 
         expected_evacuated = 63400
         assert evacuated == expected_evacuated

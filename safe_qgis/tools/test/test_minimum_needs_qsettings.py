@@ -104,9 +104,8 @@ class MinimumNeedsTest(unittest.TestCase):
 
         minimum_needs2 = TestNeedsProfile()
         self.assertIsNone(minimum_needs2._root_directory)
-        # noinspection PyStatementEffect
-        minimum_needs2.root_directory
-        self.assertIsNotNone(minimum_needs2._root_directory)
+        if minimum_needs2.root_directory:
+            self.assertIsNotNone(minimum_needs2._root_directory)
         self.assertEqual(
             minimum_needs2.root_directory,
             minimum_needs2._root_directory
