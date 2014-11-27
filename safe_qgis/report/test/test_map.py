@@ -24,8 +24,8 @@ import logging
 
 from qgis.core import (
     QgsMapLayerRegistry,
-    QgsRectangle)
-from qgis.gui import QgsMapCanvasLayer
+    QgsRectangle,
+    QgsLayerTreeGroup)
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
@@ -35,6 +35,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.report.map import Map
+from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -75,13 +76,18 @@ class MapTest(unittest.TestCase):
         """Test that loading default template works"""
         LOGGER.info('Testing default_template')
         layer, _ = load_layer('test_shakeimpact.shp')
-        canvas_layer = QgsMapCanvasLayer(layer)
-        CANVAS.setLayerSet([canvas_layer])
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
         rect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
         CANVAS.setExtent(rect)
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
+
+        if qgis_version() >= 20600:
+            legend_layers = QgsLayerTreeGroup()
+            legend_layers.addLayer(layer)
+            report.set_legend_layers(legend_layers)
+
         out_path = unique_filename(
             prefix='mapDefaultTemplateTest',
             suffix='.pdf',
@@ -103,7 +109,7 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
-            468836,  # Ubuntu 14.04_64 AG
+            535783,  # Ubuntu 14.04_64 AG
             431844,  # Ubuntu 14.04_64 TS - pycharm
             425645,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             437994,  # Ubuntu 14.04_64 MB - pycharm
@@ -123,13 +129,18 @@ class MapTest(unittest.TestCase):
         """Test that setting user-defined logo works."""
         LOGGER.info('Testing custom_logo')
         layer, _ = load_layer('test_shakeimpact.shp')
-        canvas_layer = QgsMapCanvasLayer(layer)
-        CANVAS.setLayerSet([canvas_layer])
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
         rect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
         CANVAS.setExtent(rect)
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
+
+        if qgis_version() >= 20600:
+            legend_layers = QgsLayerTreeGroup()
+            legend_layers.addLayer(layer)
+            report.set_legend_layers(legend_layers)
+
         report.set_organisation_logo(":/plugins/inasafe/logo-flower.png")
         out_path = unique_filename(
             prefix='mapCustomLogoTest', suffix='.pdf', dir=temp_dir('test'))
@@ -151,7 +162,7 @@ class MapTest(unittest.TestCase):
         expected_sizes = [
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
-            450385,  # Ubuntu 14.04_64 AG
+            517178,  # Ubuntu 14.04_64 AG
             413193,  # Ubuntu 14.04_64 TS pycharm
             413015,  # Ubuntu 14.04_64 TS make - TODO why is this?
             419483,  # Ubuntu 14.04_64 MB pycharm

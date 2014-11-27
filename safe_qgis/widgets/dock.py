@@ -24,11 +24,6 @@ from functools import partial
 
 import numpy
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
-from PyQt4.QtGui import QColor
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
@@ -36,7 +31,14 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QGis)
+    QGis,
+    QgsLayerTreeGroup)
+
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+from PyQt4.QtGui import QColor
 from qgis.gui import QgsRubberBand
 from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
@@ -166,7 +168,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.last_used_function = ''
 
         self.composer = None
-        self.composition = None
 
         # Flag used to prevent recursion and allow bulk loads of layers to
         # trigger a single event only
@@ -2378,6 +2379,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Set all the map components
         print_map.set_impact_layer(self.iface.activeLayer())
+        # Set the layers in the legend (Added for QGIS 2.6)
+        legend_layers = QgsLayerTreeGroup()
+        legend_layers.addLayer(self.iface.activeLayer())
+        print_map.set_legend_layers(legend_layers)
+
         if use_full_extent:
             map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
             layer_crs = self.iface.activeLayer().crs()
@@ -2442,8 +2448,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
-            print_map.setup_composition()
-            print_map.load_template()
             if print_map.map_title() is not None:
                 default_file_name = print_map.map_title() + '.pdf'
             else:
@@ -2523,7 +2527,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     print_map.composition.paperWidth() + 1,
                     height + 1,
                     QtCore.Qt.KeepAspectRatio)
-
         self.hide_busy()
 
     def get_function_id(self, index=None):

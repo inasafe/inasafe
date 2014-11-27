@@ -19,12 +19,13 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
-    QgsMapLayer)
+    QgsMapLayer,
+    QgsLayerTreeGroup)
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore, QtXml
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
@@ -34,6 +35,7 @@ from safe_qgis.utilities.defaults import (
     disclaimer,
     default_organisation_logo_path,
     default_north_arrow_path)
+from safe_qgis.utilities.utilities import qgis_version
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -64,6 +66,7 @@ class Map():
         self.page_height = 0  # height in mm
         self.page_dpi = 300.0
         self.show_frames = False  # intended for debugging use only
+        self.legend_layers = None  # The layers in legend (QgsLayerTreeGroup)
 
     @staticmethod
     def tr(string):
@@ -85,6 +88,17 @@ class Map():
         :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
         """
         self.layer = layer
+
+    def set_legend_layers(self, legend_layers):
+        """Set the layers that will be shown in the legend.
+
+        .. note: Added in 2.2 to cater the obsolescence of legend.model() in
+                QGIS 2.6. The layers must be an instance of QgsLayerTreeGroup.
+
+        :param legend_layers: The layers to be shown in the legend.
+        :type legend_layers: QgsLayerTreeGroup
+        """
+        self.legend_layers = legend_layers
 
     def set_north_arrow_image(self, north_arrow_path):
         """Set image that will be used as organisation logo in reports.
@@ -333,13 +347,12 @@ class Map():
             if legend_title is None:
                 legend_title = ""
             legend.setTitle(legend_title)
-            legend.updateLegend()
 
-            # remove from legend all layers, except impact one
-            model = legend.model()
-            if model.rowCount() > 0 and model.columnCount() > 0:
-                impact_item = model.findItems(self.layer.name())[0]
-                row = impact_item.index().row()
-                model.removeRows(row + 1, model.rowCount() - row)
-                if row > 0:
-                    model.removeRows(0, row)
+            # Set Legend
+            # From QGIS 2.6, legend.model() is obsolete
+            if qgis_version() < 20600:
+                legend.model().setLayerSet([self.layer.id()])
+                legend.synchronizeWithModel()
+            else:
+                legend.modelV2().setRootGroup(self.legend_layers)
+                legend.synchronizeWithModel()

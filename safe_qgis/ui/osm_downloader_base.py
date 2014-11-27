@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'osm_downloader_base.ui'
 #
-# Created: Fri Mar 28 10:38:04 2014
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Thu Nov  6 14:52:54 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_OsmDownloaderBase(object):
     def setupUi(self, OsmDownloaderBase):
@@ -105,18 +114,18 @@ class Ui_OsmDownloaderBase(object):
         QtCore.QMetaObject.connectSlotsByName(OsmDownloaderBase)
 
     def retranslateUi(self, OsmDownloaderBase):
-        OsmDownloaderBase.setWindowTitle(QtGui.QApplication.translate("OsmDownloaderBase", "OSM Downloader", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Feature Type", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type.setItemText(0, QtGui.QApplication.translate("OsmDownloaderBase", "All", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type.setItemText(1, QtGui.QApplication.translate("OsmDownloaderBase", "Buildings", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type.setItemText(2, QtGui.QApplication.translate("OsmDownloaderBase", "Roads", None, QtGui.QApplication.UnicodeUTF8))
-        self.output_directory_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Output directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.directory_button.setText(QtGui.QApplication.translate("OsmDownloaderBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.filename_prefix_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "File name prefix", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("OsmDownloaderBase", "Bounding box", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "West", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("OsmDownloaderBase", "North", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("OsmDownloaderBase", "East", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("OsmDownloaderBase", "South", None, QtGui.QApplication.UnicodeUTF8))
+        OsmDownloaderBase.setWindowTitle(_translate("OsmDownloaderBase", "OSM Downloader", None))
+        self.feature_type_label.setText(_translate("OsmDownloaderBase", "Feature Type", None))
+        self.feature_type.setItemText(0, _translate("OsmDownloaderBase", "All", None))
+        self.feature_type.setItemText(1, _translate("OsmDownloaderBase", "Buildings", None))
+        self.feature_type.setItemText(2, _translate("OsmDownloaderBase", "Roads", None))
+        self.output_directory_label.setText(_translate("OsmDownloaderBase", "Output directory", None))
+        self.directory_button.setText(_translate("OsmDownloaderBase", "...", None))
+        self.filename_prefix_label.setText(_translate("OsmDownloaderBase", "File name prefix", None))
+        self.groupBox.setTitle(_translate("OsmDownloaderBase", "Bounding box", None))
+        self.label.setText(_translate("OsmDownloaderBase", "West", None))
+        self.label_2.setText(_translate("OsmDownloaderBase", "North", None))
+        self.label_3.setText(_translate("OsmDownloaderBase", "East", None))
+        self.label_4.setText(_translate("OsmDownloaderBase", "South", None))
 
 from PyQt4 import QtWebKit
