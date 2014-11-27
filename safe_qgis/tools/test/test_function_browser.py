@@ -31,7 +31,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.function_browser import FunctionBrowser
+from safe_qgis.tools.function_browser_dialog import FunctionBrowser
 
 
 def verifyColumn(table, col, strFilter, mode):

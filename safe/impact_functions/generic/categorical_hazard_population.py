@@ -19,7 +19,11 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 import numpy
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults, default_minimum_needs
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance
+)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
@@ -27,8 +31,8 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     evacuated_population_needs,
-    evacuated_population_weekly_needs,
-    population_rounding)
+    population_rounding
+)
 from safe.metadata import (
     hazard_all,
     layer_raster_numeric,
@@ -149,7 +153,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             ('MinimumNeeds', {'on': True}),
         ])),
         ('minimum needs', default_minimum_needs()),
-        ('rich minimum needs', None)
+        ('provenance', default_provenance())
     ])
 
     def run(self, layers):
@@ -226,16 +230,18 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         low = int(numpy.sum(lo))
         total_impact = int(numpy.sum(impact))
 
-        # Don't show digits less than a 1000
+        # Perform population rounding based on number of people
+        no_impact = population_rounding(total - total_impact)
         total = population_rounding(total)
         total_impact = population_rounding(total_impact)
         high = population_rounding(high)
         medium = population_rounding(medium)
         low = population_rounding(low)
-        no_impact = population_rounding(total - total_impact)
 
-        minimum_needs = self.parameters['minimum needs']
-        minimum_needs_full = self.parameters['rich minimum needs']
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         table_body = [question,
@@ -253,29 +259,19 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                       TableRow(tr('Table below shows the minimum '
                                   'needs for all evacuated people'))]
 
-        if minimum_needs_full:
-            total_needs = evacuated_population_needs(
-                total_impact, minimum_needs, minimum_needs_full)
-            for frequency, needs in total_needs.items():
-                table_body.append(TableRow(
-                    [
-                        tr('Needs should be provided %s' % frequency),
-                        tr('Total')
-                    ],
-                    header=True))
-                for resource in needs:
-                    table_body.append(TableRow([
-                        tr(resource['Resource table name']),
-                        format_int(resource['Amount'])]))
-            table_body.append(TableRow(tr('Provenance'), header=True))
-            table_body.append(TableRow(minimum_needs_full['provenance']))
-        else:
-            total_needs = evacuated_population_weekly_needs(
-                total_impact, minimum_needs)
-            table_body.append(
-                TableRow([tr('Needs per week'), tr('Total')], header=True))
-            for resource, amount in total_needs.items():
-                table_body.append(TableRow([tr(resource), format_int(amount)]))
+        total_needs = evacuated_population_needs(
+            total_impact, minimum_needs)
+        for frequency, needs in total_needs.items():
+            table_body.append(TableRow(
+                [
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
+                ],
+                header=True))
+            for resource in needs:
+                table_body.append(TableRow([
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
 
         impact_table = Table(table_body).toNewlineFreeString()
 
@@ -290,10 +286,12 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             'will we transport them to here?')))
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Map shows the numbers of people in high, medium '
-                              'and low hazard areas'),
-                           tr('Total population: %s') % format_int(total)])
+        table_body.extend([
+            TableRow(tr('Notes'), header=True),
+            tr('Map shows the numbers of people in high, medium and low '
+               'hazard areas'),
+            tr('Total population: %s') % format_int(total)
+        ])
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style
@@ -350,6 +348,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                 'map_title': map_title,
                 'legend_notes': legend_notes,
                 'legend_units': legend_units,
-                'legend_title': legend_title},
+                'legend_title': legend_title,
+                'total_needs': total_needs},
             style_info=style_info)
         return raster_layer

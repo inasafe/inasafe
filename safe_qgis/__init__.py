@@ -6,7 +6,6 @@ import sys
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
 
 from PyQt4.QtCore import (
     QLocale,
@@ -92,17 +91,16 @@ safe.defaults.get_defaults = lambda the_default=None: get_defaults(
     the_default)
 
 from safe.impact_functions.core import get_plugins
-from safe_qgis.tools.minimum_needs import QMinimumNeeds
-## Monkey patch all the impact functions
-minimum_needs = QMinimumNeeds()
+from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+# Monkey patch all the impact functions
+minimum_needs = NeedsProfile()
 for (name, plugin) in get_plugins().items():
     if not hasattr(plugin, 'parameters'):
         continue
     if 'minimum needs' in plugin.parameters:
         plugin.parameters['minimum needs'] = (
-            minimum_needs.get_minimum_needs())
-        plugin.parameters['rich minimum needs'] = (
-            minimum_needs.get_full_needs())
+            minimum_needs.get_needs_parameters())
+        plugin.parameters['provenance'] = minimum_needs.provenance
 
 try:
     # When upgrading, using the plugin manager, you may get an error when

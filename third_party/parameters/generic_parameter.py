@@ -12,7 +12,7 @@ class GenericParameter(object):
         :param guid: Optional unique identifier for this parameter. If none
             is specified one will be generated using python hash. This guid
             will be used when storing parameters in the registry.
-        :type guid: str
+        :type guid: str, None
         """
         self.guid = None
         if guid is None:
@@ -179,3 +179,23 @@ class GenericParameter(object):
         """
         # self._check_type(value)
         self._value = value
+
+    def serialize(self):
+        """Convert the parameter into a dictionary.
+
+        :return: The parameter dictionary.
+        :rtype: dict
+        """
+        # noinspection PyDictCreation
+        pickle = {}
+        pickle['guid'] = '%s' % self.guid
+        pickle['name'] = self.name
+        if type(self.expected_type) == list:
+            pickle['expected_type'] = ['%s' % t for t in self.expected_type]
+        else:
+            pickle['expected_type'] = '%s' % self.expected_type
+        pickle['is_required'] = self.is_required
+        pickle['help_text'] = self.help_text
+        pickle['description'] = self.description
+        pickle['value'] = self.value
+        return pickle

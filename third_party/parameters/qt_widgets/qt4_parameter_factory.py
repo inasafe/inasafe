@@ -11,6 +11,7 @@ from boolean_parameter_widget import BooleanParameterWidget
 from float_parameter_widget import FloatParameterWidget
 from integer_parameter_widget import IntegerParameterWidget
 from string_parameter_widget import StringParameterWidget
+from resource_parameter_widget import ResourceParameterWidget
 
 
 class Qt4ParameterFactory(object):
@@ -42,6 +43,8 @@ class Qt4ParameterFactory(object):
             return IntegerParameterWidget(parameter)
         elif class_name == 'StringParameter':
             return StringParameterWidget(parameter)
+        elif class_name == 'ResourceParameter':
+            return ResourceParameterWidget(parameter)
         else:
             raise TypeError(class_name)
 

@@ -4,14 +4,16 @@
 import numpy
 import logging
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults, default_minimum_needs
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
     evacuated_population_needs,
-    evacuated_population_weekly_needs,
     population_rounding_full,
     population_rounding)
 from safe.metadata import (
@@ -224,7 +226,7 @@ class ITBFatalityFunction(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})])),
         ('minimum needs', default_minimum_needs()),
-        ('rich minimum needs', None)
+        ('provenance', default_provenance())
     ])
 
     def fatality_rate(self, mmi):
@@ -357,8 +359,10 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
-        minimum_needs = self.parameters['minimum needs']
-        minimum_needs_full = self.parameters['rich minimum needs']
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         table_body = [
@@ -368,30 +372,24 @@ class ITBFatalityFunction(FunctionProvider):
             TableRow(
                 [tr('People displaced'), '%s' % format_int(displaced)],
                 header=True),
-            TableRow(tr('Map shows the estimation of displaced population'))]
-        if minimum_needs_full:
-            total_needs = evacuated_population_needs(
-                displaced, minimum_needs, minimum_needs_full)
-            for frequency, needs in total_needs.items():
-                table_body.append(TableRow(
-                    [
-                        tr('Needs should be provided %s' % frequency),
-                        tr('Total')
-                    ],
-                    header=True))
-                for resource in needs:
-                    table_body.append(TableRow([
-                        tr(resource['Resource table name']),
-                        format_int(resource['Amount'])]))
-            table_body.append(TableRow(tr('Provenance'), header=True))
-            table_body.append(TableRow(minimum_needs_full['provenance']))
-        else:
-            total_needs = evacuated_population_weekly_needs(
-                displaced, minimum_needs)
-            table_body.append(
-                TableRow([tr('Needs per week'), tr('Total')], header=True))
-            for resource, amount in total_needs.items():
-                table_body.append(TableRow([tr(resource), format_int(amount)]))
+            TableRow(tr('Map shows density estimate of displaced population'))]
+
+        total_needs = evacuated_population_needs(
+            displaced, minimum_needs)
+        for frequency, needs in total_needs.items():
+            table_body.append(TableRow(
+                [
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
+                ],
+                header=True))
+            for resource in needs:
+                table_body.append(TableRow([
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
+        table_body.append(TableRow(tr('Provenance'), header=True))
+        table_body.append(TableRow(self.parameters['provenance']))
+
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
 
         if fatalities > 0:

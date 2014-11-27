@@ -6,6 +6,7 @@ import numpy
 import sys
 import os
 from os.path import join
+from collections import OrderedDict
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
@@ -68,12 +69,20 @@ from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
 
 def linear_function(x, y):
     """Auxiliary function for use with interpolation test
-    """
+    :param y:
+    :param x:
 
+    :returns: Average
+    """
     return x + y / 2.0
 
 
 def lembang_damage_function(x):
+    """Lembang damage function.
+
+    :param x: original value
+    :returns: result
+    """
     if x < 6.0:
         value = 0.0
     else:
@@ -88,7 +97,11 @@ def lembang_damage_function(x):
 def padang_check_results(mmi, building_class):
     """Check calculated results through a lookup table
     returns False if the lookup fails and
-    an exception if more than one lookup returned"""
+    an exception if more than one lookup returned
+
+    :param mmi: MMI
+    :param building_class: Building Class
+    """
 
     # Reference table established from plugin as of 28 July 2011
     # It was then manually verified against an Excel table by Abbie Baca
@@ -118,12 +131,13 @@ def padang_check_results(mmi, building_class):
         [7.48122, 9, 1.191497],
         [7.12665, 9, 0.488944]]
 
-    impact_array = [verified_impact
+    impact_array = [
+        verified_impact
         for verified_mmi, verified_building_class, verified_impact
-               in padang_verified_results
-                    if numpy.allclose(verified_mmi, mmi, rtol=1.0e-6) and
-                    numpy.allclose(verified_building_class, building_class,
-                                   rtol=1.0e-6)]
+        in padang_verified_results
+        if numpy.allclose(verified_mmi, mmi, rtol=1.0e-6) and
+        numpy.allclose(verified_building_class, building_class, rtol=1.0e-6)
+    ]
 
     if len(impact_array) == 0:
         return False
@@ -369,8 +383,8 @@ class Test_Engine(unittest.TestCase):
         msg = ('Calculated fatality map did not match expected result: '
                'I got %s\n'
                'Expected %s' % (calculated_result, fatality_result))
-        assert nan_allclose(calculated_result, fatality_result,
-                           rtol=1.0e-4), msg
+        assert nan_allclose(
+            calculated_result, fatality_result, rtol=1.0e-4), msg
 
         # Check for expected numbers (from Hadi Ghasemi) in keywords
         # NOTE: Commented out because function no longer needs to return
@@ -1486,8 +1500,8 @@ class Test_Engine(unittest.TestCase):
         """Exceptions are caught by interpolate_raster_points
         """
 
-        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
-                            % TESTDATA)
+        hazard_filename = (
+            '%s/tsunami_max_inundation_depth_4326.tif' % TESTDATA)
         exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
 
         # Calculate impact using API
@@ -1513,8 +1527,8 @@ class Test_Engine(unittest.TestCase):
 
         # FIXME - when we know how to reproject, replace hazard
         # file with UTM version (i.e. without _geographic).
-        hazard_filename = join(TESTDATA,
-                                       'Ashload_Gede_VEI4_geographic.asc')
+        hazard_filename = join(
+            TESTDATA, 'Ashload_Gede_VEI4_geographic.asc')
         exposure_filename = join(TESTDATA, 'test_buildings.shp')
 
         # Calculate impact using API
@@ -1548,9 +1562,8 @@ class Test_Engine(unittest.TestCase):
             impact = a['DAMAGE']
 
             # Test interpolation
-            msg = 'Load %.15f was outside bounds [%f, %f]' % (load,
-                                                           load_min,
-                                                           load_max)
+            msg = 'Load %.15f was outside bounds [%f, %f]' % (
+                load, load_min, load_max)
             if not numpy.isnan(load):
                 assert load_min <= load <= load_max, msg
 
@@ -1604,8 +1617,8 @@ class Test_Engine(unittest.TestCase):
         # Longitudes go left-right (west to east)
         for i in range(numlat):
             for j in range(numlon):
-                A[numlat - 1 - i, j] = linear_function(longitudes[j],
-                                                   latitudes[i])
+                A[numlat - 1 - i, j] = linear_function(
+                    longitudes[j], latitudes[i])
 
         # Test first that original points are reproduced correctly
         for i, eta in enumerate(latitudes):
@@ -1809,8 +1822,8 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
-                            % TESTDATA)
+        hazard_filename = (
+            '%s/tsunami_max_inundation_depth_4326.tif' % TESTDATA)
         exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
 
         # Read input data
@@ -1821,9 +1834,8 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
 
         # Test interpolation function
-        I = assign_hazard_values_to_exposure_data(hazard_raster,
-                                                  exposure_vector,
-                                                  attribute_name='depth')
+        I = assign_hazard_values_to_exposure_data(
+            hazard_raster, exposure_vector, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -2894,11 +2906,10 @@ class Test_Engine(unittest.TestCase):
                                                     building_class)
                 # print calculated_mmi, building_class, calculated_dam
                 if verified_dam:
-                    msg = ('Calculated damage was not as expected '
-                             'for hazard layer %s. I got %f '
-                           'but expected %f' % (hazard_filename,
-                                                calculated_dam,
-                                                verified_dam))
+                    msg = (
+                        'Calculated damage was not as expected for hazard '
+                        'layer %s. I got %f but expected %f' % (
+                            hazard_filename, calculated_dam, verified_dam))
                     assert numpy.allclose(calculated_dam, verified_dam,
                                           rtol=1.0e-4), msg
                     verified_count += 1
@@ -2958,9 +2969,9 @@ class Test_Engine(unittest.TestCase):
                    (calculated_damage,
                     ref_damage[i],
                     bldg_class))
-            assert nan_allclose(calculated_damage, ref_damage[i],
-                               # Reference data is single precision
-                               atol=1.0e-6), msg
+            # Reference data is single precision
+            assert nan_allclose(
+                calculated_damage, ref_damage[i], atol=1.0e-6), msg
 
 #        print calculated_damage.shape
 #        bldg_class = attributes[:]['VCLASS']
@@ -3026,7 +3037,11 @@ class Test_Engine(unittest.TestCase):
         keywords = impact_layer.get_keywords()
         # print "keywords", keywords
         evacuated = float(keywords['evacuated'])
-        total_needs = keywords['total_needs']
+        total_needs_full = keywords['total_needs']
+        total_needs = OrderedDict([
+            [x['table name'], x['amount']] for x in
+            total_needs_full['weekly']
+        ])
 
         expected_evacuated = 63400
         assert evacuated == expected_evacuated
@@ -3099,10 +3114,11 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
         # Reference data
-        R = [-1., -1., -0.99999998, -0.99999926, -0.99997791, -0.99959305,
-              -0.99532227, -0.96610515, -0.84270079, -0.52049988, 0.,
-              0.52049988, 0.84270079, 0.96610515, 0.99532227, 0.99959305,
-              0.99997791, 0.99999926, 0.99999998, 1.]
+        R = [
+            -1., -1., -0.99999998, -0.99999926, -0.99997791, -0.99959305,
+            -0.99532227, -0.96610515, -0.84270079, -0.52049988, 0.,
+            0.52049988, 0.84270079, 0.96610515, 0.99532227, 0.99959305,
+            0.99997791, 0.99999926, 0.99999998, 1.]
 
         A = (numpy.arange(20) - 10.) / 2
         X = erf(A)
