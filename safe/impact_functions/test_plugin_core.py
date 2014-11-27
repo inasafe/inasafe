@@ -1,8 +1,12 @@
 # coding=utf-8
+"""Test plugin core"""
 import unittest
 import logging
 import os
 
+from collections import OrderedDict
+
+from safe.defaults import default_minimum_needs
 from safe.impact_functions.core import (
     FunctionProvider,
     requirements_collect,
@@ -13,7 +17,7 @@ from safe.impact_functions.core import (
     get_plugins_as_table,
     parse_single_requirement,
     get_metadata,
-    evacuated_population_weekly_needs,
+    evacuated_population_needs,
     aggregate,
     convert_to_old_keywords
 )
@@ -36,6 +40,10 @@ class BasicFunctionCore(FunctionProvider):
 
     @staticmethod
     def run():
+        """ Run mock method.
+
+        :returns: None
+        """
         return None
 
 
@@ -59,6 +67,10 @@ class F1(FunctionProvider):
 
     @staticmethod
     def run():
+        """ Run mock method.
+
+        :returns: None
+        """
         return None
 
 
@@ -78,6 +90,10 @@ class F2(FunctionProvider):
 
     @staticmethod
     def run():
+        """ Run mock method.
+
+        :returns: None
+        """
         return None
 
 
@@ -90,6 +106,10 @@ class F3(FunctionProvider):
 
     @staticmethod
     def run():
+        """ Run mock method.
+
+        :returns: None
+        """
         return None
 
 
@@ -106,6 +126,10 @@ class F4(FunctionProvider):
 
     @staticmethod
     def run():
+        """ Run mock method.
+
+        :returns: None
+        """
         return None
 
 
@@ -120,6 +144,10 @@ class SyntaxErrorFunction(FunctionProvider):
 
     @staticmethod
     def run():
+        """ Run mock method.
+
+        :returns: None
+        """
         return None
 
 
@@ -277,12 +305,15 @@ class Test_plugin_core(unittest.TestCase):
         assert (my_formated_int == expected_str or
                 my_formated_int == str(my_int)), my_msg
 
-    def test_default_weekly_needs(self):
+    def test_default_needs(self):
         """default calculated needs are as expected
         """
+        minimum_needs = [
+            parameter.serialize() for parameter in default_minimum_needs()]
         # 20 Happens to be the smallest number at which integer rounding
         # won't make a difference to the result
-        result = evacuated_population_weekly_needs(20)
+        result = evacuated_population_needs(20, minimum_needs)['weekly']
+        result = OrderedDict([[r['table name'], r['amount']] for r in result])
 
         assert (result['Rice [kg]'] == 56
                 and result['Drinking Water [l]'] == 350
@@ -290,17 +321,22 @@ class Test_plugin_core(unittest.TestCase):
                 and result['Family Kits'] == 4
                 and result['Toilets'] == 1)
 
-    def test_arbitrary_weekly_needs(self):
+    def test_arbitrary_needs(self):
         """custom need ratios calculated are as expected
         """
+        minimum_needs = [
+            parameter.serialize() for parameter in default_minimum_needs()]
+        minimum_needs[0]['value'] = 4
+        minimum_needs[1]['value'] = 3
+        minimum_needs[2]['value'] = 2
+        minimum_needs[3]['value'] = 1
+        minimum_needs[4]['value'] = 0.2
+        result = evacuated_population_needs(10, minimum_needs)['weekly']
+        result = OrderedDict([[r['table name'], r['amount']] for r in result])
 
-        minimum_needs = {'Rice': 4, 'Drinking Water': 3,
-                         'Water': 2, 'Family Kits': 1, 'Toilets': 0.2}
-        result = evacuated_population_weekly_needs(10, minimum_needs)
-
-        assert (result['Rice'] == 40
-                and result['Drinking Water'] == 30
-                and result['Water'] == 20
+        assert (result['Rice [kg]'] == 40
+                and result['Drinking Water [l]'] == 30
+                and result['Clean Water [l]'] == 20
                 and result['Family Kits'] == 10
                 and result['Toilets'] == 2)
 

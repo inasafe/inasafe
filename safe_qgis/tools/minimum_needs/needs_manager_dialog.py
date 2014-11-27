@@ -14,27 +14,38 @@ __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0611
+from qgis.core import QGis  # force sip2 api
+
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui
+from os.path import expanduser, basename, dirname
+
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import (
+    QDialog,
+    QFileDialog,
+    QGridLayout,
+    QPushButton,
+    QDialogButtonBox,
+    QMessageBox
+)
+
 from third_party.parameters.float_parameter import FloatParameter
 from third_party.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from third_party.parameters.string_parameter import StringParameter
-
-from PyQt4.QtGui import QDialog, QFileDialog, QGridLayout
-from PyQt4.QtCore import QFile
-
-from safe_qgis.ui.minimum_needs_configuration import Ui_minimumNeeds
+from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (
     styles)
-from PyQt4 import QtGui
-from safe_qgis.tools.minimum_needs import QMinimumNeeds
-from os.path import expanduser, basename
+from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+
 
 INFO_STYLE = styles.INFO_STYLE
 
 
-# noinspection PyArgumentList
-# noinspection PyProtectedMember
-class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
+class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
     """Dialog class for the InaSAFE global minimum needs configuration.
 
     .. versionadded:: 2.2.
@@ -49,35 +60,98 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
 
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.setWindowTitle(self.tr(
-            'InaSAFE Global Minimum Needs Configuration'))
-        self.resourceListWidget.setDragDropMode(
-            self.resourceListWidget.InternalMove)
-        self.resourceListWidget.setAlternatingRowColors(True)
-        self.resourceListWidget.setWordWrap(True)
-        self.removeButton.clicked.connect(self.remove_resource)
-        self.addButton.clicked.connect(self.add_new_resource)
-        self.editButton.clicked.connect(self.edit_resource)
-        self.discardButton.clicked.connect(self.discard_changes)
-        self.acceptButton.clicked.connect(self.accept_changes)
-        self.exportButton.clicked.connect(self.export_minimum_needs)
-        self.importButton.clicked.connect(self.import_minimum_needs)
-        self.minimum_needs = QMinimumNeeds()
+
+        # These are in the little button bar at the top
+        # 'Remove resource' button
+        self.remove_resource_button.clicked.connect(self.remove_resource)
+
+        # Add resource
+        self.add_resource_button.clicked.connect(self.add_new_resource)
+
+        # Edit resource
+        self.edit_resource_button.clicked.connect(self.edit_resource)
+
+        # Discard changes to a resource
+        self.discard_changes_button = QPushButton(self.tr('Discard changes'))
+        self.button_box.addButton(
+            self.discard_changes_button, QDialogButtonBox.ActionRole)
+        self.discard_changes_button.clicked.connect(self.discard_changes)
+
+        # Save changes to a resource
+        self.save_resource_button = QPushButton(self.tr('Save resource'))
+        self.button_box.addButton(
+            self.save_resource_button, QDialogButtonBox.ActionRole)
+        self.save_resource_button.clicked.connect(self.save_resource)
+
+        # Export profile button
+        self.export_profile_button = QPushButton(self.tr('Export ...'))
+        self.button_box.addButton(
+            self.export_profile_button, QDialogButtonBox.ActionRole)
+        self.export_profile_button.clicked.connect(self.export_profile)
+
+        # Import profile button
+        self.import_profile_button = QPushButton(self.tr('Import ...'))
+        self.button_box.addButton(
+            self.import_profile_button, QDialogButtonBox.ActionRole)
+        self.import_profile_button.clicked.connect(self.import_profile)
+
+        # New profile button
+        self.new_profile_button = QPushButton(self.tr('New'))
+        self.button_box.addButton(
+            self.new_profile_button, QDialogButtonBox.ActionRole)
+        self.new_profile_button.clicked.connect(self.new_profile)
+
+        # Save profile button
+        self.save_profile_button = QPushButton(self.tr('Save'))
+        self.button_box.addButton(
+            self.save_profile_button, QDialogButtonBox.ActionRole)
+        self.save_profile_button.clicked.connect(self.save_profile)
+
+        # 'Save as' profile button
+        self.save_profile_as_button = QPushButton(self.tr('Save as'))
+        self.button_box.addButton(
+            self.save_profile_as_button, QDialogButtonBox.ActionRole)
+        self.save_profile_as_button.clicked.connect(
+            self.save_profile_as)
+
+        self.minimum_needs = NeedsProfile()
         self.edit_item = None
 
-        self.saveButton.clicked.connect(self.save_minimum_needs)
-        self.saveAsButton.clicked.connect(self.save_minimum_needs_as)
-        self.newButton.clicked.connect(self.new_profile)
+        # Remove profile button
+        self.remove_profile_button.clicked.connect(self.remove_profile)
+
+        # These are all buttons that will get hidden on context change
+        # to the profile editing view
+        self.profile_editing_buttons = list()
+        self.profile_editing_buttons.append(self.remove_resource_button)
+        self.profile_editing_buttons.append(self.add_resource_button)
+        self.profile_editing_buttons.append(self.edit_resource_button)
+        self.profile_editing_buttons.append(self.export_profile_button)
+        self.profile_editing_buttons.append(self.import_profile_button)
+        self.profile_editing_buttons.append(self.new_profile_button)
+        self.profile_editing_buttons.append(self.save_profile_button)
+        self.profile_editing_buttons.append(self.save_profile_as_button)
+        # We also keep a list of all widgets to disable in context of resource
+        # editing (not hidden, just disabled)
+        self.profile_editing_widgets = self.profile_editing_buttons
+        self.profile_editing_widgets.append(self.remove_profile_button)
+        self.profile_editing_widgets.append(self.profile_combo)
+        # These are all buttons that will get hidden on context change
+        # to the resource editing view
+        self.resource_editing_buttons = list()
+        self.resource_editing_buttons.append(self.discard_changes_button)
+        self.resource_editing_buttons.append(self.save_resource_button)
+        for item in self.resource_editing_buttons:
+            item.hide()
 
         self.load_profiles()
         self.clear_resource_list()
         self.populate_resource_list()
         self.set_up_resource_parameters()
-
         # Only do this afterward load_profiles to avoid the resource list
         # being updated
-        self.profileComboBox.activated.connect(
-            self.select_profile)
+        self.profile_combo.activated.connect(self.select_profile)
+        self.stacked_widget.currentChanged.connect(self.page_changed)
 
     def populate_resource_list(self):
         """Populate the list resource list.
@@ -85,37 +159,12 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         minimum_needs = self.minimum_needs.get_full_needs()
         for full_resource in minimum_needs["resources"]:
             self.add_resource(full_resource)
-        self.provenanceLineEdit.setText(minimum_needs["provenance"])
+        self.provenance.setText(minimum_needs["provenance"])
 
     def clear_resource_list(self):
         """Clear the resource list.
         """
-        self.resourceListWidget.clear()
-
-    @staticmethod
-    def _format_sentence(sentence, resource):
-        """Populate the placeholders in the sentence.
-
-        :param sentence: The sentence with placeholder keywords.
-        :type sentence: basestring, str
-
-        :param resource: The resource to be placed into the sentence.
-        :type resource: dict
-
-        :returns: The formatted sentence.
-        :rtype: basestring
-        """
-        sentence = sentence.split('{{')
-        updated_sentence = sentence[0].rstrip()
-        for part in sentence[1:]:
-            replace, keep = part.split('}}')
-            replace = replace.strip()
-            updated_sentence = "%s %s%s" % (
-                updated_sentence,
-                resource[replace],
-                keep
-            )
-        return updated_sentence
+        self.resources_list.clear()
 
     def add_resource(self, resource):
         """Add a resource to the minimum needs table.
@@ -123,7 +172,7 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         :param resource: The resource to be added
         :type resource: dict
         """
-        updated_sentence = self._format_sentence(
+        updated_sentence = NeedsProfile.format_sentence(
             resource['Readable sentence'], resource)
         if self.edit_item:
             item = self.edit_item
@@ -132,102 +181,107 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         else:
             item = QtGui.QListWidgetItem(updated_sentence)
         item.resource_full = resource
-        self.resourceListWidget.addItem(item)
+        self.resources_list.addItem(item)
 
     def load_profiles(self):
         """Load the profiles into the dropdown list.
         """
         for profile in self.minimum_needs.get_profiles():
-            self.profileComboBox.addItem(profile)
+            self.profile_combo.addItem(profile)
         minimum_needs = self.minimum_needs.get_full_needs()
-        self.profileComboBox.setCurrentIndex(
-            self.profileComboBox.findText(minimum_needs['profile']))
+        self.profile_combo.setCurrentIndex(
+            self.profile_combo.findText(minimum_needs['profile']))
 
     def select_profile(self, index):
-        """Select a given profile by index. (handler)
+        """Select a given profile by index.
+
+        Slot for when profile is selected.
+
         :param index: The selected item's index
         :type index: int
         """
-        new_profile = self.profileComboBox.itemText(index)
-        self.resourceListWidget.clear()
+        new_profile = self.profile_combo.itemText(index)
+        self.resources_list.clear()
         self.minimum_needs.load_profile(new_profile)
         self.clear_resource_list()
         self.populate_resource_list()
         self.minimum_needs.save()
 
+    def select_profile_by_name(self, profile_name):
+        """Select a given profile by profile name
+
+        :param profile_name: The profile name
+        :type profile_name: str
+        """
+        self.select_profile(self.profile_combo.findText(profile_name))
+
     def mark_current_profile_as_pending(self):
         """Mark the current profile as pending by colouring the text red.
         """
-        index = self.profileComboBox.currentIndex()
-        item = self.profileComboBox.model().item(index)
+        index = self.profile_combo.currentIndex()
+        item = self.profile_combo.model().item(index)
         item.setForeground(QtGui.QColor('red'))
 
     def mark_current_profile_as_saved(self):
         """Mark the current profile as saved by colouring the text black.
         """
-        index = self.profileComboBox.currentIndex()
-        item = self.profileComboBox.model().item(index)
+        index = self.profile_combo.currentIndex()
+        item = self.profile_combo.model().item(index)
         item.setForeground(QtGui.QColor('black'))
 
     def add_new_resource(self):
         """Handle add new resource requests.
         """
         parameters_widget = [
-            self.resourceGroupBox.layout().itemAt(i) for i in
-            range(self.resourceGroupBox.layout().count())][0].widget()
+            self.resource_widget.layout().itemAt(i) for i in
+            range(self.resource_widget.layout().count())][0].widget()
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
-        parameter_widgets[0]._line_edit_input.setText('')
-        parameter_widgets[1]._line_edit_input.setText('')
-        parameter_widgets[2]._line_edit_input.setText('')
-        parameter_widgets[3]._line_edit_input.setText('')
-        parameter_widgets[4]._line_edit_input.setText('')
-        parameter_widgets[5]._input.setValue(10)
-        parameter_widgets[6]._input.setValue(0)
-        parameter_widgets[7]._input.setValue(100)
-        parameter_widgets[8]._line_edit_input.setText('weekly')
-        parameter_widgets[9]._line_edit_input.setText(
+        parameter_widgets[0].set_text('')
+        parameter_widgets[1].set_text('')
+        parameter_widgets[2].set_text('')
+        parameter_widgets[3].set_text('')
+        parameter_widgets[4].set_text('')
+        parameter_widgets[5].set_value(10)
+        parameter_widgets[6].set_value(0)
+        parameter_widgets[7].set_value(100)
+        parameter_widgets[8].set_text('weekly')
+        parameter_widgets[9].set_text(
             "A displaced person should be provided with "
             "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
             "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
             "and no more than {{ Maximum allowed }}. This should be provided "
             "{{ Frequency }}.")
-        self.stackedWidget.setCurrentIndex(1)
+        self.stacked_widget.setCurrentWidget(self.resource_edit_page)
 
     def edit_resource(self):
         """Handle edit resource requests.
         """
         self.mark_current_profile_as_pending()
         resource = None
-        for item in self.resourceListWidget.selectedItems()[:1]:
+        for item in self.resources_list.selectedItems()[:1]:
             resource = item.resource_full
             self.edit_item = item
         if not resource:
             return
         parameters_widget = [
-            self.resourceGroupBox.layout().itemAt(i) for i in
-            range(self.resourceGroupBox.layout().count())][0].widget()
+            self.resource_widget.layout().itemAt(i) for i in
+            range(self.resource_widget.layout().count())][0].widget()
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
-        parameter_widgets[0]._line_edit_input.setText(
-            resource['Resource name'])
-        parameter_widgets[1]._line_edit_input.setText(
-            resource['Resource description'])
-        parameter_widgets[2]._line_edit_input.setText(resource['Unit'])
-        parameter_widgets[3]._line_edit_input.setText(resource['Units'])
-        parameter_widgets[4]._line_edit_input.setText(
-            resource['Unit abbreviation'])
-        parameter_widgets[5]._input.setValue(float(resource['Default']))
-        parameter_widgets[6]._input.setValue(float(
-            resource['Minimum allowed']))
-        parameter_widgets[7]._input.setValue(float(
-            resource['Maximum allowed']))
-        parameter_widgets[8]._line_edit_input.setText(resource['Frequency'])
-        parameter_widgets[9]._line_edit_input.setText(
-            resource['Readable sentence'])
-        self.stackedWidget.setCurrentIndex(1)
+        parameter_widgets[0].set_text(resource['Resource name'])
+        parameter_widgets[1].set_text(resource['Resource description'])
+        parameter_widgets[2].set_text(resource['Unit'])
+        parameter_widgets[3].set_text(resource['Units'])
+        parameter_widgets[4].set_text(resource['Unit abbreviation'])
+        parameter_widgets[5].set_value(float(resource['Default']))
+        parameter_widgets[6].set_value(float(resource['Minimum allowed']))
+        parameter_widgets[7].set_value(float(resource['Maximum allowed']))
+        parameter_widgets[8].set_text(resource['Frequency'])
+        parameter_widgets[9].set_text(resource['Readable sentence'])
+        self.switch_context(self.resource_edit_page)
 
     def set_up_resource_parameters(self):
         """Set up the resource parameter for the add/edit view.
@@ -382,64 +436,71 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
 
         layout = QGridLayout()
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         layout.addWidget(parameter_container)
-        self.resourceGroupBox.setLayout(layout)
+        self.resource_widget.setLayout(layout)
 
     def remove_resource(self):
         """Remove the currently selected resource.
         """
         self.mark_current_profile_as_pending()
-        for item in self.resourceListWidget.selectedItems():
-            self.resourceListWidget.takeItem(self.resourceListWidget.row(item))
+        for item in self.resources_list.selectedItems():
+            self.resources_list.takeItem(self.resources_list.row(item))
 
     def discard_changes(self):
         """Discard the changes to the resource add/edit.
         """
         self.edit_item = None
-        self.stackedWidget.setCurrentIndex(0)
+        self.switch_context(self.profile_edit_page)
 
-    def accept_changes(self):
+    def save_resource(self):
         """Accept the add/edit of the current resource.
         """
         # --
         # Hackorama to get this working outside the method that the
         # parameters where defined in.
         parameters_widget = [
-            self.resourceGroupBox.layout().itemAt(i) for i in
-            range(self.resourceGroupBox.layout().count())][0]
+            self.resource_widget.layout().itemAt(i) for i in
+            range(self.resource_widget.layout().count())][0]
         parameters = parameters_widget.widget().get_parameters()
         # --
         resource = {}
         for parameter in parameters:
             resource[parameter.name] = parameter.value
         self.add_resource(resource)
-        self.stackedWidget.setCurrentIndex(0)
+        self.switch_context(self.profile_edit_page)
 
-    def import_minimum_needs(self):
+    def import_profile(self):
         """ Import minimum needs from an existing json file.
+
         The minimum needs are loaded from a file into the table. This state
         is only saved if the form is accepted.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QtGui.QFileDialog.getOpenFileName(
-            self,
-            self.tr('Import minimum needs'),
-            '',
-            self.tr('JSON files (*.json *.JSON)'))
-        if file_name == '' or file_name is None:
+        file_name_dialog = QFileDialog(self)
+        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
+        file_name_dialog.setDefaultSuffix('json')
+        path_name = "%s/../../../files/minimum_needs" % dirname(__file__)
+        file_name_dialog.setDirectory(path_name)
+        if file_name_dialog.exec_():
+            file_name = file_name_dialog.selectedFiles()[0]
+        else:
             return -1
 
-        if self.minimum_needs.read_from_file(QFile(file_name)) == -1:
+        if self.minimum_needs.read_from_file(file_name) == -1:
             return -1
 
+        self.clear_resource_list()
         self.populate_resource_list()
-        return 0
+        self.switch_context(self.profile_edit_page)
 
-    def export_minimum_needs(self):
+    def export_profile(self):
         """ Export minimum needs to a json file.
+
         This method will save the current state of the minimum needs setup.
         Then open a dialog allowing the user to browse to the desired
-        destination loction and allow the user to save the needs as a json
+        destination location and allow the user to save the needs as a json
         file.
         """
         file_name_dialog = QFileDialog(self)
@@ -450,27 +511,28 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]
         if file_name != '' and file_name is not None:
-            self.minimum_needs.write_to_file(QFile(file_name))
+            self.minimum_needs.write_to_file(file_name)
 
-    def save_minimum_needs(self):
+    def save_profile(self):
         """ Save the current state of the minimum needs widget.
+
         The minimum needs widget current state is saved to the QSettings via
         the appropriate QMinimumNeeds class' method.
         """
         minimum_needs = {'resources': []}
-        for index in xrange(self.resourceListWidget.count()):
-            item = self.resourceListWidget.item(index)
+        for index in xrange(self.resources_list.count()):
+            item = self.resources_list.item(index)
             minimum_needs['resources'].append(item.resource_full)
-        minimum_needs['provenance'] = self.provenanceLineEdit.text()
-        minimum_needs['profile'] = self.profileComboBox.itemText(
-            self.profileComboBox.currentIndex()
+        minimum_needs['provenance'] = self.provenance.text()
+        minimum_needs['profile'] = self.profile_combo.itemText(
+            self.profile_combo.currentIndex()
         )
         self.minimum_needs.update_minimum_needs(minimum_needs)
         self.minimum_needs.save()
         self.minimum_needs.save_profile(minimum_needs['profile'])
         self.mark_current_profile_as_saved()
 
-    def save_minimum_needs_as(self):
+    def save_profile_as(self):
         """Save the minimum needs under a new profile name.
         """
         # noinspection PyCallByClass,PyTypeChecker
@@ -487,18 +549,18 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         file_name = file_name.replace('.json', '')
         minimum_needs = {'resources': []}
         self.mark_current_profile_as_saved()
-        for index in xrange(self.resourceListWidget.count()):
-            item = self.resourceListWidget.item(index)
+        for index in xrange(self.resources_list.count()):
+            item = self.resources_list.item(index)
             minimum_needs['resources'].append(item.resource_full)
-        minimum_needs['provenance'] = self.provenanceLineEdit.text()
+        minimum_needs['provenance'] = self.provenance.text()
         minimum_needs['profile'] = file_name
         self.minimum_needs.update_minimum_needs(minimum_needs)
         self.minimum_needs.save()
         self.minimum_needs.save_profile(file_name)
-        if self.profileComboBox.findText(file_name) == -1:
-            self.profileComboBox.addItem(file_name)
-        self.profileComboBox.setCurrentIndex(
-            self.profileComboBox.findText(file_name))
+        if self.profile_combo.findText(file_name) == -1:
+            self.profile_combo.addItem(file_name)
+        self.profile_combo.setCurrentIndex(
+            self.profile_combo.findText(file_name))
 
     def new_profile(self):
         """Create a new profile by name.
@@ -506,18 +568,77 @@ class GlobalMinimumNeedsDialog(QDialog, Ui_minimumNeeds):
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QFileDialog.getSaveFileName(
             self,
-            self.tr('Export minimum needs'),
+            self.tr('Create a minimum needs profile'),
             expanduser('~/.qgis2/minimum_needs'),
             self.tr('JSON files (*.json *.JSON)'),
             options=QtGui.QFileDialog.DontUseNativeDialog)
         if not file_name:
             return
         file_name = basename(file_name)
-        minimum_needs = {
-            'resources': [], 'provenance': '', 'profile': file_name}
-        self.minimum_needs.update_minimum_needs(minimum_needs)
-        self.minimum_needs.save_profile(file_name)
-        if self.profileComboBox.findText(file_name) == -1:
-            self.profileComboBox.addItem(file_name)
-        self.profileComboBox.setCurrentIndex(
-            self.profileComboBox.findText(file_name))
+        if self.profile_combo.findText(file_name) == -1:
+            minimum_needs = {
+                'resources': [], 'provenance': '', 'profile': file_name}
+            self.minimum_needs.update_minimum_needs(minimum_needs)
+            self.minimum_needs.save_profile(file_name)
+            self.profile_combo.addItem(file_name)
+            self.clear_resource_list()
+            self.profile_combo.setCurrentIndex(
+                self.profile_combo.findText(file_name))
+        else:
+            self.profile_combo.setCurrentIndex(
+                self.profile_combo.findText(file_name))
+            self.select_profile_by_name(file_name)
+
+    def page_changed(self, index):
+        """Slot for when tab changes in the stacked widget changes.
+
+        :param index: Index of the now active tab.
+        :type index: int
+        """
+        if index == 0:  # profile edit page
+            for item in self.resource_editing_buttons:
+                item.hide()
+            for item in self.profile_editing_widgets:
+                item.setEnabled(True)
+            for item in self.profile_editing_buttons:
+                item.show()
+        else:  # resource_edit_page
+            for item in self.resource_editing_buttons:
+                item.show()
+            for item in self.profile_editing_widgets:
+                item.setEnabled(False)
+            for item in self.profile_editing_buttons:
+                item.hide()
+
+    def switch_context(self, page):
+        """Switch context tabs by tab widget name.
+
+        :param page: The page should be focussed.
+        :type page: QWidget
+        """
+        # noinspection PyUnresolvedReferences
+        if page.objectName() == 'profile_edit_page':
+            self.stacked_widget.setCurrentIndex(0)
+        else:  # resource_edit_page
+            self.stacked_widget.setCurrentIndex(1)
+
+    def remove_profile(self):
+        """Remove the current profile.
+
+        Make sure the user is sure.
+        """
+        profile_name = self.profile_combo.currentText()
+        # noinspection PyTypeChecker
+        button_selected = QMessageBox.warning(
+            None,
+            'Remove Profile',
+            self.tr('Remove %s.') % profile_name,
+            QMessageBox.Ok,
+            QMessageBox.Cancel
+        )
+        if button_selected == QMessageBox.Ok:
+            self.profile_combo.removeItem(
+                self.profile_combo.currentIndex()
+            )
+            self.minimum_needs.remove_profile(profile_name)
+            self.select_profile(self.profile_combo.currentIndex())

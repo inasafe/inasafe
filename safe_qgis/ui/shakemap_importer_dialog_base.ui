@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ShakemapImporterBase</class>
- <widget class="QDialog" name="ShakemapImporterBase">
+ <class>ShakemapImporterDialogBase</class>
+ <widget class="QDialog" name="ShakemapImporterDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,8 +15,8 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <widget class="QWebView" name="webView">
-     <property name="url">
+    <widget class="QWebView" name="webView" native="true">
+     <property name="url" stdset="0">
       <url>
        <string>about:blank</string>
       </url>
@@ -78,20 +78,11 @@
        <widget class="QLineEdit" name="line_edit_source"/>
       </item>
      </layout>
-     <zorder>label_3</zorder>
-     <zorder>lineEdit</zorder>
-     <zorder>lineEdit_3</zorder>
-     <zorder>label_6</zorder>
-     <zorder>input_path</zorder>
-     <zorder>label</zorder>
-     <zorder>lineEdit</zorder>
-     <zorder>label_3</zorder>
      <zorder>line_edit_title</zorder>
      <zorder>label_title</zorder>
      <zorder>line_edit_source</zorder>
      <zorder>label</zorder>
      <zorder>label_source</zorder>
-     <zorder>horizontalLayoutWidget</zorder>
     </widget>
    </item>
    <item row="2" column="0">
@@ -204,7 +195,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>ShakemapImporterBase</receiver>
+   <receiver>ShakemapImporterDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -220,7 +211,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>ShakemapImporterBase</receiver>
+   <receiver>ShakemapImporterDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

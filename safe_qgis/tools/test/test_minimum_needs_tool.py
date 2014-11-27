@@ -21,10 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-
 import unittest
 import os
-
 from qgis.core import QgsMapLayerRegistry
 
 from safe.common.testing import get_qgis_app
@@ -33,7 +31,9 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import safe_read_layer
-from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
+from safe_qgis.tools.minimum_needs.needs_calculator_dialog import (
+    NeedsCalculatorDialog
+)
 from safe_qgis.safe_interface import UNITDATA
 
 shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')
@@ -59,7 +59,7 @@ class MinimumNeedsTest(unittest.TestCase):
     def test_minimum_needs(self):
         """Test behaviour of the minimum needs function.
         """
-        dialog = MinimumNeeds(PARENT)
+        dialog = NeedsCalculatorDialog(PARENT)
         layer = safe_read_layer(shapefile_path)
         attribute = 'displaced'
         new_layer = dialog.minimum_needs(layer, attribute)
@@ -88,6 +88,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    # noinspection PyArgumentEqualDefault
     suite = unittest.makeSuite(MinimumNeedsTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
