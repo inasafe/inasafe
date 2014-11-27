@@ -35,7 +35,8 @@ from PyQt4.QtNetwork import QNetworkAccessManager
 # pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
 # pylint: enable=W0611
-from safe_qgis.ui.osm_downloader_base import Ui_OsmDownloaderBase
+from safe_qgis.ui.osm_downloader_dialog_base import (
+    Ui_OsmDownloaderDialogBase)
 
 from safe_qgis.exceptions import (
     CanceledImportDialogError, ImportDialogError, DownloadError)
@@ -51,7 +52,7 @@ INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
+class OsmDownloaderDialog(QDialog, Ui_OsmDownloaderDialogBase):
     """Downloader for OSM data."""
 
     def __init__(self, parent=None, iface=None):

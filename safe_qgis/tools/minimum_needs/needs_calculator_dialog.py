@@ -21,7 +21,8 @@ from PyQt4.QtCore import pyqtSignature
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 
 from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
-from safe_qgis.ui.minimum_needs_base import Ui_MinimumNeedsBase
+from safe_qgis.ui.needs_calculator_dialog_base import (
+    Ui_NeedsCalculatorDialogBase)
 from safe_qgis.utilities.utilities import (
     add_ordered_combo_item,
     is_polygon_layer,
@@ -37,7 +38,7 @@ INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
+class NeedsCalculatorDialog(QtGui.QDialog, Ui_NeedsCalculatorDialogBase):
     """Dialog implementation class for the InaSAFE minimum needs dialog.
     """
 

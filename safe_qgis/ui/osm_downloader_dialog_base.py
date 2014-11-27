@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'osm_downloader_base.ui'
+# Form implementation generated from reading ui file 'osm_downloader_dialog_base.ui'
 #
-# Created: Fri Mar 28 10:38:04 2014
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Mon Nov 17 12:22:22 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,49 +12,58 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
 
-class Ui_OsmDownloaderBase(object):
-    def setupUi(self, OsmDownloaderBase):
-        OsmDownloaderBase.setObjectName(_fromUtf8("OsmDownloaderBase"))
-        OsmDownloaderBase.resize(480, 594)
-        self.gridLayout_2 = QtGui.QGridLayout(OsmDownloaderBase)
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+class Ui_OsmDownloaderDialogBase(object):
+    def setupUi(self, OsmDownloaderDialogBase):
+        OsmDownloaderDialogBase.setObjectName(_fromUtf8("OsmDownloaderDialogBase"))
+        OsmDownloaderDialogBase.resize(480, 594)
+        self.gridLayout_2 = QtGui.QGridLayout(OsmDownloaderDialogBase)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.web_view = QtWebKit.QWebView(OsmDownloaderBase)
-        self.web_view.setUrl(QtCore.QUrl(_fromUtf8("about:blank")))
+        self.web_view = QtWebKit.QWebView(OsmDownloaderDialogBase)
+        self.web_view.setProperty("url", QtCore.QUrl(_fromUtf8("about:blank")))
         self.web_view.setObjectName(_fromUtf8("web_view"))
         self.gridLayout_2.addWidget(self.web_view, 0, 0, 1, 1)
-        self.feature_type_label = QtGui.QLabel(OsmDownloaderBase)
+        self.feature_type_label = QtGui.QLabel(OsmDownloaderDialogBase)
         self.feature_type_label.setObjectName(_fromUtf8("feature_type_label"))
         self.gridLayout_2.addWidget(self.feature_type_label, 1, 0, 1, 1)
-        self.feature_type = QtGui.QComboBox(OsmDownloaderBase)
+        self.feature_type = QtGui.QComboBox(OsmDownloaderDialogBase)
         self.feature_type.setObjectName(_fromUtf8("feature_type"))
         self.feature_type.addItem(_fromUtf8(""))
         self.feature_type.addItem(_fromUtf8(""))
         self.feature_type.addItem(_fromUtf8(""))
         self.gridLayout_2.addWidget(self.feature_type, 2, 0, 1, 1)
-        self.output_directory_label = QtGui.QLabel(OsmDownloaderBase)
+        self.output_directory_label = QtGui.QLabel(OsmDownloaderDialogBase)
         self.output_directory_label.setObjectName(_fromUtf8("output_directory_label"))
         self.gridLayout_2.addWidget(self.output_directory_label, 3, 0, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.output_directory = QtGui.QLineEdit(OsmDownloaderBase)
+        self.output_directory = QtGui.QLineEdit(OsmDownloaderDialogBase)
         self.output_directory.setText(_fromUtf8(""))
         self.output_directory.setObjectName(_fromUtf8("output_directory"))
         self.horizontalLayout.addWidget(self.output_directory)
-        self.directory_button = QtGui.QToolButton(OsmDownloaderBase)
+        self.directory_button = QtGui.QToolButton(OsmDownloaderDialogBase)
         self.directory_button.setObjectName(_fromUtf8("directory_button"))
         self.horizontalLayout.addWidget(self.directory_button)
         self.gridLayout_2.addLayout(self.horizontalLayout, 4, 0, 1, 1)
-        self.filename_prefix_label = QtGui.QLabel(OsmDownloaderBase)
+        self.filename_prefix_label = QtGui.QLabel(OsmDownloaderDialogBase)
         self.filename_prefix_label.setObjectName(_fromUtf8("filename_prefix_label"))
         self.gridLayout_2.addWidget(self.filename_prefix_label, 5, 0, 1, 1)
-        self.filename_prefix = QtGui.QLineEdit(OsmDownloaderBase)
+        self.filename_prefix = QtGui.QLineEdit(OsmDownloaderDialogBase)
         self.filename_prefix.setInputMask(_fromUtf8(""))
         self.filename_prefix.setText(_fromUtf8(""))
         self.filename_prefix.setObjectName(_fromUtf8("filename_prefix"))
         self.gridLayout_2.addWidget(self.filename_prefix, 6, 0, 1, 1)
-        self.groupBox = QtGui.QGroupBox(OsmDownloaderBase)
+        self.groupBox = QtGui.QGroupBox(OsmDownloaderDialogBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -93,30 +102,30 @@ class Ui_OsmDownloaderBase(object):
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.gridLayout.addWidget(self.label_4, 4, 1, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox, 7, 0, 1, 1)
-        self.button_box = QtGui.QDialogButtonBox(OsmDownloaderBase)
+        self.button_box = QtGui.QDialogButtonBox(OsmDownloaderDialogBase)
         self.button_box.setOrientation(QtCore.Qt.Horizontal)
         self.button_box.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok)
         self.button_box.setObjectName(_fromUtf8("button_box"))
         self.gridLayout_2.addWidget(self.button_box, 8, 0, 1, 1)
 
-        self.retranslateUi(OsmDownloaderBase)
-        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("accepted()")), OsmDownloaderBase.accept)
-        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("rejected()")), OsmDownloaderBase.reject)
-        QtCore.QMetaObject.connectSlotsByName(OsmDownloaderBase)
+        self.retranslateUi(OsmDownloaderDialogBase)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("accepted()")), OsmDownloaderDialogBase.accept)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("rejected()")), OsmDownloaderDialogBase.reject)
+        QtCore.QMetaObject.connectSlotsByName(OsmDownloaderDialogBase)
 
-    def retranslateUi(self, OsmDownloaderBase):
-        OsmDownloaderBase.setWindowTitle(QtGui.QApplication.translate("OsmDownloaderBase", "OSM Downloader", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Feature Type", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type.setItemText(0, QtGui.QApplication.translate("OsmDownloaderBase", "All", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type.setItemText(1, QtGui.QApplication.translate("OsmDownloaderBase", "Buildings", None, QtGui.QApplication.UnicodeUTF8))
-        self.feature_type.setItemText(2, QtGui.QApplication.translate("OsmDownloaderBase", "Roads", None, QtGui.QApplication.UnicodeUTF8))
-        self.output_directory_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Output directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.directory_button.setText(QtGui.QApplication.translate("OsmDownloaderBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.filename_prefix_label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "File name prefix", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("OsmDownloaderBase", "Bounding box", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "West", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("OsmDownloaderBase", "North", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("OsmDownloaderBase", "East", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("OsmDownloaderBase", "South", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, OsmDownloaderDialogBase):
+        OsmDownloaderDialogBase.setWindowTitle(_translate("OsmDownloaderDialogBase", "OSM Downloader", None))
+        self.feature_type_label.setText(_translate("OsmDownloaderDialogBase", "Feature Type", None))
+        self.feature_type.setItemText(0, _translate("OsmDownloaderDialogBase", "All", None))
+        self.feature_type.setItemText(1, _translate("OsmDownloaderDialogBase", "Buildings", None))
+        self.feature_type.setItemText(2, _translate("OsmDownloaderDialogBase", "Roads", None))
+        self.output_directory_label.setText(_translate("OsmDownloaderDialogBase", "Output directory", None))
+        self.directory_button.setText(_translate("OsmDownloaderDialogBase", "...", None))
+        self.filename_prefix_label.setText(_translate("OsmDownloaderDialogBase", "File name prefix", None))
+        self.groupBox.setTitle(_translate("OsmDownloaderDialogBase", "Bounding box", None))
+        self.label.setText(_translate("OsmDownloaderDialogBase", "West", None))
+        self.label_2.setText(_translate("OsmDownloaderDialogBase", "North", None))
+        self.label_3.setText(_translate("OsmDownloaderDialogBase", "East", None))
+        self.label_4.setText(_translate("OsmDownloaderDialogBase", "South", None))
 
 from PyQt4 import QtWebKit

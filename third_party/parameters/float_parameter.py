@@ -51,3 +51,12 @@ class FloatParameter(NumericParameter):
         """
         self._precision = precision
 
+    def serialize(self):
+        """Convert the parameter into a dictionary.
+
+        :return: The parameter dictionary.
+        :rtype: dict
+        """
+        pickle = super(FloatParameter, self).serialize()
+        pickle['precision'] = self.precision
+        return pickle

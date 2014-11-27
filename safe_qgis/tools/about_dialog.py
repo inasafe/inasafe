@@ -52,3 +52,21 @@ class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):
         # Set Disclaimer Text
         self.disclaimer_text.setFontPointSize(11)
         self.disclaimer_text.setText(disclaimer())
+
+        # Set Attributions text
+        image_credits_text = ''
+        for index, limitation in enumerate(self.attributions()):
+            image_credits_text += '%s. %s \n' % (index + 1, limitation)
+        self.image_credits_text.setFontPointSize(11)
+        self.image_credits_text.setText(image_credits_text)
+
+    def attributions(self):
+        """List of attributions for icons etc."""
+        attributes_list = list()
+        attributes_list.append(self.tr(
+            'Edit by Hugo Garduño from The Noun Project'))
+        attributes_list.append(self.tr(
+            'Add designed by Michael Zenaty from the Noun Project'))
+        attributes_list.append(self.tr(
+            'Remove designed by Dalpat Prajapati from the Noun Project'))
+        return attributes_list

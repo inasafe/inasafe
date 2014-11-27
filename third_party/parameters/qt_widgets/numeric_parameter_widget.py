@@ -7,7 +7,9 @@ __date__ = '8/21/14'
 __copyright__ = 'imajimatika@gmail.com'
 __doc__ = ''
 
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QLabel, QSizePolicy, QWidget, QComboBox
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
 from generic_parameter_widget import GenericParameterWidget
@@ -61,7 +63,8 @@ class NumericParameterWidget(GenericParameterWidget):
         if len(self._parameter.allowed_units) > 1:
             current_index = self._unit_widget.currentIndex()
             unit = self._unit_widget.itemData(current_index, Qt.UserRole)
-            unit = unit.toPyObject()
+            if hasattr(unit, 'toPyObject'):
+                unit = unit.toPyObject()
             self._parameter.unit = unit
         return self._parameter
 
@@ -86,3 +89,11 @@ class NumericParameterWidget(GenericParameterWidget):
             self._unit_widget.setCurrentIndex(current_index)
             self._unit_widget.setToolTip('Select your preferred unit')
             self._unit_widget.currentIndex()
+
+    def set_value(self, value):
+        """Set the value of the input
+
+        :param value: The new value
+        :type value: int, float
+        """
+        self._input.setValue(value)

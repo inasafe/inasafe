@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'extent_selector_base.ui'
 #
-# Created: Tue Nov 11 10:48:45 2014
-#      by: PyQt4 UI code generator 4.10.4
+# Created: Thu Nov 13 14:29:43 2014
+#      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -46,19 +46,20 @@ class Ui_ExtentSelectorBase(object):
         sizePolicy.setHeightForWidth(self.group_box.sizePolicy().hasHeightForWidth())
         self.group_box.setSizePolicy(sizePolicy)
         self.group_box.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.group_box.setFlat(True)
         self.group_box.setObjectName(_fromUtf8("group_box"))
         self.gridLayout = QtGui.QGridLayout(self.group_box)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.y_minimum = QtGui.QDoubleSpinBox(self.group_box)
+        self.y_maximum = QtGui.QDoubleSpinBox(self.group_box)
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.y_minimum.setFont(font)
-        self.y_minimum.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
-        self.y_minimum.setDecimals(7)
-        self.y_minimum.setMinimum(-999999999.0)
-        self.y_minimum.setMaximum(999999999.0)
-        self.y_minimum.setObjectName(_fromUtf8("y_minimum"))
-        self.gridLayout.addWidget(self.y_minimum, 0, 1, 1, 1)
+        self.y_maximum.setFont(font)
+        self.y_maximum.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
+        self.y_maximum.setDecimals(7)
+        self.y_maximum.setMinimum(-999999999.0)
+        self.y_maximum.setMaximum(999999999.0)
+        self.y_maximum.setObjectName(_fromUtf8("y_maximum"))
+        self.gridLayout.addWidget(self.y_maximum, 0, 1, 1, 1)
         self.x_minimum = QtGui.QDoubleSpinBox(self.group_box)
         font = QtGui.QFont()
         font.setPointSize(9)
@@ -82,16 +83,16 @@ class Ui_ExtentSelectorBase(object):
         self.x_maximum.setMaximum(999999999.0)
         self.x_maximum.setObjectName(_fromUtf8("x_maximum"))
         self.gridLayout.addWidget(self.x_maximum, 1, 2, 1, 1)
-        self.y_maximum = QtGui.QDoubleSpinBox(self.group_box)
+        self.y_minimum = QtGui.QDoubleSpinBox(self.group_box)
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.y_maximum.setFont(font)
-        self.y_maximum.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
-        self.y_maximum.setDecimals(7)
-        self.y_maximum.setMinimum(-999999999.0)
-        self.y_maximum.setMaximum(999999999.0)
-        self.y_maximum.setObjectName(_fromUtf8("y_maximum"))
-        self.gridLayout.addWidget(self.y_maximum, 2, 1, 1, 1)
+        self.y_minimum.setFont(font)
+        self.y_minimum.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
+        self.y_minimum.setDecimals(7)
+        self.y_minimum.setMinimum(-999999999.0)
+        self.y_minimum.setMaximum(999999999.0)
+        self.y_minimum.setObjectName(_fromUtf8("y_minimum"))
+        self.gridLayout.addWidget(self.y_minimum, 2, 1, 1, 1)
         self.gridLayout_2.addWidget(self.group_box, 1, 0, 1, 1)
         self.button_box = QtGui.QDialogButtonBox(ExtentSelectorBase)
         self.button_box.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok|QtGui.QDialogButtonBox.Reset)
@@ -100,20 +101,20 @@ class Ui_ExtentSelectorBase(object):
 
         self.retranslateUi(ExtentSelectorBase)
         QtCore.QMetaObject.connectSlotsByName(ExtentSelectorBase)
-        ExtentSelectorBase.setTabOrder(self.x_minimum, self.y_minimum)
-        ExtentSelectorBase.setTabOrder(self.y_minimum, self.x_maximum)
-        ExtentSelectorBase.setTabOrder(self.x_maximum, self.y_maximum)
-        ExtentSelectorBase.setTabOrder(self.y_maximum, self.capture_button)
+        ExtentSelectorBase.setTabOrder(self.x_minimum, self.y_maximum)
+        ExtentSelectorBase.setTabOrder(self.y_maximum, self.x_maximum)
+        ExtentSelectorBase.setTabOrder(self.x_maximum, self.y_minimum)
+        ExtentSelectorBase.setTabOrder(self.y_minimum, self.capture_button)
         ExtentSelectorBase.setTabOrder(self.capture_button, self.button_box)
 
     def retranslateUi(self, ExtentSelectorBase):
         ExtentSelectorBase.setWindowTitle(_translate("ExtentSelectorBase", "InaSAFE Analysis Area", None))
         self.group_box.setTitle(_translate("ExtentSelectorBase", "Bounding box", None))
-        self.y_minimum.setPrefix(_translate("ExtentSelectorBase", "North: ", None))
+        self.y_maximum.setPrefix(_translate("ExtentSelectorBase", "North: ", None))
         self.x_minimum.setPrefix(_translate("ExtentSelectorBase", "East: ", None))
         self.capture_button.setText(_translate("ExtentSelectorBase", "Select on map", None))
         self.x_maximum.setPrefix(_translate("ExtentSelectorBase", "West: ", None))
-        self.y_maximum.setPrefix(_translate("ExtentSelectorBase", "South: ", None))
+        self.y_minimum.setPrefix(_translate("ExtentSelectorBase", "South: ", None))
 
 from PyQt4 import QtWebKit
 import resources_rc

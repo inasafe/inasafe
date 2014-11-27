@@ -24,9 +24,9 @@ import random
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_needs
 )
+from third_party.parameters.resource_parameter import ResourceParameter
 
 
 class TestCore(unittest.TestCase):
@@ -56,51 +56,34 @@ class TestCore(unittest.TestCase):
                 population_rounding_full(n)[0])
 
     def test_02_evacuated_population_needs(self):
+        water = ResourceParameter()
+        water.name = 'Water'
+        water.unit.name = 'litre'
+        water.unit.abbreviation = 'l'
+        water.unit.plural = 'litres'
+        water.frequency = 'weekly'
+        water.maximum_allowed_value = 10
+        water.minimum_allowed_value = 0
+        water.value = 5
+        rice = ResourceParameter()
+        rice.name = 'Rice'
+        rice.unit.name = 'kilogram'
+        rice.unit.abbreviation = 'kg'
+        rice.unit.plural = 'kilograms'
+        rice.frequency = 'daily'
+        rice.maximum_allowed_value = 1
+        rice.minimum_allowed_value = 0
+        rice.value = 0.5
         total_needs = evacuated_population_needs(
             10,
-            {'Water [l]': 5, 'Rice [kg]': 0.5},
-            {
-                "resources": [
-                    {
-                        "Default": "5",
-                        "Minimum allowed": "0",
-                        "Maximum allowed": "100",
-                        "Frequency": "weekly",
-                        "Resource name": "Water",
-                        "Resource description": "Water",
-                        "Unit": "litre",
-                        "Units": "litres",
-                        "Unit abbreviation": "l",
-                        "Readable sentence": "Water."
-                    },
-                    {
-                        "Default": "0.5",
-                        "Minimum allowed": "0",
-                        "Maximum allowed": "100",
-                        "Frequency": "daily",
-                        "Resource name": "Rice",
-                        "Resource description": "food",
-                        "Unit": "kilogram",
-                        "Units": "kilograms",
-                        "Unit abbreviation": "kg",
-                        "Readable sentence": "Food."
-                    }
-                ],
-                "provenance": "Test",
-                "profile": "Test"
-            }
+            [water.serialize(), rice.serialize()]
         )
-        self.assertEqual(total_needs['weekly'][0]['Resource name'], 'Water')
-        self.assertEqual(total_needs['weekly'][0]['Amount'], 50)
-        self.assertEqual(total_needs['daily'][0]['Resource name'], 'Rice')
-        self.assertEqual(total_needs['daily'][0]['Amount'], 5)
-
-    def test_03_evacuated_population_weekly_needs(self):
-        total_needs = evacuated_population_weekly_needs(
-            10,
-            {'Water': 5, 'Rice': 0.5})
-        self.assertEqual(total_needs['Water'], 50)
-        self.assertEqual(total_needs['Rice'], 5)
+        self.assertEqual(total_needs['weekly'][0]['name'], 'Water')
+        self.assertEqual(total_needs['weekly'][0]['amount'], 50)
+        self.assertEqual(total_needs['weekly'][0]['table name'], 'Water [l]')
+        self.assertEqual(total_needs['daily'][0]['name'], 'Rice')
+        self.assertEqual(total_needs['daily'][0]['amount'], 5)
+        self.assertEqual(total_needs['daily'][0]['table name'], 'Rice [kg]')
 
 if __name__ == '__main__':
     unittest.main()
