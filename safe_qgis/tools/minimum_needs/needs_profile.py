@@ -39,14 +39,14 @@ class NeedsProfile(MinimumNeeds):
     def load(self):
         """Load the minimum needs from the QSettings object.
         """
-        minimum_needs = self.settings.value('MinimumNeeds', '')
+        minimum_needs = self.settings.value('MinimumNeeds', None, type=dict)
         # if hasattr(minimum_needs, 'toPyObject'):
         #     minimum_needs = minimum_needs.toPyObject()
-        if minimum_needs is None:
+        if minimum_needs is None or minimum_needs == {}:
             profiles = self.get_profiles()
             self.read_from_file(
                 '%s/minimum_needs/%s.json' % (self.root_directory, profiles))
-        if minimum_needs is None:
+        if minimum_needs is None or minimum_needs == {}:
             minimum_needs = self._defaults()
         self.minimum_needs = minimum_needs
 
