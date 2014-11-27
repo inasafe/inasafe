@@ -17,7 +17,7 @@ from PyQt4.QtCore import QSettings
 from safe.common.minimum_needs import MinimumNeeds
 from shutil import copy
 from os.path import exists, dirname
-from os import mkdir, listdir, environ
+from os import listdir, environ, makedirs
 
 
 class NeedsProfile(MinimumNeeds):
@@ -119,7 +119,7 @@ class NeedsProfile(MinimumNeeds):
         locale_minimum_needs_dir = '%s/minimum_needs/' % self.root_directory
         path_name = "%s/../../../files/minimum_needs" % dirname(__file__)
         if not exists(locale_minimum_needs_dir):
-            mkdir(locale_minimum_needs_dir)
+            makedirs(locale_minimum_needs_dir)
         for file_name in listdir(path_name):
             source_file = '%s/%s' % (path_name, file_name)
             destination_file = (
