@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Converter &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Shakemap Converter &mdash; InaSAFE Documentation 2.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.0',
+        VERSION:     '2.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="InaSAFE Documentation 2.2.0 documentation" href="index.html" />
     <link rel="next" title="Batch Runner" href="batch_runner.html" />
     <link rel="prev" title="Minimum Needs Tool" href="minimum_needs.html" />
 
@@ -169,7 +169,7 @@
                 </li>
                 
                 
-                <li><a href="#">Converter</a></li>
+                <li><a href="#">Shakemap Converter</a></li>
             </ul>
         </div>
     </div> 
@@ -181,8 +181,8 @@
     <div class="row">
         <div class="span12">
                 
-  <div class="section" id="converter">
-<span id="id1"></span><h1>Converter<a class="headerlink" href="#converter" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="shakemap-converter">
+<span id="converter"></span><h1>Shakemap Converter<a class="headerlink" href="#shakemap-converter" title="Permalink to this headline">¶</a></h1>
 <p>Shakemaps are useful for carrying out contingency planning for the event of an
 earthquake. Normally these are distributed as grid.xml files which are not
 usable in InaSAFE or QGIS. This tool will import a grid.xml file as a
@@ -192,13 +192,15 @@ GEOTIFF file from where it can be used within InaSAFE.</p>
 automatically creates InaSAFE keyword metadata for the layer so that
 it can be used immediately for analysis.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/converter.png"><img alt="Converter" src="_images/converter.png" style="width: 471.75px; height: 413.25px;" /></a>
+<a class="reference internal image-reference" href="_images/converter.png"><img alt="Converter" src="_images/converter.png" style="width: 399.0px; height: 498.0px;" /></a>
 <p class="caption">Converter</p>
 </div>
 <p>To use this tool effectively:</p>
 <blockquote>
 <div><ul class="simple">
 <li>Select a grid.xml for the input layer.</li>
+<li>Add the title of the shakemap that will be used for the keywords.</li>
+<li>Add the source of the shakemap that will also be used for the keywords.</li>
 <li>Choose where to write the output layer to.</li>
 <li>Choose the interpolation algorithm that should be used when converting the
 xml grid to a raster. If unsure keep the default.</li>

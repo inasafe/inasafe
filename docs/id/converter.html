@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Konverter &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
+    <title>Pengonversi Shakemap &mdash; dokumentasi InaSAFE Documentation 2.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.0',
+        VERSION:     '2.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,7 @@
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 2.2.0" href="index.html" />
     <link rel="next" title="Batch Runner" href="batch_runner.html" />
     <link rel="prev" title="Alat kebutuhan minimum" href="minimum_needs.html" />
 
@@ -170,7 +170,7 @@
                 </li>
                 
                 
-                <li><a href="#">Konverter</a></li>
+                <li><a href="#">Pengonversi Shakemap</a></li>
             </ul>
         </div>
     </div> 
@@ -182,8 +182,8 @@
     <div class="row">
         <div class="span12">
                 
-  <div class="section" id="converter">
-<span id="id1"></span><h1>Konverter<a class="headerlink" href="#converter" title="Link permanent untuk headline ini">¶</a></h1>
+  <div class="section" id="shakemap-converter">
+<span id="converter"></span><h1>Pengonversi Shakemap<a class="headerlink" href="#shakemap-converter" title="Link permanent untuk headline ini">¶</a></h1>
 <p>Peta guncangan berguna untuk melaksanakan perencanaan kontinjensi dalam kejadian gempa bumi. Biasanya hal ini didistribusikan sebagai file grid.xml yang tidak dapat digunakan dalam InaSAFE atau QGIS. Alat ini akan mengimpor file grid.xml sebagai file GEOTIFF yang nantinya dapat digunakan dalam InaSAFE.</p>
 <p>Dua algoritma interpolasi yang berbeda dapat digunakan selama proses impor - <tt class="docutils literal"><span class="pre">Nearest</span> <span class="pre">Neighbour</span></tt> dan <tt class="docutils literal"><span class="pre">Inverse</span> <span class="pre">Distance</span></tt>. Setelah konversi, alat tersebut secara otomatis membuat metadata katakunci InaSAFE untuk  layer sehingga dapat segera digunakan untuk analisis.</p>
 <div class="figure align-center">
@@ -194,6 +194,10 @@
 <blockquote>
 <div><ul class="simple">
 <li><p class="first">Pilih grid.xml untk layer input.</p>
+</li>
+<li><p class="first">Tambahkan judul shakemap yang akan digunakan untuk kata kunci.</p>
+</li>
+<li><p class="first">Tambahkan sumber shakemap yang juga akan digunakan untuk kata kunci.</p>
 </li>
 <li><p class="first">Pilih lokasi untuk menulis layer output.</p>
 </li>

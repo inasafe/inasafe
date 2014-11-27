@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Data Driven Age Post-processor &mdash; InaSAFE Documentation 2.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap-responsive.min.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="InaSAFE Documentation 2.2.0 documentation" href="index.html" />
+    <link rel="prev" title="Keywords Wizard" href="keywords_wizard.html" />
+
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("_static/img/logo.png");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 30px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = 'data_driven_age.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+        // Make the search button pretty - issue 36
+        $(':submit').addClass('btn btn-warning btn-small');
+    })
+
+    
+    function gotoLang(lang) {
+        var currentPage = 'data_driven_age.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.hotosm.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "2"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
+
+<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+
+  </head>
+  <body>
+
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <font color="#333">
+                        <li><h1>Ina<b>SAFE</b></h1></li>
+                        </font>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                
+                
+                <li class="right"
+                style="margin-right: 10px" >
+                <a href="genindex.html"
+                   title="General Index"
+                   style="z-index:;"
+                accesskey="I">index</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="keywords_wizard.html"
+                   title="Keywords Wizard"
+                   style="z-index:;"
+                accesskey="P">previous</a>
+                </li>
+                
+
+                
+                <li class="first">
+                    <a style="z-index:100;" href="index.html"> InaSAFE Docs </a>
+                </li>
+                
+                
+                <li><a href="#">Data Driven Age Post-processor</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="span12">
+                
+  <div class="section" id="data-driven-age-post-processor">
+<span id="datadriven-age-post-processor"></span><h1>Data Driven Age Post-processor<a class="headerlink" href="#data-driven-age-post-processor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="purpose">
+<h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<p>Data driven age is used carried out during aggregation to determine how many
+people are affected by a hazard according to their age distribution (youth,
+adult, elderly). This feature is similar to the gender post-processor.  With
+data driven age, a custom age distribution ratio is used. This is specified
+either by in the data attributes of the aggregation polygons, or by setting a
+global ratio for the whole aggregator vector layer using the keywords editor or
+keywords wizard.</p>
+<p>This feature is used to specify and to give more information by giving number
+of affected youth, adult and elderly in an area for example, the boundaries of
+a village. To identify more where area should be priorities during rescue
+operations and to give more attention on the vulnerable population (
+e.g. elderly) and their needs.</p>
+</div>
+<div class="section" id="guidelines">
+<h2>Guidelines<a class="headerlink" href="#guidelines" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="data-needed">
+<h3>Data Needed<a class="headerlink" href="#data-needed" title="Permalink to this headline">¶</a></h3>
+<p>The aggregator vector layer should contain percentage of age distribution
+in the attribute table.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="30%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">YOUTH</th>
+<th class="head">ADULT</th>
+<th class="head">ELDERLY</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0.30</td>
+<td>0.40</td>
+<td>0.30</td>
+</tr>
+<tr class="row-odd"><td>0.25</td>
+<td>0.65</td>
+<td>0.10</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="category">
+<h2>Category<a class="headerlink" href="#category" title="Permalink to this headline">¶</a></h2>
+<p>Ratio attributes or Ratio defaults should be populated up.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="74%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Allowed  Values</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>youth ratio attribute / youth ratio default</td>
+<td>youth</td>
+</tr>
+<tr class="row-odd"><td>adult ratio attribute / adult ratio default</td>
+<td>adult</td>
+</tr>
+<tr class="row-even"><td>elderly ratio attribute / elderly ratio default</td>
+<td>elderly/elder</td>
+</tr>
+</tbody>
+</table>
+<p>The keywords editor graphical user interface for Age Postprocessing.</p>
+<p>There are two ways to specifying age postprocessing options:</p>
+<p>1. Ratio Attributes: In this mode, data used for postprocessing is from the
+attributes of the aggregation layer itself. Consider the example below where
+each aggregation area has an attribute indicating the rations of age or gender.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/example_age_ratio_map.png"><img alt="Example age ration map for Jakarta" src="_images/example_age_ratio_map.png" style="width: 2630.25px; height: 1860.0px;" /></a>
+</div>
+<p>In the keywords editor you can refer to these attributes and the age and
+gender rations will be extrapolated based on the defined values.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/datadriven_postprocessing_config_by_attribute.png"><img alt="Age Post-processor configuration from layer attributes" src="_images/datadriven_postprocessing_config_by_attribute.png" style="width: 480.0px; height: 255.0px;" /></a>
+</div>
+<p>2. Ratio Defaults: In this mode, the default values will be used. in this
+case you may not know per-area what the age and gender breakdowns are and wish
+to rather apply the rations globally (to all aggregation areas).</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/datadriven_postprocessing_config_by_default.png"><img alt="Age Post-processor configuration using default values" src="_images/datadriven_postprocessing_config_by_default.png" style="width: 486.0px; height: 255.75px;" /></a>
+</div>
+<p>A similar user interface is provided in the
+<a class="reference internal" href="keywords_wizard.html#keywords-wizard"><em>keywords wizard</em></a> user interface.</p>
+</div>
+</div>
+
+
+        </div> 
+        <hr>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact
+            <a href="mailto:info@inasafe.org?subject=[inasafe-info]">
+            <b>info@inasafe.org</b></a> for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.<br>
+            This document is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
+            <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
+            Copyright 2014, Indonesian Government-BNPB, Australian
+            Government-AIFDR and the World Bank-GFDRR.
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>

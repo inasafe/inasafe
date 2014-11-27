@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Pilihan &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
+    <title>Pilihan &mdash; dokumentasi InaSAFE Documentation 2.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.0',
+        VERSION:     '2.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,7 @@
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 2.2.0" href="index.html" />
     <link rel="next" title="Memahami Fungsi Dampak" href="impact_functions.html" />
     <link rel="prev" title="Laporan" href="reports.html" />
 
@@ -214,7 +214,7 @@
 </li>
 <li><p class="first"><em class="guilabel">Saat melakukan analisis, dataset yang digunakan hanya sebatas yang tampil di layar</em> : Pilihan ini akan menyebabkan QGIS memotong layer ancaman dan keterpaparan yang terlihat pada peta kanvas.</p>
 </li>
-<li><p class="first"><em class="guilabel">Potong fitur saat melakukan clipping (akan memotong poligon menjadi lebih kecil)</em>: Pilihan ini, setiap poligon yang melampaui luasan analisis akan dipotong sehingga mereka berisi oleh luasan analisis. contohnya jika Anda memiliki layer poligon ancaman banjir yang meluas jauh melampaui area yang Anda minati, poligon banjir akan berkurang sehingga hanya bagian di dalam area yang Anda minati dipertahankan. Ini dapat mempercepat waktu pemrosesan.</p>
+<li><p class="first"><em class="guilabel">When clipping, also clip features (e.g. will clip polygon smaller)</em>: Pilihan ini akan memotong setiap poligon yang melampaui luasan analisisnya, sehingga mereka akan masuk kedalam luasan analisis. Contohnya jika Anda memiliki layer poligon ancaman banjir yang meluas jauh melampaui area yang Anda minati, poligon banjir akan berkurang sehingga hanya bagian di dalam area yang Anda minati. Ini dapat mempercepat waktu pemrosesan.</p>
 </li>
 <li><p class="first"><em class="guilabel">Tampilkan layer intermediate yang dibuat pascapemrosesan</em> : Pilihan ini akan menyebabkan QGIS menampilkan file menengah yang dihasilkan oleh langkah-langkah postprocessing pada peta kanvas.</p>
 </li>
@@ -225,13 +225,17 @@
 <div class="section" id="template-options">
 <span id="id2"></span><h2>Pilihan Template<a class="headerlink" href="#template-options" title="Link permanent untuk headline ini">¶</a></h2>
 <ul class="simple">
-<li><p class="first"><em class="guilabel">Logo organisasi</em>: Pilihan ini digunakan untuk menentukan logo yang akan digunakan sebagai logo organisasi pada berkas pdf proyek skenario dampak anda. Lihat <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> pada Panduan Pengguna InaSAFE untik informasi lebih lanjut mengenai laporan.</p>
+<li><p class="first"><em class="guilabel">Prompt me in cases when a template has missing elements</em>: Ketika diaktifkan, opsi ini akan menyebabkan InaSAFE mengingatkan pengguna ketika template telah hilang ketika pengguna mencoba mencetak laporan atau membukanya di komposer.</p>
+</li>
+<li><p class="first"><em class="guilabel">Use custom organisation logo</em>: Pilihan ini digunakan untuk menentukan logo yang akan digunakan sebagai logo organisasi dalam pdf proyek skenario dampak Anda. Jika opsi ini dinonaktifkan, InaSAFE akan menggunakan logo organisasi default. Lihat <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> in the InaSAFE Pedoman untuk pengguna informasi lebih lanjut tentang laporan.</p>
 </li>
 <li><p class="first"><em class="guilabel">Tampilkan logo organisasi pada panel utama</em>: Jika pilihan ini diaktifkan maka logo organisasi yang dipilih (jika ada) akan ditampilkan di bagian bawah panel utama inasafe.</p>
 </li>
-<li><p class="first"><em class="guilabel">Direktori template laporan</em>: Pilihan ini digunakan untuk menentukan sebuah direktori dengan template rancangan anda sendiri. Template dari direktori ini akan tersedia untuk digunakan pada saat menghasilkan laporan untuk proyek skenario dampak anda. Lihat <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> pada Panduan Pengguna InaSAFE untuk informasi lebih lanjut mengenai laporan.</p>
+<li><p class="first"><em class="guilabel">Use custom north arrow image</em>: Pilihan ini digunakan untuk menentukan gambar arah utara yang akan digunakan sebagai gambar arah utara di pdf proyek skenario dampak Anda. Jika opsi ini dinonaktifkan, InaSAFE akan menggunakan gambar default arah utara.</p>
 </li>
-<li><p class="first"><em class="guilabel">Teks disclaimer organisasi</em>: Pilihan ini digunakan untuk merubah pengaturan bawaan teks penolakan yang akan dicetak dalam laporan. Cukup masukan teks anda sendiri dan teks tersebut akan digunakan. Lihat <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> pada Panduan Pengguna InaSAFE untuk informasi lebih lanjut mengenai laporan.</p>
+<li><p class="first"><em class="guilabel">Additional report templates directory</em>: Pilihan ini digunakan untuk menentukan direktori dengan template kustom. Template dari direktori ini akan tersedia untuk penggunaan saat membuat laporan tentang proyek skenario dampak Anda.</p>
+</li>
+<li><p class="first"><em class="guilabel">Use custom organisation disclaimer text</em>: Pilihan ini digunakan untuk mengubah teks default sanggahan, dicetak dalam laporan. Jika ini diaktifkan, Anda hanya memasukkan teks sendiri dan akan digunakan sebagai pengganti dari default. Lihat <a class="reference internal" href="reports.html#toolbar-reports"><em>Laporan</em></a> in the InaSAFE Panduan bagi Pengguna untuk informasi lebih lanjut tentang laporan.</p>
 </li>
 </ul>
 </div>
@@ -248,7 +252,7 @@
 <p class="last">Untuk mengaktifkan/menonaktifkan pengaturan di atas membutuhkan QGIS untuk di <em>restart</em> . Pesan kesalahan dan informasi diagnostik akan terkirim ke <a class="reference external" href="http://sentry.linfiniti.com/inasafe-desktop/">http://sentry.linfiniti.com/inasafe-desktop/</a> . Beberapa institusi mungkin tidak memperbolehkan anda untuk mengaktifkan fitur ini - periksa kembali dengan administrasi jaringan anda jika tidak yakin. Meskipun data yang terkirim adalah anonim, informasi yang terkandung dalam <em>tracebacks</em> mungkin memiliki jejak sistem berkas dimana akan menunjukan identitas anda atau informasi lain dari sistem anda.</p>
 </div>
 <ul class="simple">
-<li><p class="first">guilabel:<cite>Aktifkan mode pengembang</cite> : Ketika pilihan ini diaktifkan, maka anda dapat melakukan klik kanan pada area laporan dan menggunakan alat <em>webkit debug</em> untuk melakukan <em>debug</em> pada hasil. <strong>Pilihan ini dimaksudkan hanya untuk pengguna yang mahir.</strong></p>
+<li><p class="first"><em class="guilabel">Enable developer mode for dock webkit (needs restart)</em> :  Dengan opsi ini diaktifkan, Anda bisa klik kanan pada area laporan dan menggunakan alat-alat webkit debug untuk men-debug keluaran. <strong>Pilihan ini ditujukan untuk pengguna tingkat lanjut.</strong></p>
 </li>
 <li><p class="first"><em class="guilabel">Gunakan zonal statistik QGIS</em> : Dengan tombol ini, anda dapat merubah antara menggunakan zonal statistik QGIS internal atau zonal statistik yang tersedia dalam InaSAFE</p>
 </li>
