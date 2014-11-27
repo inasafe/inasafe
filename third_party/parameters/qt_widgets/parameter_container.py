@@ -84,7 +84,6 @@ class ParameterContainer(QWidget, object):
 
         for widget_item in parameter_widgets:
             parameter_widget = widget_item.widget()
-            # print parameter_widget.widget().__class__.__name__
 
             parameter = parameter_widget.get_parameter()
             parameters.append(parameter)

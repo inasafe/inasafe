@@ -143,7 +143,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         # Enable remote debugging - should normally be commented out.
         # pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True,
+        #    'localhost',
+        #    port=5678,
+        #    stdoutToServer=True,
         #    stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)

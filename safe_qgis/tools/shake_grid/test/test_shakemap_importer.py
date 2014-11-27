@@ -32,7 +32,9 @@ from safe.common.testing import get_qgis_app, get_shake_test_data_path
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.shake_grid.shakemap_importer import ShakemapImporter
+from safe_qgis.tools.shake_grid.shakemap_importer_dialog import (
+    ShakemapImporterDialog
+)
 from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
 
 
@@ -41,14 +43,14 @@ class ShakemapImporterTest(unittest.TestCase):
 
     def test_init_dialog(self):
         """Test for showing table in the first."""
-        shakemap_converter_dialog = ShakemapImporter(PARENT)
+        shakemap_converter_dialog = ShakemapImporterDialog(PARENT)
         msg = 'Dialog is failed to create'
         self.assertIsNotNone(shakemap_converter_dialog, msg)
 
     def test_behaviour(self):
         """Test behaviour of elements in the dialog
         """
-        shakemap_importer_dialog = ShakemapImporter(PARENT)
+        shakemap_importer_dialog = ShakemapImporterDialog(PARENT)
         shakemap_importer_dialog.use_output_default.setEnabled(True)
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
         shakemap_importer_dialog.input_path.setText(my_grid_path)
@@ -64,7 +66,7 @@ class ShakemapImporterTest(unittest.TestCase):
 
     def test_converting(self):
         """Test converting grif file to tiff."""
-        dialog = ShakemapImporter(PARENT)
+        dialog = ShakemapImporterDialog(PARENT)
         dialog.use_output_default.setEnabled(False)
         grid_path = os.path.join(get_shake_test_data_path(),
                                  '20131105060809/output/grid.xml')
@@ -83,6 +85,7 @@ class ShakemapImporterTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    # noinspection PyArgumentEqualDefault
     suite = unittest.makeSuite(ShakemapImporterTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -2,7 +2,11 @@
 """Tsunami Evacuation Impact Function."""
 import numpy
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults, default_minimum_needs
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance
+)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
@@ -10,11 +14,12 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     evacuated_population_needs,
-    evacuated_population_weekly_needs,
     population_rounding_full,
-    population_rounding)
+    population_rounding
+)
 from safe.impact_functions.impact_function_metadata import (
-    ImpactFunctionMetadata)
+    ImpactFunctionMetadata
+)
 from safe.metadata import (
     hazard_tsunami,
     unit_feet_depth,
@@ -23,7 +28,8 @@ from safe.metadata import (
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition)
+    exposure_definition
+)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -32,7 +38,8 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator)
+    get_thousand_separator
+)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
 
@@ -154,7 +161,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
             ('MinimumNeeds', {'on': True}),
         ])),
         ('minimum needs', default_minimum_needs()),
-        ('rich minimum needs', None)
+        ('provenance', default_provenance())
     ])
 
     def run(self, layers):
@@ -216,13 +223,16 @@ class TsunamiEvacuationFunction(FunctionProvider):
             counts.append([val, rounding])
 
         # Count totals
-        evacuated, rounding = counts[-1]
+        evacuated = counts[-1][0]
+        rounding = counts[-1][0]
         total = int(numpy.sum(population))
         # Don't show digits less than a 1000
         total = population_rounding(total)
 
-        minimum_needs = self.parameters['minimum needs']
-        minimum_needs_full = self.parameters['rich minimum needs']
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         # noinspection PyListCreation
@@ -233,30 +243,21 @@ class TsunamiEvacuationFunction(FunctionProvider):
                      header=True),
             TableRow(
                 tr('* Number is rounded up to the nearest %s') % rounding),
-            TableRow(tr('Map shows the numbers of people needing evacuation'))]
-        if minimum_needs_full:
-            total_needs = evacuated_population_needs(
-                evacuated, minimum_needs, minimum_needs_full)
-            for frequency, needs in total_needs.items():
-                table_body.append(TableRow(
-                    [
-                        tr('Needs should be provided %s' % frequency),
-                        tr('Total')
-                    ],
-                    header=True))
-                for resource in needs:
-                    table_body.append(TableRow([
-                        tr(resource['Resource table name']),
-                        format_int(resource['Amount'])]))
-            table_body.append(TableRow(tr('Provenance'), header=True))
-            table_body.append(TableRow(minimum_needs_full['provenance']))
-        else:
-            total_needs = evacuated_population_weekly_needs(
-                evacuated, minimum_needs)
-            table_body.append(
-                TableRow([tr('Needs per week'), tr('Total')], header=True))
-            for resource, amount in total_needs.items():
-                table_body.append(TableRow([tr(resource), format_int(amount)]))
+            TableRow(tr('Map shows population density needing evacuation'))]
+
+        total_needs = evacuated_population_needs(
+            evacuated, minimum_needs)
+        for frequency, needs in total_needs.items():
+            table_body.append(TableRow(
+                [
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
+                ],
+                header=True))
+            for resource in needs:
+                table_body.append(TableRow([
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
@@ -341,7 +342,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population Count')
+        legend_title = tr('Population density')
 
         # Create raster object and return
         raster = Raster(

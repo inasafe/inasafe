@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-extent_selector.py
+extent_selector_dialog.py
 ---------------------
 Based on original code from:
 Date                 : December 2010
@@ -25,8 +25,8 @@ __revision__ = '$Format:%H$'
 
 import logging
 
-#noinspection PyUnresolvedReferences
-#pylint: disable=W0611
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
@@ -43,7 +43,8 @@ from qgis.core import (
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.utilities import (html_footer, html_header)
 from safe_qgis.utilities.help import show_context_help
-from safe_qgis.ui.extent_selector_base import Ui_ExtentSelectorBase
+from safe_qgis.ui.extent_selector_dialog_base import (
+    Ui_ExtentSelectorDialogBase)
 from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
 from safe_qgis.safe_interface import styles
 INFO_STYLE = styles.INFO_STYLE
@@ -53,7 +54,7 @@ LOGGER = logging.getLogger('InaSAFE')
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
+class ExtentSelectorDialog(QDialog, Ui_ExtentSelectorDialogBase):
     """Dialog for letting user determine analysis extents.
     """
 
@@ -196,7 +197,7 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
         self.tool.reset()
-        super(ExtentSelector, self).reject()
+        super(ExtentSelectorDialog, self).reject()
 
     def accept(self):
         """User accepted the rectangle.
@@ -219,7 +220,7 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
             self.clear_extent.emit()
 
         self.tool.reset()
-        super(ExtentSelector, self).accept()
+        super(ExtentSelectorDialog, self).accept()
 
     def _are_coordinates_valid(self):
         """
@@ -231,10 +232,10 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         try:
             QgsPoint(
                 self.x_minimum.value(),
-                self.y_minimum.value())
+                self.y_maximum.value())
             QgsPoint(
                 self.x_maximum.value(),
-                self.y_maximum.value())
+                self.y_minimum.value())
         except ValueError:
             return False
 
@@ -247,10 +248,10 @@ class ExtentSelector(QDialog, Ui_ExtentSelectorBase):
         if self._are_coordinates_valid():
             point1 = QgsPoint(
                 self.x_minimum.value(),
-                self.y_minimum.value())
+                self.y_maximum.value())
             point2 = QgsPoint(
                 self.x_maximum.value(),
-                self.y_maximum.value())
+                self.y_minimum.value())
             rect = QgsRectangle(point1, point2)
 
             self.tool.set_rectangle(rect)

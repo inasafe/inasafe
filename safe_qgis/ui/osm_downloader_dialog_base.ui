@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OsmDownloaderBase</class>
- <widget class="QDialog" name="OsmDownloaderBase">
+ <class>OsmDownloaderDialogBase</class>
+ <widget class="QDialog" name="OsmDownloaderDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,8 +15,8 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <widget class="QWebView" name="web_view">
-     <property name="url">
+    <widget class="QWebView" name="web_view" native="true">
+     <property name="url" stdset="0">
       <url>
        <string>about:blank</string>
       </url>
@@ -185,7 +185,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>OsmDownloaderBase</receiver>
+   <receiver>OsmDownloaderDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -201,7 +201,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>OsmDownloaderBase</receiver>
+   <receiver>OsmDownloaderDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -44,7 +44,6 @@ def get_defaults(default=None):
         valid.
     :rtype: dict, str, None
     """
-    print "QGIS defaults CALL"
     settings = QtCore.QSettings()
     defaults = DEFAULTS
 

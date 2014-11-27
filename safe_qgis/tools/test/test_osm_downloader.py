@@ -39,7 +39,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.osm_downloader import OsmDownloader
+from safe_qgis.tools.osm_downloader_dialog import OsmDownloader
 
 LOGGER = logging.getLogger('InaSAFE')
 
