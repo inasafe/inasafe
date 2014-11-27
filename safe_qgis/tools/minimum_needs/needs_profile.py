@@ -42,11 +42,11 @@ class NeedsProfile(MinimumNeeds):
         minimum_needs = self.settings.value('MinimumNeeds', '')
         # if hasattr(minimum_needs, 'toPyObject'):
         #     minimum_needs = minimum_needs.toPyObject()
-        if minimum_needs is None:
+        if minimum_needs is None or minimum_needs == u'':
             profiles = self.get_profiles()
             self.read_from_file(
                 '%s/minimum_needs/%s.json' % (self.root_directory, profiles))
-        if minimum_needs is None:
+        if minimum_needs is None or minimum_needs == u'':
             minimum_needs = self._defaults()
         self.minimum_needs = minimum_needs
 
