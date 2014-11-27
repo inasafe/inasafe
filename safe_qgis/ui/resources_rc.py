@@ -2,11 +2,7 @@
 
 # Resource object code
 #
-<<<<<<< HEAD
-# Created: Thu Nov 27 10:20:50 2014
-=======
-# Created: Thu Nov 27 15:34:02 2014
->>>>>>> upstream/develop
+# Created: Thu Nov 27 11:25:44 2014
 #      by: The Resource Compiler for PyQt (Qt v4.8.6)
 #
 # WARNING! All changes made in this file will be lost!
