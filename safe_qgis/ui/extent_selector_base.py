@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'extent_selector_base.ui'
 #
-# Created: Tue Nov 11 10:48:45 2014
+# Created: Thu Nov 27 09:00:33 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
