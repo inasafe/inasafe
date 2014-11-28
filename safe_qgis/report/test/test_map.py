@@ -108,6 +108,7 @@ class MapTest(unittest.TestCase):
             425645,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             437994,  # Ubuntu 14.04_64 MB - pycharm
             431844,  # Ubuntu 14.04_64 MB - make - TODO why is this?
+            435059,  # Ubuntu 14.04_64 IS - pycharm
             414589,  # Slackware64 14.0
             144542,  # Linux Mint 14_64
             148267,  # Windows 7 32
