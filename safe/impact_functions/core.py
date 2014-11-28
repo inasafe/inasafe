@@ -74,7 +74,7 @@ def evacuated_population_weekly_needs(
     :type: int, float
 
     :param minimum_needs: Ratios used to calculate weekly needs in parameter
-    form.
+     form.
     :type minimum_needs: list,
 
     :returns: The needs for the evacuated population.
