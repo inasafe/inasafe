@@ -36,6 +36,7 @@ from third_party.parameters.float_parameter import FloatParameter
 from third_party.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from third_party.parameters.string_parameter import StringParameter
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (
     styles)
@@ -114,6 +115,11 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.save_profile_as_button.clicked.connect(
             self.save_profile_as)
 
+        # Set up context help
+        self.help_context = 'needs_manager'
+        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        help_button.clicked.connect(self.show_help)
+
         self.minimum_needs = NeedsProfile()
         self.edit_item = None
 
@@ -152,6 +158,10 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         # being updated
         self.profile_combo.activated.connect(self.select_profile)
         self.stacked_widget.currentChanged.connect(self.page_changed)
+
+    def show_help(self):
+        """Load the help text for the dialog."""
+        show_context_help(self.help_context)
 
     def populate_resource_list(self):
         """Populate the list resource list.
