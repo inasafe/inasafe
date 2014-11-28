@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Keywords Wizard &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
+    <title>Wizard Kata Kunci &mdash; dokumentasi InaSAFE Documentation 2.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.0',
+        VERSION:     '2.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,9 @@
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 2.2.0" href="index.html" />
+    <link rel="next" title="Data Berbasis Umur Pasca-pemrosesan" href="data_driven_age.html" />
+    <link rel="prev" title="Editor Kata Kunci" href="keywords_editor.html" />
 
 <style>
     .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
@@ -145,6 +147,22 @@
                 accesskey="I">index</a>
                 </li>
                 
+                <li class="right"
+                 >
+                <a href="data_driven_age.html"
+                   title="Data Berbasis Umur Pasca-pemrosesan"
+                   style="z-index:;"
+                accesskey="N">berikut</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="keywords_editor.html"
+                   title="Editor Kata Kunci"
+                   style="z-index:;"
+                accesskey="P">sebelum</a>
+                </li>
+                
 
                 
                 <li class="first">
@@ -152,7 +170,7 @@
                 </li>
                 
                 
-                <li><a href="#">Keywords Wizard</a></li>
+                <li><a href="#">Wizard Kata Kunci</a></li>
             </ul>
         </div>
     </div> 
@@ -165,54 +183,37 @@
         <div class="span12">
                 
   <div class="section" id="keywords-wizard">
-<span id="id1"></span><h1>Keywords Wizard<a class="headerlink" href="#keywords-wizard" title="Link permanent untuk headline ini">¶</a></h1>
-<p>This wizard will lead you through the process of defining keywords for an
-exposure, hazard or aggregation layer. Unlike the
-<a class="reference internal" href="keywords_editor.html#keywords-editor"><em>keywords editor</em></a>, the keywords wizard &#8216;understands&#8217;
-the constraints and rules that determine which keywords can be applied to any
-given layer. For example, if you have a raster layer, the keywords wizard will
-use impact function metadata to prevent you declaring that the layer contains
-road exposure data since by definition, such data must be vector line data.</p>
-<p>Each impact function includes metadata that defines what rules should apply to
-data that will be used with that impact function. At startup, the wizard scans
-these metadata and uses it to define its rules.</p>
-<p>For more general discussion on the keywords system used by InaSAFE, please
-see the <a class="reference internal" href="keywords.html#keywords-system"><em>keywords system</em></a> documentation.</p>
+<span id="id1"></span><h1>Wizard Kata Kunci<a class="headerlink" href="#keywords-wizard" title="Link permanent untuk headline ini">¶</a></h1>
+<p>Wizard ini akan membawa Anda melalui proses mendefinisikan kata kunci untuk paparan, bahaya atau layer agregasi. Berbeda dengan <a class="reference internal" href="keywords_editor.html#keywords-editor"><em>editor kata kunci</em></a>, wizard kata kunci  &#8216;memahami&#8217; kendala dan aturan yang menentukan kata kunci apa saja yang dapat diterapkan untuk setiap layer yang diberikan. Misalnya, jika Anda memiliki lapisan raster, kata kunci wizard akan menggunakan metadata fungsi dampak untuk mencegah Anda menyatakan bahwa lapisan berisi data jalan terpapar sejak didefinisikan, karena data tersebut seharusnya data vektor garis.</p>
+<p>Setiap fungsi dampak termasuk metadata yang mendefinisikan aturan apa harus diterapkan pada data yang akan digunakan dengan fungsi dampak. Pada startup, wizard memindai metadata ini dan menggunakannya untuk menentukan aturan.</p>
+<p>Untuk diskusi yang lebih umum pada sistem kata kunci yang digunakan oleh InaSAFE, silakan lihat dokumentasi <a class="reference internal" href="keywords.html#keywords-system"><em>sistem kata kunci</em></a>.</p>
 <div class="section" id="invoking-the-wizard">
-<h2>Invoking the wizard<a class="headerlink" href="#invoking-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
-<p>You can run the wizard by clicking on the icon in the InaSAFE toolbar that
-looks like this:</p>
+<h2>Membuka wizard<a class="headerlink" href="#invoking-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
+<p>Anda dapat menjalankan wizard dengan mengklik icon di toolbar InaSAFE yang terlihat seperti ini:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/keyword-wizard-icon.png"><img alt="InaSAFE Keywords Wizard Icon" src="_images/keyword-wizard-icon.png" style="width: 128.0px; height: 131.0px;" /></a>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
-<p class="last">You should have at least one layer loaded and active in QGIS before
-attempting to launch the keywords wizard.</p>
+<p class="last">Anda harus memiliki setidaknya satu layer yang dimuat dan aktif dalam QGIS sebelum mencoba untuk menjalankan kata kunci wizard.</p>
 </div>
-<p>Once loaded the wizard will appear:</p>
+<p>Setelah dimuat wizard akan muncul:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/keyword-wizard-exposure.png"><img alt="InaSAFE Keywords Wizard Icon" src="_images/keyword-wizard-exposure.png" style="width: 599.25px; height: 376.5px;" /></a>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
-<p class="last">If the layer already has keywords assigned to it, the wizard will
-default to existing keywords on each step (where applicable).</p>
+<p class="last">Jika layer sudah memiliki kata kunci yang didefinisikan untuk layer tersebut, wizard secara default akan mengacu ke kata kunci yang ada pada setiap langkah (jika ada).</p>
 </div>
 </div>
 <div class="section" id="cancelling-the-wizard">
-<h2>Cancelling the wizard<a class="headerlink" href="#cancelling-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
-<p>The wizard can be cancelled at any time by pressing the <em class="guilabel">Cancel</em>
-button at the bottom of the wizard. No changes will be written to the
-keywords file if the wizard is cancelled.</p>
+<h2>Membatalkan wizard<a class="headerlink" href="#cancelling-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
+<p>Wizard dapat dibatalkan setiap saat dengan menekan tombol <em class="guilabel">Batal</em>  di bagian bawah wizard. Tidak ada perubahan yang akan ditulis di berkas kata kunci jika wizard dibatalkan.</p>
 </div>
 <div class="section" id="using-the-wizard">
-<h2>Using the wizard<a class="headerlink" href="#using-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
-<p>To use the wizard, simple follow the prompts presented on each page of the
-wizard. There are three standard forms of user input expected in the wizard:</p>
-<p>1.) List selection. In this case options are provided in a list. Clicking on
-an item will usually display additional helpful text in the information area
-of the dialog.</p>
+<h2>Menggunakan wizard<a class="headerlink" href="#using-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
+<p>Untuk menggunakan wizard, caranya sederhana dengan mengikuti petunjuk yang ditampilkan pada setiap halaman wizard. Ada tiga bentuk standar masukan dari pengguna yang diharapkan dalam wizard:</p>
+<p>1.) Daftar pilihan. Dalam hal ini pilihan yang tersedia dalam daftar. Mengklik pada item biasanya akan menampilkan teks tambahan membantu dalam bidang informasi dari dialog.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/wizard_gui_list.png"><img alt="InaSAFE Keywords Wizard List Selection" src="_images/wizard_gui_list.png" style="width: 176.25px; height: 219.0px;" /></a>
 </div>
@@ -237,18 +238,14 @@ as &#8216;YES&#8217; or &#8216;yes&#8217; onto the &#8216;wet&#8217; concept in 
 </div>
 </div>
 <div class="section" id="completing-the-wizard">
-<h2>Completing the wizard<a class="headerlink" href="#completing-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
-<p>On completion of the keywords wizard, a .keywords file will be written to disk
-and the keywords for the layer will be displayed in the dock area when that
-layer is active in QGIS.</p>
+<h2>Menyelesaikan wizard<a class="headerlink" href="#completing-the-wizard" title="Link permanent untuk headline ini">¶</a></h2>
+<p>Setelah menyelesaikan kata kunci wizard, berkas .keywords akan ditulis ke disk dan kata kunci untuk lapisan akan ditampilkan di area dock ketika lapisan aktif di QGIS.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/wizard_result.png"><img alt="InaSAFE Keywords Listing" src="_images/wizard_result.png" style="width: 297.0px; height: 227.25px;" /></a>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Catatan</p>
-<p class="last"><strong>A note on keyword compatibility:</strong> The keywords wizard will
-generate keywords that are note compatible with versions of InaSAFE older
-than 2.1.</p>
+<p class="last"><strong>Catatan tentang kompatibilitas kata kunci:</strong> Kata kunci wizard akan menghasilkan kata kunci dengan catatan kompatibel dengan versi InaSAFE lebih tua dari 2.1.</p>
 </div>
 </div>
 </div>

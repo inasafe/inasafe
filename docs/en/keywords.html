@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Keywords System &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Keywords System &mdash; InaSAFE Documentation 2.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.0',
+        VERSION:     '2.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="top" title="InaSAFE Documentation 2.2.0 documentation" href="index.html" />
     <link rel="next" title="Reports" href="reports.html" />
     <link rel="prev" title="Using InaSAFE" href="dock.html" />
 
@@ -249,13 +249,10 @@ Category should be written in lower case.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>category</td>
-<td>hazard</td>
-</tr>
-<tr class="row-odd"><td>category</td>
 <td>exposure</td>
 </tr>
-<tr class="row-even"><td>category</td>
-<td>aggregation</td>
+<tr class="row-odd"><td>category</td>
+<td>hazard</td>
 </tr>
 </tbody>
 </table>
@@ -280,16 +277,22 @@ Category should be written in lower case.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>subcategory</td>
-<td>tsunami</td>
+<td>earthquake</td>
 </tr>
 <tr class="row-odd"><td>subcategory</td>
 <td>flood</td>
 </tr>
 <tr class="row-even"><td>subcategory</td>
-<td>volcano</td>
+<td>generic</td>
 </tr>
 <tr class="row-odd"><td>subcategory</td>
-<td>earthquake</td>
+<td>tephra</td>
+</tr>
+<tr class="row-even"><td>subcategory</td>
+<td>tsunami</td>
+</tr>
+<tr class="row-odd"><td>subcategory</td>
+<td>volcano</td>
 </tr>
 </tbody>
 </table>
@@ -297,8 +300,8 @@ Category should be written in lower case.</p>
 <p>Valid subcategories for category &#8216;exposure&#8217;:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="36%" />
-<col width="64%" />
+<col width="44%" />
+<col width="56%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Key</th>
@@ -306,14 +309,14 @@ Category should be written in lower case.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>exposure</td>
+<tr class="row-even"><td>subcategory</td>
 <td>population</td>
 </tr>
-<tr class="row-odd"><td>exposure</td>
-<td>structure</td>
-</tr>
-<tr class="row-even"><td>exposure</td>
+<tr class="row-odd"><td>subcategory</td>
 <td>road</td>
+</tr>
+<tr class="row-even"><td>subcategory</td>
+<td>structure</td>
 </tr>
 </tbody>
 </table>
@@ -327,51 +330,10 @@ subcategory: flood
 <h3>Units<a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h3>
 <p>The units keyword is used to indicate the metric or imperial units represented
 by each data entity (a grid cell or a vector feature) in a layer.</p>
-<p>Example keywords file entry:</p>
-<blockquote>
-<div><blockquote>
-<div><table border="1" class="docutils">
-<colgroup>
-<col width="13%" />
-<col width="51%" />
-<col width="37%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Key</th>
-<th class="head">Allowed Values (pre InaSAFE 2.1)</th>
-<th class="head">Allowed Values (&gt;= 2.1)</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>units</td>
-<td>m</td>
-<td>metres_depth</td>
-</tr>
-<tr class="row-odd"><td>units</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-even"><td>exposure</td>
-<td>road</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td>hazard</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-<p>category: hazard
-subcategory: flood
-units: m</p>
-</div></blockquote>
-<p>In the above case there is a soft constraint to use a value for units of m,
-feet or wet/dry as defined by the table below because the subcategory is
-&#8216;flood&#8217;.
-The following are the allowed units which are dependent on the subcategory
-defined.</p>
-<p>Valid subcategories for subcategory &#8216;tsunami&#8217; or subcategory &#8216;flood&#8217;:</p>
+<div class="section" id="valid-units-for-hazard-subcategories">
+<h4>Valid Units for Hazard Subcategories<a class="headerlink" href="#valid-units-for-hazard-subcategories" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="valid-units-for-subcategory-flood-or-subcategory-tsunami">
+<h5>Valid units for subcategory &#8216;flood&#8217; or subcategory &#8216;tsunami&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-flood-or-subcategory-tsunami" title="Permalink to this headline">¶</a></h5>
 <table border="1" class="docutils">
 <colgroup>
 <col width="26%" />
@@ -384,23 +346,58 @@ defined.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>units</td>
-<td>m</td>
+<td>metres</td>
 </tr>
 <tr class="row-odd"><td>units</td>
-<td>wet/dry</td>
-</tr>
-<tr class="row-even"><td>units</td>
 <td>feet</td>
 </tr>
+<tr class="row-even"><td>units</td>
+<td>wet / dry</td>
+</tr>
+<tr class="row-odd"><td>units</td>
+<td>normalised</td>
+</tr>
 </tbody>
 </table>
-<p>In the case where the units are m (meters) or feet, the input dataset should be
-a raster layer where each cell in the raster represents a depth in the units
-specified.</p>
-<p>In the case of wet/dry, the input dataset needs to be a vector polygon layer.
-Any area that is inside a polygon is considered &#8216;wet&#8217; and any area outside of
-a polygon is considered to be &#8216;dry&#8217;.</p>
-<p>Valid subcategories for subcategory &#8216;volcano&#8217;</p>
+<p><strong>metres</strong>: <strong>metres</strong> are a metric unit of measure. There are 100 centimetres
+in 1 metre. In this case <strong>metres</strong> are used to describe the water depth.</p>
+<p><strong>feet</strong>: <strong>Feet</strong> are an imperial unit of measure. There are 12 inches in 1
+foot and 3 feet in 1 yard. In this case <strong>feet</strong> are used to describe the water
+depth.</p>
+<p><strong>wet / dry</strong>: This is a binary description for an area. The area is either
+<strong>wet</strong> (affected by flood water) or <strong>dry</strong> (not affected by flood water).
+This unit does not describe how <strong>wet</strong> or <strong>dry</strong> an area is.</p>
+<p><strong>normalised</strong>: <strong>Normalised</strong> data can be hazard or exposure data where the
+values have been classified or coded.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-volcano-or-subcategory-tephra">
+<h5>Valid units for subcategory &#8216;volcano&#8217; or subcategory &#8216;tephra&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-volcano-or-subcategory-tephra" title="Permalink to this headline">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Allowed Values</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>units</td>
+<td>normalised</td>
+</tr>
+<tr class="row-odd"><td>units</td>
+<td>volcano categorical</td>
+</tr>
+</tbody>
+</table>
+<p><strong>normalised</strong>: <strong>Normalised</strong> data can be hazard or exposure data where the
+values have been classified or coded.</p>
+<p><strong>volcano categorical</strong>: This is a ternary description for an area. The area is
+either has <strong>low</strong>, <strong>medium</strong>, or <strong>high</strong> impact from the volcano.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-earthquake">
+<h5>Valid units for subcategory &#8216;earthquake&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-earthquake" title="Permalink to this headline">¶</a></h5>
 <table border="1" class="docutils">
 <colgroup>
 <col width="26%" />
@@ -413,17 +410,93 @@ a polygon is considered to be &#8216;dry&#8217;.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>units</td>
-<td>kg2/m2</td>
+<td>MMI</td>
+</tr>
+<tr class="row-odd"><td>units</td>
+<td>normalised</td>
 </tr>
 </tbody>
 </table>
-<p>In this case the dataset should be a raster layer where each cell represents
-the kilograms per meters squared of ash fall on that cell.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">&#8216;units&#8217; and &#8216;datatype&#8217; (described below) should be considered to
-be mutually exclusive - i.e. they should not both be present in any given
-keywords file.</p>
+<p><strong>MMI</strong>: The <strong>Modified Mercalli Intensity (MMI)</strong> scale describes the
+intensity of ground shaking from a earthquake based on the effects observed by
+people at the surface.</p>
+<p><strong>normalised</strong>: <strong>Normalised</strong> data can be hazard or exposure data where the
+values have been classified or coded.</p>
+</div>
+</div>
+<div class="section" id="valid-units-for-exposure-subcategories">
+<h4>Valid Units for Exposure Subcategories<a class="headerlink" href="#valid-units-for-exposure-subcategories" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="valid-units-for-subcategory-population">
+<h5>Valid units for subcategory &#8216;population&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-population" title="Permalink to this headline">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Allowed Values</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>units</td>
+<td>people per pixel</td>
+</tr>
+</tbody>
+</table>
+<p><strong>people per pixel</strong>: <strong>Count</strong> is the number of people in each cell. For
+example <strong>population count</strong> might be measured as the number of people per
+pixel in a raster data set. This unit is relevant for population rasters in
+geographic coordinates.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-structure">
+<h5>Valid units for subcategory &#8216;structure&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-structure" title="Permalink to this headline">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Allowed Values</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>units</td>
+<td>building type</td>
+</tr>
+<tr class="row-odd"><td>units</td>
+<td>building generic</td>
+</tr>
+</tbody>
+</table>
+<p><strong>building type</strong>: <strong>Building type</strong> is a unit that represent the type of the
+building. In this case, building type will be used to group the result of
+impact function.</p>
+<p><strong>building generic</strong>: <strong>Building generic</strong> unit means that there is no building
+type attribute in the exposure data.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-road">
+<h5>Valid units for subcategory &#8216;road&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-road" title="Permalink to this headline">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Allowed Values</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>units</td>
+<td>Road Type</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Road Type</strong>: <strong>Road type</strong> is a unit that represent the type of the road. In
+this case, road type will be used to group the result of impact function.</p>
+</div>
 </div>
 </div>
 <div class="section" id="datatype">
@@ -470,7 +543,7 @@ The options dialog can be launched by clicking on the InaSAFE plugin
 toolbar&#8217;s options icon (as shown below) or by doing
 <em class="menuselection">Plugins ‣ InaSAFE ‣ InaSAFE Options</em>.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/toolbar_options.png"><img alt="Options Icon" src="_images/toolbar_options.png" style="width: 348.0px; height: 37.0px;" /></a>
+<a class="reference internal image-reference" href="_images/toolbar_options.png"><img alt="Options Icon" src="_images/toolbar_options.png" style="width: 433.0px; height: 37.0px;" /></a>
 <p class="caption">Selecting the options icon</p>
 </div>
 <p>When the options dialog is opened, the keywords database path can be specified
@@ -532,6 +605,12 @@ e.g.:</p>
 <p>If you need help using the keywords editor, you can click on the
 <em class="guilabel">Help</em> button at the bottom of the dialog and this page will be
 displayed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This document is automatically generated. It can be regenerated by
+running the python script /inasafe-doc/scripts/generate_keywords.py.</p>
+</div>
+<p>This document was generated based on inasafe 2.1.0b0.</p>
 </div>
 </div>
 

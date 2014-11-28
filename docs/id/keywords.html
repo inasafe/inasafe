@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Sistem Kata kunci &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
+    <title>Sistem Kata kunci &mdash; dokumentasi InaSAFE Documentation 2.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.0',
+        VERSION:     '2.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,7 @@
     <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="dokumentasi InaSAFE Documentation 1.2.0" href="index.html" />
+    <link rel="top" title="dokumentasi InaSAFE Documentation 2.2.0" href="index.html" />
     <link rel="next" title="Laporan" href="reports.html" />
     <link rel="prev" title="Menggunakan InaSAFE" href="dock.html" />
 
@@ -187,10 +187,7 @@
 <p>Dokumentasi ini menjelaskan tujuan dan penggunaan sistem <em>kata kunci</em> InaSAFE</p>
 <div class="admonition seealso">
 <p class="first admonition-title">lihat juga</p>
-<p class="last">Please also refer to the documentation on
-<a class="reference internal" href="keywords_wizard.html#keywords-wizard"><em>the keywords Wizards</em></a> and the
-<a class="reference internal" href="keywords_editor.html#keywords-editor"><em>keywords editor</em></a> which are tools to help you
-to create keywords files.</p>
+<p class="last">Silakan juga merujuk ke dokumentasi di <a class="reference internal" href="keywords_wizard.html#keywords-wizard"><em>the kata kunci Wizards</em></a> dan <a class="reference internal" href="keywords_editor.html#keywords-editor"><em>editor kata kunci</em></a> yang merupakan alat untuk membantu Anda untuk membuat file kata kunci.</p>
 </div>
 <div class="section" id="purpose">
 <h2>Tujuan<a class="headerlink" href="#purpose" title="Link permanent untuk headline ini">¶</a></h2>
@@ -231,17 +228,13 @@ to create keywords files.</p>
 <tbody valign="top">
 <tr class="row-even"><td><p class="first last">kategori</p>
 </td>
-<td><p class="first last">ancaman</p>
+<td><p class="first last">keterpaparan</p>
 </td>
 </tr>
 <tr class="row-odd"><td><p class="first last">kategori</p>
 </td>
-<td><p class="first last">keterpaparan</p>
+<td><p class="first last">ancaman</p>
 </td>
-</tr>
-<tr class="row-even"><td><p class="first last">kategori</p>
-</td>
-<td>aggregation</td>
 </tr>
 </tbody>
 </table>
@@ -269,7 +262,8 @@ to create keywords files.</p>
 <tbody valign="top">
 <tr class="row-even"><td><p class="first last">Subkategori</p>
 </td>
-<td>tsunami</td>
+<td><p class="first last">gempa bumi</p>
+</td>
 </tr>
 <tr class="row-odd"><td><p class="first last">Subkategori</p>
 </td>
@@ -278,11 +272,22 @@ to create keywords files.</p>
 </tr>
 <tr class="row-even"><td><p class="first last">Subkategori</p>
 </td>
-<td>volcano</td>
+<td><p class="first last">umum</p>
+</td>
 </tr>
 <tr class="row-odd"><td><p class="first last">Subkategori</p>
 </td>
-<td>earthquake</td>
+<td><p class="first last">tephra (abu vulkanik)</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">Subkategori</p>
+</td>
+<td>tsunami</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">Subkategori</p>
+</td>
+<td><p class="first last">gunung berapi</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -290,8 +295,8 @@ to create keywords files.</p>
 <p>Subkategori yang berlaku untuk kategori &#8216;keterpaparan&#8217;:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="36%" />
-<col width="64%" />
+<col width="44%" />
+<col width="56%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head"><p class="first last">Kunci</p>
@@ -301,18 +306,20 @@ to create keywords files.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><p class="first last">keterpaparan</p>
+<tr class="row-even"><td><p class="first last">Subkategori</p>
 </td>
 <td><p class="first last">populasi</p>
 </td>
 </tr>
-<tr class="row-odd"><td><p class="first last">keterpaparan</p>
+<tr class="row-odd"><td><p class="first last">Subkategori</p>
 </td>
-<td>structure</td>
+<td><p class="first last">jalan</p>
+</td>
 </tr>
-<tr class="row-even"><td><p class="first last">keterpaparan</p>
+<tr class="row-even"><td><p class="first last">Subkategori</p>
 </td>
-<td>road</td>
+<td><p class="first last">struktur</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -324,54 +331,11 @@ subcategory: flood
 </div>
 <div class="section" id="units">
 <h3>unit/ satuan<a class="headerlink" href="#units" title="Link permanent untuk headline ini">¶</a></h3>
-<p>The units keyword is used to indicate the metric or imperial units represented
-by each data entity (a grid cell or a vector feature) in a layer.</p>
-<p>Example keywords file entry:</p>
-<blockquote>
-<div><blockquote>
-<div><table border="1" class="docutils">
-<colgroup>
-<col width="13%" />
-<col width="51%" />
-<col width="37%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">Kunci</p>
-</th>
-<th class="head">Allowed Values (pre InaSAFE 2.1)</th>
-<th class="head">Allowed Values (&gt;= 2.1)</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><p class="first last">unit/ satuan</p>
-</td>
-<td>m</td>
-<td>metres_depth</td>
-</tr>
-<tr class="row-odd"><td><p class="first last">unit/ satuan</p>
-</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-even"><td><p class="first last">keterpaparan</p>
-</td>
-<td>road</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td><p class="first last">ancaman</p>
-</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-<p>category: hazard
-subcategory: flood
-units: m</p>
-</div></blockquote>
-<p>Pada kasus di atas terdapat kendala halus untuk menggunakan nilai satuan m, kaki atau basah/kering sebagaimana yang didefinisikan oleh tabel di bawah ini karena subkategori &#8216;banjir&#8217;. Berikut ini adalah satuan yang diperbolehkan tergantung pada subkategori yang telah ditetapkan.</p>
-<p>Subkategori yang berlaku untuk subkategori &#8216;tsunami&#8217; atau subkategori &#8216;banjir&#8217;:</p>
+<p>Unit kata kunci yang digunakan menunjukkan satuan metrik atau imperial diwakili oleh masing-masing entitas data (sel jaringan atau fitur vektor) dalam sebuah layer.</p>
+<div class="section" id="valid-units-for-hazard-subcategories">
+<h4>Unit-unit yang berlaku untuk Subkategori Ancaman<a class="headerlink" href="#valid-units-for-hazard-subcategories" title="Link permanent untuk headline ini">¶</a></h4>
+<div class="section" id="valid-units-for-subcategory-flood-or-subcategory-tsunami">
+<h5>Unit-unit yang berlaku untuk subkategori &#8216;banjir&#8217; atau subkategori &#8216;tsunami&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-flood-or-subcategory-tsunami" title="Link permanent untuk headline ini">¶</a></h5>
 <table border="1" class="docutils">
 <colgroup>
 <col width="26%" />
@@ -387,23 +351,63 @@ units: m</p>
 <tbody valign="top">
 <tr class="row-even"><td><p class="first last">unit/ satuan</p>
 </td>
-<td>m</td>
+<td><p class="first last">meter</p>
+</td>
 </tr>
 <tr class="row-odd"><td><p class="first last">unit/ satuan</p>
-</td>
-<td><p class="first last">basah/ kering</p>
-</td>
-</tr>
-<tr class="row-even"><td><p class="first last">unit/ satuan</p>
 </td>
 <td><p class="first last">kaki</p>
 </td>
 </tr>
+<tr class="row-even"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">basah / kering</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">ternormalisasi</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>Pada kasus dimana dalam satuan m (meter) atau kaki, pemasukan dataset diharuskan berupa sebuah layer raster dimana setiap sel menggambarkan satu nilai kedalaman berdasarkan satuan yang telah ditentukan.</p>
-<p>Pada kasus basah/ kering, pemasukan dataset diharuskan berupa sebuah layer vektor poligon. Area apa pun yang terdapat dalam poligon ini dianggap &#8216;basah&#8217; dan area diluar poligon dianggap &#8216;kering&#8217;.</p>
-<p>Subkategori yang berlaku untuk subkategori &#8216;gunung berapi&#8217;</p>
+<p><strong>meter</strong>: <strong>meter</strong> merupakan sebuah unit pengukuran metrik. 100 sentimeter sama dengan 1 meter. Pada kasus ini <strong>meter</strong> digunakan untuk mendeksripsikan kedalaman air.</p>
+<p><strong>kaki</strong>: <strong>kaki</strong> merupakan salah satu unit pengukuran imperial. 1 kaki sama dengan 12 inci dan 3 kaki sama dengan 1 yard. Dalam kasus ini <strong>kaki</strong> digunakan untuk mendeskripsikan kedalaman air.</p>
+<p><strong>basah / kering</strong>: Ini adalah deskripsi biner untuk wilayah. Wilayah bisa berupa <strong>basah</strong> (terdampak oleh air banjir) atau <strong>kering</strong> (tidak terdampak oleh air banjir). Unit ini tidak mendeskripsikan seberapa <strong>basah</strong> atau <strong>kering</strong> wilayah tersebut.</p>
+<p><strong>ternomalisasi</strong>: Data <strong>ternormalisasi</strong> dapat berupa data ancaman atau keterpaparan dimana nilainya telah diklasifikasikan atau dikodekan.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-volcano-or-subcategory-tephra">
+<h5>Unit-unit yang berlaku untuk subkategori &#8216;gunung berapi&#8217; atau subkategori &#8216;material letusan&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-volcano-or-subcategory-tephra" title="Link permanent untuk headline ini">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">Kunci</p>
+</th>
+<th class="head"><p class="first last">Nilai yang diperbolehkan</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">ternormalisasi</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">kategori gunung berapi</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ternomalisasi</strong>: Data <strong>ternormalisasi</strong> dapat berupa data ancaman atau keterpaparan dimana nilainya telah diklasifikasikan atau dikodekan.</p>
+<p><strong>Kategori gunung api</strong>: Ini adalah deskripsi ternari untuk sebuah wilayah. Wilayah memiliki dampak <strong>rendah</strong>, <strong>sedang</strong>, atau <strong>tinggi</strong> dari gunung berapi.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-earthquake">
+<h5>Unit-unit yang berlaku untuk subkategori &#8216;gempa bumi&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-earthquake" title="Link permanent untuk headline ini">¶</a></h5>
 <table border="1" class="docutils">
 <colgroup>
 <col width="26%" />
@@ -419,20 +423,104 @@ units: m</p>
 <tbody valign="top">
 <tr class="row-even"><td><p class="first last">unit/ satuan</p>
 </td>
-<td>kg2/m2</td>
+<td>MMI</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">ternormalisasi</p>
+</td>
 </tr>
 </tbody>
 </table>
-<p>Pada kasus ini, dataset diharuskan berupa sebuah layer raster dimana setiap sel menggambarkan sebuah nilai dalam kilogram per meter persegi dari abu yang berada pada sel tersebut.</p>
-<div class="admonition note">
-<p class="first admonition-title">Catatan</p>
-<p class="last">&#8216;satuan&#8217; dan &#8216;tipe data&#8217; (dideskripsikan di bawah) harus dianggap saling eksklusif - misalnya keduanya tidak harus ada pada setiap file kata kunci yang diberikan.</p>
+<p><strong>MMI</strong>: Skala <strong>Modified Mercalli Intensity (MMI)</strong> mendeskripsikan intensitas getaran tanah dari sebuah kejadian gempa bumi berdasarkan efek yang diamati oleh orang-orang di permukaan.</p>
+<p><strong>ternomalisasi</strong>: Data <strong>ternormalisasi</strong> dapat berupa data ancaman atau keterpaparan dimana nilainya telah diklasifikasikan atau dikodekan.</p>
+</div>
+</div>
+<div class="section" id="valid-units-for-exposure-subcategories">
+<h4>Unit-unit yang berlaku untuk Subkategori Terdampak<a class="headerlink" href="#valid-units-for-exposure-subcategories" title="Link permanent untuk headline ini">¶</a></h4>
+<div class="section" id="valid-units-for-subcategory-population">
+<h5>Unit-unit yang berlaku untuk subkategori &#8216;populasi&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-population" title="Link permanent untuk headline ini">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">Kunci</p>
+</th>
+<th class="head"><p class="first last">Nilai yang diperbolehkan</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">orang per piksel</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>penduduk per pixel</strong>: <strong>Jumlah</strong> adalah banyak penduduk tiap sel. Sebagai contoh <strong>jumlah penduduk</strong> bisa dihitung sebagai banyak penduduk per pixel pada data raster. Unit ini cocok untuk raster penduduk di koordinat geografis.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-structure">
+<h5>Unit-unit yang berlaku untuk subkategori &#8216;bangunan&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-structure" title="Link permanent untuk headline ini">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">Kunci</p>
+</th>
+<th class="head"><p class="first last">Nilai yang diperbolehkan</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">jenis bangunan</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">bangunan umum</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>jenis bangunan</strong>: <strong>Jenis bangunan</strong> adalah unit yang merepresentasikan jenis dari bangunan. Pada kasus ini, jenis bangunan akan digunakan untuk mengelompokan hasil dari fungsi dampak.</p>
+<p><strong>bangunan umum</strong>: <strong>Bangunan umum</strong> berarti bahwa tidak ada atribut jenis bangunan pada data terdampak.</p>
+</div>
+<div class="section" id="valid-units-for-subcategory-road">
+<h5>Unit-unit yang berlaku untuk subkategori &#8216;jalan&#8217;:<a class="headerlink" href="#valid-units-for-subcategory-road" title="Link permanent untuk headline ini">¶</a></h5>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">Kunci</p>
+</th>
+<th class="head"><p class="first last">Nilai yang diperbolehkan</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">unit/ satuan</p>
+</td>
+<td><p class="first last">Jenis Jalan</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Jenis jalan</strong>: <strong>Jenis jalan</strong> adalah unit yang merepresentasikan jenis dari jalan. Pada kasus ini, jenis jalan akan digunakan untuk mengelompokan hasil dari fungsi dampak.</p>
+</div>
 </div>
 </div>
 <div class="section" id="datatype">
 <h3>Jenis data<a class="headerlink" href="#datatype" title="Link permanent untuk headline ini">¶</a></h3>
-<p>The data type keyword indicate what kind of geospatial data is represented
-(Numeric, Polygon, Line, Point).</p>
+<p>Tipe data kunci menunjukkan jenis data geospasial diwakili (Numerik, Poligon, Garis, Poin).</p>
 </div>
 </div>
 <div class="section" id="assumptions">
@@ -503,6 +591,11 @@ units: m</p>
 <div class="section" id="getting-help">
 <h2>Mendapatkan bantuan<a class="headerlink" href="#getting-help" title="Link permanent untuk headline ini">¶</a></h2>
 <p>Jika Anda membutuhkan bantuan untuk menggunakan editor kata kunci, Anda dapat klik pada tombol <em class="guilabel">Help</em> di tombol dialog dan halaman ini akan ditampilkan.</p>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">Dokumen ini dibuat secara otomatis. Dokumen ini dapat dibuat ulang dengan menjalankan script python /inasafe-doc/scripts/generate_keywords.py.</p>
+</div>
+<p>Dokumen ini dibuat berdasarkan inasafe 2.1.0b0.</p>
 </div>
 </div>
 
