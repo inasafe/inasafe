@@ -2,7 +2,7 @@
 
 """
 extent_selector_dialog.py
----------------------
+-------------------------
 Based on original code from:
 Date                 : December 2010
 Copyright            : (C) 2010 by Giuseppe Sucameli
