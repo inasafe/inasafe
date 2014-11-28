@@ -17,7 +17,7 @@ from PyQt4.QtCore import QSettings
 from safe.common.minimum_needs import MinimumNeeds
 from shutil import copy
 from os.path import exists, dirname
-from os import mkdir, listdir, environ
+from os import listdir, environ, makedirs
 
 
 class NeedsProfile(MinimumNeeds):
@@ -39,14 +39,14 @@ class NeedsProfile(MinimumNeeds):
     def load(self):
         """Load the minimum needs from the QSettings object.
         """
-        minimum_needs = self.settings.value('MinimumNeeds', '')
+        minimum_needs = self.settings.value('MinimumNeeds', type=dict)
         # if hasattr(minimum_needs, 'toPyObject'):
         #     minimum_needs = minimum_needs.toPyObject()
-        if minimum_needs is None or minimum_needs == u'':
+        if not minimum_needs:
             profiles = self.get_profiles()
             self.read_from_file(
                 '%s/minimum_needs/%s.json' % (self.root_directory, profiles))
-        if minimum_needs is None or minimum_needs == u'':
+        if minimum_needs is None or minimum_needs == {}:
             minimum_needs = self._defaults()
         self.minimum_needs = minimum_needs
 
@@ -119,7 +119,7 @@ class NeedsProfile(MinimumNeeds):
         locale_minimum_needs_dir = '%s/minimum_needs/' % self.root_directory
         path_name = "%s/../../../files/minimum_needs" % dirname(__file__)
         if not exists(locale_minimum_needs_dir):
-            mkdir(locale_minimum_needs_dir)
+            makedirs(locale_minimum_needs_dir)
         for file_name in listdir(path_name):
             source_file = '%s/%s' % (path_name, file_name)
             destination_file = (
