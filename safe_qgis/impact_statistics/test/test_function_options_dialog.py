@@ -23,6 +23,7 @@ import logging
 from PyQt4.QtGui import QLineEdit, QCheckBox
 
 from safe.common.testing import get_qgis_app
+from third_party.parameters.resource_parameter import ResourceParameter
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -57,6 +58,18 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         assert function_list[0].keys()[0] == function_id
 
         dialog = FunctionOptionsDialog(None)
+
+        # Define rice for minimum needs
+        rice = ResourceParameter()
+        rice.value = 2.8
+        rice.frequency = 'weekly'
+        rice.minimum_allowed_value = 1.4
+        rice.maximum_allowed_value = 5.6
+        rice.name = 'Rice'
+        rice.unit.abbreviation = 'kg'
+        rice.unit.name = 'kilogram'
+        rice.unit.plural = 'kilograms'
+
         parameter = {
             'thresholds': [1.0],
             'postprocessors': {
@@ -70,9 +83,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     }
                 }
             },
-            'minimum needs': {
-                'Rice': 2.8
-            }
+            'minimum needs': [rice]
         }
 
         dialog.build_form(parameter)
