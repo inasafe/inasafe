@@ -34,7 +34,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.extent_selector import ExtentSelector
+from safe_qgis.tools.extent_selector_dialog import ExtentSelectorDialog
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -52,7 +52,7 @@ class ExtentSelectorTest(unittest.TestCase):
         self.extent = QgsRectangle(10.0, 10.0, 20.0, 20.0)
         self.crs = QgsCoordinateReferenceSystem('EPSG:4326')
         CANVAS.setExtent(self.extent)
-        self.dialog = ExtentSelector(
+        self.dialog = ExtentSelectorDialog(
             IFACE,
             PARENT,
             self.extent,
