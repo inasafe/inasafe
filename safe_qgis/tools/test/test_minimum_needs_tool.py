@@ -65,11 +65,11 @@ class MinimumNeedsTest(unittest.TestCase):
         new_layer = dialog.minimum_needs(layer, attribute)
         assert new_layer is not None
         attributes = {
-            'Drinking Water [l]': 17500.0,
-            'Family Kits': 200.0,
-            'Rice [kg]': 2800.0,
-            'Toilets': 50.0,
-            'Clean Water [l]': 67000.0}
+            'Drinking Water': 17500,
+            'Family Kits': 200,
+            'Rice': 2800,
+            'Toilets': 50,
+            'Clean Water': 67000}
         self.assertDictEqual(attributes, dict(new_layer.data[0]))
 
     # def Xtest_accept(self):
