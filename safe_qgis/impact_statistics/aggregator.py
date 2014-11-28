@@ -22,7 +22,6 @@ import time
 import numpy
 
 from collections import OrderedDict
-from PyQt4 import QtGui, QtCore
 
 from qgis.core import (
     QgsMapLayer,
@@ -41,6 +40,7 @@ from qgis.core import (
     QgsFillSymbolV2,
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
+from PyQt4 import QtGui, QtCore
 
 from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe_qgis.exceptions import InsufficientParametersError
