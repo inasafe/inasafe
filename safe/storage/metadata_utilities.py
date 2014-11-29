@@ -95,6 +95,8 @@ def write_keyword_in_iso_metadata(keyword_filename):
     if keyword_element is None:
         raise ReadMetadataError
     keyword_element.append(CDATA(keyword_str))
+    # next line fixes issue #1380 - do not remove before testing! TS
+    keyword_element.text = CDATA(keyword_str)
 
     tree.write(xml_filename, encoding="UTF-8")
     return xml_filename
