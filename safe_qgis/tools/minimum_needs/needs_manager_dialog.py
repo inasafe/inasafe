@@ -156,6 +156,10 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
             item.hide()
 
         self.load_profiles()
+        # Next 2 lines fixes issues #1388 #1389 #1390 #1391
+        if self.profile_combo.count() > 0:
+            self.select_profile(0)
+
         self.clear_resource_list()
         self.populate_resource_list()
         self.set_up_resource_parameters()
