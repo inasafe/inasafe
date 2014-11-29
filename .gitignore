@@ -56,3 +56,4 @@ realtime/fixtures/exposure/IDN_mosaic/
 realtime/server_config.py
 nohup.out
 venv
+pycharm-debug.egg

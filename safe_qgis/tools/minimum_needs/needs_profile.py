@@ -8,16 +8,20 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyUnresolvedReferences
-# pylint: disable=W0611
-from qgis.core import QGis, QgsApplication  # force sip2 api
+import qgis  # pylint: disable=W0611  # force sip2 api
 
-from third_party.parameters.resource_parameter import ResourceParameter
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings
-from safe.common.minimum_needs import MinimumNeeds
 from shutil import copy
 from os.path import exists, dirname
 from os import listdir, environ, makedirs
+
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QSettings
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0611
+from qgis.core import QgsApplication
+
+from third_party.parameters.resource_parameter import ResourceParameter
+from safe.common.minimum_needs import MinimumNeeds
 
 
 class NeedsProfile(MinimumNeeds):
