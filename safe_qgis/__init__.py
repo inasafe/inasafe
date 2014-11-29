@@ -86,24 +86,25 @@ if os.path.exists(translation_path):
 
 # MONKEYPATCHING safe.defaults.get_defaults to use get_defaults
 # see safe_qgis.utilities.defaults for more details
-import safe.defaults
-from safe_qgis.utilities.defaults import get_defaults
-safe.defaults.get_defaults = lambda the_default=None: get_defaults(
-    the_default)
-
-from safe.impact_functions.core import get_plugins
-from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
-# Monkey patch all the impact functions
-minimum_needs = NeedsProfile()
-for (name, plugin) in get_plugins().items():
-    if not hasattr(plugin, 'parameters'):
-        continue
-    if 'minimum needs' in plugin.parameters:
-        plugin.parameters['minimum needs'] = (
-            minimum_needs.get_needs_parameters())
-        plugin.parameters['provenance'] = minimum_needs.provenance
-
 try:
+    import safe.defaults
+    from safe_qgis.utilities.defaults import get_defaults
+
+    safe.defaults.get_defaults = lambda the_default=None: get_defaults(
+        the_default)
+
+    from safe.impact_functions.core import get_plugins
+    from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+    # Monkey patch all the impact functions
+    minimum_needs = NeedsProfile()
+    for (name, plugin) in get_plugins().items():
+        if not hasattr(plugin, 'parameters'):
+            continue
+        if 'minimum needs' in plugin.parameters:
+            plugin.parameters['minimum needs'] = (
+                minimum_needs.get_needs_parameters())
+            plugin.parameters['provenance'] = minimum_needs.provenance
+
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
