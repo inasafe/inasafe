@@ -159,6 +159,20 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.profile_combo.activated.connect(self.select_profile)
         self.stacked_widget.currentChanged.connect(self.page_changed)
 
+    def reject(self):
+        """Overload the base dialog reject event so we can handle state change.
+
+        If the user is in resource editing mode, clicking close button,
+        window [x] or pressing escape should switch context back to the
+        profile view, not close the whole window.
+
+        See https://github.com/AIFDR/inasafe/issues/1387
+        """
+        if self.stacked_widget.currentWidget() == self.resource_edit_page:
+            self.switch_context(self.profile_edit_page)
+        else:
+            super(NeedsManagerDialog, self).reject()
+
     def show_help(self):
         """Load the help text for the dialog."""
         show_context_help(self.help_context)
