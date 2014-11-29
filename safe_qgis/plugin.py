@@ -655,9 +655,9 @@ class Plugin:
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
-        from safe_qgis.tools.osm_downloader_dialog import OsmDownloader
+        from safe_qgis.tools.osm_downloader_dialog import OsmDownloaderDialog
 
-        dialog = OsmDownloader(self.iface.mainWindow(), self.iface)
+        dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.exec_()  # modal
 
     def show_batch_runner(self):
