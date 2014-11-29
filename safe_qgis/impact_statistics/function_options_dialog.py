@@ -38,7 +38,7 @@ from collections import OrderedDict
 from safe_qgis.ui.function_options_dialog_base import (
     Ui_FunctionOptionsDialogBase)
 from safe_qgis.safe_interface import safeTr, get_postprocessor_human_name
-from third_party.parameters.qt_widgets.parameter_container import (
+from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
 try:

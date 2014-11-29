@@ -26,7 +26,7 @@ from safe.impact_functions.core import (
     population_rounding,
     evacuated_population_needs
 )
-from third_party.parameters.resource_parameter import ResourceParameter
+from safe_extras.parameters.resource_parameter import ResourceParameter
 
 
 class TestCore(unittest.TestCase):

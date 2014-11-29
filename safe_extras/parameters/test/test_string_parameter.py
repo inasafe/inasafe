@@ -3,7 +3,7 @@
 
 from unittest import TestCase
 
-from third_party.parameters.string_parameter import StringParameter
+from safe_extras.parameters.string_parameter import StringParameter
 
 
 class TestStringParameter(TestCase):

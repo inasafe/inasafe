@@ -8,6 +8,9 @@ import sys
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
+sys.path.extend([os.path.abspath(os.path.join(
+    os.path.dirname(__file__), os.path.pardir))])
+
 from PyQt4.QtCore import (
     QLocale,
     QTranslator,
@@ -31,12 +34,6 @@ except ImportError:
     # noinspection PyTypeChecker,PyArgumentList
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
-
-# Add parent directory to path to make test aware of other modules
-myDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if myDir not in sys.path:
-    sys.path.append(myDir)
-
 
 # Setup internationalisation for the plugin.
 #
@@ -79,10 +76,6 @@ if os.path.exists(translation_path):
         raise TranslationLoadError(message)
     # noinspection PyTypeChecker,PyCallByClass
     QCoreApplication.installTranslator(translator)
-
-# LOGGER.debug('%s %s' % (
-#     translation_path,
-#     os.path.exists(translation_path)))
 
 # MONKEYPATCHING safe.defaults.get_defaults to use get_defaults
 # see safe_qgis.utilities.defaults for more details

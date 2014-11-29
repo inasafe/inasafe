@@ -26,7 +26,7 @@ from safe.messaging import (
     Text,
     ImportantText,
     EmphasizedText)
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 
 from PyQt4 import Qt, QtWebKit
 

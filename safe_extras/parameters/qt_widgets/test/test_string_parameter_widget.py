@@ -12,8 +12,8 @@ import unittest
 
 from PyQt4.QtGui import QApplication
 
-from third_party.parameters.string_parameter import StringParameter
-from third_party.parameters.qt_widgets.string_parameter_widget import (
+from safe_extras.parameters.string_parameter import StringParameter
+from safe_extras.parameters.qt_widgets.string_parameter_widget import (
     StringParameterWidget)
 
 

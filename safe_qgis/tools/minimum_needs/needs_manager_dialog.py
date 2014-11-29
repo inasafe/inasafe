@@ -32,15 +32,15 @@ from PyQt4.QtGui import (
     QMessageBox
 )
 
-from third_party.parameters.resource_parameter import ResourceParameter
-from third_party.parameters.float_parameter import FloatParameter
-from third_party.parameters.qt_widgets.parameter_container import (
+from safe_extras.parameters.resource_parameter import ResourceParameter
+from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
-from third_party.parameters.parameter_exceptions import (
+from safe_extras.parameters.parameter_exceptions import (
     ValueOutOfBounds,
     InvalidMaximumError,
     InvalidMinimumError)
-from third_party.parameters.string_parameter import StringParameter
+from safe_extras.parameters.string_parameter import StringParameter
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (

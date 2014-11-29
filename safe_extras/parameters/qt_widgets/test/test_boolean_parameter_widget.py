@@ -10,8 +10,8 @@ import unittest
 
 from PyQt4.QtGui import QApplication
 
-from third_party.parameters.boolean_parameter import BooleanParameter
-from third_party.parameters.qt_widgets.boolean_parameter_widget import (
+from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.qt_widgets.boolean_parameter_widget import (
     BooleanParameterWidget)
 
 

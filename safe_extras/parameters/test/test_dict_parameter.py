@@ -3,8 +3,8 @@
 
 from unittest import TestCase
 
-from third_party.parameters.dict_parameter import DictParameter
-from third_party.parameters.parameter_exceptions import (
+from safe_extras.parameters.dict_parameter import DictParameter
+from safe_extras.parameters.parameter_exceptions import (
     CollectionLengthError,  InvalidMinimumError, InvalidMaximumError)
 
 
