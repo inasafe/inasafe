@@ -117,7 +117,7 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+# import pydevd  # pylint: disable=F0401
 
 
 # noinspection PyArgumentList
@@ -143,10 +143,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         # Enable remote debugging - should normally be commented out.
         # pydevd.settrace(
-        #    'localhost',
-        #    port=5678,
-        #    stdoutToServer=True,
-        #    stderrToServer=True)
+        #     'localhost',
+        #     port=5678,
+        #     stdoutToServer=True,
+        #     stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)

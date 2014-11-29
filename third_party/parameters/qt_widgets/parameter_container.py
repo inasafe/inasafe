@@ -47,7 +47,7 @@ class ParameterContainer(QWidget, object):
         self.main_layout = QGridLayout()
         self.main_layout.addWidget(self.scroll_area)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
-        #self.main_layout.addStretch(1)
+        # self.main_layout.addStretch(1)
         self.setLayout(self.main_layout)
 
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)

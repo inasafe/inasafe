@@ -32,9 +32,14 @@ from PyQt4.QtGui import (
     QMessageBox
 )
 
+from third_party.parameters.resource_parameter import ResourceParameter
 from third_party.parameters.float_parameter import FloatParameter
 from third_party.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
+from third_party.parameters.parameter_exceptions import (
+    ValueOutOfBounds,
+    InvalidMaximumError,
+    InvalidMinimumError)
 from third_party.parameters.string_parameter import StringParameter
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
@@ -473,10 +478,47 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
             self.resource_widget.layout().itemAt(i) for i in
             range(self.resource_widget.layout().count())][0]
         parameters = parameters_widget.widget().get_parameters()
-        # --
+
         resource = {}
         for parameter in parameters:
             resource[parameter.name] = parameter.value
+
+        # verify the parameters are ok - create a throw-away resource param
+        try:
+            parameter = ResourceParameter()
+            parameter.name = resource['Resource name']
+            parameter.help_text = resource['Resource description']
+            # Adding in the frequency property. This is not in the
+            # FloatParameter by default, so maybe we should subclass.
+            parameter.frequency = resource['Frequency']
+            parameter.description = NeedsProfile.format_sentence(
+                resource['Readable sentence'],
+                resource)
+            parameter.minimum_allowed_value = float(
+                resource['Minimum allowed'])
+            parameter.maximum_allowed_value = float(
+                resource['Maximum allowed'])
+            parameter.unit.name = resource['Unit']
+            parameter.unit.plural = resource['Units']
+            parameter.unit.abbreviation = resource['Unit abbreviation']
+            parameter.value = float(resource['Default'])
+        except ValueOutOfBounds, e:
+            warning = self.tr(
+                'Problem - default value is invalid') + '\n' + e.message
+            QMessageBox.warning(None, 'InaSAFE', warning)
+            return
+        except InvalidMaximumError, e:
+            warning = self.tr(
+                'Problem - maximum value is invalid') + '\n' + e.message
+            QMessageBox.warning(None, 'InaSAFE', warning)
+            return
+        except InvalidMinimumError, e:
+            warning = self.tr(
+                'Problem - minimum value is invalid') + '\n' + e.message
+            QMessageBox.warning(None, 'InaSAFE', warning)
+            return
+        # end of test for parameter validity
+
         self.add_resource(resource)
         self.switch_context(self.profile_edit_page)
 
@@ -541,6 +583,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.minimum_needs.save()
         self.minimum_needs.save_profile(minimum_needs['profile'])
         self.mark_current_profile_as_saved()
+
 
     def save_profile_as(self):
         """Save the minimum needs under a new profile name.
