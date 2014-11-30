@@ -20,7 +20,7 @@ from PyQt4.QtCore import QSettings
 # pylint: disable=W0611
 from qgis.core import QgsApplication
 
-from third_party.parameters.resource_parameter import ResourceParameter
+from safe_extras.parameters.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 
 

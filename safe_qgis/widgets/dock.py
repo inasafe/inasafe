@@ -38,7 +38,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QGis)
 from qgis.gui import QgsRubberBand
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (

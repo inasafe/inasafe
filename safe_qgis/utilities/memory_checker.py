@@ -25,7 +25,7 @@ from safe_qgis.safe_interface import get_free_memory
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import DYNAMIC_MESSAGE_SIGNAL
 from safe_qgis.safe_interface import styles
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE

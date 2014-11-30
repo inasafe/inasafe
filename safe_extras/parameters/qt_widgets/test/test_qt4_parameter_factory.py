@@ -10,13 +10,13 @@ import unittest
 
 from PyQt4.QtGui import QApplication
 
-from third_party.parameters.qt_widgets.qt4_parameter_factory import (
+from safe_extras.parameters.qt_widgets.qt4_parameter_factory import (
     Qt4ParameterFactory)
-from third_party.parameters.boolean_parameter import BooleanParameter
-from third_party.parameters.float_parameter import FloatParameter
-from third_party.parameters.qt_widgets.boolean_parameter_widget import (
+from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.qt_widgets.boolean_parameter_widget import (
     BooleanParameterWidget)
-from third_party.parameters.qt_widgets.float_parameter_widget import (
+from safe_extras.parameters.qt_widgets.float_parameter_widget import (
     FloatParameterWidget)
 
 

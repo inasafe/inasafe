@@ -19,7 +19,7 @@ __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from third_party.parameters.resource_parameter import ResourceParameter
+from safe_extras.parameters.resource_parameter import ResourceParameter
 
 from safe.common.utilities import ugettext as tr
 
