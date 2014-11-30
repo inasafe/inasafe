@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Mon Oct 20 08:47:44 2014
-#      by: PyQt4 UI code generator 4.10.4
+# Created: Sun Nov 30 01:28:17 2014
+#      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -83,6 +83,11 @@ class Ui_KeywordsDialogBase(object):
         self.lblSubcategory.setObjectName(_fromUtf8("lblSubcategory"))
         self.formLayout.setWidget(2, QtGui.QFormLayout.LabelRole, self.lblSubcategory)
         self.cboSubcategory = QtGui.QComboBox(self.core_fields_tab)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cboSubcategory.sizePolicy().hasHeightForWidth())
+        self.cboSubcategory.setSizePolicy(sizePolicy)
         self.cboSubcategory.setObjectName(_fromUtf8("cboSubcategory"))
         self.formLayout.setWidget(2, QtGui.QFormLayout.FieldRole, self.cboSubcategory)
         self.lblSource = QtGui.QLabel(self.core_fields_tab)
@@ -107,7 +112,7 @@ class Ui_KeywordsDialogBase(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName(_fromUtf8("scrollArea_2"))
         self.scrollAreaWidgetContents_2 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 276, 423))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 253, 439))
         self.scrollAreaWidgetContents_2.setObjectName(_fromUtf8("scrollAreaWidgetContents_2"))
         self.verticalLayout = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
