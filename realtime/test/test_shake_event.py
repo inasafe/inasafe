@@ -223,7 +223,7 @@ class TestShakeEvent(unittest.TestCase):
 
         expected_fatalities = {2: 0.0,
                                3: 0.0,
-                               4: 0.000036387775168853676,
+                               4: 0.000036387775168847936,
                                5: 0.0,
                                6: 0.0,
                                7: 0.0,
