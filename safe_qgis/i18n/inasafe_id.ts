@@ -332,17 +332,17 @@
     <message>
         <location filename="about_dialog.py" line="68"/>
         <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
         <location filename="about_dialog.py" line="70"/>
         <source>Add designed by Michael Zenaty from the Noun Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Tombol Tambah dirancang oleh Michael Zenaty dari the Noun Project</translation>
     </message>
     <message>
         <location filename="about_dialog.py" line="72"/>
         <source>Remove designed by Dalpat Prajapati from the Noun Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Tombol hapus dirancang oleh Dalpat Prajapati dari the Noun Project</translation>
     </message>
 </context>
 <context>
@@ -386,7 +386,13 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;InaSAFE is free software that produces realistic natural hazard impact scenarios for better planning, preparedness and response activities. It provides a simple but rigorous way to combine data from scientists, local governments and communities to provide insights into the likely impacts of future disaster events.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;InaSAFE was conceived and initially developed by the Indonesia&apos;s National Disaster Management Agency (BNPB) and the Australian Government, through the Australia-Indonesia Facility for Disaster Reduction and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;InaSAFE adalah sebuah perangkat lunak gratis yang menghasilkan skenario dampak bencana alam untuk perencanaan, persiapan, dan aktivitas respon yang lebih baik. Perangkat lunak ini menyediakan cara yang sederhana namun teliti untuk mengkombinasikan data dari ilmuwan, pemerintah daerah, dan komunitas untuk menyediakan wawasan mengenai kemungkinan dampak dari kejadian bencana di masa depan.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;InaSAFE mula-mula dipikirkan dan dikembangkan oleh Badan Nasional Penanggulangan Bencana (BNPB) Indonesia dan Australian Agency for International Development, melalui Australia-Indonesia Facility for Disaster Reduction, World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="about_dialog_base.ui" line="56"/>
@@ -400,7 +406,16 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Berikut adalah langkah-langkah minimum yang perlu dilakukan untuk menggunakan InaSAFE:&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. Tambahkan setidaknya satu layer ancaman (misalnya layer gempabumi MMI) ke QGIS.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. Tambahkan setidaknya satu layer keterpaparan (misalnya layer struktur bangunan) ke QGIS.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3. Pastikan Anda telah memberikan kata kunci untuk layer ancaman dan layer keterpaparan tersebut. Anda dapat melakukannya dengan menggunakan tool Editor Kata Kunci pada toolbar InaSAFE.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;4. Klik tombol Hitung pada panel InaSAFE.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="about_dialog_base.ui" line="159"/>
@@ -431,12 +446,20 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://hot.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Humanitarian OpenStreetMap Team&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://linfiniti.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Linfiniti Consulting CC.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://essc.org.ph/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Environmental Science for Social Change (Philippines)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.aifdr.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australia-Indonesia Facility for Disaster Reduction&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://hot.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Humanitarian OpenStreetMap Team&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://linfiniti.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Linfiniti Consulting CC.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://essc.org.ph/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Environmental Science for Social Change (Philippines)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="about_dialog_base.ui" line="145"/>
         <source>Image Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Kredit Gambar</translation>
     </message>
 </context>
 <context>
@@ -1204,54 +1227,16 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>ExtentSelectorBase</name>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="111"/>
-        <source>InaSAFE Analysis Area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="112"/>
-        <source>Bounding box</source>
-        <translation>Kotak batas</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="113"/>
-        <source>North: </source>
-        <translation>Utara:</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="114"/>
-        <source>East: </source>
-        <translation>Timur:</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="115"/>
-        <source>Select on map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="116"/>
-        <source>West: </source>
-        <translation>Barat:</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="117"/>
-        <source>South: </source>
-        <translation>Selatan:</translation>
-    </message>
-</context>
-<context>
     <name>ExtentSelectorDialog</name>
     <message>
         <location filename="extent_selector_dialog.py" line="130"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog.py" line="145"/>
         <source>User Extents Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Tool Jangkauan Pengguna</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog.py" line="146"/>
@@ -1264,42 +1249,42 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="extent_selector_dialog_base.ui" line="19"/>
         <source>InaSAFE Analysis Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Area Analisis InaSAFE</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog_base.ui" line="30"/>
         <source>about:blank</source>
-        <translation type="unfinished">Perihal:kosong</translation>
+        <translation>Perihal:kosong</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog_base.ui" line="47"/>
         <source>Bounding box</source>
-        <translation type="unfinished">Kotak batas</translation>
+        <translation>Kotak batas</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog_base.ui" line="64"/>
         <source>North: </source>
-        <translation type="unfinished">Utara:</translation>
+        <translation>Utara:</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog_base.ui" line="88"/>
         <source>East: </source>
-        <translation type="unfinished">Timur:</translation>
+        <translation>Timur:</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog_base.ui" line="104"/>
         <source>Select on map</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih pada peta</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog_base.ui" line="119"/>
         <source>West: </source>
-        <translation type="unfinished">Barat:</translation>
+        <translation>Barat:</translation>
     </message>
     <message>
         <location filename="extent_selector_dialog_base.ui" line="143"/>
         <source>South: </source>
-        <translation type="unfinished">Selatan:</translation>
+        <translation>Selatan:</translation>
     </message>
 </context>
 <context>
@@ -1368,47 +1353,47 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="function_browser_dialog_base.py" line="165"/>
         <source>InaSAFE Impact Functions</source>
-        <translation type="unfinished">Fungsi Dampak InaSAFE</translation>
+        <translation>Fungsi Dampak InaSAFE</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.py" line="166"/>
         <source>Title</source>
-        <translation type="unfinished">Judul</translation>
+        <translation>Judul</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.py" line="167"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.py" line="168"/>
         <source>Subcategory</source>
-        <translation type="unfinished">Subkategori</translation>
+        <translation>Subkategori</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.py" line="169"/>
         <source>Category</source>
-        <translation type="unfinished">Kategori</translation>
+        <translation>Kategori</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.py" line="170"/>
         <source>Layer Type</source>
-        <translation type="unfinished">Jenis layer</translation>
+        <translation>Jenis layer</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.py" line="171"/>
         <source>Unit</source>
-        <translation type="unfinished">Satuan</translation>
+        <translation>Satuan</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.py" line="172"/>
         <source>Data Type</source>
-        <translation type="unfinished">Jenis Data</translation>
+        <translation>Jenis Data</translation>
     </message>
     <message>
         <location filename="function_browser_dialog_base.ui" line="214"/>
         <source>about:blank</source>
-        <translation type="unfinished">Perihal:kosong</translation>
+        <translation>Perihal:kosong</translation>
     </message>
 </context>
 <context>
@@ -1935,7 +1920,7 @@ ke
     <message>
         <location filename="keywords_dialog.py" line="112"/>
         <source>generic [categorised]</source>
-        <translation type="unfinished"></translation>
+        <translation>umum [terkategorisasi]</translation>
     </message>
 </context>
 <context>
@@ -1946,7 +1931,7 @@ ke
         <translation>InaSAFE - Editor Kata Kunci</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="129"/>
+        <location filename="keywords_dialog_base.ui" line="135"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation>Subkategori menunjukan jenis ancaman.</translation>
     </message>
@@ -1956,7 +1941,7 @@ ke
         <translation>Subkategori</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="216"/>
+        <location filename="keywords_dialog_base.ui" line="222"/>
         <source>Aggregation attribute</source>
         <translation>Atribut agregasi</translation>
     </message>
@@ -1996,82 +1981,82 @@ ke
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="238"/>
+        <location filename="keywords_dialog_base.ui" line="244"/>
         <source>Female ratio attribute</source>
         <translation>Atribut perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="251"/>
+        <location filename="keywords_dialog_base.ui" line="257"/>
         <source>Female ratio default</source>
         <translation>Nilai default perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="424"/>
+        <location filename="keywords_dialog_base.ui" line="430"/>
         <source>Predefined</source>
         <translation>Yang telah ditentukan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="431"/>
+        <location filename="keywords_dialog_base.ui" line="437"/>
         <source>User defined</source>
         <translation>Yang ditentukan oleh pengguna</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="501"/>
+        <location filename="keywords_dialog_base.ui" line="507"/>
         <source>Keyword</source>
         <translation>Kata kunci (keyword)</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="535"/>
+        <location filename="keywords_dialog_base.ui" line="541"/>
         <source>Value</source>
         <translation>Nilai</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="545"/>
+        <location filename="keywords_dialog_base.ui" line="551"/>
         <source>Add to list</source>
         <translation>Tambahkan ke dalam daftar</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="449"/>
+        <location filename="keywords_dialog_base.ui" line="455"/>
         <source>Key</source>
         <translation>Kunci</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="412"/>
+        <location filename="keywords_dialog_base.ui" line="418"/>
         <source>Current keywords</source>
         <translation>Kata kunci (keyword) saat ini</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="485"/>
+        <location filename="keywords_dialog_base.ui" line="491"/>
         <source>Remove selected</source>
         <translation>Hilangkan yang dipilih</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="365"/>
+        <location filename="keywords_dialog_base.ui" line="371"/>
         <source>Elderly ratio default</source>
         <translation>Perbandingan orang tua default</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="352"/>
+        <location filename="keywords_dialog_base.ui" line="358"/>
         <source>Elderly ratio attribute</source>
         <translation>Atribut perbandingan orang tua</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="332"/>
+        <location filename="keywords_dialog_base.ui" line="338"/>
         <source>Adult ratio default</source>
         <translation>Perbandingan orang dewasa default</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="319"/>
+        <location filename="keywords_dialog_base.ui" line="325"/>
         <source>Adult ratio attribute</source>
         <translation>Atribute </translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="299"/>
+        <location filename="keywords_dialog_base.ui" line="305"/>
         <source>Youth ratio default</source>
         <translation>Perbandingan anak muda default</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="286"/>
+        <location filename="keywords_dialog_base.ui" line="292"/>
         <source>Youth ratio attribute</source>
         <translation>Atribut perbandingan anak muda</translation>
     </message>
@@ -2081,32 +2066,32 @@ ke
         <translation>Isian utama</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="136"/>
+        <location filename="keywords_dialog_base.ui" line="142"/>
         <source>&amp;Source</source>
         <translation>&amp;Sumber</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="180"/>
+        <location filename="keywords_dialog_base.ui" line="186"/>
         <source>Aggregation</source>
         <translation>Agregasi</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="207"/>
+        <location filename="keywords_dialog_base.ui" line="213"/>
         <source>Report labels</source>
         <translation>Label laporan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="232"/>
+        <location filename="keywords_dialog_base.ui" line="238"/>
         <source>Gender Ratio</source>
         <translation>Perbandingan Jenis Kelamin</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="280"/>
+        <location filename="keywords_dialog_base.ui" line="286"/>
         <source>Age Ratios</source>
         <translation>Perbandingan Usia</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="406"/>
+        <location filename="keywords_dialog_base.ui" line="412"/>
         <source>Advanced</source>
         <translation>Lanjutan</translation>
     </message>
@@ -2187,47 +2172,47 @@ Pesan: %s</translation>
     <message>
         <location filename="needs_calculator_dialog.py" line="54"/>
         <source>InaSAFE %s Minimum Needs Tool</source>
-        <translation type="unfinished">Tool Kebutuhan Minimum InaSAFE %s</translation>
+        <translation>Tool Kebutuhan Minimum InaSAFE %s</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="67"/>
         <source>Minimum Needs Calculator</source>
-        <translation type="unfinished">Kalkulator Kebutuhan Minimum</translation>
+        <translation>Kalkulator Kebutuhan Minimum</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="68"/>
         <source>This tool will calculated minimum needs for evacuated people. To use this tool effectively:</source>
-        <translation type="unfinished">Tool ini akan menghitung kebutuhan minimum untuk penduduk yang dievakuasi. Untuk menggunakan tool ini secara efektif:</translation>
+        <translation>Tool ini akan menghitung kebutuhan minimum untuk penduduk yang dievakuasi. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="73"/>
         <source>Load a polygon layer in QGIS. Typically the layer will represent administrative districts where people have gone to an evacuation center.</source>
-        <translation type="unfinished">Memuat layer poligon di QGIS. Secara khusus layer tersebut akan menampilkan daerah administrasi dimana penduduk pergi ke pusat evakuasi.</translation>
+        <translation>Memuat layer poligon di QGIS. Secara khusus layer tersebut akan menampilkan daerah administrasi dimana penduduk pergi ke pusat evakuasi.</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="77"/>
         <source>Ensure that the layer has an INTEGER attribute for the number of displaced people associated with each feature.</source>
-        <translation type="unfinished">Pastikan bahwa layer itu memiliki atribut INTEGER untuk jumlah pengungsi yang terkait dengan setiap fitur.</translation>
+        <translation>Pastikan bahwa layer itu memiliki atribut INTEGER untuk jumlah pengungsi yang terkait dengan setiap fitur.</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="81"/>
         <source>Use the pick lists below to select the layer and the population field and then press &apos;OK&apos;.</source>
-        <translation type="unfinished">Gunakan daftar pilihan di bawah ini untuk memilih layer dan bidang populasi lalu tekan &apos;OK&apos;.</translation>
+        <translation>Gunakan daftar pilihan di bawah ini untuk memilih layer dan bidang populasi lalu tekan &apos;OK&apos;.</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="85"/>
         <source>A new layer will be added to QGIS after the calculation is complete. The layer will contain the minimum needs per district / administrative boundary.</source>
-        <translation type="unfinished">Sebuah layer baru akan ditambahkan ke QGIS setelah perhitungan selesai. Layer ini akan berisi kebutuhan minimum per kabupaten / batas administratif.</translation>
+        <translation>Sebuah layer baru akan ditambahkan ke QGIS setelah perhitungan selesai. Layer ini akan berisi kebutuhan minimum per kabupaten / batas administratif.</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="127"/>
         <source>Format error</source>
-        <translation type="unfinished">Kesalahan format</translation>
+        <translation>Kesalahan format</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="127"/>
         <source>Please change the value of %1 in attribute %1 to integer format</source>
-        <translation type="unfinished">Silahkan ganti nilai %1 pada atribut %1 ke format bilangan bulat</translation>
+        <translation>Silahkan ganti nilai %1 pada atribut %1 ke format bilangan bulat</translation>
     </message>
 </context>
 <context>
@@ -2235,74 +2220,89 @@ Pesan: %s</translation>
     <message>
         <location filename="needs_calculator_dialog_base.ui" line="14"/>
         <source>Minumum Needs Calculator</source>
-        <translation type="unfinished">Kalkulator Kebutuhan Minimum</translation>
+        <translation>Kalkulator Kebutuhan Minimum</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog_base.ui" line="31"/>
         <source>Affected people Layer</source>
-        <translation type="unfinished">Layer Penduduk Terdampak</translation>
+        <translation>Layer Penduduk Terdampak</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog_base.ui" line="41"/>
         <source>Affected people field</source>
-        <translation type="unfinished">Atribut penduduk terdampak</translation>
+        <translation>Atribut penduduk terdampak</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog_base.ui" line="21"/>
         <source>about:blank</source>
-        <translation type="unfinished">Perihal:kosong</translation>
+        <translation>Perihal:kosong</translation>
     </message>
 </context>
 <context>
     <name>NeedsManagerDialog</name>
     <message>
-        <location filename="needs_manager_dialog.py" line="75"/>
-        <source>Discard changes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="needs_manager_dialog.py" line="81"/>
-        <source>Save resource</source>
-        <translation type="unfinished"></translation>
+        <source>Discard changes</source>
+        <translation>Membuang perubahan</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="87"/>
-        <source>Export ...</source>
-        <translation type="unfinished"></translation>
+        <source>Save resource</source>
+        <translation>Menyimpan sumberdaya</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="93"/>
-        <source>Import ...</source>
-        <translation type="unfinished"></translation>
+        <source>Export ...</source>
+        <translation>Ekspor ...</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="99"/>
-        <source>New</source>
-        <translation type="unfinished"></translation>
+        <source>Import ...</source>
+        <translation>Impor ...</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="105"/>
-        <source>Save</source>
-        <translation type="unfinished">Simpan</translation>
+        <source>New</source>
+        <translation>Baru</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="111"/>
+        <source>Save</source>
+        <translation>Simpan</translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="117"/>
         <source>Save as</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="574"/>
+        <location filename="needs_manager_dialog.py" line="644"/>
         <source>JSON files (*.json *.JSON)</source>
-        <translation type="unfinished"></translation>
+        <translation>File JSON (*.json *.JSON)</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="574"/>
+        <location filename="needs_manager_dialog.py" line="644"/>
         <source>Create a minimum needs profile</source>
+        <translation>Buat profil kebutuhan minimum</translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="707"/>
+        <source>Remove %s.</source>
+        <translation>Hapus %s.</translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="529"/>
+        <source>Problem - default value is invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="637"/>
-        <source>Remove %s.</source>
+        <location filename="needs_manager_dialog.py" line="534"/>
+        <source>Problem - maximum value is invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="539"/>
+        <source>Problem - minimum value is invalid</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2311,52 +2311,52 @@ Pesan: %s</translation>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="17"/>
         <source>Minimum Needs Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengelola Kebutuhan Minimum</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="31"/>
         <source>Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="44"/>
         <source>Select a profile</source>
-        <translation type="unfinished">Pilih sebuah profil</translation>
+        <translation>Pilih sebuah profil</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="51"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="94"/>
         <source>Resources for this profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Sumberdaya untuk profil ini</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="138"/>
         <source>Add new resource</source>
-        <translation type="unfinished"></translation>
+        <translation>Menambahkan sumberdaya baru</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="185"/>
         <source>Remove selected resource</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus sumberdaya yang terpilih</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="217"/>
         <source>Edit selected resource</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit sumberdaya yang terpilih</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="244"/>
         <source>Provenance</source>
-        <translation type="unfinished"></translation>
+        <translation>Sumber</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="277"/>
         <source>Resource editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor sumberdaya</translation>
     </message>
 </context>
 <context>
@@ -2557,7 +2557,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="446"/>
         <source>Contact Email</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontak Email</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="460"/>
@@ -2567,22 +2567,22 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="474"/>
         <source>Analysis Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Judul Analisis</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="488"/>
         <source>Analysis License</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisensi analisis</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="426"/>
         <source>ISO 19155 Metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>ISO 19155 Metadata</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="284"/>
         <source>Show organisation logo in InaSAFE dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan logo organisasi pada dek InaSAFE</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="566"/>
@@ -2591,7 +2591,11 @@ Pesan: %s</translation>
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Arial Unicode MS&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Arial Unicode MS&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; Pengaturan di atas memerlukan restart QGIS untuk menon-aktifkan/mengaktifkan. Pesan kesalahan dan informasi diagnosa akan dikirimkan ke http://sentry.linfiniti.com/inasafe-desktop/. Beberapa institusi mungkin tidak memperbolehkan Anda untuk mengaktifkan fitur ini - periksa dengan admin jaringan Anda jika tidak yakin. Walaupun data dikirimkan secara anonim, informasi yang berada di jejak mungkin berisi path sistem file yang akan membuka identitas Anda atau informasi lain dari sistem Anda.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -2599,92 +2603,92 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_dialog.py" line="81"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
-        <translation type="unfinished">Alat Download OpenStreetMap InaSAFE</translation>
+        <translation>Alat Download OpenStreetMap InaSAFE</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="110"/>
         <source>OSM Downloader</source>
-        <translation type="unfinished">Alat Download OSM</translation>
+        <translation>Alat Download OSM</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="111"/>
         <source>This tool will fetch building (&apos;structure&apos;) or road (&apos;highway&apos;) data from the OpenStreetMap project for you. The downloaded data will have InaSAFE keywords defined and a default QGIS style applied. To use this tool effectively:</source>
-        <translation type="unfinished">Tool ini akan mengambil data bangunan (&apos;structure&apos;) atau jalan (&apos;highway&apos;) dari proyek OpenStreetMap untuk Anda. Data yang didownload akan memiliki kata kunci InaSAFE yang telah didefinisikan dan style QGIS standar yang telah diterapkan. Untuk menggunakan tool ini secara efektif:</translation>
+        <translation>Tool ini akan mengambil data bangunan (&apos;structure&apos;) atau jalan (&apos;highway&apos;) dari proyek OpenStreetMap untuk Anda. Data yang didownload akan memiliki kata kunci InaSAFE yang telah didefinisikan dan style QGIS standar yang telah diterapkan. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="118"/>
         <source>Your current extent will be used to determine the area for which you want data to be retrieved. You can adjust it manually using the bounding box options below.</source>
-        <translation type="unfinished">Extent Anda saat ini akan digunakan untuk mendapatkan area yang ingin Anda ambil. Anda dapat mengubahnya secara manual dengan menggunakan pilihan kotak pembatas di bawah ini.</translation>
+        <translation>Extent Anda saat ini akan digunakan untuk mendapatkan area yang ingin Anda ambil. Anda dapat mengubahnya secara manual dengan menggunakan pilihan kotak pembatas di bawah ini.</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="122"/>
         <source>Check the output directory is correct. Note that the saved dataset will be called either roads.shp or buildings.shp (and associated files).</source>
-        <translation type="unfinished">Periksa direktori output yang benar. Perhatikan bahwa dataset yang tersimpan akan dinamai roads.shp atau buildings.shp (dan file terkaitnya).</translation>
+        <translation>Periksa direktori output yang benar. Perhatikan bahwa dataset yang tersimpan akan dinamai roads.shp atau buildings.shp (dan file terkaitnya).</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="127"/>
         <source>By default simple file names will be used (e.g. roads.shp, buildings.shp). If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;padang-&apos; will cause the downloaded files to be saved as &apos;padang-roads.shp&apos; and &apos;padang-buildings.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
-        <translation type="unfinished">Secara default, nama file yang sederhana akan digunakan (misalnya roads.shp, buildings.shp). Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &apos;padang-&apos; akan mengubah file yang di-download menjadi &apos;padang-roads.shp&apos; dan &apos;padang-buildings.shp&apos;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &apos;-&apos;, dan &apos;_&apos;. Anda dapat mengosongkan pilihan ini.</translation>
+        <translation>Secara default, nama file yang sederhana akan digunakan (misalnya roads.shp, buildings.shp). Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &apos;padang-&apos; akan mengubah file yang di-download menjadi &apos;padang-roads.shp&apos; dan &apos;padang-buildings.shp&apos;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &apos;-&apos;, dan &apos;_&apos;. Anda dapat mengosongkan pilihan ini.</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="137"/>
         <source>If a dataset already exists in the output directory it will be overwritten.</source>
-        <translation type="unfinished">Jika dataset sudah ada di direktori output maka dataset tersebut akan ditimpa.</translation>
+        <translation>Jika dataset sudah ada di direktori output maka dataset tersebut akan ditimpa.</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="141"/>
         <source>This tool requires a working internet connection and fetching buildings or roads will consume your bandwidth.</source>
-        <translation type="unfinished">Tool ini memerlukan koneksi internet dan men-download data bangunan atau jalan akan mengkonsumsi bandwidth Anda.</translation>
+        <translation>Tool ini memerlukan koneksi internet dan men-download data bangunan atau jalan akan mengkonsumsi bandwidth Anda.</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="144"/>
         <source>Downloaded data is copyright OpenStreetMap contributors (click for more info).</source>
-        <translation type="unfinished">Data yang didownload adalah hak cipta kontributor OpenStreetMap  (klik untuk info lebih lanjut).</translation>
+        <translation>Data yang didownload adalah hak cipta kontributor OpenStreetMap  (klik untuk info lebih lanjut).</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="224"/>
         <source>Select download directory</source>
-        <translation type="unfinished">Pilih direktori download</translation>
+        <translation>Pilih direktori download</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="229"/>
         <source>InaSAFE OpenStreetMap Downloader Error</source>
-        <translation type="unfinished">Kesalahan Alat Download OpenStreetMap InaSAFE</translation>
+        <translation>Kesalahan Alat Download OpenStreetMap InaSAFE</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="234"/>
         <source>The bounding box is not valid. Please make sure it is valid or check your projection!</source>
-        <translation type="unfinished">Kotak batas tidak valid. Silahkan pastikan bahwa itu valid atau cek proyeksi Anda!</translation>
+        <translation>Kotak batas tidak valid. Silahkan pastikan bahwa itu valid atau cek proyeksi Anda!</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="281"/>
         <source>Directory %s not exist</source>
-        <translation type="unfinished">Direktori %s tidak ada</translation>
+        <translation>Direktori %s tidak ada</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="282"/>
         <source>Directory %s not exist. Do you want to create it?</source>
-        <translation type="unfinished">Directory %s tidak ada. Apakah Anda ingin membuatnya?</translation>
+        <translation>Directory %s tidak ada. Apakah Anda ingin membuatnya?</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="293"/>
         <source>InaSAFE error</source>
-        <translation type="unfinished">Kesalahan InaSAFE</translation>
+        <translation>Kesalahan InaSAFE</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="293"/>
         <source>Output directory can not be empty.</source>
-        <translation type="unfinished">Direktori output tidak boleh kosong.</translation>
+        <translation>Direktori output tidak boleh kosong.</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="362"/>
         <source>Downloading shapefile</source>
-        <translation type="unfinished">Mendownload shapefile</translation>
+        <translation>Mendownload shapefile</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="418"/>
         <source>%s don&apos;t exist. The server doesn&apos;t have any data.</source>
-        <translation type="unfinished">%s tidak ada. Server tidak memiliki data.</translation>
+        <translation>%s tidak ada. Server tidak memiliki data.</translation>
     </message>
 </context>
 <context>
@@ -2692,72 +2696,72 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="14"/>
         <source>OSM Downloader</source>
-        <translation type="unfinished">Alat Download OSM</translation>
+        <translation>Alat Download OSM</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="29"/>
         <source>Feature Type</source>
-        <translation type="unfinished">Jenis fitur</translation>
+        <translation>Jenis fitur</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="37"/>
         <source>All</source>
-        <translation type="unfinished">Semua</translation>
+        <translation>Semua</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="42"/>
         <source>Buildings</source>
-        <translation type="unfinished">Bangunan</translation>
+        <translation>Bangunan</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="47"/>
         <source>Roads</source>
-        <translation type="unfinished">Jalan</translation>
+        <translation>Jalan</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="55"/>
         <source>Output directory</source>
-        <translation type="unfinished">Direktori hasil</translation>
+        <translation>Direktori hasil</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="71"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="80"/>
         <source>File name prefix</source>
-        <translation type="unfinished">Prefix dari nama file</translation>
+        <translation>Prefix dari nama file</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="106"/>
         <source>Bounding box</source>
-        <translation type="unfinished">Kotak batas</translation>
+        <translation>Kotak batas</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="112"/>
         <source>West</source>
-        <translation type="unfinished">Barat</translation>
+        <translation>Barat</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="134"/>
         <source>North</source>
-        <translation type="unfinished">Utara</translation>
+        <translation>Utara</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="144"/>
         <source>East</source>
-        <translation type="unfinished">Timur</translation>
+        <translation>Timur</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="154"/>
         <source>South</source>
-        <translation type="unfinished">Selatan</translation>
+        <translation>Selatan</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="21"/>
         <source>about:blank</source>
-        <translation type="unfinished">Perihal:kosong</translation>
+        <translation>Perihal:kosong</translation>
     </message>
 </context>
 <context>
@@ -2818,7 +2822,7 @@ p, li { white-space: pre-wrap; }
         <translation>Buka tool kebutuhan minimum InaSAFE</translation>
     </message>
     <message>
-        <location filename="__init__.py" line="28"/>
+        <location filename="__init__.py" line="32"/>
         <source>Please restart QGIS to use this plugin.</source>
         <translation>Silahkan restart QGIS dengan menggunakan plugin ini.</translation>
     </message>
@@ -2858,7 +2862,7 @@ p, li { white-space: pre-wrap; }
         <translation>Alat Download OpenStreetMap InaSAFE</translation>
     </message>
     <message>
-        <location filename="__init__.py" line="122"/>
+        <location filename="__init__.py" line="117"/>
         <source>Please restart QGIS to use this plugin. If you experience further problems after restarting please report the issue to the InaSAFE team.</source>
         <translation>Silahkan restart QGIS menggunakan plugin ini. Jika Anda mengalami masalah lebih lanjut setelah restart silakan laporkan masalah ini ke tim InaSAFE.</translation>
     </message>
@@ -2905,17 +2909,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="303"/>
         <source>InaSAFE Global Minimum Needs Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurasi Kebutuhan Minimal Global InaSAFE </translation>
     </message>
     <message>
         <location filename="plugin.py" line="309"/>
         <source>Open InaSAFE global minimum needs configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka konfigurasi kebutuhan minimal global InaSAFE </translation>
     </message>
     <message>
         <location filename="plugin.py" line="442"/>
         <source>Set the analysis area for InaSAFE</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengatur area analisis untuk InaSAFE</translation>
     </message>
 </context>
 <context>
@@ -3193,8 +3197,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="shake_event.py" line="1574"/>
-        <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
-        <translation>Perkiraan dampak ini dihasilkan secara otomatis dan hanya memperhitungkan penduduk dan kota yang terdampat oleh tingkatan getaran tanah. Perkiraan dihasilkan berdasarkan data getaran dari BMKG, data kepadatan penduduk dari worldpop.org.uk, informasi tempat dari geonames.org dan perangkat lunak yang dikembangkan oleh BNPB. Batasan pada perkiraan getaran tanah, data populasi, dan data nama tempat dapat menghasilkan kesalahan representasi dari situasi yang sebenarnya terjadi. Oleh karena itu keputusan tidak seharusnya diambil semata-mata hanya berdasarkan informasi yang ditunjukan di sini dan seharusnya selalu diperiksa kebenarannya di lapangan dan sumber informasi terpercaya lainnya. Perhitungan kematian menggunakan asumsi bahwa tidak terjadi kematian pada level getaran di bawah 4 MMI. Jumlah kematian kurang dari 50 diabaikan.</translation>
+        <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by AIFDR from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3202,82 +3206,82 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_importer_dialog.py" line="62"/>
         <source>InaSAFE %s Shakemap Converter</source>
-        <translation type="unfinished">Tool Konversi Shakemap - InaSAFE %s</translation>
+        <translation>Tool Konversi Shakemap - InaSAFE %s</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="162"/>
         <source>Shakemap Grid Importer</source>
-        <translation type="unfinished">Importir Grid Shakemap</translation>
+        <translation>Importir Grid Shakemap</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="95"/>
         <source>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format to a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require and earthquake layer.  To use this tool effectively:</source>
-        <translation type="unfinished">Tool ini akan melakukan konversi &apos;shakemap&apos; gempa bumi dari format grid xml menjadi file GeoTIFF. File yang diimpor dapat digunakan dalam InaSAFE sebagai input untuk fungsi dampak yang dibutuhkan dan lapisan gempa. Untuk menggunakan tool ini secara efektif:</translation>
+        <translation>Tool ini akan melakukan konversi &apos;shakemap&apos; gempa bumi dari format grid xml menjadi file GeoTIFF. File yang diimpor dapat digunakan dalam InaSAFE sebagai input untuk fungsi dampak yang dibutuhkan dan lapisan gempa. Untuk menggunakan tool ini secara efektif:</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="102"/>
         <source>Select a grid.xml for the input layer.</source>
-        <translation type="unfinished">Pilih sebuah file grid.xml untuk layer input.</translation>
+        <translation>Pilih sebuah file grid.xml untuk layer input.</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="104"/>
         <source>Choose where to write the output layer to.</source>
-        <translation type="unfinished">Pilih lokasi untuk menulis layer output.</translation>
+        <translation>Pilih lokasi untuk menulis layer output.</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="107"/>
         <source>Choose the interpolation algorithm that should be used when converting the xml grid to a raster. If unsure keep the default.</source>
-        <translation type="unfinished">Pilih algoritma interpolasi yang akan digunakan untuk mengubah grid xml menjadi raster. Jika tidak yakin, gunakan default.</translation>
+        <translation>Pilih algoritma interpolasi yang akan digunakan untuk mengubah grid xml menjadi raster. Jika tidak yakin, gunakan default.</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="111"/>
         <source>If you want to obtain shake data you can get it for free from the USGS shakemap site: http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</source>
-        <translation type="unfinished">Jika Anda ingin memperoleh data getaran Anda bisa mendapatkannya secara gratis dari situs shakemap USGS : http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</translation>
+        <translation>Jika Anda ingin memperoleh data getaran Anda bisa mendapatkannya secara gratis dari situs shakemap USGS : http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="129"/>
         <source>output file is not .tif</source>
-        <translation type="unfinished">File output bukan .tif</translation>
+        <translation>File output bukan .tif</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="142"/>
         <source>input file is not .xml</source>
-        <translation type="unfinished">File input bukan .xml</translation>
+        <translation>File input bukan .xml</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="208"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation>InaSAFE</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="202"/>
         <source>Output file name must be tif file</source>
-        <translation type="unfinished">Nama file output harus file tif</translation>
+        <translation>Nama file output harus file tif</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="208"/>
         <source>Input file is not exist</source>
-        <translation type="unfinished">File input tidak ada</translation>
+        <translation>File input tidak ada</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="250"/>
         <source>Input file</source>
-        <translation type="unfinished">File input</translation>
+        <translation>File input</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="250"/>
         <source>Raw grid file(*.xml)</source>
-        <translation type="unfinished">File grid mentah (*.xml)</translation>
+        <translation>File grid mentah (*.xml)</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="260"/>
         <source>Output file</source>
-        <translation type="unfinished">File hasil</translation>
+        <translation>File hasil</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog.py" line="260"/>
         <source>Raster file(*.tif)</source>
-        <translation type="unfinished">File raster(*.tif)</translation>
+        <translation>File raster(*.tif)</translation>
     </message>
 </context>
 <context>
@@ -3285,72 +3289,72 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="121"/>
         <source>InaSAFE - Shakemap Importer</source>
-        <translation type="unfinished">InaSAFE - Importir Shakemap</translation>
+        <translation>InaSAFE - Importir Shakemap</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="21"/>
         <source>about:blank</source>
-        <translation type="unfinished">Perihal:kosong</translation>
+        <translation>Perihal:kosong</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="122"/>
         <source>Input</source>
-        <translation type="unfinished">Input</translation>
+        <translation>Input</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="128"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="124"/>
         <source>Title</source>
-        <translation type="unfinished">Judul</translation>
+        <translation>Judul</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="125"/>
         <source>Input File (grid.xml)</source>
-        <translation type="unfinished">File Input (grid.xml)</translation>
+        <translation>File Input (grid.xml)</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="126"/>
         <source>Source</source>
-        <translation type="unfinished">Sumber</translation>
+        <translation>Sumber</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="127"/>
         <source>Output</source>
-        <translation type="unfinished">Output</translation>
+        <translation>Output</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="129"/>
         <source>The output will be a .tif raster file</source>
-        <translation type="unfinished">Output akan menjadi file raster .tif</translation>
+        <translation>Output akan menjadi file raster .tif</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="130"/>
         <source>Same directory as input file</source>
-        <translation type="unfinished">Direktori yang sama dengan file input.</translation>
+        <translation>Direktori yang sama dengan file input.</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="131"/>
         <source>Add output layer to QGIS project</source>
-        <translation type="unfinished">Tambahkan layer output kedalam proyek QGIS</translation>
+        <translation>Tambahkan layer output kedalam proyek QGIS</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="132"/>
         <source>Algorithm</source>
-        <translation type="unfinished">Algoritma</translation>
+        <translation>Algoritma</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="133"/>
         <source>Nearest neighbour</source>
-        <translation type="unfinished">Nearest neighbour</translation>
+        <translation>Nearest neighbour</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.py" line="134"/>
         <source>Inverse Distance</source>
-        <translation type="unfinished">Inverse Distance</translation>
+        <translation>Inverse Distance</translation>
     </message>
 </context>
 <context>
