@@ -35,9 +35,12 @@ class FloatParameterWidget(NumericParameterWidget):
         self._input.setSingleStep(
             10 ** -self._parameter.precision)
         # is it possible to use dynamic precision ?
-        tool_tip = 'Choose a number between %f and %f' % (
-            self._parameter.minimum_allowed_value,
-            self._parameter.maximum_allowed_value)
+        string_min_value = '%.*f' % (
+            self._parameter.precision, self._parameter.minimum_allowed_value)
+        string_max_value = '%.*f' % (
+            self._parameter.precision, self._parameter.maximum_allowed_value)
+        tool_tip = 'Choose a number between %s and %s' % (
+            string_min_value, string_max_value)
         self._input.setToolTip(tool_tip)
 
         self._input.setSizePolicy(self._spin_box_size_policy)
