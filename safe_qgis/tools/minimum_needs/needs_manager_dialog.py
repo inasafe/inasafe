@@ -602,7 +602,6 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.minimum_needs.save_profile(minimum_needs['profile'])
         self.mark_current_profile_as_saved()
 
-
     def save_profile_as(self):
         """Save the minimum needs under a new profile name.
         """
