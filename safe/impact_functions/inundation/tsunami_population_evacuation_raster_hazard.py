@@ -223,8 +223,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
             counts.append([val, rounding])
 
         # Count totals
-        evacuated = counts[-1][0]
-        rounding = counts[-1][0]
+        evacuated, rounding = counts[-1]
         total = int(numpy.sum(population))
         # Don't show digits less than a 1000
         total = population_rounding(total)
@@ -243,7 +242,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
                      header=True),
             TableRow(
                 tr('* Number is rounded up to the nearest %s') % rounding),
-            TableRow(tr('Map shows population density needing evacuation'))]
+            TableRow(tr('Map shows the numbers of people needing evacuation'))]
 
         total_needs = evacuated_population_needs(
             evacuated, minimum_needs)
@@ -342,7 +341,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
-        legend_title = tr('Population density')
+        legend_title = tr('Population')
 
         # Create raster object and return
         raster = Raster(

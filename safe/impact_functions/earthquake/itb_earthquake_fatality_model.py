@@ -372,7 +372,7 @@ class ITBFatalityFunction(FunctionProvider):
             TableRow(
                 [tr('People displaced'), '%s' % format_int(displaced)],
                 header=True),
-            TableRow(tr('Map shows density estimate of displaced population'))]
+            TableRow(tr('Map shows the estimation of displaced population'))]
 
         total_needs = evacuated_population_needs(
             displaced, minimum_needs)
