@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>User Extents &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Luasan Pengguna &mdash; dokumentasi InaSAFE Documentation 1.2.0</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -173,53 +173,41 @@
         <div class="span12">
                 
   <div class="section" id="user-extents">
-<span id="id1"></span><h1>User Extents<a class="headerlink" href="#user-extents" title="Permalink to this headline">¶</a></h1>
-<p>As of version 2.2, it is possible to explicitly define the extents that
-should be used for the analysis. You can use the new
-<em class="menuselection">Plugins‣InaSAFE‣Set the analysis area for InaSAFE</em> to
-invoke the extents selection dialog.</p>
+<span id="id1"></span><h1>Luasan Pengguna<a class="headerlink" href="#user-extents" title="Permalink to this headline">¶</a></h1>
+<p>Mulai versi 2.2, sekarang memungkinkan untuk mendefinisikan luasan yang seharusnya digunakan untuk analisis secara eksplisit. Anda dapat menggunakan
+<em class="menuselection">Plugins‣InaSAFE‣Mengatur area analisis untuk InaSAFE</em>  yang baru untuk memunculkan dialog pemilihan luasan.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/user_extents.png"><img alt="User extents dialog" src="_images/user_extents.png" style="width: 336.0px; height: 316.5px;" /></a>
-<p class="caption">User extents dialog</p>
+<p class="caption">Dialog luasan pengguna</p>
 </div>
-<p>It is important do understand the logical workflow for your custom defined
-extents and their relation to the layer and viewport extents. There are three
-possible permutations for the basic extents clipping behaviour:</p>
+<p>Ini sangat penting untuk dimengerti logika alur kerja untuk luasan yang Anda definisikan dan hubungannya dengan luasan lapisan dan tampilan. Ada 3 permutasi yang mungin untuk perilaku pemotongan (<i>clipping</i>) dasar:
 <ul>
 <li><dl class="first docutils">
-<dt><strong>No clipping</strong>: use full extents of the union of the hazard and exposure</dt>
-<dd><p class="first last">datasets regardless of your current viewport (where you are zoomed to on
-the map. You can enable this behaviour in the options dialog by unticking
-<em class="guilabel">Clip datasets to visible extents before analysis</em>.</p>
+<dt><strong>Tanpa pemotongan</strong>: menggunakan luasan penuh dari gabungan bencana dan paparan</dt>
+<dd><p class="first last">datasets terlepas dari tampilan sekarang (dimana Anda melakukan perbesaran pada peta)  Anda dapat mengaktifkan perilaku ini pada dialog opsi dengan menghilangkan centang 
+<em class="guilabel">Potong dataset sebesar tampilan terlihat sebelum analisis</em>.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><strong>Clip to visible viewport extents</strong>: use the common overlapping area of</dt>
-<dd><p class="first last">hazard, exposure and the current extents for the analysis (enable this
-behaviour by ticking <em class="guilabel">Clip datasets to visible extents before
-analysis</em>).</p>
+<dt><strong>Potong ke tampilan terlihat</strong>: menggunakan luasan perpotongan hasil singgungan dari</dt>
+<dd><p class="first last">ancaman, paparan, dan luasan sekarang untuk analisis (aktifkan dengan mencentang
+ <em class="guilabel">Potong dataset sebesar tampilan terlihat sebelum analisis</em>).</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><strong>Clip to the user defined extents</strong>: use the common overlapping area of</dt>
-<dd><p class="first last">hazard, exposure and the user defined extents for the analysis (enable this
-behaviour by using <em class="menuselection">Plugins‣InaSAFE‣Set the analysis
-area for InaSAFE</em>).</p>
+<dt><strong>Potong sesuai luasan pengguna</strong>: menggunakan luasan perpotongan hasil singgungan dari</dt>
+<dd><p class="first last">ancaman, paparan, dan dan luasan pengguna untuk analisis (aktifkan perilaku ini dengan menggunakan <em class="menuselection">Plugins‣InaSAFE‣Mengatur area analisis untuk InaSAFE</em>).</p>
 </dd>
 </dl>
 </li>
 </ul>
-<p>When you select an area using the user extents dialog (either by pressing the
-<em class="guilabel">Select on map</em> button, or by manually typing the extents
-coordinates) the user extent will be shown with a blue rectangle on the map
-if you have rubber band previews enabled. Creating a user defined analysis
-extent will enable the third behaviour described above, and any analysis done
-will disregard the current viewport extents and only consider the intersection
-of the user defined analysis ares and the hazard and exposure layers.</p>
-<p><strong>Note:</strong> To disable user defined extents, <em class="menuselection">Plugins‣InaSAFE‣Set
-the analysis area for InaSAFE</em> then click the <em class="guilabel">clear</em> button.</p>
+<p>Ketika Anda memilih luasan dengan menggunakan dialog luasan pengguna (dengan menekan tombol
+<em class="guilabel">Pilih pada peta</em> button, atau dengan mengetik koordinat luasa secara manual)
+luasan pengguna akan ditampilkan dengan segiempat biru pada peta jika Anda mengaktifkan <i>rubber band previews</i>. Membuat luasan analisis pengguna akan mengaktifkan perilaku ke tiga yang dijelaskan di atas, dan analisis apapun yang dilakukan akan mengabaikan luasan tampilan saat ini dan hanya mempertimbangkan perpotongan
+dari yang ditetapkan luasan pengguna analisis dan lapisan bahaya dan lapisan paparan.</p>
+<p><strong>Catatan:</strong> Untuk menon-aktif-kan luasan pengguna, <em class="menuselection">Plugins‣InaSAFE‣Mengatur area analisis untuk InaSAFE</em> lalu klik pada tombol <em class="guilabel">hapus</em>.</p>
 </div>
 
 
