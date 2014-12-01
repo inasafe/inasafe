@@ -986,7 +986,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def draw_rubber_bands(self):
         """Draw any rubber bands that are enabled."""
         settings = QSettings()
-        flag = settings.value('inasafe/showRubberBands', type=bool)
+        try:
+            flag = settings.value('inasafe/showRubberBands', type=bool)
+        except TypeError:
+            flag = False
         if flag:
             self.show_next_analysis_extent()
             self.show_last_analysis_extent()
