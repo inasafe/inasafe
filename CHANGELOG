@@ -1,3 +1,519 @@
+Changelog for version 2.2.0
+================================
+
+a6f560f (HEAD, develop) Updated metadata with key changes
+0a8a81b (upstream/develop) Merge pull request #1400 from timlinux/fix-1367
+e074737 Merge pull request #1398 from timlinux/fix-1380
+28c2c05 (origin/develop) Merge pull request #1399 from timlinux/fix-1388-1391
+ae534fb Merge pull request #1397 from timlinux/safe_extras
+3da29ac (origin/fix-1367) Fix #1367 - subcategory combo box does not expand to dialog width
+899d2a7 (origin/fix-1388-1391) Fix #1388 #1389 #1390 #1391 - show state of profile properly on dialog open
+b6dd67f (origin/fix-1380) Fix for #1380 - remove in kw editor does not remove kw
+aa8cbad (origin/safe_extras) Changed third_party module to safe_extras since third_party is commonly used by other packages and then results in import errors if it shadows ours.
+925eb2b Merge pull request #1396 from timlinux/fix-1387
+fce89ab Merge pull request #1395 from timlinux/fix-1386
+e0b0ef3 (origin/fix-1387) Fix #1387 - escape / close / window x should not close needs manager when in resource edit mode
+87ed8e9 Merge pull request #1394 from timlinux/fix-1393
+26d36b2 (origin/fix-1386) Fix 1386 - validate min max and default for new resource in minimum needs
+84cb600 (origin/fix-1393) Workaround to fix #1393
+0cf7dad Merge pull request #1392 from akbargumbira/develop
+97339b0 Fix unable to open OSM Downloader Dialog.
+fce6a39 Enable only quick tests in travis
+96e2642 Update README.md
+8b6c1c0 Merge pull request #1385 from timlinux/develop
+ec79c1e Added user extents help and placeholder for id help
+e2d0be4 Merge pull request #1384 from timlinux/develop
+4a2ced6 Added minimum needs help and placeholders for id help - still unstranslated
+1935c31 Merge pull request #1383 from timlinux/develop
+00abbc4 Added xml files for test data
+f2acaa6 Merge pull request #1382 from timlinux/develop
+678ed84 compile fix for doc
+0f6443c fix for crash on start when reading minimum needs from QSettings
+4bbab30 Merge pull request #1381 from ismailsunni/update_test
+8f38a03 Merge remote-tracking branch 'aifdr/develop' into develop
+38d0ae0 Pep and hash for image.
+9b13d54 typo fix for doc compile
+5f207f3 Merge pull request #1369 from timlinux/develop
+868807f Merge pull request #1379 from akbargumbira/develop
+436c239 Fix minimum needs tools failing test
+af145f6 Merge pull request #1378 from akbargumbira/develop
+f703dfd Fix extent selector dialog.
+5fe6c5b Update metadata.txt
+3635bf2 Merge pull request #1377 from akbargumbira/develop
+d3d9fa0 Use the new parameter style for testing.
+2b378a4 Merge pull request #1376 from akbargumbira/develop
+cd03dfc Fix wrong import of OSMDownloader tests.
+894a1fc Merge pull request #1375 from akbargumbira/develop
+b7ff6e6 Fix QVariant Problems. Force using SIP API V.2
+04c8ec4 Merge pull request #1371 from ismailsunni/unit_test_2
+77ce806 Fix merge conflict.
+79ea1cd Merge pull request #1374 from timlinux/marquee_fix
+64b6f9b (origin/marquee_fix) Fix base class for extents selector
+5cb6a96 Merge pull request #1372 from timlinux/minimum_needs_fix
+7f444a8 (origin/minimum_needs_fix) Fix for minimum needs startup on a fresh machine
+29814e3 Use makedirs instead mkdir.
+a368825 Fix unit test related to QVariant.
+c02f754 Merge remote-tracking branch 'aifdr/develop' into unit_test
+026702d Update unit test.
+8f72442 Resolved merge conflicts
+2e18e2c Resolved merge conflicts
+9f1a40a Remove in progress IF from Christian
+de23b00 Merge pull request #1368 from ismailsunni/translation
+e3e15c2 Update string translation.
+e546eb6 Merge pull request #1348 from timlinux/issue-1339
+c0d7d61 (origin/issue-1339) Regenerated resources file
+79ddf5b merged from master
+d93f9b5 Merge pull request #1357 from timlinux/marquee_fixes
+97502ba (origin/marquee_fixes) Regenerated ui py files
+fa89677 Resolved merge conflicts
+e030037 Deleting my email - overwhelming my inbox
+c98c343 Merge pull request #1366 from timlinux/feature/inasafe-1334-new-style-parameters
+259c3c6 (origin/feature/inasafe-1334-new-style-parameters) Regenerated resources
+39af87e Resolved merge conflicts
+21750a4 Regenerated broken resources file
+532ce2b Resolved merge conflicts
+031fc2a Merge remote-tracking branch 'upstream/develop' into issue-1339
+9742e30 fix failing test on travis
+4c39f7c Merge pull request #1364 from ismailsunni/translation
+0f653b9 Pylint and pep8
+7bc8157 Translation file updates.
+4115dc2 Resolving conflicts with merge from develop
+e958f6c Changing the default import path to the defaults (as per Charlottes request)
+e91b931 Updating Tests.
+933ac6b Updating Tests.
+dbb9e2b More pep8
+2d77f86 Fixing PEP8
+3522120 Remove profile
+b4bcd94 Merge pull request #4 from timlinux/feature/inasafe-1334-new-style-parameters
+8382d1b Further interaction cleanups for minimum needs manager
+06d867e Resolved merge conflicts
+111d646 Merge pull request #1355 from essc/develop
+5be60ad changed legend title
+fbc6349 Updated clear new profile behaviour. Started on context switch. Remove QFile and QDir in favour of native python file handling.
+525ac7d needs manager coding convention and button bar updates
+b3367da Merge pull request #3 from timlinux/feature/inasafe-1334-new-style-parameters
+a61716b Layout improvements for minimum needs editor
+7dd96f5 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+05ed9bd Merge remote-tracking branch 'christian/feature/inasafe-1334-new-style-parameters' into feature/inasafe-1334-new-style-parameters
+0a95b91 Updated icons for minimum needs manager
+7413dfe Updated icons for minimum needs manager
+a748bfe Always import new profiles into minimum needs directory
+93677e4 changed rounding method
+14b404b changed density term
+a316154 Replacing hard with soft coded paths
+8af94e5 Updating needs defaults
+abc9a3e Added comment explaining why test is expected to fail
+a3aa025 Update the plugin path to be relative
+56c9ed1 Mark canvas test as expected to fail
+f2a17db Merge branch 'develop' into marquee_fixes
+55953c6 Merge pull request #2 from timlinux/feature/inasafe-1334-new-style-parameters
+132c1c7 Put minum needs related stuff into a package in tools
+5ae04b9 Renamed shakemap importer to shakemap importer dialog for consistency
+40eb0d6 Remove old minimum needs dialog
+271d3bf Merge pull request #1 from timlinux/feature/inasafe-1334-new-style-parameters
+bc6250a Refactored dialogs for consistent and logical naming
+7872722 Merge branch 'develop' into feature/inasafe-1334-new-style-parameters
+5a79e81 Merge pull request #1349 from ismailsunni/fix_358
+5e1824f Merge remote-tracking branch 'aifdr/develop' into fix_358
+b9d1136 Improve layout of items
+c0ddb37 Merged develop into branch
+4d56af6 make tests pass
+b6e3361 Merge pull request #1353 from akbargumbira/develop
+8d37635 Updated the unit.
+da8ae2d changed population rounding
+bc6bf9a Use the same rounding for total population in volcano on population IF.
+7a9da82 Update hash test data.
+0fbe828 Fix rounding issue on tsunami on people IF #1352
+4d80237 Changed density term.
+450fa1f Fix and test attempts for extent selector
+6879c87 Updated all remaining IF. Cleared minimum needs on import.
+9611876 In progress test for marquee
+672bf6f Merge pull request #1350 from cchristelis/inasafe-1230-minimum-needs
+786ce04 Updating minimum_needs in Bahasa Indonesia
+b929225 Pep8.
+1c530e5 Update hash value for Makefile.
+7603896 Merge remote-tracking branch 'aifdr/develop' into fix_358
+8e8cab4 Update unit test on ubuntu.
+089ac69 Add unit test related to Windows.
+8943835 Unit test for #358.
+eb72e3a Updated options dialog to move org logo option to first panel, and default to off. See #1339
+48bbd73 Updated logo for #1339
+d06807e Merge pull request #1346 from timlinux/pep8-1.5.6
+24192a0 Merge branch 'develop' of github.com:AIFDR/inasafe into feature/inasafe-1334-new-style-parameters
+bc5f007 Merge pull request #1347 from cchristelis/develop
+7c5036a Choosing the first page as the langing page in the options dialog
+3d6eac6 Removing a print
+51b2b5b Working for the first impact function.
+f42a2ab Early stages, committing as a baseline
+6179aae (origin/pep8-1.5.6) Resolved merge conflict
+d49bbf2 fixes some new introduced doc bugs
+25bf718 fix doc compile bugs
+4b5779a Merge pull request #1345 from timlinux/develop
+0a7195d PEP8 v 1.5.6 fixes - no more pep8 violations.
+c189e46 More pep8 fixes - 125 left
+6c90001 Improved UI for extents selector tool for #1332
+6a86584 Merge pull request #1341 from cchristelis/inasafe-1230-minimum-needs
+a091cb9 fix doc compile bugs
+8b4abcd Updated the minimum needs default profiles text.
+b478aeb Updating the minimum needs for drinking water to 67l weekly (which is 9.7 daily).
+2f2927a Change the default save as to exclude the extenion from the profile.
+6c2fa95 Fixing import minimum needs
+5baa911 Resolved merge conflicts
+99d36ef More pep8 fixes
+b425945 Order profiles by language settings
+691e6bb More pep8 fixes
+242f194 Make pep8 pass on pep8 1.5.6
+9f0e441 Fix last failing tests
+43130f0 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1230-minimum-needs
+cb95c82 Increasing consistency in table layout
+59ce5c6 removing margins from parameter widget
+64c2057 Fixing single test run. Added other tests.
+845a1e7 Divide frequency into batches by adding the rich minimum needs to metadata. Some minor refactoring
+4d4d47a Merge pull request #1338 from timlinux/marquee_fixes
+58dc679 When opening the extents creation tool, remember the previously set extent and use it as default.
+826df94 Merge pull request #1329 from cchristelis/develop
+796e7d4 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1230-minimum-needs
+f788a95 Minor comment improvement
+7ad58f9 make minimum needs scrollable in the minimum needs tab
+a3f83dd Merge pull request #1331 from timlinux/develop
+d011e57 Fix #1330 - Extents to dataset not respected.
+083b460 Add Philippine minimum needs
+d345dfc Fixing file access issues.
+d355be9 Merge pull request #1313 from assefay/develop
+c7eba6d Merge pull request #1326 from timlinux/marquee_fixes
+a632af2 Wrap resource list text
+4c0edbb Change minimum needs to int values to avoid the '.0'
+fb5af8a Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+ec59b34 Add support for ordered dicts in keywords.
+e3443fb clear button for extent selector
+cecf473 Added clear button
+fe8c1e8 Fix for user extents so that they can be cleared properly
+f58da6e Merge pull request #1322 from akbargumbira/develop
+515f11b Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+dd54fce Merge pull request #1320 from essc/develop
+22806ac Merge pull request #1323 from mbernasocchi/metadata
+77e61e1 Merge branch 'develop' into metadata
+3c72b4b implemented gmd:LI_Lineage to close #1245
+53648c0 FIx volcano IF problem when the hazard is point.
+c1bc367 applied new minimum needs
+0cd80cc last pep and lint.  @assefay please review this and act accordingly if needed.
+d5e206a fixed all but one pylint and pep8.
+4172fe9 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+0ae73e9 fix NameError: global name 'extent_to_geo_array' is not defined
+29eeb00 set target_field for styling
+7717386 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+880aed8 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+0f1dfb7 Quick fix last quicktests - @cchristelis you need to check this
+f0a22c9 Quick fix last quicktests - @cchristelis you need to check this
+703e2b6 Merge pull request #1312 from cchristelis/develop
+7ba94ff Moved minimum_needs default to defaults.py
+215a448 Fixed minimum-needs test
+853b4fc merging origin develop into local develop
+6d1f891 fixing the safe_qgis import in safe
+8315a92 disable simply of polygons for roads #1300
+bb015ae Merge pull request #1311 from timlinux/papercuts
+641986d (origin/papercuts) Fix for makefile issue
+cd8392d Merge branch 'develop', remote-tracking branch 'upstream/develop' into develop
+e9d5ade Run pep8 etc tests first, not last
+b617615 Merge pull request #1302 from timlinux/marquee
+e70bd1e (origin/marquee) Resolved merge conflicts
+a550c83 Updated resources
+bf7f584 Merge pull request #1308 from cchristelis/inasafe-1230-minimum-needs
+bb39918 Resolved merge conflicts
+baaceaf merged develop into branch
+1f37645 Merge pull request #1306 from mbernasocchi/metadata
+b66853e Merge remote-tracking branch 'origin/develop' into marquee
+2dceb06 Merge branch 'develop' of github.com:AIFDR/inasafe into metadata
+c4b40bf Make sure the aggregator gets the correct damaged buildings
+5617fcc fix small failing tests
+4846fe1 Fixed error message of failing test
+6b894b4 Fix for travis test error
+3550f92 Allow for title substitution at XML generation
+3b78be1 Fixes for failing tests on travis
+39cd368 Merge branch 'essc-generic_categorised_hazard' into develop
+9e5cde6 Merge branch 'generic_categorised_hazard' of https://github.com/essc/inasafe into essc-generic_categorised_hazard
+4071756 support for updating legacy kw in sqlite db. If the DB already has a record for the given URI, it converts the legacy format into ISO xml
+9c1bb90 fixed last failing guitest
+7d80924 removed a duplicated test
+ef04205 (marquee) Fix last two travis failing tests?
+44b75d7 fighting with tests and incorporated Ismails suggestions
+069c33f updated make file test data hash. All guitest should pass now
+29bf9bd added gui support far the metadata elements
+1d58feb more tests stuff
+5c5fab1 more test stuff
+98cf5f6 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1230-minimum-needs
+ed1e5c4 changing tests
+8c68508 More passing tests and allow dynamic date generation for ISO
+21d7e49 Dont stop travis to ask about adding a repo
+ca34100 Fixes for aggregation tests - use user-extent
+3657569 Merge remote-tracking branch 'origin/develop' into marquee
+cffe36f Merge remote-tracking branch 'origin' into marquee
+cfc2314 Fixing tests.
+ddf9ae1 updating more tests
+7514869 Fixes for travis builds
+0f1ba2a Merge branch 'develop' of github.com:AIFDR/inasafe into metadata
+e0bc79b Install more recent version of QGIS for travis testing
+d8701f9 Fixing tests and removing prints.
+2a00944 Merge pull request #1310 from ismailsunni/new_bangunan_data
+821053a [Data Test] Add new datatest for volcano.
+c216ba9 Fix for failing tests in marquee branch
+d502355 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1230-minimum-needs
+48c5e27 using the QFile and QDirectory api to access files relative to '.qgis2'.
+9e4827f Merge branch 'develop' of github.com:AIFDR/inasafe into metadata
+8a5354d use /usr/local/qgis as default
+7c1daed Remove incorrect call to canvas.get_Extent
+6660ef3 cleanedup after renaming get_defaults
+43870d1 Merge branch 'develop' into marquee
+9843021 moved xml template to an xml file
+476a1cd Merge pull request #1294 from ismailsunni/volcano
+61d4b2e Merge branch 'develop' of github.com:AIFDR/inasafe into metadata
+200a606 fixed some issues
+43c25c5 removed 'categorised'
+a0fa2f2 fixed pep8
+5c008c8 added categorised for unit test
+f98b0dd added unit_categorised for unit test
+0049988 Get Travis working
+d5e6a67 Get Travis working
+689324f Get Travis working
+e58dce3 load defaults rather than going into panic if no profiles are found.
+dd256b4 Removed an unneccessary requirements addition
+314095c Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+27aecb3 Updated some tests
+0a9e1f6 Romoved testing profile. Corrected BNPB minimum needs profile.
+12fbe2d Merged develop into branch
+b260c2d More pylint, pep8 and spelling improvements
+4405f7a fix typo for documentation compiling
+c87e3ba more pylint
+2d3fa65 imports cleanup
+605abc7  fixed pep8 and pylint
+90af38e Merged develop
+95e4d4e merged develop
+59800d4 PEP8
+f4f62b1 clean up
+177ec93 allow generating xml without writing to file
+c8b9e0c Removed the minimum_needs tab from the options dialog
+b4bf991 Hot plug the new minimum needs into the IF after saving
+4412ce1 Setup export functionality to use the correct extention if none is given
+2fe44ad added initial read write suport for non file based layers
+bed6f44 XML Template can now use the values from safe.defaults.get_defaults
+0b02d02 new profile and fixed edit resource
+162a712 added gui capabilities for setting defaults for iso metadata. I used the already present DEFAULTS method so that we have a central place in safe with all the defaults.
+a169dc5 [Volcano] PEP8.
+a9f8b3a Merge remote-tracking branch 'aifdr/develop' into volcano
+dccc005 [Volcano] Add 'other' building type.
+9662e85 Save and save as profile
+880585f Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+05d9f36 changed target_field to affected_field
+c08239a Keep the current profile as the default
+fa264f9 file based profiles
+b0a7668 Merge pull request #1254 from akbargumbira/flood_IF
+261ddf0 Address Charlotte and Tim's feedbacks.
+457d098 Merge branch 'develop' of github.com:AIFDR/inasafe into flood_IF
+f4ea8b3 Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+a118e1a merged from develop
+825e63b add edit options created. Access parameters outside method in which they where created.
+5b73a25 added tests for writing xml metadata
+f48962c added read keywords from iso file. not handling errors yet
+96be77c replaced teplate with one generated at http://inspire-geoportal.ec.europa.eu/editor/
+4658860 Merge pull request #1286 from assefay/assefa_clip
+15e447a Fix wrong method.
+6f46f87 Fix wording.
+bd2ecfd Change the way we adjust the extent so that user's extent won't get cut.
+ee1cb0c Merge remote-tracking branch 'assefa/assefa_clip' into marquee
+c5c8129 Use explicit extent in tests to make them more deterministic
+232a9d7 Adding the parameters tool
+f0370d2 Merge branch 'develop' into marquee
+67fc44b Merge pull request #1303 from timlinux/develop
+c2350ca Reverted north arrow corrupted by compression.
+6289a45 Fix failing test
+9258f55 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+6e0e6a9 changed format for analysis result
+e4ac50e #1301 Update adjust_clip_extent to use two dimensional cell size.
+d26e19c Fixes and tests in progress for user defined extents
+fc9139c changed text
+073a8ad set total_impact for calling total population affected
+d7c0961 Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+27e0660 greener code
+6136fee Fix failing tests caused by alignment.
+149e899 [Realtime] Update realtime related to #1301.
+20fb2f5 Resolved merge conflicts
+c00f1fb State saving added for user extentsso they are restored when re-opening QGIS.
+cf14dc5 #1301 Make get_wgs84_resolution function return tuple containing cell_size_x and cell_size_y.
+17a2f97 Coding standards.
+1b5ea3d In progress state saving for user analysis extent
+8860f28 Updated save scenario tool to take into account user defined analysis extent if present
+bfc488d Merge branch 'develop' into marquee
+0e0fc37 added tests for writing xml metadata
+c8b6a83 Fixed issue when marquee selection is cancelled and tool was not reverted
+863d4f3 Marquee selection now working - analysis is constrained to that extent
+6703cd6 More cleanups for user analysis selection and extents and crs propogate back to dock now. User analysis extent rubber band displayes nicely.
+a52e179 added note about CDATA in ElementTree
+171b53b refactored all into an own module and added support for CDATA in ElementTree
+42f9f3d Also adjust the extent for the case hazard==raster and exposure==vector so that the hazard will be clipped properly.
+6f477d1 added 'categorised' for unit options
+afadf2e initial implementation of raw writing of keywords in an xml template
+05bd952 In progress hookup of extent selector to dock etc.
+acbaa84 Merge remote-tracking branch 'origin/develop' into assefa_clip
+b813df9 Update exposure description.
+940dfaa Address Charlotte's feedback.
+8ecc222 In progress updates for user analysis extents support. Persist rubber band extents for last and next analysis extent when rubber bands are toggled. Implementation for slot for user extents. Refactor code in dock to avoid duplication.
+a89d81c Merge develop upstream.
+4454bcf changed back constant to linear.
+23c3069 removed unused line
+06c1254 Merge pull request #1295 from akbargumbira/reporting
+306d3dd Merge pull request #1235 from ismailsunni/point_building
+6ba5091 make test
+bb5c01e Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+c8c2d3c make test
+fd97579 Fix merged conflict.
+26351d0 Fix merged conflict.
+dfc709d Merge pull request #1282 from cchristelis/inasafe-1239-population-rounding
+74ad359 incorporated Ismail's comments
+4dc0df9 Moved minimum needs to its own window
+f164543 fixed pep8
+b183bfc fixed pep8
+e8aad76 change border
+f3e4b0d [Reporting] Dont print as full page, instead allow the method to specify page margin.
+193bb53 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+1743c3a fixed styling
+775185c [Volcano Building] Fix Unit test.
+81c5923 [Point building] Fix unit test.
+cee6778 Merge branch 'aifdr_develop' into volcano
+360fb97 Pep8.
+a8da790 Fix conlict test.
+f34bb5e fixed pep8
+04e0efc Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+499674b More small marquee tweaks
+d29121a Incremental improvements to extent selector
+0bea075 test_map seems to be a bit random...
+58eda16 Fixed safe_qgis side tests
+f7a6eb6 In progress support for extents selection for analysis. Reorganised dialog to be more compact and get rid of some cruft.
+7a65f8e In progress support for extents selection for analysis. Interactive setting of marquee now works - still needs to by used by dock prior to running analysis.
+fd29442 fixed assigning of damage attribute
+432c269 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1239-population-rounding
+878e969 (upstream/master, origin/master, master) Merge pull request #1291 from timlinux/master
+08ad884 Possible remedy for #1287
+5deead8 Fixing tests
+0b48ad6 In progress work on marquee selector
+4b114b1 Merge pull request #1289 from timlinux/issue-1287
+96eaa9f Move adjust_clip_extent to clipper module.
+ca5dfcd (origin/issue-1287) Possible remedy for #1287
+2246f1f Charlote got hawk eyes. Use repr function in order not to lose precision of the extent and cell size.
+1da2582 Optimise allignment of the clipped layer and provide tests.
+afe3787 added generic [categorised] on keywords dialog
+44e7f95 changed border width to 0.1
+56d179e fixed assigning other values not in parameters as not affected
+8ad0bfa assigning other values not in parameters as zero
+44c0e99 Merge remote-tracking branch 'assefay/develop' into assefa_clip
+b5e9f5f Merge branch 'develop' of https://github.com/assefay/inasafe into generic_categorised_hazard
+e449447 Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+eb14eb9 added borders
+eed36f8 In progress support for analysis extent definition.
+54f93b2 Merge pull request #1260 from akbargumbira/jenkins_qgis2.4
+8f50448 Merge pull request #1283 from akbargumbira/develop
+e1eba00 Merge pull request #1285 from akbargumbira/test
+d96dab1 tests updated
+96b3ef7 Update tests
+4de614b Update hash test data.
+18496d1 Delete unnecessary test.
+d35fee2 Fix failing local tests.
+e9d7719 Merge remote-tracking branch 'origin/develop' into test
+61a9d8b Don't use grid from inasafe_data and rather use it from inasafe test data.
+5aaee6c In progress creation of new analysis extents tool
+4189a65 Merge pull request #1284 from timlinux/marquee
+137de7c Fix small bug where inasafe toggle icon is incorrect when QGIS starts if dock is closed in session restore. Bumped version to 2.2.0 beta
+1dd5574 #1188 Delete scenario files under files folder. We can access them from data.inasafe.org
+04ca0b0 changed border color to black
+5f0cca8 Merge branch 'develop' of https://github.com/AIFDR/inasafe into generic_categorised_hazard
+de60928 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+752c9d8 adding mode
+770e67b Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1239-population-rounding
+d3586bb select row to for clarity
+212bf8b Merge pull request #1269 from timlinux/compressed-images
+f3de726 (origin/compressed-images) Fix for messy looking logo in header bar of docs
+5e9fc12 Dont use degraded wizard icone image
+1628a56 Merge remote-tracking branch 'timlinux/compressed-images' into develop
+1d76ecd Added dropdowns on new lines. Added note that changes only take affect after restart. Widened the the dialog to hopefully show everything even on Charlotte's PC.
+e0f20a6 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1230-minimum-needs
+c29214e Update after merge also changed 'to' to 'up to'
+dc0d0d0 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1239-population-rounding
+042ebe2 Updated the volcano evecuation IF
+fc41794 Updated rounding
+20baf31 generic
+a12e22a Added generic IF for buildings and population
+61472a4 added unit_categorised in metadata
+f401db1 added flood [categorised] to keywords dialog
+1d476ab change linear to constant interpolation
+50c3667 added generic hazard impact function for buildings
+a8d087a Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+43422a2 (compressed-images) Compressed all images
+ec95c3d Added image compression logic
+0c940e6 align result raster to exposure or harzard #344 #710 #344
+341efe1 Merge remote-tracking branch 'upstream/develop' into develop
+e34c0f7 align result raster to exposure or harzard #344 #710
+18afeaa Update script to use qgis 2.4 for jenkins.
+3f72514 Merge remote-tracking branch 'upstream/develop' into develop
+34c32ea Added tests for minimum needs.
+6fc588a Update minimum needs class
+b404236 - Get minimum needs from QMinimumNeeds. - Make minimum needs handling generic.
+3aefe1b Updated minimum needs table creation in IF.
+3dc6313 Faster flood OSM Building IF.
+fe874f1 Quick hackfest on Flood IF.
+a1ab64a Updated the minimum_needs tool to include editable drop-down fields.
+5f90598 Updated the minimum_needs tool to include editable drop-down fields.
+d513aab Updating docstrings and other pep and pylint requirements
+173d404 Minimum needs added all event connections, added doc strings, added import export and add/remove row logic
+13dc655 Merge branch 'develop' of github.com:AIFDR/inasafe into inasafe-1230-minimum-needs
+394db16 Minimum needs interface - updating needs works
+93455de Pep8 and pylint.
+5346d03 Fix typo.
+6fbcffc Breakdown result by building type.
+6234536 #1183 propagate interpolation mode
+d29fc61 Merge remote-tracking branch 'upstream/develop' into develop
+7a9ac43 Volcano building impact to give exposure as the result, not the hazard.
+7ccd419 Merge branch 'aifdr_develop' into volcano
+6ea9c46 Point for building volcano impact function.
+a9cdcce Fix for #993
+ada6dde Add point for building in flood_osm_building_impact.py
+d3a1b40 Snap to pixel edge #1083
+57d5081 Better unit tests.
+cb85813 Add total needs to impact layer's keywords.
+7dba91f Fix merge conflict.
+164d427 Add get total needs for impact layer.
+43ef1fd Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+9a51d35 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+042185d First try
+0038e06 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+5680359 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+fb2804e Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+afd1298 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+3f54359 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+27175e3 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+483b45b Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+54d16a5 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+db042c2 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+cac6717 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+f12766a Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+b8b3fc8 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+2393b4b Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+0b3b7af Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+9c329d2 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+8e42eb6 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+d3b97fe Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+f25e56e Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+4f1936b Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+bb947c0 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+ba7cccd Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+fe79d9c Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+8e4dacc Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+fc7841d Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+d887cfd Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+7723c34 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+0c36349 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+98a49dd Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop
+6964574 fixed merge conflict
+b4106c6 fixed merge conflicts
+
 Changelog for version 2.1.1
 ================================
 
