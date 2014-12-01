@@ -1199,44 +1199,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>ExtentSelectorBase</name>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="111"/>
-        <source>InaSAFE Analysis Area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="112"/>
-        <source>Bounding box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="113"/>
-        <source>North: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="114"/>
-        <source>East: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="115"/>
-        <source>Select on map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="116"/>
-        <source>West: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.py" line="117"/>
-        <source>South: </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ExtentSelectorDialog</name>
     <message>
         <location filename="extent_selector_dialog.py" line="130"/>
@@ -1937,7 +1899,7 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="129"/>
+        <location filename="keywords_dialog_base.ui" line="135"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1947,7 +1909,7 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="216"/>
+        <location filename="keywords_dialog_base.ui" line="222"/>
         <source>Aggregation attribute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1987,82 +1949,82 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="238"/>
+        <location filename="keywords_dialog_base.ui" line="244"/>
         <source>Female ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="251"/>
+        <location filename="keywords_dialog_base.ui" line="257"/>
         <source>Female ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="424"/>
+        <location filename="keywords_dialog_base.ui" line="430"/>
         <source>Predefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="431"/>
+        <location filename="keywords_dialog_base.ui" line="437"/>
         <source>User defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="501"/>
+        <location filename="keywords_dialog_base.ui" line="507"/>
         <source>Keyword</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="535"/>
+        <location filename="keywords_dialog_base.ui" line="541"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="545"/>
+        <location filename="keywords_dialog_base.ui" line="551"/>
         <source>Add to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="449"/>
+        <location filename="keywords_dialog_base.ui" line="455"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="412"/>
+        <location filename="keywords_dialog_base.ui" line="418"/>
         <source>Current keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="485"/>
+        <location filename="keywords_dialog_base.ui" line="491"/>
         <source>Remove selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="365"/>
+        <location filename="keywords_dialog_base.ui" line="371"/>
         <source>Elderly ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="352"/>
+        <location filename="keywords_dialog_base.ui" line="358"/>
         <source>Elderly ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="332"/>
+        <location filename="keywords_dialog_base.ui" line="338"/>
         <source>Adult ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="319"/>
+        <location filename="keywords_dialog_base.ui" line="325"/>
         <source>Adult ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="299"/>
+        <location filename="keywords_dialog_base.ui" line="305"/>
         <source>Youth ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="286"/>
+        <location filename="keywords_dialog_base.ui" line="292"/>
         <source>Youth ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2072,32 +2034,32 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="136"/>
+        <location filename="keywords_dialog_base.ui" line="142"/>
         <source>&amp;Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="180"/>
+        <location filename="keywords_dialog_base.ui" line="186"/>
         <source>Aggregation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="207"/>
+        <location filename="keywords_dialog_base.ui" line="213"/>
         <source>Report labels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="232"/>
+        <location filename="keywords_dialog_base.ui" line="238"/>
         <source>Gender Ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="280"/>
+        <location filename="keywords_dialog_base.ui" line="286"/>
         <source>Age Ratios</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="406"/>
+        <location filename="keywords_dialog_base.ui" line="412"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2246,53 +2208,68 @@ Message: %s</source>
 <context>
     <name>NeedsManagerDialog</name>
     <message>
-        <location filename="needs_manager_dialog.py" line="75"/>
+        <location filename="needs_manager_dialog.py" line="81"/>
         <source>Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="81"/>
+        <location filename="needs_manager_dialog.py" line="87"/>
         <source>Save resource</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="87"/>
+        <location filename="needs_manager_dialog.py" line="93"/>
         <source>Export ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="93"/>
+        <location filename="needs_manager_dialog.py" line="99"/>
         <source>Import ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="99"/>
+        <location filename="needs_manager_dialog.py" line="105"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="105"/>
+        <location filename="needs_manager_dialog.py" line="111"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="111"/>
+        <location filename="needs_manager_dialog.py" line="117"/>
         <source>Save as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="574"/>
+        <location filename="needs_manager_dialog.py" line="644"/>
         <source>JSON files (*.json *.JSON)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="574"/>
+        <location filename="needs_manager_dialog.py" line="644"/>
         <source>Create a minimum needs profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="637"/>
+        <location filename="needs_manager_dialog.py" line="707"/>
         <source>Remove %s.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="529"/>
+        <source>Problem - default value is invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="534"/>
+        <source>Problem - maximum value is invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="539"/>
+        <source>Problem - minimum value is invalid</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2629,7 +2606,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_dialog.py" line="144"/>
         <source>Downloaded data is copyright OpenStreetMap contributors (click for more info).</source>
-        <translation type="unfinished">Les données OpenStreetMap sont la propriété collective des contributeurs (clickez pour de plus amples informations).</translation>
+        <translation>Les données OpenStreetMap sont la propriété collective des contributeurs (clickez pour de plus amples informations).</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="224"/>
@@ -2808,7 +2785,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="__init__.py" line="28"/>
+        <location filename="__init__.py" line="32"/>
         <source>Please restart QGIS to use this plugin.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2848,7 +2825,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="__init__.py" line="122"/>
+        <location filename="__init__.py" line="117"/>
         <source>Please restart QGIS to use this plugin. If you experience further problems after restarting please report the issue to the InaSAFE team.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3183,7 +3160,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="shake_event.py" line="1574"/>
-        <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
+        <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by AIFDR from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
