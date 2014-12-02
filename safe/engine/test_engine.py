@@ -3038,18 +3038,22 @@ class Test_Engine(unittest.TestCase):
         # print "keywords", keywords
         evacuated = float(keywords['evacuated'])
         total_needs_full = keywords['total_needs']
-        total_needs = OrderedDict([
+        total_needs_weekly = OrderedDict([
             [x['table name'], x['amount']] for x in
             total_needs_full['weekly']
+        ])
+        total_needs_single = OrderedDict([
+            [x['table name'], x['amount']] for x in
+            total_needs_full['single']
         ])
 
         expected_evacuated = 63400
         assert evacuated == expected_evacuated
-        assert total_needs['Rice [kg]'] == 177520
-        assert total_needs['Family Kits'] == 12680
-        assert total_needs['Drinking Water [l]'] == 1109500
-        assert total_needs['Toilets'] == 3170
-        assert total_needs['Clean Water [l]'] == 4247800
+        assert total_needs_weekly['Rice [kg]'] == 177520
+        assert total_needs_weekly['Family Kits'] == 12680
+        assert total_needs_weekly['Drinking Water [l]'] == 1109500
+        assert total_needs_weekly['Clean Water [l]'] == 4247800
+        assert total_needs_single['Toilets'] == 3170
 
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)
