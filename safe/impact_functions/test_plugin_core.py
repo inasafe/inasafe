@@ -271,13 +271,13 @@ class Test_plugin_core(unittest.TestCase):
 
     def test_get_documentation(self):
         """Test get_documentation for a function"""
-        dict_doc = get_metadata('Basic Function')
+        dict_doc = get_metadata('Basic Function Core')
         myMsg = ('title should be Basic Function but found %s \n'
                  % (dict_doc['title']))
         myMsg += str(dict_doc)
         for key, value in dict_doc.iteritems():
             print key + ':\t' + str(value)
-        assert dict_doc['title'] == 'Basic Function', myMsg
+        assert dict_doc['title'] == 'Basic Function Core', myMsg
 
     def test_format_int(self):
         """Test formatting integer
@@ -318,8 +318,11 @@ class Test_plugin_core(unittest.TestCase):
         assert (result['Rice [kg]'] == 56
                 and result['Drinking Water [l]'] == 350
                 and result['Clean Water [l]'] == 1340
-                and result['Family Kits'] == 4
-                and result['Toilets'] == 1)
+                and result['Family Kits'] == 4)
+
+        result = evacuated_population_needs(10, minimum_needs)['single']
+        result = OrderedDict([[r['table name'], r['amount']] for r in result])
+        assert result['Toilets'] == 1
 
     def test_arbitrary_needs(self):
         """custom need ratios calculated are as expected
@@ -337,8 +340,10 @@ class Test_plugin_core(unittest.TestCase):
         assert (result['Rice [kg]'] == 40
                 and result['Drinking Water [l]'] == 30
                 and result['Clean Water [l]'] == 20
-                and result['Family Kits'] == 10
-                and result['Toilets'] == 2)
+                and result['Family Kits'] == 10)
+        result = evacuated_population_needs(10, minimum_needs)['single']
+        result = OrderedDict([[r['table name'], r['amount']] for r in result])
+        assert result['Toilets'] == 2
 
     def test_aggregate(self):
         """Test aggregate function behaves as expected."""

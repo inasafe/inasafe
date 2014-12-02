@@ -129,7 +129,7 @@ def default_minimum_needs():
 
     toilets = ResourceParameter()
     toilets.value = 0.05
-    toilets.frequency = 'weekly'
+    toilets.frequency = 'single'
     toilets.minimum_allowed_value = 0.02
     toilets.maximum_allowed_value = 0.05
     toilets.name = 'Toilets'
