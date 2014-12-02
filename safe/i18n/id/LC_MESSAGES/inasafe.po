@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-27 15:34+0700\n"
+"POT-Creation-Date: 2014-12-01 17:53+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,11 +34,9 @@ msgstr "Gedung-gedung/bangunan"
 #: safe/impact_functions/inundation/flood_building_impact_qgis.py:250
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:368
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:380
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:372
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:384
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:343
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:252
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:254
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:253
 #: safe/impact_functions/volcanic/volcano_building_impact.py:305
 #: safe/impact_functions/volcanic/volcano_building_impact.py:351
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:324
@@ -57,8 +55,6 @@ msgstr "Jumlah"
 #: safe/impact_functions/inundation/flood_building_impact_qgis.py:253
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:370
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:381
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:374
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:385
 #: safe/impact_functions/inundation/flood_polygon_roads.py:262
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:309
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:270
@@ -136,7 +132,6 @@ msgstr ""
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:298
 #: safe/impact_functions/generic/categorical_hazard_building.py:391
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:542
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:546
 msgid "Estimated buildings affected"
 msgstr "Bangunan yang diperkirakan terkena dampak"
 
@@ -274,8 +269,6 @@ msgstr "Terkena banjir"
 #: safe/common/dynamic_translations.py:175
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:364
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:378
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:368
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:382
 #: safe/impact_functions/volcanic/volcano_building_impact.py:303
 msgid "Building type"
 msgstr "Jenis bangunan"
@@ -431,14 +424,14 @@ msgstr "Penduduk perlu dievakuasi kalau banjir lebih dari %i m"
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:415
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:370
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:276
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:278
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:277
 msgid "Minimum needs are defined in BNPB regulation 7/2008"
 msgstr "Minimum bantuan per minggu dari perka 7 BNPB/2008"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:124
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:267
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:338
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:340
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:339
 msgid "People in need of evacuation"
 msgstr "Penduduk yang perlu dievakuasi"
 
@@ -450,7 +443,7 @@ msgstr "Kepadatan Penduduk"
 #: safe/impact_functions/generic/categorical_hazard_population.py:343
 #: safe/impact_functions/generic/categorised_hazard_population.py:277
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:350
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:352
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:351
 #, python-format
 msgid "Population which %s"
 msgstr "Penduduk yang %s"
@@ -474,7 +467,6 @@ msgstr "Jumlah keseluruhan (*)"
 
 #: safe/impact_functions/inundation/flood_building_impact_qgis.py:261
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:489
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:493
 msgid "Buildings inundated"
 msgstr "Bangunan terendam"
 
@@ -788,10 +780,9 @@ msgstr "Jumlah pengungsi"
 #: safe/impact_functions/generic/categorical_hazard_building.py:316
 #: safe/impact_functions/generic/categorical_hazard_population.py:278
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:438
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:442
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:353
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:260
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:262
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:261
 msgid "Action Checklist:"
 msgstr "Daftar tindakan:"
 
@@ -829,14 +820,12 @@ msgstr "Ditutup sementara"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:318
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:440
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:444
 msgid "Are the critical facilities still open?"
 msgstr "Apakah fasilitas publik penting masih dibuka?"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:310
 #: safe/impact_functions/inundation/flood_building_impact_qgis.py:255
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:431
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:435
 msgid "Breakdown by building type"
 msgstr "Perincian menurut jenis bangunan"
 
@@ -914,7 +903,6 @@ msgid "%.2f people/cell"
 msgstr "%.2f orang/sel"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:94
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:246
 msgid "Map shows population density needing evacuation"
 msgstr "Peta menunjukkan kepadatan penduduk yang memerlukan evakuasi"
 
@@ -1108,17 +1096,16 @@ msgstr "Fungsi Dampak yang Tersedia"
 #: safe/impact_functions/generic/categorical_hazard_population.py:290
 #: safe/impact_functions/generic/categorised_hazard_population.py:232
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:463
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:467
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:366
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:272
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:274
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:273
 #: safe/impact_functions/volcanic/volcano_building_impact.py:367
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:355
 msgid "Notes"
 msgstr "Catatan"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:281
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:283
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:282
 msgid "Detailed breakdown"
 msgstr "Perincian lebih detil"
 
@@ -1134,7 +1121,7 @@ msgstr ""
 "dari %(eps).1f m"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:284
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:286
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:285
 #, python-format
 msgid "People in %(lo).1f m to %(hi).1f m of water: %(val)i"
 msgstr "Orang-orang di %(lo).1f m ke %(hi).1f m air: %(val)i"
@@ -1199,7 +1186,6 @@ msgstr ""
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:320
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:442
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:446
 msgid "Which structures have warning capacity (eg. sirens, speakers, etc.)?"
 msgstr ""
 "Bangunan mana saja yang memiliki mekanisme peringatan (contoh sirene, "
@@ -1207,19 +1193,16 @@ msgstr ""
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:323
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:445
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:449
 msgid "Which buildings will be evacuation centres?"
 msgstr "Bangunan mana saja yang memiliki pusat evakuasi?"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:325
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:447
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:451
 msgid "Where will we locate the operations centre?"
 msgstr "Dimana kita akan menempatkan pusat operasi?"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:327
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:449
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:453
 msgid "Where will we locate warehouse and/or distribution centres?"
 msgstr "Dimana kita akan menempatkan gudang dan/atau pusat distribusi?"
 
@@ -1238,21 +1221,21 @@ msgstr ""
 #: safe/impact_functions/generic/categorical_hazard_population.py:279
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:354
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:261
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:263
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:262
 msgid "How will warnings be disseminated?"
 msgstr "Bagimana peringatan tanggap bencana akan disebarluaskan?"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:280
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:355
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:262
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:264
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:263
 msgid "How will we reach stranded people?"
 msgstr "Bagaimana kita akan menjangkau orang-orang yang terdampar/terlantar?"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:281
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:356
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:263
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:265
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:264
 msgid "Do we have enough relief items?"
 msgstr "Apakah kita memiliki barang-barang bantuan yang cukup?"
 
@@ -1261,7 +1244,7 @@ msgstr "Apakah kita memiliki barang-barang bantuan yang cukup?"
 #: safe/impact_functions/generic/categorical_hazard_population.py:282
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:358
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:264
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:266
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:265
 msgid "If yes, where are they located and how will we distribute them?"
 msgstr ""
 "Jika iya, dimana kita akan meletakannya dan bagaimana pendistribusiannya?"
@@ -1269,7 +1252,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorical_hazard_population.py:285
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:361
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:267
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:269
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:268
 msgid ""
 "If no, where can we obtain additional relief items from and how will we "
 "transport them to here?"
@@ -1309,8 +1292,6 @@ msgstr "Terdampak"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:81
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:120
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:84
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:123
 #: safe/impact_functions/inundation/flood_polygon_roads.py:73
 #: safe/impact_functions/inundation/flood_polygon_roads.py:94
 msgid "Be flooded"
@@ -1585,7 +1566,6 @@ msgid "Not specified"
 msgstr "Tidak ditentukan"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:379
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:383
 msgid "Number flooded"
 msgstr "Jumlah yang kebanjiran"
 
@@ -1611,7 +1591,6 @@ msgid "People displaced"
 msgstr "Penduduk yang diungsikan"
 
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:232
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:375
 msgid "Map shows density estimate of displaced population"
 msgstr "Peta menunjukkan kepadatan penduduk yang perlu diungsikan"
 
@@ -1661,8 +1640,8 @@ msgstr "Jumlah manula"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:237
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:298
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:241
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:300
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:240
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:299
 #, python-format
 msgid "People in %.1f m of water"
 msgstr "Orang-orang yang terendam air %.1f"
@@ -1706,7 +1685,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_population.py:234
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:367
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:273
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:275
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:274
 #, python-format
 msgid "Total population: %s"
 msgstr "Jumlah Penduduk: %s"
@@ -1771,7 +1750,6 @@ msgid "Lorem ipsum limitation"
 msgstr "Batasan lorem ipsum"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:325
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:329
 #, python-format
 msgid "Unknown hazard type %s. Must be either \"depth\" or \"grid\""
 msgstr ""
@@ -1804,14 +1782,12 @@ msgstr "Total bangunan %s di area yang terlihat"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:331
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:453
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:457
 #, python-format
 msgid "Where will the students from the %s closed schools go to study?"
 msgstr "Dimanakah siswa dari %s sekolah yang ditutup akan belajar?"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:336
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:458
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:462
 #, python-format
 msgid ""
 "Where will the patients from the %s closed hospitals go for treatment and "
@@ -1822,8 +1798,6 @@ msgstr ""
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:85
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:122
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:88
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:125
 msgid ""
 "To assess the impacts of (flood or tsunami) inundation on building "
 "footprints originating from OpenStreetMap (OSM)."
@@ -1832,14 +1806,12 @@ msgstr ""
 "bangunan yang berasal dari OpenStreetMap (OSM)."
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:125
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:128
 msgid "Provide details about where critical infrastructure might be flooded"
 msgstr ""
 "Menyediakan detil/rincian mengenai dimana infrastrutur penting yang "
 "tergenang banjir"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:127
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:130
 msgid ""
 "The inundation status is calculated for each building (using the centroid if "
 "it is a polygon) based on the hazard levels provided. if the hazard is given "
@@ -1870,7 +1842,6 @@ msgstr ""
 "ditetapkan."
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:142
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:145
 msgid ""
 "A hazard raster layer where each cell represents flood depth (in meters), or "
 "a vector polygon layer where each polygon represents an inundated area. In "
@@ -1893,7 +1864,6 @@ msgstr ""
 "merepresentasikan jejak keberadaan bangunan."
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:154
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:157
 msgid ""
 "This function only flags buildings as impacted or not either based on a "
 "fixed threshold in case of raster hazard or the the attributes mentioned "
@@ -2291,7 +2261,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:467
 #: safe/impact_functions/generic/categorical_hazard_population.py:333
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:340
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:342
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:341
 #: safe/impact_functions/volcanic/volcano_building_impact.py:404
 #, python-format
 msgid "Thousand separator is represented by %s"
@@ -2300,11 +2270,11 @@ msgstr "Ribuan pemisah diwaliki oleh %s"
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:469
 #: safe/impact_functions/generic/categorical_hazard_population.py:335
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:342
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:344
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:343
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:405
 msgid "(people per cell)"
 msgstr "(penduduk per sel)"
 
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:345
 msgid "Population density"
 msgstr "Kepadatan penduduk"
 
@@ -2373,7 +2343,6 @@ msgstr ""
 "yang diberikan."
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:151
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:154
 msgid ""
 "Vector layer contains building is estimated to be flooded and the breakdown "
 "of the building by type."
@@ -2383,7 +2352,6 @@ msgstr ""
 
 #: safe/impact_functions/inundation/flood_building_impact_qgis.py:264
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:521
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:525
 #: safe/impact_functions/inundation/flood_polygon_roads.py:273
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:323
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:283
@@ -2392,7 +2360,6 @@ msgstr "Tidak tergenang"
 
 #: safe/impact_functions/inundation/flood_building_impact_qgis.py:266
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:527
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:531
 #: safe/impact_functions/inundation/flood_polygon_roads.py:275
 #: safe/impact_functions/inundation/flood_raster_roads_qgis_gdal.py:326
 #: safe/impact_functions/inundation/flood_raster_roads_qgis.py:285
@@ -2400,13 +2367,11 @@ msgid "Inundated"
 msgstr "Tergenang"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:531
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:535
 msgid "(inundated or not inundated)"
 msgstr "(tergenang atau tidak tergenang)"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:384
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:490
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:494
 msgid "Structure inundated status"
 msgstr "Status struktur yang tergenang"
 
@@ -2584,11 +2549,9 @@ msgstr "Total penduduk %s di layer data keterpaparan"
 msgid "Thousand separator is represented by  %s"
 msgstr "Pemisah nilai ribuan diwaliki oleh %s"
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:405
 msgid "(people)"
 msgstr "(penduduk)"
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:406
 msgid "Population count"
 msgstr "Jumlah penduduk"
 
@@ -2837,7 +2800,7 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:421
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:277
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:279
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:278
 msgid ""
 "All values are rounded up to the nearest integer in order to avoid "
 "representing human lives as fractions."
@@ -3506,6 +3469,7 @@ msgstr ""
 "pada penduduk terdampak."
 
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:242
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:245
 msgid "Map shows the numbers of people needing evacuation"
 msgstr "Peta menunjukkan jumlah penduduk yang memerlukan evakuasi"
 
@@ -3594,37 +3558,38 @@ msgstr ""
 "Ambang batas default 0.7 meter dipilih berdasarkan konsensus, bukan dari "
 "bukti yang kuat."
 
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:276
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:275
 #, python-format
 msgid "People need evacuation if tsunami levels exceed %(eps).1f m"
 msgstr "Penduduk perlu evakuasi kalau level tsunami lebih dari %(eps).1f m"
 
 #: safe/common/minimum_needs.py:118
 msgid "Clean Water"
-msgstr ""
+msgstr "Air Bersih"
 
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:375
 msgid "Map shows the estimation of displaced population"
-msgstr ""
+msgstr "Peta menunjukkan estimasi jumlah penduduk yang perlu diungsikan"
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:382
 #: safe/impact_functions/generic/categorical_hazard_population.py:267
 #: safe/impact_functions/generic/categorised_hazard_population.py:244
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:342
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:251
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:253
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:252
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:343
 #, python-format
 msgid "Needs should be provided %s"
-msgstr ""
+msgstr "Kebutuhan yang harus dipenuhi %s"
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:390
 msgid "Provenance"
-msgstr ""
+msgstr "Sumber"
 
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:429
 #, python-format
 msgid "Population numbers rounded up to the nearest %s."
-msgstr ""
+msgstr "Jumlah penduduk dibulatkan ke atas terdekat %s."
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:73
 msgid "Categorised Hazard Building Impact Function"
@@ -3635,196 +3600,206 @@ msgid ""
 "To assess the impacts of categorized hazards in raster format on building "
 "vector layer."
 msgstr ""
+"Untuk menghitung dampak ancaman yang dikategorikan dalam format raster pada "
+"layer raster populasi."
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:102
 #: safe/impact_functions/generic/categorical_hazard_population.py:95
 msgid "Be impacted by each category"
-msgstr ""
+msgstr "Terdampak oleh setiap kategori"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:267
 msgid "Number of Buildings"
-msgstr ""
+msgstr "Jumlah bangunan"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:268
 msgid "Buildings in High risk areas"
-msgstr ""
+msgstr "Bangunan di wilayah risiko tinggi"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:270
 msgid "Buildings in Medium risk areas"
-msgstr ""
+msgstr "Bangunnan di wilayah risiko sedang"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:272
 msgid "Buildings in Low risk areas"
-msgstr ""
+msgstr "Bangunan di wilayah risiko rendah"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:274
 msgid "Total Buildings Affected"
-msgstr ""
+msgstr "Jumlah bangunan terdampak"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:277
 msgid "Buildings Not Affected"
-msgstr ""
+msgstr "Bangunan tidak terdampak"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:280
 msgid "All Buildings"
-msgstr ""
+msgstr "Jumlah seluruh bangunan"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:341
 msgid "Map shows buildings affected in low, medium and high risk areas."
 msgstr ""
+"Peta menunjukan jumlah bangunan di wilayah risiko rendah, sedang, dan tinggi."
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:370
 msgid "Not Affected"
-msgstr ""
+msgstr "Tidak terdampak"
 
 #: safe/impact_functions/generic/categorical_hazard_building.py:383
 msgid "(Low, Medium, High)"
-msgstr ""
+msgstr "(Rendah, Sedang, Tinggi)"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:119
 msgid "Be affected by each hazard category"
-msgstr ""
+msgstr "Terdampak oleh setiap kategori bencana."
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:248
 msgid "Total Population Affected "
-msgstr ""
+msgstr "Jumlah penduduk terdampak"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:251
 msgid "Population in High risk areas "
-msgstr ""
+msgstr "Penduduk yang berada di wilayah risiko tinggi"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:253
 msgid "Population in Medium risk areas "
-msgstr ""
+msgstr "Penduduk yang berada di wilayah risiko sedang"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:255
 msgid "Population in Low risk areas "
-msgstr ""
+msgstr "Penduduk yang berada di wilayah risiko rendah"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:257
 msgid "Population Not Affected"
-msgstr ""
+msgstr "Penduduk yang tidak terdampak"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:259
 msgid "Table below shows the minimum needs for all evacuated people"
 msgstr ""
+"Tabel di bawah ini menunjukan kebutuhan minimal untuk penduduk yang "
+"dievakuasi"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:291
 msgid "Map shows the numbers of people in high, medium and low hazard areas"
 msgstr ""
+"Peta menunjukan jumlah penduduk terdampak pada wilayah risiko tinggi, "
+"sedang, dan rendah"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:331
 msgid "Population affected by each category"
-msgstr ""
+msgstr "Penduduk terdampak oleh setiap kategori"
 
 #: safe/impact_functions/generic/categorical_hazard_population.py:336
 msgid "Number of People"
-msgstr ""
+msgstr "Jumlah penduduk"
 
 #: safe/impact_functions/generic/categorised_hazard_population.py:236
 msgid "Table below shows the minimum needs for all affected people"
 msgstr ""
+"Tabel di bawah ini menunjukan kebutuhan minimal untuk penduduk yang "
+"dievakuasi"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:148
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:151
 msgid ""
 "Vector polygon or point layer extracted from OSM where each feature "
 "represents the footprint of a building."
 msgstr ""
+"Poligon vektor atau layer titik diambil dari OSM dimana masing-masing fitur "
+"merepresentasikan batas tapak sebuah bangunan."
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:365
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:369
 msgid "Number Inundated"
-msgstr ""
+msgstr "Jumlah yang tergenang"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:366
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:370
 msgid "Number of Wet Buildings"
-msgstr ""
+msgstr "Jumlah bangunan yang basah"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:367
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:371
 msgid "Number of Dry Buildings"
-msgstr ""
+msgstr "Jumlah bangunan yang kering"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:466
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:470
 #, python-format
 msgid "Buildings are said to be inundated when flood levels exceed %.1f m"
 msgstr ""
+"Bangunan yang kemungkinan akan tergenang jika ketinggian banjir melebihi "
+"%.1f m"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:469
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:473
 #, python-format
 msgid ""
 "Buildings are said to be wet when flood levels are greater than 0 m but less "
 "than %.1f m"
 msgstr ""
+"Bangunan yang kemungkinan basah jika ketinggian banjir lebih dari 0 m tetapi "
+"kurang dari %.1f m"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:472
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:476
 msgid "Buildings are said to be dry when flood levels are less than 0 m"
 msgstr ""
+"Bangunan yang kemungkinan kering ketika ketinggian banjir kurang dari 0 m"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:475
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:479
 msgid "Buildings are said to be closed if they are inundated or wet"
-msgstr ""
+msgstr "Bangunan yang kemungkinan ditutup jika mereka tergenang atau basah"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:478
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:482
 msgid "Buildings are said to be open if they are dry"
-msgstr ""
+msgstr "Bangunan yang kemungkinan tetap buka jika mereka kering"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:481
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:485
 msgid "Buildings are said to be flooded when in regions marked as affected"
 msgstr ""
+"Bangunan yang kemungkinan akan terkena banjir di wilayah yang ditandai "
+"sebagai wilayah terdampak"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:497
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:501
 msgid "Dry (<= 0 m)"
-msgstr ""
+msgstr "Kering  (<= 0 m)"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:504
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:508
 #, python-format
 msgid "Wet (0 m - %.1f m)"
-msgstr ""
+msgstr "Basah  (0 m - %.1f m)"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:511
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:515
 #, python-format
 msgid "Inundated (>= %.1f m)"
-msgstr ""
+msgstr "Tergenang  (>= %.1f m)"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:517
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:521
 msgid "(inundated, wet, or dry)"
-msgstr ""
+msgstr "(tergenang, basah, atau kering)"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:319
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:326
 #: safe/impact_functions/inundation/flood_population_evacuation_raster_hazard.py:240
-#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:245
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:244
 #, python-format
 msgid "* Number is rounded up to the nearest %s"
-msgstr ""
+msgstr "* Angka dibulatkan ke atas terdekat %s"
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:287
 msgid "unknown"
-msgstr ""
+msgstr "tidak diketahui"
 
 #: safe/metadata.py:203
 msgid "categorised"
-msgstr ""
+msgstr "Kategorisasi"
 
 #: safe/metadata.py:205
 msgid ""
 "<b>Categorised</b> data can be hazard data where the values have been "
 "classified or coded (i.e. low, medium, high)."
 msgstr ""
+"<b>Kategorisasi</b> data dapat berupa data ancaman dimana nilainya telah "
+"diklasifikasikan atau dikodekan (contoh rendah, sedang, tinggi)."
 
-#: safe/impact_functions/inundation/flood_OSM_people_in_buildings_impact.py:83
 msgid "Flood People In Buildings Impact Function"
+msgstr "Fungsi Dampak Banjir pada Penduduk dalam Bangunan "
+
+#: safe/impact_functions/inundation/tsunami_population_evacuation_raster_hazard.py:344
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:406
+msgid "Population"
 msgstr ""

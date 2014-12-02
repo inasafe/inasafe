@@ -117,8 +117,6 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# import pydevd  # pylint: disable=F0401
-
 
 # noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
@@ -141,13 +139,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             use autoconnect to set up slots. See article below:
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
-        # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(
-        #     'localhost',
-        #     port=5678,
-        #     stdoutToServer=True,
-        #     stderrToServer=True)
-
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
@@ -343,19 +334,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         flag = bool(settings.value(
             'inasafe/showRubberBands', False, type=bool))
         self.show_rubber_bands = flag
-
-        extent = settings.value('inasafe/analysis_extent', '', type=str)
-        crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+        try:
+            extent = settings.value('inasafe/analysis_extent', '', type=str)
+            crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+        except TypeError:
+            # Any bogus stuff in settings and we just clear them
+            extent = ''
+            crs = ''
 
         if extent != '' and crs != '':
             extent = extent_string_to_array(extent)
             try:
                 self.user_extent = QgsRectangle(*extent)
                 self.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-                self.show_user_analysis_extent()
             except TypeError:
                 self.user_extent = None
                 self.user_extent_crs = None
+
+        self.draw_rubber_bands()
 
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
@@ -424,7 +420,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.connect(
-            self.show_next_analysis_extent)
+            self.draw_rubber_bands)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -440,7 +436,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.disconnect(
-            self.show_next_analysis_extent)
+            self.draw_rubber_bands)
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -591,7 +587,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.get_functions()
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     @pyqtSlot(int)
     def on_cboExposure_currentIndexChanged(self, index):
@@ -607,7 +603,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.get_functions()
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -855,7 +851,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
         # Make sure to update the analysis area preview
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
@@ -984,7 +980,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hide_next_analysis_extent()
             self.hide_user_analysis_extent()
         else:
+            self.draw_rubber_bands()
+
+    @pyqtSlot()
+    def draw_rubber_bands(self):
+        """Draw any rubber bands that are enabled."""
+        settings = QSettings()
+        try:
+            flag = settings.value('inasafe/showRubberBands', type=bool)
+        except TypeError:
+            flag = False
+        if flag:
             self.show_next_analysis_extent()
+            self.show_last_analysis_extent()
             self.show_user_analysis_extent()
 
     def _draw_rubberband(self, extent, colour, width=2):
@@ -1080,6 +1088,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hide_user_analysis_extent()
         self.user_extent = None
         self.user_extent_crs = None
+        settings = QSettings()
+        settings.setValue('inasafe/analysis_extent', '')
+        settings.setValue('inasafe/analysis_extent_crs', '')
 
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
@@ -1093,7 +1104,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             extent.
         :type crs: QgsCoordinateReferenceSystem
         """
-        self.hide_user_analysis_extent()
+        self.clear_user_analysis_extent()
 
         try:
             extent = self.validate_rectangle(extent)
@@ -1114,10 +1125,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         settings.setValue('inasafe/analysis_extent', extent_string)
         settings.setValue('inasafe/analysis_extent_crs', crs.authid())
 
-        self.show_user_analysis_extent()
-        # Next extent might have changed as a result of the new user
-        # analysis extent, so update it too.
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     def show_user_analysis_extent(self):
         """Update the rubber band showing the user defined analysis extent.
@@ -1131,7 +1139,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         .. versionadded:: 2.2.0
         """
-
+        self.hide_user_analysis_extent()
         extent = self.user_extent
         source_crs = self.user_extent_crs
 
@@ -1188,11 +1196,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.next_analysis_extent = extent
 
         extent = self._geo_extent_to_canvas_crs(extent)
+        # Shrink it a by 1 pixel so you can actually see it on screen
+        # if it coincides with the canvas
+        canvas_pixel_distance = self.iface.mapCanvas().mapUnitsPerPixel()
+        extent.setXMinimum(extent.xMinimum() + canvas_pixel_distance)
+        extent.setXMaximum(extent.xMaximum() - canvas_pixel_distance)
+        extent.setYMinimum(extent.yMinimum() + canvas_pixel_distance)
+        extent.setYMaximum(extent.yMaximum() - canvas_pixel_distance)
 
         if self.show_rubber_bands:
             # draw in green
             self.next_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 255, 0, 100), width=10)
+                extent, QColor(0, 255, 0, 100), width=6)
 
     def hide_last_analysis_extent(self):
         """Clear extent rubber band if any.
@@ -1205,10 +1220,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.last_analysis_rubberband.reset(QGis.Polygon)
             self.last_analysis_rubberband = None
 
-    def show_last_analysis_extent(self, extent):
+    def show_last_analysis_extent(self):
         """Show last analysis extent as a rubber band on the canvas.
 
-        .. seealso:: hide_extent()
+        .. seealso:: hide_last_analysis_extent()
 
         .. versionadded:: 2.1.0
 
@@ -1221,19 +1236,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hide_last_analysis_extent()
         try:
             # Massage it into a QgsRectangle
-            extent = self.validate_rectangle(extent)
+            extent = self.validate_rectangle(self.last_analysis_extent)
         except InvalidGeometryError:
             return
-
-        # store the extent to the instance property before reprojecting it
-        self.last_analysis_extent = extent
 
         extent = self._geo_extent_to_canvas_crs(extent)
 
         if self.show_rubber_bands:
             # Draw in red
             self.last_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(255, 0, 0, 100), width=5)
+                extent, QColor(255, 0, 0, 100), width=4)
 
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
@@ -1251,8 +1263,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
          exposure_layer,
          geo_extent,
          hazard_layer) = self.clip_parameters
-
-        self.show_last_analysis_extent(buffered_geo_extent)
+        self.last_analysis_extent = buffered_geo_extent
+        self.show_last_analysis_extent()
         # pylint: enable=W0633,W0612
 
         if self.calculator.requires_clipping():

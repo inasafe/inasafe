@@ -415,7 +415,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         default_parameter.is_required = True
         default_parameter.precision = 2
         default_parameter.minimum_allowed_value = -99999.0
-        default_parameter.default_allowed_value = 99999.0
+        default_parameter.maximum_allowed_value = 99999.0
         default_parameter.help_text = (
             'The default allowable quantity per person. ')
         default_parameter.description = (
