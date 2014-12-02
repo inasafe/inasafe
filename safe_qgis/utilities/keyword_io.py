@@ -14,8 +14,12 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+
+import json
 import os
 from os.path import expanduser
+from xml.etree import ElementTree
+
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
@@ -34,7 +38,9 @@ from safe_qgis.exceptions import (
 from safe_qgis.safe_interface import (
     verify,
     read_file_keywords,
-    write_keywords_to_file)
+    write_keywords_to_file,
+    generate_iso_metadata,
+    ISO_METADATA_KEYWORD_TAG)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -76,7 +82,8 @@ class KeywordIO(QObject):
 
         :param layer:  A QGIS QgsMapLayer instance that you want to obtain
             the keywords for.
-        :type layer: QgsMapLayer
+        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer,
+            QgsPluginLayer
 
         :param keyword: If set, will extract only the specified keyword
               from the keywords dict.
@@ -359,7 +366,7 @@ class KeywordIO(QObject):
                     'dict text);')
                 LOGGER.debug(sql)
                 cursor.execute(sql)
-                #data = cursor.fetchone()
+                # data = cursor.fetchone()
                 cursor.fetchone()
             else:
                 LOGGER.debug('Keywords table already exists')
@@ -472,9 +479,7 @@ class KeywordIO(QObject):
             provided as a dict of key value pairs).
         :type keywords: dict
 
-        :returns: The retrieved value for the keyword if the keyword argument
-            is specified, otherwise the complete keywords dictionary is
-            returned.
+        :returns: The XML written to the DB
 
         :raises: KeywordNotFoundError if the keyword is not recognised.
         """
@@ -486,10 +491,11 @@ class KeywordIO(QObject):
                 'select dict from keyword where hash = \'%s\';' % hash_value)
             cursor.execute(sql)
             data = cursor.fetchone()
-            pickle_dump = pickle.dumps(keywords, pickle.HIGHEST_PROTOCOL)
+            metadata_xml = generate_iso_metadata(keywords)
+            pickle_dump = pickle.dumps(metadata_xml, pickle.HIGHEST_PROTOCOL)
             if data is None:
                 # insert a new rec
-                #cursor.execute('insert into keyword(hash) values(:hash);',
+                # cursor.execute('insert into keyword(hash) values(:hash);',
                 #             {'hash': hash_value})
                 cursor.execute(
                     'insert into keyword(hash, dict) values(:hash, :dict);',
@@ -511,6 +517,8 @@ class KeywordIO(QObject):
         finally:
             self.close_connection()
 
+        return metadata_xml
+
     def read_keyword_from_uri(self, uri, keyword=None):
         """Get metadata from the keywords file associated with a URI.
 
@@ -521,6 +529,10 @@ class KeywordIO(QObject):
         A hash will be constructed from the supplied uri and a lookup made
         in a local SQLITE database for the keywords. If there is an existing
         record it will be returned, if not and error will be thrown.
+
+        If the record is a dictionary, it means that it was inserted into the
+        DB in a pre 2.2 version which had no ISO metadata. In this case, we use
+        that dictionary to update the entry to the new ISO based metadata
 
         .. seealso:: write_keywords_for_uri, delete_keywords_for_uri
 
@@ -555,7 +567,21 @@ class KeywordIO(QObject):
             if data is None:
                 raise HashNotFoundError('No hash found for %s' % hash_value)
             data = data[0]  # first field
-            picked_dict = pickle.loads(str(data))
+
+            # get the ISO XML out of the DB
+            metadata = pickle.loads(str(data))
+
+            # the uri already had a KW entry in the DB using the old KW system
+            # we use that dictionary to update the entry to the new ISO based
+            # metadata system
+            if type(metadata) is dict:
+                metadata = self.write_keywords_for_uri(uri, metadata)
+
+            root = ElementTree.fromstring(metadata)
+            keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
+            dict_str = keyword_element.text
+            picked_dict = json.loads(dict_str)
+
             if keyword is None:
                 return picked_dict
             if keyword in picked_dict:

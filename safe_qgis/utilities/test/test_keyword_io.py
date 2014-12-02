@@ -1,7 +1,7 @@
 # coding=utf-8
 """Tests for keyword io class."""
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -70,7 +70,7 @@ class KeywordIOTest(unittest.TestCase):
             'subcategory': 'earthquake',
             'unit': 'MMI',
             'title': ('An earthquake in Padang '
-            'like in 2009')}
+                      'like in 2009')}
 
     def tearDown(self):
         pass
@@ -92,6 +92,7 @@ class KeywordIOTest(unittest.TestCase):
         # ERROR 1: c:\temp\inasafe\clip_jpxjnt.shp is not a directory.
         # This is because mkstemp creates the file handle and leaves
         # the file open.
+
         os.close(handle)
         os.remove(filename)
         expected_keywords = {
@@ -124,11 +125,11 @@ class KeywordIOTest(unittest.TestCase):
         self.keyword_io.delete_keywords_for_uri(PG_URI)
         try:
             _ = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
-            #if the above didnt cause an exception then bad
+            # if the above didnt cause an exception then bad
             message = 'Expected a HashNotFoundError to be raised'
             assert message
         except HashNotFoundError:
-            #we expect this outcome so good!
+            # we expect this outcome so good!
             pass
 
     def test_are_keywords_file_based(self):
@@ -171,26 +172,37 @@ class KeywordIOTest(unittest.TestCase):
                 'Layer keywords:\n%s\n'
                 'Appended keywords:\n%s\n' %
                 (key,
-                keywords,
-                new_keywords))
+                 keywords,
+                 new_keywords))
             assert key in keywords, message
             message = (
                 'Layer keywords misses appended value: %s\n'
                 'Layer keywords:\n%s\n'
                 'Appended keywords:\n%s\n' %
                 (value,
-                keywords,
-                new_keywords))
+                 keywords,
+                 new_keywords))
             assert keywords[key] == value, message
 
     def test_read_db_keywords(self):
+        """Can we read sqlite kw with the generic readKeywords method
+        """
+        db_path = os.path.join(TESTDATA, 'test_keywords.db')
+        self.read_db_keywords(db_path)
+
+    def test_read_legacy_db_keywords(self):
+        """Can we read legacy sqlite kw with the generic readKeywords method
+        """
+        db_path = os.path.join(TESTDATA, 'test_keywords_legacy.db')
+        self.read_db_keywords(db_path)
+
+    def read_db_keywords(self, db_path):
         """Can we read sqlite keywords with the generic readKeywords method
         """
         # noinspection PyUnresolvedReferences
         local_path = os.path.join(
             os.path.dirname(__file__), '../../..///', 'jk.sqlite')
-        path = os.path.join(TESTDATA, 'test_keywords.db')
-        self.keyword_io.set_keyword_db_path(path)
+        self.keyword_io.set_keyword_db_path(db_path)
         # We need to make a local copy of the dataset so
         # that we can use a local path that will hash properly on the
         # database to return us the correct / valid keywords record.
@@ -204,10 +216,12 @@ class KeywordIOTest(unittest.TestCase):
         expected_source = (
             'dbname=\'../jk.sqlite\' table="osm_buildings" (Geometry) sql=')
         message = 'Got source: %s\n\nExpected %s\n' % (
-            sqlite_layer.source, expected_source)
+            sqlite_layer.source(), expected_source)
         assert sqlite_layer.source() == expected_source, message
         keywords = self.keyword_io.read_keywords(sqlite_layer)
         expected_keywords = self.expected_sqlite_keywords
+        message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+            keywords, expected_keywords, self.sqlite_layer.source())
         assert keywords == expected_keywords, message
         source = self.sqlite_layer.source()
         # delete sqlite_layer so that we can delete the file

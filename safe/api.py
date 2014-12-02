@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # pylint: disable=W0611
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.vector import Layer
 from safe.storage.vector import Vector
@@ -34,7 +34,11 @@ from safe.storage.utilities import (
     verify,
     write_keywords,
     read_keywords,
-    calculate_polygon_centroid)
+    calculate_polygon_centroid,
+    safe_to_qgis_layer)
+from safe.storage.metadata_utilities import (
+    generate_iso_metadata,
+    ISO_METADATA_KEYWORD_TAG)
 
 from safe.storage.core import read_layer
 
@@ -49,7 +53,8 @@ from safe.impact_functions.core import (
     get_doc_string,
     get_unique_values,
     get_plugins_as_table,
-    evacuated_population_weekly_needs)
+    evacuated_population_weekly_needs,
+    evacuated_population_needs)
 
 from safe.engine.core import calculate_impact
 
@@ -96,7 +101,12 @@ from safe import metadata
 # hack for excluding test-related import in built package
 try:
     from safe.common.testing import (
-        HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
+        HAZDATA,
+        EXPDATA,
+        TESTDATA,
+        UNITDATA,
+        BOUNDDATA,
+        get_shake_test_data_path)
 except ImportError:
     pass
 # pylint: enable=W0611

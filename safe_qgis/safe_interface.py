@@ -64,6 +64,7 @@ from safe.api import (
     get_unique_values,
     get_plugins_as_table,
     evacuated_population_weekly_needs,
+    evacuated_population_needs,
     Layer,
     Vector,
     Raster,
@@ -81,7 +82,10 @@ from safe.api import (
     styles,
     feature_attributes_as_dict,
     get_utm_epsg,
-    which)
+    which,
+    safe_to_qgis_layer,
+    generate_iso_metadata,
+    ISO_METADATA_KEYWORD_TAG)
 # noinspection PyUnresolvedReferences
 # hack for excluding test-related import in builded package
 
@@ -138,47 +142,47 @@ def verify(statement, message=None):
 
 
 def get_optimal_extent(
-        hazard_geo_extent, exposure_geo_extent, view_port_geo_extent=None):
-    """ A helper function to determine what the optimal extent is.
+        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent=None):
+    """A helper function to determine what the optimal extent is.
+
     Optimal extent should be considered as the intersection between
     the three inputs. The inasafe library will perform various checks
     to ensure that the extent is tenable, includes data from both
     etc.
 
-    This is just a thin wrapper around safe.api.bbox_intersection.
+    This is just a thin wrapper around safe.storage.utilities.bbox_intersection
 
     Typically the result of this function will be used to clip
-    input layers to a commone extent before processing.
+    input layers to a common extent before processing.
 
-    Args:
+    :param hazard_geo_extent: An array representing the hazard layer
+        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that the
+        coordinates are in EPSG:4326 although currently no checks are made to
+        enforce this.
+    :type hazard_geo_extent: list
 
-        * hazard_geo_extent - an array representing the hazard layer
-           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-           that the coordinates are in EPSG:4326 although currently
-           no checks are made to enforce this.
-        * exposure_geo_extent - an array representing the exposure layer
-           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-           that the coordinates are in EPSG:4326 although currently
-           no checks are made to enforce this.
-        * view_port_geo_extent (optional) - an array representing the viewport
-           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-           that the coordinates are in EPSG:4326 although currently
-           no checks are made to enforce this.
+    :param exposure_geo_extent: An array representing the exposure layer
+        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that the
+        coordinates are in EPSG:4326 although currently no checks are made
+        to enforce this.
+    :type exposure_geo_extent: list
 
-       ..note:: We do minimal checking as the inasafe library takes
-         care of it for us.
+    :param viewport_geo_extent: (optional) An array representing the
+        viewport extents in the form [xmin, ymin, xmax, ymax]. It is assumed
+        that the coordinates are in EPSG:4326 although currently no checks
+        are made to enforce this.
 
-    Returns:
-       An array containing an extent in the form [xmin, ymin, xmax, ymax]
-       e.g.::
+        ..note:: We do minimal checking as the inasafe library takes care of
+        it for us.
 
-          [100.03, -1.14, 100.81, -0.73]
+    :returns: An array containing an extent in the form
+        [xmin, ymin, xmax, ymax]
+        e.g.::
+        [100.03, -1.14, 100.81, -0.73]
+    :rtype: list
 
-    Raises:
-        Any exceptions raised by the InaSAFE library will be propogated.
+    :raises: Any exceptions raised by the InaSAFE library will be propagated.
     """
-
-    #
     message = tr(
         'theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: '
         '/ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s' %
@@ -190,7 +194,7 @@ def get_optimal_extent(
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
     optimal_extent = bbox_intersection(
-        hazard_geo_extent, exposure_geo_extent, view_port_geo_extent)
+        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent)
 
     if optimal_extent is None:
         # Bounding boxes did not overlap
@@ -207,18 +211,18 @@ def get_optimal_extent(
 def get_buffered_extent(geo_extent, cell_size):
     """Grow bounding box with one unit of resolution in each direction.
 
-    Args:
+    If resolution is None bbox is returned unchanged.
 
-        * geo_extent - Bounding box with format [W, S, E, N]
-        * cell_size - (resx, resy) Raster resolution in each direction.
+    :param geo_extent: Bounding box with format [W, S, E, N]
+    :type geo_extent: list
 
-        If resolution is None bbox is returned unchanged.
+    :param cell_size: (resx, resy) Raster resolution in each direction.
+    :type: tuple
 
-    Returns:
-        Adjusted bounding box
+    :returns: Adjusted bounding box.
+    :rtype: list
 
-    Raises:
-        Any exceptions are propogated
+    :raises: Any exceptions raised will be propagated.
 
     Note: See docstring for underlying function buffered_bounding_box
           for more details.
@@ -257,7 +261,7 @@ def available_functions(keyword_list=None):
     """
     try:
         dictionary = get_admissible_plugins(keyword_list)
-        #if len(dictionary) < 1:
+        # if len(dictionary) < 1:
         #    message = 'No InaSAFE impact functions could be found'
         #    raise NoFunctionsFoundError(message)
         return dictionary
@@ -351,7 +355,7 @@ def read_file_keywords(layer_path, keyword=None):
     # if no keyword was supplied, just return the dict
     if keyword is None:
         return dictionary
-    if not keyword in dictionary:
+    if keyword not in dictionary:
         message = tr('No value was found in file %s for keyword %s' % (
             keyword_file_path, keyword))
         raise KeywordNotFoundError(message)

@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -27,11 +27,11 @@ import os
 import tempfile
 import shutil
 
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant, QByteArray
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog
-#noinspection PyPackageRequirements
+# noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkReply
 
 from safe.common.testing import get_qgis_app
@@ -39,7 +39,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.osm_downloader import OsmDownloader
+from safe_qgis.tools.osm_downloader_dialog import OsmDownloaderDialog
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -64,7 +64,7 @@ class MockQNetworkReply(QObject):
         self.content = ""
         self._url = ""
 
-    #noinspection PyDocstring,PyPep8Naming
+    # noinspection PyDocstring,PyPep8Naming
     def isFinished(self):
         """ simulate download progress """
         self.progress += 1
@@ -73,19 +73,19 @@ class MockQNetworkReply(QObject):
         # noinspection PyUnresolvedReferences
         self.downloadProgress.emit(self.progress, 4)
         if self.progress >= 4:
-            #noinspection PyUnresolvedReferences
+            # noinspection PyUnresolvedReferences
             self.finished.emit()
             return True
         else:
             return False
 
-    #noinspection PyDocstring,PyPep8Naming
+    # noinspection PyDocstring,PyPep8Naming
     def readAll(self):
         content = self.content
         self.content = ""
         return content
 
-    #noinspection PyDocstring,PyPep8Naming
+    # noinspection PyDocstring,PyPep8Naming
     def read(self, size):
         content = self.content
         self.content = ""
@@ -94,30 +94,30 @@ class MockQNetworkReply(QObject):
         data.chop(data.size() - size)
         return str(data)
 
-    #noinspection PyDocstring,PyPep8Naming
+    # noinspection PyDocstring,PyPep8Naming
     def url(self):
         return QUrl(self._url)
 
-    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     def error(self):
         return QNetworkReply.NoError
 
-    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     def size(self):
         data = QByteArray(self.content)
         return data.size()
 
-    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
     def attribute(self):
         return QVariant()
         # pylint: enable=W0613
 
 
-#noinspection PyClassHasNoInit
+# noinspection PyClassHasNoInit
 class FakeQNetworkAccessManager:
     """Mock network manager for testing."""
-    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
     def post(self, request_url, data=None):
         """Mock handler for post requests.
@@ -129,14 +129,14 @@ class FakeQNetworkAccessManager:
 
     # pylint: enable=W0613
 
-    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     def get(self, request_url):
         """Mock handler for a get request.
         :param request_url: Url being requested.
         """
         return self.request(request_url)
 
-    #noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
+    # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     def request(self, request_url):
         """Mock handler for an http request.
         :param request_url: Url being requested.
@@ -182,12 +182,12 @@ def read_all(path):
 class ImportDialogTest(unittest.TestCase):
     """Test Import Dialog widget
     """
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
-        self.dialog = OsmDownloader(PARENT, IFACE)
+        self.dialog = OsmDownloaderDialog(PARENT, IFACE)
 
-        ## provide Fake QNetworkAccessManager for self.network_manager
+        # provide Fake QNetworkAccessManager for self.network_manager
         self.dialog.network_manager = FakeQNetworkAccessManager()
 
     def test_validate_extent(self):

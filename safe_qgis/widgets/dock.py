@@ -38,7 +38,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QGis)
 from qgis.gui import QgsRubberBand
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
@@ -46,9 +46,10 @@ from safe_qgis.utilities.utilities import (
     get_wgs84_resolution,
     impact_attribution,
     add_ordered_combo_item,
-    extent_to_geo_array,
+    extent_to_array,
     viewport_geo_array,
-    read_impact_layer)
+    read_impact_layer,
+    extent_string_to_array)
 from safe_qgis.utilities.defaults import (
     limitations,
     disclaimer,
@@ -79,7 +80,7 @@ from safe_qgis.safe_interface import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.clipper import clip_layer
+from safe_qgis.utilities.clipper import clip_layer, adjust_clip_extent
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
@@ -96,7 +97,7 @@ from safe_qgis.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
-    AggregatioError,
+    AggregationError,
     UnsupportedProviderError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
@@ -116,15 +117,13 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
 
-
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
 
-    analysisDone = pyqtSignal(bool)
+    analysis_done = pyqtSignal(bool)
 
     def __init__(self, iface):
         """Constructor for the dialog.
@@ -140,11 +139,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             use autoconnect to set up slots. See article below:
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
-        # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True,
-        #    stderrToServer=True)
-
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
@@ -205,12 +199,30 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
-        # Rubber band for showing analysis extent etc.
+
+        # Rubber bands and extents for showing analysis extent etc.
+        # Note that rubber bands are transient but their associated
+        # extents are persistent for the session.
+
+        # Last analysis extents
         # Added by Tim in version 2.1.0
         self.last_analysis_rubberband = None
+        # Added by Tim in version 2.2.0
+        self.last_analysis_extent = None
         # This is a rubber band to show what the AOI of the
         # next analysis will be. Also added in 2.1.0
         self.next_analysis_rubberband = None
+        # Added by Tim in version 2.2.0
+        self.next_analysis_extent = None
+        # Rubber band to show the user defined analysis using extent
+        # Added in 2.2.0
+        self.user_analysis_rubberband = None
+        # Rectangle defining the user's preferred extent for the analysis
+        # Added in 2.2.0
+        self.user_extent = None
+        # CRS for user defined preferred extent
+        self.user_extent_crs = None
+
         # Whether to show rubber band of last and next scenario
         self.show_rubber_bands = False
 
@@ -317,7 +329,30 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Do this on init and after changing options in the options dialog.
         """
 
-        settings = QtCore.QSettings()
+        settings = QSettings()
+
+        flag = bool(settings.value(
+            'inasafe/showRubberBands', False, type=bool))
+        self.show_rubber_bands = flag
+        try:
+            extent = settings.value('inasafe/analysis_extent', '', type=str)
+            crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+        except TypeError:
+            # Any bogus stuff in settings and we just clear them
+            extent = ''
+            crs = ''
+
+        if extent != '' and crs != '':
+            extent = extent_string_to_array(extent)
+            try:
+                self.user_extent = QgsRectangle(*extent)
+                self.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+            except TypeError:
+                self.user_extent = None
+                self.user_extent_crs = None
+
+        self.draw_rubber_bands()
+
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
         self.run_in_thread_flag = flag
@@ -372,10 +407,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             self.organisation_logo.hide()
 
-        flag = bool(settings.value(
-            'inasafe/showRubberBands', False, type=bool))
-        self.show_rubber_bands = flag
-
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
 
@@ -389,7 +420,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.connect(
-            self.show_next_analysis_extent)
+            self.draw_rubber_bands)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -405,7 +436,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.disconnect(
-            self.show_next_analysis_extent)
+            self.draw_rubber_bands)
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -478,10 +509,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         :returns Message: A localised message indicating we are not ready.
         """
-        #myHazardFilename = self.getHazardLayer().source()
+        # myHazardFilename = self.getHazardLayer().source()
         hazard_keywords = str(
             self.keyword_io.read_keywords(self.get_hazard_layer()))
-        #myExposureFilename = self.getExposureLayer().source()
+        # myExposureFilename = self.getExposureLayer().source()
         exposure_keywords = str(
             self.keyword_io.read_keywords(self.get_exposure_layer()))
         heading = m.Heading(
@@ -556,7 +587,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.get_functions()
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     @pyqtSlot(int)
     def on_cboExposure_currentIndexChanged(self, index):
@@ -572,7 +603,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.get_functions()
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -709,7 +740,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.get_layers_lock:
             return
 
-        #for arg in args:
+        # for arg in args:
         #    LOGGER.debug('get_layer argument: %s' % arg)
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
@@ -816,11 +847,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
         self.get_layers_lock = False
-        #ensure the dock keywords info panel is updated
-        #make sure to do this after the lock is released!
+        # ensure the dock keywords info panel is updated
+        # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
         # Make sure to update the analysis area preview
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
@@ -860,10 +891,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 function_title = get_function_title(function)
 
                 # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
-                #print
-                #print 'function (ID)', myFunctionID
-                #print 'function', function
-                #print 'Function title:', function_title
+                # print
+                # print 'function (ID)', myFunctionID
+                # print 'function', function
+                # print 'Function title:', function_title
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo
@@ -945,41 +976,75 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         settings = QSettings()
         settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
-            self.hide_extent()
+            self.hide_last_analysis_extent()
             self.hide_next_analysis_extent()
+            self.hide_user_analysis_extent()
         else:
-            self.show_next_analysis_extent()
+            self.draw_rubber_bands()
 
-    def hide_next_analysis_extent(self):
-        """Hide the rubber band showing extent of the next analysis."""
-        if self.next_analysis_rubberband is not None:
-            self.next_analysis_rubberband.reset(QGis.Polygon)
-            self.next_analysis_rubberband = None
-
-    def show_next_analysis_extent(self):
-        """Update the rubber band showing where the next analysis extent is.
-
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers.
-
-        This slot is called on pan, zoom, layer visibility changes and
-
-        .. versionadded:: 2.1.0
-        """
-        if not self.show_rubber_bands:
-            return
-
-        self.hide_next_analysis_extent()
+    @pyqtSlot()
+    def draw_rubber_bands(self):
+        """Draw any rubber bands that are enabled."""
+        settings = QSettings()
         try:
-            extent = self.get_clip_parameters()[1]
+            flag = settings.value('inasafe/showRubberBands', type=bool)
+        except TypeError:
+            flag = False
+        if flag:
+            self.show_next_analysis_extent()
+            self.show_last_analysis_extent()
+            self.show_user_analysis_extent()
 
-        except (AttributeError, InsufficientOverlapError):
-            # No layers loaded etc.
-            return
+    def _draw_rubberband(self, extent, colour, width=2):
+        """
+        Draw a rubber band on the canvas.
+
+        .. versionadded: 2.2.0
+
+        :param extent: Extent that the rubber band should be drawn for.
+        :type extent: QgsRectangle
+
+        :param colour: Colour for the rubber band.
+        :type colour: QColor
+
+        :param width: The width for the rubber band pen stroke.
+        :type width: int
+
+        :returns: Rubber band that should be set to the extent.
+        :rtype: QgsRubberBand
+        """
+        rubberband = QgsRubberBand(
+            self.iface.mapCanvas(), geometryType=QGis.Line)
+        rubberband.setColor(colour)
+        rubberband.setWidth(width)
+        update_display_flag = False
+        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
+        rubberband.addPoint(point, update_display_flag)
+        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
+        update_display_flag = True
+        rubberband.addPoint(point, update_display_flag)
+        return rubberband
+
+    @staticmethod
+    def validate_rectangle(extent):
+        """
+
+        .. versionadded: 2.2.0
+
+        :param extent:
+        :return:
+
+        :raises: InvalidGeometryError
+        """
 
         if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
-            return
+            raise InvalidGeometryError
         if isinstance(extent, list):
             try:
                 extent = QgsRectangle(
@@ -988,36 +1053,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     extent[2],
                     extent[3])
             except:  # yes we want to catch all exception types here
-                return
-
-        extent = self._geo_extent_to_canvas_crs(extent)
-        self.next_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), True)
-        self.next_analysis_rubberband.setColor(QColor(0, 255, 0, 100))
-        self.next_analysis_rubberband.setWidth(1)
-        update_display_flag = False
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        update_display_flag = True
-        self.next_analysis_rubberband.addPoint(point, update_display_flag)
-
-    def hide_extent(self):
-        """Clear extent rubber band if any.
-
-        This method can safely be called even if there is no rubber band set.
-
-        .. versionadded:: 2.1.0
-        """
-        if self.last_analysis_rubberband is not None:
-            self.last_analysis_rubberband.reset(QGis.Polygon)
-            self.last_analysis_rubberband = None
+                raise InvalidGeometryError
+        return extent
 
     def _geo_extent_to_canvas_crs(self, extent):
         """Transform a bounding box into the CRS of the canvas.
@@ -1037,10 +1074,156 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         extent = transform.transformBoundingBox(extent)
         return extent
 
-    def show_extent(self, extent):
-        """Show an extent as a rubber band on the canvas.
+    def hide_user_analysis_extent(self):
+        """Hide the rubber band showing extent of the next analysis.
 
-        .. seealso:: hide_extent()
+        .. versionadded: 2.2.0
+        """
+        if self.user_analysis_rubberband is not None:
+            self.user_analysis_rubberband.reset(QGis.Polygon)
+            self.user_analysis_rubberband = None
+
+    def clear_user_analysis_extent(self):
+        """Slot called when the users clears the analysis extents."""
+        self.hide_user_analysis_extent()
+        self.user_extent = None
+        self.user_extent_crs = None
+        settings = QSettings()
+        settings.setValue('inasafe/analysis_extent', '')
+        settings.setValue('inasafe/analysis_extent_crs', '')
+
+    def define_user_analysis_extent(self, extent, crs):
+        """Slot called when user has defined a custom analysis extent.
+
+        .. versionadded: 2.2.0
+
+        :param extent: Extent of the user's preferred analysis area.
+        :type extent: QgsRectangle
+
+        :param crs: Coordinate reference system for user defined analysis
+            extent.
+        :type crs: QgsCoordinateReferenceSystem
+        """
+        self.clear_user_analysis_extent()
+
+        try:
+            extent = self.validate_rectangle(extent)
+            self.user_extent = extent
+            self.user_extent_crs = crs
+        except InvalidGeometryError:
+            # keep existing user extent without updating it
+            return
+
+        # Persist this extent for the next session
+        settings = QSettings()
+        user_extent = [
+            self.user_extent.xMinimum(),
+            self.user_extent.yMinimum(),
+            self.user_extent.xMaximum(),
+            self.user_extent.yMaximum()]
+        extent_string = ', '.join(('%f' % x) for x in user_extent)
+        settings.setValue('inasafe/analysis_extent', extent_string)
+        settings.setValue('inasafe/analysis_extent_crs', crs.authid())
+
+        self.draw_rubber_bands()
+
+    def show_user_analysis_extent(self):
+        """Update the rubber band showing the user defined analysis extent.
+
+        Primary purpose of this slot is to draw a rubber band of where the
+        analysis will be carried out based on valid intersection between
+        layers and the user's preferred analysis area.
+
+        This slot is called on pan, zoom, layer visibility changes and
+        when the user updates the defined extent.
+
+        .. versionadded:: 2.2.0
+        """
+        self.hide_user_analysis_extent()
+        extent = self.user_extent
+        source_crs = self.user_extent_crs
+
+        try:
+            extent = self.validate_rectangle(extent)
+        except InvalidGeometryError:
+            # keep existing user extent without updating it
+            return
+
+        # make sure the extent is in the same crs as the canvas
+        destination_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        transform = QgsCoordinateTransform(source_crs, destination_crs)
+        extent = transform.transformBoundingBox(extent)
+
+        if self.show_rubber_bands:
+            # Draw in blue
+            self.user_analysis_rubberband = self._draw_rubberband(
+                extent, QColor(0, 0, 255, 100), width=2)
+
+    def hide_next_analysis_extent(self):
+        """Hide the rubber band showing extent of the next analysis.
+
+        .. versionadded:: 2.1.0
+        """
+        if self.next_analysis_rubberband is not None:
+            self.next_analysis_rubberband.reset(QGis.Polygon)
+            self.next_analysis_rubberband = None
+
+    def show_next_analysis_extent(self):
+        """Update the rubber band showing where the next analysis extent is.
+
+        Primary purpose of this slot is to draw a rubber band of where the
+        analysis will be carried out based on valid intersection between
+        layers.
+
+        This slot is called on pan, zoom, layer visibility changes and
+
+        .. versionadded:: 2.1.0
+        """
+        self.hide_next_analysis_extent()
+
+        try:
+            extent = self.get_clip_parameters()[1]
+        except (AttributeError, InsufficientOverlapError):
+            # No layers loaded etc.
+            return
+
+        try:
+            extent = self.validate_rectangle(extent)
+        except InvalidGeometryError:
+            return
+
+        # store the extent to the instance property before reprojecting it
+        self.next_analysis_extent = extent
+
+        extent = self._geo_extent_to_canvas_crs(extent)
+        # Shrink it a by 1 pixel so you can actually see it on screen
+        # if it coincides with the canvas
+        canvas_pixel_distance = self.iface.mapCanvas().mapUnitsPerPixel()
+        extent.setXMinimum(extent.xMinimum() + canvas_pixel_distance)
+        extent.setXMaximum(extent.xMaximum() - canvas_pixel_distance)
+        extent.setYMinimum(extent.yMinimum() + canvas_pixel_distance)
+        extent.setYMaximum(extent.yMaximum() - canvas_pixel_distance)
+
+        if self.show_rubber_bands:
+            # draw in green
+            self.next_analysis_rubberband = self._draw_rubberband(
+                extent, QColor(0, 255, 0, 100), width=6)
+
+    def hide_last_analysis_extent(self):
+        """Clear extent rubber band if any.
+
+        This method can safely be called even if there is no rubber band set.
+
+        .. versionadded:: 2.1.0
+        """
+        if self.last_analysis_rubberband is not None:
+            self.last_analysis_rubberband.reset(QGis.Polygon)
+            self.last_analysis_rubberband = None
+
+    def show_last_analysis_extent(self):
+        """Show last analysis extent as a rubber band on the canvas.
+
+        .. seealso:: hide_last_analysis_extent()
 
         .. versionadded:: 2.1.0
 
@@ -1050,40 +1233,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             do nothing.
         :type extent: QgsRectangle, list
         """
-        if not self.show_rubber_bands:
+        self.hide_last_analysis_extent()
+        try:
+            # Massage it into a QgsRectangle
+            extent = self.validate_rectangle(self.last_analysis_extent)
+        except InvalidGeometryError:
             return
 
-        if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
-            return
-        if isinstance(extent, list):
-            try:
-                extent = QgsRectangle(
-                    extent[0],
-                    extent[1],
-                    extent[2],
-                    extent[3])
-            except:  # yes we want to catch all exception types here
-                return
-
-        self.hide_extent()
         extent = self._geo_extent_to_canvas_crs(extent)
 
-        self.last_analysis_rubberband = QgsRubberBand(
-            self.iface.mapCanvas(), True)
-        self.last_analysis_rubberband.setColor(QColor(255, 0, 0, 100))
-        self.last_analysis_rubberband.setWidth(2)
-        update_display_flag = False
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        update_display_flag = True
-        self.last_analysis_rubberband.addPoint(point, update_display_flag)
+        if self.show_rubber_bands:
+            # Draw in red
+            self.last_analysis_rubberband = self._draw_rubberband(
+                extent, QColor(255, 0, 0, 100), width=4)
 
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
@@ -1101,8 +1263,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
          exposure_layer,
          geo_extent,
          hazard_layer) = self.clip_parameters
-
-        self.show_extent(buffered_geo_extent)
+        self.last_analysis_extent = buffered_geo_extent
+        self.show_last_analysis_extent()
         # pylint: enable=W0633,W0612
 
         if self.calculator.requires_clipping():
@@ -1150,7 +1312,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             crs = QgsCoordinateReferenceSystem()
             crs.createFromSrid(4326)
-        geo_extent = extent_to_geo_array(rectangle, crs)
+        geo_extent = extent_to_array(rectangle, crs)
 
         return geo_extent
 
@@ -1161,7 +1323,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise Exception(self.tr('Clip parameters are not set!'))
         buffered_geo_extent = self.clip_parameters[1]
 
-        #setup aggregator to use buffered_geo_extent to deal with #759
+        # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
             buffered_geo_extent,
             self.get_aggregation_layer())
@@ -1195,7 +1357,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         details = self.tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
-        #TODO style these.
+        # TODO style these.
 
         hazard_layer = self.get_hazard_layer()
         exposure_layer = self.get_exposure_layer()
@@ -1205,7 +1367,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             exposure_name = exposure_layer.name()
             hazard_name = hazard_layer.name()
-            #aggregation layer could be set to AOI so no check for that
+            # aggregation layer could be set to AOI so no check for that
         except AttributeError:
             title = self.tr('No valid layers')
             details = self.tr(
@@ -1352,7 +1514,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # see how the popup decision is made
                 self.keyword_io.delete_keywords(self.layer, 'category')
         except AttributeError:
-            #first run, self.last_used_function does not exist yet
+            # first run, self.last_used_function does not exist yet
             pass
 
     def show_busy(self):
@@ -1480,7 +1642,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
         self.show_error_message(message)
-        self.analysisDone.emit(False)
+        self.analysis_done.emit(False)
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1505,15 +1667,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # On success, display generated report
             impact_path = qgis_impact_layer.source()
             message = m.Message(report)
-            #message.add(m.Heading(self.tr('View processing log as HTML'),
+            # message.add(m.Heading(self.tr('View processing log as HTML'),
             #                      **INFO_STYLE))
-            #message.add(m.Link('file://%s' % self.wvResults.log_path))
+            # message.add(m.Link('file://%s' % self.wvResults.log_path))
             self.show_static_message(message)
             self.wvResults.impact_path = impact_path
 
         self.save_state()
         self.hide_busy()
-        self.analysisDone.emit(True)
+        self.analysis_done.emit(True)
 
     def show_results(self, qgis_impact_layer, engine_impact_layer):
         """Helper function for slot activated when the process is done.
@@ -1565,7 +1727,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not style:
                 qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
-                #qgis_impact_layer.setColorShadingAlgorithm(
+                # qgis_impact_layer.setColorShadingAlgorithm(
                 #    QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
@@ -1609,7 +1771,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
-        #self.pbnRunStop.setText('Run')
+        # self.pbnRunStop.setText('Run')
         if self.runner:
             try:
                 self.runner.done.disconnect(self.aggregate)
@@ -1678,7 +1840,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 message = get_error_message(exception, context=content)
             # noinspection PyTypeChecker
             self.show_error_message(message)
-            self.analysisDone.emit(False)
+            self.analysis_done.emit(False)
             return
 
         try:
@@ -1686,19 +1848,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except InvalidGeometryError, e:
             message = get_error_message(e)
             self.show_error_message(message)
-            self.analysisDone.emit(False)
+            self.analysis_done.emit(False)
             return
         except Exception, e:  # pylint: disable=W0703
             # noinspection PyPropertyAccess
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
             raise
 
-        #TODO (MB) do we really want this check?
+        # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
             self.post_process()
         else:
             content = self.aggregator.error_message
-            exception = AggregatioError(self.tr(
+            exception = AggregationError(self.tr(
                 'Aggregation error occurred.'))
             self.analysis_error(exception, content)
 
@@ -1711,7 +1873,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.function_parameters
         self.postprocessor_manager.run()
         self.completed()
-        self.analysisDone.emit(True)
+        self.analysis_done.emit(True)
 
     @staticmethod
     def enable_busy_cursor():
@@ -1787,9 +1949,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 should be written to the exposure layer. For example if
                 rescaling is required for a raster, the original resolution
                 can be added to the keywords file.
-            * buffered_geoextent: list - [xmin, ymin, xmax, ymax] - the best
+            * adjusted_geo_extent: list - [xmin, ymin, xmax, ymax] - the best
                 extent that can be used given the input datasets and the
-                current viewport extents.
+                current viewport extents or user defined analysis extents.
             * cell_size: float - the cell size that is the best of the
                 hazard and exposure rasters.
             * exposure_layer: QgsMapLayer - layer representing exposure.
@@ -1802,14 +1964,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         hazard_layer = self.get_hazard_layer()
         exposure_layer = self.get_exposure_layer()
-        # Get the current viewport extent as an array in EPSG:4326
-        viewport_geoextent = viewport_geo_array(self.iface.mapCanvas())
+
+        if self.user_extent is not None \
+                and self.user_extent_crs is not None:
+            # User has defined preferred extent, so use that
+            analysis_geoextent = extent_to_array(
+                self.user_extent,
+                self.user_extent_crs)
+        elif self.clip_to_viewport:
+            # Get the current viewport extent as an array in EPSG:4326
+            analysis_geoextent = viewport_geo_array(self.iface.mapCanvas())
+
         # Get the Hazard extents as an array in EPSG:4326
-        hazard_geoextent = extent_to_geo_array(
+        hazard_geoextent = extent_to_array(
             hazard_layer.extent(),
             hazard_layer.crs())
         # Get the Exposure extents as an array in EPSG:4326
-        exposure_geoextent = extent_to_geo_array(
+        exposure_geoextent = extent_to_array(
             exposure_layer.extent(),
             exposure_layer.crs())
 
@@ -1822,11 +1993,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
-            if self.clip_to_viewport:
+            # If the user has defined a preferred analysis extent it will
+            # always be used, otherwise the data will be clipped to
+            # the viewport unless the user has deselected clip to viewport in
+            # options.
+            if self.clip_to_viewport or (
+                    self.user_extent is not None and
+                    self.user_extent_crs is not None):
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
-                    viewport_geoextent)
+                    analysis_geoextent)
             else:
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
@@ -1839,7 +2016,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 exposure_layer,
                 hazard_geoextent,
                 hazard_layer,
-                viewport_geoextent)
+                analysis_geoextent)
             raise InsufficientOverlapError(message)
 
         # Next work out the ideal spatial resolution for rasters
@@ -1849,16 +2026,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # the ideal WGS84 cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
         # All this is done in the function getWGS84resolution
-        buffered_geoextent = geo_extent  # Bbox to use for hazard layer
+        adjusted_geo_extent = geo_extent  # Bbox to use for hazard layer
         cell_size = None
         extra_exposure_keywords = {}
         if hazard_layer.type() == QgsMapLayer.RasterLayer:
             # Hazard layer is raster
-            hazard_geo_cell_size = get_wgs84_resolution(hazard_layer)
+            hazard_geo_cell_size, _ = get_wgs84_resolution(hazard_layer)
 
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
-                exposure_geo_cell_size = get_wgs84_resolution(exposure_layer)
+                exposure_geo_cell_size, _ = get_wgs84_resolution(
+                    exposure_layer)
+
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
                 keywords = self.keyword_io.read_keywords(exposure_layer)
@@ -1866,26 +2045,56 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 if 'allow_resampling' in keywords:
                     allow_resampling_flag = keywords[
                         'allow_resampling'].lower() == 'true'
+
                 if hazard_geo_cell_size < exposure_geo_cell_size and \
                         allow_resampling_flag:
                     cell_size = hazard_geo_cell_size
+
+                    # Adjust the geo extent to coincide with hazard grids
+                    # so gdalwarp can do clipping properly
+                    geo_extent = adjust_clip_extent(
+                        geo_extent,
+                        get_wgs84_resolution(hazard_layer),
+                        hazard_geoextent)
                 else:
                     cell_size = exposure_geo_cell_size
+
+                    # Adjust extent to coincide with exposure grids
+                    # so gdalwarp can do clipping properly
+                    geo_extent = adjust_clip_extent(
+                        geo_extent,
+                        get_wgs84_resolution(exposure_layer),
+                        exposure_geoextent)
+
+                adjusted_geo_extent = geo_extent
 
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(cell_size, exposure_geo_cell_size):
                     extra_exposure_keywords['resolution'] = \
                         exposure_geo_cell_size
             else:
+                if exposure_layer.type() != QgsMapLayer.VectorLayer:
+                    raise RuntimeError
+
+                # In here we do not set cell_size so that in
+                # _clip_raster_layer we can perform gdalwarp without
+                # specifying cell size as we still want to have the original
+                # pixel size.
+
+                # Adjust the geo extent to be at the edge of the pixel in
+                # so gdalwarp can do clipping properly
+                geo_extent = adjust_clip_extent(
+                    geo_extent,
+                    get_wgs84_resolution(hazard_layer),
+                    hazard_geoextent)
+
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
                 # the view port to be interpolated correctly. This requires
                 # resolution to be available
-                if exposure_layer.type() != QgsMapLayer.VectorLayer:
-                    raise RuntimeError
-                buffered_geoextent = get_buffered_extent(
+                adjusted_geo_extent = get_buffered_extent(
                     geo_extent,
-                    hazard_geo_cell_size)
+                    get_wgs84_resolution(hazard_layer))
         else:
             # Hazard layer is vector
 
@@ -1894,11 +2103,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # as centers for evacuation circles: See issue #285
             if hazard_layer.geometryType() == QGis.Point:
                 geo_extent = exposure_geoextent
-                buffered_geoextent = geo_extent
+                adjusted_geo_extent = geo_extent
 
         return (
             extra_exposure_keywords,
-            buffered_geoextent,
+            adjusted_geo_extent,
             cell_size,
             exposure_layer,
             geo_extent,

@@ -193,11 +193,11 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
         layer_name = hazard.get_name()
 
     if (exposure.is_raster and hazard.is_vector and hazard.is_polygon_data
-        and attribute_name is None):
+            and attribute_name is None):
         attribute_name = exposure.get_name()
 
     if (hazard.is_raster and exposure.is_vector and exposure.is_point_data
-        and attribute_name is None):
+            and attribute_name is None):
         attribute_name = hazard.get_name()
 
     # Launder for shape files
@@ -208,9 +208,9 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
     return layer_name, attribute_name
 
 
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 # Specific functions for each individual kind of interpolation
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 def interpolate_raster_vector(source, target,
                               layer_name=None, attribute_name=None,
                               mode='linear'):
@@ -238,11 +238,12 @@ def interpolate_raster_vector(source, target,
 
     if target.is_point_data:
         # Interpolate from raster to point data
-        R = interpolate_raster_vector_points(source, target,
-                                             layer_name=layer_name,
-                                             attribute_name=attribute_name,
-                                             mode=mode)
-    #elif target.is_line_data:
+        R = interpolate_raster_vector_points(
+            source, target,
+            layer_name=layer_name,
+            attribute_name=attribute_name,
+            mode=mode)
+    # elif target.is_line_data:
     # TBA - issue https://github.com/AIFDR/inasafe/issues/36
     #
     elif target.is_polygon_data:
@@ -250,7 +251,8 @@ def interpolate_raster_vector(source, target,
         P = convert_polygons_to_centroids(target)
         R = interpolate_raster_vector_points(source, P,
                                              layer_name=layer_name,
-                                             attribute_name=attribute_name)
+                                             attribute_name=attribute_name,
+                                             mode=mode)
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
         # that of the original polygon
@@ -472,9 +474,9 @@ def interpolate_polygon_points(source, target,
 
     attribute_names = source.get_attribute_names()
 
-    #----------------
+    # ----------------
     # Start algorithm
-    #----------------
+    # ----------------
 
     # Extract point features
     points = ensure_numeric(target.get_geometry())
@@ -553,8 +555,8 @@ def interpolate_polygon_lines(source, target,
     verify(len(polygons) == len(polygon_attributes))
 
     # Data structure for resulting line segments
-    #clipped_geometry = []
-    #clipped_attributes = []
+    # clipped_geometry = []
+    # clipped_attributes = []
 
     # Clip line lines to polygons
     lines_covered = clip_lines_by_polygons(lines, polygons)

@@ -1,10 +1,10 @@
-978,000*
-Rice [kg] 2,738,400
-Drinking Water [l] 17,115,000
-Clean Water [l] 65,526,000
-Family Kits 195,600
-Toilets 48,900
-Total population: 10,473,000
+979,000*
+Rice [kg] 2,741,200
+Drinking Water [l] 17,132,500
+Clean Water [l] 65,593,000
+Family Kits 195,800
+Toilets 48,950
+Total population: 10,474,000
 People need evacuation if flood levels exceed 1.0 m
 Minimum needs are defined in BNPB regulation 7/2008
 All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.
@@ -28,7 +28,7 @@ JAKARTA TIMUR 253,961 66,792 167,361 19,809
 JAKARTA PUSAT 66,693 17,540 43,951 5,202
 JAKARTA SELATAN 30,847 8,113 20,328 2,406
 Detailed minimum needs report
-Kab_name Rice Drinking Water Water Family Kits Toilets
+Kab_name Rice [kg] Drinking Water [l] Clean Water [l] Family Kits Toilets
 JAKARTA UTARA 964,510 6,028,190 23,079,356 68,894 17,223
 JAKARTA BARAT 780,536 4,878,353 18,677,121 55,753 13,938
 JAKARTA TIMUR 711,091 4,444,318 17,015,387 50,792 12,698

@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -31,7 +31,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.function_browser import FunctionBrowser
+from safe_qgis.tools.function_browser_dialog import FunctionBrowser
 
 
 def verifyColumn(table, col, strFilter, mode):
@@ -120,8 +120,8 @@ class FunctionBrowserTest(unittest.TestCase):
     def testRestButton(self):
         """Test when reset button is pressed."""
         # ... and this is how you skip it using nosetests
-        #prevent unreachable code errors in pylint
-        #pylint: disable=W0101
+        # prevent unreachable code errors in pylint
+        # pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
         myDialog = FunctionBrowser(PARENT)
         expectedTable = myDialog.table.toNewlineFreeString()
@@ -142,14 +142,14 @@ class FunctionBrowserTest(unittest.TestCase):
     def test_showHelp(self):
         """Test that help button works"""
         # ... and this is how you skip it using nosetests
-        #pylint: disable=W0101
+        # pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins if docs dir not present.")
         myDialog = FunctionBrowser(PARENT)
         myButton = myDialog.buttonBox.button(QDialogButtonBox.Help)
         myButton.click()
         message = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, message
-        #pylint: enable=W0101
+        # pylint: enable=W0101
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(FunctionBrowserTest, 'test')

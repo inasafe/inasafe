@@ -1,3 +1,4 @@
+# coding=utf-8
 """Function to manage self-registering plugins
 
 The design is based on http://effbot.org/zone/metaclass-plugins.htm
@@ -6,17 +7,16 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-
 import logging
 from math import ceil
-
 import numpy
-from safe.common.utilities import OrderedDict
-
+from collections import OrderedDict
 import keyword as python_keywords
+
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
+from safe.defaults import default_minimum_needs
 from utilities import pretty_string, remove_double_spaces
 from safe.metadata import converter_dict
 
@@ -64,88 +64,101 @@ class FunctionProvider(object):
     symbol_field = 'USE_MAJOR'
 
 
-def default_minimum_needs():
-    """Helper to get the default minimum needs.
-
-    .. note:: Key names will be translated.
-    """
-    rice = 'Rice'
-    drinking_water = 'Drinking Water'
-    water = 'Water'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
-    minimum_needs = OrderedDict([
-        (rice, 2.8),
-        (drinking_water, 17.5),
-        (water, 67),
-        (family_kits, 0.2),
-        (toilets, 0.05)])
-    return minimum_needs
-
-
 def evacuated_population_weekly_needs(
         population,
-        minimum_needs=False,
-        human_names=False):
-    """Calculate estimated needs using BNPB Perka 7/2008 minimum bantuan.
+        minimum_needs=None):
+    """Calculate estimated needs using minimum needs as specified or the
+    default.
 
     :param population: The number of evacuated population.
     :type: int, float
 
-    :param human_names: A flag whether to use human names for minimum needs
-        items or not
-    :type human_names: bool
+    :param minimum_needs: Ratios used to calculate weekly needs in parameter
+     form.
+    :type minimum_needs: list,
 
-    :param minimum_needs: Ratios to use when calculating minimum needs.
-        Defaults to perka 7 as described in assumptions below.
-    :type minimum_needs: dict
-
-    :returns: The weekly needs for the evacuated population.
+    :returns: The needs for the evacuated population.
     :rtype: dict
-
-    Assumptions:
-    * 400g rice per person per day
-    * 2.5L drinking water per person per day
-    * 15L clean water per person per day
-    * assume 5 people per family (not in perka - 0.2 people per family)
-    * 20 people per toilet (0.05 per person)
     """
-    rice = 'Rice'
-    drinking_water = 'Drinking Water'
-    water = 'Water'
-    family_kits = 'Family Kits'
-    toilets = 'Toilets'
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
-    min_rice = minimum_needs[rice]
-    min_drinking_water = minimum_needs[drinking_water]
-    min_water = minimum_needs[water]
-    min_family_kits = minimum_needs[family_kits]
-    min_toilets = minimum_needs[toilets]
+    population_needs = OrderedDict()
+    for resource in minimum_needs:
+        resource = resource.serialize()
+        amount = resource['value']
+        name = resource['name']
+        population_needs[name] = int(ceil(population * float(amount)))
 
-    val_rice = int(ceil(population * min_rice))
-    val_drinking_water = int(ceil(population * min_drinking_water))
-    val_water = int(ceil(population * min_water))
-    val_family_kits = int(ceil(population * min_family_kits))
-    val_toilets = int(ceil(population * min_toilets))
+    return population_needs
 
-    if human_names:
-        weekly_needs = {
-            rice: val_rice,
-            drinking_water: val_drinking_water,
-            water: val_water,
-            family_kits: val_family_kits,
-            toilets: val_toilets}
+
+def evacuated_population_needs(population, minimum_needs):
+    """Calculate estimated needs using minimum needs configuration provided
+    in full_minimum_needs.
+
+    :param population: The number of evacuated population.
+    :type: int, float
+
+    :param minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: list
+
+    :returns: The needs for the evacuated population.
+    :rtype: dict
+    """
+    frequencies = []
+    for resource in minimum_needs:
+        if resource['frequency'] not in frequencies:
+            frequencies.append(resource['frequency'])
+
+    population_needs_by_frequency = OrderedDict([
+        [frequency, []] for frequency in frequencies])
+
+    for resource in minimum_needs:
+        if resource['unit']['abbreviation']:
+            resource_name = '%s [%s]' % (
+                resource['name'],
+                resource['unit']['abbreviation'])
+        else:
+            resource_name = resource['name']
+        amount_pp = resource['value']
+        resource['amount'] = int(ceil(population * float(amount_pp)))
+        resource['table name'] = resource_name
+        population_needs_by_frequency[resource['frequency']].append(resource)
+
+    return population_needs_by_frequency
+
+
+def population_rounding_full(number):
+    """This function performs a rigorous population rounding.
+
+    :param number: The amount of people as calculated.
+    :type number: int, float
+
+    :returns: result and rounding bracket.
+    :rtype: (int, int)
+    """
+    if number < 1000:
+        rounding = 10
+    elif number < 100000:
+        rounding = 100
     else:
-        weekly_needs = {
-            'rice': val_rice,
-            'drinking_water': val_drinking_water,
-            'water': val_water,
-            'family_kits': val_family_kits,
-            'toilets': val_toilets}
+        rounding = 1000
+    number = int(rounding * ceil(1.0 * number / rounding))
+    return number, rounding
 
-    return weekly_needs
+
+def population_rounding(number):
+    """A shorthand for population_rounding_full(number)[0].
+
+    :param number: The amount of people as calculated.
+    :type number: int, float
+
+    :returns: result and rounding bracket.
+    :rtype: int
+    """
+    return population_rounding_full(number)[0]
 
 
 def get_function_title(func):
@@ -310,8 +323,8 @@ def requirement_check(params, require_str, verbose=False):
         if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % key)
-            #print msg
-            #logger.error(msg)
+            # print msg
+            # LOGGER.error(msg)
             return False
 
         if key in excluded_keywords:
@@ -342,8 +355,8 @@ def requirement_check(params, require_str, verbose=False):
     except Exception, e:
         msg = ('Requirements header could not compiled: %s. '
                'Original message: %s' % (execstr, e))
-        #print msg
-        #logger.error(msg)
+        # print msg
+        # LOGGER.error(msg)
 
     return False
 
@@ -390,9 +403,9 @@ def compatible_layers(func, layer_descriptors):
     return layers
 
 
-#-------------------------------
+# -------------------------------
 # Helpers for individual plugins
-#-------------------------------
+# -------------------------------
 def get_hazard_layers(layers):
     """Get list of layers that have category=='hazard'
     """
@@ -517,17 +530,17 @@ def aggregate_point_data(data=None, boundaries=None,
         raise Exception(msg)
 
     polygon_geoms = boundaries.get_geometry()
-    #polygon_attrs = boundaries.get_data()
+    # polygon_attrs = boundaries.get_data()
 
     points = data.get_geometry()
     attributes = data.get_data()
 
     result = []
-    #for i, polygon in enumerate(polygon_geoms):
+    # for i, polygon in enumerate(polygon_geoms):
     for polygon in polygon_geoms:
         indices = inside_polygon(points, polygon)
 
-        #print 'Found %i points in polygon %i' % (len(indices), i)
+        # print 'Found %i points in polygon %i' % (len(indices), i)
 
         # Aggregate numbers
         if aggregation_function == 'count':
@@ -575,7 +588,7 @@ def aggregate(data=None, boundaries=None,
     elif data.is_raster_data:
         # Convert to point data
         # Call point aggregation function
-        #aggregate_point_data(data, boundaries,
+        # aggregate_point_data(data, boundaries,
         #                     attribute_name, aggregation_function)
         pass
     else:
@@ -903,7 +916,7 @@ def get_doc_string(func):
 def is_function_enabled(func):
     """Check whether a function is enabled or not
     :param func:
-    :return: False is disabled param is True
+    :returns: False is disabled param is True
     """
     for requirement in requirements_collect(func):
         dict_req = parse_single_requirement(str(requirement))

@@ -34,20 +34,24 @@ from safe.metadata import (
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance
+)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_needs,
+    population_rounding_full,
+    population_rounding
 )
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label
@@ -165,26 +169,24 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True}),
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('provenance', default_provenance())
     ])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation.
 
-        Input:
-          layers: List of layers expected to contain
+        :param layers: List of layers expected to contain
 
-              hazard_layer : Vector polygon layer of flood depth
-
-              exposure_layer : Raster layer of population data on the same
-                grid as hazard_layer
+            * hazard_layer : Vector polygon layer of flood depth
+            * exposure_layer : Raster layer of population data on the same grid
+                as hazard_layer
 
         Counts number of people exposed to areas identified as flood prone
 
-        Return
-          Map of population exposed to flooding
-
-          Table with number of people evacuated and supplies required
+        :returns: Map of population exposed to flooding Table with number of
+            people evacuated and supplies required.
+        :rtype: tuple
         """
         # Identify hazard and exposure layers
         hazard_layer = get_hazard_layer(layers)  # Flood inundation
@@ -254,16 +256,16 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     x = res
                 affected = x
             else:
-                #assume that every polygon is affected (see #816)
+                # assume that every polygon is affected (see #816)
                 affected = True
                 # there is no flood related attribute
-                #message = ('No flood related attribute found in %s. '
+                # message = ('No flood related attribute found in %s. '
                 #       'I was looking for either "Flooded", "FLOODPRONE" '
                 #       'or "Affected". The latter should have been '
                 #       'automatically set by call to '
                 #       'assign_hazard_values_to_exposure_data(). '
                 #       'Sorry I can\'t help more.')
-                #raise Exception(message)
+                # raise Exception(message)
 
             if affected:
                 # Get population at this location
@@ -285,39 +287,45 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 # Update total
                 affected_population += pop
 
-        affected_population = round_thousand(affected_population)
         # Estimate number of people in need of evacuation
         evacuated = (
             affected_population
             * self.parameters['evacuation_percentage']
             / 100.0)
 
+        affected_population, rounding = population_rounding_full(
+            affected_population)
+
         total = int(numpy.sum(exposure_layer.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
-        total = round_thousand(total)
-        evacuated = round_thousand(evacuated)
+        total = population_rounding(total)
+        evacuated, rounding_evacuated = population_rounding_full(evacuated)
 
-        # Calculate estimated minimum needs
-        minimum_needs = self.parameters['minimum needs']
-        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         table_body = [
             question,
             TableRow(
-                [tr('People affected'), '%s%s' % (
-                    format_int(int(affected_population)),
-                    ('*' if affected_population >= 1000 else ''))],
+                [tr('People affected'), '%s*' % (
+                    format_int(int(affected_population)))],
                 header=True),
-            TableRow([tr('People needing evacuation'), '%s%s' % (
-                format_int(int(evacuated)),
-                ('*' if evacuated >= 1000 else ''))], header=True),
             TableRow(
                 [TableCell(
-                    tr('* Number is rounded to the nearest 1000'),
-                    col_span=2)],
-                header=False),
+                    tr('* Number is rounded up to the nearest %s') % (
+                        rounding),
+                    col_span=2)]),
+            TableRow([tr('People needing evacuation'), '%s*' % (
+                format_int(int(evacuated)))], header=True),
+            TableRow(
+                [TableCell(
+                    tr('* Number is rounded up to the nearest %s') % (
+                        rounding_evacuated),
+                    col_span=2)]),
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
                 self.parameters['evacuation_percentage'])], header=True),
             TableRow(tr(
@@ -325,14 +333,21 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'area')),
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
-                'evacuated people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
-            [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]]
+                'evacuated people'))]
+        total_needs = evacuated_population_needs(
+            evacuated, minimum_needs)
+        for frequency, needs in total_needs.items():
+            table_body.append(TableRow(
+                [
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
+                ],
+                header=True))
+            for resource in needs:
+                table_body.append(TableRow([
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
+
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
@@ -406,6 +421,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'affected_population': affected_population,
-                'total_population': total},
+                'total_population': total,
+                'total_needs': total_needs},
             style_info=style_info)
         return vector_layer

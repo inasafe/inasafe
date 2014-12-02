@@ -23,7 +23,7 @@ import re
 import os
 import shutil
 
-from safe.api import temp_dir
+from safe.api import temp_dir, get_shake_test_data_path
 from realtime.ftp_client import FtpClient
 
 
@@ -40,10 +40,8 @@ def mock_get_listing(self, extension='zip'):
         the supplied extension suffix.
     """
     base_url = 'ftp://%s' % self.base_url
-    local_shake_dir = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            '../fixtures/shake_data'))
+    shake_path = get_shake_test_data_path()
+    local_shake_dir = os.path.abspath(shake_path)
     file_list = []
     for filename in os.listdir(local_shake_dir):
         if filename.endswith('.%s' % extension):
@@ -65,10 +63,8 @@ def mock_get_file(self, url_path, file_path):
 
      :return: The path to the downloaded file.
     """
-    local_shake_dir = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            '../fixtures/shake_data'))
+    shake_path = get_shake_test_data_path()
+    local_shake_dir = os.path.abspath(shake_path)
     source_file_path = os.path.join(local_shake_dir, url_path)
     shutil.copy(source_file_path, file_path)
 # pylint: enable=W0613
@@ -97,7 +93,7 @@ class FtpClientTest(unittest.TestCase):
         """Check if we can get a nice directory listing"""
         client = FtpClient()
         file_list = client.get_listing()
-        #Make it a single string
+        # Make it a single string
         file_list = '\n'.join(file_list)
         expected_output = ['20120726022003.inp.zip', '20120726022003.out.zip']
         message = (

@@ -130,9 +130,9 @@ class StyleError(Exception):
     pass
 
 
-#class ShapefileCreationError(Exception):
-#    """Raised if an error occurs creating the cities file"""
-#    pass
+# class ShapefileCreationError(Exception):
+#     """Raised if an error occurs creating the cities file"""
+#     pass
 #
 #
 class MemoryLayerCreationError(Exception):
@@ -167,7 +167,7 @@ class InvalidAggregatorError(Exception):
     pass
 
 
-class AggregatioError(Exception):
+class AggregationError(Exception):
     """Raised if aggregator state is not valid when trying to run it."""
     pass
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Disaster risk assessment tool developed by AusAid -
-  *SClipper implementation.**
+  *Clipper implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -39,7 +39,6 @@ from safe_qgis.safe_interface import (
     read_file_keywords,
     temp_dir,
     which)
-
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
     InvalidParameterError,
@@ -129,7 +128,7 @@ def clip_layer(
             raise e
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 def _clip_vector_layer(
         layer,
         extent,
@@ -191,7 +190,7 @@ def _clip_vector_layer(
             str(layer.type()))
         raise InvalidParameterError(message)
 
-    #handle, file_name = tempfile.mkstemp('.sqlite', 'clip_',
+    # handle, file_name = tempfile.mkstemp('.sqlite', 'clip_',
     #    temp_dir())
     handle, file_name = tempfile.mkstemp(
         '.shp', 'clip_', temp_dir())
@@ -214,7 +213,7 @@ def _clip_vector_layer(
             extent[0], extent[1],
             extent[2], extent[3])
         # noinspection PyCallByClass
-        #noinspection PyTypeChecker
+        # noinspection PyTypeChecker
         polygon = QgsGeometry.fromRect(rectangle)
     elif (type(extent) is QgsGeometry and
           extent.wkbType in allowed_clip_values):
@@ -253,7 +252,7 @@ def _clip_vector_layer(
         field_list,
         layer.wkbType(),
         geo_crs,
-        #'SQLite')  # FIXME (Ole): This works but is far too slow
+        # 'SQLite')  # FIXME (Ole): This works but is far too slow
         'ESRI Shapefile')
     if writer.hasError() != QgsVectorFileWriter.NoError:
         message = tr(
@@ -477,7 +476,7 @@ def _clip_raster_layer(
             raise InvalidProjectionError(message)
 
     # We need to provide gdalwarp with a dataset for the clip
-    # because unline gdal_translate, it does not take projwin.
+    # because unlike gdal_translate, it does not take projwin.
     clip_kml = extent_to_kml(extent)
 
     # Create a filename for the clipped, resampled and reprojected layer
@@ -505,11 +504,11 @@ def _clip_raster_layer(
                 filename))
     else:
         command = (
-            '"%s" -q -t_srs EPSG:4326 -r near -tr %.14f %.14f -cutline %s '
+            '"%s" -q -t_srs EPSG:4326 -r near -tr %s %s -cutline %s '
             '-crop_to_cutline -ot Float64 -of GTiff "%s" "%s"' % (
                 binary,
-                cell_size,
-                cell_size,
+                repr(cell_size),
+                repr(cell_size),
                 clip_kml,
                 working_layer,
                 filename))
@@ -551,10 +550,10 @@ def extent_to_kml(extent):
     :type extent: list(float)
     """
 
-    bottom_left_corner = '%f,%f' % (extent[0], extent[1])
-    top_left_corner = '%f,%f' % (extent[0], extent[3])
-    top_right_corner = '%f,%f' % (extent[2], extent[3])
-    bottom_right_corner = '%f,%f' % (extent[2], extent[1])
+    bottom_left_corner = '%s,%s' % (repr(extent[0]), repr(extent[1]))
+    top_left_corner = '%s,%s' % (repr(extent[0]), repr(extent[3]))
+    top_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[3]))
+    bottom_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[1]))
     kml = ("""<?xml version="1.0" encoding="utf-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
@@ -615,3 +614,69 @@ def extent_to_geoarray(extent, source_crs):
         transformed_extent.xMaximum(),
         transformed_extent.yMaximum()]
     return geo_extent
+
+
+def adjust_clip_extent(clip_extent, cell_size, layer_extent):
+    """Helper function to adjust the clip extent to the edge of the pixel.
+
+    This function will shift all edges of the extent to the outmost edge of
+    the raster's pixel row or column on which the edge coincides.
+
+    :param clip_extent: An array representing the clip extents in the
+        form [xmin, ymin, xmax, ymax]. This is the optimal extent between
+        the exposure, hazard and view port.
+    :type clip_extent: list
+
+    :param cell_size: The size of a pixel in geo reference unit in the form
+
+        (res_x, res_y)
+    :type cell_size: tuple
+
+    :param layer_extent: An array representing the full extents of the layer
+        in the form [xmin, ymin, xmax, ymax].
+    :type layer_extent: list
+
+    :return: An array containing an the adjusted clip extent in the
+        form [xmin, ymin, xmax, ymax]
+    :rtype: list
+
+    """
+    if clip_extent == layer_extent:
+        return clip_extent
+
+    clip_extent_xmin = clip_extent[0]
+    clip_extent_ymin = clip_extent[1]
+    clip_extent_xmax = clip_extent[2]
+    clip_extent_ymax = clip_extent[3]
+
+    # In case layer_extent is within clip_extent, adjust them
+    if clip_extent[0] < layer_extent[0]:
+        clip_extent_xmin = layer_extent[0]
+    if clip_extent[1] < layer_extent[1]:
+        clip_extent_ymin = layer_extent[1]
+    if clip_extent[2] > layer_extent[2]:
+        clip_extent_xmax = layer_extent[2]
+    if clip_extent[3] > layer_extent[3]:
+        clip_extent_ymax = layer_extent[3]
+
+    cell_size_x, cell_size_y = cell_size
+    starting_cell_x = int(
+        abs(clip_extent_xmin - layer_extent[0]) / cell_size_x)
+    adjusted_xmin = layer_extent[0] + starting_cell_x * cell_size_x
+
+    starting_cell_y = int(
+        abs(clip_extent_ymin - layer_extent[1]) / cell_size_y)
+    adjusted_ymin = layer_extent[1] + starting_cell_y * cell_size_y
+
+    ending_cell_x = int(
+        abs(clip_extent_xmax - layer_extent[2]) / cell_size_x)
+    adjusted_xmax = layer_extent[2] - ending_cell_x * cell_size_x
+
+    ending_cell_y = int(
+        abs(clip_extent_ymax - layer_extent[3]) / cell_size_y)
+    adjusted_ymax = layer_extent[3] - ending_cell_y * cell_size_y
+
+    adjusted_extent = [
+        adjusted_xmin, adjusted_ymin, adjusted_xmax, adjusted_ymax]
+
+    return adjusted_extent

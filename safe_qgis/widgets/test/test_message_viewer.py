@@ -20,7 +20,7 @@ __author__ = 'timlinux'
 import os
 import unittest
 
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 from safe_qgis.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (

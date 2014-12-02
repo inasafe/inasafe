@@ -393,7 +393,7 @@ def split_by_polygon_in_out(
         polygon_in, file_name_poly_in, "utf-8", None, "ESRI Shapefile")
     QgsVectorFileWriter.writeAsVectorFormat(
         polygon_out, file_name_poly_out, "utf-8", None, "ESRI Shapefile")
-    #merge layers
+    # merge layers
     in_features = line_layer_in.featureCount()
     out_features = line_layer_out.featureCount()
     if in_features > out_features:
@@ -499,7 +499,9 @@ def split_by_polygon2(
     for polygon_feature in polygon_layer.getFeatures(request):
         # Using simplify 1 should remove any pseudonodes on the polygon
         # and speed up polygon operations. TS
-        polygon = polygon_feature.geometry().simplify(1)
+        # polygon = polygon_feature.geometry().simplify(1)
+        # disabled for now (see #1300 Y.A.)
+        polygon = polygon_feature.geometry()
         poly_geoms.append(QgsGeometry(polygon))
 
     result_layer.startEditing()
@@ -518,8 +520,8 @@ def split_by_polygon2(
                 poly_intersect = polygon.intersects(initial_geom)
 
             if poly_contains or poly_intersect:
-            # Find parts of initial_geom, intersecting
-            # with the polygon, then mark them if needed
+                # Find parts of initial_geom, intersecting
+                # with the polygon, then mark them if needed
                 if poly_contains:
                     g = initial_geom
                     if mark_value is not None:

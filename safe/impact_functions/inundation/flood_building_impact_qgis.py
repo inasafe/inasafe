@@ -236,7 +236,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
             building_type = attributes[building_type_field_index]
             if building_type in [None, 'NULL', 'null', 'Null']:
                 building_type = 'Unknown type'
-            if not building_type in buildings_by_type:
+            if building_type not in buildings_by_type:
                 buildings_by_type[building_type] = {'flooded': 0, 'total': 0}
             buildings_by_type[building_type]['total'] += 1
 

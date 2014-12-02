@@ -25,7 +25,7 @@ from safe_qgis.safe_interface import get_free_memory
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import DYNAMIC_MESSAGE_SIGNAL
 from safe_qgis.safe_interface import styles
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -90,9 +90,9 @@ def check_memory_usage(buffered_geo_extent, cell_size):
     width = buffered_geo_extent[2] - buffered_geo_extent[0]
     height = buffered_geo_extent[3] - buffered_geo_extent[1]
     try:
-        #noinspection PyAugmentAssignment
+        # noinspection PyAugmentAssignment
         width = width / cell_size
-        #noinspection PyAugmentAssignment
+        # noinspection PyAugmentAssignment
         height = height / cell_size
     except TypeError:
         # Could have been a vector layer for example

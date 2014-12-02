@@ -44,7 +44,7 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.setup(self, None)
         if (self.impact_classes is not None or
             self.impact_attrs is not None or
-            self.target_field is not None):
+                self.target_field is not None):
             self._raise_error('clear needs to be called before setup')
 
         self.impact_classes = params['impact_classes']
@@ -58,12 +58,12 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
         if (self.impact_classes is None or
             self.impact_attrs is None or
-            self.target_field is None):
+                self.target_field is None):
             self._log_message(
                 '%s not all params have been correctly '
                 'initialized, setup needs to be called before '
                 'process. Skipping this postprocessor'
-                 % self.__class__.__name__)
+                % self.__class__.__name__)
         else:
             self._calculate_categories()
 

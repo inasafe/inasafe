@@ -201,8 +201,8 @@ class Vector(Layer):
                 msg = 'Data must be a sequence'
                 verify(is_sequence(data), msg)
 
-                msg = ('The number of entries in geometry and data '
-                       'must be the same')
+                msg = ('The number of entries in geometry (%s) and data (%s)'
+                       'must be the same' % (len(geometry), len(data)))
                 verify(len(geometry) == len(data), msg)
 
             # Establish extent
@@ -527,19 +527,19 @@ class Vector(Layer):
                 #              We need to cast each appropriately?
                 #              This is issue #66
                 #              (https://github.com/AIFDR/riab/issues/66)
-                #feature_type = feature.GetFieldDefnRef(j).GetType()
+                # feature_type = feature.GetFieldDefnRef(j).GetType()
                 fields[name] = feature.GetField(j)
 
-                    # We do this because there is NaN problem on windows
-                    # NaN value must be converted to _pseudo_in to solve the
-                    # problem. But, when InaSAFE read the file, it'll be
-                    # converted back to NaN value, so that NaN in InaSAFE is a
-                    # numpy.nan
-                    # please check https://github.com/AIFDR/inasafe/issues/269
-                    # for more information
+                # We do this because there is NaN problem on windows
+                # NaN value must be converted to _pseudo_in to solve the
+                # problem. But, when InaSAFE read the file, it'll be
+                # converted back to NaN value, so that NaN in InaSAFE is a
+                # numpy.nan
+                # please check https://github.com/AIFDR/inasafe/issues/269
+                # for more information
                 if fields[name] == _pseudo_inf:
                     fields[name] = float('nan')
-                #print 'Field', name, feature_type, j, fields[name]
+                # print 'Field', name, feature_type, j, fields[name]
 
             data.append(fields)
         # Store geometry coordinates as a compact numeric array
@@ -705,9 +705,9 @@ class Vector(Layer):
                         ogr_types[name] = TYPE_MAP[py_type]
 
             else:
-                #msg = ('Input parameter "data" was specified '
+                # msg = ('Input parameter "data" was specified '
                 #       'but appears to be empty')
-                #raise InaSAFEError(msg)
+                # raise InaSAFEError(msg)
                 pass
 
             # Create attribute fields in layer
@@ -717,13 +717,13 @@ class Vector(Layer):
                 # FIXME (Ole): Trying to address issue #16
                 #              But it doesn't work and
                 #              somehow changes the values of MMI in test
-                #width = max(128, len(name))
-                #print name, width
-                #fd.SetWidth(width)
+                # width = max(128, len(name))
+                # print name, width
+                # fd.SetWidth(width)
 
                 # Silent handling of warnings like
                 # Warning 6: Normalized/laundered field name:
-                #'CONTENTS_LOSS_AUD' to 'CONTENTS_L'
+                # 'CONTENTS_LOSS_AUD' to 'CONTENTS_L'
                 gdal.PushErrorHandler('CPLQuietErrorHandler')
                 if lyr.CreateField(fd) != 0:
                     msg = 'Could not create field %s' % name
@@ -1072,9 +1072,9 @@ class Vector(Layer):
         return self.is_vector and self.geometry_type == ogr.wkbMultiPolygon
 
 
-#----------------------------------
+# ----------------------------------
 # Helper functions for class Vector
-#----------------------------------
+# ----------------------------------
 def convert_line_to_points(V, delta):
     """Convert line vector data to point vector data
 

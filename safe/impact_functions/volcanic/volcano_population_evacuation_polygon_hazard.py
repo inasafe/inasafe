@@ -25,29 +25,36 @@ from safe.metadata import (
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition)
+    exposure_definition
+)
 from collections import OrderedDict
-from safe.defaults import get_defaults
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance
+)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    default_minimum_needs,
-    evacuated_population_weekly_needs)
+    evacuated_population_needs,
+    population_rounding
+)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    round_thousand,
     humanize_class,
     create_classes,
     create_label,
     get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_non_conflicting_attribute_name
+)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
-    assign_hazard_values_to_exposure_data)
+    assign_hazard_values_to_exposure_data
+)
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
@@ -148,7 +155,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('provenance', default_provenance())
     ])
 
     def run(self, layers):
@@ -197,16 +205,16 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         if hazard_layer.is_point_data:
             # Use concentric circles
             radii = self.parameters['distance [km]']
-
-            centers = hazard_layer.get_geometry()
-            rad_m = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = buffer_points(centers, rad_m, data_table=data_table)
-
             category_title = 'Radius'
             category_header = tr('Distance [km]')
             category_names = radii
 
             name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
+
+            centers = hazard_layer.get_geometry()
+            rad_m = [x * 1000 for x in radii]  # Convert to meters
+            hazard_layer = buffer_points(
+                centers, rad_m, category_title, data_table=data_table)
         else:
             # Use hazard map
             category_title = 'KRB'
@@ -234,7 +242,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             volcano_names = tr('Not specified in data')
 
         # Check if category_title exists in hazard_layer
-        if not category_title in hazard_layer.get_attribute_names():
+        if category_title not in hazard_layer.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (hazard_layer.get_name(), category_title))
             # noinspection PyExceptionInherit
@@ -273,10 +281,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             categories[category] += population
 
         # Count totals
-        total = int(numpy.sum(exposure_layer.get_data(nan=0)))
-
-        # Don't show digits less than a 1000
-        total = round_thousand(total)
+        total_population = population_rounding(
+            int(numpy.sum(exposure_layer.get_data(nan=0))))
 
         # Count number and cumulative for each zone
         cumulative = 0
@@ -290,21 +296,19 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             # prevent key error
             population = int(categories.get(key, 0))
 
-            population = round_thousand(population)
-
             cumulative += population
-            cumulative = round_thousand(cumulative)
 
-            all_categories_population[name] = population
-            all_categories_cumulative[name] = cumulative
+            # I'm not sure whether this is the best place to apply rounding?
+            all_categories_population[name] = population_rounding(population)
+            all_categories_cumulative[name] = population_rounding(cumulative)
 
         # Use final accumulation as total number needing evacuation
-        evacuated = cumulative
+        evacuated = population_rounding(cumulative)
 
-        # Calculate estimated minimum needs
-        minimum_needs = self.parameters['minimum needs']
-        total_needs = evacuated_population_weekly_needs(
-            evacuated, minimum_needs)
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -329,25 +333,28 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         table_body.extend([
             TableRow(tr(
                 'Map shows the number of people affected in each of volcano '
-                'hazard polygons.')),
-            TableRow(
-                [tr('Needs per week'), tr('Total'), blank_cell], header=True),
-            [tr('Rice [kg]'), format_int(total_needs['rice']), blank_cell], [
-                tr('Drinking Water [l]'),
-                format_int(total_needs['drinking_water']),
-                blank_cell],
-            [tr('Clean Water [l]'), format_int(total_needs['water']),
-                blank_cell],
-            [tr('Family Kits'), format_int(total_needs['family_kits']),
-                blank_cell],
-            [tr('Toilets'), format_int(total_needs['toilets']), blank_cell]])
+                'hazard polygons.'))])
+
+        total_needs = evacuated_population_needs(
+            evacuated, minimum_needs)
+        for frequency, needs in total_needs.items():
+            table_body.append(TableRow(
+                [
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
+                ],
+                header=True))
+            for resource in needs:
+                table_body.append(TableRow([
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
              tr('Total population %s in the exposure layer') % format_int(
-                 total),
+                 total_population),
              tr('People need evacuation if they are within the '
                 'volcanic hazard zones.')])
 
@@ -395,8 +402,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         map_title = tr('People affected by volcanic hazard zone')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
-        legend_units = tr('(people)')
-        legend_title = tr('Population count')
+        legend_units = tr('(people per cell)')
+        legend_title = tr('Population')
 
         # Create vector layer and return
         impact_layer = Vector(
@@ -410,6 +417,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,
-                      'legend_title': legend_title},
+                      'legend_title': legend_title,
+                      'total_needs': total_needs},
             style_info=style_info)
         return impact_layer

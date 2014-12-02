@@ -6,7 +6,10 @@ import sys
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
+sys.path.extend([os.path.abspath(os.path.join(
+    os.path.dirname(__file__), os.path.pardir))])
 
 from PyQt4.QtCore import (
     QLocale,
@@ -31,12 +34,6 @@ except ImportError:
     # noinspection PyTypeChecker,PyArgumentList
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
-
-# Add parent directory to path to make test aware of other modules
-myDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if myDir not in sys.path:
-    sys.path.append(myDir)
-
 
 # Setup internationalisation for the plugin.
 #
@@ -80,18 +77,27 @@ if os.path.exists(translation_path):
     # noinspection PyTypeChecker,PyCallByClass
     QCoreApplication.installTranslator(translator)
 
-# LOGGER.debug('%s %s' % (
-#     translation_path,
-#     os.path.exists(translation_path)))
-
-# MONKEYPATCHING safe.defaults.get_defaults to use breakdown_defaults
+# MONKEYPATCHING safe.defaults.get_defaults to use get_defaults
 # see safe_qgis.utilities.defaults for more details
-import safe.defaults
-from safe_qgis.utilities.defaults import breakdown_defaults
-safe.defaults.get_defaults = lambda the_default=None: breakdown_defaults(
-    the_default)
-
 try:
+    import safe.defaults
+    from safe_qgis.utilities.defaults import get_defaults
+
+    safe.defaults.get_defaults = lambda the_default=None: get_defaults(
+        the_default)
+
+    from safe.impact_functions.core import get_plugins
+    from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+    # Monkey patch all the impact functions
+    minimum_needs = NeedsProfile()
+    for (name, plugin) in get_plugins().items():
+        if not hasattr(plugin, 'parameters'):
+            continue
+        if 'minimum needs' in plugin.parameters:
+            plugin.parameters['minimum needs'] = (
+                minimum_needs.get_needs_parameters())
+            plugin.parameters['provenance'] = minimum_needs.provenance
+
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
@@ -114,5 +120,5 @@ except ImportError:
                   'to the InaSAFE team.')
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
-        #None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
+    #   None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
     raise

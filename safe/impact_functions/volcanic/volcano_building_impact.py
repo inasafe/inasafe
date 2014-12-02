@@ -30,15 +30,12 @@ from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
     format_int,
-    humanize_class,
-    create_classes,
-    create_label,
     get_thousand_separator,
     get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.common.exceptions import InaSAFEError
 
 
 class VolcanoBuildingImpact(FunctionProvider):
@@ -100,7 +97,9 @@ class VolcanoBuildingImpact(FunctionProvider):
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],
-                        'layer_constraints': [layer_vector_polygon]
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point]
                     }
                 }
             }
@@ -129,7 +128,21 @@ class VolcanoBuildingImpact(FunctionProvider):
         'zones for each Kawasan Rawan Bencana or radius.')
 
     parameters = OrderedDict([
-        ('distances [km]', [3, 5, 10])])
+        # The list of radii in km for volcano point hazard
+        ('distances [km]', [3, 5, 10]),
+
+        # Default string value for not affected
+        ('Not affected value', 'Not affected'),
+
+        # This field of impact layer that will be filled with hazard level
+        # zone is chosen because usually they are divided into some zones
+        ('target field', 'zone'),
+
+        # The attribute for name of the volcano in hazard layer
+        ('name attribute', 'NAME'),
+
+        # The attribute of hazard zone in hazard layer
+        ('hazard zone attribute', 'KRB')])
 
     def run(self, layers):
         """Risk plugin for volcano hazard on building/structure.
@@ -145,128 +158,210 @@ class VolcanoBuildingImpact(FunctionProvider):
                   Table with number of buildings affected
         :rtype: dict
         """
+        # Parameters
+        not_affected_value = self.parameters['Not affected value']
+        radii = self.parameters['distances [km]']
+        target_field = self.parameters['target field']
+        name_attribute = self.parameters['name attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute']
+
         # Identify hazard and exposure layers
         hazard_layer = get_hazard_layer(layers)  # Volcano hazard layer
-        exposure_layer = get_exposure_layer(layers)
-        is_point_data = False
+        exposure_layer = get_exposure_layer(layers)  # Building exposure layer
 
+        # Get question
         question = get_question(
             hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Input checks
         if not hazard_layer.is_vector:
-            msg = ('Input hazard %s  was not a vector layer as expected '
-                   % hazard_layer.get_name())
-            raise Exception(msg)
+            message = ('Input hazard %s  was not a vector layer as expected '
+                       % hazard_layer.get_name())
+            raise Exception(message)
 
-        msg = ('Input hazard must be a polygon or point layer. I got %s '
-               'with layer type %s' %
-               (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
         if not (hazard_layer.is_polygon_data or hazard_layer.is_point_data):
-            raise Exception(msg)
+            message = (
+                'Input hazard must be a polygon or point layer. I got %s with '
+                'layer type %s' %
+                (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
+            raise Exception(message)
 
         if hazard_layer.is_point_data:
             # Use concentric circles
-            radii = self.parameters['distances [km]']
-            is_point_data = True
-
             centers = hazard_layer.get_geometry()
             attributes = hazard_layer.get_data()
-            rad_m = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = buffer_points(centers, rad_m, data_table=attributes)
+            radii_meter = [x * 1000 for x in radii]  # Convert to meters
+            hazard_layer = buffer_points(
+                centers,
+                radii_meter,
+                hazard_zone_attribute,
+                data_table=attributes)
             # To check
-            category_title = 'Radius'
-            category_names = rad_m
-            name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
+            category_names = radii_meter
         else:
-            # Use hazard map
-            category_title = 'KRB'
-
             # FIXME (Ole): Change to English and use translation system
+            # FIXME (Ismail) : Or simply use the values from the hazard layer
             category_names = ['Kawasan Rawan Bencana III',
                               'Kawasan Rawan Bencana II',
                               'Kawasan Rawan Bencana I']
-            name_attribute = 'GUNUNG'  # As in e.g. BNPB hazard map
+
+        category_names.append(not_affected_value)
 
         # Get names of volcanoes considered
         if name_attribute in hazard_layer.get_attribute_names():
-            volcano_name_list = []
+            volcano_name_list = set()
             for row in hazard_layer.get_data():
                 # Run through all polygons and get unique names
-                volcano_name_list.append(row[name_attribute])
-
-            volcano_names = ''
-            for name in volcano_name_list:
-                volcano_names += '%s, ' % name
-            volcano_names = volcano_names[:-2]  # Strip trailing ', '
+                volcano_name_list.add(row[name_attribute])
+            volcano_names = ', '.join(volcano_name_list)
         else:
             volcano_names = tr('Not specified in data')
 
         # Check if category_title exists in hazard_layer
-        if not category_title in hazard_layer.get_attribute_names():
-            msg = ('Hazard data %s did not contain expected '
-                   'attribute %s ' % (hazard_layer.get_name(), category_title))
+        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+            message = (
+                'Hazard data %s did not contain expected attribute %s ' %
+                (hazard_layer.get_name(), hazard_zone_attribute))
             # noinspection PyExceptionInherit
-            raise InaSAFEError(msg)
+            raise InaSAFEError(message)
 
         # Find the target field name that has no conflict with default
         # target
         attribute_names = hazard_layer.get_attribute_names()
-        new_target_field = get_non_conflicting_attribute_name(
-            self.target_field, attribute_names)
-        self.target_field = new_target_field
+        target_field = get_non_conflicting_attribute_name(
+            target_field, attribute_names)
 
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer)
+            hazard_layer, exposure_layer, attribute_name=None)
 
-        # Initialise attributes of output dataset with all attributes
-        # from input polygon and a building count of zero
-        new_data_table = hazard_layer.get_data()
+        # Extract relevant exposure data
+        attribute_names = interpolated_layer.get_attribute_names()
+        attributes = interpolated_layer.get_data()
+        interpolate_size = len(interpolated_layer)
 
-        categories = {}
-        for row in new_data_table:
-            row[self.target_field] = 0
-            category = row[category_title]
-            categories[category] = 0
+        building_per_category = {}
+        building_usages = []
+        for category_name in category_names:
+            building_per_category[category_name] = {}
+            building_per_category[category_name]['total'] = 0
 
-        # Count impacted building per polygon and total
-        for row in interpolated_layer.get_data():
-            # Update building count for associated polygon
-            poly_id = row['polygon_id']
-            if poly_id is not None:
-                new_data_table[poly_id][self.target_field] += 1
+        for i in range(interpolate_size):
+            hazard_value = attributes[i][hazard_zone_attribute]
+            if not hazard_value:
+                hazard_value = not_affected_value
+            attributes[i][target_field] = hazard_value
 
-                # Update building count for each category
-                category = new_data_table[poly_id][category_title]
-                categories[category] += 1
+            if hazard_value in building_per_category.keys():
+                building_per_category[hazard_value]['total'] += 1
+            elif not hazard_value:
+                building_per_category[not_affected_value]['total'] += 1
+            else:
+                building_per_category[hazard_value] = {}
+                building_per_category[hazard_value]['total'] = 1
 
-        # Count totals
-        total = len(exposure_layer)
+            # Count affected buildings by usage type if available
+            usage = None
+            building_type_attributes = [
+                'type',
+                'TYPE',
+                'amenity',
+                'building_t',
+                'office',
+                'tourism',
+                'leisure',
+                'use',
+            ]
+
+            for building_type_attribute in building_type_attributes:
+                if building_type_attribute in attribute_names and (
+                                usage is None or usage == 0):
+                    usage = attributes[i][building_type_attribute]
+
+            if 'building' in attribute_names and (usage is None or usage == 0):
+                usage = attributes[i]['building']
+                if usage == 'yes':
+                    usage = 'building'
+
+            if usage is None or usage == 0:
+                usage = tr('unknown')
+
+            if usage not in building_usages:
+                building_usages.append(usage)
+                for building in building_per_category.values():
+                    building[usage] = 0
+
+            building_per_category[hazard_value][usage] += 1
 
         # Generate simple impact report
         blank_cell = ''
         table_body = [question,
                       TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
-                               header=True),
-                      TableRow([tr('Distance [km]'), tr('Total'),
-                                tr('Cumulative')],
                                header=True)]
 
-        cumulative = 0
-        for name in category_names:
-            # prevent key error
-            count = categories.get(name, 0)
-            cumulative += count
-            if is_point_data:
-                name = int(name) / 1000
-            table_body.append(TableRow([name, format_int(count),
-                                        format_int(cumulative)]))
+        table_headers = [tr('Building type')]
+        table_headers += [tr(x) for x in category_names]
+        table_headers += [tr('Total')]
 
-        table_body.append(TableRow(tr('Map shows buildings affected in '
-                                      'each of volcano hazard polygons.')))
+        table_body += [TableRow(table_headers, header=True)]
+
+        other_sum = {}
+        for building_usage in building_usages:
+            building_usage_good = building_usage.replace('_', ' ')
+            building_usage_good = building_usage_good.capitalize()
+
+            building_sum = sum([building_per_category[category_name][
+                                    building_usage] for category_name in
+                               category_names])
+
+            # Filter building type that has no less than 25 items
+            if building_sum >= 25:
+                row = [tr(building_usage_good)]
+                building_sum = 0
+                for category_name in category_names:
+                    building_sub_sum = building_per_category[category_name][
+                        building_usage]
+                    row.append(format_int(building_sub_sum))
+                    building_sum += building_sub_sum
+
+                row.append(format_int(building_sum))
+                table_body.append(row)
+
+            else:
+                for category_name in category_names:
+                    if category_name in other_sum.keys():
+                        other_sum[category_name] += building_per_category[
+                            category_name][building_usage]
+                    else:
+                        other_sum[category_name] = building_per_category[
+                            category_name][building_usage]
+
+        # Adding others building type to the report.
+        other_row = [tr('Other')]
+        other_building_total = 0
+        for category_name in category_names:
+            other_building_sum = other_sum[category_name]
+            other_row.append(format_int(other_building_sum))
+            other_building_total += other_building_sum
+
+        other_row.append(format_int(other_building_total))
+        table_body.append(other_row)
+
+        all_row = [tr('Total')]
+        all_row += [format_int(building_per_category[category_name]['total'])
+                    for category_name in category_names]
+        total = sum([building_per_category[category_name]['total'] for
+                     category_name in category_names])
+        all_row += [format_int(total)]
+
+        table_body.append(TableRow(all_row, header=True))
+
+        table_body += [TableRow(tr('Map shows buildings affected in each of '
+                                   'volcano hazard polygons.'))]
+
         impact_table = Table(table_body).toNewlineFreeString()
+        impact_summary = impact_table
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
@@ -275,44 +370,34 @@ class VolcanoBuildingImpact(FunctionProvider):
                            tr('Only buildings available in OpenStreetMap '
                               'are considered.')])
 
-        impact_summary = Table(table_body).toNewlineFreeString()
-        building_counts = [x[self.target_field] for x in new_data_table]
-
-        if max(building_counts) == 0 == min(building_counts):
-            table_body = [
-                question,
-                TableRow([tr('Number of buildings affected'),
-                          '%s' % format_int(cumulative), blank_cell],
-                         header=True)]
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
-
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+        colours = colours[::-1]  # flip
 
-        # Create Classes
-        classes = create_classes(building_counts, len(colours))
-        # Create Interval Classes
-        interval_classes = humanize_class(classes)
+        colours = colours[:len(category_names)]
 
         style_classes = []
-        for i in xrange(len(colours)):
+
+        i = 0
+        for category_name in category_names:
             style_class = dict()
-            style_class['label'] = create_label(interval_classes[i])
-            if i == 0:
-                style_class['min'] = 0
-            else:
-                style_class['min'] = classes[i - 1]
-            style_class['transparency'] = 30
+            style_class['label'] = tr(category_name)
+            style_class['transparency'] = 0
+            style_class['value'] = category_name
+            style_class['size'] = 1
+
+            if i >= len(category_names):
+                i = len(category_names) - 1
             style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
+            i += 1
+
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=self.target_field,
+        style_info = dict(target_field=target_field,
                           style_classes=style_classes,
-                          style_type='graduatedSymbol')
+                          style_type='categorizedSymbol')
 
         # For printing map purpose
         map_title = tr('Buildings affected by volcanic hazard zone')
@@ -323,13 +408,13 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Create vector layer and return
         impact_layer = Vector(
-            data=new_data_table,
-            projection=hazard_layer.get_projection(),
-            geometry=hazard_layer.get_geometry(as_geometry_objects=True),
+            data=attributes,
+            projection=interpolated_layer.get_projection(),
+            geometry=interpolated_layer.get_geometry(as_geometry_objects=True),
             name=tr('Buildings affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
-                      'target_field': self.target_field,
+                      'target_field': target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,

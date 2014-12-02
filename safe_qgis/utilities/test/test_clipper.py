@@ -16,7 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import unittest
@@ -55,7 +55,8 @@ from safe_qgis.utilities.clipper import (
     clip_layer,
     extent_to_kml,
     explode_multipart_geometry,
-    clip_geometry)
+    clip_geometry,
+    adjust_clip_extent)
 from safe_qgis.utilities.utilities import qgis_version
 from safe_qgis.utilities.utilities_for_testing import (
     set_canvas_crs,
@@ -136,42 +137,6 @@ class ClipperTest(unittest.TestCase):
             'Resampled raster has incorrect pixel size. Expected: %5f, '
             'Actual: %5f' % (size, new_raster_layer.rasterUnitsPerPixelX()))
         assert new_raster_layer.rasterUnitsPerPixelX() == size, message
-
-    def test_clip_raster_small(self):
-        """Raster layers can be clipped in small and precise size. For #710."""
-
-        # Create a raster layer
-        layer_name = 'shake'
-        raster_layer = QgsRasterLayer(RASTERPATH, layer_name)
-
-        message = (
-            'Did not find layer "%s" in path "%s"' % (layer_name, RASTERPATH))
-        assert raster_layer is not None, message
-
-        # Create a bounding box
-        bounding_box = [97, -3, 104, 1]
-
-        # Clip the vector to the bbox
-        result = clip_layer(raster_layer, bounding_box)
-
-        # Check the output is valid
-        assert os.path.exists(result.source())
-
-        # Clip and give a desired resolution for the output
-
-        # small pixel size and high precision
-
-        # based on pixel size of Flood_Current_Depth_Jakarta_geographic.asc
-        size = 0.00045228819716
-        result = clip_layer(raster_layer, bounding_box, size)
-        new_raster_layer = QgsRasterLayer(result.source(), layer_name)
-        assert new_raster_layer.isValid(), 'Resampled raster is not valid'
-        message = (
-            'Resampled raster has incorrect pixel size. Expected: %.14f, '
-            'Actual: %.14f' % (
-                size, new_raster_layer.rasterUnitsPerPixelX()))
-        result_size = new_raster_layer.rasterUnitsPerPixelX()
-        self.assertAlmostEqual(result_size, size, places=13, msg=message)
 
     def test_clip_raster_with_no_extension(self):
         """Test we can clip a raster with no extension - see #659."""
@@ -669,6 +634,47 @@ class ClipperTest(unittest.TestCase):
 
         # Check the output is valid
         assert(os.path.exists(result.source()))
+
+    def test_adjust_clip_extent(self):
+        """Test adjust_clip_extent works as expected."""
+        cell_size = (2, 3)
+        layer_extent = [-2, -2, 14, 10]
+
+        clip_extent = [-1, -1, 0, 0]
+        expected_adjusted_extent = [-2, -2, 0, 1]
+        adjusted_extent = adjust_clip_extent(
+            clip_extent, cell_size, layer_extent)
+        message = 'The adjusted extent should be %s, instead it gives %s' % (
+            expected_adjusted_extent, adjusted_extent)
+        self.assertEqual(adjusted_extent, expected_adjusted_extent, message)
+
+        clip_extent = [-1, -1, 2, 2]
+        expected_adjusted_extent = [-2, -2, 2, 4]
+        adjusted_extent = adjust_clip_extent(
+            clip_extent, cell_size, layer_extent)
+        message = 'The adjusted extent should be %s, instead it gives %s' % (
+            expected_adjusted_extent, adjusted_extent)
+        self.assertEqual(adjusted_extent, expected_adjusted_extent, message)
+
+        # clip_extent = layer_extent. Will just return layer_extent
+        clip_extent = [-2, -2, 14, 10]
+        expected_adjusted_extent = [-2, -2, 14, 10]
+        adjusted_extent = adjust_clip_extent(
+            clip_extent, cell_size, layer_extent)
+        message = 'The adjusted extent should be %s, instead it gives %s' % (
+            expected_adjusted_extent, adjusted_extent)
+        self.assertEqual(adjusted_extent, expected_adjusted_extent, message)
+
+        # 3. clip_extent > layer_extent.
+        # get_optimal_extent should never produce this, but in case, it would
+        # return adjusted_extent = layer_extent
+        clip_extent = [-5, -5, 15, 15]
+        expected_adjusted_extent = [-2, -2, 14, 10]
+        adjusted_extent = adjust_clip_extent(
+            clip_extent, cell_size, layer_extent)
+        message = 'The adjusted extent should be %s, instead it gives %s' % (
+            expected_adjusted_extent, adjusted_extent)
+        self.assertEqual(adjusted_extent, expected_adjusted_extent, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ClipperTest, 'test')

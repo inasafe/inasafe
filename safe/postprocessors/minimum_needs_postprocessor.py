@@ -83,9 +83,14 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         this indicator reports the aggregated minimum needs
         """
 
-        for need, value in self.minimum_needs.iteritems():
+        for resource in self.minimum_needs:
+            if resource.unit.abbreviation:
+                need = "%s [%s]" % (resource.name, resource.unit.abbreviation)
+            else:
+                need = resource.name
+            value = resource.value
             try:
-                result = int(round(value * self.impact_total))
+                result = int(round(float(value) * self.impact_total))
             except (ValueError, TypeError):
                 result = self.NO_DATA_TEXT
 

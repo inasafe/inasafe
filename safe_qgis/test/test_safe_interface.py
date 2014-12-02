@@ -98,7 +98,7 @@ class SafeInterfaceTest(unittest.TestCase):
         bbox = get_optimal_extent(hazard_bbox, exposure_bbox, view_port)
         assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
-        #testing with viewport clipping disabled
+        # testing with viewport clipping disabled
         bbox = get_optimal_extent(hazard_bbox, exposure_bbox, None)
         assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
@@ -141,7 +141,7 @@ class SafeInterfaceTest(unittest.TestCase):
         try:
             get_optimal_extent(haz_metadata, exp_metadata, view_port)
         except BoundingBoxError:
-            #good this was expected
+            # good this was expected
             pass
         except InsufficientOverlapError, e:
             message = 'Did not find expected error message in %s' % str(e)

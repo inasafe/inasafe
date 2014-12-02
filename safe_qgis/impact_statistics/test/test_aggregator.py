@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -35,11 +36,12 @@ from qgis.core import (
     QgsMapLayerRegistry)
 
 from safe.common.testing import get_qgis_app
+from safe.common.qgis_vector_tools import extent_to_geo_array
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis import breakdown_defaults
+from safe_qgis import get_defaults
 from safe_qgis.safe_interface import (
     UNITDATA,
     TESTDATA,
@@ -55,8 +57,6 @@ from safe_qgis.utilities.utilities_for_testing import (
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities import (
-    extent_to_geo_array)
 
 from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
@@ -68,11 +68,11 @@ DOCK = Dock(IFACE)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 class AggregatorTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
 
@@ -93,7 +93,7 @@ class AggregatorTest(unittest.TestCase):
         set_jakarta_extent()
 
         self._keywordIO = KeywordIO()
-        self._defaults = breakdown_defaults()
+        self._defaults = get_defaults()
 
         # Set extent as Jakarta extent
         geo_crs = QgsCoordinateReferenceSystem()
@@ -123,7 +123,7 @@ class AggregatorTest(unittest.TestCase):
     def test_aggregation_attribute_in_keywords(self):
         """Aggregation attribute is chosen correctly when present in keywords.
         """
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
@@ -134,6 +134,7 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -146,9 +147,9 @@ class AggregatorTest(unittest.TestCase):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
         file_list = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
-        #add additional layers
+        # add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
@@ -158,6 +159,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -170,14 +172,14 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_check_aggregation_no_attributes(self):
         """Aggregation attribute chosen correctly when no attr available."""
 
         file_list = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
-        #add additional layers
+        # add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         result, message = setup_scenario(
@@ -186,6 +188,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -195,14 +198,14 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_check_aggregation_none_in_keywords(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
 
         file_list = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
-        #add additional layers
+        # add additional layers
         load_layers(file_list, clear_flag=False)
-        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = get_defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
         result, message = setup_scenario(
@@ -211,6 +214,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
         # Press RUN
         DOCK.accept()
@@ -220,7 +224,7 @@ class AggregatorTest(unittest.TestCase):
         assert attribute is None, message
 
     def test_setup_target_field(self):
-        """Test setup up target field is correct
+        """Test setup up target field is correct.
         """
         layer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
@@ -243,7 +247,7 @@ class AggregatorTest(unittest.TestCase):
         """
 
         # See qgis project in test data: vector_preprocessing_test.qgs
-        #add additional layers
+        # add additional layers
         file_list = ['jakarta_crosskabupaten_polygons.shp']
         load_layers(file_list, clear_flag=False)
         file_list = ['kabupaten_jakarta.shp']
@@ -260,7 +264,7 @@ class AggregatorTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(dock=DOCK)
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()

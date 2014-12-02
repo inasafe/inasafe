@@ -22,6 +22,7 @@ import os
 import shutil
 import unittest
 
+from safe.api import get_shake_test_data_path
 from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_zip_dir,
@@ -44,7 +45,7 @@ SHAKE_ID = '20120726022003'
 class TestShakeMap(unittest.TestCase):
     """Testing for the shakemap class"""
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir."""
         # Run monkey patching to ftp_client
@@ -52,16 +53,10 @@ class TestShakeMap(unittest.TestCase):
 
         output_file = '20120726022003.out.zip'
         input_file = '20120726022003.inp.zip'
-        output_path = os.path.abspath(
-            os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/shake_data',
-                output_file))
-        input_path = os.path.abspath(
-            os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/shake_data',
-                input_file))
+
+        shake_path = get_shake_test_data_path()
+        output_path = os.path.abspath(os.path.join(shake_path, output_file))
+        input_path = os.path.abspath(os.path.join(shake_path, input_file))
         shutil.copyfile(
             output_path,
             os.path.join(shakemap_zip_dir(),
@@ -71,7 +66,7 @@ class TestShakeMap(unittest.TestCase):
             os.path.join(shakemap_zip_dir(),
                          input_file))
 
-        #TODO Downloaded data should be removed before each test
+        # TODO Downloaded data should be removed before each test
 
     def test_get_shake_map_input(self):
         """Check that we can retrieve a shakemap 'inp' input file."""
@@ -178,7 +173,7 @@ class TestShakeMap(unittest.TestCase):
         self.assertTrue(shake_data.is_on_server(),
                         ('Data for %s is on server' % SHAKE_ID))
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_cache_paths(self):
         """Check we compute local cache paths properly."""
         shake_data = ShakeData(SHAKE_ID)
@@ -194,7 +189,7 @@ class TestShakeMap(unittest.TestCase):
         message = 'Expected: %s\nGot: %s' % (expected_output_path, output_path)
         self.assertEqual(output_path, expected_output_path, message)
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_file_names(self):
         """Check we compute file names properly."""
         shake_data = ShakeData(SHAKE_ID)

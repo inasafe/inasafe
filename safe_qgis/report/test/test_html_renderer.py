@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import os
@@ -141,8 +141,10 @@ class HtmlRendererTest(unittest.TestCase):
             20605,  # as rendered on linux ub 13.04 64
             13965,  # as rendered on linux ub 13.10 64
             14220,  # as rendered on linux ub 13.04 64 MB
-            11074,  # as rendered on linux ub 14.04 64 AG
-            17295,  # as rendered on linux ub 14.04_64 TS
+            11085,  # as rendered on linux ub 14.04 64 AG
+            17306,  # as rendered on linux ub 14.04_64 TS
+            17127,  # as rendered on linux ub 14.04_64 MB
+            17295,  # as rendered on linux ub 14.04_64 IS
             18665,  # as rendered on Jenkins per 19 June 2014
             377191,  # as rendered on OSX
             17556,  # as rendered on Windows 7_32

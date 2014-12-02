@@ -1,15 +1,37 @@
 # coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid - **Flood polygon evacuation.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+.. todo:: Check raster is single band
+
+"""
+
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import numpy
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance
+)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
     get_function_title,
-    default_minimum_needs,
-    evacuated_population_weekly_needs
+    evacuated_population_needs,
+    population_rounding
 )
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
@@ -19,12 +41,14 @@ from safe.metadata import (
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition,
-    unit_normalised)
+    unit_normalised
+)
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as tr, format_int, round_thousand
+from safe.common.utilities import ugettext as tr, format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
-    ImpactFunctionMetadata)
+    ImpactFunctionMetadata
+)
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
@@ -126,20 +150,21 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True}),
         ])),
-        ('minimum needs', default_minimum_needs())
+        ('minimum needs', default_minimum_needs()),
+        ('provenance', default_provenance())
     ])
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard.
 
-        Input
-          layers: List of layers expected to contain
-              hazard_layer: Raster layer of categorised hazard
-              exposure_layer: Raster layer of population data
+        :param layers: List of layers expected to contain
+
+            * hazard_layer: Raster layer of categorised hazard
+            * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each category of the hazard
 
-        Return
+        :returns:
           Map of population exposed to high category
           Table with number of people in each category
         """
@@ -173,16 +198,16 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         total_impact = high + medium + low
 
         # Don't show digits less than a 1000
-        total = round_thousand(total)
-        total_impact = round_thousand(total_impact)
-        high = round_thousand(high)
-        medium = round_thousand(medium)
-        low = round_thousand(low)
+        total = population_rounding(total)
+        total_impact = population_rounding(total_impact)
+        high = population_rounding(high)
+        medium = population_rounding(medium)
+        low = population_rounding(low)
 
-        # Calculate estimated minimum needs
-        minimum_needs = self.parameters['minimum needs']
-        tot_needs = evacuated_population_weekly_needs(
-            total_impact, minimum_needs)
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         table_body = [
@@ -208,16 +233,23 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
             tr('Map shows population count in high or medium hazard area'),
             tr('Total population: %s') % format_int(total),
             TableRow(tr(
-                'Table below shows the weekly minimum needs for all '
-                'affected people')),
-            TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
-            [tr('Drinking Water [l]'),
-             format_int(tot_needs['drinking_water'])],
-            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
-            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
-            [tr('Toilets'), format_int(tot_needs['toilets'])]
-        ])
+                'Table below shows the minimum needs for all '
+                'affected people'))])
+
+        total_needs = evacuated_population_needs(
+            total_impact, minimum_needs)
+        for frequency, needs in total_needs.items():
+            table_body.append(TableRow(
+                [
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
+                ],
+                header=True))
+            for resource in needs:
+                table_body.append(TableRow([
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
+
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in high hazard areas')
 
@@ -247,6 +279,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
             keywords={
                 'impact_summary': impact_summary,
                 'impact_table': impact_table,
-                'map_title': map_title},
+                'map_title': map_title,
+                'total_needs': total_needs},
             style_info=style_info)
         return raster_layer

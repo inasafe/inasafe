@@ -29,7 +29,7 @@ from realtime.pickle_reader import create_index, generate_pages
 class TestPickleReader(unittest.TestCase):
     """Tests relating to pickle reader"""
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Set public test dir for en and id"""
         self.shakemap_dir_en = os.path.join(

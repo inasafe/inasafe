@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import os
@@ -38,7 +38,7 @@ from PyQt4.QtGui import (
     QPushButton,
     QDialogButtonBox)
 
-from qgis.core import QgsRectangle
+from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
 from safe_qgis.tools.batch import scenario_runner
@@ -46,7 +46,8 @@ from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import FileNotFoundError
 from safe_qgis.safe_interface import temp_dir
-from safe_qgis.utilities.utilities import read_impact_layer
+from safe_qgis.utilities.utilities import (
+    read_impact_layer, extent_string_to_array)
 from safe_qgis.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -301,29 +302,24 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             if not result:
                 return False
 
+        # Set extent CRS if it exists
+        if 'extent_crs' in items:
+            crs = QgsCoordinateReferenceSystem(items['extent_crs'])
+        else:
+            # assume crs is Geo/WGS84
+            crs = QgsCoordinateReferenceSystem('EPSG:4326')
         # set extent if exist
         if 'extent' in items:
             # split extent string
-            coordinates = items['extent'].replace(' ', '').split(',')
-            count = len(coordinates)
-            if count != 4:
-                message = (
-                    'Extent need exactly 4 value but got %s instead' % count)
-                LOGGER.error(message)
-                return False
-
-            # parse the value to float type
-            try:
-                coordinates = [float(i) for i in coordinates]
-            except ValueError as e:
-                message = e.message
-                LOGGER.error(message)
-                return False
+            coordinates = items['extent']
+            coordinates = extent_string_to_array(coordinates)
 
             # set the extent according the value
             self.iface.mapCanvas().mapRenderer().setProjectionsEnabled(True)
 
             extent = QgsRectangle(*coordinates)
+
+            self.dock.define_user_analysis_extent(extent, crs)
 
             message = 'set layer extent to %s ' % extent.asWktCoordinates()
             LOGGER.info(message)
@@ -764,7 +760,7 @@ def append_row(table, label, data):
     # Make the value immutable.
     variant = (data,)
     # To retrieve it again you would need to do:
-    #value = myVariant.toPyObject()[0]
+    # value = myVariant.toPyObject()[0]
     items.setData(Qt.UserRole, variant)
 
     # noinspection PyUnresolvedReferences

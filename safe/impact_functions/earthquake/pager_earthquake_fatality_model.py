@@ -1,4 +1,16 @@
 # coding=utf-8
+"""**Pager Earthquake fatality model**
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import math
 import numpy
 from safe.metadata import (
@@ -11,8 +23,11 @@ from safe.metadata import (
     exposure_definition
 )
 from collections import OrderedDict
-from safe.defaults import get_defaults
-from safe.impact_functions.core import default_minimum_needs
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance
+)
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
     ITBFatalityFunction)
 from safe.common.utilities import ugettext as tr
@@ -98,10 +113,6 @@ class PAGFatalityFunction(ITBFatalityFunction):
     title = tr('Die or be displaced according Pager model')
     defaults = get_defaults()
 
-    # see https://github.com/AIFDR/inasafe/issues/628
-    default_needs = default_minimum_needs()
-    default_needs[tr('Water')] = 67
-
     parameters = OrderedDict([
         ('Theta', 11.067),
         ('Beta', 0.106),  # Model coefficients
@@ -126,11 +137,17 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
             ('MinimumNeeds', {'on': True})])),
-        ('minimum needs', default_needs)])
+        ('minimum needs', default_minimum_needs()),
+        ('provenance', default_provenance())])
 
     # noinspection PyPep8Naming
     def fatality_rate(self, mmi):
-        """Pager method to compute fatality rate."""
+        """Pager method to compute fatality rate.
+
+        :param mmi: MMI
+
+        :returns: Fatality rate
+        """
 
         N = math.sqrt(2 * math.pi)
         THETA = self.parameters['Theta']

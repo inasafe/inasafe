@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
-#noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 import os
@@ -32,7 +32,12 @@ import difflib
 from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe.api import unique_filename, temp_dir, get_version
+from safe.api import (
+    unique_filename,
+    temp_dir,
+    get_version,
+    get_shake_test_data_path
+)
 from safe.common.testing import get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -51,7 +56,7 @@ SHAKE_ID = '20131105060809'
 
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir."""
         # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
@@ -59,8 +64,7 @@ class TestShakeEvent(unittest.TestCase):
         # shakemap_cache_dir/20131105060809/grid.xml
         input_path = os.path.abspath(
             os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/shake_data',
+                get_shake_test_data_path(),
                 SHAKE_ID,
                 'output/grid.xml'))
         target_folder = os.path.join(
@@ -71,7 +75,7 @@ class TestShakeEvent(unittest.TestCase):
         target_path = os.path.abspath(os.path.join(target_folder, 'grid.xml'))
         shutil.copyfile(input_path, target_path)
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def tearDown(self):
         """Delete the cached data."""
         target_path = os.path.join(shakemap_extract_dir(), SHAKE_ID)
@@ -219,7 +223,7 @@ class TestShakeEvent(unittest.TestCase):
 
         expected_fatalities = {2: 0.0,
                                3: 0.0,
-                               4: 0.000036387775168853676,
+                               4: 0.000036387775168847936,
                                5: 0.0,
                                6: 0.0,
                                7: 0.0,
@@ -301,7 +305,7 @@ class TestShakeEvent(unittest.TestCase):
                         'Visit http://inasafe.org for more information.' %
                         get_version())
 
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         expected_dict = {
             'place-name': u'n/a',
             'depth-name': u'Depth',
@@ -325,17 +329,17 @@ class TestShakeEvent(unittest.TestCase):
                 u'takes into account the population and cities affected by '
                 u'different levels of ground shaking. The estimate is based '
                 u'on ground shaking data from BMKG, population count data '
-                u'from worldpop.org.uk, place information from geonames.org '
-                u'and software developed by BNPB. Limitations in the '
-                u'estimates of ground shaking, population and place names '
-                u'datasets may result in significant misrepresentation of the '
-                u'on-the-ground situation in the figures shown here. '
-                u'Consequently decisions should not be made solely on the '
-                u'information presented here and should always be verified by '
-                u'ground truthing and other reliable information sources. The '
-                u'fatality calculation assumes that no fatalities occur for '
-                u'shake levels below MMI 4. Fatality counts of less than 50 '
-                u'are disregarded.'),
+                u'derived by AIFDR from worldpop.org.uk, place information '
+                u'from geonames.org and software developed by BNPB. '
+                u'Limitations in the estimates of ground shaking, population '
+                u'and place names datasets may result in significant '
+                u'misrepresentation of the on-the-ground situation in the '
+                u'figures shown here. Consequently decisions should not be '
+                u'made solely on the information presented here and should '
+                u'always be verified by ground truthing and other reliable '
+                u'information sources. The fatality calculation assumes that '
+                u'no fatalities occur for shake levels below MMI 4. Fatality '
+                u'counts of less than 50 are disregarded.'),
             'depth-unit': u'km',
             'latitude-name': u'Latitude',
             'mmi': '3.6',

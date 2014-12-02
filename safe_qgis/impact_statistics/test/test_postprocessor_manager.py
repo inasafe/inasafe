@@ -26,8 +26,6 @@ from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
-#for p in sys.path:
-#    print p + '\n'
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
@@ -48,11 +46,11 @@ DOCK = Dock(IFACE)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-#noinspection PyArgumentList
+# noinspection PyArgumentList
 class PostprocessorManagerTest(unittest.TestCase):
     """Test the postprocessor manager"""
 
-    #noinspection PyPep8Naming
+    # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
@@ -76,7 +74,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.cboHazard.clear()
         DOCK.cboExposure.clear()
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_check_postprocessing_layers_visibility(self):
         """Generated layers are not added to the map registry."""
         # Explicitly disable showing intermediate layers
@@ -89,19 +87,20 @@ class PostprocessorManagerTest(unittest.TestCase):
             exposure='People',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart')
+        set_jakarta_extent(dock=DOCK)
         assert result, message
 
-        #LOGGER.info("Registry list before:\n%s" %
+        # LOGGER.info("Registry list before:\n%s" %
         #            QgsMapLayerRegistry.instance().mapLayers())
 
-        #one layer (the impact) should have been added
+        # one layer (the impact) should have been added
         expected_count = len(CANVAS.layers()) + 1
         #
-        # # Press RUN
+        # Press RUN
         DOCK.accept()
         # no KW dialog will popuo due to complete keywords
         after_count = len(CANVAS.layers())
-        #LOGGER.info("Registry list after:\n%s" %
+        # LOGGER.info("Registry list after:\n%s" %
         #            QgsMapLayerRegistry.instance().mapLayers())
         message = (
             'Expected %s items in canvas, got %s' %
@@ -113,7 +112,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         # Press RUN
         DOCK.accept()
         # no KW dialog will popup due to complete keywords
-        #one layer (the impact) should have been added
+        # one layer (the impact) should have been added
         expected_count += 2
         after_count = len(CANVAS.layers())
 
@@ -124,7 +123,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         # We expect two more since we enabled showing intermediate layers
         assert expected_count == after_count, message
 
-    #noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic
     def test_post_processor_output(self):
         """Check that the post processor does not add spurious report rows."""
 

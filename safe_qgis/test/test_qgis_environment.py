@@ -38,14 +38,14 @@ class QGISTest(unittest.TestCase):
         """QGIS environment has the expected providers"""
 
         r = QgsProviderRegistry.instance()
-        #for item in r.providerList():
+        # for item in r.providerList():
         #    print str(item)
 
-        #print 'Provider count: %s' % len(r.providerList())
+        # print 'Provider count: %s' % len(r.providerList())
         assert 'gdal' in r.providerList()
         assert 'ogr' in r.providerList()
         assert 'postgres' in r.providerList()
-        #assert 'wfs' in r.providerList()
+        # assert 'wfs' in r.providerList()
 
     def testProjInterpretation(self):
         """Test that QGIS properly parses a proj4 string.

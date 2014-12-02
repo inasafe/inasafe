@@ -24,7 +24,9 @@ import shutil
 import ogr
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import get_qgis_app, TESTDATA
+from safe.common.testing import (
+    get_qgis_app,
+    get_shake_test_data_path)
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -35,7 +37,10 @@ from safe_qgis.tools.shake_grid.shake_grid import (
 
 # Parse the grid once and use it for all tests to fasten the tests
 # Use temp directory to do the testing
-SOURCE_PATH = os.path.join(TESTDATA, 'grid.xml')
+SOURCE_PATH = os.path.join(
+    get_shake_test_data_path(),
+    '20131105060809/output',
+    'grid.xml')
 GRID_PATH = os.path.join(temp_dir(__name__), 'grid.xml')
 shutil.copyfile(SOURCE_PATH, GRID_PATH)
 
@@ -63,7 +68,7 @@ class ShakeGridTest(unittest.TestCase):
         base_name = os.path.splitext(os.path.basename(path))[0]
         # do a little query to make sure we got some results...
         sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
-        #print sql_statement
+        # print sql_statement
         layer = data_source.ExecuteSQL(sql_statement)
         feature_count = layer.GetFeatureCount()
         flag = feature_count == count
@@ -77,62 +82,62 @@ class ShakeGridTest(unittest.TestCase):
     def test_extract_date_time(self):
         """Test extract_date_time giving the correct output."""
         # Test on SHAKE_GRID
-        expected_year = 2014
+        expected_year = 2013
         message = 'Expected year should be %s, I got %s' % (
             expected_year, SHAKE_GRID.year)
         self.assertEqual(SHAKE_GRID.year, expected_year, message)
 
-        expected_month = 1
+        expected_month = 11
         message = 'Expected month should be %s, I got %s' % (
             expected_month, SHAKE_GRID.month)
         self.assertEqual(SHAKE_GRID.month, expected_month, message)
 
-        expected_day = 29
+        expected_day = 5
         message = 'Expected day should be %s, I got %s' % (
             expected_day, SHAKE_GRID.day)
         self.assertEqual(SHAKE_GRID.day, expected_day, message)
 
-        expected_hour = 1
+        expected_hour = 6
         message = 'Expected hour should be %s, I got %s' % (
             expected_hour, SHAKE_GRID.hour)
         self.assertEqual(SHAKE_GRID.hour, expected_hour, message)
 
-        expected_minute = 39
+        expected_minute = 8
         message = 'Expected minute should be %s, I got %s' % (
             expected_minute, SHAKE_GRID.minute)
         self.assertEqual(SHAKE_GRID.minute, expected_minute, message)
 
-        expected_second = 0
+        expected_second = 9
         message = 'Expected second should be %s, I got %s' % (
             expected_second, SHAKE_GRID.second)
         self.assertEqual(SHAKE_GRID.second, expected_second, message)
 
     def test_parse_grid_xml(self):
         """Test parse_grid_xml works."""
-        self.assertEquals(29, SHAKE_GRID.day)
-        self.assertEquals(1, SHAKE_GRID.month)
-        self.assertEquals(2014, SHAKE_GRID.year)
-        self.assertEquals(1, SHAKE_GRID.hour)
-        self.assertEquals(39, SHAKE_GRID.minute)
-        self.assertEquals(0, SHAKE_GRID.second)
-        self.assertEquals('UTC', SHAKE_GRID.time_zone)
-        self.assertEquals(-114.1056, SHAKE_GRID.longitude)
-        self.assertEquals(37.3411, SHAKE_GRID.latitude)
-        self.assertEquals(4.9954, SHAKE_GRID.depth)
-        self.assertEquals('29.3 miles SE of Caliente', SHAKE_GRID.location)
-        self.assertEquals(-115.1056, SHAKE_GRID.x_minimum)
-        self.assertEquals(-113.1056, SHAKE_GRID.x_maximum)
-        self.assertEquals(36.5411, SHAKE_GRID.y_minimum)
-        self.assertEquals(38.1411, SHAKE_GRID.y_maximum)
+        self.assertEquals(5, SHAKE_GRID.day)
+        self.assertEquals(11, SHAKE_GRID.month)
+        self.assertEquals(2013, SHAKE_GRID.year)
+        self.assertEquals(6, SHAKE_GRID.hour)
+        self.assertEquals(8, SHAKE_GRID.minute)
+        self.assertEquals(9, SHAKE_GRID.second)
+        self.assertEquals('WIB', SHAKE_GRID.time_zone)
+        self.assertEquals(140.62, SHAKE_GRID.longitude)
+        self.assertEquals(-2.43, SHAKE_GRID.latitude)
+        self.assertEquals(10.0, SHAKE_GRID.depth)
+        self.assertEquals('Papua', SHAKE_GRID.location)
+        self.assertEquals(139.37, SHAKE_GRID.x_minimum)
+        self.assertEquals(141.87, SHAKE_GRID.x_maximum)
+        self.assertEquals(-3.67875, SHAKE_GRID.y_minimum)
+        self.assertEquals(-1.18125, SHAKE_GRID.y_maximum)
 
         grid_xml_data = SHAKE_GRID.mmi_data
-        self.assertEquals(11737, len(grid_xml_data))
+        self.assertEquals(10201, len(grid_xml_data))
 
         # Check SHAKE_GRID.grid_bounding_box
         bounds = SHAKE_GRID.grid_bounding_box.toString()
         expected_result = (
-            '-115.1055999999999955,36.5411000000000001 : '
-            '-113.1055999999999955,38.1411000000000016')
+            '139.3700000000000045,-3.6787500000000000 : '
+            '141.8700000000000045,-1.1812499999999999')
         message = 'Got:\n%s\nExpected:\n%s\n' % (bounds, expected_result)
         self.assertEqual(bounds, expected_result, message)
 
@@ -147,7 +152,7 @@ class ShakeGridTest(unittest.TestCase):
     def test_mmi_to_delimited_text(self):
         """Test mmi_to_delimited_text works."""
         delimited_string = SHAKE_GRID.mmi_to_delimited_text()
-        self.assertEqual(190842, len(delimited_string))
+        self.assertEqual(204869, len(delimited_string))
 
     def test_mmi_to_delimited_file(self):
         """Test mmi_to_delimited_file works."""
@@ -157,7 +162,7 @@ class ShakeGridTest(unittest.TestCase):
         delimited_file = file(file_path)
         delimited_string = delimited_file.readlines()
         delimited_file.close()
-        self.assertEqual(11738, len(delimited_string))
+        self.assertEqual(10202, len(delimited_string))
 
         # Check CSVT File
         csvt_file_path = file_path.replace('csv', 'csvt')
@@ -207,7 +212,6 @@ class ShakeGridTest(unittest.TestCase):
 
     def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)"""
-        grid_path = os.path.join(TESTDATA, 'grid.xml')
         grid_title = 'Earthquake'
         grid_source = 'USGS'
         output_raster = unique_filename(
@@ -215,7 +219,7 @@ class ShakeGridTest(unittest.TestCase):
             suffix='.tif',
             dir=temp_dir('test'))
         result = convert_mmi_data(
-            grid_path, grid_title, grid_source, output_raster)
+            GRID_PATH, grid_title, grid_source, output_raster)
         expected_result = output_raster.replace('.tif', '-nearest.tif')
         self.assertEqual(
             result, expected_result,

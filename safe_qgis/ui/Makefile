@@ -25,14 +25,16 @@ UI_FILES = \
 	batch_dialog_base.ui \
 	dock_base.ui \
 	function_options_dialog_base.ui \
+	function_browser_dialog_base.ui \
 	impact_merge_dialog_base.ui \
 	keywords_dialog_base.ui	\
-	minimum_needs_base.ui \
+	needs_calculator_dialog_base.ui \
+        needs_manager_dialog_base.ui \
 	options_dialog_base.ui \
-	osm_downloader_base.ui \
-	shakemap_importer_base.ui \
-    function_browser_base.ui \
-    wizard_dialog_base.ui
+	osm_downloader_dialog_base.ui \
+	shakemap_importer_dialog_base.ui \
+	wizard_dialog_base.ui \
+	extent_selector_dialog_base.ui
 
 ###################### EDITABLE AREA ENDS ###################################
 

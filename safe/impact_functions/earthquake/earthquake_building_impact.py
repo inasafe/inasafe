@@ -154,17 +154,17 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             is_nexis = False
 
         # Interpolate hazard level to building locations.
-        my_interpolate_result = assign_hazard_values_to_exposure_data(
+        interpolate_result = assign_hazard_values_to_exposure_data(
             hazard_layer,
             exposure_layer,
             attribute_name=hazard_attribute
         )
 
         # Extract relevant exposure data
-        #attribute_names = my_interpolate_result.get_attribute_names()
-        attributes = my_interpolate_result.get_data()
+        # attribute_names = interpolate_result.get_attribute_names()
+        attributes = interpolate_result.get_data()
 
-        interpolate_size = len(my_interpolate_result)
+        interpolate_size = len(interpolate_result)
 
         # Calculate building impact
         lo = 0
@@ -183,19 +183,19 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 try:
                     area = float(attributes[i]['FLOOR_AREA'])
                 except (ValueError, KeyError):
-                    #print 'Got area', attributes[i]['FLOOR_AREA']
+                    # print 'Got area', attributes[i]['FLOOR_AREA']
                     area = 0.0
 
                 try:
                     building_value_density = float(attributes[i]['BUILDING_C'])
                 except (ValueError, KeyError):
-                    #print 'Got bld value', attributes[i]['BUILDING_C']
+                    # print 'Got bld value', attributes[i]['BUILDING_C']
                     building_value_density = 0.0
 
                 try:
                     contents_value_density = float(attributes[i]['CONTENTS_C'])
                 except (ValueError, KeyError):
-                    #print 'Got cont value', attributes[i]['CONTENTS_C']
+                    # print 'Got cont value', attributes[i]['CONTENTS_C']
                     contents_value_density = 0.0
 
                 building_value = building_value_density * area
@@ -293,8 +293,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         # Create vector layer and return
         result_layer = Vector(
             data=attributes,
-            projection=my_interpolate_result.get_projection(),
-            geometry=my_interpolate_result.get_geometry(),
+            projection=interpolate_result.get_projection(),
+            geometry=interpolate_result.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,
