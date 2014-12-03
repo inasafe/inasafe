@@ -145,8 +145,12 @@ def population_rounding_full(number):
         rounding = 100
     else:
         rounding = 1000
-    number = int(rounding * ceil(1.0 * number / rounding))
-    return number, rounding
+    try:
+        result = int(rounding * ceil(1.0 * number / rounding))
+    except ValueError:
+        result = number
+        rounding = 0
+    return result, rounding
 
 
 def population_rounding(number):
