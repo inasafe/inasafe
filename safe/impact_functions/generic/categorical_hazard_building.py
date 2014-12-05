@@ -80,13 +80,13 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': hazard_all,
+                        'subcategories': hazard_all,
                         'units': [unit_categorised],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_structure,
+                        'subcategories': [exposure_structure],
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],

@@ -24,6 +24,7 @@ import traceback
 import sys
 import logging
 
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, pyqtSignal
 
 from safe_qgis.safe_interface import calculate_safe_impact
@@ -78,8 +79,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
                  check_integrity=True):
         """Constructor for the impact calculator thread.
 
-        :param hazard_layer: read_layer object containing the Hazard.
-            data.
+        :param hazard_layer: read_layer object containing the Hazard data.
         :type hazard_layer: read_layer
 
         :param exposure_layer: read_layer object containing the Exposure data.
@@ -89,14 +89,13 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             will be computed.
         :type function: FunctionProvider
 
-        :param extent: Bounding box [xmin, ymin, xmax, ymax]
-            of the working region.
+        :param extent: Bounding box [xmin, ymin, xmax, ymax] of the working
+            region.
         :type extent: list
 
-        :param check_integrity:     If true, perform checking of
-                                    input data integrity before running
-                                    impact calculation
-        :type check_integrity:      Bool
+        :param check_integrity: If true, perform checking of input data
+            integrity before running impact calculation
+        :type check_integrity: bool
 
         :raises: InsufficientParametersError if not all parameters are set.
         """

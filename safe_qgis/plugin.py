@@ -532,10 +532,10 @@ class Plugin:
         widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
-            extent=self.dock_widget.user_extent,
-            crs=self.dock_widget.user_extent_crs)
+            extent=self.dock_widget.extent.user_extent,
+            crs=self.dock_widget.extent.user_extent_crs)
         widget.clear_extent.connect(
-            self.dock_widget.clear_user_analysis_extent)
+            self.dock_widget.extent.clear_user_analysis_extent)
         widget.extent_defined.connect(
             self.dock_widget.define_user_analysis_extent)
         # Needs to be non modal to support hide -> interact with map -> show

@@ -72,7 +72,6 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     load_layers,
     canvas_list,
-    FakeLayer
 )
 
 from safe_qgis.widgets.dock import Dock
@@ -93,7 +92,6 @@ from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # noinspection PyUnresolvedReferences
 from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
-# from safe.engine.impact_functions_for_testing import error_raising_functions
 # pylint: enable=W0611
 # noinspection PyUnresolvedReferences
 from safe.impact_functions.core import get_plugin
@@ -431,7 +429,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_jakarta_extent(DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -570,7 +568,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([101, -12, 119, -4])
+        set_geo_extent([101, -12, 119, -4], DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -597,7 +595,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50])
+        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -622,7 +620,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50])
+        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -664,7 +662,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50])
+        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
 
         # Press RUN
         DOCK.accept()
@@ -738,14 +736,9 @@ class TestDock(TestCase):
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent(DOCK)
 
-        # Run manually so we can get the output layer
-        DOCK.clip_parameters = DOCK.get_clip_parameters()
-        DOCK.prepare_aggregator()
-        DOCK.aggregator.validate_keywords()
-        DOCK.setup_calculator()
-        test_runner = DOCK.calculator.get_runner()
-        test_runner.run()  # Run in same thread
-        safe_layer = test_runner.impact_layer()
+        DOCK.accept()
+        # DOCK.analysis.get_impact_layer()
+        safe_layer = DOCK.analysis.get_impact_layer()
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
@@ -1210,6 +1203,7 @@ class TestDock(TestCase):
         DOCK.get_functions()
         self.assertTrue(result, message)
 
+    # noinspection PyPep8Naming
     def Xtest_runner_exceptions(self):
         """Test runner exceptions"""
 
@@ -1380,22 +1374,6 @@ Click for Diagnostic Information:
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
 
-    def test_generate_insufficient_overlap_message(self):
-        """Test we generate insufficent overlap messages nicely."""
-
-        exposure_layer = FakeLayer('Fake exposure layer')
-
-        hazard_layer = FakeLayer('Fake hazard layer')
-
-        message = DOCK.generate_insufficient_overlap_message(
-            Exception('Dummy exception'),
-            exposure_geoextent=[10.0, 10.0, 20.0, 20.0],
-            exposure_layer=exposure_layer,
-            hazard_geoextent=[15.0, 15.0, 20.0, 20.0],
-            hazard_layer=hazard_layer,
-            viewport_geoextent=[5.0, 5.0, 12.0, 12.0])
-        self.assertIn('insufficient overlap', message.to_text())
-
     def test_rubber_bands(self):
         """Test that the rubber bands get updated."""
 
@@ -1408,27 +1386,27 @@ Click for Diagnostic Information:
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
 
-        DOCK.show_rubber_bands = True
+        DOCK.extent.show_rubber_bands = True
         expected_vertex_count = 5
 
         # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
         set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
-        next_band = DOCK.next_analysis_rubberband
+        next_band = DOCK.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
         set_small_jakarta_extent(DOCK)
         DOCK.show_next_analysis_extent()
-        next_band = DOCK.next_analysis_rubberband
+        next_band = DOCK.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent(DOCK)
-        next_band = DOCK.next_analysis_rubberband
+        next_band = DOCK.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check last
@@ -1438,7 +1416,7 @@ Click for Diagnostic Information:
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
         # DOCK.show_extent()
-        last_band = DOCK.last_analysis_rubberband
+        last_band = DOCK.extent.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected_wkt = (
             'LINESTRING(11876228.33329810947179794 -695807.82839082507416606, '
@@ -1475,15 +1453,15 @@ Click for Diagnostic Information:
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
 
-        DOCK.show_rubber_bands = True
+        DOCK.extent.show_rubber_bands = True
         expected_vertex_count = 5
 
         # 4326 with disabled on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         # User extent should override this
         set_small_jakarta_extent(DOCK)
-        DOCK.show_user_analysis_extent()
-        user_band = DOCK.user_analysis_rubberband
+        DOCK.extent.show_user_analysis_extent()
+        user_band = DOCK.extent.user_analysis_rubberband
         self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
 
     def test_issue1191(self):
