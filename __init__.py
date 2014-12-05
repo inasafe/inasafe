@@ -18,11 +18,6 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-#
-# Note: Don't use function docstrings more than one line - they
-#       break the plugins.qgis.org validator when uploading!
-#
-
 
 # noinspection PyDocstring
 def classFactory(iface):

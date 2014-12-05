@@ -28,6 +28,7 @@ import logging
 from os.path import join
 
 # this import required to enable PyQt API v2
+# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 from unittest import TestCase, skipIf
@@ -49,7 +50,8 @@ from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem)
 from safe_qgis.safe_interface import (
-    format_int, HAZDATA, UNITDATA)
+    format_int, HAZDATA, UNITDATA
+)
 
 from safe_qgis.utilities.utilities_for_testing import (
     set_canvas_crs,
@@ -69,7 +71,9 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_ui_state,
     setup_scenario,
     load_layers,
-    canvas_list)
+    canvas_list,
+    FakeLayer
+)
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -90,6 +94,7 @@ from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
 # pylint: enable=W0611
+# noinspection PyUnresolvedReferences
 from safe.impact_functions.core import get_plugin
 
 LOGGER = logging.getLogger('InaSAFE')

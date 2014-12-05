@@ -223,7 +223,7 @@ class TestShakeEvent(unittest.TestCase):
 
         expected_fatalities = {2: 0.0,
                                3: 0.0,
-                               4: 0.000036387775168853676,
+                               4: 0.000036387775168847936,
                                5: 0.0,
                                6: 0.0,
                                7: 0.0,
@@ -329,17 +329,17 @@ class TestShakeEvent(unittest.TestCase):
                 u'takes into account the population and cities affected by '
                 u'different levels of ground shaking. The estimate is based '
                 u'on ground shaking data from BMKG, population count data '
-                u'from worldpop.org.uk, place information from geonames.org '
-                u'and software developed by BNPB. Limitations in the '
-                u'estimates of ground shaking, population and place names '
-                u'datasets may result in significant misrepresentation of the '
-                u'on-the-ground situation in the figures shown here. '
-                u'Consequently decisions should not be made solely on the '
-                u'information presented here and should always be verified by '
-                u'ground truthing and other reliable information sources. The '
-                u'fatality calculation assumes that no fatalities occur for '
-                u'shake levels below MMI 4. Fatality counts of less than 50 '
-                u'are disregarded.'),
+                u'derived by AIFDR from worldpop.org.uk, place information '
+                u'from geonames.org and software developed by BNPB. '
+                u'Limitations in the estimates of ground shaking, population '
+                u'and place names datasets may result in significant '
+                u'misrepresentation of the on-the-ground situation in the '
+                u'figures shown here. Consequently decisions should not be '
+                u'made solely on the information presented here and should '
+                u'always be verified by ground truthing and other reliable '
+                u'information sources. The fatality calculation assumes that '
+                u'no fatalities occur for shake levels below MMI 4. Fatality '
+                u'counts of less than 50 are disregarded.'),
             'depth-unit': u'km',
             'latitude-name': u'Latitude',
             'mmi': '3.6',

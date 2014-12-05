@@ -33,7 +33,7 @@ before_script:
   - export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 
 script:
-  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
+  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
 
 notifications:
   irc:
@@ -43,4 +43,3 @@ notifications:
 
   email:
     - tim@kartoza.com
-    - akbargumbira@gmail.com

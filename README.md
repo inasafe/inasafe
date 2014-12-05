@@ -18,27 +18,11 @@ functions for impact modelling.
 Story queue on Waffle:
 [![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
 [![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
+[![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
-Current test status for master branch:
-* [![Build Status](http://jenkins.inasafe.org/job/inasafe-qgis2/badge/icon)](http://jenkins.inasafe.org/job/inasafe-qgis2/) - ALL Tests
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-impact-stats-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-impact-stats-test/) - impact-stats-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-realtime-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-realtime-test/) - realtime-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-report-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-report-test/) - report-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-safe-package/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-safe-package/) - safe-package
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-test/) - test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-tools-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-tools-test/) - tools-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-utilities-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-utilities-test/) - utilities-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-master/job/inasafe-qgis2-widgets-test/) - widgets-test
+Current build status master: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=master)](https://travis-ci.org/AIFDR/inasafe)
+Current build status develop: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
 
-Current test status for develop branch:
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/impact-stats-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/impact-stats-test/) - impact-stats-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/realtime-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/realtime-test/) - realtime-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/report-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/report-test/) - report-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/safe-package/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/safe-package/) - safe-package
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/test/) - test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/tools-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/tools-test/) - tools-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/utilities-test/) - utilities-test
-* [![Build Status](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/badge/icon)](http://jenkins.inasafe.org/view/QGIS2-InaSAFE-develop/job/widgets-test/) - widgets-test
 
 PyPi Downloads for the 'safe' library:
 [![Downloads](https://pypip.in/d/python-safe/badge.png)](https://crate.io/packages/python-safe)

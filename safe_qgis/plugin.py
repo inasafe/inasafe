@@ -23,6 +23,7 @@ import logging
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import is_raster_layer
 
+
 LOGGER = logging.getLogger('InaSAFE')
 
 # Import the PyQt and QGIS libraries
@@ -527,8 +528,8 @@ class Plugin:
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.extent_selector import ExtentSelector
-        widget = ExtentSelector(
+        from safe_qgis.tools.extent_selector_dialog import ExtentSelectorDialog
+        widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
             extent=self.dock_widget.extent.user_extent,
@@ -543,18 +544,20 @@ class Plugin:
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.minimum_needs_tool import MinimumNeeds
+        from safe_qgis.tools.minimum_needs.needs_calculator_dialog import (
+            NeedsCalculatorDialog
+        )
 
-        dialog = MinimumNeeds(self.iface.mainWindow())
+        dialog = NeedsCalculatorDialog(self.iface.mainWindow())
         dialog.show()  # non modal
 
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.global_minimum_needs_configuration import (
-            GlobalMinimumNeedsDialog)
+        from safe_qgis.tools.minimum_needs.needs_manager_dialog import (
+            NeedsManagerDialog)
 
-        dialog = GlobalMinimumNeedsDialog(self.iface.mainWindow())
+        dialog = NeedsManagerDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_impact_merge(self):
@@ -606,11 +609,12 @@ class Plugin:
         # End of fix for #793
         # Fix for filtered-layer
         except InvalidParameterError, e:
-            # noinspection PyTypeChecker,PyTypeChecker
+            # noinspection PyTypeChecker,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 None,
                 self.tr('Invalid Layer'),
-                e.message)
+                e.message
+            )
             return
 
         dialog = KeywordsDialog(
@@ -635,7 +639,7 @@ class Plugin:
     def show_function_browser(self):
         """Show the impact function browser tool."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.function_browser import FunctionBrowser
+        from safe_qgis.tools.function_browser_dialog import FunctionBrowser
 
         dialog = FunctionBrowser(self.iface.mainWindow())
         dialog.exec_()  # modal
@@ -643,17 +647,17 @@ class Plugin:
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.shake_grid.shakemap_importer import (
-            ShakemapImporter)
+        from safe_qgis.tools.shake_grid.shakemap_importer_dialog import (
+            ShakemapImporterDialog)
 
-        dialog = ShakemapImporter(self.iface.mainWindow())
+        dialog = ShakemapImporterDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
-        from safe_qgis.tools.osm_downloader import OsmDownloader
+        from safe_qgis.tools.osm_downloader_dialog import OsmDownloaderDialog
 
-        dialog = OsmDownloader(self.iface.mainWindow(), self.iface)
+        dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.exec_()  # modal
 
     def show_batch_runner(self):

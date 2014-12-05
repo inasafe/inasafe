@@ -23,10 +23,10 @@ import sys
 import logging
 
 
-third_party_dir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../', 'third_party'))
-if third_party_dir not in sys.path:
-    sys.path.append(third_party_dir)
+safe_extras_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../', 'safe_extras'))
+if safe_extras_dir not in sys.path:
+    sys.path.append(safe_extras_dir)
 # pylint: disable=F0401
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven.handlers.logging import SentryHandler

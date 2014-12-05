@@ -32,8 +32,10 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
-    QgsCoordinateReferenceSystem)
-from third_party.pydispatch import dispatcher
+    QgsCoordinateReferenceSystem,
+    QGis)
+from qgis.gui import QgsRubberBand
+from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
@@ -100,8 +102,6 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
-
 
 # noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
@@ -124,11 +124,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             use autoconnect to set up slots. See article below:
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
-        # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True,
-        #    stderrToServer=True)
-
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
@@ -325,9 +320,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         flag = bool(settings.value(
             'inasafe/showRubberBands', False, type=bool))
         self.extent.show_rubber_bands = flag
-
-        extent = settings.value('inasafe/analysis_extent', '', type=str)
-        crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+        try:
+            extent = settings.value('inasafe/analysis_extent', '', type=str)
+            crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+        except TypeError:
+            # Any bogus stuff in settings and we just clear them
+            extent = ''
+            crs = ''
 
         if extent != '' and crs != '':
             extent = extent_string_to_array(extent)
@@ -338,6 +337,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             except TypeError:
                 self.extent.user_extent = None
                 self.extent.user_extent_crs = None
+
+        self.draw_rubber_bands()
 
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
@@ -406,7 +407,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.connect(
-            self.show_next_analysis_extent)
+            self.draw_rubber_bands)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -422,7 +423,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.disconnect(
-            self.show_next_analysis_extent)
+            self.draw_rubber_bands)
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -575,7 +576,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.get_functions()
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -592,7 +593,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.get_functions()
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -840,7 +841,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
         # Make sure to update the analysis area preview
-        self.show_next_analysis_extent()
+        self.draw_rubber_bands()
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
@@ -971,6 +972,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.extent.hide_next_analysis_extent()
             self.extent.hide_user_analysis_extent()
         else:
+            self.draw_rubber_bands()
+
+    @pyqtSlot()
+    def draw_rubber_bands(self):
+        """Draw any rubber bands that are enabled."""
+        settings = QSettings()
+        try:
+            flag = settings.value('inasafe/showRubberBands', type=bool)
+        except TypeError:
+            flag = False
+        if flag:
             self.show_next_analysis_extent()
             self.extent.show_user_analysis_extent()
 

@@ -25,16 +25,20 @@ from safe.metadata import (
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition)
+    exposure_definition
+)
 from collections import OrderedDict
-from safe.defaults import get_defaults, default_minimum_needs
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance
+)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
     evacuated_population_needs,
-    evacuated_population_weekly_needs,
     population_rounding
 )
 from safe.storage.vector import Vector
@@ -45,10 +49,12 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_non_conflicting_attribute_name
+)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
-    assign_hazard_values_to_exposure_data)
+    assign_hazard_values_to_exposure_data
+)
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
@@ -150,7 +156,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             ('MinimumNeeds', {'on': True})
         ])),
         ('minimum needs', default_minimum_needs()),
-        ('rich minimum needs', None)
+        ('provenance', default_provenance())
     ])
 
     def run(self, layers):
@@ -299,8 +305,10 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evacuation
         evacuated = population_rounding(cumulative)
 
-        minimum_needs = self.parameters['minimum needs']
-        minimum_needs_full = self.parameters['rich minimum needs']
+        minimum_needs = [
+            parameter.serialize() for parameter in
+            self.parameters['minimum needs']
+        ]
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -327,30 +335,19 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 'Map shows the number of people affected in each of volcano '
                 'hazard polygons.'))])
 
-        if minimum_needs_full:
-            total_needs = evacuated_population_needs(
-                evacuated, minimum_needs, minimum_needs_full)
-            for frequency, needs in total_needs.items():
-                table_body.append(TableRow(
-                    [
-                        tr('Needs should be provided %s' % frequency),
-                        tr('Total')
-                    ],
-                    header=True))
-                for resource in needs:
-                    table_body.append(TableRow([
-                        tr(resource['Resource table name']),
-                        format_int(resource['Amount'])]))
-            table_body.append(TableRow(tr('Provenance'), header=True))
-            table_body.append(TableRow(minimum_needs_full['provenance']))
-        else:
-            total_needs = evacuated_population_weekly_needs(
-                evacuated, minimum_needs)
-            table_body.append(
-                TableRow([tr('Needs per week'), tr('Total')], header=True))
-            for resource, amount in total_needs.items():
-                table_body.append(TableRow([tr(resource), format_int(amount)]))
-
+        total_needs = evacuated_population_needs(
+            evacuated, minimum_needs)
+        for frequency, needs in total_needs.items():
+            table_body.append(TableRow(
+                [
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
+                ],
+                header=True))
+            for resource in needs:
+                table_body.append(TableRow([
+                    tr(resource['table name']),
+                    format_int(resource['amount'])]))
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
@@ -405,8 +402,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         map_title = tr('People affected by volcanic hazard zone')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
-        legend_units = tr('(people)')
-        legend_title = tr('Population count')
+        legend_units = tr('(people per cell)')
+        legend_title = tr('Population')
 
         # Create vector layer and return
         impact_layer = Vector(

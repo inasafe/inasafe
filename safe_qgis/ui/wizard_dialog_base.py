@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Thu Nov 13 11:31:16 2014
+# Created: Mon Nov 17 10:20:22 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!

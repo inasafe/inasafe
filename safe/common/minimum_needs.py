@@ -11,6 +11,7 @@ from collections import OrderedDict
 import json
 from safe.common.utilities import ugettext as tr
 from os.path import exists, dirname
+from os import remove
 
 
 class MinimumNeeds(object):
@@ -130,12 +131,8 @@ class MinimumNeeds(object):
                     "Units": "kilograms",
                     "Unit abbreviation": "kg",
                     "Readable sentence": (
-                        "A displaced person should be provided with "
-                        "{{ Default }} {{ Unit }}/{{ Units }}/"
-                        "{{ Unit abbreviation }} of {{ Resource name }}. "
-                        "Though no less than {{ Minimum allowed }} and no "
-                        "more than {{ Maximum allowed }}. This should be "
-                        "provided {{ Frequency }}.")
+                        "Each person should be provided with {{ Default }} "
+                        "{{ Units }} of {{ Resource name }} {{ Frequency }}.")
                 },
                 {
                     "Default": "17.5",
@@ -148,12 +145,9 @@ class MinimumNeeds(object):
                     "Units": "litres",
                     "Unit abbreviation": "l",
                     "Readable sentence": (
-                        "A displaced person should be provided with "
-                        "{{ Default }} {{ Unit }}/{{ Units }}/"
-                        "{{ Unit abbreviation }} of {{ Resource name }}. "
-                        "Though no less than {{ Minimum allowed }} and no "
-                        "more than {{ Maximum allowed }}. This should be "
-                        "provided {{ Frequency }}.")
+                        "Each person should be provided with {{ Default }} "
+                        "{{ Units }} of {{ Resource name }} {{ Frequency }} "
+                        "for drinking.")
                 },
                 {
                     "Default": "67",
@@ -166,12 +160,9 @@ class MinimumNeeds(object):
                     "Units": "litres",
                     "Unit abbreviation": "l",
                     "Readable sentence": (
-                        "A displaced person should be provided with "
-                        "{{ Default }} {{ Unit }}/{{ Units }}/"
-                        "{{ Unit abbreviation }} of {{ Resource name }}. "
-                        "Though no less than {{ Minimum allowed }} and no "
-                        "more than {{ Maximum allowed }}. This should be "
-                        "provided {{ Frequency }}.")
+                        "Each person should be provided with {{ Default }} "
+                        "{{ Units }} of {{ Resource name }} {{ Frequency }} "
+                        "for washing.")
                 },
                 {
                     "Default": "0.2",
@@ -184,12 +175,8 @@ class MinimumNeeds(object):
                     "Units": "",
                     "Unit abbreviation": "",
                     "Readable sentence": (
-                        "A displaced person should be provided with "
-                        "{{ Default }} {{ Unit }}/{{ Units }}/"
-                        "{{ Unit abbreviation }} of {{ Resource name }}. "
-                        "Though no less than {{ Minimum allowed }} and no "
-                        "more than {{ Maximum allowed }}. This should be "
-                        "provided {{ Frequency }}.")
+                        "Each family of 5 persons should be provided with 1 "
+                        "Family Kit per week.")
                 },
                 {
                     "Default": "0.05",
@@ -202,16 +189,11 @@ class MinimumNeeds(object):
                     "Units": "",
                     "Unit abbreviation": "",
                     "Readable sentence": (
-                        "A displaced person should be provided with "
-                        "{{ Default }} {{ Unit }}/{{ Units }}/"
-                        "{{ Unit abbreviation }} of {{ Resource name }}. "
-                        "Though no less than {{ Minimum allowed }} and no "
-                        "more than {{ Maximum allowed }}. This should be "
-                        "provided {{ Frequency }}.")
+                        "A Toilet should be provided for every 20 persons.")
                 }
             ],
-            "provenance": "BNPB",
-            "profile": "BNPB"
+            "provenance": "The minimum needs are based on Perka 7/2008.",
+            "profile": "BNPB_en"
         }
         return minimum_needs
 
@@ -249,3 +231,19 @@ class MinimumNeeds(object):
         with open(filename, 'w') as fd:
             needs_json = json.dumps(self.minimum_needs)
             fd.write(needs_json)
+        return 0
+
+    @staticmethod
+    def remove_file(filename):
+        """Remove a minimum needs file.
+
+        :param filename: The file to be removed.
+        :type filename: basestring, str
+        """
+        if not exists(dirname(filename)):
+            return -1
+        try:
+            remove(filename)
+        except OSError:
+            return -1
+        return 0
