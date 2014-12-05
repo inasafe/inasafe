@@ -72,7 +72,6 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     load_layers,
     canvas_list,
-    FakeLayer
 )
 
 from safe_qgis.widgets.dock import Dock

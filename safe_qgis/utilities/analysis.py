@@ -70,7 +70,7 @@ from safe_qgis.safe_interface import (
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 from safe_qgis.exceptions import NoValidLayerError
 
 
