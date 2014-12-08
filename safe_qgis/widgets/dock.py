@@ -186,16 +186,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
-        long_version = get_version()
-        LOGGER.debug('Version: %s' % long_version)
-        tokens = long_version.split('.')
-        version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
-        try:
-            version_type = tokens[3].split('2')[0]
-        except IndexError:
-            version_type = 'final'
-            # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %s %s' % (version, version_type)))
+        version = get_version()
+        self.setWindowTitle(self.tr('InaSAFE %s' % version))
 
     def enable_signal_receiver(self):
         """Setup dispatcher for all available signal from Analysis."""
