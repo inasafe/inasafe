@@ -31,7 +31,8 @@ rm -rf ${WORKDIR}/${DIR}/pylintrc
 rm -rf ${WORKDIR}/${DIR}/extras
 rm -rf ${WORKDIR}/${DIR}/safe/test
 rm -rf ${WORKDIR}/${DIR}/realtime
-rm -rf ${WORKDIR}/${DIR}/files
+rm -rf ${WORKDIR}/${DIR}/files/flood_tagging_test.*
+rm -rf ${WORKDIR}/${DIR}/files/README.rst
 rm -rf ${WORKDIR}/${DIR}/fabfile.py
 # Commented out next line for #832 - reinstate when that issue is resolved
 #rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
