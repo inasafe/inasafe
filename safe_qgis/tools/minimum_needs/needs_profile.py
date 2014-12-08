@@ -13,6 +13,7 @@ import qgis  # pylint: disable=W0611  # force sip2 api
 from shutil import copy
 from os.path import exists, dirname
 from os import listdir, environ, makedirs
+import os
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings
@@ -43,14 +44,19 @@ class NeedsProfile(MinimumNeeds):
     def load(self):
         """Load the minimum needs from the QSettings object.
         """
-        minimum_needs = None
+        # minimum_needs = None
         try:
             minimum_needs = self.settings.value('MinimumNeeds', type=dict)
             if not minimum_needs and minimum_needs != u'':
                 profiles = self.get_profiles()
-                self.read_from_file(
-                    '%s/minimum_needs/%s.json' % (
-                        self.root_directory, profiles))
+                # TODO (Ismail): Check this part below.
+                # I just change from string concatenation to use os.path.join.
+                # But it's obvious that there is something wrong in this line
+                profiles_path = os.path.join(
+                    str(self.root_directory),
+                    'minimum_needs',
+                    profiles + '.json')
+                self.read_from_file(profiles_path)
         except TypeError:
             minimum_needs = self._defaults()
 
@@ -65,8 +71,12 @@ class NeedsProfile(MinimumNeeds):
         :param profile: The profile's name
         :type profile: basestring, str
         """
-        self.read_from_file(
-            '%s/minimum_needs/%s.json' % (self.root_directory, profile))
+        profile_path = os.path.join(
+            str(self.root_directory),
+            'minimum_needs',
+            profile + '.json'
+        )
+        self.read_from_file(profile_path)
 
     def save_profile(self, profile):
         """Save the current minimum needs into a new profile.
@@ -75,8 +85,12 @@ class NeedsProfile(MinimumNeeds):
         :type profile: basestring, str
         """
         profile = profile.replace('.json', '')
-        self.write_to_file(
-            '%s/minimum_needs/%s.json' % (self.root_directory, profile))
+        profile_path = os.path.join(
+            str(self.root_directory),
+            'minimum_needs',
+            profile + '.json'
+        )
+        self.write_to_file(profile_path)
 
     def save(self):
         """Save the minimum needs to the QSettings object.
@@ -125,14 +139,16 @@ class NeedsProfile(MinimumNeeds):
 
             return profiles_our_locale + profiles_remaining
 
-        locale_minimum_needs_dir = '%s/minimum_needs/' % self.root_directory
-        path_name = "%s/../../../files/minimum_needs" % dirname(__file__)
+        locale_minimum_needs_dir = os.path.join(
+            str(self.root_directory), 'minimum_needs')
+        path_name = os.path.join(
+            dirname(__file__), '..', '..', '..', 'files', 'minimum_needs')
         if not exists(locale_minimum_needs_dir):
             makedirs(locale_minimum_needs_dir)
         for file_name in listdir(path_name):
-            source_file = '%s/%s' % (path_name, file_name)
-            destination_file = (
-                '%s/%s' % (locale_minimum_needs_dir, file_name))
+            source_file = os.path.join(path_name, file_name)
+            destination_file = os.path.join(
+                locale_minimum_needs_dir, file_name)
             if not exists(destination_file):
                 copy(
                     source_file,
@@ -197,7 +213,7 @@ class NeedsProfile(MinimumNeeds):
                 # This only happens when running only one test on its own
                 self._root_directory = None
             if self._root_directory is None or self._root_directory == '':
-                self._root_directory = "%s/.qgis2" % (environ['HOME'])
+                self._root_directory = os.path.join(environ['HOME'], '.qgis2')
         return self._root_directory
 
     @staticmethod
@@ -232,5 +248,6 @@ class NeedsProfile(MinimumNeeds):
         :type profile: basestring, str
         """
         self.remove_file(
-            '%s/minimum_needs/%s.json' % (self.root_directory, profile)
+            os.path.join(
+                str(self.root_directory), 'minimum_needs', profile + '.json')
         )
