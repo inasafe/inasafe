@@ -20,24 +20,10 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 import sys
-from safe.common.version import (
-    get_git_timestamp,
-    get_version,
-    current_git_hash
-)
+from safe.common.version import get_version, current_git_hash
 
 
 class TestVersion(unittest.TestCase):
-    def test_get_git_changeset(self):
-        """Test for get_git_changeset."""
-        if not ('win32' in sys.platform or 'darwin' in sys.platform):
-            changeset = get_git_timestamp()
-            self.assertEqual(len(changeset), 14)
-
-        if 'win32' in sys.platform or 'darwin' in sys.platform:
-            changeset = get_git_timestamp()
-            self.assertIsNone(changeset)
-
     def test_get_version(self):
         """Test for get_version."""
         version_tuple = ('2', '2', '0', 'alpha', '0')
