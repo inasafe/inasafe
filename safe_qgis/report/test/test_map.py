@@ -108,14 +108,14 @@ class MapTest(unittest.TestCase):
             431873,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             437994,  # Ubuntu 14.04_64 MB - pycharm
             431844,  # Ubuntu 14.04_64 MB - make - TODO why is this?
-            434596,  # Ubuntu 14.04_64 MB - pycharm
-            428339,  # Ubuntu 14.04_64 MB - make - TODO why is this?
+            434420,  # Ubuntu 14.04_64 IS - pycharm
+            428339,  # Ubuntu 14.04_64 IS - make - TODO why is this?
             414589,  # Slackware64 14.0
             144542,  # Linux Mint 14_64
             148267,  # Windows 7 32
             150412,  # Windows 7 64
             448270,  # UB 12.04 Jenkins
-            448241,  # Travis
+            448090,  # Travis
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -158,14 +158,14 @@ class MapTest(unittest.TestCase):
             416313,  # Ubuntu 14.04_64 TS make - TODO why is this?
             419483,  # Ubuntu 14.04_64 MB pycharm
             413193,  # Ubuntu 14.04_64 MB make - TODO why is this?
-            419036,  # Ubuntu 14.04_64 IS pycharm
+            418847,  # Ubuntu 14.04_64 IS pycharm
             412764,  # Ubuntu 14.04_64 IS make - TODO why is this?
             367934,  # Slackware64 14.0
             82263,  # Linux Mint 14_64
             85418,  # Windows 7 32bit
             88779,  # Windows 7 64bit
             436118,   # Jenkins ub 12.04
-            432703,  # Travis
+            432516,  # Travis
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
