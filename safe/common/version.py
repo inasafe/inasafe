@@ -18,6 +18,25 @@ import subprocess
 from exceptions import WindowsError
 
 
+def current_git_hash():
+    """Retrieve the current git hash number of the git repo (first 6 digit).
+
+    :returns: 6 digit of hash number.
+    :rtype: str
+    """
+    repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    git_show = subprocess.Popen(
+        'git rev-parse --short HEAD',
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
+        cwd=repo_dir,
+        universal_newlines=True
+    )
+    hash_number = git_show.communicate()[0].partition('\n')[0]
+    return hash_number
+
+
 def get_version(version=None):
     """Returns a PEP 386-compliant version number from VERSION.
 
@@ -70,9 +89,9 @@ def get_version(version=None):
             sub = '.dev-master'
         else:
             try:
-                git_changeset = get_git_changeset()
-                if git_changeset:
-                    sub = '.dev%s' % git_changeset
+                git_hash = current_git_hash()
+                if git_hash:
+                    sub = '.dev-%s' % git_hash
             except WindowsError:
                 sub = '.dev-master'
 
@@ -83,7 +102,7 @@ def get_version(version=None):
     return main + sub
 
 
-def get_git_changeset():
+def get_git_timestamp():
     """Returns a numeric identifier of the latest git changeset.
 
     The result is the UTC timestamp of the changeset in YYYYMMDDHHMMSS format.

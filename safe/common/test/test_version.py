@@ -20,18 +20,22 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 import sys
-from safe.common.version import get_git_changeset, get_version
+from safe.common.version import (
+    get_git_timestamp,
+    get_version,
+    current_git_hash
+)
 
 
 class TestVersion(unittest.TestCase):
     def test_get_git_changeset(self):
         """Test for get_git_changeset."""
         if not ('win32' in sys.platform or 'darwin' in sys.platform):
-            changeset = get_git_changeset()
+            changeset = get_git_timestamp()
             self.assertEqual(len(changeset), 14)
 
         if 'win32' in sys.platform or 'darwin' in sys.platform:
-            changeset = get_git_changeset()
+            changeset = get_git_timestamp()
             self.assertIsNone(changeset)
 
     def test_get_version(self):
@@ -44,7 +48,7 @@ class TestVersion(unittest.TestCase):
                 expected_version, version)
             self.assertEqual(expected_version, version, message)
         else:
-            expected_version = '2.2.0.devYYYYMMDDhhmmss'
+            expected_version = '2.2.0.dev-ABCDEFG'
             message = 'It should be %s but got %s' % (
                 expected_version[:9], version[:9])
             self.assertEqual(expected_version[:9], version[:9], message)
@@ -65,6 +69,10 @@ class TestVersion(unittest.TestCase):
         version = get_version(version_tuple)
         self.assertEqual(version, '2.2.0', 'The version should be 2.2.0')
 
+    def test_get_current_hash(self):
+        """Test for get_current_hash."""
+        git_hash = current_git_hash()
+        self.assertEqual(len(git_hash), 7)
 
 if __name__ == '__main__':
     unittest.main()
