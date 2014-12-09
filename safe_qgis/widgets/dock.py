@@ -80,8 +80,8 @@ from safe_qgis.exceptions import (
     UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
-from safe_qgis.report.map import Map
-from safe_qgis.report.html_renderer import HtmlRenderer
+from safe.report.map import Map
+from safe.report.html_renderer import HtmlRenderer
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.tools.about_dialog import AboutDialog

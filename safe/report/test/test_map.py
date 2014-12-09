@@ -34,7 +34,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import load_layer
-from safe_qgis.report.map import Map
+from safe.report.map import Map
 
 LOGGER = logging.getLogger('InaSAFE')
 
