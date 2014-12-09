@@ -84,9 +84,9 @@ from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe_qgis.tools.about_dialog import AboutDialog
-from safe_qgis.tools.keywords_dialog import KeywordsDialog
-from safe_qgis.tools.impact_report_dialog import ImpactReportDialog
+from safe.tools.about_dialog import AboutDialog
+from safe.tools.keywords_dialog import KeywordsDialog
+from safe.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
 
 from safe_qgis.utilities.analysis import Analysis

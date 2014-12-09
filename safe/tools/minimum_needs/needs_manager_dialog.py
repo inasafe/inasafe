@@ -20,7 +20,8 @@ from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
-from os.path import expanduser, basename, dirname
+import os
+from os.path import expanduser, basename
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
@@ -45,7 +46,7 @@ from safe_qgis.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (
     styles)
-from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.tools.minimum_needs.needs_profile import NeedsProfile
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -551,7 +552,10 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
-        path_name = "%s/../../../files/minimum_needs" % dirname(__file__)
+        current_directory = os.path.dirname(__file__)
+        path_name = os.path.join(
+            current_directory, '..', '..', '..', 'safe_qgis', 'resources',
+            'minimum_needs')
         file_name_dialog.setDirectory(path_name)
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]

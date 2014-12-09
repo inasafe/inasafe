@@ -87,7 +87,7 @@ try:
         the_default)
 
     from safe.impact_functions.core import get_plugins
-    from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+    from safe.tools.minimum_needs.needs_profile import NeedsProfile
     # Monkey patch all the impact functions
     minimum_needs = NeedsProfile()
     for (name, plugin) in get_plugins().items():

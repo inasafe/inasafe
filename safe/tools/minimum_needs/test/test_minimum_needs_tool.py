@@ -23,15 +23,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import qgis  # pylint: disable=W0611
 import unittest
 import os
+
 from qgis.core import QgsMapLayerRegistry
 
 from safe.common.testing import get_qgis_app
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import safe_read_layer
-from safe_qgis.tools.minimum_needs.needs_calculator_dialog import (
+from safe.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog
 )
 from safe_qgis.safe_interface import UNITDATA

@@ -20,18 +20,18 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 import shutil
-
 import ogr
 
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.testing import (
     get_qgis_app,
     get_shake_test_data_path)
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.shake_grid.shake_grid import (
+from safe.tools.shake_grid.shake_grid import (
     ShakeGrid,
     convert_mmi_data)
 

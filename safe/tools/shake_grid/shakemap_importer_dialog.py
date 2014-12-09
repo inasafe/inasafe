@@ -38,7 +38,7 @@ from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import html_footer, html_header
 from safe_qgis.utilities.styling import mmi_ramp
-from safe_qgis.tools.shake_grid.shake_grid import convert_mmi_data
+from safe.tools.shake_grid.shake_grid import convert_mmi_data
 
 
 INFO_STYLE = styles.INFO_STYLE
