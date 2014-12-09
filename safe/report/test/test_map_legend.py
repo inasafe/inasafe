@@ -40,7 +40,7 @@ from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import (
     check_images,
     load_layer)
-from safe_qgis.report.map_legend import MapLegend
+from safe.report.map_legend import MapLegend
 
 LOGGER = logging.getLogger('InaSAFE')
 

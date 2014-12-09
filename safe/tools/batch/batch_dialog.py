@@ -43,8 +43,8 @@ from PyQt4.QtGui import (
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
-from safe_qgis.report.map import Map
-from safe_qgis.report.html_renderer import HtmlRenderer
+from safe.report.map import Map
+from safe.report.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import FileNotFoundError
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.utilities.utilities import (
