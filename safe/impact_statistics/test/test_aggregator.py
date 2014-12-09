@@ -54,7 +54,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     set_jakarta_extent,
     GEOCRS)
 
-from safe_qgis.widgets.dock import Dock
+from safe.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.keyword_io import KeywordIO
 

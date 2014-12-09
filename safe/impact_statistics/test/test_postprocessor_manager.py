@@ -21,8 +21,10 @@ import sys
 import os
 import logging
 
-from qgis.core import QgsMapLayerRegistry
 from os.path import join
+
+from qgis.core import QgsMapLayerRegistry
+
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
@@ -39,7 +41,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
     setup_scenario,
     canvas_list)
-from safe_qgis.widgets.dock import Dock
+from safe.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
 
