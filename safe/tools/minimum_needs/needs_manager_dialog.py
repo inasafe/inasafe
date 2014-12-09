@@ -554,8 +554,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         file_name_dialog.setDefaultSuffix('json')
         current_directory = os.path.dirname(__file__)
         path_name = os.path.join(
-            current_directory, '..', '..', '..', 'safe_qgis', 'resources',
-            'minimum_needs')
+            current_directory, '..', '..', 'resources', 'minimum_needs')
         file_name_dialog.setDirectory(path_name)
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]
