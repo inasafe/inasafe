@@ -3,7 +3,8 @@
 
 import os
 import unittest
-from safe_qgis.utilities.memory_checker import check_memory_usage
+
+from safe.utilities.memory_checker import check_memory_usage
 
 
 class TestMemoryChecker(unittest.TestCase):

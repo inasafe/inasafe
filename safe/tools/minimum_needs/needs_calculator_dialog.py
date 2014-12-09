@@ -14,10 +14,9 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature
 
+from PyQt4.QtCore import pyqtSignature
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 
 from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
@@ -29,7 +28,7 @@ from safe_qgis.utilities.utilities import (
     is_point_layer,
     html_footer,
     html_header)
-from safe_qgis.utilities.help import show_context_help
+from safe.utilities.help import show_context_help
 from safe_qgis.safe_interface import evacuated_population_weekly_needs
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles

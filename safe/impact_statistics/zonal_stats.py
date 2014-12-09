@@ -19,7 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import struct
 import logging
-
 import numpy
 from osgeo import gdal, ogr, osr
 
@@ -30,10 +29,11 @@ from qgis.core import (
     QgsGeometry,
     QgsPoint)
 
-from safe_qgis.utilities.utilities import (
+from safe.utilities.utilities import (
     is_raster_layer,
     is_polygon_layer)
 from safe_qgis.exceptions import InvalidParameterError, InvalidGeometryError
+
 
 LOGGER = logging.getLogger('InaSAFE')
 

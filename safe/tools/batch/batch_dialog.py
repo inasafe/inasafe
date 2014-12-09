@@ -47,9 +47,9 @@ from safe.report.map import Map
 from safe.report.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import FileNotFoundError
 from safe_qgis.safe_interface import temp_dir
-from safe_qgis.utilities.utilities import (
+from safe.utilities.utilities import (
     read_impact_layer, extent_string_to_array)
-from safe_qgis.utilities.help import show_context_help
+from safe.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')
 

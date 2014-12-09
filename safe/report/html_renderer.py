@@ -22,7 +22,7 @@ import logging
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, QtWebKit
-from safe_qgis.utilities.utilities import (
+from safe.utilities.utilities import (
     html_header,
     html_footer,
     mm_to_points,

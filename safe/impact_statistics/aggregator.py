@@ -44,14 +44,14 @@ from qgis.analysis import QgsZonalStatistics
 from safe.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe_qgis.exceptions import InsufficientParametersError
 from safe_extras.pydispatch import dispatcher
-from safe_qgis.utilities.clipper import clip_layer
-from safe_qgis.utilities.defaults import get_defaults
-from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities import (
+from safe.utilities.clipper import clip_layer
+from safe.utilities.defaults import get_defaults
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
     create_memory_layer)
-from safe_qgis.utilities.styling import set_vector_graduated_style
+from safe.utilities.styling import set_vector_graduated_style
 from safe_qgis.safe_interface import (
     temp_dir,
     safe_read_layer,

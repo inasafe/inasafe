@@ -43,7 +43,7 @@ from safe.common.exceptions import (
     GridXmlParseError,
     ContourCreationError,
     InvalidLayerError)
-from safe_qgis.utilities.styling import mmi_colour
+from safe.utilities.styling import mmi_colour
 
 LOGGER = logging.getLogger('InaSAFE')
 

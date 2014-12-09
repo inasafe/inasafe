@@ -42,8 +42,8 @@ from qgis.core import (
     QgsCoordinateTransform)
 
 from safe_qgis.safe_interface import messaging as m
-from safe_qgis.utilities.utilities import (html_footer, html_header)
-from safe_qgis.utilities.help import show_context_help
+from safe.utilities.utilities import (html_footer, html_header)
+from safe.utilities.help import show_context_help
 from safe_qgis.ui.extent_selector_dialog_base import (
     Ui_ExtentSelectorDialogBase)
 from safe.tools.rectangle_map_tool import RectangleMapTool

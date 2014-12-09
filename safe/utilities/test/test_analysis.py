@@ -21,8 +21,8 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 import unittest
-from safe_qgis.utilities.analysis import Analysis
-from safe_qgis.utilities.utilities_for_testing import FakeLayer
+from safe.utilities.analysis import Analysis
+from safe.utilities.utilities_for_testing import FakeLayer
 
 
 class TestAnalysis(unittest.TestCase):

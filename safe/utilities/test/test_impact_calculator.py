@@ -30,7 +30,7 @@ pardir = os.path.abspath(
 sys.path.append(pardir)
 
 import unittest
-from safe_qgis.utilities.impact_calculator import ImpactCalculator
+from safe.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.exceptions import (
     InsufficientParametersError,
     KeywordNotFoundError,

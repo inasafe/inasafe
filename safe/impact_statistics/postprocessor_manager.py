@@ -17,16 +17,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
-
 from PyQt4 import QtCore
+from collections import OrderedDict
 
 from qgis.core import QgsFeatureRequest
 
-from collections import OrderedDict
-
 from safe.common.utilities import unhumanize_number, format_int
-
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import (
     safeTr,
     get_postprocessors,

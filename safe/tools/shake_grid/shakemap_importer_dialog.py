@@ -35,9 +35,9 @@ from safe_qgis.ui.shakemap_importer_dialog_base import (
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
-from safe_qgis.utilities.help import show_context_help
-from safe_qgis.utilities.utilities import html_footer, html_header
-from safe_qgis.utilities.styling import mmi_ramp
+from safe.utilities.help import show_context_help
+from safe.utilities.utilities import html_footer, html_header
+from safe.utilities.styling import mmi_ramp
 from safe.tools.shake_grid.shake_grid import convert_mmi_data
 
 

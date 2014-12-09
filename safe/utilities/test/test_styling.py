@@ -29,13 +29,13 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.utilities.styling import (
+from safe.utilities.styling import (
     set_vector_graduated_style,
     setRasterStyle,
     add_extrema_to_style,
     mmi_colour)
-from safe_qgis.utilities.utilities import get_error_message
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.utilities.utilities import get_error_message
+from safe.utilities.utilities_for_testing import (
     test_data_path,
     load_layer)
 from safe_qgis.exceptions import StyleError

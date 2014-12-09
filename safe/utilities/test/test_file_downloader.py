@@ -27,8 +27,8 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.utilities.file_downloader import FileDownloader
-from safe_qgis.utilities.utilities_for_testing import assert_hash_for_file
+from safe.utilities.file_downloader import FileDownloader
+from safe.utilities.utilities_for_testing import assert_hash_for_file
 from safe_qgis.exceptions import DownloadError
 
 
@@ -45,8 +45,9 @@ class FileDownloaderTest(unittest.TestCase):
         # of google.com never changes (probably).
         # ...or not...changed on 5 Dec 2013 ...
         # ...and changed on 28 Apr 2014 by Tim to hash and url  below
-        unique_hash = '32230a09ffe7b0011095e8cd627097a5'
-        url = 'http://inasafe.org/en/_static/img/logo.png'
+        # ...and change on 9 Des 2014 by Akbar to hash and url below
+        unique_hash = '57e396baedfe1a034590339082b9abce'
+        url = 'https://www.google.com/images/srpr/logo11w.png'
         path = tempfile.mktemp()
 
         file_downloader = FileDownloader(

@@ -5,7 +5,7 @@ import os
 import unittest
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFile
-from safe_qgis.utilities.defaults import (
+from safe.utilities.defaults import (
     get_defaults,
     disclaimer,
     default_organisation_logo_path,

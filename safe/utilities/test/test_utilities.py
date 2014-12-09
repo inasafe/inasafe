@@ -20,7 +20,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.utilities.utilities import (
+from safe.utilities.utilities import (
     get_error_message,
     qgis_version,
     mm_to_points,
@@ -31,7 +31,7 @@ from safe_qgis.utilities.utilities import (
     impact_attribution,
     dpi_to_meters,
     qt_at_least)
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
 from safe.tools.test.test_keywords_dialog import (
     make_polygon_layer,

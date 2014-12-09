@@ -18,9 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4 import QtGui, QtCore
+
 from PyQt4.QtCore import pyqtSignature
+
 from safe_qgis.ui.impact_report_dialog_base import Ui_ImpactReportDialogBase
-from safe_qgis.utilities.help import show_context_help
+from safe.utilities.help import show_context_help
 
 
 class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):

@@ -42,7 +42,7 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMaximumError,
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
-from safe_qgis.utilities.help import show_context_help
+from safe.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (
     styles)

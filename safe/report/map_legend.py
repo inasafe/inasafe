@@ -23,8 +23,8 @@ import logging
 from PyQt4 import QtCore, QtGui
 from qgis.core import QgsMapLayer
 from safe_qgis.exceptions import LegendLayerError, KeywordNotFoundError
-from safe_qgis.utilities.utilities import dpi_to_meters
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities import dpi_to_meters
+from safe.utilities.keyword_io import KeywordIO
 
 LOGGER = logging.getLogger('InaSAFE')
 

@@ -23,8 +23,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4.QtCore import QObject
 
 # Do not import any QGIS or SAFE modules in this module!
-from safe_qgis.utilities.impact_calculator_thread import ImpactCalculatorThread
-from safe_qgis.utilities.qgis_layer_wrapper import QgisWrapper
+from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
+from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe_qgis.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)

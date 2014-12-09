@@ -36,22 +36,22 @@ from qgis.core import (
 )
 from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
-from safe_qgis.utilities.help import show_context_help
-from safe_qgis.utilities.utilities import (
+from safe.utilities.help import show_context_help
+from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
     add_ordered_combo_item,
     read_impact_layer,
     extent_string_to_array)
-from safe_qgis.utilities.defaults import (
+from safe.utilities.defaults import (
     limitations,
     disclaimer,
     default_organisation_logo_path)
-from safe_qgis.utilities.styling import (
+from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe_qgis.utilities.impact_calculator import ImpactCalculator
+from safe.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
     load_plugins,
     available_functions,
@@ -69,7 +69,7 @@ from safe_qgis.safe_interface import (
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -89,8 +89,8 @@ from safe.tools.keywords_dialog import KeywordsDialog
 from safe.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
 
-from safe_qgis.utilities.analysis import Analysis
-from safe_qgis.utilities.extent import Extent
+from safe.utilities.analysis import Analysis
+from safe.utilities.extent import Extent
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE

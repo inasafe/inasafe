@@ -27,9 +27,9 @@ from PyQt4.QtCore import QSettings
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QFileDialog
 
-from safe_qgis.utilities.utilities import (
+from safe.utilities.utilities import (
     viewport_geo_array, extent_to_array)
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import safeTr
 
 LOGGER = logging.getLogger('InaSAFE')

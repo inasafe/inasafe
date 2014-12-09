@@ -21,7 +21,7 @@ import os
 import logging
 
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities import is_raster_layer
+from safe.utilities.utilities import is_raster_layer
 
 
 LOGGER = logging.getLogger('InaSAFE')

@@ -11,7 +11,7 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2014, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import KeywordNotFoundError
 
 

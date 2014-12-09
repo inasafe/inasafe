@@ -53,31 +53,28 @@ from safe_qgis.safe_interface import (
     format_int, HAZDATA, UNITDATA
 )
 
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.widgets.dock import Dock
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.styling import setRasterStyle
+from safe.utilities.utilities import qgis_version, read_impact_layer
+from safe.utilities.utilities_for_testing import (
+    load_standard_layers,
+    setup_scenario,
     set_canvas_crs,
-    set_padang_extent,
-    set_batemans_bay_extent,
-    set_jakarta_extent,
-    set_yogya_extent,
-    set_jakarta_google_extent,
-    set_small_jakarta_extent,
+    combos_to_string,
+    populate_dock,
     set_geo_extent,
+    canvas_list,
     GEOCRS,
     GOOGLECRS,
     load_layer,
-    load_standard_layers,
-    populate_dock,
-    combos_to_string,
-    get_ui_state,
-    setup_scenario,
     load_layers,
-    canvas_list,
-)
-
-from safe.widgets.dock import Dock
-from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.styling import setRasterStyle
-from safe_qgis.utilities.utilities import qgis_version, read_impact_layer
+    set_jakarta_extent,
+    set_jakarta_google_extent,
+    set_yogya_extent,
+    get_ui_state,
+    set_batemans_bay_extent,
+    set_small_jakarta_extent)
 
 
 # Retired impact function for characterisation (Ole)

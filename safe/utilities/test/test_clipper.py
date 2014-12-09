@@ -51,14 +51,14 @@ from safe_qgis.safe_interface import (
     GetDataError,
     unique_filename)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
-from safe_qgis.utilities.clipper import (
+from safe.utilities.clipper import (
     clip_layer,
     extent_to_kml,
     explode_multipart_geometry,
     clip_geometry,
     adjust_clip_extent)
-from safe_qgis.utilities.utilities import qgis_version
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.utilities.utilities import qgis_version
+from safe.utilities.utilities_for_testing import (
     set_canvas_crs,
     RedirectStreams,
     DEVNULL,

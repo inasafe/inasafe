@@ -48,14 +48,14 @@ from safe_qgis.safe_interface import (
     messaging as m,
     styles,
     temp_dir)
-from safe_qgis.utilities.defaults import disclaimer
-from safe_qgis.utilities.utilities import (
+from safe.utilities.defaults import disclaimer
+from safe.utilities.utilities import (
     html_header,
     html_footer,
     html_to_file,
     add_ordered_combo_item)
-from safe_qgis.utilities.help import show_context_help
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.help import show_context_help
+from safe.utilities.keyword_io import KeywordIO
 
 INFO_STYLE = styles.INFO_STYLE
 

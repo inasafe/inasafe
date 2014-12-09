@@ -19,7 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-
 import unittest
 
 from safe.common.testing import get_qgis_app
@@ -28,7 +27,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Needed though not used below
-from safe_qgis.utilities.help import _show_local_help
+from safe.utilities.help import _show_local_help
 from safe_qgis.exceptions import HelpFileMissingError
 
 

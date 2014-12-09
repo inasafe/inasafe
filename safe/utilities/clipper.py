@@ -39,14 +39,15 @@ from safe_qgis.safe_interface import (
     read_file_keywords,
     temp_dir,
     which)
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
     InvalidParameterError,
     NoFeaturesInExtentError,
     CallGDALError,
     InvalidProjectionError,
     InvalidClipGeometryError)
-from safe_qgis.utilities.utilities import tr
+from safe.utilities.utilities import tr
+
 
 LOGGER = logging.getLogger(name='InaSAFE')
 

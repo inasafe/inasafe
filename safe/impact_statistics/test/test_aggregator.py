@@ -49,16 +49,16 @@ from safe_qgis.safe_interface import (
     Raster,
     Vector)
 
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.utilities.utilities_for_testing import (
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS)
 
 from safe.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO
 
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.utilities.utilities_for_testing import (
     load_standard_layers,
     setup_scenario,
     load_layers)

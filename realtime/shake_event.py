@@ -82,9 +82,9 @@ from safe.api import (
     TableRow,
     get_version,
     romanise)
-from safe_qgis.utilities.utilities import get_wgs84_resolution
-from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
-from safe_qgis.utilities.styling import mmi_colour
+from safe.utilities.utilities import get_wgs84_resolution
+from safe.utilities.clipper import extent_to_geoarray, clip_layer
+from safe.utilities.styling import mmi_colour
 from safe_qgis.exceptions import TranslationLoadError
 from safe.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData

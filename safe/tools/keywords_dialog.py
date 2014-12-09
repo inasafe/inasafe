@@ -29,10 +29,10 @@ from collections import OrderedDict
 
 from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
-from safe_qgis.utilities.defaults import get_defaults
-from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.help import show_context_help
-from safe_qgis.utilities.utilities import (
+from safe.utilities.defaults import get_defaults
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.help import show_context_help
+from safe.utilities.utilities import (
     get_error_message,
     is_polygon_layer,
     layer_attribute_names)

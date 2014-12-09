@@ -24,8 +24,8 @@ from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 import numpy
 import logging
-from safe_qgis.utilities.impact_calculator import ImpactCalculator
-from safe_qgis.utilities.utilities import (
+from safe.utilities.impact_calculator import ImpactCalculator
+from safe.utilities.utilities import (
     get_wgs84_resolution,
     extent_to_array,
     viewport_geo_array,
@@ -34,7 +34,7 @@ from safe_qgis.utilities.utilities import (
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
-from safe_qgis.utilities.memory_checker import check_memory_usage
+from safe.utilities.memory_checker import check_memory_usage
 from safe_qgis.safe_interface import (
     get_optimal_extent,
     get_buffered_extent,
@@ -60,7 +60,7 @@ from safe_qgis.exceptions import (
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe_qgis.safe_interface import messaging as m
-from safe_qgis.utilities.clipper import clip_layer, adjust_clip_extent
+from safe.utilities.clipper import clip_layer, adjust_clip_extent
 
 from safe_qgis.safe_interface import styles
 from safe_qgis.safe_interface import (

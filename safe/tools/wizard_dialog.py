@@ -35,21 +35,21 @@ from safe.api import metadata  # pylint: disable=W0612
 
 from safe_qgis.safe_interface import InaSAFEError, DEFAULTS
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
-from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities import (
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities import (
     get_error_message,
     is_point_layer,
     is_polygon_layer,
     is_raster_layer,
     layer_attribute_names)
-from safe_qgis.utilities.defaults import get_defaults
+from safe.utilities.defaults import get_defaults
 from safe_qgis.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
     InvalidParameterError,
     UnsupportedProviderError)
-from safe_qgis.utilities.help import show_context_help
+from safe.utilities.help import show_context_help
 
 
 LOGGER = logging.getLogger('InaSAFE')

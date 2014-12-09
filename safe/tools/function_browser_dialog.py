@@ -18,10 +18,10 @@ __date__ = '10/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 from PyQt4 import QtGui, QtWebKit
+
 from safe_qgis.ui.function_browser_base import Ui_FunctionBrowserBase
-from safe_qgis.utilities.help import show_context_help
+from safe.utilities.help import show_context_help
 from safe_qgis.safe_interface import (
     get_version,
     get_unique_values,

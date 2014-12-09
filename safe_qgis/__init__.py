@@ -81,7 +81,7 @@ if os.path.exists(translation_path):
 # see safe_qgis.utilities.defaults for more details
 try:
     import safe.defaults
-    from safe_qgis.utilities.defaults import get_defaults
+    from safe.utilities.defaults import get_defaults
 
     safe.defaults.get_defaults = lambda the_default=None: get_defaults(
         the_default)
@@ -101,7 +101,7 @@ try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
-    from safe_qgis.utilities.custom_logging import setup_logger
+    from safe.utilities.custom_logging import setup_logger
     setup_logger()
 except ImportError:
     # Note we use translate directly but the string may still not translate

@@ -52,8 +52,8 @@ from safe.tools.wizard_dialog import (
     step_unit,
     step_aggregation,
     step_field)
-from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities_for_testing import (
     clone_raster_layer,
     clone_shp_layer)
 

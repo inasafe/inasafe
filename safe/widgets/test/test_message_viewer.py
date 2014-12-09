@@ -27,7 +27,7 @@ from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
-from safe_qgis.utilities.utilities import get_error_message
+from safe.utilities.utilities import get_error_message
 
 
 TEST_FILES_DIR = os.path.join(

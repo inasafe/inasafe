@@ -45,7 +45,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.utilities.utilities_for_testing import (
+from safe.utilities.utilities_for_testing import (
     test_data_path, clone_shp_layer, temp_dir)
 from safe_qgis.safe_interface import (
     read_file_keywords,
@@ -55,8 +55,8 @@ from safe_qgis.safe_interface import (
     BOUNDDATA)
 from safe.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
-from safe_qgis.utilities.utilities import qgis_version
-from safe_qgis.utilities.defaults import get_defaults
+from safe.utilities.utilities import qgis_version
+from safe.utilities.defaults import get_defaults
 
 
 def make_padang_layer():

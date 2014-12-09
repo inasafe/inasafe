@@ -24,12 +24,12 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
-from safe_qgis.utilities.help import show_context_help
-from safe_qgis.utilities.defaults import (
+from safe.utilities.help import show_context_help
+from safe.utilities.defaults import (
     disclaimer,
     default_organisation_logo_path,
     default_north_arrow_path, get_defaults)
-from safe_qgis.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 
 

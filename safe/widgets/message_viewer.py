@@ -16,17 +16,16 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
+from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m
 from safe_qgis.safe_interface import InvalidParameterError
-from safe_qgis.utilities.utilities import (
+from safe.utilities.utilities import (
     html_header,
     html_footer,
     html_to_file,
     open_in_browser,
     qt_at_least)
-
-from PyQt4 import QtCore, QtGui, QtWebKit
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

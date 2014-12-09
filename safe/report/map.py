@@ -29,8 +29,8 @@ from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     ReportCreationError)
-from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.defaults import (
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.defaults import (
     disclaimer,
     default_organisation_logo_path,
     default_north_arrow_path)
