@@ -141,7 +141,7 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
         F.set_name(default_name)
 
     # FIXME (Ole): If we need to save style as defined by the impact_function
-    #              this is the place
+    # this is the place
 
     # Return layer object
     return F

@@ -11,15 +11,16 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.metadata import (
+    exposure_structure,
+    exposure_definition,
     hazard_all,
+    hazard_definition,
     layer_vector_polygon,
     layer_raster_numeric,
-    exposure_structure,
-    unit_building_type_type,
-    hazard_definition,
-    exposure_definition,
+    layer_vector_point,
     unit_building_generic,
-    unit_categorised)
+    unit_categorised,
+    unit_building_type_type,)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -80,17 +81,20 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': hazard_all,
+                        'subcategories': hazard_all,
                         'units': [unit_categorised],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_structure,
+                        'subcategories': [exposure_structure],
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],
-                        'layer_constraints': [layer_vector_polygon]
+                        'layer_constraints': [
+                            layer_vector_polygon,
+                            layer_vector_point
+                        ]
                     }
                 }
             }
@@ -135,9 +139,9 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         """Categorical hazard impact to buildings (e.g. from Open Street Map).
 
          :param layers: List of layers expected to contain.
-                * my_hazard: Categorical Hazard layer
-                * my_exposure: Vector layer of structure data on
-                the same grid as my_hazard
+                * hazard: Categorical Hazard layer
+                * exposure: Vector layer of structure data on
+                the same grid as hazard
         """
 
         # The 3 category
@@ -146,23 +150,20 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         low_t = self.parameters['low_thresholds']
 
         # Extract data
-        my_hazard = get_hazard_layer(layers)  # Depth
-        my_exposure = get_exposure_layer(layers)  # Building locations
+        hazard = get_hazard_layer(layers)  # Depth
+        exposure = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(
-            my_hazard.get_name(),
-            my_exposure.get_name(),
-            self)
+        question = get_question(hazard.get_name(), exposure.get_name(), self)
 
         # Determine attribute name for hazard levels
-        if my_hazard.is_raster:
+        if hazard.is_raster:
             hazard_attribute = 'level'
         else:
             hazard_attribute = None
 
         interpolated_result = assign_hazard_values_to_exposure_data(
-            my_hazard,
-            my_exposure,
+            hazard,
+            exposure,
             attribute_name=hazard_attribute,
             mode='constant')
 
@@ -386,8 +387,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         # Create vector layer and return
         vector_layer = Vector(
             data=attributes,
-            projection=my_exposure.get_projection(),
-            geometry=my_exposure.get_geometry(),
+            projection=exposure.get_projection(),
+            geometry=exposure.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,

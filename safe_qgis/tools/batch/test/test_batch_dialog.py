@@ -75,7 +75,9 @@ class BatchDialogTest(unittest.TestCase):
         button = dialog.run_selected_button
         button.click()
         status = dialog.table.item(1, 1).text()
-        self.assertTrue(status == 'Report Ok')
+        expected_status = 'Report Ok'
+        message = 'Expected %s but got %s' % (expected_status, status)
+        self.assertEqual(status, expected_status, message)
 
     def test_run_all_scenario(self):
         """Test run single scenario.

@@ -40,11 +40,6 @@ from safe_qgis.safe_interface import (
     read_keywords_from_layer, get_style_info, read_safe_layer,
     HAZDATA, EXPDATA, TESTDATA)
 
-# Retired impact function for characterisation
-# (need import here if test is run independently)
-# pylint: disable=W0611
-# pylint: enable=W0611
-
 
 class ImpactCalculatorTest(unittest.TestCase):
     """Test the InaSAFE plugin stub"""
@@ -119,7 +114,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             message = 'Calculator run failed:\n' + str(e)
             assert(), message
 
-    def test_startWithNoParameters(self):
+    def test_start_with_no_parameters(self):
         """Test that run raises an error properly when no parameters defined.
         """
         # noinspection PyBroadException
@@ -140,7 +135,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         message = 'Expected an error, none encountered.'
         assert(), message
 
-    def test_getKeywordFromImpactLayer(self):
+    def test_get_keyword_from_impact_layer(self):
         """Check that we can get keywords from a created impact layer."""
         function_runner = self.calculator.get_runner()
         function_runner.run()
@@ -184,7 +179,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             message = 'Calculator run failed. %s' % str(e)
             assert(), message
 
-    def test_getStyleInfo(self):
+    def test_get_style_info(self):
         """Test that we can get styleInfo data from a vector's keyword file
         """
         function_runner = self.calculator.get_runner()
@@ -227,6 +222,6 @@ class ImpactCalculatorTest(unittest.TestCase):
         assert not self.calculator.requires_clipping(), message
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ImpactCalculatorTest, 'test')
+    suite = unittest.makeSuite(ImpactCalculatorTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

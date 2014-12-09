@@ -10,6 +10,7 @@
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/"
                           codeListValue="eng">eng
         </gmd:LanguageCode>
+        <gco:CharacterString>eng</gco:CharacterString>
     </gmd:language>
     <gmd:characterSet>
         <gmd:MD_CharacterSetCode codeSpace="ISOTC211/19115"

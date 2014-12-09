@@ -302,6 +302,7 @@ def set_geo_extent(bounding_box, dock=None):
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
         dock.define_user_analysis_extent(rect, crs)
+        print dock.extent.user_extent.toString(), 'set geo extent'
 
 
 def check_images(control_image, test_image_path, tolerance=1000):
