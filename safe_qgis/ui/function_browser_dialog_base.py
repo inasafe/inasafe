@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'function_browser_dialog_base.ui'
 #
-# Created: Thu Nov 27 10:20:50 2014
+# Created: Tue Dec  9 16:30:02 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!

@@ -41,10 +41,10 @@ YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_files'))
+    os.path.dirname(__file__), '../../safe/test/test_data/test_files'))
 
 SCENARIO_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_scenarios'))
+    os.path.dirname(__file__), '../../safe/test/test_data/test_scenarios'))
 
 
 LOGGER = logging.getLogger('InaSAFE')

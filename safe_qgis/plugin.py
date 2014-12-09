@@ -192,7 +192,7 @@ class Plugin:
         self.toolbar = self.iface.addToolBar('InaSAFE')
         self.toolbar.setObjectName('InaSAFEToolBar')
         # Import dock here as it needs to be imported AFTER i18n is set up
-        from safe_qgis.widgets.dock import Dock
+        from safe.widgets.dock import Dock
         self.dock_widget = None
         # --------------------------------------
         # Create action for plugin dockable window (show/hide)

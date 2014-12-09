@@ -161,5 +161,4 @@ class Ui_DockBase(object):
         self.pbnPrint.setText(_translate("DockBase", "Print ...", None))
         self.pbnRunStop.setText(_translate("DockBase", "Run", None))
 
-from ..widgets.message_viewer import MessageViewer
-import resources_rc
+from safe.widgets.message_viewer import MessageViewer

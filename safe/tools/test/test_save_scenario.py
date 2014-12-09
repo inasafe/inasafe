@@ -24,6 +24,7 @@ from qgis.core import QgsMapLayerRegistry
 
 from safe.common.testing import TESTDATA, get_qgis_app
 
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -39,7 +40,7 @@ from safe_qgis.utilities.utilities_for_testing import (
 from safe_qgis.safe_interface import (
     unique_filename,
     temp_dir)
-from safe_qgis.widgets.dock import Dock
+from safe.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
 

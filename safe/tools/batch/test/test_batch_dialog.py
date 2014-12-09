@@ -30,7 +30,7 @@ from safe.tools.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
     SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir
-from safe_qgis.widgets.dock import Dock
+from safe.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
 

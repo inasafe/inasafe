@@ -21,13 +21,14 @@ import os
 import unittest
 
 from safe_extras.pydispatch import dispatcher
-from safe_qgis.widgets.message_viewer import MessageViewer
+from safe.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe_qgis.utilities.utilities import get_error_message
+
 
 TEST_FILES_DIR = os.path.join(
     os.path.dirname(__file__), '../../test/test_data/test_files')
