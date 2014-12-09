@@ -11,7 +11,7 @@ from boolean_parameter_widget import BooleanParameterWidget
 from float_parameter_widget import FloatParameterWidget
 from integer_parameter_widget import IntegerParameterWidget
 from string_parameter_widget import StringParameterWidget
-from resource_parameter_widget import ResourceParameterWidget
+from safe.common.resource_parameter_widget import ResourceParameterWidget
 
 
 class Qt4ParameterFactory(object):
