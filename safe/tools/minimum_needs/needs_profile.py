@@ -141,8 +141,7 @@ class NeedsProfile(MinimumNeeds):
             str(self.root_directory), 'minimum_needs')
         current_directory = os.path.dirname(__file__)
         path_name = os.path.join(
-            current_directory, '..', '..', '..', 'safe_qgis', 'resources',
-            'minimum_needs')
+            current_directory, '..', '..', 'resources', 'minimum_needs')
         if not os.path.exists(locale_minimum_needs_dir):
             os.makedirs(locale_minimum_needs_dir)
         for file_name in os.listdir(path_name):
