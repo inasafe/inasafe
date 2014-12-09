@@ -82,8 +82,8 @@ class SaveScenarioTest(unittest.TestCase):
             DOCK,
             hazard='Flood in Jakarta',
             exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
+            function='Be affected by each hazard category',
+            function_id='Categorical Hazard Population Impact Function')
         self.assertTrue(result, message)
         is_valid, message = self.save_scenario_dialog.validate_input()
         self.assertTrue(is_valid)
@@ -101,8 +101,8 @@ class SaveScenarioTest(unittest.TestCase):
             DOCK,
             hazard='Flood in Jakarta',
             exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
+            function='Be affected by each hazard category',
+            function_id='Categorical Hazard Population Impact Function')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -136,7 +136,7 @@ class SaveScenarioTest(unittest.TestCase):
             'Hazard is not the same')
         self.assertTrue(
             function == (
-                'function = Categorised Hazard Population Impact Function'),
+                'function = Categorical Hazard Population Impact Function'),
             'Impact function is not same')
 
         # TODO: figure out why this changed between releases
@@ -158,8 +158,8 @@ class SaveScenarioTest(unittest.TestCase):
             DOCK,
             hazard='Flood in Jakarta',
             exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
+            function='Be affected by each hazard category',
+            function_id='Categorical Hazard Population Impact Function')
         self.assertTrue(result, message)
         fake_dir = os.path.dirname(TESTDATA)
         scenario_file = unique_filename(

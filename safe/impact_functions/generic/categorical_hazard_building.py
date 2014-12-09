@@ -50,7 +50,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Categorised Hazard Population Impact Function.
+        """Metadata for Categorised Hazard Building Impact Function.
 
         .. versionadded:: 2.1
 
