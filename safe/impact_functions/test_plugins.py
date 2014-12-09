@@ -20,16 +20,12 @@ from safe.impact_functions.utilities import keywords_to_str
 from safe.storage.core import read_layer
 from safe.common.testing import TESTDATA
 
-DEFAULT_PLUGINS = ('Earthquake Fatality Function',)
+DEFAULT_PLUGINS = ('ITBFatalityFunction',)
 
 # These imports are needed for impact function registration if this test
 # is to be run independently - dont remove
 # If any of these get reinstated as "official" public impact functions,
 # remove from here and update test to use the real one.
-# pylint: disable=W0611
-from safe.engine.impact_functions_for_testing import empirical_fatality_model
-from safe.engine.impact_functions_for_testing import allen_fatality_model
-# pylint: enable=W0611
 
 
 class BasicFunction(FunctionProvider):

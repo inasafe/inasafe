@@ -34,6 +34,10 @@ pardir = os.path.abspath(
 sys.path.append(pardir)
 
 from safe_qgis.safe_interface import get_plugins
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0612
+from safe.impact_functions.earthquake import itb_earthquake_fatality_model
+# pylint: enable=W0612
 from collections import OrderedDict
 
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -47,12 +51,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
     def test_build_form(self):
         """Test that we can build a form by passing it a function and params.
         """
-        # noinspection PyUnresolvedReferences
-        # pylint: disable=W0612
-        from safe.engine.impact_functions_for_testing import \
-            itb_fatality_model_configurable
-        # pylint: enable=W0612
-        function_id = 'I T B Fatality Function Configurable'
+        function_id = 'I T B Fatality Function'
         function_list = get_plugins(function_id)
         assert len(function_list) == 1
         assert function_list[0].keys()[0] == function_id

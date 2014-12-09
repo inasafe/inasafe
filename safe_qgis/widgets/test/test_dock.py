@@ -82,17 +82,6 @@ from safe_qgis.utilities.utilities import qgis_version, read_impact_layer
 
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
-# pylint: disable=W0611
-# noinspection PyUnresolvedReferences
-from safe.engine.impact_functions_for_testing import allen_fatality_model
-# noinspection PyUnresolvedReferences
-from safe.engine.impact_functions_for_testing import HKV_flood_study
-# noinspection PyUnresolvedReferences
-from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
-# noinspection PyUnresolvedReferences
-from safe.engine.impact_functions_for_testing import \
-    categorised_hazard_building_impact
-# pylint: enable=W0611
 # noinspection PyUnresolvedReferences
 from safe.impact_functions.core import get_plugin
 
