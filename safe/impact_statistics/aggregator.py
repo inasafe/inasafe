@@ -20,8 +20,8 @@ import sys
 import logging
 import time
 import numpy
-
 from collections import OrderedDict
+from PyQt4 import QtGui, QtCore
 
 from qgis.core import (
     QgsMapLayer,
@@ -40,9 +40,8 @@ from qgis.core import (
     QgsFillSymbolV2,
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
-from PyQt4 import QtGui, QtCore
 
-from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
+from safe.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe_qgis.exceptions import InsufficientParametersError
 from safe_extras.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
@@ -77,6 +76,7 @@ from safe_qgis.exceptions import (
     UnsupportedProviderError,
     InvalidLayerError)
 from safe_qgis.safe_interface import styles
+
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE

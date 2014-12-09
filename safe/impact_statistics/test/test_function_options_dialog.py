@@ -40,7 +40,7 @@ from safe.impact_functions.earthquake import itb_earthquake_fatality_model
 # pylint: enable=W0612
 from collections import OrderedDict
 
-from safe_qgis.impact_statistics.function_options_dialog import (
+from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 
 LOGGER = logging.getLogger('InaSAFE')

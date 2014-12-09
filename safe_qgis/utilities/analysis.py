@@ -31,9 +31,9 @@ from safe_qgis.utilities.utilities import (
     viewport_geo_array,
     get_error_message
 )
-from safe_qgis.impact_statistics.postprocessor_manager import (
+from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
-from safe_qgis.impact_statistics.aggregator import Aggregator
+from safe.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.memory_checker import check_memory_usage
 from safe_qgis.safe_interface import (
     get_optimal_extent,

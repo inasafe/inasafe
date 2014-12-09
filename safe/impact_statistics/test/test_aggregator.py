@@ -55,7 +55,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     GEOCRS)
 
 from safe_qgis.widgets.dock import Dock
-from safe_qgis.impact_statistics.aggregator import Aggregator
+from safe.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 from safe_qgis.utilities.utilities_for_testing import (

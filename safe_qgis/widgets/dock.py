@@ -82,7 +82,7 @@ from safe_qgis.exceptions import (
     InsufficientMemoryWarning)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
-from safe_qgis.impact_statistics.function_options_dialog import (
+from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.tools.about_dialog import AboutDialog
 from safe.tools.keywords_dialog import KeywordsDialog
