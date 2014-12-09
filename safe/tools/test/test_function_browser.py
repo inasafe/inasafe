@@ -19,11 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-
 import unittest
 
 from nose import SkipTest
-
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe.common.testing import get_qgis_app
@@ -31,7 +29,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.function_browser_dialog import FunctionBrowser
+from safe.tools.function_browser_dialog import FunctionBrowser
 
 
 def verifyColumn(table, col, strFilter, mode):

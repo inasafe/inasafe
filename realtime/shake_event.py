@@ -86,7 +86,7 @@ from safe_qgis.utilities.utilities import get_wgs84_resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
 from safe_qgis.exceptions import TranslationLoadError
-from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
+from safe.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,

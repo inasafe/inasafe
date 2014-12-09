@@ -22,7 +22,7 @@ import unittest
 
 from PyQt4.QtCore import QSettings
 
-from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.common.minimum_needs import MinimumNeeds
 
 

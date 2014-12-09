@@ -46,7 +46,7 @@ from safe_qgis.utilities.utilities import (html_footer, html_header)
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.ui.extent_selector_dialog_base import (
     Ui_ExtentSelectorDialogBase)
-from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
+from safe.tools.rectangle_map_tool import RectangleMapTool
 from safe_qgis.safe_interface import styles
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')

@@ -46,7 +46,7 @@ from safe_qgis.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe_qgis.safe_interface import (
     styles)
-from safe_qgis.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.tools.minimum_needs.needs_profile import NeedsProfile
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -554,7 +554,8 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         file_name_dialog.setDefaultSuffix('json')
         current_directory = os.path.dirname(__file__)
         path_name = os.path.join(
-            current_directory, '..', '..', 'resources', 'minimum_needs')
+            current_directory, '..', '..', '..', 'safe_qgis', 'resources',
+            'minimum_needs')
         file_name_dialog.setDirectory(path_name)
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]

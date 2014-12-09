@@ -528,7 +528,7 @@ class Plugin:
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.extent_selector_dialog import ExtentSelectorDialog
+        from safe.tools.extent_selector_dialog import ExtentSelectorDialog
         widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
@@ -544,7 +544,7 @@ class Plugin:
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.minimum_needs.needs_calculator_dialog import (
+        from safe.tools.minimum_needs.needs_calculator_dialog import (
             NeedsCalculatorDialog
         )
 
@@ -554,7 +554,7 @@ class Plugin:
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.minimum_needs.needs_manager_dialog import (
+        from safe.tools.minimum_needs.needs_manager_dialog import (
             NeedsManagerDialog)
 
         dialog = NeedsManagerDialog(self.iface.mainWindow())
@@ -563,7 +563,7 @@ class Plugin:
     def show_impact_merge(self):
         """Show the impact layer merge dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
+        from safe.tools.impact_merge_dialog import ImpactMergeDialog
 
         dialog = ImpactMergeDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
@@ -571,7 +571,7 @@ class Plugin:
     def show_options(self):
         """Show the options dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.options_dialog import OptionsDialog
+        from safe.tools.options_dialog import OptionsDialog
 
         dialog = OptionsDialog(
             self.iface,
@@ -582,7 +582,7 @@ class Plugin:
     def show_keywords_editor(self):
         """Show the keywords editor."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.keywords_dialog import KeywordsDialog
+        from safe.tools.keywords_dialog import KeywordsDialog
 
         # Next block is a fix for #776
         if self.iface.activeLayer() is None:
@@ -626,7 +626,7 @@ class Plugin:
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.wizard_dialog import WizardDialog
+        from safe.tools.wizard_dialog import WizardDialog
 
         if self.iface.activeLayer() is None:
             return
@@ -639,7 +639,7 @@ class Plugin:
     def show_function_browser(self):
         """Show the impact function browser tool."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.function_browser_dialog import FunctionBrowser
+        from safe.tools.function_browser_dialog import FunctionBrowser
 
         dialog = FunctionBrowser(self.iface.mainWindow())
         dialog.exec_()  # modal
@@ -647,7 +647,7 @@ class Plugin:
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.shake_grid.shakemap_importer_dialog import (
+        from safe.tools.shake_grid.shakemap_importer_dialog import (
             ShakemapImporterDialog)
 
         dialog = ShakemapImporterDialog(self.iface.mainWindow())
@@ -655,14 +655,14 @@ class Plugin:
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
-        from safe_qgis.tools.osm_downloader_dialog import OsmDownloaderDialog
+        from safe.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.exec_()  # modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
-        from safe_qgis.tools.batch.batch_dialog import BatchDialog
+        from safe.tools.batch.batch_dialog import BatchDialog
 
         dialog = BatchDialog(
             parent=self.iface.mainWindow(),
@@ -672,7 +672,7 @@ class Plugin:
 
     def save_scenario(self):
         """Save current scenario to text file"""
-        from safe_qgis.tools.save_scenario import SaveScenarioDialog
+        from safe.tools.save_scenario import SaveScenarioDialog
 
         dialog = SaveScenarioDialog(
             iface=self.iface,

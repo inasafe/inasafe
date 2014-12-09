@@ -43,7 +43,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis.safe_interface import unique_filename, temp_dir
 from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
-from safe_qgis.tools.wizard_dialog import (
+from safe.tools.wizard_dialog import (
     WizardDialog,
     step_source,
     step_title,

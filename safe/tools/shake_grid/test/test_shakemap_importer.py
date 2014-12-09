@@ -22,7 +22,6 @@ import unittest
 import os
 
 # This is to enable API V2
-import qgis  # pylint: disable=W0611
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
@@ -32,7 +31,7 @@ from safe.common.testing import get_qgis_app, get_shake_test_data_path
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.shake_grid.shakemap_importer_dialog import (
+from safe.tools.shake_grid.shakemap_importer_dialog import (
     ShakemapImporterDialog
 )
 from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir

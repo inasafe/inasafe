@@ -39,13 +39,14 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.tools.osm_downloader_dialog import OsmDownloaderDialog
+from safe.tools.osm_downloader_dialog import OsmDownloaderDialog
 
 LOGGER = logging.getLogger('InaSAFE')
 
 TEST_DATA_DIR = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__), '../../test/test_data/test_files'))
+        os.path.dirname(__file__),
+        '../../../safe_qgis/test/test_data/test_files'))
 
 
 class MockQNetworkReply(QObject):

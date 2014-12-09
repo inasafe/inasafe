@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.tools.batch import scenario_runner
+
 __author__ = 'bungcip@gmail.com & tim@linfiniti.com & imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '01/10/2012'
@@ -41,7 +43,6 @@ from PyQt4.QtGui import (
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
-from safe_qgis.tools.batch import scenario_runner
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import FileNotFoundError

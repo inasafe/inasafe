@@ -33,7 +33,7 @@ from safe_qgis.utilities.utilities import (
     qt_at_least)
 from safe_qgis.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
-from safe_qgis.tools.test.test_keywords_dialog import (
+from safe.tools.test.test_keywords_dialog import (
     make_polygon_layer,
     make_padang_layer,
     make_point_layer)

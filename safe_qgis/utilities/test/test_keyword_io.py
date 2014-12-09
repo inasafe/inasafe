@@ -27,7 +27,7 @@ from safe_qgis.safe_interface import read_file_keywords
 from safe_qgis.utilities.utilities_for_testing import load_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
-from safe_qgis.tools.test.test_keywords_dialog import clone_padang_layer
+from safe.tools.test.test_keywords_dialog import clone_padang_layer
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
