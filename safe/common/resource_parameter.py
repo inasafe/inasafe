@@ -7,8 +7,8 @@ __date__ = '11/11/14'
 __copyright__ = 'kartoza.com'
 __doc__ = ''
 
-from float_parameter import FloatParameter
-from unit import Unit
+from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.unit import Unit
 
 
 class ResourceParameter(FloatParameter):

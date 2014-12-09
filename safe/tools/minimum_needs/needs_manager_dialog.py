@@ -33,7 +33,7 @@ from PyQt4.QtGui import (
     QMessageBox
 )
 
-from safe_extras.parameters.resource_parameter import ResourceParameter
+from safe.common.resource_parameter import ResourceParameter
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)

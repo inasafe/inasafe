@@ -18,15 +18,15 @@ __date__ = '24/10/14'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import unittest
 import random
+
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
     evacuated_population_needs
 )
-from safe_extras.parameters.resource_parameter import ResourceParameter
+from safe.common.resource_parameter import ResourceParameter
 
 
 class TestCore(unittest.TestCase):

@@ -7,7 +7,8 @@ __date__ = '12/11/14'
 __copyright__ = 'kartoza.com'
 __doc__ = ''
 
-from float_parameter_widget import FloatParameterWidget
+from safe_extras.parameters.qt_widgets.float_parameter_widget import (
+    FloatParameterWidget)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLabel
 
