@@ -44,8 +44,7 @@ from safe_extras.parameters.parameter_exceptions import (
 from safe_extras.parameters.string_parameter import StringParameter
 from safe.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
-from safe_qgis.safe_interface import (
-    styles)
+from safe.messaging import styles
 from safe.tools.minimum_needs.needs_profile import NeedsProfile
 
 

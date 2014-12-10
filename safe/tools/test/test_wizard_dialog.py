@@ -41,8 +41,8 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.safe_interface import unique_filename, temp_dir
-from safe_qgis.safe_interface import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
+from safe.common.utilities import unique_filename, temp_dir
+from safe.common.testing import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
 from safe.tools.wizard_dialog import (
     WizardDialog,
     step_source,

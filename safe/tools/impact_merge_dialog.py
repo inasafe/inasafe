@@ -44,10 +44,9 @@ from safe.exceptions import (
     InvalidParameterError,
     ReportCreationError,
     UnsupportedProviderError)
-from safe_qgis.safe_interface import (
-    messaging as m,
-    styles,
-    temp_dir)
+from safe.common.utilities import temp_dir
+from safe import messaging as m
+from safe.messaging import styles
 from safe.utilities.defaults import disclaimer
 from safe.utilities.utilities import (
     html_header,

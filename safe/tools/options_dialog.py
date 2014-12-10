@@ -30,7 +30,7 @@ from safe.utilities.defaults import (
     default_organisation_logo_path,
     default_north_arrow_path, get_defaults)
 from safe.utilities.keyword_io import KeywordIO
-from safe_qgis.safe_interface import get_version
+from safe.common.version import get_version
 
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):

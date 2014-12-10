@@ -27,7 +27,8 @@ from PyQt4.QtCore import pyqtSignature
 
 from collections import OrderedDict
 
-from safe_qgis.safe_interface import InaSAFEError, get_version
+from safe.common.version import get_version
+from safe.common.exceptions import InaSAFEError
 from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe.utilities.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
@@ -40,7 +41,7 @@ from safe.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
-from safe_qgis.safe_interface import DEFAULTS
+from safe.defaults import DEFAULTS
 from safe.api import metadata
 
 # Aggregations' keywords

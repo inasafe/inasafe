@@ -40,12 +40,12 @@ from safe_qgis.ui.osm_downloader_dialog_base import (
 
 from safe.exceptions import (
     CanceledImportDialogError, ImportDialogError, DownloadError)
-from safe_qgis.safe_interface import messaging as m
+from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.utilities import (
     html_footer, html_header, viewport_geo_array)
 from safe.utilities.help import show_context_help
-from safe_qgis.safe_interface import styles
+from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
 
 INFO_STYLE = styles.INFO_STYLE
