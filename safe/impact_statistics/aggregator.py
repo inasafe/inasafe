@@ -21,7 +21,6 @@ import logging
 import time
 import numpy
 from collections import OrderedDict
-from PyQt4 import QtGui, QtCore
 
 from qgis.core import (
     QgsMapLayer,
@@ -40,10 +39,13 @@ from qgis.core import (
     QgsFillSymbolV2,
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
+from PyQt4 import QtGui, QtCore
 
+from safe.storage.core import read_layer as safe_read_layer
+from safe.storage.utilities import (
+    calculate_polygon_centroid,
+    safe_to_qgis_layer)
 from safe.impact_statistics.zonal_stats import calculate_zonal_stats
-from safe.exceptions import InsufficientParametersError
-from safe_extras.pydispatch import dispatcher
 from safe.utilities.clipper import clip_layer
 from safe.utilities.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
@@ -52,21 +54,20 @@ from safe.utilities.utilities import (
     layer_attribute_names,
     create_memory_layer)
 from safe.utilities.styling import set_vector_graduated_style
-from safe_qgis.safe_interface import (
+from safe.common.utilities import (
     temp_dir,
-    safe_read_layer,
-    ReadLayerError,
-    points_in_and_outside_polygon,
-    calculate_polygon_centroid,
     unique_filename,
-    messaging as m,
     feature_attributes_as_dict,
-    get_utm_epsg,
-    safe_to_qgis_layer)
-from safe_qgis.safe_interface import (
+    get_utm_epsg)
+from safe.common.exceptions import ReadLayerError, PointsInputError
+from safe.common.polygon import (
+    in_and_outside_polygon as points_in_and_outside_polygon)
+from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
-    PointsInputError)
+)
+from safe import messaging as m
+from safe.messaging import styles
 from safe.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -74,8 +75,9 @@ from safe.exceptions import (
     KeywordDbError,
     InvalidAggregatorError,
     UnsupportedProviderError,
-    InvalidLayerError)
-from safe_qgis.safe_interface import styles
+    InvalidLayerError,
+    InsufficientParametersError)
+from safe_extras.pydispatch import dispatcher
 
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
