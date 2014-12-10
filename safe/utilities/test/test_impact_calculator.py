@@ -32,8 +32,7 @@ from safe.exceptions import (
     StyleInfoNotFoundError)
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
 from safe.storage.core import read_layer as read_safe_layer
-from safe_qgis.safe_interface import (
-    read_keywords_from_layer, get_style_info)
+from safe_qgis.safe_interface import get_style_info
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(
@@ -134,25 +133,6 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(), message
         message = 'Expected an error, none encountered.'
         assert(), message
-
-    def test_get_keyword_from_impact_layer(self):
-        """Check that we can get keywords from a created impact layer."""
-        function_runner = self.calculator.get_runner()
-        function_runner.run()
-        impact_layer = function_runner.impact_layer()
-        keyword = read_keywords_from_layer(impact_layer, 'impact_summary')
-        message = 'Keyword request returned an empty string'
-        assert(keyword is not ''), message
-        # Test we get an exception if keyword is not found
-        try:
-            _ = read_keywords_from_layer(impact_layer, 'boguskeyword')
-        except KeywordNotFoundError:
-            pass  # this is good
-        except Exception, e:
-            message = (
-                'Request for bogus keyword raised incorrect '
-                'exception type: \n %s') % str(e)
-            assert(), message
 
     def test_issue100(self):
         """Test for issue 100: unhashable type dict"""

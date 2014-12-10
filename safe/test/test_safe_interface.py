@@ -23,11 +23,11 @@ import unittest
 
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import BoundingBoxError
+from safe.storage.core import read_layer as safe_read_layer
 from safe_qgis.safe_interface import (
     get_optimal_extent,
     available_functions,
-    read_file_keywords,
-    safe_read_layer)
+    read_file_keywords)
 from safe.exceptions import (
     KeywordNotFoundError,
     InsufficientOverlapError)

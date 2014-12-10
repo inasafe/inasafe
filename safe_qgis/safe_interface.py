@@ -272,39 +272,6 @@ def available_functions(keyword_list=None):
         raise
 
 
-def read_keywords_from_layer(layer, keyword):
-    """Get metadata from the keywords file associated with a layer.
-
-    .. note:: Requires a inasafe layer instance as parameter.
-    .. seealso:: getKeywordFromPath
-
-    Args:
-
-       * layer - a InaSAFE layer (vector or raster)
-       * keyword - the metadata keyword to retrieve e.g. 'title'
-
-    Returns:
-       A string containing the retrieved value for the keyword.
-
-    Raises:
-       KeywordNotFoundError if the keyword is not recognised.
-    """
-    if layer is None:
-        raise InvalidParameterError()
-    try:
-        value = layer.get_keywords(keyword)
-    except Exception, e:
-        message = tr(
-            'Keyword retrieval failed for %s (%s) \n %s' % (
-                layer.get_filename(), keyword, str(e)))
-        raise KeywordNotFoundError(message)
-    if not value or value == '':
-        message = tr('No value was found for keyword %s in layer %s' % (
-            layer.get_filename(), keyword))
-        raise KeywordNotFoundError(message)
-    return value
-
-
 def read_file_keywords(layer_path, keyword=None):
     """Get metadata from the keywords file associated with a local
      file in the file system.
