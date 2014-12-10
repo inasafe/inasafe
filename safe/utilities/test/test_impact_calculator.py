@@ -31,8 +31,9 @@ from safe.exceptions import (
     KeywordNotFoundError,
     StyleInfoNotFoundError)
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
+from safe.storage.core import read_layer as read_safe_layer
 from safe_qgis.safe_interface import (
-    read_keywords_from_layer, get_style_info, read_safe_layer)
+    read_keywords_from_layer, get_style_info)
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(

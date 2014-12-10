@@ -41,8 +41,8 @@ from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
 from safe.common.numerics import nan_allclose
 from safe.common.utilities import unique_filename
 from safe.common.exceptions import GetDataError
+from safe.storage.core import read_layer as read_safe_layer
 from safe_qgis.safe_interface import (
-    read_safe_layer,
     get_optimal_extent)
 from safe.exceptions import InvalidProjectionError, CallGDALError
 from safe.utilities.clipper import (

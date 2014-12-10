@@ -436,22 +436,6 @@ def make_ascii(x):
     return x
 
 
-def read_safe_layer(path):
-    """Thin wrapper around the safe read_layer function.
-
-    Args:
-        path - str representing path to layer that must be opened.
-    Returns:
-        A safe read_safe_layer object is returned.
-    Raises:
-        Any exceptions are propagated
-    """
-    try:
-        return safe_read_layer(make_ascii(path))
-    except:
-        raise
-
-
 def convert_to_safe_layer(layer):
     """Thin wrapper around the safe read_layer function.
 
@@ -469,7 +453,7 @@ def convert_to_safe_layer(layer):
     if isinstance(layer, Layer):
         return layer
     try:
-        return read_safe_layer(layer.source())
+        return safe_read_layer(layer.source())
     except:
         raise
 

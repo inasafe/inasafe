@@ -27,7 +27,7 @@ from safe_qgis.safe_interface import (
     get_optimal_extent,
     available_functions,
     read_file_keywords,
-    read_safe_layer)
+    safe_read_layer)
 from safe.exceptions import (
     KeywordNotFoundError,
     InsufficientOverlapError)
@@ -72,8 +72,8 @@ class SafeInterfaceTest(unittest.TestCase):
                                        0.0083333333333333003)}
 
         # Verify relevant metada is ok
-        H = read_safe_layer(hazard_path)
-        E = read_safe_layer(exposure_path)
+        H = safe_read_layer(hazard_path)
+        E = safe_read_layer(exposure_path)
 
         hazard_bbox = H.get_bounding_box()
         assert numpy.allclose(hazard_bbox, haz_metadata['bounding_box'],
