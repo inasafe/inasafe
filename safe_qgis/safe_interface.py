@@ -126,24 +126,6 @@ def tr(text):
     context = "@default"
     return QCoreApplication.translate(context, text)
 
-
-def verify(statement, message=None):
-    """This is just a thin wrapper around safe.api.verify.
-
-    Args:
-        * theStatement - expression to verify
-        * theMessage - message to display on failure
-    Returns:
-        None
-    Raises:
-        VerificationError
-    """
-    try:
-        verify_util(statement, message)
-    except:
-        raise
-
-
 def get_optimal_extent(
         hazard_geo_extent, exposure_geo_extent, viewport_geo_extent=None):
     """A helper function to determine what the optimal extent is.

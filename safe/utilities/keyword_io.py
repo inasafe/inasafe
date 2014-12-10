@@ -36,8 +36,8 @@ from safe.exceptions import (
 from safe.storage.metadata_utilities import (
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
+from safe.common.utilities import verify
 from safe_qgis.safe_interface import (
-    verify,
     read_file_keywords,
     write_keywords_to_file)
 
