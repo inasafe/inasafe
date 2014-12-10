@@ -62,7 +62,9 @@ from safe.exceptions import (
     InsufficientMemoryWarning)
 from safe import messaging as m
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
-from safe.messaging import styles
+from safe.utilities.utilities import resources_path
+
+from safe_qgis.safe_interface import styles
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -81,7 +83,8 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
+LOGO_ELEMENT = m.Image(
+    'file:///%s/img/logos/inasafe-logo.png' % resources_path(), 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -361,6 +364,7 @@ class Analysis(object):
         """
         hazard_layer = self.hazard_layer
         exposure_layer = self.exposure_layer
+        analysis_geoextent = None
 
         if self.user_extent is not None \
                 and self.user_extent_crs is not None:
@@ -369,8 +373,8 @@ class Analysis(object):
                 self.user_extent,
                 self.user_extent_crs)
         elif self.clip_to_viewport:
-            # Get the current viewport extent as an array in EPSG:4326
             analysis_geoextent = viewport_geo_array(self.map_canvas)
+
 
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
@@ -588,7 +592,7 @@ class Analysis(object):
             raise Exception(self.tr('Clip parameters are not set!'))
         buffered_geo_extent = self.clip_parameters[1]
 
-        #setup aggregator to use buffered_geo_extent to deal with #759
+        # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
             buffered_geo_extent, self.aggregation_layer)
 
@@ -609,7 +613,7 @@ class Analysis(object):
                 self.exposure_layer, self.exposure_keyword)
             hazard_name = self.get_layer_title(
                 self.hazard_layer, self.hazard_keyword)
-            #aggregation layer could be set to AOI so no check for that
+            # aggregation layer could be set to AOI so no check for that
         except AttributeError:
             title = self.tr('No valid layers')
             details = self.tr(
@@ -902,7 +906,7 @@ class Analysis(object):
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
             raise
 
-        #TODO (MB) do we really want this check?
+        # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
             self.run_post_processor()
         else:

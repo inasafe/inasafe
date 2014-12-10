@@ -17,7 +17,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="about_tab">
       <attribute name="title">
@@ -180,7 +180,7 @@ p, li { white-space: pre-wrap; }
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../resources/resources.qrc">:/plugins/inasafe/supporters.png</pixmap>
+      <pixmap>../../safe/resources/img/logos/supporters.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>

@@ -34,8 +34,6 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 
-from safe.utilities.analysis import Analysis
-from safe.utilities.extent import Extent
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
@@ -59,9 +57,7 @@ from safe.impact_functions.core import (
     get_function_title)
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe.common.utilities import (
-    ugettext as safeTr,
-    temp_dir)
+from safe.common.utilities import temp_dir
 from safe.common.exceptions import ReadLayerError
 from safe.common.version import get_version
 from safe.common.signals import (
@@ -92,6 +88,9 @@ from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.safe_interface import get_safe_impact_function
 
+from safe.utilities.analysis import Analysis
+from safe.utilities.utilities import resources_path
+from safe.utilities.extent import Extent
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -99,7 +98,10 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
+
+LOGO_ELEMENT = m.Image(
+    'file:///%s/img/logos/inasafe-logo.png' % resources_path(),
+    'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -445,7 +447,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'Make sure you have defined keywords for your hazard and '
                 'exposure layers. You can do this using the keywords icon '),
             m.Image(
-                'qrc:/plugins/inasafe/show-keyword-editor.svg',
+                'file:///%s/img/icons/show-keyword-editor.svg' % (
+                    resources_path()),
                 **SMALL_ICON_STYLE),
             self.tr(' in the InaSAFE toolbar.')))
         basics_list.add(m.Paragraph(
@@ -1365,8 +1368,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'you wish to use it as an impact or hazard layer in a '
                 'scenario, please use the keyword editor. You can open'
                 ' the keyword editor by clicking on the ')),
-            m.Image('qrc:/plugins/inasafe/show-keyword-editor.svg',
-                    attributes='width=24 height=24'),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-editor.svg' % resources_path(),
+                attributes='width=24 height=24'),
             m.Text(self.tr(
                 ' icon in the toolbar, or choosing Plugins -> InaSAFE '
                 '-> Keyword Editor from the menu bar.')))

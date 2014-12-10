@@ -82,7 +82,7 @@ from safe.api import (
     TableRow,
     get_version,
     romanise)
-from safe.utilities.utilities import get_wgs84_resolution
+from safe.utilities.utilities import get_wgs84_resolution, resources_path
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.styling import mmi_colour
 from safe.exceptions import TranslationLoadError
@@ -861,6 +861,7 @@ class ShakeEvent(QObject):
         footer_file = os.path.join(data_dir(), 'footer.html')
         header_file = file(header_file)
         header = header_file.read()
+        header = header.replace('PATH', resources_path())
         header_file.close()
         footer_file = file(footer_file)
         footer = footer_file.read()

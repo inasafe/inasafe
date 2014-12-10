@@ -194,6 +194,7 @@ def html_header():
     file_path = os.path.join(resources_path(), 'header.html')
     with file(file_path) as header_file:
         content = header_file.read()
+        content = content.replace('PATH', resources_path())
     return content
 
 

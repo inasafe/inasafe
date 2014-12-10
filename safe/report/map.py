@@ -36,8 +36,6 @@ from safe.utilities.defaults import (
     default_organisation_logo_path,
     default_north_arrow_path)
 
-# Don't remove this even if it is flagged as unused by your ide
-# it is needed for qrc:/ url resolution. See Qt Resources docs.
 LOGGER = logging.getLogger('InaSAFE')
 
 

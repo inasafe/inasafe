@@ -14,15 +14,16 @@ __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# This import must come first to force sip2 api
 # noinspection PyUnresolvedReferences
 # pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui
 import os
 from os.path import expanduser, basename
 
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog,
@@ -30,7 +31,8 @@ from PyQt4.QtGui import (
     QGridLayout,
     QPushButton,
     QDialogButtonBox,
-    QMessageBox
+    QMessageBox,
+    QIcon
 )
 
 from safe.common.resource_parameter import ResourceParameter
@@ -42,6 +44,7 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMaximumError,
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
+from safe.utilities.utilities import resources_path
 from safe.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe.messaging import styles
@@ -69,54 +72,72 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
 
         # These are in the little button bar at the top
         # 'Remove resource' button
+        # noinspection PyUnresolvedReferences
         self.remove_resource_button.clicked.connect(self.remove_resource)
+        self.remove_resource_button.setIcon(
+            QIcon(os.path.join(
+                resources_path(), 'img', 'icons', 'remove.svg')))
 
         # Add resource
+        # noinspection PyUnresolvedReferences
         self.add_resource_button.clicked.connect(self.add_new_resource)
-
+        self.add_resource_button.setIcon(
+            QIcon(os.path.join(
+                resources_path(), 'img', 'icons', 'add.svg')))
         # Edit resource
+        # noinspection PyUnresolvedReferences
         self.edit_resource_button.clicked.connect(self.edit_resource)
+        self.edit_resource_button.setIcon(
+            QIcon(os.path.join(
+                resources_path(), 'img', 'icons', 'edit.svg')))
 
         # Discard changes to a resource
         self.discard_changes_button = QPushButton(self.tr('Discard changes'))
         self.button_box.addButton(
             self.discard_changes_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
         self.discard_changes_button.clicked.connect(self.discard_changes)
 
         # Save changes to a resource
         self.save_resource_button = QPushButton(self.tr('Save resource'))
         self.button_box.addButton(
             self.save_resource_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
         self.save_resource_button.clicked.connect(self.save_resource)
 
         # Export profile button
         self.export_profile_button = QPushButton(self.tr('Export ...'))
         self.button_box.addButton(
             self.export_profile_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
         self.export_profile_button.clicked.connect(self.export_profile)
 
         # Import profile button
         self.import_profile_button = QPushButton(self.tr('Import ...'))
         self.button_box.addButton(
             self.import_profile_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
         self.import_profile_button.clicked.connect(self.import_profile)
 
         # New profile button
         self.new_profile_button = QPushButton(self.tr('New'))
         self.button_box.addButton(
             self.new_profile_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
         self.new_profile_button.clicked.connect(self.new_profile)
 
         # Save profile button
         self.save_profile_button = QPushButton(self.tr('Save'))
         self.button_box.addButton(
             self.save_profile_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
         self.save_profile_button.clicked.connect(self.save_profile)
 
         # 'Save as' profile button
         self.save_profile_as_button = QPushButton(self.tr('Save as'))
         self.button_box.addButton(
             self.save_profile_as_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
         self.save_profile_as_button.clicked.connect(
             self.save_profile_as)
 
@@ -129,6 +150,7 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.edit_item = None
 
         # Remove profile button
+        # noinspection PyUnresolvedReferences
         self.remove_profile_button.clicked.connect(self.remove_profile)
 
         # These are all buttons that will get hidden on context change
@@ -165,7 +187,9 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         self.set_up_resource_parameters()
         # Only do this afterward load_profiles to avoid the resource list
         # being updated
+        # noinspection PyUnresolvedReferences
         self.profile_combo.activated.connect(self.select_profile)
+        # noinspection PyUnresolvedReferences
         self.stacked_widget.currentChanged.connect(self.page_changed)
 
     def reject(self):
@@ -523,16 +547,19 @@ class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
         except ValueOutOfBounds, e:
             warning = self.tr(
                 'Problem - default value is invalid') + '\n' + e.message
+            # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
         except InvalidMaximumError, e:
             warning = self.tr(
                 'Problem - maximum value is invalid') + '\n' + e.message
+            # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
         except InvalidMinimumError, e:
             warning = self.tr(
                 'Problem - minimum value is invalid') + '\n' + e.message
+            # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
         # end of test for parameter validity

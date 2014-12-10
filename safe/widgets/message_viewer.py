@@ -24,6 +24,7 @@ from safe.utilities.utilities import (
     html_header,
     html_footer,
     html_to_file,
+    resources_path,
     open_in_browser,
     qt_at_least)
 
@@ -220,17 +221,6 @@ class MessageViewer(QtWebKit.QWebView):
     def clear_dynamic_messages_log(self):
         self.dynamic_messages_log = []
 
-    def scroll_to_div(self):
-        """Scroll to the last added div.
-
-        see resources/js/inasafe.js and also
-        http://stackoverflow.com/a/4801719
-        """
-        if self.last_id > 0:
-            js = '$(\'#%s\').goTo();' % str(self.last_id)
-            # LOGGER.debug(js)
-            self.page().mainFrame().evaluateJavaScript(js)
-
     def show_messages(self):
         """Show all messages."""
         string = html_header()
@@ -286,8 +276,9 @@ class MessageViewer(QtWebKit.QWebView):
     def save_log_to_html(self):
         """Helper to write the log out as an html file."""
         html = html_header()
-        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo-url.png" '
-                 'title="InaSAFE Logo" alt="InaSAFE Logo" />')
+        html += (
+            '<img src="file:///%s/img/logos/inasafe-logo-url.png" '
+            'title="InaSAFE Logo" alt="InaSAFE Logo" />' % resources_path())
         html += ('<h5 class="info"><i class="icon-info-sign icon-white"></i> '
                  '%s</h5>' % self.tr('Analysis log'))
         for item in self.dynamic_messages_log:

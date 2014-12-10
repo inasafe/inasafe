@@ -144,8 +144,8 @@
           <string notr="true"/>
          </property>
          <property name="icon">
-          <iconset resource="../resources/resources.qrc">
-           <normaloff>:/plugins/inasafe/add_icon.svg</normaloff>:/plugins/inasafe/add_icon.svg</iconset>
+          <iconset>
+           <normaloff>../../safe/resources/img/icons/add.svg</normaloff>../../safe/resources/img/icons/add.svg</iconset>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -188,8 +188,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../resources/resources.qrc">
-           <normaloff>:/plugins/inasafe/remove_icon.svg</normaloff>:/plugins/inasafe/remove_icon.svg</iconset>
+          <iconset>
+           <normaloff>../../safe/resources/img/icons/remove.svg</normaloff>../../safe/resources/img/icons/remove.svg</iconset>
          </property>
         </widget>
        </item>
@@ -220,8 +220,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../resources/resources.qrc">
-           <normaloff>:/plugins/inasafe/edit_icon.svg</normaloff>:/plugins/inasafe/edit_icon.svg</iconset>
+          <iconset>
+           <normaloff>../../safe/resources/img/icons/edit.svg</normaloff>../../safe/resources/img/icons/edit.svg</iconset>
          </property>
         </widget>
        </item>
