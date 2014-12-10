@@ -3,23 +3,12 @@
 import unittest
 import sys
 import os
-
 from unittest import expectedFailure
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QVariant
 
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
-
 from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.utilities.utilities import (
     get_error_message,
     qgis_version,
@@ -37,7 +26,17 @@ from safe.tools.test.test_keywords_dialog import (
     make_polygon_layer,
     make_padang_layer,
     make_point_layer)
-from safe_qgis.safe_interface import bbox_intersection
+from safe.storage.utilities import bbox_intersection
+
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+# Add parent directory to path to make test aware of other modules
+# We should be able to remove this now that we use env vars. TS
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../..///'))
+sys.path.append(pardir)
 
 
 class UtilitiesTest(unittest.TestCase):

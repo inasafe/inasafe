@@ -40,14 +40,13 @@ from qgis.core import (
     QgsVectorLayer)
 
 from safe.exceptions import MemoryLayerCreationError
-
-from safe_qgis.safe_interface import (
-    ErrorMessage,
-    safeTr,
-    get_version,
+from safe.common.utilities import (
     unique_filename,
-    messaging as m,
-    styles)
+    ugettext as safeTr)
+from safe.common.version import get_version
+from safe import messaging as m
+from safe.messaging import styles
+from safe.messaging.error_message import ErrorMessage
 
 INFO_STYLE = styles.INFO_STYLE
 

@@ -22,8 +22,11 @@ import os
 from qgis.core import QgsRectangle
 
 from safe.common.testing import get_qgis_app
-
-
+from safe.impact_statistics.zonal_stats import (
+    calculate_zonal_stats, intersection_box)
+from safe.utilities.utilities_for_testing import (
+    load_layer)
+from safe.common.testing import UNITDATA
 
 
 # In our tests, we need to have this line below before importing any other
@@ -35,12 +38,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
-
-from safe.impact_statistics.zonal_stats import (
-    calculate_zonal_stats, intersection_box)
-from safe.utilities.utilities_for_testing import (
-    load_layer)
-from safe_qgis.safe_interface import UNITDATA
 
 
 class ZonalStatsTest(unittest.TestCase):

@@ -34,11 +34,10 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer)
 
+from safe.common.utilities import temp_dir, which
 from safe_qgis.safe_interface import (
     verify,
-    read_file_keywords,
-    temp_dir,
-    which)
+    read_file_keywords)
 from safe.utilities.keyword_io import KeywordIO
 from safe.exceptions import (
     InvalidParameterError,

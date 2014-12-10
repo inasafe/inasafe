@@ -24,12 +24,6 @@ import sys
 import os
 import shutil
 from unittest import expectedFailure
-
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../../..///'))
-sys.path.append(pardir)
-
 import numpy
 
 from qgis.core import (
@@ -43,13 +37,13 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
+from safe.common.numerics import nan_allclose
+from safe.common.utilities import unique_filename
+from safe.common.exceptions import GetDataError
 from safe_qgis.safe_interface import (
     read_safe_layer,
-    get_optimal_extent,
-    HAZDATA, TESTDATA, EXPDATA, UNITDATA,
-    nan_allclose,
-    GetDataError,
-    unique_filename)
+    get_optimal_extent)
 from safe.exceptions import InvalidProjectionError, CallGDALError
 from safe.utilities.clipper import (
     clip_layer,
@@ -73,6 +67,11 @@ VECTOR_PATH3 = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
 
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
+
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../../..///'))
+sys.path.append(pardir)
 
 
 # noinspection PyStringFormat,PyTypeChecker,PyCallByClass,PyArgumentList

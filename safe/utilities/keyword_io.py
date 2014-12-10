@@ -33,12 +33,13 @@ from safe.exceptions import (
     InvalidParameterError,
     NoKeywordsFoundError,
     UnsupportedProviderError)
+from safe.storage.metadata_utilities import (
+    generate_iso_metadata,
+    ISO_METADATA_KEYWORD_TAG)
 from safe_qgis.safe_interface import (
     verify,
     read_file_keywords,
-    write_keywords_to_file,
-    generate_iso_metadata,
-    ISO_METADATA_KEYWORD_TAG)
+    write_keywords_to_file)
 
 
 LOGGER = logging.getLogger('InaSAFE')

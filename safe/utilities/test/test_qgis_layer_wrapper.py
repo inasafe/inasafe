@@ -21,7 +21,7 @@ import unittest
 
 from qgis.core import QgsVectorLayer
 
-from safe_qgis.safe_interface import UNITDATA
+from safe.common.testing import UNITDATA
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.exceptions import KeywordNotFoundError
 

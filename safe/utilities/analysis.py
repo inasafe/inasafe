@@ -24,28 +24,29 @@ from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 import numpy
 import logging
+
+from qgis.core import (
+    QgsMapLayer,
+    QgsCoordinateReferenceSystem,
+    QGis)
+
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.utilities.utilities import (
     get_wgs84_resolution,
     extent_to_array,
     viewport_geo_array,
-    get_error_message
-)
+    get_error_message)
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.memory_checker import check_memory_usage
+from safe.common.exceptions import ReadLayerError, ZeroImpactException
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessors,
+    get_postprocessor_human_name)
 from safe_qgis.safe_interface import (
     get_optimal_extent,
-    get_buffered_extent,
-    ReadLayerError,
-    get_postprocessors,
-    get_postprocessor_human_name,
-    ZeroImpactException)
-from qgis.core import (
-    QgsMapLayer,
-    QgsCoordinateReferenceSystem,
-    QGis)
+    get_buffered_extent)
 from safe.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
@@ -59,11 +60,10 @@ from safe.exceptions import (
     UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
-from safe_qgis.safe_interface import messaging as m
+from safe import messaging as m
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
-
-from safe_qgis.safe_interface import styles
-from safe_qgis.safe_interface import (
+from safe.messaging import styles
+from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
