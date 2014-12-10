@@ -193,31 +193,6 @@ def get_optimal_extent(
     return optimal_extent
 
 
-def get_buffered_extent(geo_extent, cell_size):
-    """Grow bounding box with one unit of resolution in each direction.
-
-    If resolution is None bbox is returned unchanged.
-
-    :param geo_extent: Bounding box with format [W, S, E, N]
-    :type geo_extent: list
-
-    :param cell_size: (resx, resy) Raster resolution in each direction.
-    :type: tuple
-
-    :returns: Adjusted bounding box.
-    :rtype: list
-
-    :raises: Any exceptions raised will be propagated.
-
-    Note: See docstring for underlying function buffered_bounding_box
-          for more details.
-    """
-    try:
-        return buffered_bounding_box(geo_extent, cell_size)
-    except:
-        raise
-
-
 def available_functions(keyword_list=None):
     """ Query the inasafe engine to see what plugins are available.
 

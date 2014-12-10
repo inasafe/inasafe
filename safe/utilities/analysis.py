@@ -44,9 +44,8 @@ from safe.common.exceptions import ReadLayerError, ZeroImpactException
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
-from safe_qgis.safe_interface import (
-    get_optimal_extent,
-    get_buffered_extent)
+from safe.storage.utilities import buffered_bounding_box as get_buffered_extent
+from safe_qgis.safe_interface import get_optimal_extent
 from safe.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
