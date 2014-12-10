@@ -22,7 +22,7 @@ from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
 from safe_qgis.ui.needs_calculator_dialog_base import (
     Ui_NeedsCalculatorDialogBase)
-from safe_qgis.utilities.utilities import (
+from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_polygon_layer,
     is_point_layer,

@@ -7,3 +7,6 @@ __full_version__ = get_version(__version__)
 
 from safe.common.custom_logging import setup_logger
 setup_logger('InaSAFE')
+
+from safe.utilities.custom_logging import setup_logger
+setup_logger()

@@ -26,7 +26,7 @@ from safe_qgis.safe_interface import (
     get_version,
     get_unique_values,
     get_plugins_as_table)
-from safe_qgis.utilities.utilities import html_footer, html_header
+from safe.utilities.utilities import html_footer, html_header
 
 
 class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
