@@ -21,6 +21,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(pardir)
 
 
+from qgis.gui import QgsMapCanvas
 from PyQt4.QtGui import QWidget
 
 from safe.common.testing import get_qgis_app
@@ -28,7 +29,6 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qgis.gui import QgsMapCanvas
 from safe.common.qgis_interface import QgisInterface
 from safe.plugin import Plugin
 from safe_qgis.safe_interface import safeTr
