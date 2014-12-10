@@ -449,31 +449,3 @@ def get_safe_impact_function_type(function_id):
         raise
 
     return fun_type
-
-
-def calculate_safe_impact(
-        layers, function, extent=None, check_integrity=True):
-    """Thin wrapper around the safe calculate_impact function.
-
-    Args:
-        * layers - a list of layers to be used. They should be ordered
-          with hazard layer first and exposure layer second.
-        * function - SAFE impact function instance to be used
-        * extent - List of [xmin, ymin, xmax, ymax]
-                the coordinates of the bounding box.
-        * check_integrity - If true, perform checking of
-                input data integrity before running
-                impact calculation
-    Returns:
-        A safe impact function is returned
-    Raises:
-        Any exceptions are propagated
-    """
-    try:
-        return safe_calculate_impact(
-            layers,
-            function,
-            extent=extent,
-            check_integrity=check_integrity)
-    except:
-        raise
