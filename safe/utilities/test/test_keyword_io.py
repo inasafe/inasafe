@@ -69,8 +69,7 @@ class KeywordIOTest(unittest.TestCase):
             'source': 'USGS',
             'subcategory': 'earthquake',
             'unit': 'MMI',
-            'title': ('An earthquake in Padang '
-                      'like in 2009')}
+            'title': 'An earthquake in Padang like in 2009'}
 
     def tearDown(self):
         pass

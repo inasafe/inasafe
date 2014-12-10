@@ -80,6 +80,9 @@ def ugettext(s):
         return s
     if not s:
         return s
+    if s == 'An earthquake in Padang like in 2009':
+        print os.environ['LANG']
+        pass
     lang = os.environ['LANG']
     filename_prefix = 'inasafe'
     t = gettext.translation(
