@@ -179,7 +179,7 @@ def resources_path():
     :rtype: str
     """
     path = __file__
-    path = os.path.join(path, os.pardir, 'resources')
+    path = os.path.join(path, os.pardir, os.pardir, 'resources')
     path = os.path.abspath(path)
     return path
 
@@ -191,13 +191,10 @@ def html_header():
         including the body open tag.
     :rtype: str
     """
-    file_path = QtCore.QFile(':/plugins/inasafe/header.html')
-    if not file_path.open(QtCore.QIODevice.ReadOnly):
-        return '----'
-    stream = QtCore.QTextStream(file_path)
-    header = stream.readAll()
-    file_path.close()
-    return header
+    file_path = os.path.join(resources_path(), 'header.html')
+    with file(file_path) as header_file:
+        content = header_file.read()
+    return content
 
 
 def html_footer():
@@ -207,13 +204,10 @@ def html_footer():
         and including the body close tag.
     :rtype: str
     """
-    file_path = QtCore.QFile(':/plugins/inasafe/footer.html')
-    if not file_path.open(QtCore.QIODevice.ReadOnly):
-        return '----'
-    stream = QtCore.QTextStream(file_path)
-    footer = stream.readAll()
-    file_path.close()
-    return footer
+    file_path = os.path.join(resources_path(), 'footer.html')
+    with file(file_path) as header_file:
+        content = header_file.read()
+    return content
 
 
 def qgis_version():

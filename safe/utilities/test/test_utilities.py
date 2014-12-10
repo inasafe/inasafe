@@ -20,6 +20,8 @@ from safe.utilities.utilities import (
     impact_attribution,
     dpi_to_meters,
     qt_at_least,
+    html_footer,
+    html_header,
     resources_path)
 from safe.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
@@ -207,13 +209,34 @@ class UtilitiesTest(unittest.TestCase):
         assert qt_at_least('4.7.2', test_version)
         assert not qt_at_least('4.8.4', test_version)
 
+    def test_html_footer(self):
+        """Test that we can get the html footer.
+
+        .. versionadded:: 3.0
+        """
+        footer = html_header()
+        self.assertTrue('bootstrap' in footer)
+
+    def test_html_header(self):
+        """Test that we can get the html header.
+
+        .. versionadded:: 3.0
+        """
+        header = html_header()
+        self.assertTrue(
+            'bootstrap' in header,
+            'bootstrap not in ' + header)
+
     def test_resources_path(self):
         """Test we can get the path to the resources dir nicely.
 
         ..versionadded:: 3.0
         """
         path = resources_path()
-        self.assertTrue(os.path.exists(os.path.join(path, 'css', 'bootstrap.css')))
+        css_path = os.path.join(path, 'css', 'bootstrap.css')
+        self.assertTrue(
+            os.path.exists(css_path),
+            css_path + ' does not exist')
 
 
 if __name__ == '__main__':
