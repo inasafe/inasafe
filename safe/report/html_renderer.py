@@ -29,7 +29,7 @@ from safe.utilities.utilities import (
     dpi_to_meters,
     setup_printer,
     impact_attribution)
-from safe_qgis.safe_interface import unique_filename, temp_dir
+from safe.common.utilities import unique_filename, temp_dir
 
 LOGGER = logging.getLogger('InaSAFE')
 
