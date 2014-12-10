@@ -21,13 +21,13 @@ import os
 import numpy
 import unittest
 
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.exceptions import BoundingBoxError
 from safe_qgis.safe_interface import (
     get_optimal_extent,
     available_functions,
     read_file_keywords,
-    read_safe_layer,
-    TESTDATA, HAZDATA, EXPDATA,
-    BoundingBoxError)
+    read_safe_layer)
 from safe.exceptions import (
     KeywordNotFoundError,
     InsufficientOverlapError)

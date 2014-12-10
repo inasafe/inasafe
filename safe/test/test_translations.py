@@ -19,13 +19,16 @@ import unittest
 import os
 import re
 
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QCoreApplication, QTranslator
+
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.safe_interface import safeTr, get_function_title, get_plugins
-from PyQt4.QtCore import QCoreApplication, QTranslator
+from safe.impact_functions.core import get_function_title, get_plugins
+from safe.common.utilities import ugettext as safeTr
 
 
 class SafeTranslationsTest(unittest.TestCase):

@@ -22,8 +22,8 @@ import unittest
 
 from safe_extras.pydispatch import dispatcher
 from safe.widgets.message_viewer import MessageViewer
-from safe_qgis.safe_interface import messaging as m
-from safe_qgis.safe_interface import (
+from safe import messaging as m
+from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)

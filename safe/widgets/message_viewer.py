@@ -19,7 +19,7 @@ import logging
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m
-from safe_qgis.safe_interface import InvalidParameterError
+from safe.exceptions import InvalidParameterError
 from safe.utilities.utilities import (
     html_header,
     html_footer,

@@ -16,11 +16,6 @@ import unittest
 import sys
 import os
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
-sys.path.append(pardir)
-
-
 from qgis.gui import QgsMapCanvas
 from PyQt4.QtGui import QWidget
 
@@ -31,7 +26,11 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.qgis_interface import QgisInterface
 from safe.plugin import Plugin
-from safe_qgis.safe_interface import safeTr
+from safe.common.utilities import ugettext as safeTr
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(pardir)
 
 
 class PluginTest(unittest.TestCase):

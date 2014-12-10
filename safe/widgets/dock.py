@@ -23,19 +23,20 @@ import logging
 from functools import partial
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
-# noinspection PyPackageRequirements
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
-    QgsCoordinateReferenceSystem,
-)
-from safe_extras.pydispatch import dispatcher
-from safe_qgis.ui.dock_base import Ui_DockBase
+    QgsCoordinateReferenceSystem)
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+
+from safe.utilities.analysis import Analysis
+from safe.utilities.extent import Extent
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
@@ -52,24 +53,24 @@ from safe.utilities.styling import (
     set_vector_graduated_style,
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe_qgis.safe_interface import (
-    load_plugins,
-    available_functions,
-    get_function_title,
-    get_safe_impact_function,
-    safeTr,
-    get_version,
-    temp_dir,
-    ReadLayerError)
-from safe_qgis.safe_interface import messaging as m
-from safe_qgis.safe_interface import (
+from safe.impact_functions import load_plugins
+from safe.impact_functions.core import get_function_title
+from safe.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
+from safe.common.utilities import (
+    ugettext as safeTr,
+    temp_dir)
+from safe.common.exceptions import ReadLayerError
+from safe.common.version import get_version
+from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
-from safe.utilities.keyword_io import KeywordIO
+from safe import messaging as m
+from safe.messaging import styles
 from safe.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -82,15 +83,15 @@ from safe.exceptions import (
     InsufficientMemoryWarning)
 from safe.report.map import Map
 from safe.report.html_renderer import HtmlRenderer
-from safe.impact_statistics.function_options_dialog import (
-    FunctionOptionsDialog)
 from safe.tools.about_dialog import AboutDialog
 from safe.tools.keywords_dialog import KeywordsDialog
 from safe.tools.impact_report_dialog import ImpactReportDialog
-from safe_qgis.safe_interface import styles
+from safe_extras.pydispatch import dispatcher
+from safe_qgis.ui.dock_base import Ui_DockBase
+from safe_qgis.safe_interface import (
+    available_functions,
+    get_safe_impact_function)
 
-from safe.utilities.analysis import Analysis
-from safe.utilities.extent import Extent
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
