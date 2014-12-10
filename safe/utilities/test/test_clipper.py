@@ -42,8 +42,6 @@ from safe.common.numerics import nan_allclose
 from safe.common.utilities import unique_filename
 from safe.common.exceptions import GetDataError
 from safe.storage.core import read_layer as read_safe_layer
-from safe_qgis.safe_interface import (
-    get_optimal_extent)
 from safe.exceptions import InvalidProjectionError, CallGDALError
 from safe.utilities.clipper import (
     clip_layer,
@@ -52,6 +50,7 @@ from safe.utilities.clipper import (
     clip_geometry,
     adjust_clip_extent)
 from safe.utilities.utilities import qgis_version
+from safe.utilities.analysis import Analysis
 from safe.utilities.utilities_for_testing import (
     set_canvas_crs,
     RedirectStreams,
@@ -259,7 +258,8 @@ class ClipperTest(unittest.TestCase):
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
         # Extent is returned as an array [xmin,ymin,xmax,ymax]
-        geo_extent = get_optimal_extent(
+        analysis = Analysis()
+        geo_extent = analysis.get_optimal_extent(
             hazard_geo_extent, exposure_geo_extent, view_port_geo_extent)
 
         # Clip the vector to the bbox
