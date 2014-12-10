@@ -70,7 +70,7 @@ from safe_qgis.safe_interface import (
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
 from safe.utilities.keyword_io import KeywordIO
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
     InsufficientOverlapError,

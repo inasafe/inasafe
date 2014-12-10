@@ -20,12 +20,13 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 import logging
-import PyQt4.QtCore as QtCore
-
-from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
 from qgis.utils import iface
 
-from safe_qgis.exceptions import FileNotFoundError
+import PyQt4.QtCore as QtCore
+from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
+
+from safe.exceptions import FileNotFoundError
+
 
 LOGGER = logging.getLogger('InaSAFE')
 global_status_flag = False

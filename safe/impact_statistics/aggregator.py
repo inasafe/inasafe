@@ -42,7 +42,7 @@ from qgis.core import (
 from qgis.analysis import QgsZonalStatistics
 
 from safe.impact_statistics.zonal_stats import calculate_zonal_stats
-from safe_qgis.exceptions import InsufficientParametersError
+from safe.exceptions import InsufficientParametersError
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.clipper import clip_layer
 from safe.utilities.defaults import get_defaults
@@ -67,7 +67,7 @@ from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     PointsInputError)
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
     InvalidParameterError,

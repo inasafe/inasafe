@@ -54,7 +54,7 @@ from safe_qgis.safe_interface import (
     TESTDATA,
     BOUNDDATA)
 from safe.tools.keywords_dialog import KeywordsDialog
-from safe_qgis.exceptions import KeywordNotFoundError
+from safe.exceptions import KeywordNotFoundError
 from safe.utilities.utilities import qgis_version
 from safe.utilities.defaults import get_defaults
 

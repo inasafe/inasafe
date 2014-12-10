@@ -23,7 +23,7 @@ import logging
 # noinspection PyPackageRequirements
 from PyQt4 import (QtGui, QtCore)
 
-from safe_qgis.exceptions import HelpFileMissingError
+from safe.exceptions import HelpFileMissingError
 
 LOGGER = logging.getLogger('InaSAFE')
 

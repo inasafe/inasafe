@@ -12,7 +12,7 @@ __copyright__ = 'Copyright 2014, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 from safe.utilities.keyword_io import KeywordIO
-from safe_qgis.exceptions import KeywordNotFoundError
+from safe.exceptions import KeywordNotFoundError
 
 
 class QgisWrapper():

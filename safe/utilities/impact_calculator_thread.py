@@ -28,7 +28,7 @@ import logging
 from PyQt4.QtCore import QObject, pyqtSignal
 
 from safe_qgis.safe_interface import calculate_safe_impact
-from safe_qgis.exceptions import InsufficientParametersError
+from safe.exceptions import InsufficientParametersError
 
 LOGGER = logging.getLogger('InaSAFE')
 

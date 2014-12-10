@@ -101,7 +101,7 @@ except ImportError:
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     KeywordNotFoundError,
     StyleInfoNotFoundError,
     InvalidParameterError,

@@ -39,7 +39,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsVectorLayer)
 
-from safe_qgis.exceptions import MemoryLayerCreationError
+from safe.exceptions import MemoryLayerCreationError
 
 from safe_qgis.safe_interface import (
     ErrorMessage,

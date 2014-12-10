@@ -36,7 +36,7 @@ from safe.utilities.utilities import (
     get_error_message,
     is_polygon_layer,
     layer_attribute_names)
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)

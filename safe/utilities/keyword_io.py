@@ -14,12 +14,10 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-
 import json
 import os
 from os.path import expanduser
 from xml.etree import ElementTree
-
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
@@ -28,7 +26,7 @@ import cPickle as pickle
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QSettings
 
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
     KeywordDbError,
@@ -41,6 +39,7 @@ from safe_qgis.safe_interface import (
     write_keywords_to_file,
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
+
 
 LOGGER = logging.getLogger('InaSAFE')
 

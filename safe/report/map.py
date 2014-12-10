@@ -26,7 +26,7 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayer)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     KeywordNotFoundError,
     ReportCreationError)
 from safe.utilities.keyword_io import KeywordIO

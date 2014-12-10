@@ -50,7 +50,7 @@ from safe_qgis.safe_interface import (
     nan_allclose,
     GetDataError,
     unique_filename)
-from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
+from safe.exceptions import InvalidProjectionError, CallGDALError
 from safe.utilities.clipper import (
     clip_layer,
     extent_to_kml,

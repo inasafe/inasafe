@@ -43,7 +43,7 @@ from safe.utilities.utilities import (
     is_raster_layer,
     layer_attribute_names)
 from safe.utilities.defaults import get_defaults
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
     KeywordNotFoundError,

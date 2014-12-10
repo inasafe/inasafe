@@ -34,7 +34,7 @@ from qgis.core import (
     QgsAtlasComposition)
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     InvalidLayerError,
     EmptyDirectoryError,
     FileNotFoundError,

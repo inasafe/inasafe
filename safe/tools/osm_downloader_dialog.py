@@ -38,7 +38,7 @@ from qgis.core import QGis  # force sip2 api
 from safe_qgis.ui.osm_downloader_dialog_base import (
     Ui_OsmDownloaderDialogBase)
 
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     CanceledImportDialogError, ImportDialogError, DownloadError)
 from safe_qgis.safe_interface import messaging as m
 from safe.utilities.file_downloader import FileDownloader

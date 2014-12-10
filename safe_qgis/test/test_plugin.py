@@ -30,7 +30,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.gui import QgsMapCanvas
 from safe.common.qgis_interface import QgisInterface
-from safe_qgis.plugin import Plugin
+from safe.plugin import Plugin
 from safe_qgis.safe_interface import safeTr
 
 

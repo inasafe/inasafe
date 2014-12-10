@@ -32,7 +32,7 @@ from qgis.core import (
 from safe.utilities.utilities import (
     is_raster_layer,
     is_polygon_layer)
-from safe_qgis.exceptions import InvalidParameterError, InvalidGeometryError
+from safe.exceptions import InvalidParameterError, InvalidGeometryError
 
 
 LOGGER = logging.getLogger('InaSAFE')

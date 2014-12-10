@@ -22,5 +22,5 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyDocstring
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
-    from safe_qgis.plugin import Plugin
+    from safe.plugin import Plugin
     return Plugin(iface)

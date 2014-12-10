@@ -23,7 +23,7 @@ from qgis.core import QgsVectorLayer
 
 from safe_qgis.safe_interface import UNITDATA
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
-from safe_qgis.exceptions import KeywordNotFoundError
+from safe.exceptions import KeywordNotFoundError
 
 
 class QgisLayerWrapperTest(unittest.TestCase):

@@ -22,8 +22,8 @@ import sys
 import logging
 import math
 import numpy
-
 from PyQt4 import QtGui
+
 from qgis.core import (
     QGis,
     QgsGraduatedSymbolRendererV2,
@@ -37,7 +37,8 @@ from qgis.core import (
     QgsColorRampShader,
     QgsSingleBandPseudoColorRenderer)
 
-from safe_qgis.exceptions import StyleError
+from safe.exceptions import StyleError
+
 
 LOGGER = logging.getLogger('InaSAFE')
 

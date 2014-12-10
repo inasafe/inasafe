@@ -28,7 +28,7 @@ from safe_qgis.safe_interface import (
     read_safe_layer,
     TESTDATA, HAZDATA, EXPDATA,
     BoundingBoxError)
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     KeywordNotFoundError,
     InsufficientOverlapError)
 

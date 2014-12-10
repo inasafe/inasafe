@@ -23,17 +23,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings
-
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
     QgsPoint,
     QgsCoordinateReferenceSystem,
     QGis)
-
-from safe_qgis.exceptions import InvalidGeometryError
-
 from qgis.gui import QgsRubberBand
+
+from safe.exceptions import InvalidGeometryError
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
 

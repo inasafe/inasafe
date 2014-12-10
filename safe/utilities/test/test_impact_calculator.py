@@ -31,7 +31,7 @@ sys.path.append(pardir)
 
 import unittest
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     InsufficientParametersError,
     KeywordNotFoundError,
     StyleInfoNotFoundError)

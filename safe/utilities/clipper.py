@@ -40,7 +40,7 @@ from safe_qgis.safe_interface import (
     temp_dir,
     which)
 from safe.utilities.keyword_io import KeywordIO
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     InvalidParameterError,
     NoFeaturesInExtentError,
     CallGDALError,

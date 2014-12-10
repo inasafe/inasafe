@@ -45,7 +45,7 @@ from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
 from safe.report.map import Map
 from safe.report.html_renderer import HtmlRenderer
-from safe_qgis.exceptions import FileNotFoundError
+from safe.exceptions import FileNotFoundError
 from safe_qgis.safe_interface import temp_dir
 from safe.utilities.utilities import (
     read_impact_layer, extent_string_to_array)

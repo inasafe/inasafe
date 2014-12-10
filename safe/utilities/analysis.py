@@ -46,7 +46,7 @@ from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QGis)
-from safe_qgis.exceptions import (
+from safe.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
     InvalidLayerError,
@@ -71,7 +71,7 @@ from safe_qgis.safe_interface import (
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
-from safe_qgis.exceptions import NoValidLayerError
+from safe.exceptions import NoValidLayerError
 
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
