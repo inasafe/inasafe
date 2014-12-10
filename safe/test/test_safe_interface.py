@@ -21,9 +21,7 @@ import os
 import unittest
 
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
-from safe_qgis.safe_interface import (
-    available_functions,
-    read_file_keywords)
+from safe_qgis.safe_interface import read_file_keywords
 from safe.exceptions import (
     KeywordNotFoundError)
 
@@ -42,27 +40,6 @@ class SafeInterfaceTest(unittest.TestCase):
                                                'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
-
-    def test_available_functions(self):
-        """Check we can get the available functions from the impact calculator.
-        """
-        functions = available_functions()
-        message = 'No functions available (len=%ss)' % len(functions)
-        self.assertTrue(len(functions) > 0, message)
-
-        # Also test if it works when we give it two layers
-        # to see if we can determine which functions will
-        # work for them.
-        keywords1 = read_file_keywords(self.rasterShakePath)
-        keywords2 = read_file_keywords(self.vectorPath)
-        # We need to explicitly add the layer type to each keyword list
-        keywords1['layertype'] = 'raster'
-        keywords2['layertype'] = 'vector'
-
-        functions = [keywords1, keywords2]
-        functions = available_functions(functions)
-        message = 'No functions available (len=%ss)' % len(functions)
-        self.assertTrue(len(functions) > 0, message)
 
     def test_get_keyword_from_file(self):
         """Get keyword from a filesystem file's .keyword file."""

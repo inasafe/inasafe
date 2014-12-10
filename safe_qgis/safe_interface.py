@@ -127,42 +127,6 @@ def tr(text):
     return QCoreApplication.translate(context, text)
 
 
-def available_functions(keyword_list=None):
-    """ Query the inasafe engine to see what plugins are available.
-
-    Args:
-
-       keyword_list - an optional parameter which should contain
-       a list of 2 dictionaries (the number of items in the list
-       is not enforced). The dictionaries should be obtained by using
-       readKeywordsFromFile e.g.::
-
-           myFile1 = foo.shp
-           myFile2 = bar.asc
-           keywords1 = readKeywordsFromFile(myFile1)
-           keywords2 = readKeywordsFromFile(myFile2)
-           myList = [keywords1, keywords2]
-           myFunctions = available_functions(myList)
-
-    Returns:
-       A dictionary of strings where each is a plugin name.
-
-       .. note:: If keyword_list is not provided, all available
-        plugins will be returned in the list.
-
-    Raises:
-       NoFunctionsFoundError if no functions are found.
-    """
-    try:
-        dictionary = get_admissible_plugins(keyword_list)
-        # if len(dictionary) < 1:
-        #    message = 'No InaSAFE impact functions could be found'
-        #    raise NoFunctionsFoundError(message)
-        return dictionary
-    except:
-        raise
-
-
 def read_file_keywords(layer_path, keyword=None):
     """Get metadata from the keywords file associated with a local
      file in the file system.

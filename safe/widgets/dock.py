@@ -54,7 +54,9 @@ from safe.utilities.styling import (
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.impact_functions import load_plugins
-from safe.impact_functions.core import get_function_title
+from safe.impact_functions.core import (
+    get_admissible_plugins,
+    get_function_title)
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import (
@@ -88,9 +90,7 @@ from safe.tools.keywords_dialog import KeywordsDialog
 from safe.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
-from safe_qgis.safe_interface import (
-    available_functions,
-    get_safe_impact_function)
+from safe_qgis.safe_interface import get_safe_impact_function
 
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -868,7 +868,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Find out which functions can be used with these layers
         func_list = [hazard_keywords, exposure_keywords]
         try:
-            func_dict = available_functions(func_list)
+            func_dict = get_admissible_plugins(func_list)
             # Populate the hazard combo with the available functions
             for myFunctionID in func_dict:
                 function = func_dict[myFunctionID]
