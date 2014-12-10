@@ -73,8 +73,6 @@ class MessageViewer(QtWebKit.QWebView):
         self.report_path = None
         self._impact_path = None
 
-        # base_dir = os.path.dirname(__file__)
-        # self.header = header.replace('PATH', base_dir)
 
     @property
     def impact_path(self):
