@@ -6,6 +6,7 @@
    library.
 
 """
+from safe.utilities.utilities import read_file_keywords
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -38,7 +39,6 @@ from safe.storage.metadata_utilities import (
     ISO_METADATA_KEYWORD_TAG)
 from safe.common.utilities import verify
 from safe_qgis.safe_interface import (
-    read_file_keywords,
     write_keywords_to_file)
 
 

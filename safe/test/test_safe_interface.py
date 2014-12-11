@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'tim@linfiniti.com'
 __date__ = '04/04/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -21,9 +20,9 @@ import os
 import unittest
 
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
-from safe_qgis.safe_interface import read_file_keywords
 from safe.exceptions import (
     KeywordNotFoundError)
+from safe.utilities.utilities import read_file_keywords
 
 
 class SafeInterfaceTest(unittest.TestCase):

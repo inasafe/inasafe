@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '24/10/14'
@@ -26,11 +25,10 @@ from safe.impact_functions.core import (
     get_admissible_plugins,
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs
-)
+    evacuated_population_needs)
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.testing import TESTDATA, HAZDATA
-from safe_qgis.safe_interface import read_file_keywords
+from safe.utilities.utilities import read_file_keywords
 
 
 class TestCore(unittest.TestCase):
