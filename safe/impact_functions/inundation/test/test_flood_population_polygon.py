@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- *Flood Raster on Population Test Cases.**
+- *Flood Vector on Population Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 
