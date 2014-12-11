@@ -103,7 +103,6 @@ except ImportError:
 from PyQt4.QtCore import QCoreApplication
 from safe.exceptions import (
     KeywordNotFoundError,
-    StyleInfoNotFoundError,
     InvalidParameterError,
     NoKeywordsFoundError)
 
