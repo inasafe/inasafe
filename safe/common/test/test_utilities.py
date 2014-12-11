@@ -194,6 +194,7 @@ class UtilitiesTest(unittest.TestCase):
         os.environ['LANG'] = 'id'
         assert '.' == get_thousand_separator()
         assert ',' == get_decimal_separator()
+        os.environ['LANG'] = 'en'
 
     def test_create_classes(self):
         """Test create_classes.

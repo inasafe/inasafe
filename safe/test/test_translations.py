@@ -63,6 +63,9 @@ class SafeTranslationsTest(unittest.TestCase):
             expected_title, function_title, os.environ['LANG']))
         self.assertEqual(expected_title, function_title, message)
 
+        # Set back to en
+        os.environ['LANG'] = 'en'
+
     def test_dynamic_translation(self):
         """Test for dynamic translations for a string."""
 
@@ -80,6 +83,9 @@ class SafeTranslationsTest(unittest.TestCase):
         message = 'expected %s but got %s' % (expected_title, real_title)
         self.assertEqual(expected_title, real_title, message)
 
+        # Set back to en
+        os.environ['LANG'] = 'en'
+
     def test_impact_summary_words(self):
         """Test specific words from impact summary info shown in doc see #348.
         """
@@ -92,6 +98,9 @@ class SafeTranslationsTest(unittest.TestCase):
             else:
                 message += 'PASS: %s' % phrase
         self.assertNotIn('FAIL', message, message)
+
+        # Set back to en
+        os.environ['LANG'] = 'en'
 
     def test_all_dynamic_translations(self):
         """Test all the phrases defined in dynamic_translations translate."""
@@ -128,6 +137,9 @@ class SafeTranslationsTest(unittest.TestCase):
             'the same form in English, i.e. "hotel", you can add it in '
             'exception_words in safe_qgis/test_safe_translations.py')
         self.assertEqual(len(failure_list), 0, message)
+
+        # Set back to en
+        os.environ['LANG'] = 'en'
 
     def test_qgis_translations(self):
         """Test for qgis translations."""

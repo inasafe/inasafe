@@ -187,6 +187,9 @@ class UtilitiesTest(unittest.TestCase):
         print html
         assert html == '11'
 
+        # Set back to en
+        os.environ['LANG'] = 'en'
+
     def test_dpi_to_meters(self):
         """Test conversion from dpi to dpm."""
         dpi = 300
