@@ -232,6 +232,18 @@ def unload_plugins():
         del p
 
 
+def remove_impact_function(impact_function):
+    """Remove an impact_function from FunctionProvider
+
+    :param impact_function: An impact function that want to be removed
+    :type impact_function: FunctionProvider
+
+    """
+    if impact_function in FunctionProvider.plugins:
+        FunctionProvider.plugins.remove(impact_function)
+    del impact_function
+
+
 # FIXME (Ole): Deprecate this function (see issue #392)
 def pretty_function_name(func):
     """Return a human readable name for the function

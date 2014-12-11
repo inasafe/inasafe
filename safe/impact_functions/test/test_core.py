@@ -39,7 +39,8 @@ from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
     evacuated_population_needs,
-    compatible_layers)
+    compatible_layers,
+    remove_impact_function)
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.testing import TESTDATA, HAZDATA
 from safe.storage.core import read_layer
@@ -590,6 +591,15 @@ class TestCore(unittest.TestCase):
         msg = 'Expected %s but I got %s' % (
             expected_keywords, new_keywords)
         self.assertDictEqual(new_keywords, expected_keywords, msg)
+
+    @classmethod
+    def tearDownClass(cls):
+        remove_impact_function(BasicFunctionCore)
+        remove_impact_function(F1)
+        remove_impact_function(F2)
+        remove_impact_function(F3)
+        remove_impact_function(F4)
+        remove_impact_function(SyntaxErrorFunction)
 
 if __name__ == '__main__':
     unittest.main()
