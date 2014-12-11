@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -30,7 +30,7 @@ from collections import OrderedDict
 from safe.common.version import get_version
 from safe.common.exceptions import InaSAFEError
 from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
-from safe.utilities.defaults import get_defaults
+from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
@@ -41,10 +41,11 @@ from safe.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
-from safe.defaults import DEFAULTS
+from safe.defaults import get_defaults
 from safe.api import metadata
 
 # Aggregations' keywords
+DEFAULTS = get_defaults()
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
 female_ratio_default_key = DEFAULTS['FEMALE_RATIO_KEY']
 youth_ratio_attribute_key = DEFAULTS['YOUTH_RATIO_ATTR_KEY']

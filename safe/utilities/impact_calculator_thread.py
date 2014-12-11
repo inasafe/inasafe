@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
+__author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')

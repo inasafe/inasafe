@@ -20,11 +20,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 import numpy
 import logging
 
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
@@ -62,7 +62,6 @@ from safe.exceptions import (
     InsufficientMemoryWarning)
 from safe import messaging as m
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
-from safe.utilities.utilities import resources_path
 
 from safe_qgis.safe_interface import styles
 from safe.common.signals import (
@@ -83,9 +82,10 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image(
-    'file:///%s/img/logos/inasafe-logo.png' % resources_path(), 'InaSAFE Logo')
+LOGO_ELEMENT = styles.logo_element()
 LOGGER = logging.getLogger('InaSAFE')
+
+
 
 
 class Analysis(object):

@@ -33,7 +33,6 @@ from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
 from safe.api import ImpactFunctionManager
 from safe.api import metadata  # pylint: disable=W0612
 
-from safe.defaults import DEFAULTS
 from safe.common.exceptions import InaSAFEError
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
 from safe.utilities.keyword_io import KeywordIO
@@ -43,7 +42,7 @@ from safe.utilities.utilities import (
     is_polygon_layer,
     is_raster_layer,
     layer_attribute_names)
-from safe.utilities.defaults import get_defaults
+from safe.defaults import get_defaults
 from safe.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -172,6 +171,7 @@ step_title = 8
 
 
 # Aggregations' keywords
+DEFAULTS = get_defaults()
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
 female_ratio_default_key = DEFAULTS['FEMALE_RATIO_KEY']
 youth_ratio_attribute_key = DEFAULTS['YOUTH_RATIO_ATTR_KEY']

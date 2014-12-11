@@ -1,7 +1,7 @@
 # coding=utf-8
 """**Tests for safe vector layer class**"""
 
-__author__ = 'Tim Sutton <tim@linfiniti.com>'
+__author__ = 'Tim Sutton <tim@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '21/08/2012'
 __license__ = "GPL"

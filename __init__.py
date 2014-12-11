@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -22,5 +22,5 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyDocstring
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
-    from safe.plugin import Plugin
+    from plugin import Plugin
     return Plugin(iface)

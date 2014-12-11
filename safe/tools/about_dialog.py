@@ -12,8 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.defaults import disclaimer, limitations
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '26/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -23,9 +24,7 @@ from PyQt4 import QtGui
 
 from safe_qgis.ui.about_dialog_base import Ui_AboutDialogBase
 from safe.common.version import get_version
-from safe.utilities.defaults import (
-    limitations,
-    disclaimer)
+from safe.defaults import limitations
 
 
 class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):

@@ -5,9 +5,9 @@ import os
 import unittest
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFile
-from safe.utilities.defaults import (
-    get_defaults,
+from safe.defaults import (
     disclaimer,
+    get_defaults,
     default_organisation_logo_path,
     default_north_arrow_path)
 

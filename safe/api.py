@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
+__author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __version__ = '0.4.0'
 __revision__ = '$Format:%H$'
 __date__ = '01/06/2012'
@@ -27,7 +27,6 @@ from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.vector import Layer
 from safe.storage.vector import Vector
 from safe.storage.raster import Raster
-from safe.defaults import DEFAULTS
 from safe.storage.utilities import (
     bbox_intersection,
     buffered_bounding_box,

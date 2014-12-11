@@ -12,7 +12,10 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'tim@linfiniti.com'
+from safe.defaults import disclaimer, default_organisation_logo_path, \
+    limitations
+
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -42,9 +45,8 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     read_impact_layer,
     extent_string_to_array)
-from safe.utilities.defaults import (
+from safe.defaults import (
     limitations,
-    disclaimer,
     default_organisation_logo_path)
 from safe.utilities.styling import (
     setRasterStyle,

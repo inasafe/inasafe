@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.tools.batch import scenario_runner
 
-__author__ = 'bungcip@gmail.com & tim@linfiniti.com & imajimatika@gmail.com'
+__author__ = 'bungcip@gmail.com & tim@kartoza.com & imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -436,7 +436,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         :type report_path: str
         """
         if self.show_results_popup:
-            url = QtCore.QUrl('file:///' + report_path)
+            url = QtCore.QUrl.fromLocalFile(report_path)
             # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
             QtGui.QDesktopServices.openUrl(url)
         else:

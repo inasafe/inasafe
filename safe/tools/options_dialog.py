@@ -12,8 +12,10 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.defaults import default_organisation_logo_path, \
+    default_north_arrow_path
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -25,10 +27,10 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
 from safe.utilities.help import show_context_help
-from safe.utilities.defaults import (
+from safe.defaults import (
     disclaimer,
-    default_organisation_logo_path,
-    default_north_arrow_path, get_defaults)
+    default_north_arrow_path,
+    get_defaults)
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.version import get_version
 

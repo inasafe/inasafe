@@ -7,7 +7,7 @@
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -20,12 +20,13 @@ from qgis.gui import QgsMapCanvas
 from PyQt4.QtGui import QWidget
 
 from safe.common.testing import get_qgis_app
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.qgis_interface import QgisInterface
-from safe.plugin import Plugin
+from plugin import Plugin
 from safe.common.utilities import ugettext as safeTr
 
 # Add parent directory to path to make test aware of other modules

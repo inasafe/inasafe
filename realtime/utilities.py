@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '19/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '

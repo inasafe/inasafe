@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.defaults import disclaimer
+
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '06/05/2014'
@@ -47,7 +49,6 @@ from safe.exceptions import (
 from safe.common.utilities import temp_dir
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.defaults import disclaimer
 from safe.utilities.utilities import (
     html_header,
     html_footer,

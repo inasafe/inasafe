@@ -11,7 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+from safe.defaults import disclaimer, default_organisation_logo_path, \
+    default_north_arrow_path
+
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -31,8 +34,7 @@ from safe.exceptions import (
     KeywordNotFoundError,
     ReportCreationError)
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.defaults import (
-    disclaimer,
+from safe.defaults import (
     default_organisation_logo_path,
     default_north_arrow_path)
 

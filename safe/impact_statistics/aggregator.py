@@ -47,7 +47,7 @@ from safe.storage.utilities import (
     safe_to_qgis_layer)
 from safe.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe.utilities.clipper import clip_layer
-from safe.utilities.defaults import get_defaults
+from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     is_polygon_layer,

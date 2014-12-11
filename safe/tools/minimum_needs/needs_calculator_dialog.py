@@ -6,7 +6,7 @@
 
 """
 
-__author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
+__author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '20/1/2013'
 __license__ = "GPL"

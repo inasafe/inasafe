@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -53,7 +53,7 @@ from safe_qgis.safe_interface import read_file_keywords
 from safe.tools.keywords_dialog import KeywordsDialog
 from safe.exceptions import KeywordNotFoundError
 from safe.utilities.utilities import qgis_version
-from safe.utilities.defaults import get_defaults
+from safe.defaults import get_defaults
 
 
 def make_padang_layer():

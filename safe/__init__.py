@@ -87,22 +87,14 @@ try:
     setup_logger()
 
     import safe.defaults
-    from safe.utilities.defaults import get_defaults
 
-    safe.defaults.get_defaults = lambda the_default=None: get_defaults(
-        the_default)
 
-    from safe.impact_functions.core import get_plugins
     from safe.tools.minimum_needs.needs_profile import NeedsProfile
     # Monkey patch all the impact functions
     minimum_needs = NeedsProfile()
-    for (name, plugin) in get_plugins().items():
-        if not hasattr(plugin, 'parameters'):
-            continue
-        if 'minimum needs' in plugin.parameters:
-            plugin.parameters['minimum needs'] = (
-                minimum_needs.get_needs_parameters())
-            plugin.parameters['provenance'] = minimum_needs.provenance
+    plugin.parameters['minimum needs'] = minimum_needs.get_needs_parameters()
+    plugin.parameters['provenance'] = minimum_needs.provenance
+
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
