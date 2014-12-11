@@ -56,6 +56,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data
 )
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class VolcanoPolygonHazardPopulation(FunctionProvider):
@@ -158,6 +159,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for volcano population evacuation.
