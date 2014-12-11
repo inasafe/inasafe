@@ -49,6 +49,7 @@ from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata
 )
+from safe.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
@@ -153,6 +154,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard.

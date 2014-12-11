@@ -35,6 +35,7 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
+from safe.tools.minimum_needs.needs_profile import add_needs_parameters
 import logging
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -160,6 +161,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         ('threshold [m]', 1.0),
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map).

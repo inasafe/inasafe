@@ -31,7 +31,7 @@ from safe.defaults import (
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
     ITBFatalityFunction)
 from safe.common.utilities import ugettext as tr
-
+from safe.tools.minimum_needs.needs_profile import add_needs_parameters
 
 class PAGFatalityFunction(ITBFatalityFunction):
     # noinspection PyUnresolvedReferences
@@ -139,6 +139,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
             ('MinimumNeeds', {'on': True})])),
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())])
+    parameters = add_needs_parameters(parameters)
 
     # noinspection PyPep8Naming
     def fatality_rate(self, mmi):

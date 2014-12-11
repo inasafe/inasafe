@@ -23,6 +23,20 @@ from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 
 
+def add_needs_parameters(parameters):
+    """Add minimum needs to an impact functions parameters.
+
+    :param parameters: A dictionary of impact function parameters.
+    :type parameters: dict
+
+    :returns: A dictionary of parameters with minimum needs appended.
+    :rtype: dict
+    """
+    minimum_needs = NeedsProfile()
+    parameters['minimum needs'] = minimum_needs.get_needs_parameters()
+    parameters['provenance'] = minimum_needs.provenance
+    return parameters
+
 class NeedsProfile(MinimumNeeds):
     """The concrete MinimumNeeds class to be used in a QGIS environment.
 

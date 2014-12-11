@@ -27,6 +27,7 @@ from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
+from safe.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
@@ -102,6 +103,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
 
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
+    parameters = add_needs_parameters(parameters)
 
     def get_function_type(self):
         """Get type of the impact function.
