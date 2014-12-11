@@ -1911,52 +1911,6 @@ class TestEngine(unittest.TestCase):
 
     test_layer_integrity_raises_exception.slow = True
 
-    def test_flood_population_evacuation(self):
-        """Flood population evacuation"""
-        population = 'people_jakarta_clip.tif'
-        flood_data = 'flood_jakarta_clip.tif'
-        plugin_name = 'FloodEvacuationFunction'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, population)
-
-        # Calculate impact using API
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        impact_functions = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(
-            layers=[hazard_layer, exposure_layer], impact_fcn=impact_functions)
-        impact_filename = impact_layer.get_filename()
-        impact_layer = read_layer(impact_filename)
-
-        keywords = impact_layer.get_keywords()
-        # print "keywords", keywords
-        evacuated = float(keywords['evacuated'])
-        total_needs_full = keywords['total_needs']
-        total_needs_weekly = OrderedDict([
-            [x['table name'], x['amount']] for x in
-            total_needs_full['weekly']
-        ])
-        total_needs_single = OrderedDict([
-            [x['table name'], x['amount']] for x in
-            total_needs_full['single']
-        ])
-
-        expected_evacuated = 63400
-        assert evacuated == expected_evacuated
-        assert total_needs_weekly['Rice [kg]'] == 177520
-        assert total_needs_weekly['Family Kits'] == 12680
-        assert total_needs_weekly['Drinking Water [l]'] == 1109500
-        assert total_needs_weekly['Clean Water [l]'] == 4247800
-        assert total_needs_single['Toilets'] == 3170
-
     def test_flood_population_evacuation_polygon(self):
         """Flood population evacuation (flood is polygon)
         """
