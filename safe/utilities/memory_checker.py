@@ -21,10 +21,10 @@ import logging
 
 from PyQt4.QtCore import QCoreApplication
 
-from safe_qgis.safe_interface import get_free_memory
-from safe_qgis.safe_interface import messaging as m
-from safe_qgis.safe_interface import DYNAMIC_MESSAGE_SIGNAL
-from safe_qgis.safe_interface import styles
+from safe.common.utilities import get_free_memory
+from safe import messaging as m
+from safe.messaging import styles
+from safe.common.signals import DYNAMIC_MESSAGE_SIGNAL
 from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE

@@ -37,7 +37,9 @@ from collections import OrderedDict
 
 from safe_qgis.ui.function_options_dialog_base import (
     Ui_FunctionOptionsDialogBase)
-from safe_qgis.safe_interface import safeTr, get_postprocessor_human_name
+from safe.common.utilities import ugettext as safeTr
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 

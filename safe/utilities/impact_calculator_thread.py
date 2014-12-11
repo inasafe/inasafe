@@ -27,7 +27,7 @@ import logging
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, pyqtSignal
 
-from safe_qgis.safe_interface import calculate_safe_impact
+from safe.engine.core import calculate_impact as calculate_safe_impact
 from safe.exceptions import InsufficientParametersError
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -180,7 +180,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         try:
             layers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculate_safe_impact(
-                layers=layers, function=self._function,
+                layers=layers,
+                impact_fcn=self._function,
                 extent=self._extent,
                 check_integrity=self._check_integrity)
         except MemoryError, e:

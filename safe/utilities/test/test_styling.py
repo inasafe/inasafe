@@ -18,17 +18,7 @@ import unittest
 import sys
 import os
 
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
-
 from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.utilities.styling import (
     set_vector_graduated_style,
     setRasterStyle,
@@ -39,7 +29,18 @@ from safe.utilities.utilities_for_testing import (
     test_data_path,
     load_layer)
 from safe.exceptions import StyleError
-from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
+from safe.common.exceptions import BoundingBoxError
+from safe.storage.utilities import bbox_intersection
+
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+# Add parent directory to path to make test aware of other modules
+# We should be able to remove this now that we use env vars. TS
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../..///'))
+sys.path.append(pardir)
 
 
 class StylingTest(unittest.TestCase):

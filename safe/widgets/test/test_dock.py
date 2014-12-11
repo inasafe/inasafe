@@ -26,12 +26,16 @@ import sys
 import os
 import logging
 from os.path import join
+from unittest import TestCase, skipIf
 
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-
-from unittest import TestCase, skipIf
+from qgis.core import (
+    QgsVectorLayer,
+    QgsMapLayerRegistry,
+    QgsRectangle,
+    QgsCoordinateReferenceSystem)
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
@@ -40,19 +44,8 @@ from safe.common.testing import TESTDATA, BOUNDDATA, get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
-from qgis.core import (
-    QgsVectorLayer,
-    QgsMapLayerRegistry,
-    QgsRectangle,
-    QgsCoordinateReferenceSystem)
-from safe_qgis.safe_interface import (
-    format_int, HAZDATA, UNITDATA
-)
-
+from safe.common.utilities import format_int
+from safe.common.testing import HAZDATA, UNITDATA
 from safe.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
@@ -76,11 +69,9 @@ from safe.utilities.utilities_for_testing import (
     set_batemans_bay_extent,
     set_small_jakarta_extent)
 
-
-# Retired impact function for characterisation (Ole)
-# So ignore unused import errors for these? (Tim)
-# noinspection PyUnresolvedReferences
-from safe.impact_functions.core import get_plugin
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
 
 LOGGER = logging.getLogger('InaSAFE')
 DOCK = Dock(IFACE)

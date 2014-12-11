@@ -24,28 +24,29 @@ from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 import numpy
 import logging
+
+from qgis.core import (
+    QgsMapLayer,
+    QgsCoordinateReferenceSystem,
+    QGis)
+
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.utilities.utilities import (
     get_wgs84_resolution,
     extent_to_array,
     viewport_geo_array,
-    get_error_message
-)
+    get_error_message)
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.memory_checker import check_memory_usage
-from safe_qgis.safe_interface import (
-    get_optimal_extent,
-    get_buffered_extent,
-    ReadLayerError,
+from safe.common.exceptions import ReadLayerError, ZeroImpactException
+from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
-    get_postprocessor_human_name,
-    ZeroImpactException)
-from qgis.core import (
-    QgsMapLayer,
-    QgsCoordinateReferenceSystem,
-    QGis)
+    get_postprocessor_human_name)
+from safe.storage.utilities import (
+    buffered_bounding_box as get_buffered_extent,
+    bbox_intersection)
 from safe.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
@@ -59,11 +60,12 @@ from safe.exceptions import (
     UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
-from safe_qgis.safe_interface import messaging as m
+from safe import messaging as m
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
+from safe.utilities.utilities import resources_path
 
 from safe_qgis.safe_interface import styles
-from safe_qgis.safe_interface import (
+from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
@@ -71,6 +73,7 @@ from safe_qgis.safe_interface import (
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
+from safe.common.exceptions import BoundingBoxError
 from safe.exceptions import NoValidLayerError
 
 
@@ -80,7 +83,8 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
+LOGO_ELEMENT = m.Image(
+    'file:///%s/img/logos/inasafe-logo.png' % resources_path(), 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -287,12 +291,14 @@ class Analysis(object):
             hazard_geoextent,
             hazard_layer,
             viewport_geoextent):
-        """
+        """Generate insufficient overlap message.
 
         :param e: An exception.
         :param exposure_geoextent: Extent of the exposure layer.
+
         :param exposure_layer: Exposure layer.
         :param hazard_geoextent: Extent of the hazard layer.
+
         :param hazard_layer:  Hazard layer instance.
         :param viewport_geoextent: Viewport extents.
 
@@ -358,6 +364,7 @@ class Analysis(object):
         """
         hazard_layer = self.hazard_layer
         exposure_layer = self.exposure_layer
+        analysis_geoextent = None
 
         if self.user_extent is not None \
                 and self.user_extent_crs is not None:
@@ -366,8 +373,8 @@ class Analysis(object):
                 self.user_extent,
                 self.user_extent_crs)
         elif self.clip_to_viewport:
-            # Get the current viewport extent as an array in EPSG:4326
             analysis_geoextent = viewport_geo_array(self.map_canvas)
+
 
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
@@ -394,12 +401,12 @@ class Analysis(object):
             if (self.clip_to_viewport or (
                     self.user_extent is not None and
                     self.user_extent_crs is not None)):
-                geo_extent = get_optimal_extent(
+                geo_extent = self.get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
                     analysis_geoextent)
             else:
-                geo_extent = get_optimal_extent(
+                geo_extent = self.get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent)
 
@@ -507,6 +514,77 @@ class Analysis(object):
             geo_extent,
             hazard_layer)
 
+    def get_optimal_extent(
+            self,
+            hazard_geo_extent,
+            exposure_geo_extent,
+            viewport_geo_extent=None):
+        """A helper function to determine what the optimal extent is.
+
+        Optimal extent should be considered as the intersection between
+        the three inputs. The inasafe library will perform various checks
+        to ensure that the extent is tenable, includes data from both
+        etc.
+
+        This is a thin wrapper around safe.storage.utilities.bbox_intersection
+
+        Typically the result of this function will be used to clip
+        input layers to a common extent before processing.
+
+        :param hazard_geo_extent: An array representing the hazard layer
+            extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
+            the coordinates are in EPSG:4326 although currently no checks are
+            made to enforce this.
+        :type hazard_geo_extent: list
+
+        :param exposure_geo_extent: An array representing the exposure layer
+            extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
+            the coordinates are in EPSG:4326 although currently no checks are
+            made to enforce this.
+        :type exposure_geo_extent: list
+
+        :param viewport_geo_extent: (optional) An array representing the
+            viewport extents in the form [xmin, ymin, xmax, ymax]. It is
+            assumed that the coordinates are in EPSG:4326 although currently
+            no checks are made to enforce this.
+
+            ..note:: We do minimal checking as the inasafe library takes care of
+            it for us.
+
+        :returns: An array containing an extent in the form
+            [xmin, ymin, xmax, ymax]
+            e.g.::
+            [100.03, -1.14, 100.81, -0.73]
+        :rtype: list
+
+        :raises: Any exceptions raised by the InaSAFE library will be
+            propagated.
+        """
+
+        message = self.tr(
+            'theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: '
+            '/ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s' %
+            (hazard_geo_extent, exposure_geo_extent))
+
+        if (hazard_geo_extent is None) or (exposure_geo_extent is None):
+            raise BoundingBoxError(message)
+
+        # .. note:: The bbox_intersection function below assumes that
+        # all inputs are in EPSG:4326
+        optimal_extent = bbox_intersection(
+            hazard_geo_extent, exposure_geo_extent, viewport_geo_extent)
+
+        if optimal_extent is None:
+            # Bounding boxes did not overlap
+            message = self.tr(
+                'Bounding boxes of hazard data, exposure data and viewport did '
+                'not overlap, so no computation was done. Please make sure you '
+                'pan to where the data is and that hazard and exposure data '
+                'overlaps.')
+            raise InsufficientOverlapError(message)
+
+        return optimal_extent
+
     def setup_aggregator(self):
         """Create an aggregator for this analysis run."""
         # Refactor from dock.prepare_aggregator
@@ -514,7 +592,7 @@ class Analysis(object):
             raise Exception(self.tr('Clip parameters are not set!'))
         buffered_geo_extent = self.clip_parameters[1]
 
-        #setup aggregator to use buffered_geo_extent to deal with #759
+        # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
             buffered_geo_extent, self.aggregation_layer)
 
@@ -535,7 +613,7 @@ class Analysis(object):
                 self.exposure_layer, self.exposure_keyword)
             hazard_name = self.get_layer_title(
                 self.hazard_layer, self.hazard_keyword)
-            #aggregation layer could be set to AOI so no check for that
+            # aggregation layer could be set to AOI so no check for that
         except AttributeError:
             title = self.tr('No valid layers')
             details = self.tr(
@@ -828,7 +906,7 @@ class Analysis(object):
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
             raise
 
-        #TODO (MB) do we really want this check?
+        # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
             self.run_post_processor()
         else:

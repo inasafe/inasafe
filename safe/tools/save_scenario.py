@@ -30,7 +30,7 @@ from PyQt4.QtGui import QDialog, QFileDialog
 from safe.utilities.utilities import (
     viewport_geo_array, extent_to_array)
 from safe.utilities.keyword_io import KeywordIO
-from safe_qgis.safe_interface import safeTr
+from safe.common.utilities import ugettext as safeTr
 
 LOGGER = logging.getLogger('InaSAFE')
 

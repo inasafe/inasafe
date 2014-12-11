@@ -40,9 +40,7 @@ from safe.utilities.utilities_for_testing import (
     set_jakarta_extent,
     load_standard_layers,
     GEOCRS)
-from safe_qgis.safe_interface import (
-    unique_filename,
-    temp_dir)
+from safe.common.utilities import unique_filename, temp_dir
 from safe.widgets.dock import Dock
 
 DOCK = Dock(IFACE)

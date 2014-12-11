@@ -30,7 +30,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.tools.batch.batch_dialog import BatchDialog
 from safe.utilities.utilities_for_testing import (
     SCENARIO_DIR)
-from safe_qgis.safe_interface import temp_dir
+from safe.common.utilities import temp_dir
 from safe.widgets.dock import Dock
 
 DOCK = Dock(IFACE)

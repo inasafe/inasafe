@@ -18,12 +18,21 @@ import unittest
 import sys
 import os
 import logging
+from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit, QCheckBox
 
 from safe.common.testing import get_qgis_app
 from safe.common.resource_parameter import ResourceParameter
+from safe.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
+from safe.impact_functions.core import get_plugins
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0612
+from safe.impact_functions.earthquake import itb_earthquake_fatality_model
+# pylint: enable=W0612
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -33,15 +42,6 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from safe_qgis.safe_interface import get_plugins
-# noinspection PyUnresolvedReferences
-# pylint: disable=W0612
-from safe.impact_functions.earthquake import itb_earthquake_fatality_model
-# pylint: enable=W0612
-from collections import OrderedDict
-
-from safe.impact_statistics.function_options_dialog import (
-    FunctionOptionsDialog)
 
 LOGGER = logging.getLogger('InaSAFE')
 

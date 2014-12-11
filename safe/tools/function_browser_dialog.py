@@ -22,8 +22,8 @@ from PyQt4 import QtGui, QtWebKit
 
 from safe_qgis.ui.function_browser_base import Ui_FunctionBrowserBase
 from safe.utilities.help import show_context_help
-from safe_qgis.safe_interface import (
-    get_version,
+from safe.common.version import get_version
+from safe.impact_functions.core import (
     get_unique_values,
     get_plugins_as_table)
 from safe.utilities.utilities import html_footer, html_header

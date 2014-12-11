@@ -24,12 +24,6 @@ import sys
 import os
 import shutil
 from unittest import expectedFailure
-
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../../..///'))
-sys.path.append(pardir)
-
 import numpy
 
 from qgis.core import (
@@ -43,13 +37,11 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.safe_interface import (
-    read_safe_layer,
-    get_optimal_extent,
-    HAZDATA, TESTDATA, EXPDATA, UNITDATA,
-    nan_allclose,
-    GetDataError,
-    unique_filename)
+from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
+from safe.common.numerics import nan_allclose
+from safe.common.utilities import unique_filename
+from safe.common.exceptions import GetDataError
+from safe.storage.core import read_layer as read_safe_layer
 from safe.exceptions import InvalidProjectionError, CallGDALError
 from safe.utilities.clipper import (
     clip_layer,
@@ -58,6 +50,7 @@ from safe.utilities.clipper import (
     clip_geometry,
     adjust_clip_extent)
 from safe.utilities.utilities import qgis_version
+from safe.utilities.analysis import Analysis
 from safe.utilities.utilities_for_testing import (
     set_canvas_crs,
     RedirectStreams,
@@ -73,6 +66,11 @@ VECTOR_PATH3 = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
 
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
+
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../../..///'))
+sys.path.append(pardir)
 
 
 # noinspection PyStringFormat,PyTypeChecker,PyCallByClass,PyArgumentList
@@ -260,7 +258,8 @@ class ClipperTest(unittest.TestCase):
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
         # Extent is returned as an array [xmin,ymin,xmax,ymax]
-        geo_extent = get_optimal_extent(
+        analysis = Analysis()
+        geo_extent = analysis.get_optimal_extent(
             hazard_geo_extent, exposure_geo_extent, view_port_geo_extent)
 
         # Clip the vector to the bbox

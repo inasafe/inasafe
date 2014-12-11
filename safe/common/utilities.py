@@ -14,20 +14,11 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
+# pylint: disable=W0611
+from collections import OrderedDict
+# pylint: enable=W0611
 
 from safe.common.exceptions import VerificationError
-
-# Prefer python's own OrderedDict if it exists
-try:
-    # pylint: disable=W0611
-    from collections import OrderedDict
-    # pylint: enable=W0611
-except ImportError:
-    try:
-        from collections import OrderedDict
-    except ImportError:
-        raise RuntimeError(
-            'Could not find an available OrderedDict implementation')
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')

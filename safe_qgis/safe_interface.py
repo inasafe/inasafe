@@ -103,9 +103,7 @@ except ImportError:
 from PyQt4.QtCore import QCoreApplication
 from safe.exceptions import (
     KeywordNotFoundError,
-    StyleInfoNotFoundError,
     InvalidParameterError,
-    InsufficientOverlapError,
     NoKeywordsFoundError)
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -125,184 +123,6 @@ def tr(text):
     """
     context = "@default"
     return QCoreApplication.translate(context, text)
-
-
-def verify(statement, message=None):
-    """This is just a thin wrapper around safe.api.verify.
-
-    Args:
-        * theStatement - expression to verify
-        * theMessage - message to display on failure
-    Returns:
-        None
-    Raises:
-        VerificationError
-    """
-    try:
-        verify_util(statement, message)
-    except:
-        raise
-
-
-def get_optimal_extent(
-        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent=None):
-    """A helper function to determine what the optimal extent is.
-
-    Optimal extent should be considered as the intersection between
-    the three inputs. The inasafe library will perform various checks
-    to ensure that the extent is tenable, includes data from both
-    etc.
-
-    This is just a thin wrapper around safe.storage.utilities.bbox_intersection
-
-    Typically the result of this function will be used to clip
-    input layers to a common extent before processing.
-
-    :param hazard_geo_extent: An array representing the hazard layer
-        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that the
-        coordinates are in EPSG:4326 although currently no checks are made to
-        enforce this.
-    :type hazard_geo_extent: list
-
-    :param exposure_geo_extent: An array representing the exposure layer
-        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that the
-        coordinates are in EPSG:4326 although currently no checks are made
-        to enforce this.
-    :type exposure_geo_extent: list
-
-    :param viewport_geo_extent: (optional) An array representing the
-        viewport extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-        that the coordinates are in EPSG:4326 although currently no checks
-        are made to enforce this.
-
-        ..note:: We do minimal checking as the inasafe library takes care of
-        it for us.
-
-    :returns: An array containing an extent in the form
-        [xmin, ymin, xmax, ymax]
-        e.g.::
-        [100.03, -1.14, 100.81, -0.73]
-    :rtype: list
-
-    :raises: Any exceptions raised by the InaSAFE library will be propagated.
-    """
-    message = tr(
-        'theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: '
-        '/ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s' %
-        (hazard_geo_extent, exposure_geo_extent))
-
-    if (hazard_geo_extent is None) or (exposure_geo_extent is None):
-        raise BoundingBoxError(message)
-
-    # .. note:: The bbox_intersection function below assumes that
-    #           all inputs are in EPSG:4326
-    optimal_extent = bbox_intersection(
-        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent)
-
-    if optimal_extent is None:
-        # Bounding boxes did not overlap
-        message = tr(
-            'Bounding boxes of hazard data, exposure data and viewport did '
-            'not overlap, so no computation was done. Please make sure you '
-            'pan to where the data is and that hazard and exposure data '
-            'overlaps.')
-        raise InsufficientOverlapError(message)
-
-    return optimal_extent
-
-
-def get_buffered_extent(geo_extent, cell_size):
-    """Grow bounding box with one unit of resolution in each direction.
-
-    If resolution is None bbox is returned unchanged.
-
-    :param geo_extent: Bounding box with format [W, S, E, N]
-    :type geo_extent: list
-
-    :param cell_size: (resx, resy) Raster resolution in each direction.
-    :type: tuple
-
-    :returns: Adjusted bounding box.
-    :rtype: list
-
-    :raises: Any exceptions raised will be propagated.
-
-    Note: See docstring for underlying function buffered_bounding_box
-          for more details.
-    """
-    try:
-        return buffered_bounding_box(geo_extent, cell_size)
-    except:
-        raise
-
-
-def available_functions(keyword_list=None):
-    """ Query the inasafe engine to see what plugins are available.
-
-    Args:
-
-       keyword_list - an optional parameter which should contain
-       a list of 2 dictionaries (the number of items in the list
-       is not enforced). The dictionaries should be obtained by using
-       readKeywordsFromFile e.g.::
-
-           myFile1 = foo.shp
-           myFile2 = bar.asc
-           keywords1 = readKeywordsFromFile(myFile1)
-           keywords2 = readKeywordsFromFile(myFile2)
-           myList = [keywords1, keywords2]
-           myFunctions = available_functions(myList)
-
-    Returns:
-       A dictionary of strings where each is a plugin name.
-
-       .. note:: If keyword_list is not provided, all available
-        plugins will be returned in the list.
-
-    Raises:
-       NoFunctionsFoundError if no functions are found.
-    """
-    try:
-        dictionary = get_admissible_plugins(keyword_list)
-        # if len(dictionary) < 1:
-        #    message = 'No InaSAFE impact functions could be found'
-        #    raise NoFunctionsFoundError(message)
-        return dictionary
-    except:
-        raise
-
-
-def read_keywords_from_layer(layer, keyword):
-    """Get metadata from the keywords file associated with a layer.
-
-    .. note:: Requires a inasafe layer instance as parameter.
-    .. seealso:: getKeywordFromPath
-
-    Args:
-
-       * layer - a InaSAFE layer (vector or raster)
-       * keyword - the metadata keyword to retrieve e.g. 'title'
-
-    Returns:
-       A string containing the retrieved value for the keyword.
-
-    Raises:
-       KeywordNotFoundError if the keyword is not recognised.
-    """
-    if layer is None:
-        raise InvalidParameterError()
-    try:
-        value = layer.get_keywords(keyword)
-    except Exception, e:
-        message = tr(
-            'Keyword retrieval failed for %s (%s) \n %s' % (
-                layer.get_filename(), keyword, str(e)))
-        raise KeywordNotFoundError(message)
-    if not value or value == '':
-        message = tr('No value was found for keyword %s in layer %s' % (
-            layer.get_filename(), keyword))
-        raise KeywordNotFoundError(message)
-    return value
 
 
 def read_file_keywords(layer_path, keyword=None):
@@ -392,64 +212,11 @@ def write_keywords_to_file(filename, keywords):
         raise
 
 
-def get_style_info(layer):
-    """Get styleinfo associated with a layer.
-
-    Args:
-
-       * layer - InaSAFE layer (raster or vector)
-
-    Returns:
-       A list of dictionaries containing styleinfo info for a layer.
-
-    Raises:
-
-       * StyleInfoNotFoundError if the style is not found.
-       * InvalidParameterError if the paramers are not correct.
-    """
-
-    if not layer:
-        raise InvalidParameterError()
-
-    if not hasattr(layer, 'get_style_info'):
-        message = tr('Argument "%s" was not a valid layer instance' % layer)
-        raise StyleInfoNotFoundError(message)
-
-    try:
-        value = layer.get_style_info()
-    except Exception, e:
-        message = tr('Styleinfo retrieval failed for %s\n %s' % (
-            layer.get_filename(), str(e)))
-        raise StyleInfoNotFoundError(message)
-
-    if not value or value == '':
-        message = tr('No styleInfo was found for layer %s' % (
-            layer.get_filename()))
-        raise StyleInfoNotFoundError(message)
-    return value
-
-
 def make_ascii(x):
     """Convert QgsString to ASCII"""
     x = unicode(x)
     x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
     return x
-
-
-def read_safe_layer(path):
-    """Thin wrapper around the safe read_layer function.
-
-    Args:
-        path - str representing path to layer that must be opened.
-    Returns:
-        A safe read_safe_layer object is returned.
-    Raises:
-        Any exceptions are propagated
-    """
-    try:
-        return safe_read_layer(make_ascii(path))
-    except:
-        raise
 
 
 def convert_to_safe_layer(layer):
@@ -469,7 +236,7 @@ def convert_to_safe_layer(layer):
     if isinstance(layer, Layer):
         return layer
     try:
-        return read_safe_layer(layer.source())
+        return safe_read_layer(layer.source())
     except:
         raise
 
@@ -516,31 +283,3 @@ def get_safe_impact_function_type(function_id):
         raise
 
     return fun_type
-
-
-def calculate_safe_impact(
-        layers, function, extent=None, check_integrity=True):
-    """Thin wrapper around the safe calculate_impact function.
-
-    Args:
-        * layers - a list of layers to be used. They should be ordered
-          with hazard layer first and exposure layer second.
-        * function - SAFE impact function instance to be used
-        * extent - List of [xmin, ymin, xmax, ymax]
-                the coordinates of the bounding box.
-        * check_integrity - If true, perform checking of
-                input data integrity before running
-                impact calculation
-    Returns:
-        A safe impact function is returned
-    Raises:
-        Any exceptions are propagated
-    """
-    try:
-        return safe_calculate_impact(
-            layers,
-            function,
-            extent=extent,
-            check_integrity=check_integrity)
-    except:
-        raise

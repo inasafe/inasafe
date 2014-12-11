@@ -41,13 +41,13 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform)
 
-from safe_qgis.safe_interface import messaging as m
+from safe import messaging as m
 from safe.utilities.utilities import (html_footer, html_header)
 from safe.utilities.help import show_context_help
 from safe_qgis.ui.extent_selector_dialog_base import (
     Ui_ExtentSelectorDialogBase)
 from safe.tools.rectangle_map_tool import RectangleMapTool
-from safe_qgis.safe_interface import styles
+from safe.messaging import styles
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 

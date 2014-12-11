@@ -78,7 +78,7 @@ if os.path.exists(translation_path):
     QCoreApplication.installTranslator(translator)
 
 # MONKEYPATCHING safe.defaults.get_defaults to use get_defaults
-# see safe_qgis.utilities.defaults for more details
+# see safe.utilities.defaults for more details
 try:
     import safe.defaults
     from safe.utilities.defaults import get_defaults

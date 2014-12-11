@@ -48,9 +48,8 @@ from safe.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
     InvalidLayerError)
-from safe_qgis.safe_interface import (
-    UNITDATA,
-    temp_dir)
+from safe.common.utilities import temp_dir
+from safe.common.testing import UNITDATA
 
 LOGGER = logging.getLogger('InaSAFE')
 

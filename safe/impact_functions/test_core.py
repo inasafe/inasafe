@@ -20,16 +20,46 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 import unittest
 import random
+import os
 
 from safe.impact_functions.core import (
+    get_admissible_plugins,
     population_rounding_full,
     population_rounding,
     evacuated_population_needs
 )
 from safe.common.resource_parameter import ResourceParameter
+from safe.common.testing import TESTDATA, HAZDATA
+from safe_qgis.safe_interface import read_file_keywords
 
 
 class TestCore(unittest.TestCase):
+    def setUp(self):
+        """Setup test before each unit"""
+        self.vector_path = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+        self.raster_shake_path = os.path.join(
+            HAZDATA, 'Shakemap_Padang_2009.asc')
+
+    def test_get_admissible_plugins(self):
+        """Test for get_admissible_plugins function."""
+        functions = get_admissible_plugins()
+        message = 'No functions available (len=%ss)' % len(functions)
+        self.assertTrue(len(functions) > 0, message)
+
+        # Also test if it works when we give it two layers
+        # to see if we can determine which functions will
+        # work for them.
+        keywords1 = read_file_keywords(self.raster_shake_path)
+        keywords2 = read_file_keywords(self.vector_path)
+        # We need to explicitly add the layer type to each keyword list
+        keywords1['layertype'] = 'raster'
+        keywords2['layertype'] = 'vector'
+
+        functions = [keywords1, keywords2]
+        functions = get_admissible_plugins(functions)
+        message = 'No functions available (len=%ss)' % len(functions)
+        self.assertTrue(len(functions) > 0, message)
+
     def test_01_test_rounding(self):
         """Test for add_to_list function
         """

@@ -19,7 +19,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import re
 import sys
 import traceback
 import logging
@@ -29,7 +28,7 @@ import webbrowser
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, Qt
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QFile, QUrl
+from PyQt4.QtCore import QCoreApplication
 
 from qgis.core import (
     QGis,
@@ -40,22 +39,15 @@ from qgis.core import (
     QgsVectorLayer)
 
 from safe.exceptions import MemoryLayerCreationError
-
-from safe_qgis.safe_interface import (
-    ErrorMessage,
-    safeTr,
-    get_version,
+from safe.common.utilities import (
     unique_filename,
-    messaging as m,
-    styles)
+    ugettext as safeTr)
+from safe.common.version import get_version
+from safe import messaging as m
+from safe.messaging import styles
+from safe.messaging.error_message import ErrorMessage
 
 INFO_STYLE = styles.INFO_STYLE
-
-# do not remove this even if it is marked as unused by your IDE
-# resources are used by html footer and header the comment will mark it unused
-# for pylint
-# noinspection PyUnresolvedReferences
-from safe_qgis.ui import resources_rc  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -175,6 +167,23 @@ def get_wgs84_resolution(layer):
     return cell_size
 
 
+def resources_path():
+    """Get the path to our resources folder.
+
+    .. versionadded:: 3.0
+
+    Note that in version 3.0 we removed the use of Qt Resource files in
+    favour of directly accessing on-disk resources.
+
+    :return: Absolute path to the resources folder.
+    :rtype: str
+    """
+    path = __file__
+    path = os.path.join(path, os.pardir, os.pardir, 'resources')
+    path = os.path.abspath(path)
+    return path
+
+
 def html_header():
     """Get a standard html header for wrapping content in.
 
@@ -182,13 +191,11 @@ def html_header():
         including the body open tag.
     :rtype: str
     """
-    file_path = QtCore.QFile(':/plugins/inasafe/header.html')
-    if not file_path.open(QtCore.QIODevice.ReadOnly):
-        return '----'
-    stream = QtCore.QTextStream(file_path)
-    header = stream.readAll()
-    file_path.close()
-    return header
+    file_path = os.path.join(resources_path(), 'header.html')
+    with file(file_path) as header_file:
+        content = header_file.read()
+        content = content.replace('PATH', resources_path())
+    return content
 
 
 def html_footer():
@@ -198,13 +205,10 @@ def html_footer():
         and including the body close tag.
     :rtype: str
     """
-    file_path = QtCore.QFile(':/plugins/inasafe/footer.html')
-    if not file_path.open(QtCore.QIODevice.ReadOnly):
-        return '----'
-    stream = QtCore.QTextStream(file_path)
-    footer = stream.readAll()
-    file_path.close()
-    return footer
+    file_path = os.path.join(resources_path(), 'footer.html')
+    with file(file_path) as header_file:
+        content = header_file.read()
+    return content
 
 
 def qgis_version():
@@ -728,55 +732,6 @@ def read_impact_layer(impact_layer):
         raise Exception(message)
 
 
-def map_qrc_to_file(match, destination_directory):
-    """Map a qrc:/ path to its correspondent file:/// and create it.
-
-    For example qrc:/plugins/inasafe/ajax-loader.gif
-    is converted to file:////home/marco/.qgis2/python/plugins/
-    inasafe-master/safe_qgis/resources/img/ajax-loader.gif
-
-    If the qrc asset is non file based (i.e. is compiled in resources_rc
-    .pc) then a copy of is extracted to destination_directory.
-
-    :param match: The qrc path to be mapped matched from a regular
-        expression such as re.compile('qrc:/plugins/inasafe/([-./ \\w]*)').
-    :type match: re.match object
-
-    :param destination_directory: The destination path to copy non file based
-        qrc assets.
-    :type destination_directory: str
-
-    :returns: File path to the resource or None if the resource could
-        not be created.
-    :rtype: None, str
-    """
-    # Resource alias on resources.qrc
-    resource_alias = match.group(1)
-
-    # The resource path (will be placed inside destination_directory)
-    resource_path = os.path.join(destination_directory, resource_alias)
-
-    # The file (resource) might be here due to a previous copy
-    if not os.path.isfile(resource_path):
-        # Get resource directory tree
-        resource_path_directory = os.path.dirname(resource_path)
-
-        # Create dirs recursively if resource_path_directory does not exist
-        if not os.path.exists(resource_path_directory):
-            os.makedirs(resource_path_directory)
-
-        # Now, copy from qrc to file system
-        source_file = ':/plugins/inasafe/%s' % resource_alias
-        # noinspection PyTypeChecker
-        copy_successful = QFile.copy(source_file, resource_path)
-        if not copy_successful:
-            # copy somehow failed
-            resource_path = None
-
-    # noinspection PyArgumentList
-    return QUrl.fromLocalFile(resource_path).toString()
-
-
 def open_in_browser(file_path):
     """Open a file in the default web browser.
 
@@ -792,8 +747,6 @@ def html_to_file(html, file_path=None, open_browser=False):
     if a file_path is passed, it is used, if not a unique_filename is
     generated.
 
-    qrc:/..../ paths gets converted to file:///..../
-
     :param html: the html for the output file.
     :type html: str
 
@@ -805,11 +758,6 @@ def html_to_file(html, file_path=None, open_browser=False):
     """
     if file_path is None:
         file_path = unique_filename(suffix='.html')
-
-    file_dir = os.path.dirname(file_path)
-    reg_exp = re.compile(r'qrc:/plugins/inasafe/([-./ \w]*)')
-    html = reg_exp.sub(lambda match: map_qrc_to_file(match, file_dir),
-                       html)
 
     with open(file_path, 'w') as f:
         f.write(html)

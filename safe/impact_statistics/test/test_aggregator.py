@@ -42,12 +42,9 @@ from safe.common.qgis_vector_tools import extent_to_geo_array
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe_qgis import get_defaults
-from safe_qgis.safe_interface import (
-    UNITDATA,
-    TESTDATA,
-    BOUNDDATA,
-    Raster,
-    Vector)
+from safe.common.testing import UNITDATA, TESTDATA, BOUNDDATA
+from safe.storage.raster import Raster
+from safe.storage.vector import Vector
 
 from safe.utilities.utilities_for_testing import (
     set_canvas_crs,

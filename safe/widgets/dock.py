@@ -23,19 +23,18 @@ import logging
 from functools import partial
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
-# noinspection PyPackageRequirements
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
-    QgsCoordinateReferenceSystem,
-)
-from safe_extras.pydispatch import dispatcher
-from safe_qgis.ui.dock_base import Ui_DockBase
+    QgsCoordinateReferenceSystem)
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui, QtCore
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
@@ -52,24 +51,24 @@ from safe.utilities.styling import (
     set_vector_graduated_style,
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe_qgis.safe_interface import (
-    load_plugins,
-    available_functions,
-    get_function_title,
-    get_safe_impact_function,
-    safeTr,
-    get_version,
-    temp_dir,
-    ReadLayerError)
-from safe_qgis.safe_interface import messaging as m
-from safe_qgis.safe_interface import (
+from safe.impact_functions import load_plugins
+from safe.impact_functions.core import (
+    get_admissible_plugins,
+    get_function_title)
+from safe.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
+from safe.common.utilities import temp_dir
+from safe.common.exceptions import ReadLayerError
+from safe.common.version import get_version
+from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
-from safe.utilities.keyword_io import KeywordIO
+from safe import messaging as m
+from safe.messaging import styles
 from safe.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -82,14 +81,15 @@ from safe.exceptions import (
     InsufficientMemoryWarning)
 from safe.report.map import Map
 from safe.report.html_renderer import HtmlRenderer
-from safe.impact_statistics.function_options_dialog import (
-    FunctionOptionsDialog)
 from safe.tools.about_dialog import AboutDialog
 from safe.tools.keywords_dialog import KeywordsDialog
 from safe.tools.impact_report_dialog import ImpactReportDialog
-from safe_qgis.safe_interface import styles
+from safe_extras.pydispatch import dispatcher
+from safe_qgis.ui.dock_base import Ui_DockBase
+from safe_qgis.safe_interface import get_safe_impact_function
 
 from safe.utilities.analysis import Analysis
+from safe.utilities.utilities import resources_path
 from safe.utilities.extent import Extent
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -98,7 +98,10 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
+
+LOGO_ELEMENT = m.Image(
+    'file:///%s/img/logos/inasafe-logo.png' % resources_path(),
+    'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -444,7 +447,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'Make sure you have defined keywords for your hazard and '
                 'exposure layers. You can do this using the keywords icon '),
             m.Image(
-                'qrc:/plugins/inasafe/show-keyword-editor.svg',
+                'file:///%s/img/icons/show-keyword-editor.svg' % (
+                    resources_path()),
                 **SMALL_ICON_STYLE),
             self.tr(' in the InaSAFE toolbar.')))
         basics_list.add(m.Paragraph(
@@ -783,7 +787,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     continue
             else:
                 # Lookup internationalised title if available
-                title = safeTr(title)
+                title = self.tr(title)
             # Register title with layer
             if title and self.set_layer_from_title_flag:
                 layer.setLayerName(title)
@@ -867,7 +871,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Find out which functions can be used with these layers
         func_list = [hazard_keywords, exposure_keywords]
         try:
-            func_dict = available_functions(func_list)
+            func_dict = get_admissible_plugins(func_list)
             # Populate the hazard combo with the available functions
             for myFunctionID in func_dict:
                 function = func_dict[myFunctionID]
@@ -1337,7 +1341,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             # Translate titles explicitly if possible
             if keyword == 'title':
-                value = safeTr(value)
+                value = self.tr(value)
                 # Add this keyword to report
             key = m.ImportantText(
                 self.tr(keyword.capitalize()))
@@ -1364,8 +1368,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'you wish to use it as an impact or hazard layer in a '
                 'scenario, please use the keyword editor. You can open'
                 ' the keyword editor by clicking on the ')),
-            m.Image('qrc:/plugins/inasafe/show-keyword-editor.svg',
-                    attributes='width=24 height=24'),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-editor.svg' % resources_path(),
+                attributes='width=24 height=24'),
             m.Text(self.tr(
                 ' icon in the toolbar, or choosing Plugins -> InaSAFE '
                 '-> Keyword Editor from the menu bar.')))

@@ -32,9 +32,9 @@ from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
 from safe_qgis.ui.shakemap_importer_dialog_base import (
     Ui_ShakemapImporterDialogBase)
-from safe_qgis.safe_interface import get_version
-from safe_qgis.safe_interface import messaging as m
-from safe_qgis.safe_interface import styles
+from safe.common.version import get_version
+from safe import messaging as m
+from safe.messaging import styles
 from safe.utilities.help import show_context_help
 from safe.utilities.utilities import html_footer, html_header
 from safe.utilities.styling import mmi_ramp

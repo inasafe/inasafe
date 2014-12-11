@@ -28,14 +28,9 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis.safe_interface import (
-    read_file_keywords,
-    unique_filename,
-    temp_dir,
-    TESTDATA,
-    UNITDATA)
-
-from safe_qgis.safe_interface import HAZDATA, EXPDATA
+from safe.common.utilities import unique_filename, temp_dir
+from safe.common.testing import TESTDATA, UNITDATA, HAZDATA, EXPDATA
+from safe_qgis.safe_interface import read_file_keywords
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'

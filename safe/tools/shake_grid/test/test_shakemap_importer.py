@@ -32,9 +32,9 @@ from safe.common.testing import get_qgis_app, get_shake_test_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.tools.shake_grid.shakemap_importer_dialog import (
-    ShakemapImporterDialog
-)
-from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
+    ShakemapImporterDialog)
+from safe.common.testing import TESTDATA
+from safe.common.utilities import unique_filename, temp_dir
 
 
 class ShakemapImporterTest(unittest.TestCase):

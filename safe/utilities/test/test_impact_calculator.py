@@ -17,28 +17,23 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys
+import os
+import unittest
+
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
-import sys
-import os
+from safe.utilities.impact_calculator import ImpactCalculator
+from safe.exceptions import InsufficientParametersError
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
+from safe.storage.core import read_layer as read_safe_layer
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
-
-import unittest
-from safe.utilities.impact_calculator import ImpactCalculator
-from safe.exceptions import (
-    InsufficientParametersError,
-    KeywordNotFoundError,
-    StyleInfoNotFoundError)
-
-from safe_qgis.safe_interface import (
-    read_keywords_from_layer, get_style_info, read_safe_layer,
-    HAZDATA, EXPDATA, TESTDATA)
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -135,25 +130,6 @@ class ImpactCalculatorTest(unittest.TestCase):
         message = 'Expected an error, none encountered.'
         assert(), message
 
-    def test_get_keyword_from_impact_layer(self):
-        """Check that we can get keywords from a created impact layer."""
-        function_runner = self.calculator.get_runner()
-        function_runner.run()
-        impact_layer = function_runner.impact_layer()
-        keyword = read_keywords_from_layer(impact_layer, 'impact_summary')
-        message = 'Keyword request returned an empty string'
-        assert(keyword is not ''), message
-        # Test we get an exception if keyword is not found
-        try:
-            _ = read_keywords_from_layer(impact_layer, 'boguskeyword')
-        except KeywordNotFoundError:
-            pass  # this is good
-        except Exception, e:
-            message = (
-                'Request for bogus keyword raised incorrect '
-                'exception type: \n %s') % str(e)
-            assert(), message
-
     def test_issue100(self):
         """Test for issue 100: unhashable type dict"""
         exposure_path = os.path.join(
@@ -178,36 +154,6 @@ class ImpactCalculatorTest(unittest.TestCase):
         except Exception, e:  # pylint: disable=W0703
             message = 'Calculator run failed. %s' % str(e)
             assert(), message
-
-    def test_get_style_info(self):
-        """Test that we can get styleInfo data from a vector's keyword file
-        """
-        function_runner = self.calculator.get_runner()
-        function_runner.start()
-        function_runner.join()
-        impact_layer = function_runner.impact_layer()
-
-        message = (
-            'Incorrect type returned from '
-            'function_runner.impactlayer(). Expected an impactlayer'
-            'but received a %s' % type(impact_layer))
-        assert hasattr(impact_layer, 'get_style_info'), message
-
-        style_info = get_style_info(impact_layer)
-        message = 'Style info request returned an empty string'
-        assert style_info is not '', message
-        # print style_info
-
-        # Test we get an exception if style info is not found
-        try:
-            get_style_info('boguspath')
-        except StyleInfoNotFoundError:
-            pass  # This is good
-        except Exception, e:
-            message = (
-                'StyleInfo request for bogus file raised incorrect'
-                ' exception type: \n %s') % str(e)
-            raise StyleInfoNotFoundError(message)
 
     def test_need_clip(self):
         """Test if need_clip method work as expected."""

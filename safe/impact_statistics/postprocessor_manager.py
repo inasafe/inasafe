@@ -17,21 +17,24 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from collections import OrderedDict
 
 from qgis.core import QgsFeatureRequest
 
-from safe.common.utilities import unhumanize_number, format_int
+from safe.common.utilities import (
+    unhumanize_number,
+    format_int,
+    ugettext as safeTr)
+from safe.common.exceptions import PostProcessorError
+from safe.exceptions import KeywordNotFoundError
 from safe.utilities.keyword_io import KeywordIO
-from safe_qgis.safe_interface import (
-    safeTr,
+from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
-    get_postprocessor_human_name,
-    messaging as m,
-    PostProcessorError,
-    KeywordNotFoundError,
-    styles)
+    get_postprocessor_human_name)
+from safe import messaging as m
+from safe.messaging import styles
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -330,8 +333,8 @@ class PostprocessorManager(QtCore.QObject):
                 # something went wrong finding the youth ratio field,
                 # use defaults from below except block
                 if (youth_ratio_field_index == -1 or
-                            adult_ratio_field_index == -1 or
-                            elderly_ratio_field_index == -1):
+                        adult_ratio_field_index == -1 or
+                        elderly_ratio_field_index == -1):
                     raise KeyError
 
                 user_defined_age_ratios = True
@@ -429,8 +432,8 @@ class PostprocessorManager(QtCore.QObject):
                         adult_ratio = feature[adult_ratio_field_index]
                         elderly_ratio = feature[elderly_ratio_field_index]
                         if (youth_ratio is None or
-                                    adult_ratio is None or
-                                    elderly_ratio is None):
+                                adult_ratio is None or
+                                elderly_ratio is None):
                             youth_ratio = self.aggregator.defaults[
                                 'YOUTH_RATIO']
                             adult_ratio = self.aggregator.defaults[

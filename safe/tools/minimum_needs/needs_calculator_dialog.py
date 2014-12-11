@@ -14,12 +14,14 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-from PyQt4 import QtGui, QtCore
 
-from PyQt4.QtCore import pyqtSignature
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignature
 
-from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
+from safe.common.version import get_version
+from safe.storage.core import read_layer as safe_read_layer
+from safe.storage.vector import Vector
 from safe_qgis.ui.needs_calculator_dialog_base import (
     Ui_NeedsCalculatorDialogBase)
 from safe.utilities.utilities import (
@@ -29,9 +31,9 @@ from safe.utilities.utilities import (
     html_footer,
     html_header)
 from safe.utilities.help import show_context_help
-from safe_qgis.safe_interface import evacuated_population_weekly_needs
-from safe_qgis.safe_interface import messaging as m
-from safe_qgis.safe_interface import styles
+from safe.impact_functions.core import evacuated_population_weekly_needs
+from safe import messaging as m
+from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')

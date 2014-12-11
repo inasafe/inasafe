@@ -47,12 +47,9 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.utilities.utilities_for_testing import (
     test_data_path, clone_shp_layer, temp_dir)
-from safe_qgis.safe_interface import (
-    read_file_keywords,
-    unique_filename,
-    HAZDATA,
-    TESTDATA,
-    BOUNDDATA)
+from safe.common.utilities import unique_filename
+from safe.common.testing import HAZDATA, TESTDATA, BOUNDDATA
+from safe_qgis.safe_interface import read_file_keywords
 from safe.tools.keywords_dialog import KeywordsDialog
 from safe.exceptions import KeywordNotFoundError
 from safe.utilities.utilities import qgis_version

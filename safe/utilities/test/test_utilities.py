@@ -3,23 +3,12 @@
 import unittest
 import sys
 import os
-
 from unittest import expectedFailure
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QVariant
 
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
-
 from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.utilities.utilities import (
     get_error_message,
     qgis_version,
@@ -30,14 +19,27 @@ from safe.utilities.utilities import (
     layer_attribute_names,
     impact_attribution,
     dpi_to_meters,
-    qt_at_least)
+    qt_at_least,
+    html_footer,
+    html_header,
+    resources_path)
 from safe.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
 from safe.tools.test.test_keywords_dialog import (
     make_polygon_layer,
     clone_padang_layer,
     make_point_layer)
-from safe_qgis.safe_interface import bbox_intersection
+from safe.storage.utilities import bbox_intersection
+
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+# Add parent directory to path to make test aware of other modules
+# We should be able to remove this now that we use env vars. TS
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../..///'))
+sys.path.append(pardir)
 
 
 class UtilitiesTest(unittest.TestCase):
@@ -80,7 +82,7 @@ class UtilitiesTest(unittest.TestCase):
                 '/test-stacktrace-html.txt', 'r').read().replace('\n', '')
             self.assertIn(expected_results, message)
 
-        # pylint: enable=W0703
+            # pylint: enable=W0703
 
     def test_get_qgis_version(self):
         """Test we can get the version of QGIS"""
@@ -95,13 +97,13 @@ class UtilitiesTest(unittest.TestCase):
         # with good attribute name
         attributes, position = layer_attribute_names(layer, [
             QVariant.Int, QVariant.String],
-            'TEST_STRIN')  # Not a typo...
+                                                     'TEST_STRIN')  # Not a typo...
         expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         expected_position = 2
-        message = 'expected_attributes, got %s, expected %s' % (
+        message = 'expected_attributes, got %s, expected %s'%(
             attributes, expected_attributes)
         assert (attributes == expected_attributes), message
-        message = 'expected_position, got %s, expected %s' % (
+        message = 'expected_position, got %s, expected %s'%(
             position, expected_position)
         assert (position == expected_position), message
 
@@ -112,28 +114,28 @@ class UtilitiesTest(unittest.TestCase):
             'MISSING_ATTR')
         expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         expected_position = None
-        message = 'expected_attributes, got %s, expected %s' % (
+        message = 'expected_attributes, got %s, expected %s'%(
             attributes, expected_attributes)
         assert (attributes == expected_attributes), message
-        message = 'expected_position, got %s, expected %s' % (
+        message = 'expected_position, got %s, expected %s'%(
             position, expected_position)
         assert (position == expected_position), message
 
         # with raster layer
         layer, _ = clone_padang_layer()
         attributes, position = layer_attribute_names(layer, [], '')
-        message = 'Should return None, None for raster layer, got %s, %s' % (
+        message = 'Should return None, None for raster layer, got %s, %s'%(
             attributes, position)
         assert (attributes is None and position is None), message
 
     def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back"""
         layer = make_polygon_layer()
-        message = 'isPolygonLayer, %s layer should be polygonal' % layer
+        message = 'isPolygonLayer, %s layer should be polygonal'%layer
         assert is_polygon_layer(layer), message
 
         layer = make_point_layer()
-        message = '%s layer should be polygonal' % layer
+        message = '%s layer should be polygonal'%layer
         assert not is_polygon_layer(layer), message
 
         layer, _ = clone_padang_layer()
@@ -147,10 +149,10 @@ class UtilitiesTest(unittest.TestCase):
         pixels = 300
         mm = 25.4  # 1 inch
         result = points_to_mm(pixels, dpi)
-        message = "Expected: %s\nGot: %s" % (mm, result)
+        message = "Expected: %s\nGot: %s"%(mm, result)
         assert result == mm, message
         result = mm_to_points(mm, dpi)
-        message = "Expected: %s\nGot: %s" % (pixels, result)
+        message = "Expected: %s\nGot: %s"%(pixels, result)
         assert result == pixels, message
 
     def test_humanize_seconds(self):
@@ -197,7 +199,7 @@ class UtilitiesTest(unittest.TestCase):
         expected_dpm = 11811.023622
         message = (
             'Conversion from dpi to dpm failed\n'
-            ' Got: %s Expected: %s\n' %
+            ' Got: %s Expected: %s\n'%
             (dpm, expected_dpm))
         self.assertAlmostEqual(dpm, expected_dpm, msg=message)
 
@@ -209,6 +211,36 @@ class UtilitiesTest(unittest.TestCase):
         assert qt_at_least('4.6.4', test_version)
         assert qt_at_least('4.7.2', test_version)
         assert not qt_at_least('4.8.4', test_version)
+
+    def test_html_footer(self):
+        """Test that we can get the html footer.
+
+        .. versionadded:: 3.0
+        """
+        footer = html_header()
+        self.assertTrue('bootstrap' in footer)
+
+    def test_html_header(self):
+        """Test that we can get the html header.
+
+        .. versionadded:: 3.0
+        """
+        header = html_header()
+        self.assertTrue(
+            'bootstrap' in header,
+            'bootstrap not in ' + header)
+
+    def test_resources_path(self):
+        """Test we can get the path to the resources dir nicely.
+
+        ..versionadded:: 3.0
+        """
+        path = resources_path()
+        css_path = os.path.join(path, 'css', 'bootstrap.css')
+        self.assertTrue(
+            os.path.exists(css_path),
+            css_path + ' does not exist')
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)
