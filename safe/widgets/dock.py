@@ -787,7 +787,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     continue
             else:
                 # Lookup internationalised title if available
-                title = safeTr(title)
+                title = self.tr(title)
             # Register title with layer
             if title and self.set_layer_from_title_flag:
                 layer.setLayerName(title)
@@ -1341,7 +1341,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             # Translate titles explicitly if possible
             if keyword == 'title':
-                value = safeTr(value)
+                value = self.tr(value)
                 # Add this keyword to report
             key = m.ImportantText(
                 self.tr(keyword.capitalize()))
