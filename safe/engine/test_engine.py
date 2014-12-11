@@ -32,8 +32,7 @@ from safe.common.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,
-    ensure_numeric,
-    nan_allclose)
+    ensure_numeric)
 from safe.common.utilities import (
     VerificationError,
     unique_filename,
@@ -600,80 +599,6 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 4
 
     test_polygon_hazard_with_holes_and_raster_exposure.slow = True
-
-    def test_flood_building_impact_function(self):
-        """Flood building impact function works
-
-        This test also exercises interpolation of hazard level (raster) to
-        building locations (vector data).
-        """
-
-        for haz_filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
-                             'Flood_Design_Depth_Jakarta_geographic.asc']:
-
-            # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
-            exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                                 % TESTDATA)
-
-            # Calculate impact using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
-
-            plugin_name = 'FloodBuildingImpactFunction'
-            plugin_list = get_plugins(plugin_name)
-            assert len(plugin_list) == 1
-            assert plugin_list[0].keys()[0] == plugin_name
-
-            IF = plugin_list[0][plugin_name]
-
-            impact_vector = calculate_impact(layers=[H, E],
-                                             impact_fcn=IF)
-
-            # Extract calculated result
-            icoordinates = impact_vector.get_geometry()
-            iattributes = impact_vector.get_data()
-
-            # Check
-            assert len(icoordinates) == 34960
-            assert len(iattributes) == 34960
-
-            # FIXME (Ole): check more numbers
-
-    test_flood_building_impact_function.slow = True
-
-    def test_flood_building_impact_function_vector(self):
-        """Flood building impact function works (flood is polygon)
-        """
-        building = 'test_flood_building_impact_exposure.shp'
-        flood_data = 'test_flood_building_impact_hazard.shp'
-        plugin_name = 'FloodBuildingImpactFunction'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, building)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-        I = read_layer(impact_filename)
-
-        keywords = I.get_keywords()
-        buildings_total = keywords['buildings_total']
-        buildings_affected = keywords['buildings_affected']
-
-        assert buildings_total == 67
-        assert buildings_affected == 41
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer
