@@ -29,9 +29,6 @@ class TestRealImpactFunctions(unittest.TestCase):
             'Flood Evacuation Function Vector Hazard',
             admissible_plugins, msg)
         self.assertIn(
-            'I T B Earthquake Building Damage Function',
-            admissible_plugins, msg)
-        self.assertIn(
             'Earthquake Building Impact Function',
             admissible_plugins, msg)
         self.assertIn(
