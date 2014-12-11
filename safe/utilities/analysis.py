@@ -30,16 +30,9 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QGis)
 
-from safe.utilities.impact_calculator import ImpactCalculator
-from safe.utilities.utilities import (
-    get_wgs84_resolution,
-    extent_to_array,
-    viewport_geo_array,
-    get_error_message)
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
-from safe.utilities.memory_checker import check_memory_usage
 from safe.common.exceptions import ReadLayerError, ZeroImpactException
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
@@ -61,10 +54,16 @@ from safe.common.exceptions import (
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe import messaging as m
+from safe.utilities.impact_calculator import ImpactCalculator
+from safe.utilities.memory_checker import check_memory_usage
+from safe.utilities.utilities import (
+    get_wgs84_resolution,
+    extent_to_array,
+    viewport_geo_array,
+    get_error_message,
+    resources_path)
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
-from safe.utilities.utilities import resources_path
-
-from safe_qgis.safe_interface import styles
+from safe.messaging import styles
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -357,8 +356,8 @@ class Analysis(object):
             * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
                 intersection of the two input layers extents and the viewport.
             * hazard_layer: QgsMapLayer - layer representing hazard.
-        :rtype: dict, QgsRectangle, float,
-                QgsMapLayer, QgsRectangle, QgsMapLayer
+        :rtype: dict, QgsRectangle, float, QgsMapLayer, QgsRectangle,
+            QgsMapLayer
         :raises: InsufficientOverlapError
         """
         hazard_layer = self.hazard_layer

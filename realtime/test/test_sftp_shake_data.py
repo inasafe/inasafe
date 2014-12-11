@@ -21,7 +21,8 @@ import os
 import unittest
 import shutil
 
-from safe.api import temp_dir, get_shake_test_data_path
+from safe.common.utilities import temp_dir
+from safe.common.testing import get_shake_test_data_path
 from realtime.sftp_client import SFtpClient
 from realtime.test.test_sftp_client import run_monkey_patching_sftp_client
 from realtime.sftp_shake_data import SftpShakeData

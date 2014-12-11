@@ -23,8 +23,7 @@ import traceback
 import logging
 import uuid
 import webbrowser
-from safe.storage.utilities import read_keywords
-from safe_qgis.safe_interface import tr
+import unicodedata
 
 from qgis.core import (
     QGis,
@@ -39,8 +38,10 @@ from PyQt4 import QtCore, QtGui, Qt
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication
 
+from safe.storage.utilities import read_keywords
 from safe.storage.layer import Layer
 from safe.storage.core import read_layer as safe_read_layer
+from safe.storage.utilities import write_keywords as safe_write_keywords
 from safe.common.exceptions import (
     MemoryLayerCreationError,
     InvalidParameterError,
@@ -51,6 +52,7 @@ from safe.common.utilities import (
     ugettext as safeTr)
 from safe.common.version import get_version
 from safe import messaging as m
+from safe.impact_functions.core import get_plugins
 from safe.messaging import styles
 from safe.messaging.error_message import ErrorMessage
 
@@ -881,3 +883,73 @@ def read_file_keywords(layer_path, keyword=None):
     except:
         raise
     return value
+
+
+def write_keywords_to_file(filename, keywords):
+    """Thin wrapper around the safe write_keywords function.
+
+    Args:
+        * filename - str representing path to layer that must be written.
+          If the file does not end in .keywords, its extension will be
+          stripped off and the basename + .keywords will be used as the file.
+        * keywords - a dictionary of keywords to be written
+    Returns:
+        None
+    Raises:
+        Any exceptions are propogated
+    """
+    basename, extension = os.path.splitext(filename)
+    if 'keywords' not in extension:
+        filename = basename + '.keywords'
+    try:
+        safe_write_keywords(keywords, filename)
+    except:
+        raise
+
+
+def get_safe_impact_function(function=None):
+    """Thin wrapper around the safe impact_functions function.
+
+    Args:
+        function - optional str giving a specific plugins name that should
+        be fetched.
+    Returns:
+        A safe impact function is returned
+    Raises:
+        Any exceptions are propagated
+    """
+    # Convert string to ASCII
+    function = unicode(function)
+    function = unicodedata.normalize(
+        'NFKD', function).encode('ascii', 'ignore')
+    try:
+        return get_plugins(function)
+    except:
+        raise
+
+
+def get_safe_impact_function_type(function_id):
+    """
+    Args:
+        function_id - str giving a specific plugins name that should be
+        fetched.
+    Returns:
+        A str type of safe impact function is returned:
+            'old-style' is "classic" safe impact function
+            'qgis2.0'   is impact function with native qgis layers support
+    Raises:
+        Any exceptions are propagated
+    """
+    try:
+        # Get an instance of the impact function and get the type
+        function = get_safe_impact_function(function_id)[0][function_id]
+        function = function()
+
+        try:
+            fun_type = function.get_function_type()
+        except AttributeError:
+            fun_type = 'old-style'
+    except:
+        raise
+
+    return fun_type

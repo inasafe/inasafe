@@ -12,7 +12,7 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 
-from safe.api import PostProcessorError
+from safe.common.exceptions import PostProcessorError
 from safe.postprocessors.gender_postprocessor import GenderPostprocessor
 
 POSTPROCESSOR = GenderPostprocessor()

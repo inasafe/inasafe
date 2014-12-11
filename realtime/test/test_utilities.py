@@ -22,7 +22,7 @@ import logging
 import unittest
 import datetime
 
-from safe.api import log_file_path
+from safe.common.utilities import log_file_path
 from realtime.utilities import (
     base_data_dir,
     shakemap_zip_dir,

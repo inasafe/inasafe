@@ -7,6 +7,8 @@
      (at your option) any later version.
 
 """
+from safe.utilities.utilities import get_safe_impact_function
+
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -105,7 +107,6 @@ class PluginTest(unittest.TestCase):
         myPlugin.change_i18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        from safe_qgis.safe_interface import get_safe_impact_function
         # myFunctions = get_safe_impact_function()
         # print myFunctions
         myFunctions = get_safe_impact_function('Tydelik gesluit')
