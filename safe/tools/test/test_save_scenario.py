@@ -25,9 +25,6 @@ from qgis.core import QgsMapLayerRegistry
 from safe.common.testing import TESTDATA, get_qgis_app
 
 
-
-
-
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

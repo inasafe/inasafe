@@ -22,7 +22,7 @@ import logging
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 from qgis.core import QgsMapLayer
-from safe.exceptions import LegendLayerError, KeywordNotFoundError
+from safe.common.exceptions import LegendLayerError, KeywordNotFoundError
 from safe.utilities.utilities import dpi_to_meters
 from safe.utilities.keyword_io import KeywordIO
 

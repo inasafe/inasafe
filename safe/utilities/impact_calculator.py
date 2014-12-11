@@ -26,7 +26,7 @@ from PyQt4.QtCore import QObject
 from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.utilities.utilities import convert_to_safe_layer
-from safe.exceptions import (
+from safe.common.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
 from safe_qgis.safe_interface import (

@@ -50,7 +50,7 @@ from safe.utilities.utilities_for_testing import (
 from safe.common.utilities import unique_filename
 from safe.common.testing import HAZDATA, TESTDATA, BOUNDDATA
 from safe.tools.keywords_dialog import KeywordsDialog
-from safe.exceptions import KeywordNotFoundError
+from safe.common.exceptions import KeywordNotFoundError
 from safe.utilities.utilities import qgis_version, read_file_keywords
 from safe.utilities.defaults import get_defaults
 

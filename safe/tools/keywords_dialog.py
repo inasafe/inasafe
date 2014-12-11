@@ -37,7 +37,7 @@ from safe.utilities.utilities import (
     get_error_message,
     is_polygon_layer,
     layer_attribute_names)
-from safe.exceptions import (
+from safe.common.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)

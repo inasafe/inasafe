@@ -121,9 +121,6 @@ def tr(text):
     return QCoreApplication.translate(context, text)
 
 
-
-
-
 def write_keywords_to_file(filename, keywords):
     """Thin wrapper around the safe write_keywords function.
 

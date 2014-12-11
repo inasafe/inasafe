@@ -27,7 +27,7 @@ import cPickle as pickle
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QSettings
 
-from safe.exceptions import (
+from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
     KeywordDbError,

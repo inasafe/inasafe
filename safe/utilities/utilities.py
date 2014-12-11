@@ -41,7 +41,7 @@ from PyQt4.QtCore import QCoreApplication
 
 from safe.storage.layer import Layer
 from safe.storage.core import read_layer as safe_read_layer
-from safe.exceptions import (
+from safe.common.exceptions import (
     MemoryLayerCreationError,
     InvalidParameterError,
     NoKeywordsFoundError,

@@ -36,7 +36,7 @@ from qgis.core import (
 
 from safe.common.utilities import temp_dir, which, verify
 from safe.utilities.keyword_io import KeywordIO
-from safe.exceptions import (
+from safe.common.exceptions import (
     InvalidParameterError,
     NoFeaturesInExtentError,
     CallGDALError,

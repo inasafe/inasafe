@@ -28,7 +28,7 @@ import logging
 from PyQt4.QtCore import QObject, pyqtSignal
 
 from safe.engine.core import calculate_impact as calculate_safe_impact
-from safe.exceptions import InsufficientParametersError
+from safe.common.exceptions import InsufficientParametersError
 
 LOGGER = logging.getLogger('InaSAFE')
 
