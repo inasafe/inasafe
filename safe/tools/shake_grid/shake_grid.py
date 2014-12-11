@@ -37,7 +37,7 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsRectangle)
 
-from safe.api import which, romanise
+from safe.common.utilities import which, romanise
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,

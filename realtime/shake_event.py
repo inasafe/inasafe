@@ -72,16 +72,16 @@ from qgis.core import (
 
 # pylint: enable=E0611
 # pylint: enable=W0611
+from safe.impact_functions.core import get_plugins as safe_get_plugins
+from safe.storage.core import read_layer as safe_read_layer
+from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.common.testing import get_qgis_app
-from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_layer as safe_read_layer
-from safe.api import calculate_impact as safe_calculate_impact
-from safe.api import (
+from safe.common.tables import (
     Table,
     TableCell,
-    TableRow,
-    get_version,
-    romanise)
+    TableRow)
+from safe.common.version import get_version
+from safe.common.utilities import romanise
 from safe.utilities.utilities import get_wgs84_resolution, resources_path
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.styling import mmi_colour

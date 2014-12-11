@@ -42,7 +42,7 @@ from safe.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError)
 from safe.defaults import DEFAULTS
-from safe.api import metadata
+from safe import metadata
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
