@@ -14,8 +14,9 @@ import logging
 import unittest
 
 from safe.common.testing import UNITDATA
-from safe.storage.utilities import (read_keywords,
-                                    write_keywords)
+from safe.storage.utilities import (
+    read_keywords,
+    write_keywords)
 
 LOGGER = logging.getLogger('InaSAFE')
 KEYWORD_PATH = os.path.abspath(

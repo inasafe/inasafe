@@ -32,7 +32,6 @@ from safe.storage.metadata_utilities import (
     write_keyword_in_iso_metadata,
     ISO_METADATA_KEYWORD_TAG,
     ISO_METADATA_KEYWORD_NESTING, generate_iso_metadata)
-
 from safe.common.testing import UNITDATA
 from safe.common.utilities import unique_filename
 

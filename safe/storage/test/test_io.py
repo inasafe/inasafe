@@ -2,7 +2,6 @@ import unittest
 import numpy
 import sys
 import os
-
 from osgeo import gdal
 
 from safe.storage.raster import Raster
@@ -31,7 +30,7 @@ from safe.storage.core import (
     bboxlist2string,
     bboxstring2list,
     check_bbox_string)
-from safe.storage.utilities_test import same_API
+from safe.storage.test.utilities import same_API
 from safe.storage.geometry import Polygon
 from safe.common.numerics import nan_allclose
 from safe.common.testing import (
@@ -47,6 +46,7 @@ from safe.common.exceptions import (
     ReadLayerError,
     VerificationError,
     InaSAFEError)
+
 
 
 # Auxiliary function for raster test
