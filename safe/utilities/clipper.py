@@ -35,7 +35,6 @@ from qgis.core import (
     QgsRasterLayer)
 
 from safe.common.utilities import temp_dir, which, verify
-from safe_qgis.safe_interface import read_file_keywords
 from safe.utilities.keyword_io import KeywordIO
 from safe.exceptions import (
     InvalidParameterError,
@@ -43,7 +42,7 @@ from safe.exceptions import (
     CallGDALError,
     InvalidProjectionError,
     InvalidClipGeometryError)
-from safe.utilities.utilities import tr
+from safe.utilities.utilities import tr, read_file_keywords
 
 
 LOGGER = logging.getLogger(name='InaSAFE')
