@@ -31,12 +31,12 @@ class SafeInterfaceTest(unittest.TestCase):
     def setUp(self):
         """Setup test before each unit"""
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        self.rasterShakePath = os.path.join(HAZDATA,
-                                            'Shakemap_Padang_2009.asc')
+        self.rasterShakePath = os.path.join(
+            HAZDATA, 'Shakemap_Padang_2009.asc')
         self.rasterTsunamiPath = os.path.join(
             TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif')
-        self.rasterExposurePath = os.path.join(TESTDATA,
-                                               'tsunami_building_exposure.shp')
+        self.rasterExposurePath = os.path.join(
+            TESTDATA, 'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
 

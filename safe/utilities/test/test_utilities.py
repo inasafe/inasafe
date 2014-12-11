@@ -27,7 +27,7 @@ from safe.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
 from safe.tools.test.test_keywords_dialog import (
     make_polygon_layer,
-    make_padang_layer,
+    clone_padang_layer,
     make_point_layer)
 from safe.storage.utilities import bbox_intersection
 
@@ -122,7 +122,7 @@ class UtilitiesTest(unittest.TestCase):
         assert (position == expected_position), message
 
         # with raster layer
-        layer = make_padang_layer()
+        layer, _ = clone_padang_layer()
         attributes, position = layer_attribute_names(layer, [], '')
         message = 'Should return None, None for raster layer, got %s, %s'%(
             attributes, position)
@@ -138,8 +138,8 @@ class UtilitiesTest(unittest.TestCase):
         message = '%s layer should be polygonal'%layer
         assert not is_polygon_layer(layer), message
 
-        layer = make_padang_layer()
-        message = ('%s raster layer should not be polygonal'%layer)
+        layer, _ = clone_padang_layer()
+        message = ('%s raster layer should not be polygonal' % layer)
         assert not is_polygon_layer(layer), message
 
     def test_mm_to_points(self):
@@ -188,6 +188,9 @@ class UtilitiesTest(unittest.TestCase):
         html = impact_attribution(keywords, True)
         print html
         assert html == '11'
+
+        # Set back to en
+        os.environ['LANG'] = 'en'
 
     def test_dpi_to_meters(self):
         """Test conversion from dpi to dpm."""

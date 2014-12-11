@@ -71,6 +71,7 @@ def ugettext(s):
         return s
     if not s:
         return s
+
     lang = os.environ['LANG']
     filename_prefix = 'inasafe'
     t = gettext.translation(

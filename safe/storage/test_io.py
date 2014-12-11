@@ -2458,10 +2458,13 @@ class Test_IO(unittest.TestCase):
         os.environ['LC_ALL'] = 'id_ID.UTF-8'
 
         # must be after above
-        indoout1 = tr('Hello!')  # translate as 'Hi'
-        indoexpected1 = 'Halo!'
-        msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
-        assert indoout1 == indoexpected1, msg
+        ina_out1 = tr('Hello!')  # translate as 'Hi'
+        ina_expected1 = 'Halo!'
+        msg = 'Expected %s, got %s' % (ina_expected1, ina_out1)
+        assert ina_out1 == ina_expected1, msg
+
+        # Set back to en
+        os.environ['LANG'] = 'en'
 
     def test_multipart_polygon_can_be_read(self):
         """Multipart polygons are be converted to singlepart

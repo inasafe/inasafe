@@ -55,34 +55,18 @@ from safe.utilities.utilities import qgis_version, read_file_keywords
 from safe.utilities.defaults import get_defaults
 
 
-def make_padang_layer():
-    """Helper function that returns a single predefined layer."""
-    path = 'Shakemap_Padang_2009.asc'
-    full_path = os.path.join(HAZDATA, path)
-    title = read_file_keywords(full_path, 'title')
-    # title = 'An earthquake in Padang like in 2009'
-    layer = QgsRasterLayer(full_path, title)
-    if qgis_version() >= 10800:  # 1.8 or newer
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-        IFACE.setActiveLayer(layer)
-    else:
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-    return layer
-
-
 def clone_padang_layer():
     """Helper function that copies padang keyword for testing and return it."""
     path = 'Shakemap_Padang_2009'
     extensions = [
-        '.asc', '.asc.aux.xml', '.keywords', '.lic', '.prj', '.qml', '.sld']
+        '.asc', '.asc.aux.xml', '.keywords', '.lic', '.prj', '.qml', '.sld',
+        '.xml']
     temp_path = unique_filename()
     # copy to temp file
     for ext in extensions:
         source_path = os.path.join(HAZDATA, path + ext)
-        dest_path = os.path.join(HAZDATA, temp_path + ext)
-        shutil.copy2(source_path, dest_path)
+        destination_path = os.path.join(HAZDATA, temp_path + ext)
+        shutil.copy2(source_path, destination_path)
     # return a single predefined layer
     path = temp_path + '.asc'
     full_path = os.path.join(HAZDATA, path)
@@ -91,6 +75,7 @@ def clone_padang_layer():
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
+        IFACE.setActiveLayer(layer)
     else:
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
@@ -449,7 +434,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_remove_item_by_value(self):
         """Test remove item by its value works."""
-        make_padang_layer()
+        layer, _ = clone_padang_layer()
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.remove_item_by_value('hazard')
 
@@ -463,7 +448,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_get_value_for_key(self):
         """Test get value for key works."""
-        make_padang_layer()
+        layer, _ = clone_padang_layer()
         dialog = KeywordsDialog(PARENT, IFACE)
         expected_value = 'hazard'
         value = dialog.get_value_for_key('category')
@@ -471,7 +456,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_load_state_from_keywords(self):
         """Test load state from keywords works."""
-        layer = make_padang_layer()
+        layer, _ = clone_padang_layer()
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         dialog.load_state_from_keywords()
         keywords = dialog.get_keywords()
@@ -492,8 +477,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_add_keyword_when_press_ok_button(self):
         """Test add keyword when ok button is pressed."""
-        # _, path = makePadangLayerClone()
-        clone_padang_layer()
+        layer, _ = clone_padang_layer()
         dialog = KeywordsDialog(PARENT, IFACE)
 
         dialog.radUserDefined.setChecked(True)
