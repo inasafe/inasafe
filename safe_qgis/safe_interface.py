@@ -23,7 +23,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 # Standard modules
-import os
 import unicodedata
 import logging
 
@@ -119,31 +118,6 @@ def tr(text):
     """
     context = "@default"
     return QCoreApplication.translate(context, text)
-
-
-
-
-
-def write_keywords_to_file(filename, keywords):
-    """Thin wrapper around the safe write_keywords function.
-
-    Args:
-        * filename - str representing path to layer that must be written.
-          If the file does not end in .keywords, its extension will be
-          stripped off and the basename + .keywords will be used as the file.
-        * keywords - a dictionary of keywords to be written
-    Returns:
-        None
-    Raises:
-        Any exceptions are propogated
-    """
-    basename, extension = os.path.splitext(filename)
-    if 'keywords' not in extension:
-        filename = basename + '.keywords'
-    try:
-        safe_write_keywords(keywords, filename)
-    except:
-        raise
 
 
 def make_ascii(x):

@@ -6,8 +6,6 @@
    library.
 
 """
-from safe.utilities.utilities import read_file_keywords
-
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -24,9 +22,12 @@ import sqlite3 as sqlite
 from sqlite3 import OperationalError
 import cPickle as pickle
 
-from PyQt4.QtCore import QObject
-from PyQt4.QtCore import QSettings
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QObject, QSettings
 
+from safe.utilities.utilities import (
+    read_file_keywords,
+    write_keywords_to_file)
 from safe.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
@@ -38,8 +39,6 @@ from safe.storage.metadata_utilities import (
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
 from safe.common.utilities import verify
-from safe_qgis.safe_interface import (
-    write_keywords_to_file)
 
 
 LOGGER = logging.getLogger('InaSAFE')

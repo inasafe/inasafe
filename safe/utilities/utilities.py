@@ -23,7 +23,7 @@ import traceback
 import logging
 import uuid
 import webbrowser
-from safe.storage.utilities import read_keywords
+from safe.storage.utilities import read_keywords, write_keywords
 from safe_qgis.safe_interface import tr
 
 from qgis.core import (
@@ -41,6 +41,7 @@ from PyQt4.QtCore import QCoreApplication
 
 from safe.storage.layer import Layer
 from safe.storage.core import read_layer as safe_read_layer
+from safe.storage.utilities import write_keywords as safe_write_keywords
 from safe.exceptions import (
     MemoryLayerCreationError,
     InvalidParameterError,
@@ -881,3 +882,25 @@ def read_file_keywords(layer_path, keyword=None):
     except:
         raise
     return value
+
+
+def write_keywords_to_file(filename, keywords):
+    """Thin wrapper around the safe write_keywords function.
+
+    Args:
+        * filename - str representing path to layer that must be written.
+          If the file does not end in .keywords, its extension will be
+          stripped off and the basename + .keywords will be used as the file.
+        * keywords - a dictionary of keywords to be written
+    Returns:
+        None
+    Raises:
+        Any exceptions are propogated
+    """
+    basename, extension = os.path.splitext(filename)
+    if 'keywords' not in extension:
+        filename = basename + '.keywords'
+    try:
+        safe_write_keywords(keywords, filename)
+    except:
+        raise
