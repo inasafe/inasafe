@@ -41,7 +41,7 @@ from safe.utilities.utilities import (
     impact_attribution,
     add_ordered_combo_item,
     read_impact_layer,
-    extent_string_to_array)
+    extent_string_to_array, get_safe_impact_function)
 from safe.utilities.defaults import (
     limitations,
     disclaimer,
@@ -86,7 +86,6 @@ from safe.tools.keywords_dialog import KeywordsDialog
 from safe.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
-from safe_qgis.safe_interface import get_safe_impact_function
 
 from safe.utilities.analysis import Analysis
 from safe.utilities.utilities import resources_path
