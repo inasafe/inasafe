@@ -48,7 +48,6 @@ from safe.common.exceptions import (
     InaSAFEError)
 
 
-
 # Auxiliary function for raster test
 def linear_function(x, y):
     """Auxiliary function for use with raster test

@@ -85,7 +85,7 @@ class TestEngine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'I T B Fatality Function'
+        plugin_name = 'ITB Fatality Function'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
@@ -145,7 +145,7 @@ class TestEngine(unittest.TestCase):
         # Calculate impact using API
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
-        plugin_name = 'P A G Fatality Function'
+        plugin_name = 'PAG Fatality Function'
         plugin_list = get_plugins(plugin_name)
 
         assert len(plugin_list) == 1

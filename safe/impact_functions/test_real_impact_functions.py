@@ -32,7 +32,7 @@ class TestRealImpactFunctions(unittest.TestCase):
             'Earthquake Building Impact Function',
             admissible_plugins, msg)
         self.assertIn(
-            'P A G Fatality Function',
+            'PAG Fatality Function',
             admissible_plugins, msg)
         self.assertIn(
             'Flood Evacuation Function',
@@ -41,7 +41,7 @@ class TestRealImpactFunctions(unittest.TestCase):
             'Flood Building Impact Function',
             admissible_plugins, msg)
         self.assertIn(
-            'I T B Fatality Function',
+            'ITB Fatality Function',
             admissible_plugins, msg)
         self.assertIn(
             'Volcano Building Impact',

@@ -50,6 +50,8 @@ from safe.impact_functions.utilities import (
     pretty_string,
     admissible_plugins_to_str)
 from safe.metadata import converter_dict
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -66,6 +68,34 @@ class BasicFunctionCore(FunctionProvider):
     :param requires category=="test_cat1"
     :param requires unit=="MMI"
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Basic Function Core.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'BasicFunctionCore',
+                'name': 'Basic Function Core',
+                'impact': 'Be affected',
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': (
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.'),
+            }
+            return dict_meta
 
     @staticmethod
     def run():
@@ -93,6 +123,34 @@ class F1(FunctionProvider):
     """
     title = 'Title for F1'
 
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Basic Function Core.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'F1',
+                'name': 'F1',
+                'impact': 'Be affected',
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': (
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.'),
+                }
+            return dict_meta
+
     @staticmethod
     def run():
         """ Run mock method.
@@ -113,6 +171,34 @@ class F2(FunctionProvider):
     :param requires category=='test_cat2' and \
                     subcategory.startswith('building')
     """
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Basic Function Core.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'F2',
+                'name': 'F2',
+                'impact': 'Be affected',
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': (
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.'),
+                }
+            return dict_meta
+
     title = 'Title for F2'
 
     @staticmethod
@@ -130,6 +216,34 @@ class F3(FunctionProvider):
     :param requires category=='test_cat1'
     :param requires category=='test_cat2'
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Basic Function Core.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'F3',
+                'name': 'F3',
+                'impact': 'Be affected',
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': (
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.'),
+                }
+            return dict_meta
 
     @staticmethod
     def run():
@@ -151,6 +265,34 @@ class F4(FunctionProvider):
                     layertype=='vector'
     """
 
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Basic Function Core.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'F4',
+                'name': 'F4',
+                'impact': 'Be affected',
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': (
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.'),
+                }
+            return dict_meta
+
     @staticmethod
     def run():
         """ Run mock method.
@@ -168,6 +310,34 @@ class SyntaxErrorFunction(FunctionProvider):
     :param requires category=="test_cat1"
     :param requires unit="MMI"  # Note the error should be ==
     """
+
+    class Metadata(ImpactFunctionMetadata):
+        """Metadata for Basic Function Core.
+        """
+
+        @staticmethod
+        def get_metadata():
+            """Return metadata as a dictionary.
+
+            This is a static method. You can use it to get the metadata in
+            dictionary format for an impact function.
+
+            :returns: A dictionary representing all the metadata for the
+                concrete impact function.
+            :rtype: dict
+            """
+            dict_meta = {
+                'id': 'SyntaxErrorFunction',
+                'name': 'Syntax Error Function',
+                'impact': 'Be affected',
+                'author': 'N/A',
+                'date_implemented': 'N/A',
+                'overview': (
+                    'This impact function will calculate the impact of an '
+                    'earthquake on buildings, reporting how many are expected '
+                    'to be damaged etc.'),
+                }
+            return dict_meta
 
     @staticmethod
     def run():

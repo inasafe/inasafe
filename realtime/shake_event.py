@@ -1048,7 +1048,7 @@ class ShakeEvent(QObject):
             str(clipped_exposure.source()))
         layers = [clipped_hazard_layer, clipped_exposure_layer]
 
-        function_id = 'I T B Fatality Function'
+        function_id = 'ITB Fatality Function'
         function = safe_get_plugins(function_id)[0][function_id]
 
         result = safe_calculate_impact(layers, function)
