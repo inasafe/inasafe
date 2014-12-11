@@ -2,6 +2,7 @@
 utils relevant to impact_functions.
 """
 
+
 def admissible_plugins_to_str(plugin_list):
     """A helper to write the admissible plugin list to a string.
 
