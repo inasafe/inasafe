@@ -44,7 +44,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # noinspection PyPackageRequirements
 from safe.tools.impact_merge_dialog import ImpactMergeDialog
 from safe.utilities.utilities_for_testing import load_layer
-from safe.exceptions import (
+from safe.common.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
     InvalidLayerError)

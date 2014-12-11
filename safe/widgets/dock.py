@@ -69,7 +69,7 @@ from safe.common.signals import (
     ANALYSIS_DONE_SIGNAL)
 from safe import messaging as m
 from safe.messaging import styles
-from safe.exceptions import (
+from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
     InsufficientOverlapError,

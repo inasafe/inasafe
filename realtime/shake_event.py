@@ -85,7 +85,7 @@ from safe.common.utilities import romanise
 from safe.utilities.utilities import get_wgs84_resolution, resources_path
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.styling import mmi_colour
-from safe.exceptions import TranslationLoadError
+from safe.common.exceptions import TranslationLoadError
 from safe.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (

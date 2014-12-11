@@ -40,7 +40,7 @@ from safe.postprocessors.postprocessor_factory import (
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
     bbox_intersection)
-from safe.exceptions import (
+from safe.common.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
     InvalidLayerError,
@@ -72,8 +72,7 @@ from safe.common.signals import (
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
-from safe.common.exceptions import BoundingBoxError
-from safe.exceptions import NoValidLayerError
+from safe.common.exceptions import BoundingBoxError, NoValidLayerError
 
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -546,8 +545,8 @@ class Analysis(object):
             assumed that the coordinates are in EPSG:4326 although currently
             no checks are made to enforce this.
 
-            ..note:: We do minimal checking as the inasafe library takes care of
-            it for us.
+            ..note:: We do minimal checking as the inasafe library takes care
+            of it for us.
 
         :returns: An array containing an extent in the form
             [xmin, ymin, xmax, ymax]
@@ -575,10 +574,10 @@ class Analysis(object):
         if optimal_extent is None:
             # Bounding boxes did not overlap
             message = self.tr(
-                'Bounding boxes of hazard data, exposure data and viewport did '
-                'not overlap, so no computation was done. Please make sure you '
-                'pan to where the data is and that hazard and exposure data '
-                'overlaps.')
+                'Bounding boxes of hazard data, exposure data and viewport '
+                'did not overlap, so no computation was done. Please make '
+                'sure you pan to where the data is and that hazard and '
+                'exposure data overlaps.')
             raise InsufficientOverlapError(message)
 
         return optimal_extent

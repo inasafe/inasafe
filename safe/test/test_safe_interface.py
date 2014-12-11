@@ -20,8 +20,7 @@ import os
 import unittest
 
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
-from safe.exceptions import (
-    KeywordNotFoundError)
+from safe.common.exceptions import KeywordNotFoundError
 from safe.utilities.utilities import read_file_keywords
 
 

@@ -26,7 +26,7 @@ import unittest
 import qgis  # pylint: disable=W0611
 
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe.exceptions import InsufficientParametersError
+from safe.common.exceptions import InsufficientParametersError
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
 from safe.storage.core import read_layer as read_safe_layer
 

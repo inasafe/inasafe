@@ -26,7 +26,6 @@ from os.path import join
 from qgis.core import QgsMapLayerRegistry
 
 
-
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)

@@ -25,11 +25,8 @@ from safe.utilities.styling import (
     add_extrema_to_style,
     mmi_colour)
 from safe.utilities.utilities import get_error_message
-from safe.utilities.utilities_for_testing import (
-    test_data_path,
-    load_layer)
-from safe.exceptions import StyleError
-from safe.common.exceptions import BoundingBoxError
+from safe.utilities.utilities_for_testing import test_data_path, load_layer
+from safe.common.exceptions import StyleError, BoundingBoxError
 from safe.storage.utilities import bbox_intersection
 
 # In our tests, we need to have this line below before importing any other

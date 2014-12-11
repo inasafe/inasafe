@@ -1986,68 +1986,6 @@ class TestEngine(unittest.TestCase):
 
     test_layer_integrity_raises_exception.slow = True
 
-    def test_itb_building_function(self):
-        """Damage ratio (estimated repair cost relative to replacement cost)
-           can be computed using the ITB building vulnerability model.
-           (Test data from Hyeuk Ryu).
-           As of July 4, 2012, the vulnerability model used to generate
-           the reference values is dummy one, and it will be updated with
-           the ITB's model later.
-        """
-
-        # Name file names for hazard level, exposure and expected impact
-        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
-        exposure_filename = '%s/Padang_WGS84.shp' % TESTDATA
-        damage_filename = '%s/reference_result_itb.csv' % TESTDATA
-
-        a = open(damage_filename).readlines()[1:]
-        ref_damage = []
-        for item in a:
-            b = item.strip('\n').split(',')
-            ref_damage.append(float(b[2]))
-        ref_damage = numpy.array(ref_damage)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_name = 'I T B Earthquake Building Damage Function'
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-        IF = plugin_list[0][plugin_name]
-
-        # Call impact calculation engine
-        impact_vector = calculate_impact(layers=[H, E], impact_fcn=IF)
-        attributes = impact_vector.get_data()
-
-#        calculated_damage = []
-        for i in range(len(attributes)):
-            calculated_damage = attributes[i]['DAMAGE']
-            bldg_class = attributes[i]['ITB_Class']
-            msg = ('Calculated damage did not match expected result: \n'
-                   'I got %s\n'
-                   'Expected %s for bldg type: %s' %
-                   (calculated_damage,
-                    ref_damage[i],
-                    bldg_class))
-            # Reference data is single precision
-            assert nan_allclose(
-                calculated_damage, ref_damage[i], atol=1.0e-6), msg
-
-#        print calculated_damage.shape
-#        bldg_class = attributes[:]['VCLASS']
-#        impact_filename = impact_vector.get_filename()
-#        I = read_layer(impact_filename)
-#        calculated_result = I.get_data()
-
-#        keywords = I.get_keywords()
-
-#        print keywords
-#        print calculated_damage
-
-    test_itb_building_function.slow = True
-
     def test_flood_population_evacuation(self):
         """Flood population evacuation"""
         population = 'people_jakarta_clip.tif'

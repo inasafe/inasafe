@@ -24,11 +24,10 @@ import cPickle as pickle
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
-
 from safe.utilities.utilities import (
     read_file_keywords,
     write_keywords_to_file)
-from safe.exceptions import (
+from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
     KeywordDbError,

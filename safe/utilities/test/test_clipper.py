@@ -40,9 +40,11 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
 from safe.common.numerics import nan_allclose
 from safe.common.utilities import unique_filename
-from safe.common.exceptions import GetDataError
 from safe.storage.core import read_layer as read_safe_layer
-from safe.exceptions import InvalidProjectionError, CallGDALError
+from safe.common.exceptions import (
+    InvalidProjectionError,
+    CallGDALError,
+    GetDataError)
 from safe.utilities.clipper import (
     clip_layer,
     extent_to_kml,

@@ -42,7 +42,7 @@ from safe.storage.utilities import read_keywords
 from safe.storage.layer import Layer
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import write_keywords as safe_write_keywords
-from safe.exceptions import (
+from safe.common.exceptions import (
     MemoryLayerCreationError,
     InvalidParameterError,
     NoKeywordsFoundError,
