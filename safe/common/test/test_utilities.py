@@ -24,6 +24,7 @@ from safe.common.utilities import (
     get_significant_decimal,
     humanize_class,
     format_decimal,
+    format_int,
     create_classes,
     create_label,
     get_thousand_separator,
@@ -184,6 +185,30 @@ class UtilitiesTest(unittest.TestCase):
         print my_result
         assert my_result == '10,000.09', \
             'Format decimal is not valid %s' % my_result
+
+    def test_format_int(self):
+        """Test formatting integer"""
+        number = 10000000
+        lang = os.getenv('LANG')
+        formatted_int = format_int(number)
+        if lang == 'id':
+            expected_str = '10.000.000'
+        else:
+            expected_str = '10,000,000'
+        message = 'Format integer is not valid'
+        assert (formatted_int == expected_str or
+                formatted_int == str(number)), message
+
+        number = 1234
+        lang = os.getenv('LANG')
+        formatted_int = format_int(number)
+        if lang == 'id':
+            expected_str = '1.234'
+        else:
+            expected_str = '1,234'
+        message = 'Format integer %s is not valid' % formatted_int
+        assert (formatted_int == expected_str or
+                formatted_int == str(number)), message
 
     def test_separator(self):
         """Test decimal and thousand separator

@@ -80,8 +80,7 @@ YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__),
-    '../../test/test_data/test_files')
+    os.path.dirname(__file__), '..', '..', 'test/test_data/test_files')
 
 
 # noinspection PyArgumentList

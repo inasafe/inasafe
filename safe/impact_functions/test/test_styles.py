@@ -18,8 +18,7 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
 
 import unittest
 
-from safe.impact_functions.styles import (
-    generate_categorical_color_ramp)
+from safe.impact_functions.styles import generate_categorical_color_ramp
 
 
 class StylesTest(unittest.TestCase):

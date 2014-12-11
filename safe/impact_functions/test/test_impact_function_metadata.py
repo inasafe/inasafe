@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.impact_functions.earthquake.earthquake_building_impact import (
