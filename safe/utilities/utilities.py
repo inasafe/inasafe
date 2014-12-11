@@ -38,6 +38,8 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsVectorLayer)
 
+from safe.storage.layer import Layer
+from safe.storage.core import read_layer as safe_read_layer
 from safe.exceptions import MemoryLayerCreationError
 from safe.common.utilities import (
     unique_filename,
@@ -730,6 +732,24 @@ def read_impact_layer(impact_layer):
         message = tr(
             'Loaded impact layer "%s" is not valid') % file_name
         raise Exception(message)
+
+
+def convert_to_safe_layer(layer):
+    """Thin wrapper around the safe read_layer function.
+
+    Args:
+        layer - QgsMapLayer or Safe layer.
+    Returns:
+        A safe read_safe_layer object is returned.
+    Raises:
+        Any exceptions are propagated
+    """
+    if isinstance(layer, Layer):
+        return layer
+    try:
+        return safe_read_layer(layer.source())
+    except:
+        raise
 
 
 def open_in_browser(file_path):

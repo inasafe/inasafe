@@ -219,28 +219,6 @@ def make_ascii(x):
     return x
 
 
-def convert_to_safe_layer(layer):
-    """Thin wrapper around the safe read_layer function.
-
-    Args:
-        layer - QgsMapLayer or Safe layer.
-    Returns:
-        A safe read_safe_layer object is returned.
-    Raises:
-        Any exceptions are propagated
-    """
-    # FIXME (DK): it is a stub now.
-    #   Do not call read_safe_layer, but write function
-    #     safe.storage.core.convert_layer to convert QgsMapLayer to SAFE layer
-
-    if isinstance(layer, Layer):
-        return layer
-    try:
-        return safe_read_layer(layer.source())
-    except:
-        raise
-
-
 def get_safe_impact_function(function=None):
     """Thin wrapper around the safe impact_functions function.
 
