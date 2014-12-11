@@ -105,7 +105,6 @@ from safe.exceptions import (
     KeywordNotFoundError,
     StyleInfoNotFoundError,
     InvalidParameterError,
-    InsufficientOverlapError,
     NoKeywordsFoundError)
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -212,43 +211,6 @@ def write_keywords_to_file(filename, keywords):
         safe_write_keywords(keywords, filename)
     except:
         raise
-
-
-def get_style_info(layer):
-    """Get styleinfo associated with a layer.
-
-    Args:
-
-       * layer - InaSAFE layer (raster or vector)
-
-    Returns:
-       A list of dictionaries containing styleinfo info for a layer.
-
-    Raises:
-
-       * StyleInfoNotFoundError if the style is not found.
-       * InvalidParameterError if the paramers are not correct.
-    """
-
-    if not layer:
-        raise InvalidParameterError()
-
-    if not hasattr(layer, 'get_style_info'):
-        message = tr('Argument "%s" was not a valid layer instance' % layer)
-        raise StyleInfoNotFoundError(message)
-
-    try:
-        value = layer.get_style_info()
-    except Exception, e:
-        message = tr('Styleinfo retrieval failed for %s\n %s' % (
-            layer.get_filename(), str(e)))
-        raise StyleInfoNotFoundError(message)
-
-    if not value or value == '':
-        message = tr('No styleInfo was found for layer %s' % (
-            layer.get_filename()))
-        raise StyleInfoNotFoundError(message)
-    return value
 
 
 def make_ascii(x):

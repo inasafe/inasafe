@@ -26,13 +26,9 @@ import unittest
 import qgis  # pylint: disable=W0611
 
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe.exceptions import (
-    InsufficientParametersError,
-    KeywordNotFoundError,
-    StyleInfoNotFoundError)
+from safe.exceptions import InsufficientParametersError
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
 from safe.storage.core import read_layer as read_safe_layer
-from safe_qgis.safe_interface import get_style_info
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(
@@ -158,36 +154,6 @@ class ImpactCalculatorTest(unittest.TestCase):
         except Exception, e:  # pylint: disable=W0703
             message = 'Calculator run failed. %s' % str(e)
             assert(), message
-
-    def test_get_style_info(self):
-        """Test that we can get styleInfo data from a vector's keyword file
-        """
-        function_runner = self.calculator.get_runner()
-        function_runner.start()
-        function_runner.join()
-        impact_layer = function_runner.impact_layer()
-
-        message = (
-            'Incorrect type returned from '
-            'function_runner.impactlayer(). Expected an impactlayer'
-            'but received a %s' % type(impact_layer))
-        assert hasattr(impact_layer, 'get_style_info'), message
-
-        style_info = get_style_info(impact_layer)
-        message = 'Style info request returned an empty string'
-        assert style_info is not '', message
-        # print style_info
-
-        # Test we get an exception if style info is not found
-        try:
-            get_style_info('boguspath')
-        except StyleInfoNotFoundError:
-            pass  # This is good
-        except Exception, e:
-            message = (
-                'StyleInfo request for bogus file raised incorrect'
-                ' exception type: \n %s') % str(e)
-            raise StyleInfoNotFoundError(message)
 
     def test_need_clip(self):
         """Test if need_clip method work as expected."""
