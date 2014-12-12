@@ -796,7 +796,7 @@ class TestDock(TestCase):
             file_list, data_directory=None)
         self.assertTrue(hazard_layer_count == 2)
         self.assertTrue(exposure_layer_count == 1)
-        DOCK.cboFunction.setCurrentIndex(1)
+        DOCK.cboFunction.setCurrentIndex(0)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         expected_function = str(DOCK.cboFunction.currentText())
