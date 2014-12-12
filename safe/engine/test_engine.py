@@ -32,8 +32,7 @@ from safe.common.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,
-    ensure_numeric,
-    nan_allclose)
+    ensure_numeric)
 from safe.common.utilities import (
     VerificationError,
     unique_filename,
@@ -218,41 +217,6 @@ class TestEngine(unittest.TestCase):
         #              evacuation zones
 
     test_volcano_population_evacuation_impact.slow = True
-
-    def test_volcano_building_impact(self):
-        """Building impact from volcanic hazard is computed correctly"""
-
-        # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = os.path.join(TESTDATA, 'donut.shp')
-        exposure_filename = os.path.join(UNITDATA, 'exposure', 'bangunan.shp')
-
-        # Calculate impact using API
-        hazard = read_layer(hazard_filename)
-        exposure = read_layer(exposure_filename)
-
-        plugin_name = 'Volcano Building Impact'
-        impact_function = get_plugin(plugin_name)
-        impact_function.parameters['name attribute'] = 'GUNUNG'
-        print 'Calculating'
-        # Call calculation engine
-        impact_layer = calculate_impact(
-            layers=[hazard, exposure], impact_fcn=impact_function)
-        impact_filename = impact_layer.get_filename()
-
-        impact = read_layer(impact_filename)
-
-        keywords = impact.get_keywords()
-
-        # Check for expected results:
-        for value in ['Merapi', 5, 86, 91, 1, 21, 22, 6, 107, 113]:
-            if isinstance(value, int):
-                x = format_int(value)
-            else:
-                x = value
-            summary = keywords['impact_summary']
-            message = (
-                'Did not find expected value %s in summary %s' % (x, summary))
-            self.assertIn(x, summary, message)
 
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
@@ -600,80 +564,6 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 4
 
     test_polygon_hazard_with_holes_and_raster_exposure.slow = True
-
-    def test_flood_building_impact_function(self):
-        """Flood building impact function works
-
-        This test also exercises interpolation of hazard level (raster) to
-        building locations (vector data).
-        """
-
-        for haz_filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
-                             'Flood_Design_Depth_Jakarta_geographic.asc']:
-
-            # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
-            exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                                 % TESTDATA)
-
-            # Calculate impact using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
-
-            plugin_name = 'FloodBuildingImpactFunction'
-            plugin_list = get_plugins(plugin_name)
-            assert len(plugin_list) == 1
-            assert plugin_list[0].keys()[0] == plugin_name
-
-            IF = plugin_list[0][plugin_name]
-
-            impact_vector = calculate_impact(layers=[H, E],
-                                             impact_fcn=IF)
-
-            # Extract calculated result
-            icoordinates = impact_vector.get_geometry()
-            iattributes = impact_vector.get_data()
-
-            # Check
-            assert len(icoordinates) == 34960
-            assert len(iattributes) == 34960
-
-            # FIXME (Ole): check more numbers
-
-    test_flood_building_impact_function.slow = True
-
-    def test_flood_building_impact_function_vector(self):
-        """Flood building impact function works (flood is polygon)
-        """
-        building = 'test_flood_building_impact_exposure.shp'
-        flood_data = 'test_flood_building_impact_hazard.shp'
-        plugin_name = 'FloodBuildingImpactFunction'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, building)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-        I = read_layer(impact_filename)
-
-        keywords = I.get_keywords()
-        buildings_total = keywords['buildings_total']
-        buildings_affected = keywords['buildings_affected']
-
-        assert buildings_total == 67
-        assert buildings_affected == 41
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer
@@ -1985,86 +1875,6 @@ class TestEngine(unittest.TestCase):
                 raise Exception(msg)
 
     test_layer_integrity_raises_exception.slow = True
-
-    def test_flood_population_evacuation(self):
-        """Flood population evacuation"""
-        population = 'people_jakarta_clip.tif'
-        flood_data = 'flood_jakarta_clip.tif'
-        plugin_name = 'FloodEvacuationFunction'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, population)
-
-        # Calculate impact using API
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        impact_functions = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(
-            layers=[hazard_layer, exposure_layer], impact_fcn=impact_functions)
-        impact_filename = impact_layer.get_filename()
-        impact_layer = read_layer(impact_filename)
-
-        keywords = impact_layer.get_keywords()
-        # print "keywords", keywords
-        evacuated = float(keywords['evacuated'])
-        total_needs_full = keywords['total_needs']
-        total_needs_weekly = OrderedDict([
-            [x['table name'], x['amount']] for x in
-            total_needs_full['weekly']
-        ])
-        total_needs_single = OrderedDict([
-            [x['table name'], x['amount']] for x in
-            total_needs_full['single']
-        ])
-
-        expected_evacuated = 63400
-        assert evacuated == expected_evacuated
-        assert total_needs_weekly['Rice [kg]'] == 177520
-        assert total_needs_weekly['Family Kits'] == 12680
-        assert total_needs_weekly['Drinking Water [l]'] == 1109500
-        assert total_needs_weekly['Clean Water [l]'] == 4247800
-        assert total_needs_single['Toilets'] == 3170
-
-    def test_flood_population_evacuation_polygon(self):
-        """Flood population evacuation (flood is polygon)
-        """
-        population = 'pop_clip_flood_test.tif'
-        flood_data = 'flood_poly_clip_flood_test.shp'
-        plugin_name = 'FloodEvacuationFunctionVectorHazard'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, population)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-        I = read_layer(impact_filename)
-
-        keywords = I.get_keywords()
-        # print "keywords", keywords
-        affected_population = float(keywords['affected_population'])
-        total_population = keywords['total_population']
-
-        assert affected_population == 134000
-        assert total_population == 163000
 
     def test_erf(self):
         """Test ERF approximation
