@@ -1,8 +1,11 @@
+# coding=utf-8
+# Tests for styles
+import os
 from unittest import TestCase
-
-__author__ = 'timlinux'
+from safe.messaging.styles import logo_element
 
 
 class TestStyles(TestCase):
     def test_logo_element(self):
-        self.fail()
+        path = logo_element()
+        self.assertTrue(os.path.exists(path))

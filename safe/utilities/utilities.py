@@ -28,7 +28,7 @@ import webbrowser
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, Qt
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtCore import QCoreApplication, QUrl
 
 from qgis.core import (
     QGis,
@@ -39,14 +39,11 @@ from qgis.core import (
     QgsVectorLayer)
 
 from safe.exceptions import MemoryLayerCreationError
-from safe.common.utilities import (
-    unique_filename,
-    ugettext as safeTr)
+from safe.common.utilities import unique_filename, ugettext as safe_tr
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.messaging import styles
 from safe.messaging.error_message import ErrorMessage
-
 INFO_STYLE = styles.INFO_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -167,7 +164,7 @@ def get_wgs84_resolution(layer):
     return cell_size
 
 
-def resources_path():
+def resources_path(*args):
     """Get the path to our resources folder.
 
     .. versionadded:: 3.0
@@ -175,12 +172,16 @@ def resources_path():
     Note that in version 3.0 we removed the use of Qt Resource files in
     favour of directly accessing on-disk resources.
 
+    :param args List of path elements e.g. ['img', 'logos', 'image.png']
+    :type args: list
+
     :return: Absolute path to the resources folder.
     :rtype: str
     """
-    path = __file__
-    path = os.path.join(path, os.pardir, os.pardir, 'resources')
-    path = os.path.abspath(path)
+    elements = [os.path.dirname(__file__)] + args
+    path = os.path.abspath(os.path.join(elements))
+    url = QUrl(path)
+    path = url.toLocalFile()
     return path
 
 
@@ -475,13 +476,13 @@ def impact_attribution(keywords, inasafe_flag=False):
 
     if hazard_title_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        hazard_title = safeTr(keywords[hazard_title_keywords])
+        hazard_title = safe_tr(keywords[hazard_title_keywords])
     else:
         hazard_title = tr('Hazard layer')
 
     if hazard_source_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        hazard_source = safeTr(keywords[hazard_source_keywords])
+        hazard_source = safe_tr(keywords[hazard_source_keywords])
     else:
         hazard_source = tr('an unknown source')
 

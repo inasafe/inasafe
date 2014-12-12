@@ -13,17 +13,16 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from PyQt4 import QtCore
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 from safe.common.resource_parameter import ResourceParameter
-
 from safe.common.utilities import ugettext as tr
+from safe.utilities.utilities import resources_path
 from PyQt4.QtCore import QSettings
 
 def define_defaults():
@@ -219,8 +218,8 @@ def default_organisation_logo_path():
     :return: Default organisation logo path.
     :rtype: str
     """
-    default_path = ':/plugins/inasafe/supporters.png'
-    return default_path
+    path = resources_path('img', 'logos', 'supporters.png')
+    return path
 
 
 def default_north_arrow_path():
@@ -229,8 +228,8 @@ def default_north_arrow_path():
     :return: Default north arrow path.
     :rtype: str
     """
-    default_path = ':/plugins/inasafe/simple_north_arrow.png'
-    return default_path
+    path = resources_path('img', 'logos', 'simple_north_arrow.png')
+    return path
 
 
 def limitations():
