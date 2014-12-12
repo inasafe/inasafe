@@ -11,7 +11,7 @@ __copyright__ += 'Disaster Reduction'
 
 from safe.common.utilities import unique_filename
 from safe.storage.raster import qgis_imported
-from safe.common.gdal_ogr_tools import polygonize_thresholds
+from safe.geometry.gdal_ogr_tools import polygonize_thresholds
 from safe.common.exceptions import GetDataError
 
 if qgis_imported:   # Import QgsRasterLayer if qgis is available

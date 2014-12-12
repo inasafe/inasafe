@@ -20,15 +20,15 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-
 import logging
 import numpy
 from random import uniform, seed as seed_function
 
-from safe.common.numerics import ensure_numeric
-from safe.common.numerics import grid_to_points, geotransform_to_axes
+from safe.geometry.numerics import ensure_numeric
+from safe.geometry.numerics import grid_to_points, geotransform_to_axes
 from safe.common.exceptions import (
     PolygonInputError, InaSAFEError, PointsInputError)
+
 
 LOGGER = logging.getLogger('InaSAFE')
 

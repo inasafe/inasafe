@@ -8,6 +8,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform
 )
+
 from safe.metadata import (
     unit_wetdry,
     hazard_flood,
@@ -29,7 +30,8 @@ from safe.impact_functions.impact_function_metadata import (
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
+from safe.geometry.qgis_vector_tools import split_by_polygon, clip_by_polygon
+
 
 LOGGER = logging.getLogger('InaSAFE')
 

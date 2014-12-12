@@ -23,6 +23,7 @@ import unittest
 from safe.common.testing import UNITDATA, get_qgis_app
 from safe.storage.raster import qgis_imported
 
+
 if qgis_imported:   # Import QgsRasterLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
     from qgis.core import (
@@ -40,7 +41,7 @@ RASTER_BASE = os.path.abspath(
 VECTOR_BASE = os.path.abspath(
     os.path.join(UNITDATA, 'other', 'polygonization_result'))
 
-from safe.common.qgis_raster_tools import (
+from safe.geometry.qgis_raster_tools import (
     pixels_to_points,
     polygonize,
     clip_raster)

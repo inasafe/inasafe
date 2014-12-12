@@ -20,11 +20,12 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-
 import logging
 import numpy
+
 from safe.common.exceptions import InaSAFEError
-from safe.common.interpolation import validate_inputs, validate_mode
+from safe.geometry.interpolation import validate_inputs, validate_mode
+
 
 LOGGER = logging.getLogger('InaSAFE')
 # pylint: disable=W0105

@@ -22,7 +22,7 @@ import unittest
 from osgeo import ogr
 
 from safe.common.testing import UNITDATA
-from safe.common.gdal_ogr_tools import polygonize_thresholds
+from safe.geometry.gdal_ogr_tools import polygonize_thresholds
 
 
 class TestGDALOGRTools(unittest.TestCase):

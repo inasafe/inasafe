@@ -20,7 +20,7 @@ except ImportError:
 from safe.common.utilities import (verify,
                                    ugettext as safe_tr,
                                    unique_filename)
-from safe.common.numerics import (nan_allclose,
+from safe.geometry.numerics import (nan_allclose,
                                   geotransform_to_axes,
                                   grid_to_points)
 from safe.common.exceptions import ReadLayerError, WriteLayerError

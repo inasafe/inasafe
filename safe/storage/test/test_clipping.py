@@ -4,13 +4,14 @@ import os
 from os.path import join
 
 from safe.common.testing import TESTDATA
-from safe.common.polygon import (is_inside_polygon, inside_polygon,
+from safe.geometry.polygon import (is_inside_polygon, inside_polygon,
                                  populate_polygon,
                                  generate_random_points_in_bbox)
 from safe.storage.vector import Vector
 from safe.storage.core import read_layer
 from safe.storage.geometry import Polygon
 from safe.common.utilities import unique_filename
+
 
 
 # FIXME (Ole): Move this along with contents of clipping.py to

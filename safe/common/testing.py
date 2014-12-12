@@ -3,7 +3,6 @@
 """
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
 
 import numpy
 import os
@@ -11,7 +10,7 @@ import sys
 import logging
 from numpy.testing import Tester
 
-from safe.common.numerics import axes_to_points
+from safe.geometry.numerics import axes_to_points
 from safe.common.version import get_version
 
 
@@ -686,11 +685,13 @@ def get_qgis_app():
     """
 
     try:
+        # noinspection PyPackageRequirements
         from PyQt4 import QtGui, QtCore
+        # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
-        from safe.common.qgis_interface import QgisInterface
+        from safe.geometry.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 
@@ -701,8 +702,11 @@ def get_qgis_app():
 
         # AG: For testing purposes, we use our own configuration file instead
         # of using the QGIS apps conf of the host
+        # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setOrganizationName('QGIS')
+        # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setOrganizationDomain('qgis.org')
+        # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
         # noinspection PyPep8Naming

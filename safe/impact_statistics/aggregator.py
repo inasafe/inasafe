@@ -21,7 +21,6 @@ import logging
 import time
 import numpy
 from collections import OrderedDict
-
 from qgis.core import (
     QgsMapLayer,
     QgsGeometry,
@@ -60,7 +59,7 @@ from safe.common.utilities import (
     feature_attributes_as_dict,
     get_utm_epsg)
 from safe.common.exceptions import ReadLayerError, PointsInputError
-from safe.common.polygon import (
+from safe.geometry.polygon import (
     in_and_outside_polygon as points_in_and_outside_polygon)
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,

@@ -5,7 +5,6 @@ import cPickle
 import numpy
 import os
 from os.path import join
-from collections import OrderedDict
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
@@ -20,15 +19,15 @@ from safe.storage.core import (
     write_raster_data)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.common.polygon import (
+from safe.geometry.polygon import (
     separate_points_by_polygon,
     is_inside_polygon,
     inside_polygon,
     clip_lines_by_polygon,
     clip_grid_by_polygons,
     line_dictionary_to_geometry)
-from safe.common.interpolation2d import interpolate_raster
-from safe.common.numerics import (
+from safe.geometry.interpolation2d import interpolate_raster
+from safe.geometry.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,
@@ -37,7 +36,7 @@ from safe.common.utilities import (
     VerificationError,
     unique_filename,
     format_int)
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, UNITDATA
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
 from safe.impact_functions.core import population_rounding
