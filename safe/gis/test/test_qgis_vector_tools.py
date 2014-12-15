@@ -22,7 +22,7 @@ import unittest
 
 from safe.common.testing import UNITDATA, get_qgis_app
 from safe.storage.raster import qgis_imported
-from safe.geometry.gdal_ogr_tools import (
+from safe.gis.gdal_ogr_tools import (
     polygonize_thresholds)
 
 
@@ -38,7 +38,7 @@ if qgis_imported:  # Import QgsRasterLayer if qgis is available
         QgsRectangle)
 
 
-from safe.geometry.qgis_vector_tools import (
+from safe.gis.qgis_vector_tools import (
     points_to_rectangles,
     union_geometry,
     create_layer,

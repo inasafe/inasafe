@@ -32,7 +32,7 @@ from safe.storage.core import (
     check_bbox_string)
 from safe.storage.test.utilities import same_API
 from safe.storage.geometry import Polygon
-from safe.common.numerics import nan_allclose
+from safe.gis.numerics import nan_allclose
 from safe.common.testing import (
     TESTDATA,
     HAZDATA,
@@ -40,12 +40,14 @@ from safe.common.testing import (
     FEATURE_COUNTS,
     GEOTRANSFORMS)
 from safe.common.utilities import ugettext as tr, unique_filename
-from safe.geometry.polygon import is_inside_polygon
+from safe.gis.polygon import is_inside_polygon
 from safe.common.exceptions import (
     BoundingBoxError,
     ReadLayerError,
     VerificationError,
     InaSAFEError)
+
+
 
 
 # Auxiliary function for raster test

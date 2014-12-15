@@ -2,11 +2,11 @@ import numpy
 import unittest
 
 # Import InaSAFE modules
-from safe.geometry.interpolation2d import interpolate2d, interpolate_raster
-from safe.geometry.interpolation import BoundsError
-from safe.geometry.interpolation1d import interpolate1d
+from safe.gis.interpolation2d import interpolate2d, interpolate_raster
+from safe.gis.interpolation import BoundsError
+from safe.gis.interpolation1d import interpolate1d
 from safe.common.testing import combine_coordinates
-from safe.common.numerics import nan_allclose
+from safe.gis.numerics import nan_allclose
 
 
 def linear_function(x, y):

@@ -3,7 +3,7 @@
 """
 
 import numpy
-from utilities import verify
+from safe.common.utilities import verify
 
 
 def ensure_numeric(A, typecode=None):

@@ -15,7 +15,7 @@ See interpolation2d.py for documentation of the mathematical derivation used.
 
 import numpy
 
-from safe.geometry.interpolation import validate_inputs, validate_mode
+from safe.gis.interpolation import validate_inputs, validate_mode
 # pylint: disable=W0105
 
 
