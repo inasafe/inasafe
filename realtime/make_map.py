@@ -121,8 +121,7 @@ if __name__ == '__main__':
             '[working_dir] [event_id]' % (
                 sys.argv[0], sys.argv[0], sys.argv[0], sys.argv[0]))
     elif len(sys.argv) == 3:
-        print('Processing shakemap %s' % sys.argv[1])
-
+        print('The events in the working dir:')
         working_dir = sys.argv[1]
         event_option = sys.argv[2]
         if event_option in '--list':
@@ -131,6 +130,7 @@ if __name__ == '__main__':
                 print event
             sys.exit(0)
         else:
+            print('Processing shakemap %s' % event_option)
             if is_event_id(event_option):
                 process_event(
                     working_dir=working_dir,
