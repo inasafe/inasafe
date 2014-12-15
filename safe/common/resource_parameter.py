@@ -71,4 +71,4 @@ class ResourceParameter(FloatParameter):
         :type unit: Unit
 
         """
-        self._unit.name = unit
+        self._unit = unit
