@@ -9,8 +9,8 @@ import numpy
 # from safe.common.numerics import normal_cdf
 # from safe.common.numerics import log_normal_cdf
 # from safe.common.numerics import erf
-from safe.geometry.numerics import axes_to_points
-from safe.geometry.numerics import grid_to_points
+from safe.common.numerics import axes_to_points
+from safe.common.numerics import grid_to_points
 # from safe.common.numerics import geotransform_to_axes
 
 

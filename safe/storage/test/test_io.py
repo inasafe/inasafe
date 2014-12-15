@@ -32,7 +32,7 @@ from safe.storage.core import (
     check_bbox_string)
 from safe.storage.test.utilities import same_API
 from safe.storage.geometry import Polygon
-from safe.geometry.numerics import nan_allclose
+from safe.common.numerics import nan_allclose
 from safe.common.testing import (
     TESTDATA,
     HAZDATA,
@@ -46,8 +46,6 @@ from safe.common.exceptions import (
     ReadLayerError,
     VerificationError,
     InaSAFEError)
-
-
 
 
 # Auxiliary function for raster test

@@ -31,12 +31,13 @@ from qgis.core import (
     QgsPoint)
 
 from safe.common.testing import get_qgis_app
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
-from safe.geometry.numerics import nan_allclose
+from safe.common.numerics import nan_allclose
 from safe.common.utilities import unique_filename
 from safe.storage.core import read_layer as read_safe_layer
 from safe.common.exceptions import (

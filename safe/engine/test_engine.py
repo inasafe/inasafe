@@ -27,7 +27,7 @@ from safe.geometry.polygon import (
     clip_grid_by_polygons,
     line_dictionary_to_geometry)
 from safe.geometry.interpolation2d import interpolate_raster
-from safe.geometry.numerics import (
+from safe.common.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,

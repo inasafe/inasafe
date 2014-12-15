@@ -10,7 +10,7 @@ import numpy
 from safe.geometry.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as tr
-from safe.geometry.numerics import ensure_numeric
+from safe.common.numerics import ensure_numeric
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.geometry.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)

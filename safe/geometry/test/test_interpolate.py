@@ -6,7 +6,7 @@ from safe.geometry.interpolation2d import interpolate2d, interpolate_raster
 from safe.geometry.interpolation import BoundsError
 from safe.geometry.interpolation1d import interpolate1d
 from safe.common.testing import combine_coordinates
-from safe.geometry.numerics import nan_allclose
+from safe.common.numerics import nan_allclose
 
 
 def linear_function(x, y):

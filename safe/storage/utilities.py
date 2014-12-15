@@ -12,11 +12,10 @@ from osgeo import ogr
 from collections import OrderedDict
 
 from geometry import Polygon
-from safe.geometry.numerics import ensure_numeric
+from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.exceptions import (
     BoundingBoxError, InaSAFEError, ReadMetadataError)
-
 
 
 # Default attribute to assign to vector layers

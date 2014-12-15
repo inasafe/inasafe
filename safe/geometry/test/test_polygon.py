@@ -22,7 +22,7 @@ from safe.geometry.polygon import (separate_points_by_polygon,
                                  PolygonInputError,
                                  line_dictionary_to_geometry)
 from safe.common.testing import test_polygon, test_lines
-from safe.geometry.numerics import ensure_numeric
+from safe.common.numerics import ensure_numeric
 
 
 def linear_function(x, y):

@@ -13,7 +13,6 @@ from safe.storage.geometry import Polygon
 from safe.common.utilities import unique_filename
 
 
-
 # FIXME (Ole): Move this along with contents of clipping.py to
 # common and consolidate
 class Test_Clipping(unittest.TestCase):
