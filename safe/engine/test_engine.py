@@ -69,50 +69,6 @@ class TestEngine(unittest.TestCase):
         # ensure we are using english by default
         os.environ['LANG'] = 'en'
 
-    def test_volcano_population_evacuation_impact(self):
-        """Population impact from volcanic hazard is computed correctly
-        """
-
-        # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = '%s/donut.shp' % TESTDATA
-        exposure_filename = ('%s/pop_merapi_clip.tif' % TESTDATA)
-        # Slow
-        # FIXME (Ole): Results are different - check!
-        # exposure_filename = ('%s/population_indonesia_2010_BNPB_BPS.asc'
-        #                     % EXPDATA)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_name = 'Volcano Polygon Hazard Population'
-        IF = get_plugin(plugin_name)
-        print 'Calculating'
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-
-        I = read_layer(impact_filename)
-
-        keywords = I.get_keywords()
-
-        # Check for expected results:
-        for value in ['Merapi', 192055, 56514, 68568, 66971]:
-            if isinstance(value, int):
-                x = format_int(population_rounding(value))
-            else:
-                x = value
-            summary = keywords['impact_summary']
-            msg = ('Did not find expected value %s in summary %s'
-                   % (x, summary))
-            assert x in summary, msg
-
-        # FIXME (Ole): Should also have test for concentric circle
-        #              evacuation zones
-
-    test_volcano_population_evacuation_impact.slow = True
-
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
     #
