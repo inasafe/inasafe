@@ -670,69 +670,6 @@ class TestDock(TestCase):
         DOCK.get_functions()
         self.assertTrue(result, message)
 
-    # noinspection PyPep8Naming
-    def Xtest_runner_exceptions(self):
-        """Test runner exceptions"""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function='Exception riser',
-            function_id='Exception Raising Impact Function',
-            aggregation_enabled_flag=True)
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        DOCK.accept()
-        #        DOCK.runtime_keywords_dialog.accept()
-        expected_result = """Error:
-An exception occurred when calculating the results
-Problem:
-Exception : AHAHAH I got you
-Click for Diagnostic Information:
-"""
-        result = DOCK.wvResults.page_to_text()
-        message = (
-            'The result message should be:\n%s\nFound:\n%s' %
-            (expected_result, result))
-        self.assertEqual(expected_result, result, message)
-
-    def xtest_runner_is_none(self):
-        """Test for none runner exceptions"""
-        result, message = setup_scenario(
-            DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function='None returner',
-            function_id='None Returning Impact Function',
-            aggregation_enabled_flag=True)
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
-
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        DOCK.accept()
-        #        DOCK.runtime_keywords_dialog.accept()
-        expected_result = """Error:
-An exception occurred when calculating the results
-Problem:
-AttributeError : 'NoneType' object has no attribute 'keywords'
-Click for Diagnostic Information:
-"""
-        result = DOCK.wvResults.page_to_text()
-        message = (
-            'The result message should be:\n%s\nFound:\n%s' %
-            (expected_result, result))
-        self.assertEqual(expected_result, result, message)
-
     def test_has_parameters_button_disabled(self):
         """Function configuration button is disabled when layers not
         compatible."""
