@@ -1,7 +1,6 @@
 # coding=utf-8
-# coding=utf-8
 """InaSAFE Disaster risk assessment tool developed by AusAid -
-  **Test class for version.py.**
+  **Test class for resource_parameter.py.**
 
 Contact : ole.moller.nielsen@gmail.com
 
