@@ -87,7 +87,7 @@ from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
 from safe_qgis.exceptions import TranslationLoadError
 from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
-from realtime.sftp_shake_data import SftpShakeData
+from realtime.local_shake_data import LocalShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
@@ -114,6 +114,7 @@ class ShakeEvent(QObject):
     Including epicenter, magnitude etc.
     """
     def __init__(self,
+                 working_dir=None,
                  event_id=None,
                  locale='en',
                  population_raster_path=None,
@@ -169,8 +170,9 @@ class ShakeEvent(QObject):
             # fetch the data from (s)ftp
             # self.data = ShakeData(event_id, force_flag)
             try:
-                self.data = SftpShakeData(
+                self.data = LocalShakeData(
                     event=event_id,
+                    working_dir=working_dir,
                     force_flag=force_flag)
             except (SFTPEmptyError, NetworkError, EventIdError):
                 raise
