@@ -288,11 +288,6 @@ class UnsupportedProviderError(Exception):
     pass
 
 
-class InvalidLayerError(Exception):
-    """For when an invalid layer is encountered."""
-    pass
-
-
 class TemplateElementMissingError(Exception):
     """Raised when some element ids are missing from template."""
 

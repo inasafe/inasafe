@@ -751,5 +751,9 @@ def get_shake_test_data_path():
     shake_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            '../test/data/hazard/shake_data'))
+            '..',
+            'test',
+            'data',
+            'hazard',
+            'shake_data'))
     return shake_path
