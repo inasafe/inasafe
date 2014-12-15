@@ -18,7 +18,6 @@ from safe.common.exceptions import (
     BoundingBoxError, InaSAFEError, ReadMetadataError)
 
 
-
 # Default attribute to assign to vector layers
 from safe.common.utilities import ugettext as tr
 from safe.storage.metadata_utilities import (

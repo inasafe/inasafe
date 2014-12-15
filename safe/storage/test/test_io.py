@@ -1,3 +1,4 @@
+# coding=utf-8
 import unittest
 import numpy
 import sys
@@ -5,11 +6,8 @@ import os
 from osgeo import gdal
 
 from safe.storage.raster import Raster
-from safe.storage.vector import (
-    Vector,
-    convert_polygons_to_centroids)
-from safe.storage.projection import (
-    Projection, DEFAULT_PROJECTION)
+from safe.storage.vector import Vector, convert_polygons_to_centroids
+from safe.storage.projection import Projection, DEFAULT_PROJECTION
 from safe.storage.utilities import (
     write_keywords,
     read_keywords,
@@ -46,8 +44,6 @@ from safe.common.exceptions import (
     ReadLayerError,
     VerificationError,
     InaSAFEError)
-
-
 
 
 # Auxiliary function for raster test
