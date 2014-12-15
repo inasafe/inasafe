@@ -59,9 +59,6 @@ class TestShakeEvent(unittest.TestCase):
     # noinspection PyPep8Naming
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir."""
-        # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
-        # file inside 20131105060809 folder to
-        # shakemap_cache_dir/20131105060809/grid.xml
         input_path = os.path.abspath(
             os.path.join(
                 get_shake_test_data_path(),

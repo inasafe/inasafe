@@ -65,8 +65,8 @@ class ShakeData(object):
 
         :param event: A string representing the event id that this raster is
             associated with. e.g. 20110413170148 (Optional).
-            **If no event id is supplied, a query will be made to the ftp
-            server, and the latest event id assigned.**
+            **If no event id is supplied, the latest event id will be
+            assigned.**
         :type event: str
 
         :param force_flag: The flag if we want to force move data from

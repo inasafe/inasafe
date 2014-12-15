@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Ftp Client Test Cases.**
+- **Shake Data Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 

@@ -101,5 +101,5 @@ class CopyError(Exception):
 
 
 class EmptyShakeDirectoryError(Exception):
-    """Raised if the SFTP remote directory does not contain any shakemaps."""
+    """Raised if the working directory does not contain any shakemaps."""
     pass

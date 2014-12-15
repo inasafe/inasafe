@@ -122,12 +122,15 @@ class ShakeEvent(QObject):
                  data_is_local_flag=False):
         """Constructor for the shake event class.
 
+        :param working_dir: The locale working dir where all the shakemaps are
+            located.
+        :type working_dir: str
+
         :param event_id: (Optional) Id of the event. Will be used to
-            fetch the ShakeData for this event (either from cache or from ftp
-            server as required). The grid.xml file in the unpacked event will
-            be used to initialise the state of the a ShakeGridConvert instance.
-            If no event id is supplied, the most recent event recorded on the
-            server will be used.
+            fetch the ShakeData for this event. The grid.xml file in the
+            unpacked event will be used to initialise the state of the a
+            ShakeGrid instance. If no event id is supplied, the most recent
+            event recorded on working dir will be used.
         :type event_id: str
 
         :param locale:(Optional) string for iso locale to use for outputs.
@@ -145,8 +148,7 @@ class ShakeEvent(QObject):
             that will be used.
         :type geonames_sqlite_path: str
 
-        :param force_flag: Whether to force retrieval of the dataset from the
-            ftp server.
+        :param force_flag: Whether to force retrieval of the dataset.
         :type force_flag: bool
 
         :param data_is_local_flag: Whether the data is already extracted and
@@ -156,7 +158,7 @@ class ShakeEvent(QObject):
 
         :return: Instance
 
-        :raises: SFTPEmptyError, EventIdError, EventXmlParseError
+        :raises: EmptyShakeDirectoryError, EventIdError, EventXmlParseError
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
