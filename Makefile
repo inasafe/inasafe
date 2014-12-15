@@ -33,7 +33,7 @@ compile:
 	@echo "-----------------"
 	@echo "Compile GUI forms"
 	@echo "-----------------"
-	make -C safe_qgis
+	make -C safe/gui/ui
 
 compress-images:
 	@echo
@@ -115,6 +115,7 @@ clean:
 	@-find . -name '*.orig' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
+	make clean -C safe/gui/ui
 
 # Run the test suite followed by style checking
 test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite
