@@ -12,6 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.resources import resources_path
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
@@ -41,7 +44,7 @@ from safe.utilities.utilities import (
     impact_attribution,
     add_ordered_combo_item,
     read_impact_layer,
-    extent_string_to_array, get_safe_impact_function)
+    get_safe_impact_function)
 from safe.utilities.defaults import (
     limitations,
     default_organisation_logo_path)
@@ -87,7 +90,6 @@ from safe_extras.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 
 from safe.utilities.analysis import Analysis
-from safe.utilities.utilities import resources_path
 from safe.utilities.extent import Extent
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE

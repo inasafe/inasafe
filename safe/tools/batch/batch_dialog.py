@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.tools.batch import scenario_runner
+from safe.utilities.gis import extent_string_to_array, read_impact_layer
 
 __author__ = 'bungcip@gmail.com & tim@kartoza.com & imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -48,7 +49,7 @@ from safe.report.html_renderer import HtmlRenderer
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
 from safe.utilities.utilities import (
-    read_impact_layer, extent_string_to_array)
+    read_impact_layer)
 from safe.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')

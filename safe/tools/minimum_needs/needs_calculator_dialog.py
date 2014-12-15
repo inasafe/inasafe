@@ -5,6 +5,8 @@
     counts of people affected per polygon.
 
 """
+from safe.utilities.gis import is_point_layer, is_polygon_layer
+from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
@@ -27,8 +29,6 @@ from safe_qgis.ui.needs_calculator_dialog_base import (
 from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_polygon_layer,
-    is_point_layer,
-    html_footer,
     html_header)
 from safe.utilities.help import show_context_help
 from safe.impact_functions.core import evacuated_population_weekly_needs

@@ -17,6 +17,7 @@ This will result in some standardised styling being applied to the important
 text element.
 
 """
+from safe.utilities.resources import resources_path
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -26,7 +27,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 from PyQt4.QtCore import QUrl
-from safe.utilities.utilities import resources_path
 # These all apply to heading elements
 
 PROGRESS_UPDATE_STYLE = {

@@ -12,6 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.utilities.gis import is_raster_layer, is_point_layer, is_polygon_layer, \
+    layer_attribute_names
 
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
@@ -39,7 +41,6 @@ from safe.utilities.utilities import (
     get_error_message,
     is_point_layer,
     is_polygon_layer,
-    is_raster_layer,
     layer_attribute_names)
 from safe.utilities.defaults import get_defaults
 from safe.common.exceptions import (

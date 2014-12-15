@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import extent_to_array, viewport_geo_array
+
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '25/02/2014'
@@ -28,7 +30,7 @@ from PyQt4.QtCore import QSettings
 from PyQt4.QtGui import QDialog, QFileDialog
 
 from safe.utilities.utilities import (
-    viewport_geo_array, extent_to_array)
+    viewport_geo_array)
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.utilities import ugettext as safeTr
 

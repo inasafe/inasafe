@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import viewport_geo_array
+from safe.utilities.resources import html_footer, html_header
+
 __author__ = 'bungcip@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '4/12/2012'
@@ -43,7 +46,7 @@ from safe.common.exceptions import (
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.utilities import (
-    html_footer, html_header, viewport_geo_array)
+    html_header)
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy

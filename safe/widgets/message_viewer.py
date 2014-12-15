@@ -9,6 +9,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.utilities.qt import qt_at_least
+from safe.utilities.resources import html_footer, html_header, resources_path
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -22,11 +24,9 @@ from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
 from safe.utilities.utilities import (
     html_header,
-    html_footer,
     html_to_file,
     resources_path,
-    open_in_browser,
-    qt_at_least)
+    open_in_browser)
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

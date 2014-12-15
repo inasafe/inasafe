@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import is_raster_layer, is_polygon_layer
 
 __author__ = 'tim@kartoza.com'
 __date__ = '17/10/2013'
@@ -29,9 +30,7 @@ from qgis.core import (
     QgsGeometry,
     QgsPoint)
 
-from safe.utilities.utilities import (
-    is_raster_layer,
-    is_polygon_layer)
+from safe.utilities.gis import is_polygon_layer
 from safe.common.exceptions import InvalidParameterError, InvalidGeometryError
 
 

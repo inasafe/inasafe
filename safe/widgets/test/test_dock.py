@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import qgis_version, read_impact_layer
 
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
@@ -44,7 +45,7 @@ from safe.common.testing import HAZDATA, UNITDATA
 from safe.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
-from safe.utilities.utilities import qgis_version, read_impact_layer
+from safe.utilities.utilities import read_impact_layer
 from safe.utilities.utilities_for_testing import (
     load_standard_layers,
     setup_scenario,

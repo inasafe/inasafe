@@ -9,6 +9,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.utilities.gis import is_polygon_layer, create_memory_layer, \
+    layer_attribute_names
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -48,8 +50,7 @@ from safe.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe.utilities.clipper import clip_layer
 from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities import (
-    is_polygon_layer,
+from safe.utilities.gis import (
     layer_attribute_names,
     create_memory_layer)
 from safe.utilities.styling import set_vector_graduated_style

@@ -13,17 +13,18 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.resources import resources_path
+
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
+from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.utilities import ugettext as tr
-from safe.utilities.utilities import resources_path
-from PyQt4.QtCore import QSettings
+
 
 def define_defaults():
     """Define standard defaults such as age ratios etc.

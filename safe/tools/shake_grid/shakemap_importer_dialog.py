@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -36,7 +37,7 @@ from safe.common.version import get_version
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.help import show_context_help
-from safe.utilities.utilities import html_footer, html_header
+from safe.utilities.utilities import html_header
 from safe.utilities.styling import mmi_ramp
 from safe.tools.shake_grid.shake_grid import convert_mmi_data
 

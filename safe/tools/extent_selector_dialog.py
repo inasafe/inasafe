@@ -16,6 +16,7 @@ Refactored and improved in Oct 2014 by Tim Sutton for InaSAFE.
 
 .. versionadded:: 2.2.0
 """
+from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'Giuseppe Sucameli & Tim Sutton'
 __date__ = 'December 2010'
@@ -42,7 +43,7 @@ from qgis.core import (
     QgsCoordinateTransform)
 
 from safe import messaging as m
-from safe.utilities.utilities import (html_footer, html_header)
+from safe.utilities.utilities import (html_header)
 from safe.utilities.help import show_context_help
 from safe_qgis.ui.extent_selector_dialog_base import (
     Ui_ExtentSelectorDialogBase)

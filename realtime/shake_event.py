@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import get_wgs84_resolution
+from safe.utilities.resources import resources_path
+
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
@@ -82,7 +85,6 @@ from safe.common.tables import (
     TableRow)
 from safe.common.version import get_version
 from safe.common.utilities import romanise
-from safe.utilities.utilities import get_wgs84_resolution, resources_path
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.styling import mmi_colour
 from safe.common.exceptions import TranslationLoadError

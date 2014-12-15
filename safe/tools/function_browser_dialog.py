@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'ismailsunni@yahoo.co.id'
 __revision__ = '$Format:%H$'
@@ -26,7 +27,7 @@ from safe.common.version import get_version
 from safe.impact_functions.core import (
     get_unique_values,
     get_plugins_as_table)
-from safe.utilities.utilities import html_footer, html_header
+from safe.utilities.utilities import html_header
 
 
 class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):

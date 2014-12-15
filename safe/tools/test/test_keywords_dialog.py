@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import qgis_version
 
 __author__ = 'tim@kartoza.com'
 __date__ = '21/02/2011'
@@ -51,8 +52,8 @@ from safe.common.utilities import unique_filename
 from safe.common.testing import HAZDATA, TESTDATA, BOUNDDATA
 from safe.tools.keywords_dialog import KeywordsDialog
 from safe.common.exceptions import KeywordNotFoundError
-from safe.utilities.utilities import qgis_version, read_file_keywords
-from safe.utilities.defaults import get_defaults
+from safe.utilities.utilities import read_file_keywords
+from safe.defaults import get_defaults
 
 
 def clone_padang_layer():

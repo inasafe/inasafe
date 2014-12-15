@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.utilities.gis import is_polygon_layer, layer_attribute_names
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -33,15 +34,12 @@ from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.help import show_context_help
-from safe.utilities.utilities import (
-    get_error_message,
-    is_polygon_layer,
-    layer_attribute_names)
+from safe.utilities.utilities import get_error_message
+from safe.utilities.gis import layer_attribute_names
 from safe.common.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
-from safe.defaults import DEFAULTS
 from safe import metadata
 
 # Aggregations' keywords

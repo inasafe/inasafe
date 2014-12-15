@@ -2,6 +2,7 @@
 """**Tests for map creation in QGIS plugin.**
 
 """
+from safe.utilities.resources import resources_path
 
 __author__ = 'Tim Sutton <tim@kartoza.com>'
 __revision__ = '$Format:%H$'
@@ -33,7 +34,6 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import temp_dir, unique_filename
-from safe.utilities.utilities import resources_path
 from safe.utilities.utilities_for_testing import load_layer
 from safe.report.map import Map
 

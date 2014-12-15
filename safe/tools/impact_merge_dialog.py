@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.defaults import disclaimer
+from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -51,7 +52,6 @@ from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.utilities import (
     html_header,
-    html_footer,
     html_to_file,
     add_ordered_combo_item)
 from safe.utilities.help import show_context_help

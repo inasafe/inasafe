@@ -8,6 +8,8 @@ Impact Layer Merge Dialog.
      (at your option) any later version.
 
 """
+from safe.utilities.resources import resources_path
+
 __author__ = 'Christian Christelis christian@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/10/2014'
@@ -44,7 +46,6 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMaximumError,
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
-from safe.utilities.utilities import resources_path
 from safe.utilities.help import show_context_help
 from safe_qgis.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
 from safe.messaging import styles

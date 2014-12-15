@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import is_raster_layer
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
@@ -21,7 +23,6 @@ import os
 import logging
 
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities import is_raster_layer
 
 
 LOGGER = logging.getLogger('InaSAFE')

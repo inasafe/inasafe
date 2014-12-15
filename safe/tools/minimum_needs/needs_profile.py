@@ -21,7 +21,7 @@ from qgis.core import QgsApplication
 
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
-
+from safe.utilities.resources import resources_path
 
 def add_needs_parameters(parameters):
     """Add minimum needs to an impact functions parameters.
@@ -36,6 +36,7 @@ def add_needs_parameters(parameters):
     parameters['minimum needs'] = minimum_needs.get_needs_parameters()
     parameters['provenance'] = minimum_needs.provenance
     return parameters
+
 
 class NeedsProfile(MinimumNeeds):
     """The concrete MinimumNeeds class to be used in a QGIS environment.
@@ -153,9 +154,7 @@ class NeedsProfile(MinimumNeeds):
 
         locale_minimum_needs_dir = os.path.join(
             str(self.root_directory), 'minimum_needs')
-        current_directory = os.path.dirname(__file__)
-        path_name = os.path.join(
-            current_directory, '..', '..', 'resources', 'minimum_needs')
+        path_name = resources_path('minimum_needs')
         if not os.path.exists(locale_minimum_needs_dir):
             os.makedirs(locale_minimum_needs_dir)
         for file_name in os.listdir(path_name):

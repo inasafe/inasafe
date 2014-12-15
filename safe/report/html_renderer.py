@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.printing import dpi_to_meters, setup_printer, mm_to_points
+from safe.utilities.resources import html_footer, html_header
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
@@ -24,9 +27,7 @@ import logging
 from PyQt4 import QtCore, QtGui, QtWebKit
 from safe.utilities.utilities import (
     html_header,
-    html_footer,
     mm_to_points,
-    dpi_to_meters,
     setup_printer,
     impact_attribution)
 from safe.common.utilities import unique_filename, temp_dir

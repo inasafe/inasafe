@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import qgis_version
+
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '25/02/2014'
@@ -30,7 +32,6 @@ from safe.common.testing import TESTDATA, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.tools.save_scenario import SaveScenarioDialog
-from safe.utilities.utilities import qgis_version
 from safe.utilities.utilities_for_testing import (
     setup_scenario,
     set_canvas_crs,
