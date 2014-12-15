@@ -25,7 +25,7 @@ from qgis.utils import iface
 import PyQt4.QtCore as QtCore
 from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
 
-from safe.exceptions import FileNotFoundError
+from safe.common.exceptions import FileNotFoundError
 
 
 LOGGER = logging.getLogger('InaSAFE')

@@ -16,11 +16,6 @@ __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 import unittest
 import sys
 import os
@@ -56,7 +51,6 @@ from safe.utilities.utilities_for_testing import (
     set_canvas_crs,
     combos_to_string,
     populate_dock,
-    set_geo_extent,
     canvas_list,
     GEOCRS,
     GOOGLECRS,
@@ -66,7 +60,6 @@ from safe.utilities.utilities_for_testing import (
     set_jakarta_google_extent,
     set_yogya_extent,
     get_ui_state,
-    set_batemans_bay_extent,
     set_small_jakarta_extent)
 
 # Add PARENT directory to path to make test aware of other modules
@@ -81,7 +74,11 @@ PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.join(
     os.path.dirname(__file__),
-    '../../test/test_data/test_files')
+    '..',
+    '..',
+    'test',
+    'test_data',
+    'test_files')
 
 
 # noinspection PyArgumentList
@@ -155,70 +152,11 @@ class TestDock(TestCase):
             'Validation expected to pass on a populated DOCK with selections.')
         self.assertTrue(flag, message)
 
-    def test_run_tsunami_building_impact_function(self):
-        """Tsunami function runs in GUI as expected."""
-
-        # Push OK with the left mouse button
-
-        button = DOCK.pbnRunStop
-
-        message = 'Run button was not enabled'
-        self.assertTrue(button.isEnabled(), message)
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='Tsunami Max Inundation',
-            exposure='Tsunami Building Exposure',
-            function='Be flooded',
-            function_id='Flood Building Impact Function')
-        self.assertTrue(result, message)
-
-        set_canvas_crs(GEOCRS, True)
-        set_batemans_bay_extent(dock=DOCK)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-
-        # print result
-        # Post clip on steroids refactor
-        # < 1 m:    1923
-        # 1 - 3 m:    89
-        # > 3 m:    0
-        # Post replacement of Batemans Bay dataset
-        # < 1 m:  10
-        # 1 - 3 m:    7
-        # > 3 m:  0
-        # Post rewrite of impact function
-        # Building type	 closed	Total
-        # All	        7	                17
-
-        # QGIS  > 2.2 scales the extents to the 400x400 canvas
-        # slightly differently so versions prior to 2.4
-        # Versions >= 2.4 of QGIS
-        # All	7	16
-
-        if qgis_version() < 20400:
-            total_buildings = 18
-        else:
-            # Changed from 17 to 16 with merge of user_extents branch
-            total_buildings = 16
-        message = 'Result not as expected: %s' % result
-        self.assertTrue(format_int(total_buildings) in result, message)
-
-        if qgis_version() < 20400:
-            flooded_buildings = 8
-        else:
-            # Changed from 7 to 6 with merge of user_extents branch
-            flooded_buildings = 6
-        self.assertTrue(format_int(flooded_buildings) in result, message)
-
     def test_insufficient_overlap(self):
         """Test Insufficient overlap errors are caught.
 
         ..note:: See https://github.com/AIFDR/inasafe/issues/372
         """
-
         # Push OK with the left mouse button
         button = DOCK.pbnRunStop
 
@@ -253,223 +191,6 @@ class TestDock(TestCase):
             expected_string, result)
         # This is the expected impact number
         self.assertIn(expected_string, result, message)
-
-    def test_run_flood_population_impact_function_scaling(self):
-        """Flood function runs in GUI with 5x5km population data
-           Raster on raster based function runs as expected with scaling."""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function='Need evacuation',
-            function_id='Flood Evacuation Function')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
-
-        # Press RUN
-        button = DOCK.pbnRunStop
-        button.click()
-        result = DOCK.wvResults.page_to_text()
-
-        message = 'Result not as expected: %s' % result
-
-        # Check numbers are OK (within expected errors from resampling)
-        # These are expected impact number
-        self.assertTrue(format_int(10474000) in result, message)
-        self.assertTrue(format_int(979000) in result, message)
-
-    def test_run_flood_population_polygon_hazard_impact_function(self):
-        """Flood function runs in GUI with Jakarta polygon flood hazard data.
-           Uses population raster exposure layer"""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='A flood in Jakarta',
-            exposure='Penduduk Jakarta',
-            function='Need evacuation',
-            function_id='Flood Evacuation Function Vector Hazard')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-
-        message = 'Result not as expected: %s' % result
-        # This is the expected number of people needing evacuation
-        self.assertTrue(format_int(1350000) in result, message)
-
-    def test_run_categorised_hazard_population_impact_function(self):
-        """Flood function runs in GUI with Flood in Jakarta hazard data
-            Uses Penduduk Jakarta as exposure data."""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='Flood in Jakarta',
-            exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-
-        message = ('Result not as expected: %s' % result)
-        # This is the expected number of population might be affected
-        self.assertTrue(format_int(30939000) in result, message)  # high
-        # self.assertTrue(format_int(68280000) in result, message)
-        # self.assertTrue(format_int(157551000) in result, message)
-        # The 2 asserts above are not valid anymore after the fix we made to
-        # CategorisedHazardPopulationImpactFunction
-        # Look at the fix here:
-        # (https://github.com/AIFDR/inasafe/commit/aa5b3d72145c031c91f4d101b830
-        # 8228915c248d#diff-378093670f4ebd60b4487af9b7c2e164)
-        # New Asserts
-        self.assertTrue(format_int(0) in result, message)  # medium
-        self.assertTrue(format_int(256770000) in result, message)  # low
-
-    # noinspection PyArgumentList
-    def test_run_earthquake_building_impact_function(self):
-        """Earthquake function runs in GUI with An earthquake in Yogyakarta
-        like in 2006 hazard data uses OSM Building Polygons exposure data."""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='An earthquake in Yogyakarta like in 2006',
-            exposure='OSM Building Polygons',
-            function='Be affected',
-            function_id='Earthquake Building Impact Function')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_geo_extent([101, -12, 119, -4], DOCK)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-        LOGGER.debug(result)
-
-        message = ('Result not as expected: %s' % result)
-        # This is the expected number of building might be affected
-        self.assertTrue(format_int(845) in result, message)
-        self.assertTrue(format_int(15524) in result, message)
-        self.assertTrue(format_int(122) in result, message)
-
-    def test_run_volcano_building_impact(self):
-        """Volcano function runs in GUI with An donut (merapi hazard map)
-         hazard data uses OSM Building Polygons exposure data."""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='donut',
-            exposure='OSM Building Polygons',
-            function='Be affected',
-            function_id='Volcano Building Impact')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-        LOGGER.debug(result)
-
-        message = ('Result not as expected: %s' % result)
-        # This is the expected number of building might be affected
-        self.assertTrue(format_int(288) in result, message)
-
-    def test_run_volcano_population_impact(self):
-        """Volcano function runs in GUI with a donut (merapi hazard map)
-         hazard data uses population count grid."""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='donut',
-            exposure='People',
-            function='Need evacuation',
-            function_id='Volcano Polygon Hazard Population')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-        LOGGER.debug(result)
-
-        message = ('Result not as expected: %s' % result)
-        # This is the expected number of people affected
-        # Kategori	Jumlah	Kumulatif
-        # Kawasan Rawan Bencana III	45.000	45.000
-        # Kawasan Rawan Bencana II	84.000	129.000
-        # Kawasan Rawan Bencana I	28.000	157.000
-
-        # We could also get a memory error here so there are
-        # two plausible outcomes:
-
-        # Outcome 1: we ran out of memory
-        if 'system does not have sufficient memory' in result:
-            return
-            # Outcome 2: It ran so check the results
-        self.assertTrue(format_int(45) in result, message)
-        self.assertTrue(format_int(84) in result, message)
-        self.assertTrue(format_int(28) in result, message)
-
-    def test_run_volcano_circle_population(self):
-        """Volcano function runs in GUI with a circular evacuation zone.
-
-        Uses population count grid as exposure."""
-
-        # NOTE: We assume radii in impact function to be 3, 5 and 10 km
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='Merapi Alert',
-            exposure='People',
-            function='Need evacuation',
-            function_id='Volcano Polygon Hazard Population')
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_geo_extent([110.01, -7.81, 110.78, -7.50], DOCK)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-        LOGGER.debug(result)
-
-        message = 'Result not as expected: %s' % result
-        memory_string = 'not have sufficient memory'
-        if memory_string in result:
-            # Test host did not have enough memory to run the test
-            # and user was given a nice message stating this
-            return
-            # This is the expected number of people affected
-        # Jarak [km]	Jumlah	Kumulatif
-        # 3	     15.000	15.000
-        # 5	     17.000	32.000
-        # 10	124.000	156.000
-        self.assertTrue(format_int(15800) in result, message)
-        self.assertTrue(format_int(17300) in result, message)
-        self.assertTrue(format_int(125000) in result, message)
 
     # disabled this test until further coding
     def xtest_print_map(self):
@@ -792,7 +513,7 @@ class TestDock(TestCase):
             file_list, data_directory=None)
         self.assertTrue(hazard_layer_count == 2)
         self.assertTrue(exposure_layer_count == 1)
-        DOCK.cboFunction.setCurrentIndex(1)
+        DOCK.cboFunction.setCurrentIndex(0)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         expected_function = str(DOCK.cboFunction.currentText())
@@ -948,69 +669,6 @@ class TestDock(TestCase):
             function_id='Flood Building Impact Function')
         DOCK.get_functions()
         self.assertTrue(result, message)
-
-    # noinspection PyPep8Naming
-    def Xtest_runner_exceptions(self):
-        """Test runner exceptions"""
-
-        result, message = setup_scenario(
-            DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function='Exception riser',
-            function_id='Exception Raising Impact Function',
-            aggregation_enabled_flag=True)
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        DOCK.accept()
-        #        DOCK.runtime_keywords_dialog.accept()
-        expected_result = """Error:
-An exception occurred when calculating the results
-Problem:
-Exception : AHAHAH I got you
-Click for Diagnostic Information:
-"""
-        result = DOCK.wvResults.page_to_text()
-        message = (
-            'The result message should be:\n%s\nFound:\n%s' %
-            (expected_result, result))
-        self.assertEqual(expected_result, result, message)
-
-    def xtest_runner_is_none(self):
-        """Test for none runner exceptions"""
-        result, message = setup_scenario(
-            DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function='None returner',
-            function_id='None Returning Impact Function',
-            aggregation_enabled_flag=True)
-        self.assertTrue(result, message)
-
-        # Enable on-the-fly reprojection
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
-
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        DOCK.accept()
-        #        DOCK.runtime_keywords_dialog.accept()
-        expected_result = """Error:
-An exception occurred when calculating the results
-Problem:
-AttributeError : 'NoneType' object has no attribute 'keywords'
-Click for Diagnostic Information:
-"""
-        result = DOCK.wvResults.page_to_text()
-        message = (
-            'The result message should be:\n%s\nFound:\n%s' %
-            (expected_result, result))
-        self.assertEqual(expected_result, result, message)
 
     def test_has_parameters_button_disabled(self):
         """Function configuration button is disabled when layers not

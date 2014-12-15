@@ -18,14 +18,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-
 import unittest
 import sys
 import os
 import shutil
 from unittest import expectedFailure
 import numpy
-
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -33,6 +31,7 @@ from qgis.core import (
     QgsPoint)
 
 from safe.common.testing import get_qgis_app
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -40,9 +39,11 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
 from safe.common.numerics import nan_allclose
 from safe.common.utilities import unique_filename
-from safe.common.exceptions import GetDataError
 from safe.storage.core import read_layer as read_safe_layer
-from safe.exceptions import InvalidProjectionError, CallGDALError
+from safe.common.exceptions import (
+    InvalidProjectionError,
+    CallGDALError,
+    GetDataError)
 from safe.utilities.clipper import (
     clip_layer,
     extent_to_kml,

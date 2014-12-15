@@ -22,7 +22,7 @@ import os
 import shutil
 import unittest
 
-from safe.api import get_shake_test_data_path
+from safe.common.testing import get_shake_test_data_path
 from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_zip_dir,

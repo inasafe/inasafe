@@ -7,6 +7,8 @@
      (at your option) any later version.
 
 """
+from safe.utilities.utilities import get_safe_impact_function
+
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -25,8 +27,8 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.common.qgis_interface import QgisInterface
-from plugin import Plugin
+from safe.geometry.qgis_interface import QgisInterface
+from safe.plugin import Plugin
 from safe.common.utilities import ugettext as safeTr
 
 # Add parent directory to path to make test aware of other modules
@@ -106,7 +108,6 @@ class PluginTest(unittest.TestCase):
         myPlugin.change_i18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        from safe_qgis.safe_interface import get_safe_impact_function
         # myFunctions = get_safe_impact_function()
         # print myFunctions
         myFunctions = get_safe_impact_function('Tydelik gesluit')

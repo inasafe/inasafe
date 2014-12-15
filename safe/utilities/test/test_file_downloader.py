@@ -29,7 +29,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.utilities_for_testing import assert_hash_for_file
-from safe.exceptions import DownloadError
+from safe.common.exceptions import DownloadError
 
 
 class FileDownloaderTest(unittest.TestCase):

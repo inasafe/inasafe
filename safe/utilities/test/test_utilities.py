@@ -20,14 +20,13 @@ from safe.utilities.utilities import (
     impact_attribution,
     dpi_to_meters,
     qt_at_least,
-    html_footer,
     html_header,
     resources_path)
 from safe.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
 from safe.tools.test.test_keywords_dialog import (
     make_polygon_layer,
-    make_padang_layer,
+    clone_padang_layer,
     make_point_layer)
 from safe.storage.utilities import bbox_intersection
 
@@ -79,7 +78,7 @@ class UtilitiesTest(unittest.TestCase):
             message = message.decode('string_escape')
             expected_results = open(
                 TEST_FILES_DIR +
-                '/test-stacktrace-html.txt', 'r').read().replace('\n', '')
+                '/test-stacktrace-html.txt').read().replace('\n', '')
             self.assertIn(expected_results, message)
 
             # pylint: enable=W0703
@@ -95,15 +94,15 @@ class UtilitiesTest(unittest.TestCase):
         layer = make_polygon_layer()
 
         # with good attribute name
-        attributes, position = layer_attribute_names(layer, [
-            QVariant.Int, QVariant.String],
-                                                     'TEST_STRIN')  # Not a typo...
+        attributes, position = layer_attribute_names(
+            layer,
+            [QVariant.Int, QVariant.String], 'TEST_STRIN')  # Not a typo...
         expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         expected_position = 2
-        message = 'expected_attributes, got %s, expected %s'%(
+        message = 'expected_attributes, got %s, expected %s' % (
             attributes, expected_attributes)
         assert (attributes == expected_attributes), message
-        message = 'expected_position, got %s, expected %s'%(
+        message = 'expected_position, got %s, expected %s' % (
             position, expected_position)
         assert (position == expected_position), message
 
@@ -114,32 +113,32 @@ class UtilitiesTest(unittest.TestCase):
             'MISSING_ATTR')
         expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         expected_position = None
-        message = 'expected_attributes, got %s, expected %s'%(
+        message = 'expected_attributes, got %s, expected %s' % (
             attributes, expected_attributes)
         assert (attributes == expected_attributes), message
-        message = 'expected_position, got %s, expected %s'%(
+        message = 'expected_position, got %s, expected %s' % (
             position, expected_position)
         assert (position == expected_position), message
 
         # with raster layer
-        layer = make_padang_layer()
+        layer, _ = clone_padang_layer()
         attributes, position = layer_attribute_names(layer, [], '')
-        message = 'Should return None, None for raster layer, got %s, %s'%(
+        message = 'Should return None, None for raster layer, got %s, %s' % (
             attributes, position)
         assert (attributes is None and position is None), message
 
     def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back"""
         layer = make_polygon_layer()
-        message = 'isPolygonLayer, %s layer should be polygonal'%layer
+        message = 'isPolygonLayer, %s layer should be polygonal' % layer
         assert is_polygon_layer(layer), message
 
         layer = make_point_layer()
-        message = '%s layer should be polygonal'%layer
+        message = '%s layer should be polygonal' % layer
         assert not is_polygon_layer(layer), message
 
-        layer = make_padang_layer()
-        message = ('%s raster layer should not be polygonal'%layer)
+        layer, _ = clone_padang_layer()
+        message = ('%s raster layer should not be polygonal' % layer)
         assert not is_polygon_layer(layer), message
 
     def test_mm_to_points(self):
@@ -149,10 +148,10 @@ class UtilitiesTest(unittest.TestCase):
         pixels = 300
         mm = 25.4  # 1 inch
         result = points_to_mm(pixels, dpi)
-        message = "Expected: %s\nGot: %s"%(mm, result)
+        message = "Expected: %s\nGot: %s" % (mm, result)
         assert result == mm, message
         result = mm_to_points(mm, dpi)
-        message = "Expected: %s\nGot: %s"%(pixels, result)
+        message = "Expected: %s\nGot: %s" % (pixels, result)
         assert result == pixels, message
 
     def test_humanize_seconds(self):
@@ -189,6 +188,9 @@ class UtilitiesTest(unittest.TestCase):
         print html
         assert html == '11'
 
+        # Set back to en
+        os.environ['LANG'] = 'en'
+
     def test_dpi_to_meters(self):
         """Test conversion from dpi to dpm."""
         dpi = 300
@@ -196,7 +198,7 @@ class UtilitiesTest(unittest.TestCase):
         expected_dpm = 11811.023622
         message = (
             'Conversion from dpi to dpm failed\n'
-            ' Got: %s Expected: %s\n'%
+            ' Got: %s Expected: %s\n' %
             (dpm, expected_dpm))
         self.assertAlmostEqual(dpm, expected_dpm, msg=message)
 

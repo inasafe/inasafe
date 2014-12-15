@@ -36,7 +36,7 @@ from raven.handlers.logging import SentryHandler
 from raven import Client
 # pylint: enable=F0401
 
-from safe.api import add_logging_handler_once
+from safe.common.custom_logging import add_logging_handler_once
 from safe.utilities.utilities import tr
 
 LOGGER = logging.getLogger('InaSAFE')

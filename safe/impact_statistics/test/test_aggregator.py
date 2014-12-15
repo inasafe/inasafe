@@ -36,7 +36,7 @@ from qgis.core import (
     QgsMapLayerRegistry)
 
 from safe.common.testing import get_qgis_app
-from safe.common.qgis_vector_tools import extent_to_geo_array
+from safe.geometry.qgis_vector_tools import extent_to_geo_array
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

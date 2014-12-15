@@ -37,7 +37,7 @@ from qgis.core import (
     QgsColorRampShader,
     QgsSingleBandPseudoColorRenderer)
 
-from safe.exceptions import StyleError
+from safe.common.exceptions import StyleError
 
 
 LOGGER = logging.getLogger('InaSAFE')

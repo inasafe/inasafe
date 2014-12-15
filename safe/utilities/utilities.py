@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -24,11 +23,7 @@ import traceback
 import logging
 import uuid
 import webbrowser
-
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui, Qt
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QUrl
+import unicodedata
 
 from qgis.core import (
     QGis,
@@ -38,12 +33,29 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsVectorLayer)
 
-from safe.exceptions import MemoryLayerCreationError
-from safe.common.utilities import unique_filename, ugettext as safe_tr
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore, QtGui, Qt
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QCoreApplication
+
+from safe.storage.utilities import read_keywords
+from safe.storage.layer import Layer
+from safe.storage.core import read_layer as safe_read_layer
+from safe.storage.utilities import write_keywords as safe_write_keywords
+from safe.common.exceptions import (
+    MemoryLayerCreationError,
+    InvalidParameterError,
+    NoKeywordsFoundError,
+    KeywordNotFoundError)
+from safe.common.utilities import (
+    unique_filename,
+    ugettext as safeTr)
 from safe.common.version import get_version
 from safe import messaging as m
+from safe.impact_functions.core import get_plugins
 from safe.messaging import styles
 from safe.messaging.error_message import ErrorMessage
+
 INFO_STYLE = styles.INFO_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -733,6 +745,24 @@ def read_impact_layer(impact_layer):
         raise Exception(message)
 
 
+def convert_to_safe_layer(layer):
+    """Thin wrapper around the safe read_layer function.
+
+    Args:
+        layer - QgsMapLayer or Safe layer.
+    Returns:
+        A safe read_safe_layer object is returned.
+    Raises:
+        Any exceptions are propagated
+    """
+    if isinstance(layer, Layer):
+        return layer
+    try:
+        return safe_read_layer(layer.source())
+    except:
+        raise
+
+
 def open_in_browser(file_path):
     """Open a file in the default web browser.
 
@@ -792,3 +822,138 @@ def qt_at_least(needed_version, test_version=None):
         return True
     else:
         return False
+
+
+def read_file_keywords(layer_path, keyword=None):
+    """Get metadata from the keywords file associated with a local
+     file in the file system.
+
+    .. note:: Requires a str representing a file path instance
+              as parameter As opposed to read_keywords_from_layer which
+              takes a inasafe file object as parameter.
+
+    .. seealso:: read_keywords_from_layer
+
+    :param: layer_path: a string representing a path to a layer
+           (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
+    :type layer_path: str
+
+    :param keyword: optional - the metadata keyword to retrieve e.g. 'title'
+    :type keyword: str
+
+    :return: A string containing the retrieved value for the keyword if
+             the keyword argument is specified, otherwise the
+             complete keywords dictionary is returned.
+
+    :raises: KeywordNotFoundError, NoKeywordsFoundError, InvalidParameterError
+
+    Note:
+        * KeywordNotFoundError - occurs when the keyword is not recognised.
+        * NoKeywordsFoundError - occurs when no keyword file exists.
+        * InvalidParameterError - occurs when the layer does not exist.
+    """
+    # check the source layer path is valid
+    if not os.path.isfile(layer_path):
+        message = tr('Cannot get keywords from a non-existent file. File '
+                     '%s does not exist.' % layer_path)
+        raise InvalidParameterError(message)
+
+    # check there really is a keywords file for this layer
+    keyword_file_path = os.path.splitext(layer_path)[0]
+    keyword_file_path += '.keywords'
+    if not os.path.isfile(keyword_file_path):
+        message = tr('No keywords file found for %s' % keyword_file_path)
+        raise NoKeywordsFoundError(message)
+
+    # now get the requested keyword using the inasafe library
+    try:
+        dictionary = read_keywords(keyword_file_path)
+    except Exception, e:
+        message = tr(
+            'Keyword retrieval failed for %s (%s) \n %s' % (
+                keyword_file_path, keyword, str(e)))
+        raise KeywordNotFoundError(message)
+
+    # if no keyword was supplied, just return the dict
+    if keyword is None:
+        return dictionary
+    if keyword not in dictionary:
+        message = tr('No value was found in file %s for keyword %s' % (
+            keyword_file_path, keyword))
+        raise KeywordNotFoundError(message)
+
+    try:
+        value = dictionary[keyword]
+    except:
+        raise
+    return value
+
+
+def write_keywords_to_file(filename, keywords):
+    """Thin wrapper around the safe write_keywords function.
+
+    Args:
+        * filename - str representing path to layer that must be written.
+          If the file does not end in .keywords, its extension will be
+          stripped off and the basename + .keywords will be used as the file.
+        * keywords - a dictionary of keywords to be written
+    Returns:
+        None
+    Raises:
+        Any exceptions are propogated
+    """
+    basename, extension = os.path.splitext(filename)
+    if 'keywords' not in extension:
+        filename = basename + '.keywords'
+    try:
+        safe_write_keywords(keywords, filename)
+    except:
+        raise
+
+
+def get_safe_impact_function(function=None):
+    """Thin wrapper around the safe impact_functions function.
+
+    Args:
+        function - optional str giving a specific plugins name that should
+        be fetched.
+    Returns:
+        A safe impact function is returned
+    Raises:
+        Any exceptions are propagated
+    """
+    # Convert string to ASCII
+    function = unicode(function)
+    function = unicodedata.normalize(
+        'NFKD', function).encode('ascii', 'ignore')
+    try:
+        return get_plugins(function)
+    except:
+        raise
+
+
+def get_safe_impact_function_type(function_id):
+    """
+    Args:
+        function_id - str giving a specific plugins name that should be
+        fetched.
+    Returns:
+        A str type of safe impact function is returned:
+            'old-style' is "classic" safe impact function
+            'qgis2.0'   is impact function with native qgis layers support
+    Raises:
+        Any exceptions are propagated
+    """
+    try:
+        # Get an instance of the impact function and get the type
+        function = get_safe_impact_function(function_id)[0][function_id]
+        function = function()
+
+        try:
+            fun_type = function.get_function_type()
+        except AttributeError:
+            fun_type = 'old-style'
+    except:
+        raise
+
+    return fun_type

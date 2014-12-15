@@ -28,7 +28,7 @@ from safe.common.utilities import (
     format_int,
     ugettext as safeTr)
 from safe.common.exceptions import PostProcessorError
-from safe.exceptions import KeywordNotFoundError
+from safe.common.exceptions import KeywordNotFoundError
 from safe.utilities.keyword_io import KeywordIO
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,

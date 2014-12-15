@@ -26,11 +26,12 @@ from qgis.core import (
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
+from safe.utilities.utilities import read_file_keywords
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.testing import TESTDATA, UNITDATA, HAZDATA, EXPDATA
-from safe_qgis.safe_interface import read_file_keywords
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'

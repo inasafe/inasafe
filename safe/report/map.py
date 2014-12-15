@@ -30,9 +30,7 @@ from qgis.core import (
     QgsMapLayer)
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
-from safe.exceptions import (
-    KeywordNotFoundError,
-    ReportCreationError)
+from safe.common.exceptions import KeywordNotFoundError, ReportCreationError
 from safe.utilities.keyword_io import KeywordIO
 from safe.defaults import (
     default_organisation_logo_path,

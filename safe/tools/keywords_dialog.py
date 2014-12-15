@@ -37,12 +37,12 @@ from safe.utilities.utilities import (
     get_error_message,
     is_polygon_layer,
     layer_attribute_names)
-from safe.exceptions import (
+from safe.common.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
-from safe.defaults import get_defaults
-from safe.api import metadata
+from safe.defaults import DEFAULTS
+from safe import metadata
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()

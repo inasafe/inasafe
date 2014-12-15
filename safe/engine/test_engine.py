@@ -5,7 +5,6 @@ import cPickle
 import numpy
 import os
 from os.path import join
-from collections import OrderedDict
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
@@ -20,25 +19,24 @@ from safe.storage.core import (
     write_raster_data)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.common.polygon import (
+from safe.geometry.polygon import (
     separate_points_by_polygon,
     is_inside_polygon,
     inside_polygon,
     clip_lines_by_polygon,
     clip_grid_by_polygons,
     line_dictionary_to_geometry)
-from safe.common.interpolation2d import interpolate_raster
+from safe.geometry.interpolation2d import interpolate_raster
 from safe.common.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,
-    ensure_numeric,
-    nan_allclose)
+    ensure_numeric)
 from safe.common.utilities import (
     VerificationError,
     unique_filename,
     format_int)
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, UNITDATA
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
 from safe.impact_functions.core import population_rounding
@@ -71,68 +69,6 @@ class TestEngine(unittest.TestCase):
         # ensure we are using english by default
         os.environ['LANG'] = 'en'
 
-    def test_ITB_earthquake_fatality_estimation(self):
-        """Fatalities from ground shaking can be computed correctly
-           using the ITB fatality model (Test data from Hadi Ghasemi).
-        """
-
-        # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
-        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
-        # fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_name = 'I T B Fatality Function'
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-
-        I = read_layer(impact_filename)
-        # calculated_result = I.get_data()
-        # print calculated_result.shape
-        keywords = I.get_keywords()
-        # print "keywords", keywords
-        population = float(keywords['total_population'])
-        fatalities = float(keywords['total_fatalities'])
-
-        # Check aggregated values
-        expected_population = population_rounding(85424650.0)
-        msg = ('Expected population was %f, I got %f'
-               % (expected_population, population))
-        assert population == expected_population, msg
-
-        expected_fatalities = population_rounding(40871.3028)
-        msg = ('Expected fatalities was %f, I got %f'
-               % (expected_fatalities, fatalities))
-
-        assert numpy.allclose(fatalities, expected_fatalities,
-                              rtol=1.0e-5), msg
-
-        # Check that aggregated number of fatilites is as expected
-        all_numbers = int(numpy.sum([31.8937368131,
-                                     2539.26369372,
-                                     1688.72362573,
-                                     17174.9261705,
-                                     19436.834531]))
-        msg = ('Aggregated number of fatalities not as expected: %i'
-               % all_numbers)
-        assert all_numbers == 40871, msg
-
-        x = population_rounding(all_numbers)
-        msg = ('Did not find expected fatality value %i in summary %s'
-               % (x, keywords['impact_summary']))
-        assert format_int(x) in keywords['impact_summary'], msg
-
     def test_pager_earthquake_fatality_estimation(self):
         """Fatalities from ground shaking can be computed correctly
             using the Pager fatality model.
@@ -145,7 +81,7 @@ class TestEngine(unittest.TestCase):
         # Calculate impact using API
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
-        plugin_name = 'P A G Fatality Function'
+        plugin_name = 'PAG Fatality Function'
         plugin_list = get_plugins(plugin_name)
 
         assert len(plugin_list) == 1
@@ -218,41 +154,6 @@ class TestEngine(unittest.TestCase):
         #              evacuation zones
 
     test_volcano_population_evacuation_impact.slow = True
-
-    def test_volcano_building_impact(self):
-        """Building impact from volcanic hazard is computed correctly"""
-
-        # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = os.path.join(TESTDATA, 'donut.shp')
-        exposure_filename = os.path.join(UNITDATA, 'exposure', 'bangunan.shp')
-
-        # Calculate impact using API
-        hazard = read_layer(hazard_filename)
-        exposure = read_layer(exposure_filename)
-
-        plugin_name = 'Volcano Building Impact'
-        impact_function = get_plugin(plugin_name)
-        impact_function.parameters['name attribute'] = 'GUNUNG'
-        print 'Calculating'
-        # Call calculation engine
-        impact_layer = calculate_impact(
-            layers=[hazard, exposure], impact_fcn=impact_function)
-        impact_filename = impact_layer.get_filename()
-
-        impact = read_layer(impact_filename)
-
-        keywords = impact.get_keywords()
-
-        # Check for expected results:
-        for value in ['Merapi', 5, 86, 91, 1, 21, 22, 6, 107, 113]:
-            if isinstance(value, int):
-                x = format_int(value)
-            else:
-                x = value
-            summary = keywords['impact_summary']
-            message = (
-                'Did not find expected value %s in summary %s' % (x, summary))
-            self.assertIn(x, summary, message)
 
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
@@ -600,80 +501,6 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 4
 
     test_polygon_hazard_with_holes_and_raster_exposure.slow = True
-
-    def test_flood_building_impact_function(self):
-        """Flood building impact function works
-
-        This test also exercises interpolation of hazard level (raster) to
-        building locations (vector data).
-        """
-
-        for haz_filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
-                             'Flood_Design_Depth_Jakarta_geographic.asc']:
-
-            # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
-            exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                                 % TESTDATA)
-
-            # Calculate impact using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
-
-            plugin_name = 'FloodBuildingImpactFunction'
-            plugin_list = get_plugins(plugin_name)
-            assert len(plugin_list) == 1
-            assert plugin_list[0].keys()[0] == plugin_name
-
-            IF = plugin_list[0][plugin_name]
-
-            impact_vector = calculate_impact(layers=[H, E],
-                                             impact_fcn=IF)
-
-            # Extract calculated result
-            icoordinates = impact_vector.get_geometry()
-            iattributes = impact_vector.get_data()
-
-            # Check
-            assert len(icoordinates) == 34960
-            assert len(iattributes) == 34960
-
-            # FIXME (Ole): check more numbers
-
-    test_flood_building_impact_function.slow = True
-
-    def test_flood_building_impact_function_vector(self):
-        """Flood building impact function works (flood is polygon)
-        """
-        building = 'test_flood_building_impact_exposure.shp'
-        flood_data = 'test_flood_building_impact_hazard.shp'
-        plugin_name = 'FloodBuildingImpactFunction'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, building)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-        I = read_layer(impact_filename)
-
-        keywords = I.get_keywords()
-        buildings_total = keywords['buildings_total']
-        buildings_affected = keywords['buildings_affected']
-
-        assert buildings_total == 67
-        assert buildings_affected == 41
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer
@@ -1985,148 +1812,6 @@ class TestEngine(unittest.TestCase):
                 raise Exception(msg)
 
     test_layer_integrity_raises_exception.slow = True
-
-    def test_itb_building_function(self):
-        """Damage ratio (estimated repair cost relative to replacement cost)
-           can be computed using the ITB building vulnerability model.
-           (Test data from Hyeuk Ryu).
-           As of July 4, 2012, the vulnerability model used to generate
-           the reference values is dummy one, and it will be updated with
-           the ITB's model later.
-        """
-
-        # Name file names for hazard level, exposure and expected impact
-        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
-        exposure_filename = '%s/Padang_WGS84.shp' % TESTDATA
-        damage_filename = '%s/reference_result_itb.csv' % TESTDATA
-
-        a = open(damage_filename).readlines()[1:]
-        ref_damage = []
-        for item in a:
-            b = item.strip('\n').split(',')
-            ref_damage.append(float(b[2]))
-        ref_damage = numpy.array(ref_damage)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_name = 'I T B Earthquake Building Damage Function'
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-        IF = plugin_list[0][plugin_name]
-
-        # Call impact calculation engine
-        impact_vector = calculate_impact(layers=[H, E], impact_fcn=IF)
-        attributes = impact_vector.get_data()
-
-#        calculated_damage = []
-        for i in range(len(attributes)):
-            calculated_damage = attributes[i]['DAMAGE']
-            bldg_class = attributes[i]['ITB_Class']
-            msg = ('Calculated damage did not match expected result: \n'
-                   'I got %s\n'
-                   'Expected %s for bldg type: %s' %
-                   (calculated_damage,
-                    ref_damage[i],
-                    bldg_class))
-            # Reference data is single precision
-            assert nan_allclose(
-                calculated_damage, ref_damage[i], atol=1.0e-6), msg
-
-#        print calculated_damage.shape
-#        bldg_class = attributes[:]['VCLASS']
-#        impact_filename = impact_vector.get_filename()
-#        I = read_layer(impact_filename)
-#        calculated_result = I.get_data()
-
-#        keywords = I.get_keywords()
-
-#        print keywords
-#        print calculated_damage
-
-    test_itb_building_function.slow = True
-
-    def test_flood_population_evacuation(self):
-        """Flood population evacuation"""
-        population = 'people_jakarta_clip.tif'
-        flood_data = 'flood_jakarta_clip.tif'
-        plugin_name = 'FloodEvacuationFunction'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, population)
-
-        # Calculate impact using API
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        impact_functions = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(
-            layers=[hazard_layer, exposure_layer], impact_fcn=impact_functions)
-        impact_filename = impact_layer.get_filename()
-        impact_layer = read_layer(impact_filename)
-
-        keywords = impact_layer.get_keywords()
-        # print "keywords", keywords
-        evacuated = float(keywords['evacuated'])
-        total_needs_full = keywords['total_needs']
-        total_needs_weekly = OrderedDict([
-            [x['table name'], x['amount']] for x in
-            total_needs_full['weekly']
-        ])
-        total_needs_single = OrderedDict([
-            [x['table name'], x['amount']] for x in
-            total_needs_full['single']
-        ])
-
-        expected_evacuated = 63400
-        assert evacuated == expected_evacuated
-        assert total_needs_weekly['Rice [kg]'] == 177520
-        assert total_needs_weekly['Family Kits'] == 12680
-        assert total_needs_weekly['Drinking Water [l]'] == 1109500
-        assert total_needs_weekly['Clean Water [l]'] == 4247800
-        assert total_needs_single['Toilets'] == 3170
-
-    def test_flood_population_evacuation_polygon(self):
-        """Flood population evacuation (flood is polygon)
-        """
-        population = 'pop_clip_flood_test.tif'
-        flood_data = 'flood_poly_clip_flood_test.shp'
-        plugin_name = 'FloodEvacuationFunctionVectorHazard'
-
-        hazard_filename = join(TESTDATA, flood_data)
-        exposure_filename = join(TESTDATA, population)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-        I = read_layer(impact_filename)
-
-        keywords = I.get_keywords()
-        # print "keywords", keywords
-        affected_population = float(keywords['affected_population'])
-        total_population = keywords['total_population']
-
-        assert affected_population == 134000
-        assert total_population == 163000
 
     def test_erf(self):
         """Test ERF approximation

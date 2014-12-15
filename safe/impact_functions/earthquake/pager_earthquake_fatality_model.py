@@ -77,8 +77,8 @@ class PAGFatalityFunction(ITBFatalityFunction):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'PAGFatalityFunction.',
-                'name': tr('PAG Fatality Function.'),
+                'id': 'PAGFatalityFunction',
+                'name': tr('PAG Fatality Function'),
                 'impact': tr('Die or be displaced according Pager model'),
                 'author': 'Helen Crowley',
                 'date_implemented': 'N/A',

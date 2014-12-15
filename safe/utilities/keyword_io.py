@@ -6,7 +6,6 @@
    library.
 
 """
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -23,10 +22,12 @@ import sqlite3 as sqlite
 from sqlite3 import OperationalError
 import cPickle as pickle
 
-from PyQt4.QtCore import QObject
-from PyQt4.QtCore import QSettings
-
-from safe.exceptions import (
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QObject, QSettings
+from safe.utilities.utilities import (
+    read_file_keywords,
+    write_keywords_to_file)
+from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
     KeywordDbError,
@@ -37,9 +38,6 @@ from safe.storage.metadata_utilities import (
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
 from safe.common.utilities import verify
-from safe_qgis.safe_interface import (
-    read_file_keywords,
-    write_keywords_to_file)
 
 
 LOGGER = logging.getLogger('InaSAFE')

@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
@@ -51,12 +52,12 @@ class FunctionOptionsDialogTest(unittest.TestCase):
     def test_build_form(self):
         """Test that we can build a form by passing it a function and params.
         """
-        function_id = 'I T B Fatality Function'
+        function_id = 'ITB Fatality Function'
         function_list = get_plugins(function_id)
         assert len(function_list) == 1
         assert function_list[0].keys()[0] == function_id
 
-        dialog = FunctionOptionsDialog(None)
+        dialog = FunctionOptionsDialog()
 
         # Define rice for minimum needs
         rice = ResourceParameter()
@@ -104,7 +105,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         assert len(function_list) == 1
         assert function_list[0].keys()[0] == function_id
 
-        dialog = FunctionOptionsDialog(None)
+        dialog = FunctionOptionsDialog()
         parameters = {
             'thresholds': [1.0],
             'postprocessors': {
@@ -124,7 +125,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         assert len(children) == 4
 
     def test_build_widget(self):
-        dialog = FunctionOptionsDialog(None)
+        dialog = FunctionOptionsDialog()
         value = dialog.build_widget(dialog.configLayout, 'foo', [2.3])
         widget = dialog.findChild(QLineEdit)
 
@@ -156,7 +157,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         else:
             raise Exception("Fail: must be raise an exception")
 
-        dialog = FunctionOptionsDialog(None)
+        dialog = FunctionOptionsDialog()
         value = dialog.build_widget(dialog.configLayout, 'foo', True)
         widget = dialog.findChild(QCheckBox)
 
@@ -173,7 +174,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         self.assertEqual(expected_value, real_value, message)
 
         original_value = {'a': 1, 'b': 2}
-        dialog = FunctionOptionsDialog(None)
+        dialog = FunctionOptionsDialog()
         value = dialog.build_widget(dialog.configLayout, 'foo', original_value)
         widget = dialog.findChild(QLineEdit)
 
@@ -201,7 +202,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         'elderly_ratio': lambda: 0.078,
                         'adult_ratio': lambda: 0.659}}}}
 
-        dialog = FunctionOptionsDialog(None)
+        dialog = FunctionOptionsDialog()
         result = dialog.parse_input(function_input)
         print result
         expected = OrderedDict([
@@ -219,6 +220,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         self.assertDictEqual(result, expected)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
+    suite = unittest.makeSuite(FunctionOptionsDialogTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

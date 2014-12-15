@@ -29,7 +29,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Needed though not used below
 from safe.utilities.help import _show_local_help
-from safe.exceptions import HelpFileMissingError
+from safe.common.exceptions import HelpFileMissingError
 
 
 class HelpTest(unittest.TestCase):

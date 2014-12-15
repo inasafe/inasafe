@@ -43,7 +43,7 @@ try:
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
     # noinspection PyUnresolvedReferences
-    from safe.exceptions import (
+    from safe.common.exceptions import (
         TranslationLoadError,
         UnsupportedProviderError,
         NoKeywordsFoundError,

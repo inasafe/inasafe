@@ -1,0 +1,8 @@
+# coding=utf-8
+"""Docstring for this file."""
+__author__ = 'ismailsunni'
+__project_name = 'inasafe-dev'
+__filename = '__init__.py'
+__date__ = '12/12/14'
+__copyright__ = 'imajimatika@gmail.com'
+__doc__ = ''

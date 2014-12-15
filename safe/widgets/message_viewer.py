@@ -19,7 +19,7 @@ import logging
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m
-from safe.exceptions import InvalidParameterError
+from safe.common.exceptions import InvalidParameterError
 from safe.utilities.utilities import (
     html_header,
     html_footer,
@@ -73,7 +73,6 @@ class MessageViewer(QtWebKit.QWebView):
         self.log_path = None
         self.report_path = None
         self._impact_path = None
-
 
     @property
     def impact_path(self):

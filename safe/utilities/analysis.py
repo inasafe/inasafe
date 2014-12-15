@@ -30,16 +30,9 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QGis)
 
-from safe.utilities.impact_calculator import ImpactCalculator
-from safe.utilities.utilities import (
-    get_wgs84_resolution,
-    extent_to_array,
-    viewport_geo_array,
-    get_error_message)
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
-from safe.utilities.memory_checker import check_memory_usage
 from safe.common.exceptions import ReadLayerError, ZeroImpactException
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
@@ -47,7 +40,7 @@ from safe.postprocessors.postprocessor_factory import (
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
     bbox_intersection)
-from safe.exceptions import (
+from safe.common.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
     InvalidLayerError,
@@ -61,9 +54,16 @@ from safe.exceptions import (
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe import messaging as m
+from safe.utilities.impact_calculator import ImpactCalculator
+from safe.utilities.memory_checker import check_memory_usage
+from safe.utilities.utilities import (
+    get_wgs84_resolution,
+    extent_to_array,
+    viewport_geo_array,
+    get_error_message,
+    resources_path)
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
-
-from safe_qgis.safe_interface import styles
+from safe.messaging import styles
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -72,8 +72,7 @@ from safe.common.signals import (
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
-from safe.common.exceptions import BoundingBoxError
-from safe.exceptions import NoValidLayerError
+from safe.common.exceptions import BoundingBoxError, NoValidLayerError
 
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -358,8 +357,8 @@ class Analysis(object):
             * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
                 intersection of the two input layers extents and the viewport.
             * hazard_layer: QgsMapLayer - layer representing hazard.
-        :rtype: dict, QgsRectangle, float,
-                QgsMapLayer, QgsRectangle, QgsMapLayer
+        :rtype: dict, QgsRectangle, float, QgsMapLayer, QgsRectangle,
+            QgsMapLayer
         :raises: InsufficientOverlapError
         """
         hazard_layer = self.hazard_layer
@@ -374,7 +373,6 @@ class Analysis(object):
                 self.user_extent_crs)
         elif self.clip_to_viewport:
             analysis_geoextent = viewport_geo_array(self.map_canvas)
-
 
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
@@ -548,8 +546,8 @@ class Analysis(object):
             assumed that the coordinates are in EPSG:4326 although currently
             no checks are made to enforce this.
 
-            ..note:: We do minimal checking as the inasafe library takes care of
-            it for us.
+            ..note:: We do minimal checking as the inasafe library takes care
+            of it for us.
 
         :returns: An array containing an extent in the form
             [xmin, ymin, xmax, ymax]
@@ -577,10 +575,10 @@ class Analysis(object):
         if optimal_extent is None:
             # Bounding boxes did not overlap
             message = self.tr(
-                'Bounding boxes of hazard data, exposure data and viewport did '
-                'not overlap, so no computation was done. Please make sure you '
-                'pan to where the data is and that hazard and exposure data '
-                'overlaps.')
+                'Bounding boxes of hazard data, exposure data and viewport '
+                'did not overlap, so no computation was done. Please make '
+                'sure you pan to where the data is and that hazard and '
+                'exposure data overlaps.')
             raise InsufficientOverlapError(message)
 
         return optimal_extent

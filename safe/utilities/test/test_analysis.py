@@ -30,7 +30,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.utilities.analysis import Analysis
 from safe.utilities.utilities_for_testing import FakeLayer
 from safe.common.exceptions import BoundingBoxError
-from safe.exceptions import InsufficientOverlapError
+from safe.common.exceptions import InsufficientOverlapError
 
 
 class TestAnalysis(unittest.TestCase):

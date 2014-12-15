@@ -31,7 +31,7 @@ from qgis.core import (
     QGis)
 from qgis.gui import QgsRubberBand
 
-from safe.exceptions import InvalidGeometryError
+from safe.common.exceptions import InvalidGeometryError
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
 

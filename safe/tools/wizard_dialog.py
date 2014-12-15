@@ -30,10 +30,9 @@ from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
 
-from safe.api import ImpactFunctionManager
-from safe.api import metadata  # pylint: disable=W0612
-
-from safe.common.exceptions import InaSAFEError
+from safe import metadata
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.defaults import DEFAULTS
 from safe_qgis.ui.wizard_dialog_base import Ui_WizardDialogBase
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -42,13 +41,14 @@ from safe.utilities.utilities import (
     is_polygon_layer,
     is_raster_layer,
     layer_attribute_names)
-from safe.defaults import get_defaults
-from safe.exceptions import (
+from safe.utilities.defaults import get_defaults
+from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
     KeywordNotFoundError,
     InvalidParameterError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    InaSAFEError)
 from safe.utilities.help import show_context_help
 
 
