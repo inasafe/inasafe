@@ -24,7 +24,7 @@ import logging
 import numpy
 
 from safe.common.exceptions import InaSAFEError
-from safe.geometry.interpolation import validate_inputs, validate_mode
+from safe.gis.interpolation import validate_inputs, validate_mode
 
 
 LOGGER = logging.getLogger('InaSAFE')

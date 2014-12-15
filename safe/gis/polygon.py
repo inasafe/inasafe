@@ -24,8 +24,8 @@ import logging
 import numpy
 from random import uniform, seed as seed_function
 
-from safe.common.numerics import ensure_numeric
-from safe.common.numerics import grid_to_points, geotransform_to_axes
+from safe.gis.numerics import ensure_numeric
+from safe.gis.numerics import grid_to_points, geotransform_to_axes
 from safe.common.exceptions import (
     PolygonInputError, InaSAFEError, PointsInputError)
 

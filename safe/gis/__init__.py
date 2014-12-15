@@ -3,6 +3,6 @@
 __author__ = 'ismailsunni'
 __project_name = 'inasafe-dev'
 __filename = '__init__.py'
-__date__ = '12/12/14'
+__date__ = '12/15/14'
 __copyright__ = 'imajimatika@gmail.com'
 __doc__ = ''

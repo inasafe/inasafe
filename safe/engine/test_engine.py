@@ -19,15 +19,15 @@ from safe.storage.core import (
     write_raster_data)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.geometry.polygon import (
+from safe.gis.polygon import (
     separate_points_by_polygon,
     is_inside_polygon,
     inside_polygon,
     clip_lines_by_polygon,
     clip_grid_by_polygons,
     line_dictionary_to_geometry)
-from safe.geometry.interpolation2d import interpolate_raster
-from safe.common.numerics import (
+from safe.gis.interpolation2d import interpolate_raster
+from safe.gis.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,
