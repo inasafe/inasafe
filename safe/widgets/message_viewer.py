@@ -22,11 +22,8 @@ from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
-from safe.utilities.utilities import (
-    html_header,
-    html_to_file,
-    resources_path,
-    open_in_browser)
+from safe.utilities.utilities import html_to_file, open_in_browser
+from safe.utilities.resources import resources_path, html_footer
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

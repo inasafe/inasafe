@@ -1,8 +1,13 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
 import uuid
-from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, \
-    QgsCoordinateTransform, QGis, QgsVectorLayer, QgsRasterLayer
+from qgis.core import (
+    QgsMapLayer,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QGis,
+    QgsVectorLayer,
+    QgsRasterLayer)
 from safe.common.exceptions import MemoryLayerCreationError
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.layer import Layer

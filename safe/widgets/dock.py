@@ -12,9 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
-from safe.utilities.resources import resources_path
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
@@ -43,9 +40,11 @@ from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
     add_ordered_combo_item,
-    read_impact_layer,
     get_safe_impact_function)
-from safe.utilities.defaults import (
+from safe.defaults import disclaimer
+from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.resources import resources_path
+from safe.defaults import (
     limitations,
     default_organisation_logo_path)
 from safe.utilities.styling import (

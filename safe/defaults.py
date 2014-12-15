@@ -229,7 +229,7 @@ def default_north_arrow_path():
     :return: Default north arrow path.
     :rtype: str
     """
-    path = resources_path('img', 'logos', 'simple_north_arrow.png')
+    path = resources_path('img', 'north_arrows', 'simple_north_arrow.png')
     return path
 
 

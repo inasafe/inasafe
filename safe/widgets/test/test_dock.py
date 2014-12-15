@@ -45,7 +45,7 @@ from safe.common.testing import HAZDATA, UNITDATA
 from safe.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
-from safe.utilities.utilities import read_impact_layer
+from safe.utilities.gis import read_impact_layer
 from safe.utilities.utilities_for_testing import (
     load_standard_layers,
     setup_scenario,

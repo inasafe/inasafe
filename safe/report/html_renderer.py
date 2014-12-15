@@ -25,11 +25,12 @@ import logging
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, QtWebKit
-from safe.utilities.utilities import (
-    html_header,
+from safe.utilities.resources import html_header
+from safe.utilities.printing import (
     mm_to_points,
-    setup_printer,
-    impact_attribution)
+    setup_printer
+)
+from safe.utilities.utilities import impact_attribution
 from safe.common.utilities import unique_filename, temp_dir
 
 LOGGER = logging.getLogger('InaSAFE')

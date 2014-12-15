@@ -105,7 +105,7 @@ class MapTest(unittest.TestCase):
             405359,  # Ubuntu 13.04_64
             427172,  # Ubuntu 13.10_64
             468836,  # Ubuntu 14.04_64 AG
-            431844,  # Ubuntu 14.04_64 TS - pycharm
+            434842,  # Ubuntu 14.04_64 TS - pycharm
             431873,  # Ubuntu 14.04_64 TS - make - TODO why is this?
             437994,  # Ubuntu 14.04_64 MB - pycharm
             431844,  # Ubuntu 14.04_64 MB - make - TODO why is this?
@@ -156,7 +156,7 @@ class MapTest(unittest.TestCase):
             402083,  # Ubuntu 13.04_64
             400563,  # Ubuntu 13.10_64
             450385,  # Ubuntu 14.04_64 AG
-            413193,  # Ubuntu 14.04_64 TS pycharm
+            419309,  # Ubuntu 14.04_64 TS pycharm
             416313,  # Ubuntu 14.04_64 TS make - TODO why is this?
             419483,  # Ubuntu 14.04_64 MB pycharm
             413193,  # Ubuntu 14.04_64 MB make - TODO why is this?

@@ -18,6 +18,8 @@ import unittest
 import sys
 import os
 
+# noinspection PyUnresolvedReferences
+import qgis
 from qgis.gui import QgsMapCanvas
 from PyQt4.QtGui import QWidget
 

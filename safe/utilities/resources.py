@@ -53,4 +53,4 @@ def resources_path(*args):
         path = os.path.abspath(os.path.join(path, item))
     url = QtCore.QUrl(path)
     path = url.toLocalFile()
-    return path
+    return str(path)
