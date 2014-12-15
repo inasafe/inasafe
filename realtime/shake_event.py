@@ -87,12 +87,12 @@ from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from safe_qgis.utilities.styling import mmi_colour
 from safe_qgis.exceptions import TranslationLoadError
 from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
-from realtime.local_shake_data import LocalShakeData
+from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
-    realtime_logger_name)
-from realtime.sftp_configuration.configuration import get_grid_source
+    realtime_logger_name,
+    get_grid_source)
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
     InvalidLayerError,
@@ -100,8 +100,7 @@ from realtime.exceptions import (
     CityMemoryLayerCreationError,
     FileNotFoundError,
     MapComposerError,
-    SFTPEmptyError,
-    NetworkError,
+    EmptyShakeDirectoryError,
     EventIdError)
 
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -114,7 +113,7 @@ class ShakeEvent(QObject):
     Including epicenter, magnitude etc.
     """
     def __init__(self,
-                 working_dir=None,
+                 working_dir,
                  event_id=None,
                  locale='en',
                  population_raster_path=None,
@@ -157,7 +156,7 @@ class ShakeEvent(QObject):
 
         :return: Instance
 
-        :raises: SFTPEmptyError, NetworkError, EventIdError, EventXmlParseError
+        :raises: SFTPEmptyError, EventIdError, EventXmlParseError
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
@@ -170,11 +169,11 @@ class ShakeEvent(QObject):
             # fetch the data from (s)ftp
             # self.data = ShakeData(event_id, force_flag)
             try:
-                self.data = LocalShakeData(
+                self.data = ShakeData(
                     event=event_id,
                     working_dir=working_dir,
                     force_flag=force_flag)
-            except (SFTPEmptyError, NetworkError, EventIdError):
+            except (EmptyShakeDirectoryError, EventIdError):
                 raise
             self.data.extract()
             self.event_id = self.data.event_id

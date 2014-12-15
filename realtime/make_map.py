@@ -24,10 +24,9 @@ import logging
 from urllib2 import URLError
 from zipfile import BadZipfile
 
-from realtime.sftp_client import SFtpClient
 from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 from realtime.shake_event import ShakeEvent
-from realtime.exceptions import SFTPEmptyError
+from realtime.exceptions import EmptyShakeDirectoryError
 
 # Initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -95,7 +94,7 @@ def process_event(working_dir=None, event_id=None, locale='en'):
                     event_id=event_id,
                     locale=locale,
                     force_flag=True)
-        except SFTPEmptyError as ex:
+        except EmptyShakeDirectoryError as ex:
             LOGGER.info(ex)
             return
         except:
@@ -118,8 +117,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 3:
         sys.exit(
             'Usage:\n%s [working_dir] \nor\n%s [working_dir] --list\nor%s '
-            '[working_dir] --run-all' % (
-                sys.argv[0], sys.argv[0], sys.argv[0]))
+            '[working_dir] --run-all\nor%s '
+            '[working_dir] [event_id]' % (
+                sys.argv[0], sys.argv[0], sys.argv[0], sys.argv[0]))
     elif len(sys.argv) == 3:
         print('Processing shakemap %s' % sys.argv[1])
 
@@ -131,9 +131,13 @@ if __name__ == '__main__':
                 print event
             sys.exit(0)
         else:
-            process_event(
-                working_dir=working_dir, event_id=event_option,
-                locale=locale_option)
+            if is_event_id(event_option):
+                process_event(
+                    working_dir=working_dir,
+                    event_id=event_option,
+                    locale=locale_option)
+            else:
+                print('%s is not a valid event ID' % event_option)
     else:
         working_dir = sys.argv[1]
         event_option = None
