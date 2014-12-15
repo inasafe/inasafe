@@ -66,7 +66,11 @@ def verify(statement, message=None):
 def ugettext(s):
     """Translation support."""
     path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), '..', 'i18n'))
+        os.path.join(
+            os.path.dirname(__file__),
+            os.path.pardir,
+            os.path.pardir,
+            'i18n'))
     if 'LANG' not in os.environ:
         return s
     if not s:

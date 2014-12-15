@@ -3,6 +3,7 @@
 """
 import numpy
 import logging
+
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
@@ -36,7 +37,8 @@ from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 LOGGER = logging.getLogger('InaSAFE')
 

@@ -5,7 +5,7 @@ import unittest
 # noinspection PyUnresolvedReferences
 import qgis
 from PyQt4.QtCore import QVariant
-from safe.tools.test.test_keywords_dialog import (
+from safe.gui.tools.test.test_keywords_dialog import (
     make_polygon_layer,
     clone_padang_layer,
     make_point_layer)

@@ -36,7 +36,7 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.common.exceptions import InaSAFEError
-from safe.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class VolcanoBuildingImpact(FunctionProvider):

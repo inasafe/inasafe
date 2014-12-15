@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import logging
 from numpy import round as numpy_round
+
 from safe.metadata import (
     exposure_structure,
     exposure_definition,
@@ -32,7 +33,8 @@ from safe.common.utilities import ugettext as tr, format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 LOGGER = logging.getLogger('InaSAFE')
 
 

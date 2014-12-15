@@ -30,8 +30,8 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gis.qgis_interface import QgisInterface
-from safe.plugin import Plugin
-from safe.common.utilities import ugettext as safeTr
+from plugin import Plugin
+from safe.common.utilities import ugettext as safe_tr
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
@@ -66,7 +66,7 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.change_i18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
-        myTranslation = safeTr('A volcano eruption')
+        myTranslation = safe_tr('A volcano eruption')
         message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     ('A volcano eruption', myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, message

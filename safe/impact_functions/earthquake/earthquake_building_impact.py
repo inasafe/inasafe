@@ -1,6 +1,7 @@
 # coding=utf-8
 """Earthquake Impact Function on Building."""
 import logging
+
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -21,7 +22,8 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 LOGGER = logging.getLogger('InaSAFE')
 

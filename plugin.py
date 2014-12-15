@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import is_raster_layer
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -23,7 +22,7 @@ import os
 import logging
 
 from safe.utilities.keyword_io import KeywordIO
-
+from safe.utilities.gis import is_raster_layer
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -62,7 +61,7 @@ except ImportError:
 
 
 # noinspection PyUnresolvedReferences
-class Plugin:
+class Plugin(object):
     """The QGIS interface implementation for the InaSAFE plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
@@ -124,7 +123,7 @@ class Plugin:
 
         os.environ['LANG'] = str(new_locale)
 
-        LOGGER.debug('%s %s %s' % (
+        LOGGER.debug('%s %s %s'%(
             new_locale,
             QLocale.system().name(),
             os.environ['LANG']))
@@ -138,12 +137,12 @@ class Plugin:
             self.translator = QTranslator()
             result = self.translator.load(translation_path)
             if not result:
-                message = 'Failed to load translation for %s' % new_locale
+                message = 'Failed to load translation for %s'%new_locale
                 raise TranslationLoadError(message)
             # noinspection PyTypeChecker,PyCallByClass
             QCoreApplication.installTranslator(self.translator)
 
-        LOGGER.debug('%s %s' % (
+        LOGGER.debug('%s %s'%(
             translation_path,
             os.path.exists(translation_path)))
 
@@ -193,7 +192,8 @@ class Plugin:
         self.toolbar = self.iface.addToolBar('InaSAFE')
         self.toolbar.setObjectName('InaSAFEToolBar')
         # Import dock here as it needs to be imported AFTER i18n is set up
-        from safe.widgets.dock import Dock
+        from safe.gui.widgets.dock import Dock
+
         self.dock_widget = None
         # --------------------------------------
         # Create action for plugin dockable window (show/hide)
@@ -459,7 +459,7 @@ class Plugin:
         for myModule in sys.modules:
             if 'inasafe' in myModule:
                 # Check if it is really one of our modules i.e. exists in the
-                #  plugin directory
+                # plugin directory
                 tokens = myModule.split('.')
                 path = ''
                 for myToken in tokens:
@@ -468,7 +468,7 @@ class Plugin:
                     __file__, os.path.pardir, os.path.pardir))
                 full_path = os.path.join(parent, path + '.py')
                 if os.path.exists(os.path.abspath(full_path)):
-                    LOGGER.debug('Removing: %s' % myModule)
+                    LOGGER.debug('Removing: %s'%myModule)
                     modules.append(myModule)
         for myModule in modules:
             del (sys.modules[myModule])
@@ -479,7 +479,7 @@ class Plugin:
         # Lets also clean up all the path additions that were made
         package_path = os.path.abspath(os.path.join(
             os.path.dirname(__file__), os.path.pardir))
-        LOGGER.debug('Path to remove: %s' % package_path)
+        LOGGER.debug('Path to remove: %s'%package_path)
         # We use a list comprehension to ensure duplicate entries are removed
         LOGGER.debug(sys.path)
         sys.path = [y for y in sys.path if package_path not in y]
@@ -529,7 +529,8 @@ class Plugin:
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.extent_selector_dialog import ExtentSelectorDialog
+        from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
+
         widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
@@ -545,7 +546,7 @@ class Plugin:
     def show_minimum_needs(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.minimum_needs.needs_calculator_dialog import (
+        from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
             NeedsCalculatorDialog
         )
 
@@ -555,7 +556,7 @@ class Plugin:
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.minimum_needs.needs_manager_dialog import (
+        from safe.gui.tools.minimum_needs.needs_manager_dialog import (
             NeedsManagerDialog)
 
         dialog = NeedsManagerDialog(self.iface.mainWindow())
@@ -564,7 +565,7 @@ class Plugin:
     def show_impact_merge(self):
         """Show the impact layer merge dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.impact_merge_dialog import ImpactMergeDialog
+        from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog
 
         dialog = ImpactMergeDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
@@ -572,7 +573,7 @@ class Plugin:
     def show_options(self):
         """Show the options dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.options_dialog import OptionsDialog
+        from safe.gui.tools.options_dialog import OptionsDialog
 
         dialog = OptionsDialog(
             self.iface,
@@ -583,7 +584,7 @@ class Plugin:
     def show_keywords_editor(self):
         """Show the keywords editor."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.keywords_dialog import KeywordsDialog
+        from safe.gui.tools.keywords_dialog import KeywordsDialog
 
         # Next block is a fix for #776
         if self.iface.activeLayer() is None:
@@ -627,7 +628,7 @@ class Plugin:
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.wizard_dialog import WizardDialog
+        from safe.gui.tools.wizard_dialog import WizardDialog
 
         if self.iface.activeLayer() is None:
             return
@@ -640,7 +641,7 @@ class Plugin:
     def show_function_browser(self):
         """Show the impact function browser tool."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.function_browser_dialog import FunctionBrowser
+        from safe.gui.tools.function_browser_dialog import FunctionBrowser
 
         dialog = FunctionBrowser(self.iface.mainWindow())
         dialog.exec_()  # modal
@@ -648,7 +649,7 @@ class Plugin:
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe.tools.shake_grid.shakemap_importer_dialog import (
+        from safe.gui.tools.shake_grid.shakemap_importer_dialog import (
             ShakemapImporterDialog)
 
         dialog = ShakemapImporterDialog(self.iface.mainWindow())
@@ -656,14 +657,14 @@ class Plugin:
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
-        from safe.tools.osm_downloader_dialog import OsmDownloaderDialog
+        from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.exec_()  # modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
-        from safe.tools.batch.batch_dialog import BatchDialog
+        from safe.gui.tools.batch.batch_dialog import BatchDialog
 
         dialog = BatchDialog(
             parent=self.iface.mainWindow(),
@@ -673,7 +674,7 @@ class Plugin:
 
     def save_scenario(self):
         """Save current scenario to text file"""
-        from safe.tools.save_scenario import SaveScenarioDialog
+        from safe.gui.tools.save_scenario import SaveScenarioDialog
 
         dialog = SaveScenarioDialog(
             iface=self.iface,

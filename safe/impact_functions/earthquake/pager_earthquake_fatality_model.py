@@ -13,6 +13,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import math
 import numpy
+from collections import OrderedDict
+
 from safe.metadata import (
     hazard_earthquake,
     unit_mmi,
@@ -22,7 +24,6 @@ from safe.metadata import (
     hazard_definition,
     exposure_definition
 )
-from collections import OrderedDict
 from safe.defaults import (
     get_defaults,
     default_minimum_needs,
@@ -31,7 +32,8 @@ from safe.defaults import (
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
     ITBFatalityFunction)
 from safe.common.utilities import ugettext as tr
-from safe.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 class PAGFatalityFunction(ITBFatalityFunction):
     # noinspection PyUnresolvedReferences

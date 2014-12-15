@@ -17,7 +17,7 @@ from safe.utilities.utilities import read_file_keywords
 from safe.utilities.utilities_for_testing import load_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.exceptions import HashNotFoundError
-from safe.tools.test.test_keywords_dialog import clone_padang_layer
+from safe.gui.tools.test.test_keywords_dialog import clone_padang_layer
 from safe.common.utilities import temp_dir
 from safe.common.testing import HAZDATA, TESTDATA
 

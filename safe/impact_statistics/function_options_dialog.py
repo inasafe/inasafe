@@ -35,7 +35,7 @@ from PyQt4.QtGui import (
     QWidget)
 from collections import OrderedDict
 
-from safe_qgis.ui.function_options_dialog_base import (
+from safe.gui.ui.function_options_dialog_base import (
     Ui_FunctionOptionsDialogBase)
 from safe.common.utilities import ugettext as safeTr
 from safe.postprocessors.postprocessor_factory import (

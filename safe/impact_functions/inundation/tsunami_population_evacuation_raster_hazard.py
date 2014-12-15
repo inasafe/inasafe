@@ -1,6 +1,7 @@
 # coding=utf-8
 """Tsunami Evacuation Impact Function."""
 import numpy
+
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
@@ -42,7 +43,8 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
-from safe.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 
 # noinspection PyClassHasNoInit

@@ -36,7 +36,7 @@ from safe.gis.qgis_vector_tools import (
     split_by_polygon_in_out,
     extent_to_geo_array,
     reproject_vector_layer)
-from safe.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
