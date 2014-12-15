@@ -24,7 +24,7 @@ import logging
 
 
 safe_extras_dir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../', 'safe_extras'))
+    os.path.join(os.path.dirname(__file__), '..', '..', 'safe_extras'))
 if safe_extras_dir not in sys.path:
     sys.path.append(safe_extras_dir)
 # pylint: disable=F0401

@@ -36,21 +36,31 @@ from safe.common.utilities import (
     romanise)
 
 
-def print_class(my_array, my_result_class, my_expected):
-    """Print my_array, my_result, my_expected in nice format
+def print_class(array, result_class, expected_result):
+    """Print array, result_class, expected_result in nice format.
+
+    :param array: The original array.
+    :type array: list
+
+    :param result_class: The class result.
+    :type result_class: list
+
+    :param expected_result: The expected result.
+    :type expected_result: list
+
     """
     print 'Original Array'
-    for i in xrange(len(my_array[1:])):
-        print my_array[i], ' - ', my_array[i + 1]
+    for i in xrange(len(array[1:])):
+        print array[i], ' - ', array[i + 1]
     print 'Classes result'
-    for result in my_result_class:
+    for result in result_class:
         print result[0], ' - ', result[1]
     print 'Expect result'
-    for expect in my_expected:
+    for expect in expected_result:
         print expect[0], ' - ', expect[1]
 
 
-class UtilitiesTest(unittest.TestCase):
+class TestUtilities(unittest.TestCase):
     def test_humanize_class(self):
         """Test humanize class
         First class interval < 1
@@ -320,6 +330,6 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(UtilitiesTest, 'test')
+    suite = unittest.makeSuite(TestUtilities)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
