@@ -19,15 +19,15 @@ from safe.storage.core import (
     write_raster_data)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.geometry.polygon import (
+from safe.gis.polygon import (
     separate_points_by_polygon,
     is_inside_polygon,
     inside_polygon,
     clip_lines_by_polygon,
     clip_grid_by_polygons,
     line_dictionary_to_geometry)
-from safe.geometry.interpolation2d import interpolate_raster
-from safe.common.numerics import (
+from safe.gis.interpolation2d import interpolate_raster
+from safe.gis.numerics import (
     normal_cdf,
     log_normal_cdf,
     erf,
@@ -68,92 +68,6 @@ class TestEngine(unittest.TestCase):
         """Run before each test."""
         # ensure we are using english by default
         os.environ['LANG'] = 'en'
-
-    def test_pager_earthquake_fatality_estimation(self):
-        """Fatalities from ground shaking can be computed correctly
-            using the Pager fatality model.
-        """
-
-        # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
-        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-        plugin_name = 'PAG Fatality Function'
-        plugin_list = get_plugins(plugin_name)
-
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-
-        I = read_layer(impact_filename)
-        keywords = I.get_keywords()
-        population = keywords['total_population']
-        fatalities = keywords['total_fatalities']
-
-        # Check aggregated values
-        expected_population = 85425000.0
-        msg = ('Expected population was %f, I got %f'
-               % (expected_population, population))
-        assert population == expected_population, msg
-
-        expected_fatalities = 410000.0
-        msg = ('Expected fatalities was %f, I got %f'
-               % (expected_fatalities, fatalities))
-        assert numpy.allclose(fatalities, expected_fatalities,
-                              rtol=1.0e-5), msg
-
-    def test_volcano_population_evacuation_impact(self):
-        """Population impact from volcanic hazard is computed correctly
-        """
-
-        # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = '%s/donut.shp' % TESTDATA
-        exposure_filename = ('%s/pop_merapi_clip.tif' % TESTDATA)
-        # Slow
-        # FIXME (Ole): Results are different - check!
-        # exposure_filename = ('%s/population_indonesia_2010_BNPB_BPS.asc'
-        #                     % EXPDATA)
-
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_name = 'Volcano Polygon Hazard Population'
-        IF = get_plugin(plugin_name)
-        print 'Calculating'
-        # Call calculation engine
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
-
-        I = read_layer(impact_filename)
-
-        keywords = I.get_keywords()
-
-        # Check for expected results:
-        for value in ['Merapi', 192055, 56514, 68568, 66971]:
-            if isinstance(value, int):
-                x = format_int(population_rounding(value))
-            else:
-                x = value
-            summary = keywords['impact_summary']
-            msg = ('Did not find expected value %s in summary %s'
-                   % (x, summary))
-            assert x in summary, msg
-
-        # FIXME (Ole): Should also have test for concentric circle
-        #              evacuation zones
-
-    test_volcano_population_evacuation_impact.slow = True
 
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344

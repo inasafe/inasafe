@@ -10,7 +10,7 @@ import sys
 import logging
 from numpy.testing import Tester
 
-from safe.common.numerics import axes_to_points
+from safe.gis.numerics import axes_to_points
 from safe.common.version import get_version
 
 
@@ -691,7 +691,7 @@ def get_qgis_app():
         from PyQt4.QtCore import QCoreApplication, QSettings
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
-        from safe.geometry.qgis_interface import QgisInterface
+        from safe.gis.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 

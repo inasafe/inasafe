@@ -36,8 +36,8 @@ from safe.impact_functions.impact_function_metadata import (
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.geometry.qgis_raster_tools import polygonize, clip_raster
-from safe.geometry.qgis_vector_tools import split_by_polygon, clip_by_polygon
+from safe.gis.qgis_raster_tools import polygonize, clip_raster
+from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 from safe.tools.minimum_needs.needs_profile import add_needs_parameters
 
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
