@@ -33,6 +33,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import temp_dir, unique_filename
+from safe.utilities.utilities import resources_path
 from safe.utilities.utilities_for_testing import load_layer
 from safe.report.map import Map
 
@@ -132,7 +133,8 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
-        report.set_organisation_logo(":/plugins/inasafe/logo-flower.png")
+        report.set_organisation_logo(
+            resources_path('img', 'logos', 'logo-flower.png'))
         out_path = unique_filename(
             prefix='mapCustomLogoTest', suffix='.pdf', dir=temp_dir('test'))
         report.make_pdf(out_path)
