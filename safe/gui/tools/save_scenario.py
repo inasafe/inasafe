@@ -134,8 +134,7 @@ class SaveScenarioDialog(QDialog):
         exposure_path = str(self.exposure_layer.publicSource())
         hazard_path = str(self.hazard_layer.publicSource())
         title = self.keyword_io.read_keywords(self.hazard_layer, 'title')
-        # Maybe we need to use @default context here as it is a dynamic phrase
-        title = self.tr('@default', title)
+        title = self.tr(title)
         default_filename = title.replace(
             ' ', '_').replace('(', '').replace(')', '')
 
