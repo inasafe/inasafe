@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.gui.tools.batch import scenario_runner
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
 
 __author__ = 'bungcip@gmail.com & tim@kartoza.com & ismail@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -43,19 +41,23 @@ from PyQt4.QtGui import (
 
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
-from safe.gui.ui.batch_dialog_base import Ui_BatchDialogBase
+from safe.gui.tools.batch import scenario_runner
+from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.resources import get_ui_class
 from safe.report.map import Map
 from safe.report.html_renderer import HtmlRenderer
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
-from safe.utilities.utilities import (
-    read_impact_layer)
 from safe.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'ui',
+    'batch_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
 
-class BatchDialog(QDialog, Ui_BatchDialogBase):
+class BatchDialog(QDialog, FORM_CLASS):
     """Script Dialog for InaSAFE."""
 
     def __init__(self, parent=None, iface=None, dock=None):

@@ -283,7 +283,7 @@
   <customwidget>
    <class>MessageViewer</class>
    <extends>QWidget</extends>
-   <header>..widgets.message_viewer</header>
+   <header>safe.gui.widgets.message_viewer</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

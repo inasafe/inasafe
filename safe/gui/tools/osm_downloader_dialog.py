@@ -11,9 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import viewport_geo_array
-from safe.utilities.resources import html_footer, html_header
-
 __author__ = 'bungcip@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '4/12/2012'
@@ -23,6 +20,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import tempfile
 import logging
+
+# noinspection PyUnresolvedReferences
+# pylint: disable=W0611
+from qgis.core import QGis  # force sip2 api
+# pylint: enable=W0611
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
@@ -34,19 +36,12 @@ from PyQt4.QtGui import (
 # noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkAccessManager
 
-# noinspection PyUnresolvedReferences
-# pylint: disable=W0611
-from qgis.core import QGis  # force sip2 api
-# pylint: enable=W0611
-from safe.gui.ui.osm_downloader_dialog_base import (
-    Ui_OsmDownloaderDialogBase)
-
 from safe.common.exceptions import (
     CanceledImportDialogError, ImportDialogError, DownloadError)
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
-from safe.utilities.utilities import (
-    html_header)
+from safe.utilities.gis import viewport_geo_array
+from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
@@ -54,8 +49,12 @@ from safe.utilities.proxy import get_proxy
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'osm_downloader_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
-class OsmDownloaderDialog(QDialog, Ui_OsmDownloaderDialogBase):
+
+class OsmDownloaderDialog(QDialog, FORM_CLASS):
     """Downloader for OSM data."""
 
     def __init__(self, parent=None, iface=None):

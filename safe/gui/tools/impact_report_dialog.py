@@ -16,16 +16,20 @@ __revision__ = '$Format:%H$'
 __date__ = '26/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+import os
 
 from PyQt4 import QtGui, QtCore
-
 from PyQt4.QtCore import pyqtSignature
 
-from safe.gui.ui.impact_report_dialog_base import Ui_ImpactReportDialogBase
 from safe.utilities.help import show_context_help
+from safe.utilities.resources import get_ui_class
+
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'impact_report_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
 
-class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
+class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
     """Impact report dialog for the InaSAFE plugin."""
 
     def __init__(self, iface, dock=None, parent=None):

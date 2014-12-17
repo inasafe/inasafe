@@ -36,7 +36,6 @@ from qgis.core import (
     QgsRectangle,
     QgsAtlasComposition)
 
-from safe.gui.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 from safe.common.exceptions import (
     InvalidLayerError,
     EmptyDirectoryError,
@@ -50,18 +49,21 @@ from safe.common.exceptions import (
 from safe.common.utilities import temp_dir
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.resources import html_header, get_ui_class
 from safe.utilities.utilities import (
-    html_header,
     html_to_file,
     add_ordered_combo_item)
 from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
 
 INFO_STYLE = styles.INFO_STYLE
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'impact_merge_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
 
 # noinspection PyArgumentList
-class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
+class ImpactMergeDialog(QDialog, FORM_CLASS):
     """Tools for merging 2 impact layer based on different exposure."""
 
     def __init__(self, parent=None, iface=None):

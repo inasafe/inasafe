@@ -9,21 +9,21 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.utilities.qt import qt_at_least
-from safe.utilities.resources import html_footer, html_header, resources_path
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
 import logging
+
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
 from safe.utilities.utilities import html_to_file, open_in_browser
-from safe.utilities.resources import resources_path, html_footer
+from safe.utilities.qt import qt_at_least
+from safe.utilities.resources import html_footer, html_header, resources_path
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

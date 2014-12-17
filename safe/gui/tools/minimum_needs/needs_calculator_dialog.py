@@ -5,9 +5,6 @@
     counts of people affected per polygon.
 
 """
-from safe.utilities.gis import is_point_layer, is_polygon_layer
-from safe.utilities.resources import html_footer, html_header
-
 __author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '20/1/2013'
@@ -15,6 +12,7 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
 import logging
 
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
@@ -24,12 +22,9 @@ from PyQt4.QtCore import pyqtSignature
 from safe.common.version import get_version
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.vector import Vector
-from safe.gui.ui.needs_calculator_dialog_base import (
-    Ui_NeedsCalculatorDialogBase)
-from safe.utilities.utilities import (
-    add_ordered_combo_item,
-    is_polygon_layer,
-    html_header)
+from safe.utilities.gis import is_point_layer, is_polygon_layer
+from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.utilities import add_ordered_combo_item
 from safe.utilities.help import show_context_help
 from safe.impact_functions.core import evacuated_population_weekly_needs
 from safe import messaging as m
@@ -38,8 +33,13 @@ from safe.messaging import styles
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'ui',
+    'needs_calculator_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
-class NeedsCalculatorDialog(QtGui.QDialog, Ui_NeedsCalculatorDialogBase):
+
+class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
     """Dialog implementation class for the InaSAFE minimum needs dialog.
     """
 

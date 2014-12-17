@@ -11,26 +11,28 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+import os
 
 from PyQt4 import QtGui, QtWebKit
 
-from safe.gui.ui.function_browser_base import Ui_FunctionBrowserBase
 from safe.utilities.help import show_context_help
 from safe.common.version import get_version
 from safe.impact_functions.core import (
     get_unique_values,
     get_plugins_as_table)
-from safe.utilities.resources import html_header, html_footer
+from safe.utilities.resources import html_header, html_footer, get_ui_class
+
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'function_browser_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
 
-class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
+class FunctionBrowser(QtGui.QDialog, FORM_CLASS):
     """ImpactFunctions Dialog for InaSAFE.
     """
 

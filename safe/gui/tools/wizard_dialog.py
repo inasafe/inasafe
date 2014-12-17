@@ -12,9 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.utilities.gis import is_raster_layer, is_point_layer, is_polygon_layer, \
-    layer_attribute_names
-
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
@@ -24,7 +21,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import logging
 import re
 import json
+import os
 from sqlite3 import OperationalError
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -34,15 +33,14 @@ from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
 
 from safe import metadata
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.defaults import DEFAULTS
-from safe.gui.ui.wizard_dialog_base import Ui_WizardDialogBase
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities import (
-    get_error_message,
+from safe.utilities.gis import (
+    is_raster_layer,
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.defaults import get_defaults
+from safe.utilities.utilities import get_error_message
+from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -50,11 +48,15 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError,
     InaSAFEError)
+from safe.utilities.resources import get_ui_class
 from safe.utilities.help import show_context_help
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'wizard_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
 # Constants for categories
 category_question = QApplication.translate(
@@ -198,7 +200,7 @@ def get_question_text(constant):
         return '<b>MISSING CONSTANT: %s</b>' % constant
 
 
-class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
+class WizardDialog(QtGui.QDialog, FORM_CLASS):
 
     """Dialog implementation class for the InaSAFE keywords wizard."""
 

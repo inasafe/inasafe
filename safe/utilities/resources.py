@@ -2,7 +2,7 @@
 """This module contains utilities for locating application resources (img etc).
 """
 import os
-from PyQt4 import QtCore
+from PyQt4 import QtCore, uic
 
 
 def html_footer():
@@ -71,3 +71,12 @@ def resource_url(path):
     """
     url = QtCore.QUrl.fromLocalFile(path)
     return str(url.toString())
+
+
+def get_ui_class(path):
+    """Get UI Python class from .ui file.
+
+    :param path: The path to the ui file.
+    :type path: str
+    """
+    return uic.loadUiType(path)[0]

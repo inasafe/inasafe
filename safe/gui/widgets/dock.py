@@ -43,7 +43,10 @@ from safe.utilities.utilities import (
     get_safe_impact_function)
 from safe.defaults import disclaimer
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
-from safe.utilities.resources import resources_path, resource_url
+from safe.utilities.resources import (
+    resources_path,
+    resource_url,
+    get_ui_class)
 from safe.defaults import (
     limitations,
     default_organisation_logo_path)
@@ -86,8 +89,6 @@ from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.keywords_dialog import KeywordsDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
-from safe.gui.ui.dock_base import Ui_DockBase
-
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
 
@@ -98,6 +99,10 @@ KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'dock_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
+
 LOGO_ELEMENT = m.Image(
     resource_url(
         resources_path('img', 'logos', 'inasafe-logo.png')),
@@ -107,7 +112,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 # noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
-class Dock(QtGui.QDockWidget, Ui_DockBase):
+class Dock(QtGui.QDockWidget, FORM_CLASS):
     """Dock implementation class for the inaSAFE plugin."""
 
     analysis_done = pyqtSignal(bool)
