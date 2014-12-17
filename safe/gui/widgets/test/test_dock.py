@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import qgis_version
-
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -45,7 +43,7 @@ from safe.common.testing import HAZDATA, UNITDATA
 from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
-from safe.utilities.gis import read_impact_layer
+from safe.utilities.gis import read_impact_layer, qgis_version
 from safe.utilities.utilities_for_testing import (
     load_standard_layers,
     setup_scenario,
@@ -75,6 +73,7 @@ PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.join(
     os.path.dirname(__file__),
+    '..',
     '..',
     '..',
     'test',
