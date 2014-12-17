@@ -30,9 +30,6 @@ from safe.impact_functions.core import evacuated_population_weekly_needs
 from safe import messaging as m
 from safe.messaging import styles
 
-from safe.gui.ui.needs_calculator_dialog_base import (
-    Ui_NeedsCalculatorDialogBase)
-
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
