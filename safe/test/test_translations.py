@@ -21,6 +21,7 @@ import unittest
 import os
 import re
 
+# noinspection PyUnresolvedReferences
 import qgis
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QTranslator
@@ -111,8 +112,8 @@ class SafeTranslationsTest(unittest.TestCase):
         """Test all the phrases defined in dynamic_translations translate."""
         parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)
         dir_path = os.path.abspath(parent_path)
-        file_path = os.path.join(
-            dir_path, '../safe', 'common', 'dynamic_translations.py')
+        file_path = os.path.abspath(os.path.join(
+            dir_path, os.pardir, 'safe', 'common', 'dynamic_translations.py'))
         translations_file = file(file_path)
         failure_list = []
         os.environ['LANG'] = 'id'

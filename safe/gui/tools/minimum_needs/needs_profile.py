@@ -23,6 +23,7 @@ from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.resources import resources_path
 
+
 def add_needs_parameters(parameters):
     """Add minimum needs to an impact functions parameters.
 
