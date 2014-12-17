@@ -33,10 +33,10 @@ compile:
 	@echo "-----------------"
 	@echo "Compile GUI forms"
 	@echo "-----------------"
-	make -C safe/gui/ui
+	@echo
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
-update-translation-strings: compile
+update-translation-strings:
         #update application strings
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
@@ -63,7 +63,7 @@ translation-stats:
 	@echo
 	@echo "Gettext translations (*.po):"
 	@echo "----------------------------"
-	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@echo
 	@echo "Qt translations (*.ts):"
 	@echo "----------------------------"
