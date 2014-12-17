@@ -326,7 +326,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.global_default_data = metadata.global_default_attribute['id']
         self.do_not_use_string = metadata.do_not_use_attribute['name']
         self.do_not_use_data = metadata.do_not_use_attribute['id']
-        self.defaults = breakdown_defaults()
+        self.defaults = get_defaults()
 
         # Initialize attributes
         self.existing_keywords = None
@@ -1030,7 +1030,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
     def set_widgets_step_kw_aggregation(self):
         """Set widgets on the aggregation tab."""
         # Set values based on existing keywords (if already assigned)
-        self.defaults = breakdown_defaults()
+        self.defaults = get_defaults()
 
         female_ratio_default = self.get_existing_keyword(
             female_ratio_default_key)
