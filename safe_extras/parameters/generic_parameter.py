@@ -177,7 +177,7 @@ class GenericParameter(object):
 
         :raises: TypeError
         """
-        # self._check_type(value)
+        self._check_type(value)
         self._value = value
 
     def serialize(self):

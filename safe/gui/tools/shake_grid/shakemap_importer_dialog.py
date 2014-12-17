@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.resources import html_footer, html_header
-
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '08/5/2014'
@@ -23,30 +21,34 @@ __copyright__ += 'Disaster Reduction'
 import logging
 import os
 
+from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFileInfo, pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
-from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
-from safe.gui.ui.shakemap_importer_dialog_base import (
-    Ui_ShakemapImporterDialogBase)
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.help import show_context_help
 from safe.utilities.resources import html_header
 from safe.utilities.styling import mmi_ramp
+from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'ui',
+    'shakemap_importer_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
-class ShakemapImporterDialog(QDialog, Ui_ShakemapImporterDialogBase):
+
+class ShakemapImporterDialog(QDialog, FORM_CLASS):
     """Importer for shakemap grid.xml files."""
     def __init__(self, parent=None):
         """Constructor for the dialog.

@@ -25,7 +25,7 @@ __copyright__ = '(C) 2010, Giuseppe Sucameli'
 __revision__ = '$Format:%H$'
 
 import logging
-
+import os
 # noinspection PyUnresolvedReferences
 # pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
@@ -48,17 +48,14 @@ from safe.utilities.help import show_context_help
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
 
-from safe.gui.ui.extent_selector_dialog_base import (
-    Ui_ExtentSelectorDialogBase)
-
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'extent_selector_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
 
-LOGGER = logging.getLogger('InaSAFE')
-
-
-class ExtentSelectorDialog(QDialog, Ui_ExtentSelectorDialogBase):
+class ExtentSelectorDialog(QDialog, FORM_CLASS):
     """Dialog for letting user determine analysis extents.
     """
 

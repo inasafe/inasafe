@@ -18,16 +18,21 @@ __date__ = '26/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
+
 from PyQt4 import QtGui
 
-from safe.gui.ui.about_dialog_base import Ui_AboutDialogBase
 from safe.common.version import get_version
 from safe.defaults import limitations
-from safe.utilities.resources import resources_path
+from safe.utilities.resources import resources_path, get_ui_class
 from safe.defaults import disclaimer
 
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'ui', 'about_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
-class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):
+
+class AboutDialog(QtGui.QDialog, FORM_CLASS):
     """About dialog for the InaSAFE plugin."""
 
     def __init__(self, parent=None):

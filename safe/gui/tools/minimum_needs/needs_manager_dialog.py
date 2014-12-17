@@ -8,21 +8,19 @@ Impact Layer Merge Dialog.
      (at your option) any later version.
 
 """
-from safe.utilities.resources import resources_path
-
 __author__ = 'Christian Christelis christian@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
+from os.path import expanduser, basename
+
 # This import must come first to force sip2 api
 # noinspection PyUnresolvedReferences
 # pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
-
-import os
-from os.path import expanduser, basename
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
@@ -47,15 +45,19 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
 from safe.utilities.help import show_context_help
-from safe.gui.ui.needs_manager_dialog_base import Ui_NeedsManagerDialogBase
+from safe.utilities.resources import resources_path, get_ui_class
 from safe.messaging import styles
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
 
 INFO_STYLE = styles.INFO_STYLE
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'ui',
+    'needs_manager_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
 
 
-class NeedsManagerDialog(QDialog, Ui_NeedsManagerDialogBase):
+class NeedsManagerDialog(QDialog, FORM_CLASS):
     """Dialog class for the InaSAFE global minimum needs configuration.
 
     .. versionadded:: 2.2.

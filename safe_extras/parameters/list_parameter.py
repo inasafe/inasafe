@@ -19,4 +19,3 @@ class ListParameter(CollectionParameter):
         """
         super(ListParameter, self).__init__(guid)
         self.expected_type = list
-

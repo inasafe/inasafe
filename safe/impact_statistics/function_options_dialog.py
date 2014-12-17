@@ -19,7 +19,10 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 import ast
+from collections import OrderedDict
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -34,24 +37,29 @@ from PyQt4.QtGui import (
     QFormLayout,
     QGridLayout,
     QWidget)
-from collections import OrderedDict
 
-from safe.gui.ui.function_options_dialog_base import (
-    Ui_FunctionOptionsDialogBase)
+from safe.utilities.resources import get_ui_class
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
+from safe.common.resource_parameter import ResourceParameter
+from safe.common.resource_parameter_widget import ResourceParameterWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+UI_FILE_PATH = os.path.join(
+    os.path.dirname(__file__),
+    '..', 'gui', 'ui', 'function_options_dialog_base.ui')
+FORM_CLASS = get_ui_class(UI_FILE_PATH)
+
 
 # FIXME (Tim and Ole): Change to ConfigurationDialog throughout
 # Maybe also change filename and Base name accordingly.
-class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
+class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
     """ConfigurableImpactFunctions Dialog for InaSAFE.
     """
 
@@ -128,7 +136,8 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         tab = QWidget()
         form_layout = QGridLayout(tab)
         form_layout.setContentsMargins(0, 0, 0, 0)
-        parameter_container = ParameterContainer(parameters)
+        extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
+        parameter_container = ParameterContainer(parameters, extra_parameters)
         form_layout.addWidget(parameter_container)
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
@@ -213,7 +222,7 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
             label = QLabel()
             label.setObjectName(_fromUtf8(name + "Label"))
             label_text = name.replace('_', ' ').capitalize()
-            label.setText(safeTr(label_text))
+            label.setText(tr(label_text))
             label.setToolTip(str(type(key_value)))
         else:
             label = name
