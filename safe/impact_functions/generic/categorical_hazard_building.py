@@ -29,7 +29,8 @@ from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-import PyQt4.QtCore.QObject.tr as tr, format_int
+from safe.utilities.i18n import tr
+from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)

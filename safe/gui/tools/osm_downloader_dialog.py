@@ -45,8 +45,7 @@ from safe.common.exceptions import (
     CanceledImportDialogError, ImportDialogError, DownloadError)
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
-from safe.utilities.utilities import (
-    html_header)
+from safe.utilities.resources import html_header
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy

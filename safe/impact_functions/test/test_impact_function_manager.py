@@ -76,9 +76,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_volcano,
             hazard_tephra,
             hazard_generic]
-        message = (
-            'I expect %s but I got %s.' % (expected_result, result))
-        self.assertItemsEqual(result, expected_result, message)
+        self.assertItemsEqual(result, expected_result)
 
     def test_allowed_data_types(self):
         """Test allowed_data_types API."""

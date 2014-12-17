@@ -34,15 +34,14 @@ from PyQt4.QtGui import QListWidgetItem, QPixmap, QApplication
 
 from safe import metadata
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.defaults import DEFAULTS
+from safe.defaults import get_defaults
 from safe.gui.ui.wizard_dialog_base import Ui_WizardDialogBase
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities import (
-    get_error_message,
+from safe.utilities.utilities import get_error_message
+from safe.utilities.gis import (
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -52,9 +51,7 @@ from safe.common.exceptions import (
     InaSAFEError)
 from safe.utilities.help import show_context_help
 
-
 LOGGER = logging.getLogger('InaSAFE')
-
 
 # Constants for categories
 category_question = QApplication.translate(
@@ -97,6 +94,7 @@ unit_question = QApplication.translate(
 # Constants for subcategory-unit relations
 # These texts below will be inserted as the fourth variable
 # to the field_question_subcategory_unit constant.
+# noinspection PyCallByClass
 flood_metres_depth_question = QApplication.translate(
     'WizardDialog',
     'flood depth in meters')
@@ -138,6 +136,7 @@ structure_building_type_question = QApplication.translate(
     'type for your building')
 
 # Constants for field selection
+# noinspection PyCallByClass
 field_question_subcategory_unit = QApplication.translate(
     'WizardDialog',
     'You have selected a <b>%s %s</b> layer measured in '
@@ -145,6 +144,7 @@ field_question_subcategory_unit = QApplication.translate(
     'select the attribute in this layer that represents %s.')
 # (category, subcategory, unit, subcategory-unit relation))
 
+# noinspection PyCallByClass,PyCallByClass
 field_question_aggregation = QApplication.translate(
     'WizardDialog',
     'You have selected an aggregation layer, and it is a vector '
@@ -152,6 +152,7 @@ field_question_aggregation = QApplication.translate(
     'names of the aggregation areas.')
 
 # Constants for classify values for categorized units
+# noinspection PyCallByClass
 classify_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> measured in <b>%s</b> categorical '

@@ -24,16 +24,16 @@ from PyQt4.QtCore import pyqtSignature
 from safe.common.version import get_version
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.vector import Vector
-from safe.gui.ui.needs_calculator_dialog_base import (
-    Ui_NeedsCalculatorDialogBase)
-from safe.utilities.utilities import (
-    add_ordered_combo_item,
-    is_polygon_layer,
-    html_header)
+from safe.utilities.utilities import add_ordered_combo_item
+from safe.utilities.gis import is_polygon_layer
+from safe.utilities.resources import html_header
 from safe.utilities.help import show_context_help
 from safe.impact_functions.core import evacuated_population_weekly_needs
 from safe import messaging as m
 from safe.messaging import styles
+
+from safe.gui.ui.needs_calculator_dialog_base import (
+    Ui_NeedsCalculatorDialogBase)
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')

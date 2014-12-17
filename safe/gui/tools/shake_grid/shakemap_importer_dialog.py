@@ -37,7 +37,7 @@ from safe.common.version import get_version
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.help import show_context_help
-from safe.utilities.utilities import html_header
+from safe.utilities.resources import html_header
 from safe.utilities.styling import mmi_ramp
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 

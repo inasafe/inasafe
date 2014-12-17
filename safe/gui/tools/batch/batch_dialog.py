@@ -48,8 +48,7 @@ from safe.report.map import Map
 from safe.report.html_renderer import HtmlRenderer
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
-from safe.utilities.utilities import (
-    read_impact_layer)
+from safe.utilities.gis import read_impact_layer
 from safe.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')

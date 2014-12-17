@@ -45,7 +45,8 @@ from safe.metadata import (
     unit_normalised
 )
 from safe.storage.raster import Raster
-import PyQt4.QtCore.QObject.tr as tr, format_int
+from safe.utilities.i18n import tr
+from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata

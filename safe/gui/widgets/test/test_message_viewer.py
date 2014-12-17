@@ -94,7 +94,7 @@ class MessageViewerTest(unittest.TestCase):
         my_expected_result = open(
             TEST_FILES_DIR +
             '/test-error-message.txt',
-            'r').read().replace('\n', '')
+            ).read().replace('\n', '')
         self.assertEqual(text, my_expected_result)
 
     def test_static_and_error(self):
@@ -104,7 +104,7 @@ class MessageViewerTest(unittest.TestCase):
         my_expected_result = open(
             TEST_FILES_DIR +
             '/test-static-error-message.txt',
-            'r').read().replace('\n', '')
+            ).read().replace('\n', '')
         self.assertEqual(text, my_expected_result)
 
 if __name__ == '__main__':

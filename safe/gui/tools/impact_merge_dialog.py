@@ -51,9 +51,9 @@ from safe.common.utilities import temp_dir
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.utilities import (
-    html_header,
     html_to_file,
     add_ordered_combo_item)
+from safe.utilities.resources import html_header
 from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
 
