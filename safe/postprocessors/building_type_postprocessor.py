@@ -10,9 +10,11 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import itertools
-from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 from collections import OrderedDict
+import itertools
+
+from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.utilities.i18n import tr
 
 
 class BuildingTypePostprocessor(AbstractPostprocessor):
