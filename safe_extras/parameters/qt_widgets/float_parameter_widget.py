@@ -4,7 +4,7 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'float_parameter_widget'
 __date__ = '8/19/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 from PyQt4.QtGui import QDoubleSpinBox

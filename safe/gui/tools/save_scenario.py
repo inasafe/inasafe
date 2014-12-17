@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import extent_to_array, viewport_geo_array
-
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '25/02/2014'
@@ -28,11 +26,9 @@ from PyQt4 import QtGui
 from PyQt4.QtCore import QSettings
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QFileDialog
-
-from safe.utilities.utilities import (
-    viewport_geo_array)
+from safe.utilities.gis import extent_to_array, viewport_geo_array
 from safe.utilities.keyword_io import KeywordIO
-from safe.common.utilities import ugettext as safeTr
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -138,7 +134,8 @@ class SaveScenarioDialog(QDialog):
         exposure_path = str(self.exposure_layer.publicSource())
         hazard_path = str(self.hazard_layer.publicSource())
         title = self.keyword_io.read_keywords(self.hazard_layer, 'title')
-        title = safeTr(title)
+        # Maybe we need to use @default context here as it is a dynamic phrase
+        title = self.tr('@default', title)
         default_filename = title.replace(
             ' ', '_').replace('(', '').replace(')', '')
 

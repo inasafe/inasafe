@@ -9,7 +9,7 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 from collections import OrderedDict
 import json
-from safe.common.utilities import ugettext as tr
+import PyQt4.QtCore.QObject.tr as tr
 from os.path import exists, dirname
 from os import remove
 

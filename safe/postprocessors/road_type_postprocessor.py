@@ -14,9 +14,7 @@ __copyright__ += 'Disaster Reduction'
 from safe.postprocessors.building_type_postprocessor import \
     BuildingTypePostprocessor
 
-from safe.common.utilities import (
-    ugettext as tr,
-    OrderedDict)
+from collections import OrderedDict
 
 
 # The road postprocessing is the same workflow as Building postprocessing

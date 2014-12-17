@@ -12,22 +12,20 @@ __copyright__ += 'Disaster Reduction'
 import itertools
 
 from safe.common.utilities import unique_filename
-from safe.storage.raster import qgis_imported
 from safe.common.exceptions import WrongDataTypeException
 
-if qgis_imported:   # Import QgsRasterLayer if qgis is available
-    from PyQt4.QtCore import QVariant
-    from qgis.core import (
-        QgsField,
-        QgsVectorLayer,
-        QgsFeature,
-        QgsPoint,
-        QgsGeometry,
-        QgsFeatureRequest,
-        QgsVectorFileWriter,
-        QgsCoordinateReferenceSystem,
-        QgsCoordinateTransform
-    )
+from PyQt4.QtCore import QVariant
+from qgis.core import (
+    QgsField,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsPoint,
+    QgsGeometry,
+    QgsFeatureRequest,
+    QgsVectorFileWriter,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform
+)
 
 
 def points_to_rectangles(points, dx, dy):

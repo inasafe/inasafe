@@ -14,7 +14,7 @@ from collections import OrderedDict
 import keyword as python_keywords
 
 from safe.gis.polygon import inside_polygon
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableCell, TableRow
 from safe.defaults import default_minimum_needs
 from utilities import pretty_string, remove_double_spaces

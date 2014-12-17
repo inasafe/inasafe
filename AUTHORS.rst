@@ -7,7 +7,7 @@ Authors ordered by date of first contribution:
 * Ole Nielsen <ole.nielsen@aifdr.org>
 * Ted Dunstone <ted@biometix.com>
 * Ariel Nunez <ingenieroariel@gmail.com>
-* Tim Sutton <tim@linfiniti.com>
+* Tim Sutton <tim@kartoza.com>
 * Ismail Sunni <imajimatika@gmail.com>
 * Kristy Van Putten <Kristy.VanPutten@dfat.gov.au>
 * Marco Bernasocchi <marco@opengis.ch>
@@ -15,6 +15,9 @@ Authors ordered by date of first contribution:
 * Trevor Dhu <Trevor.Dhu@ausaid.gov.au>
 * Gigih Aji Ibrahim <bungcip@gmail.com>
 * Akbar Gumbira <akbargumbira@gmail.com>
+* Dianne Bencito <diannebencito@essc.org.ph>
+* Christian Christelis <christian@kartoza.com>
+* Yewondwossen Assefa <assefay@gmail.com>
 
 
 Other contributors who have provided input, testing, translations etc.

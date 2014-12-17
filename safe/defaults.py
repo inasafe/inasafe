@@ -23,7 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
-from safe.common.utilities import ugettext as tr
+from utilities.i18n import tr
 
 
 def define_defaults():
@@ -195,6 +195,8 @@ def default_provenance():
 
 
 def disclaimer():
+    from safe.utilities.i18n import tr
+
     """Get a standard disclaimer.
 
     :returns: Standard disclaimer string for InaSAFE.
@@ -202,7 +204,6 @@ def disclaimer():
     """
     # import tr here to avoid side effects with safe (see notes above in import
     # section.
-    from safe.utilities.utilities import tr
     text = tr(
         'InaSAFE has been jointly developed by Indonesian '
         'Government-BNPB, Australian Government-AIFDR and the World '
@@ -234,6 +235,8 @@ def default_north_arrow_path():
 
 
 def limitations():
+    from safe.utilities.i18n import tr
+
     """Get InaSAFE limitations.
 
     :return: All limitations on current InaSAFE.
@@ -241,7 +244,6 @@ def limitations():
     """
     # import tr here to avoid side effects with safe (see notes above in import
     # section.
-    from safe.utilities.utilities import tr
     limitation_list = list()
     limitation_list.append(tr('InaSAFE is not a hazard modelling tool.'))
     limitation_list.append(

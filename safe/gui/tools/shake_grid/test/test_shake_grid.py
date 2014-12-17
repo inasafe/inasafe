@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __date__ = '27/03/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')

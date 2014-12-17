@@ -1834,10 +1834,6 @@ class ShakeEvent(QObject):
            TranslationLoadException
         """
         locale_name = self.locale
-        # Also set the system locale to the user overridden local
-        # so that the inasafe library functions gettext will work
-        # .. see:: :py:func:`common.utilities`
-        os.environ['LANG'] = str(locale_name)
 
         root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         translation_path = os.path.join(

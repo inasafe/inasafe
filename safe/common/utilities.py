@@ -6,7 +6,6 @@ import sys
 import numpy
 import zipfile
 import platform
-import gettext
 from datetime import date
 import getpass
 from tempfile import mkstemp
@@ -61,26 +60,6 @@ def verify(statement, message=None):
     if bool(statement) is False:
         # noinspection PyExceptionInherit
         raise VerificationError(message)
-
-
-def ugettext(s):
-    """Translation support."""
-    path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            os.path.pardir,
-            os.path.pardir,
-            'i18n'))
-    if 'LANG' not in os.environ:
-        return s
-    if not s:
-        return s
-
-    lang = os.environ['LANG']
-    filename_prefix = 'inasafe'
-    t = gettext.translation(
-        filename_prefix, path, languages=[lang], fallback=True)
-    return t.ugettext(s)
 
 
 def temp_dir(sub_dir='work'):
@@ -331,11 +310,7 @@ def format_int(x):
 
     """
 
-    # This is broken
-    # import locale
-    # locale.setlocale(locale.LC_ALL, '')  # Broken, why?
-    # s = locale.format('%d', x, 1)
-    lang = os.getenv('LANG')
+
     try:
         s = '{0:,}'.format(x)
         # s = '{0:n}'.format(x)  # n means locale aware (read up on this)

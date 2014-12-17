@@ -21,21 +21,18 @@ import os
 import unittest
 
 from safe.common.testing import UNITDATA, get_qgis_app
-from safe.storage.raster import qgis_imported
 from safe.gis.gdal_ogr_tools import (
     polygonize_thresholds)
 
-
-if qgis_imported:  # Import QgsRasterLayer if qgis is available
-    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    from PyQt4.QtCore import QVariant
-    from qgis.core import (
-        QgsVectorLayer,
-        QgsPoint,
-        QgsField,
-        QgsFeature,
-        QgsGeometry,
-        QgsRectangle)
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from PyQt4.QtCore import QVariant
+from qgis.core import (
+    QgsVectorLayer,
+    QgsPoint,
+    QgsField,
+    QgsFeature,
+    QgsGeometry,
+    QgsRectangle)
 
 
 from safe.gis.qgis_vector_tools import (

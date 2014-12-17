@@ -10,23 +10,21 @@ __copyright__ += 'Disaster Reduction'
 
 
 from safe.common.utilities import unique_filename
-from safe.storage.raster import qgis_imported
 from safe.gis.gdal_ogr_tools import polygonize_thresholds
 from safe.common.exceptions import GetDataError
 
-if qgis_imported:   # Import QgsRasterLayer if qgis is available
-    # noinspection PyPackageRequirements
-    from PyQt4.QtCore import QVariant
-    from qgis.core import (
-        QgsRasterLayer,
-        QgsField,
-        QgsVectorLayer,
-        QgsFeature,
-        QgsPoint,
-        QgsGeometry,
-        QgsRasterFileWriter,
-        QgsRasterPipe
-    )
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QVariant
+from qgis.core import (
+    QgsRasterLayer,
+    QgsField,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsPoint,
+    QgsGeometry,
+    QgsRasterFileWriter,
+    QgsRasterPipe
+)
 
 from qgis_vector_tools import (
     union_geometry,

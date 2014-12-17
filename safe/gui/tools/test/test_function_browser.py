@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'ismailsunni@yahoo.co.id'
+__author__ = 'ismail@kartoza.com'
 __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')

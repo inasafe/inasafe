@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __version__ = '3.0'
 __revision__ = '$Format:%H$'
 __date__ = '12/15/14'

@@ -43,8 +43,8 @@ from safe.impact_functions.core import (
     population_rounding
 )
 from safe.storage.vector import Vector
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     humanize_class,
     create_classes,

@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.gui.tools.batch import scenario_runner
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 
-__author__ = 'bungcip@gmail.com & tim@kartoza.com & imajimatika@gmail.com'
+__author__ = 'bungcip@gmail.com & tim@kartoza.com & ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '

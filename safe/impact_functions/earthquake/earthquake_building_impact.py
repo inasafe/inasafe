@@ -17,7 +17,7 @@ from safe.metadata import (
     exposure_definition,
     unit_building_generic)
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as tr, format_int
+import PyQt4.QtCore.QObject.tr as tr, format_int
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (

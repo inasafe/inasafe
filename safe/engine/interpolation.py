@@ -9,7 +9,7 @@ import numpy
 
 from safe.gis.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
-from safe.common.utilities import ugettext as tr
+import PyQt4.QtCore.QObject.tr as tr
 from safe.gis.numerics import ensure_numeric
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.gis.polygon import (inside_polygon,

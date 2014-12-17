@@ -38,7 +38,8 @@ from safe.common.testing import (
     DATADIR,
     FEATURE_COUNTS,
     GEOTRANSFORMS)
-from safe.common.utilities import ugettext as tr, unique_filename
+from safe.utilities.i18n import tr
+from safe.common.utilities import unique_filename
 from safe.gis.polygon import is_inside_polygon
 from safe.common.exceptions import (
     BoundingBoxError,
@@ -58,7 +59,7 @@ def linear_function(x, y):
 
 
 class TestIO(unittest.TestCase):
-    """Tests for reading and writing of raster and vector data
+    """Tests for reading and writing of raster and vector data.
     """
 
     def setUp(self):
@@ -2437,40 +2438,6 @@ class TestIO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
-    @numpy.testing.dec.skipif(sys.platform == 'darwin', 'Fails in OSX, #198')
-    def test_i18n(self):
-        """Test to see if internationalisation is working correctly.
-
-        Make sure to include this file when using xgettext to scan for
-        translatable strings.
-        .. see:: :doc:`/developer-docs/i18n`
-        """
-        # If you want to modify this code, please get acquainted with
-        # Python's locale module. In particular:
-        # http://docs.python.org/library/locale.html#locale.getdefaultlocale
-
-        # Set the standard C locale.
-        os.environ['LANG'] = 'C'
-        os.environ['LC_ALL'] = 'C.UTF-8'
-
-        # must be after above
-        out1 = tr('Hello!')
-        expected1 = 'Hello!'
-        msg = 'Expected %s, got %s' % (expected1, out1)
-        assert out1 == expected1, msg
-
-        # Set the Indonesian locale to test translations.
-        os.environ['LANG'] = 'id'
-        os.environ['LC_ALL'] = 'id_ID.UTF-8'
-
-        # must be after above
-        ina_out1 = tr('Hello!')  # translate as 'Hi'
-        ina_expected1 = 'Halo!'
-        msg = 'Expected %s, got %s' % (ina_expected1, ina_out1)
-        assert ina_out1 == ina_expected1, msg
-
-        # Set back to en
-        os.environ['LANG'] = 'en'
 
     def test_multipart_polygon_can_be_read(self):
         """Multipart polygons are be converted to singlepart

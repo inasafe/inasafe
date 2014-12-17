@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -37,7 +38,6 @@ from raven import Client
 # pylint: enable=F0401
 
 from safe.common.custom_logging import add_logging_handler_once
-from safe.utilities.utilities import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 

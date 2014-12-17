@@ -15,7 +15,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-from safe.common.utilities import ugettext as tr
 
 # pylint: disable=W0611
 from gender_postprocessor import GenderPostprocessor
@@ -26,6 +25,7 @@ from road_type_postprocessor import RoadTypePostprocessor
 from aggregation_categorical_postprocessor import \
     AggregationCategoricalPostprocessor
 from minimum_needs_postprocessor import MinimumNeedsPostprocessor
+from safe.utilities.i18n import tr
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')

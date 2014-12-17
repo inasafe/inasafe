@@ -11,7 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'ismailsunni@yahoo.co.id'
+from safe.utilities.i18n import tr
+
+__author__ = 'ismail@kartoza.com'
 __date__ = '12/10/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -29,7 +31,6 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.core import get_function_title, get_plugins
-from safe.common.utilities import ugettext as safeTr
 
 
 class SafeTranslationsTest(unittest.TestCase):
@@ -75,14 +76,14 @@ class SafeTranslationsTest(unittest.TestCase):
 
         # English
         function_title = 'Be affected'
-        expected_title = safeTr('Be affected')
+        expected_title = tr('Be affected')
         message = 'Expected %s but got %s' % (expected_title, function_title)
         self.assertEqual(function_title, expected_title, message)
 
         # Indonesia
         os.environ['LANG'] = 'id'
         function_title = 'Be affected'
-        real_title = safeTr(function_title)
+        real_title = tr(function_title)
         expected_title = 'Terkena dampak'
         message = 'expected %s but got %s' % (expected_title, real_title)
         self.assertEqual(expected_title, real_title, message)
@@ -97,7 +98,7 @@ class SafeTranslationsTest(unittest.TestCase):
         phrase_list = []
         message = 'Specific words checked for translation:\n'
         for phrase in phrase_list:
-            if phrase == safeTr(phrase):
+            if phrase == tr(phrase):
                 message += 'FAIL: %s' % phrase
             else:
                 message += 'PASS: %s' % phrase
@@ -128,7 +129,7 @@ class SafeTranslationsTest(unittest.TestCase):
                     cleaned_line = group[2:-2]
                     if cleaned_line in exception_words:
                         continue
-                    translation = safeTr(cleaned_line)
+                    translation = tr(cleaned_line)
                     if cleaned_line == translation:
                         failure_list.append(cleaned_line)
 
@@ -158,7 +159,7 @@ class SafeTranslationsTest(unittest.TestCase):
         expected_message = (
             'Tidak ada informasi gaya yang ditemukan pada lapisan %s')
         real_message = QCoreApplication.translate(
-            "@default", 'No styleInfo was found for layer %s')
+            '@default', 'No styleInfo was found for layer %s')
         message = 'expected %s but got %s' % (expected_message, real_message)
         self.assertEqual(expected_message, real_message, message)
 

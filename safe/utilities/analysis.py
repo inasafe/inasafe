@@ -16,7 +16,7 @@ from safe.utilities.gis import extent_to_array, viewport_geo_array, \
     get_wgs84_resolution
 from safe.utilities.resources import resources_path
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/20/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '

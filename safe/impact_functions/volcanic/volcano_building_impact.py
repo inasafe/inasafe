@@ -27,8 +27,8 @@ from safe.metadata import (
     hazard_definition,
     unit_building_generic)
 from safe.storage.vector import Vector
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     get_thousand_separator,
     get_non_conflicting_attribute_name)

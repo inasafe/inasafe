@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -26,7 +27,6 @@ import webbrowser
 import unicodedata
 
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication
 
 from safe.storage.utilities import read_keywords
 from safe.storage.utilities import write_keywords as safe_write_keywords
@@ -34,9 +34,7 @@ from safe.common.exceptions import (
     InvalidParameterError,
     NoKeywordsFoundError,
     KeywordNotFoundError)
-from safe.common.utilities import (
-    unique_filename,
-    ugettext as safe_tr)
+from safe.common.utilities import unique_filename
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.impact_functions.core import get_plugins
@@ -46,22 +44,6 @@ from safe.messaging.error_message import ErrorMessage
 INFO_STYLE = styles.INFO_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def tr(text):
-    """We define a tr() alias here since the utilities implementation below
-    is not a class and does not inherit from QObject.
-    .. note:: see http://tinyurl.com/pyqt-differences
-
-    :param text: String to be translated
-    :type text: str
-
-    :returns: Translated version of the given string if available, otherwise
-        the original string.
-    :rtype: str
-    """
-    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    return QCoreApplication.translate('@default', text)
 
 
 def get_error_message(exception, context=None, suggestion=None):
@@ -173,13 +155,13 @@ def impact_attribution(keywords, inasafe_flag=False):
 
     if hazard_title_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        hazard_title = safe_tr(keywords[hazard_title_keywords])
+        hazard_title = tr(keywords[hazard_title_keywords])
     else:
         hazard_title = tr('Hazard layer')
 
     if hazard_source_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        hazard_source = safe_tr(keywords[hazard_source_keywords])
+        hazard_source = tr(keywords[hazard_source_keywords])
     else:
         hazard_source = tr('an unknown source')
 

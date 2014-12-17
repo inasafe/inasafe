@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 Initially this was adapted from shake_event.py and now realtime uses this.
 """
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '11/02/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
