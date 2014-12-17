@@ -9,7 +9,7 @@ __doc__ = ''
 
 from PyQt4.QtGui import QCheckBox
 
-from generic_parameter_widget import GenericParameterWidget
+from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
 class BooleanParameterWidget(GenericParameterWidget):
@@ -40,4 +40,3 @@ class BooleanParameterWidget(GenericParameterWidget):
         """
         self._parameter.value = self._check_box_input.isChecked()
         return self._parameter
-

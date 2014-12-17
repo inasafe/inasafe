@@ -3,9 +3,9 @@
 
 from unittest import TestCase
 
-from safe_extras.parameters.dict_parameter import DictParameter
-from safe_extras.parameters.parameter_exceptions import (
-    CollectionLengthError,  InvalidMinimumError, InvalidMaximumError)
+from dict_parameter import DictParameter
+from parameter_exceptions import (
+    CollectionLengthError, InvalidMinimumError, InvalidMaximumError)
 
 
 good_dict = {'foo': True, 'bar': False, 'woo': False}

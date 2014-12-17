@@ -10,7 +10,7 @@ __doc__ = ''
 
 from PyQt4.QtGui import QLineEdit, QSizePolicy
 
-from generic_parameter_widget import GenericParameterWidget
+from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
 class StringParameterWidget(GenericParameterWidget):

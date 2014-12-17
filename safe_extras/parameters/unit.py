@@ -181,7 +181,7 @@ class Unit(object):
             'abbreviation': self.abbreviation,
             'help_text': self.help_text,
             'description': self.description,
-        }
+            }
 
     def __str__(self):
         return self.name

@@ -12,9 +12,8 @@ import unittest
 
 from PyQt4.QtGui import QApplication
 
-from safe_extras.parameters.string_parameter import StringParameter
-from safe_extras.parameters.qt_widgets.string_parameter_widget import (
-    StringParameterWidget)
+from string_parameter import StringParameter
+from qt_widgets.string_parameter_widget import StringParameterWidget
 
 
 application = QApplication([])
@@ -56,4 +55,3 @@ class TestBooleanParameterWidget(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

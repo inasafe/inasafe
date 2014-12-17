@@ -1,7 +1,8 @@
 # coding=utf-8
 """Tests for boolean parameter."""
 from unittest import TestCase
-from safe_extras.parameters.boolean_parameter import BooleanParameter
+
+from boolean_parameter import BooleanParameter
 
 
 class TestBooleanParameter(TestCase):
@@ -23,5 +24,3 @@ class TestBooleanParameter(TestCase):
 
         with self.assertRaises(TypeError):
             parameter.value = 'Test'
-
-

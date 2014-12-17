@@ -9,7 +9,7 @@ __doc__ = ''
 
 from PyQt4.QtGui import QSpinBox
 
-from numeric_parameter_widget import NumericParameterWidget
+from qt_widgets.numeric_parameter_widget import NumericParameterWidget
 
 
 class IntegerParameterWidget(NumericParameterWidget):

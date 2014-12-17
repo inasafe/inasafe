@@ -3,8 +3,8 @@
 
 from unittest import TestCase
 
-from safe_extras.parameters.integer_parameter import IntegerParameter
-from safe_extras.parameters.parameter_exceptions import (
+from integer_parameter import IntegerParameter
+from parameter_exceptions import (
     InvalidMaximumError, InvalidMinimumError, ValueOutOfBounds)
 
 

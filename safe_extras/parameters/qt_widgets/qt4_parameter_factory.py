@@ -7,11 +7,11 @@ __date__ = '8/19/14'
 __copyright__ = 'imajimatika@gmail.com'
 __doc__ = ''
 
-from boolean_parameter_widget import BooleanParameterWidget
-from float_parameter_widget import FloatParameterWidget
-from integer_parameter_widget import IntegerParameterWidget
-from string_parameter_widget import StringParameterWidget
-from safe.common.resource_parameter_widget import ResourceParameterWidget
+from qt_widgets.boolean_parameter_widget import BooleanParameterWidget
+from qt_widgets.float_parameter_widget import FloatParameterWidget
+from qt_widgets.integer_parameter_widget import IntegerParameterWidget
+from qt_widgets.string_parameter_widget import StringParameterWidget
+from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
 class Qt4ParameterFactory(object):
@@ -19,11 +19,34 @@ class Qt4ParameterFactory(object):
 
     def __init__(self):
         """Constructor."""
-        pass
+        self.dict_widget = {
+            'BooleanParameter': BooleanParameterWidget,
+            'FloatParameter': FloatParameterWidget,
+            'IntegerParameter': IntegerParameterWidget,
+            'StringParameter': StringParameterWidget,
+        }
 
+    def register_widget(self, parameter, parameter_widget):
+        """Register new custom widget.
 
-    @staticmethod
-    def get_widget(parameter):
+        :param parameter:
+        :type parameter: GenericParameter
+
+        :param parameter_widget:
+        :type parameter_widget: GenericParameterWidget
+        """
+        self.dict_widget[parameter.__name__] = parameter_widget
+
+    def remove_widget(self, parameter):
+        """Register new custom widget.
+
+        :param parameter:
+        :type parameter: GenericParameter
+        """
+        if parameter.__name__ in self.dict_widget.keys():
+            self.dict_widget.pop(parameter.__name__)
+
+    def get_widget(self, parameter):
         """Create parameter widget from current
         :param parameter: Parameter object.
         :type parameter: BooleanParameter, FloatParameter, IntegerParameter,
@@ -35,16 +58,8 @@ class Qt4ParameterFactory(object):
         """
         class_name = parameter.__class__.__name__
 
-        if class_name == 'BooleanParameter':
-            return BooleanParameterWidget(parameter)
-        elif class_name == 'FloatParameter':
-            return FloatParameterWidget(parameter)
-        elif class_name == 'IntegerParameter':
-            return IntegerParameterWidget(parameter)
-        elif class_name == 'StringParameter':
-            return StringParameterWidget(parameter)
-        elif class_name == 'ResourceParameter':
-            return ResourceParameterWidget(parameter)
+        if class_name in self.dict_widget.keys():
+            return self.dict_widget[class_name](parameter)
         else:
             raise TypeError(class_name)
 

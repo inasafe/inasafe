@@ -3,7 +3,7 @@
 
 from unittest import TestCase
 
-from safe_extras.parameters.generic_parameter import GenericParameter
+from generic_parameter import GenericParameter
 
 
 class TestGenericParameter(TestCase):
