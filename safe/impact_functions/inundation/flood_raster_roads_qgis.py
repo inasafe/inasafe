@@ -30,7 +30,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
-import PyQt4.QtCore.QObject.tr as tr
+from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.storage.vector import Vector

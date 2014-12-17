@@ -93,16 +93,11 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             """
             dict_meta = {
                 'id': 'CategoricalHazardPopulationImpactFunction',
-                'name': tr(
-
-                    'Categorised Hazard Population Impact Function'),
-                'impact': tr(
-
-                    'Be impacted by each category'),
+                'name': tr('Categorical Hazard Population Impact Function'),
+                'impact': tr('Be impacted by each category'),
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
-
                     'To assess the impacts of categorized hazards in raster '
                     'format on population raster layer.'),
                 'categories': {

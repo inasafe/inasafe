@@ -56,6 +56,11 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test initialize ImpactFunctionManager."""
         impact_function_manager = ImpactFunctionManager()
         expected_result = 15
+        i = 0
+        print 'Your impact functions:'
+        for impact_function in impact_function_manager.impact_functions:
+            i += 1
+            print i, impact_function.Metadata.get_metadata()['name']
         result = len(impact_function_manager.impact_functions)
         message = (
             'I expect %s but I got %s, please check the number of current '
