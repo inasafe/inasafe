@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
  - **Module inasafe.**
@@ -18,16 +19,19 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import sys
-THIRD_PARTY_DIR = os.path.abspath(
+import os
+sys.path.append(os.path.dirname(__file__))
+
+PARAMETER_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), 'safe_extras', 'parameters'))
-if THIRD_PARTY_DIR not in sys.path:
-    sys.path.append(THIRD_PARTY_DIR)
+if PARAMETER_DIR not in sys.path:
+    sys.path.append(PARAMETER_DIR)
 
 
 # noinspection PyDocstring
+# noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
-    from safe.plugin import Plugin
+    from plugin import Plugin
     return Plugin(iface)

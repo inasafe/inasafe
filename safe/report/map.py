@@ -11,26 +11,29 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-
+# noinspection PyUnresolvedReferences
+import qgis
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtXml
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer)
+from safe.defaults import disclaimer
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
 from safe.common.exceptions import KeywordNotFoundError, ReportCreationError
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.defaults import (
-    disclaimer,
+from safe.utilities.resources import resources_path
+from safe.defaults import (
     default_organisation_logo_path,
     default_north_arrow_path)
 
@@ -52,10 +55,12 @@ class Map():
         self.printer = None
         self.composition = None
         self.extent = iface.mapCanvas().extent()
-        self.safe_logo = ':/plugins/inasafe/inasafe-logo-url.svg'
+        self.safe_logo = resources_path(
+            'img', 'logos', 'inasafe-logo-url.svg')
         self.north_arrow = default_north_arrow_path()
         self.org_logo = default_organisation_logo_path()
-        self.template = ':/plugins/inasafe/inasafe-portrait-a4.qpt'
+        self.template = resources_path(
+            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
         self.disclaimer = disclaimer()
         self.page_width = 0  # width in mm
         self.page_height = 0  # height in mm

@@ -2,8 +2,7 @@
 """**Tests for map creation in QGIS plugin.**
 
 """
-
-__author__ = 'Tim Sutton <tim@linfiniti.com>'
+__author__ = 'Tim Sutton <tim@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
 __license__ = "GPL"
@@ -33,7 +32,9 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import temp_dir, unique_filename
+from safe.utilities.resources import resources_path
 from safe.utilities.utilities_for_testing import load_layer
+from safe.utilities.gis import qgis_version
 from safe.report.map import Map
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -83,43 +84,50 @@ class MapTest(unittest.TestCase):
         report = Map(IFACE)
         report.set_impact_layer(layer)
         out_path = unique_filename(
-            prefix='mapDefaultTemplateTest',
+            prefix='map_default_template_test',
             suffix='.pdf',
             dir=temp_dir('test'))
         report.make_pdf(out_path)
-        LOGGER.debug(out_path)
+
+        # Check the file exists
         message = 'Rendered output does not exist: %s' % out_path
         self.assertTrue(os.path.exists(out_path), message)
-        # pdf rendering is non deterministic so we can't do a hash check
-        # test_renderComposition renders just the image instead of pdf
-        # so we hash check there and here we just do a basic minimum file
-        # size check.
-        out_size = os.stat(out_path).st_size
 
-        # Note: You should replace, not append the numbers for a given
-        # platform. Also note that this test will break every time the
-        # version number of InaSAFE changes so we should ultimately come up
-        # with a lower maintenance test strategy.
-        expected_sizes = [
-            405359,  # Ubuntu 13.04_64
-            427172,  # Ubuntu 13.10_64
-            468836,  # Ubuntu 14.04_64 AG
-            431844,  # Ubuntu 14.04_64 TS - pycharm
-            431873,  # Ubuntu 14.04_64 TS - make - TODO why is this?
-            437994,  # Ubuntu 14.04_64 MB - pycharm
-            431844,  # Ubuntu 14.04_64 MB - make - TODO why is this?
-            434596,  # Ubuntu 14.04_64 MB - pycharm
-            428339,  # Ubuntu 14.04_64 MB - make - TODO why is this?
-            414589,  # Slackware64 14.0
-            144542,  # Linux Mint 14_64
-            148267,  # Windows 7 32
-            150412,  # Windows 7 64
-            448270,  # UB 12.04 Jenkins
-            448241,  # Travis
-        ]
-        message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
-            out_path, expected_sizes, out_size)
-        self.assertIn(out_size, expected_sizes, message)
+        # Check the file is not corrupt
+        message = 'The output file %s is corrupt' % out_path
+        out_size = os.stat(out_path).st_size
+        self.assertTrue(out_size > 0, message)
+
+        # Check the components in composition are default components
+        if qgis_version() < 20500:
+            safe_logo = report.composition.getComposerItemById(
+                'safe-logo').pictureFile()
+            north_arrow = report.composition.getComposerItemById(
+                'north-arrow').pictureFile()
+            org_logo = report.composition.getComposerItemById(
+                'organisation-logo').pictureFile()
+        else:
+            safe_logo = report.composition.getComposerItemById(
+                'safe-logo').picturePath()
+            north_arrow = report.composition.getComposerItemById(
+                'north-arrow').picturePath()
+            org_logo = report.composition.getComposerItemById(
+                'organisation-logo').picturePath()
+
+        expected_safe_logo = resources_path(
+            'img', 'logos', 'inasafe-logo-url.svg')
+        expected_north_arrow = resources_path(
+            'img', 'north_arrows', 'simple_north_arrow.png')
+        expected_org_logo = resources_path('img', 'logos', 'supporters.png')
+
+        message = 'The safe logo path is not the default one'
+        self.assertEqual(expected_safe_logo, safe_logo, message)
+
+        message = 'The north arrow path is not the default one'
+        self.assertEqual(expected_north_arrow, north_arrow, message)
+
+        message = 'The organisation logo path is not the default one'
+        self.assertEqual(expected_org_logo, org_logo, message)
 
     def test_custom_logo(self):
         """Test that setting user-defined logo works."""
@@ -132,44 +140,33 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         report = Map(IFACE)
         report.set_impact_layer(layer)
-        report.set_organisation_logo(":/plugins/inasafe/logo-flower.png")
+
+        custom_logo_path = resources_path('img', 'logos', 'logo-flower.png')
+        report.set_organisation_logo(custom_logo_path)
         out_path = unique_filename(
-            prefix='mapCustomLogoTest', suffix='.pdf', dir=temp_dir('test'))
+            prefix='map_custom_logo_test', suffix='.pdf', dir=temp_dir('test'))
         report.make_pdf(out_path)
-        LOGGER.debug(out_path)
+
+        # Check the file exists
         message = 'Rendered output does not exist: %s' % out_path
         self.assertTrue(os.path.exists(out_path), message)
-        # pdf rendering is non deterministic so we can't do a hash check
-        # test_renderComposition renders just the image instead of pdf
-        # so we hash check there and here we just do a basic minimum file
-        # size check.
+
+        # Check the file is not corrupt
+        message = 'The output file %s is corrupt' % out_path
         out_size = os.stat(out_path).st_size
+        self.assertTrue(out_size > 0, message)
 
-        # Note: You should replace, not append the numbers for a given
-        # platform. Also note that this test will break every time the
-        # version number of InaSAFE changes so we should ultimately come up
-        # with a lower maintenance test strategy.
+        # Check the organisation logo in composition sets correctly to
+        # logo-flower
+        if qgis_version() < 20500:
+            custom_img_path = report.composition.getComposerItemById(
+                'organisation-logo').pictureFile()
+        else:
+            custom_img_path = report.composition.getComposerItemById(
+                'organisation-logo').picturePath()
 
-        expected_sizes = [
-            402083,  # Ubuntu 13.04_64
-            400563,  # Ubuntu 13.10_64
-            450385,  # Ubuntu 14.04_64 AG
-            413193,  # Ubuntu 14.04_64 TS pycharm
-            416313,  # Ubuntu 14.04_64 TS make - TODO why is this?
-            419483,  # Ubuntu 14.04_64 MB pycharm
-            413193,  # Ubuntu 14.04_64 MB make - TODO why is this?
-            419036,  # Ubuntu 14.04_64 IS pycharm
-            412764,  # Ubuntu 14.04_64 IS make - TODO why is this?
-            367934,  # Slackware64 14.0
-            82263,  # Linux Mint 14_64
-            85418,  # Windows 7 32bit
-            88779,  # Windows 7 64bit
-            436118,   # Jenkins ub 12.04
-            432703,  # Travis
-        ]
-        message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
-            out_path, expected_sizes, out_size)
-        self.assertIn(out_size, expected_sizes, message)
+        message = 'The custom logo path is not set correctly'
+        self.assertEqual(custom_logo_path, custom_img_path, message)
 
 
 if __name__ == '__main__':

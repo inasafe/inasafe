@@ -1,7 +1,7 @@
 # coding=utf-8
 """Tests for map creation in QGIS plugin."""
 
-__author__ = 'Tim Sutton <tim@linfiniti.com>'
+__author__ = 'Tim Sutton <tim@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '17/10/2010'
 __license__ = "GPL"

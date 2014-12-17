@@ -19,6 +19,7 @@ import unittest
 import os
 import re
 
+import qgis
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QTranslator
 
@@ -146,7 +147,8 @@ class SafeTranslationsTest(unittest.TestCase):
 
     def test_qgis_translations(self):
         """Test for qgis translations."""
-        parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)
+        parent_path = os.path.join(
+            __file__, os.path.pardir, os.path.pardir, os.path.pardir)
         dir_path = os.path.abspath(parent_path)
         file_path = os.path.join(dir_path, 'i18n', 'inasafe_id.qm')
         translator = QTranslator()

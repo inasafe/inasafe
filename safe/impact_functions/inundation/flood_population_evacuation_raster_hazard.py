@@ -1,6 +1,7 @@
 # coding=utf-8
 """Flood Evacuation Impact Function."""
 import numpy
+
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
@@ -41,6 +42,8 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 
 # noinspection PyClassHasNoInit
@@ -162,6 +165,7 @@ class FloodEvacuationFunction(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for flood population evacuation.

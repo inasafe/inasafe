@@ -1,4 +1,5 @@
 # coding=utf-8
+"""io related tests."""
 import unittest
 import numpy
 import sys
@@ -49,12 +50,14 @@ from safe.common.exceptions import (
 # Auxiliary function for raster test
 def linear_function(x, y):
     """Auxiliary function for use with raster test
+    :param x:
+    :param y:
     """
 
     return x + y / 2.
 
 
-class Test_IO(unittest.TestCase):
+class TestIO(unittest.TestCase):
     """Tests for reading and writing of raster and vector data
     """
 
@@ -95,10 +98,10 @@ class Test_IO(unittest.TestCase):
             attributes = layer.get_data()
 
             # Check basic data integrity
-            N = len(layer)
-            assert len(coords) == N
-            assert len(attributes) == N
-            assert FEATURE_COUNTS[vectorname] == N
+            n = len(layer)
+            assert len(coords) == n
+            assert len(attributes) == n
+            assert FEATURE_COUNTS[vectorname] == n
 
     test_vector_feature_count.slow = True
 
@@ -278,19 +281,19 @@ class Test_IO(unittest.TestCase):
 
         # Read real polygon with holes
         filename = '%s/%s' % (TESTDATA, '25dpolygon.shp')
-        L = read_layer(filename)
+        l = read_layer(filename)
 
         # Write this new object, read it again and check
         tmp_filename = unique_filename(suffix='.shp')
-        L.write_to_file(tmp_filename)
+        l.write_to_file(tmp_filename)
 
         # Read back
-        R = read_layer(tmp_filename)
+        r = read_layer(tmp_filename)
         msg = ('Geometry of polygon was not preserved after reading '
                'and re-writing')
 
         # Check
-        assert R == L, msg
+        assert r == l, msg
 
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
@@ -364,56 +367,56 @@ class Test_IO(unittest.TestCase):
         assert 'kw2' in V_ref.get_keywords()
 
         # Create new object from test data
-        V_new = Vector(data=data, projection=projection, geometry=geometry,
+        v_new = Vector(data=data, projection=projection, geometry=geometry,
                        keywords=V_ref.get_keywords())
 
         # Check equality operations
-        assert V_new == V_ref
-        assert not V_new != V_ref
+        assert v_new == V_ref
+        assert not v_new != V_ref
 
-        V3 = V_new.copy()
-        assert V_new == V3  # Copy is OK
+        v3 = v_new.copy()
+        assert v_new == v3  # Copy is OK
 
-        V3.data[0]['FLOOR_AREA'] += 1.0e-5
-        assert V_new == V3  # Copy is OK within tolerance
+        v3.data[0]['FLOOR_AREA'] += 1.0e-5
+        assert v_new == v3  # Copy is OK within tolerance
 
-        V3.data[0]['FLOOR_AREA'] += 1.0e-2
-        assert V_new != V3  # Copy is outside tolerance
+        v3.data[0]['FLOOR_AREA'] += 1.0e-2
+        assert v_new != v3  # Copy is outside tolerance
 
-        V3 = V_new.copy()
-        V4 = V_new.copy()
-        V3.data[0]['BUILDING_C'] = True
-        assert V4 == V3  # Booleans work
+        v3 = v_new.copy()
+        v4 = v_new.copy()
+        v3.data[0]['BUILDING_C'] = True
+        assert v4 == v3  # Booleans work
 
-        V3.data[0]['BUILDING_C'] = False
-        assert V4 != V3  # Booleans work
+        v3.data[0]['BUILDING_C'] = False
+        assert v4 != v3  # Booleans work
 
-        V3.data[0]['BUILDING_C'] = None
-        assert V4 != V3  # None works
+        v3.data[0]['BUILDING_C'] = None
+        assert v4 != v3  # None works
 
-        V3.data[0]['BUILDING_C'] = None
-        V4.data[0]['BUILDING_C'] = False
-        assert V4 == V3  # False matches None
+        v3.data[0]['BUILDING_C'] = None
+        v4.data[0]['BUILDING_C'] = False
+        assert v4 == v3  # False matches None
 
-        V3.data[0]['BUILDING_C'] = 0
-        V4.data[0]['BUILDING_C'] = False
-        assert V4 == V3  # False matches 0
+        v3.data[0]['BUILDING_C'] = 0
+        v4.data[0]['BUILDING_C'] = False
+        assert v4 == v3  # False matches 0
 
-        V3.data[0]['BUILDING_C'] = 1
-        V4.data[0]['BUILDING_C'] = True
-        assert V4 == V3  # True matches 1
+        v3.data[0]['BUILDING_C'] = 1
+        v4.data[0]['BUILDING_C'] = True
+        assert v4 == v3  # True matches 1
 
         # Write this new object, read it again and check
         tmp_filename = unique_filename(suffix='.shp')
-        V_new.write_to_file(tmp_filename)
+        v_new.write_to_file(tmp_filename)
 
-        V_tmp = read_layer(tmp_filename)
-        assert V_tmp == V_ref
-        assert not V_tmp != V_ref
+        v_tmp = read_layer(tmp_filename)
+        assert v_tmp == V_ref
+        assert not v_tmp != V_ref
 
         # Check that equality raises exception when type is wrong
         try:
-            V_tmp == Raster()
+            v_tmp == Raster()
         except TypeError:
             pass
         else:
@@ -421,10 +424,10 @@ class Test_IO(unittest.TestCase):
             raise Exception(msg)
 
         # Check that differences in keywords affect comparison
-        assert V_new == V_ref
-        V_tmp.keywords['kw2'] = 'blah'
-        assert not V_tmp == V_ref
-        assert V_tmp != V_ref
+        assert v_new == V_ref
+        v_tmp.keywords['kw2'] = 'blah'
+        assert not v_tmp == V_ref
+        assert v_tmp != V_ref
 
     def test_ordering_polygon_vertices(self):
         """Ordering of polygon vertices is preserved when writing and reading
@@ -434,12 +437,12 @@ class Test_IO(unittest.TestCase):
         tmp_filename = unique_filename(suffix='.shp')
 
         # Simple polygon (in clock wise order)
-        P = numpy.array([[106.79, -6.23],
+        p = numpy.array([[106.79, -6.23],
                          [106.80, -6.24],
                          [106.78, -6.23],
                          [106.77, -6.21]])
 
-        v_ref = Vector(geometry=[P], geometry_type='polygon')
+        v_ref = Vector(geometry=[p], geometry_type='polygon')
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
         for i in range(len(v_ref)):
@@ -454,12 +457,12 @@ class Test_IO(unittest.TestCase):
         assert v_file.geometry_type == 3
 
         # Reversed order (OGR will swap back to clockwise)
-        P = numpy.array([[106.77, -6.21],
+        p = numpy.array([[106.77, -6.21],
                          [106.78, -6.23],
                          [106.80, -6.24],
                          [106.79, -6.23]])
 
-        v_ref = Vector(geometry=[P], geometry_type='polygon')
+        v_ref = Vector(geometry=[p], geometry_type='polygon')
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
         for i in range(len(v_ref)):
@@ -474,12 +477,12 @@ class Test_IO(unittest.TestCase):
         assert v_ref.geometry_type == 3
 
         # Self intersecting polygon (in this case order will be flipped)
-        P = numpy.array([[106.79, -6.23],
+        p = numpy.array([[106.79, -6.23],
                          [106.80, -6.24],
                          [106.78, -6.23],
                          [106.79, -6.22],
                          [106.77, -6.21]])
-        v_ref = Vector(geometry=[P], geometry_type='polygon')
+        v_ref = Vector(geometry=[p], geometry_type='polygon')
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
         for i in range(len(v_ref)):
@@ -743,20 +746,20 @@ class Test_IO(unittest.TestCase):
             data.append(D)
 
         # Create new object from test data
-        V_new = Vector(data=data, projection=projection, geometry=geometry)
+        v_new = Vector(data=data, projection=projection, geometry=geometry)
 
         # Write this new object, read it again and check
         tmp_filename = unique_filename(suffix='.shp')
-        V_new.write_to_file(tmp_filename)
+        v_new.write_to_file(tmp_filename)
 
-        V_tmp = read_layer(tmp_filename)
+        v_tmp = read_layer(tmp_filename)
 
-        assert V_tmp.projection == V_new.projection
-        assert numpy.allclose(V_tmp.geometry, V_new.geometry)
-        assert V_tmp.data == V_new.data
-        assert V_tmp.get_data() == V_new.get_data()
-        assert V_tmp == V_new
-        assert not V_tmp != V_new
+        assert v_tmp.projection == v_new.projection
+        assert numpy.allclose(v_tmp.geometry, v_new.geometry)
+        assert v_tmp.data == v_new.data
+        assert v_tmp.get_data() == v_new.get_data()
+        assert v_tmp == v_new
+        assert not v_tmp != v_new
 
     def test_reading_and_writing_of_vector_polygon_data(self):
         """Vector polygon data can be read and written correctly
@@ -1137,113 +1140,115 @@ class Test_IO(unittest.TestCase):
                         AXIS["Y",NORTH]]"""
 
         geotransform = (x_ul, dx, 0, y_ul, 0, dy)
-        R1 = Raster(A1, projection, geotransform,
+        r1 = Raster(A1, projection, geotransform,
                     keywords={'testkwd': 'testval', 'size': 'small'})
 
         # Check string representation of raster class
-        assert str(R1).startswith('Raster data')
-        assert str(R1.rows) in str(R1)
-        assert str(R1.columns) in str(R1)
+        assert str(r1).startswith('Raster data')
+        assert str(r1.rows) in str(r1)
+        assert str(r1.columns) in str(r1)
 
-        assert nan_allclose(R1.get_data(), A1, rtol=1.0e-12)
-        assert nan_allclose(R1.get_geotransform(), geotransform,
+        assert nan_allclose(r1.get_data(), A1, rtol=1.0e-12)
+        assert nan_allclose(r1.get_geotransform(), geotransform,
                            rtol=1.0e-12)
-        assert 'DGN95' in R1.get_projection()
+        assert 'DGN95' in r1.get_projection()
 
     def test_reading_and_writing_of_real_rasters(self):
         """Rasters can be read and written correctly in different formats
         """
 
-        for rastername in ['Earthquake_Ground_Shaking_clip.tif',
-                           'Population_2010_clip.tif',
-                           'shakemap_padang_20090930.asc',
-                           'population_padang_1.asc',
-                           'population_padang_2.asc']:
+        for rastername in [
+            'Earthquake_Ground_Shaking_clip.tif',
+            'Population_2010_clip.tif',
+            'shakemap_padang_20090930.asc',
+            'population_padang_1.asc',
+            'population_padang_2.asc']:
 
             filename = '%s/%s' % (TESTDATA, rastername)
-            R1 = read_layer(filename)
-            assert R1.filename == filename
+            r1 = read_layer(filename)
+            assert r1.filename == filename
 
             # Check consistency of raster
-            A1 = R1.get_data()
-            M, N = A1.shape
+            a1 = r1.get_data()
+            m, n = a1.shape
 
             msg = ('Dimensions of raster array do not match those of '
-                   'raster file %s' % R1.filename)
-            assert M == R1.rows, msg
-            assert N == R1.columns, msg
+                   'raster file %s' % r1.filename)
+            assert m == r1.rows, msg
+            assert n == r1.columns, msg
 
             # Test conversion between geotransform and
             # geometry (longitudes and latitudes)
             # pylint: disable=W0633,W0632
-            longitudes, latitudes = R1.get_geometry()
+            longitudes, latitudes = r1.get_geometry()
             # pylint: enable=W0633,W0632
             gt = raster_geometry_to_geotransform(longitudes, latitudes)
             msg = ('Conversion from coordinates to geotransform failed: %s'
                    % str(gt))
-            assert numpy.allclose(gt, R1.get_geotransform(),
+            assert numpy.allclose(gt, r1.get_geotransform(),
                                   rtol=1.0e-12, atol=1.0e-12), msg
 
             # Write back to new file
             for ext in ['.tif']:  # Would like to also have , '.asc']:
                 out_filename = unique_filename(suffix=ext)
-                write_raster_data(A1,
-                                  R1.get_projection(),
-                                  R1.get_geotransform(),
-                                  out_filename,
-                                  keywords=R1.keywords)
+                write_raster_data(
+                    a1,
+                    r1.get_projection(),
+                    r1.get_geotransform(),
+                    out_filename,
+                    keywords=r1.keywords)
 
                 # Read again and check consistency
-                R2 = read_layer(out_filename)
-                assert R2.filename == out_filename
+                r2 = read_layer(out_filename)
+                assert r2.filename == out_filename
 
                 msg = ('Dimensions of written raster array do not match those '
                        'of input raster file\n')
                 msg += ('    Dimensions of input file '
-                        '%s:  (%s, %s)\n' % (R1.filename, M, N))
+                        '%s:  (%s, %s)\n' % (r1.filename, m, n))
                 msg += ('    Dimensions of output file %s: '
-                        '(%s, %s)' % (R2.filename, R2.rows, R2.columns))
+                        '(%s, %s)' % (r2.filename, r2.rows, r2.columns))
 
-                assert M == R2.rows, msg
-                assert N == R2.columns, msg
+                assert m == r2.rows, msg
+                assert n == r2.columns, msg
 
-                A2 = R2.get_data()
+                a2 = r2.get_data()
 
-                assert numpy.allclose(numpy.nanmin(A1), numpy.nanmin(A2))
-                assert numpy.allclose(numpy.nanmax(A1), numpy.nanmax(A2))
+                assert numpy.allclose(numpy.nanmin(a1), numpy.nanmin(a2))
+                assert numpy.allclose(numpy.nanmax(a1), numpy.nanmax(a2))
 
                 msg = ('Array values of written raster array were not as '
                        'expected')
-                assert nan_allclose(A1, A2), msg
+                assert nan_allclose(a1, a2), msg
 
                 msg = 'Geotransforms were different'
-                assert R1.get_geotransform() == R2.get_geotransform(), msg
+                assert r1.get_geotransform() == r2.get_geotransform(), msg
 
-                p1 = R1.get_projection(proj4=True)
-                p2 = R2.get_projection(proj4=True)
+                p1 = r1.get_projection(proj4=True)
+                p2 = r2.get_projection(proj4=True)
                 msg = 'Projections were different: %s != %s' % (p1, p2)
                 assert p1 == p1, msg
 
-                msg = 'Keywords were different: %s != %s' % (R1.keywords,
-                                                             R2.keywords)
-                assert R1.keywords == R2.keywords, msg
+                msg = 'Keywords were different: %s != %s' % (r1.keywords,
+                                                             r2.keywords)
+                assert r1.keywords == r2.keywords, msg
 
                 # Use overridden == and != to verify
-                assert R1 == R2
-                assert not R1 != R2
+                assert r1 == r2
+                assert not r1 != r2
 
                 # Check equality within tolerance
-                R3 = R1.copy()
+                r3 = r1.copy()
 
-                R3.data[-1, -1] += 1.0e-5  # This is within tolerance
-                assert R1 == R3
+                r3.data[-1, -1] += 1.0e-5  # This is within tolerance
+                assert r1 == r3
 
-                R3.data[-1, -1] += 1.0e-2  # This is outside tolerance
-                assert R1 != R3
+                r3.data[-1, -1] += 1.0e-2  # This is outside tolerance
+                assert r1 != r3
 
                 # Check that equality raises exception when type is wrong
                 try:
-                    R1 == Vector()
+                    r1 == Vector()
                 except TypeError:
                     pass
                 else:
@@ -1314,19 +1319,19 @@ class Test_IO(unittest.TestCase):
             A = R.get_data(nan=True)
 
             # Verify nodata value
-            Amin = numpy.nanmin(A.flat[:])
+            amin = numpy.nanmin(A.flat[:])
             msg = ('True raster minimum must exceed -9999. '
-                   'We got %f for file %s' % (Amin, filename))
-            assert Amin > -9999, msg
+                   'We got %f for file %s' % (amin, filename))
+            assert amin > -9999, msg
 
             # Then try with a number
             A = R.get_data(nan=-100000)
 
             # Verify nodata value
-            Amin = numpy.nanmin(A.flat[:])
+            amin = numpy.nanmin(A.flat[:])
             msg = ('Raster must have -100000 as its minimum for this test. '
-                   'We got %f for file %s' % (Amin, filename))
-            assert Amin == -100000, msg
+                   'We got %f for file %s' % (amin, filename))
+            assert amin == -100000, msg
 
             # Try with illegal nan values
             for illegal in [{}, (), [], None, 'a', 'oeuu']:
@@ -1405,23 +1410,23 @@ class Test_IO(unittest.TestCase):
             minimum, maximum = R.get_extrema()
 
             # Check that arrays with NODATA value replaced by NaN's agree
-            A = R.get_data(nan=False)
-            B = R.get_data(nan=True)
+            a = R.get_data(nan=False)
+            b = R.get_data(nan=True)
 
-            assert A.dtype == B.dtype
-            assert numpy.nanmax(A - B) == 0
-            assert numpy.nanmax(B - A) == 0
-            assert numpy.nanmax(numpy.abs(A - B)) == 0
+            assert a.dtype == b.dtype
+            assert numpy.nanmax(a - b) == 0
+            assert numpy.nanmax(b - a) == 0
+            assert numpy.nanmax(numpy.abs(a - b)) == 0
 
             # Check that extrema are OK
-            assert numpy.allclose(maximum, numpy.nanmax(A[:]))
-            assert numpy.allclose(maximum, numpy.nanmax(B[:]))
-            assert numpy.allclose(minimum, numpy.nanmin(B[:]))
+            assert numpy.allclose(maximum, numpy.nanmax(a[:]))
+            assert numpy.allclose(maximum, numpy.nanmax(b[:]))
+            assert numpy.allclose(minimum, numpy.nanmin(b[:]))
 
             # Check that nodata can be replaced by 0.0
-            C = R.get_data(nan=0.0)
+            c = R.get_data(nan=0.0)
             msg = '-9999 should have been replaced by 0.0 in %s' % rastername
-            assert min(C.flat[:]) != -9999, msg
+            assert min(c.flat[:]) != -9999, msg
 
     test_raster_extrema.slow = True
 
@@ -1494,13 +1499,13 @@ class Test_IO(unittest.TestCase):
         # Check data directly
         coordinates, values = R.to_vector_points()
         longitudes, latitudes = R.get_geometry()  # pylint: disable=W0633,W0632
-        A = R.get_data()
-        M, N = A.shape
+        a = R.get_data()
+        M, N = a.shape
         L = M * N
 
         assert numpy.allclose(coordinates[:N, 0], longitudes)
         assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
-        assert nan_allclose(A.flat[:], values)
+        assert nan_allclose(a.flat[:], values)
 
         # Generate vector layer
         V = R.to_vector_layer()
@@ -1517,19 +1522,19 @@ class Test_IO(unittest.TestCase):
         # Check against cells that were verified manually using QGIS
         assert numpy.allclose(geometry[5], [96.97137053, -5.34965715])
         assert numpy.allclose(attributes[5]['value'], 3)
-        assert numpy.allclose(attributes[5]['value'], A[1, 0])
+        assert numpy.allclose(attributes[5]['value'], a[1, 0])
 
         assert numpy.allclose(geometry[11], [97.0021116, -5.38039821])
         assert numpy.allclose(attributes[11]['value'], -50.6014, rtol=1.0e-6)
-        assert numpy.allclose(attributes[11]['value'], A[2, 1], rtol=1.0e-6)
+        assert numpy.allclose(attributes[11]['value'], a[2, 1], rtol=1.0e-6)
 
         assert numpy.allclose(geometry[16], [97.0021116, -5.411139276])
         assert numpy.allclose(attributes[16]['value'], -15, rtol=1.0e-6)
-        assert numpy.allclose(attributes[16]['value'], A[3, 1], rtol=1.0e-6)
+        assert numpy.allclose(attributes[16]['value'], a[3, 1], rtol=1.0e-6)
 
         assert numpy.allclose(geometry[23], [97.06359372, -5.44188034])
         assert numpy.isnan(attributes[23]['value'])
-        assert numpy.isnan(A[4, 3])
+        assert numpy.isnan(a[4, 3])
 
     def test_raster_to_vector_points2(self):
         """Raster layers can be converted to vector point layers (real data)
@@ -1950,7 +1955,8 @@ class Test_IO(unittest.TestCase):
         assert numpy.allclose(bbox_intersection(west_java, jakarta), jakarta)
 
         # Ignore Bounding Boxes that are None
-        assert numpy.allclose(bbox_intersection(west_java, jakarta, None),
+        assert numpy.allclose(
+            bbox_intersection(west_java, jakarta, None),
             jakarta)
 
         # Realistic ones
@@ -2142,117 +2148,117 @@ class Test_IO(unittest.TestCase):
         """
 
         # Create closed simple polygon (counter clock wise)
-        P = numpy.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]])
-        A = calculate_polygon_area(P)
-        msg = 'Calculated area was %f, expected 1.0 deg^2' % A
-        assert numpy.allclose(A, 1), msg
+        p = numpy.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]])
+        a = calculate_polygon_area(p)
+        msg = 'Calculated area was %f, expected 1.0 deg^2' % a
+        assert numpy.allclose(a, 1), msg
 
         # Create closed simple polygon (clock wise)
-        P = numpy.array([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]])
-        A = calculate_polygon_area(P)
-        msg = 'Calculated area was %f, expected 1.0 deg^2' % A
-        assert numpy.allclose(A, 1), msg
+        p = numpy.array([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]])
+        a = calculate_polygon_area(p)
+        msg = 'Calculated area was %f, expected 1.0 deg^2' % a
+        assert numpy.allclose(a, 1), msg
 
-        A = calculate_polygon_area(P, signed=True)
-        msg = 'Calculated signed area was %f, expected -1.0 deg^2' % A
-        assert numpy.allclose(A, -1), msg
+        a = calculate_polygon_area(p, signed=True)
+        msg = 'Calculated signed area was %f, expected -1.0 deg^2' % a
+        assert numpy.allclose(a, -1), msg
 
         # Not starting at zero
         # Create closed simple polygon (counter clock wise)
-        P = numpy.array([[168, -2], [169, -2], [169, -1],
+        p = numpy.array([[168, -2], [169, -2], [169, -1],
                          [168, -1], [168, -2]])
-        A = calculate_polygon_area(P)
+        a = calculate_polygon_area(p)
 
-        msg = 'Calculated area was %f, expected 1.0 deg^2' % A
-        assert numpy.allclose(A, 1), msg
+        msg = 'Calculated area was %f, expected 1.0 deg^2' % a
+        assert numpy.allclose(a, 1), msg
 
         # Realistic polygon
         filename = '%s/%s' % (TESTDATA, 'test_polygon.shp')
         layer = read_layer(filename)
         geometry = layer.get_geometry()
 
-        P = geometry[0]
-        A = calculate_polygon_area(P)
+        p = geometry[0]
+        a = calculate_polygon_area(p)
 
         # Verify against area reported by qgis (only three decimals)
         qgis_area = 0.003
-        assert numpy.allclose(A, qgis_area, atol=1.0e-3)
+        assert numpy.allclose(a, qgis_area, atol=1.0e-3)
 
         # Verify against area reported by ESRI ARC (very good correspondence)
         esri_area = 2.63924787273461e-3
-        assert numpy.allclose(A, esri_area, rtol=0, atol=1.0e-10)
+        assert numpy.allclose(a, esri_area, rtol=0, atol=1.0e-10)
 
     def test_polygon_centroids(self):
         """Polygon centroids are computed correctly
         """
 
         # Create closed simple polygon (counter clock wise)
-        P = numpy.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]])
-        C = calculate_polygon_centroid(P)
+        p = numpy.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]])
+        c = calculate_polygon_centroid(p)
 
         msg = ('Calculated centroid was (%f, %f), expected '
-               '(0.5, 0.5)' % tuple(C))
-        assert numpy.allclose(C, [0.5, 0.5]), msg
+               '(0.5, 0.5)' % tuple(c))
+        assert numpy.allclose(c, [0.5, 0.5]), msg
 
         # Create closed simple polygon (clock wise)
         # FIXME (Ole): Not sure whether to raise an exception or
         #              to return absolute value in this case
-        P = numpy.array([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]])
-        C = calculate_polygon_centroid(P)
+        p = numpy.array([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]])
+        c = calculate_polygon_centroid(p)
 
         msg = ('Calculated centroid was (%f, %f), expected '
-               '(0.5, 0.5)' % tuple(C))
-        assert numpy.allclose(C, [0.5, 0.5]), msg
+               '(0.5, 0.5)' % tuple(c))
+        assert numpy.allclose(c, [0.5, 0.5]), msg
 
         # Not starting at zero
         # Create closed simple polygon (counter clock wise)
-        P = numpy.array([[168, -2], [169, -2], [169, -1],
+        p = numpy.array([[168, -2], [169, -2], [169, -1],
                          [168, -1], [168, -2]])
-        C = calculate_polygon_centroid(P)
+        c = calculate_polygon_centroid(p)
 
         msg = ('Calculated centroid was (%f, %f), expected '
-               '(168.5, -1.5)' % tuple(C))
-        assert numpy.allclose(C, [168.5, -1.5]), msg
+               '(168.5, -1.5)' % tuple(c))
+        assert numpy.allclose(c, [168.5, -1.5]), msg
 
         # Realistic polygon
         filename = '%s/%s' % (TESTDATA, 'test_polygon.shp')
         layer = read_layer(filename)
         geometry = layer.get_geometry()
 
-        P = geometry[0]
-        C = calculate_polygon_centroid(P)
+        p = geometry[0]
+        c = calculate_polygon_centroid(p)
 
         # Check against reference centroid
         reference_centroid = [106.7036938, -6.134533855]  # From qgis
-        assert numpy.allclose(C, reference_centroid, rtol=1.0e-8)
+        assert numpy.allclose(c, reference_centroid, rtol=1.0e-8)
 
         # Store centroid to file (to e.g. check with qgis)
         out_filename = unique_filename(prefix='test_centroid', suffix='.shp')
         V = Vector(data=None,
                    projection=DEFAULT_PROJECTION,
-                   geometry=[C],
+                   geometry=[c],
                    name='Test centroid')
         V.write_to_file(out_filename)
 
         # Another realistic polygon
-        P = numpy.array([[106.7922547, -6.2297884],
+        p = numpy.array([[106.7922547, -6.2297884],
                          [106.7924589, -6.2298087],
                          [106.7924538, -6.2299127],
                          [106.7922547, -6.2298899],
                          [106.7922547, -6.2297884]])
 
-        C = calculate_polygon_centroid(P)
+        c = calculate_polygon_centroid(p)
 
         # Check against reference centroid from qgis
         reference_centroid = [106.79235602697445, -6.229849764722536]
-        msg = 'Got %s but expected %s' % (str(C), str(reference_centroid))
-        assert numpy.allclose(C, reference_centroid, rtol=1.0e-8), msg
+        msg = 'Got %s but expected %s' % (str(c), str(reference_centroid))
+        assert numpy.allclose(c, reference_centroid, rtol=1.0e-8), msg
 
         # Store centroid to file (to e.g. check with qgis)
         out_filename = unique_filename(prefix='test_centroid', suffix='.shp')
         V = Vector(data=None,
                    projection=DEFAULT_PROJECTION,
-                   geometry=[C],
+                   geometry=[c],
                    name='Test centroid')
         V.write_to_file(out_filename)
 
@@ -2261,47 +2267,49 @@ class Test_IO(unittest.TestCase):
         """
         delta = 1
         # Create simple line
-        L = numpy.array([[0, 0], [2, 0]])
-        V = points_along_line(L, 1)
+        l = numpy.array([[0, 0], [2, 0]])
+        v = points_along_line(l, 1)
 
-        expected_V = [[0, 0], [1, 0], [2, 0]]
+        expected_v = [[0, 0], [1, 0], [2, 0]]
         msg = ('Calculated points were %s, expected '
-               '%s' % (V, expected_V))
-        assert numpy.allclose(V, expected_V), msg
+               '%s' % (v, expected_v))
+        assert numpy.allclose(v, expected_v), msg
 
         # Not starting at zero
         # Create line
-        L2 = numpy.array([[168, -2], [170, -2], [170, 0]])
-        V2 = points_along_line(L2, delta)
+        l2 = numpy.array([[168, -2], [170, -2], [170, 0]])
+        v2 = points_along_line(l2, delta)
 
-        expected_V2 = [[168, -2], [169, -2], [170, -2],
+        expected_v2 = [[168, -2], [169, -2], [170, -2],
                       [170, -1], [170, 0]]
         msg = ('Calculated points were %s, expected '
-               '%s' % (V2, expected_V2))
-        assert numpy.allclose(V2, expected_V2), msg
+               '%s' % (v2, expected_v2))
+        assert numpy.allclose(v2, expected_v2), msg
 
         # Realistic polygon
         filename = '%s/%s' % (TESTDATA, 'indonesia_highway_sample.shp')
         layer = read_layer(filename)
         geometry = layer.get_geometry()
 
-        P = geometry[0]
-        C = points_along_line(P, delta)
+        p = geometry[0]
+        c = points_along_line(p, delta)
 
         # Check against reference centroid
-        expected_v = [[106.7168975, -6.15530081],
-                      [106.85224176, -6.15344678],
-                      [106.93660016, -6.21370279]]
-        assert numpy.allclose(C, expected_v, rtol=1.0e-8)
+        expected_v = [
+            [106.7168975, -6.15530081],
+            [106.85224176, -6.15344678],
+            [106.93660016, -6.21370279]]
+        assert numpy.allclose(c, expected_v, rtol=1.0e-8)
 
         # Store points to file (to e.g. check with qgis)
         out_filename = unique_filename(prefix='test_points_along_line',
                                        suffix='.shp')
-        V = Vector(data=None,
+        # noinspection PyArgumentEqualDefault
+        v = Vector(data=None,
                    projection=DEFAULT_PROJECTION,
-                   geometry=[C],
+                   geometry=[c],
                    name='Test points_along_line')
-        V.write_to_file(out_filename)
+        v.write_to_file(out_filename)
 
     def test_geotransform2bbox(self):
         """Bounding box can be extracted from geotransform
@@ -2432,6 +2440,7 @@ class Test_IO(unittest.TestCase):
     @numpy.testing.dec.skipif(sys.platform == 'darwin', 'Fails in OSX, #198')
     def test_i18n(self):
         """Test to see if internationalisation is working correctly.
+
         Make sure to include this file when using xgettext to scan for
         translatable strings.
         .. see:: :doc:`/developer-docs/i18n`
@@ -2589,6 +2598,6 @@ class Test_IO(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test')
+    suite = unittest.makeSuite(TestIO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.4.0'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'

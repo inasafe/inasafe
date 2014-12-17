@@ -17,13 +17,13 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = (
     'Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
     'Copyright (c) 2011 German Carrillo, geotux_tuxman@linuxmail.org'
-    'Copyright (c) 2014 Tim Sutton, tim@linfiniti.com'
+    'Copyright (c) 2014 Tim Sutton, tim@kartoza.com'
 )
 
 import logging

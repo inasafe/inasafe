@@ -5,29 +5,18 @@ import sys
 import os
 from unittest import expectedFailure
 
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QVariant
+# noinspection PyUnresolvedReferences
+import qgis
 
 from safe.common.testing import get_qgis_app
 from safe.utilities.utilities import (
     get_error_message,
-    qgis_version,
-    mm_to_points,
-    points_to_mm,
     humanise_seconds,
-    is_polygon_layer,
-    layer_attribute_names,
-    impact_attribution,
-    dpi_to_meters,
-    qt_at_least,
-    html_header,
-    resources_path)
+    impact_attribution)
+from safe.utilities.gis import qgis_version
 from safe.utilities.utilities_for_testing import (
     TEST_FILES_DIR)
-from safe.tools.test.test_keywords_dialog import (
-    make_polygon_layer,
-    clone_padang_layer,
-    make_point_layer)
+
 from safe.storage.utilities import bbox_intersection
 
 # In our tests, we need to have this line below before importing any other
@@ -89,71 +78,6 @@ class UtilitiesTest(unittest.TestCase):
         message = 'Got version %s of QGIS, but at least 107000 is needed'
         assert version > 10700, message
 
-    def test_get_layer_attribute_names(self):
-        """Test we can get the correct attributes back"""
-        layer = make_polygon_layer()
-
-        # with good attribute name
-        attributes, position = layer_attribute_names(
-            layer,
-            [QVariant.Int, QVariant.String], 'TEST_STRIN')  # Not a typo...
-        expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
-        expected_position = 2
-        message = 'expected_attributes, got %s, expected %s' % (
-            attributes, expected_attributes)
-        assert (attributes == expected_attributes), message
-        message = 'expected_position, got %s, expected %s' % (
-            position, expected_position)
-        assert (position == expected_position), message
-
-        # with non existing attribute name
-        attributes, position = layer_attribute_names(
-            layer,
-            [QVariant.Int, QVariant.String],
-            'MISSING_ATTR')
-        expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
-        expected_position = None
-        message = 'expected_attributes, got %s, expected %s' % (
-            attributes, expected_attributes)
-        assert (attributes == expected_attributes), message
-        message = 'expected_position, got %s, expected %s' % (
-            position, expected_position)
-        assert (position == expected_position), message
-
-        # with raster layer
-        layer, _ = clone_padang_layer()
-        attributes, position = layer_attribute_names(layer, [], '')
-        message = 'Should return None, None for raster layer, got %s, %s' % (
-            attributes, position)
-        assert (attributes is None and position is None), message
-
-    def test_is_polygonal_layer(self):
-        """Test we can get the correct attributes back"""
-        layer = make_polygon_layer()
-        message = 'isPolygonLayer, %s layer should be polygonal' % layer
-        assert is_polygon_layer(layer), message
-
-        layer = make_point_layer()
-        message = '%s layer should be polygonal' % layer
-        assert not is_polygon_layer(layer), message
-
-        layer, _ = clone_padang_layer()
-        message = ('%s raster layer should not be polygonal' % layer)
-        assert not is_polygon_layer(layer), message
-
-    def test_mm_to_points(self):
-        """Test that conversions between pixel and page dimensions work."""
-
-        dpi = 300
-        pixels = 300
-        mm = 25.4  # 1 inch
-        result = points_to_mm(pixels, dpi)
-        message = "Expected: %s\nGot: %s" % (mm, result)
-        assert result == mm, message
-        result = mm_to_points(mm, dpi)
-        message = "Expected: %s\nGot: %s" % (pixels, result)
-        assert result == pixels, message
-
     def test_humanize_seconds(self):
         """Test that humanise seconds works."""
         self.assertEqual(humanise_seconds(5), '5 seconds')
@@ -190,56 +114,6 @@ class UtilitiesTest(unittest.TestCase):
 
         # Set back to en
         os.environ['LANG'] = 'en'
-
-    def test_dpi_to_meters(self):
-        """Test conversion from dpi to dpm."""
-        dpi = 300
-        dpm = dpi_to_meters(dpi)
-        expected_dpm = 11811.023622
-        message = (
-            'Conversion from dpi to dpm failed\n'
-            ' Got: %s Expected: %s\n' %
-            (dpm, expected_dpm))
-        self.assertAlmostEqual(dpm, expected_dpm, msg=message)
-
-    def test_qt_at_least(self):
-        """Test that we can compare the installed qt version"""
-        # simulate 4.7.2 installed
-        test_version = 0x040702
-
-        assert qt_at_least('4.6.4', test_version)
-        assert qt_at_least('4.7.2', test_version)
-        assert not qt_at_least('4.8.4', test_version)
-
-    def test_html_footer(self):
-        """Test that we can get the html footer.
-
-        .. versionadded:: 3.0
-        """
-        footer = html_header()
-        self.assertTrue('bootstrap' in footer)
-
-    def test_html_header(self):
-        """Test that we can get the html header.
-
-        .. versionadded:: 3.0
-        """
-        header = html_header()
-        self.assertTrue(
-            'bootstrap' in header,
-            'bootstrap not in ' + header)
-
-    def test_resources_path(self):
-        """Test we can get the path to the resources dir nicely.
-
-        ..versionadded:: 3.0
-        """
-        path = resources_path()
-        css_path = os.path.join(path, 'css', 'bootstrap.css')
-        self.assertTrue(
-            os.path.exists(css_path),
-            css_path + ' does not exist')
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)

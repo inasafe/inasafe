@@ -11,7 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -21,35 +22,21 @@ import os
 import sys
 import traceback
 import logging
-import uuid
 import webbrowser
 import unicodedata
 
-from qgis.core import (
-    QGis,
-    QgsRasterLayer,
-    QgsMapLayer,
-    QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform,
-    QgsVectorLayer)
-
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui, Qt
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication
 
 from safe.storage.utilities import read_keywords
-from safe.storage.layer import Layer
-from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import write_keywords as safe_write_keywords
 from safe.common.exceptions import (
-    MemoryLayerCreationError,
     InvalidParameterError,
     NoKeywordsFoundError,
     KeywordNotFoundError)
 from safe.common.utilities import (
     unique_filename,
-    ugettext as safeTr)
+    ugettext as safe_tr)
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.impact_functions.core import get_plugins
@@ -123,304 +110,6 @@ def get_error_message(exception, context=None, suggestion=None):
     return error_message
 
 
-def get_wgs84_resolution(layer):
-    """Return resolution of raster layer in EPSG:4326.
-
-    If input layer is already in EPSG:4326, simply return the resolution
-    If not, work it out based on EPSG:4326 representations of its extent.
-
-    :param layer: Raster layer
-    :type layer: QgsRasterLayer or QgsMapLayer
-
-    :returns: The resolution of the given layer in the form of (res_x, res_y)
-    :rtype: tuple
-    """
-
-    msg = tr(
-        'Input layer to get_wgs84_resolution must be a raster layer. '
-        'I got: %s' % str(layer.type())[1:-1])
-
-    if not layer.type() == QgsMapLayer.RasterLayer:
-        raise RuntimeError(msg)
-
-    if layer.crs().authid() == 'EPSG:4326':
-        cell_size = (
-            layer.rasterUnitsPerPixelX(), layer.rasterUnitsPerPixelY())
-    else:
-        # Otherwise, work it out based on EPSG:4326 representations of
-        # its extent
-
-        # Reproject extent to EPSG:4326
-        geo_crs = QgsCoordinateReferenceSystem()
-        geo_crs.createFromSrid(4326)
-        transform = QgsCoordinateTransform(layer.crs(), geo_crs)
-        extent = layer.extent()
-        projected_extent = transform.transformBoundingBox(extent)
-
-        # Estimate resolution x
-        columns = layer.width()
-        width = abs(
-            projected_extent.xMaximum() -
-            projected_extent.xMinimum())
-        cell_size_x = width / columns
-
-        # Estimate resolution y
-        rows = layer.height()
-        height = abs(
-            projected_extent.yMaximum() -
-            projected_extent.yMinimum())
-        cell_size_y = height / rows
-
-        cell_size = (cell_size_x, cell_size_y)
-
-    return cell_size
-
-
-def resources_path():
-    """Get the path to our resources folder.
-
-    .. versionadded:: 3.0
-
-    Note that in version 3.0 we removed the use of Qt Resource files in
-    favour of directly accessing on-disk resources.
-
-    :return: Absolute path to the resources folder.
-    :rtype: str
-    """
-    path = __file__
-    path = os.path.join(path, os.pardir, os.pardir, 'resources')
-    path = os.path.abspath(path)
-    return path
-
-
-def html_header():
-    """Get a standard html header for wrapping content in.
-
-    :returns: A header containing a web page preamble in html - up to and
-        including the body open tag.
-    :rtype: str
-    """
-    file_path = os.path.join(resources_path(), 'header.html')
-    with file(file_path) as header_file:
-        content = header_file.read()
-        content = content.replace('PATH', resources_path())
-    return content
-
-
-def html_footer():
-    """Get a standard html footer for wrapping content in.
-
-    :returns: A header containing a web page closing content in html - up to
-        and including the body close tag.
-    :rtype: str
-    """
-    file_path = os.path.join(resources_path(), 'footer.html')
-    with file(file_path) as header_file:
-        content = header_file.read()
-    return content
-
-
-def qgis_version():
-    """Get the version of QGIS.
-
-    :returns: QGIS Version where 10700 represents QGIS 1.7 etc.
-    :rtype: int
-    """
-    version = unicode(QGis.QGIS_VERSION_INT)
-    version = int(version)
-    return version
-
-
-def layer_attribute_names(layer, allowed_types, current_keyword=None):
-    """Iterates over the layer and returns int or string fields.
-
-    :param layer: A vector layer whose attributes shall be returned.
-    :type layer: QgsVectorLayer, QgsMapLayer
-
-    :param allowed_types: List of QVariant that are acceptable for the
-        attribute. e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String].
-    :type allowed_types: list(QVariant)
-
-    :param current_keyword: The currently stored keyword for the attribute.
-    :type current_keyword: str
-
-    :returns: A two-tuple containing all the attribute names of attributes
-        that have int or string as field type (first element) and the position
-        of the current_keyword in the attribute names list, this is None if
-        current_keyword is not in the list of attributes (second element).
-    :rtype: tuple(list(str), int)
-    """
-
-    if layer.type() == QgsMapLayer.VectorLayer:
-        provider = layer.dataProvider()
-        provider = provider.fields()
-        fields = []
-        selected_index = None
-        i = 0
-        for f in provider:
-            # show only int or string fields to be chosen as aggregation
-            # attribute other possible would be float
-            if f.type() in allowed_types:
-                current_field_name = f.name()
-                fields.append(current_field_name)
-                if current_keyword == current_field_name:
-                    selected_index = i
-                i += 1
-        return fields, selected_index
-    else:
-        return None, None
-
-
-def create_memory_layer(layer, new_name=''):
-    """Return a memory copy of a layer
-
-    :param layer: QgsVectorLayer that shall be copied to memory.
-    :type layer: QgsVectorLayer
-
-    :param new_name: The name of the copied layer.
-    :type new_name: str
-
-    :returns: An in-memory copy of a layer.
-    :rtype: QgsMapLayer
-    """
-
-    if new_name is '':
-        new_name = layer.name() + ' TMP'
-
-    if layer.type() == QgsMapLayer.VectorLayer:
-        vector_type = layer.geometryType()
-        if vector_type == QGis.Point:
-            type_string = 'Point'
-        elif vector_type == QGis.Line:
-            type_string = 'Line'
-        elif vector_type == QGis.Polygon:
-            type_string = 'Polygon'
-        else:
-            raise MemoryLayerCreationError('Layer is whether Point nor '
-                                           'Line nor Polygon')
-    else:
-        raise MemoryLayerCreationError('Layer is not a VectorLayer')
-
-    crs = layer.crs().authid().lower()
-    uuid_string = str(uuid.uuid4())
-    uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, uuid_string)
-    memory_layer = QgsVectorLayer(uri, new_name, 'memory')
-    memory_provider = memory_layer.dataProvider()
-
-    provider = layer.dataProvider()
-    vector_fields = provider.fields()
-
-    fields = []
-    for i in vector_fields:
-        fields.append(i)
-
-    memory_provider.addAttributes(fields)
-
-    for ft in provider.getFeatures():
-        memory_provider.addFeatures([ft])
-
-    return memory_layer
-
-
-def mm_to_points(mm, dpi):
-    """Convert measurement in mm to one in points.
-
-    :param mm: A distance in millimeters.
-    :type mm: int, float
-
-    :returns: mm converted value as points.
-    :rtype: int, float
-
-    :param dpi: Dots per inch to use for the calculation (based on in the
-        print / display medium).
-    :type dpi: int, float
-
-    """
-    inch_as_mm = 25.4
-    points = (mm * dpi) / inch_as_mm
-    return points
-
-
-def points_to_mm(points, dpi):
-    """Convert measurement in points to one in mm.
-
-    :param points: A distance in points.
-    :type points: int
-
-    :param dpi: Dots per inch to use for the calculation (based on in the
-        print / display medium).
-    :type dpi: int
-
-    :returns: points converted value as mm.
-    :rtype: int
-    """
-    inch_as_mm = 25.4
-    mm = (float(points) / dpi) * inch_as_mm
-    return mm
-
-
-def dpi_to_meters(dpi):
-    """Convert dots per inch (dpi) to dots per meters.
-
-    :param dpi: Dots per inch in the print / display medium.
-    :type dpi: int, float
-
-    :returns: dpi converted value.
-    :rtype: int
-    """
-    inch_as_mm = 25.4
-    inches_per_m = 1000.0 / inch_as_mm
-    dots_per_m = inches_per_m * dpi
-    return dots_per_m
-
-
-def setup_printer(
-        filename,
-        resolution=300,
-        page_height=297,
-        page_width=210,
-        page_margin=None):
-    """Create a QPrinter instance defaulted to print to an A4 portrait pdf.
-
-    :param filename: Filename for the pdf print device.
-    :type filename: str
-
-    :param resolution: Resolution (in dpi) for the output.
-    :type resolution: int
-
-    :param page_height: Height of the page in mm.
-    :type page_height: int
-
-    :param page_width: Width of the page in mm.
-    :type page_width: int
-
-    :param page_margin: Page margin in mm in form [left, top, right, bottom].
-    :type page_margin: list
-    """
-    #
-    # Create a printer device (we are 'printing' to a pdf
-    #
-    LOGGER.debug('InaSAFE Map setupPrinter called')
-    printer = QtGui.QPrinter()
-    printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
-    printer.setOutputFileName(filename)
-    printer.setPaperSize(
-        QtCore.QSizeF(page_width, page_height),
-        QtGui.QPrinter.Millimeter)
-    printer.setColorMode(QtGui.QPrinter.Color)
-    printer.setResolution(resolution)
-
-    if page_margin is None:
-        page_margin = [10, 10, 10, 10]
-    printer.setPageMargins(
-        page_margin[0],
-        page_margin[1],
-        page_margin[2],
-        page_margin[3],
-        QtGui.QPrinter.Millimeter)
-    return printer
-
-
 def humanise_seconds(seconds):
     """Utility function to humanise seconds value into e.g. 10 seconds ago.
 
@@ -484,13 +173,13 @@ def impact_attribution(keywords, inasafe_flag=False):
 
     if hazard_title_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        hazard_title = safeTr(keywords[hazard_title_keywords])
+        hazard_title = safe_tr(keywords[hazard_title_keywords])
     else:
         hazard_title = tr('Hazard layer')
 
     if hazard_source_keywords in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
-        hazard_source = safeTr(keywords[hazard_source_keywords])
+        hazard_source = safe_tr(keywords[hazard_source_keywords])
     else:
         hazard_source = tr('an unknown source')
 
@@ -558,207 +247,6 @@ def add_ordered_combo_item(combo, text, data=None):
     combo.insertItem(size, text, data)
 
 
-def is_polygon_layer(layer):
-    """Check if a QGIS layer is vector and its geometries are polygons.
-
-    :param layer: A vector layer.
-    :type layer: QgsVectorLayer, QgsMapLayer
-
-    :returns: True if the layer contains polygons, otherwise False.
-    :rtype: bool
-
-    """
-    try:
-        return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QGis.Polygon)
-    except AttributeError:
-        return False
-
-
-def is_point_layer(layer):
-    """Check if a QGIS layer is vector and its geometries are points.
-
-    :param layer: A vector layer.
-    :type layer: QgsVectorLayer, QgsMapLayer
-
-    :returns: True if the layer contains points, otherwise False.
-    :rtype: bool
-    """
-    try:
-        return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QGis.Point)
-    except AttributeError:
-        return False
-
-
-def is_raster_layer(layer):
-    """Check if a QGIS layer is raster.
-
-    :param layer: A layer.
-    :type layer: QgsRaster, QgsMapLayer, QgsVectorLayer
-
-    :returns: True if the layer contains polygons, otherwise False.
-    :rtype: bool
-    """
-    try:
-        return layer.type() == QgsMapLayer.RasterLayer
-    except AttributeError:
-        return False
-
-
-def extent_string_to_array(extent_text):
-    """Convert an extent string to an array.
-
-    .. versionadded: 2.2.0
-
-    :param extent_text: String representing an extent e.g.
-        109.829170982, -8.13333290561, 111.005344795, -7.49226294379
-    :type extent_text: str
-
-    :returns: A list of floats, or None
-    :rtype: list, None
-    """
-    coordinates = extent_text.replace(' ', '').split(',')
-    count = len(coordinates)
-    if count != 4:
-        message = (
-            'Extent need exactly 4 value but got %s instead' % count)
-        LOGGER.error(message)
-        return None
-
-    # parse the value to float type
-    try:
-        coordinates = [float(i) for i in coordinates]
-    except ValueError as e:
-        message = e.message
-        LOGGER.error(message)
-        return None
-    return coordinates
-
-
-def extent_to_array(extent, source_crs, dest_crs=None):
-    """Convert the supplied extent to geographic and return as an array.
-
-    :param extent: Rectangle defining a spatial extent in any CRS.
-    :type extent: QgsRectangle
-
-    :param source_crs: Coordinate system used for input extent.
-    :type source_crs: QgsCoordinateReferenceSystem
-
-    :param dest_crs: Coordinate system used for output extent. Defaults to
-        EPSG:4326 if not specified.
-    :type dest_crs: QgsCoordinateReferenceSystem
-
-    :returns: a list in the form [xmin, ymin, xmax, ymax] where all
-            coordinates provided are in Geographic / EPSG:4326.
-    :rtype: list
-
-    """
-
-    if dest_crs is None:
-        geo_crs = QgsCoordinateReferenceSystem()
-        geo_crs.createFromSrid(4326)
-    else:
-        geo_crs = dest_crs
-
-    transform = QgsCoordinateTransform(source_crs, geo_crs)
-
-    # Get the clip area in the layer's crs
-    transformed_extent = transform.transformBoundingBox(extent)
-
-    geo_extent = [
-        transformed_extent.xMinimum(),
-        transformed_extent.yMinimum(),
-        transformed_extent.xMaximum(),
-        transformed_extent.yMaximum()]
-    return geo_extent
-
-
-def viewport_geo_array(map_canvas):
-    """Obtain the map canvas current extent in EPSG:4326.
-
-    :param map_canvas: A map canvas instance.
-    :type map_canvas: QgsMapCanvas
-
-    :returns: A list in the form [xmin, ymin, xmax, ymax] where all
-        coordinates provided are in Geographic / EPSG:4326.
-    :rtype: list
-
-    .. note:: Delegates to extent_to_array()
-    """
-
-    # get the current viewport extent
-    rectangle = map_canvas.extent()
-
-    destination_crs = QgsCoordinateReferenceSystem()
-    destination_crs.createFromSrid(4326)
-
-    if map_canvas.hasCrsTransformEnabled():
-        source_crs = map_canvas.mapRenderer().destinationCrs()
-    else:
-        source_crs = destination_crs
-
-    return extent_to_array(rectangle, source_crs, destination_crs)
-
-
-def read_impact_layer(impact_layer):
-    """Helper function to read and validate a safe native spatial layer.
-
-    :param impact_layer: Layer object as provided by InaSAFE engine.
-    :type impact_layer: read_layer
-
-    :returns: Valid QGIS layer or None
-    :rtype: None, QgsRasterLayer, QgsVectorLayer
-    """
-
-    # noinspection PyUnresolvedReferences
-    message = tr(
-        'Input layer must be a InaSAFE spatial object. '
-        'I got %s') % (str(type(impact_layer)))
-    if not hasattr(impact_layer, 'is_inasafe_spatial_object'):
-        raise Exception(message)
-    if not impact_layer.is_inasafe_spatial_object:
-        raise Exception(message)
-
-    # Get associated filename and symbolic name
-    file_name = impact_layer.get_filename()
-    name = impact_layer.get_name()
-
-    qgis_layer = None
-    # Read layer
-    if impact_layer.is_vector:
-        qgis_layer = QgsVectorLayer(file_name, name, 'ogr')
-    elif impact_layer.is_raster:
-        qgis_layer = QgsRasterLayer(file_name, name)
-
-    # Verify that new qgis layer is valid
-    if qgis_layer.isValid():
-        return qgis_layer
-    else:
-        # noinspection PyUnresolvedReferences
-        message = tr(
-            'Loaded impact layer "%s" is not valid') % file_name
-        raise Exception(message)
-
-
-def convert_to_safe_layer(layer):
-    """Thin wrapper around the safe read_layer function.
-
-    Args:
-        layer - QgsMapLayer or Safe layer.
-    Returns:
-        A safe read_safe_layer object is returned.
-    Raises:
-        Any exceptions are propagated
-    """
-    if isinstance(layer, Layer):
-        return layer
-    try:
-        return safe_read_layer(layer.source())
-    except:
-        raise
-
-
 def open_in_browser(file_path):
     """Open a file in the default web browser.
 
@@ -791,33 +279,6 @@ def html_to_file(html, file_path=None, open_browser=False):
 
     if open_browser:
         open_in_browser(file_path)
-
-
-def qt_at_least(needed_version, test_version=None):
-    """Check if the installed Qt version is greater than the requested
-
-    :param needed_version: minimally needed Qt version in format like 4.8.4
-    :type needed_version: str
-
-    :param test_version: Qt version as returned from Qt.QT_VERSION. As in
-     0x040100 This is used only for tests
-    :type test_version: int
-
-    :returns: True if the installed Qt version is greater than the requested
-    :rtype: bool
-    """
-    major, minor, patch = needed_version.split('.')
-    needed_version = '0x0%s0%s0%s' % (major, minor, patch)
-    needed_version = int(needed_version, 0)
-
-    installed_version = Qt.QT_VERSION
-    if test_version is not None:
-        installed_version = test_version
-
-    if needed_version <= installed_version:
-        return True
-    else:
-        return False
 
 
 def read_file_keywords(layer_path, keyword=None):
@@ -888,15 +349,13 @@ def read_file_keywords(layer_path, keyword=None):
 def write_keywords_to_file(filename, keywords):
     """Thin wrapper around the safe write_keywords function.
 
-    Args:
-        * filename - str representing path to layer that must be written.
+    :param filename:  Path to layer that must be written.
           If the file does not end in .keywords, its extension will be
           stripped off and the basename + .keywords will be used as the file.
-        * keywords - a dictionary of keywords to be written
-    Returns:
-        None
-    Raises:
-        Any exceptions are propogated
+    :type filename: str
+
+    :param keywords: A dictionary of keywords to be written
+    :type keywords: dict
     """
     basename, extension = os.path.splitext(filename)
     if 'keywords' not in extension:
@@ -907,38 +366,36 @@ def write_keywords_to_file(filename, keywords):
         raise
 
 
-def get_safe_impact_function(function=None):
+def get_safe_impact_function(function_name=None):
     """Thin wrapper around the safe impact_functions function.
 
-    Args:
-        function - optional str giving a specific plugins name that should
-        be fetched.
-    Returns:
-        A safe impact function is returned
-    Raises:
-        Any exceptions are propagated
+    :param function_name: Specific plugin name that should be fetched.
+    :type function_name: str
+
+    :returns: A safe impact function is returned
+    :rtype: safe.impact.core.FunctionProvider
+
     """
     # Convert string to ASCII
-    function = unicode(function)
-    function = unicodedata.normalize(
-        'NFKD', function).encode('ascii', 'ignore')
+    function_name = unicode(function_name)
+    function_name = unicodedata.normalize(
+        'NFKD', function_name).encode('ascii', 'ignore')
     try:
-        return get_plugins(function)
+        return get_plugins(function_name)
     except:
         raise
 
 
 def get_safe_impact_function_type(function_id):
     """
-    Args:
-        function_id - str giving a specific plugins name that should be
-        fetched.
-    Returns:
-        A str type of safe impact function is returned:
+
+    :parm function_id: A specific plugins name that should be fetched.
+    :type function_id: str
+
+    :returns: A safe impact function type is returned:
             'old-style' is "classic" safe impact function
             'qgis2.0'   is impact function with native qgis layers support
-    Raises:
-        Any exceptions are propagated
+    :rtype: str
     """
     try:
         # Get an instance of the impact function and get the type

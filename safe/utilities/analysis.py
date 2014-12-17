@@ -12,6 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import extent_to_array, viewport_geo_array, \
+    get_wgs84_resolution
+from safe.utilities.resources import resources_path
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -20,11 +23,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 import numpy
 import logging
 
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
@@ -56,12 +59,8 @@ from safe.common.exceptions import (
 from safe import messaging as m
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.utilities.memory_checker import check_memory_usage
-from safe.utilities.utilities import (
-    get_wgs84_resolution,
-    extent_to_array,
-    viewport_geo_array,
-    get_error_message,
-    resources_path)
+from safe.utilities.gis import get_wgs84_resolution, viewport_geo_array
+from safe.utilities.utilities import get_error_message
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
 from safe.messaging import styles
 from safe.common.signals import (
@@ -81,9 +80,10 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image(
-    'file:///%s/img/logos/inasafe-logo.png' % resources_path(), 'InaSAFE Logo')
+LOGO_ELEMENT = styles.logo_element()
 LOGGER = logging.getLogger('InaSAFE')
+
+
 
 
 class Analysis(object):

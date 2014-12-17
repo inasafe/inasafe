@@ -1,6 +1,7 @@
 # coding=utf-8
 """Earthquake Impact Function on Building."""
 import logging
+
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -21,6 +22,8 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -96,6 +99,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     statistics_type = 'class_count'
     statistics_classes = [0, 1, 2, 3]
     title = tr('Be affected')
+
     parameters = OrderedDict(
         [('low_threshold', 6),
          ('medium_threshold', 7),
@@ -106,7 +110,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
              'params': OrderedDict([
                  # Disable categorical aggregation when in AOI mode see #781
                  ('disable_for_entire_area_aggregation', False)])})
-         ]))])
+        ]))])
+    parameters = add_needs_parameters(parameters)
+
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap).

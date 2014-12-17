@@ -41,7 +41,7 @@ from safe.gis.qgis_vector_tools import extent_to_geo_array
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe_qgis import get_defaults
+from safe.defaults import get_defaults
 from safe.common.testing import UNITDATA, TESTDATA, BOUNDDATA
 from safe.storage.raster import Raster
 from safe.storage.vector import Vector
@@ -51,7 +51,7 @@ from safe.utilities.utilities_for_testing import (
     set_jakarta_extent,
     GEOCRS)
 
-from safe.widgets.dock import Dock
+from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
 

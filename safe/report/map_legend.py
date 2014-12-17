@@ -11,7 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+from safe.utilities.printing import dpi_to_meters
+
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -23,7 +25,6 @@ import logging
 from PyQt4 import QtCore, QtGui
 from qgis.core import QgsMapLayer
 from safe.common.exceptions import LegendLayerError, KeywordNotFoundError
-from safe.utilities.utilities import dpi_to_meters
 from safe.utilities.keyword_io import KeywordIO
 
 LOGGER = logging.getLogger('InaSAFE')

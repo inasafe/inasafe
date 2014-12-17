@@ -11,7 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+from safe.utilities.printing import dpi_to_meters, setup_printer, mm_to_points
+from safe.utilities.resources import html_footer, html_header
+
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -22,13 +25,12 @@ import logging
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui, QtWebKit
-from safe.utilities.utilities import (
-    html_header,
-    html_footer,
+from safe.utilities.resources import html_header
+from safe.utilities.printing import (
     mm_to_points,
-    dpi_to_meters,
-    setup_printer,
-    impact_attribution)
+    setup_printer
+)
+from safe.utilities.utilities import impact_attribution
 from safe.common.utilities import unique_filename, temp_dir
 
 LOGGER = logging.getLogger('InaSAFE')

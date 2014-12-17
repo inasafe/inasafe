@@ -20,10 +20,10 @@ import unittest
 import sys
 import os
 import logging
-
 from os.path import join
 
 from qgis.core import QgsMapLayerRegistry
+
 
 
 # Add PARENT directory to path to make test aware of other modules
@@ -42,7 +42,7 @@ from safe.utilities.utilities_for_testing import (
     load_standard_layers,
     setup_scenario,
     canvas_list)
-from safe.widgets.dock import Dock
+from safe.gui.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
 

@@ -13,54 +13,94 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.resources import resources_path
+
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
-
 from safe.common.utilities import ugettext as tr
 
-DEFAULTS = dict()
 
-# https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
-# total population: 1.01 male(s)/female (2011 est.)
-DEFAULTS['FEMALE_RATIO'] = 0.50
+def define_defaults():
+    """Define standard defaults such as age ratios etc.
 
-# https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
-# Age structure:
-# 0-14 years: 26.3% (male 944,987,919/female 884,268,378)
-# 15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
-# 65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
+    :returns: A dictionary of standard default definitions.
+    :rtype: dict
+    """
+    settings = QSettings()
+    defaults = dict()
+    # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
+    # total population: 1.01 male(s)/female (2011 est.)
+    female_ratio = 0.50
+    value = settings.value(
+        'inasafe/defaultFemaleRatio', female_ratio, type=float)
+    defaults['FEMALE_RATIO'] = float(value)
 
-# NOTE (MB) CIA can not do maths!!!  this gives 100.1%
-# inaSAFE can, thus we remove 0.1% from the elderly
-# I wrote them and got this contact confirmation number: CTCU1K2
+    # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
+    # Age structure:
+    # 0-14 years: 26.3% (male 944,987,919/female 884,268,378)
+    # 15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
+    # 65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
 
-DEFAULTS['YOUTH_RATIO'] = 0.263
-DEFAULTS['ADULT_RATIO'] = 0.659
-DEFAULTS['ELDERLY_RATIO'] = 0.078
+    # NOTE (MB) CIA can not do maths!!!  this gives 100.1%
+    # inaSAFE can, thus we remove 0.1% from the elderly
+    # I wrote them and got this contact confirmation number: CTCU1K2
 
-# Keywords key names
-DEFAULTS['FEMALE_RATIO_ATTR_KEY'] = 'female ratio attribute'
-DEFAULTS['FEMALE_RATIO_KEY'] = 'female ratio default'
-DEFAULTS['YOUTH_RATIO_ATTR_KEY'] = 'youth ratio attribute'
-DEFAULTS['YOUTH_RATIO_KEY'] = 'youth ratio default'
-DEFAULTS['ADULT_RATIO_ATTR_KEY'] = 'adult ratio attribute'
-DEFAULTS['ADULT_RATIO_KEY'] = 'adult ratio default'
-DEFAULTS['ELDERLY_RATIO_ATTR_KEY'] = 'elderly ratio attribute'
-DEFAULTS['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
-DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'
-DEFAULTS['NO_DATA'] = tr('No data')
+    youth_ratio = 0.263
+    value = settings.value(
+        'inasafe/defaultYouthRatio', youth_ratio, type=float)
+    defaults['YOUTH_RATIO'] = float(value)
 
-# Defaults for iso_19115_template.xml
-DEFAULTS['ISO19115_ORGANIZATION'] = 'InaSAFE.org'
-DEFAULTS['ISO19115_URL'] = 'http://inasafe.org'
-DEFAULTS['ISO19115_EMAIL'] = 'info@inasafe.org'
-DEFAULTS['ISO19115_TITLE'] = 'InaSAFE analysis result'
-DEFAULTS['ISO19115_LICENSE'] = 'Free use with accreditation'
+    adult_ratio = 0.659
+    value = settings.value(
+        'inasafe/defaultAdultRatio', adult_ratio, type=float)
+    defaults['ADULT_RATIO'] = float(value)
+
+    elderly_ratio = 0.078
+    value = settings.value(
+        'inasafe/defaultElderlyRatio', elderly_ratio, type=float)
+    defaults['ELDERLY_RATIO'] = float(value)
+
+    # Keywords key names
+    defaults['FEMALE_RATIO_ATTR_KEY'] = 'female ratio attribute'
+    defaults['FEMALE_RATIO_KEY'] = 'female ratio default'
+    defaults['YOUTH_RATIO_ATTR_KEY'] = 'youth ratio attribute'
+    defaults['YOUTH_RATIO_KEY'] = 'youth ratio default'
+    defaults['ADULT_RATIO_ATTR_KEY'] = 'adult ratio attribute'
+    defaults['ADULT_RATIO_KEY'] = 'adult ratio default'
+    defaults['ELDERLY_RATIO_ATTR_KEY'] = 'elderly ratio attribute'
+    defaults['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
+    defaults['AGGR_ATTR_KEY'] = 'aggregation attribute'
+    defaults['NO_DATA'] = tr('No data')
+
+    # defaults for iso_19115_template.xml
+    organisation = 'InaSAFE.org'
+    value = settings.value(
+        'ISO19115_ORGANIZATION', organisation, type=str)
+    defaults['ISO19115_ORGANIZATION'] = value
+
+    url = 'http://inasafe.org'
+    value = settings.value('ISO19115_URL', url, type=str)
+    defaults['ISO19115_URL'] = value
+
+    email = 'info@inasafe.org'
+    value = settings.value('ISO19115_EMAIL', email, type=str)
+    defaults['ISO19115_EMAIL'] = value
+
+    title = 'InaSAFE analysis result'
+    value = settings.value('ISO19115_TITLE', title, type=str)
+    defaults['ISO19115_TITLE'] = value
+
+    iso_license = 'Free use with accreditation'
+    value = settings.value('ISO19115_LICENSE', iso_license, type=str)
+    defaults['ISO19115_LICENSE'] = value
+
+    return defaults
 
 
 # noinspection PyUnresolvedReferences
@@ -76,10 +116,11 @@ def get_defaults(default=None):
     :rtype: str, int, float, dict
     """
     print "SAFE defaults CALL. If in QGIS this is a WRONG CALL"
+    defaults = define_defaults()
     if default is None:
-        return DEFAULTS
-    elif default in DEFAULTS:
-        return DEFAULTS[default]
+        return defaults
+    elif default in defaults:
+        return defaults[default]
     else:
         return None
 
@@ -151,3 +192,67 @@ def default_provenance():
     :rtype: str
     """
     return 'The minimum needs are based on Perka 7/2008.'
+
+
+def disclaimer():
+    """Get a standard disclaimer.
+
+    :returns: Standard disclaimer string for InaSAFE.
+    :rtype: str
+    """
+    # import tr here to avoid side effects with safe (see notes above in import
+    # section.
+    from safe.utilities.utilities import tr
+    text = tr(
+        'InaSAFE has been jointly developed by Indonesian '
+        'Government-BNPB, Australian Government-AIFDR and the World '
+        'Bank-GFDRR. These agencies and the individual software '
+        'developers of InaSAFE take no responsibility for the '
+        'correctness of outputs from InaSAFE or decisions derived as '
+        'a consequence.')
+    return text
+
+
+def default_organisation_logo_path():
+    """Get a default organisation logo path.
+
+    :return: Default organisation logo path.
+    :rtype: str
+    """
+    path = resources_path('img', 'logos', 'supporters.png')
+    return path
+
+
+def default_north_arrow_path():
+    """Get a default north arrow image path.
+
+    :return: Default north arrow path.
+    :rtype: str
+    """
+    path = resources_path('img', 'north_arrows', 'simple_north_arrow.png')
+    return path
+
+
+def limitations():
+    """Get InaSAFE limitations.
+
+    :return: All limitations on current InaSAFE.
+    :rtype: list
+    """
+    # import tr here to avoid side effects with safe (see notes above in import
+    # section.
+    from safe.utilities.utilities import tr
+    limitation_list = list()
+    limitation_list.append(tr('InaSAFE is not a hazard modelling tool.'))
+    limitation_list.append(
+        tr('Polygon area analysis (such as land use) is not yet supported.'))
+    limitation_list.append(
+        tr('Population count data (raster) must be provided in WGS84 '
+           'geographic coordinates.'))
+    limitation_list.append(
+        tr('Population by administration boundary is not yet supported.'))
+    limitation_list.append(
+        tr('InaSAFE is a Free and Open Source Software (FOSS) project, '
+           'published under the GPL V3 license. As such you may freely '
+           'download, share and (if you like) modify the software.'))
+    return limitation_list

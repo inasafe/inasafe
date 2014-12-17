@@ -9,7 +9,7 @@
 """
 from safe.utilities.utilities import get_safe_impact_function
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -18,17 +18,20 @@ import unittest
 import sys
 import os
 
+# noinspection PyUnresolvedReferences
+import qgis
 from qgis.gui import QgsMapCanvas
 from PyQt4.QtGui import QWidget
 
 from safe.common.testing import get_qgis_app
+
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gis.qgis_interface import QgisInterface
-from safe.plugin import Plugin
-from safe.common.utilities import ugettext as safeTr
+from plugin import Plugin
+from safe.common.utilities import ugettext as safe_tr
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
@@ -63,7 +66,7 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.change_i18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
-        myTranslation = safeTr('A volcano eruption')
+        myTranslation = safe_tr('A volcano eruption')
         message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     ('A volcano eruption', myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, message

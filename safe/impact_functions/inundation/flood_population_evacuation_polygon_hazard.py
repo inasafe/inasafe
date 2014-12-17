@@ -19,8 +19,9 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import numpy
+import logging
+
 from safe.metadata import (
     hazard_flood,
     unit_wetdry,
@@ -58,9 +59,8 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
-
-import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -172,6 +172,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for flood population evacuation.

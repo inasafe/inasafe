@@ -1,13 +1,29 @@
-# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
+ - **Module inasafe.**
+
+This script initializes the plugin, making it known to QGIS.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+
+__author__ = 'tim@kartoza.com'
+__date__ = '10/01/2011'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import os
-import sys
 
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-sys.path.extend([os.path.abspath(os.path.join(
-    os.path.dirname(__file__), os.path.pardir))])
 
 from PyQt4.QtCore import (
     QLocale,
@@ -21,17 +37,16 @@ try:
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
     # noinspection PyUnresolvedReferences
-    from safe.common.exceptions import TranslationLoadError
+    from exceptions import TranslationLoadError
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
     # yet.
     # noinspection PyTypeChecker,PyArgumentList
     myWarning = QCoreApplication.translate(
-        'Plugin', 'Please restart QGIS to use this plugin.')
+        'InaSAFE', 'Please restart QGIS to use this plugin.')
     # noinspection PyTypeChecker,PyArgumentList
-    QMessageBox.warning(
-        None, 'InaSAFE', myWarning)
+    QMessageBox.warning(None, 'InaSAFE', myWarning)
 
 # Setup internationalisation for the plugin.
 #
@@ -55,16 +70,9 @@ else:
 # .. see:: :py:func:`common.utilities`
 os.environ['LANG'] = str(locale_name)
 
-# LOGGER.debug('%s %s %s %s' % (
-#     preferred_locale,
-#     override_flag,
-#     QLocale.system().name(),
-#     os.environ['LANG']))
-
-root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-translation_path = os.path.join(
-    root, 'safe_qgis', 'i18n',
-    'inasafe_' + str(locale_name) + '.qm')
+root = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+translation_path = os.path.abspath(os.path.join(
+    root, os.path.pardir, 'i18n', 'inasafe_' + str(locale_name) + '.qm'))
 
 if os.path.exists(translation_path):
     translator = QTranslator()
@@ -75,50 +83,3 @@ if os.path.exists(translation_path):
     # noinspection PyTypeChecker,PyCallByClass
     QCoreApplication.installTranslator(translator)
 
-# MONKEYPATCHING safe.defaults.get_defaults to use get_defaults
-# see safe_qgis.utilities.defaults for more details
-try:
-    from safe.common.custom_logging import setup_logger
-
-    setup_logger('InaSAFE')
-
-    from safe.utilities.custom_logging import setup_logger
-
-    setup_logger()
-
-    import safe.defaults
-    from safe.utilities.defaults import get_defaults
-
-    safe.defaults.get_defaults = lambda the_default=None: get_defaults(
-        the_default)
-
-    from safe.impact_functions.core import get_plugins
-    from safe.tools.minimum_needs.needs_profile import NeedsProfile
-    # Monkey patch all the impact functions
-    minimum_needs = NeedsProfile()
-    for (name, plugin) in get_plugins().items():
-        if not hasattr(plugin, 'parameters'):
-            continue
-        if 'minimum needs' in plugin.parameters:
-            plugin.parameters['minimum needs'] = (
-                minimum_needs.get_needs_parameters())
-            plugin.parameters['provenance'] = minimum_needs.provenance
-except ImportError:
-    # Note we use translate directly but the string may still not translate
-    # at this early stage since the i18n setup routines have not been called
-    # yet.
-    import traceback
-
-    trace = ''.join(traceback.format_tb(sys.exc_info()[2]))
-    # Note that we do a late import here to avoid QPaintDevice before
-    # QApplication errors when running tests of safe package. TS
-    from PyQt4.QtCore import QCoreApplication
-    from PyQt4.QtGui import QMessageBox
-    myWarning = QCoreApplication.translate(
-        'Plugin', 'Please restart QGIS to use this plugin. If you experience '
-                  'further problems after restarting please report the issue '
-                  'to the InaSAFE team.')
-    QMessageBox.warning(
-        None, 'InaSAFE', myWarning)
-    #   None, 'InaSAFE', myWarning + ' ' + e.message + ' ' + trace)
-    raise

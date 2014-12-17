@@ -10,6 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import logging
+from numpy import round as numpy_round
+
 from safe.metadata import (
     exposure_structure,
     exposure_definition,
@@ -30,8 +33,8 @@ from safe.common.utilities import ugettext as tr, format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-import logging
-from numpy import round as numpy_round
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -134,6 +137,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         ('high_thresholds', 3.0),
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Categorical hazard impact to buildings (e.g. from Open Street Map).

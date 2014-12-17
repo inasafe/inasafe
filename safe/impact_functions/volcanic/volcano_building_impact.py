@@ -36,6 +36,7 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.common.exceptions import InaSAFEError
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class VolcanoBuildingImpact(FunctionProvider):
@@ -143,6 +144,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # The attribute of hazard zone in hazard layer
         ('hazard zone attribute', 'KRB')])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for volcano hazard on building/structure.

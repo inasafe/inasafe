@@ -12,8 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.gis import convert_to_safe_layer
 
-__author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
+__author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -26,7 +27,6 @@ from PyQt4.QtCore import QObject
 from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.utilities.utilities import (
-    convert_to_safe_layer,
     get_safe_impact_function,
     get_safe_impact_function_type)
 from safe.common.exceptions import (

@@ -10,7 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+from safe.utilities.gis import qgis_version
+
+__author__ = 'tim@kartoza.com'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -51,7 +53,6 @@ from safe.utilities.clipper import (
     explode_multipart_geometry,
     clip_geometry,
     adjust_clip_extent)
-from safe.utilities.utilities import qgis_version
 from safe.utilities.analysis import Analysis
 from safe.utilities.utilities_for_testing import (
     set_canvas_crs,
