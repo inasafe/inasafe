@@ -49,11 +49,10 @@ from safe.common.exceptions import (
 from safe.common.utilities import temp_dir
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.resources import html_header, get_ui_class
+from safe.utilities.resources import html_header, get_ui_class, resources_path
 from safe.utilities.utilities import (
     html_to_file,
     add_ordered_combo_item)
-from safe.utilities.resources import html_header
 from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
 
@@ -84,13 +83,16 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         self.keyword_io = KeywordIO()
 
         # Template Path for composer
-        self.template_path = ':/plugins/inasafe/merged_report.qpt'
+        self.template_path = resources_path(
+            'qgis-composer-templates',  'merged_report.qpt')
 
         # Safe Logo Path
-        self.safe_logo_path = ':/plugins/inasafe/inasafe-logo-url.png'
+        self.safe_logo_path = resources_path(
+            'img', 'logos', 'inasafe-logo-url.png')
 
         # Organisation Logo Path
-        self.organisation_logo_path = ':/plugins/inasafe/supporters.png'
+        self.organisation_logo_path = resources_path(
+            'img', 'logos', 'supporters.png')
 
         # Disclaimer text
         self.disclaimer = disclaimer()

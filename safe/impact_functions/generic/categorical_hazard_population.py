@@ -12,8 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.utilities.i18n import tr
-
 __revision__ = '$Format:%H$'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -50,6 +48,7 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator)
+from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)

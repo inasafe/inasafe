@@ -31,7 +31,11 @@ from safe.utilities.utilities import get_error_message
 
 
 TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__), '../../test/test_data/test_files')
+    os.path.dirname(__file__),
+    '..',
+    '..',
+    '..',
+    'test/test_data/test_files')
 
 
 class MessageViewerTest(unittest.TestCase):

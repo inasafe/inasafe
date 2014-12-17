@@ -43,7 +43,7 @@ from qgis.core import (
     QgsCoordinateTransform)
 
 from safe import messaging as m
-from safe.utilities.resources import html_header
+from safe.utilities.resources import html_header, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
