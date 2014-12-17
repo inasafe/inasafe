@@ -9,10 +9,9 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 from collections import OrderedDict
 import json
-import PyQt4.QtCore.QObject.tr as tr
 from os.path import exists, dirname
 from os import remove
-
+from safe.utilities.i18n import tr
 
 class MinimumNeeds(object):
     """A abstract class for handling the minimum needs.

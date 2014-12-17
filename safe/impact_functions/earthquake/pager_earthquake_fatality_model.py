@@ -31,7 +31,7 @@ from safe.defaults import (
 )
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
     ITBFatalityFunction)
-import PyQt4.QtCore.QObject.tr as tr
+from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 

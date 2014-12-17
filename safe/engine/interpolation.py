@@ -9,11 +9,13 @@ import numpy
 
 from safe.gis.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
-import PyQt4.QtCore.QObject.tr as tr
+from safe.utilities.i18n import tr
 from safe.gis.numerics import ensure_numeric
 from safe.common.exceptions import InaSAFEError, BoundsError
-from safe.gis.polygon import (inside_polygon,
-                                 clip_lines_by_polygons, clip_grid_by_polygons)
+from safe.gis.polygon import (
+    inside_polygon,
+    clip_lines_by_polygons,
+    clip_grid_by_polygons)
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometry_type_to_string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE

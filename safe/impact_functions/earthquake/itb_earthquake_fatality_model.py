@@ -4,7 +4,6 @@
 import numpy
 import logging
 
-import PyQt4.QtCore.QObject.tr as tr
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
@@ -38,7 +37,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
