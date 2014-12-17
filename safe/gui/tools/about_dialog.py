@@ -12,8 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.defaults import disclaimer
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '26/02/2014'
@@ -25,6 +23,8 @@ from PyQt4 import QtGui
 from safe.gui.ui.about_dialog_base import Ui_AboutDialogBase
 from safe.common.version import get_version
 from safe.defaults import limitations
+from safe.utilities.resources import resources_path
+from safe.defaults import disclaimer
 
 
 class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):
@@ -59,6 +59,10 @@ class AboutDialog(QtGui.QDialog, Ui_AboutDialogBase):
             image_credits_text += '%s. %s \n' % (index + 1, limitation)
         self.image_credits_text.setFontPointSize(11)
         self.image_credits_text.setText(image_credits_text)
+
+        supporters_path = resources_path('img', 'logos', 'supporters.png')
+        pixmap = QtGui.QPixmap(supporters_path)
+        self.supporters_label.setPixmap(pixmap)
 
     def attributions(self):
         """List of attributions for icons etc."""

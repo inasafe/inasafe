@@ -33,32 +33,16 @@ from PyQt4.QtCore import (
     QTranslator,
     QCoreApplication,
     Qt,
-    QSettings
-)
+    QSettings)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 
-try:
-    # When upgrading, using the plugin manager, you may get an error when
-    # doing the following import, so we wrap it in a try except
-    # block and then display a friendly message to restart QGIS
-    # noinspection PyUnresolvedReferences
-    from safe.common.exceptions import (
-        TranslationLoadError,
-        UnsupportedProviderError,
-        NoKeywordsFoundError,
-        InvalidParameterError)
-except ImportError:
-    # Note we use translate directly but the string may still not translate
-    # at this early stage since the i18n setup routines have not been called
-    # yet.
-    # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-    myWarning = QCoreApplication.translate(
-        'Plugin', 'Please restart QGIS to use this plugin.')
-    # noinspection PyTypeChecker,PyArgumentList
-    QMessageBox.warning(
-        None, 'InaSAFE', myWarning)
-
+from safe.common.exceptions import (
+    TranslationLoadError,
+    UnsupportedProviderError,
+    NoKeywordsFoundError,
+    InvalidParameterError)
+from safe.utilities.resources import resource_url, resources_path
 
 # noinspection PyUnresolvedReferences
 class Plugin(object):

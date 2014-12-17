@@ -43,7 +43,7 @@ from safe.utilities.utilities import (
     get_safe_impact_function)
 from safe.defaults import disclaimer
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
-from safe.utilities.resources import resources_path
+from safe.utilities.resources import resources_path, resource_url
 from safe.defaults import (
     limitations,
     default_organisation_logo_path)
@@ -99,7 +99,8 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 LOGO_ELEMENT = m.Image(
-    'file:///%s/img/logos/inasafe-logo.png' % resources_path(),
+    resource_url(
+        resources_path('img', 'logos', 'inasafe-logo.png')),
     'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -185,6 +186,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.set_ok_button_status()
 
         self.read_settings()  # get_project_layers called by this
+        pixmap = QtGui.QPixmap(
+            resources_path('img', 'logos', 'supporters.png'),
+        )
+        self.organisation_logo.setPixmap(pixmap)
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""

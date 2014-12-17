@@ -5,7 +5,8 @@ import os
 # noinspection PyUnresolvedReferences
 import qgis
 import unittest
-from safe.utilities.resources import html_header, html_footer, resources_path
+from safe.utilities.resources import (
+    html_header, html_footer, resources_path, resource_url)
 
 
 class TestResources(unittest.TestCase):
@@ -38,6 +39,17 @@ class TestResources(unittest.TestCase):
             os.path.exists(css_path),
             css_path + ' does not exist')
 
+    def test_resources_url(self):
+        """Test we can get the path as a local url nicely.
+
+        ..versionadded:: 3.0
+        """
+        url = resource_url(
+            resources_path(
+                'img', 'logos', 'inasafe-logo.png'))
+        self.assertTrue(
+            'file://' in url,
+            url + ' is not valid')
 
 if __name__ == '__main__':
     unittest.main()

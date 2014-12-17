@@ -51,6 +51,23 @@ def resources_path(*args):
         os.path.join(path, os.path.pardir, os.path.pardir, 'resources'))
     for item in args:
         path = os.path.abspath(os.path.join(path, item))
-    url = QtCore.QUrl(path)
-    path = url.toLocalFile()
-    return str(path)
+
+    return path
+
+
+def resource_url(path):
+    """Get the a local filesystem url to a given resource.
+
+    .. versionadded:: 3.0
+
+    Note that in version 3.0 we removed the use of Qt Resource files in
+    favour of directly accessing on-disk resources.
+
+    :param path: Path to resource e.g. /home/timlinux/foo/bar.png
+    :type path: str
+
+    :return: A valid file url e.g. file:///home/timlinux/foo/bar.png
+    :rtype: str
+    """
+    url = QtCore.QUrl.fromLocalFile(path)
+    return str(url.toString())
