@@ -182,9 +182,10 @@ step_fc_agglayer_origin = 17
 step_fc_agglayer_from_canvas = 18
 step_fc_agglayer_from_browser = 19
 step_fc_agglayer_disjoint = 20
-step_fc_params = 21
-step_fc_summary = 22
-step_fc_analysis = 23
+step_fc_extent = 21
+step_fc_params = 22
+step_fc_summary = 23
+step_fc_analysis = 24
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -1905,9 +1906,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # remove the existing tab widget
             # TODO: ensure it's really removed (strange overlapping children
             # was observed)
-            self.pgF21ParamsIF_layout.removeWidget(self.twParams)
+            self.pgF22ParamsIF_layout.removeWidget(self.twParams)
         self.twParams = dialog.tabWidget
-        self.pgF21ParamsIF_layout.addWidget(self.twParams)
+        self.pgF22ParamsIF_layout.addWidget(self.twParams)
         self.if_params = dialog.parse_input(dialog.values)
 
     # ===========================
