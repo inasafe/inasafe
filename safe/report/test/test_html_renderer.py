@@ -82,7 +82,6 @@ class HtmlRendererTest(unittest.TestCase):
     def test_print_to_pdf(self):
         """Test that we can render some html to a pdf (most common use case).
         """
-        LOGGER.debug('InaSAFE HtmlRenderer testing printToPdf')
         html = self.sample_html()
         page_dpi = 300
         renderer = HtmlRenderer(page_dpi)
@@ -90,7 +89,7 @@ class HtmlRendererTest(unittest.TestCase):
             prefix='testHtmlTable',
             suffix='.pdf',
             dir=temp_dir('test'))
-        LOGGER.debug(path)
+
         # If it fails new_path will come back as None
         new_path = renderer.to_pdf(html, path)
         message = 'Rendered output does not exist: %s' % new_path
@@ -114,7 +113,6 @@ class HtmlRendererTest(unittest.TestCase):
 
     def test_print_impact_table(self):
         """Test that we can render html from impact table keywords."""
-        LOGGER.debug('InaSAFE HtmlRenderer testing printImpactTable')
         file_name = 'test_floodimpact.tif'
         layer, _ = load_layer(file_name)
         message = 'Layer is not valid: %s' % file_name
@@ -130,55 +128,34 @@ class HtmlRendererTest(unittest.TestCase):
         path = html_renderer.print_impact_table(keywords, filename=path)
         message = 'Rendered output does not exist: %s' % path
         self.assertTrue(os.path.exists(path), message)
-        # pdf rendering is non deterministic so we can't do a hash check
-        # test_renderComposition renders just the image instead of pdf
-        # so we hash check there and here we just do a basic minimum file
-        # size check.
-        size = os.stat(path).st_size
-        expected_sizes = [
-            20936,  # as rendered on linux ub 12.04 64
-            21523,  # as rendered on linux ub 12.10 64
-            20605,  # as rendered on linux ub 13.04 64
-            13965,  # as rendered on linux ub 13.10 64
-            14220,  # as rendered on linux ub 13.04 64 MB
-            11085,  # as rendered on linux ub 14.04 64 AG
-            17306,  # as rendered on linux ub 14.04_64 TS
-            17127,  # as rendered on linux ub 14.04_64 MB
-            17295,  # as rendered on linux ub 14.04_64 IS
-            18665,  # as rendered on Jenkins per 19 June 2014
-            377191,  # as rendered on OSX
-            17556,  # as rendered on Windows 7_32
-            16163L,  # as rendered on Windows 7 64 bit Ultimate i3
-            251782L,  # as rendered on Windows 8 64 bit amd
-            21491,  # as rendered on Slackware64 14.0
-            18667,  # as rendered on Linux Mint 14_64
-        ]
-        print 'Output pdf to %s' % path
-        self.assertIn(size, expected_sizes)
+
+        # Check the file is not corrupt
+        message = 'The output file %s is corrupt' % path
+        out_size = os.stat(path).st_size
+        self.assertTrue(out_size > 0, message)
 
     def test_render_html_to_image(self):
         """Test that we can render html to a pixmap."""
-        LOGGER.debug('InaSAFE HtmlRenderer testing renderHtmlToImage')
         html = self.sample_html(20)
-        LOGGER.debug(html)
+
         page_dpi = 100
         renderer = HtmlRenderer(page_dpi)
         path = unique_filename(
             prefix='testHtmlToImage',
             suffix='.png',
             dir=temp_dir('test'))
-        LOGGER.debug(path)
+
         width = 150
         pixmap = renderer.html_to_image(html, width)
         self.assertFalse(pixmap.isNull())
-        LOGGER.debug(pixmap.__class__)
+
         pixmap.save(path)
         message = 'Rendered output does not exist: %s' % path
         self.assertTrue(os.path.exists(path), message)
 
         tolerance = 1000  # to allow for version number changes in disclaimer
         flag, message = check_images(
-            'renderHtmlToImage', path, tolerance)
+            'render_html_to_image', path, tolerance)
         self.assertTrue(flag, message + '\n' + path)
 
 if __name__ == '__main__':
