@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 
 import unittest
 import random
+from numpy import nan
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
@@ -54,6 +55,9 @@ class TestCore(unittest.TestCase):
             self.assertEqual(
                 population_rounding(n),
                 population_rounding_full(n)[0])
+
+        self.assertTrue(population_rounding_full(nan)[0] is nan)
+
 
     def test_02_evacuated_population_needs(self):
         water = ResourceParameter()
