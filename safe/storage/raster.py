@@ -1,5 +1,5 @@
-"""**Class Raster**
-"""
+# coding=utf-8
+"""**Class Raster**"""
 
 import os
 import gc
@@ -7,11 +7,8 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 
-from qgis.core import (
-    QgsRasterLayer,
-    QgsRasterFileWriter,
-    QgsRasterPipe
-)
+from qgis.core import (QgsRasterLayer, QgsRasterFileWriter, QgsRasterPipe)
+
 from safe.utilities.i18n import tr
 from safe.common.utilities import verify, unique_filename
 from safe.gis.numerics import (
@@ -324,11 +321,6 @@ class Raster(Layer):
                 * GetDataError      if can't create copy of qgis_layer's
                                         dataProvider
         """
-        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
-            msg = ('Used data is QgsRasterLayer instance, '
-                   'but QGIS is not available.')
-            raise TypeError(msg)
-
         base_name = unique_filename()
         file_name = base_name + '.tif'
 
@@ -360,10 +352,6 @@ class Raster(Layer):
             Raises:
                 * TypeError         if qgis is not avialable
         """
-        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
-            msg = ('Tried to convert layer to QgsRasterLayer instance, '
-                   'but QGIS is not avialable.')
-            raise TypeError(msg)
 
         qgis_layer = safe_to_qgis_layer(self)
         return qgis_layer
@@ -612,8 +600,8 @@ class Raster(Layer):
 
         # Get actual resolution first
         try:
-            res = geotransform_to_resolution(self.geotransform,
-                                          isotropic=isotropic)
+            res = geotransform_to_resolution(
+                self.geotransform, isotropic=isotropic)
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))
