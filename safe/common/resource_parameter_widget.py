@@ -25,6 +25,7 @@ class ResourceParameterWidget(FloatParameterWidget):
 
         """
         super(ResourceParameterWidget, self).__init__(parameter, parent)
+        self.set_unit()
 
     def set_unit(self):
         """Set the units label. (Include the frequency.)"""
