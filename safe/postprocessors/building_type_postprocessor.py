@@ -11,12 +11,8 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import itertools
-
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-
-from safe.common.utilities import (
-    ugettext as tr,
-    OrderedDict)
+from collections import OrderedDict
 
 
 class BuildingTypePostprocessor(AbstractPostprocessor):

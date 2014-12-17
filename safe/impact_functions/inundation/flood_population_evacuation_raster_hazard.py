@@ -31,8 +31,8 @@ from safe.metadata import (
     exposure_definition
 )
 from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     verify,
     humanize_class,

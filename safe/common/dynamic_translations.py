@@ -48,7 +48,7 @@ but never import this module or the functions in it!
 # for s in strings:
 #     names[s] = '_(%s)' % s
 
-from safe.common.utilities import ugettext as tr
+import PyQt4.QtCore.QObject.tr as tr
 
 
 # Don't call this function

@@ -23,7 +23,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
-from safe.common.utilities import ugettext as tr
+import PyQt4.QtCore.QObject.tr as tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
 from safe.impact_functions.impact_function_metadata import (

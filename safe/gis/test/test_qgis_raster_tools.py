@@ -21,18 +21,14 @@ import os
 import unittest
 
 from safe.common.testing import UNITDATA, get_qgis_app
-from safe.storage.raster import qgis_imported
 
-
-if qgis_imported:   # Import QgsRasterLayer if qgis is available
-    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    from qgis.core import (
-        QgsRasterLayer,
-        QgsRaster,
-        QgsPoint,
-        QgsVectorLayer,
-        QgsRectangle)
-
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from qgis.core import (
+    QgsRasterLayer,
+    QgsRaster,
+    QgsPoint,
+    QgsVectorLayer,
+    QgsRectangle)
 
 # noinspection PyUnresolvedReferences
 RASTER_BASE = os.path.abspath(

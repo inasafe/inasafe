@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -42,7 +43,7 @@ from safe.common.exceptions import (
     CallGDALError,
     InvalidProjectionError,
     InvalidClipGeometryError)
-from safe.utilities.utilities import tr, read_file_keywords
+from safe.utilities.utilities import read_file_keywords
 
 
 LOGGER = logging.getLogger(name='InaSAFE')

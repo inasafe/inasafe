@@ -19,7 +19,7 @@ from safe.common.exceptions import (
 
 
 # Default attribute to assign to vector layers
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 from safe.storage.metadata_utilities import (
     write_keyword_in_iso_metadata, read_iso_metadata)
 

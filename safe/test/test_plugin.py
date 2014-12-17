@@ -7,6 +7,7 @@
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 from safe.utilities.utilities import get_safe_impact_function
 
 __author__ = 'tim@kartoza.com'
@@ -31,7 +32,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gis.qgis_interface import QgisInterface
 from plugin import Plugin
-from safe.common.utilities import ugettext as safe_tr
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
@@ -41,37 +41,37 @@ sys.path.append(pardir)
 class PluginTest(unittest.TestCase):
     """Test suite for InaSAFE QGis plugin"""
 
-    def Xtest_setupI18n(self):
+    def Xtest_setup_i18n(self):
         """Gui translations are working."""
 
-        myUntranslatedString = 'Show/hide InaSAFE dock widget'
-        myExpectedString = 'Tampilkan/hilangkan widget InaSAFE'
-        myParent = QWidget()
-        myCanvas = QgsMapCanvas(myParent)
-        myIface = QgisInterface(myCanvas)
-        myPlugin = Plugin(myIface)
-        myPlugin.change_i18n('id')
-        myTranslation = myPlugin.tr(myUntranslatedString)
+        unstranslated = 'Show/hide InaSAFE dock widget'
+        expected = 'Tampilkan/hilangkan widget InaSAFE'
+        parent = QWidget()
+        canvas = QgsMapCanvas(parent)
+        iface = QgisInterface(canvas)
+        plugin = Plugin(iface)
+        plugin.change_i18n('id')
+        translation = plugin.tr(unstranslated)
         message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
-                    (myUntranslatedString, myTranslation, myExpectedString)
-        assert myTranslation == myExpectedString, message
+            (unstranslated, translation, expected)
+        assert translation == expected, message
 
-    def Xtest_ImpactFunctionI18n(self):
+    def Xtest_impact_function_i18n(self):
         """Library translations are working."""
         # Import this late so that i18n setup is already in place
 
         # Test indonesian too
-        myCanvas = QgsMapCanvas(PARENT)
-        myIface = QgisInterface(myCanvas)
-        myPlugin = Plugin(myIface)
-        myPlugin.change_i18n('id')  # indonesian
-        myExpectedString = 'Letusan gunung berapi'
-        myTranslation = safe_tr('A volcano eruption')
+        canvas = QgsMapCanvas(PARENT)
+        iface = QgisInterface(canvas)
+        plugin = Plugin(iface)
+        plugin.change_i18n('id')  # indonesian
+        expected = 'Letusan gunung berapi'
+        translation = tr('A volcano eruption')
         message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
-                    ('A volcano eruption', myTranslation, myExpectedString)
-        assert myTranslation == myExpectedString, message
+                    ('A volcano eruption', translation, expected)
+        assert translation == expected, message
 
-    def Xtest_Afrikaans(self):
+    def Xtest_afrikaans(self):
         """Test that Afrikaans translations are working"""
 
         # Note this has really bad side effects - lots of tests suddenly start
@@ -87,33 +87,33 @@ class PluginTest(unittest.TestCase):
         # (see http://effbot.org/zone/metaclass-plugins.htm)
         # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
-        from safe.common.utilities import ugettext as tr
-        myUntranslatedString = 'Temporarily Closed'
-        myExpectedString = 'Tydelik gesluit'  # afrikaans
-        myTranslation = tr(myUntranslatedString)
+        import PyQt4.QtCore.QObject.tr as tr
+        untranslated = 'Temporarily Closed'
+        expected = 'Tydelik gesluit'  # afrikaans
+        translated = tr(untranslated)
         message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
-                    (myUntranslatedString, myTranslation, myExpectedString)
-        assert myTranslation == myExpectedString, message
-        myParent = QWidget()
-        myCanvas = QgsMapCanvas(myParent)
-        myIface = QgisInterface(myCanvas)
+                    (untranslated, translated, expected)
+        assert translated == expected, message
+        parent = QWidget()
+        canvas = QgsMapCanvas(parent)
+        iface = QgisInterface(canvas)
         # reload all inasafe modules so that i18n get picked up afresh
         # this is the part that produces bad side effects
-        for myMod in sys.modules.values():
+        for mod in sys.modules.values():
             try:
-                if 'storage' in str(myMod) or 'impact' in str(myMod):
-                    print 'Reloading:', str(myMod)
-                    reload(myMod)
+                if 'storage' in str(mod) or 'impact' in str(mod):
+                    print 'Reloading:', str(mod)
+                    reload(mod)
             except NameError:
                 pass
-        myPlugin = Plugin(myIface)
-        myPlugin.change_i18n('af')  # afrikaans
-        myLang = os.environ['LANG']
-        assert myLang == 'af'
-        # myFunctions = get_safe_impact_function()
-        # print myFunctions
-        myFunctions = get_safe_impact_function('Tydelik gesluit')
-        assert len(myFunctions) > 0
+        plugin = Plugin(iface)
+        plugin.change_i18n('af')  # afrikaans
+        language = os.environ['LANG']
+        assert language == 'af'
+        # functions = get_safe_impact_function()
+        # print functions
+        functions = get_safe_impact_function('Tydelik gesluit')
+        assert len(functions) > 0
 
 if __name__ == '__main__':
     unittest.main()

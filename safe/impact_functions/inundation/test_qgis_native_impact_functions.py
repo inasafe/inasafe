@@ -32,13 +32,12 @@ from safe.impact_functions import get_plugins
 
 # We need QGIS_APP started during the tests
 # to convert SAFE layers to QGIS layers
-from safe.storage.raster import qgis_imported
-if qgis_imported:
-    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    from qgis.core import QgsVectorLayer, QgsRasterLayer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 
-class Wrapper():
+class Wrapper(object):
     """
     A wrapper around qgis layers. It implements get_layer method of
     safe_qgis.utilities.qgis_layer_wrapper.QgisWrapper

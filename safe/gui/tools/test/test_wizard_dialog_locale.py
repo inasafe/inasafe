@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'ismail@linfiniti.com'
+__author__ = 'ismail@kartoza.com'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -22,7 +22,7 @@ import sys
 
 skipped_reason = (
     'These tests are skipped because it will make a segmentation fault. Just '
-    'run in separately.')
+    'run it separately.')
 
 
 @unittest.skip(skipped_reason)

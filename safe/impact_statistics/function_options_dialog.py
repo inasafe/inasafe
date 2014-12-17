@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'oz@tanoshiistudio.com'
 __revision__ = '$Format:%H$'
@@ -37,7 +38,6 @@ from collections import OrderedDict
 
 from safe.gui.ui.function_options_dialog_base import (
     Ui_FunctionOptionsDialogBase)
-from safe.common.utilities import ugettext as safeTr
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (

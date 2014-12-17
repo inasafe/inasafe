@@ -11,7 +11,8 @@ from qgis.core import (
 from safe.common.exceptions import MemoryLayerCreationError
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.layer import Layer
-from safe.utilities.utilities import LOGGER, tr
+from safe.utilities.i18n import tr
+from safe.utilities.utilities import LOGGER
 
 
 def is_raster_layer(layer):

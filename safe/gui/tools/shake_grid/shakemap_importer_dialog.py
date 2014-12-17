@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.utilities.resources import html_footer, html_header
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '08/5/2014'
 __license__ = "GPL"

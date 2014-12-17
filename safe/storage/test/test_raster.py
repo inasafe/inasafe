@@ -17,11 +17,10 @@ import unittest
 
 from safe.common.testing import UNITDATA, get_qgis_app
 from safe.storage.utilities import read_keywords
-from safe.storage.raster import Raster, qgis_imported
+from safe.storage.raster import Raster
 
-if qgis_imported:   # Import QgsRasterLayer if qgis is available
-    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    from qgis.core import QgsRasterLayer
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from qgis.core import QgsRasterLayer
 
 LOGGER = logging.getLogger('InaSAFE')
 KEYWORD_PATH = os.path.abspath(
@@ -38,34 +37,32 @@ class RasterTest(unittest.TestCase):
 
     def test_qgis_raster_layer_loading(self):
         """Test that reading from QgsRasterLayer works."""
-        if qgis_imported:
-            # This line is the cause of the problem:
-            qgis_layer = QgsRasterLayer(RASTER_BASE + '.tif', 'test')
-            layer = Raster(data=qgis_layer)
-            qgis_extent = qgis_layer.dataProvider().extent()
-            qgis_extent = [qgis_extent.xMinimum(), qgis_extent.yMinimum(),
-                           qgis_extent.xMaximum(), qgis_extent.yMaximum()]
-            layer_exent = layer.get_bounding_box()
-            self.assertListEqual(
-                layer_exent, qgis_extent,
-                'Expected %s extent, got %s' % (qgis_extent, layer_exent))
+        # This line is the cause of the problem:
+        qgis_layer = QgsRasterLayer(RASTER_BASE + '.tif', 'test')
+        layer = Raster(data=qgis_layer)
+        qgis_extent = qgis_layer.dataProvider().extent()
+        qgis_extent = [qgis_extent.xMinimum(), qgis_extent.yMinimum(),
+                       qgis_extent.xMaximum(), qgis_extent.yMaximum()]
+        layer_exent = layer.get_bounding_box()
+        self.assertListEqual(
+            layer_exent, qgis_extent,
+            'Expected %s extent, got %s' % (qgis_extent, layer_exent))
 
     def test_convert_to_qgis_raster_layer(self):
         """Test that converting to QgsVectorLayer works."""
-        if qgis_imported:
-            # Create vector layer
-            keywords = read_keywords(RASTER_BASE + '.keywords')
-            layer = Raster(data=RASTER_BASE + '.tif', keywords=keywords)
+        # Create vector layer
+        keywords = read_keywords(RASTER_BASE + '.keywords')
+        layer = Raster(data=RASTER_BASE + '.tif', keywords=keywords)
 
-            # Convert to QgsRasterLayer
-            qgis_layer = layer.as_qgis_native()
-            qgis_extent = qgis_layer.dataProvider().extent()
-            qgis_extent = [qgis_extent.xMinimum(), qgis_extent.yMinimum(),
-                           qgis_extent.xMaximum(), qgis_extent.yMaximum()]
-            layer_exent = layer.get_bounding_box()
-            self.assertListEqual(
-                layer_exent, qgis_extent,
-                'Expected %s extent, got %s' % (qgis_extent, layer_exent))
+        # Convert to QgsRasterLayer
+        qgis_layer = layer.as_qgis_native()
+        qgis_extent = qgis_layer.dataProvider().extent()
+        qgis_extent = [qgis_extent.xMinimum(), qgis_extent.yMinimum(),
+                       qgis_extent.xMaximum(), qgis_extent.yMaximum()]
+        layer_exent = layer.get_bounding_box()
+        self.assertListEqual(
+            layer_exent, qgis_extent,
+            'Expected %s extent, got %s' % (qgis_extent, layer_exent))
 
 
 if __name__ == '__main__':

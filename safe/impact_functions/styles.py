@@ -19,7 +19,7 @@ E.g.::
 """
 
 import colorsys
-from safe.common.utilities import ugettext as tr
+import PyQt4.QtCore.QObject.tr as tr
 
 # Flood population impact raster style
 style_classes = [dict(colour='#FFFFFF', quantity=2, transparency=100),

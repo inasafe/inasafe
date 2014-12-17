@@ -169,7 +169,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="1" rowspan="2">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="supporters_label">
      <property name="maximumSize">
       <size>
        <width>600</width>
@@ -180,7 +180,7 @@ p, li { white-space: pre-wrap; }
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../safe/resources/img/logos/supporters.png</pixmap>
+      <pixmap>../../../resources/img/logos/supporters.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -225,9 +225,7 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

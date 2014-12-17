@@ -35,13 +35,6 @@ compile:
 	@echo "-----------------"
 	make -C safe/gui/ui
 
-compress-images:
-	@echo
-	@echo "-----------------"
-	@echo "Compress images"
-	@echo "-----------------"
-	@scripts/compress-images.sh
-
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
         #update application strings
@@ -329,7 +322,7 @@ docker-test: testdata clean
 	@echo "Regression Test Suite for running in docker"
 	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" nosetest s-v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
 
 
 ##########################################################

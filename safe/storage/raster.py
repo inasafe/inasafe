@@ -7,22 +7,17 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 
-qgis_imported = True
-try:
-    from qgis.core import (
-        QgsRasterLayer,
-        QgsRasterFileWriter,
-        QgsRasterPipe
-    )
-except ImportError:
-    qgis_imported = False
-
-from safe.common.utilities import (verify,
-                                   ugettext as safe_tr,
-                                   unique_filename)
-from safe.gis.numerics import (nan_allclose,
-                                  geotransform_to_axes,
-                                  grid_to_points)
+from qgis.core import (
+    QgsRasterLayer,
+    QgsRasterFileWriter,
+    QgsRasterPipe
+)
+from safe.utilities.i18n import tr
+from safe.common.utilities import verify, unique_filename
+from safe.gis.numerics import (
+    nan_allclose,
+    geotransform_to_axes,
+    grid_to_points)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -210,7 +205,7 @@ class Raster(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            title = safe_tr(title)
+            title = tr(title)
 
             rastername = title
         else:

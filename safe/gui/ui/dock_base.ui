@@ -179,6 +179,9 @@
         <property name="text">
          <string/>
         </property>
+        <property name="pixmap">
+         <pixmap>../../../resources/img/logos/supporters.png</pixmap>
+        </property>
         <property name="scaledContents">
          <bool>true</bool>
         </property>
@@ -296,9 +299,7 @@
   <tabstop>pbnPrint</tabstop>
   <tabstop>pbnRunStop</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources/resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pbnShowQuestion</sender>

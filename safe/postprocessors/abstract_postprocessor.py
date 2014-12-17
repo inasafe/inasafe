@@ -21,7 +21,7 @@ from safe.common.utilities import (format_int)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class AbstractPostprocessor():
+class AbstractPostprocessor(object):
     """
     Abstract postprocessor class, do not instantiate directly.
     but instantiate the PostprocessorFactory class which will take care of

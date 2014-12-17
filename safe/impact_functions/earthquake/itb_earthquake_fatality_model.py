@@ -27,7 +27,6 @@ from safe.metadata import (
     hazard_definition)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     humanize_class,
     create_classes,
@@ -38,7 +37,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -269,9 +268,10 @@ class ITBFatalityFunction(FunctionProvider):
         intensity = get_hazard_layer(layers)
         population = get_exposure_layer(layers)
 
-        question = get_question(intensity.get_name(),
-                                population.get_name(),
-                                self)
+        question = get_question(
+            intensity.get_name(),
+            population.get_name(),
+            self)
 
         # Extract data grids
         hazard = intensity.get_data()   # Ground Shaking
@@ -279,7 +279,6 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-
         mmi_range = self.parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
@@ -287,11 +286,11 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Calculate fatality rates for observed Intensity values (hazard
         # based on ITB power model
-        R = numpy.zeros(hazard.shape)
+        mask = numpy.zeros(hazard.shape)
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
             # count people affected by this shake level
-            I = numpy.where(
+            mmi_matches = numpy.where(
                 (hazard > mmi - self.parameters['step']) * (
                     hazard <= mmi + self.parameters['step']),
                 exposure, 0)
@@ -299,33 +298,35 @@ class ITBFatalityFunction(FunctionProvider):
             # Calculate expected number of fatalities per level
             fatality_rate = self.fatality_rate(mmi)
 
-            F = fatality_rate * I
+            fatalities = fatality_rate * mmi_matches
 
             # Calculate expected number of displaced people per level
             try:
-                D = displacement_rate[mmi] * I
+                displacements = displacement_rate[mmi] * mmi_matches
             except KeyError, e:
-                msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
+                msg = 'mmi = %i, mmi_matches = %s, Error msg: %s' % (
+                    mmi, str(mmi_matches), str(e))
                 # noinspection PyExceptionInherit
                 raise InaSAFEError(msg)
 
             # Adjust displaced people to disregard fatalities.
             # Set to zero if there are more fatalities than displaced.
-            D = numpy.where(D > F, D - F, 0)
+            displacements = numpy.where(
+                displacements > fatalities, displacements - fatalities, 0)
 
             # Sum up numbers for map
-            R += D   # Displaced
+            mask += displacements   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
-            number_of_exposed[mmi] = numpy.nansum(I.flat)
-            number_of_displaced[mmi] = numpy.nansum(D.flat)
+            number_of_exposed[mmi] = numpy.nansum(mmi_matches.flat)
+            number_of_displaced[mmi] = numpy.nansum(displacements.flat)
             # noinspection PyUnresolvedReferences
-            number_of_fatalities[mmi] = numpy.nansum(F.flat)
+            number_of_fatalities[mmi] = numpy.nansum(fatalities.flat)
 
         # Set resulting layer to NaN when less than a threshold. This is to
         # achieve transparency (see issue #126).
-        R[R < tolerance] = numpy.nan
+        mask[mask < tolerance] = numpy.nan
 
         # Total statistics
         total, rounding = population_rounding_full(numpy.nansum(exposure.flat))
@@ -437,7 +438,7 @@ class ITBFatalityFunction(FunctionProvider):
         impact_table = impact_summary
 
         # check for zero impact
-        if numpy.nanmax(R) == 0 == numpy.nanmin(R):
+        if numpy.nanmax(mask) == 0 == numpy.nanmin(mask):
             table_body = [
                 question,
                 TableRow([tr('Fatalities'), '%s' % format_int(fatalities)],
@@ -447,7 +448,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
-        classes = create_classes(R.flat[:], len(colours))
+        classes = create_classes(mask.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
         for i in xrange(len(colours)):
@@ -475,7 +476,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Create raster object and return
         raster = Raster(
-            R,
+            mask,
             projection=population.get_projection(),
             geotransform=population.get_geotransform(),
             keywords={

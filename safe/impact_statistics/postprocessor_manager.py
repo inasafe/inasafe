@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -20,13 +21,11 @@ import logging
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from collections import OrderedDict
-
 from qgis.core import QgsFeatureRequest
 
 from safe.common.utilities import (
     unhumanize_number,
-    format_int,
-    ugettext as safeTr)
+    format_int)
 from safe.common.exceptions import PostProcessorError
 from safe.common.exceptions import KeywordNotFoundError
 from safe.utilities.keyword_io import KeywordIO
@@ -132,7 +131,7 @@ class PostprocessorManager(QtCore.QObject):
             has_no_data = False
             table = m.Table(
                 style_class='table table-condensed table-striped')
-            table.caption = self.tr('Detailed %s report') % (safeTr(
+            table.caption = self.tr('Detailed %s report') % (tr(
                 get_postprocessor_human_name(processor)).lower())
 
             header = m.Row()
