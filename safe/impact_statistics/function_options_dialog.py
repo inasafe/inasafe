@@ -42,6 +42,8 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
+from safe.common.resource_parameter import ResourceParameter
+from safe.common.resource_parameter_widget import ResourceParameterWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -128,7 +130,8 @@ class FunctionOptionsDialog(QtGui.QDialog, Ui_FunctionOptionsDialogBase):
         tab = QWidget()
         form_layout = QGridLayout(tab)
         form_layout.setContentsMargins(0, 0, 0, 0)
-        parameter_container = ParameterContainer(parameters)
+        extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
+        parameter_container = ParameterContainer(parameters, extra_parameters)
         form_layout.addWidget(parameter_container)
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)

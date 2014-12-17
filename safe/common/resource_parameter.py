@@ -7,6 +7,14 @@ __date__ = '11/11/14'
 __copyright__ = 'kartoza.com'
 __doc__ = ''
 
+import os
+import sys
+PARAMETERS_DIR = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__), '..', '..', 'safe_extras', 'parameters'))
+if PARAMETERS_DIR not in sys.path:
+    sys.path.append(PARAMETERS_DIR)
+
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.unit import Unit
 

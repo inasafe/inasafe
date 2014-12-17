@@ -15,6 +15,17 @@ __author__ = 'misugijunz@gmail.com'
 __date__ = '15/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+import os
+import sys
+PARAMETERS_DIR = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__), '..', 'safe_extras', 'parameters'))
+if PARAMETERS_DIR not in sys.path:
+    sys.path.append(PARAMETERS_DIR)
+
+print PARAMETERS_DIR
+
 import unittest
 import sys
 import os

@@ -18,6 +18,13 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
+import sys
+THIRD_PARTY_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), 'safe_extras', 'parameters'))
+if THIRD_PARTY_DIR not in sys.path:
+    sys.path.append(THIRD_PARTY_DIR)
+
 
 # noinspection PyDocstring
 def classFactory(iface):
