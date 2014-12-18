@@ -1906,9 +1906,9 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             # remove the existing tab widget
             # TODO: ensure it's really removed (strange overlapping children
             # was observed)
-            self.pgF22ParamsIF_layout.removeWidget(self.twParams)
+            self.layoutIFParams.removeWidget(self.twParams)
         self.twParams = dialog.tabWidget
-        self.pgF22ParamsIF_layout.addWidget(self.twParams)
+        self.layoutIFParams.addWidget(self.twParams)
         self.if_params = dialog.parse_input(dialog.values)
 
     # ===========================

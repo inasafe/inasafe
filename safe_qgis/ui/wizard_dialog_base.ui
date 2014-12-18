@@ -3074,7 +3074,7 @@ Please step back and select another layer.</string>
       <zorder>verticalSpacer_42</zorder>
      </widget>
      <widget class="QWidget" name="pgF22ParamsIF">
-      <layout class="QVBoxLayout" name="pgF22ParamsIF_layout">
+      <layout class="QVBoxLayout" name="layoutIFParams">
        <item>
         <widget class="QLabel" name="lblSelectIFParameters">
          <property name="text">

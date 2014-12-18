@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wizard_dialog_base.ui'
 #
-# Created: Wed Dec 17 22:39:32 2014
+# Created: Thu Dec 18 10:46:58 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -953,14 +953,14 @@ class Ui_WizardDialogBase(object):
         self.stackedWidget.addWidget(self.pgF21Extent)
         self.pgF22ParamsIF = QtGui.QWidget()
         self.pgF22ParamsIF.setObjectName(_fromUtf8("pgF22ParamsIF"))
-        self.pgF22ParamsIF_layout = QtGui.QVBoxLayout(self.pgF22ParamsIF)
-        self.pgF22ParamsIF_layout.setObjectName(_fromUtf8("pgF22ParamsIF_layout"))
+        self.layoutIFParams = QtGui.QVBoxLayout(self.pgF22ParamsIF)
+        self.layoutIFParams.setObjectName(_fromUtf8("layoutIFParams"))
         self.lblSelectIFParameters = QtGui.QLabel(self.pgF22ParamsIF)
         self.lblSelectIFParameters.setWordWrap(True)
         self.lblSelectIFParameters.setObjectName(_fromUtf8("lblSelectIFParameters"))
-        self.pgF22ParamsIF_layout.addWidget(self.lblSelectIFParameters)
+        self.layoutIFParams.addWidget(self.lblSelectIFParameters)
         spacerItem97 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
-        self.pgF22ParamsIF_layout.addItem(spacerItem97)
+        self.layoutIFParams.addItem(spacerItem97)
         self.stackedWidget.addWidget(self.pgF22ParamsIF)
         self.pgF23Summary = QtGui.QWidget()
         self.pgF23Summary.setObjectName(_fromUtf8("pgF23Summary"))
