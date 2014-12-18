@@ -1216,8 +1216,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf.setText(0, imfunc['name'])
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
                 # TODO TEMP DEBUG temporary:
-                # if h['name'] == 'flood' and
-                #    imfunc['name'] == "Flood Building Impact Function":
+                # if (h['name'] == 'flood' and
+                #        imfunc['name'] == "Flood Building Impact Function"):
                 #    self.twi_if_tsunami = tree_leaf
         # TODO TEMP DEBUG temporary
         # self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
@@ -2574,7 +2574,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             keywords['value_map'] = json.dumps(value_map)
 
         # Set allow_resampling to false if unit is people_per_pixel
-        if is_raster_layer(self.layer) and keywords['unit'] == 'people_per_pixel':
+        if (is_raster_layer(self.layer) and keywords['unit']
+                and keywords['unit'] == 'people_per_pixel'):
             keywords['allow_resampling'] = 'false'
 
         return keywords
