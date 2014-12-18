@@ -98,10 +98,7 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'dock_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('dock_base.ui')
 
 LOGO_ELEMENT = m.Image(
     resource_url(

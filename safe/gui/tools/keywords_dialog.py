@@ -55,9 +55,7 @@ elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
 
 LOGGER = logging.getLogger('InaSAFE')
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'keywords_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('keywords_dialog_base.ui')
 
 
 class KeywordsDialog(QtGui.QDialog, FORM_CLASS):

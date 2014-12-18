@@ -32,11 +32,7 @@ from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
-
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', '..', 'ui',
-    'needs_calculator_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('needs_calculator_dialog_base.ui')
 
 
 class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):

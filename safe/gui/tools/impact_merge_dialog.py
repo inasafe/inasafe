@@ -57,9 +57,7 @@ from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
 
 INFO_STYLE = styles.INFO_STYLE
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'impact_merge_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('impact_merge_dialog_base.ui')
 
 
 # noinspection PyArgumentList
