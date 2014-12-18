@@ -18,7 +18,7 @@ done
 # for .po files by applying xgettext command
 for LOCALE in $LOCALES
 do
-  PODIR=safe/i18n/${LOCALE}/LC_MESSAGES
+  PODIR=i18n/${LOCALE}/LC_MESSAGES
   POPATH=${PODIR}/inasafe.po
 
   # get modified date of .po file
@@ -63,7 +63,7 @@ done
 UPDATE=false
 for LOCALE in $LOCALES
 do
-  TSFILE="safe_qgis/i18n/inasafe_"$LOCALE".ts"
+  TSFILE="i18n/inasafe_"$LOCALE".ts"
   TSMODTIME=$(stat -c %Y $TSFILE)
   if [ $NEWESTPY -gt $TSMODTIME ]
   then
@@ -73,22 +73,22 @@ do
 done
 
 if [ $UPDATE == true ]
-# retrieve all python files in safe_qgis and realtime
+# retrieve all python files in safe and realtime
 then
-  python_safe_qgis=`find safe_qgis/ -regex ".*\(ui\|py\)$" -type f`
+  python_safe=`find safe/ -regex ".*\(ui\|py\)$" -type f`
   python_realtime=`find realtime/ -regex ".*\(ui\|py\)$" -type f`
   # concat list of files
-  python_all="$python_safe_qgis $python_realtime"
+  python_all="$python_safe $python_realtime"
 
   # update .ts
   echo "Please provide translations by editing the translation files below:"
   for LOCALE in $LOCALES
   do
-    echo "safe_qgis/i18n/inasafe_"$LOCALE".ts"
+    echo "i18n/inasafe_"$LOCALE".ts"
     # Note we don't use pylupdate with qt .pro file approach as it is flakey
     # about what is made available.
     set -x
-    pylupdate4 -noobsolete $python_all -ts safe_qgis/i18n/inasafe_${LOCALE}.ts
+    pylupdate4 -noobsolete $python_all -ts i18n/inasafe_${LOCALE}.ts
   done
 else
   echo "No need to edit any translation files (.ts) because no python files "

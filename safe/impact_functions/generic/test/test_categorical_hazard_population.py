@@ -25,14 +25,14 @@ from safe.common.testing import TESTDATA, HAZDATA
 from safe.common.utilities import format_int
 
 
-class TestCategorisedHazardPopulationImpactFunction(unittest.TestCase):
-    """Test for CategorisedHazardPopulationImpactFunction."""
+class TestCategoricalHazardPopulationImpactFunction(unittest.TestCase):
+    """Test for CategoricalHazardPopulationImpactFunction."""
 
     def setUp(self):
         """Run before each test."""
         pass
 
-    def test_categorised_hazard_population_impact_function(self):
+    def test_categorical_hazard_population_impact_function(self):
         """Categorised Hazard Population IF works as expected."""
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/jakarta_flood_category_123.asc' % HAZDATA
@@ -42,7 +42,7 @@ class TestCategorisedHazardPopulationImpactFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_filename)
         exposure_layer = read_layer(exposure_filename)
 
-        plugin_name = 'Categorised Hazard Population Impact Function'
+        plugin_name = 'Categorical Hazard Population Impact Function'
         impact_function = get_plugin(plugin_name)
 
         # Call calculation engine
@@ -55,8 +55,9 @@ class TestCategorisedHazardPopulationImpactFunction(unittest.TestCase):
         impact_summary = keywords['impact_summary']
 
         # This is the expected number
-        # FIXME Akbar: This number does not make sense, pls check manually
-        # the exposure data or there's something wrong with the IF
+        # Akbar: I check the exposure data (
+        #       Population_Jakarta_geographic.as), the total population is
+        #       355bio. This results makes sense then
         # Total Population Affected - 99,219,000
         # Population in High risk areas - 38,940,000
         # Population in Medium risk areas - 29,341,000

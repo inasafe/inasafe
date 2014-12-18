@@ -29,8 +29,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.tools.batch.batch_dialog import BatchDialog
-from safe.utilities.utilities_for_testing import (
-    SCENARIO_DIR)
+from safe.utilities.utilities_for_testing import SCENARIO_DIR
 from safe.common.utilities import temp_dir
 from safe.gui.widgets.dock import Dock
 
