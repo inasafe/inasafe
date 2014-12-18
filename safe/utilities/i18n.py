@@ -1,3 +1,5 @@
+# coding=utf-8
+"""Internationalisation related utilities."""
 import os
 from PyQt4.QtCore import QCoreApplication, QSettings, QLocale, QTranslator
 from safe import TranslationLoadError
@@ -6,8 +8,8 @@ __author__ = 'timlinux'
 
 
 def tr(text):
-    """We define a tr() alias here since the utilities implementation below
-    is not a class and does not inherit from QObject.
+    """Convencience QObject.tr wrapper for use by non QObject derived classes.
+
     .. note:: see http://tinyurl.com/pyqt-differences
 
     :param text: String to be translated
@@ -28,9 +30,20 @@ def locale():
     and then see if we can get a valid translation file
     for whatever locale is effectively being used.
 
-    :returns: ISO two letter code for the users's preferred locale.
+    **Local is set with this precedence:**
+    - If the LANG environment variable is set, it is used as first preference
+    - If the user has 'locale/userLocale' defined it will be used as second
+      preference
+    - If the QLocale.system().name() returns a locale other than the default
+      (en), it will be used as third preference.
+    - As final fallback - english is used
+
+    :returns: ISO  code for the users's preferred locale e.g. en_US.
     :rtype: str
     """
+    if 'LANG' in os.environ:
+        return os.environ['LANG']
+
     override_flag = QSettings().value(
         'locale/overrideFlag', True, type=bool)
     if override_flag:
@@ -51,12 +64,20 @@ def translation_file():
     locale_name = locale()
     root = os.path.abspath(os.path.join(os.path.dirname(__file__)))
     translation_path = os.path.abspath(os.path.join(
-        root, os.path.pardir, 'i18n', 'inasafe_' + str(locale_name) + '.qm'))
+        root,
+        os.path.pardir,
+        os.path.pardir,
+        'i18n',
+        'inasafe_' + str(locale_name) + '.qm'))
     return translation_path
 
 
 def load_translation():
-    """Load the translation file preferred by the user."""
+    """Load the translation file preferred by the user.
+
+    If the file does not exist, the currently loaded (eng) language
+    will be left intact.
+    """
     path = translation_file()
     if os.path.exists(path):
         translator = QTranslator()
@@ -66,3 +87,6 @@ def load_translation():
             raise TranslationLoadError(message)
         # noinspection PyTypeChecker,PyCallByClass
         QCoreApplication.installTranslator(translator)
+    else:
+        raise TranslationLoadError(
+            'There is no InaSAFE translation for locale: %s' % locale())
