@@ -38,7 +38,7 @@ from qgis.core import (
     QGis)
 from qgis.gui import QgsRubberBand
 
-from third_party.pydispatch import dispatcher
+from safe_extras.pydispatch import dispatcher
 
 from safe.api import metadata  # pylint: disable=W0612
 
