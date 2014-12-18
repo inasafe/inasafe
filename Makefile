@@ -1,4 +1,4 @@
-#d202e28d4594ac2bc/***************************************************************************
+#/***************************************************************************
 #
 # InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
@@ -26,14 +26,7 @@ ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list usi
 # Please dont remove en here
 LOCALES = en id fr
 
-default: compile
-
-compile:
-	@echo
-	@echo "-----------------"
-	@echo "Compile GUI forms"
-	@echo "-----------------"
-#	make -C safe_qgis
+default: update-translation-strings
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings:
@@ -42,9 +35,7 @@ update-translation-strings:
 	@scripts/update-strings.sh $(LOCALES)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
-compile-translation-strings: compile
-	@#compile gettext messages binary
-	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+compile-translation-strings:
 	@#Compile qt messages binary
 	cd safe_qgis; lrelease-qt4 inasafe.pro; cd ..
 
