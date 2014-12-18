@@ -2572,6 +2572,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         value_map = self.selected_mapping()
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
+
+        # Set allow_resampling to false if unit is people_per_pixel
+        if is_raster_layer(self.layer) and keywords['unit'] == 'people_per_pixel':
+            keywords['allow_resampling'] = 'false'
+
         return keywords
 
     def save_current_keywords(self):
