@@ -45,6 +45,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
 from safe.utilities.gis import read_impact_layer, qgis_version
 from safe.test.utilities import (
+    test_data_path,
     load_standard_layers,
     setup_scenario,
     set_canvas_crs,
@@ -70,15 +71,6 @@ DOCK = Dock(IFACE)
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
-
-TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__),
-    '..',
-    '..',
-    '..',
-    'test',
-    'test_data',
-    'files')
 
 
 # noinspection PyArgumentList
@@ -560,10 +552,11 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        expected_result = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results.txt',
-            'r').readlines()
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'test-full-run-results.txt')
+        expected_result = open(control_file_path, 'r').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -611,9 +604,11 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        expected_result = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results-qgis.txt', 'rb').readlines()
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'test-full-run-results-qgis.txt')
+        expected_result = open(control_file_path, 'rb').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
