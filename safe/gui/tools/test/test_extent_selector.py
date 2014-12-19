@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import unittest
 import logging
-import os
+
 from PyQt4 import QtGui
 
 from PyQt4.QtCore import Qt, QPoint
@@ -37,11 +37,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
 
 LOGGER = logging.getLogger('InaSAFE')
-
-TEST_DATA_DIR = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '../../../safe_qgis/test/test_data/files'))
 
 
 class ExtentSelectorTest(unittest.TestCase):

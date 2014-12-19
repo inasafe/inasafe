@@ -52,11 +52,9 @@ from safe.impact_functions.utilities import (
 from safe.metadata import converter_dict
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
+from safe.test.utilities import test_data_path
 
 LOGGER = logging.getLogger('InaSAFE')
-
-TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__), '..', '..', 'test/test_data/files')
 
 
 # noinspection PyUnresolvedReferences
@@ -622,11 +620,11 @@ class TestCore(unittest.TestCase):
         """Test get plugins as table with filtering."""
         plugins_table = get_plugins_as_table({'title': 'Title for F1'})
 
-        print plugins_table.toNewlineFreeString()
-        expected_result = open(
-            os.path.join(
-                TEST_FILES_DIR, 'test-get-plugins-as-table.txt'),
-            'r').read()
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'test-get-plugins-as-table.txt')
+        expected_result = open(control_file_path,'r').read()
         self.assertEqual(
             plugins_table.toNewlineFreeString(),
             str(expected_result).replace('\n', ''))

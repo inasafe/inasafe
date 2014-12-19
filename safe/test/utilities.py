@@ -31,23 +31,16 @@ from safe.utilities.utilities import read_file_keywords
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import TESTDATA, UNITDATA, HAZDATA, EXPDATA
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
-
-TEST_FILES_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '../test/test_data/files'))
-
 
 LOGGER = logging.getLogger('InaSAFE')
 
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
-CONTROL_IMAGE_DIR = os.path.join(
-    os.path.dirname(__file__),
-    '../test/test_data/images')
 
 
 def assert_hashes_for_file(hashes, filename):
@@ -313,20 +306,21 @@ def check_images(control_image, test_image_path, tolerance=1000):
     :type test_image_path: str
 
     :param control_image: The basename for the control image. The .png
-        extension will automatically be added and the test image path
-        (CONTROL_IMAGE_DIR) will be prepended. e.g.
+        extension will automatically be added and the test image dir
+        (safe/test/data/control/images) will be prepended. e.g.
         addClassToLegend will cause the control image of
-        test\/test_data\/images\/addClassToLegend.png to be used.
+        test\/data\/control/images\/addClassToLegend.png to be used.
     :type control_image: str
 
     :returns: Success or failure indicator, message providing analysis,
         comparison notes
     :rtype: bool, str
     """
+    control_image_dir = test_data_path('control', 'images')
     messages = ''
     platform_name = get_platform_name()
     base_name, extension = os.path.splitext(control_image)
-    platform_image = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s.png' % (
+    platform_image = os.path.join(control_image_dir, '%s-variant%s%s.png' % (
         base_name, platform_name, extension))
     messages += 'Checking for platform specific variant...\n'
     messages += test_image_path + '\n'
@@ -348,12 +342,12 @@ def check_images(control_image, test_image_path, tolerance=1000):
     # Ok there is no specific platform match so go ahead and match to any of
     # the control image and its variants...
     control_images = glob.glob('%s/%s*%s' % (
-        CONTROL_IMAGE_DIR, base_name, extension))
+        control_image_dir, base_name, extension))
     flag = False
 
     for control_image in control_images:
         full_path = os.path.join(
-            CONTROL_IMAGE_DIR, control_image)
+            control_image_dir, control_image)
         flag, message = check_image(
             full_path, test_image_path, tolerance)
         messages += message

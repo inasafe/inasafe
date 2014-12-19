@@ -37,13 +37,9 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
+from safe.test.utilities import test_data_path
 
 LOGGER = logging.getLogger('InaSAFE')
-
-TEST_DATA_DIR = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '../../../test/test_data/files'))
 
 
 class MockQNetworkReply(QObject):
@@ -163,14 +159,17 @@ class FakeQNetworkAccessManager:
 
 
 def read_all(path):
-    """ Helper function to load all content of path in TEST_DATA_DIR folder.
+    """ Helper function to load all content of path in
+        safe/test/data/control/files folder.
+
     :param path: File name to read in.
     :type path: str
 
     :returns: The file contents.
     :rtype: str
     """
-    path = os.path.join(TEST_DATA_DIR, path)
+    control_files_dir = test_data_path('control', 'files')
+    path = os.path.join(control_files_dir, path)
     handle = open(path, 'r')
     content = handle.read()
     handle.close()
@@ -258,9 +257,11 @@ class ImportDialogTest(unittest.TestCase):
     def test_extract_zip(self):
         """Test extract_zip method."""
         base_path = tempfile.mkdtemp()
-        zipfile = os.path.abspath(os.path.join(
-            TEST_DATA_DIR, 'test-importdlg-extractzip.zip'))
-        self.dialog.extract_zip(zipfile, base_path)
+        zip_file_path = test_data_path(
+            'control',
+            'files',
+            'test-importdlg-extractzip.zip')
+        self.dialog.extract_zip(zip_file_path, base_path)
 
         message = "file {0} not exist"
 
@@ -295,12 +296,11 @@ class ImportDialogTest(unittest.TestCase):
 
     def test_load_shapefile(self):
         """Test loading shape file to QGIS Main Window """
-
-        zip_path = os.path.abspath(os.path.join(
-            TEST_DATA_DIR, 'test-importdlg-extractzip.zip'))
+        zip_file_path = test_data_path(
+            'control', 'files', 'test-importdlg-extractzip.zip')
         output_path = tempfile.mkdtemp()
 
-        self.dialog.extract_zip(zip_path, output_path)
+        self.dialog.extract_zip(zip_file_path, output_path)
 
         # outDir must be set to output_path because loadShapeFile() use
         # that variable to determine the location of shape files.

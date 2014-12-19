@@ -28,14 +28,7 @@ from safe.common.signals import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe.utilities.utilities import get_error_message
-
-
-TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__),
-    '..',
-    '..',
-    '..',
-    'test/test_data/files')
+from safe.test.utilities import test_data_path
 
 
 class MessageViewerTest(unittest.TestCase):
@@ -95,21 +88,23 @@ class MessageViewerTest(unittest.TestCase):
     def test_error_message(self):
         """Test we can send error messages to the message viewer."""
         text = self.fake_error()
-        my_expected_result = open(
-            TEST_FILES_DIR +
-            '/test-error-message.txt',
-            ).read().replace('\n', '')
-        self.assertEqual(text, my_expected_result)
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'test-error-message.txt')
+        expected_result = open(control_file_path).read().replace('\n', '')
+        self.assertEqual(text, expected_result)
 
     def test_static_and_error(self):
         """Test error message works when there is a static message in place."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.fake_error()
-        my_expected_result = open(
-            TEST_FILES_DIR +
-            '/test-static-error-message.txt',
-            ).read().replace('\n', '')
-        self.assertEqual(text, my_expected_result)
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'test-static-error-message.txt')
+        expected_result = open(control_file_path).read().replace('\n', '')
+        self.assertEqual(text, expected_result)
 
 if __name__ == '__main__':
     unittest.main()
