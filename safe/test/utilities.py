@@ -94,22 +94,25 @@ def hash_for_file(filename):
     return data_hash
 
 
-def test_data_path(subdirectory=None):
-    """Return the absolute path to the InaSAFE unit test data dir.
+def test_data_path(*args):
+    """Return the absolute path to the InaSAFE test data or directory path.
 
-    :type subdirectory: Additional subdir to add to the path - typically
-        'hazard' or 'exposure'.
-    :param subdirectory:
+    .. versionadded:: 3.0
 
-    .. note:: This is not the same thing as the GIT inasafe_data dir. Rather
-       this is a new dataset where the test datasets are all tiny for fast
-       testing and the datasets live in the same repo as the code.
+    :param args: List of path e.g. ['control', 'files',
+        'test-error-message.txt'] or ['control', 'scenarios'] to get the path
+        to scenarios dir.
+    :type args: list
+
+    :return: Absolute path to the test data or dir path.
+    :rtype: str
 
     """
-    path = UNITDATA
+    path = os.path.dirname(__file__)
+    path = os.path.abspath(os.path.join(path, 'data'))
+    for item in args:
+        path = os.path.abspath(os.path.join(path, item))
 
-    if subdirectory is not None:
-        path = os.path.abspath(os.path.join(path, subdirectory))
     return path
 
 
