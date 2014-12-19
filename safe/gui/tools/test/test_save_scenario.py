@@ -32,7 +32,7 @@ from safe.common.testing import TESTDATA, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.tools.save_scenario import SaveScenarioDialog
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     setup_scenario,
     set_canvas_crs,
     set_jakarta_extent,

@@ -44,7 +44,7 @@ from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
 from safe.utilities.gis import read_impact_layer, qgis_version
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     load_standard_layers,
     setup_scenario,
     set_canvas_crs,
@@ -78,7 +78,7 @@ TEST_FILES_DIR = os.path.join(
     '..',
     'test',
     'test_data',
-    'test_files')
+    'files')
 
 
 # noinspection PyArgumentList

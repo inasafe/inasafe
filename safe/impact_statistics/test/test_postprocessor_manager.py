@@ -26,6 +26,7 @@ from qgis.core import QgsMapLayerRegistry
 
 
 
+
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
@@ -35,7 +36,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS,

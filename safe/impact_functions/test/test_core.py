@@ -56,7 +56,7 @@ from safe.impact_functions.impact_function_metadata import (
 LOGGER = logging.getLogger('InaSAFE')
 
 TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__), '..', '..', 'test/test_data/test_files')
+    os.path.dirname(__file__), '..', '..', 'test/test_data/files')
 
 
 # noinspection PyUnresolvedReferences

@@ -41,7 +41,7 @@ LOGGER = logging.getLogger('InaSAFE')
 TEST_DATA_DIR = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
-        '../../../safe_qgis/test/test_data/test_files'))
+        '../../../safe_qgis/test/test_data/files'))
 
 
 class ExtentSelectorTest(unittest.TestCase):

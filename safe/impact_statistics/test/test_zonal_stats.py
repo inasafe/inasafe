@@ -24,9 +24,10 @@ from qgis.core import QgsRectangle
 from safe.common.testing import get_qgis_app
 from safe.impact_statistics.zonal_stats import (
     calculate_zonal_stats, intersection_box)
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     load_layer)
 from safe.common.testing import UNITDATA
+
 
 
 # In our tests, we need to have this line below before importing any other

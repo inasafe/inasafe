@@ -46,7 +46,7 @@ from safe.common.testing import UNITDATA, TESTDATA, BOUNDDATA
 from safe.storage.raster import Raster
 from safe.storage.vector import Vector
 
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS)
@@ -55,7 +55,7 @@ from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
 
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     load_standard_layers,
     setup_scenario,
     load_layers)

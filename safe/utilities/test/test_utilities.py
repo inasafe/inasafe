@@ -14,7 +14,7 @@ from safe.utilities.utilities import (
     humanise_seconds,
     impact_attribution)
 from safe.utilities.gis import qgis_version
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     TEST_FILES_DIR)
 
 from safe.storage.utilities import bbox_intersection

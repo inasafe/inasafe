@@ -53,7 +53,7 @@ from safe.gui.tools.wizard_dialog import (
     step_aggregation,
     step_field)
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer)
 

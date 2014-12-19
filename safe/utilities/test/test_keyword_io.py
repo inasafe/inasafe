@@ -14,7 +14,7 @@ from qgis.core import QgsDataSourceURI, QgsVectorLayer
 from safe.common.testing import get_qgis_app
 from safe.common.utilities import unique_filename
 from safe.utilities.utilities import read_file_keywords
-from safe.utilities.utilities_for_testing import load_layer
+from safe.test.utilities import load_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.exceptions import HashNotFoundError
 from safe.gui.tools.test.test_keywords_dialog import clone_padang_layer

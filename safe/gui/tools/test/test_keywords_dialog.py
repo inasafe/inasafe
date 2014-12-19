@@ -46,7 +46,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     test_data_path, clone_shp_layer, temp_dir)
 from safe.common.utilities import unique_filename
 from safe.common.testing import HAZDATA, TESTDATA, BOUNDDATA

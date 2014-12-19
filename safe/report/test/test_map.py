@@ -11,11 +11,11 @@ __copyright__ += 'Disaster Reduction'
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 import unittest
 import os
 import logging
+
+import qgis  # pylint: disable=W0611
 
 # Add PARENT directory to path to make test aware of other modules
 # pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -33,7 +33,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.utilities.resources import resources_path
-from safe.utilities.utilities_for_testing import load_layer
+from safe.test.utilities import load_layer
 from safe.utilities.gis import qgis_version
 from safe.report.map import Map
 

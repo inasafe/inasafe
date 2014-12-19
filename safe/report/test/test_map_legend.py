@@ -19,10 +19,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 import unittest
 import logging
+
+import qgis  # pylint: disable=W0611
 
 # Add PARENT directory to path to make test aware of other modules
 # pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -37,7 +37,7 @@ from safe.common.testing import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import temp_dir, unique_filename
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     check_images,
     load_layer)
 from safe.report.map_legend import MapLegend
@@ -183,7 +183,7 @@ class MapLegendTest(unittest.TestCase):
         LOGGER.debug(path)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so place any other possible
-        # variants in the safe_qgis/test_data/test_images/ dir e.g.
+        # variants in the safe_qgis/test_data/images/ dir e.g.
         # addClassToLegend-variantUbuntu13.04.png
         tolerance = 0  # to allow for version number changes in disclaimer
         flag, message = check_images(

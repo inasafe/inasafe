@@ -35,7 +35,7 @@ TEST_FILES_DIR = os.path.join(
     '..',
     '..',
     '..',
-    'test/test_data/test_files')
+    'test/test_data/files')
 
 
 class MessageViewerTest(unittest.TestCase):

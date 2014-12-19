@@ -40,7 +40,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # noinspection PyPackageRequirements
 from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog
-from safe.utilities.utilities_for_testing import load_layer
+from safe.test.utilities import load_layer
 from safe.common.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
@@ -73,7 +73,7 @@ district_jakarta_boundary_path = os.path.join(
 
 TEST_DATA_DIR = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__), '../../test/test_data/test_files'))
+        os.path.dirname(__file__), '../../test/test_data/files'))
 
 
 class ImpactMergeDialogTest(unittest.TestCase):

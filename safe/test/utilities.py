@@ -37,10 +37,10 @@ YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_files'))
+    os.path.dirname(__file__), '../test/test_data/files'))
 
 SCENARIO_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_scenarios'))
+    os.path.dirname(__file__), '../test/test_data/scenarios'))
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -50,7 +50,7 @@ GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 CONTROL_IMAGE_DIR = os.path.join(
     os.path.dirname(__file__),
-    '../test/test_data/test_images')
+    '../test/test_data/images')
 
 
 def assert_hashes_for_file(hashes, filename):
@@ -316,7 +316,7 @@ def check_images(control_image, test_image_path, tolerance=1000):
         extension will automatically be added and the test image path
         (CONTROL_IMAGE_DIR) will be prepended. e.g.
         addClassToLegend will cause the control image of
-        test\/test_data\/test_images\/addClassToLegend.png to be used.
+        test\/test_data\/images\/addClassToLegend.png to be used.
     :type control_image: str
 
     :returns: Success or failure indicator, message providing analysis,

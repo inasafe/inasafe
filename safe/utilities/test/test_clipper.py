@@ -54,7 +54,7 @@ from safe.utilities.clipper import (
     clip_geometry,
     adjust_clip_extent)
 from safe.utilities.analysis import Analysis
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     set_canvas_crs,
     RedirectStreams,
     DEVNULL,
