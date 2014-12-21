@@ -1,4 +1,4 @@
-    # coding=utf-8
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid **GUI InaSAFE Wizard Dialog.**
 
@@ -177,7 +177,7 @@ class WizardAnalysisHandler(QObject):
         """Setup and execute the analysis"""
         self.enable_signal_receiver()
 
-        #TODO: TRY...CATCH HERE! (see: dock)
+        # TODO: TRY...CATCH HERE! (see: dock)
 
         # TODO: In dock, the keywords dialog is displayed here
         #       for the aggregation layer. Why?
@@ -202,7 +202,7 @@ class WizardAnalysisHandler(QObject):
         self.analysis.hazard_layer = self.parent.hazard_layer
         self.analysis.exposure_layer = self.parent.exposure_layer
         self.analysis.aggregation_layer = self.parent.aggregation_layer
-        #TODO test if the implement aggregation layer works!
+        # TODO test if the implement aggregation layer works!
 
         # noinspection PyTypeChecker
         self.analysis.hazard_keyword = self.keyword_io.read_keywords(
@@ -342,7 +342,7 @@ class WizardAnalysisHandler(QObject):
         :type message: Message
 
         """
-        #TODO Hardcoded step - may overflow, if the number of messages increase
+        # TODO Hardcoded step - may overflow, if number of messages increase
         self.parent.pbProgress.setValue(self.parent.pbProgress.value() + 15)
         self.parent.wvResults.dynamic_message_event(sender, message)
 
@@ -435,7 +435,7 @@ class WizardAnalysisHandler(QObject):
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not style:
                 qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
-                #qgis_impact_layer.setColorShadingAlgorithm(
+                # qgis_impact_layer.setColorShadingAlgorithm(
                 #    QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)

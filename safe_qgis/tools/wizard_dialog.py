@@ -2536,7 +2536,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             new_step = step_fc_extent
         elif current_step == step_fc_extent:
             new_step = step_fc_params
-        elif current_step in [step_fc_user_extent, step_fc_params, step_fc_summary]:
+        elif current_step in [step_fc_user_extent, step_fc_params,
+                              step_fc_summary]:
             new_step = current_step + 1
         elif current_step == step_fc_analysis:
             new_step = None  # Wizard complete
