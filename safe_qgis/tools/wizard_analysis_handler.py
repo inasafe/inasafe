@@ -56,11 +56,14 @@ from safe_qgis.safe_interface import (
 
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.analysis import Analysis
+from safe_qgis.utilities.extent import Extent
 
 from safe_qgis.utilities.utilities import (
     get_error_message,
     impact_attribution,
-    read_impact_layer)
+    read_impact_layer,
+    extent_string_to_array)
+
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -98,12 +101,13 @@ class WizardAnalysisHandler(QObject):
         self.iface = parent.iface
         self.keyword_io = KeywordIO()
 
+        self.extent = Extent(self.iface)
+
         # Values for settings these get set in read_settings.
         self.run_in_thread_flag = None
         self.zoom_to_impact_flag = None
         self.hide_exposure_flag = None
         self.clip_hard = None
-        self.clip_to_viewport = None
         self.show_intermediate_layers = None
         self.show_rubber_bands = False
 
@@ -120,7 +124,28 @@ class WizardAnalysisHandler(QObject):
         Do this on init and after changing options in the options dialog.
         """
 
-        settings = QtCore.QSettings()
+        settings = QSettings()
+
+        flag = bool(settings.value(
+            'inasafe/showRubberBands', False, type=bool))
+        self.extent.show_rubber_bands = flag
+        try:
+            extent = settings.value('inasafe/analysis_extent', '', type=str)
+            crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+        except TypeError:
+            # Any bogus stuff in settings and we just clear them
+            extent = ''
+            crs = ''
+
+        if extent != '' and crs != '':
+            extent = extent_string_to_array(extent)
+            try:
+                self.extent.user_extent = QgsRectangle(*extent)
+                self.extent.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+                self.extent.show_user_analysis_extent()
+            except TypeError:
+                self.extent.user_extent = None
+                self.extent.user_extent_crs = None
 
         flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
@@ -138,10 +163,6 @@ class WizardAnalysisHandler(QObject):
         # whether to 'hard clip' layers (e.g. cut buildings in half if they
         # lie partially in the AOI
         self.clip_hard = settings.value('inasafe/clip_hard', False, type=bool)
-
-        # whether to clip hazard and exposure layers to the view port
-        self.clip_to_viewport = settings.value(
-            'inasafe/clip_to_viewport', True, type=bool)
 
         # whether to show or not postprocessing generated layers
         self.show_intermediate_layers = settings.value(
@@ -203,7 +224,14 @@ class WizardAnalysisHandler(QObject):
         self.analysis.show_intermediate_layers = self.show_intermediate_layers
         self.analysis.run_in_thread_flag = self.run_in_thread_flag
         self.analysis.map_canvas = self.iface.mapCanvas()
-        self.analysis.clip_to_viewport = self.clip_to_viewport
+
+        # Extent
+        if self.parent.rbExtentUser.isChecked():
+            self.analysis.user_extent = self.extent.user_extent
+        else:
+            self.analysis.user_extent = None
+        self.analysis.user_extent_crs = self.extent.user_extent_crs
+        self.analysis.clip_to_viewport = self.parent.rbExtentScreen.isChecked()
 
         try:
             self.analysis.setup_analysis()

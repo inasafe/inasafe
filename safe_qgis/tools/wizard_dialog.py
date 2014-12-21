@@ -41,7 +41,11 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsDataSourceURI,
-    QgsMapLayerRegistry)
+    QgsMapLayerRegistry,
+    QgsPoint,
+    QgsRectangle,
+    QgsCoordinateTransform)
+
 
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 
@@ -51,7 +55,9 @@ from safe_qgis.tools.wizard_analysis_handler import WizardAnalysisHandler
 from safe.api import ImpactFunctionManager, InaSAFEError
 from safe.api import metadata  # pylint: disable=W0612
 
-from safe_qgis.safe_interface import DEFAULTS
+from safe_qgis.safe_interface import (
+    DEFAULTS,
+    get_safe_impact_function)
 
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
@@ -69,11 +75,10 @@ from safe_qgis.exceptions import (
     UnsupportedProviderError)
 from safe_qgis.utilities.help import show_context_help
 
-# TODO: Temporary:
+from safe_qgis.tools.rectangle_map_tool import RectangleMapTool
+from safe_qgis.tools.extent_selector_dialog import ExtentSelectorDialog
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe_qgis.safe_interface import (
-    get_safe_impact_function)
 
 
 def wizard_tr(text):
@@ -183,9 +188,10 @@ step_fc_agglayer_from_canvas = 18
 step_fc_agglayer_from_browser = 19
 step_fc_agglayer_disjoint = 20
 step_fc_extent = 21
-step_fc_params = 22
-step_fc_summary = 23
-step_fc_analysis = 24
+step_fc_user_extent = 22
+step_fc_params = 23
+step_fc_summary = 24
+step_fc_analysis = 25
 
 # Aggregations' keywords
 female_ratio_attribute_key = DEFAULTS['FEMALE_RATIO_ATTR_KEY']
@@ -320,6 +326,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.tvBrowserAggregation.selectionModel().selectionChanged.connect(
             self.tvBrowserAggregation_selection_changed)
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
+        self.lblDefineExtentNow.linkActivated.connect(
+            self.lblDefineExtentNow_clicked)
         self.pbnCancel.released.connect(self.reject)
 
         # string constants
@@ -1215,12 +1223,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setText(0, imfunc['name'])
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
-                # TODO TEMP DEBUG temporary:
-                # if (h['name'] == 'flood' and
-                #        imfunc['name'] == "Flood Building Impact Function"):
-                #    self.twi_if_tsunami = tree_leaf
-        # TODO TEMP DEBUG temporary
-        # self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
+                ## TODO TEMP DEBUG temporary:
+                #if (h['name'] == 'flood' and
+                        #imfunc['name'] == "Flood Building Impact Function"):
+                    #self.twi_if_tsunami = tree_leaf
+        ## TODO TEMP DEBUG temporary
+        #self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1231,7 +1239,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+           executed when the radiobutton is activated.
         """
         self.pbnNext.setEnabled(True)
 
@@ -1240,7 +1248,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+           executed when the radiobutton is activated.
         """
         self.pbnNext.setEnabled(True)
 
@@ -1685,7 +1693,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+           executed when the radiobutton is activated.
         """
         self.pbnNext.setEnabled(True)
 
@@ -1694,7 +1702,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+           executed when the radiobutton is activated.
         """
         self.pbnNext.setEnabled(True)
 
@@ -1787,7 +1795,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+           executed when the radiobutton is activated.
         """
         self.pbnNext.setEnabled(True)
 
@@ -1796,7 +1804,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+           executed when the radiobutton is activated.
         """
         self.pbnNext.setEnabled(True)
 
@@ -1805,7 +1813,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         """Unlock the Next button
 
         .. note:: This is an automatic Qt slot
-           executed when the title value changes.
+           executed when the radiobutton is activated.
         """
         self.pbnNext.setEnabled(True)
 
@@ -1878,6 +1886,158 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         pass
 
     # ===========================
+    # STEP_FC_EXTENT
+    # ===========================
+
+    # noinspection PyPep8Naming
+    def on_rbExtentUser_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the radiobutton is activated.
+        """
+        self.pbnNext.setEnabled(True)
+
+    # noinspection PyPep8Naming
+    def on_rbExtentLayer_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the radiobutton is activated.
+        """
+        self.pbnNext.setEnabled(True)
+
+    # noinspection PyPep8Naming
+    def on_rbExtentScreen_toggled(self):
+        """Unlock the Next button
+
+        .. note:: This is an automatic Qt slot
+           executed when the radiobutton is activated.
+        """
+        self.pbnNext.setEnabled(True)
+
+    def lblDefineExtentNow_clicked(self):
+        """Go to the Define User Extent step
+        """
+        self.rbExtentUser.click()
+        self.set_widgets_step_fc_user_extent()
+        self.go_to_step(step_fc_user_extent)
+
+    def set_widgets_step_fc_extent(self):
+        """Set widgets on the Extent tab"""
+        pass
+
+    # ===========================
+    # STEP_FC_USER_EXTENT
+    # ===========================
+
+    def start_capture(self):
+        """Start capturing the rectangle."""
+        previous_map_tool = self.iface.mapCanvas().mapTool()
+        if previous_map_tool != self.tool:
+            self.previous_map_tool = previous_map_tool
+        self.iface.mapCanvas().setMapTool(self.tool)
+        self.hide()
+
+    def stop_capture(self):
+        """Stop capturing the rectangle and reshow the dialog."""
+        self._populate_coordinates()
+        self.iface.mapCanvas().setMapTool(self.previous_map_tool)
+        self.show()
+
+    def _are_coordinates_valid(self):
+        """
+        Check if the coordinates are valid.
+
+        :return: True if coordinates are valid otherwise False.
+        :type: bool
+        """
+        try:
+            QgsPoint(
+                self.x_minimum.value(),
+                self.y_maximum.value())
+            QgsPoint(
+                self.x_maximum.value(),
+                self.y_minimum.value())
+        except ValueError:
+            return False
+
+        return True
+
+    def _coordinates_changed(self):
+        """
+        Handle a change in the coordinate input boxes.
+        """
+        if self._are_coordinates_valid():
+            point1 = QgsPoint(
+                self.x_minimum.value(),
+                self.y_maximum.value())
+            point2 = QgsPoint(
+                self.x_maximum.value(),
+                self.y_minimum.value())
+            rect = QgsRectangle(point1, point2)
+
+            self.tool.set_rectangle(rect)
+
+    def _populate_coordinates(self):
+        """
+        Update the UI with the current active coordinates.
+        """
+        rect = self.tool.rectangle()
+        self.blockSignals(True)
+        if rect is not None:
+            self.x_minimum.setValue(rect.xMinimum())
+            self.y_minimum.setValue(rect.yMinimum())
+            self.x_maximum.setValue(rect.xMaximum())
+            self.y_maximum.setValue(rect.yMaximum())
+        else:
+            self.x_minimum.clear()
+            self.y_minimum.clear()
+            self.x_maximum.clear()
+            self.y_maximum.clear()
+        self.blockSignals(False)
+
+    def set_widgets_step_fc_user_extent(self):
+        """Set widgets on the User Extent tab"""
+
+        # Read current user extent from dock
+        extent = self.dock.extent.user_extent
+        crs = self.dock.extent.user_extent_crs
+
+        self.previous_map_tool = self.iface.mapCanvas().mapTool()
+        self.tool = RectangleMapTool(self.iface.mapCanvas())
+
+        if extent is None and crs is None:
+            # Use the current map canvas extents as a starting point
+            self.tool.set_rectangle(self.iface.mapCanvas().extent())
+        else:
+            # Ensure supplied extent is in current canvas crs
+            transform = QgsCoordinateTransform(
+                crs,
+                self.iface.mapCanvas().mapRenderer().destinationCrs())
+            transformed_extent = transform.transformBoundingBox(extent)
+            self.tool.set_rectangle(transformed_extent)
+
+        self._populate_coordinates()
+
+        # Observe inputs for changes
+        self.x_minimum.valueChanged.connect(self._coordinates_changed)
+        self.y_minimum.valueChanged.connect(self._coordinates_changed)
+        self.x_maximum.valueChanged.connect(self._coordinates_changed)
+        self.y_maximum.valueChanged.connect(self._coordinates_changed)
+
+        # Draw the rubberband
+        self._coordinates_changed()
+
+        # Wire up button events
+        self.capture_button.clicked.connect(self.start_capture)
+        # Make sure to reshow this dialog when rectangle is captured
+        self.tool.rectangle_created.connect(self.stop_capture)
+
+
+        self.pbnNext.setEnabled(True)
+
+    # ===========================
     # STEP_FC_PARAMS
     # ===========================
 
@@ -1903,12 +2063,11 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         dialog.build_form(self.if_params)
 
         if self.twParams:
-            # remove the existing tab widget
-            # TODO: ensure it's really removed (strange overlapping children
-            # was observed)
-            self.layoutIFParams.removeWidget(self.twParams)
+            self.twParams.hide()
+
         self.twParams = dialog.tabWidget
         self.layoutIFParams.addWidget(self.twParams)
+
         self.if_params = dialog.parse_input(dialog.values)
 
     # ===========================
@@ -2091,6 +2250,10 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             self.set_widgets_step_fc_agglayer_from_browser()
         elif new_step == step_fc_agglayer_disjoint:
             self.set_widgets_step_fc_agglayer_disjoint()
+        elif new_step == step_fc_extent:
+            self.set_widgets_step_fc_extent()
+        elif new_step == step_fc_user_extent:
+            self.set_widgets_step_fc_user_extent()
         elif new_step == step_fc_params:
             self.set_widgets_step_fc_params()
         elif new_step == step_fc_summary:
@@ -2122,7 +2285,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if new_step == step_fc_analysis:
             self.setup_and_run_analysis()
 
-        # TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
+        # TODO TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
         if new_step == step_kw_category and self.parent_step:
             if self.parent_step in [step_fc_hazlayer_from_canvas,
                                     step_fc_hazlayer_from_browser]:
@@ -2231,6 +2394,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         if step == step_fc_agglayer_disjoint:
             # Never go further if layers disjoint
             return False
+        if step == step_fc_extent:
+            return (bool(self.rbExtentUser.isChecked() or
+                         self.rbExtentLayer.isChecked() or
+                         self.rbExtentScreen.isChecked()))
+        if step == step_fc_user_extent:
+            return True
         if step == step_fc_params:
             return True
         if step == step_fc_summary:
@@ -2347,7 +2516,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_fc_agglayer_from_browser
             else:
                 # no aggregation (so also no disjoint test)
-                new_step = step_fc_params
+                new_step = step_fc_extent
         elif current_step in [step_fc_agglayer_from_canvas,
                               step_fc_agglayer_from_browser]:
             if self.is_selected_layer_keyword_less:
@@ -2362,10 +2531,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                                              self.aggregation_layer):
                     new_step = step_fc_agglayer_disjoint
                 else:
-                    new_step = step_fc_params
+                    new_step = step_fc_extent
         elif current_step == step_fc_agglayer_disjoint:
+            new_step = step_fc_extent
+        elif current_step == step_fc_extent:
             new_step = step_fc_params
-        elif current_step in [step_fc_params, step_fc_summary]:
+        elif current_step in [step_fc_user_extent, step_fc_params, step_fc_summary]:
             new_step = current_step + 1
         elif current_step == step_fc_analysis:
             new_step = None  # Wizard complete
@@ -2455,7 +2626,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_fc_agglayer_from_canvas
             else:
                 new_step = step_fc_agglayer_from_browser
-        elif current_step == step_fc_params:
+        elif current_step == step_fc_extent:
             # TODO test disjoint aggr layers!!
             _agg_layers_disjoint = False
             if _agg_layers_disjoint:
@@ -2466,6 +2637,8 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_fc_agglayer_from_browser
             else:
                 new_step = step_fc_agglayer_origin
+        elif current_step == step_fc_params:
+                new_step = step_fc_extent
         else:
             new_step = current_step - 1
         return new_step

@@ -662,7 +662,8 @@ class Plugin:
             self.iface,
             self.dock_widget)
         dialog.set_function_centric_mode()
-        dialog.exec_()  # modal
+
+        dialog.show()  # non-modal
 
     def show_function_browser(self):
         """Show the impact function browser tool."""
