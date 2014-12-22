@@ -1053,8 +1053,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         finally:
             # Set back analysis to not ignore memory warning
             self.analysis.force_memory = False
+            self.hide_busy()
             self.disable_signal_receiver()
-        pass
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
