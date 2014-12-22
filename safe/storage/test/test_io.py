@@ -34,8 +34,7 @@ from safe.gis.numerics import nan_allclose
 from safe.common.testing import (
     TESTDATA,
     HAZDATA,
-    DATADIR,
-    GEOTRANSFORMS)
+    DATADIR)
 from safe.common.utilities import unique_filename
 from safe.gis.polygon import is_inside_polygon
 from safe.common.exceptions import (
@@ -54,6 +53,10 @@ FEATURE_COUNTS = {
     'indonesia_highway_sample.shp': 2,
     'OSM_subset.shp': 79,
     'kecamatan_jakarta_osm.shp': 47}
+
+GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
+                 (105.29857, 0.0112, 0.0, -5.565233000000001, 0.0, -0.0112),
+                 (96.956, 0.03074106, 0.0, 2.2894972560001, 0.0, -0.03074106)]
 
 
 # Auxiliary function for raster test

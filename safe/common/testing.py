@@ -47,11 +47,6 @@ HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
-# For testing of storage modules
-GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
-                 (105.29857, 0.0112, 0.0, -5.565233000000001, 0.0, -0.0112),
-                 (96.956, 0.03074106, 0.0, 2.2894972560001, 0.0, -0.03074106)]
-
 
 # For polygon testing
 test_lines = [numpy.array([[122.231021, -8.626557],
