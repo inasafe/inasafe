@@ -35,7 +35,6 @@ from safe.common.testing import (
     TESTDATA,
     HAZDATA,
     DATADIR,
-    FEATURE_COUNTS,
     GEOTRANSFORMS)
 from safe.common.utilities import unique_filename
 from safe.gis.polygon import is_inside_polygon
@@ -44,6 +43,17 @@ from safe.common.exceptions import (
     ReadLayerError,
     VerificationError,
     InaSAFEError)
+
+# Known feature counts in test data
+FEATURE_COUNTS = {
+    'test_buildings.shp': 144,
+    'tsunami_building_exposure.shp': 19,
+    'kecamatan_geo.shp': 42,
+    'Padang_WGS84.shp': 3896,
+    'OSM_building_polygons_20110905.shp': 34960,
+    'indonesia_highway_sample.shp': 2,
+    'OSM_subset.shp': 79,
+    'kecamatan_jakarta_osm.shp': 47}
 
 
 # Auxiliary function for raster test

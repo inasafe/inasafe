@@ -16,7 +16,6 @@ from safe.common.version import get_version
 LOGGER = logging.getLogger('InaSAFE')
 
 
-
 class SafeTester(Tester):
     """Tester class for testing SAFE package."""
     def _show_system_info(self):
@@ -47,17 +46,6 @@ TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
 HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
-
-# Known feature counts in test data
-FEATURE_COUNTS = {
-    'test_buildings.shp': 144,
-    'tsunami_building_exposure.shp': 19,
-    'kecamatan_geo.shp': 42,
-    'Padang_WGS84.shp': 3896,
-    'OSM_building_polygons_20110905.shp': 34960,
-    'indonesia_highway_sample.shp': 2,
-    'OSM_subset.shp': 79,
-    'kecamatan_jakarta_osm.shp': 47}
 
 # For testing of storage modules
 GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
@@ -652,7 +640,4 @@ test_polygon = numpy.array([[122.229086, -8.624406],
                             [122.228947, -8.624550],
                             [122.229167, -8.624583],
                             [122.229086, -8.624406]])
-
-
-# noinspection PyUnresolvedReferences
 
