@@ -101,7 +101,10 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.png', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+# import pydevd
+# pydevd.settrace(
+#     'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+
 
 # noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
@@ -403,8 +406,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(
-            self.draw_rubber_bands)
+        self.iface.mapCanvas().extentsChanged.connect(self.draw_rubber_bands)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -965,9 +967,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         settings = QSettings()
         settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
-            self.extent.hide_last_analysis_extent()
-            self.extent.hide_next_analysis_extent()
-            self.extent.hide_user_analysis_extent()
+            self.extent.hide_last_analysis_extent()  # red
+            self.extent.hide_next_analysis_extent()  # green
+            self.extent.hide_user_analysis_extent()  # blue
         else:
             self.draw_rubber_bands()
 
@@ -980,8 +982,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except TypeError:
             flag = False
         if flag:
-            self.show_next_analysis_extent()
-            self.extent.show_user_analysis_extent()
+            self.show_next_analysis_extent()  # green
+            self.extent.show_user_analysis_extent()  # blue
+            try:
+                self.extent.show_last_analysis_extent(
+                    self.analysis.clip_parameters[1])
+            except AttributeError:
+                pass
 
     def accept(self):
         """Execute analysis when run button is clicked.
@@ -1051,8 +1058,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         finally:
             # Set back analysis to not ignore memory warning
             self.analysis.force_memory = False
+            self.hide_busy()
             self.disable_signal_receiver()
-        pass
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
