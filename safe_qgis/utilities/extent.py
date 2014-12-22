@@ -218,6 +218,8 @@ class Extent(object):
         .. versionadded:: 2.2.0
         """
 
+        self.hide_user_analysis_extent()
+
         extent = self.user_extent
         source_crs = self.user_extent_crs
 
