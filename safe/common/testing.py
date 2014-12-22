@@ -8,9 +8,9 @@ import numpy
 import os
 import sys
 import logging
+
 from numpy.testing import Tester
 
-from safe.gis.numerics import axes_to_points
 from safe.common.version import get_version
 
 
@@ -67,15 +67,6 @@ FEATURE_COUNTS = {
 GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
                  (105.29857, 0.0112, 0.0, -5.565233000000001, 0.0, -0.0112),
                  (96.956, 0.03074106, 0.0, 2.2894972560001, 0.0, -0.03074106)]
-
-
-def combine_coordinates(x, y):
-    """Make list of all combinations of points for x and y coordinates
-    :param x:
-    :param y:
-    """
-
-    return axes_to_points(x, y)
 
 
 # For polygon testing

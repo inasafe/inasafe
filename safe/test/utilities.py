@@ -26,6 +26,7 @@ from qgis.core import (
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
+from safe.gis.numerics import axes_to_points
 from safe.utilities.utilities import read_file_keywords
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -1040,6 +1041,14 @@ def remove_vector_temp_file(file_path):
     for ext in extensions:
         if os.path.exists(file_path + ext):
             os.remove(file_path + ext)
+
+
+def combine_coordinates(x, y):
+    """Make list of all combinations of points for x and y coordinates
+    :param x:
+    :param y:
+    """
+    return axes_to_points(x, y)
 
 
 class FakeLayer(object):
