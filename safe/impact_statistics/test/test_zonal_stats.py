@@ -16,27 +16,18 @@ __date__ = '17/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
-import sys
 import os
 
 from qgis.core import QgsRectangle
 
-from safe.common.testing import get_qgis_app
 from safe.impact_statistics.zonal_stats import (
     calculate_zonal_stats, intersection_box)
 from safe.test.utilities import (
     load_layer,
-    test_data_path)
+    test_data_path,
+    get_qgis_app)
 
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 
 
 class ZonalStatsTest(unittest.TestCase):

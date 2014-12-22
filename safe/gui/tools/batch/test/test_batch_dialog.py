@@ -21,9 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import unittest
 
-from safe.common.testing import get_qgis_app
-
-
+from safe.test.utilities import test_data_path, get_qgis_app
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -31,7 +29,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
 from safe.gui.widgets.dock import Dock
-from safe.test.utilities import test_data_path
+
 
 DOCK = Dock(IFACE)
 

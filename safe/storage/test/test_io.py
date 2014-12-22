@@ -2,7 +2,6 @@
 """io related tests."""
 import unittest
 import numpy
-import sys
 import os
 from osgeo import gdal
 
@@ -38,7 +37,6 @@ from safe.common.testing import (
     DATADIR,
     FEATURE_COUNTS,
     GEOTRANSFORMS)
-from safe.utilities.i18n import tr
 from safe.common.utilities import unique_filename
 from safe.gis.polygon import is_inside_polygon
 from safe.common.exceptions import (

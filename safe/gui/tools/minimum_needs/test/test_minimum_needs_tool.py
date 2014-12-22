@@ -25,17 +25,12 @@ import os
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe.common.testing import get_qgis_app
-
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.storage.core import read_layer as safe_read_layer
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 shapefile_path = test_data_path('other', 'minimum_needs.shp')
 result_path_base = test_data_path('other', 'minimum_needs_perka7')
 

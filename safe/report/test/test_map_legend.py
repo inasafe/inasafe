@@ -17,31 +17,19 @@ __date__ = '12/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
 import unittest
 import logging
 
-import qgis  # pylint: disable=W0611
-
-# Add PARENT directory to path to make test aware of other modules
-# pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-# sys.path.append(pardir)
-
-from PyQt4 import QtGui
 from qgis.core import QgsMapLayerRegistry, QgsFillSymbolV2
-
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from PyQt4 import QtGui
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.test.utilities import (
     check_images,
-    load_layer)
+    load_layer, get_qgis_app)
 from safe.report.map_legend import MapLegend
 
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

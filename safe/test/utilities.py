@@ -23,16 +23,17 @@ from qgis.core import (
     QgsMapLayerRegistry)
 
 # For testing and demoing
-from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 from safe.gis.numerics import axes_to_points
 from safe.utilities.utilities import read_file_keywords
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, LOGGER
+
+QGIS_APP = None  # Static variable used to hold hand to running QGIS app
+CANVAS = None
+PARENT = None
+IFACE = None
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
@@ -42,6 +43,74 @@ LOGGER = logging.getLogger('InaSAFE')
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
+
+
+def get_qgis_app():
+    """ Start one QGIS application to test against.
+
+    :returns: Handle to QGIS app, canvas, iface and parent. If there are any
+        errors the tuple members will be returned as None.
+    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
+
+    If QGIS is already running the handle to that app will be returned.
+    """
+
+    try:
+        # noinspection PyPackageRequirements
+        from PyQt4 import QtGui, QtCore
+        # noinspection PyPackageRequirements
+        from PyQt4.QtCore import QCoreApplication, QSettings
+        from qgis.core import QgsApplication
+        from qgis.gui import QgsMapCanvas
+        from safe.gis.qgis_interface import QgisInterface
+    except ImportError:
+        return None, None, None, None
+
+    global QGIS_APP  # pylint: disable=W0603
+
+    if QGIS_APP is None:
+        gui_flag = True  # All test will run qgis in gui mode
+
+        # AG: For testing purposes, we use our own configuration file instead
+        # of using the QGIS apps conf of the host
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationName('QGIS')
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationDomain('qgis.org')
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
+
+        # noinspection PyPep8Naming
+        QGIS_APP = QgsApplication(sys.argv, gui_flag)
+
+        # Make sure QGIS_PREFIX_PATH is set in your env if needed!
+        QGIS_APP.initQgis()
+        s = QGIS_APP.showSettings()
+        LOGGER.debug(s)
+
+        # Save some settings
+        settings = QSettings()
+        settings.setValue('locale/overrideFlag', True)
+        settings.setValue('locale/userLocale', 'en_US')
+
+    global PARENT  # pylint: disable=W0603
+    if PARENT is None:
+        # noinspection PyPep8Naming
+        PARENT = QtGui.QWidget()
+
+    global CANVAS  # pylint: disable=W0603
+    if CANVAS is None:
+        # noinspection PyPep8Naming
+        CANVAS = QgsMapCanvas(PARENT)
+        CANVAS.resize(QtCore.QSize(400, 400))
+
+    global IFACE  # pylint: disable=W0603
+    if IFACE is None:
+        # QgisInterface is a stub implementation of the QGIS plugin interface
+        # noinspection PyPep8Naming
+        IFACE = QgisInterface(CANVAS)
+
+    return QGIS_APP, CANVAS, IFACE, PARENT
 
 
 def assert_hashes_for_file(hashes, filename):

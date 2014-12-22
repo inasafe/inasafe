@@ -29,9 +29,8 @@ from qgis.core import (
     QgsComposition)
 from PyQt4 import QtCore
 
-from safe.common.testing import get_qgis_app
 from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog
-from safe.test.utilities import load_layer, test_data_path
+from safe.test.utilities import load_layer, test_data_path, get_qgis_app
 from safe.common.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,

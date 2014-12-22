@@ -6,7 +6,6 @@
 
 import numpy
 import os
-import sys
 import logging
 
 from numpy.testing import Tester
@@ -15,10 +14,7 @@ from safe.common.version import get_version
 
 
 LOGGER = logging.getLogger('InaSAFE')
-QGIS_APP = None  # Static variable used to hold hand to running QGIS app
-CANVAS = None
-PARENT = None
-IFACE = None
+
 
 
 class SafeTester(Tester):
@@ -659,69 +655,4 @@ test_polygon = numpy.array([[122.229086, -8.624406],
 
 
 # noinspection PyUnresolvedReferences
-def get_qgis_app():
-    """ Start one QGIS application to test against.
 
-    :returns: Handle to QGIS app, canvas, iface and parent. If there are any
-        errors the tuple members will be returned as None.
-    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
-
-    If QGIS is already running the handle to that app will be returned.
-    """
-
-    try:
-        # noinspection PyPackageRequirements
-        from PyQt4 import QtGui, QtCore
-        # noinspection PyPackageRequirements
-        from PyQt4.QtCore import QCoreApplication, QSettings
-        from qgis.core import QgsApplication
-        from qgis.gui import QgsMapCanvas
-        from safe.gis.qgis_interface import QgisInterface
-    except ImportError:
-        return None, None, None, None
-
-    global QGIS_APP  # pylint: disable=W0603
-
-    if QGIS_APP is None:
-        gui_flag = True  # All test will run qgis in gui mode
-
-        # AG: For testing purposes, we use our own configuration file instead
-        # of using the QGIS apps conf of the host
-        # noinspection PyCallByClass,PyArgumentList
-        QCoreApplication.setOrganizationName('QGIS')
-        # noinspection PyCallByClass,PyArgumentList
-        QCoreApplication.setOrganizationDomain('qgis.org')
-        # noinspection PyCallByClass,PyArgumentList
-        QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
-
-        # noinspection PyPep8Naming
-        QGIS_APP = QgsApplication(sys.argv, gui_flag)
-
-        # Make sure QGIS_PREFIX_PATH is set in your env if needed!
-        QGIS_APP.initQgis()
-        s = QGIS_APP.showSettings()
-        LOGGER.debug(s)
-
-        # Save some settings
-        settings = QSettings()
-        settings.setValue('locale/overrideFlag', True)
-        settings.setValue('locale/userLocale', 'en_US')
-
-    global PARENT  # pylint: disable=W0603
-    if PARENT is None:
-        # noinspection PyPep8Naming
-        PARENT = QtGui.QWidget()
-
-    global CANVAS  # pylint: disable=W0603
-    if CANVAS is None:
-        # noinspection PyPep8Naming
-        CANVAS = QgsMapCanvas(PARENT)
-        CANVAS.resize(QtCore.QSize(400, 400))
-
-    global IFACE  # pylint: disable=W0603
-    if IFACE is None:
-        # QgisInterface is a stub implementation of the QGIS plugin interface
-        # noinspection PyPep8Naming
-        IFACE = QgisInterface(CANVAS)
-
-    return QGIS_APP, CANVAS, IFACE, PARENT

@@ -27,12 +27,11 @@ import qgis
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 
-from safe.common.testing import get_qgis_app
 from safe.gui.tools.shake_grid.shakemap_importer_dialog import (
     ShakemapImporterDialog)
 from safe.common.testing import TESTDATA
 from safe.common.utilities import unique_filename, temp_dir
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

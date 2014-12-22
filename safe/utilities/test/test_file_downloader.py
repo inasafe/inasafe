@@ -19,17 +19,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import tempfile
 
-# noinspection PyPackageRequirements
+# AG: Although we don't use qgis here, qgis should be imported before PyQt to
+#  force this test to use SIP API V.2
+# noinspection PyUnresolvedReferences
+import qgis
 from PyQt4.QtNetwork import QNetworkAccessManager
 
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.utilities.file_downloader import FileDownloader
-from safe.test.utilities import assert_hash_for_file
 from safe.common.exceptions import DownloadError
+from safe.test.utilities import assert_hash_for_file, get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class FileDownloaderTest(unittest.TestCase):

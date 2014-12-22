@@ -23,7 +23,7 @@ from nose import SkipTest
 
 from PyQt4.QtGui import QDialogButtonBox
 
-from safe.common.testing import get_qgis_app
+from safe.test.utilities import get_qgis_app
 
 
 # In our tests, we need to have this line below before importing any other

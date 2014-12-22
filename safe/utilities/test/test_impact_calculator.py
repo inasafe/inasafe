@@ -17,23 +17,13 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import sys
 import os
 import unittest
-
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.common.exceptions import InsufficientParametersError
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
 from safe.storage.core import read_layer as read_safe_layer
-
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 
 
 class ImpactCalculatorTest(unittest.TestCase):

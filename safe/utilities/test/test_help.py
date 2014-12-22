@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import qgis  # pylint: disable=W0611
 import unittest
 
-from safe.common.testing import get_qgis_app
+from safe.test.utilities import get_qgis_app
 
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing

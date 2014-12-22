@@ -78,7 +78,7 @@ from qgis.core import (
 from safe.impact_functions.core import get_plugins as safe_get_plugins
 from safe.storage.core import read_layer as safe_read_layer
 from safe.engine.core import calculate_impact as safe_calculate_impact
-from safe.common.testing import get_qgis_app
+from safe.test.utilities import get_qgis_app
 from safe.common.tables import (
     Table,
     TableCell,

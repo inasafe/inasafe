@@ -17,18 +17,16 @@ __date__ = '20/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 from safe.engine.core import calculate_impact
 from safe.storage.core import read_layer
-from safe.common.testing import get_qgis_app
 from safe.common.utilities import OrderedDict
 from safe.common.exceptions import GetDataError
 from safe.impact_functions import get_plugins
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

@@ -23,8 +23,7 @@ import shutil
 import ogr
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import get_qgis_app
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.gui.tools.shake_grid.shake_grid import (
     ShakeGrid,
     convert_mmi_data)

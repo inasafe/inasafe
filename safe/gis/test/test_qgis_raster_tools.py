@@ -26,8 +26,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRectangle)
 
-from safe.common.testing import get_qgis_app
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.gis.qgis_raster_tools import (
     pixels_to_points,
     polygonize,

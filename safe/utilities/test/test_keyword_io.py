@@ -1,35 +1,22 @@
 # coding=utf-8
 """Tests for keyword io class."""
 import unittest
-import sys
 import os
 import tempfile
 import shutil
 
-# This import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
-from safe.common.testing import get_qgis_app
 from safe.common.utilities import unique_filename
 from safe.utilities.utilities import read_file_keywords
-from safe.test.utilities import load_layer
+from safe.test.utilities import load_layer, get_qgis_app
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.exceptions import HashNotFoundError
 from safe.gui.tools.test.test_keywords_dialog import clone_padang_layer
 from safe.common.utilities import temp_dir
 from safe.common.testing import HAZDATA, TESTDATA
 
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 
 # Don't change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'

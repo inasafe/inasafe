@@ -1,33 +1,22 @@
 # coding=utf-8
 """Tests for utilities."""
+
 import unittest
-import sys
 import os
 from unittest import expectedFailure
 
-# noinspection PyUnresolvedReferences
-import qgis
-
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, get_qgis_app
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.utilities.utilities import (
     get_error_message,
     humanise_seconds,
     impact_attribution,
     read_file_keywords)
 from safe.utilities.gis import qgis_version
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.common.exceptions import KeywordNotFoundError
 from safe.storage.utilities import bbox_intersection
 
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 
 
 class UtilitiesTest(unittest.TestCase):

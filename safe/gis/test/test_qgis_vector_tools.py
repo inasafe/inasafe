@@ -28,10 +28,9 @@ from qgis.core import (
     QgsRectangle)
 from PyQt4.QtCore import QVariant
 
-from safe.common.testing import get_qgis_app
 from safe.gis.gdal_ogr_tools import (
     polygonize_thresholds)
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.gis.qgis_vector_tools import (
     points_to_rectangles,
     union_geometry,

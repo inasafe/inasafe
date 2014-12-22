@@ -34,12 +34,10 @@ from safe.gis.numerics import (
     ensure_numeric)
 from safe.common.utilities import (
     VerificationError,
-    unique_filename,
-    format_int)
+    unique_filename,)
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
-from safe.impact_functions import get_plugins, get_plugin
-from safe.impact_functions.core import population_rounding
+from safe.impact_functions import get_plugins
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,

@@ -12,11 +12,10 @@ import os
 import logging
 import unittest
 
-from safe.common.testing import get_qgis_app
 from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
 from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 
 if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

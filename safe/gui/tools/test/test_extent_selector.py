@@ -27,7 +27,7 @@ from PyQt4.QtCore import Qt, QPoint
 from PyQt4.QtTest import QTest
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
-from safe.common.testing import get_qgis_app
+from safe.test.utilities import get_qgis_app
 
 
 # In our tests, we need to have this line below before importing any other

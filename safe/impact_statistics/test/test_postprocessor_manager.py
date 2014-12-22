@@ -17,24 +17,10 @@ __date__ = '19/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
-import sys
 import os
 import logging
-from os.path import join
 
 from qgis.core import QgsMapLayerRegistry
-
-
-
-
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.test.utilities import (
     set_canvas_crs,
@@ -42,11 +28,16 @@ from safe.test.utilities import (
     GEOCRS,
     load_standard_layers,
     setup_scenario,
-    canvas_list)
+    canvas_list,
+    get_qgis_app)
+
+# AG: get_qgis_app() should be called before importing modules from
+# safe.gui.widgets.dock
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.gui.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
-
 LOGGER = logging.getLogger('InaSAFE')
 
 

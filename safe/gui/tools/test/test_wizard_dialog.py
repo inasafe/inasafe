@@ -36,13 +36,18 @@ from PyQt4.QtCore import Qt
 
 from qgis.core import QgsVectorLayer
 
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.testing import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
+from safe.test.utilities import (
+    clone_raster_layer,
+    clone_shp_layer,
+    get_qgis_app)
+
+# AG: get_qgis_app() should be called before importing modules from
+# safe.gui.tools.wizard_dialog
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
     step_source,
@@ -53,9 +58,6 @@ from safe.gui.tools.wizard_dialog import (
     step_aggregation,
     step_field)
 from safe.utilities.keyword_io import KeywordIO
-from safe.test.utilities import (
-    clone_raster_layer,
-    clone_shp_layer)
 
 
 def clone_csv_layer():

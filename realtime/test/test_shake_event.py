@@ -33,10 +33,8 @@ from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe.common.utilities import temp_dir, unique_filename
-from safe.common.testing import (
-    get_qgis_app,
-    get_version)
-from safe.test.utilities import test_data_path
+from safe.common.testing import get_version
+from safe.test.utilities import test_data_path, get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,

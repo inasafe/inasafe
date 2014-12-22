@@ -24,22 +24,23 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe.common.testing import TESTDATA, get_qgis_app
-
-
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
+from safe.common.testing import TESTDATA
 from safe.gui.tools.save_scenario import SaveScenarioDialog
 from safe.test.utilities import (
     setup_scenario,
     set_canvas_crs,
     set_jakarta_extent,
     load_standard_layers,
-    GEOCRS)
+    GEOCRS,
+    get_qgis_app)
 from safe.common.utilities import unique_filename, temp_dir
+
+# AG: get_qgis_app() should be called before importing modules from
+# safe.gui.widgets.dock
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.gui.widgets.dock import Dock
+
 
 DOCK = Dock(IFACE)
 

@@ -12,10 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import extent_to_array, viewport_geo_array, \
-    get_wgs84_resolution
-from safe.utilities.resources import resources_path
-
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/20/14'
@@ -26,12 +22,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 import logging
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QGis)
+from PyQt4 import QtCore
 
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
@@ -59,7 +54,10 @@ from safe.common.exceptions import (
 from safe import messaging as m
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.utilities.memory_checker import check_memory_usage
-from safe.utilities.gis import get_wgs84_resolution, viewport_geo_array
+from safe.utilities.gis import (
+    get_wgs84_resolution,
+    viewport_geo_array,
+    extent_to_array)
 from safe.utilities.utilities import get_error_message
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
 from safe.messaging import styles

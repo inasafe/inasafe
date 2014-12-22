@@ -110,7 +110,7 @@ class TestWizardDialogLocale(unittest.TestCase):
             clone_shp_layer, remove_vector_temp_file)
         from safe.common.testing import BOUNDDATA
 
-        from safe.common.testing import get_qgis_app
+        from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app()
@@ -138,7 +138,7 @@ class TestWizardDialogLocale(unittest.TestCase):
             clone_shp_layer, remove_vector_temp_file)
         layer = clone_shp_layer(include_keywords=True)
 
-        from safe.common.testing import get_qgis_app
+        from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app()

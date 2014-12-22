@@ -17,27 +17,18 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
 import os
 import unittest
 import logging
 
-import qgis  # pylint: disable=W0611
-
-from safe.common.testing import get_qgis_app
-
-
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.common.utilities import temp_dir, unique_filename
 from safe.test.utilities import (
-    load_layer, check_images)
+    load_layer, check_images, get_qgis_app)
 from safe.report.html_renderer import HtmlRenderer
 from safe.utilities.keyword_io import KeywordIO
 
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

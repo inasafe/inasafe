@@ -18,29 +18,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-import sys
 import os
 import logging
-
-import numpy.testing
 import numpy
-
-from os.path import join
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
 
 from qgis.core import (
     QgsVectorLayer,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
 
-from safe.common.testing import get_qgis_app
 from safe.gis.qgis_vector_tools import extent_to_geo_array
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.defaults import get_defaults
 from safe.common.testing import TESTDATA, BOUNDDATA
 from safe.storage.raster import Raster
@@ -49,19 +36,22 @@ from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS,
-    test_data_path)
+    test_data_path,
+    get_qgis_app,
+    load_standard_layers,
+    setup_scenario,
+    load_layers)
+
+# AG: get_qgis_app() should be called before importing modules from
+# safe.gui.widgets.dock
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
 
-from safe.test.utilities import (
-    load_standard_layers,
-    setup_scenario,
-    load_layers)
 
 DOCK = Dock(IFACE)
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
