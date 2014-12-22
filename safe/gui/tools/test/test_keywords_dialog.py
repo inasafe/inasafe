@@ -32,9 +32,14 @@ from qgis.core import (
 from PyQt4 import QtGui
 
 from safe.test.utilities import (
-    test_data_path, clone_shp_layer, temp_dir, get_qgis_app)
+    test_data_path,
+    clone_shp_layer,
+    temp_dir,
+    get_qgis_app,
+    HAZDATA,
+    TESTDATA,
+    BOUNDDATA)
 from safe.common.utilities import unique_filename
-from safe.common.testing import HAZDATA, TESTDATA, BOUNDDATA
 from safe.gui.tools.keywords_dialog import KeywordsDialog
 from safe.common.exceptions import KeywordNotFoundError
 from safe.utilities.utilities import read_file_keywords

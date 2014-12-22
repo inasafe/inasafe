@@ -18,12 +18,9 @@ import os
 import unittest
 import numpy
 
-from safe.common.testing import (
-    TESTDATA,
-    HAZDATA)
 from safe.storage.core import read_layer
+from safe.test.utilities import FakeLayer, get_qgis_app, TESTDATA, HAZDATA
 
-from safe.test.utilities import FakeLayer, get_qgis_app
 # AG: get_qgis_app() should be called before importing modules from
 # safe.utilities.analysis
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

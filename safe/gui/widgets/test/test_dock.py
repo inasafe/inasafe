@@ -33,9 +33,7 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-from safe.common.testing import TESTDATA, BOUNDDATA
 from safe.common.utilities import format_int
-from safe.common.testing import HAZDATA
 from safe.test.utilities import (
     test_data_path,
     load_standard_layers,
@@ -52,7 +50,11 @@ from safe.test.utilities import (
     set_jakarta_google_extent,
     set_yogya_extent,
     get_ui_state,
-    set_small_jakarta_extent, get_qgis_app)
+    set_small_jakarta_extent,
+    get_qgis_app,
+    TESTDATA,
+    BOUNDDATA,
+    HAZDATA)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock

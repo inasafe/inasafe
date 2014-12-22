@@ -31,7 +31,7 @@ from safe.storage.core import (
 from safe.storage.test.utilities import same_API
 from safe.storage.geometry import Polygon
 from safe.gis.numerics import nan_allclose
-from safe.common.testing import (
+from safe.test.utilities import (
     TESTDATA,
     HAZDATA,
     DATADIR)

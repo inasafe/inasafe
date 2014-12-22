@@ -35,7 +35,7 @@ from safe.gis.numerics import (
 from safe.common.utilities import (
     VerificationError,
     unique_filename,)
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins
 

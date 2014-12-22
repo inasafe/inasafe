@@ -42,7 +42,6 @@ from safe.impact_functions.core import (
     compatible_layers,
     remove_impact_function)
 from safe.common.resource_parameter import ResourceParameter
-from safe.common.testing import TESTDATA, HAZDATA
 from safe.storage.core import read_layer
 from safe.utilities.utilities import read_file_keywords
 from safe.defaults import default_minimum_needs
@@ -52,7 +51,7 @@ from safe.impact_functions.utilities import (
 from safe.metadata import converter_dict
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, TESTDATA, HAZDATA
 
 LOGGER = logging.getLogger('InaSAFE')
 

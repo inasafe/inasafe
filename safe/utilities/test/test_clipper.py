@@ -29,7 +29,6 @@ from qgis.core import (
     QgsGeometry,
     QgsPoint)
 
-from safe.common.testing import HAZDATA, TESTDATA, EXPDATA
 from safe.gis.numerics import nan_allclose
 from safe.common.utilities import unique_filename
 from safe.storage.core import read_layer as read_safe_layer
@@ -51,7 +50,10 @@ from safe.test.utilities import (
     set_jakarta_extent,
     compare_wkt,
     test_data_path,
-    get_qgis_app)
+    get_qgis_app,
+    HAZDATA,
+    TESTDATA,
+    EXPDATA)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.utilities.analysis

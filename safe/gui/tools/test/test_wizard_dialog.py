@@ -38,11 +38,14 @@ from qgis.core import QgsVectorLayer
 
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
 from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
-    get_qgis_app)
+    get_qgis_app,
+    TESTDATA,
+    BOUNDDATA,
+    HAZDATA,
+    EXPDATA)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard_dialog

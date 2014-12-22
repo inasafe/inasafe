@@ -28,21 +28,38 @@ from qgis.core import (
 from safe.gis.numerics import axes_to_points
 from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, LOGGER
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
 PARENT = None
 IFACE = None
-
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
-
 LOGGER = logging.getLogger('InaSAFE')
-
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
+
+# FIXME AG: We are going to remove the usage of all the data from
+# inasafe_data and just use data in test_data_path. But until that is done,
+# we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
+
+# Assuming test data three lvls up
+pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
+    __file__)),
+    '..',
+    '..',
+    '..'))
+
+# Location of test data
+DATANAME = 'inasafe_data'
+DATADIR = os.path.join(pardir, DATANAME)
+
+# Bundled test data
+TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
+HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
+EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
+BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
 
 def get_qgis_app():
@@ -56,12 +73,12 @@ def get_qgis_app():
     """
 
     try:
+        from qgis.core import QgsApplication
+        from qgis.gui import QgsMapCanvas
         # noinspection PyPackageRequirements
         from PyQt4 import QtGui, QtCore
         # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
-        from qgis.core import QgsApplication
-        from qgis.gui import QgsMapCanvas
         from safe.gis.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None

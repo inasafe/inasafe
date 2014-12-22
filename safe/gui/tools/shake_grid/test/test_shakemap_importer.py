@@ -29,9 +29,8 @@ from PyQt4.QtGui import QDialogButtonBox
 
 from safe.gui.tools.shake_grid.shakemap_importer_dialog import (
     ShakemapImporterDialog)
-from safe.common.testing import TESTDATA
 from safe.common.utilities import unique_filename, temp_dir
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import test_data_path, get_qgis_app, TESTDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

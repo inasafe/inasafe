@@ -24,7 +24,6 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe.common.testing import TESTDATA
 from safe.gui.tools.save_scenario import SaveScenarioDialog
 from safe.test.utilities import (
     setup_scenario,
@@ -32,7 +31,8 @@ from safe.test.utilities import (
     set_jakarta_extent,
     load_standard_layers,
     GEOCRS,
-    get_qgis_app)
+    get_qgis_app,
+    TESTDATA)
 from safe.common.utilities import unique_filename, temp_dir
 
 # AG: get_qgis_app() should be called before importing modules from

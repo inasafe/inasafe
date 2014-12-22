@@ -22,7 +22,7 @@ import unittest
 
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.common.exceptions import InsufficientParametersError
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
+from safe.test.utilities import HAZDATA, EXPDATA, TESTDATA
 from safe.storage.core import read_layer as read_safe_layer
 
 

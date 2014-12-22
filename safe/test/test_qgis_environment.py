@@ -24,8 +24,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
 
-from safe.common.testing import EXPDATA
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, EXPDATA
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

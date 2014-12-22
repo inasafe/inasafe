@@ -4,7 +4,7 @@ import numpy
 import os
 from os.path import join
 
-from safe.common.testing import TESTDATA
+from safe.test.utilities import TESTDATA
 from safe.gis.polygon import (
     is_inside_polygon,
     inside_polygon,

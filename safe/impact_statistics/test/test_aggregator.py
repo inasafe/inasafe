@@ -29,7 +29,6 @@ from qgis.core import (
 
 from safe.gis.qgis_vector_tools import extent_to_geo_array
 from safe.defaults import get_defaults
-from safe.common.testing import TESTDATA, BOUNDDATA
 from safe.storage.raster import Raster
 from safe.storage.vector import Vector
 from safe.test.utilities import (
@@ -40,7 +39,9 @@ from safe.test.utilities import (
     get_qgis_app,
     load_standard_layers,
     setup_scenario,
-    load_layers)
+    load_layers,
+    TESTDATA,
+    BOUNDDATA)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock

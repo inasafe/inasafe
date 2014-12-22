@@ -23,9 +23,8 @@ import unittest
 from safe.storage.core import read_layer
 from safe.engine.core import calculate_impact
 from safe.impact_functions import get_plugin
-from safe.common.testing import TESTDATA
 from safe.common.utilities import format_int
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, TESTDATA
 
 
 class TestVolcanoBuildingImpact(unittest.TestCase):
