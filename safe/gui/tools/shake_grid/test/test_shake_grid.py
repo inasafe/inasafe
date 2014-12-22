@@ -23,25 +23,20 @@ import shutil
 import ogr
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import (
-    get_qgis_app,
-    get_shake_test_data_path)
-
-
-
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
+from safe.common.testing import get_qgis_app
+from safe.test.utilities import test_data_path
 from safe.gui.tools.shake_grid.shake_grid import (
     ShakeGrid,
     convert_mmi_data)
 
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # Parse the grid once and use it for all tests to fasten the tests
 # Use temp directory to do the testing
-SOURCE_PATH = os.path.join(
-    get_shake_test_data_path(),
-    '20131105060809/output',
+SOURCE_PATH = test_data_path(
+    'hazard',
+    'shake_data',
+    '20131105060809',
+    'output',
     'grid.xml')
 GRID_PATH = os.path.join(temp_dir(__name__), 'grid.xml')
 shutil.copyfile(SOURCE_PATH, GRID_PATH)

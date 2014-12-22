@@ -35,8 +35,8 @@ from qgis.core import QgsFeatureRequest
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.testing import (
     get_qgis_app,
-    get_version,
-    get_shake_test_data_path)
+    get_version)
+from safe.test.utilities import test_data_path
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
@@ -60,11 +60,9 @@ class TestShakeEvent(unittest.TestCase):
         # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
         # file inside 20131105060809 folder to
         # shakemap_cache_dir/20131105060809/grid.xml
+        shake_path = test_data_path('hazard', 'shake_data')
         input_path = os.path.abspath(
-            os.path.join(
-                get_shake_test_data_path(),
-                SHAKE_ID,
-                'output/grid.xml'))
+            os.path.join(shake_path, SHAKE_ID, 'output/grid.xml'))
         target_folder = os.path.join(
             shakemap_extract_dir(), SHAKE_ID)
         if not os.path.exists(target_folder):
