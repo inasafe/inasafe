@@ -25,10 +25,8 @@ from safe.common.testing import get_qgis_app
 from safe.impact_statistics.zonal_stats import (
     calculate_zonal_stats, intersection_box)
 from safe.test.utilities import (
-    load_layer)
-from safe.common.testing import UNITDATA
-
-
+    load_layer,
+    test_data_path)
 
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
@@ -59,10 +57,10 @@ class ZonalStatsTest(unittest.TestCase):
 
     def test_zonal(self):
         """Test that zonal stats returns the expected output."""
-        raster_layer, _ = load_layer(os.path.join(
-            UNITDATA, 'other', 'tenbytenraster.asc'))
-        vector_layer, _ = load_layer(os.path.join(
-            UNITDATA, 'other', 'zonal_polygons.shp'))
+        raster_layer, _ = load_layer(
+            test_data_path('other', 'tenbytenraster.asc'))
+        vector_layer, _ = load_layer(
+            test_data_path('other', 'zonal_polygons.shp'))
         result = calculate_zonal_stats(
             raster_layer=raster_layer,
             polygon_layer=vector_layer)
@@ -78,13 +76,13 @@ class ZonalStatsTest(unittest.TestCase):
 
     def test_zonal_with_exact_cell_boundaries(self):
         """Test that zonal stats returns the expected output."""
-        raster_layer, _ = load_layer(os.path.join(
-            UNITDATA, 'other', 'tenbytenraster.asc'))
+        raster_layer, _ = load_layer(
+            test_data_path('other', 'tenbytenraster.asc'))
         # Note this is a matrix of 11x11 polygons - one per cell
         # and one poly extending beyond to the right of each row
         # and one poly extending beyond the bottom of each col
-        vector_layer, _ = load_layer(os.path.join(
-            UNITDATA, 'other', 'ten_by_ten_raster_as_polys.shp'))
+        vector_layer, _ = load_layer(
+            test_data_path('other', 'ten_by_ten_raster_as_polys.shp'))
         result = calculate_zonal_stats(
             raster_layer=raster_layer,
             polygon_layer=vector_layer)

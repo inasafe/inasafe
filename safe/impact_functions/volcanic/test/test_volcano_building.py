@@ -23,8 +23,9 @@ import unittest
 from safe.storage.core import read_layer
 from safe.engine.core import calculate_impact
 from safe.impact_functions import get_plugin
-from safe.common.testing import TESTDATA, UNITDATA
+from safe.common.testing import TESTDATA
 from safe.common.utilities import format_int
+from safe.test.utilities import test_data_path
 
 
 class TestVolcanoBuildingImpact(unittest.TestCase):
@@ -38,7 +39,7 @@ class TestVolcanoBuildingImpact(unittest.TestCase):
         """Building impact from volcanic hazard is computed correctly."""
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = os.path.join(TESTDATA, 'donut.shp')
-        exposure_filename = os.path.join(UNITDATA, 'exposure', 'bangunan.shp')
+        exposure_filename = test_data_path('exposure', 'bangunan.shp')
 
         # Calculate impact using API
         hazard = read_layer(hazard_filename)

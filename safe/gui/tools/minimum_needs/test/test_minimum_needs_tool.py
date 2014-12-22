@@ -34,10 +34,10 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.storage.core import read_layer as safe_read_layer
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)
-from safe.common.testing import UNITDATA
+from safe.test.utilities import test_data_path
 
-shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')
-result_path_base = os.path.join(UNITDATA, 'other', 'minimum_needs_perka7')
+shapefile_path = test_data_path('other', 'minimum_needs.shp')
+result_path_base = test_data_path('other', 'minimum_needs_perka7')
 
 
 class MinimumNeedsTest(unittest.TestCase):

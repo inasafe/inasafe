@@ -39,7 +39,7 @@ from safe.common.testing import TESTDATA, BOUNDDATA, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import format_int
-from safe.common.testing import HAZDATA, UNITDATA
+from safe.common.testing import HAZDATA
 from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
@@ -68,9 +68,6 @@ sys.path.append(pardir)
 
 LOGGER = logging.getLogger('InaSAFE')
 DOCK = Dock(IFACE)
-
-YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
-PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 
 # noinspection PyArgumentList
@@ -395,10 +392,8 @@ class TestDock(TestCase):
         """Test that multipart features can be used in a scenario - issue #160
         """
 
-        exposure = os.path.join(
-            UNITDATA, 'exposure', 'buildings_osm_4326.shp')
-        hazard = os.path.join(
-            UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
+        exposure = test_data_path('exposure', 'buildings_osm_4326.shp')
+        hazard = test_data_path('hazard', 'multipart_polygons_osm_4326.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         # print 'Using QGIS: %s' % qgis_version()

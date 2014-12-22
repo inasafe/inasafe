@@ -25,49 +25,41 @@ from xml.dom import minidom
 from glob import glob
 import shutil
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore
-
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapRenderer,
     QgsComposition)
+from PyQt4 import QtCore
+
 
 from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-# noinspection PyPackageRequirements
 from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog
-from safe.test.utilities import load_layer
+from safe.test.utilities import load_layer, test_data_path
 from safe.common.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
     InvalidLayerError)
 from safe.common.utilities import temp_dir
-from safe.common.testing import UNITDATA
 
 LOGGER = logging.getLogger('InaSAFE')
 
-population_entire_jakarta_impact_path = os.path.join(
-    UNITDATA,
+population_entire_jakarta_impact_path = test_data_path(
     'impact',
     'population_affected_entire_area.shp')
-population_district_jakarta_impact_path = os.path.join(
-    UNITDATA,
+population_district_jakarta_impact_path = test_data_path(
     'impact',
     'population_affected_district_jakarta.shp')
-building_entire_jakarta_impact_path = os.path.join(
-    UNITDATA,
+building_entire_jakarta_impact_path = test_data_path(
     'impact',
     'buildings_inundated_entire_area.shp')
-building_district_jakarta_impact_path = os.path.join(
-    UNITDATA,
+building_district_jakarta_impact_path = test_data_path(
     'impact',
     'buildings_inundated_district_jakarta.shp')
-district_jakarta_boundary_path = os.path.join(
-    UNITDATA,
+district_jakarta_boundary_path = test_data_path(
     'boundaries',
     'district_osm_jakarta.shp')
 

@@ -42,14 +42,14 @@ from safe.gis.qgis_vector_tools import extent_to_geo_array
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.defaults import get_defaults
-from safe.common.testing import UNITDATA, TESTDATA, BOUNDDATA
+from safe.common.testing import TESTDATA, BOUNDDATA
 from safe.storage.raster import Raster
 from safe.storage.vector import Vector
-
 from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
-    GEOCRS)
+    GEOCRS,
+    test_data_path)
 
 from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
@@ -459,8 +459,7 @@ class AggregatorTest(unittest.TestCase):
         self._aggregate(impact_layer, expected_results, use_aoi_mode=True)
 
         # Aggregation in class_count mode
-        data_path = os.path.join(
-            UNITDATA,
+        data_path = test_data_path(
             'impact',
             'aggregation_test_impact_vector_class_count.shp')
         impact_layer = Vector(
@@ -524,8 +523,7 @@ class AggregatorTest(unittest.TestCase):
         """Test if line aggregation works
         """
 
-        data_path = os.path.join(
-            UNITDATA,
+        data_path = test_data_path(
             'impact',
             'aggregation_test_roads.shp')
         impact_layer = Vector(
@@ -604,16 +602,14 @@ class AggregatorTest(unittest.TestCase):
         """
 
         hazard = QgsVectorLayer(
-            os.path.join(
-                UNITDATA,
+            test_data_path(
                 'hazard',
                 'multipart_polygons_osm_4326.shp'),
             'hazard',
             'ogr'
         )
         exposure = QgsVectorLayer(
-            os.path.join(
-                UNITDATA,
+            test_data_path(
                 'exposure',
                 'buildings_osm_4326.shp'),
             'impact',

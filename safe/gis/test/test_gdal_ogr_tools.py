@@ -17,12 +17,11 @@ __date__ = '20/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 from osgeo import ogr
 
-from safe.common.testing import UNITDATA
 from safe.gis.gdal_ogr_tools import polygonize_thresholds
+from safe.test.utilities import test_data_path
 
 
 class TestGDALOGRTools(unittest.TestCase):
@@ -30,15 +29,11 @@ class TestGDALOGRTools(unittest.TestCase):
     def test_polygonize_thresholds(self):
         """Test polygonize raster using gdal
         """
-
-        raster_name = os.path.join(
-            UNITDATA,
-            'hazard',
-            'jakarta_flood_design.tif')
+        raster_path = test_data_path('hazard', 'jakarta_flood_design.tif')
 
         inside_file_name, inside_layer_name, outside_file_name, \
             outside_layer_name = polygonize_thresholds(
-                raster_name, 0.5)
+                raster_path, 0.5)
 
         # Syntactic sugar to ignore unused vars.
         _ = inside_layer_name

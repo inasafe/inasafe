@@ -17,12 +17,8 @@ __date__ = '20/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
-from safe.common.testing import UNITDATA, get_qgis_app
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import (
     QgsRasterLayer,
     QgsRaster,
@@ -30,17 +26,17 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRectangle)
 
-# noinspection PyUnresolvedReferences
-RASTER_BASE = os.path.abspath(
-    os.path.join(UNITDATA, 'hazard', 'jakarta_flood_design'))
-# noinspection PyUnresolvedReferences
-VECTOR_BASE = os.path.abspath(
-    os.path.join(UNITDATA, 'other', 'polygonization_result'))
-
+from safe.common.testing import get_qgis_app
+from safe.test.utilities import test_data_path
 from safe.gis.qgis_raster_tools import (
     pixels_to_points,
     polygonize,
     clip_raster)
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+RASTER_BASE = test_data_path('hazard', 'jakarta_flood_design')
+VECTOR_BASE = test_data_path('other', 'polygonization_result')
 
 
 class TestQGISRasterTools(unittest.TestCase):

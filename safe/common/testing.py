@@ -52,13 +52,6 @@ HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
-UNITDATA = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '..',
-        'test',
-        'data'))
-
 # Known feature counts in test data
 FEATURE_COUNTS = {
     'test_buildings.shp': 144,

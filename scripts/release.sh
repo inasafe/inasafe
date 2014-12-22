@@ -44,7 +44,7 @@ find ${WORKDIR}/${DIR} -name *_test.py -delete
 find ${WORKDIR}/${DIR} -name *.po -delete
 find ${WORKDIR}/${DIR} -name *.ts -delete
 
-rpl "from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA" "" ${WORKDIR}/${DIR}/safe/api.py
+rpl "from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, BOUNDDATA" "" ${WORKDIR}/${DIR}/safe/api.py
 
 rm -rf ${WORKDIR}/${DIR}/*.bat
 
@@ -54,7 +54,7 @@ cd ${WORKDIR}
 find . -name test -exec /bin/rm -rf {} \;
 # Compress all images shipped
 for FILE in `find . -type f -name "*.png"`
-do 
+do
     echo "Compressing $FILE"
     convert -dither FloydSteinberg -colors 128 $FILE $FILE
 done

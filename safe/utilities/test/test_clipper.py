@@ -39,7 +39,7 @@ from safe.common.testing import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
+from safe.common.testing import HAZDATA, TESTDATA, EXPDATA
 from safe.gis.numerics import nan_allclose
 from safe.common.utilities import unique_filename
 from safe.storage.core import read_layer as read_safe_layer
@@ -60,12 +60,13 @@ from safe.test.utilities import (
     DEVNULL,
     GEOCRS,
     set_jakarta_extent,
-    compare_wkt)
+    compare_wkt,
+    test_data_path)
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
-VECTOR_PATH3 = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
+VECTOR_PATH3 = test_data_path('exposure', 'buildings_osm_4326.shp')
 
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
@@ -142,13 +143,12 @@ class ClipperTest(unittest.TestCase):
     def test_clip_raster_with_no_extension(self):
         """Test we can clip a raster with no extension - see #659."""
         # Create a raster layer
-        source_file = os.path.join(UNITDATA, 'other', 'tenbytenraster.asc')
+        source_file = test_data_path('other', 'tenbytenraster.asc')
         test_file = unique_filename(prefix='tenbytenraster-')
         shutil.copyfile(source_file, test_file)
 
         # Create a keywords file
-        source_file = os.path.join(
-            UNITDATA, 'other', 'tenbytenraster.keywords')
+        source_file = test_data_path('other', 'tenbytenraster.keywords')
         keywords_file = test_file + '.keywords'
         shutil.copyfile(source_file, keywords_file)
 
