@@ -248,9 +248,9 @@ class Plugin:
 
         self.add_action(self.action_keywords_wizard)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for IF-centric wizard
-        #--------------------------------------
+        # --------------------------------------
         self.action_function_centric_wizard = QAction(
             QIcon(':/plugins/inasafe/show-wizard.svg'),
             self.tr('InaSAFE Impact Function Centric Wizard'),
@@ -266,7 +266,7 @@ class Plugin:
 
         self.add_action(self.action_function_centric_wizard)
 
-        #--------------------------------------
+        # --------------------------------------
         # Create action for options dialog
         # --------------------------------------
         self.action_options = QAction(
@@ -663,7 +663,7 @@ class Plugin:
             self.dock_widget)
         dialog.set_function_centric_mode()
 
-        dialog.show()  # non-modal
+        dialog.show()  # non-modal in order to hide for selecting user extent
 
     def show_function_browser(self):
         """Show the impact function browser tool."""
