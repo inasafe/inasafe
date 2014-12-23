@@ -1514,6 +1514,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Hazard Layer From TOC tab"""
         self.list_compatible_layers_from_canvas(
             'hazard', self.lstCanvasHazLayers)
+        self.auto_select_one_item(self.lstCanvasHazLayers)
         self.lblDescribeCanvasHazLayer.clear()
 
     # ===========================
@@ -1773,6 +1774,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Exposure Layer From Canvas tab"""
         self.list_compatible_layers_from_canvas(
             'exposure', self.lstCanvasExpLayers)
+        self.auto_select_one_item(self.lstCanvasExpLayers)
         self.lblDescribeCanvasExpLayer.clear()
 
     # ===========================
@@ -1885,6 +1887,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Aggregation Layer from Canvas tab"""
         self.list_compatible_layers_from_canvas(
             'postprocessing', self.lstCanvasAggLayers)
+        self.auto_select_one_item(self.lstCanvasAggLayers)
         self.lblDescribeCanvasAggLayer.clear()
 
     # ===========================
