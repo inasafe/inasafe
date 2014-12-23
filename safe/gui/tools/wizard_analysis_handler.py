@@ -708,5 +708,3 @@ class WizardAnalysisHandler(QObject):
                     QtCore.Qt.KeepAspectRatio)
 
         self.hide_busy()
-
-
