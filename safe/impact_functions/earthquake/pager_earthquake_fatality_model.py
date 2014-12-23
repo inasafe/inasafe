@@ -13,6 +13,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import math
 import numpy
+from collections import OrderedDict
+
 from safe.metadata import (
     hazard_earthquake,
     unit_mmi,
@@ -22,7 +24,6 @@ from safe.metadata import (
     hazard_definition,
     exposure_definition
 )
-from collections import OrderedDict
 from safe.defaults import (
     get_defaults,
     default_minimum_needs,
@@ -30,7 +31,8 @@ from safe.defaults import (
 )
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
     ITBFatalityFunction)
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class PAGFatalityFunction(ITBFatalityFunction):
@@ -77,8 +79,8 @@ class PAGFatalityFunction(ITBFatalityFunction):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'PAGFatalityFunction.',
-                'name': tr('PAG Fatality Function.'),
+                'id': 'PAGFatalityFunction',
+                'name': tr('PAG Fatality Function'),
                 'impact': tr('Die or be displaced according Pager model'),
                 'author': 'Helen Crowley',
                 'date_implemented': 'N/A',
@@ -139,6 +141,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
             ('MinimumNeeds', {'on': True})])),
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())])
+    parameters = add_needs_parameters(parameters)
 
     # noinspection PyPep8Naming
     def fatality_rate(self, mmi):

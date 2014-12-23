@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -24,33 +24,10 @@ import cPickle as pickle
 import math
 import logging
 from datetime import datetime
-
 import numpy
 # noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
 
-# This import is required to enable PyQt API v2
-# noinspection PyUnresolvedReferences
-# pylint: disable=W0611
-import qgis
-# pylint: enable=W0611
-# TODO: I think QCoreApplication is needed for tr() check before removing
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import (
-    QCoreApplication,
-    QObject,
-    QVariant,
-    QFileInfo,
-    QUrl,
-    QSize,
-    Qt,
-    QTranslator)
-# noinspection PyPackageRequirements
-from PyQt4.QtXml import QDomDocument
-# We should remove the following pylint suppressions when we support only QGIS2
-# pylint: disable=E0611
-# pylint: disable=W0611
-# Above for pallabelling
 from qgis.core import (
     QgsPoint,
     QgsField,
@@ -70,23 +47,34 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsVectorDataProvider)
 
-# pylint: enable=E0611
-# pylint: enable=W0611
-from safe.common.testing import get_qgis_app
-from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_layer as safe_read_layer
-from safe.api import calculate_impact as safe_calculate_impact
-from safe.api import (
+from PyQt4.QtCore import (
+    QCoreApplication,
+    QObject,
+    QVariant,
+    QFileInfo,
+    QUrl,
+    QSize,
+    Qt,
+    QTranslator)
+# noinspection PyPackageRequirements
+from PyQt4.QtXml import QDomDocument
+
+from safe.impact_functions.core import get_plugins as safe_get_plugins
+from safe.storage.core import read_layer as safe_read_layer
+from safe.engine.core import calculate_impact as safe_calculate_impact
+from safe.test.utilities import get_qgis_app
+from safe.common.tables import (
     Table,
     TableCell,
-    TableRow,
-    get_version,
-    romanise)
-from safe_qgis.utilities.utilities import get_wgs84_resolution
-from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
-from safe_qgis.utilities.styling import mmi_colour
-from safe_qgis.exceptions import TranslationLoadError
-from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
+    TableRow)
+from safe.common.version import get_version
+from safe.common.utilities import romanise
+from safe.utilities.clipper import extent_to_geoarray, clip_layer
+from safe.utilities.styling import mmi_colour
+from safe.utilities.gis import get_wgs84_resolution
+from safe.utilities.resources import resources_path
+from safe.common.exceptions import TranslationLoadError
+from safe.gui.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -864,6 +852,7 @@ class ShakeEvent(QObject):
         footer_file = os.path.join(data_dir(), 'footer.html')
         header_file = file(header_file)
         header = header_file.read()
+        header = header.replace('PATH', resources_path())
         header_file.close()
         footer_file = file(footer_file)
         footer = footer_file.read()
@@ -1834,10 +1823,6 @@ class ShakeEvent(QObject):
            TranslationLoadException
         """
         locale_name = self.locale
-        # Also set the system locale to the user overridden local
-        # so that the inasafe library functions gettext will work
-        # .. see:: :py:func:`common.utilities`
-        os.environ['LANG'] = str(locale_name)
 
         root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         translation_path = os.path.join(

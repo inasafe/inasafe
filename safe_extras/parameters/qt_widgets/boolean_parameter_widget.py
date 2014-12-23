@@ -3,13 +3,13 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'boolean_parameter_widget'
 __date__ = '8/19/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 
 from PyQt4.QtGui import QCheckBox
 
-from generic_parameter_widget import GenericParameterWidget
+from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
 class BooleanParameterWidget(GenericParameterWidget):
@@ -40,4 +40,3 @@ class BooleanParameterWidget(GenericParameterWidget):
         """
         self._parameter.value = self._check_box_input.isChecked()
         return self._parameter
-

@@ -1,6 +1,7 @@
 # coding=utf-8
 """Polygon flood on roads."""
 import logging
+
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -8,6 +9,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform
 )
+
 from safe.metadata import (
     unit_wetdry,
     hazard_flood,
@@ -23,13 +25,15 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
+from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -107,6 +111,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         ('affected_value', '1'),
         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
+    parameters = add_needs_parameters(parameters)
 
     def __init__(self):
         """Constructor."""

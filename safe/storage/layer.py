@@ -5,7 +5,7 @@ from safe.common.utilities import verify
 from projection import Projection
 
 
-class Layer:
+class Layer(object):
     """Common class for geospatial layers
     """
 

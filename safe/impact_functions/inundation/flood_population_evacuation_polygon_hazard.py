@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'Ole Nielson'
 __revision__ = '$Format:%H$'
@@ -19,8 +20,9 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import numpy
+import logging
+
 from safe.metadata import (
     hazard_flood,
     unit_wetdry,
@@ -50,7 +52,6 @@ from safe.impact_functions.core import (
 )
 from safe.storage.vector import Vector
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     humanize_class,
     create_classes,
@@ -58,9 +59,8 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
-
-import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -172,6 +172,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for flood population evacuation.
@@ -209,7 +210,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             raise Exception(message)
 
         # Run interpolation function for polygon2raster
-        P = assign_hazard_values_to_exposure_data(
+        combined = assign_hazard_values_to_exposure_data(
             hazard_layer, exposure_layer, attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
@@ -221,17 +222,17 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         for attr in new_attributes:
             attr[self.target_field] = 0
             try:
-                cat = attr[category_title]
+                title = attr[category_title]
             except KeyError:
                 try:
-                    cat = attr['FLOODPRONE']
-                    categories[cat] = 0
+                    title = attr['FLOODPRONE']
+                    categories[title] = 0
                 except KeyError:
                     pass
 
         # Count affected population per polygon, per category and total
         affected_population = 0
-        for attr in P.get_data():
+        for attr in combined.get_data():
 
             affected = False
             if 'affected' in attr:
@@ -278,11 +279,11 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 # Update population count for each category
                 if len(categories) > 0:
                     try:
-                        cat = new_attributes[poly_id][category_title]
+                        title = new_attributes[poly_id][category_title]
                     except KeyError:
-                        cat = new_attributes[poly_id][
+                        title = new_attributes[poly_id][
                             deprecated_category_title]
-                    categories[cat] += pop
+                    categories[title] += pop
 
                 # Update total
                 affected_population += pop
@@ -354,12 +355,12 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
         table_body.append(TableRow(tr('How will we reach stranded people?')))
         table_body.append(TableRow(tr('Do we have enough relief items?')))
-        table_body.append(TableRow(tr(
+        table_body.append(TableRow(
             'If yes, where are they located and how will we distribute '
-            'them?')))
-        table_body.append(TableRow(tr(
+            'them?'))
+        table_body.append(TableRow(
             'If no, where can we obtain additional relief items from and '
-            'how will we transport them to here?')))
+            'how will we transport them to here?'))
 
         # Extend impact report for on-screen display
         table_body.extend([

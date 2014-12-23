@@ -18,12 +18,12 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import numpy
+
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
     default_minimum_needs,
-    default_provenance
-)
+    default_provenance)
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
@@ -31,8 +31,7 @@ from safe.impact_functions.core import (
     get_question,
     get_function_title,
     evacuated_population_needs,
-    population_rounding
-)
+    population_rounding)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
     hazard_all,
@@ -41,14 +40,14 @@ from safe.metadata import (
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition,
-    unit_normalised
-)
+    unit_normalised)
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as tr, format_int
+from safe.utilities.i18n import tr
+from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.impact_function_metadata import (
-    ImpactFunctionMetadata
-)
+    ImpactFunctionMetadata)
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
@@ -153,6 +152,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard.

@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import logging
+
 from safe.metadata import (
     hazard_flood,
     hazard_tsunami,
@@ -30,12 +32,14 @@ from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.common.utilities import ugettext as tr, format_int, verify
+from safe.utilities.i18n import tr
+from safe.common.utilities import format_int, verify
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-import logging
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -160,6 +164,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         ('threshold [m]', 1.0),
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map).

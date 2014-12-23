@@ -1,4 +1,6 @@
 .c9
-.idea
+.idea/
 *.pyc
 .idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
+.noseids

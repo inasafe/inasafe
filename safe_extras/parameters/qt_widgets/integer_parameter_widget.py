@@ -4,12 +4,12 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'float_parameter_widget'
 __date__ = '8/19/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 from PyQt4.QtGui import QSpinBox
 
-from numeric_parameter_widget import NumericParameterWidget
+from qt_widgets.numeric_parameter_widget import NumericParameterWidget
 
 
 class IntegerParameterWidget(NumericParameterWidget):

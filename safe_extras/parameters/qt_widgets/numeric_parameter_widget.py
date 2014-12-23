@@ -4,7 +4,7 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'numeric_parameter_widget'
 __date__ = '8/21/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 # noinspection PyPackageRequirements
@@ -12,7 +12,7 @@ from PyQt4.QtGui import QLabel, QSizePolicy, QWidget, QComboBox
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
-from generic_parameter_widget import GenericParameterWidget
+from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
 class NumericParameterWidget(GenericParameterWidget):

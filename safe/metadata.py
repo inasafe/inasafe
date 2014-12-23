@@ -11,15 +11,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '19/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.common.utilities import ugettext as tr
-
 # Please group them and sort them alphabetical
+from safe.utilities.i18n import tr
 
 # constants
 small_number = 2 ** -53  # I think this is small enough

@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'akbargumbira@gmail.com'
-__version__ = '2.3'
+__version__ = '3.0'
 __date__ = '14/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')

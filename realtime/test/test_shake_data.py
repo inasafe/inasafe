@@ -12,30 +12,29 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
-__date__ = '10/01/2013'
+__date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
 import os
 import unittest
 import shutil
 
-from safe.api import temp_dir
-from safe.common.testing import get_shake_test_data_path
+from safe.common.utilities import temp_dir
+from safe.test.utilities import test_data_path
 from realtime.shake_data import ShakeData
 
-# Shake event ID for this test
+# Shake ID for this test
 SHAKE_ID = '20131105060809'
-
 
 class ShakeDataTest(unittest.TestCase):
     def setUp(self):
         """Setup before each test."""
         # Download files (which are local files) to realtime-test temp folder
         local_path = os.path.join(temp_dir('realtime-test'))
-        shake_data = os.path.abspath(
-            os.path.join(get_shake_test_data_path(), SHAKE_ID))
+        shake_data = test_data_path('hazard', 'shake_data', SHAKE_ID)
         shutil.copytree(
             shake_data, os.path.join(local_path, 'shakemaps', SHAKE_ID))
 

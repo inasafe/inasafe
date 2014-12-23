@@ -11,8 +11,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 
 
 class AggregationCategoricalPostprocessor(AbstractPostprocessor):

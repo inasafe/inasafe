@@ -33,7 +33,7 @@ from safe.defaults import get_defaults
 from safe.storage.iso_19115_template import ISO_METADATA_XML_TEMPLATE
 
 
-# list of tags to get to the inasafe keywords.
+# list of tags to get to the InaSAFE keywords.
 # this is stored in a list so it can be easily used in a for loop
 ISO_METADATA_KEYWORD_NESTING = [
     '{http://www.isotc211.org/2005/gmd}identificationInfo',

@@ -11,15 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '2/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 
 import os
 import shutil
@@ -27,18 +23,11 @@ import unittest
 import logging
 import difflib
 
-# pylint: disable=E0611
-# pylint: disable=W0611
 from qgis.core import QgsFeatureRequest
-# pylint: enable=E0611
-# pylint: enable=W0611
-from safe.api import (
-    unique_filename,
-    temp_dir,
-    get_version,
-    get_shake_test_data_path
-)
-from safe.common.testing import get_qgis_app
+
+from safe.common.utilities import temp_dir, unique_filename
+from safe.common.version import get_version
+from safe.test.utilities import test_data_path, get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
@@ -59,11 +48,12 @@ class TestShakeEvent(unittest.TestCase):
     # noinspection PyPep8Naming
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir."""
+        # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
+        # file inside 20131105060809 folder to
+        # shakemap_extract_dir/20131105060809/grid.xml
+        shake_path = test_data_path('hazard', 'shake_data')
         input_path = os.path.abspath(
-            os.path.join(
-                get_shake_test_data_path(),
-                SHAKE_ID,
-                'output/grid.xml'))
+            os.path.join(shake_path, SHAKE_ID, 'output/grid.xml'))
         target_folder = os.path.join(
             shakemap_extract_dir(), SHAKE_ID)
         if not os.path.exists(target_folder):
@@ -75,8 +65,8 @@ class TestShakeEvent(unittest.TestCase):
     # noinspection PyPep8Naming
     def tearDown(self):
         """Delete the cached data."""
-        # target_path = os.path.join(shakemap_extract_dir(), SHAKE_ID)
-        # shutil.rmtree(target_path)
+        target_path = os.path.join(shakemap_extract_dir(), SHAKE_ID)
+        shutil.rmtree(target_path)
 
     def test_grid_file_path(self):
         """Test grid_file_path works using cached data."""
