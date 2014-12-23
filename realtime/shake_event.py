@@ -11,7 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+from safe.utilities.gis import get_wgs84_resolution
+from safe.utilities.resources import resources_path
+
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -72,21 +75,20 @@ from qgis.core import (
 
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe.common.testing import get_qgis_app
-from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_layer as safe_read_layer
-from safe.api import calculate_impact as safe_calculate_impact
-from safe.api import (
+from safe.impact_functions.core import get_plugins as safe_get_plugins
+from safe.storage.core import read_layer as safe_read_layer
+from safe.engine.core import calculate_impact as safe_calculate_impact
+from safe.test.utilities import get_qgis_app
+from safe.common.tables import (
     Table,
     TableCell,
-    TableRow,
-    get_version,
-    romanise)
-from safe_qgis.utilities.utilities import get_wgs84_resolution
-from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
-from safe_qgis.utilities.styling import mmi_colour
-from safe_qgis.exceptions import TranslationLoadError
-from safe_qgis.tools.shake_grid.shake_grid import ShakeGrid
+    TableRow)
+from safe.common.version import get_version
+from safe.common.utilities import romanise
+from safe.utilities.clipper import extent_to_geoarray, clip_layer
+from safe.utilities.styling import mmi_colour
+from safe.common.exceptions import TranslationLoadError
+from safe.gui.tools.shake_grid.shake_grid import ShakeGrid
 from realtime.sftp_shake_data import SftpShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -861,6 +863,7 @@ class ShakeEvent(QObject):
         footer_file = os.path.join(data_dir(), 'footer.html')
         header_file = file(header_file)
         header = header_file.read()
+        header = header.replace('PATH', resources_path())
         header_file.close()
         footer_file = file(footer_file)
         footer = footer_file.read()
@@ -1047,7 +1050,7 @@ class ShakeEvent(QObject):
             str(clipped_exposure.source()))
         layers = [clipped_hazard_layer, clipped_exposure_layer]
 
-        function_id = 'I T B Fatality Function'
+        function_id = 'ITB Fatality Function'
         function = safe_get_plugins(function_id)[0][function_id]
 
         result = safe_calculate_impact(layers, function)
@@ -1831,10 +1834,6 @@ class ShakeEvent(QObject):
            TranslationLoadException
         """
         locale_name = self.locale
-        # Also set the system locale to the user overridden local
-        # so that the inasafe library functions gettext will work
-        # .. see:: :py:func:`common.utilities`
-        os.environ['LANG'] = str(locale_name)
 
         root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         translation_path = os.path.join(

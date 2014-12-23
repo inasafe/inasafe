@@ -8,6 +8,7 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsGeometry
 )
+
 from safe.metadata import (
     unit_wetdry,
     hazard_flood,
@@ -22,11 +23,12 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class FloodNativePolygonExperimentalFunction(FunctionProvider):
@@ -102,6 +104,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
 
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
+    parameters = add_needs_parameters(parameters)
 
     def get_function_type(self):
         """Get type of the impact function.

@@ -1,6 +1,7 @@
 # coding=utf-8
 """Tsunami Evacuation Impact Function."""
 import numpy
+
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
@@ -31,8 +32,8 @@ from safe.metadata import (
     exposure_definition
 )
 from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     verify,
     humanize_class,
@@ -42,6 +43,8 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+
 
 
 # noinspection PyClassHasNoInit
@@ -163,6 +166,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for tsunami population evacuation.

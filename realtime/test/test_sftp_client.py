@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -22,7 +22,8 @@ import unittest
 import os
 import shutil
 
-from safe.api import temp_dir, get_shake_test_data_path
+from safe.common.utilities import temp_dir
+from safe.test.utilities import test_data_path
 from realtime.sftp_client import SFtpClient
 from realtime.sftp_configuration.configuration import (
     get_sftp_base_url,
@@ -132,7 +133,7 @@ class SFtpClientTest(unittest.TestCase):
         self.assertIsNotNone(sftp_client)
 
         # Download directories
-        shake_path = get_shake_test_data_path()
+        shake_path = test_data_path('hazard', 'shake_data')
         remote_path = os.path.abspath(
             os.path.join(shake_path, SHAKE_ID))
         local_path = temp_dir('realtime-test')
@@ -165,7 +166,7 @@ class SFtpClientTest(unittest.TestCase):
         self.assertIsNotNone(sftp_client)
 
         # Download directories
-        shake_path = get_shake_test_data_path()
+        shake_path = test_data_path('hazard', 'shake_data')
         remote_path = os.path.abspath(
             os.path.join(shake_path, SHAKE_ID))
         local_path = temp_dir('realtime-test')

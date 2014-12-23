@@ -24,18 +24,19 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_raster_tools import (
+from safe.gis.qgis_raster_tools import (
     clip_raster, polygonize_gdal)
-from safe.common.qgis_vector_tools import (
+from safe.gis.qgis_vector_tools import (
     split_by_polygon_in_out,
     extent_to_geo_array,
     reproject_vector_layer)
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
@@ -117,6 +118,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         ('max threshold [m]', float('inf')),
         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
+    parameters = add_needs_parameters(parameters)
 
     def get_function_type(self):
         """Get type of the impact function.

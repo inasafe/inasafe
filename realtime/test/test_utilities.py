@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -22,7 +22,7 @@ import logging
 import unittest
 import datetime
 
-from safe.api import log_file_path
+from safe.common.utilities import log_file_path
 from realtime.utilities import (
     base_data_dir,
     shakemap_zip_dir,

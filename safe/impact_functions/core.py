@@ -13,8 +13,8 @@ import numpy
 from collections import OrderedDict
 import keyword as python_keywords
 
-from safe.common.polygon import inside_polygon
-from safe.common.utilities import ugettext as tr
+from safe.gis.polygon import inside_polygon
+from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableCell, TableRow
 from safe.defaults import default_minimum_needs
 from utilities import pretty_string, remove_double_spaces
@@ -174,7 +174,7 @@ def get_function_title(func):
     if hasattr(func, 'title'):
         title = func.title
     else:
-        title = pretty_function_name(func)
+        title = function_name(func)
 
     return tr(title)
 
@@ -185,7 +185,7 @@ def get_plugins(name=None):
        Or all of them if no name is passed.
     """
 
-    plugins_dict = dict([(pretty_function_name(p), p)
+    plugins_dict = dict([(function_name(p), p)
                          for p in FunctionProvider.plugins])
 
     if name is None:
@@ -232,23 +232,31 @@ def unload_plugins():
         del p
 
 
-# FIXME (Ole): Deprecate this function (see issue #392)
-def pretty_function_name(func):
-    """Return a human readable name for the function
-    if the function has a func.plugin_name use this
-    otherwise turn underscores to spaces and Caps to spaces """
+def remove_impact_function(impact_function):
+    """Remove an impact_function from FunctionProvider
 
-    if not hasattr(func, 'plugin_name'):
-        nounderscore_name = func.__name__.replace('_', ' ')
-        func_name = ''
-        for i, c in enumerate(nounderscore_name):
-            if c.isupper() and i > 0:
-                func_name += ' ' + c
-            else:
-                func_name += c
-    else:
-        func_name = func.plugin_name
-    return func_name
+    :param impact_function: An impact function that want to be removed
+    :type impact_function: FunctionProvider
+
+    """
+    if impact_function in FunctionProvider.plugins:
+        FunctionProvider.plugins.remove(impact_function)
+    del impact_function
+
+
+def function_name(impact_function):
+    """Return the name for the impact function.
+
+    It assume that the impact function is valid and has name in its metadata.
+
+    :param impact_function: An impact function.
+    :type impact_function: FunctionProvider
+
+    :returns: The name of the impact function.
+    :rtype: str
+    """
+    # noinspection PyUnresolvedReferences
+    return impact_function.Metadata.get_metadata()['name']
 
 
 def requirements_collect(func):
@@ -723,7 +731,7 @@ def get_plugins_as_table(dict_filter=None):
                       header=True)
     table_body.append(header)
 
-    plugins_dict = dict([(pretty_function_name(p), p)
+    plugins_dict = dict([(function_name(p), p)
                          for p in FunctionProvider.plugins])
 
     not_found_value = 'N/A'
@@ -813,7 +821,7 @@ def get_unique_values():
                    'id': set(),
                    'title': set()}
 
-    plugins_dict = dict([(pretty_function_name(p), p)
+    plugins_dict = dict([(function_name(p), p)
                          for p in FunctionProvider.plugins])
     for key, func in plugins_dict.iteritems():
         if not is_function_enabled(func):
@@ -854,7 +862,7 @@ def get_metadata(func):
     retval = OrderedDict()
     retval['unique_identifier'] = func
 
-    plugins_dict = dict([(pretty_function_name(p), p)
+    plugins_dict = dict([(function_name(p), p)
                          for p in FunctionProvider.plugins])
     if func not in plugins_dict.keys():
         return None

@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -21,7 +21,8 @@ import os
 import unittest
 import shutil
 
-from safe.api import temp_dir, get_shake_test_data_path
+from safe.common.utilities import temp_dir
+from safe.test.utilities import test_data_path
 from realtime.sftp_client import SFtpClient
 from realtime.test.test_sftp_client import run_monkey_patching_sftp_client
 from realtime.sftp_shake_data import SftpShakeData
@@ -43,8 +44,9 @@ class SFtpShakeDataTest(unittest.TestCase):
         # please pass the working dir to the local dir
         sftp_client = SFtpClient(working_dir=temp_dir('realtime-test'))
         local_path = temp_dir('realtime-test')
+        shake_path = test_data_path('hazard', 'shake_data')
         remote_path = os.path.abspath(
-            os.path.join(get_shake_test_data_path(), SHAKE_ID))
+            os.path.join(shake_path, SHAKE_ID))
         sftp_client.download_path(remote_path, local_path)
 
     def tearDown(self):
