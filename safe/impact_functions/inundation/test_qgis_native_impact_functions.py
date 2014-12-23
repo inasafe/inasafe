@@ -17,28 +17,21 @@ __date__ = '20/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
+
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 from safe.engine.core import calculate_impact
 from safe.storage.core import read_layer
-
-from safe.common.testing import UNITDATA, get_qgis_app
 from safe.common.utilities import OrderedDict
 from safe.common.exceptions import GetDataError
-
 from safe.impact_functions import get_plugins
+from safe.test.utilities import test_data_path, get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-# We need QGIS_APP started during the tests
-# to convert SAFE layers to QGIS layers
-from safe.storage.raster import qgis_imported
-if qgis_imported:
-    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    from qgis.core import QgsVectorLayer, QgsRasterLayer
-
-
-class Wrapper():
+class Wrapper(object):
     """
     A wrapper around qgis layers. It implements get_layer method of
     safe_qgis.utilities.qgis_layer_wrapper.QgisWrapper
@@ -138,12 +131,10 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
 
     def test_building_native_impact_experimental(self):
         """Test flood_building_native_impact_experimental."""
-        hazard_name = os.path.join(
-            UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
+        hazard_name = test_data_path('hazard', 'multipart_polygons_osm_4326.shp')
         qgis_hazard = QgsVectorLayer(hazard_name, 'HAZARD', 'ogr')
 
-        exposure_name = os.path.join(
-            UNITDATA, 'exposure', 'buildings_osm_4326.shp')
+        exposure_name = test_data_path('exposure', 'buildings_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(exposure_name, 'EXPOSURE', 'ogr')
 
         plugin_name = "FloodNativePolygonExperimentalFunction"
@@ -191,12 +182,10 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
 
     def test_polygon_roads_impact(self):
         """Test FloodVectorRoadsExperimentalFunction work."""
-        hazard_name = os.path.join(
-            UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
+        hazard_name = test_data_path('hazard', 'multipart_polygons_osm_4326.shp')
         qgis_hazard = QgsVectorLayer(hazard_name, 'HAZARD', 'ogr')
 
-        exposure_name = os.path.join(
-            UNITDATA, 'exposure', 'roads_osm_4326.shp')
+        exposure_name = test_data_path('exposure', 'roads_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(exposure_name, 'EXPOSURE', 'ogr')
 
         plugin_name = "FloodVectorRoadsExperimentalFunction"
@@ -222,12 +211,10 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
 
     def test_raster_roads_impact(self):
         """Test FloodRasterRoadsExperimentalFunction work."""
-        hazard_name = os.path.join(
-            UNITDATA, 'hazard', 'jakarta_flood_design.tif')
+        hazard_name = test_data_path('hazard', 'jakarta_flood_design.tif')
         qgis_hazard = QgsRasterLayer(hazard_name, 'HAZARD')
 
-        exposure_name = os.path.join(
-            UNITDATA, 'exposure', 'roads_osm_4326.shp')
+        exposure_name = test_data_path('exposure', 'roads_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(exposure_name, 'EXPOSURE', 'ogr')
 
         plugin_name = "FloodRasterRoadsExperimentalFunction"
@@ -250,12 +237,10 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
 
     def test_raster_roads_impact_optimized(self):
         """Test FloodRasterRoadsExperimentalFunction-Optimized work."""
-        hazard_name = os.path.join(
-            UNITDATA, 'hazard', 'jakarta_flood_design.tif')
+        hazard_name = test_data_path('hazard', 'jakarta_flood_design.tif')
         qgis_hazard = QgsRasterLayer(hazard_name, 'HAZARD')
 
-        exposure_name = os.path.join(
-            UNITDATA, 'exposure', 'roads_osm_4326.shp')
+        exposure_name = test_data_path('exposure', 'roads_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(exposure_name, 'EXPOSURE', 'ogr')
 
         plugin_name = 'FloodRasterRoadsExperimentalFunction2'

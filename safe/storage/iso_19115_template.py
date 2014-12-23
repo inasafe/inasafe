@@ -12,19 +12,17 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 from string import Template  # pylint: disable=W0402
+from safe.utilities.resources import resources_path
 
-_xml_file = os.path.join(os.path.dirname(__file__), 'iso_19115_template.xml')
-with open(_xml_file, 'r') as f:
+_xml_file = resources_path('iso_19115_template.xml')
+with open(_xml_file) as f:
     _template = f.read()
 
 # This template uses python strings.Template module to allow replacing values

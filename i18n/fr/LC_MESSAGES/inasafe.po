@@ -1,0 +1,2493 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 17:16+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Buildings"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Low damage"
+msgstr ""
+
+msgid "Medium damage"
+msgstr ""
+
+msgid "High damage"
+msgstr ""
+
+msgid "No damage"
+msgstr ""
+
+msgid "Temporarily Closed"
+msgstr ""
+
+#, python-format
+msgid ""
+"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of &#58;"
+"</b><br><br><p>"
+msgstr ""
+
+msgid "Building"
+msgstr ""
+
+msgid "Number of"
+msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Opened"
+msgstr ""
+
+msgid "Assumption"
+msgstr ""
+
+#, python-format
+msgid "Buildings that will need to closed when floodingmore than %.1f m"
+msgstr ""
+
+msgid "Estimated buildings affected"
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Flooded"
+msgstr ""
+
+msgid "Hello!"
+msgstr ""
+
+msgid "Hello2!"
+msgstr ""
+
+msgid "Rawan Banjir"
+msgstr ""
+
+msgid "Ketinggian Banjir"
+msgstr ""
+
+msgid "Jumlah gedung"
+msgstr ""
+
+msgid "< 1 m"
+msgstr ""
+
+msgid "1 - 3 m"
+msgstr ""
+
+msgid "> 3 m"
+msgstr ""
+
+msgid "Based on BNPB Perka 2 - 2012"
+msgstr ""
+
+#, python-format
+msgid ""
+"<b>In case of \"%s\" the estimated impact to \"%s\" is&#58;</b><br><br><p>"
+msgstr ""
+
+msgid ""
+"- Levels of impact are defined by post 2009 Padang earthquake survey "
+"conducted by Geoscience Australia and Institut of Teknologi Bandung.<br>"
+msgstr ""
+
+msgid ""
+"- Unreinforced masonry is assumed where no structural information is "
+"available. <br>"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Affected"
+msgstr ""
+
+msgid "Be affected by tsunami"
+msgstr ""
+
+msgid "Impact"
+msgstr ""
+
+msgid "Number of buildings"
+msgstr ""
+
+msgid "Levels of impact are defined by BNPB's <i>Pengkajian Risiko Bencana</i>"
+msgstr ""
+
+msgid "Tsunami height"
+msgstr ""
+
+#, python-format
+msgid ""
+"<table border=\"0\" width=\"320px\">   <tr><th><b>%s</b></th><th><b>%s</b></"
+"th></tr>   <tr></tr>   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>   <tr><td>"
+"%s&#58;</td><td>%s&#58;</td></tr>   <tr><td>%s&#58;</td><td>%s&#58;</td></"
+"tr></table>"
+msgstr ""
+
+msgid "Be inundated"
+msgstr ""
+
+msgid "Building type"
+msgstr ""
+
+#, python-format
+msgid "Buildings will need to be closed when flooding  levels exceed %.1f m"
+msgstr ""
+
+msgid "Be temporarily closed"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+#, python-format
+msgid "Buildings will need to close if flood levels exceed %.1f m"
+msgstr ""
+
+msgid "Need evacuation"
+msgstr ""
+
+msgid "Beras [kg]"
+msgstr ""
+
+msgid "Air Minum [l]"
+msgstr ""
+
+msgid "Air Bersih [l]"
+msgstr ""
+
+msgid "Kit Keluarga"
+msgstr ""
+
+msgid "Jamban Keluarga"
+msgstr ""
+
+#, python-format
+msgid ""
+"Apabila terjadi \"%s\" perkiraan dampak terhadap \"%s\" kemungkinan yang "
+"terjadi&#58;"
+msgstr ""
+
+msgid "Perlu Evakuasi (x 1000)"
+msgstr ""
+
+msgid "Catatan:"
+msgstr ""
+
+#, python-format
+msgid "Jumlah penduduk Jakarta %s"
+msgstr ""
+
+msgid "Jumlah dalam ribuan"
+msgstr ""
+
+#, python-format
+msgid "Penduduk perlu dievakuasi ketikabanjir lebih dari %i m."
+msgstr ""
+
+msgid "Minmum Bantuan per minggu (BNPB Perka 7/2008)"
+msgstr ""
+
+msgid "Penduduk yang Mungkin dievakuasi"
+msgstr ""
+
+msgid "Kepadatan Penduduk"
+msgstr ""
+
+#, python-format
+msgid "Penduduk yang %s"
+msgstr ""
+
+msgid "Assumptions"
+msgstr ""
+
+msgid "Buildings are said to be flooded when "
+msgstr ""
+
+#, python-format
+msgid "flood levels exceed %.1f m"
+msgstr ""
+
+msgid "in areas marked as flood prone"
+msgstr ""
+
+msgid "Not Flooded"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+#, python-format
+msgid "In case of \"%s\" the estimated impact to \"%s\" is:"
+msgstr ""
+
+msgid "People needing evacuation"
+msgstr ""
+
+msgid "Rice [kg]"
+msgstr ""
+
+msgid "Drinking Water [l]"
+msgstr ""
+
+msgid "Clean Water [l]"
+msgstr ""
+
+msgid "Family Kits"
+msgstr ""
+
+msgid "Toilets"
+msgstr ""
+
+msgid "Notes:"
+msgstr ""
+
+#, python-format
+msgid "Total population Jakarta: %s"
+msgstr ""
+
+msgid "* Counts are given in thousands"
+msgstr ""
+
+#, python-format
+msgid "People need evacuation if flood levels exceed %i m"
+msgstr ""
+
+msgid "Minimum needs are defined in BNPB regulation 7/2008"
+msgstr ""
+
+msgid "People in need of evacuation"
+msgstr ""
+
+msgid "Population Density"
+msgstr ""
+
+#, python-format
+msgid "Population which %s"
+msgstr ""
+
+msgid "People need evacuation if flood levels exceed %(eps) m"
+msgstr ""
+
+#, python-format
+msgid "People need evacuation if flood levels exceed %(eps)i m"
+msgstr ""
+
+msgid "Needs per week"
+msgstr ""
+
+msgid "Total (*)"
+msgstr ""
+
+msgid "Buildings inundated"
+msgstr ""
+
+#, python-format
+msgid "Total population: %i"
+msgstr ""
+
+#, python-format
+msgid "In the event of <i>%s</i> how many <i>%s</i> might <i>%s</i>"
+msgstr ""
+
+msgid ""
+"Levels of impact are defined by post 2009 Padang earthquake survey conducted "
+"by Geoscience Australia and Institut of Teknologi Bandung."
+msgstr ""
+
+msgid ""
+"Unreinforced masonry is assumed where no structural information is available."
+msgstr ""
+
+msgid "Earthquake damage to buildings"
+msgstr ""
+
+msgid "Buildings that need to close due flooding"
+msgstr ""
+
+msgid "Be damaged depending on building type"
+msgstr ""
+
+msgid ""
+"Levels of impact are defined by post 2009 Padang earthquake survey conducted "
+"by Geoscience Australia and Institute of Teknologi Bandung."
+msgstr ""
+
+msgid ""
+"- Levels of impact are defined by post 2009 Padang earthquake survey "
+"conducted by Geoscience Australia and Institute of Teknologi Bandung.<br>"
+msgstr ""
+
+msgid "Be affected by ground shaking"
+msgstr ""
+
+msgid "Groundshaking (MMI)"
+msgstr ""
+
+msgid "# people impacted"
+msgstr ""
+
+msgid "Number of fatalities"
+msgstr ""
+
+msgid "Fatality model is from Institute of Teknologi Bandung 2012."
+msgstr ""
+
+msgid "Earthquake impact to population"
+msgstr ""
+
+msgid "DKI buildings"
+msgstr ""
+
+msgid "Jakarta 2007 flood"
+msgstr ""
+
+msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
+msgstr ""
+
+msgid "Sea wall collapse at Pluit"
+msgstr ""
+
+msgid "Jakarta flood prone areas"
+msgstr ""
+
+msgid "Population Jakarta"
+msgstr ""
+
+msgid "Flood Depth (design) Jakarta"
+msgstr ""
+
+msgid "Flood Depth (current) Jakarta"
+msgstr ""
+
+msgid "Yogyakarta 2006 earthquake"
+msgstr ""
+
+msgid "Indonesian Earthquake Hazard Map"
+msgstr ""
+
+msgid "Maumere Tsunami Inundation"
+msgstr ""
+
+msgid "Sumatran fault Mw 7.8 scenario"
+msgstr ""
+
+msgid "Mentawai fault Mw 9.0 scenario"
+msgstr ""
+
+msgid "Shakemap Padang 2009"
+msgstr ""
+
+msgid "OSM building footprints"
+msgstr ""
+
+msgid "AIBEP schools"
+msgstr ""
+
+msgid "Population density (5kmx5km)"
+msgstr ""
+
+msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
+msgstr ""
+
+msgid "Maumere tsunami inundation"
+msgstr ""
+
+msgid "Office buildings Jakarta"
+msgstr ""
+
+msgid "Hospitals and clinics Jakarta"
+msgstr ""
+
+msgid "Schools Jakarta"
+msgstr ""
+
+msgid "Industrial buildings Jakarta"
+msgstr ""
+
+msgid "Industrial areas Jakarta"
+msgstr ""
+
+msgid "Commercial areas Jakarta"
+msgstr ""
+
+msgid "Hospitals Jakarta"
+msgstr ""
+
+msgid "Schools"
+msgstr ""
+
+msgid "OSM buildings"
+msgstr ""
+
+msgid "office"
+msgstr ""
+
+msgid "clinic"
+msgstr ""
+
+msgid "terrace"
+msgstr ""
+
+msgid "police"
+msgstr ""
+
+msgid "residential"
+msgstr ""
+
+msgid "kindergarten"
+msgstr ""
+
+msgid "bank"
+msgstr ""
+
+msgid "place of worship"
+msgstr ""
+
+msgid "school"
+msgstr ""
+
+msgid "university"
+msgstr ""
+
+msgid "apartments"
+msgstr ""
+
+msgid "college"
+msgstr ""
+
+msgid "commercial"
+msgstr ""
+
+msgid "hospital"
+msgstr ""
+
+msgid "industrial"
+msgstr ""
+
+msgid "civic"
+msgstr ""
+
+msgid "church"
+msgstr ""
+
+msgid "hotel"
+msgstr ""
+
+msgid "public building"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "fire station"
+msgstr ""
+
+msgid "Padang 2009 scenario"
+msgstr ""
+
+msgid "Yogya 2006 scenario"
+msgstr ""
+
+msgid "Estimated fatalities"
+msgstr ""
+
+msgid "Lembang fault scenario"
+msgstr ""
+
+msgid "Jakarta flood like 2007 with structural improvements"
+msgstr ""
+
+msgid "Number of people displaced"
+msgstr ""
+
+msgid "Action Checklist:"
+msgstr ""
+
+#, python-format
+msgid "Are suffient victim identification resources available for %i people?"
+msgstr ""
+
+#, python-format
+msgid "Are suffient shelters available for %i people?"
+msgstr ""
+
+msgid "Be temporarily closed - OLD"
+msgstr ""
+
+#, python-format
+msgid "Unknown hazard type %s. Must be either \"depth\" or \"floodprone\""
+msgstr ""
+
+#, python-format
+msgid "Are enough victim identification units available for %i people?"
+msgstr ""
+
+#, python-format
+msgid "Are enough shelters available for %i people?"
+msgstr ""
+
+msgid "All buildings"
+msgstr ""
+
+msgid "Temporarily closed"
+msgstr ""
+
+msgid "Are the critical facilities still open?"
+msgstr ""
+
+msgid "Breakdown by building type"
+msgstr ""
+
+msgid "Be affected by earthquake"
+msgstr ""
+
+msgid "Number of women displaced"
+msgstr ""
+
+msgid "Number of pregnant women displaced"
+msgstr ""
+
+#, python-format
+msgid "Are enough shelters available for %i women?"
+msgstr ""
+
+#, python-format
+msgid "Are enough facilities available to assist %i pregnant women?"
+msgstr ""
+
+msgid "Mid"
+msgstr ""
+
+msgid "People"
+msgstr ""
+
+msgid "people"
+msgstr ""
+
+msgid "Total number of people"
+msgstr ""
+
+msgid "Population numbers rounded to nearest 1000."
+msgstr ""
+
+msgid "Die"
+msgstr ""
+
+msgid "Suffer because of gender"
+msgstr ""
+
+#, python-format
+msgid "Are there enough victim identification units available for %i people?"
+msgstr ""
+
+#, python-format
+msgid "Are there enough shelters available for %i people?"
+msgstr ""
+
+#, python-format
+msgid "%.2f people/cell"
+msgstr ""
+
+msgid "Map shows population density needing evacuation"
+msgstr ""
+
+#, python-format
+msgid "People in 50cm to 1m of water: %i"
+msgstr ""
+
+#, python-format
+msgid "People in 30cm to 50cm of water: %i"
+msgstr ""
+
+msgid "test"
+msgstr ""
+
+#, python-format
+msgid ""
+"Could not interpolate from raster layer %s to vector layer %s. Error "
+"message: %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
+"%(impact)s</i>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Could not interpolate from raster layer %(raster)s to vector layer "
+"%(vector)s. Error message: %(error)s"
+msgstr ""
+
+msgid "THIS SHOULD SHOW UP IN THE GUI"
+msgstr ""
+
+#, python-format
+msgid "%.2f people/cell)"
+msgstr ""
+
+#, python-format
+msgid "Low [%i people/cell]"
+msgstr ""
+
+#, python-format
+msgid "Medium [%i people/cell]"
+msgstr ""
+
+#, python-format
+msgid "High [%i people/cell]"
+msgstr ""
+
+msgid "A flood in Jakarta like in 2007"
+msgstr ""
+
+msgid "A flood in Jakarta like in 2007 but with structural improvements"
+msgstr ""
+
+msgid "A flood in Jakarta in RW areas identified as flood prone"
+msgstr ""
+
+msgid "An earthquake in Yogyakarta like in 2006"
+msgstr ""
+
+msgid "A tsunami in Maumere (Mw 8.1)"
+msgstr ""
+
+msgid "An earthquake at the Sumatran fault (Mw 7.8)"
+msgstr ""
+
+msgid "An earthquake at the Mentawai fault (Mw 9.0)"
+msgstr ""
+
+msgid "An earthquake in Padang like in 2009"
+msgstr ""
+
+msgid "An earthquake at the Lembang fault"
+msgstr ""
+
+msgid "A tsunami in Padang (Mw 8.8)"
+msgstr ""
+
+msgid "be impacted"
+msgstr ""
+
+msgid "People impacted "
+msgstr ""
+
+msgid "People in high hazard area "
+msgstr ""
+
+msgid "People in medium hazard area "
+msgstr ""
+
+msgid "People in low hazard area"
+msgstr ""
+
+msgid "Map shows population density in high or medium hazard area"
+msgstr ""
+
+msgid "People in high hazard areas"
+msgstr ""
+
+msgid "Map shows population affected in each flood prone area "
+msgstr ""
+
+msgid "People need evacuation if in area identified as \"Flood Prone\""
+msgstr ""
+
+msgid "People affected by flood prone areas"
+msgstr ""
+
+msgid "Nil"
+msgstr ""
+
+msgid "Population Count"
+msgstr ""
+
+msgid "Population affected by flood prone areas"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Requirements"
+msgstr ""
+
+msgid "Available Impact Functions"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Detailed breakdown"
+msgstr ""
+
+#, python-format
+msgid "People in %.1f m to %.1f m of water: %i"
+msgstr ""
+
+#, python-format
+msgid "People need evacuation if flood levels exceed %(eps).1f m"
+msgstr ""
+
+#, python-format
+msgid "People in %(lo).1f m to %(hi).1f m of water: %(val)i"
+msgstr ""
+
+msgid "People in Jakarta"
+msgstr ""
+
+msgid "0"
+msgstr ""
+
+#, python-format
+msgid "%i - %i"
+msgstr ""
+
+msgid "Be affected"
+msgstr ""
+
+msgid "Categorised hazard has only 3 classes, high, medium and low."
+msgstr ""
+
+msgid "Categorised hazard impact on buildings"
+msgstr ""
+
+msgid "be affected"
+msgstr ""
+
+msgid "Map shows population affected in each of volcano hazard polygons."
+msgstr ""
+
+#, python-format
+msgid "Total population %i in view port"
+msgstr ""
+
+msgid "People need evacuation if they are within the volcanic hazard zones."
+msgstr ""
+
+msgid "People affected by volcanic hazard zone"
+msgstr ""
+
+msgid "Population affected by volcanic hazard zone"
+msgstr ""
+
+msgid "Which structures have warning capacity (eg. sirens, speakers, etc.)?"
+msgstr ""
+
+msgid "Which buildings will be evacuation centres?"
+msgstr ""
+
+msgid "Where will we locate the operations centre?"
+msgstr ""
+
+msgid "Where will we locate warehouse and/or distribution centres?"
+msgstr ""
+
+#, python-format
+msgid "Where will the students from the %d closed schools go to study?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Where will the patients from the %d closed hospitals go for treatment and "
+"how will we transport them?"
+msgstr ""
+
+msgid "How will warnings be disseminated?"
+msgstr ""
+
+msgid "How will we reach stranded people?"
+msgstr ""
+
+msgid "Do we have enough relief items?"
+msgstr ""
+
+msgid "If yes, where are they located and how will we distribute them?"
+msgstr ""
+
+msgid ""
+"If no, where can we obtain additional relief items from and how will we "
+"transport them to here?"
+msgstr ""
+
+msgid "Sub Category"
+msgstr ""
+
+msgid "Layer type"
+msgstr ""
+
+msgid "Data type"
+msgstr ""
+
+msgid "Unit"
+msgstr ""
+
+#, python-format
+msgid "Total population %i in in the viewable area"
+msgstr ""
+
+#, python-format
+msgid "Total population %i in the viewable area"
+msgstr ""
+
+msgid "Be impacted"
+msgstr ""
+
+msgid "Be flooded"
+msgstr ""
+
+msgid "An eruption"
+msgstr ""
+
+msgid "Cumulative"
+msgstr ""
+
+msgid "Map shows buildings affected in each of volcano hazard polygons."
+msgstr ""
+
+#, python-format
+msgid "Total number of buildings %i in the viewable area"
+msgstr ""
+
+msgid "Only buildings available in Open Street Mapare considered."
+msgstr ""
+
+msgid "Buildings affected by volcanic hazard zone"
+msgstr ""
+
+msgid "Building Count"
+msgstr ""
+
+msgid ""
+"Lookup table mapping layer titles to translatable strings\n"
+"\n"
+"Layer titles are kept in the associated keywords files. However,\n"
+"these files are not seen by the internationalisation system and\n"
+"can therefore not be translated.\n"
+"\n"
+"To achieve this for selected titles, we maintain a lookup table of the form\n"
+"\n"
+"{string: translatable_string}\n"
+"\n"
+"where string e.g. comes from the keywords file or attribute names/values\n"
+"in datasets and translatable_string is the string that will appear as the\n"
+"translated at runtime.\n"
+"\n"
+"e.g (using a neutral symbol)\n"
+"{'title1': tr('Jakarta 2007 flood')}\n"
+"\n"
+"or (using existing title)\n"
+"{'Schools': tr('Schools')}\n"
+"\n"
+"or (attribute value)\n"
+"{'school': tr('school')}\n"
+"\n"
+"With the underscore function, the specified string will be seen by the\n"
+"translation system and can appear in the supported languages as with\n"
+"other strings in SAFE.\n"
+"\n"
+"Note, this module does *not* provide translations! Rather it provides\n"
+"mappings between strings expected at runtime to strings seen by the\n"
+"existing translation systems.\n"
+"\n"
+"To use:\n"
+"\n"
+"This module contains words and phrases that need to be translatable but\n"
+"would not normally be available in code for example, that originate from\n"
+"a dataset or external source.\n"
+"\n"
+"Just put your translations here, and it will be available to the tr "
+"function\n"
+"but never import this module or the functions in it!\n"
+"\n"
+"\n"
+"\n"
+msgstr ""
+
+msgid ""
+"These listed here so they get translated apriori to loading data.\n"
+"    "
+msgstr ""
+
+msgid "Jakarta flood like 2007 with pump failure at Pluit Ancol and Sunter"
+msgstr ""
+
+#: safe/test/test_plugin.py:69
+msgid "A volcano eruption"
+msgstr ""
+
+msgid "A volcano alert"
+msgstr ""
+
+msgid "Indonesian people"
+msgstr ""
+
+msgid "People in Indonesia"
+msgstr ""
+
+msgid "# people exposed"
+msgstr ""
+
+msgid "# Fatalities"
+msgstr ""
+
+msgid "Hazard Level"
+msgstr ""
+
+msgid "Buildings Affected"
+msgstr ""
+
+msgid "Buildings value ($M)"
+msgstr ""
+
+msgid "Contents value ($M)"
+msgstr ""
+
+#, python-format
+msgid ""
+"High hazard is defined as shake levels greater than %i on the MMI scale."
+msgstr ""
+
+#, python-format
+msgid ""
+"Medium hazard is defined as shake levels between %i and %i on the MMI scale."
+msgstr ""
+
+#, python-format
+msgid ""
+"Low hazard is defined as shake levels between %i and %i on the MMI scale."
+msgstr ""
+
+msgid "Values are in units of 1 million Australian Dollars"
+msgstr ""
+
+msgid "Buildings affected"
+msgstr ""
+
+msgid "Roads inundated"
+msgstr ""
+
+msgid "Estimated roads affected"
+msgstr ""
+
+msgid "Not specified in data"
+msgstr ""
+
+msgid "Yksi kaksi kolme"
+msgstr ""
+
+msgid "Dodo"
+msgstr ""
+
+msgid "Volcanos considered"
+msgstr ""
+
+msgid "No data"
+msgstr ""
+
+msgid "Female population"
+msgstr ""
+
+msgid "Weekly hygiene packs"
+msgstr ""
+
+msgid "Additional weekly rice kg for pregnant and lactating women"
+msgstr ""
+
+msgid "Indonesian People"
+msgstr ""
+
+msgid "Structures"
+msgstr ""
+
+msgid "Structures in Jakarta"
+msgstr ""
+
+msgid "Buildings in Jakarta"
+msgstr ""
+
+msgid "Not specified"
+msgstr ""
+
+msgid "Number flooded"
+msgstr ""
+
+msgid "Distance [km]"
+msgstr ""
+
+msgid "Die or be displaced"
+msgstr ""
+
+msgid "Fatalities"
+msgstr ""
+
+msgid "People displaced"
+msgstr ""
+
+msgid "Map shows density estimate of displaced population"
+msgstr ""
+
+#, python-format
+msgid "Are there enough shelters and relief items available for %i people?"
+msgstr ""
+
+msgid ""
+"If no, where can we obtain additional relief items from and how will we "
+"transport them?"
+msgstr ""
+
+msgid ""
+"People are considered to be displaced if they experience and survive a shake "
+"levelof more than 5 on the MMI scale "
+msgstr ""
+
+msgid "Estimated displaced population"
+msgstr ""
+
+msgid "People needing evacuation toda"
+msgstr ""
+
+msgid "People needing evacuation today"
+msgstr ""
+
+msgid "Youth count"
+msgstr ""
+
+msgid "Adult count"
+msgstr ""
+
+msgid "Elderly count"
+msgstr ""
+
+#, python-format
+msgid "People in %.1f m of water"
+msgstr ""
+
+msgid "Essential buildings"
+msgstr ""
+
+msgid "Essential Buildings"
+msgstr ""
+
+msgid "thresholds"
+msgstr ""
+
+msgid "postprocessors"
+msgstr ""
+
+msgid "Thresholds"
+msgstr ""
+
+msgid "Postprocessors"
+msgstr ""
+
+#, python-format
+msgid "Are there enough victim identification units available for %s people?"
+msgstr ""
+
+#, python-format
+msgid "Are there enough shelters and relief items available for %s people?"
+msgstr ""
+
+#, python-format
+msgid "Total population: %s"
+msgstr ""
+
+#, python-format
+msgid "Total population %s in the viewable area"
+msgstr ""
+
+msgid "Medium thresholds"
+msgstr ""
+
+msgid "High thresholds"
+msgstr ""
+
+msgid "Low thresholds"
+msgstr ""
+
+msgid "Die or be displaced according Pager model"
+msgstr ""
+
+msgid ""
+"To assess the impacts of inundation on building footprints originating from "
+"OpenStreetMap (OSM)."
+msgstr ""
+
+msgid "Provide details about where critical response areas are"
+msgstr ""
+
+msgid ""
+"This is an area for free form text where adetailed description of the "
+"methodology used is given."
+msgstr ""
+
+msgid ""
+"A raster layer where each cell represents flood depth, or a vector polygon "
+"layer where each polygon represents an inundated area. The following "
+"attributes are recognised (in order): Flooded (True or False), FLOODPRONE "
+"(Yes or No) and Affected (True or False)."
+msgstr ""
+
+msgid ""
+"vector polygon layer extracted from OSM where each polygon represents the "
+"footprint of a building."
+msgstr ""
+
+msgid "Lorem ipsum limitation"
+msgstr ""
+
+#, python-format
+msgid "Unknown hazard type %s. Must be either \"depth\" or \"grid\""
+msgstr ""
+
+msgid "in regions marked as affected"
+msgstr ""
+
+#, python-format
+msgid "Low [%.2f people/cell]"
+msgstr ""
+
+#, python-format
+msgid "Medium [%.2f people/cell]"
+msgstr ""
+
+#, python-format
+msgid "High [%.2f people/cell]"
+msgstr ""
+
+msgid "Only buildings available in OpenStreetMap are considered."
+msgstr ""
+
+#, python-format
+msgid "Total number of buildings %s in the viewable area"
+msgstr ""
+
+#, python-format
+msgid "Where will the students from the %s closed schools go to study?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Where will the patients from the %s closed hospitals go for treatment and "
+"how will we transport them?"
+msgstr ""
+
+msgid ""
+"To assess the impacts of (flood or tsunami) inundation on building "
+"footprints originating from OpenStreetMap (OSM)."
+msgstr ""
+
+msgid "Provide details about where critical infrastructure might be flooded"
+msgstr ""
+
+msgid ""
+"The inundation status is calculated for each building (using the centroid if "
+"it is a polygon) based on the hazard levels provided. if the hazard is given "
+"as a raster a threshold of 1 meter is used. This is configurable through the "
+"InaSAFE interface. If the hazard is given as a vector polygon layer "
+"buildings are considered to be impacted depending on the value of hazard "
+"attributes (in order) \"affected\" or \"FLOODPRONE\": If a building is in a "
+"region that has attribute \"affected\" set to True (or 1) it is impacted. If "
+"attribute \"affected\" does not exist but \"FLOODPRONE\" does, then the "
+"building is considered impacted if \"FLOODPRONE\" is \"yes\". If neither "
+"\"affected\" nor \"FLOODPRONE\" is available, a building will be impacted if "
+"it belongs to any polygon. The latter behaviour is implemented through the "
+"attribute \"inapolygon\" which is automatically assigned."
+msgstr ""
+
+msgid ""
+"A hazard raster layer where each cell represents flood depth (in meters), or "
+"a vector polygon layer where each polygon represents an inundated area. In "
+"the latter case, the following attributes are recognised (in order): "
+"\"affected\" (True or False) or \"FLOODPRONE\" (Yes or No). (True may be "
+"represented as 1, False as 0"
+msgstr ""
+
+msgid ""
+"Vector polygon layer extracted from OSM where each polygon represents the "
+"footprint of a building."
+msgstr ""
+
+msgid ""
+"This function only flags buildings as impacted or not either based on a "
+"fixed threshold in case of raster hazard or the the attributes mentioned "
+"under input in case of vector hazard."
+msgstr ""
+
+msgid "To assess the impacts of (flood or tsunami) inundation on population."
+msgstr ""
+
+msgid ""
+"Provide details about how many people would likely need to be evacuated, "
+"where they are located and what resources would be required to support them."
+msgstr ""
+
+msgid ""
+"The population subject to inundation exceeding a threshold (default 1m) is "
+"calculated and returned as a raster layer.In addition the total number and "
+"the required needs in terms of the BNPB (Perka 7) are reported. The "
+"threshold can be changed and even contain multiple numbers in which case "
+"evacuation and needs are calculated using the largest number with population "
+"breakdowns provided for the smaller numbers. The population raster is "
+"resampled to the resolution of the hazard raster and is rescaled so that the "
+"resampled population counts reflect estimates of population count per "
+"resampled cell. The resulting impact layer has the same resolution and "
+"reflects population count per cell which are affected by inundation."
+msgstr ""
+
+msgid ""
+"A hazard raster layer where each cell represents flood depth (in meters)."
+msgstr ""
+
+msgid "An exposure raster layer where each cell represent population count."
+msgstr ""
+
+msgid ""
+"The default threshold of 1 meter was selected based on consensus, not hard "
+"evidence."
+msgstr ""
+
+msgid ""
+"The fatality calculation assumes that no fatalities occur for shake levels "
+"below 4 and fatality counts of less than 50 are disregarded."
+msgstr ""
+
+msgid "Place of worship"
+msgstr ""
+
+msgid "Hospitals"
+msgstr ""
+
+msgid "Medium threshold"
+msgstr ""
+
+msgid "High threshold"
+msgstr ""
+
+msgid "Low threshold"
+msgstr ""
+
+msgid "Distances"
+msgstr ""
+
+msgid "Volcano name"
+msgstr ""
+
+msgid "BuildingType"
+msgstr ""
+
+msgid "Youth ratio"
+msgstr ""
+
+msgid "Adult ratio"
+msgstr ""
+
+msgid "Elder ratio"
+msgstr ""
+
+msgid "R [km]"
+msgstr ""
+
+msgid "AggregationCategorical"
+msgstr ""
+
+msgid "Displacement rate"
+msgstr ""
+
+msgid "Mmi range"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid "Tolerance"
+msgstr ""
+
+msgid "Calculate displaced people"
+msgstr ""
+
+msgid "Gender"
+msgstr ""
+
+msgid "Age"
+msgstr ""
+
+msgid "Aggregation"
+msgstr ""
+
+msgid "Aggregation Categorical"
+msgstr ""
+
+msgid "People affected"
+msgstr ""
+
+msgid "* Evacuation count rounded to nearest 1000"
+msgstr ""
+
+msgid "Evacuation threshold"
+msgstr ""
+
+msgid "gender"
+msgstr ""
+
+msgid "age"
+msgstr ""
+
+msgid "aggregation"
+msgstr ""
+
+msgid "building type"
+msgstr ""
+
+msgid "aggregation categorical"
+msgstr ""
+
+msgid "Evacuation percentage"
+msgstr ""
+
+msgid "* Number is rounded to the nearest 1000"
+msgstr ""
+
+msgid "Threshold [m]"
+msgstr ""
+
+msgid "Thresholds [m]"
+msgstr ""
+
+msgid "Distances [km]"
+msgstr ""
+
+msgid ""
+"To assess the impacts of categorized hazard in raster format on structure/"
+"building raster layer."
+msgstr ""
+
+msgid ""
+"Provide details about how many building would likely need to be affected for "
+"each category."
+msgstr ""
+
+msgid ""
+"A hazard raster layer where each cell represents the category of the hazard. "
+"There should be 3 categories: 1, 2, and 3."
+msgstr ""
+
+msgid ""
+"Vector polygon layer which can be extracted from OSM where each polygon "
+"represents the footprint of a building."
+msgstr ""
+
+msgid ""
+"Map of structure exposed to high category and a table with number of "
+"structure in each category"
+msgstr ""
+
+msgid ""
+"This function will calculate how many buildings will be affected per each "
+"category for all categories in the hazard layer. Currently there should be 3 "
+"categories in the hazard layer. After that it will show the result and the "
+"total of buildings that will be affected for the hazard given."
+msgstr ""
+
+msgid "The number of categories is three."
+msgstr ""
+
+msgid "Building affected by earthquake"
+msgstr ""
+
+msgid "The level of the impact is according to the threshold the user input."
+msgstr ""
+
+msgid "(mmi)"
+msgstr ""
+
+msgid "Impact level"
+msgstr ""
+
+msgid ""
+"To asses the impact of earthquake on population based on earthquake model "
+"developed by ITB"
+msgstr ""
+
+msgid ""
+" * Indonesian Earthquake Building-Damage and Fatality Models and    Post "
+"Disaster Survey Guidelines Development Bali, 27-28    February 2012, 54pp.\n"
+" * Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D.,    Hotovec, A. "
+"J., Lin, K., and Hearne, M., 2009. An Atlas    of ShakeMaps and population "
+"exposure catalog for    earthquake loss modeling, Bull. Earthq. Eng. 7, "
+"701-718.\n"
+" * Jaiswal, K., and Wald, D., 2010. An empirical model for    global "
+"earthquake fatality estimation, Earthq. Spectra    26, 1017-1037.\n"
+msgstr ""
+
+msgid ""
+" - The model is based on limited number of observed fatality    rates during "
+"4 past fatal events. \n"
+" - The model clearly over-predicts the fatality rates at    intensities "
+"higher than VIII.\n"
+" - The model only estimates the expected fatality rate    for a given "
+"intensity level; however the associated    uncertainty for the proposed "
+"model is not addressed.\n"
+" - There are few known mistakes in developing the current    model:\n"
+"\n"
+"   * rounding MMI values to the nearest 0.5,\n"
+"   * Implementing Finite-Fault models of candidate events, and\n"
+"   * consistency between selected GMPEs with those in use by      BMKG.\n"
+msgstr ""
+
+msgid "Provide details about the population will be die or displaced"
+msgstr ""
+
+msgid ""
+"This model was developed by Institut Teknologi Bandung (ITB) and implemented "
+"by Dr. Hadi Ghasemi, Geoscience Australia\n"
+"Algorithm:\n"
+"In this study, the same functional form as Allen (2009) is adopted o express "
+"fatality rate as a function of intensity (see Eq. 10 in the report). The "
+"Matlab built-in function (fminsearch) for  Nelder-Mead algorithm was used to "
+"estimate the model parameters. The objective function (L2G norm) that is "
+"minimized during the optimisation is the same as the one used by Jaiswal et "
+"al. (2010).\n"
+"The coefficients used in the indonesian model are x=0.62275231, "
+"y=8.03314466, zeta=2.15"
+msgstr ""
+
+msgid ""
+"All values are rounded up to the nearest integer in order to avoid "
+"representing human lives as fractionals."
+msgstr ""
+
+#, python-format
+msgid "Thousand separator is represented by %s"
+msgstr ""
+
+msgid "(people per cell)"
+msgstr ""
+
+msgid "Population density"
+msgstr ""
+
+msgid "Estimated displaced population per cell"
+msgstr ""
+
+msgid ""
+"To asses the impact of earthquake on population based on Population "
+"Vulnerability Model Pager"
+msgstr ""
+
+msgid ""
+" * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).    Estimating "
+"casualties for large worldwide earthquakes using    an empirical approach. U."
+"S. Geological Survey Open-File    Report 2009-1136."
+msgstr ""
+
+msgid ""
+"To assess the impacts of categorized hazards in raster format on population "
+"raster layer."
+msgstr ""
+
+msgid ""
+"Provide details about how many people would likely need to be impacted for "
+"each category."
+msgstr ""
+
+msgid ""
+"Map of population exposed to high category and a table with number of people "
+"in each category"
+msgstr ""
+
+msgid ""
+"This function will calculate how many people will be impacted per each "
+"category for all categories in the hazard layer. Currently there should be 3 "
+"categories in the hazard layer. After that it will show the result and the "
+"total amount of people that will be impacted for the hazard given."
+msgstr ""
+
+msgid ""
+"Vector layer contains building is estimated to be flooded and the breakdown "
+"of the building by type."
+msgstr ""
+
+msgid "Not Inundated"
+msgstr ""
+
+msgid "Inundated"
+msgstr ""
+
+msgid "(inundated or not inundated)"
+msgstr ""
+
+msgid "Structure inundated status"
+msgstr ""
+
+msgid ""
+"To assess the impacts of (flood or tsunami) inundation in vector format on "
+"population."
+msgstr ""
+
+msgid ""
+"The population subject to inundation is determined whether in an area which "
+"affected or not. You can also set an evacuation percentage to calculate how "
+"many percent of the total population affected to be evacuated. This number "
+"will be used to estimate needs based on BNPB Perka 7/2008 minimum bantuan."
+msgstr ""
+
+msgid ""
+"A hazard vector layer which has attribute affected the value is either 1 or 0"
+msgstr ""
+
+msgid ""
+"Vector layer contains population affected and the minimum needs based on "
+"evacuation percentage."
+msgstr ""
+
+msgid "Thousand separator is represented by '.'"
+msgstr ""
+
+msgid "(people per polygon)"
+msgstr ""
+
+msgid ""
+"To assess the impacts of (flood or tsunami) inundation in raster format on "
+"population."
+msgstr ""
+
+msgid ""
+"The population subject to inundation exceeding a threshold (default 1m) is "
+"calculated and returned as a raster layer. In addition the total number and "
+"the required needs in terms of the BNPB (Perka 7) are reported. The "
+"threshold can be changed and even contain multiple numbers in which case "
+"evacuation and needs are calculated using the largest number with population "
+"breakdowns provided for the smaller numbers. The population raster is "
+"resampled to the resolution of the hazard raster and is rescaled so that the "
+"resampled population counts reflect estimates of population count per "
+"resampled cell. The resulting impact layer has the same resolution and "
+"reflects population count per cell which are affected by inundation."
+msgstr ""
+
+msgid ""
+"Raster layer contains population affected and the minimum needs based on the "
+"population affected."
+msgstr ""
+
+msgid "To assess the impacts of volcano eruption on building."
+msgstr ""
+
+msgid ""
+"Provide details about how many building would likely be affected by each "
+"hazard zones."
+msgstr ""
+
+msgid ""
+"A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
+"\" attribute and the values for it are \"Kawasan Rawan Bencana I\", "
+"\"Kawasan Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\" If you want "
+"to see the name of the volcano in the result, you need to add \"NAME\" "
+"attribute for point data or \"GUNUNG\" attribute for polygon data."
+msgstr ""
+
+msgid ""
+"Vector layer contains Map of building exposed to volcanic hazard zones for "
+"each Kawasan Rawan Bencana or radius."
+msgstr ""
+
+msgid "Number of buildings affected"
+msgstr ""
+
+msgid "(building)"
+msgstr ""
+
+msgid "Building count"
+msgstr ""
+
+msgid "To assess the impacts of volcano eruption on population."
+msgstr ""
+
+msgid ""
+"Provide details about how many population would likely be affected by each "
+"hazard zones."
+msgstr ""
+
+msgid ""
+"A hazard vector layer can be polygon or point. If polygon, it must have \"KRB"
+"\" attribute and the valuefor it are \"Kawasan Rawan Bencana I\", \"Kawasan "
+"Rawan Bencana II\", or \"Kawasan Rawan Bencana III.\"If you want to see the "
+"name of the volcano in the result, you need to add \"NAME\" attribute for "
+"point data or \"GUNUNG\" attribute for polygon data."
+msgstr ""
+
+msgid ""
+"Vector layer contains population affected and the minimum needs based on the "
+"population affected."
+msgstr ""
+
+#, python-format
+msgid "Total population %s in the exposure layer"
+msgstr ""
+
+#, python-format
+msgid "Thousand separator is represented by  %s"
+msgstr ""
+
+msgid "(people)"
+msgstr ""
+
+msgid "Population count"
+msgstr ""
+
+msgid "Problem"
+msgstr ""
+
+msgid "The following problem(s) were encountered whilst running the analysis."
+msgstr ""
+
+msgid "Suggestion"
+msgstr ""
+
+msgid "You can try the following to resolve the issue:"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "These additional details were reported when the problem occurred."
+msgstr ""
+
+msgid "Diagnostics (click for details)"
+msgstr ""
+
+msgid "Calculates age related statistics."
+msgstr ""
+
+msgid "Calculates generic categorical statistics."
+msgstr ""
+
+msgid "Calculates generic aggregation statistics"
+msgstr ""
+
+msgid "Calculates building types related statistics."
+msgstr ""
+
+msgid "Calculates gender related statistics."
+msgstr ""
+
+msgid "Rice"
+msgstr ""
+
+msgid "Drinking Water"
+msgstr ""
+
+msgid "Water"
+msgstr ""
+
+msgid "Map shows population affected in each flood prone area"
+msgstr ""
+
+msgid "Table below shows the weekly minium needs for all evacuated people"
+msgstr ""
+
+msgid "Youth count (affected)"
+msgstr ""
+
+msgid "Adult count (affected)"
+msgstr ""
+
+msgid "Elderly count (affected)"
+msgstr ""
+
+msgid "Female population (affected)"
+msgstr ""
+
+msgid "Area"
+msgstr ""
+
+msgid "Road Type"
+msgstr ""
+
+msgid "Flooded roads"
+msgstr ""
+
+msgid "Be Liquefied"
+msgstr ""
+
+msgid ""
+"To assess the impacts of (liquefaction) on buildingfootprints originating "
+"from OpenStreetMap (OSM)."
+msgstr ""
+
+msgid "Provide details about where critical infrastructure might be liquefied"
+msgstr ""
+
+msgid ""
+"The liquefaction status is calculated for each building (using thecentroid "
+"if it is a polygon) based on the hazard levels provided. ifthe hazard is "
+"given as a rester threshold of 1 meter is used. Thisis configurable though "
+"the InaSAFE interface. If the hazard isgiven as a vector polygon layer "
+"buildings are considered to beimpacted depending on the value of hazard "
+"attributes (in order)\"affected\" or \"LIQUEFACTIONPRONE\": If a building is "
+"in a region that hasattribute \"affected\" set to True(or 1) it is impacted. "
+"If attribute\"affected\" does not exist but \"LIQUEFACTIONPRONE\" does, then "
+"the buildingis considered impacted if \"LIQUEFACTIONPRONE\" is \"yes\". If "
+"neither\"affected\" nor \"LIQUEFACTIONPRONE\" is available, a building will "
+"beimpacted if it is belongs to any polygon. The latter behaviour "
+"isimplemented through the attribute \"inapolygon\" which is automatically "
+"assigned."
+msgstr ""
+
+msgid ""
+"A hazard raster layer where each cell represents flood depth (inmeters), or "
+"a vector polygon layer where each polygon represents anliquefied area. In "
+"the latter case, the following attributes arerecognized (in order): "
+"\"affected\" (True or False) or \"LIQUEFACTIONPRONE\"(Yes or No). (True may "
+"be represented as 1, False as 0)"
+msgstr ""
+
+msgid ""
+"Vector polygon layer extracted from OSM where each polygonrepresents the "
+"footprint of the building."
+msgstr ""
+
+msgid ""
+"Vector layer contains building is estimated to be flooded and thebreakdown "
+"of the building by type"
+msgstr ""
+
+msgid ""
+"This function only flags buildings as impacted or not either basedon a fixed "
+"threshold in case of raster hazard or the attributesmentioned under input in "
+"case of vector hazard."
+msgstr ""
+
+msgid "Number liquefied"
+msgstr ""
+
+msgid "Which structures have warning capacity(e.g. sirens, speakers, etc.)?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Where will the patients from the %s closed hospitals go and how will we "
+"transfer them?"
+msgstr ""
+
+#, python-format
+msgid "flood levels exceed %.1fm"
+msgstr ""
+
+msgid "Not Liquefied"
+msgstr ""
+
+msgid "Liquefied"
+msgstr ""
+
+msgid "Buildings Liquefied"
+msgstr ""
+
+msgid "(liquefied or not liquefied)"
+msgstr ""
+
+msgid "Stucture liquefied status"
+msgstr ""
+
+msgid "Aggregates minimum needs."
+msgstr ""
+
+#, python-format
+msgid "Input layer must be a InaSAFE spatial object. I got %s"
+msgstr ""
+
+#, python-format
+msgid "Loaded impact layer \"%s\" is not valid"
+msgstr ""
+
+msgid ""
+"To assess the impact of earthquake on population based on earthquake model "
+"developed by ITB"
+msgstr ""
+
+msgid ""
+"All values are rounded up to the nearest integer in order to avoid "
+"representing human lives as fractions."
+msgstr ""
+
+msgid ""
+"To assess the impact of earthquake on population based on Population "
+"Vulnerability Model Pager"
+msgstr ""
+
+msgid "Table below shows the weekly minimum needs for all evacuated people"
+msgstr ""
+
+msgid "Volcanoes considered"
+msgstr ""
+
+msgid "Be-flooded"
+msgstr ""
+
+#, python-format
+msgid ""
+"Parameter \"Affected Field\"(='%s')\n"
+"                doesn't presented in the\n"
+"                attribute table of the hazard layer."
+msgstr ""
+
+#, python-format
+msgid ""
+"There are no objects\n"
+"                in the hazard layer with\n"
+"                \"Affected value\"='%s'.\n"
+"                Please check the value or use other\n"
+"                extent."
+msgstr ""
+
+msgid "Building Type"
+msgstr ""
+
+msgid "Flooded buildings"
+msgstr ""
+
+#, python-format
+msgid ""
+"Parameter \"Affected Field\"(='%s')\n"
+"                is not present in the attribute table of the hazard layer.\n"
+"                "
+msgstr ""
+
+#, python-format
+msgid ""
+"There are no objects in the hazard layer with\n"
+"                \"Affected value\"='%s'. Please check the value or use a\n"
+"                different extent."
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Temporarily closed (m)"
+msgstr ""
+
+msgid "Total (m)"
+msgstr ""
+
+msgid "Breakdown by road type"
+msgstr ""
+
+msgid "Be flooded in given thresholds"
+msgstr ""
+
+msgid ""
+"The minimal threshold is\n"
+"                greater then the maximal specified threshold.\n"
+"                Please check the values."
+msgstr ""
+
+#, python-format
+msgid ""
+"There are no objects\n"
+"                in the hazard layer with\n"
+"                \"value\">'%s'.\n"
+"                Please check the value or use other\n"
+"                extent."
+msgstr ""
+
+msgid "Flooded in the threshold (m)"
+msgstr ""
+
+msgid "Calculates road types related statistics."
+msgstr ""
+
+#, python-format
+msgid ""
+"Parameter \"Affected Field\"(='%s')\n"
+"                is not present in the\n"
+"                attribute table of the hazard layer."
+msgstr ""
+
+msgid "Elderly ratio"
+msgstr ""
+
+msgid "Earthquake Building Impact Function"
+msgstr ""
+
+msgid ""
+"This impact function will calculate the impact of an earthquake on "
+"buildings, reporting how many are expected to be damaged etc."
+msgstr ""
+
+msgid "ITB Fatality Function"
+msgstr ""
+
+msgid "PAG Fatality Function."
+msgstr ""
+
+msgid "Categorised Hazard Population Impact Function"
+msgstr ""
+
+msgid "Flood Native Polygon Experimental Function"
+msgstr ""
+
+msgid "N/A"
+msgstr ""
+
+msgid "Flood Building Impact Function"
+msgstr ""
+
+msgid "Flood Vector Roads Experimental Function"
+msgstr ""
+
+msgid "Flood Evacuation Function Vector Hazard"
+msgstr ""
+
+msgid ""
+"To assess the impacts of (flood or tsunami)inundation in vector format on "
+"population."
+msgstr ""
+
+msgid "Flood Evacuation Function"
+msgstr ""
+
+msgid ""
+"To assess the impacts of (flood or tsunami)inundation in raster format on "
+"population."
+msgstr ""
+
+msgid "Flood Raster Roads Experimental Function"
+msgstr ""
+
+msgid "OPTIMIZED-TEST-Be flooded in given thresholds"
+msgstr ""
+
+msgid "Volcano Building Impact"
+msgstr ""
+
+msgid "Volcano Polygon Hazard Population"
+msgstr ""
+
+msgid "hazard"
+msgstr "danger"
+
+msgid ""
+"A <b>hazard</b> layer represents something that will impact on the people or "
+"infrastructure in an area. For example; flood, earthquake, tsunami and  "
+"volcano are all examples of hazards."
+msgstr ""
+
+msgid "exposure"
+msgstr ""
+
+msgid ""
+"An <b>exposure</b> layer represents people, property or infrastructure that "
+"may be affected in the event of a flood, earthquake, volcano etc."
+msgstr ""
+
+msgid ""
+"An <b>aggregation</b> layer represents regions you can use to summarise the "
+"results by. For example, we might summarise the affected people aftera flood "
+"according to city districts."
+msgstr ""
+
+msgid "population"
+msgstr ""
+
+msgid ""
+"The <b>population</b> describes the people that might be exposed to a "
+"particular hazard."
+msgstr ""
+
+msgid "road"
+msgstr ""
+
+msgid ""
+"A <b>road</b> is a defined route used by a vehicle or people to travel "
+"between two or more points."
+msgstr ""
+
+msgid "structure"
+msgstr ""
+
+msgid ""
+"A <b>structure</b> can be any relatively permanent man made feature such as "
+"a building (an enclosed structure with walls and a roof) or a "
+"telecommunications facility or a bridge."
+msgstr ""
+
+msgid "earthquake"
+msgstr ""
+
+msgid ""
+"An <b>earthquake</b> describes the sudden violent shaking of the ground that "
+"occurs as a result of volcanic activity or movement in the earth's crust."
+msgstr ""
+
+msgid "flood"
+msgstr ""
+
+msgid ""
+"A <b>flood</b> describes the inundation of land that is normally dry by a "
+"large amount of water. For example: A <b>flood</b> can occur after heavy "
+"rainfall, when a river overflows its banks or when a dam breaks. The effect "
+"of a <b>flood</b> is for land that is normally dry to become wet."
+msgstr ""
+
+msgid "tephra"
+msgstr ""
+
+msgid ""
+"<b>Tephra</b> describes the material, such as rock fragments and ash "
+"particles ejected by a volcanic eruption."
+msgstr ""
+
+msgid "tsunami"
+msgstr ""
+
+msgid ""
+"A <b>tsunami</b> describes a large ocean wave or series or waves usually "
+"caused by an under water earthquake or volcano.A <b>tsunami</b> at sea may "
+"go unnoticed but a <b>tsunami</b> wave that strikes land may cause massive "
+"destruction and flooding."
+msgstr ""
+
+msgid "volcano"
+msgstr ""
+
+msgid ""
+"A <b>volcano</b> describes a mountain which has a vent through which rock "
+"fragments, ash, lava, steam and gases can be ejected from below the earth's "
+"surface. The type of material ejected depends on the type of <b>volcano</b>."
+msgstr ""
+
+msgid "feet"
+msgstr ""
+
+msgid ""
+"<b>Feet</b> are an imperial unit of measure. There are 12 inches in 1 foot "
+"and 3 feet in 1 yard. In this case <b>feet</b> are used to describe the "
+"water depth."
+msgstr ""
+
+msgid "metres"
+msgstr ""
+
+msgid ""
+"<b>metres</b> are a metric unit of measure. There are 100 centimetres in 1 "
+"metre. In this case <b>metres</b> are used to describe the water depth."
+msgstr ""
+
+msgid "MMI"
+msgstr ""
+
+msgid ""
+"The <b>Modified Mercalli Intensity (MMI)</b> scale describes the intensity "
+"of ground shaking from a earthquake based on the effects observed by people "
+"at the surface."
+msgstr ""
+
+msgid "normalized"
+msgstr ""
+
+msgid "people per pixel"
+msgstr ""
+
+msgid ""
+"<b>Density</b> is the number of features within a defined area. For example "
+"<b>population density</b> might be measured as the number of people per "
+"square kilometre."
+msgstr ""
+
+msgid "Water above ground height."
+msgstr ""
+
+msgid "volcano categorical"
+msgstr ""
+
+msgid "No water above ground height."
+msgstr ""
+
+msgid "wet / dry"
+msgstr ""
+
+msgid ""
+"This is a binary description for an area. The area is either <b>wet</b> "
+"(affected by flood water) or <b>dry</b> (not affected by flood water). This "
+"unit does not describe how <b>wet</b> or <b>dry</b> an area is."
+msgstr ""
+
+msgid "Elder count (affected)"
+msgstr ""
+
+msgid "generic"
+msgstr ""
+
+msgid ""
+"A generic hazard can be used for any type of hazard where the data have been "
+"classified or generalised. For example: earthquake, flood, volcano, or "
+"tsunami."
+msgstr ""
+
+msgid "normalised"
+msgstr ""
+
+msgid ""
+"Normalised data can be hazard or exposure data where the values have been "
+"classified or coded."
+msgstr ""
+
+msgid ""
+"<b>Count</b> is the number of people in each cell. For example <b>population "
+"count</b> might be measured as the number of people per pixel in a raster "
+"data set. This unit is relevant for population rasters in geographic "
+"coordinates."
+msgstr ""
+
+msgid "Distance from the volcano."
+msgstr ""
+
+msgid ""
+"<b>Building type</b> is a unit that represent the type of the building. In "
+"this case, building type will be used to group the result of impact function."
+msgstr ""
+
+msgid ""
+"<b>Normalised</b> data can be hazard or exposure data where the values have "
+"been classified or coded."
+msgstr ""
+
+msgid "no type"
+msgstr ""
+
+msgid ""
+"<b>No type</b> unit means that there is no building type attribute in the "
+"exposure data."
+msgstr ""
+
+msgid ""
+"<b>Road type</b> is a unit that represent the type of the road. In this "
+"case, road type will be used to group the result of impact function."
+msgstr ""
+
+msgid ""
+"This is a ternary description for an area. The area is either has <b>low</"
+"b>, <b>medium</b>, or <b>high</b> impact from the volcano."
+msgstr ""
+
+msgid "building generic"
+msgstr ""
+
+msgid ""
+"<b>Building generic</b> unit means that there is no building type attribute "
+"in the exposure data."
+msgstr ""
+
+msgid "Be flooded (experimental)"
+msgstr ""
+
+msgid ""
+"The minimal threshold is greater then the maximal specified threshold. "
+"Please check the values."
+msgstr ""
+
+#, python-format
+msgid ""
+"There are no objects in the hazard layer with \"value\">%s.Please check the "
+"value or use other extent."
+msgstr ""
+
+#, python-format
+msgid ""
+"There are no objects in the hazard layer with \"Affected\n"
+"                value\"='%s'. Please check the value or use other extent."
+msgstr ""
+
+#, python-format
+msgid ""
+"There are no objects in the hazard layer with \"Affected\n"
+"                value\"='%s'. Please check the value or use a different\n"
+"                extent."
+msgstr ""
+
+msgid "Global default"
+msgstr ""
+
+msgid "Don't use"
+msgstr ""
+
+msgid "Table below shows the weekly minimum needs for all affected people"
+msgstr ""
+
+msgid "Population Count (5kmx5km)"
+msgstr ""
+
+msgid "Map shows population count in high or medium hazard area"
+msgstr ""
+
+msgid ""
+"Vector layer contains people affected and the minimum needs based on "
+"evacuation percentage."
+msgstr ""
+
+msgid "Map shows the number of people affected in each flood prone area"
+msgstr ""
+
+msgid "People need evacuation if in the area identified as \"Flood Prone\""
+msgstr ""
+
+msgid ""
+"Raster layer contains people affected and the minimum needs based on the "
+"people affected."
+msgstr ""
+
+msgid "Map shows the numbers of people needing evacuation"
+msgstr ""
+
+msgid ""
+"Vector layer contains people affected and the minimum needs based on the "
+"number of people affected."
+msgstr ""
+
+msgid ""
+"Map shows the number of people affected in each of volcano hazard polygons."
+msgstr ""
+
+msgid "Female count (affected)"
+msgstr ""
+
+msgid ""
+"To assess the impacts of flood inundation in vector format on population."
+msgstr ""
+
+msgid ""
+"To assess the impacts of flood inundation in raster format on population."
+msgstr ""
+
+msgid "Tsunami Evacuation Function"
+msgstr ""
+
+msgid ""
+"To assess the impacts of tsunami inundation in raster format on population."
+msgstr ""
+
+msgid ""
+"The population subject to inundation exceeding a threshold (default 0.7m) is "
+"calculated and returned as a raster layer. In addition the total number and "
+"the required needs in terms of the BNPB (Perka 7) are reported. The "
+"threshold can be changed and even contain multiple numbers in which case "
+"evacuation and needs are calculated using the largest number with population "
+"breakdowns provided for the smaller numbers. The population raster is "
+"resampled to the resolution of the hazard raster and is rescaled so that the "
+"resampled population counts reflect estimates of population count per "
+"resampled cell. The resulting impact layer has the same resolution and "
+"reflects population count per cell which are affected by inundation."
+msgstr ""
+
+msgid ""
+"A hazard raster layer where each cell represents tsunami depth (in meters)."
+msgstr ""
+
+msgid ""
+"The default threshold of 0.7 meter was selected based on consensus, not hard "
+"evidence."
+msgstr ""
+
+#, python-format
+msgid "People need evacuation if tsunami levels exceed %(eps).1f m"
+msgstr ""
+
+msgid "Clean Water"
+msgstr ""
+
+msgid "Map shows the estimation of displaced population"
+msgstr ""
+
+#, python-format
+msgid "Needs should be provided %s"
+msgstr ""
+
+msgid "Provenance"
+msgstr ""
+
+#, python-format
+msgid "Population numbers rounded up to the nearest %s."
+msgstr ""
+
+msgid "Categorised Hazard Building Impact Function"
+msgstr ""
+
+msgid ""
+"To assess the impacts of categorized hazards in raster format on building "
+"vector layer."
+msgstr ""
+
+msgid "Be impacted by each category"
+msgstr ""
+
+msgid "Number of Buildings"
+msgstr ""
+
+msgid "Buildings in High risk areas"
+msgstr ""
+
+msgid "Buildings in Medium risk areas"
+msgstr ""
+
+msgid "Buildings in Low risk areas"
+msgstr ""
+
+msgid "Total Buildings Affected"
+msgstr ""
+
+msgid "Buildings Not Affected"
+msgstr ""
+
+msgid "All Buildings"
+msgstr ""
+
+msgid "Map shows buildings affected in low, medium and high risk areas."
+msgstr ""
+
+msgid "Not Affected"
+msgstr ""
+
+msgid "(Low, Medium, High)"
+msgstr ""
+
+msgid "Be affected by each hazard category"
+msgstr ""
+
+msgid "Total Population Affected "
+msgstr ""
+
+msgid "Population in High risk areas "
+msgstr ""
+
+msgid "Population in Medium risk areas "
+msgstr ""
+
+msgid "Population in Low risk areas "
+msgstr ""
+
+msgid "Population Not Affected"
+msgstr ""
+
+msgid "Table below shows the minimum needs for all evacuated people"
+msgstr ""
+
+msgid "Map shows the numbers of people in high, medium and low hazard areas"
+msgstr ""
+
+msgid "Population affected by each category"
+msgstr ""
+
+msgid "Number of People"
+msgstr ""
+
+msgid "Table below shows the minimum needs for all affected people"
+msgstr ""
+
+msgid ""
+"Vector polygon or point layer extracted from OSM where each feature "
+"represents the footprint of a building."
+msgstr ""
+
+msgid "Number Inundated"
+msgstr ""
+
+msgid "Number of Wet Buildings"
+msgstr ""
+
+msgid "Number of Dry Buildings"
+msgstr ""
+
+#, python-format
+msgid "Buildings are said to be inundated when flood levels exceed %.1f m"
+msgstr ""
+
+#, python-format
+msgid ""
+"Buildings are said to be wet when flood levels are greater than 0 m but less "
+"than %.1f m"
+msgstr ""
+
+msgid "Buildings are said to be dry when flood levels are less than 0 m"
+msgstr ""
+
+msgid "Buildings are said to be closed if they are inundated or wet"
+msgstr ""
+
+msgid "Buildings are said to be open if they are dry"
+msgstr ""
+
+msgid "Buildings are said to be flooded when in regions marked as affected"
+msgstr ""
+
+msgid "Dry (<= 0 m)"
+msgstr ""
+
+#, python-format
+msgid "Wet (0 m - %.1f m)"
+msgstr ""
+
+#, python-format
+msgid "Inundated (>= %.1f m)"
+msgstr ""
+
+msgid "(inundated, wet, or dry)"
+msgstr ""
+
+#, python-format
+msgid "* Number is rounded up to the nearest %s"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "categorised"
+msgstr ""
+
+msgid ""
+"<b>Categorised</b> data can be hazard data where the values have been "
+"classified or coded (i.e. low, medium, high)."
+msgstr ""
+
+msgid "Flood People In Buildings Impact Function"
+msgstr ""
+
+msgid "Population"
+msgstr ""

@@ -4,13 +4,13 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'string_parameter_widget'
 __date__ = '8/28/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 
 from PyQt4.QtGui import QLineEdit, QSizePolicy
 
-from generic_parameter_widget import GenericParameterWidget
+from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
 class StringParameterWidget(GenericParameterWidget):

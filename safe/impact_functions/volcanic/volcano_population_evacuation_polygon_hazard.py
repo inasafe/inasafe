@@ -13,6 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+from collections import OrderedDict
+
 from safe.engine.utilities import buffer_points
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
@@ -27,7 +29,6 @@ from safe.metadata import (
     hazard_definition,
     exposure_definition
 )
-from collections import OrderedDict
 from safe.defaults import (
     get_defaults,
     default_minimum_needs,
@@ -42,8 +43,8 @@ from safe.impact_functions.core import (
     population_rounding
 )
 from safe.storage.vector import Vector
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     humanize_class,
     create_classes,
@@ -56,6 +57,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data
 )
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class VolcanoPolygonHazardPopulation(FunctionProvider):
@@ -158,6 +160,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for volcano population evacuation.

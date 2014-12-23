@@ -6,7 +6,6 @@ import sys
 import numpy
 import zipfile
 import platform
-import gettext
 from datetime import date
 import getpass
 from tempfile import mkstemp
@@ -14,20 +13,13 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
+# pylint: disable=W0611
+from collections import OrderedDict
+# pylint: enable=W0611
 
 from safe.common.exceptions import VerificationError
+from safe.utilities.i18n import locale
 
-# Prefer python's own OrderedDict if it exists
-try:
-    # pylint: disable=W0611
-    from collections import OrderedDict
-    # pylint: enable=W0611
-except ImportError:
-    try:
-        from collections import OrderedDict
-    except ImportError:
-        raise RuntimeError(
-            'Could not find an available OrderedDict implementation')
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')
@@ -70,21 +62,6 @@ def verify(statement, message=None):
     if bool(statement) is False:
         # noinspection PyExceptionInherit
         raise VerificationError(message)
-
-
-def ugettext(s):
-    """Translation support."""
-    path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), '..', 'i18n'))
-    if 'LANG' not in os.environ:
-        return s
-    if not s:
-        return s
-    lang = os.environ['LANG']
-    filename_prefix = 'inasafe'
-    t = gettext.translation(
-        filename_prefix, path, languages=[lang], fallback=True)
-    return t.ugettext(s)
 
 
 def temp_dir(sub_dir='work'):
@@ -335,11 +312,7 @@ def format_int(x):
 
     """
 
-    # This is broken
-    # import locale
-    # locale.setlocale(locale.LC_ALL, '')  # Broken, why?
-    # s = locale.format('%d', x, 1)
-    lang = os.getenv('LANG')
+
     try:
         s = '{0:,}'.format(x)
         # s = '{0:n}'.format(x)  # n means locale aware (read up on this)
@@ -348,19 +321,19 @@ def format_int(x):
         return x
 
     # Quick solution for the moment
-    if lang == 'id':
+    if locale() == 'id':
         # Replace commas with dots
         s = s.replace(',', '.')
     return s
 
 
-def round_thousand(my_int):
+def round_thousand(value):
     """Round an integer to the nearest thousand if my_int
     is more than a thousand
     """
-    if my_int > 1000:
-        my_int = my_int // 1000 * 1000
-    return my_int
+    if value > 1000:
+        value = value // 1000 * 1000
+    return value
 
 
 def humanize_min_max(min_value, max_value, interval):
@@ -368,15 +341,19 @@ def humanize_min_max(min_value, max_value, interval):
     If the range between the max and min is less than one, the original
     value will be returned.
 
-    Args:
-        * min_value
-        * max_value
-        * interval - (float): the interval between classes in the the
-            class list where the results will be used.
+    :param min_value: Minimum value
+    :type min_value: int, float
 
-    Returns:
-        A two-tuple consisting of a string for min_value and a string for
+    :param max_value: Maximim value
+    :type max_value: int, float
+
+    :param interval: The interval between classes in the
+            class list where the results will be used.
+    :type interval: float, int
+
+    :returns: A two-tuple consisting of a string for min_value and a string for
             max_value.
+    :rtype: tuple
 
     """
     current_interval = max_value - min_value
@@ -392,7 +369,7 @@ def humanize_min_max(min_value, max_value, interval):
     return humanize_min_value, humanize_max_value
 
 
-def format_decimal(interval, my_number):
+def format_decimal(interval, value):
     """Return formatted decimal according to interval decimal place
     For example:
     interval = 0.33 (two decimal places)
@@ -402,17 +379,17 @@ def format_decimal(interval, my_number):
     If my_number is an integer return as is
     """
     interval = get_significant_decimal(interval)
-    if isinstance(interval, Integral) or isinstance(my_number, Integral):
-        return format_int(int(my_number))
+    if isinstance(interval, Integral) or isinstance(value, Integral):
+        return format_int(int(value))
     if interval != interval:
         # nan
-        return str(my_number)
-    if my_number != my_number:
+        return str(value)
+    if value != value:
         # nan
-        return str(my_number)
+        return str(value)
     decimal_places = len(str(interval).split('.')[1])
-    my_number_int = str(my_number).split('.')[0]
-    my_number_decimal = str(my_number).split('.')[1][:decimal_places]
+    my_number_int = str(value).split('.')[0]
+    my_number_decimal = str(value).split('.')[1][:decimal_places]
     if len(set(my_number_decimal)) == 1 and my_number_decimal[-1] == '0':
         return my_number_int
     return (format_int(int(my_number_int)) + get_decimal_separator() +

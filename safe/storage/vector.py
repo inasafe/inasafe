@@ -10,6 +10,7 @@ OGR C++ reference: http://www.gdal.org/ogr
 
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
 __revision__ = '$Format:%H$'
@@ -31,13 +32,13 @@ except ImportError:
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.utilities import verify, ugettext as safe_tr
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from projection import Projection
 from geometry import Polygon
+from utilities import verify
 from utilities import DRIVER_MAP, TYPE_MAP
 from utilities import read_keywords
 from utilities import write_keywords
@@ -428,7 +429,7 @@ class Vector(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            title = safe_tr(title)
+            title = tr(title)
 
             vector_name = title
         else:

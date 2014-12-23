@@ -2,6 +2,7 @@
 """**Postprocessors package.**
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'Marco Bernasocchi <marco@opengis.ch>'
 __revision__ = '$Format:%H$'
@@ -12,8 +13,6 @@ __copyright__ += 'Disaster Reduction'
 
 
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-
-from safe.common.utilities import (ugettext as tr)
 
 
 class MinimumNeedsPostprocessor(AbstractPostprocessor):

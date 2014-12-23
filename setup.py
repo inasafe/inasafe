@@ -70,7 +70,7 @@ setup(name='python-safe',
       long_description=read('README.md'),
       packages=packages,
       data_files=data_files,
-      install_requires=['Numpy', ],
+      install_requires=['Numpy', 'PyQt4', ],
       classifiers=[
           'Development Status :: 2 - Pre-Alpha',
           'Intended Audience :: Developers',

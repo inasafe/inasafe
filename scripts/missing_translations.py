@@ -1,5 +1,5 @@
-"""Report missing translations for given locales
-"""
+# coding=utf-8
+"""Report missing translations for given locales"""
 
 import os
 import sys
@@ -20,14 +20,13 @@ if __name__ == '__main__':
 
     locales = sys.argv[2:]
 
-    files = {'QT': '%s/safe_qgis/i18n/inasafe_%s.ts',
-             'GT': '%s/safe/i18n/%s/LC_MESSAGES/inasafe.po'}
+    files = {'QT': '%s/i18n/inasafe_%s.ts',
+             'GT': '%s/i18n/%s/LC_MESSAGES/inasafe.po'}
 
     commands = {'QT': 'lrelease %s',
                 'GT': 'msgfmt --statistics %s'}
 
     for locale in locales:
-
         for key in files:
             filename = files[key] % (root, locale)
             cmd = commands[key] % filename

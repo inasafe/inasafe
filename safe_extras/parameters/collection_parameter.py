@@ -140,7 +140,8 @@ class CollectionParameter(GenericParameter):
         :raises: CollectionLengthError
         """
 
-        if self._maximum_item_count is None and self._minimum_item_count is None:
+        if (self._maximum_item_count is None and
+                    self._minimum_item_count is None):
             return
 
         length = len(value)

@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '14/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -21,7 +21,7 @@ import json
 from safe.impact_functions.utilities import add_to_list
 
 
-class ImpactFunctionMetadata():
+class ImpactFunctionMetadata(object):
     """Abstract metadata class for an impact function.
 
     .. versionadded:: 2.1

@@ -4,7 +4,7 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'test_string_parameter_widget.py'
 __date__ = '8/28/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 import unittest
