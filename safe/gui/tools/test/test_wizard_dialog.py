@@ -60,7 +60,6 @@ from safe.gui.tools.wizard_dialog import (
     step_kw_unit,
     step_kw_aggregation,
     step_kw_field)
-
 from safe.utilities.keyword_io import KeywordIO
 
 
@@ -350,7 +349,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer=layer)
+        dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 7 - select category
         self.check_current_text('hazard', dialog.lstCategories)
@@ -590,7 +589,8 @@ class WizardDialogTest(unittest.TestCase):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
             name='building_Maumere',
-            include_keywords=True)
+            include_keywords=True,
+            source_directory=TESTDATA)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -721,6 +721,7 @@ class WizardDialogTest(unittest.TestCase):
             source_directory=HAZDATA)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
+
         dialog.pbnNext.click()  # choose hazard go to subcategory step
         dialog.pbnNext.click()  # choose volcano  go to unit  step
 
@@ -922,7 +923,8 @@ class WizardDialogTest(unittest.TestCase):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
             name='Jakarta_RW_2007flood',
-            source_directory=HAZDATA)
+            source_directory=HAZDATA,
+            include_keywords=False)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -1184,6 +1186,6 @@ class WizardDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(WizardDialogTest)
+    suite = unittest.makeSuite(WizardDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

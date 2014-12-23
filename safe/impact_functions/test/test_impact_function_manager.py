@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.earthquake.earthquake_building_impact import (
     EarthquakeBuildingImpactFunction)
@@ -54,6 +53,7 @@ from safe.metadata import (
     unit_normalised,
     hazard_generic,
     unit_building_generic,
+    unit_categorised,
     hazard_all)
 
 
@@ -96,7 +96,9 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_volcano,
             hazard_tephra,
             hazard_generic]
-        self.assertItemsEqual(result, expected_result)
+        message = (
+            'I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
     def test_allowed_data_types(self):
         """Test allowed_data_types API."""

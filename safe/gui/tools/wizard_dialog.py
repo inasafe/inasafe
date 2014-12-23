@@ -19,17 +19,18 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import logging
 import re
 import json
-import os
+from collections import OrderedDict
 from sqlite3 import OperationalError
-
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature, QSettings
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
+    QDialog,
     QListWidgetItem,
     QPixmap,
     QApplication,
@@ -45,15 +46,20 @@ from qgis.core import (
 
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 
+from wizard_analysis_handler import WizardAnalysisHandler
+
 from safe import metadata
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
+
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import get_error_message
+from safe.utilities.utilities import (
+    get_error_message,
+    get_safe_impact_function)
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -65,16 +71,27 @@ from safe.common.exceptions import (
 from safe.utilities.resources import get_ui_class
 from safe.utilities.help import show_context_help
 
+from safe.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
+
+# import here only so that it is AFTER i18n set up
+from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
+
+
+LOGGER = logging.getLogger('InaSAFE')
+
 FORM_CLASS = get_ui_class('wizard_dialog_base.ui')
 
 # Constants for categories
-category_question = wizard_tr(
+category_question = QApplication.translate(
+    'WizardDialog',
     'By following the simple steps in this wizard, you can assign '
     'keywords to your layer: <b>%s</b>. First you need to define '
     'the category of your layer.')   # (layer name)
 
 # Constants for hazards
-hazard_question = wizard_tr(
+hazard_question = QApplication.translate(
+    'WizardDialog',
     'What kind of hazard does this '
     'layer represent? The choice you make here will determine '
     'which impact functions this hazard layer can be used with. '
@@ -83,7 +100,8 @@ hazard_question = wizard_tr(
     'as <b>flood impact on population</b>.')
 
 # Constants for exposures
-exposure_question = wizard_tr(
+exposure_question = QApplication.translate(
+    'WizardDialog',
     'What kind of exposure does this '
     'layer represent? The choice you make here will determine '
     'which impact functions this exposure layer can be used with. '
@@ -92,7 +110,8 @@ exposure_question = wizard_tr(
     'as <b>flood impact on population</b>.')
 
 # Constants for units
-unit_question = wizard_tr(
+unit_question = QApplication.translate(
+    'WizardDialog',
     'You have selected <b>%s</b> '
     'for this <b>%s</b> layer type. We need to know what units the '
     'data are in. For example in a raster layer, each cell might '
@@ -132,11 +151,18 @@ tephra_kgm2_question = QApplication.translate(
 volcano_volcano_categorical_question = QApplication.translate(
     'WizardDialog',
     'volcano hazard categorical level')
-population_number_question = wizard_tr('the number of people')
-population_density_question = wizard_tr(
+population_number_question = QApplication.translate(
+    'WizardDialog',
+    'the number of people')
+population_density_question = QApplication.translate(
+    'WizardDialog',
     'people density in people/km<sup>2</sup>')
-road_road_type_question = wizard_tr('type for your road')
-structure_building_type_question = wizard_tr('type for your building')
+road_road_type_question = QApplication.translate(
+    'WizardDialog',
+    'type for your road')
+structure_building_type_question = QApplication.translate(
+    'WizardDialog',
+    'type for your building')
 
 # Constants for field selection
 # noinspection PyCallByClass
@@ -162,7 +188,7 @@ classify_question = QApplication.translate(
     'unit, and the data column is <b>%s</b>. Below on the left you '
     'can see all unique values found in that column. Please drag them '
     'to the right panel in order to classify them to appropriate '
-    'categories.')  # (subcategory, category, unit, field)
+    'categories.')   # (subcategory, category, unit, field)
 
 # Constants: tab numbers for steps
 step_kw_category = 1
@@ -229,11 +255,6 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         """
         QSortFilterProxyModel.__init__(self, parent)
 
-
-class WizardDialog(QtGui.QDialog, FORM_CLASS):
-
-    """Dialog implementation class for the InaSAFE keywords wizard."""
-
     def filterAcceptsRow(self, source_row, source_parent):
         """The filter method
 
@@ -263,7 +284,8 @@ class WizardDialog(QtGui.QDialog, FORM_CLASS):
         return True
 
 
-class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
+class WizardDialog(QDialog, FORM_CLASS):
+
     """Dialog implementation class for the InaSAFE wizard."""
 
     def __init__(self, parent=None, iface=None, dock=None):
@@ -284,7 +306,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
             the keywords. Optional.
         :type dock: Dock
         """
-        QtGui.QDialog.__init__(self, parent)
+        QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle('InaSAFE')
         # Note the keys should remain untranslated as we need to write
@@ -316,7 +338,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         self.twParams = None
 
         # TODO document it:
-        self.is_selected_layer_keyword_less = False
+        self.is_selected_layer_keywordless = False
         self.parent_step = None
 
         self.pbnBack.setEnabled(False)
@@ -1227,12 +1249,12 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setText(0, imfunc['name'])
                 tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
-                ## TODO TEMP DEBUG temporary:
-                #if (h['name'] == 'flood' and
-                        #imfunc['name'] == "Flood Building Impact Function"):
-                    #self.twi_if_tsunami = tree_leaf
-        ## TODO TEMP DEBUG temporary
-        #self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
+                # # TODO TEMP DEBUG temporary:
+                # if (h['name'] == 'flood' and
+                #         imfunc['name'] == "Flood Building Impact Function"):
+                #     self.twi_if_tsunami = tree_leaf
+        # # TODO TEMP DEBUG temporary
+        # self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1291,7 +1313,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 UnsupportedProviderError):
             keywords = None
 
-        self.is_selected_layer_keyword_less = not bool(keywords)
+        self.is_selected_layer_keywordless = not bool(keywords)
 
         if keywords:
             label_text = """
@@ -1642,7 +1664,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
         else:
             self.aggregation_layer = layer
 
-        self.is_selected_layer_keyword_less = not bool(keywords)
+        self.is_selected_layer_keywordless = not bool(keywords)
 
         if keywords:
             desc = (
@@ -2369,7 +2391,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 # Come back to the parent thread
                 new_step = self.parent_step
                 self.parent_step = None
-                self.is_selected_layer_keyword_less = False
+                self.is_selected_layer_keywordless = False
             else:
                 # Wizard complete
                 new_step = None
@@ -2383,7 +2405,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_fc_hazlayer_from_browser
         elif current_step in [step_fc_hazlayer_from_canvas,
                               step_fc_hazlayer_from_browser]:
-            if self.is_selected_layer_keyword_less:
+            if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
                 self.set_keywords_creation_mode(self.layer)
@@ -2398,7 +2420,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_fc_explayer_from_browser
         elif current_step in [step_fc_explayer_from_canvas,
                               step_fc_explayer_from_browser]:
-            if self.is_selected_layer_keyword_less:
+            if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
                 self.existing_keywords = None
@@ -2423,7 +2445,7 @@ class WizardDialog(QtGui.QDialog, Ui_WizardDialogBase):
                 new_step = step_fc_extent
         elif current_step in [step_fc_agglayer_from_canvas,
                               step_fc_agglayer_from_browser]:
-            if self.is_selected_layer_keyword_less:
+            if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
                 self.existing_keywords = None

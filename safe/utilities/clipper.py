@@ -22,7 +22,6 @@ import os
 import tempfile
 import logging
 
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import QProcess
 from qgis.core import (
     QGis,
@@ -533,7 +532,6 @@ def _clip_raster_layer(
 
     # .. todo:: Check the result of the shell call is ok
     keyword_io = KeywordIO()
-    # noinspection PyTypeChecker
     keyword_io.copy_keywords(layer, filename, extra_keywords=extra_keywords)
     base_name = '%s clipped' % layer.name()
     layer = QgsRasterLayer(filename, base_name)

@@ -81,8 +81,8 @@ class Plugin(object):
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
-        self.action_extent_selector = None
         self.action_function_centric_wizard = None
+        self.action_extent_selector = None
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
@@ -239,8 +239,9 @@ class Plugin(object):
         # --------------------------------------
         # Create action for IF-centric wizard
         # --------------------------------------
+        icon = resources_path('img', 'icons', 'show-wizard.svg')
         self.action_function_centric_wizard = QAction(
-            QIcon(':/plugins/inasafe/show-wizard.svg'),
+            QIcon(icon),
             self.tr('InaSAFE Impact Function Centric Wizard'),
             self.iface.mainWindow())
         self.action_function_centric_wizard.setStatusTip(self.tr(
@@ -629,7 +630,11 @@ class Plugin(object):
         # Fix for filtered-layer
         except InvalidParameterError, e:
             # noinspection PyTypeChecker,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(None, self.tr('Invalid Layer'), e.message)
+            QMessageBox.warning(
+                None,
+                self.tr('Invalid Layer'),
+                e.message
+            )
             return
 
         dialog = KeywordsDialog(
@@ -655,14 +660,13 @@ class Plugin(object):
     def show_function_centric_wizard(self):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.wizard_dialog import WizardDialog
+        from safe.gui.tools.wizard_dialog import WizardDialog
 
         dialog = WizardDialog(
             self.iface.mainWindow(),
             self.iface,
             self.dock_widget)
         dialog.set_function_centric_mode()
-
         dialog.show()  # non-modal in order to hide for selecting user extent
 
     def show_function_browser(self):

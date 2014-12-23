@@ -217,8 +217,6 @@ class Extent(object):
         """
         self.hide_user_analysis_extent()
 
-        self.hide_user_analysis_extent()
-
         extent = self.user_extent
         source_crs = self.user_extent_crs
 
@@ -314,5 +312,5 @@ class Extent(object):
 
         if self.show_rubber_bands:
             # Draw in red
-                self.last_analysis_rubberband = self._draw_rubberband(
+            self.last_analysis_rubberband = self._draw_rubberband(
                 extent, QColor(255, 0, 0, 100), width=5)
