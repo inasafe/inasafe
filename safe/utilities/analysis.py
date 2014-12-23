@@ -82,8 +82,6 @@ LOGO_ELEMENT = styles.logo_element()
 LOGGER = logging.getLogger('InaSAFE')
 
 
-
-
 class Analysis(object):
     """Class for running full analysis."""
     def __init__(self):

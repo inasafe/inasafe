@@ -82,7 +82,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
         # Template Path for composer
         self.template_path = resources_path(
-            'qgis-composer-templates',  'merged_report.qpt')
+            'qgis-composer-templates', 'merged_report.qpt')
 
         # Safe Logo Path
         self.safe_logo_path = resources_path(

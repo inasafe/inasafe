@@ -623,7 +623,7 @@ class TestCore(unittest.TestCase):
             'control',
             'files',
             'test-get-plugins-as-table.txt')
-        expected_result = open(control_file_path,'r').read()
+        expected_result = open(control_file_path, 'r').read()
         self.assertEqual(
             plugins_table.toNewlineFreeString(),
             str(expected_result).replace('\n', ''))
