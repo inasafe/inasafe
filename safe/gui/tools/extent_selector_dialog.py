@@ -16,7 +16,6 @@ Refactored and improved in Oct 2014 by Tim Sutton for InaSAFE.
 
 .. versionadded:: 2.2.0
 """
-from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'Giuseppe Sucameli & Tim Sutton'
 __date__ = 'December 2010'
@@ -25,7 +24,7 @@ __copyright__ = '(C) 2010, Giuseppe Sucameli'
 __revision__ = '$Format:%H$'
 
 import logging
-import os
+
 # noinspection PyUnresolvedReferences
 # pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
@@ -43,7 +42,7 @@ from qgis.core import (
     QgsCoordinateTransform)
 
 from safe import messaging as m
-from safe.utilities.resources import html_header, get_ui_class
+from safe.utilities.resources import html_header, html_footer, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles

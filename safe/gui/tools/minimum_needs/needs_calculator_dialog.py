@@ -12,7 +12,6 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
 import logging
 
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer

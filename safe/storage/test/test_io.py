@@ -1168,15 +1168,16 @@ class TestIO(unittest.TestCase):
     def test_reading_and_writing_of_real_rasters(self):
         """Rasters can be read and written correctly in different formats
         """
-
-        for rastername in [
+        raster_names = [
             'Earthquake_Ground_Shaking_clip.tif',
             'Population_2010_clip.tif',
             'shakemap_padang_20090930.asc',
             'population_padang_1.asc',
-            'population_padang_2.asc']:
+            'population_padang_2.asc'
+        ]
 
-            filename = '%s/%s' % (TESTDATA, rastername)
+        for raster in raster_names:
+            filename = '%s/%s' % (TESTDATA, raster)
             r1 = read_layer(filename)
             assert r1.filename == filename
 
@@ -1191,9 +1192,7 @@ class TestIO(unittest.TestCase):
 
             # Test conversion between geotransform and
             # geometry (longitudes and latitudes)
-            # pylint: disable=W0633,W0632
             longitudes, latitudes = r1.get_geometry()
-            # pylint: enable=W0633,W0632
             gt = raster_geometry_to_geotransform(longitudes, latitudes)
             msg = ('Conversion from coordinates to geotransform failed: %s'
                    % str(gt))
@@ -1510,7 +1509,7 @@ class TestIO(unittest.TestCase):
 
         # Check data directly
         coordinates, values = R.to_vector_points()
-        longitudes, latitudes = R.get_geometry()  # pylint: disable=W0633,W0632
+        longitudes, latitudes = R.get_geometry()
         a = R.get_data()
         M, N = a.shape
         L = M * N
@@ -1559,7 +1558,7 @@ class TestIO(unittest.TestCase):
 
         # Check data directly
         coordinates, values = R.to_vector_points()
-        longitudes, latitudes = R.get_geometry()  # pylint: disable=W0633,W0632
+        longitudes, latitudes = R.get_geometry()
         A = R.get_data()
         M, N = A.shape
         L = M * N
@@ -2448,7 +2447,6 @@ class TestIO(unittest.TestCase):
             assert len(attributes_new[i]) == 3
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
-
 
     def test_multipart_polygon_can_be_read(self):
         """Multipart polygons are be converted to singlepart

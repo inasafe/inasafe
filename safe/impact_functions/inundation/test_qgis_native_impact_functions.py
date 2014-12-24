@@ -131,7 +131,8 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
 
     def test_building_native_impact_experimental(self):
         """Test flood_building_native_impact_experimental."""
-        hazard_name = test_data_path('hazard', 'multipart_polygons_osm_4326.shp')
+        hazard_name = test_data_path(
+            'hazard', 'multipart_polygons_osm_4326.shp')
         qgis_hazard = QgsVectorLayer(hazard_name, 'HAZARD', 'ogr')
 
         exposure_name = test_data_path('exposure', 'buildings_osm_4326.shp')
@@ -182,7 +183,8 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
 
     def test_polygon_roads_impact(self):
         """Test FloodVectorRoadsExperimentalFunction work."""
-        hazard_name = test_data_path('hazard', 'multipart_polygons_osm_4326.shp')
+        hazard_name = test_data_path(
+            'hazard', 'multipart_polygons_osm_4326.shp')
         qgis_hazard = QgsVectorLayer(hazard_name, 'HAZARD', 'ogr')
 
         exposure_name = test_data_path('exposure', 'roads_osm_4326.shp')
