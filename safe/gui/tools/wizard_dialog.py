@@ -2015,6 +2015,16 @@ class WizardDialog(QDialog, FORM_CLASS):
                 subparams = [u'%s: %s' % (unicode(pp), unicode(
                     self.if_params[p][pp])) for pp in self.if_params[p]]
                 subparams = u', '.join(subparams)
+            elif type(self.if_params[p]) == list and p == 'minimum needs':
+                subparams = ''
+                for need in self.if_params[p]:
+                    subparams += '%s %.0f' % (need.name, need.value)
+                    if need.unit.abbreviation:
+                        subparams += need.unit.abbreviation
+                    if need != self.if_params[p][-1]:
+                        subparams += ', '
+                if not subparams:
+                    subparams = 'Not applicable'
             elif type(self.if_params[p]) == list:
                 subparams = ', '.join([unicode(i) for i in self.if_params[p]])
             else:
