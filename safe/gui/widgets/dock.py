@@ -1021,8 +1021,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.analysis.clip_parameters[1])
             # Start the analysis
             self.analysis.run_analysis()
-            pass
-
         except InsufficientOverlapError as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(

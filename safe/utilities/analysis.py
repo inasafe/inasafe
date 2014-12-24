@@ -796,7 +796,7 @@ class Analysis(object):
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        # pylint: disable=W0633,W0612
+        # pylint: disable=W0612
         (extra_exposure_keywords,
          buffered_geo_extent,
          cell_size,
