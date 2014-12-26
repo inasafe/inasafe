@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1008</width>
+    <width>1024</width>
     <height>544</height>
    </rect>
   </property>
@@ -89,10 +89,10 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../resources/resources.qrc">:/plugins/inasafe/icon.svg</pixmap>
+        <pixmap>../../../icon.svg</pixmap>
        </property>
        <property name="scaledContents">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1636,13 +1636,13 @@
           <widget class="QTreeWidget" name="treeFunctions">
            <property name="minimumSize">
             <size>
-             <width>360</width>
+             <width>460</width>
              <height>99</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>360</width>
+             <width>460</width>
              <height>16777215</height>
             </size>
            </property>
@@ -1893,13 +1893,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2065,13 +2065,13 @@
           <widget class="QTreeView" name="tvBrowserHazard">
            <property name="minimumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2266,13 +2266,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2438,13 +2438,13 @@
           <widget class="QTreeView" name="tvBrowserExposure">
            <property name="minimumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2703,13 +2703,13 @@ Please step back and select another layer.</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>16777215</height>
             </size>
            </property>
@@ -2875,13 +2875,13 @@ Please step back and select another layer.</string>
           <widget class="QTreeView" name="tvBrowserAggregation">
            <property name="minimumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>350</width>
+             <width>460</width>
              <height>16777215</height>
             </size>
            </property>
@@ -3063,7 +3063,7 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>350</height>
+           <height>460</height>
           </size>
          </property>
         </spacer>
@@ -3401,8 +3401,6 @@ Please step back and select another layer.</string>
   <tabstop>pbnReportComposer</tabstop>
   <tabstop>pbnHelp</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources/resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -68,14 +68,12 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError,
     InaSAFEError)
-from safe.utilities.resources import get_ui_class
+from safe.utilities.resources import get_ui_class, resources_path
+
 from safe.utilities.help import show_context_help
 
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-
-# import here only so that it is AFTER i18n set up
-from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -317,6 +315,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.dock = dock
         self.suppress_warning_dialog = False
         self.set_tool_tip()
+        self.lblMainIcon.setPixmap(
+            QPixmap(resources_path('img', 'icons', 'icon.svg')))
 
         # Set models for browsers
         browserModel = QgsBrowserModel()
@@ -426,9 +426,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             return
         # Set description label
         self.lblDescribeCategory.setText(category["description"])
-        self.lblIconCategory.setPixmap(
-            QPixmap(':/plugins/inasafe/keyword-category-%s.svg'
-                    % (category['id'] or 'notset')))
+        self.lblIconCategory.setPixmap(QPixmap(
+            resources_path('img', 'wizard', 'keyword-category-%s.svg'
+                           % (category['id'] or 'notset'))))
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
@@ -503,8 +503,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set description label
         self.lblDescribeSubcategory.setText(subcategory['description'])
         self.lblIconSubcategory.setPixmap(QPixmap(
-            ':/plugins/inasafe/keyword-subcategory-%s.svg'
-            % (subcategory['id'] or 'notset')))
+            resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
+                           % (subcategory['id'] or 'notset'))))
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
@@ -1177,8 +1177,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             description += "<b>NAME</b>: %s<br/>" % imfunc['name']
         if "overview" in imfunc.keys():
             description += "<b>OVERVIEW</b>: %s<br/>" % imfunc['overview']
-        description += ("<br/><i>Why the metadata key is called 'overview' "
-                        "instead of 'description'?</i><br/>")
 
         self.lblDescribeFunction.setText(description)
         # Enable the next button if anything selected
@@ -1241,7 +1239,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             tree_branch.setFlags(QtCore.Qt.ItemIsEnabled)
-            tree_branch.setText(0, h['name'])
+            tree_branch.setText(0, h['name'].upper())
             tree_branch.setData(0, QtCore.Qt.UserRole, h)
             # Collect functions for hazard
             imfunctions = ImpactFunctionManager().get_functions_for_hazard(h)
@@ -1528,8 +1526,8 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_widgets_step_fc_hazlayer_from_canvas(self):
         """Set widgets on the Hazard Layer From TOC tab"""
         # The lstCanvasHazLayers is already populated in the previous step
-        self.auto_select_one_item(self.lstCanvasHazLayers)
         self.lblDescribeCanvasHazLayer.clear()
+        self.auto_select_one_item(self.lstCanvasHazLayers)
 
     # ===========================
     # STEP_FC_HAZLAYER_FROM_BROWSER
@@ -1805,8 +1803,8 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_widgets_step_fc_explayer_from_canvas(self):
         """Set widgets on the Exposure Layer From Canvas tab"""
         # The lstCanvasExpLayers is already populated in the previous step
-        self.auto_select_one_item(self.lstCanvasExpLayers)
         self.lblDescribeCanvasExpLayer.clear()
+        self.auto_select_one_item(self.lstCanvasExpLayers)
 
     # ===========================
     # STEP_FC_EXPLAYER_FROM_BROWSER
@@ -1935,8 +1933,8 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_widgets_step_fc_agglayer_from_canvas(self):
         """Set widgets on the Aggregation Layer from Canvas tab"""
         # The lstCanvasAggLayers is already populated in the previous step
-        self.auto_select_one_item(self.lstCanvasAggLayers)
         self.lblDescribeCanvasAggLayer.clear()
+        self.auto_select_one_item(self.lstCanvasAggLayers)
 
     # ===========================
     # STEP_FC_AGGLAYER_FROM_BROWSER
@@ -1999,6 +1997,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def lblDefineExtentNow_clicked(self):
         """Show the extent selector widget for defining analysis extents."""
+        # import here only so that it is AFTER i18n set up
+        from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
         widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
