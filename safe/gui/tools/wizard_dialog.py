@@ -1278,10 +1278,53 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.pbnNext.setEnabled(True)
 
-    @staticmethod
-    def set_widgets_step_fc_hazlayer_origin():
+    def list_compatible_layers_from_canvas(self, category, list_widget):
+        """Fill given list widget with compatible layers.
+
+        .. note:: Uses get_compatible_layers_from_canvas() to filter layers
+
+        :param category: The category to filter for.
+        :type category: string
+
+        :param list_widget: The list widget to be filled with layers.
+        :type list_widget: QListWidget
+
+
+        :returns: Metadata of found layers.
+        :rtype: list of dicts
+        """
+
+        italic_font = QtGui.QFont()
+        italic_font.setItalic(True)
+
+        # Add compatible layers
+        list_widget.clear()
+        for layer in self.get_compatible_layers_from_canvas(category):
+            item = QListWidgetItem(layer['name'], list_widget)
+            item.setData(QtCore.Qt.UserRole, layer['id'])
+            if not layer['keywords']:
+                item.setFont(italic_font)
+            list_widget.addItem(item)
+
+    def set_widgets_step_fc_hazlayer_origin(self):
         """Set widgets on the Hazard Layer Origin Type tab."""
-        pass
+        # First, check if there are any available layers
+        self.list_compatible_layers_from_canvas(
+            'hazard', self.lstCanvasHazLayers)
+        if self.lstCanvasHazLayers.count():
+            self.rbHazLayerFromCanvas.setText(QApplication.translate(
+                'WizardDialog',
+                'I would like to use a hazard layer already loaded in QGIS\n'
+                '(launches the hazard data registration wizard if needed)'))
+            self.rbHazLayerFromCanvas.setEnabled(True)
+            self.rbHazLayerFromCanvas.click()
+        else:
+            self.rbHazLayerFromCanvas.setText(QApplication.translate(
+                'WizardDialog',
+                'I would like to use a hazard layer already loaded in QGIS\n'
+                '(no suitable layers found)'))
+            self.rbHazLayerFromCanvas.setEnabled(False)
+            self.rbHazLayerFromBrowser.click()
 
     # ===========================
     # STEP_FC_HAZLAYER_FROM_CANVAS
@@ -1482,38 +1525,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         return layers
 
-    def list_compatible_layers_from_canvas(self, category, list_widget):
-        """Fill given list widget with compatible layers.
-
-        .. note:: Uses get_compatible_layers_from_canvas() to filter layers
-
-        :param category: The category to filter for.
-        :type category: string
-
-        :param list_widget: The list widget to be filled with layers.
-        :type list_widget: QListWidget
-
-
-        :returns: Metadata of found layers.
-        :rtype: list of dicts
-        """
-
-        italic_font = QtGui.QFont()
-        italic_font.setItalic(True)
-
-        # Add compatible layers
-        list_widget.clear()
-        for layer in self.get_compatible_layers_from_canvas(category):
-            item = QListWidgetItem(layer['name'], list_widget)
-            item.setData(QtCore.Qt.UserRole, layer['id'])
-            if not layer['keywords']:
-                item.setFont(italic_font)
-            list_widget.addItem(item)
-
     def set_widgets_step_fc_hazlayer_from_canvas(self):
         """Set widgets on the Hazard Layer From TOC tab"""
-        self.list_compatible_layers_from_canvas(
-            'hazard', self.lstCanvasHazLayers)
+        # The lstCanvasHazLayers is already populated in the previous step
         self.auto_select_one_item(self.lstCanvasHazLayers)
         self.lblDescribeCanvasHazLayer.clear()
 
@@ -1735,7 +1749,25 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_explayer_origin(self):
         """Set widgets on the Exposure Layer Origin Type tab"""
-        pass
+        # First, check if there are any available layers
+        self.list_compatible_layers_from_canvas(
+            'exposure', self.lstCanvasExpLayers)
+        if self.lstCanvasExpLayers.count():
+            self.rbExpLayerFromCanvas.setText(QApplication.translate(
+                'WizardDialog',
+                'I would like to use an exposure layer already loaded in QGIS'
+                '\n'
+                '(launches the hazard data registration wizard if needed)'))
+            self.rbExpLayerFromCanvas.setEnabled(True)
+            self.rbExpLayerFromCanvas.click()
+        else:
+            self.rbExpLayerFromCanvas.setText(QApplication.translate(
+                'WizardDialog',
+                'I would like to use an exposure layer already loaded in QGIS'
+                '\n'
+                '(no suitable layers found)'))
+            self.rbExpLayerFromCanvas.setEnabled(False)
+            self.rbExpLayerFromBrowser.click()
 
     # ===========================
     # STEP_FC_EXPLAYER_FROM_CANVAS
@@ -1772,8 +1804,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_explayer_from_canvas(self):
         """Set widgets on the Exposure Layer From Canvas tab"""
-        self.list_compatible_layers_from_canvas(
-            'exposure', self.lstCanvasExpLayers)
+        # The lstCanvasExpLayers is already populated in the previous step
         self.auto_select_one_item(self.lstCanvasExpLayers)
         self.lblDescribeCanvasExpLayer.clear()
 
@@ -1847,7 +1878,25 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_agglayer_origin(self):
         """Set widgets on the Aggregation Layer Origin Type tab"""
-        pass
+        # First, check if there are any available layers
+        self.list_compatible_layers_from_canvas(
+            'postprocessing', self.lstCanvasAggLayers)
+        if self.lstCanvasAggLayers.count():
+            self.rbAggLayerFromCanvas.setText(QApplication.translate(
+                'WizardDialog',
+                'I would like to use an aggregation layer already loaded '
+                'in QGIS\n'
+                '(launches the hazard data registration wizard if needed)'))
+            self.rbAggLayerFromCanvas.setEnabled(True)
+            self.rbAggLayerFromCanvas.click()
+        else:
+            self.rbAggLayerFromCanvas.setText(QApplication.translate(
+                'WizardDialog',
+                'I would like to use an aggregation layer already loaded '
+                'in QGIS\n'
+                '(no suitable layers found)'))
+            self.rbAggLayerFromCanvas.setEnabled(False)
+            self.rbAggLayerFromBrowser.click()
 
     # ===========================
     # STEP_FC_AGGLAYER_FROM_CANVAS
@@ -1885,8 +1934,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_agglayer_from_canvas(self):
         """Set widgets on the Aggregation Layer from Canvas tab"""
-        self.list_compatible_layers_from_canvas(
-            'postprocessing', self.lstCanvasAggLayers)
+        # The lstCanvasAggLayers is already populated in the previous step
         self.auto_select_one_item(self.lstCanvasAggLayers)
         self.lblDescribeCanvasAggLayer.clear()
 
