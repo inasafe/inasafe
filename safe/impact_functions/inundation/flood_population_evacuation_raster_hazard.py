@@ -18,8 +18,7 @@ from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding)
 from safe.impact_functions.impact_function_metadata import (
-    ImpactFunctionMetadata
-)
+    ImpactFunctionMetadata)
 from safe.metadata import (
     hazard_flood,
     unit_feet_depth,
@@ -28,8 +27,7 @@ from safe.metadata import (
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition
-)
+    exposure_definition)
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
@@ -38,12 +36,10 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator
-)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-
 
 
 # noinspection PyClassHasNoInit

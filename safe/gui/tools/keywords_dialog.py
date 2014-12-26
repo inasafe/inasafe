@@ -18,7 +18,6 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import logging
 
 # noinspection PyPackageRequirements

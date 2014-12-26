@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.resources import resources_path
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -22,8 +21,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4.QtCore import QSettings
+
 from safe.common.resource_parameter import ResourceParameter
-from utilities.i18n import tr
+from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 
 def define_defaults():
@@ -195,15 +196,11 @@ def default_provenance():
 
 
 def disclaimer():
-    from safe.utilities.i18n import tr
-
     """Get a standard disclaimer.
 
     :returns: Standard disclaimer string for InaSAFE.
     :rtype: str
     """
-    # import tr here to avoid side effects with safe (see notes above in import
-    # section.
     text = tr(
         'InaSAFE has been jointly developed by Indonesian '
         'Government-BNPB, Australian Government-AIFDR and the World '
@@ -235,15 +232,11 @@ def default_north_arrow_path():
 
 
 def limitations():
-    from safe.utilities.i18n import tr
-
     """Get InaSAFE limitations.
 
     :return: All limitations on current InaSAFE.
     :rtype: list
     """
-    # import tr here to avoid side effects with safe (see notes above in import
-    # section.
     limitation_list = list()
     limitation_list.append(tr('InaSAFE is not a hazard modelling tool.'))
     limitation_list.append(

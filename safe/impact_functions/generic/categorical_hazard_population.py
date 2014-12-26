@@ -300,30 +300,33 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
         impact_table = Table(table_body).toNewlineFreeString()
 
-        table_body.append(TableRow(tr(
-             'Action Checklist:'), header=True))
-        table_body.append(TableRow(tr(
-             'How will warnings be disseminated?')))
-        table_body.append(TableRow(tr(
-             'How will we reach stranded people?')))
-        table_body.append(TableRow(tr(
-             'Do we have enough relief items?')))
-        table_body.append(TableRow(tr(
-
-            'If yes, where are they located and how will we distribute them?')))
-        table_body.append(TableRow(tr(
-
-            'If no, where can we obtain additional relief items from and how '
-            'will we transport them to here?')))
+        table_body.append(
+            TableRow(
+                tr('Action Checklist:'), header=True))
+        table_body.append(
+            TableRow(
+                tr('How will warnings be disseminated?')))
+        table_body.append(
+            TableRow(
+                tr('How will we reach stranded people?')))
+        table_body.append(
+            TableRow(
+                tr('Do we have enough relief items?')))
+        table_body.append(
+            TableRow(
+                tr('If yes, where are they located and how will we '
+                   'distribute them?')))
+        table_body.append(
+            TableRow(
+                tr('If no, where can we obtain additional relief items from '
+                   'and how will we transport them to here?')))
 
         # Extend impact report for on-screen display
         table_body.extend([
-            TableRow(tr( 'Notes'), header=True),
-            tr(
-
-                'Map shows the numbers of people in high, medium and low '
-                'hazard areas'),
-            tr( 'Total population: %s') % format_int(total)
+            TableRow(tr('Notes'), header=True),
+            tr('Map shows the numbers of people in high, medium and low '
+               'hazard areas'),
+            tr('Total population: %s') % format_int(total)
         ])
         impact_summary = Table(table_body).toNewlineFreeString()
 
@@ -368,15 +371,15 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
             'Thousand separator is represented by %s' %
             get_thousand_separator())
-        legend_units = tr( '(people per cell)')
-        legend_title = tr( 'Number of People')
+        legend_units = tr('(people per cell)')
+        legend_title = tr('Number of People')
 
         # Create raster object and return
         raster_layer = Raster(
             impact,
             projection=hazard_layer.get_projection(),
             geotransform=hazard_layer.get_geotransform(),
-            name=tr( 'Population which %s') % (
+            name=tr('Population which %s') % (
                 get_function_title(self).lower()),
             keywords={
                 'impact_summary': impact_summary,

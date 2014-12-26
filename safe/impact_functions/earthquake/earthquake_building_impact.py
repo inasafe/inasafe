@@ -114,7 +114,6 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         ]))])
     parameters = add_needs_parameters(parameters)
 
-
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap).
 

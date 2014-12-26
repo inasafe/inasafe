@@ -18,8 +18,6 @@ __date__ = '26/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
-
 from PyQt4 import QtGui
 
 from safe.common.version import get_version
