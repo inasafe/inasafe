@@ -1108,7 +1108,7 @@ def clone_raster_layer(
             trg_path = temp_path + ext
             shutil.copy2(src_path, trg_path)
 
-    raster_path = '%s.shp' % temp_path
+    raster_path = '%s%s' % (temp_path, extension)
     layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
     return layer
 

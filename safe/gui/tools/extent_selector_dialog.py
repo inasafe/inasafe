@@ -58,6 +58,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
     extent_defined = pyqtSignal(QgsRectangle, QgsCoordinateReferenceSystem)
     clear_extent = pyqtSignal()
+    extent_selector_closed = pyqtSignal()
 
     def __init__(self, iface, parent=None, extent=None, crs=None):
         """Constructor for the dialog.
@@ -195,6 +196,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
         self.tool.reset()
+        self.extent_selector_closed.emit()
         super(ExtentSelectorDialog, self).reject()
 
     def accept(self):
@@ -218,6 +220,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.clear_extent.emit()
 
         self.tool.reset()
+        self.extent_selector_closed.emit()
         super(ExtentSelectorDialog, self).accept()
 
     def _are_coordinates_valid(self):
