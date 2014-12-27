@@ -77,9 +77,9 @@ LOGO_ELEMENT = m.Image(
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class WizardAnalysisHandler(QObject):
+class AnalysisHandler(QObject):
 
-    """Analysis handler for the InaSAFE wizard."""
+    """Analysis handler for the dock and the wizard."""
 
     analysisDone = pyqtSignal(bool)
 

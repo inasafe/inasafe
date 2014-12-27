@@ -46,7 +46,7 @@ from qgis.core import (
 
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 
-from wizard_analysis_handler import WizardAnalysisHandler
+from analysis_handler import AnalysisHandler
 
 from safe import metadata
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -2139,7 +2139,7 @@ class WizardDialog(QDialog, FORM_CLASS):
     def setup_and_run_analysis(self):
         """Execute analysis after the tab is displayed"""
         # noinspection PyTypeChecker
-        self.analysis_handler = WizardAnalysisHandler(self)
+        self.analysis_handler = AnalysisHandler(self)
         self.analysis_handler.setup_and_run_analysis()
 
     def set_widgets_step_fc_analysis(self):
