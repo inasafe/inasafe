@@ -34,8 +34,7 @@ sys.path.append(pardir)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
-from qgis.core import QgsVectorLayer
-
+from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import (
@@ -1184,6 +1183,192 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
+    def test_input_function_centric_wizard(self):
+        """Test the IFCW mode."""
+        expected_test_layer_count = 2
+
+        expected_hazards_count = 6
+        expected_hazards = ['FLOOD', 'TSUNAMI', 'EARTHQUAKE', 'TEPHRA',
+                            'VOLCANO', 'GENERIC']
+        chosen_hazard = 'FLOOD'
+
+        expected_flood_if_count = 9
+        chosen_if = 'FloodBuildingImpactFunction'
+
+        expected_hazard_layers_count = 1
+        expected_exposure_layers_count = 1
+        expected_aggregation_layers_count = 0
+
+        expected_summary_key = 'minimum needs'
+        expected_summary_value_fragment = 'rice'
+
+        expected_report_size = 5583  # as saved on Debian
+        tolerance = 120  # windows EOL etc
+
+        # Initialize dialog
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_function_centric_mode()
+
+        # Load test layers
+        layer = clone_raster_layer(
+            name='Flood_Current_Depth_Jakarta_geographic',
+            extension='.asc',
+            include_keywords=True,
+            source_directory=HAZDATA)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        layer = clone_shp_layer(
+            name='DKI_buildings',
+            include_keywords=True,
+            source_directory=EXPDATA)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        # Check the environment first
+        message = 'Test layers are not readable. Check environment variables.'
+        self.assertIsNotNone(layer.dataProvider(), message)
+
+        count = len(dialog.iface.mapCanvas().layers())
+        message = 'Test layers are not loaded.'
+        self.assertEqual(count, expected_test_layer_count, message)
+
+        # step_fc_function: test function tree branches
+        count = dialog.treeFunctions.topLevelItemCount()
+        message = ('Invalid hazard count in the IF tree! There should be %d '
+                   'while there were: %d') % (expected_hazards_count, count)
+        self.assertEqual(count, expected_hazards_count, message)
+
+        for i in range(count):
+            hazard = dialog.treeFunctions.topLevelItem(i).text(0)
+            message = ('Invalid hazard name in the IF tree on position %d! '
+                       'There should be %s '
+                       'while there were: %s') % (i, expected_hazards[i],
+                                                  hazard)
+            self.assertEqual(hazard, expected_hazards[i], message)
+
+        chosen_hazard_index = expected_hazards.index(chosen_hazard)
+        branch = dialog.treeFunctions.topLevelItem(chosen_hazard_index)
+
+        # step_fc_function: test the FLOOD branch
+        count = branch.childCount()
+        message = ('Invalid flood functions count in the IF tree! There '
+                   'should be %d while '
+                   'there were: %d') % (expected_flood_if_count, count)
+        self.assertEqual(count, expected_flood_if_count, message)
+
+        flood_ifs = [branch.child(i).data(0, QtCore.Qt.UserRole)['id']
+                     for i in range(count)]
+        message = ('Expected flood impact function not found: %s') % chosen_if
+        self.assertTrue(chosen_if in flood_ifs, message)
+
+        # step_fc_function: select FloodBuildingImpactFunction and press ok
+        chosen_if_index = flood_ifs.index(chosen_if)
+        chosen_if_item = branch.child(chosen_if_index)
+        dialog.treeFunctions.setCurrentItem(chosen_if_item)
+        dialog.pbnNext.click()
+
+        # step_fc_hazlayer_from_canvas: test the lstCanvasHazLayers state
+        # Note this step is tested prior to step_fc_hazlayer_origin
+        # as the list is prepared prior to autoselecting the radiobuttons
+        count = dialog.lstCanvasHazLayers.count()
+        message = ('Invalid hazard layers count! There should be %d while '
+                   'there were: %d') % (expected_hazard_layers_count, count)
+        self.assertEqual(count, expected_hazard_layers_count, message)
+
+        # step_fc_hazlayer_origin: test if the radiobuttons are autmatically
+        # enabled and selected
+        message = ('The rbHazLayerFromCanvas radio button has been not '
+                   'automatically enabled')
+        self.assertTrue(dialog.rbHazLayerFromCanvas.isEnabled(), message)
+        message = ('The rbHazLayerFromCanvas radio button has been not '
+                   'automatically selected')
+        self.assertTrue(dialog.rbHazLayerFromCanvas.isChecked(), message)
+
+        # step_fc_hazlayer_origin: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_hazlayer_from_canvas: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_from_canvas: test the lstCanvasExpLayers state
+        # Note this step is tested prior to step_fc_explayer_origin
+        # as the list is prepared prior to autoselecting the radiobuttons
+        count = dialog.lstCanvasExpLayers.count()
+        message = ('Invalid expposure layers count! There should be %d while '
+                   'there were: %d') % (expected_exposure_layers_count, count)
+        self.assertEqual(count, expected_exposure_layers_count, message)
+
+        # step_fc_explayer_origin: test if the radiobuttons are autmatically
+        # enabled and selected
+        message = ('The rbExpLayerFromCanvas radio button has been not '
+                   'automatically enabled')
+        self.assertTrue(dialog.rbExpLayerFromCanvas.isEnabled(), message)
+        message = ('The rbExpLayerFromCanvas radio button has been not '
+                   'automatically selected')
+        self.assertTrue(dialog.rbExpLayerFromCanvas.isChecked(), message)
+
+        # step_fc_explayer_origin: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_from_canvas: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_from_canvas: test the lstCanvasAggLayers state
+        # Note this step is tested prior to step_fc_agglayer_origin
+        # as the list is prepared prior to autoselecting the radiobuttons
+        count = dialog.lstCanvasAggLayers.count()
+        message = ('Invalid aggregation layers count! There should be %d '
+                   'while there were: '
+                   '%d') % (expected_aggregation_layers_count, count)
+        self.assertEqual(count, expected_aggregation_layers_count, message)
+
+        # step_fc_agglayer_origin: test if the radiobuttons are autmatically
+        # enabled and selected
+        message = ('The rbAggLayerFromCanvas radio button has been not '
+                   'automatically disabled')
+        self.assertTrue(not dialog.rbAggLayerFromCanvas.isEnabled(), message)
+        message = ('The rbAggLayerFromBrowser radio button has been not '
+                   'automatically selected')
+        self.assertTrue(dialog.rbAggLayerFromBrowser.isChecked(), message)
+
+        # step_fc_agglayer_origin: switch to no aggregation and press ok
+        dialog.rbAggLayerNoAggregation.click()
+        dialog.pbnNext.click()
+
+        # step_fc_extent: switch to layer's extent and press ok
+        dialog.rbExtentLayer.click()
+        dialog.pbnNext.click()
+
+        # step_fc_params: press ok (already covered by the relevant test)
+        dialog.pbnNext.click()
+
+        # step_fc_summary: test minumum needs text
+        summaries = dialog.lblSummary.text().split('<br/>')
+
+        minneeds = [s for s in summaries
+                    if expected_summary_key.upper() in s.upper()]
+        message = 'No minimum needs found in the summary text'
+        self.assertTrue(minneeds, message)
+        message = 'No rice found in the minimum needs in the summary text'
+        self.assertTrue(expected_summary_value_fragment.upper()
+                        in minneeds[0].upper(), message)
+
+        # step_fc_summary: run analysis
+        dialog.pbnNext.click()
+
+        # step_fc_analysis: test the html output
+        report_path = dialog.wvResults.report_path
+        size = os.stat(report_path).st_size
+        message = (
+            'Expected generated report to be %d +- %dBytes, got %d. '
+            'Please update expected_size if the generated output '
+            'is acceptible on your system.'
+            % (expected_report_size, tolerance, size))
+        self.assertTrue((size > expected_report_size - tolerance and
+                         size < expected_report_size + tolerance), message)
+
+        # close the wizard
+        dialog.pbnNext.click()
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')
