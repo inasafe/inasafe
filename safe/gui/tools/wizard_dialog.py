@@ -1273,6 +1273,108 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.pbnNext.setEnabled(True)
 
+    def is_layer_compatible(self, layer, category, keywords=None):
+        """Validate if a given layer is compatible for selected IF
+           as a given category
+
+        :param layer: The layer to be validated
+        :type layer: QgsVectorLayer | QgsRasterLayer
+
+        :param category: The category the layer is validated for
+        :type category: string
+
+        :param keywords: The layer keywords
+        :type keywords: KeywordIO | None
+
+        :returns: True if layer is appropriate for the selected role
+        :rtype: boolean
+        """
+
+        imfunc = self.selected_function()
+
+        # For aggregation layers, don't use the impact function
+        if category not in imfunc['categories']:
+            imfunc = None
+
+        if imfunc:
+            allowed_subcats = imfunc['categories'][category]['subcategories']
+            if type(allowed_subcats) != list:
+                allowed_subcats = [allowed_subcats]
+            allowed_units = imfunc['categories'][category]['units']
+            if type(allowed_units) != list:
+                allowed_units = [allowed_units]
+            layer_constraints = imfunc['categories'][category][
+                'layer_constraints']
+
+        if imfunc:
+            is_compatible = False
+            if is_raster_layer(layer) and 'raster' in [
+                    lc['layer_type'] for lc in layer_constraints]:
+                is_compatible = True
+            elif is_point_layer(layer) and 'point' in [
+                    lc['data_type'] for lc in layer_constraints]:
+                is_compatible = True
+            elif is_polygon_layer(layer)and 'polygon' in [
+                    lc['data_type'] for lc in layer_constraints]:
+                is_compatible = True
+            elif 'line' in [lc['data_type'] for lc in layer_constraints]:
+                is_compatible = True
+        else:
+            is_compatible = True
+
+        if keywords and ('category' not in keywords or
+                         keywords['category'] != category):
+            is_compatible = False
+
+        if keywords and imfunc:
+            subcat_ids = [subcat['id'] for subcat in allowed_subcats]
+            if 'subcategory' in keywords.keys() and not keywords[
+                    'subcategory'] in subcat_ids:
+                is_compatible = False
+
+        return is_compatible
+
+    def get_compatible_layers_from_canvas(self, category):
+        """Collect compatible layers from map canvas.
+
+        .. note:: Returns layers with keywords and datatype matching
+           the category and compatible with the selected impact function.
+           Also returns layers without keywords with datatype
+           compatible with the selected impact function.
+
+        :param category: The category to filter for.
+        :type category: string
+
+        :returns: Metadata of found layers.
+        :rtype: list of dicts
+        """
+
+        # Collect compatible layers
+        layers = []
+        for layer in self.iface.mapCanvas().layers():
+            try:
+                keywords = self.keyword_io.read_keywords(layer)
+            except (HashNotFoundError,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError):
+                keywords = None
+
+            if self.is_layer_compatible(layer, category, keywords):
+                layers += [
+                    {'id': layer.id(),
+                     'name': layer.name(),
+                     'keywords': keywords}]
+
+        # Move layers without keywords to the end
+        l1 = [l for l in layers if l['keywords']]
+        l2 = [l for l in layers if not l['keywords']]
+        layers = l1 + l2
+
+        return layers
+
     def list_compatible_layers_from_canvas(self, category, list_widget):
         """Fill given list widget with compatible layers.
 
@@ -1417,108 +1519,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
-
-    def is_layer_compatible(self, layer, category, keywords=None):
-        """Validate if a given layer is compatible for selected IF
-           as a given category
-
-        :param layer: The layer to be validated
-        :type layer: QgsVectorLayer | QgsRasterLayer
-
-        :param category: The category the layer is validated for
-        :type category: string
-
-        :param keywords: The layer keywords
-        :type keywords: KeywordIO | None
-
-        :returns: True if layer is appropriate for the selected role
-        :rtype: boolean
-        """
-
-        imfunc = self.selected_function()
-
-        # For aggregation layers, don't use the impact function
-        if category not in imfunc['categories']:
-            imfunc = None
-
-        if imfunc:
-            allowed_subcats = imfunc['categories'][category]['subcategories']
-            if type(allowed_subcats) != list:
-                allowed_subcats = [allowed_subcats]
-            allowed_units = imfunc['categories'][category]['units']
-            if type(allowed_units) != list:
-                allowed_units = [allowed_units]
-            layer_constraints = imfunc['categories'][category][
-                'layer_constraints']
-
-        if imfunc:
-            is_compatible = False
-            if is_raster_layer(layer) and 'raster' in [
-                    lc['layer_type'] for lc in layer_constraints]:
-                is_compatible = True
-            elif is_point_layer(layer) and 'point' in [
-                    lc['data_type'] for lc in layer_constraints]:
-                is_compatible = True
-            elif is_polygon_layer(layer)and 'polygon' in [
-                    lc['data_type'] for lc in layer_constraints]:
-                is_compatible = True
-            elif 'line' in [lc['data_type'] for lc in layer_constraints]:
-                is_compatible = True
-        else:
-            is_compatible = True
-
-        if keywords and ('category' not in keywords or
-                         keywords['category'] != category):
-            is_compatible = False
-
-        if keywords and imfunc:
-            subcat_ids = [subcat['id'] for subcat in allowed_subcats]
-            if 'subcategory' in keywords.keys() and not keywords[
-                    'subcategory'] in subcat_ids:
-                is_compatible = False
-
-        return is_compatible
-
-    def get_compatible_layers_from_canvas(self, category):
-        """Collect compatible layers from map canvas.
-
-        .. note:: Returns layers with keywords and datatype matching
-           the category and compatible with the selected impact function.
-           Also returns layers without keywords with datatype
-           compatible with the selected impact function.
-
-        :param category: The category to filter for.
-        :type category: string
-
-        :returns: Metadata of found layers.
-        :rtype: list of dicts
-        """
-
-        # Collect compatible layers
-        layers = []
-        for layer in self.iface.mapCanvas().layers():
-            try:
-                keywords = self.keyword_io.read_keywords(layer)
-            except (HashNotFoundError,
-                    OperationalError,
-                    NoKeywordsFoundError,
-                    KeywordNotFoundError,
-                    InvalidParameterError,
-                    UnsupportedProviderError):
-                keywords = None
-
-            if self.is_layer_compatible(layer, category, keywords):
-                layers += [
-                    {'id': layer.id(),
-                     'name': layer.name(),
-                     'keywords': keywords}]
-
-        # Move layers without keywords to the end
-        l1 = [l for l in layers if l['keywords']]
-        l2 = [l for l in layers if not l['keywords']]
-        layers = l1 + l2
-
-        return layers
 
     def set_widgets_step_fc_hazlayer_from_canvas(self):
         """Set widgets on the Hazard Layer From TOC tab"""
