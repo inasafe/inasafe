@@ -24,6 +24,7 @@ import re
 import json
 from collections import OrderedDict
 from sqlite3 import OperationalError
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -46,12 +47,10 @@ from qgis.core import (
 
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 
-from analysis_handler import AnalysisHandler
-
 from safe import metadata
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
-
+from safe.utilities.analysis_handler import AnalysisHandler
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
@@ -69,9 +68,7 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InaSAFEError)
 from safe.utilities.resources import get_ui_class, resources_path
-
 from safe.utilities.help import show_context_help
-
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 
@@ -2624,7 +2621,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_fc_agglayer_origin
         elif current_step == step_fc_params:
-                new_step = step_fc_extent
+            new_step = step_fc_extent
         else:
             new_step = current_step - 1
         return new_step

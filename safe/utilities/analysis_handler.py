@@ -35,12 +35,10 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution)
-from safe.defaults import disclaimer
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.utilities.resources import (
     resources_path,
-    resource_url,
-    get_ui_class)
+    resource_url)
 from safe.defaults import (
     default_organisation_logo_path)
 from safe.utilities.styling import (
