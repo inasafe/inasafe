@@ -52,7 +52,7 @@ pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
     '..'))
 
 # Location of test data
-DATANAME = 'inasafe_data'
+DATANAME = 'inasafe_dat'
 DATADIR = os.path.join(pardir, DATANAME)
 
 # Bundled test data
@@ -193,28 +193,21 @@ def test_data_path(*args):
     return path
 
 
-def load_layer(layer_file, directory=TESTDATA):
+def load_layer(layer_path):
     """Helper to load and return a single QGIS layer
 
-    :param layer_file: Path name to raster or vector file.
-    :type layer_file: str
-    :param directory: Optional parent dir. If None, path name is assumed
-        to be absolute.
-    :type directory: str, None
+    :param layer_path: Path name to raster or vector file.
+    :type layer_path: str
 
     :returns: tuple containing layer and its category.
     :rtype: (QgsMapLayer, str)
 
     """
-
     # Extract basename and absolute path
-    file_path = os.path.split(layer_file)[-1]  # In case path was absolute
+    file_path = os.path.split(layer_path)[-1]  # In case path was absolute
     base_name, extension = os.path.splitext(file_path)
-    if directory is None:
-        path = layer_file
-    else:
-        path = os.path.join(directory, layer_file)
-    keyword_path = path[:-4] + '.keywords'
+
+    keyword_path = layer_path[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure
     keywords = read_file_keywords(keyword_path)
@@ -226,11 +219,11 @@ def load_layer(layer_file, directory=TESTDATA):
 
     # Create QGis Layer Instance
     if extension in ['.asc', '.tif']:
-        layer = QgsRasterLayer(path, base_name)
+        layer = QgsRasterLayer(layer_path, base_name)
     elif extension in ['.shp']:
-        layer = QgsVectorLayer(path, base_name, 'ogr')
+        layer = QgsVectorLayer(layer_path, base_name, 'ogr')
     else:
-        message = 'File %s had illegal extension' % path
+        message = 'File %s had illegal extension' % layer_path
         raise Exception(message)
 
     # noinspection PyUnresolvedReferences
@@ -978,7 +971,7 @@ def load_layers(
     # Now create our new layers
     for layer_file in layer_list:
 
-        layer, layer_type = load_layer(layer_file, data_directory)
+        layer, layer_type = load_layer(layer_file)
         if layer_type == 'hazard':
             hazard_layer_count += 1
         elif layer_type == 'exposure':
