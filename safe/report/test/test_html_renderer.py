@@ -26,7 +26,7 @@ from safe.test.utilities import (
     load_layer, check_images, get_qgis_app)
 from safe.report.html_renderer import HtmlRenderer
 from safe.utilities.keyword_io import KeywordIO
-
+from safe.test.utilities import test_data_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
@@ -106,10 +106,12 @@ class HtmlRendererTest(unittest.TestCase):
 
     def test_print_impact_table(self):
         """Test that we can render html from impact table keywords."""
-        file_name = 'test_floodimpact.tif'
-        layer, _ = load_layer(file_name)
-        message = 'Layer is not valid: %s' % file_name
+        impact_layer_path = test_data_path(
+            'impact', 'population_affected_entire_area.shp')
+        layer, _ = load_layer(impact_layer_path)
+        message = 'Layer is not valid: %s' % impact_layer_path
         self.assertTrue(layer.isValid(), message)
+
         page_dpi = 300
         html_renderer = HtmlRenderer(page_dpi)
         path = unique_filename(
