@@ -25,7 +25,6 @@ from nose import SkipTest
 
 from qgis.core import (
     QgsRasterLayer,
-    QgsVectorLayer,
     QgsMapLayerRegistry)
 from PyQt4 import QtGui
 
@@ -34,49 +33,12 @@ from safe.test.utilities import (
     clone_shp_layer,
     clone_raster_layer,
     temp_dir,
-    get_qgis_app,
-    TESTDATA)
+    get_qgis_app)
 from safe.gui.tools.keywords_dialog import KeywordsDialog
-from safe.common.exceptions import KeywordNotFoundError
-from safe.utilities.utilities import read_file_keywords
 from safe.utilities.gis import qgis_version
 from safe.defaults import get_defaults
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-
-def make_polygon_layer():
-    """Helper function that returns a single predefined layer."""
-    path = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
-    full_path = os.path.join(TESTDATA, path)
-    try:
-        title = read_file_keywords(full_path, 'title')
-    except KeywordNotFoundError:
-        title = 'kabupaten_jakarta_singlepart_3_good_attr'
-    # noinspection PyCallingNonCallable
-    layer = QgsVectorLayer(full_path, title, 'ogr')
-    if qgis_version() >= 10800:  # 1.8 or newer
-        # noinspection PyArgumentList,PyUnresolvedReferences
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-    else:
-        # noinspection PyArgumentList,PyUnresolvedReferences
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-    return layer
-
-
-def make_point_layer():
-    """Helper function that returns a single predefined layer."""
-    path = 'test_buildings.shp'
-    full_path = os.path.join(TESTDATA, path)
-    try:
-        title = read_file_keywords(full_path, 'title')
-    except KeywordNotFoundError:
-        title = 'kabupaten_jakarta_singlepart_3_good_attr'
-    # noinspection PyCallingNonCallable
-    layer = QgsVectorLayer(full_path, title, 'ogr')
-    # noinspection PyArgumentList,PyUnresolvedReferences
-    QgsMapLayerRegistry.instance().addMapLayers([layer])
-    return layer
 
 
 def make_keywordless_layer():

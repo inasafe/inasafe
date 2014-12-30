@@ -5,44 +5,49 @@ import unittest
 # noinspection PyUnresolvedReferences
 import qgis
 from PyQt4.QtCore import QVariant
-from safe.gui.tools.test.test_keywords_dialog import (
-    make_polygon_layer,
-    make_point_layer)
+
 from safe.utilities.gis import layer_attribute_names, is_polygon_layer
-from safe.test.utilities import clone_raster_layer, test_data_path
+from safe.test.utilities import (
+    clone_shp_layer,
+    clone_raster_layer,
+    test_data_path)
 
 
 class TestQGIS(unittest.TestCase):
     def test_get_layer_attribute_names(self):
         """Test we can get the correct attributes back"""
-        layer = make_polygon_layer()
+        layer = clone_shp_layer(
+            name='district_osm_jakarta',
+            include_keywords=True,
+            source_directory=test_data_path('boundaries'))
 
         # with good attribute name
         attributes, position = layer_attribute_names(
             layer,
-            [QVariant.Int, QVariant.String], 'TEST_STRIN')  # Not a typo...
-        expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
-        expected_position = 2
+            [QVariant.Int, QVariant.String],
+            'TEST_STR')
+        expected_attributes = ['KAB_NAME', 'TEST_STR', 'TEST_INT']
+        expected_position = 1
         message = 'expected_attributes, got %s, expected %s' % (
             attributes, expected_attributes)
-        assert (attributes == expected_attributes), message
+        self.assertEqual(attributes, expected_attributes, message)
         message = 'expected_position, got %s, expected %s' % (
             position, expected_position)
-        assert (position == expected_position), message
+        self.assertEqual(position, expected_position, message)
 
         # with non existing attribute name
         attributes, position = layer_attribute_names(
             layer,
             [QVariant.Int, QVariant.String],
             'MISSING_ATTR')
-        expected_attributes = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        expected_attributes = ['KAB_NAME', 'TEST_STR', 'TEST_INT']
         expected_position = None
         message = 'expected_attributes, got %s, expected %s' % (
             attributes, expected_attributes)
-        assert (attributes == expected_attributes), message
+        self.assertEqual(attributes, expected_attributes, message)
         message = 'expected_position, got %s, expected %s' % (
             position, expected_position)
-        assert (position == expected_position), message
+        self.assertEqual(position, expected_position, message)
 
         # with raster layer
         layer = clone_raster_layer(
@@ -58,13 +63,21 @@ class TestQGIS(unittest.TestCase):
 
     def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back"""
-        layer = make_polygon_layer()
+        # Polygon layer
+        layer = clone_shp_layer(
+            name='district_osm_jakarta',
+            include_keywords=True,
+            source_directory=test_data_path('boundaries'))
         message = 'isPolygonLayer, %s layer should be polygonal' % layer
-        assert is_polygon_layer(layer), message
+        self.assertTrue(is_polygon_layer(layer), message)
 
-        layer = make_point_layer()
+        # Point layer
+        layer = clone_shp_layer(
+            name='Marapi',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
         message = '%s layer should be polygonal' % layer
-        assert not is_polygon_layer(layer), message
+        self.assertFalse(is_polygon_layer(layer), message)
 
         layer = clone_raster_layer(
             name='padang_tsunami_mw8',
@@ -73,7 +86,7 @@ class TestQGIS(unittest.TestCase):
             source_directory=test_data_path('hazard')
         )
         message = ('%s raster layer should not be polygonal' % layer)
-        assert not is_polygon_layer(layer), message
+        self.assertFalse(is_polygon_layer(layer), message)
 
 
 if __name__ == '__main__':
