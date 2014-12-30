@@ -7,9 +7,9 @@ import qgis
 from PyQt4.QtCore import QVariant
 from safe.gui.tools.test.test_keywords_dialog import (
     make_polygon_layer,
-    clone_padang_layer,
     make_point_layer)
 from safe.utilities.gis import layer_attribute_names, is_polygon_layer
+from safe.test.utilities import clone_raster_layer, test_data_path
 
 
 class TestQGIS(unittest.TestCase):
@@ -45,7 +45,12 @@ class TestQGIS(unittest.TestCase):
         assert (position == expected_position), message
 
         # with raster layer
-        layer, _ = clone_padang_layer()
+        layer = clone_raster_layer(
+            name='padang_tsunami_mw8',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard')
+        )
         attributes, position = layer_attribute_names(layer, [], '')
         message = 'Should return None, None for raster layer, got %s, %s' % (
             attributes, position)
@@ -61,7 +66,12 @@ class TestQGIS(unittest.TestCase):
         message = '%s layer should be polygonal' % layer
         assert not is_polygon_layer(layer), message
 
-        layer, _ = clone_padang_layer()
+        layer = clone_raster_layer(
+            name='padang_tsunami_mw8',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard')
+        )
         message = ('%s raster layer should not be polygonal' % layer)
         assert not is_polygon_layer(layer), message
 

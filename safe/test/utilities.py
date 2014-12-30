@@ -1031,10 +1031,10 @@ def compare_wkt(a, b, tol=0.000001):
 
 
 def clone_shp_layer(
-        name='tsunami_polygon',
-        include_keywords=False,
-        source_directory=TESTDATA,
-        target_directory='testing'):
+        name,
+        include_keywords,
+        source_directory,
+        target_directory='test'):
     """Helper function that copies a test shp layer and returns it.
 
     :param name: The default name for the shp layer.
