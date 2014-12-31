@@ -1190,6 +1190,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_hazards_count = 6
         expected_hazards = ['FLOOD', 'TSUNAMI', 'EARTHQUAKE', 'TEPHRA',
                             'VOLCANO', 'GENERIC']
+        expected_hazards = sorted(expected_hazards)
         chosen_hazard = 'FLOOD'
 
         expected_flood_if_count = 9
@@ -1241,10 +1242,10 @@ class WizardDialogTest(unittest.TestCase):
         for i in range(count):
             hazard = dialog.treeFunctions.topLevelItem(i).text(0)
             message = ('Invalid hazard name in the IF tree on position %d! '
-                       'There should be %s '
-                       'while there were: %s') % (i, expected_hazards[i],
-                                                  hazard)
+                       'There should be %s while there were: %s') % (
+                i, expected_hazards[i], hazard)
             self.assertEqual(hazard, expected_hazards[i], message)
+            # self.assertIn(hazard, expected_hazards, message)
 
         chosen_hazard_index = expected_hazards.index(chosen_hazard)
         branch = dialog.treeFunctions.topLevelItem(chosen_hazard_index)
