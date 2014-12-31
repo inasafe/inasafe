@@ -96,6 +96,7 @@ class AnalysisHandler(QObject):
         self.keyword_io = KeywordIO()
 
         self.extent = Extent(self.iface)
+        self.analysis = None
 
         # Values for settings these get set in read_settings.
         self.run_in_thread_flag = None

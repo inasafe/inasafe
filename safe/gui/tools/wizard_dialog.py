@@ -331,6 +331,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         proxy_model.setSourceModel(browser_model)
         self.tvBrowserAggregation.setModel(proxy_model)
 
+        self.parameter_dialog = None
+
         self.keyword_io = KeywordIO()
         self.twParams = None
 
@@ -2036,17 +2038,15 @@ class WizardDialog(QDialog, FORM_CLASS):
                 'impact function "%s" that can be modified are:' % imfunc_id)
         self.lblSelectIFParameters.setText(text)
 
-        dialog = FunctionOptionsDialog(self)
-        dialog.set_dialog_info(imfunc_id)
-        dialog.build_form(self.if_params)
+        self.parameter_dialog = FunctionOptionsDialog(self)
+        self.parameter_dialog.set_dialog_info(imfunc_id)
+        self.parameter_dialog.build_form(self.if_params)
 
         if self.twParams:
             self.twParams.hide()
 
-        self.twParams = dialog.tabWidget
+        self.twParams = self.parameter_dialog.tabWidget
         self.layoutIFParams.addWidget(self.twParams)
-
-        self.if_params = dialog.parse_input(dialog.values)
 
     # ===========================
     # STEP_FC_SUMMARY
@@ -2054,6 +2054,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_summary(self):
         """Set widgets on the Summary tab"""
+        self.if_params = self.parameter_dialog.parse_input(
+            self.parameter_dialog.values)
         params = ""
         for p in self.if_params:
             if type(self.if_params[p]) == OrderedDict:
