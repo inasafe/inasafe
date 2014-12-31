@@ -81,6 +81,7 @@ class Plugin(object):
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
+        self.action_function_centric_wizard = None
         self.action_extent_selector = None
         self.translator = None
         self.toolbar = None
@@ -231,6 +232,25 @@ class Plugin(object):
             self.show_keywords_wizard)
 
         self.add_action(self.action_keywords_wizard)
+
+        # --------------------------------------
+        # Create action for IF-centric wizard
+        # --------------------------------------
+        icon = resources_path('img', 'icons', 'show-wizard.svg')
+        self.action_function_centric_wizard = QAction(
+            QIcon(icon),
+            self.tr('InaSAFE Impact Function Centric Wizard'),
+            self.iface.mainWindow())
+        self.action_function_centric_wizard.setStatusTip(self.tr(
+            'Open InaSAFE impact function centric wizard'))
+        self.action_function_centric_wizard.setWhatsThis(self.tr(
+            'Open InaSAFE impact function centric wizard'))
+        self.action_function_centric_wizard.setEnabled(True)
+
+        self.action_function_centric_wizard.triggered.connect(
+            self.show_function_centric_wizard)
+
+        self.add_action(self.action_function_centric_wizard)
 
         # --------------------------------------
         # Create action for options dialog
@@ -631,7 +651,20 @@ class Plugin(object):
             self.iface.mainWindow(),
             self.iface,
             self.dock_widget)
+        dialog.set_keywords_creation_mode()
         dialog.exec_()  # modal
+
+    def show_function_centric_wizard(self):
+        """Show the keywords creation wizard."""
+        # import here only so that it is AFTER i18n set up
+        from safe.gui.tools.wizard_dialog import WizardDialog
+
+        dialog = WizardDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
+        dialog.set_function_centric_mode()
+        dialog.show()  # non-modal in order to hide for selecting user extent
 
     def show_function_browser(self):
         """Show the impact function browser tool."""
