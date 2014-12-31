@@ -933,7 +933,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         """Set the ui state to match the keywords of the active layer.
 
         In case the layer has no keywords or any problem occurs reading them,
-        start with a blank slate so that subcategory gets populated nicely &
+        start with a blank state so that subcategory gets populated nicely &
         we will assume exposure to start with.
 
         Also if only title is set we use similar logic (title is added by

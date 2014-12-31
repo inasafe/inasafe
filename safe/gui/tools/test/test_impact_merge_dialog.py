@@ -107,20 +107,15 @@ class ImpactMergeDialogTest(unittest.TestCase):
         """Register needed layers to QgsMapLayerRegistry."""
         # Register 4 impact layers and aggregation layer
         self.population_entire_jakarta_layer, _ = load_layer(
-            population_entire_jakarta_impact_path,
-            directory=None)
+            population_entire_jakarta_impact_path)
         self.building_entire_jakarta_layer, _ = load_layer(
-            building_entire_jakarta_impact_path,
-            directory=None)
+            building_entire_jakarta_impact_path)
         self.population_district_jakarta_layer, _ = load_layer(
-            population_district_jakarta_impact_path,
-            directory=None)
+            population_district_jakarta_impact_path)
         self.building_district_jakarta_layer, _ = load_layer(
-            building_district_jakarta_impact_path,
-            directory=None)
+            building_district_jakarta_impact_path)
         self.district_jakarta_layer, _ = load_layer(
-            district_jakarta_boundary_path,
-            directory=None)
+            district_jakarta_boundary_path)
 
         layer_list = [self.population_entire_jakarta_layer,
                       self.population_district_jakarta_layer,
