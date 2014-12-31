@@ -269,7 +269,7 @@ class ImpactFunctionManager:
             result = add_to_list(result, subcategories)
         return result
 
-    def get_available_hazards(self, impact_function=None):
+    def get_available_hazards(self, impact_function=None, ascending=True):
         """Return a list of valid available hazards for an impact function.
 
         If impact_function is None, return all available hazards
@@ -278,6 +278,9 @@ class ImpactFunctionManager:
 
         :param impact_function: Impact Function object.
         :type impact_function: FunctionProvider
+
+        :param ascending: Sort ascending or not.
+        :type ascending: bool
 
         :returns: A list of hazard full metadata.
         :rtype: list
@@ -291,6 +294,10 @@ class ImpactFunctionManager:
         else:
             # noinspection PyUnresolvedReferences
             hazards = impact_function.Metadata.get_hazards()
+
+        # make it sorted
+        if ascending:
+            hazards = sorted(hazards, key=lambda k: k['id'])
 
         return hazards
 

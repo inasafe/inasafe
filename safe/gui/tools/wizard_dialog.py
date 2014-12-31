@@ -316,20 +316,20 @@ class WizardDialog(QDialog, FORM_CLASS):
             QPixmap(resources_path('img', 'icons', 'icon.svg')))
 
         # Set models for browsers
-        browserModel = QgsBrowserModel()
-        proxyModel = LayerBrowserProxyModel(self)
-        proxyModel.setSourceModel(browserModel)
-        self.tvBrowserHazard.setModel(proxyModel)
+        browser_model = QgsBrowserModel()
+        proxy_model = LayerBrowserProxyModel(self)
+        proxy_model.setSourceModel(browser_model)
+        self.tvBrowserHazard.setModel(proxy_model)
 
-        browserModel = QgsBrowserModel()
-        proxyModel = LayerBrowserProxyModel(self)
-        proxyModel.setSourceModel(browserModel)
-        self.tvBrowserExposure.setModel(proxyModel)
+        browser_model = QgsBrowserModel()
+        proxy_model = LayerBrowserProxyModel(self)
+        proxy_model.setSourceModel(browser_model)
+        self.tvBrowserExposure.setModel(proxy_model)
 
-        browserModel = QgsBrowserModel()
-        proxyModel = LayerBrowserProxyModel(self)
-        proxyModel.setSourceModel(browserModel)
-        self.tvBrowserAggregation.setModel(proxyModel)
+        browser_model = QgsBrowserModel()
+        proxy_model = LayerBrowserProxyModel(self)
+        proxy_model.setSourceModel(browser_model)
+        self.tvBrowserAggregation.setModel(proxy_model)
 
         self.keyword_io = KeywordIO()
         self.twParams = None
