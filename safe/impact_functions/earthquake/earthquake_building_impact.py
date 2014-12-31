@@ -23,7 +23,6 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -112,7 +111,6 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                  # Disable categorical aggregation when in AOI mode see #781
                  ('disable_for_entire_area_aggregation', False)])})
         ]))])
-    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap).

@@ -38,7 +38,6 @@ from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_raster_tools import polygonize, clip_raster
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
@@ -118,7 +117,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         ('max threshold [m]', float('inf')),
         ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
     ])
-    parameters = add_needs_parameters(parameters)
 
     def get_function_type(self):
         """Get type of the impact function.
