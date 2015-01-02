@@ -169,7 +169,10 @@ class WizardDialogTest(unittest.TestCase):
             'title': 'some title'
         }
 
-        layer = clone_shp_layer(name='tsunami_polygon')
+        layer = clone_shp_layer(
+            name='tsunami_polygon',
+            include_keywords=True,
+            source_directory=TESTDATA)
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -339,7 +342,10 @@ class WizardDialogTest(unittest.TestCase):
             'OBJECTID', 'GRIDCODE', 'Shape_Leng', 'Shape_Area', 'Category']
         expected_chosen_field = 'GRIDCODE'
 
-        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
+        layer = clone_shp_layer(
+            name='tsunami_polygon',
+            include_keywords=True,
+            source_directory=TESTDATA)
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -431,7 +437,10 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
     def test_existing_complex_keywords(self):
-        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
+        layer = clone_shp_layer(
+            name='tsunami_polygon',
+            include_keywords=True,
+            source_directory=TESTDATA)
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -741,6 +750,7 @@ class WizardDialogTest(unittest.TestCase):
         """Test for point layer and all possibilities."""
         layer = clone_shp_layer(
             name='Marapi',
+            include_keywords=True,
             source_directory=HAZDATA)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -873,6 +883,7 @@ class WizardDialogTest(unittest.TestCase):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
             name='jakarta_roads',
+            include_keywords=True,
             source_directory=EXPDATA)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
