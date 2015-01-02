@@ -2025,6 +2025,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Params tab"""
 
         # TODO Put the params to metadata! Now we need to import the IF class.
+        # Notes: Why don't we store impact_function to class attribute?
         imfunc_id = self.selected_function()['id']
         imfunctions = get_safe_impact_function(imfunc_id)
         if not imfunctions:
@@ -2056,6 +2057,16 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Summary tab"""
         self.if_params = self.parameter_dialog.parse_input(
             self.parameter_dialog.values)
+
+        # (IS) Set the current impact function to use parameter from user.
+        # We should do it prettier (put it on analysis or impact calculator
+        imfunc_id = self.selected_function()['id']
+        imfunctions = get_safe_impact_function(imfunc_id)
+        if not imfunctions:
+            return
+        imfunc = imfunctions[0][imfunc_id]
+        imfunc.parameters = self.if_params
+
         params = ""
         for p in self.if_params:
             if type(self.if_params[p]) == OrderedDict:
