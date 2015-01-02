@@ -929,7 +929,7 @@ def load_standard_layers(dock=None):
         join(TESTDATA, 'Merapi_alert.shp'),
         join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     hazard_layer_count, exposure_layer_count = load_layers(
-        file_list, data_directory=None, dock=dock)
+        file_list, dock=dock)
     # FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
@@ -941,22 +941,17 @@ def load_standard_layers(dock=None):
 def load_layers(
         layer_list,
         clear_flag=True,
-        data_directory=TESTDATA,
         dock=None):
     """Helper function to load layers as defined in a python list.
 
     :param dock: A valid dock instance.
     :type dock: Dock
 
-    :param data_directory: Path to where data should be loaded from. Defaults
-        to TESTDATA directory.
-    :type data_directory: str, None
-
     :param clear_flag: Whether to clear currently loaded layers before loading
         the new layers.
     :type clear_flag: bool
 
-    :param layer_list: A list of layers to load.
+    :param layer_list: A list of layer's paths to load.
     :type layer_list: list(str)
     """
     # First unload any layers that may already be loaded
