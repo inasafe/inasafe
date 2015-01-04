@@ -35,7 +35,7 @@ from collections import OrderedDict
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit, QCheckBox
 
-from safe.common.testing import get_qgis_app
+from safe.test.utilities import get_qgis_app
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)

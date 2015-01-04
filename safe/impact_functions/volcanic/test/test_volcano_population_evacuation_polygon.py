@@ -22,7 +22,7 @@ import unittest
 from safe.storage.core import read_layer
 from safe.engine.core import calculate_impact
 from safe.impact_functions import get_plugin
-from safe.common.testing import TESTDATA, EXPDATA
+from safe.test.utilities import TESTDATA, EXPDATA
 from safe.impact_functions.core import population_rounding
 from safe.common.utilities import format_int
 

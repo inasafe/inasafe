@@ -27,9 +27,7 @@ from safe.defaults import limitations
 from safe.utilities.resources import resources_path, get_ui_class
 from safe.defaults import disclaimer
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'about_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('about_dialog_base.ui')
 
 
 class AboutDialog(QtGui.QDialog, FORM_CLASS):

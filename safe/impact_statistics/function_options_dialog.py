@@ -51,10 +51,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__),
-    '..', 'gui', 'ui', 'function_options_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('function_options_dialog_base.ui')
 
 
 # FIXME (Tim and Ole): Change to ConfigurationDialog throughout

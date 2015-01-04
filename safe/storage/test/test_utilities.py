@@ -13,16 +13,14 @@ import os
 import logging
 import unittest
 
-from safe.common.testing import UNITDATA
 from safe.storage.utilities import (
     read_keywords,
     write_keywords)
+from safe.test.utilities import test_data_path
 
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = os.path.abspath(
-    os.path.join(UNITDATA, 'other', 'multilayer.keywords'))
-SIMPLE_PATH = os.path.abspath(
-    os.path.join(UNITDATA, 'other', 'simple.keywords'))
+KEYWORD_PATH = test_data_path('other', 'multilayer.keywords')
+SIMPLE_PATH = test_data_path('other', 'simple.keywords')
 
 DKI_KEYWORDS = {'datatype': 'osm',
                 'category': 'exposure',
@@ -76,8 +74,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         write_keywords(DKI_KEYWORDS, filename=filename, sublayer='dki')
         write_keywords(OSM_KEYWORDS, filename=filename, sublayer='osm')
         # Read back contents and check against control dataset
-        control_path = os.path.abspath(
-            os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
+        control_path = test_data_path('other', 'expected_multilayer.keywords')
         control_keywords = read_keywords(control_path, all_blocks=True)
         actual_keywords = read_keywords(filename, all_blocks=True)
         msg = 'Expected:\n%s\nGot:\n%s\n' % (control_keywords, actual_keywords)
@@ -89,8 +86,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         filename = self.make_temp_file()
         write_keywords(OSM_KEYWORDS, filename=filename, sublayer='osm')
         # read back contents and check against control dataset
-        control_path = os.path.abspath(
-            os.path.join(UNITDATA, 'other', 'expected_singlelayer.keywords'))
+        control_path = test_data_path('other', 'expected_singlelayer.keywords')
         control_keywords = read_keywords(control_path, all_blocks=True)
         actual_keywords = read_keywords(filename, all_blocks=True)
         msg = 'Expected:\n%s\nGot:\n%s\n' % (control_keywords, actual_keywords)

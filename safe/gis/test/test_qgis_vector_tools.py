@@ -17,15 +17,8 @@ __date__ = '20/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
-from safe.common.testing import UNITDATA, get_qgis_app
-from safe.gis.gdal_ogr_tools import (
-    polygonize_thresholds)
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsVectorLayer,
     QgsPoint,
@@ -33,8 +26,11 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsRectangle)
+from PyQt4.QtCore import QVariant
 
-
+from safe.gis.gdal_ogr_tools import (
+    polygonize_thresholds)
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.gis.qgis_vector_tools import (
     points_to_rectangles,
     union_geometry,
@@ -43,16 +39,15 @@ from safe.gis.qgis_vector_tools import (
     split_by_polygon,
     split_by_polygon_in_out)
 
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 
 class TestQGISVectorTools(unittest.TestCase):
 
     def setUp(self):
-        self.polygon_base = os.path.abspath(
-            os.path.join(UNITDATA, 'other', 'polygonization_result'))
-        self.line_before = os.path.abspath(
-            os.path.join(UNITDATA, 'other', 'line_before_splitting'))
-        self.line_after = os.path.abspath(
-            os.path.join(UNITDATA, 'other', 'line_after_splitting1'))
+        self.polygon_base = test_data_path('other', 'polygonization_result')
+        self.line_before = test_data_path('other', 'line_before_splitting')
+        self.line_after = test_data_path('other', 'line_after_splitting1')
 
     def test_points_to_rectangles(self):
         """Test points_to_rectangles work
@@ -252,15 +247,13 @@ class TestQGISVectorTools(unittest.TestCase):
     def test_split_by_polygon_in_out(self):
         """Test split_by_polygon in-out work"""
 
-        raster_name = os.path.join(
-            UNITDATA,
+        raster_name = test_data_path(
             'hazard',
             'jakarta_flood_design.tif')
-
-        exposure_name = os.path.join(
-            UNITDATA,
+        exposure_name = test_data_path(
             'exposure',
             'roads_osm_4326.shp')
+
         qgis_exposure = QgsVectorLayer(
             exposure_name,
             'EXPOSURE',

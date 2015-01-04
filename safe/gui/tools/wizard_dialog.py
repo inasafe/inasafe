@@ -53,9 +53,7 @@ from safe.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'wizard_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('wizard_dialog_base.ui')
 
 # Constants for categories
 category_question = QApplication.translate(

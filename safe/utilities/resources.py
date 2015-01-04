@@ -73,10 +73,19 @@ def resource_url(path):
     return str(url.toString())
 
 
-def get_ui_class(path):
+def get_ui_class(ui_file):
     """Get UI Python class from .ui file.
 
-    :param path: The path to the ui file.
-    :type path: str
+    :param ui_file: The file of the ui in safe.gui.ui
+    :type ui_file: str
     """
-    return uic.loadUiType(path)[0]
+    ui_file_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            os.pardir,
+            'gui',
+            'ui',
+            ui_file
+        )
+    )
+    return uic.loadUiType(ui_file_path)[0]

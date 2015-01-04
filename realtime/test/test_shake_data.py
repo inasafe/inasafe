@@ -22,7 +22,7 @@ import os
 import shutil
 import unittest
 
-from safe.common.testing import get_shake_test_data_path
+from safe.test.utilities import test_data_path
 from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_zip_dir,
@@ -54,7 +54,7 @@ class TestShakeMap(unittest.TestCase):
         output_file = '20120726022003.out.zip'
         input_file = '20120726022003.inp.zip'
 
-        shake_path = get_shake_test_data_path()
+        shake_path = test_data_path('hazard', 'shake_data')
         output_path = os.path.abspath(os.path.join(shake_path, output_file))
         input_path = os.path.abspath(os.path.join(shake_path, input_file))
         shutil.copyfile(

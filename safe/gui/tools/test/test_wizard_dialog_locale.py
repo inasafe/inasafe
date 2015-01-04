@@ -106,11 +106,11 @@ class TestWizardDialogLocale(unittest.TestCase):
     def test_translation(self):
         """Test for metadata translation."""
         from safe.gui.tools.wizard_dialog import WizardDialog
-        from safe.utilities.utilities_for_testing import (
+        from safe.test.utilities import (
             clone_shp_layer, remove_vector_temp_file)
-        from safe.common.testing import BOUNDDATA
+        from safe.test.utilities import BOUNDDATA
 
-        from safe.common.testing import get_qgis_app
+        from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app()
@@ -134,11 +134,11 @@ class TestWizardDialogLocale(unittest.TestCase):
     def test_existing_complex_keywords(self):
         """Test for existing complex keywords in wizard in locale mode."""
         from safe.gui.tools.wizard_dialog import WizardDialog
-        from safe.utilities.utilities_for_testing import (
+        from safe.test.utilities import (
             clone_shp_layer, remove_vector_temp_file)
         layer = clone_shp_layer(include_keywords=True)
 
-        from safe.common.testing import get_qgis_app
+        from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app()

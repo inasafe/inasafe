@@ -51,10 +51,7 @@ from safe.common.utilities import temp_dir
 from safe.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', '..', 'ui',
-    'batch_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('batch_dialog_base.ui')
 
 
 class BatchDialog(QDialog, FORM_CLASS):

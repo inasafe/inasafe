@@ -12,10 +12,10 @@ import os
 import logging
 import unittest
 
-from safe.common.testing import UNITDATA, get_qgis_app
 from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
 from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
+from safe.test.utilities import test_data_path, get_qgis_app
 
 if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -23,13 +23,9 @@ if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
 
 
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = os.path.abspath(
-    os.path.join(UNITDATA, 'exposure', 'exposure.keywords'))
-SQLITE_PATH = os.path.abspath(
-    os.path.join(UNITDATA, 'exposure', 'exposure.sqlite'))
-# noinspection PyUnresolvedReferences
-SHP_BASE = os.path.abspath(
-    os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326'))
+KEYWORD_PATH = test_data_path('exposure', 'exposure.keywords')
+SQLITE_PATH = test_data_path('exposure', 'exposure.sqlite')
+SHP_BASE = test_data_path('exposure', 'buildings_osm_4326')
 EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'
 
 

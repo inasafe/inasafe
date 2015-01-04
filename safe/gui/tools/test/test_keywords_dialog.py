@@ -17,43 +17,36 @@ __author__ = 'tim@kartoza.com'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 
 import unittest
-import sys
 import os
 import shutil
+from collections import OrderedDict
 # noinspection PyPackageRequirements
 from nose import SkipTest
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
-
-from PyQt4 import QtGui
 
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
     QgsMapLayerRegistry)
+from PyQt4 import QtGui
 
-from collections import OrderedDict
-
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.utilities.utilities_for_testing import (
-    test_data_path, clone_shp_layer, temp_dir)
+from safe.test.utilities import (
+    test_data_path,
+    clone_shp_layer,
+    temp_dir,
+    get_qgis_app,
+    HAZDATA,
+    TESTDATA,
+    BOUNDDATA)
 from safe.common.utilities import unique_filename
-from safe.common.testing import HAZDATA, TESTDATA, BOUNDDATA
 from safe.gui.tools.keywords_dialog import KeywordsDialog
 from safe.common.exceptions import KeywordNotFoundError
 from safe.utilities.utilities import read_file_keywords
 from safe.defaults import get_defaults
+
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def clone_padang_layer():

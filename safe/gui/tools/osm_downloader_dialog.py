@@ -49,9 +49,7 @@ from safe.utilities.proxy import get_proxy
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'osm_downloader_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('osm_downloader_dialog_base.ui')
 
 
 class OsmDownloaderDialog(QDialog, FORM_CLASS):

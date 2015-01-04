@@ -22,7 +22,7 @@ import unittest
 import shutil
 
 from safe.common.utilities import temp_dir
-from safe.common.testing import get_shake_test_data_path
+from safe.test.utilities import test_data_path
 from realtime.sftp_client import SFtpClient
 from realtime.test.test_sftp_client import run_monkey_patching_sftp_client
 from realtime.sftp_shake_data import SftpShakeData
@@ -44,8 +44,9 @@ class SFtpShakeDataTest(unittest.TestCase):
         # please pass the working dir to the local dir
         sftp_client = SFtpClient(working_dir=temp_dir('realtime-test'))
         local_path = temp_dir('realtime-test')
+        shake_path = test_data_path('hazard', 'shake_data')
         remote_path = os.path.abspath(
-            os.path.join(get_shake_test_data_path(), SHAKE_ID))
+            os.path.join(shake_path, SHAKE_ID))
         sftp_client.download_path(remote_path, local_path)
 
     def tearDown(self):

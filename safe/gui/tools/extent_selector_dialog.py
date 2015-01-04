@@ -50,12 +50,7 @@ from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
-UI_FILE_PATH = os.path.abspath(os.path.join(
-    os.path.dirname(__file__),
-    os.pardir,
-    'ui',
-    'extent_selector_dialog_base.ui'))
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('extent_selector_dialog_base.ui')
 
 
 class ExtentSelectorDialog(QDialog, FORM_CLASS):

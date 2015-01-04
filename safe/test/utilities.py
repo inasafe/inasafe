@@ -23,34 +23,111 @@ from qgis.core import (
     QgsMapLayerRegistry)
 
 # For testing and demoing
-from safe.common.testing import get_qgis_app
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
+from safe.gis.numerics import axes_to_points
 from safe.utilities.utilities import read_file_keywords
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import TESTDATA, UNITDATA, HAZDATA, EXPDATA
 
+QGIS_APP = None  # Static variable used to hold hand to running QGIS app
+CANVAS = None
+PARENT = None
+IFACE = None
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
-
-TEST_FILES_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_files'))
-
-SCENARIO_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_scenarios'))
-
-
 LOGGER = logging.getLogger('InaSAFE')
-
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
-CONTROL_IMAGE_DIR = os.path.join(
-    os.path.dirname(__file__),
-    '../test/test_data/test_images')
+
+# FIXME AG: We are going to remove the usage of all the data from
+# inasafe_data and just use data in test_data_path. But until that is done,
+# we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
+
+# Assuming test data three lvls up
+pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
+    __file__)),
+    '..',
+    '..',
+    '..'))
+
+# Location of test data
+DATANAME = 'inasafe_data'
+DATADIR = os.path.join(pardir, DATANAME)
+
+# Bundled test data
+TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
+HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
+EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
+BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
+
+
+def get_qgis_app():
+    """ Start one QGIS application to test against.
+
+    :returns: Handle to QGIS app, canvas, iface and parent. If there are any
+        errors the tuple members will be returned as None.
+    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
+
+    If QGIS is already running the handle to that app will be returned.
+    """
+
+    try:
+        from qgis.core import QgsApplication
+        from qgis.gui import QgsMapCanvas
+        # noinspection PyPackageRequirements
+        from PyQt4 import QtGui, QtCore
+        # noinspection PyPackageRequirements
+        from PyQt4.QtCore import QCoreApplication, QSettings
+        from safe.gis.qgis_interface import QgisInterface
+    except ImportError:
+        return None, None, None, None
+
+    global QGIS_APP  # pylint: disable=W0603
+
+    if QGIS_APP is None:
+        gui_flag = True  # All test will run qgis in gui mode
+
+        # AG: For testing purposes, we use our own configuration file instead
+        # of using the QGIS apps conf of the host
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationName('QGIS')
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationDomain('qgis.org')
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
+
+        # noinspection PyPep8Naming
+        QGIS_APP = QgsApplication(sys.argv, gui_flag)
+
+        # Make sure QGIS_PREFIX_PATH is set in your env if needed!
+        QGIS_APP.initQgis()
+        s = QGIS_APP.showSettings()
+        LOGGER.debug(s)
+
+        # Save some settings
+        settings = QSettings()
+        settings.setValue('locale/overrideFlag', True)
+        settings.setValue('locale/userLocale', 'en_US')
+
+    global PARENT  # pylint: disable=W0603
+    if PARENT is None:
+        # noinspection PyPep8Naming
+        PARENT = QtGui.QWidget()
+
+    global CANVAS  # pylint: disable=W0603
+    if CANVAS is None:
+        # noinspection PyPep8Naming
+        CANVAS = QgsMapCanvas(PARENT)
+        CANVAS.resize(QtCore.QSize(400, 400))
+
+    global IFACE  # pylint: disable=W0603
+    if IFACE is None:
+        # QgisInterface is a stub implementation of the QGIS plugin interface
+        # noinspection PyPep8Naming
+        IFACE = QgisInterface(CANVAS)
+
+    return QGIS_APP, CANVAS, IFACE, PARENT
 
 
 def assert_hashes_for_file(hashes, filename):
@@ -94,22 +171,25 @@ def hash_for_file(filename):
     return data_hash
 
 
-def test_data_path(subdirectory=None):
-    """Return the absolute path to the InaSAFE unit test data dir.
+def test_data_path(*args):
+    """Return the absolute path to the InaSAFE test data or directory path.
 
-    :type subdirectory: Additional subdir to add to the path - typically
-        'hazard' or 'exposure'.
-    :param subdirectory:
+    .. versionadded:: 3.0
 
-    .. note:: This is not the same thing as the GIT inasafe_data dir. Rather
-       this is a new dataset where the test datasets are all tiny for fast
-       testing and the datasets live in the same repo as the code.
+    :param args: List of path e.g. ['control', 'files',
+        'test-error-message.txt'] or ['control', 'scenarios'] to get the path
+        to scenarios dir.
+    :type args: list
+
+    :return: Absolute path to the test data or dir path.
+    :rtype: str
 
     """
-    path = UNITDATA
+    path = os.path.dirname(__file__)
+    path = os.path.abspath(os.path.join(path, 'data'))
+    for item in args:
+        path = os.path.abspath(os.path.join(path, item))
 
-    if subdirectory is not None:
-        path = os.path.abspath(os.path.join(path, subdirectory))
     return path
 
 
@@ -313,20 +393,21 @@ def check_images(control_image, test_image_path, tolerance=1000):
     :type test_image_path: str
 
     :param control_image: The basename for the control image. The .png
-        extension will automatically be added and the test image path
-        (CONTROL_IMAGE_DIR) will be prepended. e.g.
+        extension will automatically be added and the test image dir
+        (safe/test/data/control/images) will be prepended. e.g.
         addClassToLegend will cause the control image of
-        test\/test_data\/test_images\/addClassToLegend.png to be used.
+        test\/data\/control/images\/addClassToLegend.png to be used.
     :type control_image: str
 
     :returns: Success or failure indicator, message providing analysis,
         comparison notes
     :rtype: bool, str
     """
+    control_image_dir = test_data_path('control', 'images')
     messages = ''
     platform_name = get_platform_name()
     base_name, extension = os.path.splitext(control_image)
-    platform_image = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s.png' % (
+    platform_image = os.path.join(control_image_dir, '%s-variant%s%s.png' % (
         base_name, platform_name, extension))
     messages += 'Checking for platform specific variant...\n'
     messages += test_image_path + '\n'
@@ -348,12 +429,12 @@ def check_images(control_image, test_image_path, tolerance=1000):
     # Ok there is no specific platform match so go ahead and match to any of
     # the control image and its variants...
     control_images = glob.glob('%s/%s*%s' % (
-        CONTROL_IMAGE_DIR, base_name, extension))
+        control_image_dir, base_name, extension))
     flag = False
 
     for control_image in control_images:
         full_path = os.path.join(
-            CONTROL_IMAGE_DIR, control_image)
+            control_image_dir, control_image)
         flag, message = check_image(
             full_path, test_image_path, tolerance)
         messages += message
@@ -1046,6 +1127,14 @@ def remove_vector_temp_file(file_path):
     for ext in extensions:
         if os.path.exists(file_path + ext):
             os.remove(file_path + ext)
+
+
+def combine_coordinates(x, y):
+    """Make list of all combinations of points for x and y coordinates
+    :param x:
+    :param y:
+    """
+    return axes_to_points(x, y)
 
 
 class FakeLayer(object):

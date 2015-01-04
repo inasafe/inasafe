@@ -16,12 +16,11 @@ __date__ = '23/01/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from qgis.core import QgsVectorLayer
 
-from safe.common.testing import UNITDATA
+from safe.test.utilities import test_data_path
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.common.exceptions import KeywordNotFoundError
 
@@ -30,8 +29,7 @@ class QgisLayerWrapperTest(unittest.TestCase):
     """Test that context help works."""
 
     def setUp(self):
-        data_path = os.path.join(
-            UNITDATA,
+        data_path = test_data_path(
             'impact',
             'aggregation_test_roads.shp')
         self.layer = QgsVectorLayer(

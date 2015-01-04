@@ -9,34 +9,22 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 import unittest
 import os
 import logging
-
-# Add PARENT directory to path to make test aware of other modules
-# pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-# sys.path.append(pardir)
 
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
 
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.common.utilities import temp_dir, unique_filename
 from safe.utilities.resources import resources_path
-from safe.utilities.utilities_for_testing import load_layer
+from safe.test.utilities import load_layer, get_qgis_app
 from safe.utilities.gis import qgis_version
 from safe.report.map import Map
 
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

@@ -32,14 +32,13 @@ from safe.storage.metadata_utilities import (
     write_keyword_in_iso_metadata,
     ISO_METADATA_KEYWORD_TAG,
     ISO_METADATA_KEYWORD_NESTING, generate_iso_metadata)
-from safe.common.testing import UNITDATA
 from safe.common.utilities import unique_filename
+from safe.test.utilities import test_data_path
 
 
 class TestCase(unittest.TestCase):
     def test_write_keyword_in_iso_metadata(self):
-        keyword_file = os.path.abspath(
-            os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
+        keyword_file = test_data_path('other', 'expected_multilayer.keywords')
 
         with open(keyword_file) as f:
             keywords = f.read()
