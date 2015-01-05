@@ -347,7 +347,7 @@ converter_dict = {
         'raster': [],
         'vector': []
     },
-    'date_type': {
+    'data_type': {
     },
     'unit': {
         'm': ['metres_depth'],  # FIXME(Ismail): Please check for feet_depth
