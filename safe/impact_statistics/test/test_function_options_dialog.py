@@ -24,18 +24,17 @@ PARAMETERS_DIR = os.path.abspath(
 if PARAMETERS_DIR not in sys.path:
     sys.path.append(PARAMETERS_DIR)
 
-print PARAMETERS_DIR
-
 import unittest
-import sys
-import os
+
 import logging
 from collections import OrderedDict
 
+# noinspection PyUnresolvedReferences
+import qgis
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit, QCheckBox
 
-from safe.common.testing import get_qgis_app
+from safe.test.utilities import get_qgis_app
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
@@ -45,16 +44,8 @@ from safe.impact_functions.core import get_plugins
 from safe.impact_functions.earthquake import itb_earthquake_fatality_model
 # pylint: enable=W0612
 
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
-
-
 LOGGER = logging.getLogger('InaSAFE')
 
 

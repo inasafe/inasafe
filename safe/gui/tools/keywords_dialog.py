@@ -18,7 +18,6 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import logging
 
 # noinspection PyPackageRequirements
@@ -55,9 +54,7 @@ elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
 
 LOGGER = logging.getLogger('InaSAFE')
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'keywords_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('keywords_dialog_base.ui')
 
 
 class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
@@ -936,7 +933,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         """Set the ui state to match the keywords of the active layer.
 
         In case the layer has no keywords or any problem occurs reading them,
-        start with a blank slate so that subcategory gets populated nicely &
+        start with a blank state so that subcategory gets populated nicely &
         we will assume exposure to start with.
 
         Also if only title is set we use similar logic (title is added by

@@ -24,7 +24,7 @@ import os
 import shutil
 
 from safe.common.utilities import temp_dir
-from safe.common.testing import get_shake_test_data_path
+from safe.test.utilities import test_data_path
 from realtime.ftp_client import FtpClient
 
 
@@ -41,7 +41,7 @@ def mock_get_listing(self, extension='zip'):
         the supplied extension suffix.
     """
     base_url = 'ftp://%s' % self.base_url
-    shake_path = get_shake_test_data_path()
+    shake_path = test_data_path('hazard', 'shake_data')
     local_shake_dir = os.path.abspath(shake_path)
     file_list = []
     for filename in os.listdir(local_shake_dir):
@@ -64,7 +64,7 @@ def mock_get_file(self, url_path, file_path):
 
      :return: The path to the downloaded file.
     """
-    shake_path = get_shake_test_data_path()
+    shake_path = test_data_path('hazard', 'shake_data')
     local_shake_dir = os.path.abspath(shake_path)
     source_file_path = os.path.join(local_shake_dir, url_path)
     shutil.copy(source_file_path, file_path)

@@ -22,19 +22,17 @@ import unittest
 import os
 
 # This is to enable API V2
-
+# noinspection PyUnresolvedReferences
+import qgis
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 
-from safe.common.testing import get_qgis_app, get_shake_test_data_path
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.gui.tools.shake_grid.shakemap_importer_dialog import (
     ShakemapImporterDialog)
-from safe.common.testing import TESTDATA
 from safe.common.utilities import unique_filename, temp_dir
+from safe.test.utilities import test_data_path, get_qgis_app, TESTDATA
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakemapImporterTest(unittest.TestCase):
@@ -67,8 +65,12 @@ class ShakemapImporterTest(unittest.TestCase):
         """Test converting grif file to tiff."""
         dialog = ShakemapImporterDialog(PARENT)
         dialog.use_output_default.setEnabled(False)
-        grid_path = os.path.join(get_shake_test_data_path(),
-                                 '20131105060809/output/grid.xml')
+        grid_path = test_data_path(
+            'hazard',
+            'shake_data',
+            '20131105060809',
+            'output',
+            'grid.xml')
         output_raster = unique_filename(
             prefix='result_grid',
             suffix='.tif',

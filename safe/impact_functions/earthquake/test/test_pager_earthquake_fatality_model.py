@@ -23,7 +23,7 @@ import unittest
 from safe.storage.core import read_layer
 from safe.engine.core import calculate_impact
 from safe.impact_functions import get_plugin
-from safe.common.testing import TESTDATA
+from safe.test.utilities import TESTDATA
 
 
 class TestITBFatalityFunction(unittest.TestCase):
@@ -66,4 +66,4 @@ class TestITBFatalityFunction(unittest.TestCase):
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(
-            fatalities, expected_fatalities,rtol=1.0e-5), msg
+            fatalities, expected_fatalities, rtol=1.0e-5), msg

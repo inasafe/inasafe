@@ -41,11 +41,7 @@ from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
-
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', '..', 'ui',
-    'shakemap_importer_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
 
 
 class ShakemapImporterDialog(QDialog, FORM_CLASS):

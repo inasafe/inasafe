@@ -16,7 +16,6 @@ __revision__ = '$Format:%H$'
 __date__ = '10/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import os
 
 from PyQt4 import QtGui, QtWebKit
 
@@ -27,9 +26,7 @@ from safe.impact_functions.core import (
     get_plugins_as_table)
 from safe.utilities.resources import html_header, html_footer, get_ui_class
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'function_browser_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('function_browser_base.ui')
 
 
 class FunctionBrowser(QtGui.QDialog, FORM_CLASS):

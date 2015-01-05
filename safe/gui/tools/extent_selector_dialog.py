@@ -16,7 +16,6 @@ Refactored and improved in Oct 2014 by Tim Sutton for InaSAFE.
 
 .. versionadded:: 2.2.0
 """
-from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'Giuseppe Sucameli & Tim Sutton'
 __date__ = 'December 2010'
@@ -43,19 +42,14 @@ from qgis.core import (
     QgsCoordinateTransform)
 
 from safe import messaging as m
-from safe.utilities.resources import html_header, get_ui_class
+from safe.utilities.resources import html_header, html_footer, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
-UI_FILE_PATH = os.path.abspath(os.path.join(
-    os.path.dirname(__file__),
-    os.pardir,
-    'ui',
-    'extent_selector_dialog_base.ui'))
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('extent_selector_dialog_base.ui')
 
 
 class ExtentSelectorDialog(QDialog, FORM_CLASS):
@@ -64,6 +58,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
     extent_defined = pyqtSignal(QgsRectangle, QgsCoordinateReferenceSystem)
     clear_extent = pyqtSignal()
+    extent_selector_closed = pyqtSignal()
 
     def __init__(self, iface, parent=None, extent=None, crs=None):
         """Constructor for the dialog.
@@ -201,6 +196,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
         self.tool.reset()
+        self.extent_selector_closed.emit()
         super(ExtentSelectorDialog, self).reject()
 
     def accept(self):
@@ -224,6 +220,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.clear_extent.emit()
 
         self.tool.reset()
+        self.extent_selector_closed.emit()
         super(ExtentSelectorDialog, self).accept()
 
     def _are_coordinates_valid(self):

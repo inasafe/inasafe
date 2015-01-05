@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
  **Styling Tests.**
@@ -15,29 +16,23 @@ __date__ = '17/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
-import sys
 import os
 
-from safe.common.testing import get_qgis_app
 from safe.utilities.styling import (
     set_vector_graduated_style,
     setRasterStyle,
     add_extrema_to_style,
     mmi_colour)
 from safe.utilities.utilities import get_error_message
-from safe.utilities.utilities_for_testing import test_data_path, load_layer
+from safe.test.utilities import (
+    test_data_path,
+    load_layer,
+    get_qgis_app,
+    clone_shp_layer)
 from safe.common.exceptions import StyleError, BoundingBoxError
 from safe.storage.utilities import bbox_intersection
 
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 
 
 class StylingTest(unittest.TestCase):
@@ -55,16 +50,18 @@ class StylingTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        layer, _ = load_layer('issue126.tif')
+        data_path = test_data_path('other', 'issue126.tif')
+        layer, _ = load_layer(data_path)
 
         # Note the float quantity values below
-        myStyleInfo = {'style_classes': [
-            dict(colour='#38A800', quantity=1.1, transparency=100),
-            dict(colour='#38A800', quantity=1.4, transparency=0),
-            dict(colour='#79C900', quantity=10.1, transparency=0)]}
+        style_info = {
+            'style_classes': [
+                dict(colour='#38A800', quantity=1.1, transparency=100),
+                dict(colour='#38A800', quantity=1.4, transparency=0),
+                dict(colour='#79C900', quantity=10.1, transparency=0)]}
 
         try:
-            setRasterStyle(layer, myStyleInfo)
+            setRasterStyle(layer, style_info)
         except Exception, e:
             message = (
                 'Setting style info with float based ranges should fail '
@@ -76,19 +73,19 @@ class StylingTest(unittest.TestCase):
         # Note we don't test on the exact interval because 464c6171dd55
         value1 = layer.renderer().rasterTransparency().alphaValue(1.2)
         value2 = layer.renderer().rasterTransparency().alphaValue(1.5)
-        message = ('Transparency should be ignored when style class'
-                     ' quantities are floats')
+        message = ('Transparency should be ignored when style class '
+                   'quantities are floats')
         assert value1 == value2 == 255, message
 
         # Now run the same test again for int intervals
-        myStyleInfo['style_classes'] = [
+        style_info['style_classes'] = [
             dict(colour='#38A800', quantity=2, transparency=100),
             dict(colour='#38A800', quantity=4, transparency=0),
             dict(colour='#79C900', quantity=10, transparency=0)]
         message = ('Setting style info with generate valid transparent '
-                     'pixel entries.')
+                   'pixel entries.')
         try:
-            setRasterStyle(layer, myStyleInfo)
+            setRasterStyle(layer, style_info)
         except:
             raise Exception(message)
         # Now validate the transparency values were set to 255 because
@@ -103,13 +100,13 @@ class StylingTest(unittest.TestCase):
         # Verify that setRasterStyle doesn't break when floats coincide with
         # integers
         # See https://github.com/AIFDR/inasafe/issues/126#issuecomment-5978416
-        myStyleInfo['style_classes'] = [
+        style_info['style_classes'] = [
             dict(colour='#38A800', quantity=2.0, transparency=100),
             dict(colour='#38A800', quantity=4.0, transparency=0),
             dict(colour='#79C900', quantity=10.0, transparency=0)]
 
         try:
-            setRasterStyle(layer, myStyleInfo)
+            setRasterStyle(layer, style_info)
         except Exception, e:
             message = (
                 'Broken: Setting style info with generate valid transparent '
@@ -121,28 +118,30 @@ class StylingTest(unittest.TestCase):
         """Test that transparency of minimum value works when set to 100%
         """
         # This dataset has all cells with value 1.3
-        layer, _ = load_layer('issue126.tif')
+        data_path = test_data_path('other', 'issue126.tif')
+        layer, _ = load_layer(data_path)
 
         # Note the float quantity values below
-        myStyleInfo = {'style_classes': [
-            {'colour': '#FFFFFF', 'transparency': 100, 'quantity': 0.0},
-            {'colour': '#38A800', 'quantity': 0.038362596547925065,
-             'transparency': 0, 'label': u'Rendah [0 orang/sel]'},
-            {'colour': '#79C900', 'transparency': 0,
-             'quantity': 0.07672519309585013},
-            {'colour': '#CEED00', 'transparency': 0,
-             'quantity': 0.1150877896437752},
-            {'colour': '#FFCC00', 'quantity': 0.15345038619170026,
-             'transparency': 0, 'label': u'Sedang [0 orang/sel]'},
-            {'colour': '#FF6600', 'transparency': 0,
-             'quantity': 0.19181298273962533},
-            {'colour': '#FF0000', 'transparency': 0,
-             'quantity': 0.23017557928755039},
-            {'colour': '#7A0000', 'quantity': 0.26853817583547546,
-             'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]}
+        style_info = {
+            'style_classes': [
+                {'colour': '#FFFFFF', 'transparency': 100, 'quantity': 0.0},
+                {'colour': '#38A800', 'quantity': 0.038362596547925065,
+                 'transparency': 0, 'label': u'Rendah [0 orang/sel]'},
+                {'colour': '#79C900', 'transparency': 0,
+                 'quantity': 0.07672519309585013},
+                {'colour': '#CEED00', 'transparency': 0,
+                 'quantity': 0.1150877896437752},
+                {'colour': '#FFCC00', 'quantity': 0.15345038619170026,
+                 'transparency': 0, 'label': u'Sedang [0 orang/sel]'},
+                {'colour': '#FF6600', 'transparency': 0,
+                 'quantity': 0.19181298273962533},
+                {'colour': '#FF0000', 'transparency': 0,
+                 'quantity': 0.23017557928755039},
+                {'colour': '#7A0000', 'quantity': 0.26853817583547546,
+                 'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]}
 
         try:
-            setRasterStyle(layer, myStyleInfo)
+            setRasterStyle(layer, style_info)
         except Exception, e:
             message = '\nCould not create raster style'
             e.args = (e.args[0] + message,)
@@ -150,26 +149,31 @@ class StylingTest(unittest.TestCase):
 
         # message = ('Should get a single transparency class for first style '
         #             'class')
-        myTransparencyList = (
+        transparency_list = (
             layer.renderer().rasterTransparency().
             transparentSingleValuePixelList())
 
-        self.assertEqual(len(myTransparencyList), 1)
+        self.assertEqual(len(transparency_list), 1)
 
     def test_issue_121(self):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
-        layer, layer_type = load_layer('kecamatan_jakarta_osm_centroids.shp')
-        del layer_type
+        layer = clone_shp_layer(
+            name='Marapi',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+
         # Note the float quantity values below
-        style_info = {'target_field': 'KEPADATAN', 'style_classes': [
-            {'opacity': 1, 'max': 200, 'colour': '#fecc5c',
-             'min': 45, 'label': 'Low', 'size': 1},
-            {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
-             'min': 201, 'label': 'Medium', 'size': 2},
-            {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
-             'min': 351, 'label': 'High', 'size': 3}]}
+        style_info = {
+            'target_field': 'KEPADATAN',
+            'style_classes': [
+                {'opacity': 1, 'max': 200, 'colour': '#fecc5c',
+                 'min': 45, 'label': 'Low', 'size': 1},
+                {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
+                 'min': 201, 'label': 'Medium', 'size': 2},
+                {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
+                 'min': 351, 'label': 'High', 'size': 3}]}
 
         print 'Setting style with point sizes should work.'
         set_vector_graduated_style(layer, style_info)
@@ -209,62 +213,72 @@ class StylingTest(unittest.TestCase):
         """Verify that we give informative errors when style is not correct
            .. seealso:: https://github.com/AIFDR/inasafe/issues/230
         """
-        path = test_data_path('impact')
-        myVectorLayer, myType = load_layer('polygons_for_styling.shp', path)
-        del myType
-        myStyle = {'legend_title': u'Population Count',
-                   'target_field': 'population',
-                   'style_classes':
-                   [{'transparency': 0,
-                     'min': [0],  # <-- intentionally broken list not number!
-                     'max': 139904.08186340332,
-                     'colour': '#FFFFFF',
-                     'size': 1,
-                     'label': u'Nil'},
-                    {'transparency': 0,
-                     'min': 139904.08186340332,
-                     'max': 279808.16372680664,
-                     'colour': '#38A800',
-                     'size': 1,
-                     'label': u'Low'},
-                    {'transparency': 0,
-                     'min': 279808.16372680664,
-                     'max': 419712.24559020996,
-                     'colour': '#79C900',
-                     'size': 1,
-                     'label': u'Low'},
-                    {'transparency': 0,
-                     'min': 419712.24559020996,
-                     'max': 559616.32745361328,
-                     'colour': '#CEED00',
-                     'size': 1,
-                     'label': u'Low'},
-                    {'transparency': 0,
-                     'min': 559616.32745361328,
-                     'max': 699520.4093170166,
-                     'colour': '#FFCC00',
-                     'size': 1,
-                     'label': u'Medium'},
-                    {'transparency': 0,
-                     'min': 699520.4093170166,
-                     'max': 839424.49118041992,
-                     'colour': '#FF6600',
-                     'size': 1,
-                     'label': u'Medium'},
-                    {'transparency': 0,
-                     'min': 839424.49118041992,
-                     'max': 979328.57304382324,
-                     'colour': '#FF0000',
-                     'size': 1,
-                     'label': u'Medium'},
-                    {'transparency': 0,
-                     'min': 979328.57304382324,
-                     'max': 1119232.6549072266,
-                     'colour': '#7A0000',
-                     'size': 1,
-                     'label': u'High'}]}
+        path = test_data_path('impact', 'polygons_for_styling.shp')
+        vector_layer, _ = load_layer(path)
+
+        style = {
+            'legend_title': u'Population Count',
+            'target_field': 'population',
+            'style_classes':
+                [
+                    {
+                        'transparency': 0,
+                        'min': [0],  # <-- intentionally broken list not number!
+                        'max': 139904.08186340332,
+                        'colour': '#FFFFFF',
+                        'size': 1,
+                        'label': u'Nil'},
+                    {
+                        'transparency': 0,
+                        'min': 139904.08186340332,
+                        'max': 279808.16372680664,
+                        'colour': '#38A800',
+                        'size': 1,
+                        'label': u'Low'},
+                    {
+                        'transparency': 0,
+                        'min': 279808.16372680664,
+                        'max': 419712.24559020996,
+                        'colour': '#79C900',
+                        'size': 1,
+                        'label': u'Low'},
+                    {
+                        'transparency': 0,
+                        'min': 419712.24559020996,
+                        'max': 559616.32745361328,
+                        'colour': '#CEED00',
+                        'size': 1,
+                        'label': u'Low'},
+                    {
+                        'transparency': 0,
+                        'min': 559616.32745361328,
+                        'max': 699520.4093170166,
+                        'colour': '#FFCC00',
+                        'size': 1,
+                        'label': u'Medium'},
+                    {
+                        'transparency': 0,
+                        'min': 699520.4093170166,
+                        'max': 839424.49118041992,
+                        'colour': '#FF6600',
+                        'size': 1,
+                        'label': u'Medium'},
+                    {
+                        'transparency': 0,
+                        'min': 839424.49118041992,
+                        'max': 979328.57304382324,
+                        'colour': '#FF0000',
+                        'size': 1,
+                        'label': u'Medium'},
+                    {
+                        'transparency': 0,
+                        'min': 979328.57304382324,
+                        'max': 1119232.6549072266,
+                        'colour': '#7A0000',
+                        'size': 1,
+                        'label': u'High'}]}
         try:
-            set_vector_graduated_style(myVectorLayer, myStyle)
+            set_vector_graduated_style(vector_layer, style)
         except StyleError:
             # Exactly what should have happened
             return

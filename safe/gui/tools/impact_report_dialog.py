@@ -16,17 +16,14 @@ __revision__ = '$Format:%H$'
 __date__ = '26/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import os
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
 from safe.utilities.help import show_context_help
-from safe.utilities.resources import get_ui_class
+from safe.utilities.resources import get_ui_class, resources_path
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'impact_report_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('impact_report_dialog_base.ui')
 
 
 class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
@@ -82,7 +79,8 @@ class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
         button.clicked.connect(self.show_help)
 
         # Load templates from resources...
-        templates_dir = QtCore.QDir(':/plugins/inasafe')
+        template_dir_path = resources_path('qgis-composer-templates')
+        templates_dir = QtCore.QDir(template_dir_path)
         templates_dir.setFilter(
             QtCore.QDir.Files |
             QtCore.QDir.NoSymLinks |
@@ -91,7 +89,7 @@ class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
         report_files = templates_dir.entryList()
         for f in report_files:
             self.template_combo.addItem(
-                QtCore.QFileInfo(f).baseName(), ':/plugins/inasafe/' + f)
+                QtCore.QFileInfo(f).baseName(), template_dir_path + '/' + f)
         #  ...and user directory
         settings = QtCore.QSettings()
         path = settings.value('inasafe/reportTemplatePath', '', type=str)
@@ -125,9 +123,11 @@ class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_template_radio.setChecked(not flag)
 
         try:
+            default_template_path = resources_path(
+                'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
             path = settings.value(
                 'inasafe/lastTemplate',
-                ':/plugins/inasafe/inasafe-portrait-a4.qpt',
+                default_template_path,
                 type=str)
             self.template_combo.setCurrentIndex(
                 self.template_combo.findData(path))

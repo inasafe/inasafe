@@ -51,10 +51,7 @@ from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
 
 INFO_STYLE = styles.INFO_STYLE
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', '..', 'ui',
-    'needs_manager_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('needs_manager_dialog_base.ui')
 
 
 class NeedsManagerDialog(QDialog, FORM_CLASS):

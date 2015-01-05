@@ -1,33 +1,26 @@
 # coding=utf-8
 """Tests for utilities."""
+
 import unittest
-import sys
 import os
 from unittest import expectedFailure
 
-# noinspection PyUnresolvedReferences
-import qgis
-
-from safe.common.testing import get_qgis_app
 from safe.utilities.utilities import (
     get_error_message,
     humanise_seconds,
-    impact_attribution)
+    impact_attribution,
+    read_file_keywords)
 from safe.utilities.gis import qgis_version
-from safe.utilities.utilities_for_testing import (
-    TEST_FILES_DIR)
-
+from safe.test.utilities import (
+    test_data_path,
+    get_qgis_app,
+    TESTDATA,
+    HAZDATA,
+    EXPDATA)
+from safe.common.exceptions import KeywordNotFoundError
 from safe.storage.utilities import bbox_intersection
 
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 
 
 class UtilitiesTest(unittest.TestCase):
@@ -65,9 +58,11 @@ class UtilitiesTest(unittest.TestCase):
             assert str(e) in message
 
             message = message.decode('string_escape')
-            expected_results = open(
-                TEST_FILES_DIR +
-                '/test-stacktrace-html.txt').read().replace('\n', '')
+            control_file_path = test_data_path(
+                'control',
+                'files',
+                'test-stacktrace-html.txt')
+            expected_results = open(control_file_path).read().replace('\n', '')
             self.assertIn(expected_results, message)
 
             # pylint: enable=W0703
@@ -114,6 +109,57 @@ class UtilitiesTest(unittest.TestCase):
 
         # Set back to en
         os.environ['LANG'] = 'en'
+
+    def test_get_keyword_from_file(self):
+        """Get keyword from a filesystem file's .keyword file."""
+        raster_shake_path = test_data_path(
+            'hazard', 'jakarta_flood_design.tif')
+        vector_path = test_data_path(
+            'exposure', 'buildings_osm_4326.shp')
+        raster_tsunami_path = test_data_path(
+            'hazard', 'padang_tsunami_mw8.tif')
+
+        keyword = read_file_keywords(raster_shake_path, 'category')
+        expected_keyword = 'hazard'
+        message = ('The keyword "category" for %s is %s. Expected keyword is: '
+                   '%s') % (raster_shake_path, keyword, expected_keyword)
+        self.assertEqual(keyword, expected_keyword, message)
+
+        # Test we get an exception if keyword is not found
+        self.assertRaises(
+            KeywordNotFoundError,
+            read_file_keywords, raster_shake_path, 'boguskeyword')
+
+        # Test if all the keywords are all ready correctly
+        keywords = read_file_keywords(raster_shake_path)
+        expected_keywords = {
+            'category': 'hazard',
+            'subcategory': 'flood',
+            'unit': 'm',
+            'title': 'Jakarta flood like 2007 with structural improvements'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
+
+        # Test reading keywords from vector layer
+        keywords = read_file_keywords(vector_path)
+        expected_keywords = {
+            'category': 'exposure',
+            'datatype': 'osm',
+            'subcategory': 'structure',
+            'title': 'buildings_osm_4326',
+            'purpose': 'dki'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
+
+        # tsunami example
+        keywords = read_file_keywords(raster_tsunami_path)
+        expected_keywords = {
+            'title': 'A tsunami in Padang (Mw 8.8)',
+            'category': 'hazard',
+            'subcategory': 'tsunami',
+            'unit': 'm'}
+        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)

@@ -7,17 +7,14 @@ __date__ = '05/10/2014'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611  # force sip2 api
-
-from shutil import copy
 import os
+from shutil import copy
 
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings
 # noinspection PyUnresolvedReferences
 # pylint: disable=W0611
 from qgis.core import QgsApplication
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QSettings
 
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
@@ -52,7 +49,7 @@ class NeedsProfile(MinimumNeeds):
         self.settings = QSettings()
         self.minimum_needs = None
         self._root_directory = None
-        self.locale = os.environ['LANG']
+        self.locale = self.settings.value('locale/userLocale')
         self.load()
 
     def load(self):
@@ -131,7 +128,10 @@ class NeedsProfile(MinimumNeeds):
         :rtype: list
         """
         def sort_by_locale(unsorted_profiles, locale):
-            """Sort the profiles by language settings
+            """Sort the profiles by language settings.
+
+            The profiles that are in the same language as the QGIS' locale
+            will be sorted out first.
 
             :param unsorted_profiles: The user profiles profiles
             :type unsorted_profiles: list

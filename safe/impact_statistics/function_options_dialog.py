@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.i18n import tr
 
 __author__ = 'oz@tanoshiistudio.com'
 __revision__ = '$Format:%H$'
@@ -19,7 +18,6 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import ast
 from collections import OrderedDict
 
@@ -38,6 +36,7 @@ from PyQt4.QtGui import (
     QGridLayout,
     QWidget)
 
+from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
@@ -51,10 +50,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__),
-    '..', 'gui', 'ui', 'function_options_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('function_options_dialog_base.ui')
 
 
 # FIXME (Tim and Ole): Change to ConfigurationDialog throughout

@@ -16,8 +16,6 @@ __date__ = '23/10/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
 import unittest
 import logging
 import os
@@ -25,55 +23,38 @@ from xml.dom import minidom
 from glob import glob
 import shutil
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore
-
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapRenderer,
     QgsComposition)
+from PyQt4 import QtCore
 
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# noinspection PyPackageRequirements
 from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog
-from safe.utilities.utilities_for_testing import load_layer
+from safe.test.utilities import load_layer, test_data_path, get_qgis_app
 from safe.common.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
     InvalidLayerError)
 from safe.common.utilities import temp_dir
-from safe.common.testing import UNITDATA
 
 LOGGER = logging.getLogger('InaSAFE')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-population_entire_jakarta_impact_path = os.path.join(
-    UNITDATA,
+population_entire_jakarta_impact_path = test_data_path(
     'impact',
     'population_affected_entire_area.shp')
-population_district_jakarta_impact_path = os.path.join(
-    UNITDATA,
+population_district_jakarta_impact_path = test_data_path(
     'impact',
     'population_affected_district_jakarta.shp')
-building_entire_jakarta_impact_path = os.path.join(
-    UNITDATA,
+building_entire_jakarta_impact_path = test_data_path(
     'impact',
     'buildings_inundated_entire_area.shp')
-building_district_jakarta_impact_path = os.path.join(
-    UNITDATA,
+building_district_jakarta_impact_path = test_data_path(
     'impact',
     'buildings_inundated_district_jakarta.shp')
-district_jakarta_boundary_path = os.path.join(
-    UNITDATA,
+district_jakarta_boundary_path = test_data_path(
     'boundaries',
     'district_osm_jakarta.shp')
-
-TEST_DATA_DIR = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__), '../../test/test_data/test_files'))
 
 
 class ImpactMergeDialogTest(unittest.TestCase):
@@ -82,7 +63,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
     # noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
-        # noinspection PyArgumentList
+        # noinspection PyUnresolvedReferences
         self.map_layer_registry = QgsMapLayerRegistry.instance()
         self.register_layers()
 
@@ -90,9 +71,9 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog = ImpactMergeDialog(PARENT, IFACE)
 
         # Create test dir
-        # noinspection PyUnresolvedReferences
+        test_data_dir = temp_dir('test')
         test_impact_merge_dir = os.path.join(
-            TEST_DATA_DIR, 'test-impact-merge')
+            test_data_dir, 'test-impact-merge')
         if not os.path.exists(test_impact_merge_dir):
             os.makedirs(test_impact_merge_dir)
 
@@ -117,29 +98,24 @@ class ImpactMergeDialogTest(unittest.TestCase):
             self.map_layer_registry.removeAllMapLayers()
 
         # Delete test dir
-        # noinspection PyUnresolvedReferences
+        test_data_dir = temp_dir('test')
         test_impact_merge_dir = os.path.join(
-            TEST_DATA_DIR, 'test-impact-merge')
+            test_data_dir, 'test-impact-merge')
         shutil.rmtree(test_impact_merge_dir)
 
     def register_layers(self):
         """Register needed layers to QgsMapLayerRegistry."""
         # Register 4 impact layers and aggregation layer
         self.population_entire_jakarta_layer, _ = load_layer(
-            population_entire_jakarta_impact_path,
-            directory=None)
+            population_entire_jakarta_impact_path)
         self.building_entire_jakarta_layer, _ = load_layer(
-            building_entire_jakarta_impact_path,
-            directory=None)
+            building_entire_jakarta_impact_path)
         self.population_district_jakarta_layer, _ = load_layer(
-            population_district_jakarta_impact_path,
-            directory=None)
+            population_district_jakarta_impact_path)
         self.building_district_jakarta_layer, _ = load_layer(
-            building_district_jakarta_impact_path,
-            directory=None)
+            building_district_jakarta_impact_path)
         self.district_jakarta_layer, _ = load_layer(
-            district_jakarta_boundary_path,
-            directory=None)
+            district_jakarta_boundary_path)
 
         layer_list = [self.population_entire_jakarta_layer,
                       self.population_district_jakarta_layer,
@@ -154,6 +130,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         impact_layer_count = self.impact_merge_dialog.first_layer.count()
         aggregation_layer_count = \
             self.impact_merge_dialog.aggregation_layer.count()
+        test_data_dir = temp_dir('test')
 
         if test_entire_mode:
             # First impact layer = population entire
@@ -184,10 +161,9 @@ class ImpactMergeDialogTest(unittest.TestCase):
                         setCurrentIndex(index)
 
             # Set Output Directory
-            # noinspection PyUnresolvedReferences
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
-                    TEST_DATA_DIR, 'test-impact-merge', 'entire'))
+                    test_data_dir, 'test-impact-merge', 'entire'))
         else:
             self.impact_merge_dialog.entire_area_mode = False
             # Set the current Index of the combobox
@@ -215,10 +191,9 @@ class ImpactMergeDialogTest(unittest.TestCase):
                         setCurrentIndex(index)
 
             # Set output directory
-            # noinspection PyUnresolvedReferences
             self.impact_merge_dialog.output_directory.setText(
                 os.path.join(
-                    TEST_DATA_DIR, 'test-impact-merge', 'aggregated'))
+                    test_data_dir, 'test-impact-merge', 'aggregated'))
 
     def test_get_project_layers(self):
         """Test get_project_layers function."""
@@ -598,6 +573,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog.validate_all_layers()
 
         # Setup Map Renderer and set all the layer
+        # noinspection PyCallingNonCallable
         renderer = QgsMapRenderer()
         layer_set = [self.impact_merge_dialog.first_impact['layer'].id(),
                      self.impact_merge_dialog.second_impact['layer'].id()]

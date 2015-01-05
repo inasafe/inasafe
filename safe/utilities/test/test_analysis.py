@@ -18,17 +18,14 @@ import os
 import unittest
 import numpy
 
-from safe.common.testing import (
-    get_qgis_app,
-    TESTDATA,
-    HAZDATA)
 from safe.storage.core import read_layer
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
+from safe.test.utilities import FakeLayer, get_qgis_app, TESTDATA, HAZDATA
+
+# AG: get_qgis_app() should be called before importing modules from
+# safe.utilities.analysis
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.utilities.analysis import Analysis
-from safe.utilities.utilities_for_testing import FakeLayer
 from safe.common.exceptions import BoundingBoxError
 from safe.common.exceptions import InsufficientOverlapError
 

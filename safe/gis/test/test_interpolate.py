@@ -1,3 +1,4 @@
+# coding=utf-8
 import numpy
 import unittest
 
@@ -5,7 +6,7 @@ import unittest
 from safe.gis.interpolation2d import interpolate2d, interpolate_raster
 from safe.gis.interpolation import BoundsError
 from safe.gis.interpolation1d import interpolate1d
-from safe.common.testing import combine_coordinates
+from safe.test.utilities import combine_coordinates
 from safe.gis.numerics import nan_allclose
 
 
@@ -16,7 +17,7 @@ def linear_function(x, y):
     return x + y / 2.0
 
 
-class Test_interpolate(unittest.TestCase):
+class TestInterpolate(unittest.TestCase):
 
     def test_linear_interpolation_basic(self):
         """Interpolation library works for linear function - basic test
@@ -533,6 +534,6 @@ class Test_interpolate(unittest.TestCase):
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_interpolate, 'test')
+    suite = unittest.makeSuite(TestInterpolate, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -11,108 +11,34 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import qgis_version
-
 __author__ = 'tim@kartoza.com'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 
 import unittest
-import sys
 import os
 import shutil
+from collections import OrderedDict
 # noinspection PyPackageRequirements
 from nose import SkipTest
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
-
-from PyQt4 import QtGui
 
 from qgis.core import (
     QgsRasterLayer,
-    QgsVectorLayer,
     QgsMapLayerRegistry)
+from PyQt4 import QtGui
 
-from collections import OrderedDict
-
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.utilities.utilities_for_testing import (
-    test_data_path, clone_shp_layer, temp_dir)
-from safe.common.utilities import unique_filename
-from safe.common.testing import HAZDATA, TESTDATA, BOUNDDATA
+from safe.test.utilities import (
+    test_data_path,
+    clone_shp_layer,
+    clone_raster_layer,
+    temp_dir,
+    get_qgis_app)
 from safe.gui.tools.keywords_dialog import KeywordsDialog
-from safe.common.exceptions import KeywordNotFoundError
-from safe.utilities.utilities import read_file_keywords
+from safe.utilities.gis import qgis_version
 from safe.defaults import get_defaults
 
-
-def clone_padang_layer():
-    """Helper function that copies padang keyword for testing and return it."""
-    path = 'Shakemap_Padang_2009'
-    extensions = [
-        '.asc', '.asc.aux.xml', '.keywords', '.lic', '.prj', '.qml', '.sld',
-        '.xml']
-    temp_path = unique_filename()
-    # copy to temp file
-    for ext in extensions:
-        source_path = os.path.join(HAZDATA, path + ext)
-        destination_path = os.path.join(HAZDATA, temp_path + ext)
-        shutil.copy2(source_path, destination_path)
-    # return a single predefined layer
-    path = temp_path + '.asc'
-    full_path = os.path.join(HAZDATA, path)
-    title = read_file_keywords(full_path, 'title')
-    layer = QgsRasterLayer(full_path, title)
-    if qgis_version() >= 10800:  # 1.8 or newer
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-        IFACE.setActiveLayer(layer)
-    else:
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-    return layer, temp_path
-
-
-def make_polygon_layer():
-    """Helper function that returns a single predefined layer."""
-    path = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
-    full_path = os.path.join(TESTDATA, path)
-    try:
-        title = read_file_keywords(full_path, 'title')
-    except KeywordNotFoundError:
-        title = 'kabupaten_jakarta_singlepart_3_good_attr'
-    layer = QgsVectorLayer(full_path, title, 'ogr')
-    if qgis_version() >= 10800:  # 1.8 or newer
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-    else:
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
-    return layer
-
-
-def make_point_layer():
-    """Helper function that returns a single predefined layer."""
-    path = 'test_buildings.shp'
-    full_path = os.path.join(TESTDATA, path)
-    try:
-        title = read_file_keywords(full_path, 'title')
-    except KeywordNotFoundError:
-        title = 'kabupaten_jakarta_singlepart_3_good_attr'
-    layer = QgsVectorLayer(full_path, title, 'ogr')
-    # noinspection PyArgumentList
-    QgsMapLayerRegistry.instance().addMapLayers([layer])
-    return layer
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def make_keywordless_layer():
@@ -121,22 +47,15 @@ def make_keywordless_layer():
     base_path = test_data_path('hazard')
     full_path = os.path.abspath(os.path.join(base_path, path))
     title = 'Keywordless Layer'
+    # noinspection PyCallingNonCallable
     layer = QgsRasterLayer(full_path, title)
     if qgis_version() >= 10800:  # 1.8 or newer
-        # noinspection PyArgumentList
+        # noinspection PyArgumentList,PyUnresolvedReferences
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     else:
-        # noinspection PyArgumentList
+        # noinspection PyArgumentList,PyUnresolvedReferences
         QgsMapLayerRegistry.instance().addMapLayers([layer])
     return layer
-
-
-def clear_layers():
-    """Clear all the loaded layers."""
-    # noinspection PyArgumentList
-    for layer in QgsMapLayerRegistry.instance().mapLayers():
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeMapLayer(layer)
 
 
 class KeywordsDialogTest(unittest.TestCase):
@@ -148,7 +67,11 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def tearDown(self):
         """Destroy the dialog after each test."""
-        clear_layers()
+        # Clear all the loaded layers in Map Registry
+        # noinspection PyArgumentList,PyUnresolvedReferences
+        for layer in QgsMapLayerRegistry.instance().mapLayers():
+            # noinspection PyArgumentList,PyUnresolvedReferences
+            QgsMapLayerRegistry.instance().removeMapLayer(layer)
 
     # This is how you skip a test when using unittest ...
     @unittest.skip(
@@ -181,42 +104,56 @@ class KeywordsDialogTest(unittest.TestCase):
             message)
 
     def test_on_rad_postprocessing_toggled(self):
-        """Test hazard radio button toggle behaviour works"""
-        layer = make_polygon_layer()
+        """Test postprocessing radio button toggle behaviour works"""
+        layer = clone_shp_layer(
+            name='district_osm_jakarta',
+            include_keywords=True,
+            source_directory=test_data_path('boundaries'))
         defaults = get_defaults()
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
+        # Click hazard/exposure button first so that it won't take default
+        # from keywords file
+        dialog.radExposure.click()
+
+        # Now click the postprocessing button
         button = dialog.radPostprocessing
-        button.setChecked(False)
         button.click()
         message = (
             'Toggling the postprocessing radio did not add a '
             'category to the keywords list.')
-        self.assertEqual(dialog.get_value_for_key(
-            'category'), 'postprocessing', message)
+        self.assertEqual(
+            dialog.get_value_for_key('category'), 'postprocessing', message)
 
         message = (
             'Toggling the postprocessing radio did not add an '
             'aggregation attribute to the keywords list.')
-        self.assertEqual(dialog.get_value_for_key(
-            defaults['AGGR_ATTR_KEY']), 'KAB_NAME', message)
+        self.assertEqual(
+            dialog.get_value_for_key(defaults['AGGR_ATTR_KEY']),
+            'KAB_NAME',
+            message)
 
         message = (
             'Toggling the postprocessing radio did not add a '
             'female ratio attribute to the keywords list.')
-
-        self.assertEqual(dialog.get_value_for_key(
-            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.global_default_string,
+        self.assertEqual(
+            dialog.get_value_for_key(defaults['FEMALE_RATIO_ATTR_KEY']),
+            dialog.global_default_string,
             message)
 
         message = (
             'Toggling the postprocessing radio did not add a '
             'female ratio default value to the keywords list.')
-        self.assertEqual(float(dialog.get_value_for_key(
-            defaults['FEMALE_RATIO_KEY'])), defaults['FEMALE_RATIO'], message)
+        self.assertEqual(
+            float(dialog.get_value_for_key(defaults['FEMALE_RATIO_KEY'])),
+            defaults['FEMALE_RATIO'],
+            message)
 
     def test_on_dsb_female_ratio_default_value_changed(self):
         """Test hazard radio button toggle behaviour works"""
-        layer = make_polygon_layer()
+        layer = clone_shp_layer(
+            name='district_osm_jakarta',
+            include_keywords=True,
+            source_directory=test_data_path('boundaries'))
         defaults = get_defaults()
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         button = dialog.radPostprocessing
@@ -249,29 +186,32 @@ class KeywordsDialogTest(unittest.TestCase):
         assert (dialog.get_value_for_key(defaults['FEMALE_RATIO']) is None), \
             message
 
-        # set to TEST_REAL
-        index = female_ratio_box.findText('TEST_REAL')
-        message = 'TEST_REAL not found'
-        assert (index != -1), message
+        # set to PEREMPUAN attribute
+        attribute = 'PEREMPUAN'
+        index = female_ratio_box.findText(attribute)
+        message = 'The attribute %s is not found in the layer' % attribute
+        self.assertNotEqual(index, -1, message)
+
         female_ratio_box.setCurrentIndex(index)
+        message = (
+            'Toggling the female ratio attribute combo to %s'
+            ' did not add it to the keywords list.') % attribute
+        self.assertEqual(
+            dialog.get_value_for_key(defaults['FEMALE_RATIO_ATTR_KEY']),
+            attribute,
+            message)
 
         message = (
-            'Toggling the female ratio attribute combo to "TEST_REAL"'
-            ' did not add it to the keywords list.')
-        assert dialog.get_value_for_key(
-            defaults['FEMALE_RATIO_ATTR_KEY']) == 'TEST_REAL', message
-
-        message = (
-            'Toggling the female ratio attribute combo to "TEST_REAL"'
-            ' did not disable dsbFemaleRatioDefault.')
+            'Toggling the female ratio attribute combo to %s'
+            ' did not disable dsbFemaleRatioDefault.') % attribute
         is_enabled = dialog.dsbFemaleRatioDefault.isEnabled()
-        assert not is_enabled, message
+        self.assertFalse(is_enabled, message)
 
         message = (
-            'Toggling the female ratio attribute combo to "TEST_REAL"'
-            ' did not remove the keyword.')
-        assert (dialog.get_value_for_key(defaults['FEMALE_RATIO']) is
-                None), message
+            'Toggling the female ratio attribute combo to %s'
+            ' did not remove the keyword.') % attribute
+        self.assertIsNone(
+            dialog.get_value_for_key(defaults['FEMALE_RATIO']), message)
 
     def Xtest_on_radExposure_toggled(self):
         """Test exposure radio button toggle behaviour works"""
@@ -434,41 +374,60 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
     def test_remove_item_by_value(self):
-        """Test remove item by its value works."""
-        layer, _ = clone_padang_layer()
-        dialog = KeywordsDialog(PARENT, IFACE)
+        """Test remove_item_by_value works."""
+        layer = clone_raster_layer(
+            name='padang_tsunami_mw8',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard')
+        )
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         dialog.remove_item_by_value('hazard')
 
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'source': 'USGS',
-            'title': 'An earthquake in Padang like in 2009',
-            'subcategory': 'earthquake',
-            'unit': 'MMI'}
-        self.assertEqual(keywords, expected_keywords)
+            'title': 'A tsunami in Padang (Mw 8.8)',
+            'subcategory': 'tsunami',
+            'unit': 'm'}
+        message = 'The keywords should be %s, but it returns %s' % (
+            expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
     def test_get_value_for_key(self):
-        """Test get value for key works."""
-        layer, _ = clone_padang_layer()
-        dialog = KeywordsDialog(PARENT, IFACE)
+        """Test get_value_for_key works."""
+        layer = clone_raster_layer(
+            name='padang_tsunami_mw8',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard')
+        )
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
+        key = 'category'
         expected_value = 'hazard'
-        value = dialog.get_value_for_key('category')
-        self.assertEqual(value, expected_value)
+        value = dialog.get_value_for_key(key)
+        message = 'The value for key %s should be %s, but it returns %s' % (
+            key, expected_value, value)
+        self.assertEqual(value, expected_value, message)
 
     def test_load_state_from_keywords(self):
-        """Test load state from keywords works."""
-        layer, _ = clone_padang_layer()
+        """Test load_state_from_keywords works."""
+        layer = clone_raster_layer(
+            name='padang_tsunami_mw8',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard')
+        )
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         dialog.load_state_from_keywords()
         keywords = dialog.get_keywords()
-
         expected_keywords = {
-            'title': 'An earthquake in Padang like in 2009',
+            'title': 'A tsunami in Padang (Mw 8.8)',
             'category': 'hazard',
-            'source': 'USGS',
-            'subcategory': 'earthquake',
-            'unit': 'MMI'}
-        self.assertEqual(keywords, expected_keywords)
+            'subcategory': 'tsunami',
+            'unit': 'm'}
+        message = 'The keyword should be %s, but it returns %s' % (
+            expected_keywords, keywords)
+        self.assertEqual(keywords, expected_keywords, message)
 
     def test_layer_without_keywords(self):
         """Test load state from keywords works."""
@@ -476,30 +435,34 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         dialog.load_state_from_keywords()
 
-    def test_add_keyword_when_press_ok_button(self):
-        """Test add keyword when ok button is pressed."""
-        layer, _ = clone_padang_layer()
-        dialog = KeywordsDialog(PARENT, IFACE)
-
+    def test_add_user_defined_keyword(self):
+        """Test add user defined keyword when ok button is pressed."""
+        layer = clone_raster_layer(
+            name='padang_tsunami_mw8',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard')
+        )
+        # Set the keywords dialog
+        dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
         dialog.radUserDefined.setChecked(True)
         dialog.leKey.setText('foo')
         dialog.leValue.setText('bar')
         ok_button = dialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         ok_button.click()
 
-        # delete temp file
-        # removeTempFile(path)
-
         expected_result = 'bar'
         result = dialog.get_value_for_key('foo')
-        self.assertEqual(result, expected_result)
+        message = 'The key %s should have value %s, but it returns %s' % (
+            'foo', expected_result, result)
+        self.assertEqual(result, expected_result, message)
 
     def test_check_aggregation(self):
         """Test for keywords dialog's behavior for aggregation layer."""
         layer = clone_shp_layer(
-            name='kabupaten_jakarta',
+            name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=BOUNDDATA)
+            source_directory=test_data_path('boundaries'))
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
 
         # Load existing keywords
@@ -507,19 +470,18 @@ class KeywordsDialogTest(unittest.TestCase):
         expected_keywords = {
             'category': 'postprocessing',
             'aggregation attribute': 'KAB_NAME',
-            'title': 'kabupaten jakarta',
+            'title': 'District\'s of Jakarta',
             'elderly ratio attribute': 'Global default',
             'youth ratio default': '0.263',
-            'source': 'OpenStreetMap',
             'elderly ratio default': '0.078',
             'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'Global default',
+            'female ratio attribute': 'PEREMPUAN',
             'youth ratio attribute': 'Global default',
-            'female ratio default': '0.5',
             'adult ratio default': '0.659'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
+        # Check age ratios are valid
         good_sum_ratio, _ = dialog.age_ratios_are_valid(keywords)
         message = 'Expected %s but I got %s' % (True, good_sum_ratio)
         self.assertEqual(True, good_sum_ratio, message)
@@ -530,14 +492,12 @@ class KeywordsDialogTest(unittest.TestCase):
         expected_keywords = {
             'category': 'postprocessing',
             'aggregation attribute': 'KAB_NAME',
-            'title': 'kabupaten jakarta',
+            'title': 'District\'s of Jakarta',
             'elderly ratio attribute': 'Global default',
-            'source': 'OpenStreetMap',
             'elderly ratio default': '0.078',
             'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'Global default',
+            'female ratio attribute': 'PEREMPUAN',
             'youth ratio attribute': 'Don\'t use',
-            'female ratio default': '0.5',
             'adult ratio default': '0.659'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
@@ -554,15 +514,13 @@ class KeywordsDialogTest(unittest.TestCase):
         expected_keywords = {
             'category': 'postprocessing',
             'aggregation attribute': 'KAB_NAME',
-            'title': 'kabupaten jakarta',
+            'title': 'District\'s of Jakarta',
             'elderly ratio attribute': 'Global default',
-            'youth ratio default': '0.99',
-            'source': 'OpenStreetMap',
             'elderly ratio default': '0.078',
             'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'Global default',
+            'female ratio attribute': 'PEREMPUAN',
             'youth ratio attribute': 'Global default',
-            'female ratio default': '0.5',
+            'youth ratio default': '0.99',
             'adult ratio default': '0.659'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)

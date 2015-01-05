@@ -33,18 +33,9 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-from safe.common.testing import TESTDATA, BOUNDDATA, get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.common.utilities import format_int
-from safe.common.testing import HAZDATA, UNITDATA
-from safe.gui.widgets.dock import Dock
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.styling import setRasterStyle
-from safe.utilities.gis import read_impact_layer, qgis_version
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
+    test_data_path,
     load_standard_layers,
     setup_scenario,
     set_canvas_crs,
@@ -59,26 +50,23 @@ from safe.utilities.utilities_for_testing import (
     set_jakarta_google_extent,
     set_yogya_extent,
     get_ui_state,
-    set_small_jakarta_extent)
+    set_small_jakarta_extent,
+    get_qgis_app,
+    TESTDATA,
+    BOUNDDATA,
+    HAZDATA)
 
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
+# AG: get_qgis_app() should be called before importing modules from
+# safe.gui.widgets.dock
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+from safe.gui.widgets.dock import Dock
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.styling import setRasterStyle
+from safe.utilities.gis import read_impact_layer, qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 DOCK = Dock(IFACE)
-
-YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
-PADANG2009_title = 'An earthquake in Padang like in 2009'
-
-TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__),
-    '..',
-    '..',
-    '..',
-    'test',
-    'test_data',
-    'test_files')
 
 
 # noinspection PyArgumentList
@@ -349,8 +337,7 @@ class TestDock(TestCase):
         file_list = [
             join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
             join(TESTDATA, 'Population_Jakarta_geographic.asc')]
-        hazard_layer_count, exposure_layer_count = load_layers(
-            file_list, data_directory=None)
+        hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
             'Incorrect number of Hazard layers: expected 1 got %s'
@@ -367,7 +354,8 @@ class TestDock(TestCase):
 
         # Second part of scenario - run disabled when adding invalid layer
         # and select it - run should be disabled
-        file_list = ['issue71.tif']  # This layer has incorrect keywords
+        path = os.path.join(TESTDATA, 'issue71.tif')
+        file_list = [path]  # This layer has incorrect keywords
         clear_flag = False
         _, _ = load_layers(file_list, clear_flag)
         # set exposure to : Population Count (5kmx5km)
@@ -403,10 +391,8 @@ class TestDock(TestCase):
         """Test that multipart features can be used in a scenario - issue #160
         """
 
-        exposure = os.path.join(
-            UNITDATA, 'exposure', 'buildings_osm_4326.shp')
-        hazard = os.path.join(
-            UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
+        exposure = test_data_path('exposure', 'buildings_osm_4326.shp')
+        hazard = test_data_path('hazard', 'multipart_polygons_osm_4326.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         # print 'Using QGIS: %s' % qgis_version()
@@ -431,7 +417,8 @@ class TestDock(TestCase):
 
         # Second part of scenario - run disabled when adding invalid layer
         # and select it - run should be disabled
-        file_list = ['issue71.tif']  # This layer has incorrect keywords
+        path = os.path.join(TESTDATA, 'issue71.tif')
+        file_list = [path]  # This layer has incorrect keywords
         clear_flag = False
         _, _ = load_layers(file_list, clear_flag)
 
@@ -509,8 +496,7 @@ class TestDock(TestCase):
             join(HAZDATA, 'Flood_Design_Depth_Jakarta_geographic.asc'),
             join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
             join(TESTDATA, 'Population_Jakarta_geographic.asc')]
-        hazard_layer_count, exposure_layer_count = load_layers(
-            file_list, data_directory=None)
+        hazard_layer_count, exposure_layer_count = load_layers(file_list)
         self.assertTrue(hazard_layer_count == 2)
         self.assertTrue(exposure_layer_count == 1)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -538,8 +524,9 @@ class TestDock(TestCase):
     def test_full_run_pyzstats(self):
         """Aggregation results correct using our own python zonal stats code.
         """
-        file_list = ['kabupaten_jakarta.shp']
-        load_layers(file_list, clear_flag=False, data_directory=BOUNDDATA)
+        path = os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp')
+        file_list = [path]
+        load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
             DOCK,
@@ -560,10 +547,11 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        expected_result = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results.txt',
-            'r').readlines()
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'test-full-run-results.txt')
+        expected_result = open(control_file_path, 'r').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -582,8 +570,9 @@ class TestDock(TestCase):
         """
 
         # TODO check that the values are similar enough to the python stats
-        file_list = ['kabupaten_jakarta.shp']
-        load_layers(file_list, clear_flag=False, data_directory=BOUNDDATA)
+        path = os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp')
+        file_list = [path]
+        load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
             DOCK,
@@ -611,9 +600,11 @@ class TestDock(TestCase):
 
         result = DOCK.wvResults.page_to_text()
 
-        expected_result = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results-qgis.txt', 'rb').readlines()
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'test-full-run-results-qgis.txt')
+        expected_result = open(control_file_path, 'rb').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -626,7 +617,8 @@ class TestDock(TestCase):
         See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        layer, layer_type = load_layer('issue58.tif')
+        layer_path = os.path.join(TESTDATA, 'issue58.tif')
+        layer, layer_type = load_layer(layer_path)
         message = (
             'Unexpected category for issue58.tif.\nGot:'
             ' %s\nExpected: undefined' % layer_type)

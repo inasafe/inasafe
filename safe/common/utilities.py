@@ -311,8 +311,6 @@ def format_int(x):
     http://docs.python.org/library/string.html#formatspec
 
     """
-
-
     try:
         s = '{0:,}'.format(x)
         # s = '{0:n}'.format(x)  # n means locale aware (read up on this)

@@ -17,29 +17,18 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 import unittest
-import sys
 import os
 import shutil
 from unittest import expectedFailure
 import numpy
+
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsGeometry,
     QgsPoint)
 
-from safe.common.testing import get_qgis_app
-
-
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
 from safe.gis.numerics import nan_allclose
 from safe.common.utilities import unique_filename
 from safe.storage.core import read_layer as read_safe_layer
@@ -53,30 +42,34 @@ from safe.utilities.clipper import (
     explode_multipart_geometry,
     clip_geometry,
     adjust_clip_extent)
-from safe.utilities.analysis import Analysis
-from safe.utilities.utilities_for_testing import (
+from safe.test.utilities import (
     set_canvas_crs,
     RedirectStreams,
     DEVNULL,
     GEOCRS,
     set_jakarta_extent,
-    compare_wkt)
+    compare_wkt,
+    test_data_path,
+    get_qgis_app,
+    HAZDATA,
+    TESTDATA,
+    EXPDATA)
+
+# AG: get_qgis_app() should be called before importing modules from
+# safe.utilities.analysis
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+from safe.utilities.analysis import Analysis
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
-VECTOR_PATH3 = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
+VECTOR_PATH3 = test_data_path('exposure', 'buildings_osm_4326.shp')
 
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../../..///'))
-sys.path.append(pardir)
 
-
-# noinspection PyStringFormat,PyTypeChecker,PyCallByClass,PyArgumentList
 class ClipperTest(unittest.TestCase):
     """Test the InaSAFE clipper"""
 
@@ -142,13 +135,12 @@ class ClipperTest(unittest.TestCase):
     def test_clip_raster_with_no_extension(self):
         """Test we can clip a raster with no extension - see #659."""
         # Create a raster layer
-        source_file = os.path.join(UNITDATA, 'other', 'tenbytenraster.asc')
+        source_file = test_data_path('other', 'tenbytenraster.asc')
         test_file = unique_filename(prefix='tenbytenraster-')
         shutil.copyfile(source_file, test_file)
 
         # Create a keywords file
-        source_file = os.path.join(
-            UNITDATA, 'other', 'tenbytenraster.keywords')
+        source_file = test_data_path('other', 'tenbytenraster.keywords')
         keywords_file = test_file + '.keywords'
         shutil.copyfile(source_file, keywords_file)
 

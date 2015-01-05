@@ -2,7 +2,6 @@
 """io related tests."""
 import unittest
 import numpy
-import sys
 import os
 from osgeo import gdal
 
@@ -32,13 +31,10 @@ from safe.storage.core import (
 from safe.storage.test.utilities import same_API
 from safe.storage.geometry import Polygon
 from safe.gis.numerics import nan_allclose
-from safe.common.testing import (
+from safe.test.utilities import (
     TESTDATA,
     HAZDATA,
-    DATADIR,
-    FEATURE_COUNTS,
-    GEOTRANSFORMS)
-from safe.utilities.i18n import tr
+    DATADIR)
 from safe.common.utilities import unique_filename
 from safe.gis.polygon import is_inside_polygon
 from safe.common.exceptions import (
@@ -46,6 +42,21 @@ from safe.common.exceptions import (
     ReadLayerError,
     VerificationError,
     InaSAFEError)
+
+# Known feature counts in test data
+FEATURE_COUNTS = {
+    'test_buildings.shp': 144,
+    'tsunami_building_exposure.shp': 19,
+    'kecamatan_geo.shp': 42,
+    'Padang_WGS84.shp': 3896,
+    'OSM_building_polygons_20110905.shp': 34960,
+    'indonesia_highway_sample.shp': 2,
+    'OSM_subset.shp': 79,
+    'kecamatan_jakarta_osm.shp': 47}
+
+GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
+                 (105.29857, 0.0112, 0.0, -5.565233000000001, 0.0, -0.0112),
+                 (96.956, 0.03074106, 0.0, 2.2894972560001, 0.0, -0.03074106)]
 
 
 # Auxiliary function for raster test
@@ -1157,15 +1168,16 @@ class TestIO(unittest.TestCase):
     def test_reading_and_writing_of_real_rasters(self):
         """Rasters can be read and written correctly in different formats
         """
-
-        for rastername in [
+        raster_names = [
             'Earthquake_Ground_Shaking_clip.tif',
             'Population_2010_clip.tif',
             'shakemap_padang_20090930.asc',
             'population_padang_1.asc',
-            'population_padang_2.asc']:
+            'population_padang_2.asc'
+        ]
 
-            filename = '%s/%s' % (TESTDATA, rastername)
+        for raster in raster_names:
+            filename = '%s/%s' % (TESTDATA, raster)
             r1 = read_layer(filename)
             assert r1.filename == filename
 
@@ -1180,9 +1192,7 @@ class TestIO(unittest.TestCase):
 
             # Test conversion between geotransform and
             # geometry (longitudes and latitudes)
-            # pylint: disable=W0633,W0632
             longitudes, latitudes = r1.get_geometry()
-            # pylint: enable=W0633,W0632
             gt = raster_geometry_to_geotransform(longitudes, latitudes)
             msg = ('Conversion from coordinates to geotransform failed: %s'
                    % str(gt))
@@ -1499,7 +1509,7 @@ class TestIO(unittest.TestCase):
 
         # Check data directly
         coordinates, values = R.to_vector_points()
-        longitudes, latitudes = R.get_geometry()  # pylint: disable=W0633,W0632
+        longitudes, latitudes = R.get_geometry()
         a = R.get_data()
         M, N = a.shape
         L = M * N
@@ -1548,7 +1558,7 @@ class TestIO(unittest.TestCase):
 
         # Check data directly
         coordinates, values = R.to_vector_points()
-        longitudes, latitudes = R.get_geometry()  # pylint: disable=W0633,W0632
+        longitudes, latitudes = R.get_geometry()
         A = R.get_data()
         M, N = A.shape
         L = M * N
@@ -2437,7 +2447,6 @@ class TestIO(unittest.TestCase):
             assert len(attributes_new[i]) == 3
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
-
 
     def test_multipart_polygon_can_be_read(self):
         """Multipart polygons are be converted to singlepart

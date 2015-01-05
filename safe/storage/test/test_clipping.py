@@ -1,12 +1,15 @@
+# coding=utf-8
 import unittest
 import numpy
 import os
 from os.path import join
 
-from safe.common.testing import TESTDATA
-from safe.gis.polygon import (is_inside_polygon, inside_polygon,
-                                 populate_polygon,
-                                 generate_random_points_in_bbox)
+from safe.test.utilities import TESTDATA
+from safe.gis.polygon import (
+    is_inside_polygon,
+    inside_polygon,
+    populate_polygon,
+    generate_random_points_in_bbox)
 from safe.storage.vector import Vector
 from safe.storage.core import read_layer
 from safe.storage.geometry import Polygon

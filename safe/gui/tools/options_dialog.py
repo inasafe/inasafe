@@ -18,8 +18,6 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
-
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -35,9 +33,7 @@ from safe.utilities.resources import get_ui_class
 from safe.common.version import get_version
 from safe.defaults import default_organisation_logo_path
 
-UI_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'ui', 'options_dialog_base.ui')
-FORM_CLASS = get_ui_class(UI_FILE_PATH)
+FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
 
 class OptionsDialog(QtGui.QDialog, FORM_CLASS):

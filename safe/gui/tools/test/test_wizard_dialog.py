@@ -34,28 +34,32 @@ sys.path.append(pardir)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
-from qgis.core import QgsVectorLayer
-
-from safe.common.testing import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.testing import TESTDATA, BOUNDDATA, HAZDATA, EXPDATA
+from safe.test.utilities import (
+    clone_raster_layer,
+    clone_shp_layer,
+    get_qgis_app,
+    TESTDATA,
+    BOUNDDATA,
+    HAZDATA,
+    EXPDATA)
+
+# AG: get_qgis_app() should be called before importing modules from
+# safe.gui.tools.wizard_dialog
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
-    step_source,
-    step_title,
-    step_classify,
-    step_subcategory,
-    step_unit,
-    step_aggregation,
-    step_field)
+    step_kw_source,
+    step_kw_title,
+    step_kw_classify,
+    step_kw_subcategory,
+    step_kw_unit,
+    step_kw_aggregation,
+    step_kw_field)
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities_for_testing import (
-    clone_raster_layer,
-    clone_shp_layer)
 
 
 def clone_csv_layer():
@@ -165,7 +169,10 @@ class WizardDialogTest(unittest.TestCase):
             'title': 'some title'
         }
 
-        layer = clone_shp_layer(name='tsunami_polygon')
+        layer = clone_shp_layer(
+            name='tsunami_polygon',
+            include_keywords=True,
+            source_directory=TESTDATA)
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -173,7 +180,8 @@ class WizardDialogTest(unittest.TestCase):
 
         # Initialize dialog
         # noinspection PyTypeChecker
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 7 - select category
         count = dialog.lstCategories.count()
@@ -334,7 +342,10 @@ class WizardDialogTest(unittest.TestCase):
             'OBJECTID', 'GRIDCODE', 'Shape_Leng', 'Shape_Area', 'Category']
         expected_chosen_field = 'GRIDCODE'
 
-        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
+        layer = clone_shp_layer(
+            name='tsunami_polygon',
+            include_keywords=True,
+            source_directory=TESTDATA)
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -342,7 +353,8 @@ class WizardDialogTest(unittest.TestCase):
 
         # Initialize dialog
         # noinspection PyTypeChecker
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 7 - select category
         self.check_current_text('hazard', dialog.lstCategories)
@@ -425,9 +437,13 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
     def test_existing_complex_keywords(self):
-        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
+        layer = clone_shp_layer(
+            name='tsunami_polygon',
+            include_keywords=True,
+            source_directory=TESTDATA)
         # noinspection PyTypeChecker
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         # select hazard
         self.select_from_list_widget('hazard', dialog.lstCategories)
@@ -470,7 +486,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # finish
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 7 - select category
         self.check_current_text('hazard', dialog.lstCategories)
@@ -534,7 +551,8 @@ class WizardDialogTest(unittest.TestCase):
             name='kabupaten_jakarta',
             include_keywords=True,
             source_directory=BOUNDDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         category = dialog.lstCategories.currentItem().text()
         expected_category = 'aggregation'
@@ -581,7 +599,8 @@ class WizardDialogTest(unittest.TestCase):
             name='building_Maumere',
             include_keywords=True,
             source_directory=TESTDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # go to subcategory step 2
         dialog.pbnNext.click()  # go to unit step 3
@@ -589,12 +608,12 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # should be in step source
 
         # check if in step source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnNext.click()  # should be in step title
 
         # check if in step title
-        self.check_current_step(step_title, dialog)
+        self.check_current_step(step_kw_title, dialog)
 
         dialog.pbnNext.click()  # finishing
 
@@ -604,7 +623,8 @@ class WizardDialogTest(unittest.TestCase):
             name='kecamatan_jakarta',
             include_keywords=True,
             source_directory=BOUNDDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose aggregation go to field step
         dialog.pbnNext.click()  # choose KEC_NAME go to aggregation step
@@ -655,7 +675,8 @@ class WizardDialogTest(unittest.TestCase):
             name='Marapi_evac_zone_3000m',
             include_keywords=True,
             source_directory=HAZDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to unit step
@@ -669,15 +690,15 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose volcano  go to classify step
         # check if in step classify
-        self.check_current_step(step_classify, dialog)
+        self.check_current_step(step_kw_classify, dialog)
 
         dialog.pbnNext.click()  # choose volcano  go to source step
         # check if in step source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnNext.click()  # choose volcano  go to title step
         # check if in step title
-        self.check_current_step(step_title, dialog)
+        self.check_current_step(step_kw_title, dialog)
 
     def test_point_layer(self):
         """Wizard for point layer."""
@@ -685,18 +706,19 @@ class WizardDialogTest(unittest.TestCase):
             name='Marapi',
             include_keywords=True,
             source_directory=HAZDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to source step
 
         # check if in step source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnNext.click()  # choose volcano  go to title step
 
         # check if in step title
-        self.check_current_step(step_title, dialog)
+        self.check_current_step(step_kw_title, dialog)
         dialog.accept()
 
     def test_auto_select_one_item(self):
@@ -705,9 +727,10 @@ class WizardDialogTest(unittest.TestCase):
             name='Marapi_evac_zone_3000m',
             include_keywords=True,
             source_directory=HAZDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
-        dialog.pbnNext.click()  # choose hazard go to subcategory  step
+        dialog.pbnNext.click()  # choose hazard go to subcategory step
         dialog.pbnNext.click()  # choose volcano  go to unit  step
 
         message = 'It should auto select, but it does not.'
@@ -727,8 +750,10 @@ class WizardDialogTest(unittest.TestCase):
         """Test for point layer and all possibilities."""
         layer = clone_shp_layer(
             name='Marapi',
+            include_keywords=True,
             source_directory=HAZDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['hazard', 'exposure']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -740,7 +765,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_subcategory, dialog)
+        self.check_current_step(step_kw_subcategory, dialog)
 
         expected_subcategories = ['volcano']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
@@ -750,12 +775,12 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnNext.click()  # go to title
 
         # check if in step title
-        self.check_current_step(step_title, dialog)
+        self.check_current_step(step_kw_title, dialog)
 
         dialog.pbnCancel.click()
 
@@ -766,7 +791,8 @@ class WizardDialogTest(unittest.TestCase):
             extension='.asc',
             include_keywords=False,
             source_directory=HAZDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['hazard', 'exposure']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -784,7 +810,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_subcategory, dialog)
+        self.check_current_step(step_kw_subcategory, dialog)
 
         # check the values of subcategories options
         expected_subcategories = [
@@ -805,7 +831,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        self.check_current_step(step_unit, dialog)
+        self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
         expected_units = ['categorised', 'normalised', 'metres', 'feet']
@@ -817,13 +843,13 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnBack.click()  # back to step unit
         dialog.pbnBack.click()  # back to step subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_subcategory, dialog)
+        self.check_current_step(step_kw_subcategory, dialog)
 
         # check if flood is selected
         expected_subcategory = 'flood'
@@ -839,7 +865,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        self.check_current_step(step_unit, dialog)
+        self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
         expected_units = ['categorised', 'normalised', 'MMI']
@@ -851,14 +877,16 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
             name='jakarta_roads',
+            include_keywords=True,
             source_directory=EXPDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['exposure']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -868,7 +896,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_subcategory, dialog)
+        self.check_current_step(step_kw_subcategory, dialog)
 
         expected_subcategories = ['road']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
@@ -878,7 +906,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to unit
 
         # check if in step unit
-        self.check_current_step(step_unit, dialog)
+        self.check_current_step(step_kw_unit, dialog)
 
         expected_units = ['Road Type']
         self.check_list(expected_units, dialog.lstUnits)
@@ -888,7 +916,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to field
 
         # check if in step field
-        self.check_current_step(step_field, dialog)
+        self.check_current_step(step_kw_field, dialog)
 
         expected_fields = ['TYPE', 'NAME', 'ONEWAY', 'LANES']
         self.check_list(expected_fields, dialog.lstFields)
@@ -907,7 +935,8 @@ class WizardDialogTest(unittest.TestCase):
             name='Jakarta_RW_2007flood',
             source_directory=HAZDATA,
             include_keywords=False)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['hazard', 'exposure', 'aggregation']
         self.check_list(expected_categories, dialog.lstCategories)
@@ -928,7 +957,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        self.check_current_step(step_unit, dialog)
+        self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
         expected_units = ['building type', 'building generic']
@@ -940,7 +969,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to field
 
         # check if in step field
-        self.check_current_step(step_field, dialog)
+        self.check_current_step(step_kw_field, dialog)
 
         # check the values of field options
         expected_fields = [
@@ -953,7 +982,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to source
 
         # check if in source step
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnBack.click()  # back to field step
         dialog.pbnBack.click()  # back to unit step
@@ -964,7 +993,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to source
 
         # check if in source source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnBack.click()  # back to unit step
         dialog.pbnBack.click()  # back to subcategory step
@@ -991,7 +1020,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to field step
 
         # check in field step
-        self.check_current_step(step_field, dialog)
+        self.check_current_step(step_kw_field, dialog)
 
         for i in range(dialog.lstFields.count()):
             item_flag = dialog.lstFields.item(i).flags()
@@ -1004,7 +1033,7 @@ class WizardDialogTest(unittest.TestCase):
         # select flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)
         dialog.pbnNext.click()  # go to unit
-        self.check_current_step(step_unit, dialog)
+        self.check_current_step(step_kw_unit, dialog)
 
         expected_units = ['wet / dry', 'metres', 'feet']
         self.check_list(expected_units, dialog.lstUnits)
@@ -1012,7 +1041,7 @@ class WizardDialogTest(unittest.TestCase):
         # select wet / dry
         self.select_from_list_widget('wet / dry', dialog.lstUnits)
         dialog.pbnNext.click()  # go to fields
-        self.check_current_step(step_field, dialog)
+        self.check_current_step(step_kw_field, dialog)
 
         expected_fields = [
             'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW', 'FLOODPRONE']
@@ -1021,7 +1050,7 @@ class WizardDialogTest(unittest.TestCase):
         # select FLOODPRONE
         self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
         dialog.pbnNext.click()  # go to classify
-        self.check_current_step(step_classify, dialog)
+        self.check_current_step(step_kw_classify, dialog)
 
         # check unclassified
         expected_unique_values = ['Yes']  # Unclassified value
@@ -1050,7 +1079,7 @@ class WizardDialogTest(unittest.TestCase):
                 self.assertEqual(expected_num_child, num_child, message)
 
         dialog.pbnNext.click()  # go to source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnBack.click()  # back to classify
         dialog.pbnBack.click()  # back to field
@@ -1060,7 +1089,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to field
 
         # check in field step
-        self.check_current_step(step_field, dialog)
+        self.check_current_step(step_kw_field, dialog)
 
         # check if all options are disabled
         for i in range(dialog.lstFields.count()):
@@ -1073,7 +1102,7 @@ class WizardDialogTest(unittest.TestCase):
 
         self.select_from_list_widget('tsunami', dialog.lstSubcategories)
         dialog.pbnNext.click()  # go to unit
-        self.check_current_step(step_unit, dialog)
+        self.check_current_step(step_kw_unit, dialog)
 
         # back again since tsunami similar to flood
         dialog.pbnBack.click()  # back to subcategory
@@ -1087,11 +1116,11 @@ class WizardDialogTest(unittest.TestCase):
 
         # no need to select, use auto select
         dialog.pbnNext.click()  # go to field
-        self.check_current_step(step_field, dialog)
+        self.check_current_step(step_kw_field, dialog)
 
         self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
         dialog.pbnNext.click()  # go to classify
-        self.check_current_step(step_classify, dialog)
+        self.check_current_step(step_kw_classify, dialog)
 
         # check unclassified
         expected_unique_values = ['Yes', 'YES']  # Unclassified value
@@ -1114,7 +1143,7 @@ class WizardDialogTest(unittest.TestCase):
             self.assertEqual(expected_num_child, num_child, message)
 
         dialog.pbnNext.click()  # go to source
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnCancel.click()
 
@@ -1124,7 +1153,8 @@ class WizardDialogTest(unittest.TestCase):
             name='kabupaten_jakarta',
             include_keywords=True,
             source_directory=BOUNDDATA)
-        dialog = WizardDialog(layer=layer)
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
         dialog.suppress_warning_dialog = True
 
         self.check_current_text('aggregation', dialog.lstCategories)
@@ -1140,19 +1170,19 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Try to go to  source step
 
         # check if still in aggregation step
-        self.check_current_step(step_aggregation, dialog)
+        self.check_current_step(step_kw_aggregation, dialog)
 
         dialog.cboYouthRatioAttribute.setCurrentIndex(1)  # set don't use
 
         dialog.pbnNext.click()  # Try to go to  source step
 
         # check if in source step
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnBack.click()  # Go to aggregation step
 
         # check if in aggregation step
-        self.check_current_step(step_aggregation, dialog)
+        self.check_current_step(step_kw_aggregation, dialog)
         dialog.cboYouthRatioAttribute.setCurrentIndex(0)  # set global default
 
         dialog.dsbYouthRatioDefault.setValue(0.0)
@@ -1160,10 +1190,197 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Try to go to source step
 
         # check if in source step
-        self.check_current_step(step_source, dialog)
+        self.check_current_step(step_kw_source, dialog)
 
         dialog.pbnCancel.click()
 
+    def test_input_function_centric_wizard(self):
+        """Test the IFCW mode."""
+        expected_test_layer_count = 2
+
+        expected_hazards_count = 6
+        expected_hazards = ['FLOOD', 'TSUNAMI', 'EARTHQUAKE', 'TEPHRA',
+                            'VOLCANO', 'GENERIC']
+        expected_hazards = sorted(expected_hazards)
+        chosen_hazard = 'FLOOD'
+
+        expected_flood_if_count = 9
+        chosen_if = 'FloodBuildingImpactFunction'
+
+        expected_hazard_layers_count = 1
+        expected_exposure_layers_count = 1
+        expected_aggregation_layers_count = 0
+
+        expected_summary_key = 'minimum needs'
+        expected_summary_value_fragment = 'rice'
+
+        expected_report_size = 5583  # as saved on Debian
+        tolerance = 120  # windows EOL etc
+
+        # Initialize dialog
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_function_centric_mode()
+
+        # Load test layers
+        layer = clone_raster_layer(
+            name='Flood_Current_Depth_Jakarta_geographic',
+            extension='.asc',
+            include_keywords=True,
+            source_directory=HAZDATA)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        layer = clone_shp_layer(
+            name='DKI_buildings',
+            include_keywords=True,
+            source_directory=EXPDATA)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        # Check the environment first
+        message = 'Test layers are not readable. Check environment variables.'
+        self.assertIsNotNone(layer.dataProvider(), message)
+
+        count = len(dialog.iface.mapCanvas().layers())
+        message = 'Test layers are not loaded.'
+        self.assertEqual(count, expected_test_layer_count, message)
+
+        # step_fc_function: test function tree branches
+        count = dialog.treeFunctions.topLevelItemCount()
+        message = ('Invalid hazard count in the IF tree! There should be %d '
+                   'while there were: %d') % (expected_hazards_count, count)
+        self.assertEqual(count, expected_hazards_count, message)
+
+        for i in range(count):
+            hazard = dialog.treeFunctions.topLevelItem(i).text(0)
+            message = ('Invalid hazard name in the IF tree on position %d! '
+                       'There should be %s while there were: %s') % (
+                i, expected_hazards[i], hazard)
+            self.assertEqual(hazard, expected_hazards[i], message)
+            # self.assertIn(hazard, expected_hazards, message)
+
+        chosen_hazard_index = expected_hazards.index(chosen_hazard)
+        branch = dialog.treeFunctions.topLevelItem(chosen_hazard_index)
+
+        # step_fc_function: test the FLOOD branch
+        count = branch.childCount()
+        message = ('Invalid flood functions count in the IF tree! There '
+                   'should be %d while '
+                   'there were: %d') % (expected_flood_if_count, count)
+        self.assertEqual(count, expected_flood_if_count, message)
+
+        flood_ifs = [branch.child(i).data(0, QtCore.Qt.UserRole)['id']
+                     for i in range(count)]
+        message = ('Expected flood impact function not found: %s') % chosen_if
+        self.assertTrue(chosen_if in flood_ifs, message)
+
+        # step_fc_function: select FloodBuildingImpactFunction and press ok
+        chosen_if_index = flood_ifs.index(chosen_if)
+        chosen_if_item = branch.child(chosen_if_index)
+        dialog.treeFunctions.setCurrentItem(chosen_if_item)
+        dialog.pbnNext.click()
+
+        # step_fc_hazlayer_from_canvas: test the lstCanvasHazLayers state
+        # Note this step is tested prior to step_fc_hazlayer_origin
+        # as the list is prepared prior to autoselecting the radiobuttons
+        count = dialog.lstCanvasHazLayers.count()
+        message = ('Invalid hazard layers count! There should be %d while '
+                   'there were: %d') % (expected_hazard_layers_count, count)
+        self.assertEqual(count, expected_hazard_layers_count, message)
+
+        # step_fc_hazlayer_origin: test if the radiobuttons are autmatically
+        # enabled and selected
+        message = ('The rbHazLayerFromCanvas radio button has been not '
+                   'automatically enabled')
+        self.assertTrue(dialog.rbHazLayerFromCanvas.isEnabled(), message)
+        message = ('The rbHazLayerFromCanvas radio button has been not '
+                   'automatically selected')
+        self.assertTrue(dialog.rbHazLayerFromCanvas.isChecked(), message)
+
+        # step_fc_hazlayer_origin: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_hazlayer_from_canvas: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_from_canvas: test the lstCanvasExpLayers state
+        # Note this step is tested prior to step_fc_explayer_origin
+        # as the list is prepared prior to autoselecting the radiobuttons
+        count = dialog.lstCanvasExpLayers.count()
+        message = ('Invalid expposure layers count! There should be %d while '
+                   'there were: %d') % (expected_exposure_layers_count, count)
+        self.assertEqual(count, expected_exposure_layers_count, message)
+
+        # step_fc_explayer_origin: test if the radiobuttons are autmatically
+        # enabled and selected
+        message = ('The rbExpLayerFromCanvas radio button has been not '
+                   'automatically enabled')
+        self.assertTrue(dialog.rbExpLayerFromCanvas.isEnabled(), message)
+        message = ('The rbExpLayerFromCanvas radio button has been not '
+                   'automatically selected')
+        self.assertTrue(dialog.rbExpLayerFromCanvas.isChecked(), message)
+
+        # step_fc_explayer_origin: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_from_canvas: press ok
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_from_canvas: test the lstCanvasAggLayers state
+        # Note this step is tested prior to step_fc_agglayer_origin
+        # as the list is prepared prior to autoselecting the radiobuttons
+        count = dialog.lstCanvasAggLayers.count()
+        message = ('Invalid aggregation layers count! There should be %d '
+                   'while there were: '
+                   '%d') % (expected_aggregation_layers_count, count)
+        self.assertEqual(count, expected_aggregation_layers_count, message)
+
+        # step_fc_agglayer_origin: test if the radiobuttons are autmatically
+        # enabled and selected
+        message = ('The rbAggLayerFromCanvas radio button has been not '
+                   'automatically disabled')
+        self.assertTrue(not dialog.rbAggLayerFromCanvas.isEnabled(), message)
+        message = ('The rbAggLayerFromBrowser radio button has been not '
+                   'automatically selected')
+        self.assertTrue(dialog.rbAggLayerFromBrowser.isChecked(), message)
+
+        # step_fc_agglayer_origin: switch to no aggregation and press ok
+        dialog.rbAggLayerNoAggregation.click()
+        dialog.pbnNext.click()
+
+        # step_fc_extent: switch to layer's extent and press ok
+        dialog.rbExtentLayer.click()
+        dialog.pbnNext.click()
+
+        # step_fc_params: press ok (already covered by the relevant test)
+        dialog.pbnNext.click()
+
+        # step_fc_summary: test minumum needs text
+        summaries = dialog.lblSummary.text().split('<br/>')
+
+        minneeds = [s for s in summaries
+                    if expected_summary_key.upper() in s.upper()]
+        message = 'No minimum needs found in the summary text'
+        self.assertTrue(minneeds, message)
+        message = 'No rice found in the minimum needs in the summary text'
+        self.assertTrue(expected_summary_value_fragment.upper()
+                        in minneeds[0].upper(), message)
+
+        # step_fc_summary: run analysis
+        dialog.pbnNext.click()
+
+        # step_fc_analysis: test the html output
+        report_path = dialog.wvResults.report_path
+        size = os.stat(report_path).st_size
+        message = (
+            'Expected generated report to be %d +- %dBytes, got %d. '
+            'Please update expected_size if the generated output '
+            'is acceptible on your system.'
+            % (expected_report_size, tolerance, size))
+        self.assertTrue((size > expected_report_size - tolerance and
+                         size < expected_report_size + tolerance), message)
+
+        # close the wizard
+        dialog.pbnNext.click()
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest, 'test')
