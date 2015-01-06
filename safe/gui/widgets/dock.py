@@ -28,7 +28,8 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
-    QgsCoordinateReferenceSystem)
+    QgsCoordinateReferenceSystem,
+    QgsLayerTreeGroup)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -1513,6 +1514,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Set all the map components
         print_map.set_impact_layer(self.iface.activeLayer())
+
+        # Set the legend layers
+        legend_layers = QgsLayerTreeGroup()
+        legend_layers.addLayer(self.iface.activeLayer())
+        print_map.set_legend_layers(legend_layers)
+
         if use_full_extent:
             map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
             layer_crs = self.iface.activeLayer().crs()
