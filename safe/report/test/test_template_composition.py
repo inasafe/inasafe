@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Impact Merge Dialog Test Cases.**
+- **Template Composition Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -20,7 +20,6 @@ import os
 import unittest
 import shutil
 import logging
-
 
 from safe.report.template_composition import TemplateComposition
 from safe.utilities.resources import resources_path
@@ -48,9 +47,9 @@ class TemplateCompositionTest(unittest.TestCase):
 
     def test_constructor(self):
         """Test constructor."""
-        # If we give param renderer, composition instance must not be none
-        renderer = CANVAS.mapRenderer()
-        template_composition = TemplateComposition(renderer=renderer)
+        # If we give param map_settings, composition instance must not be none
+        map_settings = CANVAS.mapSettings()
+        template_composition = TemplateComposition(map_settings=map_settings)
         message = 'The composition instance variable must not be none.'
         self.assertIsNotNone(template_composition.composition, message)
 
@@ -95,16 +94,19 @@ class TemplateCompositionTest(unittest.TestCase):
 
         template_composition = TemplateComposition(
             template_path=template_path,
-            renderer=CANVAS.mapRenderer())
+            map_settings=CANVAS.mapSettings())
         template_composition.load_template()
 
         # Check the element of the composition
-        # In that template, there should be 'safe-logo' id
-        component = template_composition.composition.getComposerItemById(
-            'safe-logo')
-        message = 'It must not be None, but it returns %s' % component
-        self.assertIsNotNone(component, message)
-
+        # In that template, there should be these components:
+        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
+                         'impact-map', 'impact-legend']
+        for component_id in component_ids:
+            component = template_composition.composition.getComposerItemById(
+                component_id)
+            message = ('In this template: %s, there should be this component '
+                       '%s') % (INASAFE_TEMPLATE_PATH, component_id)
+            self.assertIsNotNone(component, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TemplateCompositionTest)

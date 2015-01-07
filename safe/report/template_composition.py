@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Module to handle report using QgsComposition with template.
+Module as a wrapper for QgsComposition.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -16,7 +16,8 @@ __date__ = '21/03/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from qgis.core import QgsComposition, QgsMapRenderer
+# noinspection PyUnresolvedReferences
+from qgis.core import QgsComposition, QgsMapSettings
 from PyQt4 import QtCore, QtXml
 
 from safe.utilities.i18n import tr
@@ -28,18 +29,18 @@ class TemplateComposition(object):
 
     ..versionadded: 3.0
     """
-    def __init__(self, template_path=None, renderer=None):
+    def __init__(self, template_path=None, map_settings=None):
         """Class constructor."""
         # The path to the template
         self._template_path = template_path
-        # The renderer for the map element in composition
-        self._renderer = renderer
+        # The map settings for composition
+        self._map_settings = map_settings
         # Needed elements on the template
         self._component_ids = []
         # Missing elements on the template
         self._missing_elements = []
         # Template Map Substitution
-        self._template_substitution = {}
+        self._substitution = {}
         # The composition
         self._composition = None
 
@@ -48,8 +49,8 @@ class TemplateComposition(object):
             self.template_path = template_path
 
         # Call the setter to set other things needed
-        if renderer is not None:
-            self.renderer = renderer
+        if map_settings is not None:
+            self.map_settings = map_settings
 
     @property
     def template_path(self):
@@ -66,20 +67,20 @@ class TemplateComposition(object):
         self._template_path = template_path
 
     @property
-    def renderer(self):
-        """Getter for renderer instance variable."""
-        return self._renderer
+    def map_settings(self):
+        """Getter for map_settings instance variable."""
+        return self._map_settings
 
-    @renderer.setter
-    def renderer(self, renderer):
-        """Setter for renderer instance variable.
+    @map_settings.setter
+    def map_settings(self, map_settings):
+        """Setter for map settings instance variable.
 
-        :param renderer: The renderer for map element on QgsComposition.
-        :type renderer: QgsMapRenderer
+        :param map_settings: The map settings for QgsComposition.
+        :type map_settings: QgsMapSettings
         """
-        self._renderer = renderer
+        self._map_settings = map_settings
         # noinspection PyCallingNonCallable
-        self._composition = QgsComposition(renderer)
+        self._composition = QgsComposition(map_settings)
 
     @property
     def component_ids(self):
@@ -114,19 +115,19 @@ class TemplateComposition(object):
         return self._missing_elements
 
     @property
-    def template_substitution(self):
+    def substitution(self):
         """Getter for template substitution when loading it to composition.
         """
-        return self._template_substitution
+        return self._substitution
 
-    @template_substitution.setter
-    def template_substitution(self, template_substitution):
+    @substitution.setter
+    def substitution(self, substitution):
         """Set substitution for the template.
 
-        :param template_substitution: the substitution for the template.
-        :type template_substitution: dict
+        :param substitution: the substitution for the template.
+        :type substitution: dict
         """
-        self._template_substitution = template_substitution
+        self._substitution = substitution
 
     @property
     def composition(self):
@@ -138,10 +139,10 @@ class TemplateComposition(object):
         """Load the template to composition.
 
         To load template properly, you need to set the template and the
-        renderer first (and template_substitution if you want to), e.g:
+        map settings first (and template_substitution if you want to), e.g:
             template_composition = TemplateComposition(
                                     template_path='/template/path',
-                                    renderer=some_renderer)
+                                    map_settings=some_map_settings)
             substitution_map = {
                 'impact-title': title,
                 'date': date,
@@ -156,7 +157,7 @@ class TemplateComposition(object):
 
             template_composition = TemplateComposition()
             template_composition.template_path = '/template/path'
-            template_composition.renderer = some_renderer
+            template_composition.map_settings = some_map_settings
             template_composition.load_template()
 
 
@@ -173,7 +174,7 @@ class TemplateComposition(object):
 
         # Load template
         load_status = self.composition.loadFromTemplate(
-            document, self.template_substitution)
+            document, self.substitution)
         if not load_status:
             raise LoadingTemplateError(
                 tr('Error loading template: %s') % self.template_path)
