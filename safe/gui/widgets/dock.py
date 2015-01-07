@@ -1265,13 +1265,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def hide_busy(self):
         """A helper function to indicate processing is done."""
         # self.pbnRunStop.setText('Run')
-        if self.analysis.runner:
-            try:
-                self.analysis.runner.done.disconnect(
-                    self.analysis.run_aggregator)
-            except TypeError:
-                # happens when object is not connected - see #621
-                pass
+        if self.analysis:
+            if self.analysis.runner:
+                try:
+                    self.analysis.runner.done.disconnect(
+                        self.analysis.run_aggregator)
+                except TypeError:
+                    # happens when object is not connected - see #621
+                    pass
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)

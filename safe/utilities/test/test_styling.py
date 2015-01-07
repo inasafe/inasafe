@@ -223,7 +223,7 @@ class StylingTest(unittest.TestCase):
                 [
                     {
                         'transparency': 0,
-                        'min': [0],  # <-- intentionally broken list not number!
+                        'min': [0],  # <--intentionally broken list not number!
                         'max': 139904.08186340332,
                         'colour': '#FFFFFF',
                         'size': 1,

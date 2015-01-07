@@ -258,8 +258,8 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
            Enabled root items: QgsDirectoryItem, QgsFavouritesItem,
            QgsPGRootItem.
 
-           Disabled root items: QgsMssqlRootItem, QgsSLRootItem, QgsOWSRootItem,
-           QgsWCSRootItem, QgsWFSRootItem, QgsWMSRootItem.
+           Disabled root items: QgsMssqlRootItem, QgsSLRootItem,
+           QgsOWSRootItem, QgsWCSRootItem, QgsWFSRootItem, QgsWMSRootItem.
 
         :param source_row: Parent widget of the model
         :type source_row: int
