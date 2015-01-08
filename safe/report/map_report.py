@@ -30,7 +30,7 @@ from safe.defaults import disclaimer
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
 from safe.common.exceptions import (
-    KeywordNotFoundError, LoadingTemplateError)
+    KeywordNotFoundError, TemplateLoadingError)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import qgis_version
@@ -53,24 +53,21 @@ class MapReport(object):
         :param template: The QGIS template path.
         :type template: str
         """
-        LOGGER.debug('InaSAFE Map class initialised')
-
-        self.iface = iface
-        self.keyword_io = KeywordIO()
-        self.page_dpi = 300.0
-
+        LOGGER.debug('InaSAFE Map Report class initialised')
+        self._iface = iface
         self._template = template
         self._layer = layer
-        self._template_composition = None
-        self._extent = self.iface.mapCanvas().extent()
+        self._extent = self._iface.mapCanvas().extent()
+        self._page_dpi = 300.0
         self._safe_logo = resources_path(
             'img', 'logos', 'inasafe-logo-url.svg')
-        self._org_logo = default_organisation_logo_path()
+        self._organisation_logo = default_organisation_logo_path()
         self._north_arrow = default_north_arrow_path()
         self._disclaimer = disclaimer()
         self._template_composition = TemplateComposition(
             template_path=self.template,
-            map_settings=self.iface.mapCanvas().mapSettings())
+            map_settings=self._iface.mapCanvas().mapSettings())
+        self._keyword_io = KeywordIO()
 
     @property
     def template(self):
@@ -85,6 +82,10 @@ class MapReport(object):
         :type template: str
         """
         self._template = template
+        # Also recreate template composition
+        self._template_composition = TemplateComposition(
+            template_path=self.template,
+            map_settings=self._iface.mapCanvas().mapSettings())
 
     @property
     def layer(self):
@@ -117,7 +118,24 @@ class MapReport(object):
         :param extent: The extent.
         :type extent: QgsRectangle
         """
-        self._extent = extent
+        if isinstance(extent, QgsRectangle):
+            self._extent = extent
+        else:
+            self._extent = self._iface.mapCanvas().extent()
+
+    @property
+    def page_dpi(self):
+        """Getter to page resolution in dots per inch."""
+        return self._page_dpi
+
+    @page_dpi.setter
+    def page_dpi(self, page_dpi):
+        """Set the page resolution in dpi.
+
+        :param page_dpi: The page resolution in dots per inch.
+        :type page_dpi: int
+        """
+        self._page_dpi = page_dpi
 
     @property
     def template(self):
@@ -173,21 +191,21 @@ class MapReport(object):
             self._safe_logo = default_organisation_logo_path()
 
     @property
-    def org_logo(self):
+    def organisation_logo(self):
         """Getter to organisation logo path."""
-        return self._org_logo
+        return self._organisation_logo
 
-    @org_logo.setter
-    def org_logo(self, logo):
+    @organisation_logo.setter
+    def organisation_logo(self, logo):
         """Set image that will be used as organisation logo in reports.
 
         :param logo: Path to the organisation logo image.
         :type logo: str
         """
         if isinstance(logo, str) and os.path.exists(logo):
-            self._org_logo = logo
+            self._organisation_logo = logo
         else:
-            self._org_logo = default_organisation_logo_path()
+            self._organisation_logo = default_organisation_logo_path()
 
     @property
     def disclaimer(self):
@@ -219,7 +237,10 @@ class MapReport(object):
             composition.
         :type component_ids: list
         """
-        self._template_composition.component_ids = component_ids
+        if not isinstance(component_ids, list):
+            self._template_composition.component_ids = []
+        else:
+            self._template_composition.component_ids = component_ids
 
     @property
     def missing_elements(self):
@@ -233,13 +254,39 @@ class MapReport(object):
         :returns: None on error, otherwise the title.
         :rtype: None, str
         """
+        # noinspection PyBroadException
         try:
-            title = self.keyword_io.read_keywords(self.layer, 'map_title')
+            title = self._keyword_io.read_keywords(self.layer, 'map_title')
             return title
         except KeywordNotFoundError:
             return None
         except Exception:
             return None
+
+    @property
+    def map_legend_attributes(self):
+        """Get the map legend attribute from the layer keywords if possible.
+
+        :returns: None on error, otherwise the attributes (notes and units).
+        :rtype: None, str
+        """
+        LOGGER.debug('InaSAFE Map getMapLegendAttributes called')
+        legend_attribute_list = [
+            'legend_notes',
+            'legend_units',
+            'legend_title']
+        legend_attribute_dict = {}
+        for legend_attribute in legend_attribute_list:
+            # noinspection PyBroadException
+            try:
+                legend_attribute_dict[legend_attribute] = \
+                    self._keyword_io.read_keywords(
+                        self.layer, legend_attribute)
+            except KeywordNotFoundError:
+                pass
+            except Exception:
+                pass
+        return legend_attribute_dict
 
     def setup_composition(self):
         """Set up the composition ready."""
@@ -253,7 +300,7 @@ class MapReport(object):
         """Load the template to composition."""
         # Get information for substitutions
         # date, time and plugin version
-        date_time = self.keyword_io.read_keywords(self.layer, 'time_stamp')
+        date_time = self._keyword_io.read_keywords(self.layer, 'time_stamp')
         if date_time is None:
             date = ''
             time = ''
@@ -282,39 +329,35 @@ class MapReport(object):
         self._template_composition.substitution = substitution_map
         try:
             self._template_composition.load_template()
-        except LoadingTemplateError:
+        except TemplateLoadingError:
             raise
 
     def draw_composition(self):
         """Draw all the components in the composition."""
-        # Set InaSAFE logo
-        image = self.composition.getComposerItemById('safe-logo')
-        if image is not None:
-            if qgis_version() < 20500:
-                image.setPictureFile(self.safe_logo)
-            else:
-                image.setPicturePath(self.safe_logo)
+        safe_logo = self.composition.getComposerItemById('safe-logo')
+        north_arrow = self.composition.getComposerItemById('north-arrow')
+        organisation_logo = self.composition.getComposerItemById(
+            'organisation-logo')
 
-        # Set north arrow
-        image = self.composition.getComposerItemById('north-arrow')
-        if image is not None:
-            if qgis_version() < 20500:
-                image.setPictureFile(self.north_arrow)
-            else:
-                image.setPicturePath(self.north_arrow)
-
-        # Set organisation logo
-        image = self.composition.getComposerItemById('organisation-logo')
-        if image is not None:
-            if qgis_version() < 20500:
-                image.setPictureFile(self.org_logo)
-            else:
-                image.setPicturePath(self.org_logo)
+        if qgis_version() < 20600:
+            if safe_logo is not None:
+                safe_logo.setPictureFile(self.safe_logo)
+            if north_arrow is not None:
+                north_arrow.setPictureFile(self.north_arrow)
+            if organisation_logo is not None:
+                organisation_logo.setPictureFile(self.organisation_logo)
+        else:
+            if safe_logo is not None:
+                safe_logo.setPicturePath(self.safe_logo)
+            if north_arrow is not None:
+                north_arrow.setPicturePath(self.north_arrow)
+            if organisation_logo is not None:
+                organisation_logo.setPicturePath(self.organisation_logo)
 
         # Set impact report table
         table = self.composition.getComposerItemById('impact-report')
         if table is not None:
-            text = self.keyword_io.read_keywords(self.layer, 'impact_summary')
+            text = self._keyword_io.read_keywords(self.layer, 'impact_summary')
             if text is None:
                 text = ''
             table.setText(text)
@@ -339,6 +382,7 @@ class MapReport(object):
             max_x = center.x() + half_length
             min_y = center.y() - half_length
             max_y = center.y() + half_length
+            # noinspection PyCallingNonCallable
             square_extent = QgsRectangle(min_x, min_y, max_x, max_y)
             composer_map.setNewExtent(square_extent)
 
@@ -351,7 +395,7 @@ class MapReport(object):
 
         legend = self.composition.getComposerItemById('impact-legend')
         if legend is not None:
-            legend_attributes = self.map_legend_attributes()
+            legend_attributes = self.map_legend_attributes
             legend_title = legend_attributes.get('legend_title', None)
 
             symbol_count = 1
@@ -398,7 +442,7 @@ class MapReport(object):
         self.setup_composition()
         try:
             self.load_template()
-        except LoadingTemplateError:
+        except TemplateLoadingError:
             raise
         self.draw_composition()
 
@@ -409,26 +453,3 @@ class MapReport(object):
         self.composition.exportAsPDF(output_path)
         return output_path
 
-    def map_legend_attributes(self):
-        """Get the map legend attribute from the layer keywords if possible.
-
-        :returns: None on error, otherwise the attributes (notes and units).
-        :rtype: None, str
-        """
-        LOGGER.debug('InaSAFE Map getMapLegendAttributes called')
-        legend_attribute_list = [
-            'legend_notes',
-            'legend_units',
-            'legend_title']
-        legend_attribute_dict = {}
-        for legend_attribute in legend_attribute_list:
-            # noinspection PyBroadException
-            try:
-                legend_attribute_dict[legend_attribute] = \
-                    self.keyword_io.read_keywords(
-                        self.layer, legend_attribute)
-            except KeywordNotFoundError:
-                pass
-            except Exception:
-                pass
-        return legend_attribute_dict

@@ -62,7 +62,7 @@ from safe.impact_functions.core import (
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
-from safe.common.exceptions import ReadLayerError, LoadingTemplateError
+from safe.common.exceptions import ReadLayerError, TemplateLoadingError
 from safe.common.version import get_version
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -1513,7 +1513,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_extent = transform.transformBoundingBox(layer_extent)
             area_extent = layer_extent
         else:
-            area_extent = self.iface.mapCanvas.extent()
+            area_extent = self.iface.mapCanvas().extent()
 
         # Get selected template path to use
         if print_dialog.default_template_radio.isChecked():
@@ -1538,7 +1538,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         settings = QSettings()
         logo_path = settings.value(
             'inasafe/organisation_logo_path', '', type=str)
-        map_report.org_logo = logo_path
+        map_report.organisation_logo = logo_path
 
         disclaimer_text = settings.value(
             'inasafe/reportDisclaimer', '', type=str)
@@ -1560,7 +1560,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(missing_elements))
+                ', '.join(map_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self,
@@ -1622,7 +1622,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # noinspection PyBroadException
         try:
             map_report.print_to_pdf(map_pdf_path)
-        except LoadingTemplateError, e:
+        except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
         except Exception, e:
             self.show_error_message(get_error_message(e))

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""**Tests for report creation in QGIS plugin.**
+"""**Tests for report creation using composition.**
 
 """
 __author__ = 'akbargumbira@gmail.com'
@@ -141,7 +141,7 @@ class ReportTest(unittest.TestCase):
 
         # Set custom logo
         custom_logo_path = resources_path('img', 'logos', 'logo-flower.png')
-        report.org_logo = custom_logo_path
+        report.organisation_logo = custom_logo_path
 
         out_path = unique_filename(
             prefix='map_custom_logo_test', suffix='.pdf', dir=temp_dir('test'))

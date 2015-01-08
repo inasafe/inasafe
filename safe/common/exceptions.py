@@ -288,8 +288,8 @@ class UnsupportedProviderError(Exception):
     pass
 
 
-class LoadingTemplateError(Exception):
-    """Raised when loading template is error."""
+class TemplateLoadingError(Exception):
+    """Raised when loading the template is error."""
     pass
 
 

@@ -21,7 +21,7 @@ from qgis.core import QgsComposition, QgsMapSettings
 from PyQt4 import QtCore, QtXml
 
 from safe.utilities.i18n import tr
-from safe.common.exceptions import LoadingTemplateError
+from safe.common.exceptions import TemplateLoadingError
 
 
 class TemplateComposition(object):
@@ -176,5 +176,5 @@ class TemplateComposition(object):
         load_status = self.composition.loadFromTemplate(
             document, self.substitution)
         if not load_status:
-            raise LoadingTemplateError(
+            raise TemplateLoadingError(
                 tr('Error loading template: %s') % self.template_path)
