@@ -658,11 +658,8 @@ class AnalysisHandler(QObject):
             return
 
         # Print Impact Table
-        table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
-        html_renderer = HtmlRenderer(page_dpi=map_report.page_dpi)
-        keywords = self.keyword_io.read_keywords(map_report.layer)
-        html_pdf_path = html_renderer.print_impact_table(
-            keywords, filename=table_file_name)
+        table_pdf_path = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
+        table_pdf_path = map_report.print_impact_table(table_pdf_path)
 
         # Print Impact Map
         # noinspection PyBroadException
@@ -675,7 +672,7 @@ class AnalysisHandler(QObject):
 
         # Make sure the file paths can wrap nicely:
         wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        wrapped_html_path = html_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+        wrapped_table_path = table_pdf_path.replace(os.sep, '<wbr>' + os.sep)
         status = m.Message(
             m.Heading(self.tr('Map Creator'), **INFO_STYLE),
             m.Paragraph(self.tr(
@@ -684,11 +681,11 @@ class AnalysisHandler(QObject):
                 'as:')),
             m.Paragraph(wrapped_map_path),
             m.Paragraph(self.tr('and')),
-            m.Paragraph(wrapped_html_path))
+            m.Paragraph(wrapped_table_path))
 
         # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
         QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl.fromLocalFile(html_pdf_path))
+            QtCore.QUrl.fromLocalFile(table_pdf_path))
         # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
         QtGui.QDesktopServices.openUrl(
             QtCore.QUrl.fromLocalFile(map_pdf_path))

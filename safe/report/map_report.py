@@ -24,7 +24,10 @@ from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer,
-    QgsLayerTreeGroup)
+    QgsLayerTreeGroup,
+    QgsMapSettings,
+    QgsComposerHtml,
+    QgsComposerFrame)
 
 from safe.defaults import disclaimer
 from safe.common.utilities import temp_dir, unique_filename
@@ -34,6 +37,9 @@ from safe.common.exceptions import (
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import qgis_version
+from safe.utilities.utilities import impact_attribution
+from safe.utilities.resources import html_footer, html_header
+from safe.utilities.i18n import tr
 from safe.defaults import (
     default_organisation_logo_path,
     default_north_arrow_path)
@@ -452,4 +458,101 @@ class MapReport(object):
                 prefix='report', suffix='.pdf', dir=temp_dir())
 
         self.composition.exportAsPDF(output_path)
+        return output_path
+
+    def print_impact_table(self, output_path):
+        """High level table generator to print summary from impact layer.
+
+        :param output_path: Output path.
+        :type output_path: str
+
+        :return: Path to generated pdf file.
+        :rtype: str
+
+        :raises: None
+        """
+        keywords = self._keyword_io.read_keywords(self.layer)
+
+        if output_path is None:
+            output_path = unique_filename(suffix='.pdf', dir=temp_dir())
+
+        try:
+            summary_table = keywords['impact_summary']
+        except KeyError:
+            summary_table = None
+
+        attribution_table = impact_attribution(keywords)
+
+        try:
+            full_table = keywords['impact_table']
+        except KeyError:
+            full_table = None
+
+        try:
+            aggregation_table = keywords['postprocessing_report']
+        except KeyError:
+            aggregation_table = None
+
+        # The order of the report:
+        # 1. Summary table
+        # 2. Aggregation table
+        # 3. Attribution table
+
+        # (AG) We will not use impact_table as most of the IF use that as:
+        # impact_table = impact_summary + some information intended to be
+        # shown on screen (see FloodOsmBuilding)
+        # Unless the impact_summary is None, we will use impact_table as the
+        # alternative
+        html = ''
+        if summary_table is None:
+            html += '<h2>%s</h2>' % tr('Detailed Table')
+            html += full_table
+        else:
+            html = '<h2>%s</h2>' % tr('Summary Table')
+            html += summary_table
+
+        if aggregation_table is not None:
+            html += aggregation_table
+
+        if attribution_table is not None:
+            html += attribution_table.to_html()
+
+        html = html_header() + html + html_footer()
+
+        # Print HTML using composition
+        map_settings = QgsMapSettings()
+        # A4 Portrait
+        paper_width = 210
+        paper_height = 297
+
+        # noinspection PyCallingNonCallable
+        composition = QgsComposition(map_settings)
+        # noinspection PyUnresolvedReferences
+        composition.setPlotStyle(QgsComposition.Print)
+        composition.setPaperSize(paper_width, paper_height)
+        composition.setPrintResolution(300)
+
+        # Add HTML Frame
+        # noinspection PyCallingNonCallable
+        html_item = QgsComposerHtml(composition, False)
+        margin_left = 10
+        margin_top = 10
+
+        # noinspection PyCallingNonCallable
+        html_frame = QgsComposerFrame(
+            composition,
+            html_item,
+            margin_left,
+            margin_top,
+            paper_width - 2 * margin_left,
+            paper_height - 2 * margin_top)
+        html_item.addFrame(html_frame)
+        # noinspection PyUnresolvedReferences
+        html_item.setContentMode(QgsComposerHtml.ManualHtml)
+        # noinspection PyUnresolvedReferences
+        html_item.setResizeMode(QgsComposerHtml.RepeatUntilFinished)
+        html_item.setHtml(html)
+        html_item.loadHtml()
+
+        composition.exportAsPDF(output_path)
         return output_path
