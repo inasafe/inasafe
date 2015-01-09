@@ -56,8 +56,9 @@ from safe.common.signals import (
     ANALYSIS_DONE_SIGNAL)
 from safe import messaging as m
 from safe.messaging import styles
-from safe.common.exceptions import InsufficientOverlapError
-from safe.report.map import Map
+from safe.common.exceptions import (
+    InsufficientOverlapError, TemplateLoadingError)
+from safe.report.map_report import MapReport
 from safe.report.html_renderer import HtmlRenderer
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
@@ -509,10 +510,21 @@ class AnalysisHandler(QObject):
         return report
 
     def print_map(self, mode="pdf"):
-        """Slot to open impact report dialog that used to tune report
-        when print map button pressed."""
-        print_dialog = ImpactReportDialog(self.iface)
+        """Open impact report dialog that used to tune report when print map
+            button pressed."""
+        # Check if selected layer is valid
+        impact_layer = self.iface.activeLayer()
+        if impact_layer is None:
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.warning(
+                self,
+                self.tr('InaSAFE'),
+                self.tr('Please select a valid impact layer before '
+                        'trying to print.'))
+            return
 
+        # Open Impact Report Dialog
+        print_dialog = ImpactReportDialog(self.iface)
         print_dialog.button_ok = QtGui.QPushButton(self.tr('OK'))
         print_dialog.buttonBox.addButton(
             print_dialog.button_ok,
@@ -525,185 +537,187 @@ class AnalysisHandler(QObject):
 
         if not print_dialog.exec_() == QtGui.QDialog.Accepted:
             self.show_dynamic_message(
-                self,
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Report generation cancelled!'))))
             return
 
+        # Get the extent of the map for report
         use_full_extent = print_dialog.analysis_extent_radio.isChecked()
-        create_pdf = print_dialog.create_pdf
+        if use_full_extent:
+            map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+            layer_crs = self.iface.activeLayer().crs()
+            layer_extent = self.iface.activeLayer().extent()
+            if map_crs != layer_crs:
+                # noinspection PyCallingNonCallable
+                transform = QgsCoordinateTransform(layer_crs, map_crs)
+                layer_extent = transform.transformBoundingBox(layer_extent)
+            area_extent = layer_extent
+        else:
+            area_extent = self.iface.mapCanvas().extent()
+
+        # Get selected template path to use
         if print_dialog.default_template_radio.isChecked():
             template_path = print_dialog.template_combo.itemData(
                 print_dialog.template_combo.currentIndex())
         else:
             template_path = print_dialog.template_path.text()
 
-        create_pdf = bool(mode == 'pdf')
+        # Open in PDF or Open in Composer Flag (not used, the button is hidden
+        #  by this class. The wizard has two its own buttons for Open In PDF
+        # and Open In Composer buttons. Use variable 'mode' from param instead)
+        create_pdf_flag = print_dialog.create_pdf
 
-        print_map = Map(self.iface)
-        if self.iface.activeLayer() is None:
-            # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.warning(
-                self.parent,
-                self.tr('InaSAFE'),
-                self.tr('Please select a valid impact layer before '
-                        'trying to print.'))
-            return
-
+        # Instantiate and prepare Report
         self.show_dynamic_message(
             self,
             m.Message(
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
 
-        # Set all the map components
-        print_map.set_impact_layer(self.iface.activeLayer())
-        if use_full_extent:
-            map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-            layer_crs = self.iface.activeLayer().crs()
-            layer_extent = self.iface.activeLayer().extent()
-            if map_crs != layer_crs:
-                transform = QgsCoordinateTransform(layer_crs, map_crs)
-                layer_extent = transform.transformBoundingBox(layer_extent)
-            print_map.set_extent(layer_extent)
-        else:
-            print_map.set_extent(self.iface.mapCanvas().extent())
+        map_report = MapReport(self.iface, template_path, impact_layer)
+        map_report.extent = area_extent
 
+        # Get other setting
         settings = QSettings()
         logo_path = settings.value(
             'inasafe/organisation_logo_path', '', type=str)
-        if logo_path != '':
-            print_map.set_organisation_logo(logo_path)
+        map_report.organisation_logo = logo_path
 
         disclaimer_text = settings.value(
             'inasafe/reportDisclaimer', '', type=str)
-        if disclaimer_text != '':
-            print_map.set_disclaimer(disclaimer_text)
+        map_report.disclaimer = disclaimer_text
 
         north_arrow_path = settings.value(
             'inasafe/north_arrow_path', '', type=str)
-        if north_arrow_path != '':
-            print_map.set_north_arrow_image(north_arrow_path)
+        map_report.north_arrow = north_arrow_path
 
         template_warning_verbose = bool(settings.value(
             'inasafe/template_warning_verbose', True, type=bool))
 
-        print_map.set_template(template_path)
-
-        # Get missing elements on template
-        # AG: This is a quick fix to adapt with QGIS >= 2.4
-        # https://github.com/AIFDR/inasafe/issues/911
-        # We'll need to refactor report modules
+        # Check if there's missing elements needed in the template
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
-        missing_elements = []
-        template_file = QtCore.QFile(template_path)
-        template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
-        template_content = template_file.readAll()
-        for component_id in component_ids:
-            if component_id not in template_content:
-                missing_elements.append(component_id)
-
-        if template_warning_verbose and len(missing_elements) != 0:
+        map_report.component_ids = component_ids
+        if template_warning_verbose and len(map_report.missing_elements) != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                    ', '.join(missing_elements))
+                ', '.join(map_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self.parent,
                 title,
                 question,
                 QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-
             if answer == QtGui.QMessageBox.No:
                 return
 
-        LOGGER.debug('Map Title: %s' % print_map.map_title())
-        if create_pdf:
-            print_map.setup_composition()
-            print_map.load_template()
-            if print_map.map_title() is not None:
-                default_file_name = print_map.map_title() + '.pdf'
-            else:
-                self.show_error_message(
-                    self.tr('Keyword "map_title" not found.'))
-                return
-
-            default_file_name = default_file_name.replace(' ', '_')
-            # noinspection PyCallByClass,PyTypeChecker
-            map_pdf_path = QtGui.QFileDialog.getSaveFileName(
-                self.parent, self.tr('Write to PDF'),
-                os.path.join(temp_dir(), default_file_name),
-                self.tr('Pdf File (*.pdf)'))
-            map_pdf_path = str(map_pdf_path)
-
-            if map_pdf_path is None or map_pdf_path == '':
-                self.show_dynamic_message(
-                    self,
-                    m.Message(
-                        m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
-                        m.Text(self.tr('Printing cancelled!'))))
-                return
-
-            table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
-            html_renderer = HtmlRenderer(page_dpi=print_map.page_dpi)
-            keywords = self.keyword_io.read_keywords(self.iface.activeLayer())
-            html_pdf_path = html_renderer.print_impact_table(
-                keywords, filename=table_file_name)
-
-            try:
-                print_map.make_pdf(map_pdf_path)
-            except Exception, e:  # pylint: disable=W0703
-                # FIXME (Ole): This branch is not covered by the tests
-                report = get_error_message(e)
-                self.show_error_message(report)
-
-            # Make sure the file paths can wrap nicely:
-            wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-            wrapped_html_path = html_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-            status = m.Message(
-                m.Heading(self.tr('Map Creator'), **INFO_STYLE),
-                m.Paragraph(self.tr(
-                    'Your PDF was created....opening using the default PDF '
-                    'viewer on your system. The generated pdfs were saved '
-                    'as:')),
-                m.Paragraph(wrapped_map_path),
-                m.Paragraph(self.tr('and')),
-                m.Paragraph(wrapped_html_path))
-
-            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-            QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl('file:///' + html_pdf_path,
-                            QtCore.QUrl.TolerantMode))
-            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-            QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl('file:///' + map_pdf_path,
-                            QtCore.QUrl.TolerantMode))
-            self.show_dynamic_message(self, status)
+        create_pdf_flag = bool(mode == 'pdf')
+        if create_pdf_flag:
+            self.print_map_to_pdf(map_report)
         else:
-            # AG:
-            # See https://github.com/AIFDR/inasafe/issues/911
-            # We need to set the composition to the composer before loading
-            # the template
-            print_map.setup_composition()
-            self.composer = self.iface.createNewComposer()
-            self.composer.setComposition(print_map.composition)
-            print_map.load_template()
-
-            # Zoom to Full Extent
-            number_pages = print_map.composition.numPages()
-            if number_pages > 0:
-                height = \
-                    print_map.composition.paperHeight() * number_pages + \
-                    print_map.composition.spaceBetweenPages() * \
-                    (number_pages - 1)
-                self.composer.fitInView(
-                    0, 0,
-                    print_map.composition.paperWidth() + 1,
-                    height + 1,
-                    QtCore.Qt.KeepAspectRatio)
+            self.open_map_in_composer(map_report)
 
         self.hide_busy()
+
+    def print_map_to_pdf(self, map_report):
+        """Print map to PDF given MapReport instance.
+
+        :param map_report: Map Report instance that is ready to print
+        :type map_report: MapReport
+        """
+        map_report.setup_composition()
+
+        # Get Filename
+        map_title = map_report.map_title
+        if map_title is not None:
+            default_file_name = map_title + '.pdf'
+            default_file_name = default_file_name.replace(' ', '_')
+        else:
+            self.show_error_message(
+                self.tr('Keyword "map_title" not found.'))
+            return
+
+        # Get output path
+        # noinspection PyCallByClass,PyTypeChecker
+        map_pdf_path = QtGui.QFileDialog.getSaveFileName(
+            self.parent,
+            self.tr('Write to PDF'),
+            os.path.join(temp_dir(), default_file_name),
+            self.tr('Pdf File (*.pdf)'))
+        map_pdf_path = str(map_pdf_path)
+
+        if map_pdf_path is None or map_pdf_path == '':
+            self.show_dynamic_message(
+                self,
+                m.Message(
+                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
+                    m.Text(self.tr('Printing cancelled!'))))
+            return
+
+        # Print Impact Table
+        table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
+        html_renderer = HtmlRenderer(page_dpi=map_report.page_dpi)
+        keywords = self.keyword_io.read_keywords(map_report.layer)
+        html_pdf_path = html_renderer.print_impact_table(
+            keywords, filename=table_file_name)
+
+        # Print Impact Map
+        # noinspection PyBroadException
+        try:
+            map_report.print_to_pdf(map_pdf_path)
+        except TemplateLoadingError, e:
+            self.show_error_message(get_error_message(e))
+        except Exception, e:
+            self.show_error_message(get_error_message(e))
+
+        # Make sure the file paths can wrap nicely:
+        wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+        wrapped_html_path = html_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+        status = m.Message(
+            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+            m.Paragraph(self.tr(
+                'Your PDF was created....opening using the default PDF '
+                'viewer on your system. The generated pdfs were saved '
+                'as:')),
+            m.Paragraph(wrapped_map_path),
+            m.Paragraph(self.tr('and')),
+            m.Paragraph(wrapped_html_path))
+
+        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+        QtGui.QDesktopServices.openUrl(
+            QtCore.QUrl.fromLocalFile(html_pdf_path))
+        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+        QtGui.QDesktopServices.openUrl(
+            QtCore.QUrl.fromLocalFile(map_pdf_path))
+
+        self.show_dynamic_message(self, status)
+
+    def open_map_in_composer(self, map_report):
+        """Open map in composer given MapReport instance.
+
+        ..note:: (AG) See https://github.com/AIFDR/inasafe/issues/911. We
+            need to set the composition to the composer before loading the
+            template.
+
+        :param map_report: Map Report that wants to be opened in composer.
+        :type map_report: MapReport
+        """
+        map_report.setup_composition()
+        self.composer = self.iface.createNewComposer()
+        self.composer.setComposition(map_report.composition)
+        map_report.load_template()
+        map_report.draw_composition()
+
+        # Fit In View
+        number_pages = map_report.composition.numPages()
+        paper_height = map_report.composition.paperHeight()
+        paper_width = map_report.composition.paperWidth()
+        space_between_pages = map_report.composition.spaceBetweenPages()
+        if number_pages > 0:
+            height = (paper_height * number_pages) + (
+                space_between_pages * (number_pages - 1))
+            self.composer.fitInView(
+                0, 0, paper_width + 1, height + 1, QtCore.Qt.KeepAspectRatio)
