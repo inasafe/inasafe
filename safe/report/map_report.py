@@ -399,6 +399,7 @@ class MapReport(object):
             legend_title = legend_attributes.get('legend_title', None)
 
             symbol_count = 1
+            # noinspection PyUnresolvedReferences
             if self.layer.type() == QgsMapLayer.VectorLayer:
                 renderer = self.layer.rendererV2()
                 if renderer.type() in ['', '']:
@@ -452,4 +453,3 @@ class MapReport(object):
 
         self.composition.exportAsPDF(output_path)
         return output_path
-
