@@ -29,6 +29,8 @@ from datetime import datetime
 from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
+from qgis.core import (
+    QgsRectangle, QgsCoordinateReferenceSystem, QgsMapLayerRegistry)
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
 from PyQt4.QtGui import (
@@ -37,8 +39,6 @@ from PyQt4.QtGui import (
     QTableWidgetItem,
     QPushButton,
     QDialogButtonBox)
-
-from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
 from safe_qgis.tools.batch import scenario_runner
@@ -279,7 +279,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.iface.newProject()
 
         try:
-            scenario_runner.add_layers(scenario_directory, paths)
+            scenario_runner.add_layers(scenario_directory, paths, self.iface)
         except FileNotFoundError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
@@ -460,11 +460,9 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         :returns: Flag indicating if the task succeeded or not.
         :rtype: bool
         """
-
         self.enable_busy_cursor()
         # set status to 'running'
         status_item.setText(self.tr('Running'))
-
         # .. see also:: :func:`appendRow` to understand the next 2 lines
         variant = task_item.data(QtCore.Qt.UserRole)
         value = variant[0]
@@ -501,7 +499,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 impact_layer = self.dock.runner.impact_layer()
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)
-
+                QgsMapLayerRegistry.instance().addMapLayer(
+                    qgis_layer, addToLegend=False)
                 # noinspection PyBroadException
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
