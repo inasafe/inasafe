@@ -352,7 +352,7 @@ class TestShakeEvent(unittest.TestCase):
             'elapsed-time-name': u'Elapsed time since event',
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
-            'longitude-value': u'140\xb037\'12.00"E',
+            'longitude-value': u'140\xb037\u203212.00\u2033E',
             'city-table-name': u'Places Affected',
             'bearing-text': u'bearing',
             'limitations': (
@@ -384,7 +384,7 @@ class TestShakeEvent(unittest.TestCase):
             'credits': (
                 u'Supported by the Australia-Indonesia Facility for Disaster '
                 u'Reduction, Geoscience Australia and the World Bank-GFDRR.'),
-            'latitude-value': u'2\xb025\'48.00"S',
+            'latitude-value': u'2\xb025\u203248.00\u2033S',
             'time': '6:8:9',
             'depth-value': '10.0'}
         result['elapsed-time'] = u''
@@ -403,8 +403,8 @@ class TestShakeEvent(unittest.TestCase):
             data_is_local_flag=True)
         degree_symbol = unichr(176)
         expected_result = (
-            'M 3.6 5-11-2013 6:8:9 Latitude: 2%s25\'48.00"S Longitude: '
-            '140%s37\'12.00"E Depth: 10.0km Located 0.00km n/a of n/a'
+            'M 3.6 5-11-2013 6:8:9 Latitude: 2°25′48.00″S Longitude: '
+            '140°37′12.00″E Depth: 10.0km Located 0.00km n/a of n/a'
             % (degree_symbol, degree_symbol))
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %
