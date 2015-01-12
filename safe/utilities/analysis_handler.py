@@ -59,7 +59,6 @@ from safe.messaging import styles
 from safe.common.exceptions import (
     InsufficientOverlapError, TemplateLoadingError)
 from safe.report.impact_report import ImpactReport
-from safe.report.html_renderer import HtmlRenderer
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
