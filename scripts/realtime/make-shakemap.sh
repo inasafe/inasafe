@@ -8,10 +8,10 @@ if test -z "$1"
 then
   # latest event
   python realtime/make_map.py
-  xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py
+  xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py /home/realtime/shakemaps
 else
   # User defined event
-  xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py $1
+  xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py /home/realtime/shakemaps $1
 fi
 
 
