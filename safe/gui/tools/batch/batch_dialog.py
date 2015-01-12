@@ -595,11 +595,10 @@ class BatchDialog(QDialog, FORM_CLASS):
         # create map pdf
         map_report.print_to_pdf(map_path)
 
-        # create table report pdf
-        html_renderer = HtmlRenderer(map_report.page_dpi)
-        keyword_io = KeywordIO()
-        keywords = keyword_io.read_keywords(impact_layer)
-        html_renderer.print_impact_table(keywords, table_path)
+        # Print Impact Table
+        table_path = os.path.splitext(map_path)[0] + '_table.pdf'
+        table_path = map_report.print_impact_table(table_path)
+
         LOGGER.debug("Report done %s %s" % (map_path, table_path))
 
     def show_parser_results(self, parsed_list, unparsed_list):
