@@ -25,7 +25,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ImpactReport(unittest.TestCase):
+class ImpactReportTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
 
     def setUp(self):
@@ -46,7 +46,7 @@ class ImpactReport(unittest.TestCase):
         title = report.map_title
         expected_title = 'People affected by flood prone areas'
         message = 'Expected: %s\nGot:\n %s' % (expected_title, title)
-        assert title == expected_title, message
+        self.assertEqual(title, expected_title, message)
 
     def test_handle_missing_map_title(self):
         """Missing map title from the keywords fails gracefully"""
@@ -60,6 +60,26 @@ class ImpactReport(unittest.TestCase):
         expected_title = None
         message = 'Expected: %s\nGot:\n %s' % (expected_title, title)
         self.assertEqual(title, expected_title, message)
+
+    def test_missing_elements(self):
+        """Test missing elements set correctly."""
+        impact_layer_path = test_data_path(
+            'impact', 'population_affected_entire_area.shp')
+        layer, _ = load_layer(impact_layer_path)
+
+        template = resources_path(
+            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+        report = ImpactReport(IFACE, template, layer)
+        # There are missing elements in the template
+        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
+                         'impact-map', 'impact-legend',
+                         'i-added-element-id-here-nooo']
+        report.component_ids = component_ids
+        expected_missing_elements = ['i-added-element-id-here-nooo']
+        message = 'The missing_elements should be %s, but it returns %s' % (
+            report.missing_elements, expected_missing_elements)
+        self.assertEqual(
+            expected_missing_elements, report.missing_elements, message)
 
     def test_print_default_template(self):
         """Test printing report to pdf using default template works."""
@@ -147,8 +167,6 @@ class ImpactReport(unittest.TestCase):
             prefix='map_custom_logo_test', suffix='.pdf', dir=temp_dir('test'))
         report.print_map_to_pdf(out_path)
 
-        print out_path
-
         # Check the file exists
         message = 'Rendered output does not exist: %s' % out_path
         self.assertTrue(os.path.exists(out_path), message)
@@ -170,6 +188,36 @@ class ImpactReport(unittest.TestCase):
         message = 'The custom logo path is not set correctly'
         self.assertEqual(custom_logo_path, custom_img_path, message)
 
+    def test_print_impact_table(self):
+        """Test print impact table to pdf."""
+        impact_layer_path = test_data_path(
+            'impact', 'population_affected_entire_area.shp')
+        layer, _ = load_layer(impact_layer_path)
+        # noinspection PyUnresolvedReferences
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        # noinspection PyCallingNonCallable
+        rect = QgsRectangle(106.8194, -6.2108, 106.8201, -6.1964)
+        CANVAS.setExtent(rect)
+        CANVAS.refresh()
+
+        template = resources_path(
+            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+        report = ImpactReport(IFACE, template, layer)
+        report.template = template  # just to cover set template
+        out_path = unique_filename(
+            prefix='test_print_impact_table',
+            suffix='.pdf',
+            dir=temp_dir('test'))
+        report.print_impact_table(out_path)
+
+        # Check the file exists
+        message = 'Rendered output does not exist: %s' % out_path
+        self.assertTrue(os.path.exists(out_path), message)
+
+        # Check the file is not corrupt
+        message = 'The output file %s is corrupt' % out_path
+        out_size = os.stat(out_path).st_size
+        self.assertTrue(out_size > 0, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactReport, 'test')

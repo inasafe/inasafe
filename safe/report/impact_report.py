@@ -89,12 +89,17 @@ class ImpactReport(object):
 
     @template.setter
     def template(self, template):
-        """Set the template.
+        """Set template that will be used for report generation.
 
-        :param template: The template.
+        :param template: Path to composer template
         :type template: str
         """
-        self._template = template
+        if isinstance(template, str) and os.path.exists(template):
+            self._template = template
+        else:
+            self._template = resources_path(
+                'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+
         # Also recreate template composition
         self._template_composition = TemplateComposition(
             template_path=self.template,
@@ -149,24 +154,6 @@ class ImpactReport(object):
         :type page_dpi: int
         """
         self._page_dpi = page_dpi
-
-    @property
-    def template(self):
-        """Getter to the template path."""
-        return self._template
-
-    @template.setter
-    def template(self, template):
-        """Set template that will be used for report generation.
-
-        :param template: Path to composer template
-        :type template: str
-        """
-        if isinstance(template, str) and os.path.exists(template):
-            self._template = template
-        else:
-            self._template = resources_path(
-                'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
 
     @property
     def north_arrow(self):
