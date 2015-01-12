@@ -58,7 +58,7 @@ from safe import messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import (
     InsufficientOverlapError, TemplateLoadingError)
-from safe.report.map_report import MapReport
+from safe.report.impact_report import ImpactReport
 from safe.report.html_renderer import HtmlRenderer
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
@@ -575,22 +575,22 @@ class AnalysisHandler(QObject):
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
 
-        map_report = MapReport(self.iface, template_path, impact_layer)
-        map_report.extent = area_extent
+        impact_report = ImpactReport(self.iface, template_path, impact_layer)
+        impact_report.extent = area_extent
 
         # Get other setting
         settings = QSettings()
         logo_path = settings.value(
             'inasafe/organisation_logo_path', '', type=str)
-        map_report.organisation_logo = logo_path
+        impact_report.organisation_logo = logo_path
 
         disclaimer_text = settings.value(
             'inasafe/reportDisclaimer', '', type=str)
-        map_report.disclaimer = disclaimer_text
+        impact_report.disclaimer = disclaimer_text
 
         north_arrow_path = settings.value(
             'inasafe/north_arrow_path', '', type=str)
-        map_report.north_arrow = north_arrow_path
+        impact_report.north_arrow = north_arrow_path
 
         template_warning_verbose = bool(settings.value(
             'inasafe/template_warning_verbose', True, type=bool))
@@ -598,13 +598,13 @@ class AnalysisHandler(QObject):
         # Check if there's missing elements needed in the template
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
-        map_report.component_ids = component_ids
-        if template_warning_verbose and len(map_report.missing_elements) != 0:
+        impact_report.component_ids = component_ids
+        if template_warning_verbose and len(impact_report.missing_elements) != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(map_report.missing_elements))
+                ', '.join(impact_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self.parent,
@@ -616,22 +616,22 @@ class AnalysisHandler(QObject):
 
         create_pdf_flag = bool(mode == 'pdf')
         if create_pdf_flag:
-            self.print_map_to_pdf(map_report)
+            self.print_map_to_pdf(impact_report)
         else:
-            self.open_map_in_composer(map_report)
+            self.open_map_in_composer(impact_report)
 
         self.hide_busy()
 
-    def print_map_to_pdf(self, map_report):
+    def print_map_to_pdf(self, impact_report):
         """Print map to PDF given MapReport instance.
 
-        :param map_report: Map Report instance that is ready to print
-        :type map_report: MapReport
+        :param impact_report: Impact Report instance that is ready to print
+        :type impact_report: ImpactReport
         """
-        map_report.setup_composition()
+        impact_report.setup_composition()
 
         # Get Filename
-        map_title = map_report.map_title
+        map_title = impact_report.map_title
         if map_title is not None:
             default_file_name = map_title + '.pdf'
             default_file_name = default_file_name.replace(' ', '_')
@@ -642,14 +642,14 @@ class AnalysisHandler(QObject):
 
         # Get output path
         # noinspection PyCallByClass,PyTypeChecker
-        map_pdf_path = QtGui.QFileDialog.getSaveFileName(
+        output_path = QtGui.QFileDialog.getSaveFileName(
             self.parent,
             self.tr('Write to PDF'),
             os.path.join(temp_dir(), default_file_name),
             self.tr('Pdf File (*.pdf)'))
-        map_pdf_path = str(map_pdf_path)
+        output_path = str(output_path)
 
-        if map_pdf_path is None or map_pdf_path == '':
+        if output_path is None or output_path == '':
             self.show_dynamic_message(
                 self,
                 m.Message(
@@ -657,14 +657,9 @@ class AnalysisHandler(QObject):
                     m.Text(self.tr('Printing cancelled!'))))
             return
 
-        # Print Impact Table
-        table_pdf_path = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
-        table_pdf_path = map_report.print_impact_table(table_pdf_path)
-
-        # Print Impact Map
-        # noinspection PyBroadException
         try:
-            map_report.print_to_pdf(map_pdf_path)
+            map_pdf_path, table_pdf_path = impact_report.print_to_pdf(
+                output_path)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
         except Exception, e:
@@ -692,27 +687,27 @@ class AnalysisHandler(QObject):
 
         self.show_dynamic_message(self, status)
 
-    def open_map_in_composer(self, map_report):
+    def open_map_in_composer(self, impact_report):
         """Open map in composer given MapReport instance.
 
         ..note:: (AG) See https://github.com/AIFDR/inasafe/issues/911. We
             need to set the composition to the composer before loading the
             template.
 
-        :param map_report: Map Report that wants to be opened in composer.
-        :type map_report: MapReport
+        :param impact_report: Impact Report that wants to be opened in composer.
+        :type impact_report: ImpactReport
         """
-        map_report.setup_composition()
+        impact_report.setup_composition()
         self.composer = self.iface.createNewComposer()
-        self.composer.setComposition(map_report.composition)
-        map_report.load_template()
-        map_report.draw_composition()
+        self.composer.setComposition(impact_report.composition)
+        impact_report.load_template()
+        impact_report.draw_composition()
 
         # Fit In View
-        number_pages = map_report.composition.numPages()
-        paper_height = map_report.composition.paperHeight()
-        paper_width = map_report.composition.paperWidth()
-        space_between_pages = map_report.composition.spaceBetweenPages()
+        number_pages = impact_report.composition.numPages()
+        paper_height = impact_report.composition.paperHeight()
+        paper_width = impact_report.composition.paperWidth()
+        space_between_pages = impact_report.composition.spaceBetweenPages()
         if number_pages > 0:
             height = (paper_height * number_pages) + (
                 space_between_pages * (number_pages - 1))

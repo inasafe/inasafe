@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Module to generate report using QgsComposition.
+Module to generate impact report using QgsComposition.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -34,21 +34,28 @@ from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
 from safe.common.exceptions import (
     KeywordNotFoundError, TemplateLoadingError)
+from safe import messaging as m
+from safe.messaging import styles
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import impact_attribution
-from safe.utilities.resources import html_footer, html_header
+from safe.utilities.resources import html_footer, html_header, resource_url
 from safe.utilities.i18n import tr
 from safe.defaults import (
     default_organisation_logo_path,
     default_north_arrow_path)
 from safe.report.template_composition import TemplateComposition
 
+INFO_STYLE = styles.INFO_STYLE
+LOGO_ELEMENT = m.Image(
+    resource_url(
+        resources_path('img', 'logos', 'inasafe-logo.png')),
+    'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class MapReport(object):
+class ImpactReport(object):
     """A class for creating report using QgsComposition."""
     def __init__(self, iface, template, layer):
         """Constructor for the Composition Report class.
@@ -59,7 +66,7 @@ class MapReport(object):
         :param template: The QGIS template path.
         :type template: str
         """
-        LOGGER.debug('InaSAFE Map Report class initialised')
+        LOGGER.debug('InaSAFE Impact Report class initialised')
         self._iface = iface
         self._template = template
         self._layer = layer
@@ -435,6 +442,29 @@ class MapReport(object):
                 legend.synchronizeWithModel()
 
     def print_to_pdf(self, output_path):
+        """A wrapper to print both the map and the impact table to PDF.
+
+        :param output_path: Path on the file system to which the pdf should
+            be saved. If None, a generated file name will be used. Note that the
+            table will be prefixed with '_table'.
+        :type output_path: str
+
+        :returns: The map path and the table path to the pdfs generated.
+        :rtype: tuple
+        """
+        # Print the map to pdf
+        try:
+            map_path = self.print_map_to_pdf(output_path)
+        except TemplateLoadingError:
+            raise
+
+        # Print the table to pdf
+        table_path = os.path.splitext(output_path)[0] + '_table.pdf'
+        table_path = self.print_impact_table(table_path)
+
+        return map_path, table_path
+
+    def print_map_to_pdf(self, output_path):
         """Generate the printout for our final map as pdf.
 
         :param output_path: Path on the file system to which the pdf should be
@@ -461,7 +491,12 @@ class MapReport(object):
         return output_path
 
     def print_impact_table(self, output_path):
-        """High level table generator to print summary from impact layer.
+        """Pint summary from impact layer to PDF.
+
+        ..note:: The order of the report:
+            1. Summary table
+            2. Aggregation table
+            3. Attribution table
 
         :param output_path: Output path.
         :type output_path: str
@@ -476,39 +511,21 @@ class MapReport(object):
         if output_path is None:
             output_path = unique_filename(suffix='.pdf', dir=temp_dir())
 
-        try:
-            summary_table = keywords['impact_summary']
-        except KeyError:
-            summary_table = None
-
+        summary_table = keywords.get('impact_summary', None)
+        full_table = keywords.get('impact_table', None)
+        aggregation_table = keywords.get('postprocessing_report', None)
         attribution_table = impact_attribution(keywords)
-
-        try:
-            full_table = keywords['impact_table']
-        except KeyError:
-            full_table = None
-
-        try:
-            aggregation_table = keywords['postprocessing_report']
-        except KeyError:
-            aggregation_table = None
-
-        # The order of the report:
-        # 1. Summary table
-        # 2. Aggregation table
-        # 3. Attribution table
 
         # (AG) We will not use impact_table as most of the IF use that as:
         # impact_table = impact_summary + some information intended to be
         # shown on screen (see FloodOsmBuilding)
         # Unless the impact_summary is None, we will use impact_table as the
         # alternative
-        html = ''
+        html = LOGO_ELEMENT.to_html()
+        html += m.Heading(tr('Analysis Results'), **INFO_STYLE).to_html()
         if summary_table is None:
-            html += '<h2>%s</h2>' % tr('Detailed Table')
             html += full_table
         else:
-            html = '<h2>%s</h2>' % tr('Summary Table')
             html += summary_table
 
         if aggregation_table is not None:
@@ -521,6 +538,7 @@ class MapReport(object):
 
         # Print HTML using composition
         map_settings = QgsMapSettings()
+
         # A4 Portrait
         paper_width = 210
         paper_height = 297

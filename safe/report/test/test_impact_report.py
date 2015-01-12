@@ -19,13 +19,13 @@ from safe.common.utilities import temp_dir, unique_filename
 from safe.utilities.resources import resources_path
 from safe.test.utilities import load_layer, get_qgis_app, test_data_path
 from safe.utilities.gis import qgis_version
-from safe.report.map_report import MapReport
+from safe.report.impact_report import ImpactReport
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ReportTest(unittest.TestCase):
+class ImpactReport(unittest.TestCase):
     """Test the InaSAFE Map generator"""
 
     def setUp(self):
@@ -42,7 +42,7 @@ class ReportTest(unittest.TestCase):
 
         template = resources_path(
             'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
-        report = MapReport(IFACE, template, layer)
+        report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = 'People affected by flood prone areas'
         message = 'Expected: %s\nGot:\n %s' % (expected_title, title)
@@ -55,7 +55,7 @@ class ReportTest(unittest.TestCase):
         layer, _ = load_layer(layer_path)
         template = resources_path(
             'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
-        report = MapReport(IFACE, template, layer)
+        report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = None
         message = 'Expected: %s\nGot:\n %s' % (expected_title, title)
@@ -75,12 +75,12 @@ class ReportTest(unittest.TestCase):
 
         template = resources_path(
             'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
-        report = MapReport(IFACE, template, layer)
+        report = ImpactReport(IFACE, template, layer)
         out_path = unique_filename(
             prefix='map_default_template_test',
             suffix='.pdf',
             dir=temp_dir('test'))
-        report.print_to_pdf(out_path)
+        report.print_map_to_pdf(out_path)
 
         # Check the file exists
         message = 'Rendered output does not exist: %s' % out_path
@@ -137,7 +137,7 @@ class ReportTest(unittest.TestCase):
 
         template = resources_path(
             'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
-        report = MapReport(IFACE, template, layer)
+        report = ImpactReport(IFACE, template, layer)
 
         # Set custom logo
         custom_logo_path = resources_path('img', 'logos', 'logo-flower.png')
@@ -145,7 +145,7 @@ class ReportTest(unittest.TestCase):
 
         out_path = unique_filename(
             prefix='map_custom_logo_test', suffix='.pdf', dir=temp_dir('test'))
-        report.print_to_pdf(out_path)
+        report.print_map_to_pdf(out_path)
 
         print out_path
 
@@ -172,6 +172,6 @@ class ReportTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ReportTest, 'test')
+    suite = unittest.makeSuite(ImpactReport, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

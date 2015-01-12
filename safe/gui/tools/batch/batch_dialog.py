@@ -41,9 +41,7 @@ from PyQt4.QtGui import (
 from safe.gui.tools.batch import scenario_runner
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.utilities.resources import get_ui_class
-from safe.utilities.keyword_io import KeywordIO
-from safe.report.map_report import MapReport
-from safe.report.html_renderer import HtmlRenderer
+from safe.report.impact_report import ImpactReport
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
 from safe.utilities.help import show_context_help
@@ -586,18 +584,14 @@ class BatchDialog(QDialog, FORM_CLASS):
         # FIXME: check if impact_layer is the real impact layer...
         template = resources_path(
             'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
-        map_report = MapReport(self.iface, template, impact_layer)
+        impact_report = ImpactReport(self.iface, template, impact_layer)
 
         LOGGER.debug('Create Report: %s' % title)
         map_path, table_path = self.report_path(
             output_directory, title, count, index)
 
-        # create map pdf
-        map_report.print_to_pdf(map_path)
-
-        # Print Impact Table
-        table_path = os.path.splitext(map_path)[0] + '_table.pdf'
-        table_path = map_report.print_impact_table(table_path)
+        # create map and table pdf
+        map_path, table_path = impact_report.print_to_pdf(map_path)
 
         LOGGER.debug("Report done %s %s" % (map_path, table_path))
 
