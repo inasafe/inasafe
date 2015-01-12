@@ -112,78 +112,52 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_get_keyword_from_file(self):
         """Get keyword from a filesystem file's .keyword file."""
-
-        vector_path = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        raster_shake_path = os.path.join(
-            HAZDATA, 'Shakemap_Padang_2009.asc')
-        raster_tsunami_path = os.path.join(
-            TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif')
-        raster_exposure_path = os.path.join(
-            TESTDATA, 'tsunami_building_exposure.shp')
-        raster_population_path = os.path.join(EXPDATA, 'glp10ag.asc')
+        raster_shake_path = test_data_path(
+            'hazard', 'jakarta_flood_design.tif')
+        vector_path = test_data_path(
+            'exposure', 'buildings_osm_4326.shp')
+        raster_tsunami_path = test_data_path(
+            'hazard', 'padang_tsunami_mw8.tif')
 
         keyword = read_file_keywords(raster_shake_path, 'category')
         expected_keyword = 'hazard'
-        message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-            keyword, expected_keyword, raster_shake_path)
-        self.assertEqual(keyword, 'hazard', message)
+        message = ('The keyword "category" for %s is %s. Expected keyword is: '
+                   '%s') % (raster_shake_path, keyword, expected_keyword)
+        self.assertEqual(keyword, expected_keyword, message)
 
         # Test we get an exception if keyword is not found
-        try:
-            _ = read_file_keywords(raster_shake_path, 'boguskeyword')
-        except KeywordNotFoundError:
-            pass  # this is good
-        except Exception, e:
-            message = ('Request for bogus keyword raised incorrect '
-                       'exception type: \n %s') % str(e)
-            assert (), message
+        self.assertRaises(
+            KeywordNotFoundError,
+            read_file_keywords, raster_shake_path, 'boguskeyword')
 
+        # Test if all the keywords are all ready correctly
         keywords = read_file_keywords(raster_shake_path)
-
         expected_keywords = {
             'category': 'hazard',
-            'subcategory': 'earthquake',
-            'source': 'USGS',
-            'unit': 'MMI',
-            'title': 'An earthquake in Padang like in 2009'}
+            'subcategory': 'flood',
+            'unit': 'm',
+            'title': 'Jakarta flood like 2007 with structural improvements'}
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
 
-        keywords = read_file_keywords(raster_population_path)
-        expected_keywords = {
-            'category': 'exposure',
-            'source': ('Center for International Earth Science Information '
-                       'Network (CIESIN)'),
-            'subcategory': 'population',
-            'datatype': 'density',
-            'title': 'People'}
-        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
-        self.assertEqual(keywords, expected_keywords, message)
-
+        # Test reading keywords from vector layer
         keywords = read_file_keywords(vector_path)
         expected_keywords = {
             'category': 'exposure',
-            'datatype': 'itb',
+            'datatype': 'osm',
             'subcategory': 'structure',
-            'title': 'Padang WGS84'}
+            'title': 'buildings_osm_4326',
+            'purpose': 'dki'}
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
 
-        # tsunami example (one layer is UTM)
+        # tsunami example
         keywords = read_file_keywords(raster_tsunami_path)
         expected_keywords = {
-            'title': 'Tsunami Max Inundation',
+            'title': 'A tsunami in Padang (Mw 8.8)',
             'category': 'hazard',
             'subcategory': 'tsunami',
             'unit': 'm'}
-        message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
-        self.assertEqual(keywords, expected_keywords, message)
-
-        keywords = read_file_keywords(raster_exposure_path)
-        expected_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'title': 'Tsunami Building Exposure'}
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
 

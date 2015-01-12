@@ -16,7 +16,6 @@ __revision__ = '$Format:%H$'
 __date__ = '10/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import os
 
 from PyQt4 import QtGui, QtWebKit
 

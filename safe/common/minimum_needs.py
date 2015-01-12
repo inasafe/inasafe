@@ -11,7 +11,9 @@ from collections import OrderedDict
 import json
 from os.path import exists, dirname
 from os import remove
+
 from safe.utilities.i18n import tr
+
 
 class MinimumNeeds(object):
     """A abstract class for handling the minimum needs.

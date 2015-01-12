@@ -18,10 +18,6 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 import os
 import sys
 import logging
@@ -29,6 +25,9 @@ from datetime import datetime
 
 from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
+
+from qgis.core import (
+    QgsRectangle, QgsCoordinateReferenceSystem, QgsMapLayerRegistry)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
@@ -39,16 +38,14 @@ from PyQt4.QtGui import (
     QPushButton,
     QDialogButtonBox)
 
-from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
-
 from safe.gui.tools.batch import scenario_runner
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.utilities.resources import get_ui_class
-from safe.report.map import Map
-from safe.report.html_renderer import HtmlRenderer
+from safe.report.impact_report import ImpactReport
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
 from safe.utilities.help import show_context_help
+from safe.utilities.resources import resources_path
 
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('batch_dialog_base.ui')
@@ -280,7 +277,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.iface.newProject()
 
         try:
-            scenario_runner.add_layers(scenario_directory, paths)
+            scenario_runner.add_layers(scenario_directory, paths, self.iface)
         except FileNotFoundError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
@@ -500,8 +497,11 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # become the active layer. <--- WRONG
                 # noinspection PyUnresolvedReferences
                 impact_layer = self.dock.analysis.get_impact_layer()
+
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)
+                QgsMapLayerRegistry.instance().addMapLayer(
+                    qgis_layer, addToLegend=False)
 
                 # noinspection PyBroadException
                 try:
@@ -581,23 +581,18 @@ class BatchDialog(QDialog, FORM_CLASS):
         See also:
             Dock.printMap()
         """
-
-        inasafe_map = Map(self.iface)
-
         # FIXME: check if impact_layer is the real impact layer...
-        inasafe_map.set_impact_layer(impact_layer)
+        template = resources_path(
+            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+        impact_report = ImpactReport(self.iface, template, impact_layer)
 
         LOGGER.debug('Create Report: %s' % title)
         map_path, table_path = self.report_path(
             output_directory, title, count, index)
 
-        # create map pdf
-        inasafe_map.make_pdf(map_path)
+        # create map and table pdf
+        map_path, table_path = impact_report.print_to_pdf(map_path)
 
-        # create table report pdf
-        html_renderer = HtmlRenderer(inasafe_map.page_dpi)
-        keywords = inasafe_map.keyword_io.read_keywords(impact_layer)
-        html_renderer.print_impact_table(keywords, table_path)
         LOGGER.debug("Report done %s %s" % (map_path, table_path))
 
     def show_parser_results(self, parsed_list, unparsed_list):

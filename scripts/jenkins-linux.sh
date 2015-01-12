@@ -15,7 +15,7 @@
 
 # Configuration option:
 # Add packages to this list if you want to be able to run the tests for that package
-ALLOWED_TESTS="safe realtime batch impact_stats report test tools utilities widgets"
+ALLOWED_TESTS="safe realtime"
 
 # You should not need to edit anything after this point.
 # -------------------------------------------------------------------------
@@ -24,9 +24,9 @@ ALLOWED_TESTS="safe realtime batch impact_stats report test tools utilities widg
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <test subpath>"
     echo "e.g."
-    echo "$0 widgets"
+    echo "$0 safe"
     echo
-    echo "Will run all tests in safe_qgis.widgets package"
+    echo "Will run all tests in safe package"
     echo "and limit coverage report to that package"
     echo
     exit 1
@@ -81,20 +81,10 @@ echo "Running tests in $PATH"
 #scripts/update-test-data.
 
 #Go on with metrics and tests
-make clean
-if [[ ${TEST_PACKAGE} == 'safe' ]] || [[ ${TEST_PACKAGE} == 'realtime' ]]; then
-    # special case for safe or realtime package
-    TEST_PATH="$DIR/$TEST_PACKAGE"
-    xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
-        --with-id --with-xcoverage --with-xunit --verbose \
-        --cover-package=${TEST_PACKAGE} ${TEST_PATH}
-else
-    # all other packages get dealt with the same way
-    TEST_PATH="$DIR/safe_qgis/$TEST_PACKAGE"
-    xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
-        --with-id --with-xcoverage --with-xunit --verbose \
-        --cover-package=safe_qgis.${TEST_PACKAGE} ${TEST_PATH}
-fi
+TEST_PATH="$DIR/$TEST_PACKAGE"
+xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
+    --with-id --with-xcoverage --with-xunit --verbose \
+    --cover-package=${TEST_PACKAGE} ${TEST_PATH}
 
 make jenkins-pyflakes
 make jenkins-pep8

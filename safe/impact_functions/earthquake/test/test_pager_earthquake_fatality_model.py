@@ -66,4 +66,4 @@ class TestITBFatalityFunction(unittest.TestCase):
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(
-            fatalities, expected_fatalities,rtol=1.0e-5), msg
+            fatalities, expected_fatalities, rtol=1.0e-5), msg

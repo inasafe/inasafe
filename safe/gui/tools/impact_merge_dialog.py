@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.defaults import disclaimer
-from safe.utilities.resources import html_footer, html_header
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -23,18 +21,19 @@ import os
 from collections import OrderedDict
 from xml.dom import minidom
 
+# noinspection PyUnresolvedReferences
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsMapSettings,
+    QgsComposition,
+    QgsRectangle,
+    QgsAtlasComposition)
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore, QtXml
+from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog, QDesktopServices
-from qgis.core import (
-    QgsMapLayerRegistry,
-    QgsMapRenderer,
-    QgsComposition,
-    QgsRectangle,
-    QgsAtlasComposition)
 
 from safe.common.exceptions import (
     InvalidLayerError,
@@ -45,22 +44,29 @@ from safe.common.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
     ReportCreationError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    TemplateLoadingError)
 from safe.common.utilities import temp_dir
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.resources import html_header, get_ui_class, resources_path
+from safe.report.template_composition import TemplateComposition
+from safe.utilities.resources import (
+    html_header,
+    html_footer,
+    get_ui_class,
+    resources_path)
+from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import (
     html_to_file,
     add_ordered_combo_item)
 from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
+from safe.defaults import disclaimer
 
 INFO_STYLE = styles.INFO_STYLE
 FORM_CLASS = get_ui_class('impact_merge_dialog_base.ui')
 
 
-# noinspection PyArgumentList
 class ImpactMergeDialog(QDialog, FORM_CLASS):
     """Tools for merging 2 impact layer based on different exposure."""
 
@@ -82,7 +88,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
         # Template Path for composer
         self.template_path = resources_path(
-            'qgis-composer-templates',  'merged_report.qpt')
+            'qgis-composer-templates', 'merged_report.qpt')
 
         # Safe Logo Path
         self.safe_logo_path = resources_path(
@@ -294,8 +300,9 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                 'successfully.'))
 
         # Open output directory on file explorer
+        # noinspection PyArgumentList
         output_directory_url = QUrl.fromLocalFile(self.out_dir)
-        # noinspection PyTypeChecker,PyCallByClass
+        # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
         QDesktopServices.openUrl(output_directory_url)
 
     def read_settings(self):
@@ -317,7 +324,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
     def get_project_layers(self):
         """Get impact layers and aggregation layer currently loaded in QGIS."""
-        # noinspection PyArgumentList
+        # noinspection PyArgumentList,PyUnresolvedReferences
         registry = QgsMapLayerRegistry.instance()
 
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
@@ -388,7 +395,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             raise InvalidLayerError(
                 self.tr('First layer must be different to second layer''.'))
 
-        # Get All Chosen Layer
+        # Get all chosen layers
         self.first_impact['layer'] = self.first_layer.itemData(
             self.first_layer.currentIndex(), QtCore.Qt.UserRole)
         self.second_impact['layer'] = self.second_layer.itemData(
@@ -801,8 +808,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         basically an HTML frame. Of course after the merging process is done,
         we delete each report table on self.html_reports physically on disk.
         """
-        # Setup Map Renderer and set all the layer
-        renderer = QgsMapRenderer()
+        # Set the layer set
         layer_set = [self.first_impact['layer'].id(),
                      self.second_impact['layer'].id()]
 
@@ -810,11 +816,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         if not self.entire_area_mode:
             layer_set.append(self.aggregation['layer'].id())
 
-        # Set Layer set to renderer
-        renderer.setLayerSet(layer_set)
+        # Instantiate Map Settings for Composition
+        map_settings = QgsMapSettings()
+        map_settings.setLayers(layer_set)
 
         # Create composition
-        composition = self.load_template(renderer)
+        composition = self.load_template(map_settings)
 
         # Get Map
         composer_map = composition.getComposerItemById('impact-map')
@@ -864,6 +871,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             fit_max_y = center_y + (new_height / 2.0)
 
             # Create the extent and set it to the map
+            # noinspection PyCallingNonCallable
             map_extent = QgsRectangle(
                 fit_min_x, fit_min_y, fit_max_x, fit_max_y)
             composer_map.setNewExtent(map_extent)
@@ -899,6 +907,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             composition.exportAsPDF(path)
         else:
             # Create atlas composition:
+            # noinspection PyCallingNonCallable
             atlas = QgsAtlasComposition(composition)
 
             # Set coverage layer
@@ -959,7 +968,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             atlas.endRender()
 
     # noinspection PyArgumentList
-    def load_template(self, renderer):
+    def load_template(self, map_settings):
         """Load composer template for merged report.
 
         Validate it as well. The template needs to have:
@@ -976,23 +985,25 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         8. QgsComposerLegend with id 'impact-legend' for map legend.
         9. QgsComposerHTML with id 'merged-report-table' for the merged report.
 
-        :param renderer: Map renderer
-        :type renderer: QgsMapRenderer
+        :param map_settings: Map settings.
+        :type map_settings: QgsMapSettings
 
         """
         # Create Composition
-        composition = QgsComposition(renderer)
+        template_composition = TemplateComposition(
+            self.template_path, map_settings)
 
-        template_file = QtCore.QFile(self.template_path)
-        template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
-        template_content = template_file.readAll()
-        template_file.close()
+        # Validate the component in the template
+        component_ids = ['impact-map', 'safe-logo', 'summary-report',
+                         'aggregation-area', 'map-scale', 'map-legend',
+                         'organisation-logo', 'merged-report-table']
+        template_composition.component_ids = component_ids
+        if len(template_composition.missing_elements) > 0:
+            raise ReportCreationError(self.tr(
+                'Components: %s could not be found' % ', '.join(
+                    template_composition.missing_elements)))
 
-        # Create a dom document containing template content
-        document = QtXml.QDomDocument()
-        document.setContent(template_content)
-
-        # Prepare Map Substitution
+        # Prepare map substitution and set to composition
         impact_title = '%s and %s' % (
             self.first_impact['map_title'],
             self.second_impact['map_title'])
@@ -1001,25 +1012,17 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             'hazard-title': self.first_impact['hazard_title'],
             'disclaimer': self.disclaimer
         }
+        template_composition.substitution = substitution_map
 
-        # Load template
-        load_status = composition.loadFromTemplate(document, substitution_map)
-        if not load_status:
-            raise ReportCreationError(
-                self.tr('Error loading template %s') %
-                self.template_path)
+        # Load Template
+        try:
+            template_composition.load_template()
+        except TemplateLoadingError:
+            raise
 
-        # Validate all needed composer components
-        component_ids = ['impact-map', 'safe-logo', 'summary-report',
-                         'aggregation-area', 'map-scale', 'map-legend',
-                         'organisation-logo', 'merged-report-table']
-        for component_id in component_ids:
-            component = composition.getComposerItemById(component_id)
-            if component is None:
-                raise ReportCreationError(self.tr(
-                    'Component %s could not be found' % component_id))
-
+        # Draw Composition
         # Set InaSAFE logo
+        composition = template_composition.composition
         safe_logo = composition.getComposerItemById('safe-logo')
         safe_logo.setPictureFile(self.safe_logo_path)
 
@@ -1029,6 +1032,17 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
         # Set Map Legend
         legend = composition.getComposerItemById('map-legend')
-        legend.updateLegend()
+        if qgis_version() < 20600:
+            legend.model().setLayerSet(map_settings.layers())
+            legend.synchronizeWithModel()
+        else:
+            root_group = legend.modelV2().rootGroup()
+
+            layer_ids = map_settings.layers()
+            for layer_id in layer_ids:
+                # noinspection PyUnresolvedReferences
+                layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+                root_group.addLayer(layer)
+            legend.synchronizeWithModel()
 
         return composition
