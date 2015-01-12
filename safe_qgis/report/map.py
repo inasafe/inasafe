@@ -34,6 +34,7 @@ from safe_qgis.utilities.defaults import (
     disclaimer,
     default_organisation_logo_path,
     default_north_arrow_path)
+from safe_qgis.utilities.utilities import qgis_version
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -335,11 +336,12 @@ class Map():
             legend.setTitle(legend_title)
             legend.updateLegend()
 
-            # remove from legend all layers, except impact one
-            model = legend.model()
-            if model.rowCount() > 0 and model.columnCount() > 0:
-                impact_item = model.findItems(self.layer.name())[0]
-                row = impact_item.index().row()
-                model.removeRows(row + 1, model.rowCount() - row)
-                if row > 0:
-                    model.removeRows(0, row)
+            # Set Legend
+            # From QGIS 2.6, legend.model() is obsolete
+            if qgis_version() < 20600:
+                legend.model().setLayerSet([self.layer.id()])
+                legend.synchronizeWithModel()
+            else:
+                root_group = legend.modelV2().rootGroup()
+                root_group.addLayer(self.layer)
+                legend.synchronizeWithModel()
