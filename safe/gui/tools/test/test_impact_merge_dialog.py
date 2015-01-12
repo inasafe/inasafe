@@ -23,9 +23,10 @@ from xml.dom import minidom
 from glob import glob
 import shutil
 
+# noinspection PyUnresolvedReferences
 from qgis.core import (
     QgsMapLayerRegistry,
-    QgsMapRenderer,
+    QgsMapSettings,
     QgsComposition)
 from PyQt4 import QtCore
 
@@ -572,9 +573,9 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog.prepare_input()
         self.impact_merge_dialog.validate_all_layers()
 
-        # Setup Map Renderer and set all the layer
+        # Setup Map Settings and set all the layer
         # noinspection PyCallingNonCallable
-        renderer = QgsMapRenderer()
+        map_settings = QgsMapSettings()
         layer_set = [self.impact_merge_dialog.first_impact['layer'].id(),
                      self.impact_merge_dialog.second_impact['layer'].id()]
 
@@ -583,22 +584,19 @@ class ImpactMergeDialogTest(unittest.TestCase):
             layer_set.append(
                 self.impact_merge_dialog.aggregation['layer'].id())
 
-        # Set Layer set to renderer
-        renderer.setLayerSet(layer_set)
+        # Set layer set to map settings
+        map_settings.setLayers(layer_set)
 
         # NORMAL CASE: It can find the template
         # Create composition
-        composition = self.impact_merge_dialog.load_template(renderer)
+        composition = self.impact_merge_dialog.load_template(map_settings)
         # The type of this composition must be QgsComposition
         self.assertEqual(type(composition), QgsComposition)
 
-        # FAIL CASE: It cannot find the template
+        # FAIL CASE: The components missing in the template
         self.impact_merge_dialog.template_path = '/it/will/fail/tmp.qpt'
-        expected_message = 'Error loading template %s' % \
-                           self.impact_merge_dialog.template_path
-        with self.assertRaises(ReportCreationError) as context:
-            self.impact_merge_dialog.load_template(renderer)
-        self.assertEqual(context.exception.message, expected_message)
+        with self.assertRaises(ReportCreationError):
+            self.impact_merge_dialog.load_template(map_settings)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactMergeDialogTest)

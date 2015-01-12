@@ -20,10 +20,11 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 import logging
-from qgis.utils import iface
 
-import PyQt4.QtCore as QtCore
 from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
+from qgis.gui import QgsMapCanvasLayer
+from qgis.utils import iface
+import PyQt4.QtCore as QtCore
 
 from safe.common.exceptions import FileNotFoundError
 
@@ -82,7 +83,7 @@ def extract_path(scenario_file_path, path):
     return path, base_name
 
 
-def add_layers(scenario_dir, paths):
+def add_layers(scenario_dir, paths, iface):
     """Add the layers described in a scenario file to QGIS.
 
     :param scenario_dir: Base directory to find path.
@@ -90,6 +91,9 @@ def add_layers(scenario_dir, paths):
 
     :param paths: Path of scenario file (or a list of paths).
     :type paths: str, list
+
+    :param iface: iface instance to do necessary things to QGIS.
+    :type iface: QgsInterface
 
     :raises: Exception, TypeError, FileNotFoundError
 
@@ -108,24 +112,29 @@ def add_layers(scenario_dir, paths):
         message = "Paths must be string or list not %s" % type(paths)
         raise TypeError(message)
 
+    layer_set = []
     for path, base_name in path_list:
         extension = os.path.splitext(path)[-1]
-
         if not os.path.exists(path):
             raise FileNotFoundError('File not found: %s' % path)
 
         if extension in ['.asc', '.tif']:
             LOGGER.debug("add raster layer %s" % path)
+            # noinspection PyCallingNonCallable
             layer = QgsRasterLayer(path, base_name)
-            # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayers([layer])
+            layer_set.append(layer)
         elif extension in ['.shp']:
             LOGGER.debug("add vector layer %s" % path)
+            # noinspection PyCallingNonCallable
             layer = QgsVectorLayer(path, base_name, 'ogr')
-            # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayers([layer])
+            layer_set.append(layer)
         else:
             raise Exception('File %s had illegal extension' % path)
+    # noinspection PyUnresolvedReferences
+    QgsMapLayerRegistry.instance().addMapLayers(layer_set)
+    # noinspection PyCallingNonCallable
+    iface.mapCanvas().setLayerSet([QgsMapCanvasLayer(layer) for layer in
+                                   layer_set])
 
 
 def set_function_id(function_id, dock=None):
