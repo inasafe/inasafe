@@ -78,6 +78,7 @@ class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
         button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         button.clicked.connect(self.show_help)
 
+        self.unwanted_templates = ['merged_report.qpt']
         # Load templates from resources...
         template_dir_path = resources_path('qgis-composer-templates')
         templates_dir = QtCore.QDir(template_dir_path)
@@ -87,6 +88,10 @@ class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
             QtCore.QDir.NoDotAndDotDot)
         templates_dir.setNameFilters(['*.qpt', '*.QPT'])
         report_files = templates_dir.entryList()
+        for unwanted_template in self.unwanted_templates:
+            if unwanted_template in report_files:
+                report_files.remove(unwanted_template)
+
         for f in report_files:
             self.template_combo.addItem(
                 QtCore.QFileInfo(f).baseName(), template_dir_path + '/' + f)

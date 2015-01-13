@@ -536,6 +536,7 @@ class AnalysisHandler(QObject):
 
         if not print_dialog.exec_() == QtGui.QDialog.Accepted:
             self.show_dynamic_message(
+                self,
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Report generation cancelled!'))))
