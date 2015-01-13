@@ -11,9 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import get_wgs84_resolution
-from safe.utilities.resources import resources_path
-
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
@@ -27,33 +24,10 @@ import cPickle as pickle
 import math
 import logging
 from datetime import datetime
-
 import numpy
 # noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
 
-# This import is required to enable PyQt API v2
-# noinspection PyUnresolvedReferences
-# pylint: disable=W0611
-import qgis
-# pylint: enable=W0611
-# TODO: I think QCoreApplication is needed for tr() check before removing
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import (
-    QCoreApplication,
-    QObject,
-    QVariant,
-    QFileInfo,
-    QUrl,
-    QSize,
-    Qt,
-    QTranslator)
-# noinspection PyPackageRequirements
-from PyQt4.QtXml import QDomDocument
-# We should remove the following pylint suppressions when we support only QGIS2
-# pylint: disable=E0611
-# pylint: disable=W0611
-# Above for pallabelling
 from qgis.core import (
     QgsPoint,
     QgsField,
@@ -73,8 +47,18 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsVectorDataProvider)
 
-# pylint: enable=E0611
-# pylint: enable=W0611
+from PyQt4.QtCore import (
+    QCoreApplication,
+    QObject,
+    QVariant,
+    QFileInfo,
+    QUrl,
+    QSize,
+    Qt,
+    QTranslator)
+# noinspection PyPackageRequirements
+from PyQt4.QtXml import QDomDocument
+
 from safe.impact_functions.core import get_plugins as safe_get_plugins
 from safe.storage.core import read_layer as safe_read_layer
 from safe.engine.core import calculate_impact as safe_calculate_impact
@@ -87,14 +71,16 @@ from safe.common.version import get_version
 from safe.common.utilities import romanise
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.styling import mmi_colour
+from safe.utilities.gis import get_wgs84_resolution
+from safe.utilities.resources import resources_path
 from safe.common.exceptions import TranslationLoadError
 from safe.gui.tools.shake_grid.shake_grid import ShakeGrid
-from realtime.sftp_shake_data import SftpShakeData
+from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
-    realtime_logger_name)
-from realtime.sftp_configuration.configuration import get_grid_source
+    realtime_logger_name,
+    get_grid_source)
 from realtime.exceptions import (
     GridXmlFileNotFoundError,
     InvalidLayerError,
@@ -102,8 +88,7 @@ from realtime.exceptions import (
     CityMemoryLayerCreationError,
     FileNotFoundError,
     MapComposerError,
-    SFTPEmptyError,
-    NetworkError,
+    EmptyShakeDirectoryError,
     EventIdError)
 
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -116,6 +101,7 @@ class ShakeEvent(QObject):
     Including epicenter, magnitude etc.
     """
     def __init__(self,
+                 working_dir,
                  event_id=None,
                  locale='en',
                  population_raster_path=None,
@@ -124,12 +110,15 @@ class ShakeEvent(QObject):
                  data_is_local_flag=False):
         """Constructor for the shake event class.
 
+        :param working_dir: The locale working dir where all the shakemaps are
+            located.
+        :type working_dir: str
+
         :param event_id: (Optional) Id of the event. Will be used to
-            fetch the ShakeData for this event (either from cache or from ftp
-            server as required). The grid.xml file in the unpacked event will
-            be used to initialise the state of the a ShakeGridConvert instance.
-            If no event id is supplied, the most recent event recorded on the
-            server will be used.
+            fetch the ShakeData for this event. The grid.xml file in the
+            unpacked event will be used to initialise the state of the a
+            ShakeGrid instance. If no event id is supplied, the most recent
+            event recorded on working dir will be used.
         :type event_id: str
 
         :param locale:(Optional) string for iso locale to use for outputs.
@@ -147,8 +136,7 @@ class ShakeEvent(QObject):
             that will be used.
         :type geonames_sqlite_path: str
 
-        :param force_flag: Whether to force retrieval of the dataset from the
-            ftp server.
+        :param force_flag: Whether to force retrieval of the dataset.
         :type force_flag: bool
 
         :param data_is_local_flag: Whether the data is already extracted and
@@ -158,7 +146,7 @@ class ShakeEvent(QObject):
 
         :return: Instance
 
-        :raises: SFTPEmptyError, NetworkError, EventIdError, EventXmlParseError
+        :raises: EmptyShakeDirectoryError, EventIdError, EventXmlParseError
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
@@ -171,10 +159,11 @@ class ShakeEvent(QObject):
             # fetch the data from (s)ftp
             # self.data = ShakeData(event_id, force_flag)
             try:
-                self.data = SftpShakeData(
+                self.data = ShakeData(
                     event=event_id,
+                    working_dir=working_dir,
                     force_flag=force_flag)
-            except (SFTPEmptyError, NetworkError, EventIdError):
+            except (EmptyShakeDirectoryError, EventIdError):
                 raise
             self.data.extract()
             self.event_id = self.data.event_id
@@ -1050,7 +1039,7 @@ class ShakeEvent(QObject):
             str(clipped_exposure.source()))
         layers = [clipped_hazard_layer, clipped_exposure_layer]
 
-        function_id = 'ITB Fatality Function'
+        function_id = 'I T B Fatality Function'
         function = safe_get_plugins(function_id)[0][function_id]
 
         result = safe_calculate_impact(layers, function)

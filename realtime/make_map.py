@@ -24,16 +24,15 @@ import logging
 from urllib2 import URLError
 from zipfile import BadZipfile
 
-from realtime.sftp_client import SFtpClient
 from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 from realtime.shake_event import ShakeEvent
-from realtime.exceptions import SFTPEmptyError
+from realtime.exceptions import EmptyShakeDirectoryError
 
 # Initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-def process_event(event_id=None, locale='en'):
+def process_event(working_dir=None, event_id=None, locale='en'):
     """Launcher that actually runs the event processing.
 
     :param event_id: The event id to process. If None the latest event will
@@ -69,12 +68,14 @@ def process_event(event_id=None, locale='en'):
         try:
             if os.path.exists(population_path):
                 shake_event = ShakeEvent(
+                    working_dir=working_dir,
                     event_id=event_id,
                     locale=locale,
                     force_flag=force_flag,
                     population_raster_path=population_path)
             else:
                 shake_event = ShakeEvent(
+                    working_dir=working_dir,
                     event_id=event_id,
                     locale=locale,
                     force_flag=force_flag)
@@ -82,16 +83,18 @@ def process_event(event_id=None, locale='en'):
             # retry with force flag true
             if os.path.exists(population_path):
                 shake_event = ShakeEvent(
+                    working_dir=working_dir,
                     event_id=event_id,
                     locale=locale,
                     force_flag=True,
                     population_raster_path=population_path)
             else:
                 shake_event = ShakeEvent(
+                    working_dir=working_dir,
                     event_id=event_id,
                     locale=locale,
                     force_flag=True)
-        except SFTPEmptyError as ex:
+        except EmptyShakeDirectoryError as ex:
             LOGGER.info(ex)
             return
         except:
@@ -111,43 +114,36 @@ if __name__ == '__main__':
     else:
         locale_option = 'en'
 
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 3:
         sys.exit(
-            'Usage:\n%s [optional shakeid]\nor\n%s --list\nor%s --run-all' % (
-                sys.argv[0], sys.argv[0], sys.argv[0]))
-    elif len(sys.argv) == 2:
-        print('Processing shakemap %s' % sys.argv[1])
-
-        event_option = sys.argv[1]
+            'Usage:\n%s [working_dir] \nor\n%s [working_dir] --list\nor%s '
+            '[working_dir] --run-all\nor%s '
+            '[working_dir] [event_id]' % (
+                sys.argv[0], sys.argv[0], sys.argv[0], sys.argv[0]))
+    elif len(sys.argv) == 3:
+        print('The events in the working dir:')
+        working_dir = sys.argv[1]
+        event_option = sys.argv[2]
         if event_option in '--list':
-            sftp_client = SFtpClient()
-            dir_listing = sftp_client.get_listing(function=is_event_id)
+            dir_listing = os.listdir(working_dir)
             for event in dir_listing:
                 print event
             sys.exit(0)
-        elif event_option in '--run-all':
-            #
-            # Caution, this code path gets memory leaks, use the
-            # batch file approach rather!
-            #
-            sftp_client = SFtpClient()
-            dir_listing = sftp_client.get_listing()
-            for event in dir_listing:
-                print 'Processing %s' % event
-                # noinspection PyBroadException
-                try:
-                    process_event(event, locale_option)
-                except:  # pylint: disable=W0702
-                    LOGGER.exception('Failed to process %s' % event)
-            sys.exit(0)
         else:
-            process_event(event_option, locale_option)
-
+            print('Processing shakemap %s' % event_option)
+            if is_event_id(event_option):
+                process_event(
+                    working_dir=working_dir,
+                    event_id=event_option,
+                    locale=locale_option)
+            else:
+                print('%s is not a valid event ID' % event_option)
     else:
+        working_dir = sys.argv[1]
         event_option = None
         print('Processing latest shakemap')
         # noinspection PyBroadException
         try:
-            process_event(locale=locale_option)
+            process_event(working_dir=working_dir, locale=locale_option)
         except:  # pylint: disable=W0702
             LOGGER.exception('Process event failed')

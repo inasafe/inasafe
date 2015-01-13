@@ -152,3 +152,20 @@ def get_path_tail(input_path):
     """
     head, tail = ntpath.split(input_path)
     return tail or ntpath.basename(head)
+
+
+def get_grid_source():
+    """Get the grid source where the grid.xml is obtained from.
+
+    If set, the environment variable EQ_GRID_SOURCE will be used, otherwise
+    the grid source will be taken from the configuration file.
+
+    :return: The source of the grid.xml.
+    :rtype: str
+    """
+    default_source = ('BMKG (Badan Meteorologi, Klimatologi, dan Geofisika) '
+                      'Indonesia')
+    if 'EQ_GRID_SOURCE' in os.environ:
+        return os.environ['EQ_GRID_SOURCE']
+    else:
+        return default_source

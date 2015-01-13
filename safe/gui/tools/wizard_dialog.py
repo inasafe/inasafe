@@ -254,9 +254,12 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         """The filter method
 
         .. note:: This filter hides top-level items of unsupported branches.
-        Enabled root items: QgsDirectoryItem, QgsFavouritesItem, QgsPGRootItem.
-        Disabled root items: QgsMssqlRootItem, QgsSLRootItem, QgsOWSRootItem,
-        QgsWCSRootItem, QgsWFSRootItem, QgsWMSRootItem.
+
+           Enabled root items: QgsDirectoryItem, QgsFavouritesItem,
+           QgsPGRootItem.
+
+           Disabled root items: QgsMssqlRootItem, QgsSLRootItem,
+           QgsOWSRootItem, QgsWCSRootItem, QgsWFSRootItem, QgsWMSRootItem.
 
         :param source_row: Parent widget of the model
         :type source_row: int

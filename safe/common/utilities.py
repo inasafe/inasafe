@@ -181,7 +181,6 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
     Raises:
         None
     """
-
     # go to the directory
     current_working_dir = os.getcwd()
     shp_dir, shp_name = os.path.split(shp_path)

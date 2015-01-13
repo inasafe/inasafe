@@ -37,7 +37,6 @@ rm -rf ${WORKDIR}/${DIR}/fabfile.py
 #rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
 rm -rf ${WORKDIR}/${DIR}/pylintrc_jenkins
 rm -rf ${WORKDIR}/${DIR}/.travis.yml
-rm -rf ${WORKDIR}/${DIR}/setup.py
 
 find ${WORKDIR}/${DIR} -name test*.py -delete
 find ${WORKDIR}/${DIR} -name *_test.py -delete
