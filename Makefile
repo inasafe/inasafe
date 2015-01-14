@@ -37,7 +37,7 @@ update-translation-strings:
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
 compile-translation-strings:
 	@#Compile qt messages binary
-	cd safe; lrelease-qt4 inasafe.pro; cd ..
+	@lrelease-qt4 inasafe.pro
 
 test-translations:
 	@echo
