@@ -37,7 +37,7 @@ update-translation-strings:
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
 compile-translation-strings:
 	@#Compile qt messages binary
-	cd safe_qgis; lrelease-qt4 inasafe.pro; cd ..
+	cd safe; lrelease-qt4 inasafe.pro; cd ..
 
 test-translations:
 	@echo
@@ -51,10 +51,6 @@ translation-stats:
 	@echo "----------------------"
 	@echo "Translation statistics - for more info see http://inasafe.org/developer-docs/i18n.html"
 	@echo "----------------------"
-	@echo
-	@echo "Gettext translations (*.po):"
-	@echo "----------------------------"
-	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@echo
 	@echo "Qt translations (*.ts):"
 	@echo "----------------------------"
