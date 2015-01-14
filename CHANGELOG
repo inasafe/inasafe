@@ -1,3 +1,19 @@
+Changelog for version 2.2.2
+================================
+
+5d1fb93 (HEAD, upstream/master, origin/master, master) Merge pull request #1486 from akbargumbira/master
+8fd20bd [Backport] Fix Batch Dialog in Master
+56b4cec Fix failing tests in travis.
+805dd8b [Backport] Fix Legend Issue in QGIS > 2.6.
+
+Changelog for version 2.2.1
+================================
+9f804f2 (tag: version-2_2_1) Merge pull request #1438 from ismailsunni/hotfix
+17a793e Update hash value for test image for Travis.
+c8c4b26 Merge pull request #1437 from ismailsunni/hotfix_2_2
+d4462ec Use os.path.join instead string concatenation.
+af6e555 (origin/files-hotfix) Fixed issue with missing files folder
+
 Changelog for version 2.2.0
 ================================
 
