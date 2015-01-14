@@ -42,9 +42,9 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     NoKeywordsFoundError,
     InvalidParameterError)
-from safe.utilities.resources import resource_url, resources_path
+from safe.utilities.resources import resources_path
 
-# noinspection PyUnresolvedReferences
+
 class Plugin(object):
     """The QGIS interface implementation for the InaSAFE plugin.
 
@@ -81,6 +81,7 @@ class Plugin(object):
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
+        self.action_function_centric_wizard = None
         self.action_extent_selector = None
         self.translator = None
         self.toolbar = None
@@ -107,10 +108,8 @@ class Plugin(object):
 
         os.environ['LANG'] = str(new_locale)
 
-        LOGGER.debug('%s %s %s'%(
-            new_locale,
-            QLocale.system().name(),
-            os.environ['LANG']))
+        LOGGER.debug('%s %s %s' % (
+            new_locale, QLocale.system().name(), os.environ['LANG']))
 
         root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         translation_path = os.path.join(
@@ -121,14 +120,13 @@ class Plugin(object):
             self.translator = QTranslator()
             result = self.translator.load(translation_path)
             if not result:
-                message = 'Failed to load translation for %s'%new_locale
+                message = 'Failed to load translation for %s' % new_locale
                 raise TranslationLoadError(message)
             # noinspection PyTypeChecker,PyCallByClass
             QCoreApplication.installTranslator(self.translator)
 
-        LOGGER.debug('%s %s'%(
-            translation_path,
-            os.path.exists(translation_path)))
+        LOGGER.debug('%s %s' % (
+            translation_path, os.path.exists(translation_path)))
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -195,7 +193,7 @@ class Plugin(object):
         self.action_dock.setCheckable(True)
         self.action_dock.setChecked(True)
         self.action_dock.triggered.connect(self.toggle_dock_visibility)
-        self.add_action(self.action_dock)
+        self.add_action(self.action_dock, add_to_toolbar=False)
 
         # --------------------------------------
         # Create action for keywords editor
@@ -214,7 +212,7 @@ class Plugin(object):
         self.action_keywords_dialog.triggered.connect(
             self.show_keywords_editor)
 
-        self.add_action(self.action_keywords_dialog)
+        self.add_action(self.action_keywords_dialog, add_to_toolbar=False)
 
         # --------------------------------------
         # Create action for keywords creation wizard
@@ -236,6 +234,25 @@ class Plugin(object):
         self.add_action(self.action_keywords_wizard)
 
         # --------------------------------------
+        # Create action for IF-centric wizard
+        # --------------------------------------
+        icon = resources_path('img', 'icons', 'show-wizard.svg')
+        self.action_function_centric_wizard = QAction(
+            QIcon(icon),
+            self.tr('InaSAFE Impact Function Centric Wizard'),
+            self.iface.mainWindow())
+        self.action_function_centric_wizard.setStatusTip(self.tr(
+            'Open InaSAFE impact function centric wizard'))
+        self.action_function_centric_wizard.setWhatsThis(self.tr(
+            'Open InaSAFE impact function centric wizard'))
+        self.action_function_centric_wizard.setEnabled(True)
+
+        self.action_function_centric_wizard.triggered.connect(
+            self.show_function_centric_wizard)
+
+        self.add_action(self.action_function_centric_wizard)
+
+        # --------------------------------------
         # Create action for options dialog
         # --------------------------------------
         icon = resources_path('img', 'icons', 'configure-inasafe.svg')
@@ -248,7 +265,7 @@ class Plugin(object):
             'Open InaSAFE options dialog'))
         self.action_options.triggered.connect(self.show_options)
 
-        self.add_action(self.action_options)
+        self.add_action(self.action_options, add_to_toolbar=False)
 
         # --------------------------------------
         # Create action for impact functions doc dialog
@@ -265,7 +282,7 @@ class Plugin(object):
         self.action_function_browser.triggered.connect(
             self.show_function_browser)
 
-        self.add_action(self.action_function_browser)
+        self.add_action(self.action_function_browser, add_to_toolbar=False)
 
         # Short cut for Open Impact Functions Doc
         self.key_action = QAction("Test Plugin", self.iface.mainWindow())
@@ -285,7 +302,7 @@ class Plugin(object):
             'Open InaSAFE minimum needs tool'))
         self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
 
-        self.add_action(self.action_minimum_needs)
+        self.add_action(self.action_minimum_needs, add_to_toolbar=False)
 
         # ----------------------------------------------
         # Create action for global minimum needs dialog
@@ -302,7 +319,7 @@ class Plugin(object):
         self.action_global_minimum_needs.triggered.connect(
             self.show_global_minimum_needs_configuration)
 
-        self.add_action(self.action_global_minimum_needs)
+        self.add_action(self.action_global_minimum_needs, add_to_toolbar=False)
 
         # ---------------------------------------
         # Create action for converter dialog
@@ -318,7 +335,7 @@ class Plugin(object):
         self.action_shake_converter.triggered.connect(
             self.show_shakemap_importer)
 
-        self.add_action(self.action_shake_converter)
+        self.add_action(self.action_shake_converter, add_to_toolbar=False)
 
         # ---------------------------------------
         # Create action for batch runner dialog
@@ -333,10 +350,10 @@ class Plugin(object):
             'Open InaSAFE Batch Runner'))
         self.action_batch_runner.triggered.connect(self.show_batch_runner)
 
-        self.add_action(self.action_batch_runner)
+        self.add_action(self.action_batch_runner, add_to_toolbar=False)
 
         # ---------------------------------------
-        # Create action for batch runner dialog
+        # Create action for save scenario dialog
         # ---------------------------------------
         icon = resources_path('img', 'icons', 'save-as-scenario.svg')
         self.action_save_scenario = QAction(
@@ -348,7 +365,7 @@ class Plugin(object):
         self.action_save_scenario.setWhatsThis(message)
         # noinspection PyUnresolvedReferences
         self.action_save_scenario.triggered.connect(self.save_scenario)
-        self.add_action(self.action_save_scenario)
+        self.add_action(self.action_save_scenario, add_to_toolbar=False)
 
         # --------------------------------------
         # Create action for import OSM Dialog
@@ -380,7 +397,7 @@ class Plugin(object):
             'InaSAFE Impact Layer Merge'))
         self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
 
-        self.add_action(self.action_impact_merge_dlg)
+        self.add_action(self.action_impact_merge_dlg, add_to_toolbar=False)
 
         # --------------------------------------
         # create dockwidget and tabify it with the legend
@@ -454,11 +471,11 @@ class Plugin(object):
         core.unload_plugins()
         # next lets force remove any inasafe related modules
         modules = []
-        for myModule in sys.modules:
-            if 'inasafe' in myModule:
+        for module in sys.modules:
+            if 'inasafe' in module:
                 # Check if it is really one of our modules i.e. exists in the
                 # plugin directory
-                tokens = myModule.split('.')
+                tokens = module.split('.')
                 path = ''
                 for myToken in tokens:
                     path += os.path.sep + myToken
@@ -466,18 +483,18 @@ class Plugin(object):
                     __file__, os.path.pardir, os.path.pardir))
                 full_path = os.path.join(parent, path + '.py')
                 if os.path.exists(os.path.abspath(full_path)):
-                    LOGGER.debug('Removing: %s'%myModule)
-                    modules.append(myModule)
-        for myModule in modules:
-            del (sys.modules[myModule])
-        for myModule in sys.modules:
-            if 'inasafe' in myModule:
-                print myModule
+                    LOGGER.debug('Removing: %s' % module)
+                    modules.append(module)
+        for module in modules:
+            del (sys.modules[module])
+        for module in sys.modules:
+            if 'inasafe' in module:
+                print module
 
         # Lets also clean up all the path additions that were made
         package_path = os.path.abspath(os.path.join(
             os.path.dirname(__file__), os.path.pardir))
-        LOGGER.debug('Path to remove: %s'%package_path)
+        LOGGER.debug('Path to remove: %s' % package_path)
         # We use a list comprehension to ensure duplicate entries are removed
         LOGGER.debug(sys.path)
         sys.path = [y for y in sys.path if package_path not in y]
@@ -634,7 +651,20 @@ class Plugin(object):
             self.iface.mainWindow(),
             self.iface,
             self.dock_widget)
+        dialog.set_keywords_creation_mode()
         dialog.exec_()  # modal
+
+    def show_function_centric_wizard(self):
+        """Show the keywords creation wizard."""
+        # import here only so that it is AFTER i18n set up
+        from safe.gui.tools.wizard_dialog import WizardDialog
+
+        dialog = WizardDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
+        dialog.set_function_centric_mode()
+        dialog.show()  # non-modal in order to hide for selecting user extent
 
     def show_function_browser(self):
         """Show the impact function browser tool."""

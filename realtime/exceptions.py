@@ -37,11 +37,6 @@ class EventUndefinedError(Exception):
     pass
 
 
-class NetworkError(Exception):
-    """Exception for when trying to fetch a remote resource and failing."""
-    pass
-
-
 class EventValidationError(Exception):
     """Exception for when an event is deemed to be invalid - typically for
     when no matching event can be located on the server or local filesystem
@@ -105,6 +100,6 @@ class CopyError(Exception):
     pass
 
 
-class SFTPEmptyError(Exception):
-    """Raised if the SFTP remote directory does not contain any shakemaps."""
+class EmptyShakeDirectoryError(Exception):
+    """Raised if the working directory does not contain any shakemaps."""
     pass

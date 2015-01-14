@@ -288,6 +288,11 @@ class UnsupportedProviderError(Exception):
     pass
 
 
+class TemplateLoadingError(Exception):
+    """Raised when loading the template is error."""
+    pass
+
+
 class TemplateElementMissingError(Exception):
     """Raised when some element ids are missing from template."""
 

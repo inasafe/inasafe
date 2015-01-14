@@ -193,28 +193,21 @@ def test_data_path(*args):
     return path
 
 
-def load_layer(layer_file, directory=TESTDATA):
+def load_layer(layer_path):
     """Helper to load and return a single QGIS layer
 
-    :param layer_file: Path name to raster or vector file.
-    :type layer_file: str
-    :param directory: Optional parent dir. If None, path name is assumed
-        to be absolute.
-    :type directory: str, None
+    :param layer_path: Path name to raster or vector file.
+    :type layer_path: str
 
     :returns: tuple containing layer and its category.
     :rtype: (QgsMapLayer, str)
 
     """
-
     # Extract basename and absolute path
-    file_path = os.path.split(layer_file)[-1]  # In case path was absolute
+    file_path = os.path.split(layer_path)[-1]  # In case path was absolute
     base_name, extension = os.path.splitext(file_path)
-    if directory is None:
-        path = layer_file
-    else:
-        path = os.path.join(directory, layer_file)
-    keyword_path = path[:-4] + '.keywords'
+
+    keyword_path = layer_path[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure
     keywords = read_file_keywords(keyword_path)
@@ -226,11 +219,11 @@ def load_layer(layer_file, directory=TESTDATA):
 
     # Create QGis Layer Instance
     if extension in ['.asc', '.tif']:
-        layer = QgsRasterLayer(path, base_name)
+        layer = QgsRasterLayer(layer_path, base_name)
     elif extension in ['.shp']:
-        layer = QgsVectorLayer(path, base_name, 'ogr')
+        layer = QgsVectorLayer(layer_path, base_name, 'ogr')
     else:
-        message = 'File %s had illegal extension' % path
+        message = 'File %s had illegal extension' % layer_path
         raise Exception(message)
 
     # noinspection PyUnresolvedReferences
@@ -936,7 +929,7 @@ def load_standard_layers(dock=None):
         join(TESTDATA, 'Merapi_alert.shp'),
         join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     hazard_layer_count, exposure_layer_count = load_layers(
-        file_list, data_directory=None, dock=dock)
+        file_list, dock=dock)
     # FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
@@ -948,22 +941,17 @@ def load_standard_layers(dock=None):
 def load_layers(
         layer_list,
         clear_flag=True,
-        data_directory=TESTDATA,
         dock=None):
     """Helper function to load layers as defined in a python list.
 
     :param dock: A valid dock instance.
     :type dock: Dock
 
-    :param data_directory: Path to where data should be loaded from. Defaults
-        to TESTDATA directory.
-    :type data_directory: str, None
-
     :param clear_flag: Whether to clear currently loaded layers before loading
         the new layers.
     :type clear_flag: bool
 
-    :param layer_list: A list of layers to load.
+    :param layer_list: A list of layer's paths to load.
     :type layer_list: list(str)
     """
     # First unload any layers that may already be loaded
@@ -978,7 +966,7 @@ def load_layers(
     # Now create our new layers
     for layer_file in layer_list:
 
-        layer, layer_type = load_layer(layer_file, data_directory)
+        layer, layer_type = load_layer(layer_file)
         if layer_type == 'hazard':
             hazard_layer_count += 1
         elif layer_type == 'exposure':
@@ -1038,10 +1026,10 @@ def compare_wkt(a, b, tol=0.000001):
 
 
 def clone_shp_layer(
-        name='tsunami_polygon',
-        include_keywords=False,
-        source_directory=TESTDATA,
-        target_directory='testing'):
+        name,
+        include_keywords,
+        source_directory,
+        target_directory='test'):
     """Helper function that copies a test shp layer and returns it.
 
     :param name: The default name for the shp layer.
@@ -1078,7 +1066,7 @@ def clone_raster_layer(
         extension,
         include_keywords,
         source_directory,
-        target_directory='testing'):
+        target_directory='test'):
     """Helper function that copies a test raster.
 
     :param name: The default name for the raster layer.
@@ -1108,7 +1096,7 @@ def clone_raster_layer(
             trg_path = temp_path + ext
             shutil.copy2(src_path, trg_path)
 
-    raster_path = '%s.shp' % temp_path
+    raster_path = '%s%s' % (temp_path, extension)
     layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
     return layer
 

@@ -337,8 +337,7 @@ class TestDock(TestCase):
         file_list = [
             join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
             join(TESTDATA, 'Population_Jakarta_geographic.asc')]
-        hazard_layer_count, exposure_layer_count = load_layers(
-            file_list, data_directory=None)
+        hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
             'Incorrect number of Hazard layers: expected 1 got %s'
@@ -355,7 +354,8 @@ class TestDock(TestCase):
 
         # Second part of scenario - run disabled when adding invalid layer
         # and select it - run should be disabled
-        file_list = ['issue71.tif']  # This layer has incorrect keywords
+        path = os.path.join(TESTDATA, 'issue71.tif')
+        file_list = [path]  # This layer has incorrect keywords
         clear_flag = False
         _, _ = load_layers(file_list, clear_flag)
         # set exposure to : Population Count (5kmx5km)
@@ -417,7 +417,8 @@ class TestDock(TestCase):
 
         # Second part of scenario - run disabled when adding invalid layer
         # and select it - run should be disabled
-        file_list = ['issue71.tif']  # This layer has incorrect keywords
+        path = os.path.join(TESTDATA, 'issue71.tif')
+        file_list = [path]  # This layer has incorrect keywords
         clear_flag = False
         _, _ = load_layers(file_list, clear_flag)
 
@@ -495,8 +496,7 @@ class TestDock(TestCase):
             join(HAZDATA, 'Flood_Design_Depth_Jakarta_geographic.asc'),
             join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
             join(TESTDATA, 'Population_Jakarta_geographic.asc')]
-        hazard_layer_count, exposure_layer_count = load_layers(
-            file_list, data_directory=None)
+        hazard_layer_count, exposure_layer_count = load_layers(file_list)
         self.assertTrue(hazard_layer_count == 2)
         self.assertTrue(exposure_layer_count == 1)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -524,8 +524,9 @@ class TestDock(TestCase):
     def test_full_run_pyzstats(self):
         """Aggregation results correct using our own python zonal stats code.
         """
-        file_list = ['kabupaten_jakarta.shp']
-        load_layers(file_list, clear_flag=False, data_directory=BOUNDDATA)
+        path = os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp')
+        file_list = [path]
+        load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
             DOCK,
@@ -569,8 +570,9 @@ class TestDock(TestCase):
         """
 
         # TODO check that the values are similar enough to the python stats
-        file_list = ['kabupaten_jakarta.shp']
-        load_layers(file_list, clear_flag=False, data_directory=BOUNDDATA)
+        path = os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp')
+        file_list = [path]
+        load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
             DOCK,
@@ -615,7 +617,8 @@ class TestDock(TestCase):
         See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        layer, layer_type = load_layer('issue58.tif')
+        layer_path = os.path.join(TESTDATA, 'issue58.tif')
+        layer, layer_type = load_layer(layer_path)
         message = (
             'Unexpected category for issue58.tif.\nGot:'
             ' %s\nExpected: undefined' % layer_type)

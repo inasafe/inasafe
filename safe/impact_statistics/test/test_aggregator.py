@@ -134,7 +134,9 @@ class AggregatorTest(unittest.TestCase):
     def test_check_aggregation_single_attribute(self):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
-        file_list = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
+        layer_path = os.path.join(
+            TESTDATA, 'kabupaten_jakarta_singlepart_1_good_attr.shp')
+        file_list = [layer_path]
         # add additional layers
         load_layers(file_list, clear_flag=False)
         attribute_key = get_defaults('AGGR_ATTR_KEY')
@@ -163,8 +165,9 @@ class AggregatorTest(unittest.TestCase):
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_no_attributes(self):
         """Aggregation attribute chosen correctly when no attr available."""
-
-        file_list = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
+        layer_path = os.path.join(
+            TESTDATA, 'kabupaten_jakarta_singlepart_0_good_attr.shp')
+        file_list = [layer_path]
         # add additional layers
         load_layers(file_list, clear_flag=False)
         attribute_key = get_defaults('AGGR_ATTR_KEY')
@@ -189,8 +192,9 @@ class AggregatorTest(unittest.TestCase):
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_none_in_keywords(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
-
-        file_list = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
+        layer_path = os.path.join(
+            TESTDATA, 'kabupaten_jakarta_singlepart_with_None_keyword.shp')
+        file_list = [layer_path]
         # add additional layers
         load_layers(file_list, clear_flag=False)
         attribute_key = get_defaults('AGGR_ATTR_KEY')
@@ -233,13 +237,17 @@ class AggregatorTest(unittest.TestCase):
         TODO - this needs to be fixed post dock refactor.
 
         """
-
+        layer_path = os.path.join(
+            TESTDATA, 'jakarta_crosskabupaten_polygons.shp')
         # See qgis project in test data: vector_preprocessing_test.qgs
         # add additional layers
-        file_list = ['jakarta_crosskabupaten_polygons.shp']
+        file_list = [layer_path]
         load_layers(file_list, clear_flag=False)
-        file_list = ['kabupaten_jakarta.shp']
-        load_layers(file_list, clear_flag=False, data_directory=BOUNDDATA)
+
+        layer_path = os.path.join(
+            BOUNDDATA, 'kabupaten_jakarta.shp')
+        file_list = [layer_path]
+        load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
             DOCK,

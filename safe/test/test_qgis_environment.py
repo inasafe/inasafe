@@ -16,7 +16,6 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from qgis.core import (
@@ -24,9 +23,8 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
 
-from safe.test.utilities import get_qgis_app, EXPDATA
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
+from safe.test.utilities import get_qgis_app, test_data_path
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
@@ -35,9 +33,8 @@ class QGISTest(unittest.TestCase):
 
     def test_qgis_environment(self):
         """QGIS environment has the expected providers"""
+        # noinspection PyUnresolvedReferences
         r = QgsProviderRegistry.instance()
-        # for item in r.providerList():
-        #    print str(item)
 
         # print 'Provider count: %s' % len(r.providerList())
         assert 'gdal' in r.providerList()
@@ -49,6 +46,7 @@ class QGISTest(unittest.TestCase):
         """Test that QGIS properly parses a proj4 string.
         see https://github.com/AIFDR/inasafe/issues/349
         """
+        # noinspection PyCallingNonCallable
         crs = QgsCoordinateReferenceSystem()
         proj4 = (
             'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
@@ -61,8 +59,9 @@ class QGISTest(unittest.TestCase):
         self.assertEqual(auth_id, expected_auth_id)
 
         # now test for a loaded layer
-        path = os.path.join(EXPDATA, 'glp10ag.asc')
-        title = 'people'
+        path = test_data_path('hazard', 'jakarta_flood_design.tif')
+        title = 'Jakarta Flood'
+        # noinspection PyCallingNonCallable
         layer = QgsRasterLayer(path, title)
         auth_id = layer.crs().authid()
         self.assertEqual(auth_id, expected_auth_id)

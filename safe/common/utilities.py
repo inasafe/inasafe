@@ -181,7 +181,6 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
     Raises:
         None
     """
-
     # go to the directory
     current_working_dir = os.getcwd()
     shp_dir, shp_name = os.path.split(shp_path)
@@ -311,8 +310,6 @@ def format_int(x):
     http://docs.python.org/library/string.html#formatspec
 
     """
-
-
     try:
         s = '{0:,}'.format(x)
         # s = '{0:n}'.format(x)  # n means locale aware (read up on this)

@@ -46,7 +46,6 @@ from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-
 # noinspection PyClassHasNoInit
 class TsunamiEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
