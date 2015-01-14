@@ -13,7 +13,7 @@ name=InaSAFE
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
-version=2.2.2
+version=2.2.3
 # alpha, beta, rc or final
 status=final
 
@@ -24,6 +24,8 @@ status=final
 
 # Uncomment the following line and add your changelog entries:
 changelog=
+        2.2.3
+        Bug fix: Fix #1500 - maximum QGIS version causes error in debian
         2.2.2
         Bug fix: Make legend work with QGIS 2.6, removes requirement to use QGIS 2.4
         Bug fix: Fixed issue with batch runner not working properly
