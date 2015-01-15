@@ -8,7 +8,7 @@ __author__ = 'timlinux'
 
 
 def tr(text):
-    """Convencience QObject.tr wrapper for use by non QObject derived classes.
+    """Convenient QObject.tr wrapper for use by non QObject derived classes.
 
     .. note:: see http://tinyurl.com/pyqt-differences
 
@@ -19,6 +19,8 @@ def tr(text):
         the original string.
     :rtype: str
     """
+    # Ensure that the text is a string
+    text = str(text)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     return QCoreApplication.translate('@default', text)
 
