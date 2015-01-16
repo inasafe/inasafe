@@ -37,7 +37,9 @@ update-translation-strings:
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
 compile-translation-strings:
 	@#Compile qt messages binary
+	@scripts/create_pro_file.sh
 	@lrelease-qt4 inasafe.pro
+	@rm inasafe.pro
 
 test-translations:
 	@echo
@@ -95,7 +97,6 @@ clean:
 	@-find . -name '*.orig' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
-	make clean -C safe/gui/ui
 
 # Run the test suite followed by style checking
 test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite
