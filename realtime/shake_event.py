@@ -584,11 +584,12 @@ class ShakeEvent(QObject):
                 # position not found on raster
                 continue
             value = raster_values[0]  # Band 1
+
             LOGGER.debug('Raster Value: %s' % value)
-            if 'no data' not in str(value):
-                mmi = float(value)
-            else:
+            if 'no data' in str(value) or value is None:
                 mmi = 0
+            else:
+                mmi = float(value)
 
             LOGGER.debug(
                 'Looked up mmi of %s on raster for %s' % (mmi, str(point)))
