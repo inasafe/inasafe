@@ -902,7 +902,7 @@ class ShakeEvent(QObject):
         header = TableRow([
             '',
             self.tr('Name'),
-            self.tr('People Affected (x 1000)'),
+            self.tr('Population (x 1000)'),
             self.tr('Intensity')],
             header=True)
         for row_data in table_data:
@@ -1559,7 +1559,7 @@ class ShakeEvent(QObject):
             upper_limit = math.pow(upper_limit, 2)
         fatalities_range = '%i - %i' % (lower_limit, upper_limit)
 
-        city_table_name = self.tr('Places Affected')
+        city_table_name = self.tr('Nearby Places')
         legend_name = self.tr('Population count per grid cell')
         limitations = self.tr(
             'This impact estimation is automatically generated and only takes'
