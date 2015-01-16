@@ -209,7 +209,7 @@ def load_layer(layer_path):
     base_name, extension = os.path.splitext(file_name)
 
     # Determine if layer is hazard or exposure
-    category = None
+    category = 'undefined'
     try:
         keywords = read_file_keywords(layer_path)
         if 'category' in keywords:
