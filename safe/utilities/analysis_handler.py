@@ -516,7 +516,7 @@ class AnalysisHandler(QObject):
         if impact_layer is None:
             # noinspection PyCallByClass,PyTypeChecker
             QtGui.QMessageBox.warning(
-                self,
+                self.parent,
                 self.tr('InaSAFE'),
                 self.tr('Please select a valid impact layer before '
                         'trying to print.'))
@@ -562,6 +562,14 @@ class AnalysisHandler(QObject):
                 print_dialog.template_combo.currentIndex())
         else:
             template_path = print_dialog.template_path.text()
+            if not os.path.exists(template_path):
+                # noinspection PyCallByClass,PyTypeChecker
+                QtGui.QMessageBox.warning(
+                    self.parent,
+                    self.tr('InaSAFE'),
+                    self.tr('Please select a valid template before printing. '
+                            'The template you choose does not exist.'))
+                return
 
         # Open in PDF or Open in Composer Flag (not used, the button is hidden
         #  by this class. The wizard has two its own buttons for Open In PDF

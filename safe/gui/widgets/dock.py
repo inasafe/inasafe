@@ -1521,6 +1521,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 print_dialog.template_combo.currentIndex())
         else:
             template_path = print_dialog.template_path.text()
+            if not os.path.exists(template_path):
+                # noinspection PyCallByClass,PyTypeChecker
+                QtGui.QMessageBox.warning(
+                    self,
+                    self.tr('InaSAFE'),
+                    self.tr('Please select a valid template before printing. '
+                            'The template you choose does not exist.'))
+                return
 
         # Open in PDF or Open in Composer Flag
         create_pdf_flag = print_dialog.create_pdf

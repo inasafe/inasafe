@@ -68,13 +68,6 @@ def shakemap_data_dir():
     return dir_path
 
 
-def shakemap_cache_dir():
-    """Create (if needed) and return the path to the base shakemap zip dir."""
-    dir_path = os.path.join(base_data_dir(), 'shakemaps-cache')
-    make_directory(dir_path)
-    return dir_path
-
-
 def report_data_dir():
     """Create (if needed) and return the path to the base report data dir."""
     dir_path = os.path.join(base_data_dir(), 'reports')
