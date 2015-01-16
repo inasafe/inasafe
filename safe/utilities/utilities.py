@@ -25,6 +25,7 @@ import traceback
 import logging
 import webbrowser
 import unicodedata
+from urlparse import urlparse
 
 # noinspection PyPackageRequirements
 
@@ -291,6 +292,9 @@ def read_file_keywords(layer_path, keyword=None):
         * NoKeywordsFoundError - occurs when no keyword file exists.
         * InvalidParameterError - occurs when the layer does not exist.
     """
+    # Make sure that the layer path is not in file:/// form
+    layer_path = urlparse(layer_path).path
+
     # check the source layer path is valid
     if not os.path.isfile(layer_path):
         message = tr('Cannot get keywords from a non-existent file. File '

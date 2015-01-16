@@ -17,6 +17,7 @@ from safe.test.utilities import (
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.exceptions import HashNotFoundError
 from safe.common.utilities import temp_dir
+from safe.common.exceptions import NoKeywordsFoundError
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -55,8 +56,7 @@ class KeywordIOTest(unittest.TestCase):
             'title': 'A tsunami in Padang (Mw 8.8)'}
 
         # Vector Layer keywords
-        vector_path = test_data_path(
-            'exposure', 'buildings_osm_4326.shp')
+        vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
             'category': 'exposure',
@@ -64,6 +64,10 @@ class KeywordIOTest(unittest.TestCase):
             'subcategory': 'structure',
             'title': 'buildings_osm_4326',
             'purpose': 'dki'}
+
+        # Keyword less layer
+        keywordless_path = test_data_path('other', 'keywordless_layer.shp')
+        self.keywordless_layer, _ = load_layer(keywordless_path)
 
     def tearDown(self):
         pass
@@ -151,6 +155,15 @@ class KeywordIOTest(unittest.TestCase):
         message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
             keywords, expected_keywords, source)
         assert keywords == expected_keywords, message
+
+    def test_read_keywordless_layer(self):
+        """Test read 'keyword' file from keywordless layer.
+        """
+        self.assertRaises(
+            NoKeywordsFoundError,
+            self.keyword_io.read_keywords,
+            self.keywordless_layer,
+            )
 
     def test_update_keywords(self):
         """Test append file keywords with update_keywords method."""
