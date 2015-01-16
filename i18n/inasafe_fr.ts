@@ -2981,7 +2981,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="520"/>
+        <location filename="analysis_handler.py" line="569"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2996,7 +2996,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="673"/>
+        <location filename="analysis_handler.py" line="681"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3006,48 +3006,53 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="574"/>
+        <location filename="analysis_handler.py" line="582"/>
         <source>Preparing map and report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="605"/>
+        <location filename="analysis_handler.py" line="613"/>
         <source>Template is missing some elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="608"/>
+        <location filename="analysis_handler.py" line="616"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="641"/>
+        <location filename="analysis_handler.py" line="649"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="647"/>
+        <location filename="analysis_handler.py" line="655"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="647"/>
+        <location filename="analysis_handler.py" line="655"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="655"/>
+        <location filename="analysis_handler.py" line="663"/>
         <source>Printing cancelled!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="673"/>
+        <location filename="analysis_handler.py" line="681"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="673"/>
+        <location filename="analysis_handler.py" line="681"/>
         <source>and</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="analysis_handler.py" line="569"/>
+        <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3200,7 +3205,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1491"/>
+        <location filename="dock.py" line="1529"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3215,27 +3220,27 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1628"/>
+        <location filename="dock.py" line="1636"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1532"/>
+        <location filename="dock.py" line="1540"/>
         <source>Preparing map and report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1603"/>
+        <location filename="dock.py" line="1611"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1603"/>
+        <location filename="dock.py" line="1611"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1611"/>
+        <location filename="dock.py" line="1619"/>
         <source>Printing cancelled!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3310,12 +3315,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1628"/>
+        <location filename="dock.py" line="1636"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1628"/>
+        <location filename="dock.py" line="1636"/>
         <source>and</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3330,7 +3335,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1597"/>
+        <location filename="dock.py" line="1605"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3375,18 +3380,23 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1562"/>
+        <location filename="dock.py" line="1570"/>
         <source>Template is missing some elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1565"/>
+        <location filename="dock.py" line="1573"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dock.py" line="198"/>
         <source>InaSAFE %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1529"/>
+        <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
