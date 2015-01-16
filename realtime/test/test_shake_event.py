@@ -353,7 +353,7 @@ class TestShakeEvent(unittest.TestCase):
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
             'longitude-value': u'140\xb037\'12.00"E',
-            'city-table-name': u'Places Affected',
+            'city-table-name': u'Nearby Places',
             'bearing-text': u'bearing',
             'limitations': (
                 u'This impact estimation is automatically generated and only '
