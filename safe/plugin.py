@@ -35,16 +35,13 @@ from PyQt4.QtCore import (
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 
 from safe.common.exceptions import (
-    TranslationLoadError)
-from safe.utilities.resources import resources_path
-
-from safe.utilities.keyword_io import (
-    KeywordIO,
-    # Notes(IS): I need to import them in-directly due to different reference
-    # if we import directly from plugin.py see #1492
+    TranslationLoadError,
     NoKeywordsFoundError,
     InvalidParameterError,
     UnsupportedProviderError)
+from safe.utilities.resources import resources_path
+
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_raster_layer
 
 
