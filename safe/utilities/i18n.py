@@ -19,6 +19,8 @@ def tr(text):
         the original string.
     :rtype: str
     """
+    # Ensure that the text is a string
+    text = str(text)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     return QCoreApplication.translate('@default', text)
 

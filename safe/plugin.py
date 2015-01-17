@@ -21,9 +21,6 @@ import sys
 import os
 import logging
 
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.gis import is_raster_layer
-
 LOGGER = logging.getLogger('InaSAFE')
 
 # Import the PyQt and QGIS libraries
@@ -39,10 +36,13 @@ from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 
 from safe.common.exceptions import (
     TranslationLoadError,
-    UnsupportedProviderError,
     NoKeywordsFoundError,
-    InvalidParameterError)
+    InvalidParameterError,
+    UnsupportedProviderError)
 from safe.utilities.resources import resources_path
+
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.gis import is_raster_layer
 
 
 class Plugin(object):

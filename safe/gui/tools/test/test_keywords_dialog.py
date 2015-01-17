@@ -213,7 +213,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertIsNone(
             dialog.get_value_for_key(defaults['FEMALE_RATIO']), message)
 
-    def Xtest_on_radExposure_toggled(self):
+    def test_on_radExposure_toggled(self):
         """Test exposure radio button toggle behaviour works"""
 
         # Cannot get this test to work, but it works fine in the safe_qgis
@@ -313,8 +313,8 @@ class KeywordsDialogTest(unittest.TestCase):
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
 
-    def test_add_warnings_for_colons(self):
-        """Test add entry to list works."""
+    def Xtest_add_warnings_for_colons(self):
+        """Test add add warning fot colons."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.reset(False)
         dialog.add_list_entry('bar', 'fo:o')

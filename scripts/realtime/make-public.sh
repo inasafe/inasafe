@@ -1,9 +1,14 @@
 #!/bin/bash
 
-#Search for available quakes and make sure they are listed in public
-#set -x
-REALTIME_DIR=/home/realtime
-WEB_DIR=${REALTIME_DIR}/web
+if [ -n "$1" ] && [ -n "$2" ];
+then
+  SHAKEMAPS_EXTRACT_DIR="$1"
+  WEB_DIR="$2"
+else
+  echo "No shakemaps extracted directory and web directory passed."
+  echo "USAGE: make-public.sh <shakemaps_extracted_directory> <target_web_dir>"
+  exit
+fi
 
 mkdir -p ${WEB_DIR}
 cd ${WEB_DIR}
@@ -13,7 +18,7 @@ for LOCALE in ${LOCALES}
 do
   mkdir -p ${LOCALE}
   cp -r ${WEB_DIR}/resource/ ${WEB_DIR}/${LOCALE}/
-  for FILE in `find ${REALTIME_DIR}/shakemaps-extracted -name *-${LOCALE}.pdf`
+  for FILE in `find ${SHAKEMAPS_EXTRACT_DIR} -name *-${LOCALE}.pdf`
   do
     BASE=`basename $FILE .pdf`
     DEST=${LOCALE}/${BASE}.pdf
@@ -23,7 +28,7 @@ do
     fi
   done
 
-  for FILE in `find ${REALTIME_DIR}/shakemaps-extracted -name *-${LOCALE}.png`
+  for FILE in `find ${SHAKEMAPS_EXTRACT_DIR} -name *-${LOCALE}.png`
   do
     BASE=`basename $FILE .png`
     DEST=${LOCALE}/${BASE}.png

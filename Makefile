@@ -95,7 +95,7 @@ clean:
 	@-find . -name '*.orig' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
-	make clean -C safe/gui/ui
+	@#make clean -C safe/gui/ui
 
 # Run the test suite followed by style checking
 test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite
@@ -121,7 +121,7 @@ pep8:
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude venv,pydev,safe_extras,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,minimum_needs_configuration.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py  . || true
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
-test_suite: compile testdata
+test_suite: testdata
 	@echo
 	@echo "---------------------"
 	@echo "Regression Test Suite"
@@ -133,7 +133,7 @@ test_suite: compile testdata
 	@#echo Expecting 1 test to fail in support of issue #160
 
 # Run safe package tests only
-safe_test_suite: compile testdata
+safe_test_suite: testdata
 	@echo
 	@echo "---------------------"
 	@echo "Safe Regression Test Suite"
@@ -142,7 +142,7 @@ safe_test_suite: compile testdata
 	--with-coverage --cover-package=safe safe  3>&1 1>&2 2>&3 3>&- || true
 
 # This one includes safe and realtime and runs against QGIS v2
-qgis2_test_suite: compile testdata
+qgis2_test_suite: testdata
 	@echo
 	@echo "---------------------"
 	@echo "Regression Test Suite"

@@ -584,11 +584,12 @@ class ShakeEvent(QObject):
                 # position not found on raster
                 continue
             value = raster_values[0]  # Band 1
+
             LOGGER.debug('Raster Value: %s' % value)
-            if 'no data' not in str(value):
-                mmi = float(value)
-            else:
+            if 'no data' in str(value) or value is None:
                 mmi = 0
+            else:
+                mmi = float(value)
 
             LOGGER.debug(
                 'Looked up mmi of %s on raster for %s' % (mmi, str(point)))
@@ -901,7 +902,7 @@ class ShakeEvent(QObject):
         header = TableRow([
             '',
             self.tr('Name'),
-            self.tr('People Affected (x 1000)'),
+            self.tr('Population (x 1000)'),
             self.tr('Intensity')],
             header=True)
         for row_data in table_data:
@@ -1039,7 +1040,7 @@ class ShakeEvent(QObject):
             str(clipped_exposure.source()))
         layers = [clipped_hazard_layer, clipped_exposure_layer]
 
-        function_id = 'I T B Fatality Function'
+        function_id = 'ITB Fatality Function'
         function = safe_get_plugins(function_id)[0][function_id]
 
         result = safe_calculate_impact(layers, function)
@@ -1558,7 +1559,7 @@ class ShakeEvent(QObject):
             upper_limit = math.pow(upper_limit, 2)
         fatalities_range = '%i - %i' % (lower_limit, upper_limit)
 
-        city_table_name = self.tr('Places Affected')
+        city_table_name = self.tr('Nearby Places')
         legend_name = self.tr('Population count per grid cell')
         limitations = self.tr(
             'This impact estimation is automatically generated and only takes'

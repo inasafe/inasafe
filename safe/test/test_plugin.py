@@ -31,7 +31,7 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gis.qgis_interface import QgisInterface
-from plugin import Plugin
+from safe.plugin import Plugin
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
