@@ -1411,6 +1411,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             if 'impact_summary' in keywords:
                 self.show_impact_keywords(keywords)
+                self.wvResults.impact_path = layer.source()
             else:
                 self.show_generic_keywords(keywords)
 

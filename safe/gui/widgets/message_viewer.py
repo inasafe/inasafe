@@ -61,10 +61,12 @@ class MessageViewer(QtWebKit.QWebView):
 
         self.action_show_log = QtGui.QAction(self.tr('Show log'), None)
         self.action_show_log.setEnabled(False)
+        # noinspection PyUnresolvedReferences
         self.action_show_log.triggered.connect(self.show_log)
 
         self.action_show_report = QtGui.QAction(self.tr('Show report'), None)
         self.action_show_report.setEnabled(False)
+        # noinspection PyUnresolvedReferences
         self.action_show_report.triggered.connect(self.show_report)
 
         self.log_path = None
@@ -73,10 +75,16 @@ class MessageViewer(QtWebKit.QWebView):
 
     @property
     def impact_path(self):
+        """Getter to impact path."""
         return self._impact_path
 
     @impact_path.setter
     def impact_path(self, value):
+        """Setter to impact path.
+
+        :param value: The impact path.
+        :type value: str
+        """
         self._impact_path = value
         if value is None:
             self.action_show_report.setEnabled(False)
@@ -117,6 +125,7 @@ class MessageViewer(QtWebKit.QWebView):
         # add show in browser
         action_page_to_html_file = QtGui.QAction(
             self.tr('Open in web browser'), None)
+        # noinspection PyUnresolvedReferences
         action_page_to_html_file.triggered.connect(
             self.open_current_in_browser)
         context_menu.addAction(action_page_to_html_file)
@@ -136,6 +145,7 @@ class MessageViewer(QtWebKit.QWebView):
             # add view to_text if in dev mode
             action_page_to_stdout = QtGui.QAction(self.tr('log pageToText'),
                                                   None)
+            # noinspection PyUnresolvedReferences
             action_page_to_stdout.triggered.connect(self.page_to_stdout)
             context_menu.addAction(action_page_to_stdout)
 
@@ -215,6 +225,7 @@ class MessageViewer(QtWebKit.QWebView):
         # self.scrollToDiv()
 
     def clear_dynamic_messages_log(self):
+        """Clear dynamic message log."""
         self.dynamic_messages_log = []
 
     def show_messages(self):
@@ -262,6 +273,7 @@ class MessageViewer(QtWebKit.QWebView):
         print self.page_to_text()
 
     def save_report_to_html(self):
+        """Save report in the dock to html."""
         html = self.page().mainFrame().toHtml()
         if self.report_path is not None:
             html_to_file(html, self.report_path)
@@ -287,16 +299,19 @@ class MessageViewer(QtWebKit.QWebView):
             raise InvalidParameterError(msg)
 
     def show_report(self):
+        """Show report."""
         self.action_show_report.setEnabled(False)
         self.action_show_log.setEnabled(True)
         self.load_html_file(self.report_path)
 
     def show_log(self):
+        """Show log."""
         self.action_show_report.setEnabled(True)
         self.action_show_log.setEnabled(False)
         self.load_html_file(self.log_path)
 
     def open_current_in_browser(self):
+        """Open current selected impact report in browser."""
         if self.impact_path is None:
             html = self.page().mainFrame().toHtml()
             html_to_file(html, open_browser=True)
@@ -308,4 +323,10 @@ class MessageViewer(QtWebKit.QWebView):
                 open_in_browser(self.report_path)
 
     def load_html_file(self, file_path):
+        """Load html file into webkit.
+
+        :param file_path: The path of the html file
+        :type file_path: str
+        """
+        # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         self.setUrl(QtCore.QUrl.fromLocalFile(file_path))
