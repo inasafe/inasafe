@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>544</height>
+    <width>900</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>20</number>
+      <number>10</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1568,6 +1568,237 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="page">
+      <layout class="QVBoxLayout" name="verticalLayout_19">
+       <item>
+        <widget class="QLabel" name="lblSelectFunction1">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+         </property>
+         <property name="text">
+          <string>&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. To start with you will need to choose what kind of analysis would you like to do? [1/3]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_23">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tblFunctions1">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <row>
+          <property name="text">
+           <string>People</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Construction</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>Flood</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Tsunami</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblAvailableFunctions1">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Available functions:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_28">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QVBoxLayout" name="verticalLayout_26">
+       <item>
+        <widget class="QLabel" name="lblSelectFunction2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+         </property>
+         <property name="text">
+          <string>&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. To start with you will need to choose what kind of analysis would you like to do? [2/3]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_32">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tblFunctions2">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <row>
+          <property name="text">
+           <string>Point</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Line</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Polygon</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Raster</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>Point</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Line</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Polygon</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Raster</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblAvailableFunctions2">
+         <property name="text">
+          <string>Available functions:</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_35">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="pgF9Function">
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
@@ -1588,7 +1819,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. To start with you will need to choose what kind of analysis would you like to do?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. To start with you will need to choose what kind of analysis would you like to do? [3/3]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1631,30 +1862,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-         <item row="0" column="1">
-          <widget class="QTreeWidget" name="treeFunctions">
-           <property name="minimumSize">
-            <size>
-             <width>460</width>
-             <height>99</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>460</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <attribute name="headerVisible">
-            <bool>false</bool>
-           </attribute>
-           <column>
-            <property name="text">
-             <string notr="true">1</string>
-            </property>
-           </column>
-          </widget>
          </item>
          <item row="0" column="2">
           <spacer name="horizontalSpacer_21">
@@ -1706,6 +1913,22 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="0" column="1">
+          <widget class="QListWidget" name="lstFunctions">
+           <property name="minimumSize">
+            <size>
+             <width>460</width>
+             <height>99</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>460</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -3379,7 +3602,7 @@ Please step back and select another layer.</string>
   <tabstop>cboAdultRatioAttribute</tabstop>
   <tabstop>dsbYouthRatioDefault</tabstop>
   <tabstop>dsbElderlyRatioDefault</tabstop>
-  <tabstop>treeFunctions</tabstop>
+  <tabstop>lstFunctions</tabstop>
   <tabstop>rbHazLayerFromCanvas</tabstop>
   <tabstop>rbHazLayerFromBrowser</tabstop>
   <tabstop>lstCanvasHazLayers</tabstop>
