@@ -33,5 +33,5 @@ if PARAMETER_DIR not in sys.path:
 # noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
-    from plugin import Plugin
+    from safe.plugin import Plugin
     return Plugin(iface)

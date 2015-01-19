@@ -8,7 +8,7 @@ __author__ = 'timlinux'
 
 
 def tr(text):
-    """Convenient QObject.tr wrapper for use by non QObject derived classes.
+    """Convencience QObject.tr wrapper for use by non QObject derived classes.
 
     .. note:: see http://tinyurl.com/pyqt-differences
 

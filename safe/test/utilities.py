@@ -28,6 +28,7 @@ from qgis.core import (
 from safe.gis.numerics import axes_to_points
 from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
+from safe.common.exceptions import NoKeywordsFoundError
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -204,18 +205,17 @@ def load_layer(layer_path):
 
     """
     # Extract basename and absolute path
-    file_path = os.path.split(layer_path)[-1]  # In case path was absolute
-    base_name, extension = os.path.splitext(file_path)
-
-    keyword_path = layer_path[:-4] + '.keywords'
+    file_name = os.path.split(layer_path)[-1]  # In case path was absolute
+    base_name, extension = os.path.splitext(file_name)
 
     # Determine if layer is hazard or exposure
-    keywords = read_file_keywords(keyword_path)
     category = 'undefined'
-    if 'category' in keywords:
-        category = keywords['category']
-    message = 'Could not read %s' % keyword_path
-    assert keywords is not None, message
+    try:
+        keywords = read_file_keywords(layer_path)
+        if 'category' in keywords:
+            category = keywords['category']
+    except NoKeywordsFoundError:
+        pass
 
     # Create QGis Layer Instance
     if extension in ['.asc', '.tif']:
