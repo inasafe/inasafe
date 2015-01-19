@@ -1230,6 +1230,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblAvailableFunctions2.clear()
         self.pbnNext.setEnabled(True)
 
+    def on_tblFunctions1_cellDoubleClicked(self, row, column):
+        """Choose selected hazard x exposure combination and go ahead.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        self.pbnNext.click()
+
     def set_widgets_step_fc_function_1(self):
         """Set widgets on the Impact Functions Table 1 tab."""
         hazards = ImpactFunctionManager().get_available_hazards()
@@ -1291,6 +1299,15 @@ class WizardDialog(QDialog, FORM_CLASS):
                 [f['name'] for f in functions])
             self.lblAvailableFunctions2.setText(txt)
         self.pbnNext.setEnabled(True)
+
+    def on_tblFunctions2_cellDoubleClicked(self, row, column):
+        """Choose selected hazard x exposure constraints combination
+           and go ahead.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        self.pbnNext.click()
 
     def set_widgets_step_fc_function_2(self):
         """Set widgets on the Impact Functions Table 2 tab."""
