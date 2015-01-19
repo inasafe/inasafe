@@ -230,6 +230,13 @@ adult_ratio_default_key = DEFAULTS['ADULT_RATIO_KEY']
 elderly_ratio_attribute_key = DEFAULTS['ELDERLY_RATIO_ATTR_KEY']
 elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
 
+# Data roles
+RoleFunctions = QtCore.Qt.UserRole
+RoleHazard = QtCore.Qt.UserRole + 1
+RoleExposure = QtCore.Qt.UserRole + 2
+RoleHazardConstraint = QtCore.Qt.UserRole + 3
+RoleExposureConstraint = QtCore.Qt.UserRole + 4
+
 
 def get_question_text(constant):
     """Find a constant by name and return its value.
@@ -1178,12 +1185,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         selection = self.tblFunctions1.selectedItems()
         if len(selection) != 1:
             return []
-        h_idx = self.tblFunctions1.column(selection[0])
-        e_idx = self.tblFunctions1.row(selection[0])
-        h = ImpactFunctionManager().get_available_hazards()[h_idx]
-        e = ImpactFunctionManager().get_available_exposures()[e_idx]
-        functions = ImpactFunctionManager().get_functions_for_constraint(h, e)
-        return functions
+        return selection[0].data(RoleFunctions)
 
     def selected_imfunc_constraints(self):
         """Obtain impact function constraints selected by user.
@@ -1195,18 +1197,16 @@ class WizardDialog(QDialog, FORM_CLASS):
         selection = self.tblFunctions1.selectedItems()
         if len(selection) != 1:
             return (None, None, None, None)
-        h_idx = self.tblFunctions1.column(selection[0])
-        e_idx = self.tblFunctions1.row(selection[0])
-        h = ImpactFunctionManager().get_available_hazards()[h_idx]
-        e = ImpactFunctionManager().get_available_exposures()[e_idx]
+
+        h = selection[0].data(RoleHazard)
+        e = selection[0].data(RoleExposure)
 
         selection = self.tblFunctions2.selectedItems()
         if len(selection) != 1:
             return (h, e, None, None)
-        hc_idx = self.tblFunctions2.column(selection[0])
-        ec_idx = self.tblFunctions2.row(selection[0])
-        hc = self.available_constraints()[hc_idx]
-        ec = self.available_constraints()[ec_idx]
+
+        hc = selection[0].data(RoleHazardConstraint)
+        ec = selection[0].data(RoleExposureConstraint)
         return (h, e, hc, ec)
 
     # prevents actions being handled twice
@@ -1246,6 +1246,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             QtGui.QHeaderView.Stretch)
 
         hazards = ImpactFunctionManager().get_available_hazards()
+        # Remove 'generic' from hazards
+        for h in hazards:
+            if h['id'] == 'generic':
+                hazards.remove(h)
         exposures = ImpactFunctionManager().get_available_exposures()
 
         self.lblAvailableFunctions1.clear()
@@ -1268,6 +1272,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(bgcolor))
+                item.setData(RoleFunctions, functions)
+                item.setData(RoleHazard, h)
+                item.setData(RoleExposure, e)
                 self.tblFunctions1.setItem(exposures.index(e),
                                            hazards.index(h),
                                            item)
@@ -1277,15 +1284,15 @@ class WizardDialog(QDialog, FORM_CLASS):
     # ===========================
 
     def selected_functions_2(self):
-        """Obtain functions available for hazarda an exposure selected by user.
+        """Obtain functions available for hazard and exposure selected by user.
 
         :returns: List of the available functions metadata.
         :rtype: list, None
         """
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        functions = ImpactFunctionManager().get_functions_for_constraint(
-            h, e, hc, ec)
-        return functions
+        selection = self.tblFunctions2.selectedItems()
+        if len(selection) != 1:
+            return []
+        return selection[0].data(RoleFunctions)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1316,21 +1323,30 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_function_2(self):
         """Set widgets on the Impact Functions Table 2 tab."""
+        self.tblFunctions2.clear()
+        h, e, _hc, _ec = self.selected_imfunc_constraints()
+        haz_datatypes = [layer_raster_numeric, layer_vector_polygon,
+                         layer_vector_point]
+        exp_datatypes = [layer_raster_numeric, layer_vector_point,
+                         layer_vector_line, layer_vector_polygon]
+        self.tblFunctions2.setColumnCount(len(haz_datatypes))
+        self.tblFunctions2.setRowCount(len(exp_datatypes))
+        self.tblFunctions2.setHorizontalHeaderLabels(
+            [i['data_type'] if i['data_type'] != 'numeric' else 'raster'
+             for i in haz_datatypes])
+        self.tblFunctions2.setVerticalHeaderLabels(
+            [i['data_type'] if i['data_type'] != 'numeric' else 'raster'
+             for i in exp_datatypes])
         self.tblFunctions2.horizontalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
         self.tblFunctions2.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        datatypes = [c['data_type'] for c in [layer_vector_point,
-                                              layer_vector_line,
-                                              layer_vector_polygon,
-                                              layer_raster_numeric]]
         active_items = []
-        for col in range(len(datatypes)):
-            for row in range(len(datatypes)):
-                hc = self.available_constraints()[col]
-                ec = self.available_constraints()[row]
+        for col in range(len(haz_datatypes)):
+            for row in range(len(exp_datatypes)):
+                hc = haz_datatypes[col]
+                ec = exp_datatypes[row]
                 functions = ImpactFunctionManager(
                     ).get_functions_for_constraint(h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
@@ -1343,6 +1359,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(bgcolor))
+                item.setData(RoleFunctions, functions)
+                item.setData(RoleHazard, h)
+                item.setData(RoleExposure, e)
+                item.setData(RoleHazardConstraint, hc)
+                item.setData(RoleExposureConstraint, ec)
                 self.tblFunctions2.setItem(row, col, item)
         # Automatically select one item...
         if len(active_items) == 1:
