@@ -108,10 +108,10 @@ class Plugin(object):
         :raises: TranslationLoadException
         """
 
-        os.environ['LANG'] = str(new_locale)
+        os.environ['INASAFE_LANG'] = str(new_locale)
 
         LOGGER.debug('%s %s %s' % (
-            new_locale, QLocale.system().name(), os.environ['LANG']))
+            new_locale, QLocale.system().name(), os.environ['INASAFE_LANG']))
 
         root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         translation_path = os.path.join(
@@ -528,7 +528,7 @@ class Plugin(object):
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
-        self.clear_modules()
+        #self.clear_modules()
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.

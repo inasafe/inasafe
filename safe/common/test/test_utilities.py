@@ -173,7 +173,7 @@ class TestUtilities(unittest.TestCase):
     def test_format_decimal(self):
         """Test Format Decimal
         """
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
         interval = 0.9912
         my_number = 10
         my_result = format_decimal(interval, my_number)
@@ -199,7 +199,7 @@ class TestUtilities(unittest.TestCase):
     def test_format_int(self):
         """Test formatting integer"""
         number = 10000000
-        lang = os.getenv('LANG')
+        lang = os.getenv('INASAFE_LANG')
         formatted_int = format_int(number)
         if lang == 'id':
             expected_str = '10.000.000'
@@ -210,7 +210,7 @@ class TestUtilities(unittest.TestCase):
                 formatted_int == str(number)), message
 
         number = 1234
-        lang = os.getenv('LANG')
+        lang = os.getenv('INASAFE_LANG')
         formatted_int = format_int(number)
         if lang == 'id':
             expected_str = '1.234'
@@ -223,13 +223,13 @@ class TestUtilities(unittest.TestCase):
     def test_separator(self):
         """Test decimal and thousand separator
         """
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
         assert ',' == get_thousand_separator()
         assert '.' == get_decimal_separator()
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         assert '.' == get_thousand_separator()
         assert ',' == get_decimal_separator()
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     def test_create_classes(self):
         """Test create_classes.

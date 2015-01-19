@@ -108,7 +108,7 @@ class PluginTest(unittest.TestCase):
                 pass
         plugin = Plugin(iface)
         plugin.change_i18n('af')  # afrikaans
-        language = os.environ['LANG']
+        language = os.environ['INASAFE_LANG']
         assert language == 'af'
         # functions = get_safe_impact_function()
         # print functions

@@ -17,7 +17,6 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
 # Import the PyQt and QGIS libraries
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences

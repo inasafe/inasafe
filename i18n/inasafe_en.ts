@@ -3,19 +3,19 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="utilities.py" line="311"/>
+        <location filename="utilities.py" line="315"/>
         <source>Keyword retrieval failed for %s (%s) 
  %s</source>
         <translation>Keyword retrieval failed for %s (%s) 
  %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="304"/>
+        <location filename="utilities.py" line="308"/>
         <source>No keywords file found for %s</source>
         <translation>No keywords file found for %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="320"/>
+        <location filename="utilities.py" line="324"/>
         <source>No value was found in file %s for keyword %s</source>
         <translation>No value was found in file %s for keyword %s</translation>
     </message>
@@ -70,67 +70,67 @@
         <translation>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="73"/>
+        <location filename="utilities.py" line="74"/>
         <source>No details provided</source>
         <translation>No details provided</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="116"/>
+        <location filename="utilities.py" line="117"/>
         <source>%i seconds</source>
         <translation>%i seconds</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="118"/>
+        <location filename="utilities.py" line="119"/>
         <source>a minute</source>
         <translation>a minute</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="122"/>
+        <location filename="utilities.py" line="123"/>
         <source>over an hour</source>
         <translation>over an hour</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="124"/>
+        <location filename="utilities.py" line="125"/>
         <source>%i hours and %i minutes</source>
         <translation>%i hours and %i minutes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="127"/>
+        <location filename="utilities.py" line="128"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation>%i days, %i hours and %i minutes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="148"/>
+        <location filename="utilities.py" line="149"/>
         <source>sourced from</source>
         <translation>sourced from</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="149"/>
+        <location filename="utilities.py" line="150"/>
         <source>Hazard details</source>
         <translation>Hazard details</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="152"/>
+        <location filename="utilities.py" line="153"/>
         <source>Exposure details</source>
         <translation>Exposure details</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="160"/>
+        <location filename="utilities.py" line="161"/>
         <source>Hazard layer</source>
         <translation>Hazard layer</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="176"/>
+        <location filename="utilities.py" line="177"/>
         <source>an unknown source</source>
         <translation>an unknown source</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="171"/>
+        <location filename="utilities.py" line="172"/>
         <source>Exposure layer</source>
         <translation>Exposure layer</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="192"/>
+        <location filename="utilities.py" line="193"/>
         <source>Software notes</source>
         <translation>Software notes</translation>
     </message>
@@ -205,7 +205,7 @@
         <translation>Try zooming in to a smaller area or using a raster layer with a coarser resolution to speed up execution and reduce memory requirements. You could also try adding more RAM to your computer.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="120"/>
+        <location filename="utilities.py" line="121"/>
         <source>%s minutes</source>
         <translation>%s minutes</translation>
     </message>
@@ -230,7 +230,7 @@
         <translation>Memory used / available: %d/%d</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="198"/>
+        <location filename="utilities.py" line="199"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software!InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR &amp; the World Bank</source>
         <translation>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software!InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR &amp; the World Bank</translation>
     </message>
@@ -255,37 +255,37 @@
         <translation>Feature %d has no geometry or geometry is invalid</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="204"/>
+        <location filename="defaults.py" line="203"/>
         <source>InaSAFE has been jointly developed by Indonesian Government-BNPB, Australian Government-AIFDR and the World Bank-GFDRR. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="241"/>
+        <location filename="defaults.py" line="240"/>
         <source>InaSAFE is not a hazard modelling tool.</source>
         <translation type="unfinished">InaSAFE is not a hazard modelling tool.</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="242"/>
+        <location filename="defaults.py" line="241"/>
         <source>Polygon area analysis (such as land use) is not yet supported.</source>
         <translation type="unfinished">Polygon area analysis (such as land use) is not yet supported.</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="247"/>
+        <location filename="defaults.py" line="246"/>
         <source>Population by administration boundary is not yet supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="249"/>
+        <location filename="defaults.py" line="248"/>
         <source>InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="296"/>
+        <location filename="utilities.py" line="300"/>
         <source>Cannot get keywords from a non-existent file. File %s does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="244"/>
+        <location filename="defaults.py" line="243"/>
         <source>Population count data (raster) must be provided in WGS84 geographic coordinates.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4990,6 +4990,164 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>Plugin</name>
+    <message>
+        <location filename="plugin.py" line="524"/>
+        <source>InaSAFE</source>
+        <translation type="unfinished">InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="187"/>
+        <source>Toggle InaSAFE Dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="193"/>
+        <source>Show/hide InaSAFE dock widget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="204"/>
+        <source>InaSAFE Keyword Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="210"/>
+        <source>Open InaSAFE keywords editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="224"/>
+        <source>InaSAFE Keywords Creation Wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="230"/>
+        <source>Open InaSAFE keywords creation wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="243"/>
+        <source>InaSAFE Impact Function Centric Wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="249"/>
+        <source>Open InaSAFE impact function centric wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="262"/>
+        <source>InaSAFE Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="267"/>
+        <source>Open InaSAFE options dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="277"/>
+        <source>InaSAFE Impact Functions Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="283"/>
+        <source>Open InaSAFE Impact Functions Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="300"/>
+        <source>InaSAFE Minimum Needs Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="305"/>
+        <source>Open InaSAFE minimum needs tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="316"/>
+        <source>InaSAFE Global Minimum Needs Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="322"/>
+        <source>Open InaSAFE global minimum needs configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="334"/>
+        <source>InaSAFE Converter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="339"/>
+        <source>Open InaSAFE Converter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="351"/>
+        <source>InaSAFE Batch Runner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="356"/>
+        <source>Open InaSAFE Batch Runner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="367"/>
+        <source>Save current scenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="371"/>
+        <source>Save current scenario to text file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="389"/>
+        <source>InaSAFE OpenStreetMap Downloader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="405"/>
+        <source>InaSAFE Impact Layer Merge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="440"/>
+        <source>Toggle scenario outlines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="444"/>
+        <source>Toggle rubber bands showing scenarion extents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="468"/>
+        <source>Set the analysis area for InaSAFE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="625"/>
+        <source>Unsupported layer type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="625"/>
+        <source>The layer you have selected cannot be used for analysis because its data type is unsupported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="641"/>
+        <source>Invalid Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PostprocessorManager</name>
     <message>
         <location filename="postprocessor_manager.py" line="268"/>
@@ -5138,133 +5296,138 @@ p, li { white-space: pre-wrap; }
         <translation>Very heavy</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="904"/>
+        <location filename="shake_event.py" line="905"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="958"/>
+        <location filename="shake_event.py" line="959"/>
         <source>Intensity</source>
         <translation>Intensity</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="960"/>
+        <location filename="shake_event.py" line="961"/>
         <source>People Affected (x 1000)</source>
         <translation>People Affected (x 1000)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="961"/>
+        <location filename="shake_event.py" line="962"/>
         <source>Perceived Shaking</source>
         <translation>Perceived Shaking</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1550"/>
+        <location filename="shake_event.py" line="1551"/>
         <source>Estimated Earthquake Impact</source>
         <translation>Estimated Earthquake Impact</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1551"/>
+        <location filename="shake_event.py" line="1552"/>
         <source>Estimated number of people affected by each MMI level</source>
         <translation>Estimated number of people affected by each MMI level</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1553"/>
+        <location filename="shake_event.py" line="1554"/>
         <source>Estimated fatalities</source>
         <translation>Estimated fatalities</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1564"/>
-        <source>Places Affected</source>
-        <translation>Places Affected</translation>
-    </message>
-    <message>
-        <location filename="shake_event.py" line="1584"/>
+        <location filename="shake_event.py" line="1585"/>
         <source>Supported by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the World Bank-GFDRR.</source>
         <translation>Supported by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the World Bank-GFDRR.</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1595"/>
+        <location filename="shake_event.py" line="1596"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1596"/>
+        <location filename="shake_event.py" line="1597"/>
         <source>of</source>
         <translation>of</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1597"/>
+        <location filename="shake_event.py" line="1598"/>
         <source>bearing</source>
         <translation>bearing</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1606"/>
+        <location filename="shake_event.py" line="1607"/>
         <source>n/a</source>
         <translation>n/a</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1613"/>
+        <location filename="shake_event.py" line="1614"/>
         <source>Elapsed time since event</source>
         <translation>Elapsed time since event</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1637"/>
+        <location filename="shake_event.py" line="1638"/>
         <source>Latitude</source>
         <translation>Latitude</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1639"/>
+        <location filename="shake_event.py" line="1640"/>
         <source>Longitude</source>
         <translation>Longitude</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1641"/>
+        <location filename="shake_event.py" line="1642"/>
         <source>Depth</source>
         <translation>Depth</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1644"/>
+        <location filename="shake_event.py" line="1645"/>
         <source>Located</source>
         <translation>Located</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1693"/>
+        <location filename="shake_event.py" line="1694"/>
         <source>minute(s)</source>
         <translation>minute(s)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1693"/>
+        <location filename="shake_event.py" line="1694"/>
         <source>hour(s)</source>
         <translation>hour(s)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1707"/>
+        <location filename="shake_event.py" line="1708"/>
         <source>days</source>
         <translation>days</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1707"/>
+        <location filename="shake_event.py" line="1708"/>
         <source>weeks</source>
         <translation>weeks</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1735"/>
+        <location filename="shake_event.py" line="1736"/>
         <source>Version: %s</source>
         <translation>Version: %s</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1581"/>
+        <location filename="shake_event.py" line="1582"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1565"/>
+        <location filename="shake_event.py" line="1566"/>
         <source>Population count per grid cell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1566"/>
+        <location filename="shake_event.py" line="1567"/>
         <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by AIFDR from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="shake_event.py" line="905"/>
+        <source>Population (x 1000)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="shake_event.py" line="1565"/>
+        <source>Nearby Places</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

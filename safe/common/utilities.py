@@ -395,7 +395,7 @@ def format_decimal(interval, value):
 
 def get_decimal_separator():
     """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
+    lang = os.getenv('INASAFE_LANG')
     if lang == 'id':
         return ','
     else:
@@ -404,7 +404,7 @@ def get_decimal_separator():
 
 def get_thousand_separator():
     """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
+    lang = os.getenv('INASAFE_LANG')
     if lang == 'id':
         return '.'
     else:

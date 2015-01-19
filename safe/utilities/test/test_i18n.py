@@ -14,7 +14,7 @@ class TestI18N(unittest.TestCase):
 
     def setUp(self):
         """Run before each test."""
-        os.environ['LANG'] = 'en_US'
+        os.environ['INASAFE_LANG'] = 'en_US'
 
     @unittest.expectedFailure
     def test_tr(self):
@@ -34,14 +34,14 @@ class TestI18N(unittest.TestCase):
         expected = 'en_US'
         result = locale()
         self.assertEqual(result, expected)
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         expected = 'id'
         result = locale()
         self.assertEqual(result, expected)
 
     def test_translation_file(self):
         """Test translation file works."""
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         expected = 'inasafe_id.qm'
         result = translation_file()
         self.assertIn(expected, result)
@@ -49,7 +49,7 @@ class TestI18N(unittest.TestCase):
 
     def test_load_translation(self):
         """Test load translation works."""
-        os.environ['LANG'] = 'XX'
+        os.environ['INASAFE_LANG'] = 'XX'
         self.assertRaises(TranslationLoadError, load_translation)
 
 

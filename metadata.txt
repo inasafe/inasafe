@@ -23,12 +23,13 @@ status=alpha
 # Optional items:
 
 changelog=
-        2.2.0
+        3.0.0
         New features:
         * New wizard for impact function centric analysis
         * Complete refactor of the code base to remove separation between safe and safe_qgis packages
+        * Use INASAFE_LOCALE instead of LOCALE environment variable to override locale
         Bug fixes:
-        
+
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

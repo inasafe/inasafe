@@ -39,13 +39,13 @@ class SafeTranslationsTest(unittest.TestCase):
 
     def setUp(self):
         """Runs before each test."""
-        if 'LANG' in os.environ.iterkeys():
-            os.environ.__delitem__('LANG')
+        if 'INASAFE_LANG' in os.environ.iterkeys():
+            os.environ.__delitem__('INASAFE_LANG')
 
     def tearDown(self):
         """Runs after each test."""
-        if 'LANG' in os.environ.iterkeys():
-            os.environ.__delitem__('LANG')
+        if 'INASAFE_LANG' in os.environ.iterkeys():
+            os.environ.__delitem__('INASAFE_LANG')
 
     # Skipped because it's not easy to unload qt translation
     def Xtest_dynamic_translation_function_title(self):
@@ -63,15 +63,15 @@ class SafeTranslationsTest(unittest.TestCase):
         self.assertEqual(expected_title, function_title, message)
 
         # Indonesia
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         function_title = get_function_title(function)
         expected_title = 'Terkena dampak'
         message = ('expected %s but got %s, in lang = %s' % (
-            expected_title, function_title, os.environ['LANG']))
+            expected_title, function_title, os.environ['INASAFE_LANG']))
         self.assertEqual(expected_title, function_title, message)
 
         # Set back to en
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     # Skipped because it's not easy to unload qt translation
     def Xtest_dynamic_translation(self):
@@ -84,7 +84,7 @@ class SafeTranslationsTest(unittest.TestCase):
         self.assertEqual(function_title, expected_title, message)
 
         # Indonesia
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         function_title = 'Be affected'
         real_title = tr(function_title)
         expected_title = 'Terkena dampak'
@@ -92,12 +92,12 @@ class SafeTranslationsTest(unittest.TestCase):
         self.assertEqual(expected_title, real_title, message)
 
         # Set back to en
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     def test_impact_summary_words(self):
         """Test specific words from impact summary info shown in doc see #348.
         """
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         phrase_list = []
         message = 'Specific words checked for translation:\n'
         for phrase in phrase_list:
@@ -108,7 +108,7 @@ class SafeTranslationsTest(unittest.TestCase):
         self.assertNotIn('FAIL', message, message)
 
         # Set back to en
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     # Skipped because it's not easy to unload qt translation
     def Xtest_all_dynamic_translations(self):
@@ -119,7 +119,7 @@ class SafeTranslationsTest(unittest.TestCase):
             dir_path, os.pardir, 'safe', 'common', 'dynamic_translations.py'))
         translations_file = file(file_path)
         failure_list = []
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         line_count = 0
         # exception_words is a list of words that has the same form in both
         # English and Indonesian. For example hotel, bank
@@ -148,7 +148,7 @@ class SafeTranslationsTest(unittest.TestCase):
         self.assertEqual(len(failure_list), 0, message)
 
         # Set back to en
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     def test_qgis_translations(self):
         """Test for qgis translations."""

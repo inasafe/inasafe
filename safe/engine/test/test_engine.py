@@ -65,7 +65,7 @@ class TestEngine(unittest.TestCase):
     def setUp(self):
         """Run before each test."""
         # ensure we are using english by default
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344

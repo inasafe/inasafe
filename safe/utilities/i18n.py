@@ -43,8 +43,8 @@ def locale():
     :returns: ISO  code for the users's preferred locale e.g. en_US.
     :rtype: str
     """
-    if 'LANG' in os.environ:
-        return os.environ['LANG']
+    if 'INASAFE_LANG' in os.environ:
+        return os.environ['INASAFE_LANG']
 
     override_flag = QSettings().value(
         'locale/overrideFlag', True, type=bool)
@@ -55,6 +55,7 @@ def locale():
         # NOTES: we split the locale name because we need the first two
         # character i.e. 'id', 'af, etc
         locale_name = str(locale_name).split('_')[0]
+    os.environ['INASAFE_LANG'] = locale_name
     return locale_name
 
 

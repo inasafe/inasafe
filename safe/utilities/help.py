@@ -60,8 +60,8 @@ def _show_local_help(context=None):
 
     # set default value for locale
     locale = 'en'
-    if 'LANG' in os.environ:
-        locale = os.environ['LANG']
+    if 'INASAFE_LANG' in os.environ:
+        locale = os.environ['INASAFE_LANG']
 
     if locale not in ['id', 'en']:
         locale = 'en'
@@ -97,8 +97,8 @@ def _show_online_help(context=None):
 
     # set default value for locale
     locale = 'en'
-    if 'LANG' in os.environ:
-        locale = os.environ['LANG']
+    if 'INASAFE_LANG' in os.environ:
+        locale = os.environ['INASAFE_LANG']
 
     if locale not in ['id', 'en']:
         locale = 'en'

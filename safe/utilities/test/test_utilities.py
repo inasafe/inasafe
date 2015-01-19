@@ -29,7 +29,7 @@ class UtilitiesTest(unittest.TestCase):
 
     def setUp(self):
         """Test setup."""
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     def tearDown(self):
         """Test tear down."""
@@ -97,18 +97,18 @@ class UtilitiesTest(unittest.TestCase):
     @expectedFailure
     def test_localised_attribution(self):
         """Test we can localise attribution."""
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
         keywords = {
             'hazard_title': 'Jakarta 2007 flood',
             'hazard_source': 'Sample Hazard Source',
             'exposure_title': 'People in Jakarta',
             'exposure_source': 'Sample Exposure Source'}
         html = impact_attribution(keywords, True)
-        print html
+        # print html
         assert html == '11'
 
         # Set back to en
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     def test_get_keyword_from_file(self):
         """Get keyword from a filesystem file's .keyword file."""

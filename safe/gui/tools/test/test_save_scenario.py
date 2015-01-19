@@ -50,7 +50,7 @@ class SaveScenarioTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests."""
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
