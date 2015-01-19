@@ -1240,6 +1240,11 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_function_1(self):
         """Set widgets on the Impact Functions Table 1 tab."""
+        self.tblFunctions1.horizontalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+        self.tblFunctions1.verticalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+
         hazards = ImpactFunctionManager().get_available_hazards()
         exposures = ImpactFunctionManager().get_available_exposures()
 
@@ -1311,6 +1316,11 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_function_2(self):
         """Set widgets on the Impact Functions Table 2 tab."""
+        self.tblFunctions2.horizontalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+        self.tblFunctions2.verticalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+
         h, e, hc, ec = self.selected_imfunc_constraints()
         datatypes = [c['data_type'] for c in [layer_vector_point,
                                               layer_vector_line,

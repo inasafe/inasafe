@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>8</number>
+      <number>9</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1615,62 +1615,83 @@
         </spacer>
        </item>
        <item>
-        <widget class="QTableWidget" name="tblFunctions1">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="tabKeyNavigation">
-          <bool>false</bool>
-         </property>
-         <property name="showDropIndicator" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="dragDropOverwriteMode">
-          <bool>false</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-         <row>
-          <property name="text">
-           <string>People</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Construction</string>
-          </property>
-         </row>
-         <column>
-          <property name="text">
-           <string>Flood</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Tsunami</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblAvailableFunctions1">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Available functions:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout_10">
+         <item row="0" column="1">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>&lt;b&gt;Hazard&lt;/b&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QTableWidget" name="tblFunctions1">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="tabKeyNavigation">
+            <bool>false</bool>
+           </property>
+           <property name="showDropIndicator" stdset="0">
+            <bool>false</bool>
+           </property>
+           <property name="dragDropOverwriteMode">
+            <bool>false</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <row>
+            <property name="text">
+             <string>People</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Construction</string>
+            </property>
+           </row>
+           <column>
+            <property name="text">
+             <string>Flood</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Tsunami</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="lblAvailableFunctions1">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Available functions:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_28">
@@ -1683,7 +1704,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>16</height>
+           <height>6</height>
           </size>
          </property>
         </spacer>
@@ -1737,73 +1758,103 @@
         </spacer>
        </item>
        <item>
-        <widget class="QTableWidget" name="tblFunctions2">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="tabKeyNavigation">
-          <bool>false</bool>
-         </property>
-         <property name="showDropIndicator" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="dragDropOverwriteMode">
-          <bool>false</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-         <row>
-          <property name="text">
-           <string>Point</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Line</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Polygon</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Raster</string>
-          </property>
-         </row>
-         <column>
-          <property name="text">
-           <string>Point</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Line</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Polygon</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Raster</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblAvailableFunctions2">
-         <property name="text">
-          <string>Available functions:</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout_14">
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>&lt;b&gt;Hazard&lt;/b&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QTableWidget" name="tblFunctions2">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="tabKeyNavigation">
+            <bool>false</bool>
+           </property>
+           <property name="showDropIndicator" stdset="0">
+            <bool>false</bool>
+           </property>
+           <property name="dragDropOverwriteMode">
+            <bool>false</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <row>
+            <property name="text">
+             <string>Point</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Line</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Polygon</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Raster</string>
+            </property>
+           </row>
+           <column>
+            <property name="text">
+             <string>Point</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Line</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Polygon</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Raster</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="lblAvailableFunctions2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Available functions:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_35">
@@ -1816,7 +1867,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>16</height>
+           <height>6</height>
           </size>
          </property>
         </spacer>
