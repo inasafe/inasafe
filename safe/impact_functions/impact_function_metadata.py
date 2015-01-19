@@ -524,3 +524,22 @@ class ImpactFunctionMetadata(object):
         exposures = cls.get_exposures()
         exposure_ids = [exposure['id'] for exposure in exposures]
         return exposure_id in exposure_ids
+
+    @classmethod
+    def get_hazard_layer_constraint(cls):
+        """Helper function to get the constraints for hazard layer.
+
+        :return: List of layer constraint of hazard layer.
+        :rtype: list
+        """
+        return cls.get_metadata()['categories']['hazard']['layer_constraints']
+
+    @classmethod
+    def get_exposure_layer_constraint(cls):
+        """Helper function to get the constraints for exposure layer.
+
+        :return: List of layer constraint of exposure layer.
+        :rtype: list
+        """
+        return cls.get_metadata()[
+            'categories']['exposure']['layer_constraints']

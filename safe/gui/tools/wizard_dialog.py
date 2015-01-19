@@ -231,29 +231,6 @@ elderly_ratio_attribute_key = DEFAULTS['ELDERLY_RATIO_ATTR_KEY']
 elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
 
 
-def _tempapi_get_available_exposures():
-    result = []
-    for impact_function in ImpactFunctionManager().impact_functions:
-        for e in impact_function.Metadata.get_exposures():
-            if e not in result:
-                result += [e]
-    return result
-
-
-def _tempapi_get_functions_for_constraints(hazard, exposure,
-                                           hazard_constraint=None,
-                                           exposure_constraint=None):
-    result = []
-    for f in ImpactFunctionManager().get_functions_for_hazard(hazard):
-        if f in ImpactFunctionManager().get_functions_for_exposure(exposure):
-            if (not hazard_constraint or hazard_constraint in
-                    f['categories']['hazard']['layer_constraints']):
-                if (not exposure_constraint or exposure_constraint in
-                        f['categories']['exposure']['layer_constraints']):
-                    result += [f]
-    return result
-
-
 def get_question_text(constant):
     """Find a constant by name and return its value.
 
@@ -1204,8 +1181,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         h_idx = self.tblFunctions1.column(selection[0])
         e_idx = self.tblFunctions1.row(selection[0])
         h = ImpactFunctionManager().get_available_hazards()[h_idx]
-        e = _tempapi_get_available_exposures()[e_idx]
-        functions = _tempapi_get_functions_for_constraints(h, e)
+        e = ImpactFunctionManager().get_available_exposures()[e_idx]
+        functions = ImpactFunctionManager().get_functions_for_constraint(h, e)
         return functions
 
     def selected_imfunc_constraints(self):
@@ -1221,7 +1198,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         h_idx = self.tblFunctions1.column(selection[0])
         e_idx = self.tblFunctions1.row(selection[0])
         h = ImpactFunctionManager().get_available_hazards()[h_idx]
-        e = _tempapi_get_available_exposures()[e_idx]
+        e = ImpactFunctionManager().get_available_exposures()[e_idx]
 
         selection = self.tblFunctions2.selectedItems()
         if len(selection) != 1:
@@ -1256,7 +1233,7 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_widgets_step_fc_function_1(self):
         """Set widgets on the Impact Functions Table 1 tab."""
         hazards = ImpactFunctionManager().get_available_hazards()
-        exposures = _tempapi_get_available_exposures()
+        exposures = ImpactFunctionManager().get_available_exposures()
 
         self.lblAvailableFunctions1.clear()
         self.tblFunctions1.setColumnCount(len(hazards))
@@ -1269,7 +1246,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         for h in hazards:
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
-                functions = _tempapi_get_functions_for_constraints(h, e)
+                functions = ImpactFunctionManager(
+                    ).get_functions_for_constraint(h, e)
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
                 else:
@@ -1292,7 +1270,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: list, None
         """
         h, e, hc, ec = self.selected_imfunc_constraints()
-        functions = _tempapi_get_functions_for_constraints(h, e, hc, ec)
+        functions = ImpactFunctionManager().get_functions_for_constraint(
+            h, e, hc, ec)
         return functions
 
     # prevents actions being handled twice
@@ -1325,8 +1304,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             for row in range(len(datatypes)):
                 hc = self.available_constraints()[col]
                 ec = self.available_constraints()[row]
-                functions = _tempapi_get_functions_for_constraints(h, e,
-                                                                   hc, ec)
+                functions = ImpactFunctionManager(
+                    ).get_functions_for_constraint(h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
 
                 if len(functions):
@@ -1397,7 +1376,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeFunction.setText('')
 
         h, e, hc, ec = self.selected_imfunc_constraints()
-        functions = _tempapi_get_functions_for_constraints(h, e, hc, ec)
+        functions = ImpactFunctionManager().get_functions_for_constraint(
+            h, e, hc, ec)
         for f in functions:
             item = QtGui.QListWidgetItem(self.lstFunctions)
             item.setText(f['name'])
