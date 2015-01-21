@@ -623,6 +623,7 @@ class AnalysisHandler(QObject):
                 return
 
         create_pdf_flag = bool(mode == 'pdf')
+        self.show_busy()
         if create_pdf_flag:
             self.print_map_to_pdf(impact_report)
         else:
@@ -668,32 +669,33 @@ class AnalysisHandler(QObject):
         try:
             map_pdf_path, table_pdf_path = impact_report.print_to_pdf(
                 output_path)
+
+            # Make sure the file paths can wrap nicely:
+            wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+            wrapped_table_path = table_pdf_path.replace(os.sep,
+                                                        '<wbr>' + os.sep)
+            status = m.Message(
+                m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+                m.Paragraph(self.tr(
+                    'Your PDF was created....opening using the default PDF '
+                    'viewer on your system. The generated pdfs were saved '
+                    'as:')),
+                m.Paragraph(wrapped_map_path),
+                m.Paragraph(self.tr('and')),
+                m.Paragraph(wrapped_table_path))
+
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl.fromLocalFile(table_pdf_path))
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl.fromLocalFile(map_pdf_path))
+
+            self.show_dynamic_message(self, status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
         except Exception, e:
             self.show_error_message(get_error_message(e))
-
-        # Make sure the file paths can wrap nicely:
-        wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        wrapped_table_path = table_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        status = m.Message(
-            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
-            m.Paragraph(self.tr(
-                'Your PDF was created....opening using the default PDF '
-                'viewer on your system. The generated pdfs were saved '
-                'as:')),
-            m.Paragraph(wrapped_map_path),
-            m.Paragraph(self.tr('and')),
-            m.Paragraph(wrapped_table_path))
-
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl.fromLocalFile(table_pdf_path))
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl.fromLocalFile(map_pdf_path))
-
-        self.show_dynamic_message(self, status)
 
     def open_map_in_composer(self, impact_report):
         """Open map in composer given MapReport instance.
