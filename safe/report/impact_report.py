@@ -28,6 +28,7 @@ from qgis.core import (
     QgsMapSettings,
     QgsComposerHtml,
     QgsComposerFrame)
+from PyQt4.QtCore import QUrl
 
 from safe.defaults import disclaimer
 from safe.common.utilities import temp_dir, unique_filename
@@ -39,7 +40,7 @@ from safe.messaging import styles
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import qgis_version
-from safe.utilities.utilities import impact_attribution
+from safe.utilities.utilities import impact_attribution, html_to_file
 from safe.utilities.resources import html_footer, html_header, resource_url
 from safe.utilities.i18n import tr
 from safe.defaults import (
@@ -552,12 +553,22 @@ class ImpactReport(object):
             paper_width - 2 * margin_left,
             paper_height - 2 * margin_top)
         html_item.addFrame(html_frame)
-        # noinspection PyUnresolvedReferences
-        html_item.setContentMode(QgsComposerHtml.ManualHtml)
-        # noinspection PyUnresolvedReferences
-        html_item.setResizeMode(QgsComposerHtml.RepeatUntilFinished)
-        html_item.setHtml(html)
-        html_item.loadHtml()
+
+        # Set HTML
+        # From QGIS 2.6, we can set composer HTML with manual HTML
+        if qgis_version() < 20600:
+            html_path = unique_filename(
+                prefix='report', suffix='.html', dir=temp_dir())
+            html_to_file(html, file_path=html_path)
+            html_url = QUrl.fromLocalFile(html_path)
+            html_item.setUrl(html_url)
+        else:
+            # noinspection PyUnresolvedReferences
+            html_item.setContentMode(QgsComposerHtml.ManualHtml)
+            # noinspection PyUnresolvedReferences
+            html_item.setResizeMode(QgsComposerHtml.RepeatUntilFinished)
+            html_item.setHtml(html)
+            html_item.loadHtml()
 
         composition.exportAsPDF(output_path)
         return output_path
