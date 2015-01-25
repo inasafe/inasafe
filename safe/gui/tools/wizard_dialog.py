@@ -1842,6 +1842,10 @@ class WizardDialog(QDialog, FORM_CLASS):
                 UnsupportedProviderError):
             keywords = None
 
+        # set the layer name for further use in the step_fc_summary
+        if keywords:
+            layer.setLayerName(keywords.get('title'))
+
         if not self.is_layer_compatible(layer, category, keywords):
             return (False, "This layer's keywords or type are not suitable.")
 
