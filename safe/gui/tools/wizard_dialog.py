@@ -1849,7 +1849,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not self.is_layer_compatible(layer, category, keywords):
             return (False, "This layer's keywords or type are not suitable.")
 
-        # set the current layer (e.g. for the keyword creation sub-thread)
+        # set the current layer (e.g. for the keyword creation sub-thread
+        #                          or for adding the layer to mapCanvas)
         self.layer = layer
 
         if category == 'hazard':
@@ -2389,6 +2390,14 @@ class WizardDialog(QDialog, FORM_CLASS):
                     QtGui.QMessageBox.warning(
                         self, self.tr('InaSAFE'), message)
                 return
+
+        # After each browser step, add selected layer to map canvas
+        if current_step in [step_fc_hazlayer_from_browser,
+                            step_fc_explayer_from_browser,
+                            step_fc_agglayer_from_browser]:
+            if not QgsMapLayerRegistry.instance().mapLayersByName(
+                    self.layer.name()):
+                QgsMapLayerRegistry.instance().addMapLayers([self.layer])
 
         # Determine the new step to be switched
         new_step = self.compute_next_step(current_step)
