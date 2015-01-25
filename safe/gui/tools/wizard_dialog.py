@@ -48,6 +48,11 @@ from qgis.core import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 
 from safe import metadata
+from safe.metadata import (
+    layer_vector_point,
+    layer_vector_line,
+    layer_vector_polygon,
+    layer_raster_numeric)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.analysis_handler import AnalysisHandler
@@ -186,6 +191,7 @@ classify_question = QApplication.translate(
     'categories.')   # (subcategory, category, unit, field)
 
 # Constants: tab numbers for steps
+
 step_kw_category = 1
 step_kw_subcategory = 2
 step_kw_unit = 3
@@ -194,22 +200,24 @@ step_kw_classify = 5
 step_kw_aggregation = 6
 step_kw_source = 7
 step_kw_title = 8
-step_fc_function = 9
-step_fc_hazlayer_origin = 10
-step_fc_hazlayer_from_canvas = 11
-step_fc_hazlayer_from_browser = 12
-step_fc_explayer_origin = 13
-step_fc_explayer_from_canvas = 14
-step_fc_explayer_from_browser = 15
-step_fc_disjoint_layers = 16
-step_fc_agglayer_origin = 17
-step_fc_agglayer_from_canvas = 18
-step_fc_agglayer_from_browser = 19
-step_fc_agglayer_disjoint = 20
-step_fc_extent = 21
-step_fc_params = 22
-step_fc_summary = 23
-step_fc_analysis = 24
+step_fc_function_1 = 9
+step_fc_function_2 = 10
+step_fc_function_3 = 11
+step_fc_hazlayer_origin = 12
+step_fc_hazlayer_from_canvas = 13
+step_fc_hazlayer_from_browser = 14
+step_fc_explayer_origin = 15
+step_fc_explayer_from_canvas = 16
+step_fc_explayer_from_browser = 17
+step_fc_disjoint_layers = 18
+step_fc_agglayer_origin = 19
+step_fc_agglayer_from_canvas = 20
+step_fc_agglayer_from_browser = 21
+step_fc_agglayer_disjoint = 22
+step_fc_extent = 23
+step_fc_params = 24
+step_fc_summary = 25
+step_fc_analysis = 26
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -221,6 +229,13 @@ adult_ratio_attribute_key = DEFAULTS['ADULT_RATIO_ATTR_KEY']
 adult_ratio_default_key = DEFAULTS['ADULT_RATIO_KEY']
 elderly_ratio_attribute_key = DEFAULTS['ELDERLY_RATIO_ATTR_KEY']
 elderly_ratio_default_key = DEFAULTS['ELDERLY_RATIO_KEY']
+
+# Data roles
+RoleFunctions = QtCore.Qt.UserRole
+RoleHazard = QtCore.Qt.UserRole + 1
+RoleExposure = QtCore.Qt.UserRole + 2
+RoleHazardConstraint = QtCore.Qt.UserRole + 3
+RoleExposureConstraint = QtCore.Qt.UserRole + 4
 
 
 def get_question_text(constant):
@@ -403,8 +418,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.if_params = None
 
         self.lblSubtitle.setText(self.tr('Function-centric assessment...'))
-        new_step = step_fc_function
-        self.set_widgets_step_fc_function()
+        new_step = step_fc_function_1
+        self.set_widgets_step_fc_function_1()
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
 
@@ -594,9 +609,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lstFields.clear()
         units_for_layer = ImpactFunctionManager().units_for_layer(
             subcategory['id'], self.get_layer_type(), self.get_data_type())
-        print 'jaran'
-        print units_for_layer
-        print [i['name'] for i in units_for_layer]
         for unit_for_layer in units_for_layer:
             if (self.get_layer_type() == 'raster' and
                     unit_for_layer['constraint'] == 'categorical'):
@@ -1152,11 +1164,217 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.leTitle.setText(title)
 
     # ===========================
-    # STEP_FC_FUNCTION
+    # STEP_FC_FUNCTION_1
+    # ===========================
+
+    def available_constraints(self):
+        """Collect available layer_constraints from all impact functions.
+
+        :returns: List of metadata of the available constraints.
+        :rtype: list
+        """
+        return [layer_vector_point, layer_vector_line, layer_vector_polygon,
+                layer_raster_numeric]
+
+    def selected_functions_1(self):
+        """Obtain functions available for hazarda an exposure selected by user.
+
+        :returns: List of the available functions metadata.
+        :rtype: list, None
+        """
+        selection = self.tblFunctions1.selectedItems()
+        if len(selection) != 1:
+            return []
+        return selection[0].data(RoleFunctions)
+
+    def selected_imfunc_constraints(self):
+        """Obtain impact function constraints selected by user.
+
+        :returns: Tuple of metadata of hazard, exposure,
+            hazard layer constraints and exposure layer constraints
+        :rtype: tuple
+        """
+        selection = self.tblFunctions1.selectedItems()
+        if len(selection) != 1:
+            return (None, None, None, None)
+
+        h = selection[0].data(RoleHazard)
+        e = selection[0].data(RoleExposure)
+
+        selection = self.tblFunctions2.selectedItems()
+        if len(selection) != 1:
+            return (h, e, None, None)
+
+        hc = selection[0].data(RoleHazardConstraint)
+        ec = selection[0].data(RoleExposureConstraint)
+        return (h, e, hc, ec)
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_tblFunctions1_itemSelectionChanged(self):
+        """Choose selected hazard x exposure combination.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        functions = self.selected_functions_1()
+        if not functions:
+            self.lblAvailableFunctions1.clear()
+        else:
+            txt = "Available functions: " + ", ".join(
+                [f['name'] for f in functions])
+            self.lblAvailableFunctions1.setText(txt)
+        # Clear the selection on the 2nd matrix
+        self.tblFunctions2.clearContents()
+        self.lblAvailableFunctions2.clear()
+        self.pbnNext.setEnabled(True)
+
+    def on_tblFunctions1_cellDoubleClicked(self, row, column):
+        """Choose selected hazard x exposure combination and go ahead.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        self.pbnNext.click()
+
+    def set_widgets_step_fc_function_1(self):
+        """Set widgets on the Impact Functions Table 1 tab."""
+        self.tblFunctions1.horizontalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+        self.tblFunctions1.verticalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+
+        hazards = ImpactFunctionManager().get_available_hazards()
+        # Remove 'generic' from hazards
+        for h in hazards:
+            if h['id'] == 'generic':
+                hazards.remove(h)
+        exposures = ImpactFunctionManager().get_available_exposures()
+
+        self.lblAvailableFunctions1.clear()
+        self.tblFunctions1.setColumnCount(len(hazards))
+        self.tblFunctions1.setRowCount(len(exposures))
+        self.tblFunctions1.setHorizontalHeaderLabels(
+            [h['name'] for h in hazards])
+        self.tblFunctions1.setVerticalHeaderLabels(
+            [e['name'] for e in exposures])
+
+        for h in hazards:
+            for e in exposures:
+                item = QtGui.QTableWidgetItem()
+                functions = ImpactFunctionManager(
+                    ).get_functions_for_constraint(h, e)
+                if len(functions):
+                    bgcolor = QtGui.QColor(120, 255, 120)
+                else:
+                    bgcolor = QtGui.QColor(220, 220, 220)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+                item.setBackground(QtGui.QBrush(bgcolor))
+                item.setData(RoleFunctions, functions)
+                item.setData(RoleHazard, h)
+                item.setData(RoleExposure, e)
+                self.tblFunctions1.setItem(exposures.index(e),
+                                           hazards.index(h),
+                                           item)
+
+    # ===========================
+    # STEP_FC_FUNCTION_2
+    # ===========================
+
+    def selected_functions_2(self):
+        """Obtain functions available for hazard and exposure selected by user.
+
+        :returns: List of the available functions metadata.
+        :rtype: list, None
+        """
+        selection = self.tblFunctions2.selectedItems()
+        if len(selection) != 1:
+            return []
+        return selection[0].data(RoleFunctions)
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_tblFunctions2_itemSelectionChanged(self):
+        """Choose selected hazard x exposure constraints combination.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        functions = self.selected_functions_2()
+        if not functions:
+            self.lblAvailableFunctions2.clear()
+        else:
+            txt = "Available functions: " + ", ".join(
+                [f['name'] for f in functions])
+            self.lblAvailableFunctions2.setText(txt)
+        self.pbnNext.setEnabled(True)
+
+    def on_tblFunctions2_cellDoubleClicked(self, row, column):
+        """Choose selected hazard x exposure constraints combination
+           and go ahead.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        self.pbnNext.click()
+
+    def set_widgets_step_fc_function_2(self):
+        """Set widgets on the Impact Functions Table 2 tab."""
+        self.tblFunctions2.clear()
+        h, e, _hc, _ec = self.selected_imfunc_constraints()
+        haz_datatypes = [layer_raster_numeric, layer_vector_polygon,
+                         layer_vector_point]
+        exp_datatypes = [layer_raster_numeric, layer_vector_point,
+                         layer_vector_line, layer_vector_polygon]
+        self.tblFunctions2.setColumnCount(len(haz_datatypes))
+        self.tblFunctions2.setRowCount(len(exp_datatypes))
+        self.tblFunctions2.setHorizontalHeaderLabels(
+            [i['data_type'] if i['data_type'] != 'numeric' else 'raster'
+             for i in haz_datatypes])
+        self.tblFunctions2.setVerticalHeaderLabels(
+            [i['data_type'] if i['data_type'] != 'numeric' else 'raster'
+             for i in exp_datatypes])
+        self.tblFunctions2.horizontalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+        self.tblFunctions2.verticalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+
+        active_items = []
+        for col in range(len(haz_datatypes)):
+            for row in range(len(exp_datatypes)):
+                hc = haz_datatypes[col]
+                ec = exp_datatypes[row]
+                functions = ImpactFunctionManager(
+                    ).get_functions_for_constraint(h, e, hc, ec)
+                item = QtGui.QTableWidgetItem()
+
+                if len(functions):
+                    bgcolor = QtGui.QColor(120, 255, 120)
+                    active_items += [item]
+                else:
+                    bgcolor = QtGui.QColor(220, 220, 220)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+                item.setBackground(QtGui.QBrush(bgcolor))
+                item.setData(RoleFunctions, functions)
+                item.setData(RoleHazard, h)
+                item.setData(RoleExposure, e)
+                item.setData(RoleHazardConstraint, hc)
+                item.setData(RoleExposureConstraint, ec)
+                self.tblFunctions2.setItem(row, col, item)
+        # Automatically select one item...
+        if len(active_items) == 1:
+            active_items[0].setSelected(True)
+
+    # ===========================
+    # STEP_FC_FUNCTION_3
     # ===========================
 
     # noinspection PyPep8Naming
-    def on_treeFunctions_itemSelectionChanged(self):
+    def on_lstFunctions_itemSelectionChanged(self):
         """Update function description label
 
         .. note:: This is an automatic Qt slot
@@ -1190,71 +1408,29 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: metadata of the selected function.
         :rtype: dict, None
         """
-        item = self.treeFunctions.currentItem()
+        item = self.lstFunctions.currentItem()
         if not item:
             return None
 
-        if not item.parent():
-            # it's a branch, not a leaf
-            return None
-
-        data = item.data(0, QtCore.Qt.UserRole)
+        data = item.data(QtCore.Qt.UserRole)
         if data:
             return data
         else:
             return None
 
-    def selected_function_group(self):
-        """Obtain the hazard (impact functions group) selected by user.
-
-        :returns: metadata of the selected group.
-        :rtype: dict, None
-        """
-        item = self.treeFunctions.currentItem()
-        if not item:
-            return None
-
-        if item.parent():
-            # it's a leaf, not a branch
-            return None
-
-        data = item.data(0, QtCore.Qt.UserRole)
-        if data:
-            return data
-        else:
-            return None
-
-    def set_widgets_step_fc_function(self):
+    def set_widgets_step_fc_function_3(self):
         """Set widgets on the Impact Functions tab."""
-        self.treeFunctions.clear()
+        self.lstFunctions.clear()
         self.lblDescribeFunction.setText('')
 
-        # collect unique hazards
-        hazards = ImpactFunctionManager().get_available_hazards()
-        # Populate functions tree
-        bold_font = QtGui.QFont()
-        bold_font.setBold(True)
-        bold_font.setWeight(75)
-        for h in hazards:
-            # Create branch for hazard
-            tree_branch = QtGui.QTreeWidgetItem(self.treeFunctions)
-            tree_branch.setExpanded(True)
-            tree_branch.setFont(0, bold_font)
-            tree_branch.setFlags(QtCore.Qt.ItemIsEnabled)
-            tree_branch.setText(0, h['name'].upper())
-            tree_branch.setData(0, QtCore.Qt.UserRole, h)
-            # Collect functions for hazard
-            imfunctions = ImpactFunctionManager().get_functions_for_hazard(h)
-            for imfunc in imfunctions:
-                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                tree_leaf.setText(0, imfunc['name'])
-                tree_leaf.setData(0, QtCore.Qt.UserRole, imfunc)
-                # # TODO TEMP DEBUG temporary:
-                # if (h['name'] == 'flood' and
-                #         imfunc['name'] == "Flood Building Impact Function"):
-                #     self.twi_if_tsunami = tree_leaf
-        # # TODO TEMP DEBUG temporary
-        # self.treeFunctions.setCurrentItem(self.twi_if_tsunami)
+        h, e, hc, ec = self.selected_imfunc_constraints()
+        functions = ImpactFunctionManager().get_functions_for_constraint(
+            h, e, hc, ec)
+        for f in functions:
+            item = QtGui.QListWidgetItem(self.lstFunctions)
+            item.setText(f['name'])
+            item.setData(QtCore.Qt.UserRole, f)
+        self.auto_select_one_item(self.lstFunctions)
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
@@ -1666,10 +1842,15 @@ class WizardDialog(QDialog, FORM_CLASS):
                 UnsupportedProviderError):
             keywords = None
 
+        # set the layer name for further use in the step_fc_summary
+        if keywords:
+            layer.setLayerName(keywords.get('title'))
+
         if not self.is_layer_compatible(layer, category, keywords):
             return (False, "This layer's keywords or type are not suitable.")
 
-        # set the current layer (e.g. for the keyword creation sub-thread)
+        # set the current layer (e.g. for the keyword creation sub-thread
+        #                          or for adding the layer to mapCanvas)
         self.layer = layer
 
         if category == 'hazard':
@@ -2178,7 +2359,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # self.lblStep.setText(self.tr('step %d') % step)
         self.lblStep.clear()
         self.pbnBack.setEnabled(True)
-        if (step in [step_kw_category, step_fc_function] and self.parent_step
+        if (step in [step_kw_category, step_fc_function_1] and self.parent_step
                 is None):
             self.pbnBack.setEnabled(False)
 
@@ -2210,6 +2391,14 @@ class WizardDialog(QDialog, FORM_CLASS):
                         self, self.tr('InaSAFE'), message)
                 return
 
+        # After each browser step, add selected layer to map canvas
+        if current_step in [step_fc_hazlayer_from_browser,
+                            step_fc_explayer_from_browser,
+                            step_fc_agglayer_from_browser]:
+            if not QgsMapLayerRegistry.instance().mapLayersByName(
+                    self.layer.name()):
+                QgsMapLayerRegistry.instance().addMapLayers([self.layer])
+
         # Determine the new step to be switched
         new_step = self.compute_next_step(current_step)
 
@@ -2230,8 +2419,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_source()
         elif new_step == step_kw_title:
             self.set_widgets_step_kw_title()
-        elif new_step == step_fc_function:
-            self.set_widgets_step_fc_function()
+        elif new_step == step_fc_function_1:
+            self.set_widgets_step_fc_function_1()
+        elif new_step == step_fc_function_2:
+            self.set_widgets_step_fc_function_2()
+        elif new_step == step_fc_function_3:
+            self.set_widgets_step_fc_function_3()
         elif new_step == step_fc_hazlayer_origin:
             self.set_widgets_step_fc_hazlayer_origin()
         elif new_step == step_fc_hazlayer_from_canvas:
@@ -2366,7 +2559,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             return True
         if step == step_kw_title:
             return bool(self.leTitle.text())
-        if step == step_fc_function:
+        if step == step_fc_function_1:
+            return bool(self.tblFunctions1.selectedItems())
+        if step == step_fc_function_2:
+            return bool(self.tblFunctions2.selectedItems())
+        if step == step_fc_function_3:
             return bool(self.selected_function())
         if step == step_fc_hazlayer_origin:
             return (bool(self.rbHazLayerFromCanvas.isChecked() or
@@ -2470,8 +2667,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 # Wizard complete
                 new_step = None
 
-        elif current_step == step_fc_function:
-            new_step = step_fc_hazlayer_origin
         elif current_step == step_fc_hazlayer_origin:
             if self.rbHazLayerFromCanvas.isChecked():
                 new_step = step_fc_hazlayer_from_canvas
@@ -2534,8 +2729,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     new_step = step_fc_extent
         elif current_step == step_fc_agglayer_disjoint:
             new_step = step_fc_extent
-        elif current_step in [step_fc_extent, step_fc_params,
-                              step_fc_summary]:
+        elif current_step in [step_fc_function_1, step_fc_function_2,
+                              step_fc_function_3, step_fc_extent,
+                              step_fc_params, step_fc_summary]:
             new_step = current_step + 1
         elif current_step == step_fc_analysis:
             new_step = None  # Wizard complete
@@ -2592,9 +2788,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_kw_category
 
-        elif current_step == step_fc_function:
+        elif current_step == step_fc_function_1:
             # TODO block the Back button
-            new_step = step_fc_function
+            new_step = step_fc_function_1
         elif current_step == step_fc_hazlayer_from_browser:
             new_step = step_fc_hazlayer_origin
         elif current_step == step_fc_explayer_origin:

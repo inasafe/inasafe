@@ -351,6 +351,33 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
+    def test_get_hazard_layer_constraint(self):
+        """Test for get_hazard_layer_constraint."""
+        impact_function = FloodBuildingImpactFunction()
+        expected_layer_constraint = [
+            layer_vector_polygon,
+            layer_raster_numeric
+        ]
+        layer_constraints \
+            = impact_function.Metadata.get_hazard_layer_constraint()
+        message = 'Expected %s but got %s' % (
+            expected_layer_constraint, layer_constraints)
+        self.assertItemsEqual(
+            expected_layer_constraint, layer_constraints, message)
+
+    def test_get_exposure_layer_constraint(self):
+        """Test for get_exposure_layer_constraint."""
+        impact_function = FloodBuildingImpactFunction()
+        expected_layer_constraint = [
+            layer_vector_polygon,
+            layer_vector_point
+        ]
+        layer_constraints \
+            = impact_function.Metadata.get_exposure_layer_constraint()
+        message = 'Expected %s but got %s' % (
+            expected_layer_constraint, layer_constraints)
+        self.assertItemsEqual(
+            expected_layer_constraint, layer_constraints, message)
 
 if __name__ == '__main__':
     unittest.main()
