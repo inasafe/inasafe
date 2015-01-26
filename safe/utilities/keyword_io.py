@@ -405,7 +405,7 @@ class KeywordIO(QObject):
             'gpx': False,
             'wms': False,
             'spatialite': False,
-            'delimitedtext': True,
+            'delimitedtext': False,
             'postgres': False}
         file_based_keywords = False
         if provider_type in provider_dict:
