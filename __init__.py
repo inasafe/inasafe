@@ -40,7 +40,7 @@ def classFactory(iface):
     so that when QGIS is just scanning plugin folders it does not trigger
     all modules being loaded.
     """
-    #  sys.path.append(os.path.dirname(__file__))
+    sys.path.append(os.path.dirname(__file__))
     from safe.utilities.i18n import load_translation
     from safe.utilities.custom_logging import setup_logger
     from safe.common.exceptions import TranslationLoadError
