@@ -51,8 +51,6 @@ def classFactory(iface):
     if parameter_package not in sys.path:
         sys.path.append(parameter_package)
 
-    import pydevd
-    pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
     try:
         load_translation()
     except TranslationLoadError, e:
