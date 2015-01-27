@@ -40,7 +40,7 @@ from safe.metadata import (
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition,
-    unit_categorised)
+    unit_categorical)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -71,7 +71,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Categorised Hazard Population Impact Function.
+        """Metadata for Categorical Hazard Population Impact Function.
 
         .. versionadded:: 2.1
 
@@ -97,13 +97,13 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of categorized hazards in raster '
+                    'To assess the impacts of categorical hazards in raster '
                     'format on population raster layer.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
-                        'units': [unit_categorised],
+                        'units': [unit_categorical],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
@@ -120,27 +120,25 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
     title = tr(
         'Be affected by each hazard category')
     synopsis = tr(
-        'To assess the impacts of categorized hazards in raster '
-        'format on population raster layer.')
+        'To assess the impacts of categorical hazards in raster format on '
+        'population raster layer.')
     actions = tr(
-        'Provide details about how many people would likely need '
-        'to be impacted for each category.')
+        'Provide details about how many people would likely need to be '
+        'impacted for each category.')
     hazard_input = tr(
-        'A hazard raster layer where each cell represents '
-        'the category of the hazard. There should be 3 '
-        'categories: 1, 2, and 3.')
+        'A hazard raster layer where each cell represents the category of the '
+        'hazard. There should be 3 categories: 1, 2, and 3.')
     exposure_input = tr(
-        'An exposure raster layer where each cell represent '
-        'population count.')
+        'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Map of population exposed to high category and a table with '
-        'number of people in each category')
+        'Map of population exposed to high category and a table with number '
+        'of people in each category')
     detailed_description = tr(
-        'This function will calculate how many people will be impacted '
-        'per each category for all categories in the hazard layer. '
-        'Currently there should be 3 categories in the hazard layer. After '
-        'that it will show the result and the total amount of people that '
-        'will be impacted for the hazard given.')
+        'This function will calculate how many people will be impacted per '
+        'each category for all categories in the hazard layer. Currently '
+        'there should be 3 categories in the hazard layer. After that it will '
+        'show the result and the total amount of people that will be impacted '
+        'for the hazard given.')
     limitation = tr(
         'The number of categories is three.')
 

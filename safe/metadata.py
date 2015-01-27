@@ -192,18 +192,16 @@ unit_normalised = {
     'name': tr('normalised'),
     'description': tr(
         '<b>Normalised</b> data can be hazard or exposure data where the '
-        'values '
-        'have been classified or coded.'
+        'values have been normalised.'
     ),
     'constraint': 'continuous'
 }
-unit_categorised = {
-    'id': 'categorised',
-    'name': tr('categorised'),
+unit_categorical = {
+    'id': 'categorical',
+    'name': tr('categorical'),
     'description': tr(
-        '<b>Categorised</b> data can be hazard data where the '
-        'values '
-        'have been classified or coded (i.e. low, medium, high).'
+        '<b>Categorical</b> data can be hazard data where the '
+        'values have been classified or coded (i.e. low, medium, high).'
     ),
     'constraint': 'continuous'
 }
