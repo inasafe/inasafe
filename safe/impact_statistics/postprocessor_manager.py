@@ -113,7 +113,7 @@ class PostprocessorManager(QtCore.QObject):
             self.current_output_postprocessor = processor
             # results_list is for example:
             # [
-            #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
+            # (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
             #        (u'Total', {'value': 977536, 'metadata': {}}),
             #        (u'Female population', {'value': 508319, 'metadata': {}}),
             #        (u'Weekly hygiene packs', {'value': 403453, 'metadata': {
@@ -179,7 +179,8 @@ class PostprocessorManager(QtCore.QObject):
                     '* "%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
                     'values.') % (
-                        self.aggregator.get_default_keyword('NO_DATA'))))
+                    self.aggregator.get_default_keyword(
+                        'NO_DATA'))))
 
         return message
 
@@ -449,6 +450,7 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['elderly_ratio'] = elderly_ratio
 
                 if key == 'BuildingType' or key == 'RoadType':
+                    # TODO: Fix this might be referenced before assignment
                     parameters['key_attribute'] = key_attribute
 
                 try:
@@ -471,8 +473,8 @@ class PostprocessorManager(QtCore.QObject):
 
                 except KeyError:
                     self.output[key] = []
-                    self.output[key].append(
-                        (zone_name, results))
+                    # TODO: Fix this might be referenced before assignment
+                    self.output[key].append((zone_name, results))
             # increment the index
             polygon_index += 1
 

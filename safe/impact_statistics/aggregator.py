@@ -9,8 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.utilities.gis import is_polygon_layer, create_memory_layer, \
-    layer_attribute_names
+from safe.utilities.gis import is_polygon_layer
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -108,9 +107,9 @@ class Aggregator(QtCore.QObject):
 
         QtCore.QObject.__init__(self)
 
-        self.hazard_layer = None    # Used in deintersect() method
+        self.hazard_layer = None  # Used in deintersect() method
         self.exposure_layer = None  # Used in deintersect() method
-        self.safe_layer = None      # Aggregation layer in SAFE format
+        self.safe_layer = None  # Aggregation layer in SAFE format
 
         self.prefix = 'aggr_'
         self.attributes = {}
@@ -131,7 +130,7 @@ class Aggregator(QtCore.QObject):
 
         # self.impact_layer_attributes is a list of list of dict
         # [
-        #    [{...},{...},{...}],
+        # [{...},{...},{...}],
         #    [{...},{...},{...}]
         # ]
         # It contains lists of objects that are covered by
@@ -327,20 +326,19 @@ class Aggregator(QtCore.QObject):
             elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
 
             if (aggregation_attribute in keywords
-                and ('category' in keywords and
-                             category == 'postprocessing')
-                and (female_ratio in keywords and
-                         (female_ratio != self.tr('Use default') or
-                          female_ratio_key in keywords))
-                and (youth_ratio in keywords and
-                         (youth_ratio != self.tr('Use default') or
-                          youth_ratio_key in keywords))
-                and (adult_ratio in keywords and
-                         (adult_ratio != self.tr('Use default') or
-                          adult_ratio_key in keywords))
-                and (elderly_ratio in keywords and
-                         (elderly_ratio != self.tr('Use default') or
-                          elderly_ratio_key in keywords))):
+                and ('category' in keywords and category == 'postprocessing')
+                and (female_ratio in keywords and (
+                    female_ratio != self.tr('Use default') or
+                    female_ratio_key in keywords))
+                and (youth_ratio in keywords and (
+                    youth_ratio != self.tr('Use default') or
+                    youth_ratio_key in keywords))
+                and (adult_ratio in keywords and (
+                    adult_ratio != self.tr('Use default') or
+                    adult_ratio_key in keywords))
+                and (elderly_ratio in keywords and (
+                    elderly_ratio != self.tr('Use default') or
+                    elderly_ratio_key in keywords))):
                 self.is_valid = True
             # some keywords are needed
             else:
@@ -532,7 +530,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                    qgis_impact_layer.name(), qgis_impact_layer.type())
+                qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -600,7 +598,7 @@ class Aggregator(QtCore.QObject):
 
         # Reset impact_layer_attributes
         # (if aggregation is running twice, we need empty list
-        #   for store the data)
+        # for store the data)
         self.impact_layer_attributes = []
 
         if not self._setup_target_field(impact_layer):
@@ -673,7 +671,7 @@ class Aggregator(QtCore.QObject):
             # new way
             # zonal_statistics = {
             # 0L: {'count': 50539,
-            #      'sum': 12015061.876953125,
+            # 'sum': 12015061.876953125,
             #      'mean': 237.73841739949594},
             # 1L: {
             #   'count': 19492,
@@ -711,13 +709,11 @@ class Aggregator(QtCore.QObject):
             #                      QtCore.QVariant.Double),
             #             QgsField(self._maxFieldName(),
             #                      QtCore.QVariant.Double)]
-            fields = [QgsField(self._count_field_name(),
-                               QtCore.QVariant.Double),
-                      QgsField(self.sum_field_name(),
-                               QtCore.QVariant.Double),
-                      QgsField(self._mean_field_name(),
-                               QtCore.QVariant.Double)
-                      ]
+            fields = [
+                QgsField(self._count_field_name(), QtCore.QVariant.Double),
+                QgsField(self.sum_field_name(), QtCore.QVariant.Double),
+                QgsField(self._mean_field_name(), QtCore.QVariant.Double)
+                ]
             provider.addAttributes(fields)
             self.layer.updateFields()
 
@@ -816,7 +812,7 @@ class Aggregator(QtCore.QObject):
                 outside = []
             # self.impact_layer_attributes is a list of list of dict
             # [
-            #   [{...},{...},{...}],
+            # [{...},{...},{...}],
             #   [{...},{...},{...}]
             # ]
             self.impact_layer_attributes.append([])
@@ -847,7 +843,7 @@ class Aggregator(QtCore.QObject):
                             'data. This is a problem in the impact '
                             'function statistics_classes definition' %
                             (self.statistics_classes,
-                            key))
+                             key))
                         raise KeyError(error)
 
                     self.impact_layer_attributes[polygon_index].append(
@@ -922,7 +918,8 @@ class Aggregator(QtCore.QObject):
             splits_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
             res = self.processing.runalg('qgis:intersection',
-                impact_layer, self.layer, splits_filename)
+                                         impact_layer, self.layer,
+                                         splits_filename)
             impact_layer_splits = QgsVectorLayer(
                 res['OUTPUT'], 'split aggregation', 'ogr')
 
@@ -949,27 +946,27 @@ class Aggregator(QtCore.QObject):
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
             res = self.processing.runalg('qgis:exportaddgeometrycolumns',
-                projected_layer,
-                # 2, # Ellipsoidal
-                0,  # Layer CRS
-                tmp_filename)
+                                         projected_layer,
+                                         # 2, # Ellipsoidal
+                                         0,  # Layer CRS
+                                         tmp_filename)
             impact_layer_splits = QgsVectorLayer(
                 res['OUTPUT'],
                 'length aggregation',
                 'ogr'
             )
             # This column name is used by the processing algorithm:
-            LENGTH_COLUMN = 'length'
+            length_column = 'length'
 
             sum_field_index = \
                 agg_provider.fieldNameIndex(self.sum_field_name())
 
             # agg_attribute is a field name of aggregating polygons
             agg_attribute = self.read_keywords(
-                    self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
+                self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
             agg_attribute_index = agg_provider.fieldNameIndex(agg_attribute)
 
-            request = QgsFeatureRequest().\
+            request = QgsFeatureRequest(). \
                 setSubsetOfAttributes([agg_attribute_index])
             agg_attribute_dict = {}
             for feature_id, feat in enumerate(self.layer.getFeatures(request)):
@@ -980,7 +977,7 @@ class Aggregator(QtCore.QObject):
             # Total impacted length in the aggregation polygons:
             total = {
                 feature_id: 0 for feature_id, __ in enumerate(
-                self.layer.getFeatures(request))
+                    self.layer.getFeatures(request))
             }
 
             # Create slots for dicts
@@ -990,15 +987,15 @@ class Aggregator(QtCore.QObject):
                 _ = i
             # Create list of line objects that are covered by
             # aggregation polygons (a list of dicts for a polygon)
-            impact_field_map = {}   # {'FieldName': FieldIndex}
+            impact_field_map = {}  # {'FieldName': FieldIndex}
             temp_aggr_field_map = \
                 impact_layer_splits.dataProvider().fieldNameMap()
             for k, v in temp_aggr_field_map.iteritems():
                 impact_field_map[str(k)] = v
 
-            request = QgsFeatureRequest().\
+            request = QgsFeatureRequest(). \
                 setFlags(QgsFeatureRequest.NoGeometry)
-            agg_attribute_index = impact_layer_splits.dataProvider().\
+            agg_attribute_index = impact_layer_splits.dataProvider(). \
                 fieldNameIndex(agg_attribute)
             for feat in impact_layer_splits.getFeatures(request):
                 line_attributes = feat.attributes()
@@ -1007,7 +1004,7 @@ class Aggregator(QtCore.QObject):
                     feature_attributes_as_dict(
                         impact_field_map, line_attributes)
                 line_attribute_dict[self.sum_field_name()] = \
-                    line_attribute_dict[LENGTH_COLUMN]
+                    line_attribute_dict[length_column]
 
                 if isinstance(
                         line_attribute_dict[self.target_field],
@@ -1027,15 +1024,15 @@ class Aggregator(QtCore.QObject):
                 # then the line is not impacted), so to keep the impacted
                 # length and non-impacted zeros, the multiplication is used
                 line_attribute_dict[self.target_field] = \
-                    line_attribute_dict[LENGTH_COLUMN] * \
+                    line_attribute_dict[length_column] * \
                     line_attribute_dict[self.target_field]
                 polygon_index = agg_attribute_dict[polygon_name]
-                self.impact_layer_attributes[polygon_index].\
+                self.impact_layer_attributes[polygon_index]. \
                     append(line_attribute_dict)
 
                 # ##################################################
                 # total in aggregation polygon
-                total[polygon_index] +=  \
+                total[polygon_index] += \
                     line_attribute_dict[self.target_field]
 
             for polygon_index in total.keys():
@@ -1163,9 +1160,9 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributes[self.get_default_keyword(
             'AGGR_ATTR_KEY')] = (
-                self.read_keywords(
-                    self.layer,
-                    self.get_default_keyword('AGGR_ATTR_KEY')))
+            self.read_keywords(
+                self.layer,
+                self.get_default_keyword('AGGR_ATTR_KEY')))
 
         female_ratio_key = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
         female_ratio_attribute = self.read_keywords(
@@ -1424,7 +1421,7 @@ class Aggregator(QtCore.QObject):
                             intersection_geometry = QgsGeometry(
                                 int_com.difference(int_sym))
                         # LOGGER.debug('wkbType type of intersection: %s' %
-                        #   intersection_geometry.wkbType())
+                        # intersection_geometry.wkbType())
                         polygon_types = [QGis.WKBPolygon, QGis.WKBMultiPolygon]
                         if intersection_geometry.wkbType() in polygon_types:
                             inside_feature.setGeometry(intersection_geometry)
@@ -1442,7 +1439,7 @@ class Aggregator(QtCore.QObject):
                         # processing polygon
                         outside = qgis_polygon_geometry.difference(
                             intersection_geometry)
-#                        if outside is not None:
+                        #                        if outside is not None:
                         outside_geometry = QgsGeometry(outside)
 
                         if outside_geometry.wkbType() in polygon_types:
@@ -1469,13 +1466,13 @@ class Aggregator(QtCore.QObject):
                 remaining_polygons = remaining_polygons[
                     next_iteration_index]
                 # myRemainingAttributes = myRemainingAttributes[
-                #                        next_iteration_index]
+                # next_iteration_index]
                 remaining_indexes = remaining_indexes[next_iteration_index]
                 LOGGER.debug('Remaining: %s' % len(remaining_polygons))
             else:
                 print 'no more polygons to be checked'
                 break
-            # del tmpWriter
+                # del tmpWriter
 
         # here the full polygon set is represented by:
         # inside_polygons + intersecting_polygons + next_iteration_polygons
@@ -1620,7 +1617,7 @@ class Aggregator(QtCore.QObject):
         """Set up self.target_field
 
         :param impact_layer: Layer to be processed.
-        :type layer: QgsMapLayer, QgsVectorLayer
+        :type impact_layer: QgsMapLayer, QgsVectorLayer
 
         :returns: True if the layer contains the target field,
                   False if any errors occur.
@@ -1635,7 +1632,7 @@ class Aggregator(QtCore.QObject):
                 self.tr(
                     'No "target_field" keyword found in the impact layer %s '
                     'keywords. The impact function should define this.') % (
-                        impact_layer.name()))
+                    impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
@@ -1647,7 +1644,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('No attribute "%s" was found in the attribute table '
                         'for layer "%s". The impact function must define this'
                         ' attribute for postprocessing to work.') % (
-                            self.target_field, impact_layer.name()))
+                    self.target_field, impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
