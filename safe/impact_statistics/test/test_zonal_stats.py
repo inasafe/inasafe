@@ -40,7 +40,7 @@ class ZonalStatsTest(unittest.TestCase):
     """
     # noinspection PyPep8Naming
     def setUp(self):
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     # noinspection PyPep8Naming
     def tearDown(self):

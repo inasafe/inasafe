@@ -66,7 +66,7 @@ class AggregatorTest(unittest.TestCase):
 
         self.maxDiff = None  # show full diff for assert errors
 
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)

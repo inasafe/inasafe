@@ -13,7 +13,7 @@ class TestMemoryChecker(unittest.TestCase):
 
     def setUp(self):
         """Test setup."""
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     def tearDown(self):
         """Test tear down."""

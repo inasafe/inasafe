@@ -32,11 +32,11 @@ class TestWizardDialogLocale(unittest.TestCase):
         if 'safe.metadata' in sys.modules.keys():
             del sys.modules['safe.metadata']
         self.assertFalse('safe.metadata' in sys.modules.keys())
-        os.environ['LANG'] = 'id'
+        os.environ['INASAFE_LANG'] = 'id'
 
     def tearDown(self):
-        if 'LANG' in os.environ:
-            del os.environ['LANG']
+        if 'INASAFE_LANG' in os.environ:
+            del os.environ['INASAFE_LANG']
 
     def check_list(self, expected_list, list_widget):
         """Helper function to check that list_widget is equal to expected_list.

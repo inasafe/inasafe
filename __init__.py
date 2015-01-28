@@ -21,15 +21,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import os
-sys.path.append(os.path.dirname(__file__))
 
-PARAMETER_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), 'safe_extras', 'parameters'))
-if PARAMETER_DIR not in sys.path:
-    sys.path.append(PARAMETER_DIR)
-
-sys.path.extend([os.path.abspath(os.path.join(
-    os.path.dirname(__file__), os.path.pardir))])
+#
+# Please do not put any application logic in the global space
+# that imports from safe - it will break translations and it
+# it will break the plugin reloader because QGIS will load stuff
+# in our package tree whenever it scans for plugins.
+#
+# Again DO NOT import anything from our package tree here!
+#
 
 from PyQt4.QtCore import (
     QLocale,
@@ -37,23 +37,35 @@ from PyQt4.QtCore import (
     QCoreApplication,
     QSettings)
 
-# Setup internationalisation for the plugin.
-#
-# See if QGIS wants to override the system locale
-# and then see if we can get a valid translation file
-# for whatever locale is effectively being used.
 
-override_flag = QSettings().value(
-    'locale/overrideFlag', True, type=bool)
+# Shameless duplication of code
+# do not move this into safe package tree
+# it will break i18n and plugin reloading
+def locale_name():
+    """Figure out the locale name.
 
-if override_flag:
-    locale_name = QSettings().value('locale/userLocale', 'en_US', type=str)
-else:
-    locale_name = QLocale.system().name()
-    # NOTES: we split the locale name because we need the first two
-    # character i.e. 'id', 'af, etc
-    locale_name = str(locale_name).split('_')[0]
+    :returns: Locale name e.g. 'id'.
+    :rtype: str
+    """
+    # Setup internationalisation for the plugin.
+    #
+    # See if QGIS wants to override the system locale
+    # and then see if we can get a valid translation file
+    # for whatever locale is effectively being used.
 
+    override_flag = QSettings().value(
+        'locale/overrideFlag', True, type=bool)
+    if override_flag:
+        name = QSettings().value('locale/userLocale', 'en_US', type=str)
+    else:
+        name = QLocale.system().name()
+        # NOTES: we split the locale name because we need the first two
+        # character i.e. 'id', 'af, etc
+        name = str(name).split('_')[0]
+    return name
+
+
+locale_name()
 # Also set the system locale to the user overridden local
 # so that the inasafe library functions gettext will work
 # .. see:: :py:func:`common.utilities`
@@ -73,9 +85,21 @@ if os.path.exists(translation_path):
     # noinspection PyTypeChecker,PyCallByClass
     QCoreApplication.installTranslator(translator)
 
-# noinspection PyDocstring
+
 # noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
-    """Load Plugin class from file Plugin."""
+    """Load Plugin class from file Plugin.
+
+    Note that we do all the path manipulation and imports inside the factory
+    so that when QGIS is just scanning plugin folders it does not trigger
+    all modules being loaded.
+    """
+    sys.path.append(os.path.dirname(__file__))
+
+    parameter_package = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), 'safe_extras', 'parameters'))
+    if parameter_package not in sys.path:
+        sys.path.append(parameter_package)
+
     from safe.plugin import Plugin
     return Plugin(iface)

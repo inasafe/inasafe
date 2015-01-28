@@ -387,7 +387,7 @@ class TestCore(unittest.TestCase):
 
     def test_get_plugins(self):
         """Plugins can be collected."""
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
         plugin_list = get_plugins()
         self.assertGreater(len(plugin_list), 0)
 

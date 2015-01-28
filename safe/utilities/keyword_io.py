@@ -21,7 +21,6 @@ import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
 import cPickle as pickle
-
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
 from safe.utilities.utilities import (

@@ -36,7 +36,7 @@ class MessageViewerTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
         self.message_viewer = MessageViewer(None)
         self.message_viewer.show()
         # Set up dispatcher for dynamic messages

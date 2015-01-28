@@ -40,7 +40,7 @@ class StylingTest(unittest.TestCase):
     """
 
     def setUp(self):
-        os.environ['LANG'] = 'en'
+        os.environ['INASAFE_LANG'] = 'en'
 
     def tearDown(self):
         pass

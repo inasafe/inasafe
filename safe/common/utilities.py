@@ -1,6 +1,5 @@
 # coding=utf-8
-"""Utilities for InaSAFE
-"""
+"""Utilities for InaSAFE."""
 import os
 import sys
 import numpy
@@ -16,12 +15,10 @@ import math
 # pylint: disable=W0611
 from collections import OrderedDict
 # pylint: enable=W0611
-
-from safe.common.exceptions import VerificationError
-from safe.utilities.i18n import locale
-
-
 import logging
+from safe.common.exceptions import VerificationError
+from safe.utilities.i18n import locale_name
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -318,7 +315,7 @@ def format_int(x):
         return x
 
     # Quick solution for the moment
-    if locale() == 'id':
+    if locale_name() == 'id':
         # Replace commas with dots
         s = s.replace(',', '.')
     return s
@@ -395,7 +392,7 @@ def format_decimal(interval, value):
 
 def get_decimal_separator():
     """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
+    lang = os.getenv('INASAFE_LANG')
     if lang == 'id':
         return ','
     else:
@@ -404,7 +401,7 @@ def get_decimal_separator():
 
 def get_thousand_separator():
     """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
+    lang = os.getenv('INASAFE_LANG')
     if lang == 'id':
         return '.'
     else:

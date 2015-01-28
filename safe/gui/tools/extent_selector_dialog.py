@@ -24,7 +24,7 @@ __copyright__ = '(C) 2010, Giuseppe Sucameli'
 __revision__ = '$Format:%H$'
 
 import logging
-
+import os
 # noinspection PyUnresolvedReferences
 # pylint: disable=W0611
 from qgis.core import QGis  # force sip2 api
