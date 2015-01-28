@@ -58,6 +58,11 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             ifm.get_metadata()
             ifm.allowed_data_types('flood')
 
+    def test_is_valid(self):
+        """Test is_valid."""
+        ifm = CategorisedHazardPopulationImpactFunction()
+        self.assertTrue(ifm.Metadata.is_valid()[0])
+
     def test_is_subset(self):
         """Test for is_subset function."""
         assert ImpactFunctionMetadata.is_subset('a', ['a'])
