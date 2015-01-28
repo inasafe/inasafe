@@ -74,12 +74,12 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             """
             dict_meta = {
                 'id': 'CategoricalHazardBuildingImpactFunction',
-                'name': tr('Categorised Hazard Building Impact Function'),
+                'name': tr('Categorical Hazard Building Impact Function'),
                 'impact': tr('Be impacted'),
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of categorized hazards in raster '
+                    'To assess the impacts of categorical hazards in raster '
                     'format on building vector layer.'),
                 'categories': {
                     'hazard': {
@@ -114,9 +114,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         'Provide details about how many building would likely need '
         'to be affected for each category.')
     hazard_input = tr(
-        'A hazard raster layer where each cell represents '
-        'the category of the hazard. There should be 3 '
-        'categories: 1, 2, and 3.')
+        'A hazard raster layer where each cell represents the category of the '
+        'hazard. There should be 3 categories: 1, 2, and 3.')
     exposure_input = tr(
         'Vector polygon layer which can be extracted from OSM '
         'where each polygon represents the footprint of a building.')
