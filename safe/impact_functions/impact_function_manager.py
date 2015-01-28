@@ -45,8 +45,11 @@ class ImpactFunctionManager:
         for impact_function in impact_functions:
             try:
                 is_disabled = impact_function.Metadata.is_disabled()
-                if not is_disabled:
+                is_valid, reason = impact_function.Metadata.is_valid()
+                if not is_disabled and is_valid:
                     result.append(impact_function)
+                if not is_valid:
+                    print impact_function, reason
             except AttributeError:
                 continue
         self.impact_functions = result
@@ -359,7 +362,8 @@ class ImpactFunctionManager:
         exposures = []
         if impact_function is None:
             for impact_function in self.impact_functions:
-                add_to_list(exposures, impact_function.Metadata.get_exposures())
+                add_to_list(
+                    exposures, impact_function.Metadata.get_exposures())
 
         else:
             # noinspection PyUnresolvedReferences

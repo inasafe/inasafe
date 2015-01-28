@@ -255,6 +255,72 @@ class ImpactFunctionMetadata(object):
             return True
 
     @classmethod
+    def is_valid(cls):
+        """Check whether the metadata is valid or not.
+
+        Valid metadata means, it has:
+        id, name, impact, author, date_implemented, and overview.
+        Also categories which has hazard and exposure.
+        Each hazard and exposure has definition, subcategories, units,
+        and layer_constraints.
+        Subcategories, units, and layer_constraints must be in list.
+
+        :returns: True or False based on the validity of IF Metadata
+        :rtype: bool
+        """
+        metadata_dict = cls.get_metadata()
+        expected_keys = [
+            'id',
+            'name',
+            'impact',
+            'author',
+            'date_implemented',
+            'overview',
+            'categories'
+        ]
+
+        for key in expected_keys:
+            if key not in metadata_dict.keys():
+                return False, 'key %s not in metadata' % key
+
+        expected_keys = [
+            'hazard',
+            'exposure'
+        ]
+        categories = metadata_dict['categories']
+        for key in expected_keys:
+            if key not in categories.keys():
+                return False, 'key %s not in categories' % key
+
+        expected_keys = [
+            'definition',
+            'subcategories',
+            'units',
+            'layer_constraints'
+        ]
+        hazard = categories['hazard']
+        for key in expected_keys:
+            if key not in hazard.keys():
+                return False, 'key %s not in hazard' % key
+        for key in expected_keys[1:]:
+            if type(hazard[key]) is not list:
+                return (
+                    False,
+                    'key %s in hazard not a list, but %s ' % (
+                        key, type(hazard[key])))
+        exposure = categories['exposure']
+        for key in expected_keys:
+            if key not in exposure.keys():
+                return False, 'key %s not in exposure' % key
+        for key in expected_keys[1:]:
+            if type(exposure[key]) is not list:
+                return (
+                    False,
+                    'key %s in exposure not a list, but %s ' % (
+                        key, type(exposure[key])))
+        return True, ''
+
+    @classmethod
     def allowed_layer_constraints(cls, category=None):
         """Determine allowed layer constraints.
 
