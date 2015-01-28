@@ -25,6 +25,7 @@ import logging
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
+from qgis.core import QgsMessageLog
 
 safe_extras_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../', 'safe_extras'))
@@ -55,13 +56,9 @@ class QgsLogHandler(logging.Handler):
                 logged.
         """
         try:
-            from qgis.core import QgsMessageLog
             # Check logging.LogRecord properties for lots of other goodies
             # like line number etc. you can get from the log message.
             QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
-        # Make sure it doesn't crash if using Safe without QGIS
-        except ImportError:
-            pass
         except MemoryError:
             message = tr(
                 'Due to memory limitations on this machine, InaSAFE can not '
