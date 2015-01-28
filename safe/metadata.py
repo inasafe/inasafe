@@ -133,7 +133,7 @@ hazard_volcano = {
 hazard_all = [
     hazard_earthquake,
     hazard_flood,
-    hazard_tephra,
+    # hazard_tephra,
     hazard_tsunami,
     hazard_volcano,
     hazard_generic
