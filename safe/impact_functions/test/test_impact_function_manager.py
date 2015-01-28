@@ -29,12 +29,12 @@ from safe.impact_functions.volcanic.volcano_building_impact import (
     VolcanoBuildingImpact)
 from safe.impact_functions.volcanic. \
     volcano_population_evacuation_polygon_hazard import (
-    VolcanoPolygonHazardPopulation)
+        VolcanoPolygonHazardPopulation)
 from safe.impact_functions.generic.categorised_hazard_population import (
     CategorisedHazardPopulationImpactFunction)
 from safe.impact_functions.generic.categorical_hazard_building import (
     CategoricalHazardBuildingImpactFunction)
-from  safe.impact_functions.generic.categorical_hazard_population import (
+from safe.impact_functions.generic.categorical_hazard_population import (
     CategoricalHazardPopulationImpactFunction)
 
 from safe.metadata import (
@@ -58,7 +58,9 @@ from safe.metadata import (
     hazard_generic,
     unit_building_generic,
     unit_categorical,
-    hazard_all)
+    hazard_all,
+    layer_vector_polygon,
+    layer_vector_line)
 
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -295,6 +297,24 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
+    def test_get_available_exposures(self):
+        """Test get_available_exposures API."""
+        impact_function_manager = ImpactFunctionManager()
+
+        result = impact_function_manager.get_available_exposures()
+        expected_result = [
+            exposure_population,
+            exposure_road,
+            exposure_structure]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+        impact_function = EarthquakeBuildingImpactFunction()
+        result = impact_function_manager.get_available_exposures(impact_function)
+        expected_result = [exposure_structure]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
     def test_get_functions_for_exposure(self):
         """Test get_functions_for_exposure API."""
         impact_function_manager = ImpactFunctionManager()
@@ -323,6 +343,38 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
+    def test_get_functions_for_constraint(self):
+        """Test get_functions_for_constraint."""
+        impact_function_manager = ImpactFunctionManager()
+        hazard = hazard_earthquake
+        exposure = exposure_structure
+
+        expected_result = [
+            EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
+            CategoricalHazardBuildingImpactFunction.Metadata.get_metadata()]
+        result = impact_function_manager.get_functions_for_constraint(
+            hazard, exposure)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(expected_result, result, message)
+
+        hazard_constraint = layer_vector_polygon
+        exposure_constraint = None
+
+        expected_result = [
+            EarthquakeBuildingImpactFunction.Metadata.get_metadata()]
+        result = impact_function_manager.get_functions_for_constraint(
+            hazard, exposure, hazard_constraint, exposure_constraint)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(expected_result, result, message)
+
+        hazard_constraint = layer_vector_polygon
+        exposure_constraint = layer_vector_line
+
+        expected_result = []
+        result = impact_function_manager.get_functions_for_constraint(
+            hazard, exposure, hazard_constraint, exposure_constraint)
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(expected_result, result, message)
 
 if __name__ == '__main__':
     unittest.main()

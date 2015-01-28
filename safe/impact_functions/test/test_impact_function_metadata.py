@@ -58,6 +58,11 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             ifm.get_metadata()
             ifm.allowed_data_types('flood')
 
+    def test_is_valid(self):
+        """Test is_valid."""
+        ifm = CategorisedHazardPopulationImpactFunction()
+        self.assertTrue(ifm.Metadata.is_valid()[0])
+
     def test_is_subset(self):
         """Test for is_subset function."""
         assert ImpactFunctionMetadata.is_subset('a', ['a'])
@@ -351,6 +356,33 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
+    def test_get_hazard_layer_constraint(self):
+        """Test for get_hazard_layer_constraint."""
+        impact_function = FloodBuildingImpactFunction()
+        expected_layer_constraint = [
+            layer_vector_polygon,
+            layer_raster_numeric
+        ]
+        layer_constraints \
+            = impact_function.Metadata.get_hazard_layer_constraint()
+        message = 'Expected %s but got %s' % (
+            expected_layer_constraint, layer_constraints)
+        self.assertItemsEqual(
+            expected_layer_constraint, layer_constraints, message)
+
+    def test_get_exposure_layer_constraint(self):
+        """Test for get_exposure_layer_constraint."""
+        impact_function = FloodBuildingImpactFunction()
+        expected_layer_constraint = [
+            layer_vector_polygon,
+            layer_vector_point
+        ]
+        layer_constraints \
+            = impact_function.Metadata.get_exposure_layer_constraint()
+        message = 'Expected %s but got %s' % (
+            expected_layer_constraint, layer_constraints)
+        self.assertItemsEqual(
+            expected_layer_constraint, layer_constraints, message)
 
 if __name__ == '__main__':
     unittest.main()
