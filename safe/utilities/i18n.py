@@ -21,3 +21,27 @@ def tr(text):
     text = str(text)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     return QCoreApplication.translate('@default', text)
+
+
+def locale_name():
+    """Figure out the locale name.
+
+    :returns: Locale name e.g. 'id'.
+    :rtype: str
+    """
+    # Setup internationalisation for the plugin.
+    #
+    # See if QGIS wants to override the system locale
+    # and then see if we can get a valid translation file
+    # for whatever locale is effectively being used.
+
+    override_flag = QSettings().value(
+        'locale/overrideFlag', True, type=bool)
+    if override_flag:
+        name = QSettings().value('locale/userLocale', 'en_US', type=str)
+    else:
+        name = QLocale.system().name()
+        # NOTES: we split the locale name because we need the first two
+        # character i.e. 'id', 'af, etc
+        name = str(name).split('_')[0]
+    return name
