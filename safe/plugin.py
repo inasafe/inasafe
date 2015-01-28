@@ -29,7 +29,7 @@ from PyQt4.QtCore import (
     QLocale,
     QTranslator,
     QCoreApplication,
-    Qt,
+    Qt,f
     QSettings)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
@@ -77,7 +77,6 @@ class Plugin(object):
         self.action_global_minimum_needs = None
         self.action_impact_merge_dlg = None
         self.key_action = None
-        self.action_function_browser = None
         self.action_options = None
         self.action_keywords_dialog = None
         self.action_keywords_wizard = None
@@ -269,30 +268,6 @@ class Plugin(object):
         self.action_options.triggered.connect(self.show_options)
 
         self.add_action(self.action_options, add_to_toolbar=self.full_toolbar)
-
-        # --------------------------------------
-        # Create action for impact functions doc dialog
-        # --------------------------------------
-        icon = resources_path('img', 'icons', 'show-impact-functions.svg')
-        self.action_function_browser = QAction(
-            QIcon(icon),
-            self.tr('InaSAFE Impact Functions Browser'),
-            self.iface.mainWindow())
-        self.action_function_browser.setStatusTip(self.tr(
-            'Open InaSAFE Impact Functions Browser'))
-        self.action_function_browser.setWhatsThis(self.tr(
-            'Open InaSAFE Impact Functions Browser'))
-        self.action_function_browser.triggered.connect(
-            self.show_function_browser)
-
-        self.add_action(
-            self.action_function_browser, add_to_toolbar=self.full_toolbar)
-
-        # Short cut for Open Impact Functions Doc
-        self.key_action = QAction("Test Plugin", self.iface.mainWindow())
-        self.iface.registerMainWindowAction(self.key_action, "F7")
-        self.key_action.triggered.connect(self.shortcut_f7)
-
         # ---------------------------------------
         # Create action for minimum needs dialog
         # ---------------------------------------
@@ -676,13 +651,6 @@ class Plugin(object):
         dialog.set_function_centric_mode()
         dialog.show()  # non-modal in order to hide for selecting user extent
 
-    def show_function_browser(self):
-        """Show the impact function browser tool."""
-        # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.function_browser_dialog import FunctionBrowser
-
-        dialog = FunctionBrowser(self.iface.mainWindow())
-        dialog.exec_()  # modal
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""
