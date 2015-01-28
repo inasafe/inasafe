@@ -1225,6 +1225,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             txt = "Available functions: " + ", ".join(
                 [f['name'] for f in functions])
             self.lblAvailableFunctions1.setText(txt)
+
         # Clear the selection on the 2nd matrix
         self.tblFunctions2.clearContents()
         self.lblAvailableFunctions2.clear()
@@ -1255,10 +1256,22 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblAvailableFunctions1.clear()
         self.tblFunctions1.setColumnCount(len(hazards))
         self.tblFunctions1.setRowCount(len(exposures))
-        self.tblFunctions1.setHorizontalHeaderLabels(
-            [h['name'] for h in hazards])
-        self.tblFunctions1.setVerticalHeaderLabels(
-            [e['name'] for e in exposures])
+        for i in range(len(hazards)):
+            h = hazards[i]
+            item = QtGui.QTableWidgetItem()
+            item.setIcon(QtGui.QIcon(
+                resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
+                               % (h['id'] or 'notset'))))
+            item.setText(h['name'].capitalize())
+            self.tblFunctions1.setHorizontalHeaderItem(i, item)
+        for i in range(len(exposures)):
+            e = exposures[i]
+            item = QtGui.QTableWidgetItem()
+            item.setIcon(QtGui.QIcon(
+                resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
+                               % (e['id'] or 'notset'))))
+            item.setText(e['name'].capitalize())
+            self.tblFunctions1.setVerticalHeaderItem(i, item)
 
         for h in hazards:
             for e in exposures:
@@ -1332,11 +1345,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tblFunctions2.setColumnCount(len(haz_datatypes))
         self.tblFunctions2.setRowCount(len(exp_datatypes))
         self.tblFunctions2.setHorizontalHeaderLabels(
-            [i['data_type'] if i['data_type'] != 'numeric' else 'raster'
-             for i in haz_datatypes])
+            [i['data_type'].capitalize() if i['data_type'] != 'numeric'
+             else 'Raster' for i in haz_datatypes])
         self.tblFunctions2.setVerticalHeaderLabels(
-            [i['data_type'] if i['data_type'] != 'numeric' else 'raster'
-             for i in exp_datatypes])
+            [i['data_type'].capitalize() if i['data_type'] != 'numeric'
+             else 'Raster' for i in exp_datatypes])
         self.tblFunctions2.horizontalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
         self.tblFunctions2.verticalHeader().setResizeMode(
