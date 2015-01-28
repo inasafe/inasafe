@@ -21,9 +21,3 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
-
-from safe.common.exceptions import TranslationLoadError
-from safe.utilities.i18n import locale, translation_file, load_translation
-
-
-load_translation()
