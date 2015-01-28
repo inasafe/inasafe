@@ -112,7 +112,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                             unit_building_generic],
                         'layer_constraints': [
                             layer_vector_polygon,
-                            layer_vector_point]
+                            layer_vector_point
+                        ]
                     }
                 }
             }
