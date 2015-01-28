@@ -1,12 +1,13 @@
 
-from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
 
 
 __author__ = 'timlinux'
 
 
 def tr(text):
-    """Convenience QObject.tr wrapper for use by non QObject derived classes.
+    """We define a tr() alias here since the utilities implementation below
+    is not a class and does not inherit from QObject.
 
     .. note:: see http://tinyurl.com/pyqt-differences
 
@@ -23,25 +24,20 @@ def tr(text):
     return QCoreApplication.translate('@default', text)
 
 
-def locale_name():
-    """Figure out the locale name.
+def locale():
+    """Get the name of the currently active locale.
 
-    :returns: Locale name e.g. 'id'.
-    :rtype: str
+    :returns: Name of hte locale e.g. 'id'
+    :rtype: stre
     """
-    # Setup internationalisation for the plugin.
-    #
-    # See if QGIS wants to override the system locale
-    # and then see if we can get a valid translation file
-    # for whatever locale is effectively being used.
-
     override_flag = QSettings().value(
         'locale/overrideFlag', True, type=bool)
+
     if override_flag:
-        name = QSettings().value('locale/userLocale', 'en_US', type=str)
+        locale_name = QSettings().value('locale/userLocale', 'en_US', type=str)
     else:
-        name = QLocale.system().name()
+        locale_name = QLocale.system().name()
         # NOTES: we split the locale name because we need the first two
         # character i.e. 'id', 'af, etc
-        name = str(name).split('_')[0]
-    return name
+        locale_name = str(locale_name).split('_')[0]
+    return locale_name
