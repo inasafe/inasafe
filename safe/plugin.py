@@ -29,7 +29,7 @@ from PyQt4.QtCore import (
     QLocale,
     QTranslator,
     QCoreApplication,
-    Qt,f
+    Qt,
     QSettings)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
