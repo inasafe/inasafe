@@ -1,4 +1,4 @@
-#d202e28d4594ac2bc/***************************************************************************
+#/***************************************************************************
 #
 # InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
@@ -35,11 +35,11 @@ update-translation-strings:
 	@scripts/update-strings.sh $(LOCALES)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
-compile-translation-strings: compile
-	@#compile gettext messages binary
-	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+compile-translation-strings:
 	@#Compile qt messages binary
-	cd safe_qgis; lrelease-qt4 inasafe.pro; cd ..
+	@scripts/create_pro_file.sh
+	@lrelease-qt4 inasafe.pro
+	@rm inasafe.pro
 
 test-translations:
 	@echo
@@ -53,10 +53,6 @@ translation-stats:
 	@echo "----------------------"
 	@echo "Translation statistics - for more info see http://inasafe.org/developer-docs/i18n.html"
 	@echo "----------------------"
-	@echo
-	@echo "Gettext translations (*.po):"
-	@echo "----------------------------"
-	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@echo
 	@echo "Qt translations (*.ts):"
 	@echo "----------------------------"
@@ -101,7 +97,7 @@ clean:
 	@-find . -name '*.orig' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
-	@#make clean -C safe/gui/ui
+
 
 # Run the test suite followed by style checking
 test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite

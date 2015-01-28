@@ -89,6 +89,8 @@ class Plugin(object):
         self.action_dock = None
         self.action_toggle_rubberbands = None
         self.message_bar_item = None
+        # Flag indicating if toolbar should show only common icons or not
+        self.full_toolbar = True
         # print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
@@ -106,10 +108,10 @@ class Plugin(object):
         :raises: TranslationLoadException
         """
 
-        os.environ['LANG'] = str(new_locale)
+        os.environ['INASAFE_LANG'] = str(new_locale)
 
         LOGGER.debug('%s %s %s' % (
-            new_locale, QLocale.system().name(), os.environ['LANG']))
+            new_locale, QLocale.system().name(), os.environ['INASAFE_LANG']))
 
         root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         translation_path = os.path.join(
@@ -193,7 +195,7 @@ class Plugin(object):
         self.action_dock.setCheckable(True)
         self.action_dock.setChecked(True)
         self.action_dock.triggered.connect(self.toggle_dock_visibility)
-        self.add_action(self.action_dock)
+        self.add_action(self.action_dock, add_to_toolbar=self.full_toolbar)
 
         # --------------------------------------
         # Create action for keywords editor
@@ -212,7 +214,8 @@ class Plugin(object):
         self.action_keywords_dialog.triggered.connect(
             self.show_keywords_editor)
 
-        self.add_action(self.action_keywords_dialog)
+        self.add_action(
+            self.action_keywords_dialog, add_to_toolbar=self.full_toolbar)
 
         # --------------------------------------
         # Create action for keywords creation wizard
@@ -265,7 +268,7 @@ class Plugin(object):
             'Open InaSAFE options dialog'))
         self.action_options.triggered.connect(self.show_options)
 
-        self.add_action(self.action_options)
+        self.add_action(self.action_options, add_to_toolbar=self.full_toolbar)
 
         # --------------------------------------
         # Create action for impact functions doc dialog
@@ -282,7 +285,8 @@ class Plugin(object):
         self.action_function_browser.triggered.connect(
             self.show_function_browser)
 
-        self.add_action(self.action_function_browser)
+        self.add_action(
+            self.action_function_browser, add_to_toolbar=self.full_toolbar)
 
         # Short cut for Open Impact Functions Doc
         self.key_action = QAction("Test Plugin", self.iface.mainWindow())
@@ -302,7 +306,8 @@ class Plugin(object):
             'Open InaSAFE minimum needs tool'))
         self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
 
-        self.add_action(self.action_minimum_needs)
+        self.add_action(
+            self.action_minimum_needs, add_to_toolbar=self.full_toolbar)
 
         # ----------------------------------------------
         # Create action for global minimum needs dialog
@@ -319,7 +324,8 @@ class Plugin(object):
         self.action_global_minimum_needs.triggered.connect(
             self.show_global_minimum_needs_configuration)
 
-        self.add_action(self.action_global_minimum_needs)
+        self.add_action(
+            self.action_global_minimum_needs, add_to_toolbar=self.full_toolbar)
 
         # ---------------------------------------
         # Create action for converter dialog
@@ -335,7 +341,8 @@ class Plugin(object):
         self.action_shake_converter.triggered.connect(
             self.show_shakemap_importer)
 
-        self.add_action(self.action_shake_converter)
+        self.add_action(
+            self.action_shake_converter, add_to_toolbar=self.full_toolbar)
 
         # ---------------------------------------
         # Create action for batch runner dialog
@@ -350,10 +357,11 @@ class Plugin(object):
             'Open InaSAFE Batch Runner'))
         self.action_batch_runner.triggered.connect(self.show_batch_runner)
 
-        self.add_action(self.action_batch_runner)
+        self.add_action(
+            self.action_batch_runner, add_to_toolbar=self.full_toolbar)
 
         # ---------------------------------------
-        # Create action for batch runner dialog
+        # Create action for save scenario dialog
         # ---------------------------------------
         icon = resources_path('img', 'icons', 'save-as-scenario.svg')
         self.action_save_scenario = QAction(
@@ -365,7 +373,8 @@ class Plugin(object):
         self.action_save_scenario.setWhatsThis(message)
         # noinspection PyUnresolvedReferences
         self.action_save_scenario.triggered.connect(self.save_scenario)
-        self.add_action(self.action_save_scenario)
+        self.add_action(
+            self.action_save_scenario, add_to_toolbar=self.full_toolbar)
 
         # --------------------------------------
         # Create action for import OSM Dialog
@@ -397,7 +406,8 @@ class Plugin(object):
             'InaSAFE Impact Layer Merge'))
         self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
 
-        self.add_action(self.action_impact_merge_dlg)
+        self.add_action(
+            self.action_impact_merge_dlg, add_to_toolbar=self.full_toolbar)
 
         # --------------------------------------
         # create dockwidget and tabify it with the legend
@@ -518,7 +528,7 @@ class Plugin(object):
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
-        self.clear_modules()
+        #self.clear_modules()
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
