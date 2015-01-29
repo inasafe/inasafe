@@ -194,11 +194,10 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         request.setFilterRect(extent)
 
         if flooded_polygon is None:
-            message = tr('''There are no objects
-                in the hazard layer with
-                "value">'%s'.
-                Please check the value or use other
-                extent.''' % (threshold_min, ))
+            message = tr(
+                '''There are no objects in the hazard layer with
+                "value">'%s'. Please check the value or use other extent.'''
+                % threshold_min)
             raise GetDataError(message)
 
         # Clip exposure by the extent

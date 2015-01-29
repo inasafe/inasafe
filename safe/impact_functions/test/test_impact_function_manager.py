@@ -376,5 +376,36 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(expected_result, result, message)
 
+    def test_available_functions(self):
+        """Test that we can get available functions given some keywords."""
+
+        exposure_keywords = {
+            'category': 'exposure',
+            'subcategory': 'population',
+            'title': 'Orang',
+            'datatype': 'density',
+            'source': (
+                'Center for International Earth Science Information '
+                'Network (CIESIN)'),
+            'layertype': 'raster'}
+
+        hazard_keywords = {
+            'category': 'hazard',
+            'subcategory': 'flood',
+            'title': 'Banjir di Jakarta seperti tahun 2007',
+            'thresholds': (0.3, 0.5, 1.0),
+            'source': 'HKV',
+            'layertype': 'raster',
+            'unit': 'm'
+        }
+
+        result = ImpactFunctionManager().available_functions(
+            hazard_keywords,
+            exposure_keywords
+        )
+
+        self.assertEqual(len(result), 1)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -26,6 +26,9 @@ class ImpactFunctionManager:
     """Class for managing metadata for all impact function.
 
     .. versionadded:: 2.1
+
+    #TODO: @ismailsunni please revise the api docs here and make sure
+    everything is consistent and param and param types are correct. Thanks. Tim
     """
 
     def __init__(self):
@@ -440,3 +443,27 @@ class ImpactFunctionManager:
                         result.append(f)
 
         return result
+
+    def available_functions(self, hazard_keywords, exposure_keywords):
+        """Find out which impact functions match the hazard and exposure given.
+
+        ..versionadded:: 3.0.0
+
+        :param hazard_keywords: Keywords accompanying the hazard layer. Only
+            functions which support this hazard will be returned.
+        :type hazard_keywords: dict
+
+        :param exposure_keywords: Keywords accompanying the exposure layer.
+            only functions which support this exposure will be returned.
+        :type exposure_keywords: dict
+
+        :returns: A list of impact functions (which may be empty if there are
+            no valid ones matching the hazard and exposure).
+        :rtype: list
+        """
+        functions = self.impact_functions
+        valid_functions = []
+        # for function in functions:
+        #     if function.metadata
+        return functions
+

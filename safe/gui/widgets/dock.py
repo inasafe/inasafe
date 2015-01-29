@@ -846,6 +846,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
         """
+        import pydevd
+        pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         # remember what the current function is
         original_function = self.cboFunction.currentText()
         self.cboFunction.clear()
@@ -874,27 +876,27 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             exposure_keywords['layertype'] = 'raster'
 
         # Find out which functions can be used with these layers
-        func_list = [hazard_keywords, exposure_keywords]
+        keywords_list = [hazard_keywords, exposure_keywords]
         try:
-            func_dict = get_admissible_plugins(func_list)
+            function_dict = get_admissible_plugins(keywords_list)
             # Populate the hazard combo with the available functions
-            for myFunctionID in func_dict:
-                function = func_dict[myFunctionID]
+            for function_id in function_dict:
+                function = function_dict[function_id]
                 function_title = get_function_title(function)
 
                 # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
                 # print
-                # print 'function (ID)', myFunctionID
+                # print 'function (ID)', function_id
                 # print 'function', function
                 # print 'Function title:', function_title
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo
-                # myFunctionID is the canonical identifier
+                # function_id is the canonical identifier
                 add_ordered_combo_item(
                     self.cboFunction,
                     function_title,
-                    data=myFunctionID)
+                    data=function_id)
         except Exception, e:
             raise e
 
