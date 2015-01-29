@@ -79,7 +79,7 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of classes hazards in raster '
+                    'To assess the impacts of classified hazards in raster '
                     'format on building vector layer.'),
                 'categories': {
                     'hazard': {
@@ -106,13 +106,13 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
     # Function documentation
     target_field = 'DAMAGED'
     affected_field = 'affected'
-    title = tr('Be impacted by each class')
+    title = tr('Be impacted by each hazard class')
     synopsis = tr(
-        'To assess the impacts of class hazard in raster format on '
-        'structure/building raster layer.')
+        'To assess the impacts of classified hazards in raster format on '
+        'building vector layer.')
     actions = tr(
-        'Provide details about how many building would likely need to be '
-        'affected for each class.')
+        'Provide details about how many building would likely be impacted for '
+        'each hazard class.')
     hazard_input = tr(
         'A hazard raster layer where each cell represents the class of the '
         'hazard. There should be 3 classes: e.g. 1, 2, and 3.')
@@ -126,15 +126,16 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
         'This function will use the class from the hazard layer that has been '
         'identified by the user which one is low, medium, or high from the '
         'parameter that user input. After that, this impact function will '
-        'calculate the building will be affected per each class for class in '
+        'calculate the building will be impacted per each class for class in '
         'the hazard layer. Finally, it will show the result and the total of '
         'building that will be affected for the hazard given.')
+    limitation = tr('The number of classes is three.')
 
     # parameters
     parameters = OrderedDict([
-        ('low_hazard_level', 1.0),
-        ('medium_hazard_level', 2.0),
-        ('high_hazard_level', 3.0),
+        ('low_hazard_class', 1.0),
+        ('medium_hazard_class', 2.0),
+        ('high_hazard_class', 3.0),
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
 
@@ -148,12 +149,12 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
         """
 
         # The 3 classes
-        low_t = self.parameters['low_hazard_level']
-        medium_t = self.parameters['medium_hazard_level']
-        high_t = self.parameters['high_hazard_level']
+        low_t = self.parameters['low_hazard_class']
+        medium_t = self.parameters['medium_hazard_class']
+        high_t = self.parameters['high_hazard_class']
 
         # Extract data
-        hazard = get_hazard_layer(layers)  # Depth
+        hazard = get_hazard_layer(layers)  # Classified Hazard
         exposure = get_exposure_layer(layers)  # Building locations
 
         question = get_question(hazard.get_name(), exposure.get_name(), self)

@@ -34,8 +34,8 @@ from safe.impact_functions.generic.continuous_hazard_population import (
     ContinuousHazardPopulationImpactFunction)
 from safe.impact_functions.generic.classified_hazard_building import (
     ClassifiedHazardBuildingImpactFunction)
-from safe.impact_functions.generic.categorical_hazard_population import (
-    CategoricalHazardPopulationImpactFunction)
+from safe.impact_functions.generic.classified_hazard_population import (
+    ClassifiedHazardPopulationImpactFunction)
 
 from safe.metadata import (
     unit_wetdry,
@@ -279,7 +279,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
             ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
-            CategoricalHazardPopulationImpactFunction.Metadata.get_metadata()]
+            ClassifiedHazardPopulationImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -293,7 +293,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
             ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
-            CategoricalHazardPopulationImpactFunction.Metadata.get_metadata()]
+            ClassifiedHazardPopulationImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
