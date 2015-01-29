@@ -22,7 +22,7 @@ from safe.metadata import (
     layer_raster_numeric,
     layer_vector_point,
     unit_building_generic,
-    unit_categorised,
+    unit_categorical,
     unit_building_type_type,)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
@@ -74,18 +74,18 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             """
             dict_meta = {
                 'id': 'CategoricalHazardBuildingImpactFunction',
-                'name': tr('Categorised Hazard Building Impact Function'),
+                'name': tr('Categorical Hazard Building Impact Function'),
                 'impact': tr('Be impacted'),
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of categorized hazards in raster '
+                    'To assess the impacts of categorical hazards in raster '
                     'format on building vector layer.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
-                        'units': [unit_categorised],
+                        'units': [unit_categorical],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {
@@ -114,9 +114,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         'Provide details about how many building would likely need '
         'to be affected for each category.')
     hazard_input = tr(
-        'A hazard raster layer where each cell represents '
-        'the category of the hazard. There should be 3 '
-        'categories: 1, 2, and 3.')
+        'A hazard raster layer where each cell represents the category of the '
+        'hazard. There should be 3 categories: 1, 2, and 3.')
     exposure_input = tr(
         'Vector polygon layer which can be extracted from OSM '
         'where each polygon represents the footprint of a building.')
@@ -125,8 +124,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         'number of structure in each category')
     detailed_description = tr(
         'This function will calculate how many buildings will be affected '
-        'per each category for all categories in the hazard layer. '
-        'Currently there should be 3 categories in the hazard layer. After '
+        'per category for all categories in the hazard layer. '
+        'There should be 3 categories in the hazard layer. After '
         'that it will show the result and the total of buildings that '
         'will be affected for the hazard given.')
 
