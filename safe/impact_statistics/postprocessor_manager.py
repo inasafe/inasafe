@@ -135,14 +135,23 @@ class PostprocessorManager(QtCore.QObject):
                 get_postprocessor_human_name(processor)).lower())
 
             # Dirty hack to make "evacuated" comes out in the report.
-            if 'evacuation_percentage' in self.function_parameters.keys():
-                # Currently only MinimumNeeds that calculate from evacuation
-                # percentage.
-                if processor == 'MinimumNeeds':
+            # Currently only MinimumNeeds that calculate from evacuation
+            # percentage.
+            if processor == 'MinimumNeeds':
+                if 'evacuation_percentage' in self.function_parameters.keys():
                     table.caption = self.tr(
                         'Detailed %s report (for people needing '
                         'evacuation)') % (
                         tr(get_postprocessor_human_name(processor)).lower())
+                else:
+                    table.caption = self.tr(
+                        'Detailed %s report (affected people)') % (
+                        tr(get_postprocessor_human_name(processor)).lower())
+
+            if processor in ['Gender', 'Age']:
+                table.caption = self.tr(
+                    'Detailed %s report (affected people)') % (
+                    tr(get_postprocessor_human_name(processor)).lower())
 
             header = m.Row()
             header.add(str(self.attribute_title).capitalize())
