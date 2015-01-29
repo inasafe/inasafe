@@ -129,9 +129,9 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         'of people in each category')
     detailed_description = tr(
         'This function will calculate how many people will be impacted '
-        'per each category for all categories in the hazard layer. '
+        'per category for all categories in the hazard layer. '
         'This function will assign category to each normalised hazard level.'
-        'Currently there should be 3 categories in the hazard layer. After '
+        'There should be 3 categories in the hazard layer. After '
         'that it will show the result and the total amount of people that '
         'will be impacted for the hazard given.')
     limitation = tr('The number of categories is three.')

@@ -124,8 +124,8 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         'number of structure in each category')
     detailed_description = tr(
         'This function will calculate how many buildings will be affected '
-        'per each category for all categories in the hazard layer. '
-        'Currently there should be 3 categories in the hazard layer. After '
+        'per category for all categories in the hazard layer. '
+        'There should be 3 categories in the hazard layer. After '
         'that it will show the result and the total of buildings that '
         'will be affected for the hazard given.')
 
