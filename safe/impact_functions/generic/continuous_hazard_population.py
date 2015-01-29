@@ -50,9 +50,9 @@ from safe.impact_functions.impact_function_metadata import (
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-class CategorisedHazardPopulationImpactFunction(FunctionProvider):
+class ContinuousHazardPopulationImpactFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
-    """Plugin for impact of population as derived by categorised hazard.
+    """Plugin for impact of population as derived by continuous hazard.
 
     :author AIFDR
     :rating 2
@@ -66,7 +66,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Categorised Hazard Population Impact Function.
+        """Metadata for Continuous Hazard Population Impact Function.
 
         .. versionadded:: 2.1
 
@@ -86,13 +86,13 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'CategorisedHazardPopulationImpactFunction',
-                'name': tr('Categorised Hazard Population Impact Function'),
+                'id': 'ContinuousHazardPopulationImpactFunction',
+                'name': tr('Continuous Hazard Population Impact Function'),
                 'impact': tr('Be impacted'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of normalised hazards in raster '
+                    'To assess the impacts of continuous hazards in raster '
                     'format on population raster layer.'),
                 'categories': {
                     'hazard': {
@@ -114,26 +114,24 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     # Function documentation
     title = tr('Be impacted')
     synopsis = tr(
-        'To assess the impacts of normalised hazards in raster format on '
+        'To assess the impacts of continuous hazards in raster format on '
         'population raster layer.')
     actions = tr(
         'Provide details about how many people would likely need to be '
         'impacted for each category.')
     hazard_input = tr(
         'A hazard raster layer where each cell represents the level of the '
-        'hazard. This hazard level has been normalised from the real value.')
+        'hazard. The hazard has continuous value of hazard level.')
     exposure_input = tr(
         'An exposure raster layer where each cell represent population count.')
     output = tr(
         'Map of population exposed to high category and a table with number '
         'of people in each category')
     detailed_description = tr(
-        'This function will calculate how many people will be impacted '
-        'per category for all categories in the hazard layer. '
-        'This function will assign category to each normalised hazard level.'
-        'There should be 3 categories in the hazard layer. After '
-        'that it will show the result and the total amount of people that '
-        'will be impacted for the hazard given.')
+        'This function will categorised the continuous hazard level into 3 '
+        'category based on the threshold that has been input by the user.'
+        'After that, this function will calculate how many people will be '
+        'impacted per category for all categories in the hazard layer.')
     limitation = tr('The number of categories is three.')
 
     # Configurable parameters

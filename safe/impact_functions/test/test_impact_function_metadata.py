@@ -25,8 +25,8 @@ from safe.impact_functions.earthquake.earthquake_building_impact import (
     EarthquakeBuildingImpactFunction)
 from safe.impact_functions.inundation.flood_OSM_building_impact import (
     FloodBuildingImpactFunction)
-from safe.impact_functions.generic.categorised_hazard_population import (
-    CategorisedHazardPopulationImpactFunction)
+from safe.impact_functions.generic.continuous_hazard_population import (
+    ContinuousHazardPopulationImpactFunction)
 from safe.metadata import (
     unit_wetdry,
     unit_metres_depth,
@@ -60,7 +60,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
     def test_is_valid(self):
         """Test is_valid."""
-        ifm = CategorisedHazardPopulationImpactFunction()
+        ifm = ContinuousHazardPopulationImpactFunction()
         self.assertTrue(ifm.Metadata.is_valid()[0])
 
     def test_is_subset(self):
@@ -104,7 +104,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
-        impact_function = CategorisedHazardPopulationImpactFunction()
+        impact_function = ContinuousHazardPopulationImpactFunction()
         result = impact_function.Metadata.allowed_subcategories(
             category='hazard')
         expected_result = hazard_all
@@ -199,7 +199,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
-        impact_function = CategorisedHazardPopulationImpactFunction()
+        impact_function = ContinuousHazardPopulationImpactFunction()
         result = impact_function.Metadata.units_for_layer(
             subcategory='flood', layer_type='raster', data_type='numeric')
         expected_result = [unit_normalised]
@@ -227,7 +227,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        impact_function = CategorisedHazardPopulationImpactFunction()
+        impact_function = ContinuousHazardPopulationImpactFunction()
         result = impact_function.Metadata.categories_for_layer(
             layer_type='raster', data_type='numeric')
         expected_result = ['exposure', 'hazard']

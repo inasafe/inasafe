@@ -30,8 +30,8 @@ from safe.impact_functions.volcanic.volcano_building_impact import (
 from safe.impact_functions.volcanic. \
     volcano_population_evacuation_polygon_hazard import (
         VolcanoPolygonHazardPopulation)
-from safe.impact_functions.generic.categorised_hazard_population import (
-    CategorisedHazardPopulationImpactFunction)
+from safe.impact_functions.generic.continuous_hazard_population import (
+    ContinuousHazardPopulationImpactFunction)
 from safe.impact_functions.generic.categorical_hazard_building import (
     CategoricalHazardBuildingImpactFunction)
 from safe.impact_functions.generic.categorical_hazard_population import (
@@ -277,7 +277,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
-            CategorisedHazardPopulationImpactFunction.Metadata.get_metadata(),
+            ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
             CategoricalHazardBuildingImpactFunction.Metadata.get_metadata(),
             CategoricalHazardPopulationImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
@@ -291,7 +291,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
-            CategorisedHazardPopulationImpactFunction.Metadata.get_metadata(),
+            ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
             CategoricalHazardBuildingImpactFunction.Metadata.get_metadata(),
             CategoricalHazardPopulationImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
