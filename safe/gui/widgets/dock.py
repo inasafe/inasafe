@@ -32,7 +32,7 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+from PyQt4.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal
 
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.help import show_context_help
@@ -189,7 +189,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         pixmap = QtGui.QPixmap(
             resources_path('img', 'logos', 'supporters.png'),
         )
-        self.organisation_logo.setPixmap(pixmap)
+        self.organisation_logo.setPixmap(
+            pixmap.scaled(self.width(), 100, Qt.KeepAspectRatio))
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
