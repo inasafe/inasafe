@@ -103,17 +103,6 @@ class ITBFatalityFunction(FunctionProvider):
     truthing and other reliable information sources.
 
     :author Hadi Ghasemi
-    :rating 3
-
-    :param requires category=='hazard' and \
-                    subcategory=='earthquake' and \
-                    layertype=='raster' and \
-                    unit=='MMI'
-
-    :param requires category=='exposure' and \
-                    subcategory=='population' and \
-                    layertype=='raster'
-
     """
 
     class Metadata(ImpactFunctionMetadata):

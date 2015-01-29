@@ -43,17 +43,7 @@ from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation.
-
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
-                    layertype=='raster'  and \
-                    disabled=='True'
-    :param requires category=='exposure' and \
-                    subcategory in ['road'] and \
-                    layertype=='vector'
-        """
+    """
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodRasterRoadsExperimentalFunction
 

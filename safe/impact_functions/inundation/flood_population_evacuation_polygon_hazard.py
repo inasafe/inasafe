@@ -67,17 +67,6 @@ LOGGER = logging.getLogger('InaSAFE')
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Impact function for vector flood evacuation.
-
-    :author AIFDR
-    :rating 4
-
-    :param requires category=='hazard' and \
-                    subcategory=='flood' and \
-                    layertype=='vector'
-
-    :param requires category=='exposure' and \
-                    subcategory=='population' and \
-                    layertype=='raster'
     """
 
     class Metadata(ImpactFunctionMetadata):

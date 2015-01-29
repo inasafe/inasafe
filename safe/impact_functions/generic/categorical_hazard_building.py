@@ -40,16 +40,6 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class CategoricalHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
-
-    :author ESSC
-    :rating 3
-    :param requires category=='hazard' and \
-                    unit=='categorised' and \
-                    layertype=='raster'
-
-    :param requires category=='exposure' and \
-                    subcategory=='structure' and \
-                    layertype=='vector'
     """
 
     class Metadata(ImpactFunctionMetadata):

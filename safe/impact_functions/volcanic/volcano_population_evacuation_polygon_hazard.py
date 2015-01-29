@@ -63,16 +63,6 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 class VolcanoPolygonHazardPopulation(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Impact function for volcano hazard zones impact on population.
-
-    :author AIFDR
-    :rating 4
-    :param requires category=='hazard' and \
-                    subcategory in ['volcano'] and \
-                    layertype=='vector'
-
-    :param requires category=='exposure' and \
-                    subcategory=='population' and \
-                    layertype=='raster'
     """
 
     class Metadata(ImpactFunctionMetadata):

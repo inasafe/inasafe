@@ -58,16 +58,6 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 class CategoricalHazardPopulationImpactFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by categorised hazard.
-
-        :author ESSC
-        :rating 3
-        :param requires category=='hazard' and \
-                        unit=='categorised' and \
-                        layertype=='raster'
-
-        :param requires category=='exposure' and \
-                        subcategory=='population' and \
-                        layertype=='raster'
         """
 
     class Metadata(ImpactFunctionMetadata):

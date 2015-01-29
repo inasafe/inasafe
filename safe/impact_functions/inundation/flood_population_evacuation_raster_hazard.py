@@ -46,17 +46,6 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 class FloodEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Impact function for flood evacuation.
-
-    :author AIFDR
-    :rating 4
-    :param requires category=='hazard' and \
-                    subcategory=='flood' and \
-                    layertype=='raster' and \
-                    unit=='m'
-
-    :param requires category=='exposure' and \
-                    subcategory=='population' and \
-                    layertype=='raster'
     """
 
     class Metadata(ImpactFunctionMetadata):

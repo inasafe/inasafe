@@ -54,15 +54,6 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by categorised hazard.
 
-    :author AIFDR
-    :rating 2
-    :param requires category=='hazard' and \
-                    unit=='normalised' and \
-                    layertype=='raster'
-
-    :param requires category=='exposure' and \
-                    subcategory=='population' and \
-                    layertype=='raster'
     """
 
     class Metadata(ImpactFunctionMetadata):

@@ -40,15 +40,6 @@ LOGGER = logging.getLogger('InaSAFE')
 class FloodVectorRoadsExperimentalFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation.
-
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory=='flood' and \
-                    layertype=='vector'
-    :param requires category=='exposure' and \
-                    subcategory in ['road'] and \
-                    layertype=='vector'
     """
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodVectorRoadsExperimentalFunction.

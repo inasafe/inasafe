@@ -50,17 +50,6 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 class TsunamiEvacuationFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Impact function for tsunami evacuation.
-
-    :author AIFDR
-    :rating 4
-    :param requires category=='hazard' and \
-                    subcategory=='tsunami' and \
-                    layertype=='raster' and \
-                    unit=='m'
-
-    :param requires category=='exposure' and \
-                    subcategory=='population' and \
-                    layertype=='raster'
     """
 
     class Metadata(ImpactFunctionMetadata):

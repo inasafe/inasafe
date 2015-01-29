@@ -41,16 +41,6 @@ from safe.common.exceptions import InaSAFEError
 class VolcanoBuildingImpact(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Risk plugin for volcano building impact.
-
-    :author AIFDR
-    :rating 4
-    :param requires category=='hazard' and \
-                    subcategory in ['volcano'] and \
-                    layertype=='vector'
-
-    :param requires category=='exposure' and \
-                    subcategory=='structure' and \
-                    layertype=='vector'
     """
 
     class Metadata(ImpactFunctionMetadata):
