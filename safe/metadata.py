@@ -187,23 +187,23 @@ unit_mmi = {
     'constraint': 'continuous',
     'default_attribute': 'mmi'  # applies to vector only
 }
-unit_normalised = {
-    'id': 'normalised',
-    'name': tr('normalised'),
+unit_continuous = {
+    'id': 'continuous',
+    'name': tr('continuous'),
     'description': tr(
-        '<b>Normalised</b> data can be hazard or exposure data where the '
-        'values have been normalised.'
+        '<b>Continuous</b> data can be hazard or exposure data where the '
+        'values is continuous. It does not have unit. So, it usually comes '
+        'from normalised value.'
     ),
     'constraint': 'continuous'
 }
-unit_categorical = {
-    'id': 'categorical',
-    'name': tr('categorical'),
+unit_classes = {
+    'id': 'classes',
+    'name': tr('classes'),
     'description': tr(
-        '<b>Categorical</b> data can be hazard data where the '
-        'values have been classified or coded (i.e. low, medium, high).'
+        '<b>Classes</b> data can be hazard data where the '
+        'values have been classified or coded (i.e. 1, 2, 3).'
     ),
-    'constraint': 'continuous'
 }
 unit_people_per_pixel = {
     'id': 'people_per_pixel',

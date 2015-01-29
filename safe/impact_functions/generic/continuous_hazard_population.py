@@ -40,7 +40,7 @@ from safe.metadata import (
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition,
-    unit_normalised)
+    unit_continuous)
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
@@ -98,7 +98,7 @@ class ContinuousHazardPopulationImpactFunction(FunctionProvider):
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': hazard_all,  # already a list
-                        'units': [unit_normalised],
+                        'units': [unit_continuous],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {

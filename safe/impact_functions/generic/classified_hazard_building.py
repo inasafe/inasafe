@@ -22,7 +22,7 @@ from safe.metadata import (
     layer_raster_numeric,
     layer_vector_point,
     unit_building_generic,
-    unit_categorical,
+    unit_classes,
     unit_building_type_type,)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
@@ -85,7 +85,7 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
-                        'units': [unit_categorical],
+                        'units': [unit_classes],
                         'layer_constraints': [layer_raster_numeric]
                     },
                     'exposure': {

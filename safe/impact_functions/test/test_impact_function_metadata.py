@@ -38,7 +38,7 @@ from safe.metadata import (
     layer_raster_numeric,
     layer_vector_polygon,
     layer_vector_point,
-    unit_normalised,
+    unit_continuous,
     hazard_all,
     unit_building_generic,
     hazard_flood,
@@ -202,7 +202,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = ContinuousHazardPopulationImpactFunction()
         result = impact_function.Metadata.units_for_layer(
             subcategory='flood', layer_type='raster', data_type='numeric')
-        expected_result = [unit_normalised]
+        expected_result = [unit_continuous]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
