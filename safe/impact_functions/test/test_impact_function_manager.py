@@ -53,7 +53,7 @@ from safe.metadata import (
     unit_building_type_type,
     unit_people_per_pixel,
     unit_mmi,
-    hazard_tephra,
+    hazard_volcanic_ash,
     unit_normalised,
     hazard_generic,
     unit_building_generic,
@@ -100,7 +100,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_tsunami,
             exposure_road,
             hazard_volcano,
-            # hazard_tephra,
+            hazard_volcanic_ash,
             hazard_generic]
         message = (
             'I expect %s but I got %s.' % (expected_result, result))
@@ -175,7 +175,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.units_for_layer(
             subcategory='volcano', layer_type='raster', data_type='numeric')
         expected_result = [unit_normalised, unit_categorised]
-        print result
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -217,8 +216,8 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_earthquake,
             hazard_flood,
             hazard_tsunami,
-            # hazard_tephra,
             hazard_volcano,
+            hazard_volcanic_ash,
             hazard_generic]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
