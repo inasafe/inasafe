@@ -36,7 +36,8 @@ from safe.impact_functions.core import (
 )
 from safe.metadata import (
     hazard_all,
-    layer_raster_numeric,
+    layer_raster_classified,
+    layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
@@ -105,13 +106,13 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
                         'units': [unit_classes],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_classified]
                     },
                     'exposure': {
                         'definition': exposure_definition,
                         'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     }
                 }
             }

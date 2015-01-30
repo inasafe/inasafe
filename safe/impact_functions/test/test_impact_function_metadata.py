@@ -35,7 +35,7 @@ from safe.metadata import (
     exposure_structure,
     hazard_earthquake,
     unit_building_type_type,
-    layer_raster_numeric,
+    layer_raster_continuous,
     layer_vector_polygon,
     layer_vector_point,
     unit_continuous,
@@ -119,8 +119,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        result = impact_function.Metadata .allowed_data_types('earthquake')
-        expected_result = ['numeric', 'polygon']
+        result = impact_function.Metadata.allowed_data_types('earthquake')
+        expected_result = ['continuous', 'polygon']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -134,7 +134,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function.Metadata .allowed_units(
-            'structure', 'numeric')
+            'structure', 'continuous')
         expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
@@ -146,7 +146,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        result = impact_function.Metadata .allowed_units('flood', 'numeric')
+        result = impact_function.Metadata .allowed_units('flood', 'continuous')
         expected_result = [unit_wetdry, unit_metres_depth, unit_feet_depth]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
@@ -156,13 +156,13 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = EarthquakeBuildingImpactFunction()
         result = impact_function.Metadata.allowed_layer_constraints()
         expected_result = [
-            layer_vector_polygon, layer_raster_numeric, layer_vector_point]
+            layer_vector_polygon, layer_raster_continuous, layer_vector_point]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
         result = impact_function.Metadata. allowed_layer_constraints(
             'hazard')
-        expected_result = [layer_vector_polygon, layer_raster_numeric]
+        expected_result = [layer_vector_polygon, layer_raster_continuous]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
@@ -176,19 +176,23 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for units_for_layer API."""
         impact_function = EarthquakeBuildingImpactFunction()
         result = impact_function.Metadata.units_for_layer(
-            subcategory='earthquake', layer_type='raster', data_type='numeric')
+            subcategory='earthquake',
+            layer_type='raster',
+            data_type='continuous')
         expected_result = [unit_mmi]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
         result = impact_function.Metadata.units_for_layer(
-            subcategory='flood', layer_type='raster', data_type='numeric')
+            subcategory='flood', layer_type='raster', data_type='continuous')
         expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
         result = impact_function.Metadata.units_for_layer(
-            subcategory='earthquake', layer_type='vector', data_type='numeric')
+            subcategory='earthquake',
+            layer_type='vector',
+            data_type='continuous')
         expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
@@ -201,7 +205,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
         impact_function = ContinuousHazardPopulationImpactFunction()
         result = impact_function.Metadata.units_for_layer(
-            subcategory='flood', layer_type='raster', data_type='numeric')
+            subcategory='flood', layer_type='raster', data_type='continuous')
         expected_result = [unit_continuous]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
@@ -210,7 +214,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for categories_for_layer API."""
         impact_function = EarthquakeBuildingImpactFunction()
         result = impact_function.Metadata.categories_for_layer(
-            layer_type='raster', data_type='numeric')
+            layer_type='raster', data_type='continuous')
         expected_result = ['hazard']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
@@ -229,7 +233,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
         impact_function = ContinuousHazardPopulationImpactFunction()
         result = impact_function.Metadata.categories_for_layer(
-            layer_type='raster', data_type='numeric')
+            layer_type='raster', data_type='continuous')
         expected_result = ['exposure', 'hazard']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertListEqual(result, expected_result, message)
@@ -256,7 +260,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for subcategories_for_layer API."""
         impact_function = EarthquakeBuildingImpactFunction()
         result = impact_function.Metadata.subcategories_for_layer(
-            category='hazard', layer_type='raster', data_type='numeric')
+            category='hazard', layer_type='raster', data_type='continuous')
         expected_result = [hazard_earthquake]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
@@ -361,7 +365,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = FloodBuildingImpactFunction()
         expected_layer_constraint = [
             layer_vector_polygon,
-            layer_raster_numeric
+            layer_raster_continuous
         ]
         layer_constraints \
             = impact_function.Metadata.get_hazard_layer_constraint()

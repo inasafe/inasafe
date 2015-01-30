@@ -298,9 +298,13 @@ unit_wetdry = {
 
 
 # layer_constraints
-layer_raster_numeric = {
+layer_raster_continuous = {
     'layer_type': 'raster',
-    'data_type': 'numeric'
+    'data_type': 'continuous'
+}
+layer_raster_classified = {
+    'layer_type': 'raster',
+    'data_type': 'classified'
 }
 layer_vector_line = {
     'layer_type': 'vector',

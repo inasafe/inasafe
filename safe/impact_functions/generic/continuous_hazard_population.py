@@ -35,7 +35,7 @@ from safe.impact_functions.core import (
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.metadata import (
     hazard_all,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
@@ -99,13 +99,13 @@ class ContinuousHazardPopulationImpactFunction(FunctionProvider):
                         'definition': hazard_definition,
                         'subcategories': hazard_all,  # already a list
                         'units': [unit_continuous],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     },
                     'exposure': {
                         'definition': exposure_definition,
                         'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     }
                 }
             }

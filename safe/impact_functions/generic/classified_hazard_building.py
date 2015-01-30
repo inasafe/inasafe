@@ -19,7 +19,7 @@ from safe.metadata import (
     hazard_all,
     hazard_definition,
     layer_vector_polygon,
-    layer_raster_numeric,
+    layer_raster_classified,
     layer_vector_point,
     unit_building_generic,
     unit_classes,
@@ -86,7 +86,7 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
                         'units': [unit_classes],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_classified]
                     },
                     'exposure': {
                         'definition': exposure_definition,

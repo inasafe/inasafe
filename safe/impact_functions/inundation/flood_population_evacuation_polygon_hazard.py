@@ -29,7 +29,7 @@ from safe.metadata import (
     layer_vector_polygon,
     exposure_population,
     unit_people_per_pixel,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_definition,
     hazard_definition
 )
@@ -120,7 +120,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                         'definition': exposure_definition,
                         'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     }
                 }
             }

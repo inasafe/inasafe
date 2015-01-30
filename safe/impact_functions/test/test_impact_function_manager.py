@@ -70,8 +70,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     """
 
     flood_OSM_building_hazard_units = [
-        unit_wetdry, unit_metres_depth, unit_feet_depth, unit_continuous,
-        unit_classes]
+        unit_wetdry, unit_metres_depth, unit_feet_depth, unit_continuous]
 
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
@@ -110,12 +109,12 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test allowed_data_types API."""
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.allowed_data_types('flood')
-        expected_result = ['polygon', 'numeric']
+        expected_result = ['polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('volcano')
-        expected_result = ['point', 'polygon', 'numeric']
+        expected_result = ['point', 'polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -125,17 +124,17 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('earthquake')
-        expected_result = ['polygon', 'numeric']
+        expected_result = ['polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('tsunami')
-        expected_result = ['polygon', 'numeric']
+        expected_result = ['polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('population')
-        expected_result = ['numeric']
+        expected_result = ['continuous']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -152,13 +151,15 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(set(result), set(expected_result), message)
 
-        result = impact_function_manager.allowed_units('flood', 'numeric')
+        result = impact_function_manager.allowed_units('flood', 'continuous')
         expected_result = self.flood_OSM_building_hazard_units
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        result = impact_function_manager.allowed_units('earthquake', 'numeric')
-        expected_result = [unit_mmi, unit_continuous, unit_classes]
+        result = impact_function_manager.allowed_units(
+            'earthquake', 'continuous')
+        expected_result = [unit_mmi, unit_continuous]
+
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -167,20 +168,21 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.units_for_layer(
-            subcategory='flood', layer_type='raster', data_type='numeric')
+            subcategory='flood', layer_type='raster', data_type='continuous')
         expected_result = self.flood_OSM_building_hazard_units
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.units_for_layer(
-            subcategory='volcano', layer_type='raster', data_type='numeric')
-        expected_result = [unit_continuous, unit_classes]
-        print result
+            subcategory='volcano', layer_type='raster', data_type='continuous')
+        expected_result = [unit_continuous]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.units_for_layer(
-            subcategory='population', layer_type='raster', data_type='numeric')
+            subcategory='population',
+            layer_type='raster',
+            data_type='continuous')
         expected_result = [unit_people_per_pixel]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -190,7 +192,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.categories_for_layer(
-            layer_type='raster', data_type='numeric')
+            layer_type='raster', data_type='continuous')
         expected_result = [hazard_definition, exposure_definition]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -212,7 +214,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.subcategories_for_layer(
-            category='hazard', layer_type='raster', data_type='numeric')
+            category='hazard', layer_type='raster', data_type='continuous')
         expected_result = [
             hazard_earthquake,
             hazard_flood,
@@ -237,7 +239,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.subcategories_for_layer(
-            category='exposure', layer_type='raster', data_type='numeric')
+            category='exposure', layer_type='raster', data_type='continuous')
         expected_result = [exposure_population]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)

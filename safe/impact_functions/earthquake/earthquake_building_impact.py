@@ -9,7 +9,7 @@ from safe.metadata import (
     hazard_earthquake,
     layer_vector_polygon,
     layer_vector_point,
-    layer_raster_numeric,
+    layer_raster_continuous,
     unit_mmi,
     exposure_structure,
     unit_building_type_type,
@@ -77,7 +77,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         'units': [unit_mmi],
                         'layer_constraints': [
                             layer_vector_polygon,
-                            layer_raster_numeric
+                            layer_raster_continuous
                         ]
                     },
                     'exposure': {
