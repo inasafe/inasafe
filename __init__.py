@@ -73,6 +73,7 @@ if os.path.exists(translation_path):
     # noinspection PyTypeChecker,PyCallByClass
     QCoreApplication.installTranslator(translator)
 
+
 # noinspection PyDocstring
 # noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
