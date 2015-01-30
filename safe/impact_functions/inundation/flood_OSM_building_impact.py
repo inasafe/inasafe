@@ -46,16 +46,6 @@ LOGGER = logging.getLogger('InaSAFE')
 class FloodBuildingImpactFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Inundation impact on building data.
-
-    :author Ole Nielsen, Kristy van Putten
-    # this rating below is only for testing a function, not the real one
-    :rating 0
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami']
-
-    :param requires category=='exposure' and \
-                    subcategory=='structure' and \
-                    layertype=='vector'
     """
 
     class Metadata(ImpactFunctionMetadata):

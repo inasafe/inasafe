@@ -141,6 +141,22 @@ def is_point_layer(layer):
         return False
 
 
+def is_line_layer(layer):
+    """Check if a QGIS layer is vector and its geometries are lines.
+
+    :param layer: A vector layer.
+    :type layer: QgsVectorLayer, QgsMapLayer
+
+    :returns: True if the layer contains lines, otherwise False.
+    :rtype: bool
+    """
+    try:
+        return (layer.type() == QgsMapLayer.VectorLayer) and (
+            layer.geometryType() == QGis.Line)
+    except AttributeError:
+        return False
+
+
 def is_polygon_layer(layer):
     """Check if a QGIS layer is vector and its geometries are polygons.
 

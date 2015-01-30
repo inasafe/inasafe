@@ -31,13 +31,6 @@ LOGGER = logging.getLogger('InaSAFE')
 class EarthquakeBuildingImpactFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Earthquake impact on building data.
-
-    :param requires category=='hazard' and \
-                    subcategory=='earthquake'
-
-    :param requires category=='exposure' and \
-                    subcategory=='structure' and \
-                    layertype=='vector'
     """
 
     class Metadata(ImpactFunctionMetadata):

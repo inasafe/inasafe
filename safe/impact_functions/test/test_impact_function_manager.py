@@ -57,7 +57,7 @@ from safe.metadata import (
     unit_normalised,
     hazard_generic,
     unit_building_generic,
-    unit_categorised,
+    unit_categorical,
     hazard_all,
     layer_vector_polygon,
     layer_vector_line)
@@ -71,7 +71,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
     flood_OSM_building_hazard_units = [
         unit_wetdry, unit_metres_depth, unit_feet_depth, unit_normalised,
-        unit_categorised]
+        unit_categorical]
 
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
@@ -158,7 +158,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_units('earthquake', 'numeric')
-        expected_result = [unit_mmi, unit_normalised, unit_categorised]
+        expected_result = [unit_mmi, unit_normalised, unit_categorical]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -174,7 +174,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = impact_function_manager.units_for_layer(
             subcategory='volcano', layer_type='raster', data_type='numeric')
-        expected_result = [unit_normalised, unit_categorised]
+        expected_result = [unit_normalised, unit_categorical]
         print result
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -375,6 +375,37 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard, exposure, hazard_constraint, exposure_constraint)
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(expected_result, result, message)
+
+    def test_available_functions(self):
+        """Test that we can get available functions given some keywords."""
+
+        exposure_keywords = {
+            'category': 'exposure',
+            'subcategory': 'population',
+            'title': 'Orang',
+            'datatype': 'density',
+            'source': (
+                'Center for International Earth Science Information '
+                'Network (CIESIN)'),
+            'layertype': 'raster'}
+
+        hazard_keywords = {
+            'category': 'hazard',
+            'subcategory': 'flood',
+            'title': 'Banjir di Jakarta seperti tahun 2007',
+            'thresholds': (0.3, 0.5, 1.0),
+            'source': 'HKV',
+            'layertype': 'raster',
+            'unit': 'm'
+        }
+
+        result = ImpactFunctionManager().available_functions(
+            hazard_keywords,
+            exposure_keywords
+        )
+
+        self.assertEqual(len(result), 3)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -42,7 +42,14 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     get_safe_impact_function)
 from safe.defaults import disclaimer
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.gis import (
+    extent_string_to_array,
+    read_impact_layer,
+    is_point_layer,
+    is_line_layer,
+    is_polygon_layer,
+    is_raster_layer)
+
 from safe.utilities.resources import (
     resources_path,
     resource_url,
@@ -56,9 +63,9 @@ from safe.utilities.styling import (
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.impact_functions import load_plugins
-from safe.impact_functions.core import (
-    get_admissible_plugins,
-    get_function_title)
+from safe.impact_functions.impact_function_manager import (
+    ImpactFunctionManager
+)
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
@@ -843,6 +850,30 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Make sure to update the analysis area preview
         self.draw_rubber_bands()
 
+    def add_layer_type_to_keywords(self, layer):
+        """Add keywords indicating a layer's type.
+
+        :param layer: A QGIS map layer that we will determine the
+            properties from.
+        :type layer: QgsMapLayer
+
+        :returns: The extended dict is returned. The dictionary will
+            be extended with key 'layertype' (for both raster and vector)
+            and key 'layer_geometry' for vector layers.
+        """
+        keywords = self.keyword_io.read_keywords(layer)
+        if layer.type() == QgsMapLayer.VectorLayer:
+            keywords['layertype'] = 'vector'
+            if is_point_layer(layer):
+                keywords['layer_geometry'] = 'point'
+            elif is_line_layer(layer):
+                keywords['layer_geometry'] = 'line'
+            elif is_polygon_layer(layer):
+                keywords['layer_geometry'] = 'polygon'
+        elif layer.type() == QgsMapLayer.RasterLayer:
+            keywords['layertype'] = 'raster'
+        return keywords
+
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
         """
@@ -858,43 +889,23 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if exposure_layer is None:
             return
         # noinspection PyTypeChecker
-        hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
-        # We need to add the layer type to the returned keywords
-        if hazard_layer.type() == QgsMapLayer.VectorLayer:
-            hazard_keywords['layertype'] = 'vector'
-        elif hazard_layer.type() == QgsMapLayer.RasterLayer:
-            hazard_keywords['layertype'] = 'raster'
 
-        # noinspection PyTypeChecker
-        exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
-        # We need to add the layer type to the returned keywords
-        if exposure_layer.type() == QgsMapLayer.VectorLayer:
-            exposure_keywords['layertype'] = 'vector'
-        elif exposure_layer.type() == QgsMapLayer.RasterLayer:
-            exposure_keywords['layertype'] = 'raster'
+        hazard_keywords = self.add_layer_type_to_keywords(
+            hazard_layer)
+        exposure_keywords = self.add_layer_type_to_keywords(
+            exposure_layer)
 
         # Find out which functions can be used with these layers
-        func_list = [hazard_keywords, exposure_keywords]
         try:
-            func_dict = get_admissible_plugins(func_list)
+            functions = ImpactFunctionManager().available_functions(
+                hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
-            for myFunctionID in func_dict:
-                function = func_dict[myFunctionID]
-                function_title = get_function_title(function)
-
-                # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
-                # print
-                # print 'function (ID)', myFunctionID
-                # print 'function', function
-                # print 'Function title:', function_title
-
+            for function in functions:
                 # Provide function title and ID to function combo:
-                # function_title is the text displayed in the combo
-                # myFunctionID is the canonical identifier
                 add_ordered_combo_item(
                     self.cboFunction,
-                    function_title,
-                    data=myFunctionID)
+                    function['name'],
+                    data=function['id'])
         except Exception, e:
             raise e
 
@@ -1041,10 +1052,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyCallByClass,PyTypeChecker
             result = QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
-                self.tr('You may not have sufficient free system memory to '
-                        'carry out this analysis. See the dock panel '
-                        'message for more information. Would you like to '
-                        'continue regardless?'), QtGui.QMessageBox.Yes |
+                self.tr(
+                    'You may not have sufficient free system memory to '
+                    'carry out this analysis. See the dock panel '
+                    'message for more information. Would you like to '
+                    'continue regardless?'), QtGui.QMessageBox.Yes |
                 QtGui.QMessageBox.No, QtGui.QMessageBox.No)
             if result == QtGui.QMessageBox.No:
                 # stop work here and return to QGIS

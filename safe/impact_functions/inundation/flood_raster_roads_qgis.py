@@ -43,17 +43,7 @@ from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation.
-
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
-                    layertype=='raster'  and \
-                    disabled=='True'
-    :param requires category=='exposure' and \
-                    subcategory in ['road'] and \
-                    layertype=='vector'
-        """
+    """
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodRasterRoadsExperimentalFunction
 
@@ -204,11 +194,10 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
         request.setFilterRect(extent)
 
         if flooded_polygon is None:
-            message = tr('''There are no objects
-                in the hazard layer with
-                "value">'%s'.
-                Please check the value or use other
-                extent.''' % (threshold_min, ))
+            message = tr(
+                '''There are no objects in the hazard layer with
+                "value">'%s'. Please check the value or use other extent.'''
+                % threshold_min)
             raise GetDataError(message)
 
         # Clip exposure by the extent

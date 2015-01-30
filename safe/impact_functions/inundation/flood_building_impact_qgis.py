@@ -34,14 +34,6 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation (polygon-polygon).
 
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory=='flood' and \
-                    layertype=='vector'
-    :param requires category=='exposure' and \
-                    subcategory in ['structure'] and \
-                    layertype=='vector'
     """
     class Metadata(ImpactFunctionMetadata):
         """Metadata for FloodNativePolygonExperimentalFunction.

@@ -41,15 +41,6 @@ from safe.gis.qgis_vector_tools import (
 class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation.
-
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
-                    layertype=='raster'
-    :param requires category=='exposure' and \
-                    subcategory in ['road'] and \
-                    layertype=='vector'
         """
     def __init__(self):
         """Constructor."""
