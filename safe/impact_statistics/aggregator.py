@@ -945,11 +945,12 @@ class Aggregator(QtCore.QObject):
                 'ogr')
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
-            res = self.processing.runalg('qgis:exportaddgeometrycolumns',
-                                         projected_layer,
-                                         # 2, # Ellipsoidal
-                                         0,  # Layer CRS
-                                         tmp_filename)
+            res = self.processing.runalg(
+                'qgis:exportaddgeometrycolumns',
+                projected_layer,
+                # 2, # Ellipsoidal
+                0,  # Layer CRS
+                tmp_filename)
             impact_layer_splits = QgsVectorLayer(
                 res['OUTPUT'],
                 'length aggregation',
