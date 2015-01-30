@@ -275,7 +275,8 @@ class FloodEvacuationFunction(FunctionProvider):
             {'eps': thresholds[-1]},
             tr('Minimum needs are defined in BNPB regulation 7/2008'),
             tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.')])
+               'avoid representing human lives as fractions.'),
+            tr('All affected people are assumed to be evacuated.')])
 
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))

@@ -294,7 +294,8 @@ class ImpactReport(object):
         # noinspection PyUnresolvedReferences
         self._template_composition.composition.setPlotStyle(
             QgsComposition.Preview)
-        self._template_composition.composition.setPrintResolution(self.page_dpi)
+        self._template_composition.composition.setPrintResolution(
+            self.page_dpi)
         self._template_composition.composition.setPrintAsRaster(True)
 
     def load_template(self):
@@ -433,8 +434,8 @@ class ImpactReport(object):
         """A wrapper to print both the map and the impact table to PDF.
 
         :param output_path: Path on the file system to which the pdf should
-            be saved. If None, a generated file name will be used. Note that the
-            table will be prefixed with '_table'.
+            be saved. If None, a generated file name will be used. Note that
+            the table will be prefixed with '_table'.
         :type output_path: str
 
         :returns: The map path and the table path to the pdfs generated.
