@@ -20,7 +20,7 @@ from safe.metadata import (
     unit_feet_depth,
     unit_metres_depth,
     layer_vector_polygon,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_structure,
     unit_building_type_type,
     hazard_definition,
@@ -101,7 +101,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                             unit_feet_depth],
                         'layer_constraints': [
                             layer_vector_polygon,
-                            layer_raster_numeric,
+                            layer_raster_continuous,
                         ]
                     },
                     'exposure': {

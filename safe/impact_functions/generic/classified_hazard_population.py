@@ -1,6 +1,7 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool by AusAid - **Flood polygon evacuation.**
+InaSAFE Disaster risk assessment tool by AusAid - **Flood classified raster
+evacuation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -35,12 +36,13 @@ from safe.impact_functions.core import (
 )
 from safe.metadata import (
     hazard_all,
-    layer_raster_numeric,
+    layer_raster_classified,
+    layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition,
-    unit_categorised)
+    unit_classes)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -55,9 +57,9 @@ from safe.impact_functions.impact_function_metadata import (
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-class CategoricalHazardPopulationImpactFunction(FunctionProvider):
+class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
-    """Plugin for impact of population as derived by categorised hazard.
+    """Plugin for impact of population as derived by classified hazard.
 
         :author ESSC
         :rating 3
@@ -71,7 +73,7 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Categorised Hazard Population Impact Function.
+        """Metadata for Classified Hazard Population Impact Function.
 
         .. versionadded:: 2.1
 
@@ -91,26 +93,26 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'CategoricalHazardPopulationImpactFunction',
-                'name': tr('Categorical Hazard Population Impact Function'),
-                'impact': tr('Be impacted by each category'),
+                'id': 'ClassifiedHazardPopulationImpactFunction',
+                'name': tr('Classified Hazard Population Impact Function'),
+                'impact': tr('Be impacted by each class'),
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of categorized hazards in raster '
+                    'To assess the impacts of classified hazards in raster '
                     'format on population raster layer.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
-                        'units': [unit_categorised],
-                        'layer_constraints': [layer_raster_numeric]
+                        'units': [unit_classes],
+                        'layer_constraints': [layer_raster_classified]
                     },
                     'exposure': {
                         'definition': exposure_definition,
                         'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     }
                 }
             }
@@ -118,38 +120,36 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
     # Function documentation
     title = tr(
-        'Be affected by each hazard category')
+        'Be affected by each hazard class')
     synopsis = tr(
-        'To assess the impacts of categorized hazards in raster '
-        'format on population raster layer.')
+        'To assess the impacts of classified hazards in raster format on '
+        'population raster layer.')
     actions = tr(
-        'Provide details about how many people would likely need '
-        'to be impacted for each category.')
+        'Provide details about how many people would likely be affected for '
+        'each hazard class.')
     hazard_input = tr(
-        'A hazard raster layer where each cell represents '
-        'the category of the hazard. There should be 3 '
-        'categories: 1, 2, and 3.')
+        'A hazard raster layer where each cell represents the class of the '
+        'hazard. There should be 3 classes: e.g. 1, 2, and 3.')
     exposure_input = tr(
-        'An exposure raster layer where each cell represent '
-        'population count.')
+        'An exposure raster layer where each cell represent population count.')
     output = tr(
-        'Map of population exposed to high category and a table with '
-        'number of people in each category')
+        'Map of population exposed to high class and a table with number '
+        'of people in each class')
     detailed_description = tr(
-        'This function will calculate how many people will be impacted '
-        'per each category for all categories in the hazard layer. '
-        'Currently there should be 3 categories in the hazard layer. After '
-        'that it will show the result and the total amount of people that '
-        'will be impacted for the hazard given.')
-    limitation = tr(
-        'The number of categories is three.')
+        'This function will use the class from the hazard layer that has been '
+        'identified by the user which one is low, medium, or high from the '
+        'parameter that user input. After that, this impact function will '
+        'calculate the people will be affected per each class for class in '
+        'the hazard layer. Finally, it will show the result and the total of '
+        'people that will be affected for the hazard given.')
+    limitation = tr('The number of classes is three.')
 
     # Configurable parameters
     defaults = get_defaults()
     parameters = OrderedDict([
-        ('low_thresholds', 1.0),
-        ('medium_thresholds', 2.0),
-        ('high_thresholds', 3.0),
+        ('low_hazard_class', 1.0),
+        ('medium_hazard_class', 2.0),
+        ('high_hazard_class', 3.0),
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -166,37 +166,37 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
     parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
-        """Plugin for impact of population as derived by categorised hazard.
+        """Plugin for impact of population as derived by classified hazard.
 
         Input
         :param layers: List of layers expected to contain
 
-              * hazard_layer: Raster layer of categorised hazard
+              * hazard_layer: Raster layer of classified hazard
               * exposure_layer: Raster layer of population data
 
-        Counts number of people exposed to each category of the hazard
+        Counts number of people exposed to each class of the hazard
 
         Return
-          Map of population exposed to high category
-          Table with number of people in each category
+          Map of population exposed to high class
+          Table with number of people in each class
         """
 
-        # The 3 category
-        high_t = self.parameters['high_thresholds']
-        medium_t = self.parameters['medium_thresholds']
-        low_t = self.parameters['low_thresholds']
+        # The 3 classes
+        low_t = self.parameters['low_hazard_class']
+        medium_t = self.parameters['medium_hazard_class']
+        high_t = self.parameters['high_hazard_class']
 
         # Identify hazard and exposure layers
-        hazard_layer = get_hazard_layer(layers)    # Categorised Hazard
+        hazard_layer = get_hazard_layer(layers)  # Classified Hazard
         exposure_layer = get_exposure_layer(layers)  # Population Raster
 
         question = get_question(
             hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Extract data as numeric arrays
-        data = hazard_layer.get_data(nan=0.0)  # Category
+        data = hazard_layer.get_data(nan=0.0)  # Class
 
-        # Calculate impact as population exposed to each category
+        # Calculate impact as population exposed to each class
         population = exposure_layer.get_data(nan=0.0, scaling=True)
         if high_t == 0:
             hi = numpy.where(0, population, 0)
@@ -254,68 +254,49 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
 
         # Generate impact report for the pdf map
         table_body = [question,
-                      TableRow([tr(
-
-                          'Total Population Affected '),
-                          '%s' % format_int(total_impact)],
-                          header=True),
-                      TableRow([tr(
-                          'Population in High risk areas '),
-                          '%s' % format_int(high)]),
-                      TableRow([tr(
-
-                          'Population in Medium risk areas '),
-                          '%s' % format_int(medium)]),
-                      TableRow([tr(
-
-                          'Population in Low risk areas '),
-                          '%s' % format_int(low)]),
-                      TableRow([tr(
-
-                          'Population Not Affected'),
-                          '%s' % format_int(no_impact)]),
-                      TableRow(tr(
-
-                          'Table below shows the minimum '
-                          'needs for all evacuated people'))]
+                      TableRow([tr('Total Population Affected '),
+                                '%s' % format_int(total_impact)],
+                               header=True),
+                      TableRow([tr('Population in High hazard class areas '),
+                                '%s' % format_int(high)]),
+                      TableRow([tr('Population in Medium hazard class areas '),
+                                '%s' % format_int(medium)]),
+                      TableRow([tr('Population in Low hazard class areas '),
+                                '%s' % format_int(low)]),
+                      TableRow([tr('Population Not Affected'),
+                                '%s' % format_int(no_impact)]),
+                      TableRow(
+                          tr('Table below shows the minimum needs for all '
+                             'evacuated people'))]
 
         total_needs = evacuated_population_needs(
             total_impact, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
                 [
-                    tr(
-
-                        'Needs should be provided %s' % frequency),
-                    tr(
-                        'Total')
+                    tr('Needs should be provided %s' % frequency),
+                    tr('Total')
                 ],
                 header=True))
             for resource in needs:
                 table_body.append(TableRow([
-                    tr(
-
-                        resource['table name']),
+                    tr(resource['table name']),
                     format_int(resource['amount'])]))
 
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(
-            TableRow(
-                tr('Action Checklist:'), header=True))
+            TableRow(tr('Action Checklist:'), header=True))
+        table_body.append(
+            TableRow(tr('How will warnings be disseminated?')))
+        table_body.append(
+            TableRow(tr('How will we reach stranded people?')))
+        table_body.append(
+            TableRow(tr('Do we have enough relief items?')))
         table_body.append(
             TableRow(
-                tr('How will warnings be disseminated?')))
-        table_body.append(
-            TableRow(
-                tr('How will we reach stranded people?')))
-        table_body.append(
-            TableRow(
-                tr('Do we have enough relief items?')))
-        table_body.append(
-            TableRow(
-                tr('If yes, where are they located and how will we '
-                   'distribute them?')))
+                tr('If yes, where are they located and how will we distribute '
+                   'them?')))
         table_body.append(
             TableRow(
                 tr('If no, where can we obtain additional relief items from '
@@ -324,8 +305,8 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
         # Extend impact report for on-screen display
         table_body.extend([
             TableRow(tr('Notes'), header=True),
-            tr('Map shows the numbers of people in high, medium and low '
-               'hazard areas'),
+            tr('Map shows the numbers of people in high, medium, and low '
+               'hazard class areas'),
             tr('Total population: %s') % format_int(total)
         ])
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -364,11 +345,8 @@ class CategoricalHazardPopulationImpactFunction(FunctionProvider):
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr(
-
-            'Population affected by each category')
+        map_title = tr('Population affected by each class')
         legend_notes = tr(
-
             'Thousand separator is represented by %s' %
             get_thousand_separator())
         legend_units = tr('(people per cell)')
