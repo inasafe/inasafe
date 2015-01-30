@@ -116,7 +116,6 @@ def get_defaults(default=None):
     :return: A single value (when default is passed) or a dict of values.
     :rtype: str, int, float, dict
     """
-    print "SAFE defaults CALL. If in QGIS this is a WRONG CALL"
     defaults = define_defaults()
     if default is None:
         return defaults

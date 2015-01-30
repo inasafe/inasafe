@@ -25,7 +25,6 @@ import traceback
 import logging
 import webbrowser
 import unicodedata
-from urlparse import urlparse
 
 # noinspection PyPackageRequirements
 

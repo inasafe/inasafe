@@ -20,54 +20,46 @@ if __name__ == '__main__':
 
     locales = sys.argv[2:]
 
-    files = {'QT': '%s/i18n/inasafe_%s.ts',
-             'GT': '%s/i18n/%s/LC_MESSAGES/inasafe.po'}
-
-    commands = {'QT': 'lrelease %s',
-                'GT': 'msgfmt --statistics %s'}
-
     for locale in locales:
-        for key in files:
-            filename = files[key] % (root, locale)
-            cmd = commands[key] % filename
-            # messages.mo is generated when called Popen
-            p = Popen(cmd, shell=True,
-                      stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        filename = '%s/i18n/inasafe_%s.ts' % (root, locale)
+        command = 'lrelease %s' % filename
 
-            msg = '%s[%s]: ' % (key, locale)
-            status = 'Unknown'
+        # messages.mo is generated when called Popen
+        p = Popen(
+            command,
+            shell=True,
+            stdin=PIPE,
+            stdout=PIPE,
+            stderr=PIPE)
 
-            lines = []
-            if key == 'GT' and p.stderr is not None:
-                lines = p.stderr.readlines()
+        msg = '%s[%s]: ' % ('QT', locale)
+        status = 'Unknown'
 
-            if key == 'QT' and p.stdout is not None:
-                lines = p.stdout.readlines()
+        lines = []
 
-            missing = 0
-            for line in lines:
-                if 'untranslated' in line:
-                    fields = line.split()
-                    i = fields.index('untranslated')
-                    missing += int(fields[i - 1])
+        if p.stdout is not None:
+            lines = p.stdout.readlines()
 
-                if 'unfinished' in line:
-                    fields = line.strip().split()
-                    i = fields.index('unfinished)')
-                    missing += int(fields[i - 1])
+        missing = 0
+        for line in lines:
+            if 'untranslated' in line:
+                fields = line.split()
+                i = fields.index('untranslated')
+                missing += int(fields[i - 1])
 
-            # print 'untranslated', untranslated
-            if missing == 0:
-                status = 'OK'
-            else:
-                status = '%i missing' % missing
-                status += ' - please edit %s' % filename
+            if 'unfinished' in line:
+                fields = line.strip().split()
+                i = fields.index('unfinished)')
+                missing += int(fields[i - 1])
 
-            if status != 'OK':
-                msg += status
-                print msg
+        # print 'untranslated', untranslated
+        if missing == 0:
+            status = 'OK'
+        else:
+            status = '%i missing' % missing
+            status += ' - please edit %s' % filename
 
-    # Deleted messages.mo generated file, not so good approach actually
-    fname = root + '/messages.mo'
-    if os.path.isfile(fname):
-        os.remove(fname)
+        if status != 'OK':
+            msg += status
+            print msg
+
