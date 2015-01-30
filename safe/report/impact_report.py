@@ -24,10 +24,14 @@ from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer,
-    QgsLayerTreeGroup,
-    QgsMapSettings,
     QgsComposerHtml,
     QgsComposerFrame)
+
+try:
+    from qgis.core import QgsLayerTreeGroup, QgsMapSettings
+except ImportError:
+    from qgis.core import QgsMapRenderer
+
 from PyQt4.QtCore import QUrl
 
 from safe.defaults import disclaimer
@@ -78,9 +82,17 @@ class ImpactReport(object):
         self._organisation_logo = default_organisation_logo_path()
         self._north_arrow = default_north_arrow_path()
         self._disclaimer = disclaimer()
+
+        # For QGIS < 2.4 compatibility
+        # QgsMapSettings is added in 2.4
+        if qgis_version() < 20400:
+            map_settings = self._iface.mapCanvas().mapRenderer()
+        else:
+            map_settings = self._iface.mapCanvas().mapSettings()
+
         self._template_composition = TemplateComposition(
             template_path=self.template,
-            map_settings=self._iface.mapCanvas().mapSettings())
+            map_settings=map_settings)
         self._keyword_io = KeywordIO()
 
     @property
@@ -420,7 +432,7 @@ class ImpactReport(object):
             legend.setTitle(legend_title)
 
             # Set Legend
-            # From QGIS 2.6, legend.model() is obsolete
+            # Since QGIS 2.6, legend.model() is obsolete
             if qgis_version() < 20600:
                 legend.model().setLayerSet([self.layer.id()])
                 legend.synchronizeWithModel()
@@ -525,7 +537,12 @@ class ImpactReport(object):
         html = html_header() + html + html_footer()
 
         # Print HTML using composition
-        map_settings = QgsMapSettings()
+        # For QGIS < 2.4 compatibility
+        # QgsMapSettings is added in 2.4
+        if qgis_version() < 20400:
+            map_settings = QgsMapRenderer()
+        else:
+            map_settings = QgsMapSettings()
 
         # A4 Portrait
         paper_width = 210
