@@ -99,7 +99,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_tsunami,
             exposure_road,
             hazard_volcano,
-            hazard_tephra,
+            # hazard_tephra,
             hazard_generic]
         message = (
             'I expect %s but I got %s.' % (expected_result, result))
@@ -219,7 +219,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_earthquake,
             hazard_flood,
             hazard_tsunami,
-            hazard_tephra,
+            # hazard_tephra,
             hazard_volcano,
             hazard_generic]
         message = ('I expect %s but I got %s.' % (expected_result, result))
