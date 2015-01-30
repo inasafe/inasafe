@@ -120,8 +120,9 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
         'Vector polygon layer which can be extracted from OSM where each '
         'polygon represents the footprint of a building.')
     output = tr(
-        'Map of structure exposed to high class and a table with number of '
-        'structure in each class')
+        'The impact layer will contain all structures that were exposed to '
+        'the highest class (3) and a summary table containing the number of '
+        'structures in each class.')
     detailed_description = tr(
         'This function will use the class from the hazard layer that has been '
         'identified by the user which one is low, medium, or high from the '
