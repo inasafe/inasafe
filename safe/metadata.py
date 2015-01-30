@@ -103,12 +103,13 @@ hazard_flood = {
         'The effect of a <b>flood</b> is for land that is normally dry '
         'to become wet.')
 }
-hazard_tephra = {
-    'id': 'tephra',
-    'name': tr('tephra'),
+hazard_volcanic_ash = {
+    'id': 'volcanic_ash',
+    'name': tr('volcanic ash'),
     'description': tr(
-        '<b>Tephra</b> describes the material, such as rock fragments and '
-        'ash particles ejected by a volcanic eruption.')
+        '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
+        'and volcanic glass, created during volcanic eruptions, less than '
+        '2 mm (0.079 inches) in diameter')
 }
 hazard_tsunami = {
     'id': 'tsunami',
@@ -133,7 +134,7 @@ hazard_volcano = {
 hazard_all = [
     hazard_earthquake,
     hazard_flood,
-    hazard_tephra,
+    hazard_volcanic_ash,
     hazard_tsunami,
     hazard_volcano,
     hazard_generic

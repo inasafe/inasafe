@@ -53,11 +53,10 @@ from safe.metadata import (
     unit_building_type_type,
     unit_people_per_pixel,
     unit_mmi,
-    hazard_tephra,
     unit_continuous,
+    hazard_volcanic_ash,
     hazard_generic,
     unit_building_generic,
-    unit_classes,
     hazard_all,
     layer_vector_polygon,
     layer_vector_line)
@@ -99,7 +98,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_tsunami,
             exposure_road,
             hazard_volcano,
-            hazard_tephra,
+            hazard_volcanic_ash,
             hazard_generic]
         message = (
             'I expect %s but I got %s.' % (expected_result, result))
@@ -219,8 +218,8 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_earthquake,
             hazard_flood,
             hazard_tsunami,
-            hazard_tephra,
             hazard_volcano,
+            hazard_volcanic_ash,
             hazard_generic]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -312,7 +311,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         impact_function = EarthquakeBuildingImpactFunction()
-        result = impact_function_manager.get_available_exposures(impact_function)
+        result = impact_function_manager.get_available_exposures(
+            impact_function)
         expected_result = [exposure_structure]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)

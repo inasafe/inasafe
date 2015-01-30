@@ -651,7 +651,6 @@ class Plugin(object):
         dialog.set_function_centric_mode()
         dialog.show()  # non-modal in order to hide for selecting user extent
 
-
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
