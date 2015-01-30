@@ -1040,7 +1040,7 @@ class ShakeEvent(QObject):
             str(clipped_exposure.source()))
         layers = [clipped_hazard_layer, clipped_exposure_layer]
 
-        function_id = 'ITB Fatality Function'
+        function_id = 'ITBFatalityFunction'
         function = safe_get_plugins(function_id)[0][function_id]
 
         result = safe_calculate_impact(layers, function)
@@ -1825,9 +1825,13 @@ class ShakeEvent(QObject):
         """
         locale_name = self.locale
 
-        root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        root = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                os.pardir))
         translation_path = os.path.join(
-            root, 'safe_qgis', 'i18n',
+            root,
+            'i18n',
             'inasafe_' + str(locale_name) + '.qm')
         if os.path.exists(translation_path):
             self.translator = QTranslator()
