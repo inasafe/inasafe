@@ -404,7 +404,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             exposure_keywords
         )
 
-        self.assertEqual(len(result), 1)
+        self.assertEqual(len(result), 3)
 
 
 if __name__ == '__main__':

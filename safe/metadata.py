@@ -296,7 +296,8 @@ unit_wetdry = {
     ]
 }
 
-
+# TODO: we need to support layer_raster_continuous and
+# TODO: layer_raster_classified rather
 # layer_constraints
 layer_raster_numeric = {
     'layer_type': 'raster',

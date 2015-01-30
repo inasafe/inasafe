@@ -17,7 +17,13 @@ __date__ = '20/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.metadata import hazard_definition, exposure_definition
+from safe.metadata import (
+    hazard_definition,
+    exposure_definition,
+    layer_raster_numeric,
+    layer_vector_polygon,
+    layer_vector_line,
+    layer_vector_point)
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.utilities import add_to_list
 
@@ -431,21 +437,32 @@ class ImpactFunctionManager:
         :return:
         """
         result = []
-        if_hazard = self.get_functions_for_hazard(hazard)
-        if_exposure = self.get_functions_for_exposure(exposure)
+        if isinstance(hazard, basestring):
+            hazard_functions = self.get_functions_for_hazard_id(hazard)
+        else:
+            hazard_functions = self.get_functions_for_hazard(hazard)
 
-        for f in if_hazard:
-            if f in if_exposure:
-                if (not hazard_constraint or hazard_constraint in
-                        f['categories']['hazard']['layer_constraints']):
+        if isinstance(exposure, basestring):
+            exposure_functions = self.get_functions_for_exposure_id(exposure)
+        else:
+            exposure_functions = self.get_functions_for_exposure(exposure)
+
+        for function in hazard_functions:
+            if function in exposure_functions:
+                constraints = function['categories']['hazard']['layer_constraints']
+                if not hazard_constraint or hazard_constraint in constraints:
                     if (not exposure_constraint or exposure_constraint in
-                            f['categories']['exposure']['layer_constraints']):
-                        result.append(f)
+                            function['categories']['exposure']['layer_constraints']):
+                        result.append(function)
 
         return result
 
     def available_functions(self, hazard_keywords, exposure_keywords):
         """Find out which impact functions match the hazard and exposure given.
+
+        .. note:: :file:dock.py add_layer_type_to_keywords function must have
+            been called first so that the keywords contain layer type
+            and geometry info.
 
         ..versionadded:: 3.0.0
 
@@ -461,9 +478,42 @@ class ImpactFunctionManager:
             no valid ones matching the hazard and exposure).
         :rtype: list
         """
-        functions = self.impact_functions
-        valid_functions = []
-        # for function in functions:
-        #     if function.metadata
-        return functions
 
+        if hazard_keywords['layertype'] == 'raster':
+            # TODO: we need to support layer_raster_continuous and
+            # TODO: layer_raster_classified rather
+            hazard_constraint = layer_raster_numeric
+        else:
+            geometry_type = hazard_keywords['layer_geometry']
+            if geometry_type == 'point':
+                hazard_constraint = layer_vector_point
+            elif geometry_type == 'line':
+                # Currently no line hazards are supported
+                # but for completeness we do this too
+                hazard_constraint = layer_vector_line
+            else:
+                hazard_constraint = layer_vector_polygon
+
+        if exposure_keywords['layertype'] == 'raster':
+            # TODO: we need to support layer_raster_continuous and
+            # TODO: layer_raster_classified rather
+            exposure_constraint = layer_raster_numeric
+        else:
+            if geometry_type == 'point':
+                exposure_constraint = layer_vector_point
+            elif geometry_type == 'line':
+                # Currently no line hazards are supported
+                # but for completeness we do this too
+                exposure_constraint = layer_vector_line
+            else:
+                exposure_constraint = layer_vector_polygon
+
+        hazard = hazard_keywords['subcategory']
+        exposure = exposure_keywords['subcategory']
+
+        return self.get_functions_for_constraint(
+            hazard,
+            exposure,
+            hazard_constraint,
+            exposure_constraint
+        )

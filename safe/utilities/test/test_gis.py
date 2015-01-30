@@ -61,7 +61,7 @@ class TestQGIS(unittest.TestCase):
             attributes, position)
         assert (attributes is None and position is None), message
 
-    def test_is_polygonal_layer(self):
+    def test_is_polygon_layer(self):
         """Test we can get the correct attributes back"""
         # Polygon layer
         layer = clone_shp_layer(
