@@ -1381,6 +1381,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Automatically select one item...
         if len(active_items) == 1:
             active_items[0].setSelected(True)
+            # set focus, as the inactive selection style is gray
+            self.tblFunctions2.setFocus()
 
     # ===========================
     # STEP_FC_FUNCTION_3
@@ -2527,6 +2529,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         current_step = self.get_current_step()
         new_step = self.compute_previous_step(current_step)
+        # set focus to table widgets, as the inactive selection style is gray
+        if new_step == step_fc_function_1:
+            self.tblFunctions1.setFocus()
+        if new_step == step_fc_function_2:
+            self.tblFunctions2.setFocus()
         # Set Next button label
         self.pbnNext.setText(self.tr('Next'))
         self.pbnNext.setEnabled(True)
