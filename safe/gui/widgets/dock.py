@@ -187,7 +187,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.read_settings()  # get_project_layers called by this
 
-
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
         version = get_version()
@@ -1564,7 +1563,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
         impact_report.component_ids = component_ids
-        if template_warning_verbose and len(impact_report.missing_elements) != 0:
+        if template_warning_verbose and \
+                        len(impact_report.missing_elements) != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
@@ -1659,7 +1659,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             need to set the composition to the composer before loading the
             template.
 
-        :param impact_report: Impact Report that wants to be opened in composer.
+        :param impact_report: Impact Report to be opened in composer.
         :type impact_report: ImpactReport
         """
         impact_report.setup_composition()

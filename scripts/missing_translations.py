@@ -62,4 +62,3 @@ if __name__ == '__main__':
         if status != 'OK':
             msg += status
             print msg
-
