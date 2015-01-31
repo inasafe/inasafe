@@ -22,6 +22,10 @@ extensions_to_ignore += ['.prj', '.sbn', '.sbx', '.cpg']
 # Ignore InaSAFE .keywords files
 extensions_to_ignore += ['.keywords']
 
+# Ignore control images for unit tests
+
+extensions_to_ignore += ['.png', '.zip', '.html', '.txt']
+
 # Ignore QGIS projects and styles
 extensions_to_ignore += ['.qml', '.qpj', '.qgs',
                          '.sld', '.sqlite', '.db']

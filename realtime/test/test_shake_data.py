@@ -29,6 +29,7 @@ from realtime.shake_data import ShakeData
 # Shake ID for this test
 SHAKE_ID = '20131105060809'
 
+
 class ShakeDataTest(unittest.TestCase):
     def setUp(self):
         """Setup before each test."""
