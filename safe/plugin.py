@@ -503,8 +503,6 @@ class Plugin(object):
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
-        #self.clear_modules()
-
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
 
