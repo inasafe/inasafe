@@ -186,11 +186,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.set_ok_button_status()
 
         self.read_settings()  # get_project_layers called by this
-        pixmap = QtGui.QPixmap(
-            resources_path('img', 'logos', 'supporters.png'),
-        )
-        self.organisation_logo.setPixmap(
-            pixmap.scaled(self.width(), 100, Qt.KeepAspectRatio))
+
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -386,11 +382,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
+        dock_width = self.width()
+        maximum_height = 100  # px
+        pixmap = QtGui.QPixmap(self.organisation_logo_path)
+        pixmap = pixmap.scaled(
+            dock_width, maximum_height, Qt.KeepAspectRatio)
+        self.organisation_logo.setMaximumWidth(dock_width)
+        self.organisation_logo.setPixmap(pixmap)
         if self.organisation_logo_path and flag:
-            dock_width = self.width()
-            self.organisation_logo.setMaximumWidth(dock_width)
-            self.organisation_logo.setPixmap(
-                QtGui.QPixmap(self.organisation_logo_path))
             self.organisation_logo.show()
         else:
             self.organisation_logo.hide()
