@@ -989,7 +989,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             try:
                 self.extent.show_last_analysis_extent(
                     self.analysis.clip_parameters[1])  # red
-            except AttributeError:
+            except (AttributeError, TypeError):
                 pass
 
     def accept(self):

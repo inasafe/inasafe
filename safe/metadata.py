@@ -103,12 +103,13 @@ hazard_flood = {
         'The effect of a <b>flood</b> is for land that is normally dry '
         'to become wet.')
 }
-hazard_tephra = {
-    'id': 'tephra',
-    'name': tr('tephra'),
+hazard_volcanic_ash = {
+    'id': 'volcanic_ash',
+    'name': tr('volcanic ash'),
     'description': tr(
-        '<b>Tephra</b> describes the material, such as rock fragments and '
-        'ash particles ejected by a volcanic eruption.')
+        '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
+        'and volcanic glass, created during volcanic eruptions, less than '
+        '2 mm (0.079 inches) in diameter')
 }
 hazard_tsunami = {
     'id': 'tsunami',
@@ -133,7 +134,7 @@ hazard_volcano = {
 hazard_all = [
     hazard_earthquake,
     hazard_flood,
-    hazard_tephra,
+    hazard_volcanic_ash,
     hazard_tsunami,
     hazard_volcano,
     hazard_generic
@@ -187,25 +188,23 @@ unit_mmi = {
     'constraint': 'continuous',
     'default_attribute': 'mmi'  # applies to vector only
 }
-unit_normalised = {
-    'id': 'normalised',
-    'name': tr('normalised'),
+unit_continuous = {
+    'id': 'continuous',
+    'name': tr('continuous'),
     'description': tr(
-        '<b>Normalised</b> data can be hazard or exposure data where the '
-        'values '
-        'have been classified or coded.'
+        '<b>Continuous</b> data can be hazard or exposure data where the '
+        'values is continuous. It does not have unit. So, it usually comes '
+        'from normalised value.'
     ),
     'constraint': 'continuous'
 }
-unit_categorised = {
-    'id': 'categorised',
-    'name': tr('categorised'),
+unit_classes = {
+    'id': 'classes',
+    'name': tr('classes'),
     'description': tr(
-        '<b>Categorised</b> data can be hazard data where the '
-        'values '
-        'have been classified or coded (i.e. low, medium, high).'
+        '<b>Classes</b> data can be hazard data where the '
+        'values have been classified or coded (i.e. 1, 2, 3).'
     ),
-    'constraint': 'continuous'
 }
 unit_people_per_pixel = {
     'id': 'people_per_pixel',
@@ -300,9 +299,13 @@ unit_wetdry = {
 
 
 # layer_constraints
-layer_raster_numeric = {
+layer_raster_continuous = {
     'layer_type': 'raster',
-    'data_type': 'numeric'
+    'data_type': 'continuous'
+}
+layer_raster_classified = {
+    'layer_type': 'raster',
+    'data_type': 'classified'
 }
 layer_vector_line = {
     'layer_type': 'vector',

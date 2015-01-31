@@ -52,7 +52,7 @@ from safe.metadata import (
     layer_vector_point,
     layer_vector_line,
     layer_vector_polygon,
-    layer_raster_numeric)
+    layer_raster_continuous)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.analysis_handler import AnalysisHandler
@@ -1174,7 +1174,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: list
         """
         return [layer_vector_point, layer_vector_line, layer_vector_polygon,
-                layer_raster_numeric]
+                layer_raster_continuous]
 
     def selected_functions_1(self):
         """Obtain functions available for hazarda an exposure selected by user.
@@ -1338,9 +1338,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Impact Functions Table 2 tab."""
         self.tblFunctions2.clear()
         h, e, _hc, _ec = self.selected_imfunc_constraints()
-        haz_datatypes = [layer_raster_numeric, layer_vector_polygon,
+        haz_datatypes = [layer_raster_continuous, layer_vector_polygon,
                          layer_vector_point]
-        exp_datatypes = [layer_raster_numeric, layer_vector_point,
+        exp_datatypes = [layer_raster_continuous, layer_vector_point,
                          layer_vector_line, layer_vector_polygon]
         self.tblFunctions2.setColumnCount(len(haz_datatypes))
         self.tblFunctions2.setRowCount(len(exp_datatypes))

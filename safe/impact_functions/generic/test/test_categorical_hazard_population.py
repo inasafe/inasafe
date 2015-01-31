@@ -26,7 +26,7 @@ from safe.common.utilities import format_int
 
 
 class TestCategoricalHazardPopulationImpactFunction(unittest.TestCase):
-    """Test for CategoricalHazardPopulationImpactFunction."""
+    """Test for ClassifiedHazardPopulationImpactFunction."""
 
     def setUp(self):
         """Run before each test."""
