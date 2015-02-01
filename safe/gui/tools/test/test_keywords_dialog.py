@@ -215,11 +215,12 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_on_radExposure_toggled(self):
         """Test exposure radio button toggle behaviour works"""
-
-        # Cannot get this test to work, but it works fine in the safe_qgis
         dialog = KeywordsDialog(PARENT, IFACE)
+        # Set other radio button checked first so that radExposure is not
+        # toggled
+        dialog.radHazard.setChecked(True)
+        # Then click the radExposure
         button = dialog.radExposure
-        button.setChecked(False)
         button.click()
         message = (
             'Toggling the exposure radio did not add a category '
