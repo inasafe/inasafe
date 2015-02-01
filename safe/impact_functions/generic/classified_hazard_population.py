@@ -42,7 +42,7 @@ from safe.metadata import (
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition,
-    unit_classes)
+    unit_classified)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -105,7 +105,7 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
-                        'units': [unit_classes],
+                        'units': [unit_classified],
                         'layer_constraints': [layer_raster_classified]
                     },
                     'exposure': {

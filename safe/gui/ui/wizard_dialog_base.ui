@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1046</width>
-    <height>551</height>
+    <width>1003</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -57,7 +57,7 @@
         <string notr="true">font: 14pt;</string>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; Wizard&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>10</number>
+      <number>26</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1224,7 +1224,9 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>Please input these ratio attribute below for aggregation.</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p&gt;Please input these ratio attributes below for aggregation. For each attribute you can choose whether it should be:&lt;/p&gt;
+&lt;ol&gt;&lt;li&gt;defined in an attribute of the aggregation polygon (so that you can for example have different ratios per aggregation area)&lt;/li&gt;&lt;li&gt;defined as a global default for the aggregation layer, or&lt;/li&gt;&lt;li&gt;ignored&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -1745,7 +1747,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. To start with you will need to choose what kind of analysis would you like to do? First, please select the hazard and exposure you want to use.&lt;/p&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. The assessment will combine hazard data (such as a flood layer) with exposure data (such as population, roads or buildings) to help you to understand the potential impact of such an event. To start, please select the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; you want to use by clicking a cell in the matrix below.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1888,7 +1890,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;Now, please select the data type of the hazard and exposure you want to use.&lt;br/&gt;&lt;/p&gt;</string>
+          <string>&lt;p&gt;Now, please select the data types for the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; layers you want to use. Click on the cell in the table below that matches the data type for each.&lt;br/&gt;&lt;/p&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2075,7 +2077,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;Below you can see a list of available impact functions matching the selected hazard, exposure and their data types. Please choose what impact function would you like to use?&lt;/p&gt;</string>
+          <string>&lt;p&gt;Below you can see a list of available &lt;b&gt;impact functions&lt;/b&gt; matching the selected hazard, exposure and their data types. Please choose which impact function would you like to use from the list below.&lt;/p&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2147,7 +2149,7 @@
             <string>TextLabel</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -2214,7 +2216,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer.&lt;br/&gt;&lt;br/&gt;A hazard layer represents something that will impact the people or infrastructure in an area. For example a flood, earth quake, tsunami inundation are all different kinds of hazards.</string>
+          <string>Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where you data resides:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2587,7 +2589,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>Please help us to find your &lt;b&gt;exposure&lt;/b&gt; layer.&lt;br/&gt;&lt;br/&gt;An exposure layer represents people, property or infrastructure that may be affected in the event of a flood, earthquake, volcano etc.</string>
+          <string>Please help us to find your &lt;b&gt;exposure&lt;/b&gt; layer. An exposure layer represents people, property or infrastructure that may be affected in the event of a flood, earthquake, volcano etc. Select an appropriate option below to indicate where your data can be found:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -3001,7 +3003,7 @@ Please step back and select another layer.</string>
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>Would you like to aggregate the results of your analysis by sub-regions?</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Would you like to &lt;span style=&quot; font-weight:600;&quot;&gt;aggregate&lt;/span&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -3411,7 +3413,7 @@ Please step back and select another layer.</string>
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
-Please step back and select another layer.</string>
+Please step back and select different layers.</string>
          </property>
         </widget>
        </item>
@@ -3501,7 +3503,7 @@ Please step back and select another layer.</string>
          <item row="0" column="1">
           <widget class="QRadioButton" name="rbExtentUser">
            <property name="text">
-            <string>Use user's extent</string>
+            <string>Use the extent defined by selecting an area on the map (will use existing selection if one has already been made)</string>
            </property>
           </widget>
          </item>
@@ -3521,14 +3523,14 @@ Please step back and select another layer.</string>
          <item row="2" column="1" colspan="2">
           <widget class="QRadioButton" name="rbExtentLayer">
            <property name="text">
-            <string>Use layer's extent</string>
+            <string>Use the extent of the analysis layers</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1" colspan="2">
           <widget class="QRadioButton" name="rbExtentScreen">
            <property name="text">
-            <string>Use current screen extent</string>
+            <string>Use the current extent of the map display</string>
            </property>
           </widget>
          </item>
