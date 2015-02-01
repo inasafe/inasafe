@@ -783,7 +783,9 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             html += html_footer()
 
             file_path = '%s.html' % aggregation_area
-            path = os.path.join(temp_dir(), file_path)
+            path = os.path.join(
+                temp_dir(self.__class__.__name__),
+                file_path)
             html_to_file(html, path)
             self.html_reports[aggregation_area.lower()] = path
 
