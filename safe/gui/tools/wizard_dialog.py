@@ -38,6 +38,7 @@ from PyQt4.QtGui import (
     QSortFilterProxyModel)
 
 from qgis.core import (
+    QgsCoordinateTransform,
     QgsBrowserModel,
     QgsDataItem,
     QgsVectorLayer,
@@ -2255,7 +2256,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: true if the layers intersect, false if they are disjoint
         :rtype: boolean
         """
-        return layer_a.extent().intersects(layer_b.extent())
+        extent_a = layer_a.extent()
+        extent_b = layer_b.extent()
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            coordTransform = QgsCoordinateTransform(layer_a.crs(),
+                                                    layer_b.crs())
+            extent_b = (coordTransform.transform(extent_b,
+                        QgsCoordinateTransform.ReverseTransform))
+        return extent_a.intersects(extent_b)
 
     def set_widgets_step_fc_disjoint_layers(self):
         """Set widgets on the Disjoint Layers tab"""
@@ -2951,7 +2959,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.set_keywords_creation_mode(self.layer)
                 new_step = step_kw_category
-#                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
             else:
                 new_step = step_fc_explayer_origin
         elif current_step == step_fc_explayer_origin:
@@ -2966,7 +2973,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.existing_keywords = None
                 new_step = step_kw_category
-#                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
                 # TODO test overlapping after come back!!!
             else:
                 if not self.layers_intersect(self.hazard_layer,
@@ -2991,7 +2997,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.existing_keywords = None
                 new_step = step_kw_category
-#                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
                 # TODO test overlapping after come back!!!
             else:
                 if not self.layers_intersect(self.exposure_layer,
@@ -3085,11 +3090,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_fc_explayer_from_browser
         elif current_step == step_fc_agglayer_origin:
-            # TODO test disjoint layers!!
-            _layers_disjoint = False
-            if _layers_disjoint:
-                new_step = step_fc_disjoint_layers
-            elif self.rbExpLayerFromCanvas.isChecked():
+            if self.rbExpLayerFromCanvas.isChecked():
                 new_step = step_fc_explayer_from_canvas
             else:
                 new_step = step_fc_explayer_from_browser
@@ -3101,11 +3102,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_fc_agglayer_from_browser
         elif current_step == step_fc_extent:
-            # TODO test disjoint aggr layers!!
-            _agg_layers_disjoint = False
-            if _agg_layers_disjoint:
-                new_step = step_fc_agglayer_disjoint
-            elif self.rbAggLayerFromCanvas.isChecked():
+            if self.rbAggLayerFromCanvas.isChecked():
                 new_step = step_fc_agglayer_from_canvas
             elif self.rbAggLayerFromBrowser.isChecked():
                 new_step = step_fc_agglayer_from_browser
