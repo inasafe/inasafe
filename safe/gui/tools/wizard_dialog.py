@@ -93,7 +93,7 @@ category_question = QApplication.translate(
 # Constants for hazards
 hazard_question = QApplication.translate(
     'WizardDialog',
-    'What kind of hazard does this '
+    'What kind of <b>hazard</b> does this '
     'layer represent? The choice you make here will determine '
     'which impact functions this hazard layer can be used with. '
     'For example, if you choose <b>flood</b> you will be '
@@ -103,7 +103,7 @@ hazard_question = QApplication.translate(
 # Constants for exposures
 exposure_question = QApplication.translate(
     'WizardDialog',
-    'What kind of exposure does this '
+    'What kind of <b>exposure</b> does this '
     'layer represent? The choice you make here will determine '
     'which impact functions this exposure layer can be used with. '
     'For example, if you choose <b>population</b> you will be '
@@ -115,19 +115,13 @@ exposure_question = QApplication.translate(
 datatype_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> '
-    'for this raster layer. We need to know what data type the '
-    'data are in. For example, each cell might represent a continuous '
+    'for this raster layer. We need to know whether each cell '
+    'in this raster represents a continuous '
     'value or a classified code.')   # (subcategory, category)
 
-continuous_datatype_description = QApplication.translate(
-    'WizardDialog',
-    '<b>Continuous</b> data can be hazard or exposure data where the '
-    'values is continuous. This is default option.')
+continuous_datatype_description = metadata.unit_continuous['description']
 
-classified_datatype_description = QApplication.translate(
-    'WizardDialog',
-    '<b>Classified</b> data can be hazard data where the '
-    'values have been classified or coded (i.e. 1, 2, 3).')
+classified_datatype_description = metadata.unit_classified['description']
 
 # Constants for units
 unit_question = QApplication.translate(
@@ -432,7 +426,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_function_centric_mode(self):
         """Set the Wizard to the Function Centric mode"""
-        self.lblSubtitle.setText(self.tr('Function-centric assessment...'))
+        self.lblSubtitle.setText(self.tr('Guided impact assessment wizard...'))
         new_step = step_fc_function_1
         self.set_widgets_step_fc_function_1()
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
@@ -2934,7 +2928,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = None
                 self.is_selected_layer_keywordless = False
                 self.lblSubtitle.setText(self.tr(
-                    'Function-centric assessment...'))
+                    'Guided InaSAFE analysis wizard...'))
             else:
                 # Wizard complete
                 new_step = None

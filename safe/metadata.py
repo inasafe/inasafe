@@ -46,7 +46,7 @@ aggregation_definition = {
     'name': tr('aggregation'),
     'description': tr(
         'An <b>aggregation</b> layer represents '
-        'regions you can use to summarise the results by. For '
+        'regions you can use when summarise analysis results. For '
         'example, we might summarise the affected people after'
         'a flood according to city districts.')
 }
@@ -192,19 +192,28 @@ unit_continuous = {
     'id': 'continuous',
     'name': tr('continuous'),
     'description': tr(
-        '<b>Continuous</b> data can be hazard or exposure data where the '
-        'values is continuous. It does not have unit. So, it usually comes '
-        'from normalised value.'
-    ),
+        '<b>Continuous</b> data can be hazard or exposure data '
+        'where the values are are either integers or decimal numbers '
+        'resulting a continuously varying phenomenon. For example flood depth '
+        'is a continuous value from 0 to the maximum reported depth during a '
+        'flood. Raster data is considered to be continuous by default and you '
+        'should explicitly indicate that it is classified if each cell in the '
+        'raster represents a discrete class (e.g. low depth = 1, medium depth '
+        '= 2, high depth = 3).'),
     'constraint': 'continuous'
 }
-unit_classes = {
+unit_classified = {
     'id': 'classes',
     'name': tr('classes'),
     'description': tr(
-        '<b>Classes</b> data can be hazard data where the '
-        'values have been classified or coded (i.e. 1, 2, 3).'
+        '<b>Classified</b> data can be hazard data where the '
+        'values have been classified or coded such that each raster cell '
+        'represents a discrete class. For example if the raster represents '
+        'a flood layer, permissible cell values may be 1, 2, 3 where 1 '
+        'represents low water, 2 represents medium inundation and 3 '
+        'represents high inundation.'
     ),
+    'constraint': 'classified'
 }
 unit_people_per_pixel = {
     'id': 'people_per_pixel',
@@ -297,27 +306,49 @@ unit_wetdry = {
     ]
 }
 
-
 # layer_constraints
 layer_raster_continuous = {
     'layer_type': 'raster',
-    'data_type': 'continuous'
+    'data_type': 'continuous',
+    'description': unit_continuous['description']
 }
+
 layer_raster_classified = {
     'layer_type': 'raster',
-    'data_type': 'classified'
+    'data_type': 'classified',
+    'description': unit_classified['description']
 }
-layer_vector_line = {
-    'layer_type': 'vector',
-    'data_type': 'line'
-}
+
 layer_vector_point = {
     'layer_type': 'vector',
-    'data_type': 'point'
+    'data_type': 'point',
+    'description': tr(
+        'A layer composed of points which each represent a feature on the '
+        'earth. Currently the only point data supported by InaSAFE are '
+        '<b>volcano hazard</b> layers.')
 }
+
+layer_vector_line = {
+    'layer_type': 'vector',
+    'data_type': 'line',
+    'description': tr(
+        'A layer composed of linear features. Currently only <b>road exposure'
+        '</b>line layers are supported by InaSAFE.')
+}
+
 layer_vector_polygon = {
     'layer_type': 'vector',
-    'data_type': 'polygon'
+    'data_type': 'polygon',
+    'description': tr(
+        'A layer composed on polygon features that represent areas of hazard '
+        'or exposure. For example areas of flood represented as polygons '
+        '(for a hazard) or building footprints represented as polygons ( '
+        'for an exposure). The polygon layer will often need the presence '
+        'of specific layer attributes too - these will vary from impact '
+        'function to impact function and whether the layer represents '
+        'a hazard or an exposure layer. Polygon layers can also be used '
+        'for aggregation - where impact analysis results per boundary '
+        'such as village or district boundaries.')
 }
 
 
