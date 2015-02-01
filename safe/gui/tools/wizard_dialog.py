@@ -237,9 +237,10 @@ step_fc_agglayer_from_canvas = 21
 step_fc_agglayer_from_browser = 22
 step_fc_agglayer_disjoint = 23
 step_fc_extent = 24
-step_fc_params = 25
-step_fc_summary = 26
-step_fc_analysis = 27
+step_fc_extent_disjoint = 25
+step_fc_params = 26
+step_fc_summary = 27
+step_fc_analysis = 28
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -352,9 +353,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.dock = dock
         self.suppress_warning_dialog = False
         self.set_tool_tip()
+        # Set icons
         self.lblMainIcon.setPixmap(
             QPixmap(resources_path('img', 'icons', 'icon.svg')))
-
+        self.lblIconDisjoint_1.setPixmap(
+            QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
+        self.lblIconDisjoint_2.setPixmap(
+            QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
+        self.lblIconDisjoint_3.setPixmap(
+            QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
         # Set models for browsers
         browser_model = QgsBrowserModel()
         proxy_model = LayerBrowserProxyModel(self)
@@ -2464,6 +2471,46 @@ class WizardDialog(QDialog, FORM_CLASS):
         pass
 
     # ===========================
+    # STEP_FC_EXTENT_DISJOINT
+    # ===========================
+
+    def validate_extent(self):
+        """Check if the selected extent intersects source data.
+
+        :returns: true if extent intersects both layers, false if is disjoint
+        :rtype: boolean
+        """
+        if self.rbExtentUser.isChecked():
+            # Get user extent
+            extent = self.dock.extent.user_extent
+            extent_crs = self.dock.extent.user_extent_crs
+        elif self.rbExtentScreen.isChecked():
+            # Get screen extent
+            extent = self.iface.mapCanvas().extent()
+            extent_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        else:
+            # The layer extent is chosen, no need to validate
+            return True
+
+        haz_extent = self.hazard_layer.extent()
+        exp_extent = self.exposure_layer.extent()
+
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            coordTransform = QgsCoordinateTransform(extent_crs,
+                self.hazard_layer.crs())
+            haz_extent = (coordTransform.transform(haz_extent,
+                QgsCoordinateTransform.ReverseTransform))
+            coordTransform = QgsCoordinateTransform(extent_crs,
+                self.exposure_layer.crs())
+            exp_extent = (coordTransform.transform(exp_extent,
+                QgsCoordinateTransform.ReverseTransform))
+        return extent.intersects(haz_extent) and extent.intersects(exp_extent)
+
+    def set_widgets_step_fc_extent_disjoint(self):
+        """Set widgets on the Extent Disjoint tab"""
+        pass
+
+    # ===========================
     # STEP_FC_PARAMS
     # ===========================
 
@@ -2713,6 +2760,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_fc_agglayer_disjoint()
         elif new_step == step_fc_extent:
             self.set_widgets_step_fc_extent()
+        elif new_step == step_fc_extent_disjoint:
+            self.set_widgets_step_fc_extent_disjoint()
         elif new_step == step_fc_params:
             self.set_widgets_step_fc_params()
         elif new_step == step_fc_summary:
@@ -2973,7 +3022,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.existing_keywords = None
                 new_step = step_kw_category
-                # TODO test overlapping after come back!!!
             else:
                 if not self.layers_intersect(self.hazard_layer,
                                              self.exposure_layer):
@@ -2988,7 +3036,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             elif self.rbAggLayerFromBrowser.isChecked():
                 new_step = step_fc_agglayer_from_browser
             else:
-                # no aggregation (so also no disjoint test)
                 new_step = step_fc_extent
         elif current_step in [step_fc_agglayer_from_canvas,
                               step_fc_agglayer_from_browser]:
@@ -2997,7 +3044,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.existing_keywords = None
                 new_step = step_kw_category
-                # TODO test overlapping after come back!!!
             else:
                 if not self.layers_intersect(self.exposure_layer,
                                              self.aggregation_layer):
@@ -3006,8 +3052,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                     new_step = step_fc_extent
         elif current_step == step_fc_agglayer_disjoint:
             new_step = step_fc_extent
+        elif current_step == step_fc_extent:
+                if self.validate_extent():
+                    new_step = step_fc_params
+                else:
+                    new_step = step_fc_extent_disjoint
         elif current_step in [step_fc_function_1, step_fc_function_2,
-                              step_fc_function_3, step_fc_extent,
+                              step_fc_function_3,
                               step_fc_params, step_fc_summary]:
             new_step = current_step + 1
         elif current_step == step_fc_analysis:
