@@ -64,8 +64,8 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
         :author ESSC
         :rating 3
         :param requires category=='hazard' and \
-                        unit=='categorised' and \
-                        layertype=='raster'
+                        layertype=='raster' and \
+                        data_type=='classified'
 
         :param requires category=='exposure' and \
                         subcategory=='population' and \
