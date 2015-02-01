@@ -512,9 +512,11 @@ class ImpactMergeDialogTest(unittest.TestCase):
         self.impact_merge_dialog.generate_html_reports(
             first_report_dict, second_report_dict)
 
-        # There should be 4 HTML files generated on temp_dir()
+        # There should be 4 HTML files generated
         html_list = glob(
-            os.path.join(temp_dir(), '*.html'))
+            os.path.join(
+                temp_dir(self.impact_merge_dialog.__class__.__name__),
+                '*.html'))
         expected_html_number = 4
         self.assertEqual(len(html_list), expected_html_number)
 
