@@ -57,7 +57,7 @@ class ContinuousHazardPopulationImpactFunction(FunctionProvider):
     :author AIFDR
     :rating 2
     :param requires category=='hazard' and \
-                    layertype=='raster' and
+                    layertype=='raster' and \
                     data_type=='continuous'
 
     :param requires category=='exposure' and \
