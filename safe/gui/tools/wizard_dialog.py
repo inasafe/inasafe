@@ -1635,49 +1635,81 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: boolean
         """
 
+        # Get allowed subcategory, layer_type and data_type from IF constraints
+        h, e, hc, ec = self.selected_imfunc_constraints()
+        if category == 'hazard':
+            subcategory = h['id']
+            layer_type = hc['layer_type']
+            data_type = hc['data_type']
+        elif category == 'exposure':
+            subcategory = e['id']
+            layer_type = ec['layer_type']
+            data_type = ec['data_type']
+        else:
+            # For aggregation layers, use a simplified test
+            if (keywords and 'category' in keywords
+                    and keywords['category'] == category):
+                return True
+            if not keywords and is_polygon_layer(layer):
+                return True
+            return False
+
+        # Get allowed units from selected IF if possible
         imfunc = self.selected_function()
-
-        # For aggregation layers, don't use the impact function
-        if category not in imfunc['categories']:
-            imfunc = None
-
-        if imfunc:
-            allowed_subcats = imfunc['categories'][category]['subcategories']
-            if type(allowed_subcats) != list:
-                allowed_subcats = [allowed_subcats]
+        if (imfunc and category in imfunc['categories']
+                and 'units' in imfunc['categories'][category]):
             allowed_units = imfunc['categories'][category]['units']
             if type(allowed_units) != list:
                 allowed_units = [allowed_units]
-            layer_constraints = imfunc['categories'][category][
-                'layer_constraints']
-
-        if imfunc:
-            is_compatible = False
-            if is_raster_layer(layer) and 'raster' in [
-                    lc['layer_type'] for lc in layer_constraints]:
-                is_compatible = True
-            elif is_point_layer(layer) and 'point' in [
-                    lc['data_type'] for lc in layer_constraints]:
-                is_compatible = True
-            elif is_polygon_layer(layer)and 'polygon' in [
-                    lc['data_type'] for lc in layer_constraints]:
-                is_compatible = True
-            elif 'line' in [lc['data_type'] for lc in layer_constraints]:
-                is_compatible = True
         else:
-            is_compatible = True
+            allowed_units = None
 
-        if keywords and ('category' not in keywords or
-                         keywords['category'] != category):
-            is_compatible = False
+        # Test the layer type and the data type
+        if is_raster_layer(layer):
+            if layer_type != 'raster':
+                return False
+            # Only test the data type if keywords present
+            # WARNING: if keywords present, but data_type not set,
+            # the value 'continuous' will be assumed by default.
+            if keywords:
+                if 'data_type' in keywords:
+                    # if set, get data_type from keywords
+                    layer_datatype = keywords['data_type']
+                else:
+                    # if not set, assume default value
+                    layer_datatype = 'continuous'  # default
+                if layer_datatype != data_type:
+                    return False
+        else:
+            if layer_type == 'raster':
+                return False
+            if is_point_layer(layer):
+                if data_type != 'point':
+                    return False
+            elif is_polygon_layer(layer):
+                if data_type != 'polygon':
+                    return False
+            else:
+                if data_type != 'line':
+                    return False
 
-        if keywords and imfunc:
-            subcat_ids = [subcat['id'] for subcat in allowed_subcats]
-            if 'subcategory' in keywords.keys() and not keywords[
-                    'subcategory'] in subcat_ids:
-                is_compatible = False
+        # Test the category if keywords provided
+        if (keywords and 'category' in keywords
+                and keywords['category'] != category):
+            return False
 
-        return is_compatible
+        # Test the subcategory if keywords provided
+        if (keywords and 'subcategory' in keywords
+                and keywords['subcategory'] != subcategory):
+            return False
+
+        # Test the units if keywords provided
+        if (allowed_units and keywords and 'units' in keywords
+                and keywords['units'] in allowed_units):
+            return False
+
+        # Finally return True
+        return True
 
     def get_compatible_layers_from_canvas(self, category):
         """Collect compatible layers from map canvas.
@@ -1750,7 +1782,10 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_hazlayer_origin(self):
         """Set widgets on the Hazard Layer Origin Type tab."""
-        # First, check if there are any available layers
+        # First, list available layers in order to check if there are
+        # any available layers. Note This will be repeated in
+        # set_widgets_step_fc_hazlayer_from_canvas because we need
+        # to list them again after coming back from the Keyword Wizard.
         self.list_compatible_layers_from_canvas(
             'hazard', self.lstCanvasHazLayers)
         if self.lstCanvasHazLayers.count():
@@ -1856,7 +1891,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: The currently selected map layer in the list.
         :rtype: QgsMapLayer
         """
-        item = self.lstCanvasHazLayers.currentItem()
+
+        if self.lstCanvasHazLayers.selectedItems():
+            item = self.lstCanvasHazLayers.currentItem()
+        else:
+            return None
         try:
             layer_id = item.data(QtCore.Qt.UserRole)
         except (AttributeError, NameError):
@@ -1867,15 +1906,22 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_hazlayer_from_canvas(self):
         """Set widgets on the Hazard Layer From TOC tab"""
-        # The lstCanvasHazLayers is already populated in the previous step
+        # The list is already populated in the previous step, but now we
+        # need to do it again in case we're back from the Keyword Wizard.
+        # First, preserve self.layer before clearing the list
+        last_layer = self.layer and self.layer.id() or None
         self.lblDescribeCanvasHazLayer.clear()
+        self.list_compatible_layers_from_canvas(
+            'hazard', self.lstCanvasHazLayers)
         self.auto_select_one_item(self.lstCanvasHazLayers)
-
-        item = self.lstCanvasHazLayers.currentItem()
-        if item:
-            pass
-            # TODO: If we're back from the keyword wizard, reset italic font
-            # and display keywords.
+        # Try to select the last_layer, if found:
+        if last_layer:
+            layers = []
+            for indx in xrange(self.lstCanvasHazLayers.count()):
+                item = self.lstCanvasHazLayers.item(indx)
+                layers += [item.data(QtCore.Qt.UserRole)]
+            if last_layer in layers:
+                self.lstCanvasHazLayers.setCurrentRow(layers.index(last_layer))
 
     # ===========================
     # STEP_FC_HAZLAYER_FROM_BROWSER
@@ -2100,7 +2146,10 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_explayer_origin(self):
         """Set widgets on the Exposure Layer Origin Type tab"""
-        # First, check if there are any available layers
+        # First, list available layers in order to check if there are
+        # any available layers. Note This will be repeated in
+        # set_widgets_step_fc_explayer_from_canvas because we need
+        # to list them again after coming back from the Keyword Wizard.
         self.list_compatible_layers_from_canvas(
             'exposure', self.lstCanvasExpLayers)
         if self.lstCanvasExpLayers.count():
@@ -2144,7 +2193,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: The currently selected map layer in the list.
         :rtype: QgsMapLayer
         """
-        item = self.lstCanvasExpLayers.currentItem()
+        if self.lstCanvasExpLayers.selectedItems():
+            item = self.lstCanvasExpLayers.currentItem()
+        else:
+            return None
         try:
             layer_id = item.data(QtCore.Qt.UserRole)
         except (AttributeError, NameError):
@@ -2155,9 +2207,22 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_explayer_from_canvas(self):
         """Set widgets on the Exposure Layer From Canvas tab"""
-        # The lstCanvasExpLayers is already populated in the previous step
+        # The list is already populated in the previous step, but now we
+        # need to do it again in case we're back from the Keyword Wizard.
+        # First, preserve self.layer before clearing the list
+        last_layer = self.layer and self.layer.id() or None
         self.lblDescribeCanvasExpLayer.clear()
+        self.list_compatible_layers_from_canvas(
+            'exposure', self.lstCanvasExpLayers)
         self.auto_select_one_item(self.lstCanvasExpLayers)
+        # Try to select the last_layer, if found:
+        if last_layer:
+            layers = []
+            for indx in xrange(self.lstCanvasExpLayers.count()):
+                item = self.lstCanvasExpLayers.item(indx)
+                layers += [item.data(QtCore.Qt.UserRole)]
+            if last_layer in layers:
+                self.lstCanvasExpLayers.setCurrentRow(layers.index(last_layer))
 
     # ===========================
     # STEP_FC_EXPLAYER_FROM_BROWSER
@@ -2229,7 +2294,10 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_agglayer_origin(self):
         """Set widgets on the Aggregation Layer Origin Type tab"""
-        # First, check if there are any available layers
+        # First, list available layers in order to check if there are
+        # any available layers. Note This will be repeated in
+        # set_widgets_step_fc_agglayer_from_canvas because we need
+        # to list them again after coming back from the Keyword Wizard.
         self.list_compatible_layers_from_canvas(
             'postprocessing', self.lstCanvasAggLayers)
         if self.lstCanvasAggLayers.count():
@@ -2274,7 +2342,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: The currently selected map layer in the list.
         :rtype: QgsMapLayer
         """
-        item = self.lstCanvasAggLayers.currentItem()
+        if self.lstCanvasAggLayers.selectedItems():
+            item = self.lstCanvasAggLayers.currentItem()
+        else:
+            return None
         try:
             layer_id = item.data(QtCore.Qt.UserRole)
         except (AttributeError, NameError):
@@ -2285,9 +2356,22 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_agglayer_from_canvas(self):
         """Set widgets on the Aggregation Layer from Canvas tab"""
-        # The lstCanvasAggLayers is already populated in the previous step
+        # The list is already populated in the previous step, but now we
+        # need to do it again in case we're back from the Keyword Wizard.
+        # First, preserve self.layer before clearing the list
+        last_layer = self.layer and self.layer.id() or None
         self.lblDescribeCanvasAggLayer.clear()
+        self.list_compatible_layers_from_canvas(
+            'postprocessing', self.lstCanvasAggLayers)
         self.auto_select_one_item(self.lstCanvasAggLayers)
+        # Try to select the last_layer, if found:
+        if last_layer:
+            layers = []
+            for indx in xrange(self.lstCanvasAggLayers.count()):
+                item = self.lstCanvasAggLayers.item(indx)
+                layers += [item.data(QtCore.Qt.UserRole)]
+            if last_layer in layers:
+                self.lstCanvasAggLayers.setCurrentRow(layers.index(last_layer))
 
     # ===========================
     # STEP_FC_AGGLAYER_FROM_BROWSER
