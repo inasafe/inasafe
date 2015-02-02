@@ -122,10 +122,10 @@ if __name__ == '__main__':
                 sys.argv[0], sys.argv[0], sys.argv[0], sys.argv[0]))
     elif len(sys.argv) == 3:
         print('The events in the working dir:')
-        working_dir = sys.argv[1]  # pylint: disable=W0621
+        working_directory = sys.argv[1]
         event_option = sys.argv[2]
         if event_option in '--list':
-            dir_listing = os.listdir(working_dir)
+            dir_listing = os.listdir(working_directory)
             for event in dir_listing:
                 print event
             sys.exit(0)
@@ -133,17 +133,17 @@ if __name__ == '__main__':
             print('Processing shakemap %s' % event_option)
             if is_event_id(event_option):
                 process_event(
-                    working_dir=working_dir,
+                    working_dir=working_directory,
                     event_id=event_option,
                     locale=locale_option)
             else:
                 print('%s is not a valid event ID' % event_option)
     else:
-        working_dir = sys.argv[1]
+        working_directory = sys.argv[1]
         event_option = None
         print('Processing latest shakemap')
         # noinspection PyBroadException
         try:
-            process_event(working_dir=working_dir, locale=locale_option)
+            process_event(working_dir=working_directory, locale=locale_option)
         except:  # pylint: disable=W0702
             LOGGER.exception('Process event failed')

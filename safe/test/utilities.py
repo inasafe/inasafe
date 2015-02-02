@@ -77,7 +77,7 @@ def get_qgis_app():
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
         # noinspection PyPackageRequirements
-        from PyQt4 import QtGui, QtCore
+        from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
         from safe.gis.qgis_interface import QgisInterface

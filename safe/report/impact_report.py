@@ -29,7 +29,9 @@ from qgis.core import (
 
 try:
     # noinspection PyUnresolvedReferences
+    # pylint: disable=W0611
     from qgis.core import QgsLayerTreeGroup, QgsMapSettings
+    # pylint: enable=W0611
 except ImportError:
     from qgis.core import QgsMapRenderer
 

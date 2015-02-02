@@ -23,6 +23,7 @@ from xml.dom import minidom
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=F0401
+# pylint: disable=W0611
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapSettings,
@@ -31,6 +32,7 @@ from qgis.core import (
     QgsAtlasComposition
 )
 # pylint: enable=F0401
+# pylint: enable=W0611
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore

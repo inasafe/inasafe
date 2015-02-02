@@ -24,7 +24,9 @@ class ResourceParameterWidget(FloatParameterWidget):
         :type parameter: ResourceParameter, FloatParameter
 
         """
+        # pylint: disable=E1002
         super(ResourceParameterWidget, self).__init__(parameter, parent)
+        # pylint: enable=E1002
         self.set_unit()
 
     def get_parameter(self):
