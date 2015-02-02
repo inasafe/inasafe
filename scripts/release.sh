@@ -37,6 +37,11 @@ rm -rf ${WORKDIR}/${DIR}/fabfile.py
 #rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
 rm -rf ${WORKDIR}/${DIR}/pylintrc_jenkins
 rm -rf ${WORKDIR}/${DIR}/.travis.yml
+rm -rf ${WORKDIR}/${DIR}/Dockerfile
+rm -rf ${WORKDIR}/${DIR}/docs/README.BEFORE.CHANGING.DOCS.txt
+rm -rf ${WORKDIR}/${DIR}/71-apt-cacher-ng
+rm -rf ${WORKDIR}/${DIR}/.dockerignore
+rm -rf ${WORKDIR}/${DIR}/REQUIREMENTS.txt
 
 find ${WORKDIR}/${DIR} -name test*.py -delete
 find ${WORKDIR}/${DIR} -name *_test.py -delete
