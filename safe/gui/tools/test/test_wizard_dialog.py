@@ -193,8 +193,10 @@ class WizardDialogTest(unittest.TestCase):
         categories = []
         hazard_index = -1
         for i in range(expected_category_count):
+            # pylint: disable=eval-used
             category_name = eval(
                 dialog.lstCategories.item(i).data(Qt.UserRole))['id']
+            # pylint: enable=eval-used
             categories.append(category_name)
             if category_name == chosen_category:
                 hazard_index = i

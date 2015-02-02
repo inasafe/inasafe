@@ -1192,6 +1192,7 @@ class TestIO(unittest.TestCase):
 
             # Test conversion between geotransform and
             # geometry (longitudes and latitudes)
+            # pylint: disable=unbalanced-tuple-unpacking
             longitudes, latitudes = r1.get_geometry()
             gt = raster_geometry_to_geotransform(longitudes, latitudes)
             msg = ('Conversion from coordinates to geotransform failed: %s'
@@ -1508,6 +1509,7 @@ class TestIO(unittest.TestCase):
         R = read_layer(filename)
 
         # Check data directly
+        # pylint: disable=unbalanced-tuple-unpacking
         coordinates, values = R.to_vector_points()
         longitudes, latitudes = R.get_geometry()
         a = R.get_data()
@@ -1557,6 +1559,7 @@ class TestIO(unittest.TestCase):
         R = read_layer(filename)
 
         # Check data directly
+        # pylint: disable=unbalanced-tuple-unpacking
         coordinates, values = R.to_vector_points()
         longitudes, latitudes = R.get_geometry()
         A = R.get_data()

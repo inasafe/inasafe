@@ -625,8 +625,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         item = self.lstCategories.currentItem()
 
         try:
-            return eval(
-                item.data(QtCore.Qt.UserRole))  # pylint: disable=eval-used
+            # pylint: disable=eval-used
+            return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
         except (AttributeError, NameError):
             return None
 
@@ -661,7 +662,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories = []
             for index in xrange(self.lstCategories.count()):
                 item = self.lstCategories.item(index)
+                # pylint: disable=eval-used
                 category = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
                 categories.append(category['id'])
             if category_keyword in categories:
                 self.lstCategories.setCurrentRow(
@@ -2728,7 +2731,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 for v in val:
                     if type(val[v]) == OrderedDict:
                         # omit the v key and unpack the dict directly
-                        subdict = val[v]
                         result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
                                    for k in val[v]]
                     else:

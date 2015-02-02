@@ -257,7 +257,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             # don't show anything because this exception raised
             # when user canceling the import process directly
             pass
-        except Exception as exception:
+        except Exception as exception:  # pylint: disable=broad-except
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(self, error_dialog_title, str(exception))
 
