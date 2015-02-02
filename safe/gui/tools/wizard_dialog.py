@@ -430,13 +430,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                   bar, 40 px on the bottom for the system panel, and 10 px of
                   the width for vertical decorations
         """
-        x_max = QDesktopWidget().screenGeometry().width() - 30 # for a panel
+        x_max = QDesktopWidget().screenGeometry().width() - 30  # for a panel
         y_max = QDesktopWidget().screenGeometry().height()
 
         # Don't do anything if the frame geometry fits the screen.
         # Use 5 pixels tollerance for possible shadows.
         (x0, y0, x1, y1) = self.frameGeometry().getCoords()
-        if x0 >= -5 and x1 <= x_max + 5 and y0 >= -5 and y1 <= y_max +5:
+        if x0 >= -5 and x1 <= x_max + 5 and y0 >= -5 and y1 <= y_max + 5:
             return
 
         x = self.geometry().x()
@@ -2578,14 +2578,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         exp_extent = self.exposure_layer.extent()
 
         if self.iface.mapCanvas().hasCrsTransformEnabled():
-            coordTransform = QgsCoordinateTransform(extent_crs,
-                self.hazard_layer.crs())
-            haz_extent = (coordTransform.transform(haz_extent,
-                QgsCoordinateTransform.ReverseTransform))
-            coordTransform = QgsCoordinateTransform(extent_crs,
-                self.exposure_layer.crs())
-            exp_extent = (coordTransform.transform(exp_extent,
-                QgsCoordinateTransform.ReverseTransform))
+            coordTransform = QgsCoordinateTransform(
+                extent_crs, self.hazard_layer.crs())
+            haz_extent = (coordTransform.transform(
+                haz_extent, QgsCoordinateTransform.ReverseTransform))
+            coordTransform = QgsCoordinateTransform(
+                extent_crs, self.exposure_layer.crs())
+            exp_extent = (coordTransform.transform(
+                exp_extent, QgsCoordinateTransform.ReverseTransform))
         return extent.intersects(haz_extent) and extent.intersects(exp_extent)
 
     def set_widgets_step_fc_extent_disjoint(self):
@@ -3357,7 +3357,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['data_type'] = self.selected_datatype()
         if self.selected_unit():
             keywords['unit'] = self.selected_unit()['id']
-        if self.selected_allowresample() != None:
+        if self.selected_allowresample() is not None:
             keywords['allow_resample'] = self.selected_allowresample()
         if self.lstFields.currentItem():
             if 'category' in keywords.keys():
