@@ -1215,8 +1215,8 @@ class WizardDialogTest(unittest.TestCase):
         expected_exposure_layers_count = 1
         expected_aggregation_layers_count = 0
 
-        expected_summary_key = 'minimum needs'
-        expected_summary_value_fragment = 'rice'
+        # expected_summary_key = 'minimum needs'
+        # expected_summary_value_fragment = 'rice'
 
         expected_report_size = 5583  # as saved on Debian
         tolerance = 120  # windows EOL etc
@@ -1380,7 +1380,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step_fc_summary: test minumum needs text
-        summaries = dialog.lblSummary.text().split('<br/>')
+        # summaries = dialog.lblSummary.text().split('<br/>')
 
         # #TODO: temporarily disable minimum needs test as they seem
         # #te be removed from params
