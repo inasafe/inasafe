@@ -237,6 +237,13 @@ classify_question = QApplication.translate(
     'to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, unit, field)
 
+# Constants for the layer origin selector
+layer_constraint_memo = QApplication.translate(
+    'WizardDialog',
+    'Based on your selection of <b>%s %s %s</b> on the previous page, '
+    'you should select a <b>%s</b> layer containing <b>%s</b> data now.')
+    # (subcategory, data_type, category, data_type2, subcategory )
+
 # Constants for the browser
 # noinspection PyCallByClass
 create_postGIS_connection_first = QApplication.translate(
@@ -1725,6 +1732,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Enable the next button if anything selected
         self.pbnNext.setEnabled(bool(self.selected_function()))
 
+        #
+
+
     def selected_function(self):
         """Obtain the impact function selected by user.
 
@@ -1963,6 +1973,19 @@ class WizardDialog(QDialog, FORM_CLASS):
                 '(no suitable layers found)'))
             self.rbHazLayerFromCanvas.setEnabled(False)
             self.rbHazLayerFromBrowser.click()
+
+        # Set the memo labels on this and next (hazard) steps
+        h, e, hc, ec = self.selected_imfunc_constraints()
+        if hc['layer_type'] == 'raster':
+            data_type = '%s %s' % (hc['data_type'], hc['layer_type'])
+        else:
+            data_type = hc['data_type']
+        text = layer_constraint_memo % (h['name'], data_type,
+                                        'hazard', data_type, h['name'])
+
+        self.lblHazLayerOriginConstraint.setText(text)
+        self.lblHazLayerFromCanvasConstraint.setText(text)
+        self.lblHazLayerFromBrowserConstraint.setText(text)
 
     # ===========================
     # STEP_FC_HAZLAYER_FROM_CANVAS
@@ -2341,6 +2364,19 @@ class WizardDialog(QDialog, FORM_CLASS):
                 '(no suitable layers found)'))
             self.rbExpLayerFromCanvas.setEnabled(False)
             self.rbExpLayerFromBrowser.click()
+
+        # Set the memo labels on this and next (exposure) steps
+        h, e, hc, ec = self.selected_imfunc_constraints()
+        if ec['layer_type'] == 'raster':
+            data_type = '%s %s' % (ec['data_type'], ec['layer_type'])
+        else:
+            data_type = ec['data_type']
+        text = layer_constraint_memo % (e['name'], data_type,
+                                        'exposure', data_type, e['name'])
+
+        self.lblExpLayerOriginConstraint.setText(text)
+        self.lblExpLayerFromCanvasConstraint.setText(text)
+        self.lblExpLayerFromBrowserConstraint.setText(text)
 
     # ===========================
     # STEP_FC_EXPLAYER_FROM_CANVAS
