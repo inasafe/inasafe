@@ -92,6 +92,27 @@ category_question = QApplication.translate(
     'keywords to your layer: <b>%s</b>. First you need to define '
     'the category of your layer.')   # (layer name)
 
+
+category_question_hazard = QApplication.translate(
+    'WizardDialog',
+    'You have selected a layer that has no keywords assigned. '
+    'In the next steps you can assign keywords to that layer. '
+    'First you need to confirm the layer represents a hazard.')
+
+category_question_exposure = QApplication.translate(
+    'WizardDialog',
+    'You have selected a layer that has no keywords assigned. '
+    'In the next steps you can assign keywords to that layer. '
+    'First you need to confirm the layer represents an '
+    'exposure.')
+
+category_question_aggregation = QApplication.translate(
+    'WizardDialog',
+    'You have selected a layer that has no keywords assigned. '
+    'In the next steps you can assign keywords to that layer. '
+    'First you need to confirm the layer is an aggregation '
+    'layer.')
+
 # Constants for hazards
 hazard_question = QApplication.translate(
     'WizardDialog',
@@ -2686,6 +2707,22 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_summary(self):
         """Set widgets on the Summary tab"""
+        def format_postprocessor(val):
+            """ make nested OrderedDicts more flat"""
+            if type(val) == OrderedDict:
+                result = []
+                for v in val:
+                    if type(val[v]) == OrderedDict:
+                        # omit the v key and unpack the dict directly
+                        subdict = val[v]
+                        result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
+                                   for k in val[v]]
+                    else:
+                        result += [u'%s: %s' % (unicode(v), unicode(val[v]))]
+                return u', '.join(result)
+            else:
+                return unicode(val)
+
         self.if_params = self.parameter_dialog.parse_input(
             self.parameter_dialog.values)
 
@@ -2698,12 +2735,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         imfunc = imfunctions[0][imfunc_id]
         imfunc.parameters = self.if_params
 
-        params = ""
+        params = []
         for p in self.if_params:
             if type(self.if_params[p]) == OrderedDict:
-                subparams = [u'%s: %s' % (unicode(pp), unicode(
-                    self.if_params[p][pp])) for pp in self.if_params[p]]
-                subparams = u', '.join(subparams)
+                subparams = [u'<b>%s</b>: %s' % (unicode(pp),
+                             format_postprocessor(self.if_params[p][pp]))
+                             for pp in self.if_params[p]]
+                subparams = u'<br/>'.join(subparams)
+                print '!!!', subparams
             elif type(self.if_params[p]) == list and p == 'minimum needs':
                 subparams = ''
                 for need in self.if_params[p]:
@@ -2719,26 +2758,45 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 subparams = unicode(self.if_params[p])
 
-            params += "<b>%s</b>: %s<br/>" % (p, subparams)
+            params += [(p, subparams)]
 
         if self.aggregation_layer:
             aggr = self.aggregation_layer.name()
         else:
             aggr = self.tr('no aggregation')
 
-        text = ("Please ensure the following information are correct and "
-                "press Run")
-        summary = self.tr(text) + "<br/><br/>"
-        summary += """<b>IMPACT FUNCTION</b>: %s<br/>
-                    <b>HAZARD LAYER</b>: %s<br/>
-                    <b>EXPOSURE LAYER</b>: %s<br/>
-                    <b>AGGREGATION LAYER</b>: %s<br/>
-                    %s""" % (self.selected_function()['name'],
-                             self.hazard_layer.name(),
-                             self.exposure_layer.name(),
-                             aggr,
-                             params)
-        self.lblSummary.setText(summary)
+        html = self.tr('Please ensure the following information '
+                       'is correct and press Run.')
+        html += '<br/><table cellspacing="4">'
+        html += ('<tr>'
+                 '  <td><b>%s</b></td><td width="10"></td><td>%s</td>'
+                 '</tr><tr>'
+                 '  <td colspan="3"></td>'
+                 '</tr><tr>'
+                 '  <td><b>%s</b></td><td></td><td>%s</td>'
+                 '</tr><tr>'
+                 '  <td><b>%s</b></td><td></td><td>%s</td>'
+                 '</tr><tr>'
+                 '  <td><b>%s</b></td><td></td><td>%s</td>'
+                 '</tr><tr>'
+                 '  <td colspan="3"></td>'
+                 '</tr>' % (
+                     self.tr('impact function').upper().replace(' ', '&nbsp;'),
+                     self.selected_function()['name'],
+                     self.tr('hazard layer').upper().replace(' ', '&nbsp;'),
+                     self.hazard_layer.name(),
+                     self.tr('exposure layer').upper().replace(' ', '&nbsp;'),
+                     self.exposure_layer.name(),
+                     self.tr('aggregation layer').upper().replace(
+                         ' ', '&nbsp;'), aggr))
+
+        for p in params:
+            html += ('<tr>'
+                     '  <td><b>%s</b></td><td></td><td>%s</td>'
+                     '</tr>' % (p[0], p[1]))
+        html += '</table>'
+
+        self.lblSummary.setText(html)
 
     # ===========================
     # STEP_FC_ANALYSIS
@@ -2803,7 +2861,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type step: int
         """
         self.stackedWidget.setCurrentIndex(step - 1)
-        # self.lblStep.setText(self.tr('step %d') % step)
         self.lblStep.clear()
         self.pbnBack.setEnabled(True)
         if (step in [step_kw_category, step_fc_function_1] and self.parent_step
@@ -2933,27 +2990,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         if new_step == step_fc_analysis:
             self.setup_and_run_analysis()
 
-        # TODO TEMPORARY LABEL FOR MOCKUPS. INSERT IT INTO PROPER PLACE.
         if new_step == step_kw_category and self.parent_step:
             if self.parent_step in [step_fc_hazlayer_from_canvas,
                                     step_fc_hazlayer_from_browser]:
-                text_label = (
-                    'You have selected a layer that has no keywords assigned. '
-                    'In the next steps you can assign keywords to that layer. '
-                    'First you need to confirm the layer represents a hazard.')
+                text_label = category_question_hazard
             elif self.parent_step in [step_fc_explayer_from_canvas,
                                       step_fc_explayer_from_browser]:
-                text_label = (
-                    'You have selected a layer that has no keywords assigned. '
-                    'In the next steps you can assign keywords to that layer. '
-                    'First you need to confirm the layer represents an '
-                    'exposure.')
+                text_label = category_question_exposure
             else:
-                text_label = (
-                    'You have selected a layer that has no keywords assigned. '
-                    'In the next steps you can assign keywords to that layer. '
-                    'First you need to confirm the layer is an aggregation '
-                    'layer.')
+                text_label = category_question_aggregation
             self.lblSelectCategory.setText(text_label)
 
     # prevents actions being handled twice
