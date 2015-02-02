@@ -240,8 +240,8 @@ classify_question = QApplication.translate(
 layer_constraint_memo = QApplication.translate(
     'WizardDialog',
     'Based on your selection of <b>%s %s %s</b> on the previous page, '
-    'you should select a <b>%s</b> layer containing <b>%s</b> data now.')
-    # (subcategory, data_type, category, data_type2, subcategory )
+    'you should select a <b>%s</b> layer containing <b>%s</b> data now.'
+    )  # (subcategory, data_type, category, data_type2, subcategory )
 
 # Constants for the browser
 # noinspection PyCallByClass
@@ -1742,9 +1742,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeFunction.setText(description)
         # Enable the next button if anything selected
         self.pbnNext.setEnabled(bool(self.selected_function()))
-
-        #
-
 
     def selected_function(self):
         """Obtain the impact function selected by user.
