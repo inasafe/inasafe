@@ -214,6 +214,16 @@ classify_question = QApplication.translate(
     'to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, unit, field)
 
+# Constants for the browser
+# noinspection PyCallByClass
+create_postGIS_connection_first = QApplication.translate(
+    'WizardDialog',
+    '<html>In order to use PostGIS layers, please close the wizard, '
+    'create a new PostGIS connection and run the wizard again. <br/><br/> '
+    'You can manage connections under the '
+    '<i>Layer</i> > <i>Add Layer</i> > <i>Add PostGIS Layers</i> '
+    'menu.</html>')
+
 # Constants: tab numbers for steps
 
 step_kw_category = 1
@@ -2101,7 +2111,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         uri.setUseEstimatedMetadata(useEstimatedMetadata)
 
-        # Obtain geommetryu column name
+        # Obtain the geometry column name
         connector = PostGisDBConnector(uri)
         tbls = connector.getVectorTables(schema)
         tbls = [tbl for tbl in tbls if tbl[1] == table]
@@ -2109,6 +2119,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         #    In the future, also look for raster layers?
         #    tbls = connector.getRasterTables(schema)
         #    tbls = [tbl for tbl in tbls if tbl[1]==table]
+        if not tbls:
+            return None
         tbl = tbls[0]
         geom_col = tbl[8]
 
@@ -2150,7 +2162,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         item_class_name = item.metaObject().className()
         # if not itemClassName.endswith('LayerItem'):
         if not item.type() == QgsDataItem.Layer:
-            return (False, '')
+            if item_class_name == 'QgsPGRootItem' and not item.children():
+                return (False, create_postGIS_connection_first)
+            else:
+                return (False, '')
 
         if item_class_name not in ['QgsOgrLayerItem', 'QgsLayerItem',
                                    'QgsPGLayerItem']:
@@ -2167,7 +2182,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer = QgsVectorLayer(path, '', 'ogr')
         elif item_class_name == 'QgsPGLayerItem':
             uri = self.pg_path_to_uri(path)
-            layer = QgsVectorLayer(uri.uri(), uri.table(), 'postgres')
+            if uri:
+                layer = QgsVectorLayer(uri.uri(), uri.table(), 'postgres')
+            else:
+                layer = None
         else:
             layer = QgsRasterLayer(path, '', 'gdal')
 
