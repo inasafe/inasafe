@@ -819,8 +819,9 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_subcategory, dialog)
 
         # check the values of subcategories options
+
         expected_subcategories = [
-            'flood', 'tephra', 'volcano', 'earthquake', 'tsunami', 'generic']
+            u'earthquake', u'flood', u'volcanic ash', u'tsunami', u'volcano', u'generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if no option is selected
@@ -1207,7 +1208,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_hazards_count = 5
         expected_exposures_count = 3
         expected_flood_structure_functions_count = 3
-        expected_raster_polygon_functions_count = 2
+        expected_raster_polygon_functions_count = 1
         expected_functions_count = 2
         chosen_if = 'FloodBuildingImpactFunction'
 
