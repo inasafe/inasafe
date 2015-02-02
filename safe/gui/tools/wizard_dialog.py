@@ -475,6 +475,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
+            if 'category' not in self.existing_keywords:
+                self.existing_keywords = None
         except (HashNotFoundError,
                 OperationalError,
                 NoKeywordsFoundError,
@@ -1851,6 +1853,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
+                if 'category' not in keywords:
+                    keywords = None
             except (HashNotFoundError,
                     OperationalError,
                     NoKeywordsFoundError,
@@ -1945,6 +1949,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
+            if 'category' not in keywords:
+                keywords = None
         except (HashNotFoundError,
                 OperationalError,
                 NoKeywordsFoundError,
@@ -2170,6 +2176,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
+            if 'category' not in keywords:
+                keywords = None
         except (HashNotFoundError,
                 OperationalError,
                 NoKeywordsFoundError,
