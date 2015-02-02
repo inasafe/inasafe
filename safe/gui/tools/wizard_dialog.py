@@ -1461,6 +1461,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblAvailableFunctions2.clear()
         self.pbnNext.setEnabled(True)
 
+        # Put a dot to the selected cell - note there is no way
+        # to center an icon without using a custom ItemDelegate
+        selection = self.tblFunctions1.selectedItems()
+        selItem = (len(selection) == 1) and selection[0] or None
+        for row in range(self.tblFunctions1.rowCount()):
+            for col in range(self.tblFunctions1.columnCount()):
+                item = self.tblFunctions1.item(row, col)
+                item.setText((item == selItem) and u'\u2022' or '')
+
     def on_tblFunctions1_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure combination and go ahead.
 
@@ -1503,6 +1512,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             item.setText(e['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
 
+        big_font = QtGui.QFont()
+        big_font.setPointSize(80)
+
         for h in hazards:
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
@@ -1515,6 +1527,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(bgcolor))
+                item.setFont(big_font)
+                item.setTextAlignment(QtCore.Qt.AlignCenter |
+                                      QtCore.Qt.AlignHCenter)
                 item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
@@ -1554,6 +1569,15 @@ class WizardDialog(QDialog, FORM_CLASS):
                 [f['name'] for f in functions])
             self.lblAvailableFunctions2.setText(txt)
         self.pbnNext.setEnabled(True)
+
+        # Put a dot to the selected cell - note there is no way
+        # to center an icon without using a custom ItemDelegate
+        selection = self.tblFunctions2.selectedItems()
+        selItem = (len(selection) == 1) and selection[0] or None
+        for row in range(self.tblFunctions2.rowCount()):
+            for col in range(self.tblFunctions2.columnCount()):
+                item = self.tblFunctions2.item(row, col)
+                item.setText((item == selItem) and u'\u2022' or '')
 
     def on_tblFunctions2_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure constraints combination
@@ -1595,6 +1619,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tblFunctions2.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
+        big_font = QtGui.QFont()
+        big_font.setPointSize(80)
+
         active_items = []
         for col in range(len(haz_datatypes)):
             for row in range(len(exp_datatypes)):
@@ -1611,6 +1638,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(bgcolor))
+                item.setFont(big_font)
+                item.setTextAlignment(QtCore.Qt.AlignCenter |
+                                      QtCore.Qt.AlignHCenter)
                 item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
