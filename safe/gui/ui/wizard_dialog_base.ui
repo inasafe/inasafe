@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>26</number>
+      <number>10</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1890,7 +1890,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;Now, please select the data types for the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; layers you want to use. Click on the cell in the table below that matches the data type for each.&lt;br/&gt;&lt;/p&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Now, please select the data types for the &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layers you want to use. Click on the cell in the table below that matches the data type for each. A &lt;span style=&quot; font-weight:600;&quot;&gt;continuous&lt;/span&gt; raster is one where cell values are real data values such as: &lt;span style=&quot; font-style:italic;&quot;&gt;depth of flood water in meters&lt;/span&gt; or the &lt;span style=&quot; font-style:italic;&quot;&gt;number of people per cell&lt;/span&gt;. A &lt;span style=&quot; font-weight:600;&quot;&gt;classified&lt;/span&gt; raster is one where cell values represent classes or zones such as: &lt;span style=&quot; font-style:italic;&quot;&gt;high hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;medium hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;low hazard zones&lt;/span&gt;.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
