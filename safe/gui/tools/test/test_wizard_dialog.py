@@ -53,6 +53,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
     step_kw_source,
+    step_kw_datatype,
     step_kw_title,
     step_kw_classify,
     step_kw_subcategory,
@@ -230,8 +231,10 @@ class WizardDialogTest(unittest.TestCase):
         subcategories = []
         tsunami_index = -1
         for i in range(expected_subcategory_count):
+            # pylint: disable=eval-used
             subcategory_name = eval(
                 dialog.lstSubcategories.item(i).data(Qt.UserRole))['id']
+            # pylint: enable=eval-used
             subcategories.append(subcategory_name)
             if subcategory_name == chosen_subcategory:
                 tsunami_index = i
@@ -264,8 +267,10 @@ class WizardDialogTest(unittest.TestCase):
         units = []
         feet_unit_index = -1
         for i in range(expected_unit_count):
+            # pylint: disable=eval-used
             unit_name = eval(
                 dialog.lstUnits.item(i).data(Qt.UserRole))['id']
+            # pylint: enable=eval-used
             units.append(unit_name)
             if unit_name == expected_chosen_unit:
                 feet_unit_index = i
@@ -859,7 +864,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
-        expected_units = ['categorised', 'normalised', 'metres', 'feet']
+        expected_units = [u'continuous', u'metres', u'feet']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing metres
@@ -870,8 +875,9 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step source
         self.check_current_step(step_kw_source, dialog)
 
-        dialog.pbnBack.click()  # back to step unit
-        dialog.pbnBack.click()  # back to step subcategory
+        dialog.pbnBack.click() # back to step unit
+        dialog.pbnBack.click() # back to step data_type
+        dialog.pbnBack.click() # back to step subcategory
 
         # check if in step subcategory
         self.check_current_step(step_kw_subcategory, dialog)
