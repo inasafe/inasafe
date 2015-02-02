@@ -28,6 +28,7 @@ from qgis.core import (
     QgsComposerFrame)
 
 try:
+    # noinspection PyUnresolvedReferences
     from qgis.core import QgsLayerTreeGroup, QgsMapSettings
 except ImportError:
     from qgis.core import QgsMapRenderer
