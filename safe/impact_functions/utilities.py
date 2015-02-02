@@ -106,3 +106,17 @@ def add_to_list(my_list, my_element):
             my_list.append(my_element)
 
     return my_list
+
+
+def get_list_id(list_dictionary):
+    """Helper function to return list of id from list of dictionary.
+
+     Each dictionary must have id in its key.
+
+    :param list_dictionary: List of dictionary
+    :type list_dictionary: list
+
+    :returns: List of id
+    :rtype: list
+    """
+    return [e['id'] for e in list_dictionary]
