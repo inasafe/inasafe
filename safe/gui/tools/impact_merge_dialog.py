@@ -22,12 +22,16 @@ from collections import OrderedDict
 from xml.dom import minidom
 
 # noinspection PyUnresolvedReferences
+# pylint: disable=F0401
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapSettings,
     QgsComposition,
     QgsRectangle,
-    QgsAtlasComposition)
+    QgsAtlasComposition
+)
+# pylint: enable=F0401
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
