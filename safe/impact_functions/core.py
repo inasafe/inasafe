@@ -360,7 +360,7 @@ def requirement_check(params, require_str, verbose=False):
         # is evaled against many params that are not relevant and
         # hence correctly return False
         pass
-    except Exception, e:
+    except Exception, e:  # pylint: disable=broad-exception
         msg = ('Requirements header could not compiled: %s. '
                'Original message: %s' % (execstr, e))
         # print msg

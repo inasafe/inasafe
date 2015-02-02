@@ -97,7 +97,7 @@ def process_event(working_dir=None, event_id=None, locale='en'):
         except EmptyShakeDirectoryError as ex:
             LOGGER.info(ex)
             return
-        except:
+        except Exception:  # pylint: disable=broad-exception
             LOGGER.exception('An error occurred setting up the shake event.')
             return
 
