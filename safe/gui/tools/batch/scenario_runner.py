@@ -23,7 +23,7 @@ import logging
 
 from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
 from qgis.gui import QgsMapCanvasLayer
-from qgis.utils import iface
+from qgis.utils import iface  # pylint: disable=W0621
 import PyQt4.QtCore as QtCore
 
 from safe.common.exceptions import FileNotFoundError
