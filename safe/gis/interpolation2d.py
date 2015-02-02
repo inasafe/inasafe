@@ -85,6 +85,7 @@ def interpolate2d(x, y, z, points, mode='linear', bounds_error=False):
 
     # Input checks
     validate_mode(mode)
+    # pylint: disable=unbalanced-tuple-unpacking
     x, y, z, xi, eta = validate_inputs(
         x=x, y=y, z=z, points=points, bounds_error=bounds_error)
 
