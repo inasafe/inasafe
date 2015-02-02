@@ -78,7 +78,6 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InaSAFEError)
 from safe.utilities.resources import get_ui_class, resources_path
-from safe.utilities.help import show_context_help
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 
@@ -308,7 +307,8 @@ def get_question_text(constant):
     :rtype: string
     """
     try:
-        return eval(constant)
+        # TODO Eval = bad
+        return eval(constant)  # pylint: disable=eval-used
     except NameError:
         return '<b>MISSING CONSTANT: %s</b>' % constant
 
@@ -625,7 +625,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         item = self.lstCategories.currentItem()
 
         try:
+            # pylint: disable=eval-used
             return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
         except (AttributeError, NameError):
             return None
 
@@ -639,16 +641,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblIconCategory.setPixmap(QPixmap())
         self.lblSelectCategory.setText(
             category_question % self.layer.name())
-        categories = self.categories_for_layer(self.get_layer_type(),
-                                               self.get_data_type())
+        categories = self.categories_for_layer(
+            self.get_layer_type(), self.get_data_type())
         if self.get_data_type() == 'polygon':
             categories += ['aggregation']
         for category in categories:
             if type(category) != dict:
-                # pylint: disable=W0612
-                # noinspection PyUnresolvedReferences
+                # pylint: disable=eval-used
                 category = eval('metadata.%s_definition' % category)
-                # pylint: enable=W0612
+                # pylint: enable=eval-used
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, unicode(category))
             self.lstCategories.addItem(item)
@@ -661,7 +662,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories = []
             for index in xrange(self.lstCategories.count()):
                 item = self.lstCategories.item(index)
+                # pylint: disable=eval-used
                 category = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
                 categories.append(category['id'])
             if category_keyword in categories:
                 self.lstCategories.setCurrentRow(
@@ -702,7 +705,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstSubcategories.currentItem()
         try:
+            # pylint: disable=eval-used
             return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
         except (AttributeError, NameError):
             return None
 
@@ -728,7 +733,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             subcategories = []
             for index in xrange(self.lstSubcategories.count()):
                 item = self.lstSubcategories.item(index)
+                # pylint: disable=eval-used
                 subcategory = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
                 subcategories.append(subcategory['id'])
             if subcategory_keyword in subcategories:
                 self.lstSubcategories.setCurrentRow(
@@ -825,7 +832,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstUnits.currentItem()
         try:
+            # pylint: disable=eval-used
             return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
         except (AttributeError, NameError):
             return None
 
@@ -857,7 +866,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             units = []
             for index in xrange(self.lstUnits.count()):
                 item = self.lstUnits.item(index)
+                # pylint: disable=eval-used
                 unit = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
                 units.append(unit['id'])
             if unit_id in units:
                 self.lstUnits.setCurrentRow(units.index(unit_id))
@@ -2720,7 +2731,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 for v in val:
                     if type(val[v]) == OrderedDict:
                         # omit the v key and unpack the dict directly
-                        subdict = val[v]
                         result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
                                    for k in val[v]]
                     else:
@@ -3164,7 +3174,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_kw_source
         elif current_step == step_kw_resample:
-                new_step = step_kw_source
+            new_step = step_kw_source
         elif current_step == step_kw_classify:
             new_step = step_kw_source
         elif current_step in (step_kw_aggregation, step_kw_source):
@@ -3230,18 +3240,19 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.existing_keywords = None
                 new_step = step_kw_category
             else:
-                if not self.layers_intersect(self.exposure_layer,
-                                             self.aggregation_layer):
+                flag = self.layers_intersect(
+                    self.exposure_layer, self.aggregation_layer)
+                if not flag:
                     new_step = step_fc_agglayer_disjoint
                 else:
                     new_step = step_fc_extent
         elif current_step == step_fc_agglayer_disjoint:
             new_step = step_fc_extent
         elif current_step == step_fc_extent:
-                if self.validate_extent():
-                    new_step = step_fc_params
-                else:
-                    new_step = step_fc_extent_disjoint
+            if self.validate_extent():
+                new_step = step_fc_params
+            else:
+                new_step = step_fc_extent_disjoint
         elif current_step in [step_fc_function_1, step_fc_function_2,
                               step_fc_function_3,
                               step_fc_params, step_fc_summary]:

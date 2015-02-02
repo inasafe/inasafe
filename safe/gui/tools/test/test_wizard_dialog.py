@@ -193,8 +193,10 @@ class WizardDialogTest(unittest.TestCase):
         categories = []
         hazard_index = -1
         for i in range(expected_category_count):
+            # pylint: disable=eval-used
             category_name = eval(
                 dialog.lstCategories.item(i).data(Qt.UserRole))['id']
+            # pylint: enable=eval-used
             categories.append(category_name)
             if category_name == chosen_category:
                 hazard_index = i
@@ -820,7 +822,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # check the values of subcategories options
         expected_subcategories = [
-            'flood', 'tephra', 'volcano', 'earthquake', 'tsunami', 'generic']
+            u'earthquake', u'flood', u'volcanic ash', u'tsunami', u'volcano', u'generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if no option is selected
@@ -833,6 +835,23 @@ class WizardDialogTest(unittest.TestCase):
 
         # choosing flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # Go to data type
+
+        # check if in step data type
+        self.check_current_step(step_kw_datatype, dialog)
+
+        # check the values of subcategories options
+        expected_datatypes = ['continuous', 'classified']
+        self.check_list(expected_datatypes, dialog.lstDataTypes)
+
+        # check if the default option is selected
+        expected_datatype_index = 0
+        datatype_index = dialog.lstDataTypes.currentRow()
+        message = ('Expected %s, but I got %s' %
+                   (expected_datatype_index, datatype_index))
+        self.assertEqual(
+            expected_datatype_index, datatype_index, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1207,8 +1226,8 @@ class WizardDialogTest(unittest.TestCase):
         expected_hazards_count = 5
         expected_exposures_count = 3
         expected_flood_structure_functions_count = 3
-        expected_raster_polygon_functions_count = 2
-        expected_functions_count = 2
+        expected_raster_polygon_functions_count = 1
+        expected_functions_count = 1
         chosen_if = 'FloodBuildingImpactFunction'
 
         expected_hazard_layers_count = 1
@@ -1277,9 +1296,10 @@ class WizardDialogTest(unittest.TestCase):
         dialog.tblFunctions2.setCurrentCell(3, 0)
 
         count = len(dialog.selected_functions_2())
-        message = ('Invalid functions count in the IF matrix 2! For flood '
-                   'and structure there should be %d while there were: '
-                   '%d') % (expected_raster_polygon_functions_count, count)
+        message = ('Invalid functions count in the IF matrix 2! For continuous'
+                   ' raster and polygon there should be %d while there'
+                   ' were: %d') % (expected_raster_polygon_functions_count,
+                                   count)
         self.assertEqual(count, expected_raster_polygon_functions_count,
                          message)
 
