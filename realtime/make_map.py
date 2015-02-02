@@ -122,7 +122,7 @@ if __name__ == '__main__':
                 sys.argv[0], sys.argv[0], sys.argv[0], sys.argv[0]))
     elif len(sys.argv) == 3:
         print('The events in the working dir:')
-        working_dir = sys.argv[1]
+        working_dir = sys.argv[1]  # pylint: disable=W0621
         event_option = sys.argv[2]
         if event_option in '--list':
             dir_listing = os.listdir(working_dir)
