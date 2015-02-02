@@ -3317,11 +3317,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
 
-        # Set allow_resampling to false if unit is density
-        if (is_raster_layer(self.layer)
-                and 'unit' in keywords and keywords['unit'] == 'density'):
-            keywords['allow_resampling'] = 'false'
-
         return keywords
 
     def save_current_keywords(self):
