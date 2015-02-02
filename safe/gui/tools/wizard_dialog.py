@@ -113,7 +113,6 @@ exposure_question = QApplication.translate(
     'as <b>flood impact on population</b>.')
 
 # Constants for data types
-
 datatype_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> '
@@ -135,6 +134,15 @@ unit_question = QApplication.translate(
     'is a vector layer, each polygon might represent an inundated '
     'area, while areas with no polygon coverage would be assumed '
     'to be dry.')   # (subcategory, category)
+
+# Constants for allow_resampling
+allow_resampling_question = QApplication.translate(
+    'WizardDialog',
+    'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
+    'For some exposure types you may want InaSAFE to not resample '
+    'the raster to the hazard layer resolution during analyses. Please '
+    'select the check box below if you want to set the <i>allow_resample</i> '
+    'keyword to <i>False</i>.')   # (subcategory, category, data_type)
 
 # Constants for subcategory-unit relations
 # These texts below will be inserted as the fourth variable
@@ -213,29 +221,30 @@ step_kw_subcategory = 2
 step_kw_datatype = 3
 step_kw_unit = 4
 step_kw_field = 5
-step_kw_classify = 6
-step_kw_aggregation = 7
-step_kw_source = 8
-step_kw_title = 9
-step_fc_function_1 = 10
-step_fc_function_2 = 11
-step_fc_function_3 = 12
-step_fc_hazlayer_origin = 13
-step_fc_hazlayer_from_canvas = 14
-step_fc_hazlayer_from_browser = 15
-step_fc_explayer_origin = 16
-step_fc_explayer_from_canvas = 17
-step_fc_explayer_from_browser = 18
-step_fc_disjoint_layers = 19
-step_fc_agglayer_origin = 20
-step_fc_agglayer_from_canvas = 21
-step_fc_agglayer_from_browser = 22
-step_fc_agglayer_disjoint = 23
-step_fc_extent = 24
-step_fc_extent_disjoint = 25
-step_fc_params = 26
-step_fc_summary = 27
-step_fc_analysis = 28
+step_kw_resample = 6
+step_kw_classify = 7
+step_kw_aggregation = 8
+step_kw_source = 9
+step_kw_title = 10
+step_fc_function_1 = 11
+step_fc_function_2 = 12
+step_fc_function_3 = 13
+step_fc_hazlayer_origin = 14
+step_fc_hazlayer_from_canvas = 15
+step_fc_hazlayer_from_browser = 16
+step_fc_explayer_origin = 17
+step_fc_explayer_from_canvas = 18
+step_fc_explayer_from_browser = 19
+step_fc_disjoint_layers = 20
+step_fc_agglayer_origin = 21
+step_fc_agglayer_from_canvas = 22
+step_fc_agglayer_from_browser = 23
+step_fc_agglayer_disjoint = 24
+step_fc_extent = 25
+step_fc_extent_disjoint = 26
+step_fc_params = 27
+step_fc_summary = 28
+step_fc_analysis = 29
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -919,6 +928,39 @@ class WizardDialog(QDialog, FORM_CLASS):
             if field in fields:
                 self.lstFields.setCurrentRow(fields.index(field))
         self.auto_select_one_item(self.lstFields)
+
+    # ===========================
+    # STEP_KW_RESAMPLE
+    # ===========================
+
+    def selected_allowresample(self):
+        """Obtain the allow_resample state selected by user.
+
+        .. note:: Returns none if not set or not relevant
+
+        :returns: Value of the allow_resample or None for not-set.
+        :rtype: boolean or None
+        """
+        if not is_raster_layer(self.layer):
+            return None
+
+        if self.selected_category()['id'] != 'exposure':
+            return None
+
+        # Only return false if checked, otherwise None for not-set.
+        if self.chkAllowResample.isChecked():
+            return False
+        else:
+            return None
+
+    def set_widgets_step_kw_resample(self):
+        """Set widgets on the Resample tab."""
+        category = self.selected_category()
+        subcategory = self.selected_subcategory()
+        data_type = self.selected_datatype()
+        self.lblSelectAllowResample.setText(
+            allow_resampling_question % (subcategory['name'],
+                                         category['name'], data_type))
 
     # ===========================
     # STEP_KW_CLASSIFY
@@ -2762,6 +2804,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_unit()
         elif new_step == step_kw_field:
             self.set_widgets_step_kw_field()
+        elif new_step == step_kw_resample:
+            self.set_widgets_step_kw_resample()
         elif new_step == step_kw_classify:
             self.set_widgets_step_kw_classify()
         elif new_step == step_kw_aggregation:
@@ -2908,6 +2952,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             return bool(self.selected_unit())
         if step == step_kw_field:
             return bool(self.selected_field() or not self.lstFields.count())
+        if step == step_kw_resample:
+            # Allow to not set allow resample  # TODO: really?
+            return True
         if step == step_kw_classify:
             # Allow to not classify any values
             return True
@@ -3004,7 +3051,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_unit
             else:
-                new_step = step_kw_source
+                new_step = step_kw_field
         elif current_step == step_kw_unit:
             unit = self.selected_unit()
             if unit and unit['id'] == 'building_generic':
@@ -3019,6 +3066,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
             else:
+                new_step = step_kw_source
+        elif current_step == step_kw_resample:
                 new_step = step_kw_source
         elif current_step == step_kw_classify:
             new_step = step_kw_source
@@ -3109,9 +3158,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             raise Exception('Unexpected number of steps')
 
-        # Skip the field (and classify) tab if raster layer
+        # Skip the field and classify tab if raster layer
         if new_step == step_kw_field and is_raster_layer(self.layer):
-            new_step = step_kw_source
+            # Insert the resample step for exposure layers
+            if self.selected_category()['id'] == 'exposure':
+                new_step = step_kw_resample
+            else:
+                new_step = step_kw_source
 
         return new_step
 
@@ -3145,6 +3198,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_category
             else:
                 new_step = step_kw_category
+        elif current_step == step_kw_resample:
+            if self.selected_unit():
+                new_step = step_kw_unit
+            else:
+                new_step = step_kw_datatype
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
         elif current_step == step_kw_source:
@@ -3152,6 +3210,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_classify
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
+            elif (is_raster_layer(self.layer)
+                  and self.selected_category()['id'] == 'exposure'):
+                new_step = step_kw_resample
             elif self.selected_field():
                 new_step = step_kw_field
             elif self.selected_unit():
@@ -3296,6 +3357,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['data_type'] = self.selected_datatype()
         if self.selected_unit():
             keywords['unit'] = self.selected_unit()['id']
+        if self.selected_allowresample() != None:
+            keywords['allow_resample'] = self.selected_allowresample()
         if self.lstFields.currentItem():
             if 'category' in keywords.keys():
                 if keywords['category'] != 'postprocessing':
