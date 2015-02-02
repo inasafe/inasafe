@@ -4155,16 +4155,6 @@ Please step back and select another layer.</string>
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="pbnHelp">
-       <property name="text">
-        <string>Help</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="pbnCancel">
        <property name="text">
         <string>Cancel</string>
@@ -4265,7 +4255,6 @@ Please step back and select another layer.</string>
   <tabstop>pbnReportWeb</tabstop>
   <tabstop>pbnReportPDF</tabstop>
   <tabstop>pbnReportComposer</tabstop>
-  <tabstop>pbnHelp</tabstop>
  </tabstops>
  <resources/>
  <connections/>

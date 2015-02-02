@@ -2951,17 +2951,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnNext.setEnabled(True)
         self.go_to_step(new_step)
 
-    # prevents actions being handled twice
-    # noinspection PyPep8Naming
-    @pyqtSignature('')
-    def on_pbnHelp_released(self):
-        """Handle the Help button release.
-
-        .. note:: This is an automatic Qt slot
-           executed when the Back button is released.
-        """
-        show_context_help('keywords_wizard')
-
     def is_ready_to_next_step(self, step):
         """Check if the step we enter is initially complete. If so, there is
             no reason to block the Next button.
