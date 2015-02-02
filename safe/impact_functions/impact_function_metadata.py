@@ -49,6 +49,23 @@ class ImpactFunctionMetadata(object):
         pass
 
     @staticmethod
+    def simplify_layer_constraint(layer_constraint):
+        """Simplify layer constraint to layer_type and data_type only.
+
+        :param layer_constraint: Dictionary that represent layer_constraint
+        :type layer_constraint: dict
+
+        :returns: Simple version of layer_constraint
+        :rtype: dict
+        """
+        simple_layer_constraint = {
+            'layer_type': layer_constraint['layer_type'],
+            'data_type': layer_constraint['data_type'],
+            }
+
+        return simple_layer_constraint
+
+    @staticmethod
     def is_subset(element, container):
         """Check the membership of element from container.
 
@@ -424,7 +441,13 @@ class ImpactFunctionMetadata(object):
         else:
             return []
 
-        if layer_constraints in cls.allowed_layer_constraints(category):
+        category_layer_constraints = cls.allowed_layer_constraints(category)
+        category_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            category_layer_constraints
+        ]
+
+        if layer_constraints in category_layer_constraints:
             return cls.allowed_units(subcategory, data_type)
         else:
             return []
@@ -457,9 +480,20 @@ class ImpactFunctionMetadata(object):
             'data_type': data_type
         }
         result = []
-        if layer_constraints in cls.allowed_layer_constraints('exposure'):
+
+        exposure_layer_constraints = cls.allowed_layer_constraints('exposure')
+        exposure_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            exposure_layer_constraints]
+
+        hazard_layer_constraints = cls.allowed_layer_constraints('hazard')
+        hazard_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            hazard_layer_constraints]
+
+        if layer_constraints in exposure_layer_constraints:
             result = add_to_list(result, 'exposure')
-        if layer_constraints in cls.allowed_layer_constraints('hazard'):
+        if layer_constraints in hazard_layer_constraints:
             result = add_to_list(result, 'hazard')
         return result
 
@@ -495,7 +529,14 @@ class ImpactFunctionMetadata(object):
             'layer_type': layer_type,
             'data_type': data_type
         }
-        if layer_constraints not in cls.allowed_layer_constraints(category):
+
+        category_layer_constraints = cls.allowed_layer_constraints(category)
+        category_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            category_layer_constraints
+        ]
+
+        if layer_constraints not in category_layer_constraints:
             return []
         else:
             return cls.allowed_subcategories(category)

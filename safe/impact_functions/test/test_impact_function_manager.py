@@ -37,6 +37,8 @@ from safe.impact_functions.generic.classified_hazard_building import (
 from safe.impact_functions.generic.classified_hazard_population import (
     ClassifiedHazardPopulationImpactFunction)
 
+from safe.impact_functions.utilities import get_list_id
+
 from safe.metadata import (
     unit_wetdry,
     unit_metres_depth,
@@ -193,7 +195,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.categories_for_layer(
             layer_type='raster', data_type='continuous')
         expected_result = [hazard_definition, exposure_definition]
-        message = ('I expect %s but I got %s.' % (expected_result, result))
+        message = ('I expect %s but I got %s.' % (
+            get_list_id(expected_result), get_list_id(result)))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.categories_for_layer(
