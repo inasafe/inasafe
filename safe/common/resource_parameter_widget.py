@@ -27,6 +27,15 @@ class ResourceParameterWidget(FloatParameterWidget):
         super(ResourceParameterWidget, self).__init__(parameter, parent)
         self.set_unit()
 
+    def get_parameter(self):
+        """Obtain the parameter object from the current widget state.
+
+        :returns: A BooleanParameter from the current state of widget
+
+        """
+        self._parameter.value = self._input.value()
+        return self._parameter
+
     def set_unit(self):
         """Set the units label. (Include the frequency.)"""
         label = ''
