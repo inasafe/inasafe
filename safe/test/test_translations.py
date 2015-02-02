@@ -22,7 +22,7 @@ import os
 import re
 
 # noinspection PyUnresolvedReferences
-import qgis
+import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QTranslator
 
