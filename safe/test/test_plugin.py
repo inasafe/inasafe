@@ -67,8 +67,8 @@ class PluginTest(unittest.TestCase):
         plugin.change_i18n('id')  # indonesian
         expected = 'Letusan gunung berapi'
         translation = tr('A volcano eruption')
-        message = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
-                    ('A volcano eruption', translation, expected)
+        message = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
+            'A volcano eruption', translation, expected)
         assert translation == expected, message
 
     def Xtest_afrikaans(self):
@@ -87,7 +87,7 @@ class PluginTest(unittest.TestCase):
         # (see http://effbot.org/zone/metaclass-plugins.htm)
         # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
-        import PyQt4.QtCore.QObject.tr as tr
+        # import PyQt4.QtCore.QObject.tr as tr
         untranslated = 'Temporarily Closed'
         expected = 'Tydelik gesluit'  # afrikaans
         translated = tr(untranslated)
