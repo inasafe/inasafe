@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>620</height>
+    <width>1007</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -148,7 +148,7 @@
       <string notr="true">font-size:10pt</string>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>24</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -3054,7 +3054,7 @@
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -3163,7 +3163,7 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>276</height>
+           <height>100</height>
           </size>
          </property>
         </spacer>
@@ -3574,7 +3574,7 @@ Please step back and select another layer.</string>
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -3686,7 +3686,7 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>236</height>
+           <height>100</height>
           </size>
          </property>
         </spacer>
@@ -3722,14 +3722,14 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>36</height>
+           <height>60</height>
           </size>
          </property>
         </spacer>
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_9">
-         <item row="0" column="3" rowspan="4">
+         <item row="0" column="5" rowspan="5">
           <spacer name="horizontalSpacer_57">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -3745,7 +3745,7 @@ Please step back and select another layer.</string>
            </property>
           </spacer>
          </item>
-         <item row="0" column="0" rowspan="4">
+         <item row="0" column="0" rowspan="5">
           <spacer name="horizontalSpacer_58">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -3761,14 +3761,62 @@ Please step back and select another layer.</string>
            </property>
           </spacer>
          </item>
-         <item row="0" column="1">
+         <item row="1" column="1">
+          <spacer name="horizontalSpacer_69">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>25</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="1" colspan="2">
           <widget class="QRadioButton" name="rbExtentUser">
            <property name="text">
-            <string>Use the extent defined by selecting an area on the map (will use existing selection if one has already been made)</string>
+            <string>Use the extent defined by selecting an area on the map</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
+         <item row="1" column="2" colspan="2">
+          <widget class="QLabel" name="lblExistingSelection">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 8pt;</string>
+           </property>
+           <property name="text">
+            <string>It will use existing selection if one has already been made.</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <spacer name="horizontalSpacer_68">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="3" colspan="2">
           <widget class="QLabel" name="lblDefineExtentNow">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -3781,17 +3829,29 @@ Please step back and select another layer.</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1" colspan="2">
-          <widget class="QRadioButton" name="rbExtentLayer">
+         <item row="2" column="1" colspan="4">
+          <widget class="QRadioButton" name="rbExtentScreen">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
-            <string>Use the extent of the analysis layers</string>
+            <string>Use the current extent of the map display</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QRadioButton" name="rbExtentScreen">
+         <item row="3" column="1" colspan="4">
+          <widget class="QRadioButton" name="rbExtentLayer">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
            <property name="text">
-            <string>Use the current extent of the map display</string>
+            <string>Use the extent of the analysis layers</string>
            </property>
           </widget>
          </item>
@@ -3823,7 +3883,7 @@ Please step back and select another layer.</string>
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -3932,7 +3992,7 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>255</height>
+           <height>100</height>
           </size>
          </property>
         </spacer>
