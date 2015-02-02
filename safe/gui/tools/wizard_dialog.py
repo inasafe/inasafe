@@ -35,9 +35,11 @@ from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap,
     QApplication,
+    QDesktopWidget,
     QSortFilterProxyModel)
 
 from qgis.core import (
+    QgsCoordinateTransform,
     QgsBrowserModel,
     QgsDataItem,
     QgsVectorLayer,
@@ -113,7 +115,6 @@ exposure_question = QApplication.translate(
     'as <b>flood impact on population</b>.')
 
 # Constants for data types
-
 datatype_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> '
@@ -135,6 +136,15 @@ unit_question = QApplication.translate(
     'is a vector layer, each polygon might represent an inundated '
     'area, while areas with no polygon coverage would be assumed '
     'to be dry.')   # (subcategory, category)
+
+# Constants for allow_resampling
+allow_resampling_question = QApplication.translate(
+    'WizardDialog',
+    'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
+    'For some exposure types you may want InaSAFE to not resample '
+    'the raster to the hazard layer resolution during analyses. Please '
+    'select the check box below if you want to set the <i>allow_resample</i> '
+    'keyword to <i>False</i>.')   # (subcategory, category, data_type)
 
 # Constants for subcategory-unit relations
 # These texts below will be inserted as the fourth variable
@@ -206,6 +216,16 @@ classify_question = QApplication.translate(
     'to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, unit, field)
 
+# Constants for the browser
+# noinspection PyCallByClass
+create_postGIS_connection_first = QApplication.translate(
+    'WizardDialog',
+    '<html>In order to use PostGIS layers, please close the wizard, '
+    'create a new PostGIS connection and run the wizard again. <br/><br/> '
+    'You can manage connections under the '
+    '<i>Layer</i> > <i>Add Layer</i> > <i>Add PostGIS Layers</i> '
+    'menu.</html>')
+
 # Constants: tab numbers for steps
 
 step_kw_category = 1
@@ -213,28 +233,30 @@ step_kw_subcategory = 2
 step_kw_datatype = 3
 step_kw_unit = 4
 step_kw_field = 5
-step_kw_classify = 6
-step_kw_aggregation = 7
-step_kw_source = 8
-step_kw_title = 9
-step_fc_function_1 = 10
-step_fc_function_2 = 11
-step_fc_function_3 = 12
-step_fc_hazlayer_origin = 13
-step_fc_hazlayer_from_canvas = 14
-step_fc_hazlayer_from_browser = 15
-step_fc_explayer_origin = 16
-step_fc_explayer_from_canvas = 17
-step_fc_explayer_from_browser = 18
-step_fc_disjoint_layers = 19
-step_fc_agglayer_origin = 20
-step_fc_agglayer_from_canvas = 21
-step_fc_agglayer_from_browser = 22
-step_fc_agglayer_disjoint = 23
-step_fc_extent = 24
-step_fc_params = 25
-step_fc_summary = 26
-step_fc_analysis = 27
+step_kw_resample = 6
+step_kw_classify = 7
+step_kw_aggregation = 8
+step_kw_source = 9
+step_kw_title = 10
+step_fc_function_1 = 11
+step_fc_function_2 = 12
+step_fc_function_3 = 13
+step_fc_hazlayer_origin = 14
+step_fc_hazlayer_from_canvas = 15
+step_fc_hazlayer_from_browser = 16
+step_fc_explayer_origin = 17
+step_fc_explayer_from_canvas = 18
+step_fc_explayer_from_browser = 19
+step_fc_disjoint_layers = 20
+step_fc_agglayer_origin = 21
+step_fc_agglayer_from_canvas = 22
+step_fc_agglayer_from_browser = 23
+step_fc_agglayer_disjoint = 24
+step_fc_extent = 25
+step_fc_extent_disjoint = 26
+step_fc_params = 27
+step_fc_summary = 28
+step_fc_analysis = 29
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -338,6 +360,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
+        self.fix_window_geometry()
         self.setWindowTitle('InaSAFE')
         # Note the keys should remain untranslated as we need to write
         # english to the keywords file.
@@ -347,9 +370,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.dock = dock
         self.suppress_warning_dialog = False
         self.set_tool_tip()
+        # Set icons
         self.lblMainIcon.setPixmap(
             QPixmap(resources_path('img', 'icons', 'icon.svg')))
-
+        self.lblIconDisjoint_1.setPixmap(
+            QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
+        self.lblIconDisjoint_2.setPixmap(
+            QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
+        self.lblIconDisjoint_3.setPixmap(
+            QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
         # Set models for browsers
         browser_model = QgsBrowserModel()
         proxy_model = LayerBrowserProxyModel(self)
@@ -406,6 +435,49 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.if_params = None
         self.analysis_handler = None
 
+    def fix_window_geometry(self):
+        """Fix the wizard window geometry if overflows the screen.
+        .. note:: Because of a big variety of window decorations and desktop
+                  layouts, it simply reserves 30 px on the top for the window
+                  bar, 40 px on the bottom for the system panel, and 10 px of
+                  the width for vertical decorations
+        """
+        x_max = QDesktopWidget().screenGeometry().width() - 30  # for a panel
+        y_max = QDesktopWidget().screenGeometry().height()
+
+        # Don't do anything if the frame geometry fits the screen.
+        # Use 5 pixels tollerance for possible shadows.
+        (x0, y0, x1, y1) = self.frameGeometry().getCoords()
+        if x0 >= -5 and x1 <= x_max + 5 and y0 >= -5 and y1 <= y_max + 5:
+            return
+
+        x = self.geometry().x()
+        y = self.geometry().y()
+        w = self.geometry().width()
+        h = self.geometry().height()
+
+        if x < 0 or x > x_max:
+            x = 0
+            if w > x_max:
+                w = x_max - 10
+        if x + w > x_max or x + w < 200:
+            if w > x_max:
+                w = x_max - 10
+            x = x_max - w
+        if y < 12 or y > y_max:
+            # Leave a margin for the decoration: 12px for the test, 30 to set.
+            # Ignore if the margin is < 30px but > 12px - it should be possible
+            # to drag the bar anyway.
+            y = 30
+            if h > (y_max-30):
+                h = (y_max-30)
+        if y + h > y_max or y + h < 200:
+            if h > y_max:
+                h = y_max
+            y = y_max - h
+        if (x, y, x + w, y + h) != self.geometry().getCoords():
+            self.setGeometry(x, y, w, h)
+
     def set_keywords_creation_mode(self, layer=None):
         """Set the Wizard to the Keywords Creation mode
         :param layer: Layer to set the keywords for
@@ -415,6 +487,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
+            if 'category' not in self.existing_keywords:
+                self.existing_keywords = None
         except (HashNotFoundError,
                 OperationalError,
                 NoKeywordsFoundError,
@@ -868,6 +942,39 @@ class WizardDialog(QDialog, FORM_CLASS):
             if field in fields:
                 self.lstFields.setCurrentRow(fields.index(field))
         self.auto_select_one_item(self.lstFields)
+
+    # ===========================
+    # STEP_KW_RESAMPLE
+    # ===========================
+
+    def selected_allowresample(self):
+        """Obtain the allow_resample state selected by user.
+
+        .. note:: Returns none if not set or not relevant
+
+        :returns: Value of the allow_resample or None for not-set.
+        :rtype: boolean or None
+        """
+        if not is_raster_layer(self.layer):
+            return None
+
+        if self.selected_category()['id'] != 'exposure':
+            return None
+
+        # Only return false if checked, otherwise None for not-set.
+        if self.chkAllowResample.isChecked():
+            return False
+        else:
+            return None
+
+    def set_widgets_step_kw_resample(self):
+        """Set widgets on the Resample tab."""
+        category = self.selected_category()
+        subcategory = self.selected_subcategory()
+        data_type = self.selected_datatype()
+        self.lblSelectAllowResample.setText(
+            allow_resampling_question % (subcategory['name'],
+                                         category['name'], data_type))
 
     # ===========================
     # STEP_KW_CLASSIFY
@@ -1368,6 +1475,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblAvailableFunctions2.clear()
         self.pbnNext.setEnabled(True)
 
+        # Put a dot to the selected cell - note there is no way
+        # to center an icon without using a custom ItemDelegate
+        selection = self.tblFunctions1.selectedItems()
+        selItem = (len(selection) == 1) and selection[0] or None
+        for row in range(self.tblFunctions1.rowCount()):
+            for col in range(self.tblFunctions1.columnCount()):
+                item = self.tblFunctions1.item(row, col)
+                item.setText((item == selItem) and u'\u2022' or '')
+
     # pylint: disable=W0613
     def on_tblFunctions1_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure combination and go ahead.
@@ -1412,6 +1528,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             item.setText(e['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
 
+        big_font = QtGui.QFont()
+        big_font.setPointSize(80)
+
         for h in hazards:
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
@@ -1424,6 +1543,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(bgcolor))
+                item.setFont(big_font)
+                item.setTextAlignment(QtCore.Qt.AlignCenter |
+                                      QtCore.Qt.AlignHCenter)
                 item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
@@ -1464,6 +1586,15 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.lblAvailableFunctions2.setText(txt)
         self.pbnNext.setEnabled(True)
 
+        # Put a dot to the selected cell - note there is no way
+        # to center an icon without using a custom ItemDelegate
+        selection = self.tblFunctions2.selectedItems()
+        selItem = (len(selection) == 1) and selection[0] or None
+        for row in range(self.tblFunctions2.rowCount()):
+            for col in range(self.tblFunctions2.columnCount()):
+                item = self.tblFunctions2.item(row, col)
+                item.setText((item == selItem) and u'\u2022' or '')
+
     # pylint: disable=W0613
     def on_tblFunctions2_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure constraints combination
@@ -1477,6 +1608,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_function_2(self):
         """Set widgets on the Impact Functions Table 2 tab."""
+
         self.tblFunctions2.clear()
         h, e, _hc, _ec = self.selected_imfunc_constraints()
         haz_datatypes = [layer_raster_continuous, layer_raster_classified,
@@ -1505,6 +1637,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tblFunctions2.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
+        big_font = QtGui.QFont()
+        big_font.setPointSize(80)
+
         active_items = []
         for col in range(len(haz_datatypes)):
             for row in range(len(exp_datatypes)):
@@ -1521,6 +1656,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(bgcolor))
+                item.setFont(big_font)
+                item.setTextAlignment(QtCore.Qt.AlignCenter |
+                                      QtCore.Qt.AlignHCenter)
                 item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
@@ -1731,6 +1869,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
+                if 'category' not in keywords:
+                    keywords = None
             except (HashNotFoundError,
                     OperationalError,
                     NoKeywordsFoundError,
@@ -1825,6 +1965,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
+            if 'category' not in keywords:
+                keywords = None
         except (HashNotFoundError,
                 OperationalError,
                 NoKeywordsFoundError,
@@ -1975,7 +2117,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         uri.setUseEstimatedMetadata(useEstimatedMetadata)
 
-        # Obtain geommetryu column name
+        # Obtain the geometry column name
         connector = PostGisDBConnector(uri)
         tbls = connector.getVectorTables(schema)
         tbls = [tbl for tbl in tbls if tbl[1] == table]
@@ -1983,6 +2125,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         #    In the future, also look for raster layers?
         #    tbls = connector.getRasterTables(schema)
         #    tbls = [tbl for tbl in tbls if tbl[1]==table]
+        if not tbls:
+            return None
         tbl = tbls[0]
         geom_col = tbl[8]
 
@@ -2024,7 +2168,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         item_class_name = item.metaObject().className()
         # if not itemClassName.endswith('LayerItem'):
         if not item.type() == QgsDataItem.Layer:
-            return (False, '')
+            if item_class_name == 'QgsPGRootItem' and not item.children():
+                return (False, create_postGIS_connection_first)
+            else:
+                return (False, '')
 
         if item_class_name not in ['QgsOgrLayerItem', 'QgsLayerItem',
                                    'QgsPGLayerItem']:
@@ -2041,7 +2188,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer = QgsVectorLayer(path, '', 'ogr')
         elif item_class_name == 'QgsPGLayerItem':
             uri = self.pg_path_to_uri(path)
-            layer = QgsVectorLayer(uri.uri(), uri.table(), 'postgres')
+            if uri:
+                layer = QgsVectorLayer(uri.uri(), uri.table(), 'postgres')
+            else:
+                layer = None
         else:
             layer = QgsRasterLayer(path, '', 'gdal')
 
@@ -2050,6 +2200,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
+            if 'category' not in keywords:
+                keywords = None
         except (HashNotFoundError,
                 OperationalError,
                 NoKeywordsFoundError,
@@ -2255,7 +2407,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: true if the layers intersect, false if they are disjoint
         :rtype: boolean
         """
-        return layer_a.extent().intersects(layer_b.extent())
+        extent_a = layer_a.extent()
+        extent_b = layer_b.extent()
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            coordTransform = QgsCoordinateTransform(layer_a.crs(),
+                                                    layer_b.crs())
+            extent_b = (coordTransform.transform(extent_b,
+                        QgsCoordinateTransform.ReverseTransform))
+        return extent_a.intersects(extent_b)
 
     def set_widgets_step_fc_disjoint_layers(self):
         """Set widgets on the Disjoint Layers tab"""
@@ -2453,6 +2612,46 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_extent(self):
         """Set widgets on the Extent tab"""
+        pass
+
+    # ===========================
+    # STEP_FC_EXTENT_DISJOINT
+    # ===========================
+
+    def validate_extent(self):
+        """Check if the selected extent intersects source data.
+
+        :returns: true if extent intersects both layers, false if is disjoint
+        :rtype: boolean
+        """
+        if self.rbExtentUser.isChecked():
+            # Get user extent
+            extent = self.dock.extent.user_extent
+            extent_crs = self.dock.extent.user_extent_crs
+        elif self.rbExtentScreen.isChecked():
+            # Get screen extent
+            extent = self.iface.mapCanvas().extent()
+            extent_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        else:
+            # The layer extent is chosen, no need to validate
+            return True
+
+        haz_extent = self.hazard_layer.extent()
+        exp_extent = self.exposure_layer.extent()
+
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            coordTransform = QgsCoordinateTransform(
+                extent_crs, self.hazard_layer.crs())
+            haz_extent = (coordTransform.transform(
+                haz_extent, QgsCoordinateTransform.ReverseTransform))
+            coordTransform = QgsCoordinateTransform(
+                extent_crs, self.exposure_layer.crs())
+            exp_extent = (coordTransform.transform(
+                exp_extent, QgsCoordinateTransform.ReverseTransform))
+        return extent.intersects(haz_extent) and extent.intersects(exp_extent)
+
+    def set_widgets_step_fc_extent_disjoint(self):
+        """Set widgets on the Extent Disjoint tab"""
         pass
 
     # ===========================
@@ -2667,6 +2866,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_unit()
         elif new_step == step_kw_field:
             self.set_widgets_step_kw_field()
+        elif new_step == step_kw_resample:
+            self.set_widgets_step_kw_resample()
         elif new_step == step_kw_classify:
             self.set_widgets_step_kw_classify()
         elif new_step == step_kw_aggregation:
@@ -2705,6 +2906,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_fc_agglayer_disjoint()
         elif new_step == step_fc_extent:
             self.set_widgets_step_fc_extent()
+        elif new_step == step_fc_extent_disjoint:
+            self.set_widgets_step_fc_extent_disjoint()
         elif new_step == step_fc_params:
             self.set_widgets_step_fc_params()
         elif new_step == step_fc_summary:
@@ -2780,17 +2983,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnNext.setEnabled(True)
         self.go_to_step(new_step)
 
-    # prevents actions being handled twice
-    # noinspection PyPep8Naming
-    @pyqtSignature('')
-    def on_pbnHelp_released(self):
-        """Handle the Help button release.
-
-        .. note:: This is an automatic Qt slot
-           executed when the Back button is released.
-        """
-        show_context_help('keywords_wizard')
-
     def is_ready_to_next_step(self, step):
         """Check if the step we enter is initially complete. If so, there is
             no reason to block the Next button.
@@ -2811,6 +3003,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             return bool(self.selected_unit())
         if step == step_kw_field:
             return bool(self.selected_field() or not self.lstFields.count())
+        if step == step_kw_resample:
+            # Allow to not set allow resample  # TODO: really?
+            return True
         if step == step_kw_classify:
             # Allow to not classify any values
             return True
@@ -2907,7 +3102,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_unit
             else:
-                new_step = step_kw_source
+                new_step = step_kw_field
         elif current_step == step_kw_unit:
             unit = self.selected_unit()
             if unit and unit['id'] == 'building_generic':
@@ -2922,6 +3117,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
             else:
+                new_step = step_kw_source
+        elif current_step == step_kw_resample:
                 new_step = step_kw_source
         elif current_step == step_kw_classify:
             new_step = step_kw_source
@@ -2951,7 +3148,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.set_keywords_creation_mode(self.layer)
                 new_step = step_kw_category
-#                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
             else:
                 new_step = step_fc_explayer_origin
         elif current_step == step_fc_explayer_origin:
@@ -2966,8 +3162,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.existing_keywords = None
                 new_step = step_kw_category
-#                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
-                # TODO test overlapping after come back!!!
             else:
                 if not self.layers_intersect(self.hazard_layer,
                                              self.exposure_layer):
@@ -2982,7 +3176,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             elif self.rbAggLayerFromBrowser.isChecked():
                 new_step = step_fc_agglayer_from_browser
             else:
-                # no aggregation (so also no disjoint test)
                 new_step = step_fc_extent
         elif current_step in [step_fc_agglayer_from_canvas,
                               step_fc_agglayer_from_browser]:
@@ -2991,8 +3184,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = current_step
                 self.existing_keywords = None
                 new_step = step_kw_category
-#                # TODO COME BACK TO THIS POINT OR ONE BEFORE?
-                # TODO test overlapping after come back!!!
             else:
                 if not self.layers_intersect(self.exposure_layer,
                                              self.aggregation_layer):
@@ -3001,8 +3192,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                     new_step = step_fc_extent
         elif current_step == step_fc_agglayer_disjoint:
             new_step = step_fc_extent
+        elif current_step == step_fc_extent:
+                if self.validate_extent():
+                    new_step = step_fc_params
+                else:
+                    new_step = step_fc_extent_disjoint
         elif current_step in [step_fc_function_1, step_fc_function_2,
-                              step_fc_function_3, step_fc_extent,
+                              step_fc_function_3,
                               step_fc_params, step_fc_summary]:
             new_step = current_step + 1
         elif current_step == step_fc_analysis:
@@ -3013,9 +3209,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             raise Exception('Unexpected number of steps')
 
-        # Skip the field (and classify) tab if raster layer
+        # Skip the field and classify tab if raster layer
         if new_step == step_kw_field and is_raster_layer(self.layer):
-            new_step = step_kw_source
+            # Insert the resample step for exposure layers
+            if self.selected_category()['id'] == 'exposure':
+                new_step = step_kw_resample
+            else:
+                new_step = step_kw_source
 
         return new_step
 
@@ -3049,6 +3249,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_category
             else:
                 new_step = step_kw_category
+        elif current_step == step_kw_resample:
+            if self.selected_unit():
+                new_step = step_kw_unit
+            else:
+                new_step = step_kw_datatype
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
         elif current_step == step_kw_source:
@@ -3056,6 +3261,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_classify
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
+            elif (is_raster_layer(self.layer)
+                  and self.selected_category()['id'] == 'exposure'):
+                new_step = step_kw_resample
             elif self.selected_field():
                 new_step = step_kw_field
             elif self.selected_unit():
@@ -3085,11 +3293,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_fc_explayer_from_browser
         elif current_step == step_fc_agglayer_origin:
-            # TODO test disjoint layers!!
-            _layers_disjoint = False
-            if _layers_disjoint:
-                new_step = step_fc_disjoint_layers
-            elif self.rbExpLayerFromCanvas.isChecked():
+            if self.rbExpLayerFromCanvas.isChecked():
                 new_step = step_fc_explayer_from_canvas
             else:
                 new_step = step_fc_explayer_from_browser
@@ -3101,11 +3305,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_fc_agglayer_from_browser
         elif current_step == step_fc_extent:
-            # TODO test disjoint aggr layers!!
-            _agg_layers_disjoint = False
-            if _agg_layers_disjoint:
-                new_step = step_fc_agglayer_disjoint
-            elif self.rbAggLayerFromCanvas.isChecked():
+            if self.rbAggLayerFromCanvas.isChecked():
                 new_step = step_fc_agglayer_from_canvas
             elif self.rbAggLayerFromBrowser.isChecked():
                 new_step = step_fc_agglayer_from_browser
@@ -3208,6 +3408,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['data_type'] = self.selected_datatype()
         if self.selected_unit():
             keywords['unit'] = self.selected_unit()['id']
+        if self.selected_allowresample() is not None:
+            keywords['allow_resample'] = self.selected_allowresample()
         if self.lstFields.currentItem():
             if 'category' in keywords.keys():
                 if keywords['category'] != 'postprocessing':
@@ -3228,11 +3430,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         value_map = self.selected_mapping()
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
-
-        # Set allow_resampling to false if unit is density
-        if (is_raster_layer(self.layer)
-                and 'unit' in keywords and keywords['unit'] == 'density'):
-            keywords['allow_resampling'] = 'false'
 
         return keywords
 
