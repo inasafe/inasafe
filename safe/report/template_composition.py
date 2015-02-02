@@ -19,9 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 from qgis.core import QgsComposition
 try:
-    from qgis.core import QgsMapSettings
+    from qgis.core import QgsMapSettings  # pylint: disable=W0611
 except ImportError:
-    from qgis.core import QgsMapRenderer
+    from qgis.core import QgsMapRenderer  # pylint: disable=W0611
 from PyQt4 import QtCore, QtXml
 
 from safe.utilities.i18n import tr

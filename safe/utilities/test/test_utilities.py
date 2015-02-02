@@ -9,14 +9,13 @@ from safe.utilities.utilities import (
     get_error_message,
     humanise_seconds,
     impact_attribution,
-    read_file_keywords)
+    read_file_keywords
+)
 from safe.utilities.gis import qgis_version
 from safe.test.utilities import (
     test_data_path,
-    get_qgis_app,
-    TESTDATA,
-    HAZDATA,
-    EXPDATA)
+    get_qgis_app
+)
 from safe.common.exceptions import KeywordNotFoundError
 from safe.storage.utilities import bbox_intersection
 

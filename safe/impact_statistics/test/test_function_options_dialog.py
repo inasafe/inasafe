@@ -30,7 +30,7 @@ import logging
 from collections import OrderedDict
 
 # noinspection PyUnresolvedReferences
-import qgis
+import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit, QCheckBox
 
@@ -40,9 +40,6 @@ from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.impact_functions.core import get_plugins
 # noinspection PyUnresolvedReferences
-# pylint: disable=W0612
-from safe.impact_functions.earthquake import itb_earthquake_fatality_model
-# pylint: enable=W0612
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
