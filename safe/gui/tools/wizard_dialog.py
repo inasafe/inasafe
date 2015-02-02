@@ -47,7 +47,9 @@ from qgis.core import (
     QgsDataSourceURI,
     QgsMapLayerRegistry)
 
+# pylint: disable=F0401
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
+# pylint: enable=F0401
 
 from safe import metadata
 from safe.metadata import (
@@ -1503,6 +1505,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 item = self.tblFunctions1.item(row, col)
                 item.setText((item == selItem) and u'\u2022' or '')
 
+    # pylint: disable=W0613
     def on_tblFunctions1_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure combination and go ahead.
 
@@ -1510,6 +1513,7 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the category selection changes.
         """
         self.pbnNext.click()
+    # pylint: enable=W0613
 
     def set_widgets_step_fc_function_1(self):
         """Set widgets on the Impact Functions Table 1 tab."""
@@ -1612,6 +1616,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 item = self.tblFunctions2.item(row, col)
                 item.setText((item == selItem) and u'\u2022' or '')
 
+    # pylint: disable=W0613
     def on_tblFunctions2_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure constraints combination
            and go ahead.
@@ -1620,6 +1625,7 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the category selection changes.
         """
         self.pbnNext.click()
+    # pylint: enable=W0613
 
     def set_widgets_step_fc_function_2(self):
         """Set widgets on the Impact Functions Table 2 tab."""

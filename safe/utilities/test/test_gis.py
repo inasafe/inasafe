@@ -3,7 +3,7 @@
 import unittest
 
 # noinspection PyUnresolvedReferences
-import qgis
+import qgis  # pylint: disable=W0611
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.gis import layer_attribute_names, is_polygon_layer
