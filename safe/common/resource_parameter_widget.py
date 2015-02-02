@@ -21,7 +21,7 @@ class ResourceParameterWidget(FloatParameterWidget):
         .. versionadded:: 2.3
 
         :param parameter: A ResourceParameter object.
-        :type parameter: ResourceParameter
+        :type parameter: ResourceParameter, FloatParameter
 
         """
         super(ResourceParameterWidget, self).__init__(parameter, parent)
