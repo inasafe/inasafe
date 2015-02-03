@@ -1983,13 +1983,18 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.rbHazLayerFromBrowser.click()
 
         # Set the memo labels on this and next (hazard) steps
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        if hc['layer_type'] == 'raster':
-            data_type = '%s %s' % (hc['data_type'], hc['layer_type'])
+        (hazard,
+         _,
+         hazard_constraints,
+         _) = self.selected_imfunc_constraints()
+        if hazard_constraints['layer_type'] == 'raster':
+            data_type = '%s %s' % (
+                hazard_constraints['data_type'],
+                hazard_constraints['layer_type'])
         else:
-            data_type = hc['data_type']
-        text = layer_constraint_memo % (h['name'], data_type,
-                                        'hazard', data_type, h['name'])
+            data_type = hazard_constraints['data_type']
+        text = layer_constraint_memo % (hazard['name'], data_type,
+                                        'hazard', data_type, hazard['name'])
 
         self.lblHazLayerOriginConstraint.setText(text)
         self.lblHazLayerFromCanvasConstraint.setText(text)
@@ -2375,13 +2380,19 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.rbExpLayerFromBrowser.click()
 
         # Set the memo labels on this and next (exposure) steps
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        if ec['layer_type'] == 'raster':
-            data_type = '%s %s' % (ec['data_type'], ec['layer_type'])
+        (_,
+         exposure,
+         _,
+         exposure_constraints) = self.selected_imfunc_constraints()
+        if exposure_constraints['layer_type'] == 'raster':
+            data_type = '%s %s' % (
+                exposure_constraints['data_type'],
+                exposure_constraints['layer_type'])
         else:
-            data_type = ec['data_type']
-        text = layer_constraint_memo % (e['name'], data_type,
-                                        'exposure', data_type, e['name'])
+            data_type = exposure_constraints['data_type']
+        text = layer_constraint_memo % (
+            exposure['name'], data_type,
+            'exposure', data_type, exposure['name'])
 
         self.lblExpLayerOriginConstraint.setText(text)
         self.lblExpLayerFromCanvasConstraint.setText(text)

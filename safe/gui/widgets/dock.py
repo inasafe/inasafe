@@ -1423,7 +1423,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # error_message = get_error_message(e)
             # self.show_error_message(error_message)
             return
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             error_message = get_error_message(e)
             self.show_error_message(error_message)
             return
@@ -1649,7 +1649,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_dynamic_message(status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             self.show_error_message(get_error_message(e))
 
     def open_map_in_composer(self, impact_report):
