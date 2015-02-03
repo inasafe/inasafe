@@ -295,7 +295,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="119"/>
+        <location filename="dynamic_translations.py" line="118"/>
         <source>A volcano eruption</source>
         <translation type="unfinished"></translation>
     </message>
@@ -305,482 +305,482 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="59"/>
+        <location filename="dynamic_translations.py" line="58"/>
         <source>DKI buildings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="61"/>
+        <location filename="dynamic_translations.py" line="60"/>
         <source>Jakarta 2007 flood</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="62"/>
+        <location filename="dynamic_translations.py" line="61"/>
         <source>A flood in Jakarta like in 2007</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="63"/>
+        <location filename="dynamic_translations.py" line="62"/>
         <source>Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="65"/>
+        <location filename="dynamic_translations.py" line="64"/>
         <source>Jakarta flood like 2007 with pump failure at Pluit and Ancol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="66"/>
+        <location filename="dynamic_translations.py" line="65"/>
         <source>A flood in Jakarta like in 2007 but with structural improvements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="68"/>
+        <location filename="dynamic_translations.py" line="67"/>
         <source>Sea wall collapse at Pluit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="70"/>
+        <location filename="dynamic_translations.py" line="69"/>
         <source>Jakarta flood prone areas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="71"/>
+        <location filename="dynamic_translations.py" line="70"/>
         <source>A flood in Jakarta in RW areas identified as flood prone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="74"/>
+        <location filename="dynamic_translations.py" line="73"/>
         <source>Population Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="75"/>
+        <location filename="dynamic_translations.py" line="74"/>
         <source>People</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="76"/>
+        <location filename="dynamic_translations.py" line="75"/>
         <source>people</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="77"/>
+        <location filename="dynamic_translations.py" line="76"/>
         <source>People in Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="78"/>
+        <location filename="dynamic_translations.py" line="77"/>
         <source>Indonesian people</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="79"/>
+        <location filename="dynamic_translations.py" line="78"/>
         <source>Indonesian People</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="80"/>
+        <location filename="dynamic_translations.py" line="79"/>
         <source>People in Indonesia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="81"/>
+        <location filename="dynamic_translations.py" line="80"/>
         <source>Flood Depth (design) Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="82"/>
+        <location filename="dynamic_translations.py" line="81"/>
         <source>Flood Depth (current) Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="94"/>
+        <location filename="dynamic_translations.py" line="93"/>
         <source>An earthquake in Yogyakarta like in 2006</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="84"/>
+        <location filename="dynamic_translations.py" line="83"/>
         <source>Yogyakarta 2006 earthquake</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="85"/>
+        <location filename="dynamic_translations.py" line="84"/>
         <source>Indonesian Earthquake Hazard Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="86"/>
+        <location filename="dynamic_translations.py" line="85"/>
         <source>A tsunami in Maumere (Mw 8.1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="87"/>
+        <location filename="dynamic_translations.py" line="86"/>
         <source>Maumere tsunami inundation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="88"/>
+        <location filename="dynamic_translations.py" line="87"/>
         <source>A tsunami in Padang (Mw 8.8)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="89"/>
+        <location filename="dynamic_translations.py" line="88"/>
         <source>An earthquake at the Sumatran fault (Mw 7.8)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="91"/>
+        <location filename="dynamic_translations.py" line="90"/>
         <source>An earthquake at the Mentawai fault (Mw 9.0)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="93"/>
+        <location filename="dynamic_translations.py" line="92"/>
         <source>An earthquake in Padang like in 2009</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="95"/>
+        <location filename="dynamic_translations.py" line="94"/>
         <source>An earthquake at the Lembang fault</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="97"/>
+        <location filename="dynamic_translations.py" line="96"/>
         <source>OSM building footprints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="98"/>
+        <location filename="dynamic_translations.py" line="97"/>
         <source>Structures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="99"/>
+        <location filename="dynamic_translations.py" line="98"/>
         <source>Structures in Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="100"/>
+        <location filename="dynamic_translations.py" line="99"/>
         <source>Building</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="101"/>
+        <location filename="dynamic_translations.py" line="100"/>
         <source>Buildings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="102"/>
+        <location filename="dynamic_translations.py" line="101"/>
         <source>Buildings in Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="103"/>
+        <location filename="dynamic_translations.py" line="102"/>
         <source>Essential buildings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="104"/>
+        <location filename="dynamic_translations.py" line="103"/>
         <source>Essential Buildings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="105"/>
+        <location filename="dynamic_translations.py" line="104"/>
         <source>OSM buildings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="106"/>
+        <location filename="dynamic_translations.py" line="105"/>
         <source>AIBEP schools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="108"/>
+        <location filename="dynamic_translations.py" line="107"/>
         <source>Population Count (5kmx5km)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="109"/>
+        <location filename="dynamic_translations.py" line="108"/>
         <source>Office buildings Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="111"/>
+        <location filename="dynamic_translations.py" line="110"/>
         <source>Hospitals and clinics Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="112"/>
+        <location filename="dynamic_translations.py" line="111"/>
         <source>Schools Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="113"/>
+        <location filename="dynamic_translations.py" line="112"/>
         <source>Schools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="114"/>
+        <location filename="dynamic_translations.py" line="113"/>
         <source>Industrial buildings Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="115"/>
+        <location filename="dynamic_translations.py" line="114"/>
         <source>Industrial areas Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="116"/>
+        <location filename="dynamic_translations.py" line="115"/>
         <source>Commercial areas Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="117"/>
+        <location filename="dynamic_translations.py" line="116"/>
         <source>Hospitals Jakarta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="118"/>
+        <location filename="dynamic_translations.py" line="117"/>
         <source>An eruption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="120"/>
+        <location filename="dynamic_translations.py" line="119"/>
         <source>A volcano alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="123"/>
+        <location filename="dynamic_translations.py" line="122"/>
         <source>office</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="124"/>
+        <location filename="dynamic_translations.py" line="123"/>
         <source>clinic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="125"/>
+        <location filename="dynamic_translations.py" line="124"/>
         <source>terrace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="126"/>
+        <location filename="dynamic_translations.py" line="125"/>
         <source>police</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="127"/>
+        <location filename="dynamic_translations.py" line="126"/>
         <source>residential</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="128"/>
+        <location filename="dynamic_translations.py" line="127"/>
         <source>kindergarten</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="129"/>
+        <location filename="dynamic_translations.py" line="128"/>
         <source>bank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="130"/>
+        <location filename="dynamic_translations.py" line="129"/>
         <source>place of worship</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="131"/>
+        <location filename="dynamic_translations.py" line="130"/>
         <source>school</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="132"/>
+        <location filename="dynamic_translations.py" line="131"/>
         <source>university</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="133"/>
+        <location filename="dynamic_translations.py" line="132"/>
         <source>apartments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="134"/>
+        <location filename="dynamic_translations.py" line="133"/>
         <source>college</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="135"/>
+        <location filename="dynamic_translations.py" line="134"/>
         <source>commercial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="136"/>
+        <location filename="dynamic_translations.py" line="135"/>
         <source>hospital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="137"/>
+        <location filename="dynamic_translations.py" line="136"/>
         <source>industrial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="138"/>
+        <location filename="dynamic_translations.py" line="137"/>
         <source>civic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="139"/>
+        <location filename="dynamic_translations.py" line="138"/>
         <source>church</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="140"/>
+        <location filename="dynamic_translations.py" line="139"/>
         <source>hotel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="141"/>
+        <location filename="dynamic_translations.py" line="140"/>
         <source>public building</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="142"/>
+        <location filename="dynamic_translations.py" line="141"/>
         <source>other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="143"/>
+        <location filename="dynamic_translations.py" line="142"/>
         <source>fire station</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="147"/>
+        <location filename="dynamic_translations.py" line="146"/>
         <source>Thresholds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="148"/>
+        <location filename="dynamic_translations.py" line="147"/>
         <source>Postprocessors</source>
         <translation type="unfinished">Postprocessors</translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="149"/>
+        <location filename="dynamic_translations.py" line="148"/>
         <source>Medium thresholds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="150"/>
+        <location filename="dynamic_translations.py" line="149"/>
         <source>High thresholds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="151"/>
+        <location filename="dynamic_translations.py" line="150"/>
         <source>Low thresholds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="152"/>
+        <location filename="dynamic_translations.py" line="151"/>
         <source>Medium threshold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="153"/>
+        <location filename="dynamic_translations.py" line="152"/>
         <source>High threshold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="154"/>
+        <location filename="dynamic_translations.py" line="153"/>
         <source>Low threshold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="155"/>
+        <location filename="dynamic_translations.py" line="154"/>
         <source>Distances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="156"/>
+        <location filename="dynamic_translations.py" line="155"/>
         <source>Volcano name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="157"/>
+        <location filename="dynamic_translations.py" line="156"/>
         <source>BuildingType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="158"/>
+        <location filename="dynamic_translations.py" line="157"/>
         <source>Youth ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="159"/>
+        <location filename="dynamic_translations.py" line="158"/>
         <source>Adult ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="160"/>
+        <location filename="dynamic_translations.py" line="159"/>
         <source>Elderly ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="161"/>
+        <location filename="dynamic_translations.py" line="160"/>
         <source>AggregationCategorical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="162"/>
+        <location filename="dynamic_translations.py" line="161"/>
         <source>Displacement rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="163"/>
+        <location filename="dynamic_translations.py" line="162"/>
         <source>Mmi range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="164"/>
+        <location filename="dynamic_translations.py" line="163"/>
         <source>Tolerance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="165"/>
+        <location filename="dynamic_translations.py" line="164"/>
         <source>Calculate displaced people</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="166"/>
+        <location filename="dynamic_translations.py" line="165"/>
         <source>Evacuation percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="167"/>
+        <location filename="dynamic_translations.py" line="166"/>
         <source>Threshold [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="168"/>
+        <location filename="dynamic_translations.py" line="167"/>
         <source>Thresholds [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="169"/>
+        <location filename="dynamic_translations.py" line="168"/>
         <source>Distances [km]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="172"/>
+        <location filename="dynamic_translations.py" line="171"/>
         <source>Gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="173"/>
+        <location filename="dynamic_translations.py" line="172"/>
         <source>Age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="174"/>
+        <location filename="dynamic_translations.py" line="173"/>
         <source>Aggregation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -790,17 +790,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="176"/>
+        <location filename="dynamic_translations.py" line="175"/>
         <source>Aggregation Categorical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="177"/>
+        <location filename="dynamic_translations.py" line="176"/>
         <source>gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="178"/>
+        <location filename="dynamic_translations.py" line="177"/>
         <source>age</source>
         <translation type="unfinished"></translation>
     </message>
@@ -815,12 +815,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="181"/>
+        <location filename="dynamic_translations.py" line="180"/>
         <source>aggregation categorical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="184"/>
+        <location filename="dynamic_translations.py" line="183"/>
         <source>Area</source>
         <translation type="unfinished">Area</translation>
     </message>
@@ -2335,7 +2335,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="531"/>
+        <location filename="impact_report.py" line="534"/>
         <source>Analysis Results</source>
         <translation type="unfinished">Analysis Results</translation>
     </message>
@@ -3675,172 +3675,172 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ImpactMergeDialog</name>
     <message>
-        <location filename="impact_merge_dialog.py" line="85"/>
+        <location filename="impact_merge_dialog.py" line="91"/>
         <source>InaSAFE Impact Layer Merge Tool</source>
         <translation>InaSAFE Impact Layer Merge Tool</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="162"/>
+        <location filename="impact_merge_dialog.py" line="168"/>
         <source>Impact Layer Merge Tool</source>
         <translation>Impact Layer Merge Tool</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="169"/>
+        <location filename="impact_merge_dialog.py" line="175"/>
         <source>Run an impact assessment for an area using aggregation. e.g.Flood Impact on Buildings aggregated by municipal boundaries.</source>
         <translation>Run an impact assessment for an area using aggregation. e.g.Flood Impact on Buildings aggregated by municipal boundaries.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="172"/>
+        <location filename="impact_merge_dialog.py" line="178"/>
         <source>Run a second impact assessment for the same area using the same aggregation. e.g. Flood Impact on People aggregated by municipal boundaries.</source>
         <translation>Run a second impact assessment for the same area using the same aggregation. e.g. Flood Impact on People aggregated by municipal boundaries.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="176"/>
+        <location filename="impact_merge_dialog.py" line="182"/>
         <source>Open this tool and select each impact layer from the pick lists provided below.</source>
         <translation>Open this tool and select each impact layer from the pick lists provided below.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="179"/>
+        <location filename="impact_merge_dialog.py" line="185"/>
         <source>Select the aggregation layer that was used to generate the first and second impact layer.</source>
         <translation>Select the aggregation layer that was used to generate the first and second impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="182"/>
+        <location filename="impact_merge_dialog.py" line="188"/>
         <source>Select an output directory.</source>
         <translation>Select an output directory.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="189"/>
+        <location filename="impact_merge_dialog.py" line="195"/>
         <source>Click OK to generate the per aggregation area combined summaries.</source>
         <translation>Click OK to generate the per aggregation area combined summaries.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="296"/>
+        <location filename="impact_merge_dialog.py" line="302"/>
         <source>InaSAFE Merge Impact Tool Information</source>
         <translation>InaSAFE Merge Impact Tool Information</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="268"/>
+        <location filename="impact_merge_dialog.py" line="274"/>
         <source>InaSAFE Merge Impact Tools Information</source>
         <translation>InaSAFE Merge Impact Tools Information</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="284"/>
+        <location filename="impact_merge_dialog.py" line="290"/>
         <source>InaSAFE Merge Impact Tools Error</source>
         <translation>InaSAFE Merge Impact Tools Error</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="296"/>
+        <location filename="impact_merge_dialog.py" line="302"/>
         <source>Report from merging two impact layers was generated successfully.</source>
         <translation>Report from merging two impact layers was generated successfully.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="370"/>
+        <location filename="impact_merge_dialog.py" line="376"/>
         <source>Entire Area</source>
         <translation>Entire Area</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="390"/>
+        <location filename="impact_merge_dialog.py" line="396"/>
         <source>First layer is not valid.</source>
         <translation>First layer is not valid.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="393"/>
+        <location filename="impact_merge_dialog.py" line="399"/>
         <source>Second layer is not valid.</source>
         <translation>Second layer is not valid.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="396"/>
+        <location filename="impact_merge_dialog.py" line="402"/>
         <source>First layer must be different to second layer.</source>
         <translation>First layer must be different to second layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="441"/>
+        <location filename="impact_merge_dialog.py" line="447"/>
         <source>Directory %s does not exist</source>
         <translation>Directory %s does not exist</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="442"/>
+        <location filename="impact_merge_dialog.py" line="448"/>
         <source>Directory %s does not exist. Do you want to create it?</source>
         <translation>Directory %s does not exist. Do you want to create it?</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="454"/>
+        <location filename="impact_merge_dialog.py" line="460"/>
         <source>Output directory cannot be empty.</source>
         <translation>Output directory cannot be empty.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="491"/>
+        <location filename="impact_merge_dialog.py" line="497"/>
         <source>No keywords found for first impact layer.</source>
         <translation>No keywords found for first impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="531"/>
+        <location filename="impact_merge_dialog.py" line="537"/>
         <source>No keywords exist in aggregation layer.</source>
         <translation>No keywords exist in aggregation layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="534"/>
+        <location filename="impact_merge_dialog.py" line="540"/>
         <source>Keyword aggregation attribute not found for aggregation layer.</source>
         <translation>Keyword aggregation attribute not found for aggregation layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="163"/>
+        <location filename="impact_merge_dialog.py" line="169"/>
         <source>This tool will merge the outputs from two impact maps for the same area. The maps must be created using the same aggregation areas and same hazard. To use:</source>
         <translation>This tool will merge the outputs from two impact maps for the same area. The maps must be created using the same aggregation areas and same hazard. To use:</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="494"/>
+        <location filename="impact_merge_dialog.py" line="500"/>
         <source>Keyword %s not found for first layer.</source>
         <translation>Keyword %s not found for first layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="505"/>
+        <location filename="impact_merge_dialog.py" line="511"/>
         <source>No keywords found for second impact layer.</source>
         <translation>No keywords found for second impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="508"/>
+        <location filename="impact_merge_dialog.py" line="514"/>
         <source>Keyword %s not found for second layer.</source>
         <translation>Keyword %s not found for second layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="517"/>
+        <location filename="impact_merge_dialog.py" line="523"/>
         <source>First impact layer and second impact layer do not use the same hazard layer.</source>
         <translation>First impact layer and second impact layer do not use the same hazard layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="184"/>
+        <location filename="impact_merge_dialog.py" line="190"/>
         <source>Check &quot;Use customized report template&quot; checkbox and select the report template file if you want to use your own template. Note that all the map composer components that are needed must be fulfilled.</source>
         <translation>Check &quot;Use customized report template&quot; checkbox and select the report template file if you want to use your own template. Note that all the map composer components that are needed must be fulfilled.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="225"/>
+        <location filename="impact_merge_dialog.py" line="231"/>
         <source>Select Output Directory</source>
         <translation>Select Output Directory</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="232"/>
+        <location filename="impact_merge_dialog.py" line="238"/>
         <source>Select Report Template</source>
         <translation>Select Report Template</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="232"/>
+        <location filename="impact_merge_dialog.py" line="238"/>
         <source>QPT File (*.qpt)</source>
         <translation>QPT File (*.qpt)</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="419"/>
+        <location filename="impact_merge_dialog.py" line="425"/>
         <source>Template file does not exist.</source>
         <translation>Template file does not exist.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="701"/>
+        <location filename="impact_merge_dialog.py" line="707"/>
         <source>Total</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="1008"/>
+        <location filename="impact_merge_dialog.py" line="1014"/>
         <source>Components: %s could not be found, </source>
         <translation type="unfinished"></translation>
     </message>
@@ -5518,241 +5518,296 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="87"/>
+        <location filename="wizard_dialog.py" line="90"/>
         <source>By following the simple steps in this wizard, you can assign keywords to your layer: &lt;b&gt;%s&lt;/b&gt;. First you need to define the category of your layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="141"/>
+        <location filename="wizard_dialog.py" line="173"/>
         <source>flood depth in meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="144"/>
+        <location filename="wizard_dialog.py" line="176"/>
         <source>flood depth in feet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="147"/>
+        <location filename="wizard_dialog.py" line="179"/>
         <source>flood extent as wet/dry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="150"/>
+        <location filename="wizard_dialog.py" line="182"/>
         <source>tsunami depth in meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="153"/>
+        <location filename="wizard_dialog.py" line="185"/>
         <source>tsunami depth in feet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="156"/>
+        <location filename="wizard_dialog.py" line="188"/>
         <source>tsunami extent as wet/dry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="159"/>
+        <location filename="wizard_dialog.py" line="191"/>
         <source>earthquake intensity in MMI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="162"/>
+        <location filename="wizard_dialog.py" line="194"/>
         <source>tephra intensity in kg/m&lt;sup&gt;2&lt;/sup&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="168"/>
+        <location filename="wizard_dialog.py" line="200"/>
         <source>the number of people</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="171"/>
+        <location filename="wizard_dialog.py" line="203"/>
         <source>people density in people/km&lt;sup&gt;2&lt;/sup&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="174"/>
+        <location filename="wizard_dialog.py" line="206"/>
         <source>type for your road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="183"/>
+        <location filename="wizard_dialog.py" line="215"/>
         <source>You have selected a &lt;b&gt;%s %s&lt;/b&gt; layer measured in &lt;b&gt;%s&lt;/b&gt;, and the selected layer is a vector layer. Please select the attribute in this layer that represents %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="191"/>
+        <location filename="wizard_dialog.py" line="223"/>
         <source>You have selected an aggregation layer, and it is a vector layer. Please select the attribute in this layer that represents names of the aggregation areas.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="199"/>
+        <location filename="wizard_dialog.py" line="231"/>
         <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; measured in &lt;b&gt;%s&lt;/b&gt; categorical unit, and the data column is &lt;b&gt;%s&lt;/b&gt;. Below on the left you can see all unique values found in that column. Please drag them to the right panel in order to classify them to appropriate categories.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="794"/>
+        <location filename="wizard_dialog.py" line="909"/>
         <source>Field type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="795"/>
+        <location filename="wizard_dialog.py" line="910"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="821"/>
+        <location filename="wizard_dialog.py" line="936"/>
         <source>&lt;b&gt;&lt;font color=&quot;red&quot;&gt;ERROR! Missing subcategory or unit!&lt;/font&gt;&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2725"/>
+        <location filename="wizard_dialog.py" line="3033"/>
         <source>Finish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2779"/>
+        <location filename="wizard_dialog.py" line="3075"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3252"/>
+        <location filename="wizard_dialog.py" line="3543"/>
         <source>InaSAFE</source>
         <translation type="unfinished">InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3252"/>
+        <location filename="wizard_dialog.py" line="3543"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished">An error was encountered when saving the keywords:
 %s</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="127"/>
+        <location filename="wizard_dialog.py" line="150"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer type. We need to know what units the data are in. For example in a raster layer, each cell might represent depth in metres or depth in feet. If the dataset is a vector layer, each polygon might represent an inundated area, while areas with no polygon coverage would be assumed to be dry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="177"/>
+        <location filename="wizard_dialog.py" line="209"/>
         <source>type for your building</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1201"/>
+        <location filename="wizard_dialog.py" line="1349"/>
         <source>Use default</source>
         <translation type="unfinished">Use default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3274"/>
+        <location filename="wizard_dialog.py" line="3565"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3275"/>
+        <location filename="wizard_dialog.py" line="3566"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3278"/>
+        <location filename="wizard_dialog.py" line="3569"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3280"/>
+        <location filename="wizard_dialog.py" line="3571"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3281"/>
+        <location filename="wizard_dialog.py" line="3572"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="165"/>
+        <location filename="wizard_dialog.py" line="197"/>
         <source>volcano hazard categorical level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2638"/>
+        <location filename="wizard_dialog.py" line="2942"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="412"/>
+        <location filename="wizard_dialog.py" line="514"/>
         <source>Keywords creation...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1787"/>
+        <location filename="wizard_dialog.py" line="1972"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1794"/>
+        <location filename="wizard_dialog.py" line="1979"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2154"/>
+        <location filename="wizard_dialog.py" line="2364"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2162"/>
+        <location filename="wizard_dialog.py" line="2372"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2302"/>
+        <location filename="wizard_dialog.py" line="2532"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2310"/>
+        <location filename="wizard_dialog.py" line="2540"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2534"/>
+        <location filename="wizard_dialog.py" line="2820"/>
         <source>no aggregation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2727"/>
+        <location filename="wizard_dialog.py" line="3035"/>
         <source>Run</source>
         <translation type="unfinished">Run</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="94"/>
+        <location filename="wizard_dialog.py" line="118"/>
         <source>What kind of &lt;b&gt;hazard&lt;/b&gt; does this layer represent? The choice you make here will determine which impact functions this hazard layer can be used with. For example, if you choose &lt;b&gt;flood&lt;/b&gt; you will be able to use this hazard layer with impact functions such as &lt;b&gt;flood impact on population&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="104"/>
+        <location filename="wizard_dialog.py" line="128"/>
         <source>What kind of &lt;b&gt;exposure&lt;/b&gt; does this layer represent? The choice you make here will determine which impact functions this exposure layer can be used with. For example, if you choose &lt;b&gt;population&lt;/b&gt; you will be able to use this exposure layer with impact functions such as &lt;b&gt;flood impact on population&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="115"/>
+        <location filename="wizard_dialog.py" line="138"/>
         <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; for this raster layer. We need to know whether each cell in this raster represents a continuous value or a classified code.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="429"/>
+        <location filename="wizard_dialog.py" line="533"/>
         <source>Guided impact assessment wizard...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2936"/>
+        <location filename="wizard_dialog.py" line="3226"/>
         <source>Guided InaSAFE analysis wizard...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="97"/>
+        <source>You have selected a layer that has no keywords assigned. In the next steps you can assign keywords to that layer. First you need to confirm the layer represents a hazard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="103"/>
+        <source>You have selected a layer that has no keywords assigned. In the next steps you can assign keywords to that layer. First you need to confirm the layer represents an exposure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="110"/>
+        <source>You have selected a layer that has no keywords assigned. In the next steps you can assign keywords to that layer. First you need to confirm the layer is an aggregation layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="161"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; for this &lt;b&gt;%s data&lt;/b&gt; raster layer. For some exposure types you may want InaSAFE to not resample the raster to the hazard layer resolution during analyses. Please select the check box below if you want to set the &lt;i&gt;allow_resample&lt;/i&gt; keyword to &lt;i&gt;False&lt;/i&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="240"/>
+        <source>Based on your selection of &lt;b&gt;%s %s %s&lt;/b&gt; on the previous page, you should select a &lt;b&gt;%s&lt;/b&gt; layer containing &lt;b&gt;%s&lt;/b&gt; data now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="248"/>
+        <source>&lt;html&gt;In order to use PostGIS layers, please close the wizard, create a new PostGIS connection and run the wizard again. &lt;br/&gt;&lt;br/&gt; You can manage connections under the &lt;i&gt;Layer&lt;/i&gt; &gt; &lt;i&gt;Add Layer&lt;/i&gt; &gt; &lt;i&gt;Add PostGIS Layers&lt;/i&gt; menu.&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="2822"/>
+        <source>Please ensure the following information is correct and press Run.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="2825"/>
+        <source>impact function</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="2825"/>
+        <source>hazard layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="2825"/>
+        <source>exposure layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="2825"/>
+        <source>aggregation layer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5764,124 +5819,119 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="951"/>
+        <location filename="wizard_dialog_base.ui" line="3080"/>
         <source>[placeholder]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="989"/>
+        <location filename="wizard_dialog_base.ui" line="1081"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1054"/>
+        <location filename="wizard_dialog_base.ui" line="1146"/>
         <source>Classes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1097"/>
+        <location filename="wizard_dialog_base.ui" line="1189"/>
         <source>Classified unique values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1142"/>
+        <location filename="wizard_dialog_base.ui" line="1234"/>
         <source>Unclassified unique values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1454"/>
+        <location filename="wizard_dialog_base.ui" line="1546"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1467"/>
+        <location filename="wizard_dialog_base.ui" line="1559"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1533"/>
+        <location filename="wizard_dialog_base.ui" line="1625"/>
         <source>Source</source>
         <translation type="unfinished">Source</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1569"/>
+        <location filename="wizard_dialog_base.ui" line="1661"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1633"/>
+        <location filename="wizard_dialog_base.ui" line="1725"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be &apos;A flood in Jakarta&apos; (for a hazard layer) or &apos;People living in jakarta&apos; (for an exposure layer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1683"/>
+        <location filename="wizard_dialog_base.ui" line="1775"/>
         <source>Title</source>
         <translation type="unfinished">Title</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3785"/>
+        <location filename="wizard_dialog_base.ui" line="4376"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3808"/>
+        <location filename="wizard_dialog_base.ui" line="4399"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3818"/>
+        <location filename="wizard_dialog_base.ui" line="4409"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1241"/>
+        <location filename="wizard_dialog_base.ui" line="1333"/>
         <source>Youth ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1271"/>
+        <location filename="wizard_dialog_base.ui" line="1363"/>
         <source>Adult ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1391"/>
+        <location filename="wizard_dialog_base.ui" line="1483"/>
         <source>Youth ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1308"/>
+        <location filename="wizard_dialog_base.ui" line="1400"/>
         <source>Female ratio default</source>
         <translation type="unfinished">Female ratio default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1318"/>
+        <location filename="wizard_dialog_base.ui" line="1410"/>
         <source>Adult ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1328"/>
+        <location filename="wizard_dialog_base.ui" line="1420"/>
         <source>Elderly ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1358"/>
+        <location filename="wizard_dialog_base.ui" line="1450"/>
         <source>Female ratio attribute</source>
         <translation type="unfinished">Female ratio attribute</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1368"/>
+        <location filename="wizard_dialog_base.ui" line="1460"/>
         <source>Elderly ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1420"/>
+        <location filename="wizard_dialog_base.ui" line="1512"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Where does the data come from? You may want to write more or less short comment about its source.&lt;/p&gt;&lt;p&gt;This step is optional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3775"/>
-        <source>Help</source>
-        <translation type="unfinished">Help</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="70"/>
@@ -5889,189 +5939,189 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2149"/>
+        <location filename="wizard_dialog_base.ui" line="2241"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2250"/>
+        <location filename="wizard_dialog_base.ui" line="2368"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2290"/>
+        <location filename="wizard_dialog_base.ui" line="2408"/>
         <source>I would like to pick a hazard layer from disk
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2320"/>
+        <location filename="wizard_dialog_base.ui" line="2438"/>
         <source>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;hazard&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3329"/>
+        <location filename="wizard_dialog_base.ui" line="3660"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2459"/>
+        <location filename="wizard_dialog_base.ui" line="2603"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2639"/>
+        <location filename="wizard_dialog_base.ui" line="2835"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the exposure data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2663"/>
+        <location filename="wizard_dialog_base.ui" line="2859"/>
         <source>I would like to pick an exposure layer from disk
 (launches the exposure data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2693"/>
+        <location filename="wizard_dialog_base.ui" line="2889"/>
         <source>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;exposure&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2832"/>
+        <location filename="wizard_dialog_base.ui" line="3054"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2978"/>
+        <location filename="wizard_dialog_base.ui" line="3294"/>
         <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3037"/>
+        <location filename="wizard_dialog_base.ui" line="3368"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the aggregation data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3077"/>
+        <location filename="wizard_dialog_base.ui" line="3408"/>
         <source>I would like to pick an aggregation layer from disk
 (launches the aggregation data registration wizard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3085"/>
+        <location filename="wizard_dialog_base.ui" line="3416"/>
         <source>No thanks, I am happy to aggregate results for the entire analysis window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3130"/>
+        <location filename="wizard_dialog_base.ui" line="3461"/>
         <source>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3269"/>
+        <location filename="wizard_dialog_base.ui" line="3600"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;aggregation&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3443"/>
+        <location filename="wizard_dialog_base.ui" line="3860"/>
         <source>Please specify extent of your analysis. By clicking &quot;define it now&quot; you can invoke the extent selection tool.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3519"/>
+        <location filename="wizard_dialog_base.ui" line="3984"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(&lt;a href=&quot;define_user_extent&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#e85290;&quot;&gt;define it now&lt;/span&gt;&lt;/a&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3562"/>
+        <location filename="wizard_dialog_base.ui" line="4163"/>
         <source>Please set impact functions parameters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3592"/>
+        <location filename="wizard_dialog_base.ui" line="4193"/>
         <source>Here goes the summary...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3624"/>
+        <location filename="wizard_dialog_base.ui" line="4225"/>
         <source>Running analysis...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3672"/>
+        <location filename="wizard_dialog_base.ui" line="4273"/>
         <source>about:blank</source>
         <translation type="unfinished">about:blank</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3711"/>
+        <location filename="wizard_dialog_base.ui" line="4312"/>
         <source>Open in web browser</source>
         <translation type="unfinished">Open in web browser</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3718"/>
+        <location filename="wizard_dialog_base.ui" line="4319"/>
         <source>Generate PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3725"/>
+        <location filename="wizard_dialog_base.ui" line="4326"/>
         <source>Open in composer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1924"/>
+        <location filename="wizard_dialog_base.ui" line="2016"/>
         <source>&lt;b&gt;Hazard&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1934"/>
+        <location filename="wizard_dialog_base.ui" line="2026"/>
         <source>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1814"/>
+        <location filename="wizard_dialog_base.ui" line="1906"/>
         <source>People</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1819"/>
+        <location filename="wizard_dialog_base.ui" line="1911"/>
         <source>Construction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1824"/>
+        <location filename="wizard_dialog_base.ui" line="1916"/>
         <source>Flood</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1829"/>
+        <location filename="wizard_dialog_base.ui" line="1921"/>
         <source>Tsunami</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2030"/>
+        <location filename="wizard_dialog_base.ui" line="2122"/>
         <source>Available functions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1989"/>
+        <location filename="wizard_dialog_base.ui" line="2081"/>
         <source>Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1997"/>
+        <location filename="wizard_dialog_base.ui" line="2089"/>
         <source>Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2005"/>
+        <location filename="wizard_dialog_base.ui" line="2097"/>
         <source>Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2013"/>
+        <location filename="wizard_dialog_base.ui" line="2105"/>
         <source>Raster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6081,61 +6131,77 @@ Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1227"/>
+        <location filename="wizard_dialog_base.ui" line="1319"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
 &lt;p&gt;Please input these ratio attributes below for aggregation. For each attribute you can choose whether it should be:&lt;/p&gt;
 &lt;ol&gt;&lt;li&gt;defined in an attribute of the aggregation polygon (so that you can for example have different ratios per aggregation area)&lt;/li&gt;&lt;li&gt;defined as a global default for the aggregation layer, or&lt;/li&gt;&lt;li&gt;ignored&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1750"/>
+        <location filename="wizard_dialog_base.ui" line="1842"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. The assessment will combine hazard data (such as a flood layer) with exposure data (such as population, roads or buildings) to help you to understand the potential impact of such an event. To start, please select the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; you want to use by clicking a cell in the matrix below.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1893"/>
-        <source>&lt;p&gt;Now, please select the data types for the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; layers you want to use. Click on the cell in the table below that matches the data type for each.&lt;br/&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="2080"/>
+        <location filename="wizard_dialog_base.ui" line="2172"/>
         <source>&lt;p&gt;Below you can see a list of available &lt;b&gt;impact functions&lt;/b&gt; matching the selected hazard, exposure and their data types. Please choose which impact function would you like to use from the list below.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2219"/>
+        <location filename="wizard_dialog_base.ui" line="2311"/>
         <source>Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where you data resides:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2592"/>
+        <location filename="wizard_dialog_base.ui" line="2762"/>
         <source>Please help us to find your &lt;b&gt;exposure&lt;/b&gt; layer. An exposure layer represents people, property or infrastructure that may be affected in the event of a flood, earthquake, volcano etc. Select an appropriate option below to indicate where your data can be found:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3006"/>
+        <location filename="wizard_dialog_base.ui" line="3337"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Would you like to &lt;span style=&quot; font-weight:600;&quot;&gt;aggregate&lt;/span&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3415"/>
-        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
-Please step back and select different layers.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3506"/>
-        <source>Use the extent defined by selecting an area on the map (will use existing selection if one has already been made)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3526"/>
+        <location filename="wizard_dialog_base.ui" line="4010"/>
         <source>Use the extent of the analysis layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3533"/>
+        <location filename="wizard_dialog_base.ui" line="3997"/>
         <source>Use the current extent of the map display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog_base.ui" line="1036"/>
+        <source>Never resample this layer to the hazard layer resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog_base.ui" line="1985"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Now, please select the data types for the &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layers you want to use. Click on the cell in the table below that matches the data type for each. A &lt;span style=&quot; font-weight:600;&quot;&gt;continuous&lt;/span&gt; raster is one where cell values are real data values such as: &lt;span style=&quot; font-style:italic;&quot;&gt;depth of flood water in meters&lt;/span&gt; or the &lt;span style=&quot; font-style:italic;&quot;&gt;number of people per cell&lt;/span&gt;. A &lt;span style=&quot; font-weight:600;&quot;&gt;classified&lt;/span&gt; raster is one where cell values represent classes or zones such as: &lt;span style=&quot; font-style:italic;&quot;&gt;high hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;medium hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;low hazard zones&lt;/span&gt;.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog_base.ui" line="3814"/>
+        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
+Please step back and select another layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog_base.ui" line="3939"/>
+        <source>Use the extent defined by selecting an area on the map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog_base.ui" line="3955"/>
+        <source>It will use existing selection if one has already been made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog_base.ui" line="4123"/>
+        <source>The selected extent doesn&apos;t intersect input layers.
+Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
