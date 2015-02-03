@@ -107,7 +107,7 @@ class StylingTest(unittest.TestCase):
 
         try:
             setRasterStyle(layer, style_info)
-        except Exception, e:  # pylint: disable=broad-exception
+        except Exception, e:  # pylint: disable=broad-except
             message = (
                 'Broken: Setting style info with generate valid transparent '
                 'floating point pixel entries such as 2.0, 3.0')
@@ -282,7 +282,7 @@ class StylingTest(unittest.TestCase):
         except StyleError:
             # Exactly what should have happened
             return
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             print str(e)
         assert False, 'Incorrect handling of broken styles'
 

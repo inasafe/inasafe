@@ -276,7 +276,7 @@ class ImpactReport(object):
             return title
         except KeywordNotFoundError:
             return None
-        except Exception:  # pylint: disable=broad-exception
+        except Exception:  # pylint: disable=broad-except
             return None
 
     @property
@@ -300,7 +300,7 @@ class ImpactReport(object):
                         self.layer, legend_attribute)
             except KeywordNotFoundError:
                 pass
-            except Exception:  # pylint: disable=broad-exception
+            except Exception:  # pylint: disable=broad-except
                 pass
         return legend_attribute_dict
 
