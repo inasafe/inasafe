@@ -26,13 +26,16 @@ from xml.dom import minidom
 # pylint: disable=W0611
 from qgis.core import (
     QgsMapLayerRegistry,
-    QgsMapSettings,
     QgsComposition,
     QgsRectangle,
     QgsAtlasComposition
 )
 # pylint: enable=F0401
 # pylint: enable=W0611
+try:
+    from qgis.core import QgsMapSettings
+except ImportError:
+    from qgis.core import QgsMapRenderer
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
@@ -825,8 +828,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             layer_set.append(self.aggregation['layer'].id())
 
         # Instantiate Map Settings for Composition
-        map_settings = QgsMapSettings()
-        map_settings.setLayers(layer_set)
+        if qgis_version() < 20400:
+            map_settings = QgsMapRenderer()
+            map_settings.setLayerSet(layer_set)
+        else:
+            map_settings = QgsMapSettings()
+            map_settings.setLayers(layer_set)
 
         # Create composition
         composition = self.load_template(map_settings)
@@ -994,7 +1001,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         9. QgsComposerHTML with id 'merged-report-table' for the merged report.
 
         :param map_settings: Map settings.
-        :type map_settings: QgsMapSettings
+        :type map_settings: QgsMapSettings, QgsMapRenderer
 
         """
         # Create Composition
@@ -1040,8 +1047,14 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
         # Set Map Legend
         legend = composition.getComposerItemById('map-legend')
+
+        if qgis_version() < 20400:
+            layers = map_settings.layerSet()
+        else:
+            layers = map_settings.layers()
+
         if qgis_version() < 20600:
-            legend.model().setLayerSet(map_settings.layers())
+            legend.model().setLayerSet(layers)
             legend.synchronizeWithModel()
         else:
             root_group = legend.modelV2().rootGroup()
