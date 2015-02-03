@@ -165,7 +165,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>[placeholder]</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1082,7 +1082,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>[placeholder]</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1726,7 +1726,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be 'A flood in Jakarta' (for a hazard layer) or 'People living in jakarta' (for an exposure layer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be 'A flood in Jakarta' (for a hazard layer) or 'People living in jakarta' (for an exposure layer).</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2442,7 +2442,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;hazard&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</string>
+          <string>These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;hazard&lt;/b&gt; layer that you would like to use for your assessment.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2905,7 +2905,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;exposure&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</string>
+          <string>These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;exposure&lt;/b&gt; layer that you would like to use for your assessment.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -3076,7 +3076,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Please choose one &lt;b&gt;exposure&lt;/b&gt; layer that you would like to use for your assessment.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -3365,7 +3365,7 @@ Please step back and select another layer.</string>
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Would you like to &lt;span style=&quot; font-weight:600;&quot;&gt;aggregate&lt;/span&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Would you like to &lt;b&gt;aggregate&lt;/b&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -3489,7 +3489,7 @@ Please step back and select another layer.</string>
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</string>
+          <string>These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -3631,7 +3631,7 @@ Please step back and select another layer.</string>
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;aggregation&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
