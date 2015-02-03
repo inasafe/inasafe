@@ -1735,9 +1735,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set description label
         description = ""
         if "name" in imfunc.keys():
-            description += "<b>NAME</b>: %s<br/>" % imfunc['name']
+            description += "<b>Name</b>: %s<br/>" % imfunc['name']
         if "overview" in imfunc.keys():
-            description += "<b>OVERVIEW</b>: %s<br/>" % imfunc['overview']
+            description += "<b>Overview</b>: %s<br/>" % imfunc['overview']
 
         self.lblDescribeFunction.setText(description)
         # Enable the next button if anything selected
@@ -2031,11 +2031,11 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         if keywords:
             label_text = """
-                <b>TITLE</b>: %s<br/>
-                <b>CATEGORY</b>: %s<br/>
-                <b>SUBCATEGORY</b>: %s<br/>
-                <b>UNIT</b>: %s<br/>
-                <b>SOURCE</b>: %s<br/><br/>
+                <b>Title</b>: %s<br/>
+                <b>Category</b>: %s<br/>
+                <b>Subcategory</b>: %s<br/>
+                <b>Unit</b>: %s<br/>
+                <b>Source</b>: %s<br/><br/>
             """ % (keywords.get('title'),
                    keywords.get('category'),
                    keywords.get('subcategory'),
@@ -2284,11 +2284,11 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         if keywords:
             desc = (
-                '<b>TITLE</b>: %s<br/>'
-                '<b>CATEGORY</b>: %s<br/>'
-                '<b>SUBCATEGORY</b>: %s<br/>'
-                '<b>UNIT</b>: %s<br/>'
-                '<b>SOURCE</b>: %s<br/><br/>') % (
+                '<b>Title</b>: %s<br/>'
+                '<b>Category</b>: %s<br/>'
+                '<b>Subcategory</b>: %s<br/>'
+                '<b>Unit</b>: %s<br/>'
+                '<b>Source</b>: %s<br/><br/>') % (
                 keywords.get('title'), keywords.get('category'),
                 keywords.get('subcategory'), keywords.get('unit'),
                 keywords.get('source'))
@@ -2832,19 +2832,36 @@ class WizardDialog(QDialog, FORM_CLASS):
                  '</tr><tr>'
                  '  <td colspan="3"></td>'
                  '</tr>' % (
-                     self.tr('impact function').upper().replace(' ', '&nbsp;'),
+                     self.tr('impact function').capitalize().replace(
+                         ' ', '&nbsp;'),
                      self.selected_function()['name'],
-                     self.tr('hazard layer').upper().replace(' ', '&nbsp;'),
+                     self.tr('hazard layer').capitalize().replace(
+                         ' ', '&nbsp;'),
                      self.hazard_layer.name(),
-                     self.tr('exposure layer').upper().replace(' ', '&nbsp;'),
+                     self.tr('exposure layer').capitalize().replace(
+                         ' ', '&nbsp;'),
                      self.exposure_layer.name(),
-                     self.tr('aggregation layer').upper().replace(
+                     self.tr('aggregation layer').capitalize().replace(
                          ' ', '&nbsp;'), aggr))
+
+        def humanize(my_string):
+            """Humanize string.
+
+            :param my_string: A not human friendly string
+
+            :type my_string: str
+
+            :returns: A human friendly string
+            :rtype: str
+            """
+            my_string = my_string.replace('_', ' ')
+            my_string = my_string.capitalize()
+            return my_string
 
         for p in params:
             html += ('<tr>'
                      '  <td><b>%s</b></td><td></td><td>%s</td>'
-                     '</tr>' % (p[0], p[1]))
+                     '</tr>' % (humanize(p[0]), p[1]))
         html += '</table>'
 
         self.lblSummary.setText(html)
