@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 version=3.0.0
 # alpha, beta, rc or final
-status=alpha
+status=final
 
 
 # end of mandatory metadata
@@ -26,9 +26,8 @@ changelog=
         3.0.0
         New features:
         * New wizard for impact function centric analysis
+        * Impact reports are now nicely styled in PDF outputs
         * Complete refactor of the code base to remove separation between safe and safe_qgis packages
-        * Use INASAFE_LOCALE instead of LOCALE environment variable to override locale
-        Bug fixes:
 
 
 # tags are comma separated with spaces allowed
