@@ -28,7 +28,10 @@ from qgis.core import (
     QgsComposerFrame)
 
 try:
+    # noinspection PyUnresolvedReferences
+    # pylint: disable=W0611
     from qgis.core import QgsLayerTreeGroup, QgsMapSettings
+    # pylint: enable=W0611
 except ImportError:
     from qgis.core import QgsMapRenderer
 
@@ -273,7 +276,7 @@ class ImpactReport(object):
             return title
         except KeywordNotFoundError:
             return None
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception
             return None
 
     @property
@@ -297,7 +300,7 @@ class ImpactReport(object):
                         self.layer, legend_attribute)
             except KeywordNotFoundError:
                 pass
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception
                 pass
         return legend_attribute_dict
 

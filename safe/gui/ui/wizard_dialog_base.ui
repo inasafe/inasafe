@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1003</width>
-    <height>556</height>
+    <width>1000</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>0</width>
-    <height>0</height>
+    <width>780</width>
+    <height>550</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -978,7 +978,99 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pg5Categories">
+     <widget class="QWidget" name="pg5Resample">
+      <layout class="QVBoxLayout" name="verticalLayout_29">
+       <item>
+        <widget class="QLabel" name="lblSelectAllowResample">
+         <property name="styleSheet">
+          <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+         </property>
+         <property name="text">
+          <string>[placeholder]</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_57">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Maximum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>150</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <spacer name="horizontalSpacer_66">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>60</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkAllowResample">
+           <property name="text">
+            <string>Never resample this layer to the hazard layer resolution</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_67">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_58">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>335</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pg6Classify">
       <layout class="QVBoxLayout" name="verticalLayout_14">
        <item>
         <widget class="QLabel" name="lblClassify">
@@ -1204,7 +1296,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pg6Aggregations">
+     <widget class="QWidget" name="pg7Aggregations">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -1409,7 +1501,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pg7Source">
+     <widget class="QWidget" name="pg8Source">
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QLabel" name="lblSelectSource">
@@ -1622,7 +1714,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pg8Title">
+     <widget class="QWidget" name="pg9Title">
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
         <widget class="QLabel" name="lblSelectTitle">
@@ -1727,7 +1819,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="pgF01Constraints1">
       <layout class="QVBoxLayout" name="verticalLayout_19">
        <item>
         <widget class="QLabel" name="lblSelectFunction1">
@@ -1870,7 +1962,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="pgF02Constraints2">
       <layout class="QVBoxLayout" name="verticalLayout_26">
        <item>
         <widget class="QLabel" name="lblSelectFunction2">
@@ -2057,7 +2149,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pgF9Function">
+     <widget class="QWidget" name="pgF03Function">
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
         <widget class="QLabel" name="lblSelectFunction">
@@ -2227,6 +2319,32 @@
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer_59">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblHazLayerOriginConstraint">
+         <property name="text">
+          <string>[placeholder]</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_24">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -2321,6 +2439,32 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_60">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblHazLayerFromCanvasConstraint">
+         <property name="text">
+          <string>[placeholder]</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2464,6 +2608,32 @@
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer_63">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblHazLayerFromBrowserConstraint">
+         <property name="text">
+          <string>[placeholder]</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_33">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -2582,7 +2752,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pgF13ExpLayerOrigin">
-      <layout class="QVBoxLayout" name="verticalLayout_20">
+      <layout class="QVBoxLayout" name="verticalLayout_25">
        <item>
         <widget class="QLabel" name="lblSelectExpLayerOriginType">
          <property name="styleSheet">
@@ -2593,6 +2763,32 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_65">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblExpLayerOriginConstraint">
+         <property name="text">
+          <string>[placeholder]</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2694,6 +2890,32 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_66">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblExpLayerFromCanvasConstraint">
+         <property name="text">
+          <string>[placeholder]</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2825,11 +3047,37 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pgF15ExpLayerBrowser">
-      <layout class="QVBoxLayout" name="verticalLayout_25">
+      <layout class="QVBoxLayout" name="verticalLayout_20">
        <item>
         <widget class="QLabel" name="lblSelectBrowserExpLayer">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_67">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblExpLayerFromBrowserConstraint">
+         <property name="text">
+          <string>[placeholder]</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2962,7 +3210,7 @@
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -2973,12 +3221,95 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="lblDisjointLayers">
-         <property name="text">
-          <string>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <spacer name="horizontalSpacer_63">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblIconDisjoint_1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>132</width>
+             <height>132</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>132</width>
+             <height>132</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap>../../../resources/img/wizard/icon-stop.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_64">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblDisjointLayers">
+           <property name="text">
+            <string>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</string>
-         </property>
-        </widget>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_65">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_30">
@@ -2988,7 +3319,7 @@ Please step back and select another layer.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>276</height>
+           <height>100</height>
           </size>
          </property>
         </spacer>
@@ -3399,7 +3730,7 @@ Please step back and select another layer.</string>
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -3410,12 +3741,98 @@ Please step back and select another layer.</string>
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
-Please step back and select different layers.</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <spacer name="horizontalSpacer_27">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblIconDisjoint_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>132</width>
+             <height>132</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>132</width>
+             <height>132</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap>../../../resources/img/wizard/icon-stop.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_59">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
+Please step back and select another layer.</string>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_34">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_37">
@@ -3425,7 +3842,7 @@ Please step back and select different layers.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>236</height>
+           <height>100</height>
           </size>
          </property>
         </spacer>
@@ -3461,14 +3878,14 @@ Please step back and select different layers.</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>36</height>
+           <height>60</height>
           </size>
          </property>
         </spacer>
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_9">
-         <item row="0" column="3" rowspan="4">
+         <item row="0" column="5" rowspan="5">
           <spacer name="horizontalSpacer_57">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -3484,7 +3901,7 @@ Please step back and select different layers.</string>
            </property>
           </spacer>
          </item>
-         <item row="0" column="0" rowspan="4">
+         <item row="0" column="0" rowspan="5">
           <spacer name="horizontalSpacer_58">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -3500,14 +3917,62 @@ Please step back and select different layers.</string>
            </property>
           </spacer>
          </item>
-         <item row="0" column="1">
+         <item row="1" column="1">
+          <spacer name="horizontalSpacer_69">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>25</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="1" colspan="2">
           <widget class="QRadioButton" name="rbExtentUser">
            <property name="text">
-            <string>Use the extent defined by selecting an area on the map (will use existing selection if one has already been made)</string>
+            <string>Use the extent defined by selecting an area on the map</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
+         <item row="1" column="2" colspan="2">
+          <widget class="QLabel" name="lblExistingSelection">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 8pt;</string>
+           </property>
+           <property name="text">
+            <string>It will use existing selection if one has already been made.</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <spacer name="horizontalSpacer_68">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="3" colspan="2">
           <widget class="QLabel" name="lblDefineExtentNow">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -3520,17 +3985,29 @@ Please step back and select different layers.</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1" colspan="2">
-          <widget class="QRadioButton" name="rbExtentLayer">
+         <item row="2" column="1" colspan="4">
+          <widget class="QRadioButton" name="rbExtentScreen">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
-            <string>Use the extent of the analysis layers</string>
+            <string>Use the current extent of the map display</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QRadioButton" name="rbExtentScreen">
+         <item row="3" column="1" colspan="4">
+          <widget class="QRadioButton" name="rbExtentLayer">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
            <property name="text">
-            <string>Use the current extent of the map display</string>
+            <string>Use the extent of the analysis layers</string>
            </property>
           </widget>
          </item>
@@ -3553,6 +4030,130 @@ Please step back and select different layers.</string>
       <zorder>lblSelectExtentType</zorder>
       <zorder>verticalSpacer_40</zorder>
       <zorder>verticalSpacer_42</zorder>
+     </widget>
+     <widget class="QWidget" name="pgF22ExtentDisjoint">
+      <layout class="QVBoxLayout" name="verticalLayout_28">
+       <item>
+        <spacer name="verticalSpacer_56">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>100</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <spacer name="horizontalSpacer_60">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblIconDisjoint_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>132</width>
+             <height>132</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>132</width>
+             <height>132</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap>../../../resources/img/wizard/icon-stop.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_61">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>The selected extent doesn't intersect input layers.
+Please step back and select another layer.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_62">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_54">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>100</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="pgF23ParamsIF">
       <layout class="QVBoxLayout" name="layoutIFParams">
@@ -3770,16 +4371,6 @@ Please step back and select different layers.</string>
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="pbnHelp">
-       <property name="text">
-        <string>Help</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="pbnCancel">
        <property name="text">
         <string>Cancel</string>
@@ -3880,7 +4471,6 @@ Please step back and select different layers.</string>
   <tabstop>pbnReportWeb</tabstop>
   <tabstop>pbnReportPDF</tabstop>
   <tabstop>pbnReportComposer</tabstop>
-  <tabstop>pbnHelp</tabstop>
  </tabstops>
  <resources/>
  <connections/>

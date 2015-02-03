@@ -14,7 +14,7 @@ from os.path import join
 from itertools import izip
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -77,7 +77,7 @@ def get_qgis_app():
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
         # noinspection PyPackageRequirements
-        from PyQt4 import QtGui, QtCore
+        from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
         from safe.gis.qgis_interface import QgisInterface
@@ -1126,8 +1126,16 @@ def combine_coordinates(x, y):
 
 
 class FakeLayer(object):
+    """A Mock layer.
+
+    :param source:
+    """
     def __init__(self, source=None):
         self.layer_source = source
 
     def source(self):
+        """Get the sources as defined in init
+
+        :return: sources
+        """
         return self.layer_source

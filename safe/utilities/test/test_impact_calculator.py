@@ -114,7 +114,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(), message
         except InsufficientParametersError:
             return  # expected outcome
-        except:
+        except Exception:  # pylint: disable=broad-exception
             message = 'Missing parameters not raised as error.'
             assert(), message
         message = 'Expected an error, none encountered.'

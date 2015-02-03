@@ -137,7 +137,8 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.gui.tools.wizard_dialog import WizardDialog
         from safe.test.utilities import (
             clone_shp_layer, remove_vector_temp_file)
-        layer = clone_shp_layer(name='tsunami_polygon', include_keywords=True)
+        layer = clone_shp_layer(
+            name='tsunami_polygon', include_keywords=True, source_directory='')
 
         from safe.test.utilities import get_qgis_app
         # Get QGis app handle
