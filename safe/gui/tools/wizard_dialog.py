@@ -474,7 +474,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         y_max = QDesktopWidget().screenGeometry().height()
 
         # Don't do anything if the frame geometry fits the screen.
-        # Use 5 pixels tollerance for possible shadows.
+        # Use 5 pixels tolerance for possible shadows.
         (x0, y0, x1, y1) = self.frameGeometry().getCoords()
         if x0 >= -5 and x1 <= x_max + 5 and y0 >= -5 and y1 <= y_max + 5:
             return
@@ -497,8 +497,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             # Ignore if the margin is < 30px but > 12px - it should be possible
             # to drag the bar anyway.
             y = 30
-            if h > (y_max-30):
-                h = (y_max-30)
+            if h > (y_max - 30):
+                h = (y_max - 30)
         if y + h > y_max or y + h < 200:
             if h > y_max:
                 h = y_max
@@ -1479,18 +1479,18 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         selection = self.tblFunctions1.selectedItems()
         if len(selection) != 1:
-            return (None, None, None, None)
+            return None, None, None, None
 
         h = selection[0].data(RoleHazard)
         e = selection[0].data(RoleExposure)
 
         selection = self.tblFunctions2.selectedItems()
         if len(selection) != 1:
-            return (h, e, None, None)
+            return h, e, None, None
 
         hc = selection[0].data(RoleHazardConstraint)
         ec = selection[0].data(RoleExposureConstraint)
-        return (h, e, hc, ec)
+        return h, e, hc, ec
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -2143,10 +2143,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not port:
             port = "5432"
         db = settings.value(key + "/database")
-        useEstimatedMetadata = settings.value(key + "/estimatedMetadata",
-                                              False, type=bool)
-        sslmode = settings.value(key + "/sslmode",
-                                 QgsDataSourceURI.SSLprefer, type=int)
+        use_estimated_metadata = settings.value(
+            key + "/estimatedMetadata", False, type=bool)
+        sslmode = settings.value(
+            key + "/sslmode", QgsDataSourceURI.SSLprefer, type=int)
         username = ""
         password = ""
         if settings.value(key + "/saveUsername") == "true":
@@ -2167,7 +2167,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             uri.setConnection(host, port, db, username, password, sslmode)
 
-        uri.setUseEstimatedMetadata(useEstimatedMetadata)
+        uri.setUseEstimatedMetadata(use_estimated_metadata)
 
         # Obtain the geometry column name
         connector = PostGisDBConnector(uri)
@@ -2209,31 +2209,31 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         index = browser.selectionModel().currentIndex()
         if not index:
-            return (False, '')
+            return False, ''
 
         # Map the proxy model index to the source model index
         index = browser.model().mapToSource(index)
         item = browser.model().sourceModel().dataItem(index)
         if not item:
-            return (False, '')
+            return False, ''
 
         item_class_name = item.metaObject().className()
         # if not itemClassName.endswith('LayerItem'):
         if not item.type() == QgsDataItem.Layer:
             if item_class_name == 'QgsPGRootItem' and not item.children():
-                return (False, create_postGIS_connection_first)
+                return False, create_postGIS_connection_first
             else:
-                return (False, '')
+                return False, ''
 
-        if item_class_name not in ['QgsOgrLayerItem', 'QgsLayerItem',
-                                   'QgsPGLayerItem']:
-            return (False, '')
+        if item_class_name not in [
+                'QgsOgrLayerItem', 'QgsLayerItem', 'QgsPGLayerItem']:
+            return False, ''
 
         path = item.path()
 
         if item_class_name in ['QgsOgrLayerItem',
                                'QgsLayerItem'] and not os.path.exists(path):
-            return (False, '')
+            return False, ''
 
         # try to create the layer
         if item_class_name == 'QgsOgrLayerItem':
@@ -2248,7 +2248,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer = QgsRasterLayer(path, '', 'gdal')
 
         if not layer or not layer.isValid():
-            return (False, "Not a valid layer")
+            return False, "Not a valid layer"
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
@@ -2267,7 +2267,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer.setLayerName(keywords.get('title'))
 
         if not self.is_layer_compatible(layer, category, keywords):
-            return (False, "This layer's keywords or type are not suitable.")
+            return False, "This layer's keywords or type are not suitable."
 
         # set the current layer (e.g. for the keyword creation sub-thread
         #                          or for adding the layer to mapCanvas)
@@ -2313,8 +2313,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             """ % (source, is_raster_layer(layer) and 'raster' or
                    'vector (%s)' % geom_type)
 
-        return (True, desc)
+        return True, desc
 
+    # noinspection PyPep8Naming
     def tvBrowserHazard_selection_changed(self):
         """Update layer description label"""
         (is_compatible, desc) = self.get_layer_description_from_browser(
@@ -2656,6 +2657,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Slot called when the users clears the analysis extents."""
         self.show()
 
+    # noinspection PyPep8Naming
     def lblDefineExtentNow_clicked(self):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
@@ -2705,13 +2707,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         exp_extent = self.exposure_layer.extent()
 
         if self.iface.mapCanvas().hasCrsTransformEnabled():
-            coordTransform = QgsCoordinateTransform(
+            coord_transform = QgsCoordinateTransform(
                 extent_crs, self.hazard_layer.crs())
-            haz_extent = (coordTransform.transform(
+            haz_extent = (coord_transform.transform(
                 haz_extent, QgsCoordinateTransform.ReverseTransform))
-            coordTransform = QgsCoordinateTransform(
+            coord_transform = QgsCoordinateTransform(
                 extent_crs, self.exposure_layer.crs())
-            exp_extent = (coordTransform.transform(
+            exp_extent = (coord_transform.transform(
                 exp_extent, QgsCoordinateTransform.ReverseTransform))
         return extent.intersects(haz_extent) and extent.intersects(exp_extent)
 
