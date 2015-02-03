@@ -827,7 +827,12 @@ class WizardDialogTest(unittest.TestCase):
 
         # check the values of subcategories options
         expected_subcategories = [
-            u'earthquake', u'flood', u'volcanic ash', u'tsunami', u'volcano', u'generic']
+            u'earthquake',
+            u'flood',
+            u'volcanic ash',
+            u'tsunami',
+            u'volcano',
+            u'generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if no option is selected
@@ -875,9 +880,9 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step source
         self.check_current_step(step_kw_source, dialog)
 
-        dialog.pbnBack.click() # back to step unit
-        dialog.pbnBack.click() # back to step data_type
-        dialog.pbnBack.click() # back to step subcategory
+        dialog.pbnBack.click()  # back to step unit
+        dialog.pbnBack.click()  # back to step data_type
+        dialog.pbnBack.click()  # back to step subcategory
 
         # check if in step subcategory
         self.check_current_step(step_kw_subcategory, dialog)
@@ -893,13 +898,30 @@ class WizardDialogTest(unittest.TestCase):
         # choosing earthquake
         self.select_from_list_widget('earthquake', dialog.lstSubcategories)
 
+        dialog.pbnNext.click()  # Go to data type
+
+        # check if in step data type
+        self.check_current_step(step_kw_datatype, dialog)
+
+        # check the values of subcategories options
+        expected_datatypes = ['continuous', 'classified']
+        self.check_list(expected_datatypes, dialog.lstDataTypes)
+
+        # check if the default option is selected
+        expected_datatype_index = 0
+        datatype_index = dialog.lstDataTypes.currentRow()
+        message = ('Expected %s, but I got %s' %
+                   (expected_datatype_index, datatype_index))
+        self.assertEqual(
+            expected_datatype_index, datatype_index, message)
+
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
         self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
-        expected_units = ['categorised', 'normalised', 'MMI']
+        expected_units = ['continuous', 'MMI']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing MMI
@@ -1257,12 +1279,14 @@ class WizardDialogTest(unittest.TestCase):
             extension='.asc',
             include_keywords=True,
             source_directory=HAZDATA)
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         layer = clone_shp_layer(
             name='DKI_buildings',
             include_keywords=True,
             source_directory=EXPDATA)
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         # Check the environment first
@@ -1322,7 +1346,7 @@ class WizardDialogTest(unittest.TestCase):
         role = QtCore.Qt.UserRole
         flood_ifs = [dialog.lstFunctions.item(row).data(role)['id']
                      for row in range(count)]
-        message = ('Expected flood impact function not found: %s') % chosen_if
+        message = 'Expected flood impact function not found: %s' % chosen_if
         self.assertTrue(chosen_if in flood_ifs, message)
 
         # step_fc_function: select FloodBuildingImpactFunction and press ok
@@ -1357,11 +1381,11 @@ class WizardDialogTest(unittest.TestCase):
         # Note this step is tested prior to step_fc_explayer_origin
         # as the list is prepared prior to autoselecting the radiobuttons
         count = dialog.lstCanvasExpLayers.count()
-        message = ('Invalid expposure layers count! There should be %d while '
+        message = ('Invalid exposure layers count! There should be %d while '
                    'there were: %d') % (expected_exposure_layers_count, count)
         self.assertEqual(count, expected_exposure_layers_count, message)
 
-        # step_fc_explayer_origin: test if the radiobuttons are autmatically
+        # step_fc_explayer_origin: test if the radiobuttons are automatically
         # enabled and selected
         message = ('The rbExpLayerFromCanvas radio button has been not '
                    'automatically enabled')
@@ -1378,14 +1402,14 @@ class WizardDialogTest(unittest.TestCase):
 
         # step_fc_explayer_from_canvas: test the lstCanvasAggLayers state
         # Note this step is tested prior to step_fc_agglayer_origin
-        # as the list is prepared prior to autoselecting the radiobuttons
+        # as the list is prepared prior to auto selecting the radio buttons
         count = dialog.lstCanvasAggLayers.count()
         message = ('Invalid aggregation layers count! There should be %d '
                    'while there were: '
                    '%d') % (expected_aggregation_layers_count, count)
         self.assertEqual(count, expected_aggregation_layers_count, message)
 
-        # step_fc_agglayer_origin: test if the radiobuttons are autmatically
+        # step_fc_agglayer_origin: test if the radio buttons are automatically
         # enabled and selected
         message = ('The rbAggLayerFromCanvas radio button has been not '
                    'automatically disabled')
@@ -1405,7 +1429,7 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_params: press ok (already covered by the relevant test)
         dialog.pbnNext.click()
 
-        # step_fc_summary: test minumum needs text
+        # step_fc_summary: test minimum needs text
         # summaries = dialog.lblSummary.text().split('<br/>')
 
         # #TODO: temporarily disable minimum needs test as they seem
@@ -1427,15 +1451,17 @@ class WizardDialogTest(unittest.TestCase):
         message = (
             'Expected generated report to be %d +- %dBytes, got %d. '
             'Please update expected_size if the generated output '
-            'is acceptible on your system.'
+            'is acceptable on your system.'
             % (expected_report_size, tolerance, size))
-        self.assertTrue((size > expected_report_size - tolerance and
-                         size < expected_report_size + tolerance), message)
+        self.assertTrue(
+            (expected_report_size - tolerance < size < expected_report_size +
+             tolerance),
+            message)
 
         # close the wizard
         dialog.pbnNext.click()
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(WizardDialogTest, 'test')
+    suite = unittest.makeSuite(WizardDialogTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
