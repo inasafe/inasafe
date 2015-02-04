@@ -16,6 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+import time
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -72,6 +73,8 @@ class MessageViewer(QtWebKit.QWebView):
         self.log_path = None
         self.report_path = None
         self._impact_path = None
+
+        self._html_loaded_flag = False
 
     @property
     def impact_path(self):
@@ -246,8 +249,32 @@ class MessageViewer(QtWebKit.QWebView):
                 string += html
 
         string += html_footer()
+
+        # Set HTML
+        self._html_loaded_flag = False
+        # noinspection PyUnresolvedReferences
+        self.loadFinished.connect(self.html_loaded_slot)
         self.setHtml(string)
-        # self.scroll_to_div()
+
+        counter = 0
+        sleep_period = 0.1  # sec
+        timeout = 20  # it's generous enough!
+        while not self._html_loaded_flag and counter < timeout:
+            # Block until the event loop is done
+            counter += sleep_period
+            time.sleep(sleep_period)
+            # noinspection PyArgumentList
+            QtCore.QCoreApplication.processEvents()
+        # noinspection PyUnresolvedReferences
+        self.loadFinished.disconnect(self.html_loaded_slot)
+
+    def html_loaded_slot(self, ok):
+        """Slot called when the page is loaded.
+
+        :param ok: Flag indicating if the html is loaded.
+        :type ok: bool
+        """
+        self._html_loaded_flag = ok
 
     def to_message(self):
         """Collate all message elements to a single message."""
