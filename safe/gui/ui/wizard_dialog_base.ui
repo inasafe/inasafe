@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>600</height>
+    <width>780</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -126,7 +126,7 @@
       <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
      </property>
      <property name="currentIndex">
-      <number>11</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="pg1Category">
       <property name="styleSheet">
@@ -1363,6 +1363,12 @@
          </item>
          <item row="1" column="1">
           <widget class="QTableWidget" name="tblFunctions2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
@@ -1499,6 +1505,25 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_8">
+         <property name="horizontalSpacing">
+          <number>12</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QListWidget" name="lstFunctions">
+           <property name="minimumSize">
+            <size>
+             <width>460</width>
+             <height>99</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>460</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="1">
           <widget class="QLabel" name="lblDescribeFunction">
            <property name="sizePolicy">
@@ -1518,22 +1543,6 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QListWidget" name="lstFunctions">
-           <property name="minimumSize">
-            <size>
-             <width>460</width>
-             <height>99</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>460</width>
-             <height>16777215</height>
-            </size>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
       </layout>
@@ -1542,6 +1551,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_11">
        <item>
         <widget class="QLabel" name="lblSelectHazLayerOriginType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="styleSheet">
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
@@ -1558,11 +1573,20 @@
        </item>
        <item>
         <widget class="QLabel" name="lblHazLayerOriginConstraint">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="styleSheet">
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="text">
           <string>[placeholder]</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1570,24 +1594,33 @@
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_13">
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="rbHazLayerFromCanvas">
-           <property name="text">
-            <string>I would like to use a hazard layer already loaded in QGIS
+        <widget class="QRadioButton" name="rbHazLayerFromCanvas">
+         <property name="text">
+          <string>I would like to use a hazard layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QRadioButton" name="rbHazLayerFromBrowser">
-           <property name="text">
-            <string>I would like to pick a hazard layer from disk
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbHazLayerFromBrowser">
+         <property name="text">
+          <string>I would like to pick a hazard layer from disk
 (launches the hazard data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -1764,24 +1797,33 @@
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_17">
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="rbExpLayerFromCanvas">
-           <property name="text">
-            <string>I would like to use an exposure layer already loaded in QGIS
+        <widget class="QRadioButton" name="rbExpLayerFromCanvas">
+         <property name="text">
+          <string>I would like to use an exposure layer already loaded in QGIS
 (launches the exposure data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QRadioButton" name="rbExpLayerFromBrowser">
-           <property name="text">
-            <string>I would like to pick an exposure layer from disk
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbExpLayerFromBrowser">
+         <property name="text">
+          <string>I would like to pick an exposure layer from disk
 (launches the exposure data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -2001,31 +2043,40 @@ Please step back and select another layer.</string>
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_18">
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="rbAggLayerFromCanvas">
-           <property name="text">
-            <string>I would like to use an aggregation layer already loaded in QGIS
+        <widget class="QRadioButton" name="rbAggLayerFromCanvas">
+         <property name="text">
+          <string>I would like to use an aggregation layer already loaded in QGIS
 (launches the aggregation data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QRadioButton" name="rbAggLayerFromBrowser">
-           <property name="text">
-            <string>I would like to pick an aggregation layer from disk
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbAggLayerFromBrowser">
+         <property name="text">
+          <string>I would like to pick an aggregation layer from disk
 (launches the aggregation data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QRadioButton" name="rbAggLayerNoAggregation">
-           <property name="text">
-            <string>No thanks, I am happy to aggregate results for the entire analysis window</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbAggLayerNoAggregation">
+         <property name="text">
+          <string>No thanks, I am happy to aggregate results for the entire analysis window</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -2222,73 +2273,94 @@ Please step back and select another layer.</string>
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_9">
-         <item row="0" column="0" colspan="2">
-          <widget class="QRadioButton" name="rbExtentUser">
-           <property name="text">
-            <string>Use the extent defined by selecting an area on the map</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QLabel" name="lblExistingSelection">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font: 8pt;</string>
-           </property>
-           <property name="text">
-            <string>It will use existing selection if one has already been made.</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2" colspan="2">
-          <widget class="QLabel" name="lblDefineExtentNow">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(&lt;a href=&quot;define_user_extent&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#e85290;&quot;&gt;define it now&lt;/span&gt;&lt;/a&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="4">
-          <widget class="QRadioButton" name="rbExtentScreen">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Use the current extent of the map display</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0" colspan="4">
-          <widget class="QRadioButton" name="rbExtentLayer">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Use the extent of the analysis layers</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QRadioButton" name="rbExtentUser">
+         <property name="text">
+          <string>Use the extent defined by selecting an area on the map</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblExistingSelection">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">padding-left: 20px;</string>
+         </property>
+         <property name="text">
+          <string>Your existing selection will be used if one has already been made</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblDefineExtentNow">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">padding-left: 20px;</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Alternatively, &lt;a href=&quot;define_user_extent&quot;&gt; &lt;span style=&quot; text-decoration: underline; color:#e85290;&quot;&gt;define the analysis extent now...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbExtentScreen">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Use the current extent of the map display</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbExtentLayer">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Use the extent of the analysis layers</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -2296,6 +2368,9 @@ Please step back and select another layer.</string>
       <layout class="QVBoxLayout" name="verticalLayout_28">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>12</number>
+         </property>
          <item>
           <widget class="QLabel" name="lblIconDisjoint_3">
            <property name="sizePolicy">
@@ -2443,7 +2518,7 @@ Please step back and select another layer.</string>
        <item>
         <widget class="MessageViewer" name="wvResults" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -2580,22 +2655,12 @@ Please step back and select another layer.</string>
   <tabstop>dsbYouthRatioDefault</tabstop>
   <tabstop>dsbElderlyRatioDefault</tabstop>
   <tabstop>lstFunctions</tabstop>
-  <tabstop>rbHazLayerFromCanvas</tabstop>
-  <tabstop>rbHazLayerFromBrowser</tabstop>
   <tabstop>lstCanvasHazLayers</tabstop>
   <tabstop>tvBrowserHazard</tabstop>
-  <tabstop>rbExpLayerFromCanvas</tabstop>
-  <tabstop>rbExpLayerFromBrowser</tabstop>
   <tabstop>lstCanvasExpLayers</tabstop>
   <tabstop>tvBrowserExposure</tabstop>
-  <tabstop>rbAggLayerFromCanvas</tabstop>
-  <tabstop>rbAggLayerFromBrowser</tabstop>
-  <tabstop>rbAggLayerNoAggregation</tabstop>
   <tabstop>lstCanvasAggLayers</tabstop>
   <tabstop>tvBrowserAggregation</tabstop>
-  <tabstop>rbExtentUser</tabstop>
-  <tabstop>rbExtentScreen</tabstop>
-  <tabstop>rbExtentLayer</tabstop>
   <tabstop>pbnReportWeb</tabstop>
   <tabstop>pbnReportPDF</tabstop>
   <tabstop>pbnReportComposer</tabstop>
