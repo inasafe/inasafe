@@ -16,6 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+import time
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -27,6 +28,8 @@ from safe.utilities.resources import html_footer, html_header, resources_path
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
+HTML_FILE_MODE = 1
+HTML_STR_MODE = 2
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -72,6 +75,8 @@ class MessageViewer(QtWebKit.QWebView):
         self.log_path = None
         self.report_path = None
         self._impact_path = None
+
+        self._html_loaded_flag = False
 
     @property
     def impact_path(self):
@@ -246,8 +251,9 @@ class MessageViewer(QtWebKit.QWebView):
                 string += html
 
         string += html_footer()
-        self.setHtml(string)
-        # self.scroll_to_div()
+
+        # Set HTML
+        self.load_html(HTML_STR_MODE, string)
 
     def to_message(self):
         """Collate all message elements to a single message."""
@@ -328,5 +334,51 @@ class MessageViewer(QtWebKit.QWebView):
         :param file_path: The path of the html file
         :type file_path: str
         """
+        self.load_html(HTML_FILE_MODE, file_path)
+
+    def load_html(self, mode, html):
+        """Load HTML to this class with the mode specified.
+
+        There are two modes that can be used:
+            * HTML_FILE_MODE: Directly from a local HTML file.
+            * HTML_STR_MODE: From a valid HTML string.
+
+        :param mode: The mode.
+        :type mode: int
+
+        :param html: The html that will be loaded. If the mode is a file,
+            then it should be a path to the htm lfile. If the mode is a string,
+            then it should be a valid HTML string.
+        :type html: str
+        """
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        self.setUrl(QtCore.QUrl.fromLocalFile(file_path))
+        self._html_loaded_flag = False
+        # noinspection PyUnresolvedReferences
+        self.loadFinished.connect(self.html_loaded_slot)
+
+        if mode == HTML_FILE_MODE:
+            self.setUrl(QtCore.QUrl.fromLocalFile(html))
+        elif mode == HTML_STR_MODE:
+            self.setHtml(html)
+        else:
+            raise InvalidParameterError('The mode is not supported.')
+
+        counter = 0
+        sleep_period = 0.1  # sec
+        timeout = 20  # it's generous enough!
+        while not self._html_loaded_flag and counter < timeout:
+            # Block until the event loop is done
+            counter += sleep_period
+            time.sleep(sleep_period)
+            # noinspection PyArgumentList
+            QtCore.QCoreApplication.processEvents()
+        # noinspection PyUnresolvedReferences
+        self.loadFinished.disconnect(self.html_loaded_slot)
+
+    def html_loaded_slot(self, ok):
+        """Slot called when the page is loaded.
+
+        :param ok: Flag indicating if the html is loaded.
+        :type ok: bool
+        """
+        self._html_loaded_flag = ok
