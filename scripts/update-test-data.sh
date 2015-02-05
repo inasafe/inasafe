@@ -29,7 +29,7 @@ git reset --hard
 git fetch
 
 # Checkout desired version
-# Use unneccessary force because
+# Use unnecessary force because
 # local files might have been modified
 # and can block the checkout. Issue
 # https://github.com/AIFDR/inasafe/issues/313
