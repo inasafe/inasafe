@@ -55,7 +55,6 @@ from safe.metadata import (
     unit_building_type_type,
     unit_people_per_pixel,
     unit_mmi,
-    unit_continuous,
     hazard_volcanic_ash,
     hazard_generic,
     unit_building_generic,
@@ -71,7 +70,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     """
 
     flood_OSM_building_hazard_units = [
-        unit_wetdry, unit_metres_depth, unit_feet_depth, unit_continuous]
+        unit_wetdry, unit_metres_depth, unit_feet_depth]
 
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
@@ -159,7 +158,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = impact_function_manager.allowed_units(
             'earthquake', 'continuous')
-        expected_result = [unit_mmi, unit_continuous]
+        expected_result = [unit_mmi]
 
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -176,7 +175,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = impact_function_manager.units_for_layer(
             subcategory='volcano', layer_type='raster', data_type='continuous')
-        expected_result = [unit_continuous]
+        expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
