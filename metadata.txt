@@ -27,8 +27,18 @@ changelog=
         New features:
         * New wizard for impact function centric analysis
         * Complete refactor of the code base to remove separation between safe and safe_qgis packages
-        * Use INASAFE_LOCALE instead of LOCALE environment variable to override locale
-        Bug fixes:
+        * Removed impact function browser
+        Architectural changes:
+        * Combined safe and safe_qgis into one package.
+        * We now use one translation system instead of two (gettext was dropped).
+        * UI files are dynamically compiled at run time so we don't need to ship the uic compiled versions.
+        * We no longer user Qt resources so you no longer need to compile with pyrcc.
+        * Plugin reloader works again because we fixed the import management that caused it to break.
+        * Removed a lot of moribund / experimental / test code that is not used in production.
+        * Removed the use of api.py and abstraction between Qt/QGIS based code and console only code.
+        Note:
+        * This release breaks API comptibility with 2.x releases.
+
 
 
 # tags are comma separated with spaces allowed

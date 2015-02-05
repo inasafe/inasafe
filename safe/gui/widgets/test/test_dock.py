@@ -830,7 +830,7 @@ class TestDock(TestCase):
             '11876228.33329810947179794 -695807.82839082507416606)')
         expected_list = self.wkt_to_coordinates(expected)
         actual_list = self.wkt_to_coordinates(geometry)
-        
+
         for item in xrange(0, len(expected_list)):
             print item, expected_list[item], actual_list[item]
             self.assertAlmostEqual(
