@@ -25,9 +25,10 @@ status=alpha
 changelog=
         3.0.0
         New features:
-        * New wizard for impact function centric analysis
-        * Complete refactor of the code base to remove separation between safe and safe_qgis packages
-        * Removed impact function browser
+        * New wizard for impact function centric analysis.
+        * Complete refactor of the code base to remove separation between safe and safe_qgis packages.
+        * Removed impact function browser.
+        * Simplified the toolbar - remaining functionality is still available in Plugins->InaSAFE menu.
         Architectural changes:
         * Combined safe and safe_qgis into one package.
         * We now use one translation system instead of two (gettext was dropped).
