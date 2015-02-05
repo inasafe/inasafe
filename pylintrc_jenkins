@@ -52,7 +52,7 @@ load-plugins=
 output-format=text
 
 # Include message's id in output
-include-ids=no
+# include-ids=no
 
 # Put messages in a separate file for each module / package specified on the
 # command line instead of printing them on stdout. Reports (if any) will be
