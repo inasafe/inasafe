@@ -89,7 +89,7 @@ class Plugin(object):
         self.action_toggle_rubberbands = None
         self.message_bar_item = None
         # Flag indicating if toolbar should show only common icons or not
-        self.full_toolbar = True
+        self.full_toolbar = False
         # print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
@@ -194,7 +194,7 @@ class Plugin(object):
         self.action_dock.setCheckable(True)
         self.action_dock.setChecked(True)
         self.action_dock.triggered.connect(self.toggle_dock_visibility)
-        self.add_action(self.action_dock, add_to_toolbar=self.full_toolbar)
+        self.add_action(self.action_dock)
 
         # --------------------------------------
         # Create action for keywords editor
