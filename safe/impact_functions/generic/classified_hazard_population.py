@@ -65,7 +65,8 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
         :rating 3
         :param requires category=='hazard' and \
                         layertype=='raster' and \
-                        data_type=='classified'
+                        data_type=='classified' and \
+                        unit=='classes'
 
         :param requires category=='exposure' and \
                         subcategory=='population' and \
