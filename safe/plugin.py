@@ -32,7 +32,7 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
+from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox, QWidget
 
 from safe.common.exceptions import (
     TranslationLoadError,
@@ -641,11 +641,16 @@ class Plugin(object):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.wizard_dialog import WizardDialog
-
-        dialog = WizardDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
+        # Prevent spawning multiple copies since it is non model
+        wizards = self.iface.findChildren(QWidget, "WizardDialogBase")
+        LOGGER.info('Wizards count: %i' % len(wizards))
+        if len(wizards) > 0:
+            dialog = wizards[0]
+        else:
+            dialog = WizardDialog(
+                self.iface.mainWindow(),
+                self.iface,
+                self.dock_widget)
         dialog.set_function_centric_mode()
         dialog.show()  # non-modal in order to hide for selecting user extent
 
