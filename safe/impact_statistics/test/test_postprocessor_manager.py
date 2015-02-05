@@ -146,7 +146,7 @@ class PostprocessorManagerTest(unittest.TestCase):
                 tokens = tokens[1:]
                 total = 0
                 for token in tokens:
-                    total += float(token.replace(',', '.'))
+                    total += float(token.replace(',', ''))
 
                 assert total != 0, message
 
