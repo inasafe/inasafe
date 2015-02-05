@@ -22,11 +22,9 @@ from safe_extras.parameters.unit import Unit
 from safe_extras.parameters.metadata import unit_feet_depth, unit_metres_depth
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
+from safe.test.utilities import get_qgis_app
 
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import QApplication
-
-application = QApplication([])
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestResourceParameterWidget(unittest.TestCase):
