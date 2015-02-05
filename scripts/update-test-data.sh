@@ -24,6 +24,8 @@ fi
 
 pushd .
 cd ../inasafe_data
+git clean -f -d
+git reset --hard
 git fetch
 
 # Checkout desired version
