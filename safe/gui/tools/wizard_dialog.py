@@ -388,7 +388,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.fix_window_geometry()
         self.setWindowTitle('InaSAFE')
         # Note the keys should remain untranslated as we need to write
         # english to the keywords file.
@@ -462,49 +461,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.aggregation_layer = None
         self.if_params = None
         self.analysis_handler = None
-
-    def fix_window_geometry(self):
-        """Fix the wizard window geometry if overflows the screen.
-        .. note:: Because of a big variety of window decorations and desktop
-                  layouts, it simply reserves 30 px on the top for the window
-                  bar, 40 px on the bottom for the system panel, and 10 px of
-                  the width for vertical decorations
-        """
-        x_max = QDesktopWidget().screenGeometry().width() - 30  # for a panel
-        y_max = QDesktopWidget().screenGeometry().height()
-
-        # Don't do anything if the frame geometry fits the screen.
-        # Use 5 pixels tolerance for possible shadows.
-        (x0, y0, x1, y1) = self.frameGeometry().getCoords()
-        if x0 >= -5 and x1 <= x_max + 5 and y0 >= -5 and y1 <= y_max + 5:
-            return
-
-        x = self.geometry().x()
-        y = self.geometry().y()
-        w = self.geometry().width()
-        h = self.geometry().height()
-
-        if x < 0 or x > x_max:
-            x = 0
-            if w > x_max:
-                w = x_max - 10
-        if x + w > x_max or x + w < 200:
-            if w > x_max:
-                w = x_max - 10
-            x = x_max - w
-        if y < 12 or y > y_max:
-            # Leave a margin for the decoration: 12px for the test, 30 to set.
-            # Ignore if the margin is < 30px but > 12px - it should be possible
-            # to drag the bar anyway.
-            y = 30
-            if h > (y_max - 30):
-                h = (y_max - 30)
-        if y + h > y_max or y + h < 200:
-            if h > y_max:
-                h = y_max
-            y = y_max - h
-        if (x, y, x + w, y + h) != self.geometry().getCoords():
-            self.setGeometry(x, y, w, h)
 
     def set_keywords_creation_mode(self, layer=None):
         """Set the Wizard to the Keywords Creation mode
